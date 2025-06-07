@@ -7,34 +7,56 @@ export const WORLD_CONFIG = {
   
   // Optimized chunk settings for high density
   // Reduced CHUNK_SIZE to maintain performance with 4x voxel count
-  // Total voxels per chunk: 64x64x128 = 524,288 voxels (vs 128x128x64 = 1,048,576 before)
+  // Total voxels per chunk: 128x128x256 = 4,194,304 voxels (increased for full sphere)
   CHUNK_SIZE: 128, // Reduced from 128 to maintain performance with smaller voxels  
-  CHUNK_HEIGHT: 128, // Doubled height for more vertical detail
+  CHUNK_HEIGHT: 256, // Increased to fit complete sphere (radius 25 = 200 voxels + margin)
   
-  // Terrain settings (flattened for better gameplay)
-  TERRAIN_MAX_HEIGHT: 8, // Much flatter terrain
+  PLANET: {
+    // Basic planet geometry
+    SIZE: 25, // Planet radius - reduced to fit in 3x3 chunk grid (-48 to +48)
+    FACE_SIZE: 80, // Size of each face (before rounding)
+    BORDER_RADIUS: 15, // Rounding radius for smooth edges (reasonable proportion)
+    
+    // Gravity configuration
+    GRAVITY: {
+      STRENGTH: 2, // Much lower gravity for easier testing
+      MODE: 'RADIAL', // 'RADIAL' for planet center, 'DOWN' for flat world (change to 'DOWN' if performance issues)
+      CENTER: [0, 32, 0], // Planet center in world coordinates (voxel 128 * 0.25 = 32)
+      TRANSITION_SMOOTHING: 0.8, // How smooth gravity transitions are
+    },
+    
+    // Terrain generation per face
+    TERRAIN: {
+      HEIGHT_VARIATION: 6, // Max terrain height from face surface
+      BASE_OFFSET: 2, // Base terrain thickness
+      EDGE_BLEND_DISTANCE: 15, // Distance from edge where blending starts
+    }
+  },
+  
+  // Terrain settings (adapted for cubic planet)
+  TERRAIN_MAX_HEIGHT: 8, // Much flatter terrain per face
   TERRAIN_BASE_HEIGHT: 4, // Lower base height
   
-  // Generation settings (optimized for flat terrain)
+  // Generation settings (optimized for face-based terrain)
   NOISE_SEED: 42,
-  NOISE_SCALE: 0.003, // Reduced for smoother, flatter terrain
-  NOISE_OCTAVES: 1, // Single octave for simple, flat terrain
-  NOISE_PERSISTENCE: 0.1, // Very low persistence for minimal variation
+  NOISE_SCALE: 0.005, // Adjusted for planetary surface
+  NOISE_OCTAVES: 2, // Multiple octaves for more interesting planetary surface
+  NOISE_PERSISTENCE: 0.3, // Medium persistence for varied terrain
   
-  // World bounds
-  WORLD_BOUNDS: 200,
+  // World bounds (now relative to planet)
+  WORLD_BOUNDS: 200, // Keep for compatibility, but planet bounds are different
   
   // Default movement mode
   DEFAULT_MOVEMENT_MODE: 'dev', // Start in dev mode
   
-  // Player settings (adjusted for flat terrain and high-density voxels)
-  GROUND_LEVEL: 16, // Adjusted for new flatter terrain scale
+  // Player settings (adjusted for planetary gravity)
+  GROUND_LEVEL: 16, // Adjusted for new planetary terrain scale
   MOVEMENT_SPEED: 5,
-  JUMP_SPEED: 35, // Much higher for proper jumping with small voxels
+  JUMP_SPEED: 35, // Same jump speed, but gravity direction varies
   
-  // Player body configuration (compact for flat terrain navigation)
+  // Player body configuration (planetary navigation)
   PLAYER_BODY: {
-    // Collision body dimensions (small and agile for flat terrain)
+    // Collision body dimensions (compact for planetary navigation)
     WIDTH: 1.0, // 4 voxels wide - compact for navigation
     HEIGHT: 3.0, // 12 voxels tall - reasonable proportions
     DEPTH: 1.0, // 4 voxels deep - slim profile
@@ -46,29 +68,34 @@ export const WORLD_CONFIG = {
       z: 0
     },
     
-    // Collision resolution settings (fine-tuned for small body)
+    // Collision resolution settings (planetary physics)
     COLLISION_MARGIN: 0.1, // Small margin for precise movement
     PENETRATION_RESOLUTION: 0.8, // Strong but not overwhelming
-    STEP_HEIGHT: 0.3, // Small step height for fine terrain
+    STEP_HEIGHT: 0.3, // Small step height for planetary terrain
     VELOCITY_DAMPING: 0.95, // Good responsiveness
     
-    // Ground attachment settings (jump-friendly)
+    // Ground attachment settings (simplified for spherical planet)
     GROUND_ATTACHMENT: {
-      ENABLED: true,
-      TOLERANCE: 0.4, // Moderate tolerance for flat terrain
-      SNAP_STRENGTH: 0.6, // Weaker snapping to allow jumps
-      MIN_GROUND_CONTACT_AREA: 0.3, // Small contact area needed
-      FORCE_GROUNDING: false, // Disabled to allow jumping
-      ALLOW_JUMPING: true, // New flag to prioritize jump mechanics
+      ENABLED: false, // Disabled for spherical planet - use simple physics
+      TOLERANCE: 1.0,
+      SNAP_STRENGTH: 0.5,
+      MIN_GROUND_CONTACT_AREA: 0.2,
+      FORCE_GROUNDING: false,
+      ALLOW_JUMPING: true,
+      ORIENTATION_SMOOTHING: 0.5,
     },
   },
   
-  // Performance monitoring for high-density system
+  // Performance monitoring for planetary system
   PERFORMANCE: {
     MAX_VOXELS_PER_CHUNK: 600000, // Warn if chunk exceeds this
     TARGET_FPS: 60,
     MEMORY_WARNING_THRESHOLD: 200 * 1024 * 1024, // 200MB
     ENABLE_PERFORMANCE_MONITORING: true,
+    PLANET_FACE_RENDERING: {
+      MAX_ACTIVE_FACES: 3, // Maximum faces to render simultaneously
+      LOD_DISTANCE_THRESHOLD: 150, // Distance for LOD switching
+    }
   },
   
   // Movement modes
@@ -77,29 +104,31 @@ export const WORLD_CONFIG = {
     DEV: 'dev'
   },
   
-  // Planet-specific physics (for future use)
+  // Planet-specific physics
   PLANET_PHYSICS: {
     DEFAULT: {
-      GRAVITY: -20,
+      GRAVITY: -25, // Stronger planetary gravity
       ATMOSPHERE: 1.0,
-      FRICTION: 0.8
+      FRICTION: 0.8,
+      RADIAL_GRAVITY: true, // Enable radial gravity calculation
     }
   },
   
-  // Colors
+  // Colors (enhanced for planetary terrain)
   COLORS: {
     GRASS: [0.2, 0.8, 0.3],
     STONE: [0.6, 0.6, 0.7],
     DIRT: [0.4, 0.3, 0.2],
     SAND: [0.9, 0.8, 0.6],
+    PLANET_CORE: [0.8, 0.4, 0.2], // Core material color
   },
 
   // Terrain-Vegetation Integration
   VEGETATION: {
-    ENABLED: true,
-    CHUNK_GENERATION: true,
-    DENSITY_MULTIPLIER: 1.0,
-    LOD_ENABLED: true,
+    ENABLED: false, // Temporarily disabled for spherical planet compatibility
+    CHUNK_GENERATION: false,
+    DENSITY_MULTIPLIER: 0.0,
+    LOD_ENABLED: false,
     
     // Terrain modification for vegetation
     GUARANTEED_FLAT_AREAS: {

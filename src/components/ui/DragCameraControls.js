@@ -1,13 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Vector2, Euler } from 'three';
+import * as THREE from 'three';
+const { Vector2, Vector3, Quaternion, Euler } = THREE;
 
-const DragCameraControls = ({ enabled = true }) => {
+const DragCameraControls = ({ enabled = true, playerController = null }) => {
   const { camera, gl } = useThree();
   const isDragRef = useRef(false);
   const previousMousePositionRef = useRef(new Vector2());
-  const rotationRef = useRef({ x: 0, y: 0 }); // Store rotation values
+  
+  // Store relative rotation inputs instead of absolute rotations
+  const relativeRotationRef = useRef({ yaw: 0, pitch: 0 });
   const mouseSensitivity = 0.003;
+  const maxPitch = Math.PI / 3; // Limit looking up/down to 60 degrees
 
   useEffect(() => {
     if (!enabled) return;
@@ -29,21 +33,15 @@ const DragCameraControls = ({ enabled = true }) => {
       const deltaX = event.clientX - previousMousePositionRef.current.x;
       const deltaY = event.clientY - previousMousePositionRef.current.y;
 
-      // Update rotation values
-      // Horizontal movement controls yaw (rotation around Y axis)
-      rotationRef.current.y -= deltaX * mouseSensitivity;
+      // Update relative rotation values
+      relativeRotationRef.current.yaw -= deltaX * mouseSensitivity;
+      relativeRotationRef.current.pitch -= deltaY * mouseSensitivity;
       
-      // Vertical movement controls pitch (rotation around X axis)
-      rotationRef.current.x -= deltaY * mouseSensitivity;
-
-      // Clamp vertical rotation to prevent flipping
-      rotationRef.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotationRef.current.x));
-
-      // Apply rotations in the correct order (YXZ)
-      camera.rotation.order = 'YXZ';
-      camera.rotation.y = rotationRef.current.y;
-      camera.rotation.x = rotationRef.current.x;
-      camera.rotation.z = 0; // Keep roll at 0
+      // Clamp pitch to prevent excessive looking up/down
+      relativeRotationRef.current.pitch = Math.max(
+        -maxPitch, 
+        Math.min(maxPitch, relativeRotationRef.current.pitch)
+      );
 
       previousMousePositionRef.current.set(event.clientX, event.clientY);
       event.preventDefault();
@@ -79,7 +77,30 @@ const DragCameraControls = ({ enabled = true }) => {
     };
   }, [enabled, camera, gl, mouseSensitivity]);
 
-  // This component doesn't render anything, it just handles camera controls
+  // Apply relative rotations to camera orientation each frame
+  useFrame(() => {
+    if (!enabled || !playerController) return;
+
+    // Pass relative rotation inputs to PlayerController for all modes
+    if (playerController.setRelativeRotation) {
+      playerController.setRelativeRotation(
+        relativeRotationRef.current.yaw,
+        relativeRotationRef.current.pitch
+      );
+    }
+  });
+
+  // Method to reset relative rotations (useful for debugging)
+  const resetRotation = () => {
+    relativeRotationRef.current.yaw = 0;
+    relativeRotationRef.current.pitch = 0;
+  };
+
+  // Expose the reset method
+  React.useImperativeHandle(playerController?.dragControlsRef, () => ({
+    resetRotation
+  }));
+
   return null;
 };
 

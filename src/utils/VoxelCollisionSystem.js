@@ -1,11 +1,16 @@
 import * as THREE from 'three';
 import { WORLD_CONFIG, MATERIAL_TYPES, MATERIAL_PROPERTIES } from '../constants/world';
+import { globalPlanetGeometry } from './PlanetGeometry';
 
 export class VoxelCollisionSystem {
   constructor() {
     // Spatial hash for O(1) voxel lookups
     this.spatialHash = new Map();
     this.hashCellSize = WORLD_CONFIG.VOXEL_SIZE;
+    
+    // Radial gravity system for spherical planet
+    this.currentGravityDirection = new THREE.Vector3(0, -1, 0); // Will be updated per frame
+    this.playerOrientation = new THREE.Vector3(0, 1, 0); // Player "up" direction - will be updated per frame
     
     // Player collision data with new body configuration
     this.playerAABB = new THREE.Box3();
@@ -17,15 +22,11 @@ export class VoxelCollisionSystem {
     this.lastPlayerPosition = new THREE.Vector3();
     this.playerBodyCenter = new THREE.Vector3(); // Track body center separately from camera
     
-    // Performance optimization caches (optimized for high-density voxels)
+    // Simplified caching for spherical planet
     this.collisionCache = new Map();
     this.groundHeightCache = new Map();
-    this.cacheFrameLife = 90; // Longer cache for better performance with more voxels
+    this.cacheFrameLife = 30; // Shorter cache for responsiveness
     this.currentFrame = 0;
-    
-    // Ground detection for small body on flat terrain
-    this.groundDetectionRadius = 0.75; // Smaller search radius for compact body
-    this.groundAttachmentThreshold = 0.5; // Moderate distance for flat terrain
     
     // Predictive collision system - optimized for high-density voxels
     this.velocityInfluenceRadius = 2.0; // Increased for better collision prediction
@@ -114,13 +115,13 @@ export class VoxelCollisionSystem {
     const chunkMinZ = Math.abs(chunkWorldOffsetZ - chunkWorldSize / 2);
     const chunkMaxZ = Math.abs(chunkWorldOffsetZ + chunkWorldSize / 2);
     
-    // Check if chunk is within the actually rendered 3x3 grid (-1 to 1 in chunk coordinates)
-    if (Math.abs(chunkX) > 1 || Math.abs(chunkZ) > 1) {
-      console.log(`🚫 Chunk (${chunkX},${chunkZ}) is outside rendered 3x3 grid, skipping collision registration`);
+    // Accept all chunks within reasonable bounds (we now render 5x5 grid)
+    if (Math.abs(chunkX) > 3 || Math.abs(chunkZ) > 3) {
+      
       return;
     }
     
-    console.log(`✅ Registering collision for chunk (${chunkX},${chunkZ}) - World bounds: X=${chunkMinX}-${chunkMaxX}, Z=${chunkMinZ}-${chunkMaxZ}`);
+    
     
     // Only clear the specific chunk, not all terrain (unless it's a terrain reset)
     this.clearChunk(chunkX, chunkZ);
@@ -176,7 +177,7 @@ export class VoxelCollisionSystem {
     }
     
     this.stats.totalVoxels += solidCount;
-    console.log(`🔍 Chunk (${chunkX},${chunkZ}) collision summary: ${solidCount} voxels registered (exposed faces only). Total system: ${this.stats.totalVoxels}`);
+    
   }
 
   /**
@@ -225,61 +226,27 @@ export class VoxelCollisionSystem {
   }
 
   /**
-   * Aggressive ground height detection for high-density voxels
+   * Simple spherical planet surface detection - use distance from planet center
    */
   getGroundHeight(x, z) {
-    // Check if position is within the actually rendered 3x3 chunk grid (world coords -48 to +48)
-    const RENDERED_WORLD_LIMIT = 48; // 3x3 chunks * 32 world units per chunk / 2
-    if (Math.abs(x) > RENDERED_WORLD_LIMIT || Math.abs(z) > RENDERED_WORLD_LIMIT) {
-      return 0; // No ground outside rendered area
+    // For spherical planet, ground height is determined by distance from center
+    const planetCenter = new THREE.Vector3(...WORLD_CONFIG.PLANET.GRAVITY.CENTER);
+    const planetRadius = WORLD_CONFIG.PLANET.SIZE;
+    
+    // Calculate the expected surface height at this XZ position
+    const distanceFromCenterXZ = Math.sqrt(x * x + z * z);
+    
+    // If we're within the planet radius, calculate the surface Y coordinate
+    if (distanceFromCenterXZ <= planetRadius) {
+      // Use sphere equation: x² + y² + z² = r²
+      // Solve for y: y = √(r² - x² - z²)
+      const ySquared = planetRadius * planetRadius - distanceFromCenterXZ * distanceFromCenterXZ;
+      const surfaceY = Math.sqrt(Math.max(0, ySquared));
+      return surfaceY + WORLD_CONFIG.PLANET.TERRAIN.BASE_OFFSET;
     }
     
-    const cacheKey = `${Math.floor(x * 8)},${Math.floor(z * 8)}`; // Even finer cache precision
-    const cached = this.groundHeightCache.get(cacheKey);
-    
-    if (cached && this.currentFrame - cached.frame < this.cacheFrameLife) {
-      this.stats.cacheHits++;
-      return cached.height;
-    }
-    
-    this.stats.cacheMisses++;
-    
-    // Aggressive ground detection - check wider area and use average height
-    const checkRadius = this.groundDetectionRadius;
-    let totalHeight = 0;
-    let groundPoints = 0;
-    let highestGround = 0;
-    
-    // Check multiple points in a grid pattern
-    const step = WORLD_CONFIG.VOXEL_SIZE; // Check every voxel
-    for (let dx = -checkRadius; dx <= checkRadius; dx += step) {
-      for (let dz = -checkRadius; dz <= checkRadius; dz += step) {
-        const checkX = Math.floor(x + dx);
-        const checkZ = Math.floor(z + dz);
-        
-        // Skip points outside rendered area
-        if (Math.abs(checkX) > RENDERED_WORLD_LIMIT || Math.abs(checkZ) > RENDERED_WORLD_LIMIT) {
-          continue;
-        }
-        
-        // Find ground at this position
-        for (let y = WORLD_CONFIG.CHUNK_HEIGHT - 1; y >= 0; y--) {
-          if (this.isSolid(checkX, y, checkZ)) {
-            const height = (y + 1) * WORLD_CONFIG.VOXEL_SIZE;
-            totalHeight += height;
-            groundPoints++;
-            highestGround = Math.max(highestGround, height);
-            break;
-          }
-        }
-      }
-    }
-    
-    // Use the highest ground found for stability
-    const finalHeight = groundPoints > 0 ? highestGround : 0;
-    
-    this.groundHeightCache.set(cacheKey, { height: finalHeight, frame: this.currentFrame });
-    return finalHeight;
+    // Outside planet radius
+    return 0;
   }
 
   /**
@@ -304,7 +271,7 @@ export class VoxelCollisionSystem {
   }
 
   /**
-   * Enhanced hierarchical collision detection with body-centered approach
+   * Enhanced hierarchical collision detection with planetary physics support
    */
   checkPlayerCollision(currentCameraPosition, targetCameraPosition, velocity) {
     this.stats.checksPerFrame = 0;
@@ -312,6 +279,10 @@ export class VoxelCollisionSystem {
     // Convert camera positions to body center positions
     const currentBodyCenter = this.getCameraToBodyCenter(currentCameraPosition);
     const targetBodyCenter = this.getCameraToBodyCenter(targetCameraPosition);
+    
+    // Update gravity direction for planetary physics
+    this.updateGravityDirection(targetBodyCenter);
+    this.updatePlayerOrientation(targetBodyCenter);
     
     // Update player AABB based on body center
     this.updatePlayerAABB(targetBodyCenter);
@@ -385,49 +356,25 @@ export class VoxelCollisionSystem {
         penetrationResolved: false
       };
       
-      // Jump-friendly ground attachment for small body on flat terrain
-      const attachmentThreshold = this.groundAttachmentThreshold;
-      const forceGrounding = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.FORCE_GROUNDING || false;
-      const allowJumping = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.ALLOW_JUMPING || false;
+      // Simple spherical surface attachment
+      const planetCenter = new THREE.Vector3(...WORLD_CONFIG.PLANET.GRAVITY.CENTER);
+      const planetRadius = WORLD_CONFIG.PLANET.SIZE;
+      const distanceFromCenter = targetBodyCenter.distanceTo(planetCenter);
+      const isJumping = velocity.length() > 3; // Simple jump detection
       
-      // CRITICAL: Don't interfere with jumping - if player has upward velocity, let them jump!
-      const isJumping = velocity.y > 2; // Player is jumping with significant upward velocity
-      
-      // Only apply ground attachment if not jumping or has downward/minimal velocity
-      if (groundHeight > 0 && !isJumping && (groundDistance <= attachmentThreshold || forceGrounding)) {
-        const snapStrength = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.SNAP_STRENGTH || 0.85;
-        const targetY = groundHeight + this.playerSize.y / 2;
+      // Simple surface snapping for spherical planet
+      if (distanceFromCenter > planetRadius - 5 && distanceFromCenter < planetRadius + 5 && !isJumping) {
+        // Snap to planet surface
+        const directionFromCenter = targetBodyCenter.clone().sub(planetCenter).normalize();
+        const surfacePosition = planetCenter.clone().add(
+          directionFromCenter.multiplyScalar(planetRadius + this.playerSize.y / 2)
+        );
         
-        // Smooth snapping for flat terrain
-        if (groundDistance <= attachmentThreshold * 0.3) {
-          // Very close - strong snap
-          collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, 0.9);
-        } else {
-          // Close - gentle interpolation
-          collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, snapStrength);
-        }
-        
+        collisionResult.position.copy(surfacePosition);
         collisionResult.onGround = true;
         
-        // Stop downward velocity when on ground
-        if (collisionResult.velocity.y <= 0) {
-          collisionResult.velocity.y = 0;
-        }
-        
-        // Light friction for responsive movement on flat terrain (only when grounded)
-        const friction = 0.9;
-        collisionResult.velocity.x *= friction;
-        collisionResult.velocity.z *= friction;
-      } else if (groundHeight > 0 && !isJumping && groundDistance < attachmentThreshold * 1.5) {
-        // Moderate range - gentle pull toward ground (only if not jumping)
-        const pullStrength = 0.4;
-        const targetY = groundHeight + this.playerSize.y / 2;
-        collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, pullStrength);
-        
-        // Minimal air friction for responsiveness
-        const airFriction = 0.98;
-        collisionResult.velocity.x *= airFriction;
-        collisionResult.velocity.z *= airFriction;
+        // Simple friction
+        collisionResult.velocity.multiplyScalar(0.95);
       }
       
       // When jumping, preserve upward velocity and don't apply any ground effects
@@ -558,7 +505,7 @@ export class VoxelCollisionSystem {
     
     // More aggressive cache cleanup to prevent stale data
     if (this.currentFrame % 900 === 0) { // Every 15 seconds
-      console.log('Performing aggressive cache cleanup to prevent phantom collisions');
+      
       this.collisionCache.clear();
       this.groundHeightCache.clear();
     }
@@ -839,7 +786,7 @@ export class VoxelCollisionSystem {
     }
     groundKeysToRemove.forEach(key => this.groundHeightCache.delete(key));
     
-    console.log(`Invalidated ${collisionKeysToRemove.length} collision cache entries and ${groundKeysToRemove.length} ground cache entries for chunk (${chunkX},${chunkZ})`);
+    
   }
 
   /**
@@ -903,11 +850,52 @@ export class VoxelCollisionSystem {
   }
 
   /**
+   * Update gravity direction for radial planetary gravity
+   */
+  updateGravityDirection(playerPosition) {
+    if (WORLD_CONFIG.PLANET.GRAVITY.MODE === 'RADIAL') {
+      // Use radial gravity that points toward planet center
+      const gravity = globalPlanetGeometry.getRadialGravity(playerPosition);
+      if (gravity.length() > 0) {
+        this.currentGravityDirection.copy(gravity).normalize();
+      }
+    } else {
+      // Fallback to standard downward gravity
+      this.currentGravityDirection.set(0, -1, 0);
+    }
+  }
+
+  /**
+   * Update player orientation for planetary surface
+   */
+  updatePlayerOrientation(playerPosition) {
+    if (WORLD_CONFIG.PLANET.GRAVITY.MODE === 'RADIAL') {
+      // Player "up" direction should be away from planet center
+      const upDirection = globalPlanetGeometry.getUpDirection(playerPosition);
+      this.playerOrientation.copy(upDirection);
+    } else {
+      // Standard upward orientation
+      this.playerOrientation.set(0, 1, 0);
+    }
+  }
+
+  /**
+   * Get current gravity vector for physics calculations
+   */
+  getCurrentGravity(playerPosition) {
+    if (WORLD_CONFIG.PLANET.GRAVITY.MODE === 'RADIAL') {
+      return globalPlanetGeometry.getRadialGravity(playerPosition);
+    } else {
+      return new THREE.Vector3(0, -WORLD_CONFIG.PLANET.GRAVITY.STRENGTH, 0);
+    }
+  }
+
+  /**
    * Complete terrain reset - clears all collision data
    * Use when terrain parameters change to prevent phantom collisions
    */
   resetAllTerrain() {
-    console.log('Performing complete terrain reset - clearing all collision data');
+    
     
     // Clear all spatial hash data
     this.spatialHash.clear();
@@ -920,7 +908,7 @@ export class VoxelCollisionSystem {
     this.stats.totalVoxels = 0;
     this.stats.penetrationResolutions = 0;
     
-    console.log('Terrain reset complete - all collision data cleared');
+    
   }
 }
 
