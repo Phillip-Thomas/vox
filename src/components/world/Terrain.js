@@ -142,6 +142,10 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
     
     geometry.computeVertexNormals();
     
+    // Log rendering summary for comparison with collision system
+    const renderedVoxels = vertexIndex / 8; // 8 vertices per voxel
+    console.log(`🎨 Chunk (${chunkX},${chunkZ}) render summary: ${renderedVoxels} voxels rendered (exposed faces only)`);
+    
     return geometry;
   }, [terrainGenerator, chunkX, chunkZ, regenerationTrigger]); // Use regenerationTrigger instead of terrainParameters
 

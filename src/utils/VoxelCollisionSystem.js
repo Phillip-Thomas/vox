@@ -17,14 +17,18 @@ export class VoxelCollisionSystem {
     this.lastPlayerPosition = new THREE.Vector3();
     this.playerBodyCenter = new THREE.Vector3(); // Track body center separately from camera
     
-    // Performance optimization caches
+    // Performance optimization caches (optimized for high-density voxels)
     this.collisionCache = new Map();
     this.groundHeightCache = new Map();
-    this.cacheFrameLife = 60; // Cache expires after 60 frames
+    this.cacheFrameLife = 90; // Longer cache for better performance with more voxels
     this.currentFrame = 0;
     
-    // Predictive collision system - optimized for larger body
-    this.velocityInfluenceRadius = 1.5; // Reduced from 3 to prevent phantom collisions
+    // Ground detection for small body on flat terrain
+    this.groundDetectionRadius = 0.75; // Smaller search radius for compact body
+    this.groundAttachmentThreshold = 0.5; // Moderate distance for flat terrain
+    
+    // Predictive collision system - optimized for high-density voxels
+    this.velocityInfluenceRadius = 2.0; // Increased for better collision prediction
     this.activeCollisionRegion = new THREE.Box3();
     
     // Frame-based update system
@@ -99,6 +103,25 @@ export class VoxelCollisionSystem {
    * Register terrain data with complete chunk validation
    */
   registerChunk(chunkX, chunkZ, voxelData) {
+    // Check world boundaries - don't register chunks outside configured limits
+    const chunkWorldSize = WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
+    const chunkWorldOffsetX = chunkX * chunkWorldSize;
+    const chunkWorldOffsetZ = chunkZ * chunkWorldSize;
+    
+    // Calculate chunk boundaries in world coordinates
+    const chunkMinX = Math.abs(chunkWorldOffsetX - chunkWorldSize / 2);
+    const chunkMaxX = Math.abs(chunkWorldOffsetX + chunkWorldSize / 2);
+    const chunkMinZ = Math.abs(chunkWorldOffsetZ - chunkWorldSize / 2);
+    const chunkMaxZ = Math.abs(chunkWorldOffsetZ + chunkWorldSize / 2);
+    
+    // Check if chunk is within the actually rendered 3x3 grid (-1 to 1 in chunk coordinates)
+    if (Math.abs(chunkX) > 1 || Math.abs(chunkZ) > 1) {
+      console.log(`🚫 Chunk (${chunkX},${chunkZ}) is outside rendered 3x3 grid, skipping collision registration`);
+      return;
+    }
+    
+    console.log(`✅ Registering collision for chunk (${chunkX},${chunkZ}) - World bounds: X=${chunkMinX}-${chunkMaxX}, Z=${chunkMinZ}-${chunkMaxZ}`);
+    
     // Only clear the specific chunk, not all terrain (unless it's a terrain reset)
     this.clearChunk(chunkX, chunkZ);
     
@@ -106,11 +129,8 @@ export class VoxelCollisionSystem {
     this.invalidateCachesForChunk(chunkX, chunkZ);
     
     let solidCount = 0;
-    const chunkWorldSize = WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
-    const chunkWorldOffsetX = chunkX * chunkWorldSize;
-    const chunkWorldOffsetZ = chunkZ * chunkWorldSize;
     
-    // Build spatial hash
+    // Build spatial hash - ONLY for voxels that are actually rendered
     for (let x = 0; x < WORLD_CONFIG.CHUNK_SIZE; x++) {
       for (let z = 0; z < WORLD_CONFIG.CHUNK_SIZE; z++) {
         for (let y = 0; y < WORLD_CONFIG.CHUNK_HEIGHT; y++) {
@@ -118,25 +138,45 @@ export class VoxelCollisionSystem {
           const materialProps = MATERIAL_PROPERTIES[materialType];
           
           if (materialProps && materialProps.collisionEnabled && materialProps.solid) {
-            const worldX = Math.floor((x - WORLD_CONFIG.CHUNK_SIZE / 2) + chunkWorldOffsetX / WORLD_CONFIG.VOXEL_SIZE);
-            const worldY = y;
-            const worldZ = Math.floor((z - WORLD_CONFIG.CHUNK_SIZE / 2) + chunkWorldOffsetZ / WORLD_CONFIG.VOXEL_SIZE);
+            // Enhanced exposed face detection with stricter boundary checks
+            // This ensures collision system matches exactly what's rendered
+            const hasExposedFace = 
+              (x === 0 || voxelData[x - 1][z][y] === MATERIAL_TYPES.AIR) ||
+              (x === WORLD_CONFIG.CHUNK_SIZE - 1 || voxelData[x + 1][z][y] === MATERIAL_TYPES.AIR) ||
+              (z === 0 || voxelData[x][z - 1][y] === MATERIAL_TYPES.AIR) ||
+              (z === WORLD_CONFIG.CHUNK_SIZE - 1 || voxelData[x][z + 1][y] === MATERIAL_TYPES.AIR) ||
+              (y === 0 || voxelData[x][z][y - 1] === MATERIAL_TYPES.AIR) ||
+              (y === WORLD_CONFIG.CHUNK_HEIGHT - 1 || voxelData[x][z][y + 1] === MATERIAL_TYPES.AIR);
+              
+            // Additional check: voxels near chunk boundaries should be extra validated
+            const isNearBoundary = x <= 1 || x >= WORLD_CONFIG.CHUNK_SIZE - 2 || 
+                                   z <= 1 || z >= WORLD_CONFIG.CHUNK_SIZE - 2;
             
-            const hashKey = this.getHashKey(worldX, worldY, worldZ);
-            
-            if (!this.spatialHash.has(hashKey)) {
-              this.spatialHash.set(hashKey, new Set());
+            // For boundary voxels, require stricter validation
+            const shouldRegister = hasExposedFace && (!isNearBoundary || materialType !== MATERIAL_TYPES.AIR);
+
+            // Only register voxels that pass all validation checks
+            if (shouldRegister) {
+              const worldX = Math.floor((x - WORLD_CONFIG.CHUNK_SIZE / 2) + chunkWorldOffsetX / WORLD_CONFIG.VOXEL_SIZE);
+              const worldY = y;
+              const worldZ = Math.floor((z - WORLD_CONFIG.CHUNK_SIZE / 2) + chunkWorldOffsetZ / WORLD_CONFIG.VOXEL_SIZE);
+              
+              const hashKey = this.getHashKey(worldX, worldY, worldZ);
+              
+              if (!this.spatialHash.has(hashKey)) {
+                this.spatialHash.set(hashKey, new Set());
+              }
+              
+              this.spatialHash.get(hashKey).add(`${worldX},${worldY},${worldZ}`);
+              solidCount++;
             }
-            
-            this.spatialHash.get(hashKey).add(`${worldX},${worldY},${worldZ}`);
-            solidCount++;
           }
         }
       }
     }
     
     this.stats.totalVoxels += solidCount;
-    console.log(`Registered chunk (${chunkX},${chunkZ}) - Added: ${solidCount} voxels. Total: ${this.stats.totalVoxels}`);
+    console.log(`🔍 Chunk (${chunkX},${chunkZ}) collision summary: ${solidCount} voxels registered (exposed faces only). Total system: ${this.stats.totalVoxels}`);
   }
 
   /**
@@ -144,8 +184,6 @@ export class VoxelCollisionSystem {
    */
   clearChunk(chunkX, chunkZ) {
     const chunkWorldSize = WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
-    const chunkWorldOffsetX = chunkX * chunkWorldSize;
-    const chunkWorldOffsetZ = chunkZ * chunkWorldSize;
     
     // Clear spatial hash entries for this chunk
     for (const [hashKey, voxelSet] of this.spatialHash.entries()) {
@@ -187,10 +225,16 @@ export class VoxelCollisionSystem {
   }
 
   /**
-   * Cached ground height calculation with spatial optimization
+   * Aggressive ground height detection for high-density voxels
    */
   getGroundHeight(x, z) {
-    const cacheKey = `${Math.floor(x)},${Math.floor(z)}`;
+    // Check if position is within the actually rendered 3x3 chunk grid (world coords -48 to +48)
+    const RENDERED_WORLD_LIMIT = 48; // 3x3 chunks * 32 world units per chunk / 2
+    if (Math.abs(x) > RENDERED_WORLD_LIMIT || Math.abs(z) > RENDERED_WORLD_LIMIT) {
+      return 0; // No ground outside rendered area
+    }
+    
+    const cacheKey = `${Math.floor(x * 8)},${Math.floor(z * 8)}`; // Even finer cache precision
     const cached = this.groundHeightCache.get(cacheKey);
     
     if (cached && this.currentFrame - cached.frame < this.cacheFrameLife) {
@@ -200,22 +244,42 @@ export class VoxelCollisionSystem {
     
     this.stats.cacheMisses++;
     
-    // Use spatial hash to find ground more efficiently
-    const voxelX = Math.floor(x);
-    const voxelZ = Math.floor(z);
+    // Aggressive ground detection - check wider area and use average height
+    const checkRadius = this.groundDetectionRadius;
+    let totalHeight = 0;
+    let groundPoints = 0;
+    let highestGround = 0;
     
-    // Start from reasonable height and work down, but use spatial hash
-    for (let y = WORLD_CONFIG.CHUNK_HEIGHT - 1; y >= 0; y--) {
-      if (this.isSolid(voxelX, y, voxelZ)) {
-        const height = (y + 1) * WORLD_CONFIG.VOXEL_SIZE;
-        this.groundHeightCache.set(cacheKey, { height, frame: this.currentFrame });
-        return height;
+    // Check multiple points in a grid pattern
+    const step = WORLD_CONFIG.VOXEL_SIZE; // Check every voxel
+    for (let dx = -checkRadius; dx <= checkRadius; dx += step) {
+      for (let dz = -checkRadius; dz <= checkRadius; dz += step) {
+        const checkX = Math.floor(x + dx);
+        const checkZ = Math.floor(z + dz);
+        
+        // Skip points outside rendered area
+        if (Math.abs(checkX) > RENDERED_WORLD_LIMIT || Math.abs(checkZ) > RENDERED_WORLD_LIMIT) {
+          continue;
+        }
+        
+        // Find ground at this position
+        for (let y = WORLD_CONFIG.CHUNK_HEIGHT - 1; y >= 0; y--) {
+          if (this.isSolid(checkX, y, checkZ)) {
+            const height = (y + 1) * WORLD_CONFIG.VOXEL_SIZE;
+            totalHeight += height;
+            groundPoints++;
+            highestGround = Math.max(highestGround, height);
+            break;
+          }
+        }
       }
     }
     
-    const height = 0;
-    this.groundHeightCache.set(cacheKey, { height, frame: this.currentFrame });
-    return height;
+    // Use the highest ground found for stability
+    const finalHeight = groundPoints > 0 ? highestGround : 0;
+    
+    this.groundHeightCache.set(cacheKey, { height: finalHeight, frame: this.currentFrame });
+    return finalHeight;
   }
 
   /**
@@ -307,9 +371,10 @@ export class VoxelCollisionSystem {
     let collisionResult;
     
     if (actualCollisions.length === 0) {
-      // No collisions, check for ground with caching
+      // Enhanced ground detection for high-density voxels
       const groundHeight = this.getGroundHeight(targetBodyCenter.x, targetBodyCenter.z);
       const playerBottom = targetBodyCenter.y - this.playerSize.y / 2;
+      const groundDistance = playerBottom - groundHeight;
       
       collisionResult = {
         position: targetBodyCenter.clone(),
@@ -320,12 +385,55 @@ export class VoxelCollisionSystem {
         penetrationResolved: false
       };
       
-      if (playerBottom <= groundHeight + 0.1) {
-        collisionResult.position.y = groundHeight + this.playerSize.y / 2;
+      // Jump-friendly ground attachment for small body on flat terrain
+      const attachmentThreshold = this.groundAttachmentThreshold;
+      const forceGrounding = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.FORCE_GROUNDING || false;
+      const allowJumping = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.ALLOW_JUMPING || false;
+      
+      // CRITICAL: Don't interfere with jumping - if player has upward velocity, let them jump!
+      const isJumping = velocity.y > 2; // Player is jumping with significant upward velocity
+      
+      // Only apply ground attachment if not jumping or has downward/minimal velocity
+      if (groundHeight > 0 && !isJumping && (groundDistance <= attachmentThreshold || forceGrounding)) {
+        const snapStrength = WORLD_CONFIG.PLAYER_BODY.GROUND_ATTACHMENT?.SNAP_STRENGTH || 0.85;
+        const targetY = groundHeight + this.playerSize.y / 2;
+        
+        // Smooth snapping for flat terrain
+        if (groundDistance <= attachmentThreshold * 0.3) {
+          // Very close - strong snap
+          collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, 0.9);
+        } else {
+          // Close - gentle interpolation
+          collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, snapStrength);
+        }
+        
         collisionResult.onGround = true;
+        
+        // Stop downward velocity when on ground
         if (collisionResult.velocity.y <= 0) {
           collisionResult.velocity.y = 0;
         }
+        
+        // Light friction for responsive movement on flat terrain (only when grounded)
+        const friction = 0.9;
+        collisionResult.velocity.x *= friction;
+        collisionResult.velocity.z *= friction;
+      } else if (groundHeight > 0 && !isJumping && groundDistance < attachmentThreshold * 1.5) {
+        // Moderate range - gentle pull toward ground (only if not jumping)
+        const pullStrength = 0.4;
+        const targetY = groundHeight + this.playerSize.y / 2;
+        collisionResult.position.y = THREE.MathUtils.lerp(targetBodyCenter.y, targetY, pullStrength);
+        
+        // Minimal air friction for responsiveness
+        const airFriction = 0.98;
+        collisionResult.velocity.x *= airFriction;
+        collisionResult.velocity.z *= airFriction;
+      }
+      
+      // When jumping, preserve upward velocity and don't apply any ground effects
+      if (isJumping) {
+        collisionResult.onGround = false;
+        // Don't apply any friction or snapping when jumping
       }
     } else {
       // Use enhanced collision resolution

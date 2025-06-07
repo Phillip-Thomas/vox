@@ -1,47 +1,47 @@
 // Vegetation system constants and configuration
 export const VEGETATION_CONFIG = {
-  // Global vegetation settings
+  // Global vegetation settings (optimized for high-density voxels)
   GENERATION: {
-    DENSITY_SCALE: 0.0001, // Ultra-low density for memory safety
-    MIN_FLAT_AREA: 5, // Larger flat area requirement to reduce candidates
-    MIN_DISTANCE_BETWEEN_TREES: 25, // Much larger spacing
-    HEIGHT_PREFERENCE: { min: 10, max: 30 }, // Narrower height range
-    MAX_TREES_PER_CHUNK: 5, // Emergency limit - only 5 trees per chunk
-    MAX_ANALYSIS_POINTS: 1000, // Limit terrain analysis to prevent memory bloat
+    DENSITY_SCALE: 0.0002, // Slightly increased density for finer detail
+    MIN_FLAT_AREA: 3, // Smaller requirement to work with 0.25 voxel size
+    MIN_DISTANCE_BETWEEN_TREES: 12, // Reduced spacing for finer detail (was 25)
+    HEIGHT_PREFERENCE: { min: 8, max: 32 }, // Adjusted for flat terrain scale
+    MAX_TREES_PER_CHUNK: 8, // Slightly more trees per chunk for density
+    MAX_ANALYSIS_POINTS: 800, // Reduced for 64x64 chunks (was 1000 for 128x128)
   },
 
-  // Tree generation parameters
+  // Tree generation parameters (scaled for high-density voxels)
   TREE: {
-    // Base (trunk) parameters
+    // Base (trunk) parameters (adjusted for 0.25 voxel size)
     BASE: {
-      MIN_HEIGHT: 8, // Increased minimum height to make trees more visible
-      MAX_HEIGHT: 20, // Increased maximum height
-      MIN_RADIUS: 0.8, // Increased minimum radius
-      MAX_RADIUS: 1.5, // Increased maximum radius
-      TAPER_FACTOR: 0.7, // How much the trunk tapers toward the top
-      SEGMENTS: 8, // Number of segments around trunk circumference
+      MIN_HEIGHT: 16, // 4x larger for new voxel scale (was 8)
+      MAX_HEIGHT: 32, // 4x larger for new voxel scale (was 20)
+      MIN_RADIUS: 1.2, // Slightly larger for proportion (was 0.8)
+      MAX_RADIUS: 2.5, // Larger for visual impact (was 1.5)
+      TAPER_FACTOR: 0.7,
+      SEGMENTS: 8,
     },
 
-    // Branch parameters - drastically simplified
+    // Branch parameters - still simplified for performance
     BRANCHES: {
-      MIN_BRANCHES: 0, // No branches for performance
-      MAX_BRANCHES: 0, // No branches for performance
-      BRANCH_LENGTH_FACTOR: 0.3, // Shorter branches if any
-      BRANCH_RADIUS_FACTOR: 0.2, // Thinner branches
-      BRANCH_ANGLE_MIN: 30, // Simplified angles
-      BRANCH_ANGLE_MAX: 60, // Simplified angles
-      SUB_BRANCH_PROBABILITY: 0.0, // No sub-branches
-      MAX_BRANCH_LEVELS: 0, // No branching levels
+      MIN_BRANCHES: 0,
+      MAX_BRANCHES: 2, // Allow minimal branching for more detail
+      BRANCH_LENGTH_FACTOR: 0.4, // Slightly longer branches
+      BRANCH_RADIUS_FACTOR: 0.25,
+      BRANCH_ANGLE_MIN: 25,
+      BRANCH_ANGLE_MAX: 65,
+      SUB_BRANCH_PROBABILITY: 0.0,
+      MAX_BRANCH_LEVELS: 1, // Allow one level of branching
     },
 
-    // Foliage parameters - simplified for performance
+    // Foliage parameters (scaled for higher detail)
     FOLIAGE: {
-      CANOPY_RADIUS_FACTOR: 1.0, // Smaller canopy to reduce geometry
-      CANOPY_HEIGHT_FACTOR: 0.3, // Shorter canopy
-      LEAF_DENSITY: 0.1, // Very low density to reduce vertex count
-      LEAF_SIZE: { min: 1.0, max: 2.0 }, // Larger but fewer leaves
-      FOLIAGE_LAYERS: 1, // Single layer only
-      LAYER_OVERLAP: 0.1, // Minimal overlap
+      CANOPY_RADIUS_FACTOR: 1.5, // Larger canopy for better visual impact
+      CANOPY_HEIGHT_FACTOR: 0.4, // Slightly taller canopy
+      LEAF_DENSITY: 0.15, // Slightly higher density for detail
+      LEAF_SIZE: { min: 0.8, max: 1.5 }, // Adjusted for voxel scale
+      FOLIAGE_LAYERS: 2, // Add another layer for richness
+      LAYER_OVERLAP: 0.2,
     },
 
     // Visual parameters
@@ -51,11 +51,11 @@ export const VEGETATION_CONFIG = {
       LEAVES_VARIATION: 0.3, // Color variation in leaves
     },
 
-    // Placement parameters - ultra-permissive for testing
+    // Placement parameters (adjusted for new terrain scale)
     PLACEMENT: {
-      FLATNESS_TOLERANCE: 15, // Much larger tolerance - allow very steep terrain
+      FLATNESS_TOLERANCE: 3, // Adjusted for flatter terrain
       PREFERRED_MATERIALS: ['GRASS', 'DIRT', 'STONE'], // Only allow solid, suitable terrain
-      AVOID_MATERIALS: [], // No materials to avoid 
+      AVOID_MATERIALS: [],
       BIOME_DENSITY_MULTIPLIER: {
         plains: 1.0,
         forest: 2.5,
