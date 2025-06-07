@@ -81,13 +81,50 @@ const DragCameraControls = ({ enabled = true, playerController = null }) => {
   useFrame(() => {
     if (!enabled || !playerController) return;
 
-    // Pass relative rotation inputs to PlayerController for all modes
-    if (playerController.setRelativeRotation) {
-      playerController.setRelativeRotation(
-        relativeRotationRef.current.yaw,
-        relativeRotationRef.current.pitch
-      );
+    // Only apply drag controls in player mode, and only when PlayerController allows it
+    if (!playerController.allowCameraControl) {
+      // Pass relative rotation inputs to PlayerController instead of directly controlling camera
+      if (playerController.setRelativeRotation) {
+        playerController.setRelativeRotation(
+          relativeRotationRef.current.yaw,
+          relativeRotationRef.current.pitch
+        );
+        
+        // Debug logging removed to prevent spam
+      }
+      return;
     }
+
+    // Dev mode: Apply rotations directly (for free-flying camera)
+    const upDirection = playerController.getRadialDirection();
+    
+    // Create base orientation aligned with planet surface
+    const forward = new Vector3(0, 0, -1); // Default forward
+    const tangentialForward = forward.clone().sub(
+      upDirection.clone().multiplyScalar(forward.dot(upDirection))
+    ).normalize();
+    
+    const rightDirection = new Vector3().crossVectors(tangentialForward, upDirection).normalize();
+    
+    // Apply relative yaw rotation around the up direction
+    const yawRotation = new Quaternion().setFromAxisAngle(upDirection, relativeRotationRef.current.yaw);
+    const rotatedForward = tangentialForward.clone().applyQuaternion(yawRotation);
+    const rotatedRight = rightDirection.clone().applyQuaternion(yawRotation);
+    
+    // Apply relative pitch rotation around the right direction
+    const pitchRotation = new Quaternion().setFromAxisAngle(rotatedRight, relativeRotationRef.current.pitch);
+    const finalForward = rotatedForward.clone().applyQuaternion(pitchRotation);
+    const finalUp = upDirection.clone().applyQuaternion(pitchRotation);
+    
+    // Recalculate right to maintain orthogonality
+    const finalRight = new Vector3().crossVectors(finalForward, finalUp).normalize();
+    
+    // Create final rotation matrix and apply to camera
+    const rotationMatrix = new THREE.Matrix4();
+    rotationMatrix.makeBasis(finalRight, finalUp, finalForward.multiplyScalar(-1));
+    
+    const targetQuaternion = new Quaternion().setFromRotationMatrix(rotationMatrix);
+    camera.quaternion.copy(targetQuaternion);
   });
 
   // Method to reset relative rotations (useful for debugging)

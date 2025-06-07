@@ -7,7 +7,7 @@ const Game = ({ terrainParameters, terrainKey, playerMode, onModeChange, onPlaye
   // Reset all terrain collision data when parameters change
   useEffect(() => {
     if (terrainParameters) {
-  
+      console.log('Terrain parameters changed - performing complete collision system reset');
       globalCollisionSystem.resetAllTerrain();
     }
   }, [terrainParameters]);

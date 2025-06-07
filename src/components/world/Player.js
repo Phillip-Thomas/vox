@@ -44,7 +44,39 @@ export default function Player({ mode, onModeChange, onPlayerControllerReady }) 
         if (onModeChange) onModeChange(newMode);
       }
 
+      // Debug key to show performance stats (handled by App.js now)
+      if (event.code === 'KeyP') {
+        const stats = globalCollisionSystem.getStats();
+        console.log('Collision System Performance:', stats);
+        
+        // Show player controller debug info
+        if (playerControllerRef.current) {
+          const debugInfo = playerControllerRef.current.getDebugInfo();
+          console.log('🌍 Player Controller Debug:', debugInfo);
+        }
+      }
 
+      // Debug key to check for phantom collisions
+      if (event.code === 'KeyO') {
+        console.log('Checking for phantom collisions around player...');
+        const bodyCenter = globalCollisionSystem.getCameraToBodyCenter(camera.position);
+        const checkRadius = 5;
+        
+        for (let x = -checkRadius; x <= checkRadius; x++) {
+          for (let y = -checkRadius; y <= checkRadius; y++) {
+            for (let z = -checkRadius; z <= checkRadius; z++) {
+              const worldX = Math.floor(bodyCenter.x + x);
+              const worldY = Math.floor(bodyCenter.y + y);
+              const worldZ = Math.floor(bodyCenter.z + z);
+              
+              const debugInfo = globalCollisionSystem.isSolidDebug(worldX, worldY, worldZ);
+              if (debugInfo.solid) {
+                console.log(`Solid voxel at (${worldX},${worldY},${worldZ}):`, debugInfo);
+              }
+            }
+          }
+        }
+      }
 
       // Reset player to surface position
       if (event.code === 'KeyR') {

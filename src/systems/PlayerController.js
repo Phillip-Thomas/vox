@@ -3,81 +3,6 @@ import { WORLD_CONFIG } from '../constants/world';
 import { globalCollisionSystem } from '../utils/VoxelCollisionSystem';
 
 /**
- * PlayerBodyRig - Represents the player's body as a 3-block column
- * Automatically maintains orientation relative to planet surface
- */
-class PlayerBodyRig {
-  constructor(planetCenter, planetRadius) {
-    this.planetCenter = planetCenter;
-    this.planetRadius = planetRadius;
-    
-    // Body structure (3 blocks)
-    this.blockHeight = 1.0; // Height of each block
-    this.position = new THREE.Vector3(); // World position (center of torso)
-    
-    // Body orientation (automatically calculated)
-    this.upDirection = new THREE.Vector3(0, 1, 0);     // Head to feet direction (away from planet)
-    this.forwardDirection = new THREE.Vector3(0, 0, 1); // Forward direction (tangent to surface)
-    this.rightDirection = new THREE.Vector3(1, 0, 0);   // Right direction (tangent to surface)
-  }
-  
-  /**
-   * Update body orientation based on current position
-   */
-  updateOrientation() {
-    // Calculate surface normal (feet point toward center, head away from center)
-    const toPlanetCenter = this.planetCenter.clone().sub(this.position);
-    this.upDirection = toPlanetCenter.clone().normalize().multiplyScalar(-1); // Away from center
-    
-    // Create stable tangent coordinate system
-    // Try Z-axis first as reference
-    let referenceForward = new THREE.Vector3(0, 0, 1);
-    
-    // If Z is too close to up direction, use X-axis
-    if (Math.abs(referenceForward.dot(this.upDirection)) > 0.9) {
-      referenceForward = new THREE.Vector3(1, 0, 0);
-    }
-    
-    // Create right direction perpendicular to up
-    this.rightDirection = referenceForward.clone().cross(this.upDirection).normalize();
-    
-    // Create forward direction perpendicular to both up and right
-    this.forwardDirection = this.upDirection.clone().cross(this.rightDirection).normalize();
-  }
-  
-  /**
-   * Get world position of head (where camera should be)
-   */
-  getHeadPosition() {
-    return this.position.clone().add(this.upDirection.clone().multiplyScalar(this.blockHeight));
-  }
-  
-  /**
-   * Get world position of feet
-   */
-  getFeetPosition() {
-    return this.position.clone().sub(this.upDirection.clone().multiplyScalar(this.blockHeight));
-  }
-  
-  /**
-   * Set body position and update orientation
-   */
-  setPosition(newPosition) {
-    this.position.copy(newPosition);
-    this.updateOrientation();
-  }
-  
-  /**
-   * Get rotation matrix for body orientation
-   */
-  getOrientationMatrix() {
-    const matrix = new THREE.Matrix4();
-    matrix.makeBasis(this.rightDirection, this.upDirection, this.forwardDirection.clone().negate());
-    return matrix;
-  }
-}
-
-/**
  * PlayerController - Modular locomotion system for spherical planets
  * Built specifically for radial gravity and scalable movement systems
  */
@@ -93,12 +18,12 @@ export class PlayerController {
     this.planetCenter = new THREE.Vector3(...WORLD_CONFIG.PLANET.GRAVITY.CENTER);
     this.planetRadius = WORLD_CONFIG.PLANET.SIZE;
     
-    // Spherical camera orientation (relative to surface)
-    this.cameraYaw = 0;   // Rotation around surface normal (look left/right)
-    this.cameraPitch = 0; // Rotation around surface tangent (look up/down)
+    // Initialize player position on planet surface
+    this.position = this.getInitialSurfacePosition();
+    this.camera.position.copy(this.position);
     
-    // Stable reference direction for consistent coordinate system
-    this.referenceDirection = new THREE.Vector3(0, 0, 1); // Start facing Z-direction
+    // Initialize camera orientation to match surface
+    this.initializeCameraOrientation();
     
     // Movement parameters
     this.moveSpeed = 0.02; // Much slower for planet scale
@@ -112,13 +37,11 @@ export class PlayerController {
     
     // Orientation smoothing
     this.orientationSmoothness = 0.15; // More responsive camera adjustment
+    this.allowCameraControl = true; // Allow external camera control (drag controls)
     
-    // Initialize player position on planet surface
-    this.position = this.getInitialSurfacePosition();
-    this.camera.position.copy(this.position);
-    
-    // Initialize camera orientation to match surface
-    this.initializeCameraOrientation();
+    // Relative camera rotation from drag controls
+    this.relativeYaw = 0;
+    this.relativePitch = 0;
     
     // Input state (will be set externally)
     this.inputState = {
@@ -168,9 +91,6 @@ export class PlayerController {
     // Reset physics state in dev mode
     this.velocity.set(0, 0, 0);
     this.isGrounded = true;
-    
-    // Update camera orientation to maintain surface alignment even in dev mode
-    this.updateCameraOrientation();
   }
 
   /**
@@ -219,6 +139,17 @@ export class PlayerController {
     const gravityDirection = this.planetCenter.clone().sub(this.position).normalize();
     const gravityForce = gravityDirection.multiplyScalar(this.gravityStrength);
     
+    // Debug gravity occasionally
+    if (Math.random() < 0.01) { // 1% chance to log
+      console.log(`⬇️ Gravity Debug:`, {
+        position: this.position.toArray(),
+        planetCenter: this.planetCenter.toArray(),
+        gravityDirection: gravityDirection.toArray(),
+        gravityForce: gravityForce.toArray(),
+        isGrounded: this.isGrounded
+      });
+    }
+    
     // Only apply gravity if not grounded or if moving away from surface
     const radialVelocity = this.getRadialVelocityComponent();
     if (!this.isGrounded || radialVelocity > 0) {
@@ -237,6 +168,17 @@ export class PlayerController {
       // Simple radial impulse away from planet center
       const jumpDirection = this.getRadialDirection();
       const jumpImpulse = jumpDirection.clone().multiplyScalar(this.jumpForce);
+      
+      const distanceFromCenter = this.position.distanceTo(this.planetCenter);
+      console.log(`🚀 Jumping:`, {
+        position: this.position.toArray(),
+        planetCenter: this.planetCenter.toArray(),
+        distanceFromCenter: distanceFromCenter.toFixed(2),
+        expectedSurfaceDistance: this.planetRadius,
+        jumpDirection: jumpDirection.toArray(), // This should be normalized
+        jumpImpulse: jumpImpulse.toArray(),     // This should be jumpDirection * jumpForce
+        jumpForce: this.jumpForce
+      });
       
       // Add jump impulse to current velocity (don't replace, just add)
       this.velocity.add(jumpImpulse);
@@ -264,6 +206,8 @@ export class PlayerController {
     if (tangentialMovement.length() > 0) {
       tangentialMovement.normalize().multiplyScalar(this.moveSpeed);
       this.velocity.add(tangentialMovement);
+      
+      // Debug logging removed
     }
   }
 
@@ -295,62 +239,52 @@ export class PlayerController {
    * Update camera orientation to match planet surface
    */
   updateCameraOrientation() {
-    const surfaceNormal = this.getRadialDirection(); // "Up" direction at current position
+    const upDirection = this.getRadialDirection();
     
-    // Project the stable reference direction onto the current tangent plane
-    // This maintains continuity and prevents coordinate system flips
-    let tangentForward = this.referenceDirection.clone().sub(
-      surfaceNormal.clone().multiplyScalar(this.referenceDirection.dot(surfaceNormal))
-    );
-    
-    // If the reference direction becomes too aligned with surface normal (near poles),
-    // use the current camera forward direction projected onto tangent plane
-    if (tangentForward.length() < 0.1) {
+    if (this.allowCameraControl) {
+      // Dev mode: basic orientation adjustment
       const currentForward = new THREE.Vector3(0, 0, -1).applyQuaternion(this.camera.quaternion);
-      tangentForward = currentForward.clone().sub(
-        surfaceNormal.clone().multiplyScalar(currentForward.dot(surfaceNormal))
+      const tangentialForward = currentForward.clone().sub(
+        upDirection.clone().multiplyScalar(currentForward.dot(upDirection))
       );
       
-      // If still too small, use emergency fallback
-      if (tangentForward.length() < 0.1) {
-        // Find any vector perpendicular to surface normal
-        if (Math.abs(surfaceNormal.x) < 0.9) {
-          tangentForward = new THREE.Vector3(1, 0, 0).cross(surfaceNormal);
-        } else {
-          tangentForward = new THREE.Vector3(0, 1, 0).cross(surfaceNormal);
-        }
+      if (tangentialForward.length() > 0.001) {
+        tangentialForward.normalize();
+        const rightDirection = new THREE.Vector3().crossVectors(tangentialForward, upDirection).normalize();
+        const rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.makeBasis(rightDirection, upDirection, tangentialForward.multiplyScalar(-1));
+        const targetQuaternion = new THREE.Quaternion().setFromRotationMatrix(rotationMatrix);
+        this.camera.quaternion.slerp(targetQuaternion, this.orientationSmoothness);
       }
+    } else {
+      // Player mode: use relative rotations from drag controls
+      const forward = new THREE.Vector3(0, 0, -1);
+      const tangentialForward = forward.clone().sub(
+        upDirection.clone().multiplyScalar(forward.dot(upDirection))
+      ).normalize();
+      
+      const rightDirection = new THREE.Vector3().crossVectors(tangentialForward, upDirection).normalize();
+      
+      // Apply relative yaw rotation around the up direction
+      const yawRotation = new THREE.Quaternion().setFromAxisAngle(upDirection, this.relativeYaw);
+      const rotatedForward = tangentialForward.clone().applyQuaternion(yawRotation);
+      const rotatedRight = rightDirection.clone().applyQuaternion(yawRotation);
+      
+      // Apply relative pitch rotation around the right direction
+      const pitchRotation = new THREE.Quaternion().setFromAxisAngle(rotatedRight, this.relativePitch);
+      const finalForward = rotatedForward.clone().applyQuaternion(pitchRotation);
+      const finalUp = upDirection.clone().applyQuaternion(pitchRotation);
+      
+      // Recalculate right to maintain orthogonality
+      const finalRight = new THREE.Vector3().crossVectors(finalForward, finalUp).normalize();
+      
+      // Create final rotation matrix and apply to camera
+      const rotationMatrix = new THREE.Matrix4();
+      rotationMatrix.makeBasis(finalRight, finalUp, finalForward.multiplyScalar(-1));
+      
+      const targetQuaternion = new THREE.Quaternion().setFromRotationMatrix(rotationMatrix);
+      this.camera.quaternion.copy(targetQuaternion);
     }
-    
-    tangentForward.normalize();
-    
-    // Update reference direction to maintain continuity for next frame
-    this.referenceDirection.copy(tangentForward);
-    
-    // Create orthogonal tangent coordinate system
-    const tangentRight = tangentForward.clone().cross(surfaceNormal).normalize();
-    
-    // Apply camera yaw around surface normal
-    const yawRotation = new THREE.Quaternion().setFromAxisAngle(surfaceNormal, this.cameraYaw);
-    const rotatedForward = tangentForward.clone().applyQuaternion(yawRotation);
-    const rotatedRight = tangentRight.clone().applyQuaternion(yawRotation);
-    
-    // Apply camera pitch around the rotated right axis
-    const clampedPitch = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, this.cameraPitch));
-    const pitchRotation = new THREE.Quaternion().setFromAxisAngle(rotatedRight, clampedPitch);
-    const finalForward = rotatedForward.clone().applyQuaternion(pitchRotation);
-    const finalUp = surfaceNormal.clone().applyQuaternion(pitchRotation);
-    
-    // Recalculate right to maintain orthogonality
-    const finalRight = finalForward.clone().cross(finalUp).normalize();
-    
-    // Build rotation matrix (Three.js uses -Z as forward)
-    const rotationMatrix = new THREE.Matrix4();
-    rotationMatrix.makeBasis(finalRight, finalUp, finalForward.clone().negate());
-    
-    // Apply to camera with smoothing for smooth transitions
-    const targetQuaternion = new THREE.Quaternion().setFromRotationMatrix(rotationMatrix);
-    this.camera.quaternion.slerp(targetQuaternion, this.orientationSmoothness);
   }
 
   /**
@@ -377,6 +311,17 @@ export class PlayerController {
   getRadialDirection() {
     const radial = this.position.clone().sub(this.planetCenter);
     const direction = radial.length() > 0 ? radial.normalize() : new THREE.Vector3(0, 1, 0);
+    
+    // Debug: log direction vectors occasionally 
+    if (Math.random() < 0.01) { // 1% chance to log
+      console.log(`🧭 Direction Debug:`, {
+        position: this.position.toArray(),
+        planetCenter: this.planetCenter.toArray(),
+        radialDirection: direction.toArray(),
+        distance: this.position.distanceTo(this.planetCenter).toFixed(2)
+      });
+    }
+    
     return direction;
   }
 
@@ -408,9 +353,8 @@ export class PlayerController {
    * Set relative rotation from drag controls
    */
   setRelativeRotation(yaw, pitch) {
-    this.cameraYaw = yaw;
-    this.cameraPitch = pitch;
-    // Camera orientation will be updated automatically in the next frame
+    this.relativeYaw = yaw;
+    this.relativePitch = pitch;
   }
 
   /**
@@ -421,9 +365,10 @@ export class PlayerController {
     this.camera.position.copy(this.position);
     this.velocity.set(0, 0, 0);
     this.isGrounded = true;
-    this.cameraYaw = 0;
-    this.cameraPitch = 0;
+    this.relativeYaw = 0;
+    this.relativePitch = 0;
     this.initializeCameraOrientation();
+    // Debug logging removed
   }
 
   /**
@@ -433,6 +378,15 @@ export class PlayerController {
     // For cubic planet, place player ON the TOP face surface
     const surfacePosition = this.planetCenter.clone();
     surfacePosition.y += this.planetRadius + 2; // Just 2 units above TOP face for safety
+    
+    console.log(`🌍 Planet Setup:`, {
+      planetCenter: this.planetCenter.toArray(),
+      planetRadius: this.planetRadius,
+      surfacePosition: surfacePosition.toArray(),
+      planetTopFace: this.planetCenter.y + this.planetRadius,
+      chunkBounds: `Y: 0 to ${256 * 0.25}`
+    });
+    
     return surfacePosition;
   }
 
@@ -440,39 +394,10 @@ export class PlayerController {
    * Initialize camera orientation to match surface
    */
   initializeCameraOrientation() {
-    // Safety check to ensure everything is initialized
-    if (!this.position || !this.camera || !this.planetCenter) {
-      return;
-    }
+    // Force initial camera update to ensure proper orientation
+    this.updateCameraOrientation();
     
-    // Set initial camera orientation values for a good starting view
-    this.cameraYaw = 0;
-    this.cameraPitch = 0;
-    
-    // Calculate proper initial orientation
-    const surfaceNormal = this.getRadialDirection();
-    
-    // Set up initial reference direction projected onto surface
-    let initialReference = new THREE.Vector3(0, 0, 1);
-    if (Math.abs(initialReference.dot(surfaceNormal)) > 0.9) {
-      initialReference = new THREE.Vector3(1, 0, 0);
-    }
-    
-    // Project reference onto tangent plane
-    const initialForward = initialReference.clone().sub(
-      surfaceNormal.clone().multiplyScalar(initialReference.dot(surfaceNormal))
-    ).normalize();
-    
-    // Store this as our stable reference direction
-    this.referenceDirection.copy(initialForward);
-    
-    const initialRight = initialForward.clone().cross(surfaceNormal).normalize();
-    
-    // Set camera to look forward tangentially
-    const rotationMatrix = new THREE.Matrix4();
-    rotationMatrix.makeBasis(initialRight, surfaceNormal, initialForward.clone().negate());
-    
-    this.camera.quaternion.setFromRotationMatrix(rotationMatrix);
+    // Debug logging removed
   }
 
   /**

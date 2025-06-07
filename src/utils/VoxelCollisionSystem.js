@@ -117,11 +117,11 @@ export class VoxelCollisionSystem {
     
     // Accept all chunks within reasonable bounds (we now render 5x5 grid)
     if (Math.abs(chunkX) > 3 || Math.abs(chunkZ) > 3) {
-      
+      console.log(`🚫 Chunk (${chunkX},${chunkZ}) is outside reasonable bounds, skipping collision registration`);
       return;
     }
     
-    
+    console.log(`✅ Registering collision for chunk (${chunkX},${chunkZ}) - World bounds: X=${chunkMinX}-${chunkMaxX}, Z=${chunkMinZ}-${chunkMaxZ}`);
     
     // Only clear the specific chunk, not all terrain (unless it's a terrain reset)
     this.clearChunk(chunkX, chunkZ);
@@ -177,7 +177,7 @@ export class VoxelCollisionSystem {
     }
     
     this.stats.totalVoxels += solidCount;
-    
+    console.log(`🔍 Chunk (${chunkX},${chunkZ}) collision summary: ${solidCount} voxels registered (exposed faces only). Total system: ${this.stats.totalVoxels}`);
   }
 
   /**
@@ -505,7 +505,7 @@ export class VoxelCollisionSystem {
     
     // More aggressive cache cleanup to prevent stale data
     if (this.currentFrame % 900 === 0) { // Every 15 seconds
-      
+      console.log('Performing aggressive cache cleanup to prevent phantom collisions');
       this.collisionCache.clear();
       this.groundHeightCache.clear();
     }
@@ -786,7 +786,7 @@ export class VoxelCollisionSystem {
     }
     groundKeysToRemove.forEach(key => this.groundHeightCache.delete(key));
     
-    
+    console.log(`Invalidated ${collisionKeysToRemove.length} collision cache entries and ${groundKeysToRemove.length} ground cache entries for chunk (${chunkX},${chunkZ})`);
   }
 
   /**
@@ -895,7 +895,7 @@ export class VoxelCollisionSystem {
    * Use when terrain parameters change to prevent phantom collisions
    */
   resetAllTerrain() {
-    
+    console.log('Performing complete terrain reset - clearing all collision data');
     
     // Clear all spatial hash data
     this.spatialHash.clear();
@@ -908,7 +908,7 @@ export class VoxelCollisionSystem {
     this.stats.totalVoxels = 0;
     this.stats.penetrationResolutions = 0;
     
-    
+    console.log('Terrain reset complete - all collision data cleared');
   }
 }
 

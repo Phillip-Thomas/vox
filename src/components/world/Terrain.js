@@ -17,7 +17,7 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
   // Update terrain generator when parameters change and trigger regeneration
   useEffect(() => {
     if (terrainParameters) {
-  
+      console.log(`Updating terrain generator for chunk (${chunkX},${chunkZ}) with new parameters:`, terrainParameters);
       
       terrainGenerator.updateParameters(terrainParameters);
       setRegenerationTrigger(prev => prev + 1); // Force geometry regeneration
@@ -26,7 +26,7 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
 
   // Generate terrain geometry using the new generator system
   const geometry = useMemo(() => {
-
+    console.log('Regenerating terrain geometry, trigger:', regenerationTrigger);
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
     const normals = [];
@@ -44,7 +44,7 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
       // Use integrated terrain-vegetation system for coordinate matching
       globalTerrainVegetationIntegrator.generateIntegratedVegetation(chunkX, chunkZ, voxelData)
         .then(vegetation => {
-    
+          console.log(`🌳 Integrated vegetation result for chunk (${chunkX},${chunkZ}):`, vegetation);
           setVegetationData(vegetation);
         })
         .catch(error => {
@@ -145,7 +145,7 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
     
     // Log rendering summary for comparison with collision system
     const renderedVoxels = vertexIndex / 8; // 8 vertices per voxel
-
+    console.log(`🎨 Chunk (${chunkX},${chunkZ}) render summary: ${renderedVoxels} voxels rendered (exposed faces only)`);
     
     return geometry;
   }, [terrainGenerator, chunkX, chunkZ, regenerationTrigger]); // Use regenerationTrigger instead of terrainParameters

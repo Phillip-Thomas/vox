@@ -14,14 +14,14 @@ export class PlanetTerrainGenerator extends TerrainGenerator {
    * Override updateParameters - spherical planet doesn't need parameter updates
    */
   updateParameters(newParams) {
-
+    console.log('🌍 Spherical planet: ignoring terrain parameters', newParams);
   }
 
   /**
    * Generate chunk data for spherical planet
    */
   generateChunkData(chunkX, chunkZ) {
-
+    console.log(`🌍 Generating spherical planet chunk (${chunkX}, ${chunkZ})`);
     
     // Initialize empty voxel array
     const voxelData = this.initializeVoxelArray();
