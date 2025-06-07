@@ -23,8 +23,8 @@ export class VoxelCollisionSystem {
     this.cacheFrameLife = 60; // Cache expires after 60 frames
     this.currentFrame = 0;
     
-    // Predictive collision system - increased for larger body
-    this.velocityInfluenceRadius = 3; // Increased for larger collision body
+    // Predictive collision system - optimized for larger body
+    this.velocityInfluenceRadius = 1.5; // Reduced from 3 to prevent phantom collisions
     this.activeCollisionRegion = new THREE.Box3();
     
     // Frame-based update system
@@ -96,10 +96,14 @@ export class VoxelCollisionSystem {
   }
 
   /**
-   * Register terrain data using spatial hashing for ultra-fast lookups
+   * Register terrain data with complete chunk validation
    */
   registerChunk(chunkX, chunkZ, voxelData) {
+    // Only clear the specific chunk, not all terrain (unless it's a terrain reset)
     this.clearChunk(chunkX, chunkZ);
+    
+    // Invalidate caches that might contain stale data for this chunk area
+    this.invalidateCachesForChunk(chunkX, chunkZ);
     
     let solidCount = 0;
     const chunkWorldSize = WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
@@ -132,7 +136,7 @@ export class VoxelCollisionSystem {
     }
     
     this.stats.totalVoxels += solidCount;
-
+    console.log(`Registered chunk (${chunkX},${chunkZ}) - Added: ${solidCount} voxels. Total: ${this.stats.totalVoxels}`);
   }
 
   /**
@@ -287,11 +291,15 @@ export class VoxelCollisionSystem {
     
     for (const voxelKey of potentialCollisions) {
       const [x, y, z] = voxelKey.split(',').map(Number);
-      const voxelAABB = this.getVoxelAABB(x, y, z);
       
-      if (this.playerAABB.intersectsBox(voxelAABB)) {
-        actualCollisions.push({ x, y, z, aabb: voxelAABB });
-        this.stats.checksPerFrame++;
+      // Verify the voxel actually exists (prevent phantom collisions)
+      if (this.isSolid(x, y, z)) {
+        const voxelAABB = this.getVoxelAABB(x, y, z);
+        
+        if (this.playerAABB.intersectsBox(voxelAABB)) {
+          actualCollisions.push({ x, y, z, aabb: voxelAABB });
+          this.stats.checksPerFrame++;
+        }
       }
     }
 
@@ -432,12 +440,19 @@ export class VoxelCollisionSystem {
     }
     
     // Adjust velocity influence radius based on collision checks per frame
-    if (stats.checksPerFrame > 50) {
-      // Too many checks - reduce prediction radius
-      this.velocityInfluenceRadius = Math.max(1, this.velocityInfluenceRadius - 0.1);
-    } else if (stats.checksPerFrame < 10) {
+    if (stats.checksPerFrame > 30) {
+      // Too many checks - reduce prediction radius (lowered threshold)
+      this.velocityInfluenceRadius = Math.max(0.5, this.velocityInfluenceRadius - 0.05);
+    } else if (stats.checksPerFrame < 5) {
       // Very few checks - can increase prediction for better collision detection
-      this.velocityInfluenceRadius = Math.min(3, this.velocityInfluenceRadius + 0.1);
+      this.velocityInfluenceRadius = Math.min(2, this.velocityInfluenceRadius + 0.05);
+    }
+    
+    // More aggressive cache cleanup to prevent stale data
+    if (this.currentFrame % 900 === 0) { // Every 15 seconds
+      console.log('Performing aggressive cache cleanup to prevent phantom collisions');
+      this.collisionCache.clear();
+      this.groundHeightCache.clear();
     }
     
     // Reset per-frame stats
@@ -680,6 +695,124 @@ export class VoxelCollisionSystem {
     }
 
     return result;
+  }
+
+  /**
+   * Invalidate caches for a specific chunk area
+   */
+  invalidateCachesForChunk(chunkX, chunkZ) {
+    const chunkWorldSize = WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
+    const chunkWorldOffsetX = chunkX * chunkWorldSize;
+    const chunkWorldOffsetZ = chunkZ * chunkWorldSize;
+    
+    // Calculate world bounds for this chunk
+    const minX = Math.floor(chunkWorldOffsetX / WORLD_CONFIG.VOXEL_SIZE - WORLD_CONFIG.CHUNK_SIZE / 2);
+    const maxX = Math.floor(chunkWorldOffsetX / WORLD_CONFIG.VOXEL_SIZE + WORLD_CONFIG.CHUNK_SIZE / 2);
+    const minZ = Math.floor(chunkWorldOffsetZ / WORLD_CONFIG.VOXEL_SIZE - WORLD_CONFIG.CHUNK_SIZE / 2);
+    const maxZ = Math.floor(chunkWorldOffsetZ / WORLD_CONFIG.VOXEL_SIZE + WORLD_CONFIG.CHUNK_SIZE / 2);
+    
+    // Clear collision cache for this area
+    const collisionKeysToRemove = [];
+    for (const [key, value] of this.collisionCache.entries()) {
+      const [x, y, z] = key.split(',').map(Number);
+      if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) {
+        collisionKeysToRemove.push(key);
+      }
+    }
+    collisionKeysToRemove.forEach(key => this.collisionCache.delete(key));
+    
+    // Clear ground height cache for this area
+    const groundKeysToRemove = [];
+    for (const [key, value] of this.groundHeightCache.entries()) {
+      const [x, z] = key.split(',').map(Number);
+      if (x >= minX && x <= maxX && z >= minZ && z <= maxZ) {
+        groundKeysToRemove.push(key);
+      }
+    }
+    groundKeysToRemove.forEach(key => this.groundHeightCache.delete(key));
+    
+    console.log(`Invalidated ${collisionKeysToRemove.length} collision cache entries and ${groundKeysToRemove.length} ground cache entries for chunk (${chunkX},${chunkZ})`);
+  }
+
+  /**
+   * Debug method to check for phantom collisions
+   * @param {Array} collisions - Array of detected collisions
+   * @returns {Object} - Debug information about phantom collisions
+   */
+  debugPhantomCollisions(collisions) {
+    const phantoms = [];
+    const valid = [];
+    
+    for (const collision of collisions) {
+      const { x, y, z } = collision;
+      
+      // Double-check if this voxel actually exists in our spatial hash
+      const hashKey = this.getHashKey(x, y, z);
+      const voxelSet = this.spatialHash.get(hashKey);
+      const voxelKey = `${x},${y},${z}`;
+      
+      if (!voxelSet || !voxelSet.has(voxelKey)) {
+        phantoms.push({
+          position: { x, y, z },
+          hashKey,
+          voxelKey,
+          reason: voxelSet ? 'voxel not in set' : 'hash bucket not found'
+        });
+      } else {
+        valid.push(collision);
+      }
+    }
+    
+    return {
+      phantoms,
+      valid,
+      phantomCount: phantoms.length,
+      validCount: valid.length
+    };
+  }
+
+  /**
+   * Enhanced ultra-fast voxel solid check with debug logging
+   */
+  isSolidDebug(x, y, z) {
+    const hashKey = this.getHashKey(x, y, z);
+    const voxelSet = this.spatialHash.get(hashKey);
+    
+    if (!voxelSet) {
+      return { solid: false, reason: 'no hash bucket' };
+    }
+    
+    const voxelKey = `${Math.floor(x)},${Math.floor(y)},${Math.floor(z)}`;
+    const solid = voxelSet.has(voxelKey);
+    
+    return { 
+      solid, 
+      reason: solid ? 'found in hash' : 'not in hash set',
+      hashKey,
+      voxelKey,
+      bucketSize: voxelSet.size
+    };
+  }
+
+  /**
+   * Complete terrain reset - clears all collision data
+   * Use when terrain parameters change to prevent phantom collisions
+   */
+  resetAllTerrain() {
+    console.log('Performing complete terrain reset - clearing all collision data');
+    
+    // Clear all spatial hash data
+    this.spatialHash.clear();
+    
+    // Clear all caches
+    this.collisionCache.clear();
+    this.groundHeightCache.clear();
+    
+    // Reset statistics
+    this.stats.totalVoxels = 0;
+    this.stats.penetrationResolutions = 0;
+    
+    console.log('Terrain reset complete - all collision data cleared');
   }
 }
 

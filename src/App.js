@@ -123,8 +123,8 @@ function App() {
       
       <div className="instructions">
         {playerMode === 'dev' 
-          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls • P for collision stats'
-          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls • P for collision stats'
+          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls • P for collision stats • O to debug collisions'
+          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls • P for collision stats • O to debug collisions'
         }
       </div>
       

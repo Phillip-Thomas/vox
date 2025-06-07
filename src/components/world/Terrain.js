@@ -12,11 +12,12 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
   // Update terrain generator when parameters change and trigger regeneration
   useEffect(() => {
     if (terrainParameters) {
-      console.log('Updating terrain generator with new parameters:', terrainParameters);
+      console.log(`Updating terrain generator for chunk (${chunkX},${chunkZ}) with new parameters:`, terrainParameters);
+      
       terrainGenerator.updateParameters(terrainParameters);
       setRegenerationTrigger(prev => prev + 1); // Force geometry regeneration
     }
-  }, [terrainParameters, terrainGenerator]);
+  }, [terrainParameters, terrainGenerator, chunkX, chunkZ]);
 
   // Generate terrain geometry using the new generator system
   const geometry = useMemo(() => {

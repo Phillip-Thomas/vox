@@ -46,6 +46,28 @@ export default function Player({ mode, onModeChange }) {
         const stats = globalCollisionSystem.getStats();
         console.log('Collision System Performance:', stats);
       }
+
+      // Debug key to check for phantom collisions
+      if (event.code === 'KeyO') {
+        console.log('Checking for phantom collisions around player...');
+        const bodyCenter = globalCollisionSystem.getCameraToBodyCenter(camera.position);
+        const checkRadius = 5;
+        
+        for (let x = -checkRadius; x <= checkRadius; x++) {
+          for (let y = -checkRadius; y <= checkRadius; y++) {
+            for (let z = -checkRadius; z <= checkRadius; z++) {
+              const worldX = Math.floor(bodyCenter.x + x);
+              const worldY = Math.floor(bodyCenter.y + y);
+              const worldZ = Math.floor(bodyCenter.z + z);
+              
+              const debugInfo = globalCollisionSystem.isSolidDebug(worldX, worldY, worldZ);
+              if (debugInfo.solid) {
+                console.log(`Solid voxel at (${worldX},${worldY},${worldZ}):`, debugInfo);
+              }
+            }
+          }
+        }
+      }
     };
 
     const handleKeyUp = (event) => {

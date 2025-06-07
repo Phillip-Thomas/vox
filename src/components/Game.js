@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Terrain from './world/Terrain';
 import Player from './world/Player';
+import { globalCollisionSystem } from '../utils/VoxelCollisionSystem';
 
 const Game = ({ terrainParameters, terrainKey, playerMode, onModeChange }) => {
+  // Reset all terrain collision data when parameters change
+  useEffect(() => {
+    if (terrainParameters) {
+      console.log('Terrain parameters changed - performing complete collision system reset');
+      globalCollisionSystem.resetAllTerrain();
+    }
+  }, [terrainParameters]);
+
   // Generate a 3x3 grid of terrain chunks for testing
   const renderChunks = () => {
     const chunks = [];
