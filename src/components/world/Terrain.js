@@ -4,7 +4,8 @@ import { TerrainGenerator } from '../../generators/TerrainGenerator';
 import { WORLD_CONFIG, MATERIAL_TYPES } from '../../constants/world';
 import { globalCollisionSystem } from '../../utils/VoxelCollisionSystem';
 import { globalVegetationSystem } from '../../systems/VegetationSystem';
-import VegetationRenderer from './VegetationRenderer';
+import { globalTerrainVegetationIntegrator } from '../../systems/TerrainVegetationIntegrator';
+import { VegetationRenderer } from './VegetationRenderer';
 
 const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
   const meshRef = useRef();
@@ -37,10 +38,20 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
     // Register this chunk's voxel data with the collision system
     globalCollisionSystem.registerChunk(chunkX, chunkZ, voxelData);
     
-    // Generate vegetation for this chunk if enabled
+    // Generate vegetation for this chunk if enabled - using integrated system
     if (WORLD_CONFIG.VEGETATION.ENABLED && WORLD_CONFIG.VEGETATION.CHUNK_GENERATION) {
-      const vegetation = globalVegetationSystem.generateVegetationForChunk(chunkX, chunkZ, voxelData);
-      setVegetationData(vegetation);
+      // Use integrated terrain-vegetation system for coordinate matching
+      globalTerrainVegetationIntegrator.generateIntegratedVegetation(chunkX, chunkZ, voxelData)
+        .then(vegetation => {
+          console.log(`🌳 Integrated vegetation result for chunk (${chunkX},${chunkZ}):`, vegetation);
+          setVegetationData(vegetation);
+        })
+        .catch(error => {
+          console.error(`❌ Error generating integrated vegetation for chunk (${chunkX},${chunkZ}):`, error);
+          // Fallback to basic system
+          const vegetation = globalVegetationSystem.generateVegetationForChunk(chunkX, chunkZ, voxelData);
+          setVegetationData(vegetation);
+        });
     }
     
     // Generate mesh from voxel data
@@ -142,11 +153,7 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
       {WORLD_CONFIG.VEGETATION.ENABLED && vegetationData && (
         <VegetationRenderer 
           chunkData={vegetationData}
-          position={[
-            chunkX * WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE,
-            0,
-            chunkZ * WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE
-          ]}
+          position={[0, 0, 0]}
         />
       )}
     </>

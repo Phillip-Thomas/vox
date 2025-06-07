@@ -72,12 +72,43 @@ export const WORLD_CONFIG = {
     SAND: [0.9, 0.8, 0.6],
   },
 
-  // Vegetation system integration
+  // Terrain-Vegetation Integration
   VEGETATION: {
     ENABLED: true,
-    CHUNK_GENERATION: true, // Generate vegetation per chunk
-    DENSITY_MULTIPLIER: 1.0, // Global density multiplier
-    LOD_ENABLED: true, // Enable level-of-detail for performance
+    CHUNK_GENERATION: true,
+    DENSITY_MULTIPLIER: 1.0,
+    LOD_ENABLED: true,
+    
+    // Terrain modification for vegetation
+    GUARANTEED_FLAT_AREAS: {
+      ENABLED: true,
+      MIN_PATCHES_PER_CHUNK: 2, // Minimum flat patches per chunk
+      PATCH_SIZE_MIN: 5, // Minimum patch radius in voxels
+      PATCH_SIZE_MAX: 12, // Maximum patch radius in voxels
+      FLATNESS_LEVEL: 2, // Maximum height variation in flat patches
+    },
+    
+    // Coordinate system integration
+    PLACEMENT_PRECISION: {
+      SURFACE_DETECTION: 'ACCURATE', // Use accurate surface height detection
+      COORDINATE_MATCHING: true, // Ensure vegetation coordinates match terrain
+      HEIGHT_OFFSET: 0.1, // Small offset above surface
+    },
+    
+    // Terrain-driven parameters
+    TERRAIN_INFLUENCE: {
+      HEIGHT_ZONES: {
+        LOWLAND: { min: 0, max: 15, foliage_scale: 1.5 },
+        MIDLAND: { min: 15, max: 35, foliage_scale: 1.0 },
+        HIGHLAND: { min: 35, max: 64, foliage_scale: 0.3 },
+      },
+      SLOPE_INFLUENCE: {
+        FLAT: { max_slope: 2, foliage_scale: 1.2 },
+        GENTLE: { max_slope: 5, foliage_scale: 1.0 },
+        STEEP: { max_slope: 10, foliage_scale: 0.5 },
+        CLIFF: { max_slope: 999, foliage_scale: 0.1 },
+      }
+    }
   }
 };
 

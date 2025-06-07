@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { WORLD_CONFIG, MATERIAL_TYPES } from '../constants/world';
 import { VEGETATION_CONFIG, PLACEMENT_TYPES } from '../constants/vegetation';
 import { TreeGenerator } from '../generators/TreeGenerator';
+import { globalCollisionSystem } from '../utils/VoxelCollisionSystem';
 
 export class VegetationSystem {
   constructor() {
@@ -276,27 +277,7 @@ export class VegetationSystem {
       chunkZ,
     };
     
-    // DEBUG: Force at least one simple tree in every chunk for testing
-    if (filteredPlacements.length === 0) {
-      console.log(`🚀 DEBUG: Forcing test tree in chunk (${chunkX},${chunkZ})`);
-      const testPosition = new THREE.Vector3(chunkX * 200, 25, chunkZ * 200); // Put tree at chunk center, high up
-      
-      try {
-        const testTree = this.treeGenerator.generateTree({
-          position: testPosition,
-          suitability: { flatness: 1.0, materialSuitability: 1.0 },
-          localPosition: { x: 32, z: 32, y: 25 },
-        });
-        
-        if (testTree) {
-          vegetationData.trees.push(testTree);
-          this.stats.totalTrees++;
-          console.log(`🌲 Added debug tree at position:`, testPosition);
-        }
-      } catch (error) {
-        console.error(`💥 Failed to create debug tree:`, error);
-      }
-    }
+
     
     for (const placement of filteredPlacements) {
       try {
@@ -351,6 +332,164 @@ export class VegetationSystem {
     }
     
     return vegetationData;
+  }
+
+  /**
+   * Generate vegetation for a chunk with provided surface analysis
+   * Used by the integrated terrain-vegetation system
+   */
+  async generateChunkVegetation(chunkX, chunkZ, surfaceAnalysis, vegetationParams = {}) {
+    const startTime = performance.now();
+    
+    // Use provided parameters or defaults
+    const maxTrees = vegetationParams.maxTrees || VEGETATION_CONFIG.GENERATION.MAX_TREES_PER_CHUNK;
+    const densityMultiplier = vegetationParams.densityMultiplier || 1.0;
+    
+    console.log(`🌱 Generating vegetation for chunk (${chunkX},${chunkZ}) with ${surfaceAnalysis.validPlacements?.length || 0} valid placements`);
+    
+    const vegetationData = {
+      trees: [],
+      chunkX,
+      chunkZ,
+      metadata: {
+        generationTime: 0,
+        placementStrategy: vegetationParams.placementStrategy || 'DEFAULT',
+        terrainAdaptive: vegetationParams.terrainAdaptive || false
+      }
+    };
+
+    if (!surfaceAnalysis.validPlacements || surfaceAnalysis.validPlacements.length === 0) {
+      console.log(`⚠️ No valid placements for chunk (${chunkX},${chunkZ})`);
+      return vegetationData;
+    }
+
+    // Filter and select placement locations using distance filtering
+    const filteredPlacements = this.filterPlacementsByDistance(
+      surfaceAnalysis.validPlacements, 
+      VEGETATION_CONFIG.GENERATION.MIN_DISTANCE_BETWEEN_TREES
+    );
+
+    // Apply noise-based filtering with high threshold for sparsity
+    const noisyFilteredPlacements = filteredPlacements.filter(placement => {
+      const noiseValue = this.noiseGenerator.noise2D(
+        placement.worldX * 0.01, 
+        placement.worldZ * 0.01
+      );
+      return (noiseValue + 1) / 2 > 0.95; // Very high threshold for sparse placement
+    });
+
+    // Limit tree count
+    const selectedPlacements = noisyFilteredPlacements.slice(0, maxTrees);
+    
+    console.log(`🎯 Selected ${selectedPlacements.length} out of ${filteredPlacements.length} potential placements`);
+
+    // Generate trees at selected locations
+    for (const placement of selectedPlacements) {
+      try {
+        // FINAL VALIDATION: Check collision system before generating tree
+        const groundCheck = globalCollisionSystem.isSolid(
+          placement.worldX, 
+          placement.worldY - 1, // Check the voxel below where tree will be placed
+          placement.worldZ
+        );
+        
+        if (!groundCheck) {
+          console.error(`🚫 FINAL CHECK FAILED: No solid terrain found at tree placement position (${placement.worldX.toFixed(1)}, ${(placement.worldY - 1).toFixed(1)}, ${placement.worldZ.toFixed(1)})`);
+          this.stats.placementAttempts++;
+          continue; // Skip this placement
+        }
+        
+        const tree = this.treeGenerator.generateTree({
+          position: new THREE.Vector3(placement.worldX, placement.worldY, placement.worldZ),
+          suitability: { 
+            flatness: placement.flatness || 1.0, 
+            materialSuitability: placement.suitability || 0.8 
+          },
+          localPosition: { 
+            x: placement.chunkX, 
+            z: placement.chunkZ, 
+            y: placement.chunkY 
+          },
+        });
+        
+        if (tree) {
+          vegetationData.trees.push(tree);
+          this.stats.totalTrees++;
+          this.stats.successfulPlacements++;
+          console.log(`✅ Tree generated at (${Math.round(placement.worldX)}, ${Math.round(placement.worldY)}, ${Math.round(placement.worldZ)})`);
+          
+          // CRITICAL: Cross-check with collision system to verify solid terrain exists
+          const collisionCheck = globalCollisionSystem.isSolid(
+            placement.worldX, 
+            placement.worldY - 1, // Check the voxel below the tree
+            placement.worldZ
+          );
+          console.log(`🔍 Collision system check: solid terrain at (${placement.worldX.toFixed(1)}, ${(placement.worldY - 1).toFixed(1)}, ${placement.worldZ.toFixed(1)}) = ${collisionCheck}`);
+          
+          if (!collisionCheck) {
+            console.error(`❌ MISMATCH: Tree placed at position with no solid terrain according to collision system!`);
+          }
+        }
+      } catch (error) {
+        console.error(`💥 Error generating tree at (${placement.worldX}, ${placement.worldY}, ${placement.worldZ}):`, error);
+      }
+      
+      this.stats.placementAttempts++;
+    }
+
+    // Store vegetation data for this chunk
+    const chunkKey = `${chunkX},${chunkZ}`;
+    this.placedVegetation.set(chunkKey, vegetationData);
+    this.stats.chunksProcessed++;
+    
+    const endTime = performance.now();
+    vegetationData.metadata.generationTime = endTime - startTime;
+    
+    console.log(`🌳 Generated ${vegetationData.trees.length} trees for chunk (${chunkX},${chunkZ}) in ${vegetationData.metadata.generationTime.toFixed(2)}ms`);
+    
+    return vegetationData;
+  }
+
+  /**
+   * Filter placements by minimum distance to avoid overcrowding
+   * @param {Array} placements - Array of placement objects
+   * @param {number} minDistance - Minimum distance between placements
+   * @returns {Array} - Filtered placements
+   */
+  filterPlacementsByDistance(placements, minDistance) {
+    if (!placements || placements.length === 0) return [];
+    
+    const selected = [];
+    const minDistSquared = minDistance * minDistance;
+    
+    // Sort by suitability score (highest first) to prioritize best locations
+    const sortedPlacements = [...placements].sort((a, b) => {
+      const scoreA = (a.suitability || 0.5) + (a.flatness || 0.5);
+      const scoreB = (b.suitability || 0.5) + (b.flatness || 0.5);
+      return scoreB - scoreA;
+    });
+    
+    for (const placement of sortedPlacements) {
+      let tooClose = false;
+      
+      // Check distance to all previously selected placements
+      for (const selectedPlacement of selected) {
+        const dx = placement.worldX - selectedPlacement.worldX;
+        const dz = placement.worldZ - selectedPlacement.worldZ;
+        const distSquared = dx * dx + dz * dz;
+        
+        if (distSquared < minDistSquared) {
+          tooClose = true;
+          break;
+        }
+      }
+      
+      if (!tooClose) {
+        selected.push(placement);
+      }
+    }
+    
+    return selected;
   }
 
   /**

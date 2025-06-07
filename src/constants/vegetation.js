@@ -54,7 +54,7 @@ export const VEGETATION_CONFIG = {
     // Placement parameters - ultra-permissive for testing
     PLACEMENT: {
       FLATNESS_TOLERANCE: 15, // Much larger tolerance - allow very steep terrain
-      PREFERRED_MATERIALS: ['GRASS', 'DIRT', 'SAND', 'STONE'], // Accept almost any material
+      PREFERRED_MATERIALS: ['GRASS', 'DIRT', 'STONE'], // Only allow solid, suitable terrain
       AVOID_MATERIALS: [], // No materials to avoid 
       BIOME_DENSITY_MULTIPLIER: {
         plains: 1.0,

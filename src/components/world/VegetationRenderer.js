@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { globalVegetationSystem } from '../../systems/VegetationSystem';
+import { globalTerrainVegetationIntegrator } from '../../systems/TerrainVegetationIntegrator';
 
 export const VegetationRenderer = ({ chunkData, position }) => {
   const groupRef = useRef();
@@ -173,6 +174,11 @@ const TreeMeshGroup = ({ treeMesh }) => {
     // Assign the ref to the treeMesh for LOD processing
     treeMesh.ref = groupRef;
   }, [treeMesh]);
+
+  // Debug log tree position for first few trees
+  if (treeMesh.treeData.id.endsWith('0') || treeMesh.treeData.id.endsWith('1')) {
+    console.log(`🌲 Rendering tree ${treeMesh.treeData.id} at position: (${treeMesh.position.x.toFixed(1)}, ${treeMesh.position.y.toFixed(1)}, ${treeMesh.position.z.toFixed(1)})`);
+  }
 
   return (
     <group 

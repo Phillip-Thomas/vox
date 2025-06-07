@@ -131,6 +131,9 @@ export class TreeGenerator {
     // Add slight irregularity to make it more natural
     this.addTrunkIrregularity(geometry, treeParams.random);
     
+    // CRITICAL FIX: Translate the geometry so the trunk base is at Y=0, not centered
+    geometry.translate(0, trunk.height / 2, 0);
+    
     const material = new THREE.MeshLambertMaterial({
       color: new THREE.Color(...treeParams.colors.bark),
     });
@@ -138,7 +141,7 @@ export class TreeGenerator {
     return {
       geometry,
       material,
-      position: new THREE.Vector3(0, trunk.height / 2, 0),
+      position: new THREE.Vector3(0, 0, 0), // Trunk base is now at the origin
       vertexCount: geometry.attributes.position.count,
     };
   }
