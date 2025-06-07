@@ -8,13 +8,13 @@ export const WORLD_CONFIG = {
   CHUNK_HEIGHT: 64,
   
   // Terrain settings
-  TERRAIN_MAX_HEIGHT: 25,
+  TERRAIN_MAX_HEIGHT: 10,
   TERRAIN_BASE_HEIGHT: 5,
   
   // Generation settings
   NOISE_SEED: 42,
-  NOISE_SCALE: 0.02,
-  NOISE_OCTAVES: 3,
+  NOISE_SCALE: 0.005,
+  NOISE_OCTAVES: 1,
   NOISE_PERSISTENCE: 0.1,
   
   // World bounds
@@ -33,7 +33,7 @@ export const WORLD_CONFIG = {
     // Collision body dimensions (width, height, depth)
     WIDTH: 3,
     HEIGHT: 3,
-    DEPTH: 3,
+    DEPTH: 1,
     
     // Camera position relative to body center
     CAMERA_OFFSET: {
@@ -70,6 +70,14 @@ export const WORLD_CONFIG = {
     STONE: [0.6, 0.6, 0.7],
     DIRT: [0.4, 0.3, 0.2],
     SAND: [0.9, 0.8, 0.6],
+  },
+
+  // Vegetation system integration
+  VEGETATION: {
+    ENABLED: true,
+    CHUNK_GENERATION: true, // Generate vegetation per chunk
+    DENSITY_MULTIPLIER: 1.0, // Global density multiplier
+    LOD_ENABLED: true, // Enable level-of-detail for performance
   }
 };
 

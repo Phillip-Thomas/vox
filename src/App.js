@@ -5,12 +5,14 @@ import Game from './components/Game';
 import TerrainControls from './components/ui/TerrainControls';
 import DragCameraControls from './components/ui/DragCameraControls';
 import PerformanceStats from './components/ui/PerformanceStats';
+import { VegetationStats } from './components/world/VegetationRenderer';
 import './App.css';
 
 function App() {
   const [terrainParameters, setTerrainParameters] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [showPerformanceStats, setShowPerformanceStats] = useState(false);
+  const [showVegetationStats, setShowVegetationStats] = useState(false);
   const [terrainKey, setTerrainKey] = useState(0); // Force terrain regeneration
   const [playerMode, setPlayerMode] = useState('player');
 
@@ -30,6 +32,11 @@ function App() {
     setShowPerformanceStats(prev => !prev);
   };
 
+  // Handle vegetation stats toggle
+  const toggleVegetationStats = () => {
+    setShowVegetationStats(prev => !prev);
+  };
+
   // Handle player mode changes
   const handleModeChange = (newMode) => {
     setPlayerMode(newMode);
@@ -45,6 +52,10 @@ function App() {
       if (event.code === 'KeyP') {
         event.preventDefault();
         togglePerformanceStats();
+      }
+      if (event.code === 'KeyV') {
+        event.preventDefault();
+        toggleVegetationStats();
       }
     };
 
@@ -121,10 +132,13 @@ function App() {
       {/* Performance Stats - outside Canvas */}
       <PerformanceStats visible={showPerformanceStats && process.env.NODE_ENV === 'development'} />
       
+      {/* Vegetation Stats - outside Canvas */}
+      <VegetationStats visible={showVegetationStats} />
+      
       <div className="instructions">
         {playerMode === 'dev' 
-          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls • P for collision stats • O to debug collisions'
-          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls • P for collision stats • O to debug collisions'
+          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls • P for collision stats • V for vegetation stats • O to debug collisions'
+          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls • P for collision stats • V for vegetation stats • O to debug collisions'
         }
       </div>
       
