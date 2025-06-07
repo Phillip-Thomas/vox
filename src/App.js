@@ -4,11 +4,13 @@ import { Sky, OrbitControls, Stats } from '@react-three/drei';
 import Game from './components/Game';
 import TerrainControls from './components/ui/TerrainControls';
 import DragCameraControls from './components/ui/DragCameraControls';
+import PerformanceStats from './components/ui/PerformanceStats';
 import './App.css';
 
 function App() {
   const [terrainParameters, setTerrainParameters] = useState(null);
   const [showControls, setShowControls] = useState(false);
+  const [showPerformanceStats, setShowPerformanceStats] = useState(false);
   const [terrainKey, setTerrainKey] = useState(0); // Force terrain regeneration
   const [playerMode, setPlayerMode] = useState('player');
 
@@ -23,6 +25,11 @@ function App() {
     setShowControls(prev => !prev);
   };
 
+  // Handle performance stats toggle
+  const togglePerformanceStats = () => {
+    setShowPerformanceStats(prev => !prev);
+  };
+
   // Handle player mode changes
   const handleModeChange = (newMode) => {
     setPlayerMode(newMode);
@@ -34,6 +41,10 @@ function App() {
       if (event.code === 'KeyT') {
         event.preventDefault();
         toggleTerrainControls();
+      }
+      if (event.code === 'KeyP') {
+        event.preventDefault();
+        togglePerformanceStats();
       }
     };
 
@@ -107,10 +118,13 @@ function App() {
         Mode: {playerMode.toUpperCase()}
       </div>
       
+      {/* Performance Stats - outside Canvas */}
+      <PerformanceStats visible={showPerformanceStats && process.env.NODE_ENV === 'development'} />
+      
       <div className="instructions">
         {playerMode === 'dev' 
-          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls'
-          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls'
+          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls • P for collision stats'
+          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls • P for collision stats'
         }
       </div>
       

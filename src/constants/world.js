@@ -28,6 +28,27 @@ export const WORLD_CONFIG = {
   MOVEMENT_SPEED: 5,
   JUMP_SPEED: 8,
   
+  // Player body configuration
+  PLAYER_BODY: {
+    // Collision body dimensions (width, height, depth)
+    WIDTH: 3,
+    HEIGHT: 3,
+    DEPTH: 3,
+    
+    // Camera position relative to body center
+    CAMERA_OFFSET: {
+      x: 0,
+      y: 1.2, // Position camera near "head" level (80% up the body)
+      z: 0
+    },
+    
+    // Collision resolution settings
+    COLLISION_MARGIN: 0.1, // Extra margin for collision detection
+    PENETRATION_RESOLUTION: 0.6, // Increased from 0.3 - strong enough to prevent penetration
+    STEP_HEIGHT: 0.5, // Maximum step height player can walk up
+    VELOCITY_DAMPING: 0.98, // Reduced damping to maintain responsiveness
+  },
+  
   // Movement modes
   MOVEMENT_MODES: {
     PLAYER: 'player',
