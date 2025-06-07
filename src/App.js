@@ -1,15 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Sky, PointerLockControls, Stats } from '@react-three/drei';
+import { Sky, OrbitControls, Stats } from '@react-three/drei';
 import Game from './components/Game';
+import TerrainControls from './components/ui/TerrainControls';
+import DragCameraControls from './components/ui/DragCameraControls';
 import './App.css';
 
 function App() {
+  const [terrainParameters, setTerrainParameters] = useState(null);
+  const [showControls, setShowControls] = useState(false);
+  const [terrainKey, setTerrainKey] = useState(0); // Force terrain regeneration
+  const [playerMode, setPlayerMode] = useState('dev');
+
+  // Handle terrain parameter changes
+  const handleParametersChange = (newParams) => {
+    setTerrainParameters(newParams);
+    setTerrainKey(prev => prev + 1); // Force terrain regeneration
+  };
+
+  // Handle terrain controls toggle
+  const toggleTerrainControls = () => {
+    setShowControls(prev => !prev);
+  };
+
+  // Handle player mode changes
+  const handleModeChange = (newMode) => {
+    setPlayerMode(newMode);
+  };
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === 'KeyT') {
+        event.preventDefault();
+        toggleTerrainControls();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="App">
       <Canvas
         camera={{
-          position: [0, 10, 0],
+          position: [0, 20, 20],
           fov: 60,
           near: 0.1,
           far: 1000
@@ -30,16 +66,58 @@ function App() {
           shadow-mapSize={[2048, 2048]}
         />
         
-        <Game />
+        <Game 
+          terrainParameters={terrainParameters}
+          terrainKey={terrainKey}
+          onModeChange={handleModeChange}
+        />
         
-        <PointerLockControls />
+        {/* Camera Controls - conditional based on player mode */}
+        {playerMode === 'dev' ? (
+          <OrbitControls 
+            enabled={!showControls}
+            enablePan={true}
+            enableZoom={true}
+            enableRotate={true}
+            maxDistance={200}
+            minDistance={5}
+          />
+        ) : (
+          <DragCameraControls 
+            enabled={!showControls}
+          />
+        )}
         <Stats />
       </Canvas>
       
-      <div className="crosshair">+</div>
-      <div className="instructions">
-        Click to play • WASD to move • Mouse to look around
+      {/* Mode indicator - outside Canvas */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        color: playerMode === 'dev' ? '#00ff00' : '#ff8800',
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        padding: '8px 12px',
+        borderRadius: '4px',
+        zIndex: 1000
+      }}>
+        Mode: {playerMode.toUpperCase()}
       </div>
+      
+      <div className="instructions">
+        {playerMode === 'dev' 
+          ? 'Mouse to look around • Scroll to zoom • Right-click drag to pan • WASD to move • Q/E up/down • F to toggle mode • T for terrain controls'
+          : 'Drag to look around • WASD to move • Space to jump • F to toggle mode • T for terrain controls'
+        }
+      </div>
+      
+      <TerrainControls 
+        onParametersChange={handleParametersChange}
+        isVisible={showControls}
+        onToggleVisibility={toggleTerrainControls}
+      />
     </div>
   );
 }

@@ -1,12 +1,15 @@
 import React from 'react';
-import Terrain from './Terrain';
-import Player from './Player';
+import Terrain from './world/Terrain';
+import Player from './world/Player';
 
-const Game = () => {
+const Game = ({ terrainParameters, terrainKey, onModeChange }) => {
   return (
     <>
-      <Terrain />
-      <Player />
+      <Terrain 
+        key={terrainKey}
+        terrainParameters={terrainParameters}
+      />
+      <Player onModeChange={onModeChange} />
     </>
   );
 };
