@@ -10,7 +10,7 @@ function App() {
   const [terrainParameters, setTerrainParameters] = useState(null);
   const [showControls, setShowControls] = useState(false);
   const [terrainKey, setTerrainKey] = useState(0); // Force terrain regeneration
-  const [playerMode, setPlayerMode] = useState('dev');
+  const [playerMode, setPlayerMode] = useState('player');
 
   // Handle terrain parameter changes
   const handleParametersChange = (newParams) => {
@@ -45,9 +45,9 @@ function App() {
     <div className="App">
       <Canvas
         camera={{
-          position: [0, 20, 20],
+          position: [0, 30, 20],
           fov: 60,
-          near: 0.1,
+          near: 0.5,
           far: 1000
         }}
         shadows
@@ -69,6 +69,7 @@ function App() {
         <Game 
           terrainParameters={terrainParameters}
           terrainKey={terrainKey}
+          playerMode={playerMode}
           onModeChange={handleModeChange}
         />
         

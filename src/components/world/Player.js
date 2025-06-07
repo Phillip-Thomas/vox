@@ -2,17 +2,19 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { WORLD_CONFIG } from '../../constants/world';
+import { globalCollisionSystem } from '../../utils/VoxelCollisionSystem';
 
-export default function Player({ onModeChange }) {
+export default function Player({ mode, onModeChange }) {
   const { camera } = useThree();
-  const [mode, setMode] = useState('dev'); // 'dev' or 'player'
-  const [isGrounded, setIsGrounded] = useState(true);
+  const isGroundedRef = useRef(true); // Use ref for more reliable state management
   const velocityRef = useRef(new Vector3());
+  const jumpInputRef = useRef(false); // Track jump input separately
+  const lastJumpTimeRef = useRef(0); // Prevent jump spam
   
   const keysPressed = useRef({});
   const MOVE_SPEED = 0.5;
-  const JUMP_FORCE = 0.4;
-  const GRAVITY = 0.015;
+  const JUMP_FORCE = 0.5; // Increased jump force
+  const GRAVITY = 0.02; // Slightly increased gravity
 
   // Handle keyboard input
   useEffect(() => {
@@ -22,7 +24,6 @@ export default function Player({ onModeChange }) {
       // Toggle between dev and player mode
       if (event.code === 'KeyF') {
         const newMode = mode === 'dev' ? 'player' : 'dev';
-        setMode(newMode);
         if (onModeChange) onModeChange(newMode);
       }
     };
@@ -39,6 +40,8 @@ export default function Player({ onModeChange }) {
       document.removeEventListener('keyup', handleKeyUp);
     };
   }, [mode, onModeChange]);
+
+
 
   useFrame(() => {
     const keys = keysPressed.current;
@@ -61,29 +64,38 @@ export default function Player({ onModeChange }) {
       
       // Reset velocity and grounded state in dev mode
       velocity.set(0, 0, 0);
-      setIsGrounded(true);
+      isGroundedRef.current = true;
     } else {
-      // Player mode - physics-based movement
+      // Player mode - physics-based movement with collision detection
       
-      // Handle jumping
-      if (keys['Space'] && isGrounded) {
+      // Handle jumping with more reliable input detection
+      if (keys['Space']) {
+        jumpInputRef.current = true;
+      } else {
+        jumpInputRef.current = false;
+      }
+
+      // Apply jump if input is pressed and player is grounded
+      const now = Date.now();
+      const canJump = isGroundedRef.current && 
+                      velocity.y <= 0.1 && 
+                      (now - lastJumpTimeRef.current) > 100; // 100ms cooldown
+      
+      if (jumpInputRef.current && canJump) {
         velocity.y = JUMP_FORCE;
-        setIsGrounded(false);
+        isGroundedRef.current = false; // Set airborne immediately
+        lastJumpTimeRef.current = now;
+        console.log('Jump triggered!', { velocity: velocity.y, grounded: isGroundedRef.current }); // Debug log
       }
 
       // Apply gravity when not grounded
-      if (!isGrounded) {
+      if (!isGroundedRef.current || velocity.y > 0) {
         velocity.y -= GRAVITY;
       }
 
-      // Simple ground check (enhance this with proper collision detection later)
-      const groundLevel = 2;
-      if (camera.position.y <= groundLevel && velocity.y <= 0) {
-        camera.position.y = groundLevel;
-        velocity.y = 0;
-        setIsGrounded(true);
-      }
-
+      // Calculate target position with movement
+      const targetPosition = camera.position.clone();
+      
       // Transform movement relative to camera direction for player mode
       if (moveVector.length() > 0) {
         // Get camera forward and right vectors
@@ -101,12 +113,48 @@ export default function Player({ onModeChange }) {
         direction.addScaledVector(forward, -moveVector.z); // W/S
         direction.addScaledVector(right, moveVector.x);    // A/D
         
-        // Apply horizontal movement
-        camera.position.add(direction);
+        // Apply horizontal movement to target position
+        targetPosition.add(direction);
       }
 
-      // Apply vertical velocity (jumping/falling)
-      camera.position.y += velocity.y;
+      // Apply vertical velocity (jumping/falling) to target position
+      targetPosition.y += velocity.y;
+
+      // Check collision and get corrected position
+      const collisionResult = globalCollisionSystem.checkPlayerCollision(
+        camera.position,
+        targetPosition,
+        velocity
+      );
+
+      // Debug: Log collision results periodically
+      if (Math.floor(Date.now() / 1000) % 2 === 0 && Date.now() % 1000 < 16) { // Every 2 seconds
+        console.log('Collision check:', {
+          currentPos: camera.position.toArray().map(n => n.toFixed(1)),
+          targetPos: targetPosition.toArray().map(n => n.toFixed(1)),
+          onGround: collisionResult.onGround,
+          velocity: velocity.toArray().map(n => n.toFixed(2))
+        });
+      }
+
+      // Apply collision results
+      camera.position.copy(collisionResult.position);
+      velocity.copy(collisionResult.velocity);
+      
+      // Update grounded state with debug logging
+      const wasGrounded = isGroundedRef.current;
+      isGroundedRef.current = collisionResult.onGround;
+      
+      if (!wasGrounded && isGroundedRef.current) {
+        console.log('Player landed on ground'); // Debug log
+      }
+
+      // Apply material-specific effects (like friction)
+      if (collisionResult.materialProperties && collisionResult.onGround) {
+        const friction = collisionResult.materialProperties.friction;
+        // Apply friction to horizontal movement (future enhancement)
+        // This could affect sliding on ice, sand, etc.
+      }
     }
 
     // Keep player within world bounds using WORLD_CONFIG

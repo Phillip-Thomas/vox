@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { TerrainGenerator } from '../../generators/TerrainGenerator';
 import { WORLD_CONFIG, MATERIAL_TYPES } from '../../constants/world';
+import { globalCollisionSystem } from '../../utils/VoxelCollisionSystem';
 
 const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
   const meshRef = useRef();
@@ -29,6 +30,9 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
     // Generate voxel data using the terrain generator
     const voxelData = terrainGenerator.generateChunkData(chunkX, chunkZ);
     
+    // Register this chunk's voxel data with the collision system
+    globalCollisionSystem.registerChunk(chunkX, chunkZ, voxelData);
+    
     // Generate mesh from voxel data
     let vertexIndex = 0;
     
@@ -49,9 +53,13 @@ const Terrain = ({ chunkX = 0, chunkZ = 0, terrainParameters }) => {
 
             if (shouldRender) {
               // Create a cube at this position
-              const px = (x - WORLD_CONFIG.CHUNK_SIZE / 2) * WORLD_CONFIG.VOXEL_SIZE;
+              // Account for chunk offset in world space
+              const chunkWorldOffsetX = chunkX * WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
+              const chunkWorldOffsetZ = chunkZ * WORLD_CONFIG.CHUNK_SIZE * WORLD_CONFIG.VOXEL_SIZE;
+              
+              const px = (x - WORLD_CONFIG.CHUNK_SIZE / 2) * WORLD_CONFIG.VOXEL_SIZE + chunkWorldOffsetX;
               const py = y * WORLD_CONFIG.VOXEL_SIZE;
-              const pz = (z - WORLD_CONFIG.CHUNK_SIZE / 2) * WORLD_CONFIG.VOXEL_SIZE;
+              const pz = (z - WORLD_CONFIG.CHUNK_SIZE / 2) * WORLD_CONFIG.VOXEL_SIZE + chunkWorldOffsetZ;
 
               const halfVoxel = WORLD_CONFIG.VOXEL_SIZE / 2;
 
