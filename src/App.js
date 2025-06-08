@@ -23,8 +23,8 @@ function App() {
   };
 
   const planetConfig = { 
-    radius: 200, 
-    voxelSize: 0.25, 
+    radius: 250, 
+    voxelSize: 0.5, 
     center: [0,0,0] 
   };
 
@@ -32,7 +32,7 @@ function App() {
     <PlanetContext.Provider value={planetConfig}>
     <PlayerContext.Provider value={playerConfig}>
     <Canvas
-      camera={{ fov: 60, near: 0.1, far: 2000 }}
+      camera={{ fov: 60, near: 0.1, far: 1000 }}
       shadows
       style={{ width: '100vw', height: '100vh' }}
     >
