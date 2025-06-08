@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState} from 'react'
 import { Text } from '@react-three/drei'
 
 /* ------------------------------------------------------------------ */
@@ -66,12 +66,58 @@ const EDGE: EdgeMap = {
   BOTTOM : { newFace: '+Z', newUV: (u,v)=>[ v     , 0   ], rot: Q(FWD ,180) },
 },
 };
+
+/* ------------------------------------------------------------------ */
+/* Net helpers                                                        */
+/* ------------------------------------------------------------------ */
+
+/* 2-D “cross” layout   (units are your face size N)
+
+        (+Y)
+ (-X) (+Z) (+X) (-Z)
+        (-Y)                       
+*/
+const NET_OFFSET: Record<Face, [number, number]> = {
+  '-X': [ -2 * N, 0 ],
+  '+Z': [ -1 * N, 0 ],
+  '+X': [       0, 0 ],
+  '-Z': [ +1 * N, 0 ],
+  '+Y': [ +2 * N, 0 ],
+  '-Y': [ +3 * N, 0 ],
+};
+        
+        /* (u,v) on a face → (x,z) on the net, right-handed */
+        function faceLocalToNetXZ(face: Face, u: number, v: number): [number, number] {
+          const [ox, oz] = NET_OFFSET[face];
+          switch (face) {
+            case '+Z': return [ox + (u - HALF), oz + (HALF - v)];
+            case '-Z': return [ox + (HALF - u), oz + (v - HALF)];
+            case '+X': return [ox + (HALF - v), oz + (HALF - u)];
+            case '-X': return [ox + (v - HALF), oz + (u - HALF)];
+            case '+Y': return [ox + (u - HALF), oz + (v - HALF)];
+            case '-Y': return [ox + (u - HALF), oz + (HALF - v)];
+          }
+        }
+        
+        /* local 2-D heading → net-space 2-D heading (dx,dz) */
+        function faceLocalDirToNet(face: Face, d: THREE.Vector2): [number, number] {
+          switch (face) {
+            case '+Z': return [ d.x, -d.y];
+            case '-Z': return [-d.x,  d.y];
+            case '+X': return [-d.y, -d.x];
+            case '-X': return [ d.y,  d.x];
+            case '+Y': return [ d.x,  d.y];
+            case '-Y': return [ d.x, -d.y];
+          }
+        }
 /* ------------------------------------------------------------------ */
 /* 2. Player controller                                               */
 /* ------------------------------------------------------------------ */
 function Player() {
   const mesh = useRef<THREE.Mesh>(null!)
+  const netMesh = useRef<THREE.Mesh>(null!)
   const points = useRef<THREE.Vector3[]>([])
+  const netPoints = useRef<THREE.Vector3[]>([]) 
   const maxPoints = 100
 
   // Initialize points array if empty
@@ -160,6 +206,23 @@ function Player() {
       points.current.shift()
     }
 
+        /* -------- update net avatar & trail ------------------------- */
+        const [nx, nz] = faceLocalToNetXZ(state.face, state.u, state.v)
+        if (netMesh.current) {
+          // keep it 0.1 above the net so it doesn't Z-fight
+          netMesh.current.position.set(nx, -(HALF + 1) - 10, nz)
+    
+          const [dx, dz] = faceLocalDirToNet(state.face, state.dir)
+          // yaw so +Z arrow on the cone points along (dx,dz)
+          netMesh.current.rotation.set(
+            -Math.PI / 2,                 // lay it flat
+            0,
+            Math.atan2(dx, dz),
+          )
+        }
+        netPoints.current.push(new THREE.Vector3(nx, 0, nz))
+        if (netPoints.current.length > maxPoints) netPoints.current.shift()
+
     // Log every second
     if (Date.now() - state.startTime > 1000) {
       console.log(`Face: ${state.face}, u=${state.u.toFixed(2)}, v=${state.v.toFixed(2)}, dir=(${state.dir.x.toFixed(2)},${state.dir.y.toFixed(2)})`)
@@ -173,25 +236,12 @@ function Player() {
         <coneGeometry args={[0.2, 0.4, 4]} />
         <meshStandardMaterial color="orange" />
       </mesh>
-      <Trail points={points.current} />
+      {/* flat-net cone */}
+      <mesh ref={netMesh}>
+        <coneGeometry args={[0.2, 0.4, 4]} />
+        <meshBasicMaterial color="orange" />
+      </mesh>
     </>
-  )
-}
-
-function Trail({ points }: { points: THREE.Vector3[] }) {
-  const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry()
-    if (points.length > 1) {
-      geo.setFromPoints(points)
-    }
-    return geo
-  }, [points])
-
-  return (
-    <line>
-      <primitive object={geometry} />
-      <lineBasicMaterial color="yellow" linewidth={2} />
-    </line>
   )
 }
 
@@ -247,6 +297,40 @@ function FaceLabel({ face, position }: { face: string, position: [number, number
 }
 
 /* ------------------------------------------------------------------ */
+/* Cube-net planes                                                    */
+/* ------------------------------------------------------------------ */
+function CubeNet() {
+  return (
+    <group position={[0, -(HALF + 1) - 10, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      {FACES.map(face => {
+        const [x, z] = NET_OFFSET[face];
+        return (
+          <mesh key={face} position={[x, 0, z]}>
+            <planeGeometry args={[N, N]} />
+            <meshBasicMaterial
+              color="#4caf50"
+              wireframe
+              // transparent
+              opacity={0.35}
+            />
+            <Text
+              rotation={[Math.PI / 2, 0, 0]}
+              position={[0, 0.02, 0]}
+              fontSize={1.6}
+              color="#eee"
+              anchorX="center"
+              anchorY="middle"
+            >
+              {face}
+            </Text>
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* 4. Scene root                                                      */
 /* ------------------------------------------------------------------ */
 export default function App() {
@@ -258,7 +342,7 @@ export default function App() {
       {FACES.map(f => <FacePlane key={f} face={f} />)}
       {/* player */}
       <Player />
-      <OrbitControls enablePan={false} makeDefault />
+      <OrbitControls enablePan={false} makeDefault target={[0, -10, 0]}/>
       {/* Face Labels */}
       <FaceLabel face="X+" position={[5, 0, 0]} />
       <FaceLabel face="X-" position={[-5, 0, 0]} />
@@ -266,6 +350,7 @@ export default function App() {
       <FaceLabel face="Y-" position={[0, -5, 0]} />
       <FaceLabel face="Z-" position={[0, 0, -5]} />
       <FaceLabel face="Z+" position={[0, 0, 5]} />
+      <CubeNet />
     </Canvas>
   )
 } 
