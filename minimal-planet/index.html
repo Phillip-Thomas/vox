@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minimal Voxel Planet</title>
+  <style>
+    body{margin:0;overflow:hidden;background:#000;}
+    #info{position:absolute;top:10px;left:10px;color:#0f0;font-family:monospace;font-size:13px;}
+  </style>
+</head>
+<body>
+<div id="info">WASD: move&nbsp;|&nbsp;Mouse drag: look&nbsp;|&nbsp;Space: jump</div>
+<script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.156.1/build/three.module.js"
+    }
+  }
+</script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.156.1/build/three.module.js';
+import { PointerLockControls } from 'https://unpkg.com/three@0.156.1/examples/jsm/controls/PointerLockControls.js';
+
+// ----- constants -----
+const VOXEL = 0.25;        // voxel size to match main repo (4x density)
+const RADIUS = 50;         // planet radius (units)
+const PLAYER_HEIGHT = 1;   // camera height above surface
+const GRAVITY = 9.8;       // m/s^2 equivalent strength
+
+// ----- three.js scene -----
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// ----- lighting -----
+const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambient);
+
+// hemisphere sky light (blue sky, ground bounce)
+const hemi = new THREE.HemisphereLight(0x87ceeb, 0x444444, 0.6);
+scene.add(hemi);
+
+// warm sun light
+const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+sun.position.set(100, 200, 100);
+scene.add(sun);
+
+// simple sky dome - large inverted sphere
+const skyGeo = new THREE.SphereGeometry(RADIUS*20, 32, 16);
+const skyMat = new THREE.MeshBasicMaterial({color: 0x87ceeb, side: THREE.BackSide});
+const sky = new THREE.Mesh(skyGeo, skyMat);
+scene.add(sky);
+
+// ----- generate voxel sphere surface (thin shell) using InstancedMesh -----
+const positions=[];
+const radVox = Math.round(RADIUS/VOXEL);
+for(let x=-radVox; x<=radVox; x++){
+  for(let y=-radVox; y<=radVox; y++){
+    for(let z=-radVox; z<=radVox; z++){
+      const distSq = x*x + y*y + z*z;
+      if(distSq <= radVox*radVox && distSq >= (radVox-1)*(radVox-1)){
+        positions.push(new THREE.Vector3(x*VOXEL, y*VOXEL, z*VOXEL));
+      }
+    }
+  }
+}
+
+const boxGeo = new THREE.BoxGeometry(VOXEL,VOXEL,VOXEL);
+const boxMat = new THREE.MeshStandardMaterial({color:0x229922});
+const mesh = new THREE.InstancedMesh(boxGeo, boxMat, positions.length);
+const dummy = new THREE.Object3D();
+positions.forEach((pos,i)=>{
+  dummy.position.copy(pos);
+  dummy.updateMatrix();
+  mesh.setMatrixAt(i, dummy.matrix);
+});
+scene.add(mesh);
+
+// ----- player (camera holder) -----
+const player = new THREE.Object3D();
+scene.add(player);
+player.add(camera);
+
+// start at top of planet
+player.position.set(0, RADIUS + PLAYER_HEIGHT, 0);
+camera.lookAt(0, RADIUS, 0);
+
+// ----- controls -----
+const controls = new PointerLockControls(camera, document.body);
+window.addEventListener('click', ()=>controls.lock());
+
+// movement keys
+const keys = {};
+window.addEventListener('keydown', e=>keys[e.code]=true);
+window.addEventListener('keyup', e=>keys[e.code]=false);
+
+// ----- animation loop -----
+let velocity = new THREE.Vector3();
+const clock = new THREE.Clock();
+
+/* ── POINTER-LOCK + incremental camera ─────────────────────────── */
+const SENS = 0.002;
+const MAX_PITCH = Math.PI/2 - 0.05;     // 85°
+
+/* camera orientation stored only as a quaternion */
+const camQ = new THREE.Quaternion();          // identity at start
+
+window.addEventListener('mousemove', e => {
+  if (!document.pointerLockElement) return;
+
+  /* local radial-up at this moment                                           */
+  const up = player.position.clone().normalize();
+
+  /* get current right axis = cameraForward × up                              */
+  const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(camQ).normalize();
+  const right = new THREE.Vector3().crossVectors(fwd, up).normalize();
+
+  /* incremental rotations from mouse delta                                   */
+  const qYaw   = new THREE.Quaternion().setFromAxisAngle(up,   -e.movementX * SENS);
+  const qPitch = new THREE.Quaternion().setFromAxisAngle(right,-e.movementY * SENS);
+
+  /* apply yaw first, then pitch                                              */
+  camQ.premultiply(qPitch).premultiply(qYaw);
+
+  /* ---- clamp pitch ------------------------------------------------------- */
+  /* compute new forward & its tilt w.r.t up                                  */
+  const newFwd = new THREE.Vector3(0,0,-1).applyQuaternion(camQ);
+  const tilt   = Math.asin(THREE.MathUtils.clamp(newFwd.dot(up), -1, 1));
+
+  if (tilt >  MAX_PITCH) {
+    const excess = tilt - MAX_PITCH;
+    camQ.premultiply(
+      new THREE.Quaternion().setFromAxisAngle(right,  excess)  // undo excess
+    );
+  } else if (tilt < -MAX_PITCH) {
+    const excess = tilt + MAX_PITCH;
+    camQ.premultiply(
+      new THREE.Quaternion().setFromAxisAngle(right,  excess)
+    );
+  }
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(),0.05);
+
+  // gravity toward centre
+  const toCentre = new THREE.Vector3().copy(player.position).negate();
+  const distance = toCentre.length();
+  const gravityDir = toCentre.normalize();
+  velocity.add(gravityDir.multiplyScalar(GRAVITY*dt));
+
+  // WASD input relative to camera tangent
+  const speed = 10;
+  const input = new THREE.Vector2(
+    (keys['KeyD']?1:0) - (keys['KeyA']?1:0),
+    (keys['KeyS']?1:0) - (keys['KeyW']?1:0)
+  );
+  if(input.lengthSq()>0){
+    input.normalize();
+    // build tangent basis at current position
+    const upDir = player.position.clone().normalize();
+    const forward = new THREE.Vector3();
+    camera.getWorldDirection(forward);
+    // project forward onto tangent plane
+    forward.sub(upDir.clone().multiplyScalar(forward.dot(upDir))).normalize();
+    const right = new THREE.Vector3().crossVectors(forward, upDir).normalize();
+    const moveDir = right.multiplyScalar(input.x).add(forward.multiplyScalar(-input.y)).normalize();
+    player.position.addScaledVector(moveDir, speed*dt);
+  }
+
+  // simple update
+  player.position.addScaledVector(velocity, dt);
+
+  // constrain to planet surface (stand on it)
+  const radial = player.position.length();
+  if(radial < RADIUS + PLAYER_HEIGHT){
+    player.position.normalize().multiplyScalar(RADIUS + PLAYER_HEIGHT);
+    velocity.projectOnVector(player.position.clone().normalize()); // keep only radial part
+  }
+
+  /* radial up each frame                                                     */
+  const up = player.position.clone().normalize();
+
+  /* build view matrix from camQ                                              */
+  camera.quaternion.copy(camQ);
+  camera.up.copy(up);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// resize handler
+window.addEventListener('resize',()=>{
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html> 
