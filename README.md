@@ -1,63 +1,58 @@
 # Voxel Game
 
-A procedurally generated voxel game built with React Three Fiber, inspired by No Man's Sky.
+A 3D voxel-based game built with React Three.js and Rapier physics.
 
 ## Features
 
-- **Procedural Terrain Generation**: Using noise functions to create varied, natural-looking landscapes
-- **First-Person Navigation**: WASD movement with mouse look controls
-- **Voxel-Based World**: Efficient rendering of block-based terrain
-- **Lofi Graphics**: Simple, clean aesthetic suitable for mobile devices
+- 3D voxel world rendering
+- First-person player controls (WASD + Space)
+- Physics-based movement and jumping
+- Real-time 3D graphics with Three.js
+- Physics simulation with Rapier
+
+## Controls
+
+- **W / Arrow Up**: Move forward
+- **S / Arrow Down**: Move backward  
+- **A / Arrow Left**: Move left
+- **D / Arrow Right**: Move right
+- **Space**: Jump
+
+## Technologies Used
+
+- **React**: UI framework
+- **Three.js**: 3D graphics library
+- **@react-three/fiber**: React renderer for Three.js
+- **@react-three/drei**: Useful helpers for React Three Fiber
+- **@react-three/rapier**: Physics engine integration
+- **Vite**: Build tool and dev server
 
 ## Getting Started
 
 1. Install dependencies:
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 2. Start the development server:
-```bash
-npm start
-```
+   ```bash
+   npm run dev
+   ```
 
-3. Open [http://localhost:3000](http://localhost:3000) to view the game in your browser.
+3. Open your browser to `http://localhost:5173`
 
-## Controls
+## Development
 
-- **Click** to enter pointer lock mode
-- **WASD** - Move around
-- **Mouse** - Look around
-- **Space** - Jump
+This project uses Vite for fast development and hot module replacement. The main game logic is in:
 
-## Project Structure
+- `src/components/Player.tsx` - Player movement and controls
+- `src/components/Planet.tsx` - Voxel world generation
+- `src/App.tsx` - Main application setup
 
-- `src/components/Game.js` - Main game component
-- `src/components/Terrain.js` - Procedural terrain generation
-- `src/components/Player.js` - Player movement and physics
-- `src/utils/noise.js` - Noise functions for terrain generation
+## Physics
 
-## Current Status
+The game uses Rapier physics engine for realistic movement, jumping, and collision detection.
 
-This is the initial bare minimum implementation featuring:
-- Basic procedural terrain generation
-- Character navigation with physics
-- Simple voxel rendering
+## Graphics
 
-## Next Steps
-
-Future features to implement:
-- Infinite terrain generation (chunking system)
-- Block placement/destruction
-- More varied terrain types
-- Mobile touch controls
-- Multiplayer support
-- Crafting system
-- Base building
-
-## Technical Details
-
-- Built with React Three Fiber for 3D rendering
-- Uses Three.js for 3D graphics
-- Custom noise functions for procedural generation
-- Optimized voxel rendering (only renders exposed faces) 
+Built with React Three Fiber for declarative 3D scene composition and Three.js for WebGL rendering. 
