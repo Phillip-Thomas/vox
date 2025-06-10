@@ -4,10 +4,8 @@ import { useKeyboardControls } from '@react-three/drei';
 import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
 import { PlanetContext } from '../context/PlanetContext';
 import { MaterialType, MATERIALS, getRandomMaterialType } from '../types/materials';
-
-const CUBE_SIZE_X = 50// Sze on X axis in voxels
-const CUBE_SIZE_Y = 5 // Size on Y axis in voxels
-const CUBE_SIZE_Z = 50// Size on Z axis in voxels
+import { generateVoxelInstances } from '../utils/instanceGenerator';
+import { generateInstanceMaterials } from '../utils/materialGenerator';
 
 // Create material once - using MeshStandardMaterial for roughness/metalness properties
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -27,114 +25,24 @@ export default function Planet() {
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
   const [planetReady, setPlanetReady] = useState(false);
   const [, get] = useKeyboardControls();
-console.log("voxel size", VOXEL_SIZE)
+  console.log("voxel size", VOXEL_SIZE)
   // Store original positions for reset
   const originalPositions = useRef<[number, number, number][]>([]);
 
   // Generate materials and colors for each instance
   const { instanceColors, instanceMaterials } = useMemo(() => {
-    if (!VOXEL_SIZE) return { instanceColors: [], instanceMaterials: [] };
-    
-    const colors: THREE.Color[] = [];
-    const materials: MaterialType[] = [];
-    const totalVoxels = CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1; // +1 for additional cube
-    
-    for (let i = 0; i < totalVoxels; i++) {
-      // Use the helper function to get a random material type
-      const randomMaterialType = getRandomMaterialType();
-      const material = MATERIALS[randomMaterialType];
-      
-      materials.push(randomMaterialType);
-      colors.push(material.color.clone());
-    }
-    
-    return { instanceColors: colors, instanceMaterials: materials };
+    return generateInstanceMaterials(VOXEL_SIZE);
   }, [VOXEL_SIZE]);
 
-    // Create instances data for InstancedRigidBodies
+  // Create instances data for InstancedRigidBodies
   const instances = useMemo<InstancedRigidBodyProps[]>(() => {
-    if (!VOXEL_SIZE) return [];         // wait for a real size
-    
-    const out: InstancedRigidBodyProps[] = [];
-    const positions: [number, number, number][] = [];
-
-    // optional: centre the chunk at the world origin
-    const offset = [
-      -((CUBE_SIZE_X - 1) * VOXEL_SIZE) / 2,
-      -((CUBE_SIZE_Y - 1) * VOXEL_SIZE) / 2,
-      -((CUBE_SIZE_Z - 1) * VOXEL_SIZE) / 2,
-    ] as const;
-
-    for (let x = 0; x < CUBE_SIZE_X; x++) {
-      for (let y = 0; y < CUBE_SIZE_Y; y++) {
-        for (let z = 0; z < CUBE_SIZE_Z; z++) {
-          const position: [number, number, number] = [
-            x * VOXEL_SIZE + offset[0],
-            y * VOXEL_SIZE + offset[1],
-            z * VOXEL_SIZE + offset[2],
-          ];
-          
-          const materialType = getRandomMaterialType();
-          out.push({
-            key: `voxel_${x}_${y}_${z}`,
-            position,
-            rotation: [0, 0, 0],
-            args: {
-              userData: {
-                material: getRandomMaterialType(),
-                voxelType: 'special',
-                note: 'center cube'
-              }
-            },
-            userData: {
-              material: materialType,
-              coordinates: { x, y, z },
-              voxelType: 'terrain'
-            },
-            type: "dynamic", // Changed back to dynamic so they can fall
-          });
-          
-          // Store original positions for reset
-          positions.push(position);
-        }
-      }
-    }
-    
-    // Add one additional cube in center, one row up from the top
-    const centerX = Math.floor(CUBE_SIZE_X / 2);
-    const centerZ = Math.floor(CUBE_SIZE_Z / 2);
-    const topY = CUBE_SIZE_Y; // One row above the existing top
-    
-    const additionalPosition: [number, number, number] = [
-      centerX * VOXEL_SIZE + offset[0],
-      topY * VOXEL_SIZE + offset[1],
-      centerZ * VOXEL_SIZE + offset[2],
-    ];
-    
-    out.push({
-      key: `voxel_${centerX}_${topY}_${centerZ}`,
-      position: additionalPosition,
-      rotation: [0, 0, 0],
-      type: "dynamic",
-      args: {
-        userData: {
-          material: getRandomMaterialType(),
-          coordinates: { x: centerX, y: topY, z: centerZ },
-          voxelType: 'special',
-          note: 'center cube'
-        }
-      }
-
-    });
-    
-    positions.push(additionalPosition);
-    
-    originalPositions.current = positions;
+    const result = generateVoxelInstances(VOXEL_SIZE);
+    originalPositions.current = result.originalPositions;
     setPlanetReady(true);
-    
-    return out;
+    return result.instances;
   }, [VOXEL_SIZE]); 
-  const totalVoxels = CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1; // +1 for the additional cube
+  
+  const totalVoxels = instances.length; // Use actual instances length instead of fixed calculation
   console.log(totalVoxels);
 
   // Set colors on the instanced mesh when it's ready

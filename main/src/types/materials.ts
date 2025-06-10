@@ -5,7 +5,7 @@ export enum MaterialType {
   STONE = 'stone',
   DIRT = 'dirt',
   WOOD = 'wood',
-  AIR = 'air'
+  WATER = 'water'
 }
 
 export interface Material {
@@ -31,8 +31,8 @@ export const MATERIALS: Record<MaterialType, Material> = {
     color: new THREE.Color(0xDEB887), // Burlywood
     visible: true
   },
-  [MaterialType.AIR]: {
-    type: MaterialType.AIR,
+  [MaterialType.WATER]: {
+    type: MaterialType.WATER,
     color: new THREE.Color(0x000000), // Black (invisible)
     visible: false
   }
