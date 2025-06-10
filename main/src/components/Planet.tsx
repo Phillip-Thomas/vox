@@ -1,17 +1,17 @@
 import React, { useMemo, useContext, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 import { useKeyboardControls } from '@react-three/drei';
-import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodiesProps, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
+import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
 import { PlanetContext } from '../context/PlanetContext';
+import { MaterialType, MATERIALS, getRandomMaterialType } from '../types/materials';
 
 const CUBE_SIZE_X = 50// Sze on X axis in voxels
-const CUBE_SIZE_Y = 10 // Size on Y axis in voxels
+const CUBE_SIZE_Y = 5 // Size on Y axis in voxels
 const CUBE_SIZE_Z = 50// Size on Z axis in voxels
 
 // Create material once - using MeshStandardMaterial for roughness/metalness properties
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
-  color: "#229922",
+  color: "#ffffff", // Changed to white so instance colors show properly
   roughness: 0.7,
   metalness: 0.1
 });
@@ -19,13 +19,32 @@ const voxelMaterial = new THREE.MeshStandardMaterial({
 export default function Planet() {
   const { voxelSize: VOXEL_SIZE } = useContext(PlanetContext);
   const rigidBodies = useRef<RapierRigidBody[]>([]);
+  const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
   const [planetReady, setPlanetReady] = useState(false);
   const [, get] = useKeyboardControls();
 console.log("voxel size", VOXEL_SIZE)
   // Store original positions for reset
   const originalPositions = useRef<[number, number, number][]>([]);
 
-
+  // Generate materials and colors for each instance
+  const { instanceColors, instanceMaterials } = useMemo(() => {
+    if (!VOXEL_SIZE) return { instanceColors: [], instanceMaterials: [] };
+    
+    const colors: THREE.Color[] = [];
+    const materials: MaterialType[] = [];
+    const totalVoxels = CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1; // +1 for additional cube
+    
+    for (let i = 0; i < totalVoxels; i++) {
+      // Use the helper function to get a random material type
+      const randomMaterialType = getRandomMaterialType();
+      const material = MATERIALS[randomMaterialType];
+      
+      materials.push(randomMaterialType);
+      colors.push(material.color.clone());
+    }
+    
+    return { instanceColors: colors, instanceMaterials: materials };
+  }, [VOXEL_SIZE]);
 
     // Create instances data for InstancedRigidBodies
   const instances = useMemo<InstancedRigidBodyProps[]>(() => {
@@ -62,13 +81,44 @@ console.log("voxel size", VOXEL_SIZE)
         }
       }
     }
+    
+    // Add one additional cube in center, one row up from the top
+    const centerX = Math.floor(CUBE_SIZE_X / 2);
+    const centerZ = Math.floor(CUBE_SIZE_Z / 2);
+    const topY = CUBE_SIZE_Y; // One row above the existing top
+    
+    const additionalPosition: [number, number, number] = [
+      centerX * VOXEL_SIZE + offset[0],
+      topY * VOXEL_SIZE + offset[1],
+      centerZ * VOXEL_SIZE + offset[2],
+    ];
+    
+    out.push({
+      key: `voxel_${centerX}_${topY}_${centerZ}`,
+      position: additionalPosition,
+      rotation: [0, 0, 0],
+      type: "dynamic",
+    });
+    
+    positions.push(additionalPosition);
+    
     originalPositions.current = positions;
     setPlanetReady(true);
     
     return out;
   }, [VOXEL_SIZE]); 
-  const totalVoxels = CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z;
+  const totalVoxels = CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1; // +1 for the additional cube
   console.log(totalVoxels);
+
+  // Set colors on the instanced mesh when it's ready
+  useEffect(() => {
+    if (instancedMeshRef.current && instanceColors.length > 0) {
+      instanceColors.forEach((color, index) => {
+        instancedMeshRef.current!.setColorAt(index, color);
+      });
+      instancedMeshRef.current.instanceColor!.needsUpdate = true;
+    }
+  }, [instanceColors, planetReady]);
 
   useEffect(() => {
     rigidBodies.current.forEach((body, index) => {
@@ -89,8 +139,8 @@ console.log("voxel size", VOXEL_SIZE)
       gravityScale={0}
     >
       <CuboidCollider args={[VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45]} />
-      <instancedMesh args={[undefined, undefined, totalVoxels]} count={totalVoxels}>
-      <boxGeometry args={[VOXEL_SIZE*.95, VOXEL_SIZE*.95, VOXEL_SIZE*.95]} />
+      <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, totalVoxels]} count={totalVoxels}>
+      <boxGeometry args={[VOXEL_SIZE*.9, VOXEL_SIZE*.9, VOXEL_SIZE*.9]} />
       <primitive object={voxelMaterial} attach="material" />
       </instancedMesh>
     </InstancedRigidBodies>
