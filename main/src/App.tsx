@@ -107,18 +107,12 @@ const App: React.FC = () => {
         <ambientLight intensity={0.3} />
 
         <Physics gravity={[0, -9.81, 0]}>
-          {/* Large static ground plane */}
-          <RigidBody type="fixed" position={[0, -10, 0]}>
-            <mesh>
-              <boxGeometry args={[100, 1, 100]} />
-              <meshStandardMaterial color="#8B4513" />
-            </mesh>
-          </RigidBody>
+
           
           <Planet />
           <Player />
         </Physics>
-        <PointerLockControls makeDefault />
+        <PointerLockControls />
       </Canvas>
       </PlayerContext.Provider>
       </PlanetContext.Provider>

@@ -5,16 +5,44 @@ import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei"
 // @ts-ignore - CapsuleCollider and useRapier exist at runtime but not in types
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier"
+import { planetInstancedMesh, planetInstanceMaterials, planetRigidBodies } from './Planet'
 
 const SPEED = 5
 const direction = new THREE.Vector3()
 const frontVector = new THREE.Vector3()
 const sideVector = new THREE.Vector3()
 
+// Three.js visual raycast hook
+function useVisualRaycast() {
+  const raycaster = new THREE.Raycaster()
+  
+  return (camera: THREE.Camera, instancedMesh: THREE.InstancedMesh | null) => {
+    if (!instancedMesh) return null
+    
+    // Cast ray from camera center (screen center)
+    const ndc = new THREE.Vector2(0, 0) // Screen center
+    raycaster.setFromCamera(ndc, camera)
+    
+    const hits = raycaster.intersectObject(instancedMesh)
+    if (hits[0] && hits[0].instanceId !== undefined) {
+      return {
+        instanceIndex: hits[0].instanceId,
+        point: hits[0].point,
+        distance: hits[0].distance,
+        face: hits[0].face,
+        normal: hits[0].face?.normal
+      }
+    }
+    
+    return null
+  }
+}
+
 function Player() {
   const ref = useRef<any>(null)
   const rapier = useRapier()
   const [, get] = useKeyboardControls()
+  const visualRaycast = useVisualRaycast()
   
   useFrame((state) => {
     if (!ref.current) return
@@ -32,15 +60,25 @@ function Player() {
     direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED).applyEuler(state.camera.rotation)
     ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z })
     
-    // jumping - fixed for proper rapier API
-    const world = rapier.world.raw()
-    const ray = world.castRay(
-      new RAPIER.Ray(ref.current.translation(), { x: 0, y: -1, z: 0 }),
-      10.0,  // maxToi - maximum distance
-      true   // solid - whether to include solid bodies
-    )
-    const grounded = ray && ray.collider && Math.abs(ray.toi) <= 1.75
-    if (jump && grounded) ref.current.setLinvel({ x: 0, y: 7.5, z: 0 })
+    if (jump) ref.current.setLinvel({ x: 0, y: 7.5, z: 0 })
+
+    // Terrain manipulator - visual raycast from camera center
+    const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
+    if (hitInfo) {
+      const material = planetInstanceMaterials.current[hitInfo.instanceIndex]
+      const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
+      
+      console.log("✅ Hit voxel:", {
+        instanceIndex: hitInfo.instanceIndex,
+        material: material,
+        distance: hitInfo.distance,
+        position: rigidBody?.translation(),
+        userData: rigidBody?.userData,
+        point: hitInfo.point,
+        normal: hitInfo.normal,
+      });
+      
+    }
   })
   
   return (

@@ -16,6 +16,11 @@ const voxelMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.1
 });
 
+// Export refs for raycaster access
+export const planetInstancedMesh = { current: null as THREE.InstancedMesh | null };
+export const planetInstanceMaterials = { current: [] as any[] };
+export const planetRigidBodies = { current: [] as RapierRigidBody[] };
+
 export default function Planet() {
   const { voxelSize: VOXEL_SIZE } = useContext(PlanetContext);
   const rigidBodies = useRef<RapierRigidBody[]>([]);
@@ -69,10 +74,23 @@ console.log("voxel size", VOXEL_SIZE)
             z * VOXEL_SIZE + offset[2],
           ];
           
+          const materialType = getRandomMaterialType();
           out.push({
             key: `voxel_${x}_${y}_${z}`,
             position,
             rotation: [0, 0, 0],
+            args: {
+              userData: {
+                material: getRandomMaterialType(),
+                voxelType: 'special',
+                note: 'center cube'
+              }
+            },
+            userData: {
+              material: materialType,
+              coordinates: { x, y, z },
+              voxelType: 'terrain'
+            },
             type: "dynamic", // Changed back to dynamic so they can fall
           });
           
@@ -98,6 +116,15 @@ console.log("voxel size", VOXEL_SIZE)
       position: additionalPosition,
       rotation: [0, 0, 0],
       type: "dynamic",
+      args: {
+        userData: {
+          material: getRandomMaterialType(),
+          coordinates: { x: centerX, y: topY, z: centerZ },
+          voxelType: 'special',
+          note: 'center cube'
+        }
+      }
+
     });
     
     positions.push(additionalPosition);
@@ -121,13 +148,39 @@ console.log("voxel size", VOXEL_SIZE)
   }, [instanceColors, planetReady]);
 
   useEffect(() => {
+    console.log("Setting userData on", rigidBodies.current.length, "rigid bodies");
     rigidBodies.current.forEach((body, index) => {
         const [x, y, z] = originalPositions.current[index];
         body.setTranslation({ x, y, z }, true);
         body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         body.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        
+        // Enhance userData with additional info
+        if (instances[index]) {
+          const userData = {
+            ...instances[index].userData,
+            key: instances[index].key,
+            originalPosition: [x, y, z],
+            material: instanceMaterials[index] || instances[index].userData?.material,
+            debugIndex: index
+          };
+          body.userData = userData;
+          
+          // Debug logging for first few bodies
+          if (index < 3) {
+            console.log(`Body ${index} userData set:`, userData);
+            console.log(`Body ${index} userData after setting:`, body.userData);
+          }
+        }
     });
-  }, [planetReady])
+    
+    // Set up global references for raycaster access
+    planetInstancedMesh.current = instancedMeshRef.current;
+    planetInstanceMaterials.current = instanceMaterials;
+    planetRigidBodies.current = rigidBodies.current;
+    
+    console.log("Planet raycaster references updated");
+  }, [planetReady, instances, instanceMaterials])
 
   return (
     <InstancedRigidBodies
