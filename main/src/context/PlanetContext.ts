@@ -9,7 +9,7 @@ export interface PlanetConfig {
 
 const defaultPlanetConfig: PlanetConfig = {
   radius: 1,
-  voxelSize: 0.25,
+  voxelSize: 1,
   center: [0, 0, 0],
   gravity: -9.81,
 };

@@ -3,6 +3,7 @@ import * as RAPIER from "@dimforge/rapier3d-compat"
 import { useRef } from "react"
 import { useFrame } from "@react-three/fiber"
 import { useKeyboardControls } from "@react-three/drei"
+// @ts-ignore - CapsuleCollider and useRapier exist at runtime but not in types
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier"
 
 const SPEED = 5
@@ -23,6 +24,7 @@ function Player() {
     
     // update camera
     const translation = ref.current.translation()
+
     state.camera.position.set(translation.x, translation.y, translation.z)
     
     frontVector.set(0, 0, Number(backward) - Number(forward))
@@ -43,7 +45,7 @@ function Player() {
   
   return (
     <>
-      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 10, 0]} enabledRotations={[false, false, false]}>
+      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 20, 0]} enabledRotations={[false, false, false]}>
         <CapsuleCollider args={[0.75, 0.5]} />
       </RigidBody>
     </>

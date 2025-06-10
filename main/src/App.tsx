@@ -1,7 +1,7 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Stats, Sky, KeyboardControls } from '@react-three/drei';
-import { Physics } from '@react-three/rapier';
+import { Stats, Sky, KeyboardControls, PointerLockControls } from '@react-three/drei';
+import { Physics, RigidBody } from '@react-three/rapier';
 import * as THREE from 'three';
 import { PlanetContext } from './context/PlanetContext.ts';
 import { PlayerContext } from './context/PlayerContext.ts';
@@ -67,7 +67,7 @@ const App: React.FC = () => {
 
   const planetConfig: PlanetConfig = { 
     radius: 25, 
-    voxelSize: 0.5, 
+    voxelSize: 2, 
     center: [0,0,0] 
   };
 
@@ -79,6 +79,7 @@ const App: React.FC = () => {
         { name: 'left', keys: ['ArrowLeft', 'KeyA'] },
         { name: 'right', keys: ['ArrowRight', 'KeyD'] },
         { name: 'jump', keys: ['Space'] },
+        { name: 'reset', keys: ['KeyR'] },
       ]}
     >
       <PlanetContext.Provider value={{...planetConfig, gravity: 9.81}}>
@@ -105,13 +106,19 @@ const App: React.FC = () => {
 
         <ambientLight intensity={0.3} />
 
-        <Physics
-          gravity={[0, -9.81, 0]}
-          colliders={false}
-        >
+        <Physics gravity={[0, -9.81, 0]}>
+          {/* Large static ground plane */}
+          <RigidBody type="fixed" position={[0, -10, 0]}>
+            <mesh>
+              <boxGeometry args={[100, 1, 100]} />
+              <meshStandardMaterial color="#8B4513" />
+            </mesh>
+          </RigidBody>
+          
           <Planet />
           <Player />
         </Physics>
+        <PointerLockControls makeDefault />
       </Canvas>
       </PlayerContext.Provider>
       </PlanetContext.Provider>
