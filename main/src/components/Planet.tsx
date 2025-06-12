@@ -1,11 +1,10 @@
-import React, { useMemo, useContext, useRef, useEffect, useState } from 'react';
+import { useMemo, useContext, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { useKeyboardControls } from '@react-three/drei';
 import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
 import { PlanetContext } from '../context/PlanetContext';
-import { MaterialType, MATERIALS, getRandomMaterialType } from '../types/materials';
 import { generateVoxelInstances } from '../utils/instanceGenerator';
 import { generateInstanceMaterials } from '../utils/materialGenerator';
+import { usePlanetGravity } from '../hooks/usePlanetRotation';
 
 // Create material once - using MeshStandardMaterial for roughness/metalness properties
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -18,16 +17,19 @@ const voxelMaterial = new THREE.MeshStandardMaterial({
 export const planetInstancedMesh = { current: null as THREE.InstancedMesh | null };
 export const planetInstanceMaterials = { current: [] as any[] };
 export const planetRigidBodies = { current: [] as RapierRigidBody[] };
+export const planetGravityHook = { current: null as any };
 
 export default function Planet() {
   const { voxelSize: VOXEL_SIZE } = useContext(PlanetContext);
   const rigidBodies = useRef<RapierRigidBody[]>([]);
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
   const [planetReady, setPlanetReady] = useState(false);
-  const [, get] = useKeyboardControls();
   console.log("voxel size", VOXEL_SIZE)
   // Store original positions for reset
   const originalPositions = useRef<[number, number, number][]>([]);
+  
+  // Initialize planet gravity system
+  const planetGravity = usePlanetGravity(VOXEL_SIZE);
 
   // Generate materials and colors for each instance
   const { instanceColors, instanceMaterials } = useMemo(() => {
@@ -56,7 +58,6 @@ export default function Planet() {
   }, [instanceColors, planetReady]);
 
   useEffect(() => {
-    console.log("Setting userData on", rigidBodies.current.length, "rigid bodies");
     rigidBodies.current.forEach((body, index) => {
         const [x, y, z] = originalPositions.current[index];
         body.setTranslation({ x, y, z }, true);
@@ -73,12 +74,6 @@ export default function Planet() {
             debugIndex: index
           };
           body.userData = userData;
-          
-          // Debug logging for first few bodies
-          if (index < 3) {
-            console.log(`Body ${index} userData set:`, userData);
-            console.log(`Body ${index} userData after setting:`, body.userData);
-          }
         }
     });
     
@@ -86,9 +81,10 @@ export default function Planet() {
     planetInstancedMesh.current = instancedMeshRef.current;
     planetInstanceMaterials.current = instanceMaterials;
     planetRigidBodies.current = rigidBodies.current;
+    planetGravityHook.current = planetGravity;
     
-    console.log("Planet raycaster references updated");
-  }, [planetReady, instances, instanceMaterials])
+    console.log("Planet gravity references updated");
+  }, [planetReady, instances, instanceMaterials, planetGravity])
 
   return (
     <InstancedRigidBodies
@@ -97,7 +93,7 @@ export default function Planet() {
       ref={rigidBodies}
       colliders={false}
       type="fixed"
-      gravityScale={0}
+      gravityScale={1}
     >
       <CuboidCollider args={[VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45]} />
       <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, totalVoxels]} count={totalVoxels}>

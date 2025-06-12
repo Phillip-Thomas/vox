@@ -1,16 +1,19 @@
 import * as THREE from "three"
-import * as RAPIER from "@dimforge/rapier3d-compat"
 import { useRef } from "react"
-import { useFrame } from "@react-three/fiber"
-import { useKeyboardControls } from "@react-three/drei"
-// @ts-ignore - CapsuleCollider and useRapier exist at runtime but not in types
+import { useFrame, useThree } from "@react-three/fiber"
+import { useKeyboardControls, PerspectiveCamera } from "@react-three/drei"
+// @ts-ignore - CapsuleCollider exists at runtime but not in types
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier"
 import { planetInstancedMesh, planetInstanceMaterials, planetRigidBodies } from './Planet'
+import { useGravityContext } from '../App';
+import { usePlayer } from '../context/PlayerContext';
 
 const SPEED = 5
 const direction = new THREE.Vector3()
 const frontVector = new THREE.Vector3()
 const sideVector = new THREE.Vector3()
+
+
 
 // Three.js visual raycast hook
 function useVisualRaycast() {
@@ -38,29 +41,99 @@ function useVisualRaycast() {
   }
 }
 
-function Player() {
+export default function Player() {
   const ref = useRef<any>(null)
-  const rapier = useRapier()
   const [, get] = useKeyboardControls()
   const visualRaycast = useVisualRaycast()
+  const { controls } = useThree()
+  const { checkBoundaries, isChanging, changeGravity } = useGravityContext();
+  const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   
-  useFrame((state) => {
+  useFrame((state, deltaTime) => {
     if (!ref.current) return
     
     const { forward, backward, left, right, jump } = get()
     const velocity = ref.current.linvel()
     
-    // update camera
+    // Get player position and position camera relative to player
     const translation = ref.current.translation()
-
-    state.camera.position.set(translation.x, translation.y, translation.z)
     
-    frontVector.set(0, 0, Number(backward) - Number(forward))
-    sideVector.set(Number(left) - Number(right), 0, 0)
-    direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(SPEED).applyEuler(state.camera.rotation)
-    ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z })
+    // Check for boundary crossings and update gravity + rotate player
+    const currentPosition = new THREE.Vector3(translation.x, translation.y, translation.z);
+    const boundary = checkBoundaries(currentPosition);
+    if (boundary && setCurrentFace) {
+      // Use the original changeGravity function which handles both gravity and player rotation
+      changeGravity(boundary, ref.current, setCurrentFace, currentFace);
+    }
     
-    if (jump) ref.current.setLinvel({ x: 0, y: 7.5, z: 0 })
+    // Only allow player movement if gravity is not changing
+    if (!isChanging) {
+      // Simple camera-relative movement
+      direction.set(0, 0, 0)
+      
+      if (forward || backward || left || right) {
+        // Ensure camera world matrix is up to date before getting direction
+        cameraRef.current?.updateMatrixWorld(true)
+        
+        // Use actual camera direction for movement (where the player is actually looking)
+        const cameraForward = new THREE.Vector3()
+        cameraRef.current?.getWorldDirection(cameraForward)
+        
+        // Project camera forward onto the current face plane to get proper movement direction
+        // Remove any component along the face's up direction to keep movement on the surface
+        const faceUp = faceOrientation.upDirection.clone()
+        const projectedForward = cameraForward.clone()
+        const dotProduct = faceUp.dot(cameraForward)
+        projectedForward.addScaledVector(faceUp, -dotProduct)
+        
+        // Calculate right direction by crossing projected forward with face up
+        const cameraRight = new THREE.Vector3()
+        cameraRight.crossVectors(projectedForward, faceUp).normalize()
+        
+        // Build movement direction from input using projected camera directions
+        direction.set(0, 0, 0)
+        if (forward) direction.add(projectedForward)
+        if (backward) direction.sub(projectedForward)
+        if (right) direction.add(cameraRight)
+        if (left) direction.sub(cameraRight)
+        
+        // Normalize and apply speed
+        if (direction.length() > 0) {
+          direction.normalize().multiplyScalar(SPEED)
+        }
+      
+        // Apply movement preserving only gravity component of velocity
+        const currentVel = ref.current.linvel()
+        const currentVelVector = new THREE.Vector3(currentVel.x, currentVel.y, currentVel.z)
+        
+        // Calculate gravity component of current velocity
+        const gravityDirection = faceOrientation.upDirection.clone().multiplyScalar(-1) // Gravity points toward surface
+        const gravityVelComponent = gravityDirection.multiplyScalar(gravityDirection.dot(currentVelVector))
+        
+        // New velocity = surface movement + gravity component
+        const newVelocity = direction.clone().add(gravityVelComponent)
+        
+        ref.current.setLinvel({ 
+          x: newVelocity.x,
+          y: newVelocity.y,
+          z: newVelocity.z
+        })
+      }
+      
+      // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
+      if (jump) {
+        const currentVel = ref.current.linvel();
+        const jumpForce = 7.5;
+        const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
+        
+        ref.current.setLinvel({ 
+          x: currentVel.x + jumpVector.x, 
+          y: currentVel.y + jumpVector.y, 
+          z: currentVel.z + jumpVector.z 
+        });
+      }
+    }
 
     // Terrain manipulator - visual raycast from camera center
     const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
@@ -83,11 +156,16 @@ function Player() {
   
   return (
     <>
-      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 20, 0]} enabledRotations={[false, false, false]}>
-        <CapsuleCollider args={[0.75, 0.5]} />
+    <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
+        <CapsuleCollider args={[.5, .5]} />
+        {/* Visible player body */}
+        <mesh position={[0, 0, 0]}>
+          
+          <PerspectiveCamera ref={cameraRef} position={[0, 0, 0]} makeDefault/>
+          <capsuleGeometry args={[0.5, 0.5]} />
+          <meshStandardMaterial color="red" />
+        </mesh>
       </RigidBody>
     </>
   )
-}
-
-export default Player; 
+} 
