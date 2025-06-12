@@ -134,9 +134,6 @@ export function usePlanetGravity(voxelSize: number) {
     setCurrentFace(newFace);
     setIsChanging(true);
     
-    // Apply gravity change after brief delay
-    setIsChanging(true);
-    
     // Delay gravity change by 0.2 seconds after body rotation
     setTimeout(() => {
       setGravity(newFaceOrientation.gravity);
