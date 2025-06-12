@@ -48,7 +48,7 @@ export const FACE_ORIENTATIONS: Record<CubeFace, FaceOrientation> = {
   },
   bottom: {
     gravity: [0, 9.81, 0],
-    characterRotation: new THREE.Euler(0, Math.PI, Math.PI), // Rotate around Z instead of X to avoid flip
+    characterRotation: new THREE.Euler(0, -Math.PI, -Math.PI), // Rotate around Z instead of X to avoid flip
     upDirection: new THREE.Vector3(0, -1, 0),
     forwardDirection: new THREE.Vector3(0, 0, 1), // Keep forward consistent
     rightDirection: new THREE.Vector3(-1, 0, 0)  // Flip right to maintain consistency
