@@ -50,8 +50,8 @@ export default function Player() {
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   
-  // Mouse look state
-  const mouseRef = useRef({ x: 0, y: 0 })
+  // Simple yaw/pitch mouse look state
+  const cameraAngles = useRef({ yaw: 0, pitch: 0 })
   const isLockedRef = useRef(false)
   
   // Pointer lock controls
@@ -65,14 +65,16 @@ export default function Player() {
     }
     
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isLockedRef.current || !cameraRef.current) return
+      if (!isLockedRef.current) return
       
       const sensitivity = 0.002
-      mouseRef.current.x -= event.movementX * sensitivity
-      mouseRef.current.y -= event.movementY * sensitivity
       
-      // Clamp vertical rotation
-      mouseRef.current.y = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, mouseRef.current.y))
+      // Simple yaw/pitch updates
+      cameraAngles.current.yaw -= event.movementX * sensitivity
+      cameraAngles.current.pitch -= event.movementY * sensitivity
+      
+      // Clamp pitch to prevent over-rotation
+      cameraAngles.current.pitch = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, cameraAngles.current.pitch))
     }
     
     document.addEventListener('click', handleClick)
@@ -86,12 +88,23 @@ export default function Player() {
     }
   }, [])
   
+  // Reset camera angles when face changes to prevent disorientation
+  useEffect(() => {
+    cameraAngles.current = { yaw: 0, pitch: 0 }
+  }, [currentFace])
+  
   useFrame((state, deltaTime) => {
     if (!ref.current) return
     
     // Update camera rotation based on mouse input
-    if (cameraRef.current && isLockedRef.current) {
-      cameraRef.current.rotation.set(mouseRef.current.y, mouseRef.current.x, 0)
+    if (cameraRef.current) {
+      // Simple approach: just set rotation directly
+      cameraRef.current.rotation.set(
+        cameraAngles.current.pitch,
+        cameraAngles.current.yaw,
+        0,
+        'YXZ' // Apply yaw first, then pitch
+      )
     }
     
     const { forward, backward, left, right, jump } = get()
