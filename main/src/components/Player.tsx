@@ -88,10 +88,10 @@ export default function Player() {
     }
   }, [])
   
-  // Reset camera angles when face changes to prevent disorientation
-  useEffect(() => {
-    cameraAngles.current = { yaw: 0, pitch: 0 }
-  }, [currentFace])
+  // Don't reset camera angles when face changes - let player maintain their view direction
+  // useEffect(() => {
+  //   cameraAngles.current = { yaw: 0, pitch: 0 }
+  // }, [currentFace])
   
   useFrame((state, deltaTime) => {
     if (!ref.current) return

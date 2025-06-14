@@ -144,7 +144,7 @@ export function usePlanetGravity(voxelSize: number) {
           camera.updateProjectionMatrix();
         }
         
-        console.log(`📷 Updated camera up to:`, camera.up, `(progress: ${easedProgress.toFixed(2)})`);
+        // console.log(`📷 Updated camera up to:`, camera.up, `(progress: ${easedProgress.toFixed(2)})`);
         
         if (progress < 1) {
           requestAnimationFrame(animateRotation);
