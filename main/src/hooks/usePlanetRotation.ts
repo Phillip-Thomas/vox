@@ -105,25 +105,37 @@ export function usePlanetGravity(voxelSize: number) {
       
       console.log(`📐 Final player quaternion:`, finalRotation);
       
-      playerRigidBody.setRotation({
-        x: finalRotation.x,
-        y: finalRotation.y,
-        z: finalRotation.z,
-        w: finalRotation.w
-      }, true);
+      // Smooth rotation transition using slerp
+      const startRotation = currentPlayerQuat.clone();
+      const targetRotation = finalRotation.clone();
+      let progress = 0;
+      const duration = 1000; // 1 second transition
+      const startTime = performance.now();
       
+      const animateRotation = () => {
+        const now = performance.now();
+        progress = Math.min((now - startTime) / duration, 1);
+        
+        // Use smooth easing function for more natural transition
+        const easedProgress = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        
+        const currentRotation = startRotation.clone().slerp(targetRotation, easedProgress);
+        
+        playerRigidBody.setRotation({
+          x: currentRotation.x,
+          y: currentRotation.y,
+          z: currentRotation.z,
+          w: currentRotation.w
+        }, true);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animateRotation);
+        }
+      };
+      
+      animateRotation();
+
       console.log(`🔄 Applied upDirection delta rotation from ${currentFace} to ${newFace}`);
-    } else {
-      // First transition - apply new face rotation directly
-      const quaternion = new THREE.Quaternion().setFromEuler(newFaceOrientation.characterRotation);
-      playerRigidBody.setRotation({
-        x: quaternion.x,
-        y: quaternion.y,
-        z: quaternion.z,
-        w: quaternion.w
-      }, true);
-      
-      console.log(`🔄 Applied initial rotation to ${newFace}`);
     }
     
     // Complete player rotation setup

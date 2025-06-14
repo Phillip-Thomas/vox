@@ -122,17 +122,17 @@ export default function Player() {
       }
       
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
-      // if (jump) {
-      //   const currentVel = ref.current.linvel();
-      //   const jumpForce = 7.5;
-      //   const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
+      if (jump) {
+        const currentVel = ref.current.linvel();
+        const jumpForce = 1.0;
+        const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
-      //   ref.current.setLinvel({ 
-      //     x: currentVel.x + jumpVector.x, 
-      //     y: currentVel.y + jumpVector.y, 
-      //     z: currentVel.z + jumpVector.z 
-      //   });
-      // }
+        ref.current.setLinvel({ 
+          x: currentVel.x + jumpVector.x, 
+          y: currentVel.y + jumpVector.y, 
+          z: currentVel.z + jumpVector.z 
+        });
+      }
     }
 
     // Terrain manipulator - visual raycast from camera center
