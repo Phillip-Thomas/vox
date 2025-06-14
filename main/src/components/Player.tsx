@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useKeyboardControls, PerspectiveCamera } from "@react-three/drei"
 // @ts-ignore - CapsuleCollider exists at runtime but not in types
@@ -14,7 +14,9 @@ const direction = new THREE.Vector3()
 const frontVector = new THREE.Vector3()
 const sideVector = new THREE.Vector3()
 
-
+// Highlight colors
+const HIGHLIGHT_COLOR = new THREE.Color(0xffff00) // Bright yellow
+const originalColors = new Map<number, THREE.Color>() // Store original colors
 
 // Three.js visual raycast hook
 function useVisualRaycast() {
@@ -50,6 +52,38 @@ export default function Player() {
   const { checkBoundaries, isChanging, changeGravity } = useGravityContext();
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
+  
+  // State for voxel highlighting
+  const [highlightedInstance, setHighlightedInstance] = useState<number | null>(null)
+  
+  // Function to highlight a voxel instance
+  const highlightVoxel = (instanceIndex: number) => {
+    const mesh = planetInstancedMesh.current
+    if (!mesh) return
+    
+    // Store original color if not already stored
+    if (!originalColors.has(instanceIndex)) {
+      const color = new THREE.Color()
+      mesh.getColorAt(instanceIndex, color)
+      originalColors.set(instanceIndex, color.clone())
+    }
+    
+    // Set highlight color
+    mesh.setColorAt(instanceIndex, HIGHLIGHT_COLOR)
+    mesh.instanceColor!.needsUpdate = true
+  }
+  
+  // Function to restore original voxel color
+  const restoreVoxelColor = (instanceIndex: number) => {
+    const mesh = planetInstancedMesh.current
+    if (!mesh) return
+    
+    const originalColor = originalColors.get(instanceIndex)
+    if (originalColor) {
+      mesh.setColorAt(instanceIndex, originalColor)
+      mesh.instanceColor!.needsUpdate = true
+    }
+  }
   
   useFrame((state, deltaTime) => {
     if (!ref.current) return
@@ -138,20 +172,34 @@ export default function Player() {
 
     // Terrain manipulator - visual raycast from camera center
     const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
-    if (hitInfo) {
-      // const material = planetInstanceMaterials.current[hitInfo.instanceIndex]
-      // const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
+    
+    // Handle voxel highlighting
+    if (hitInfo && hitInfo.instanceIndex !== highlightedInstance) {
+      // Restore previous highlighted voxel if exists
+      if (highlightedInstance !== null) {
+        restoreVoxelColor(highlightedInstance)
+      }
       
-      // console.log("✅ Hit voxel:", {
-      //   instanceIndex: hitInfo.instanceIndex,
-      //   material: material,
-      //   distance: hitInfo.distance,
-      //   position: rigidBody?.translation(),
-      //   userData: rigidBody?.userData,
-      //   point: hitInfo.point,
-      //   normal: hitInfo.normal,
-      // });
+      // Highlight new voxel
+      highlightVoxel(hitInfo.instanceIndex)
+      setHighlightedInstance(hitInfo.instanceIndex)
       
+      const material = planetInstanceMaterials.current[hitInfo.instanceIndex]
+      const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
+      
+      console.log("✅ Hit voxel:", {
+        instanceIndex: hitInfo.instanceIndex,
+        material: material,
+        distance: hitInfo.distance,
+        position: rigidBody?.translation(),
+        userData: rigidBody?.userData,
+        point: hitInfo.point,
+        normal: hitInfo.normal,
+      });
+    } else if (!hitInfo && highlightedInstance !== null) {
+      // No voxel hit, restore previous highlighted voxel
+      restoreVoxelColor(highlightedInstance)
+      setHighlightedInstance(null)
     }
   })
   
