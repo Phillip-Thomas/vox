@@ -88,10 +88,7 @@ export default function Player() {
     }
   }, [])
   
-  // Don't reset camera angles when face changes - let player maintain their view direction
-  // useEffect(() => {
-  //   cameraAngles.current = { yaw: 0, pitch: 0 }
-  // }, [currentFace])
+
   
   useFrame((state, deltaTime) => {
     if (!ref.current) return
@@ -178,7 +175,7 @@ export default function Player() {
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
       if (jump) {
         const currentVel = ref.current.linvel();
-        const jumpForce = 1.0;
+        const jumpForce = .25;
         const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
         ref.current.setLinvel({ 
@@ -211,12 +208,10 @@ export default function Player() {
   return (
     <>
     <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
-        <mesh position={[0, 0, 0]}>
+
         <CapsuleCollider args={[.5, .5]} />
           <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
           <capsuleGeometry args={[0.5, 0.5]} />
-          <meshStandardMaterial color="red" />
-        </mesh>
       </RigidBody>
     </>
   )
