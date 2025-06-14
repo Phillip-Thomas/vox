@@ -26,13 +26,20 @@ export function generateVoxelInstances(voxelSize: number): {
   const offset = calculateWorldOffset(voxelSize);
 
   // Generate instances only for exposed voxels
+  let processedCount = 0;
+  let exposedCount = 0;
+  
   for (let x = 0; x < CUBE_SIZE_X; x++) {
     for (let y = 0; y < CUBE_SIZE_Y; y++) {
       for (let z = 0; z < CUBE_SIZE_Z; z++) {
+        processedCount++;
+        
         // Only create instance if voxel is exposed
         if (!isVoxelExposed(x, y, z, voxelExists)) {
           continue; // Skip this voxel - it's completely surrounded
         }
+        
+        exposedCount++;
         
         const position = voxelToWorldPosition(x, y, z, voxelSize, offset);
         const materialType = getRandomMaterialType();
@@ -41,19 +48,13 @@ export function generateVoxelInstances(voxelSize: number): {
           key: `voxel_${x}_${y}_${z}`,
           position,
           rotation: [0, 0, 0],
-          args: {
-            userData: {
-              material: getRandomMaterialType(),
-              voxelType: 'special',
-              note: 'center cube'
-            }
-          },
+
           userData: {
             material: materialType,
             coordinates: { x, y, z },
             voxelType: 'terrain'
           },
-          type: "dynamic", // Changed back to dynamic so they can fall
+          type: "fixed", // Changed back to dynamic so they can fall
         });
         
         // Store original positions for reset
@@ -72,20 +73,20 @@ export function generateVoxelInstances(voxelSize: number): {
       position: additionalPosition,
       rotation: [0, 0, 0],
       type: "dynamic",
-      args: {
-        userData: {
-          material: getRandomMaterialType(),
-          coordinates: { x: centerX, y: topY, z: centerZ },
-          voxelType: 'special',
-          note: 'center cube'
-        }
-      }
+      // args: {
+      //   userData: {
+      //     material: getRandomMaterialType(),
+      //     coordinates: { x: centerX, y: topY, z: centerZ },
+      //     voxelType: 'special',
+      //     note: 'center cube'
+      //   }
+      // }
     });
     
     positions.push(additionalPosition);
   }
   
-  console.log(`Culled voxels: ${(CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1) - instances.length} hidden, ${instances.length} visible`);
+  console.log(`Generated ${instances.length} surface voxels from ${CUBE_SIZE_X}×${CUBE_SIZE_Y}×${CUBE_SIZE_Z} cube (culled ${(CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1) - instances.length} interior voxels)`);
   
   return { instances, originalPositions: positions };
 } 

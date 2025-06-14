@@ -105,7 +105,7 @@ const App: React.FC = () => {
       <PlayerContext.Provider value={playerConfig}>
       <GravityProvider>
         <Canvas
-          // camera={{ position: [0, 60, 60], fov: 75, near: 0.1, far: 1000 }}
+          // camera={{ position: [0, 20, 20], fov: 75, near: 0.1, far: 1000 }}
           shadows
           style={{ width: '100vw', height: '100vh' }}
         >
@@ -121,8 +121,8 @@ const App: React.FC = () => {
           
           {/* Visualize the angular bisector planes */}
           <QuadrantVisualizer voxelSize={planetConfig.voxelSize} visible={true} />
-          {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} /> */}
-          <PointerLockControls  makeDefault onChange={() => {console.log('changed')}}/>
+          {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} makeDefault /> */}
+          {/* <PointerLockControls makeDefault /> */}
         </Canvas>
       </GravityProvider>
       </PlayerContext.Provider>

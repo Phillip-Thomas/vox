@@ -88,17 +88,17 @@ export default function Planet() {
 
   return (
     <InstancedRigidBodies
-      key={`voxels-${VOXEL_SIZE}`} 
-      instances={instances}
-      ref={rigidBodies}
-      colliders={false}
-      type="fixed"
-      gravityScale={1}
+    key={`voxels-${VOXEL_SIZE}`} 
+    instances={instances}
+    ref={rigidBodies}
+    colliders={'cuboid'}
+    type="fixed"
     >
-      <CuboidCollider args={[VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45, VOXEL_SIZE * 0.45]} />
       <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, totalVoxels]} count={totalVoxels}>
-      <boxGeometry args={[VOXEL_SIZE*.9, VOXEL_SIZE*.9, VOXEL_SIZE*.9]} />
-      <primitive object={voxelMaterial} attach="material" />
+        <boxGeometry args={[VOXEL_SIZE*.9, VOXEL_SIZE*.9, VOXEL_SIZE*.9]} />
+        <primitive object={voxelMaterial} attach="material" />
+        {/* <CuboidCollider args={[VOXEL_SIZE * 0.5, VOXEL_SIZE * 0.5, VOXEL_SIZE * 0.5]} /> */}
+
       </instancedMesh>
     </InstancedRigidBodies>
   );

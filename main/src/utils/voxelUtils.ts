@@ -40,9 +40,11 @@ export function isVoxelExposed(x: number, y: number, z: number, voxelExists: Set
   ];
   
   // Check if any neighbor position is empty (no voxel instance)
-  return neighbors.some(([nx, ny, nz]) => {
+  const isExposed = neighbors.some(([nx, ny, nz]) => {
     return !voxelExists.has(`${nx},${ny},${nz}`);
   });
+  
+  return isExposed;
 }
 
 /**

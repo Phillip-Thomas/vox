@@ -74,11 +74,11 @@ export default function Player() {
       
       if (forward || backward || left || right) {
         // Ensure camera world matrix is up to date before getting direction
-        cameraRef.current?.updateMatrixWorld(true)
+        state.camera?.updateMatrixWorld(true)
         
         // Use actual camera direction for movement (where the player is actually looking)
         const cameraForward = new THREE.Vector3()
-        cameraRef.current?.getWorldDirection(cameraForward)
+        state.camera?.getWorldDirection(cameraForward)
         
         // Project camera forward onto the current face plane to get proper movement direction
         // Remove any component along the face's up direction to keep movement on the surface
@@ -121,35 +121,35 @@ export default function Player() {
         })
       }
       
-      // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
-      if (jump) {
-        const currentVel = ref.current.linvel();
-        const jumpForce = 7.5;
-        const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
+      // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
+      // if (jump) {
+      //   const currentVel = ref.current.linvel();
+      //   const jumpForce = 7.5;
+      //   const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
-        ref.current.setLinvel({ 
-          x: currentVel.x + jumpVector.x, 
-          y: currentVel.y + jumpVector.y, 
-          z: currentVel.z + jumpVector.z 
-        });
-      }
+      //   ref.current.setLinvel({ 
+      //     x: currentVel.x + jumpVector.x, 
+      //     y: currentVel.y + jumpVector.y, 
+      //     z: currentVel.z + jumpVector.z 
+      //   });
+      // }
     }
 
     // Terrain manipulator - visual raycast from camera center
     const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
     if (hitInfo) {
-      const material = planetInstanceMaterials.current[hitInfo.instanceIndex]
-      const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
+      // const material = planetInstanceMaterials.current[hitInfo.instanceIndex]
+      // const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
       
-      console.log("✅ Hit voxel:", {
-        instanceIndex: hitInfo.instanceIndex,
-        material: material,
-        distance: hitInfo.distance,
-        position: rigidBody?.translation(),
-        userData: rigidBody?.userData,
-        point: hitInfo.point,
-        normal: hitInfo.normal,
-      });
+      // console.log("✅ Hit voxel:", {
+      //   instanceIndex: hitInfo.instanceIndex,
+      //   material: material,
+      //   distance: hitInfo.distance,
+      //   position: rigidBody?.translation(),
+      //   userData: rigidBody?.userData,
+      //   point: hitInfo.point,
+      //   normal: hitInfo.normal,
+      // });
       
     }
   })
@@ -157,11 +157,9 @@ export default function Player() {
   return (
     <>
     <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
-        <CapsuleCollider args={[.5, .5]} />
-        {/* Visible player body */}
         <mesh position={[0, 0, 0]}>
-          
-          <PerspectiveCamera ref={cameraRef} position={[0, 0, 0]} makeDefault/>
+        <CapsuleCollider args={[.5, .5]} />
+          <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
           <capsuleGeometry args={[0.5, 0.5]} />
           <meshStandardMaterial color="red" />
         </mesh>
