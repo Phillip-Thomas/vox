@@ -18,6 +18,9 @@ const sideVector = new THREE.Vector3()
 const HIGHLIGHT_COLOR = new THREE.Color(0xffff00) // Bright yellow
 const originalColors = new Map<number, THREE.Color>() // Store original colors
 
+// Track deleted voxels
+const deletedVoxels = new Set<number>() // Track which voxels have been deleted
+
 // Three.js visual raycast hook
 function useVisualRaycast() {
   const raycaster = new THREE.Raycaster()
@@ -56,6 +59,9 @@ export default function Player() {
   // State for voxel highlighting
   const [highlightedInstance, setHighlightedInstance] = useState<number | null>(null)
   
+  // Track previous delete key state for single-press detection
+  const prevDeleteKeyRef = useRef(false)
+  
   // Function to highlight a voxel instance
   const highlightVoxel = (instanceIndex: number) => {
     const mesh = planetInstancedMesh.current
@@ -85,10 +91,41 @@ export default function Player() {
     }
   }
   
+  // Function to delete a voxel (hide it by moving it far away)
+  const deleteVoxel = (instanceIndex: number) => {
+    const mesh = planetInstancedMesh.current
+    const rigidBody = planetRigidBodies.current[instanceIndex]
+    
+    if (!mesh || !rigidBody) return
+    
+    // Mark as deleted
+    deletedVoxels.add(instanceIndex)
+    
+    // Store original color before deletion (if not already stored)
+    if (!originalColors.has(instanceIndex)) {
+      const color = new THREE.Color()
+      mesh.getColorAt(instanceIndex, color)
+      originalColors.set(instanceIndex, color.clone())
+    }
+    
+    // Move the rigid body far away (this should move the visual too since it's InstancedRigidBodies)
+    rigidBody.setTranslation({ x: 100000, y: 100000, z: 100000 }, true)
+    
+    // Disable the physics body by setting it to sensor mode  
+    rigidBody.setBodyType(2, true) // 2 = sensor (no collision)
+    
+    // Also set the color to fully transparent as backup
+    const transparentColor = new THREE.Color(0, 0, 0)
+    mesh.setColorAt(instanceIndex, transparentColor)
+    mesh.instanceColor!.needsUpdate = true
+    
+    console.log(`🗑️ Deleted voxel at index ${instanceIndex}`)
+  }
+  
   useFrame((state, deltaTime) => {
     if (!ref.current) return
     
-    const { forward, backward, left, right, jump } = get()
+    const { forward, backward, left, right, jump, delete: deleteKey } = get()
     const velocity = ref.current.linvel()
     
     // Get player position and position camera relative to player
@@ -173,8 +210,8 @@ export default function Player() {
     // Terrain manipulator - visual raycast from camera center
     const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
     
-    // Handle voxel highlighting
-    if (hitInfo && hitInfo.instanceIndex !== highlightedInstance) {
+    // Handle voxel highlighting - only for non-deleted voxels
+    if (hitInfo && !deletedVoxels.has(hitInfo.instanceIndex) && hitInfo.instanceIndex !== highlightedInstance) {
       // Restore previous highlighted voxel if exists
       if (highlightedInstance !== null) {
         restoreVoxelColor(highlightedInstance)
@@ -196,9 +233,19 @@ export default function Player() {
         point: hitInfo.point,
         normal: hitInfo.normal,
       });
-    } else if (!hitInfo && highlightedInstance !== null) {
-      // No voxel hit, restore previous highlighted voxel
+    } else if ((!hitInfo || deletedVoxels.has(hitInfo.instanceIndex)) && highlightedInstance !== null) {
+      // No voxel hit or hit a deleted voxel, restore previous highlighted voxel
       restoreVoxelColor(highlightedInstance)
+      setHighlightedInstance(null)
+    }
+    
+    // Handle voxel deletion with E key - only on fresh key press
+    const deleteKeyPressed = deleteKey && !prevDeleteKeyRef.current // Fresh press detection
+    prevDeleteKeyRef.current = deleteKey // Update previous state
+    
+    if (deleteKeyPressed && highlightedInstance !== null && !deletedVoxels.has(highlightedInstance)) {
+      deleteVoxel(highlightedInstance)
+      restoreVoxelColor(highlightedInstance) // Clean up highlight
       setHighlightedInstance(null)
     }
   })

@@ -10,7 +10,9 @@ import { generateInstanceMaterials } from '../utils/materialGenerator';
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
   color: "#ffffff", // Changed to white so instance colors show properly
   roughness: 0.7,
-  metalness: 0.1
+  metalness: 0.1,
+  transparent: true, // Enable transparency for voxel deletion
+  alphaTest: 0.1 // Don't render pixels with alpha below 0.1
 });
 
 // Export refs for raycaster access
@@ -94,7 +96,7 @@ function Planet() {
     type="fixed"
     >
       <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, totalVoxels]} count={totalVoxels}>
-        <boxGeometry args={[VOXEL_SIZE*.9, VOXEL_SIZE*.9, VOXEL_SIZE*.9]} />
+        <boxGeometry args={[VOXEL_SIZE*.99, VOXEL_SIZE*.99, VOXEL_SIZE*.99]} />
         <primitive object={voxelMaterial} attach="material" />
         {/* <CuboidCollider args={[VOXEL_SIZE * 0.5, VOXEL_SIZE * 0.5, VOXEL_SIZE * 0.5]} /> */}
 
