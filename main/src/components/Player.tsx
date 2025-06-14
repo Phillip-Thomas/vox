@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { useRef, useEffect } from "react"
+import { useRef } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useKeyboardControls, PerspectiveCamera } from "@react-three/drei"
 // @ts-ignore - CapsuleCollider exists at runtime but not in types
@@ -7,6 +7,7 @@ import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier"
 import { planetInstancedMesh, planetInstanceMaterials, planetRigidBodies } from './Planet'
 import { useGravityContext } from '../App';
 import { usePlayer } from '../context/PlayerContext';
+import CameraControls from './CameraControls';
 
 const SPEED = 5
 const direction = new THREE.Vector3()
@@ -50,59 +51,8 @@ export default function Player() {
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   
-  // Simple yaw/pitch mouse look state
-  const cameraAngles = useRef({ yaw: 0, pitch: 0 })
-  const isLockedRef = useRef(false)
-  
-  // Pointer lock controls
-  useEffect(() => {
-    const handleClick = () => {
-      document.body.requestPointerLock()
-    }
-    
-    const handlePointerLockChange = () => {
-      isLockedRef.current = document.pointerLockElement === document.body
-    }
-    
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!isLockedRef.current) return
-      
-      const sensitivity = 0.002
-      
-      // Simple yaw/pitch updates
-      cameraAngles.current.yaw -= event.movementX * sensitivity
-      cameraAngles.current.pitch -= event.movementY * sensitivity
-      
-      // Clamp pitch to prevent over-rotation
-      cameraAngles.current.pitch = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, cameraAngles.current.pitch))
-    }
-    
-    document.addEventListener('click', handleClick)
-    document.addEventListener('pointerlockchange', handlePointerLockChange)
-    document.addEventListener('mousemove', handleMouseMove)
-    
-    return () => {
-      document.removeEventListener('click', handleClick)
-      document.removeEventListener('pointerlockchange', handlePointerLockChange)
-      document.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [])
-  
-
-  
   useFrame((state, deltaTime) => {
     if (!ref.current) return
-    
-    // Update camera rotation based on mouse input
-    if (cameraRef.current) {
-      // Simple approach: just set rotation directly
-      cameraRef.current.rotation.set(
-        cameraAngles.current.pitch,
-        cameraAngles.current.yaw,
-        0,
-        'YXZ' // Apply yaw first, then pitch
-      )
-    }
     
     const { forward, backward, left, right, jump } = get()
     const velocity = ref.current.linvel()
@@ -205,13 +155,13 @@ export default function Player() {
     }
   })
   
-  return (
+    return (
     <>
-    <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
-
+      <CameraControls cameraRef={cameraRef} />
+      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
         <CapsuleCollider args={[.5, .5]} />
-          <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
-          <capsuleGeometry args={[0.5, 0.5]} />
+        <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
+        <capsuleGeometry args={[0.5, 0.5]} />
       </RigidBody>
     </>
   )
