@@ -1,44 +1,50 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Stats, Sky, KeyboardControls, PointerLockControls } from '@react-three/drei';
-import { Physics, RigidBody } from '@react-three/rapier';
+import { Stats, Sky, KeyboardControls, OrbitControls, PointerLockControls } from '@react-three/drei';
+import { Physics } from '@react-three/rapier';
 import * as THREE from 'three';
 import { PlanetContext } from './context/PlanetContext.ts';
-import { PlayerContext } from './context/PlayerContext.ts';
+import { PlayerContext, PlayerState, CubeFace, FACE_ORIENTATIONS } from './context/PlayerContext.ts';
 import Planet from './components/Planet.tsx';
 import Player from './components/Player.tsx';
+import QuadrantVisualizer from './components/QuadrantVisualizer.tsx';
+import { usePlanetGravity } from './hooks/usePlanetRotation';
 import './App.css';
 
-interface PlayerState {
-  position: THREE.Vector3 | null;
-  velocity: THREE.Vector3 | null;
-  rotation: THREE.Euler | null;
-  camera: THREE.Camera | null;
-  controls: any;
-  keys: any;
+
+
+// Gravity context to share gravity state between components
+const GravityContext = createContext<ReturnType<typeof usePlanetGravity> | null>(null);
+
+export function useGravityContext() {
+  const context = useContext(GravityContext);
+  if (!context) {
+    throw new Error('useGravityContext must be used within GravityProvider');
+  }
+  return context;
 }
 
-interface PlayerConfig {
-  playerState: PlayerState;
-  setPlayerState: React.Dispatch<React.SetStateAction<PlayerState>>;
-  playerHeight: number;
-  moveSpeed: {
-    walk: number;
-    run: number;
-    jump: number;
-  };
-  onGround: boolean;
-  canJump: boolean;
-  isRunning: boolean;
-  camera?: THREE.Camera | null;
-  controls?: any;
-  keys?: any;
+// Gravity provider component
+function GravityProvider({ children }: { children: React.ReactNode }) {
+  const voxelSize = 2.0;
+  const gravityState = usePlanetGravity(voxelSize);
+  
+  return (
+    <GravityContext.Provider value={gravityState}>
+      {children}
+    </GravityContext.Provider>
+  );
 }
 
-interface PlanetConfig {
-  radius: number;
-  voxelSize: number;
-  center: [number, number, number];
+// Physics wrapper component that uses gravity from context
+function PhysicsWrapper({ children }: { children: React.ReactNode }) {
+  const { gravity } = useGravityContext();
+  
+  return (
+    <Physics gravity={gravity}>
+      {children}
+    </Physics>
+  );
 }
 
 const App: React.FC = () => {
@@ -48,12 +54,23 @@ const App: React.FC = () => {
     rotation: null,
     camera: null,
     controls: {},
-    keys: {}
+    keys: {},
+    currentFace: 'top' as CubeFace,
+    faceOrientation: FACE_ORIENTATIONS.top
   });
   
-  const playerConfig: PlayerConfig = {
-    playerState,
+  const setCurrentFace = React.useCallback((face: CubeFace) => {
+    setPlayerState(prev => ({
+      ...prev,
+      currentFace: face,
+      faceOrientation: FACE_ORIENTATIONS[face]
+    }));
+  }, []);
+  
+  const playerConfig = {
+    ...playerState,
     setPlayerState,
+    setCurrentFace,
     playerHeight: 1.8,
     moveSpeed: {
       walk: 5.0,
@@ -62,13 +79,15 @@ const App: React.FC = () => {
     },
     onGround: false,
     canJump: false,
-    isRunning: false
+    isRunning: false,
+    setCamera: (camera: THREE.Camera) => setPlayerState(prev => ({...prev, camera}))
   };
 
-  const planetConfig: PlanetConfig = { 
+  const planetConfig = { 
     radius: 25, 
     voxelSize: 2, 
-    center: [0,0,0] 
+    center: [0,0,0] as [number, number, number],
+    gravity: 9.81
   };
 
   return (
@@ -82,38 +101,30 @@ const App: React.FC = () => {
         { name: 'reset', keys: ['KeyR'] },
       ]}
     >
-      <PlanetContext.Provider value={{...planetConfig, gravity: 9.81}}>
-      <PlayerContext.Provider value={{
-        ...playerConfig,
-        camera: playerState.camera,
-        position: playerState.position,
-        velocity: playerState.velocity,
-        setCamera: (camera: THREE.Camera) => setPlayerState(prev => ({...prev, camera})),
-        rotation: playerState.rotation,
-        controls: playerState.controls,
-        keys: playerState.keys,
-        onGround: false,
-        canJump: false,
-        isRunning: false
-      }}>
-      <Canvas
-        camera={{ position: [0, 5, 10], fov: 75, near: 0.1, far: 1000 }}
-        shadows
-        style={{ width: '100vw', height: '100vh' }}
-      >
-        <Stats />
-        <Sky sunPosition={[100, 20, 100]} />
+      <PlanetContext.Provider value={planetConfig}>
+      <PlayerContext.Provider value={playerConfig}>
+      <GravityProvider>
+        <Canvas
+          // camera={{ position: [0, 60, 60], fov: 75, near: 0.1, far: 1000 }}
+          shadows
+          style={{ width: '100vw', height: '100vh' }}
+        >
+          <Stats />
+          <Sky sunPosition={[100, 20, 100]} />
 
-        <ambientLight intensity={0.3} />
+          <ambientLight intensity={0.3} />
 
-        <Physics gravity={[0, -9.81, 0]}>
-
+          <PhysicsWrapper>
+            <Planet />
+            <Player />
+          </PhysicsWrapper>
           
-          <Planet />
-          <Player />
-        </Physics>
-        <PointerLockControls />
-      </Canvas>
+          {/* Visualize the angular bisector planes */}
+          <QuadrantVisualizer voxelSize={planetConfig.voxelSize} visible={true} />
+          {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} /> */}
+          <PointerLockControls  makeDefault onChange={() => {console.log('changed')}}/>
+        </Canvas>
+      </GravityProvider>
       </PlayerContext.Provider>
       </PlanetContext.Provider>
     </KeyboardControls>

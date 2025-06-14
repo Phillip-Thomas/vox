@@ -1,8 +1,6 @@
-import { MaterialType, getRandomMaterialType } from '../types/materials';
-
-export const CUBE_SIZE_X = 80; // Size on X axis in voxels
-export const CUBE_SIZE_Y = 5;  // Size on Y axis in voxels
-export const CUBE_SIZE_Z = 80; // Size on Z axis in voxels
+export const CUBE_SIZE_X = 10; // Size on X axis in voxels
+export const CUBE_SIZE_Y = 10;  // Size on Y axis in voxels
+export const CUBE_SIZE_Z = 10; // Size on Z axis in voxels
 
 /**
  * Creates a set of all voxel positions including the special center cube
