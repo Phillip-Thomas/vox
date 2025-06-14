@@ -64,7 +64,7 @@ export function usePlanetGravity(voxelSize: number) {
     return null;
   }, [currentQuadrant, determineQuadrant, isChanging]);
 
-  const changeGravity = useCallback((newFace: CubeFace, playerRigidBody: any, setCurrentFace: (face: CubeFace) => void, currentFace?: CubeFace) => {
+  const changeGravity = useCallback((newFace: CubeFace, playerRigidBody: any, setCurrentFace: (face: CubeFace) => void, camera?: THREE.Camera, currentFace?: CubeFace) => {
     if (isChanging || !playerRigidBody) return;
 
     const newFaceOrientation = FACE_ORIENTATIONS[newFace];
@@ -74,7 +74,7 @@ export function usePlanetGravity(voxelSize: number) {
     // Calculate rotation delta between current and new face
     playerRigidBody.lockRotations(false);
     
-    if (currentFace) {
+    if (currentFace && camera) {
       // Alternative approach: Use upDirection vectors to calculate rotation
       const currentFaceOrientation = FACE_ORIENTATIONS[currentFace];
       const currentUpDir = currentFaceOrientation.upDirection;
@@ -105,6 +105,13 @@ export function usePlanetGravity(voxelSize: number) {
       
       console.log(`📐 Final player quaternion:`, finalRotation);
       
+      // Get current camera up direction for smooth transition
+      const currentCameraUp = camera.up.clone();
+      const targetCameraUp = newUpDir.clone();
+      
+      console.log(`📷 Current camera up:`, currentCameraUp);
+      console.log(`📷 Target camera up:`, targetCameraUp);
+      
       // Smooth rotation transition using slerp
       const startRotation = currentPlayerQuat.clone();
       const targetRotation = finalRotation.clone();
@@ -127,6 +134,17 @@ export function usePlanetGravity(voxelSize: number) {
           z: currentRotation.z,
           w: currentRotation.w
         }, true);
+        
+        // Smoothly interpolate camera up direction
+        const currentUp = currentCameraUp.clone().lerp(targetCameraUp, easedProgress);
+        camera.up.copy(currentUp);
+        
+        // Update projection matrix if it's a perspective or orthographic camera
+        if ('updateProjectionMatrix' in camera && typeof camera.updateProjectionMatrix === 'function') {
+          camera.updateProjectionMatrix();
+        }
+        
+        console.log(`📷 Updated camera up to:`, camera.up, `(progress: ${easedProgress.toFixed(2)})`);
         
         if (progress < 1) {
           requestAnimationFrame(animateRotation);

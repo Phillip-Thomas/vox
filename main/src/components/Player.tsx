@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useKeyboardControls, PerspectiveCamera } from "@react-three/drei"
 // @ts-ignore - CapsuleCollider exists at runtime but not in types
@@ -50,8 +50,49 @@ export default function Player() {
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   
+  // Mouse look state
+  const mouseRef = useRef({ x: 0, y: 0 })
+  const isLockedRef = useRef(false)
+  
+  // Pointer lock controls
+  useEffect(() => {
+    const handleClick = () => {
+      document.body.requestPointerLock()
+    }
+    
+    const handlePointerLockChange = () => {
+      isLockedRef.current = document.pointerLockElement === document.body
+    }
+    
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isLockedRef.current || !cameraRef.current) return
+      
+      const sensitivity = 0.002
+      mouseRef.current.x -= event.movementX * sensitivity
+      mouseRef.current.y -= event.movementY * sensitivity
+      
+      // Clamp vertical rotation
+      mouseRef.current.y = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, mouseRef.current.y))
+    }
+    
+    document.addEventListener('click', handleClick)
+    document.addEventListener('pointerlockchange', handlePointerLockChange)
+    document.addEventListener('mousemove', handleMouseMove)
+    
+    return () => {
+      document.removeEventListener('click', handleClick)
+      document.removeEventListener('pointerlockchange', handlePointerLockChange)
+      document.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
+  
   useFrame((state, deltaTime) => {
     if (!ref.current) return
+    
+    // Update camera rotation based on mouse input
+    if (cameraRef.current && isLockedRef.current) {
+      cameraRef.current.rotation.set(mouseRef.current.y, mouseRef.current.x, 0)
+    }
     
     const { forward, backward, left, right, jump } = get()
     const velocity = ref.current.linvel()
@@ -64,7 +105,7 @@ export default function Player() {
     const boundary = checkBoundaries(currentPosition);
     if (boundary && setCurrentFace) {
       // Use the original changeGravity function which handles both gravity and player rotation
-      changeGravity(boundary, ref.current, setCurrentFace, currentFace);
+      changeGravity(boundary, ref.current, setCurrentFace, state.camera, currentFace);
     }
     
     // Only allow player movement if gravity is not changing

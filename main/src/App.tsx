@@ -120,9 +120,9 @@ const App: React.FC = () => {
           </PhysicsWrapper>
           
           {/* Visualize the angular bisector planes */}
-          <QuadrantVisualizer voxelSize={planetConfig.voxelSize} visible={true} />
+          {/* <QuadrantVisualizer voxelSize={planetConfig.voxelSize} visible={true} /> */}
           {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} makeDefault /> */}
-          {/* <PointerLockControls makeDefault /> */}
+          {/* <PointerLockControls makeDefault={true} /> */}
         </Canvas>
       </GravityProvider>
       </PlayerContext.Provider>
