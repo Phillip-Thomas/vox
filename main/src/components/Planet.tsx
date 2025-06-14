@@ -1,10 +1,10 @@
-import { useMemo, useContext, useRef, useEffect, useState } from 'react';
+import { useMemo, useContext, useRef, useEffect, useState, memo } from 'react';
 import * as THREE from 'three';
 import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
 import { PlanetContext } from '../context/PlanetContext';
 import { generateVoxelInstances } from '../utils/instanceGenerator';
 import { generateInstanceMaterials } from '../utils/materialGenerator';
-import { usePlanetGravity } from '../hooks/usePlanetRotation';
+
 
 // Create material once - using MeshStandardMaterial for roughness/metalness properties
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -19,7 +19,7 @@ export const planetInstanceMaterials = { current: [] as any[] };
 export const planetRigidBodies = { current: [] as RapierRigidBody[] };
 export const planetGravityHook = { current: null as any };
 
-export default function Planet() {
+function Planet() {
   const { voxelSize: VOXEL_SIZE } = useContext(PlanetContext);
   const rigidBodies = useRef<RapierRigidBody[]>([]);
   const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
@@ -28,8 +28,7 @@ export default function Planet() {
   // Store original positions for reset
   const originalPositions = useRef<[number, number, number][]>([]);
   
-  // Initialize planet gravity system
-  const planetGravity = usePlanetGravity(VOXEL_SIZE);
+  // Planet gravity system will be managed externally
 
   // Generate materials and colors for each instance
   const { instanceColors, instanceMaterials } = useMemo(() => {
@@ -81,10 +80,10 @@ export default function Planet() {
     planetInstancedMesh.current = instancedMeshRef.current;
     planetInstanceMaterials.current = instanceMaterials;
     planetRigidBodies.current = rigidBodies.current;
-    planetGravityHook.current = planetGravity;
+    // planetGravityHook will be set externally by the component that manages gravity
     
-    console.log("Planet gravity references updated");
-  }, [planetReady, instances, instanceMaterials, planetGravity])
+    console.log("Planet references updated");
+  }, [planetReady, instances, instanceMaterials])
 
   return (
     <InstancedRigidBodies
@@ -102,4 +101,6 @@ export default function Planet() {
       </instancedMesh>
     </InstancedRigidBodies>
   );
-} 
+}
+
+export default memo(Planet); 

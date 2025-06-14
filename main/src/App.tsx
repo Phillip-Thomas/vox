@@ -83,12 +83,12 @@ const App: React.FC = () => {
     setCamera: (camera: THREE.Camera) => setPlayerState(prev => ({...prev, camera}))
   };
 
-  const planetConfig = { 
+  const planetConfig = React.useMemo(() => ({ 
     radius: 25, 
     voxelSize: 2, 
     center: [0,0,0] as [number, number, number],
     gravity: 9.81
-  };
+  }), []);
 
   return (
     <KeyboardControls
