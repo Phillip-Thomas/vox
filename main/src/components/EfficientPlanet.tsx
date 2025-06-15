@@ -20,7 +20,7 @@ export let addDynamicCollisionBody: ((x: number, y: number, z: number) => void) 
 export let removeDynamicCollisionBody: ((x: number, y: number, z: number) => void) | null = null;
 
 interface EfficientPlanetProps {
-  size?: number; // Planet radius in voxels
+  size?: number; // Cube half-size in voxels (cube extends from -size to +size)
   playerPosition?: THREE.Vector3; // Player position for proximity-based collision
 }
 
@@ -121,28 +121,25 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
     return shouldCreate;
   };
   
-  // Generate complete original terrain (all voxels that should exist in the planet)
+  // Generate complete original terrain (all voxels that should exist in the cube)
   const originalTerrain = useMemo(() => {
     const terrain: Array<{x: number, y: number, z: number, material: MaterialType, color: THREE.Color}> = [];
     const generator = new ProceduralWorldGenerator();
     
-    // Generate ALL voxels within the sphere (not just exposed ones)
+    // Generate ALL voxels within the cube (not just exposed ones)
+    // Cube extends from -size to +size in all dimensions
     for (let x = -size; x <= size; x++) {
       for (let y = -size; y <= size; y++) {
         for (let z = -size; z <= size; z++) {
-          const distance = Math.sqrt(x*x + y*y + z*z);
-          
-          // All positions within the sphere are part of the original terrain
-          if (distance <= size) {
-            const material = generator.generateMaterialForPosition(x, y, z);
-            const color = MATERIALS[material].color.clone();
-            terrain.push({ x, y, z, material, color });
-          }
+          // All positions within the cube bounds are part of the original terrain
+          const material = generator.generateMaterialForPosition(x, y, z);
+          const color = MATERIALS[material].color.clone();
+          terrain.push({ x, y, z, material, color });
         }
       }
     }
     
-    console.log(`🌍 Generated complete original terrain with ${terrain.length} voxels (radius: ${size})`);
+    console.log(`🧊 Generated complete original terrain with ${terrain.length} voxels (cube size: ${size*2+1}³)`);
     return terrain;
   }, [size]);
 
@@ -165,8 +162,8 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
       }
     }
     
-    console.log(`🌍 Generated ${voxels.length} exposed voxels from ${originalTerrain.length} original terrain voxels`);
-    console.log(`📊 Voxel Stats: Radius=${size}, Surface=${voxels.length}, Total=${originalTerrain.length}, Surface%=${((voxels.length/originalTerrain.length)*100).toFixed(1)}%`);
+    console.log(`🧊 Generated ${voxels.length} exposed voxels from ${originalTerrain.length} original terrain voxels`);
+    console.log(`📊 Voxel Stats: CubeSize=${size*2+1}, Surface=${voxels.length}, Total=${originalTerrain.length}, Surface%=${((voxels.length/originalTerrain.length)*100).toFixed(1)}%`);
     
     return voxels;
   }, [size, originalTerrain]);
@@ -184,11 +181,13 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
     
     if (actualSurfaceVoxels === 0) {
       // Fallback to estimation if initialVoxels hasn't been calculated yet
-      const estimatedSurfaceVoxels = Math.max(6 * size * size, 1000);
+      // For a cube, surface area = 6 * (2*size+1)² - but account for edges/corners
+      const cubeSize = size * 2 + 1;
+      const estimatedSurfaceVoxels = Math.max(6 * cubeSize * cubeSize - 12 * cubeSize + 8, 1000);
       const expansionBuffer = Math.floor(estimatedSurfaceVoxels * 0.5);
       const totalSize = estimatedSurfaceVoxels + expansionBuffer;
       
-      console.log(`🎯 DYNAMIC BUFFER (ESTIMATED): PlanetSize=${size}, EstimatedSurface=${estimatedSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
+      console.log(`🎯 DYNAMIC BUFFER (ESTIMATED): CubeSize=${cubeSize}, EstimatedSurface=${estimatedSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
       return totalSize;
     }
     
@@ -196,7 +195,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
     const expansionBuffer = Math.floor(actualSurfaceVoxels * 0.3); // 30% buffer for dynamic growth
     const totalSize = actualSurfaceVoxels + expansionBuffer;
     
-    console.log(`🎯 DYNAMIC BUFFER (ACTUAL): PlanetSize=${size}, ActualSurface=${actualSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
+    console.log(`🎯 DYNAMIC BUFFER (ACTUAL): CubeSize=${size*2+1}, ActualSurface=${actualSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
     
     // Final validation - never return 0
     if (totalSize <= 0) {
@@ -320,7 +319,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
       
       // Initialize collision bodies only for voxels within range of player
     // But exclude voxels too close to player spawn position to prevent getting stuck
-    const playerSpawnPos = new THREE.Vector3(0, size*2+10, 0); // Player spawn position
+    const playerSpawnPos = new THREE.Vector3(0, size+10, 0); // Player spawn position (above cube top)
     
     const initialCollisionBodies = initialVoxels
       .filter(voxel => {
@@ -505,7 +504,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
   }, [playerPosition]); // Remove allCollisionBodies dependency to allow more frequent updates
   
   // Debug: Log buffer size at render time
-  console.log(`🎯 RENDER TIME: dynamicBufferSize = ${dynamicBufferSize} for planet size ${size}`);
+  console.log(`🎯 RENDER TIME: dynamicBufferSize = ${dynamicBufferSize} for cube size ${size*2+1}³`);
 
   return (
     <>
@@ -546,19 +545,19 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
 }
 
 // Helper function to determine if a voxel should be exposed
-function isVoxelExposed(x: number, y: number, z: number, planetSize: number): boolean {
+function isVoxelExposed(x: number, y: number, z: number, cubeSize: number): boolean {
   const neighbors = [
     [x+1, y, z], [x-1, y, z],
     [x, y+1, z], [x, y-1, z],
     [x, y, z+1], [x, y, z-1]
   ];
   
-  // Check if any neighbor is outside the planet or missing
+  // Check if any neighbor is outside the cube bounds
   for (const [nx, ny, nz] of neighbors) {
-    const neighborDistance = Math.sqrt(nx*nx + ny*ny + nz*nz);
-    
-    // If neighbor is outside planet bounds, this voxel is exposed
-    if (neighborDistance > planetSize) {
+    // If neighbor is outside cube bounds (-cubeSize to +cubeSize), this voxel is exposed
+    if (nx < -cubeSize || nx > cubeSize || 
+        ny < -cubeSize || ny > cubeSize || 
+        nz < -cubeSize || nz > cubeSize) {
       return true;
     }
   }

@@ -16,7 +16,7 @@ const mouse = new THREE.Vector2(0, 0); // Screen center
 const SPEED = 5;
 
 interface EfficientPlayerProps {
-  planetSize?: number;
+  planetSize?: number; // Cube half-size (cube extends from -planetSize to +planetSize)
   onPositionChange?: (position: THREE.Vector3) => void;
 }
 
@@ -35,14 +35,13 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
   useFrame((state) => {
     if (!ref.current) return;
     
-    // CRITICAL: Wake up the rigid body every frame to prevent sleeping/getting stuck
-    if (ref.current.wakeUp) {
-      ref.current.wakeUp();
-    }
-    
-    // Debug: Check if player is sleeping (log occasionally)
-    if (ref.current.isSleeping && Math.random() < 0.01) { // 1% chance per frame
-      console.log(`😴 Player was sleeping, waking up...`);
+    // Debug: Check if canSleep is working properly (should never sleep)
+    if (ref.current.isSleeping) {
+      console.warn(`🚨 UNEXPECTED: Player is sleeping despite canSleep={false}! This indicates a Rapier issue.`);
+      // Force wake up as fallback
+      if (ref.current.wakeUp) {
+        ref.current.wakeUp();
+      }
     }
     
     // Update player position for proximity-based collision
@@ -57,11 +56,6 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
     const direction = new THREE.Vector3();
     
     if (forward || backward || left || right) {
-      // Ensure player is awake when trying to move
-      if (ref.current.wakeUp) {
-        ref.current.wakeUp();
-      }
-      
       // Get camera direction for movement
       const cameraDirection = new THREE.Vector3();
       if (cameraRef.current) {
@@ -94,11 +88,6 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
     
     // Jumping
     if (jump) {
-      // Ensure player is awake when jumping
-      if (ref.current.wakeUp) {
-        ref.current.wakeUp();
-      }
-      
       const currentVel = ref.current.linvel();
       ref.current.setLinvel({
         x: currentVel.x,
