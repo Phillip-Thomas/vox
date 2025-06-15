@@ -4,10 +4,19 @@ import { useFrame, useThree } from "@react-three/fiber"
 import { useKeyboardControls, PerspectiveCamera } from "@react-three/drei"
 // @ts-ignore - CapsuleCollider exists at runtime but not in types
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier"
-import { planetInstancedMesh, planetInstanceMaterials, planetRigidBodies } from './Planet'
+import { planetInstancedMesh, planetInstanceMaterials, planetRigidBodies, voxelSystem } from './Planet'
 import { useGravityContext } from '../App';
 import { usePlayer } from '../context/PlayerContext';
 import CameraControls from './CameraControls';
+import { 
+  CUBE_SIZE_X, 
+  CUBE_SIZE_Y, 
+  CUBE_SIZE_Z,
+  isVoxelExposed,
+  voxelToWorldPosition,
+  calculateWorldOffset
+} from '../utils/voxelUtils';
+import { getRandomMaterialType } from '../types/materials';
 
 const SPEED = 5
 const direction = new THREE.Vector3()
@@ -91,6 +100,86 @@ export default function Player() {
     }
   }
   
+  // Function to expose a hidden voxel by moving it to its proper position
+  const exposeVoxel = (x: number, y: number, z: number) => {
+    const coordKey = `${x},${y},${z}`
+    const instanceIndex = voxelSystem.coordinateToIndex.get(coordKey)
+    
+    if (instanceIndex === undefined) {
+      console.warn(`No instance found for coordinates (${x},${y},${z})`)
+      return null
+    }
+    
+    const rigidBody = planetRigidBodies.current[instanceIndex]
+    if (!rigidBody) {
+      console.warn(`No rigid body found for instance ${instanceIndex}`)
+      return null
+    }
+    
+    // Calculate proper world position
+    const offset = calculateWorldOffset(2.0) // Use the voxel size
+    const worldPosition = voxelToWorldPosition(x, y, z, 2.0, offset)
+    
+    // Move the rigid body to its proper position
+    rigidBody.setTranslation({ x: worldPosition[0], y: worldPosition[1], z: worldPosition[2] }, true)
+    
+    // Remove from deleted voxels if it was there
+    voxelSystem.deletedVoxels.delete(coordKey)
+    deletedVoxels.delete(instanceIndex)
+    
+    console.log(`✨ Exposed hidden voxel at (${x},${y},${z}) with instance index ${instanceIndex}`)
+    return instanceIndex
+  }
+
+  // Function to check neighbors and expose hidden voxels
+  const exposeNeighboringVoxels = (deletedX: number, deletedY: number, deletedZ: number) => {
+    const neighbors = [
+      [deletedX + 1, deletedY, deletedZ], // right
+      [deletedX - 1, deletedY, deletedZ], // left
+      [deletedX, deletedY + 1, deletedZ], // up
+      [deletedX, deletedY - 1, deletedZ], // down
+      [deletedX, deletedY, deletedZ + 1], // forward
+      [deletedX, deletedY, deletedZ - 1], // backward
+    ]
+    
+    neighbors.forEach(([nx, ny, nz]) => {
+      // Check if neighbor is within bounds
+      if (nx < 0 || nx >= CUBE_SIZE_X || 
+          ny < 0 || ny >= CUBE_SIZE_Y || 
+          nz < 0 || nz >= CUBE_SIZE_Z) {
+        return
+      }
+      
+      const neighborCoordKey = `${nx},${ny},${nz}`
+      
+      // Skip if this neighbor is already deleted or doesn't exist in the original world
+      if (voxelSystem.deletedVoxels.has(neighborCoordKey) || 
+          !voxelSystem.allVoxels.has(neighborCoordKey)) {
+        return
+      }
+      
+      // Skip if this neighbor is already visible (has an instance)
+      if (voxelSystem.coordinateToIndex.has(neighborCoordKey)) {
+        return
+      }
+      
+      // Check if this voxel should now be exposed
+      const currentVoxelData = new Set<string>()
+      
+      // Rebuild the current state of existing voxels (excluding deleted ones)
+      for (const voxelCoord of voxelSystem.allVoxels) {
+        if (!voxelSystem.deletedVoxels.has(voxelCoord)) {
+          currentVoxelData.add(voxelCoord)
+        }
+      }
+      
+      if (isVoxelExposed(nx, ny, nz, currentVoxelData)) {
+        console.log(`🔍 Exposing previously hidden voxel at (${nx},${ny},${nz})`)
+        exposeVoxel(nx, ny, nz)
+      }
+    })
+  }
+
   // Function to delete a voxel (hide it by moving it far away)
   const deleteVoxel = (instanceIndex: number) => {
     const mesh = planetInstancedMesh.current
@@ -98,8 +187,22 @@ export default function Player() {
     
     if (!mesh || !rigidBody) return
     
-    // Mark as deleted
+    // Get the coordinates for this instance
+    const coordKey = voxelSystem.indexToCoordinate.get(instanceIndex)
+    if (!coordKey) {
+      console.warn("Could not find coordinates for instance", instanceIndex)
+      return
+    }
+    
+    const [x, y, z] = coordKey.split(',').map(Number)
+    
+    // Mark as deleted in the voxel system
     deletedVoxels.add(instanceIndex)
+    voxelSystem.deletedVoxels.add(coordKey)
+    
+    // Remove from coordinate mappings
+    voxelSystem.coordinateToIndex.delete(coordKey)
+    voxelSystem.indexToCoordinate.delete(instanceIndex)
     
     // Store original color before deletion (if not already stored)
     if (!originalColors.has(instanceIndex)) {
@@ -119,7 +222,10 @@ export default function Player() {
     mesh.setColorAt(instanceIndex, transparentColor)
     mesh.instanceColor!.needsUpdate = true
     
-    console.log(`🗑️ Deleted voxel at index ${instanceIndex}`)
+    console.log(`🗑️ Deleted voxel at (${x},${y},${z}) with index ${instanceIndex}`)
+    
+    // Check neighboring voxels to see if any should now be exposed
+    exposeNeighboringVoxels(x, y, z)
   }
   
   useFrame((state, deltaTime) => {
@@ -212,6 +318,24 @@ export default function Player() {
     
     // Handle voxel highlighting - only for non-deleted voxels
     if (hitInfo && !deletedVoxels.has(hitInfo.instanceIndex) && hitInfo.instanceIndex !== highlightedInstance) {
+      // Check if we have coordinate mapping for this instance
+      const coordKey = voxelSystem.indexToCoordinate.get(hitInfo.instanceIndex)
+      if (!coordKey) {
+        // Try to get coordinates from rigid body userData as fallback
+        const rigidBody = planetRigidBodies.current[hitInfo.instanceIndex]
+        if (rigidBody && rigidBody.userData && (rigidBody.userData as any).coordinates) {
+          const { x, y, z } = (rigidBody.userData as any).coordinates
+          const newCoordKey = `${x},${y},${z}`
+          // Add missing mapping
+          voxelSystem.coordinateToIndex.set(newCoordKey, hitInfo.instanceIndex)
+          voxelSystem.indexToCoordinate.set(hitInfo.instanceIndex, newCoordKey)
+          console.log(`🔧 Fixed missing coordinate mapping for instance ${hitInfo.instanceIndex} -> (${x},${y},${z})`)
+        } else {
+          console.warn(`⚠️ No coordinates found for instance ${hitInfo.instanceIndex}`)
+          return // Skip this instance
+        }
+      }
+      
       // Restore previous highlighted voxel if exists
       if (highlightedInstance !== null) {
         restoreVoxelColor(highlightedInstance)
@@ -226,6 +350,7 @@ export default function Player() {
       
       console.log("✅ Hit voxel:", {
         instanceIndex: hitInfo.instanceIndex,
+        coordinates: coordKey || voxelSystem.indexToCoordinate.get(hitInfo.instanceIndex),
         material: material,
         distance: hitInfo.distance,
         position: rigidBody?.translation(),
@@ -244,9 +369,15 @@ export default function Player() {
     prevDeleteKeyRef.current = deleteKey // Update previous state
     
     if (deleteKeyPressed && highlightedInstance !== null && !deletedVoxels.has(highlightedInstance)) {
-      deleteVoxel(highlightedInstance)
-      restoreVoxelColor(highlightedInstance) // Clean up highlight
-      setHighlightedInstance(null)
+      // Double-check we have coordinates before deleting
+      const coordKey = voxelSystem.indexToCoordinate.get(highlightedInstance)
+      if (coordKey) {
+        deleteVoxel(highlightedInstance)
+        restoreVoxelColor(highlightedInstance) // Clean up highlight
+        setHighlightedInstance(null)
+      } else {
+        console.error(`❌ Cannot delete voxel - no coordinates found for instance ${highlightedInstance}`)
+      }
     }
   })
   

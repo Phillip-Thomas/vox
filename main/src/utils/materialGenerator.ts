@@ -10,7 +10,7 @@ import {
 } from './voxelUtils';
 
 /**
- * Generates materials and colors for each voxel instance
+ * Generates materials and colors for ALL voxel instances (including hidden ones)
  */
 export function generateInstanceMaterials(voxelSize: number): {
   instanceColors: THREE.Color[];
@@ -20,14 +20,11 @@ export function generateInstanceMaterials(voxelSize: number): {
   
   const colors: THREE.Color[] = [];
   const materials: MaterialType[] = [];
-  const voxelExists = createVoxelPositionSet();
   
-  // Count and generate materials for exposed voxels only
+  // Generate materials for ALL voxels (both exposed and hidden)
   for (let x = 0; x < CUBE_SIZE_X; x++) {
     for (let y = 0; y < CUBE_SIZE_Y; y++) {
       for (let z = 0; z < CUBE_SIZE_Z; z++) {
-        if (!isVoxelExposed(x, y, z, voxelExists)) continue;
-        
         const randomMaterialType = getRandomMaterialType();
         const material = MATERIALS[randomMaterialType];
         materials.push(randomMaterialType);
@@ -36,14 +33,13 @@ export function generateInstanceMaterials(voxelSize: number): {
     }
   }
   
-  // Add material for the additional cube if exposed
-  const { x: centerX, y: topY, z: centerZ } = getCenterCubeCoordinates();
-  if (isVoxelExposed(centerX, topY, centerZ, voxelExists)) {
-    const randomMaterialType = getRandomMaterialType();
-    const material = MATERIALS[randomMaterialType];
-    materials.push(randomMaterialType);
-    colors.push(material.color.clone());
-  }
+  // Add material for the additional cube
+  const randomMaterialType = getRandomMaterialType();
+  const material = MATERIALS[randomMaterialType];
+  materials.push(randomMaterialType);
+  colors.push(material.color.clone());
+  
+  console.log(`Generated ${materials.length} materials for all voxels`);
   
   return { instanceColors: colors, instanceMaterials: materials };
 } 

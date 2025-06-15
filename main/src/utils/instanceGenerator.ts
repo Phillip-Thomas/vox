@@ -12,81 +12,83 @@ import {
 } from './voxelUtils';
 
 /**
- * Generates instances data for InstancedRigidBodies
+ * Generates instances data for InstancedRigidBodies - includes ALL voxels
  */
 export function generateVoxelInstances(voxelSize: number): {
   instances: InstancedRigidBodyProps[];
   originalPositions: [number, number, number][];
+  hiddenVoxels: Set<number>; // Track which instances should be hidden initially
 } {
-  if (!voxelSize) return { instances: [], originalPositions: [] };
+  if (!voxelSize) return { instances: [], originalPositions: [], hiddenVoxels: new Set() };
   
   const voxelExists = createVoxelPositionSet();
   const instances: InstancedRigidBodyProps[] = [];
   const positions: [number, number, number][] = [];
+  const hiddenVoxels = new Set<number>();
   const offset = calculateWorldOffset(voxelSize);
 
-  // Generate instances only for exposed voxels
-  let processedCount = 0;
-  let exposedCount = 0;
+  // Generate instances for ALL voxels, but track which should be hidden
+  let instanceIndex = 0;
   
   for (let x = 0; x < CUBE_SIZE_X; x++) {
     for (let y = 0; y < CUBE_SIZE_Y; y++) {
       for (let z = 0; z < CUBE_SIZE_Z; z++) {
-        processedCount++;
-        
-        // Only create instance if voxel is exposed
-        if (!isVoxelExposed(x, y, z, voxelExists)) {
-          continue; // Skip this voxel - it's completely surrounded
-        }
-        
-        exposedCount++;
-        
+        const isExposed = isVoxelExposed(x, y, z, voxelExists);
         const position = voxelToWorldPosition(x, y, z, voxelSize, offset);
         const materialType = getRandomMaterialType();
         
+        // Create instance for every voxel
         instances.push({
           key: `voxel_${x}_${y}_${z}`,
-          position,
+          position: isExposed ? position : [100000 + x, 100000 + y, 100000 + z], // Hide non-exposed voxels far away
           rotation: [0, 0, 0],
-
           userData: {
             material: materialType,
             coordinates: { x, y, z },
-            voxelType: 'terrain'
+            voxelType: 'terrain',
+            isExposed: isExposed
           },
-          type: "fixed", // Changed back to dynamic so they can fall
+          type: "fixed",
         });
         
-        // Store original positions for reset
+        // Track hidden voxels
+        if (!isExposed) {
+          hiddenVoxels.add(instanceIndex);
+        }
+        
+        // Store original positions (visible position for all)
         positions.push(position);
+        instanceIndex++;
       }
     }
   }
   
   // Add the additional cube if it's exposed
   const { x: centerX, y: topY, z: centerZ } = getCenterCubeCoordinates();
-  if (isVoxelExposed(centerX, topY, centerZ, voxelExists)) {
-    const additionalPosition = voxelToWorldPosition(centerX, topY, centerZ, voxelSize, offset);
-    
-    instances.push({
-      key: `voxel_${centerX}_${topY}_${centerZ}`,
-      position: additionalPosition,
-      rotation: [0, 0, 0],
-      type: "dynamic",
-      // args: {
-      //   userData: {
-      //     material: getRandomMaterialType(),
-      //     coordinates: { x: centerX, y: topY, z: centerZ },
-      //     voxelType: 'special',
-      //     note: 'center cube'
-      //   }
-      // }
-    });
-    
-    positions.push(additionalPosition);
+  const centerIsExposed = isVoxelExposed(centerX, topY, centerZ, voxelExists);
+  const additionalPosition = voxelToWorldPosition(centerX, topY, centerZ, voxelSize, offset);
+  
+  instances.push({
+    key: `voxel_${centerX}_${topY}_${centerZ}`,
+    position: centerIsExposed ? additionalPosition : [100000 + centerX, 100000 + topY, 100000 + centerZ],
+    rotation: [0, 0, 0],
+    userData: {
+      material: getRandomMaterialType(),
+      coordinates: { x: centerX, y: topY, z: centerZ },
+      voxelType: 'special',
+      isExposed: centerIsExposed
+    },
+    type: "dynamic",
+  });
+  
+  if (!centerIsExposed) {
+    hiddenVoxels.add(instanceIndex);
   }
   
-  console.log(`Generated ${instances.length} surface voxels from ${CUBE_SIZE_X}×${CUBE_SIZE_Y}×${CUBE_SIZE_Z} cube (culled ${(CUBE_SIZE_X * CUBE_SIZE_Y * CUBE_SIZE_Z + 1) - instances.length} interior voxels)`);
+  positions.push(additionalPosition);
   
-  return { instances, originalPositions: positions };
+  const exposedCount = instances.length - hiddenVoxels.size;
+  console.log(`Generated ${instances.length} total voxels (${exposedCount} exposed, ${hiddenVoxels.size} hidden initially)`);
+  
+  return { instances, originalPositions: positions, hiddenVoxels };
 } 

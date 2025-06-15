@@ -4,7 +4,15 @@ import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRi
 import { PlanetContext } from '../context/PlanetContext';
 import { generateVoxelInstances } from '../utils/instanceGenerator';
 import { generateInstanceMaterials } from '../utils/materialGenerator';
-
+import { 
+  CUBE_SIZE_X, 
+  CUBE_SIZE_Y, 
+  CUBE_SIZE_Z,
+  isVoxelExposed,
+  voxelToWorldPosition,
+  calculateWorldOffset
+} from '../utils/voxelUtils';
+import { getRandomMaterialType } from '../types/materials';
 
 // Create material once - using MeshStandardMaterial for roughness/metalness properties
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -21,6 +29,20 @@ export const planetInstanceMaterials = { current: [] as any[] };
 export const planetRigidBodies = { current: [] as RapierRigidBody[] };
 export const planetGravityHook = { current: null as any };
 
+// Global voxel management system
+export const voxelSystem = {
+  // Track which voxel coordinates exist in the world (including deleted ones)
+  allVoxels: new Set<string>(), // "x,y,z" format
+  // Track which voxels are currently deleted
+  deletedVoxels: new Set<string>(), // "x,y,z" format
+  // Map from coordinate string to instance index
+  coordinateToIndex: new Map<string, number>(),
+  // Map from instance index to coordinate string
+  indexToCoordinate: new Map<number, string>(),
+  // Track maximum instance count for dynamic expansion
+  maxInstances: 0,
+};
+
 function Planet() {
   const { voxelSize: VOXEL_SIZE } = useContext(PlanetContext);
   const rigidBodies = useRef<RapierRigidBody[]>([]);
@@ -30,7 +52,25 @@ function Planet() {
   // Store original positions for reset
   const originalPositions = useRef<[number, number, number][]>([]);
   
-  // Planet gravity system will be managed externally
+  // Initialize the global voxel system
+  useEffect(() => {
+    // Clear and rebuild the voxel system data
+    voxelSystem.allVoxels.clear();
+    voxelSystem.deletedVoxels.clear();
+    voxelSystem.coordinateToIndex.clear();
+    voxelSystem.indexToCoordinate.clear();
+    
+    // Populate all possible voxel positions
+    for (let x = 0; x < CUBE_SIZE_X; x++) {
+      for (let y = 0; y < CUBE_SIZE_Y; y++) {
+        for (let z = 0; z < CUBE_SIZE_Z; z++) {
+          voxelSystem.allVoxels.add(`${x},${y},${z}`);
+        }
+      }
+    }
+    
+    console.log("Voxel system initialized with", voxelSystem.allVoxels.size, "total voxels");
+  }, [VOXEL_SIZE]);
 
   // Generate materials and colors for each instance
   const { instanceColors, instanceMaterials } = useMemo(() => {
@@ -38,15 +78,27 @@ function Planet() {
   }, [VOXEL_SIZE]);
 
   // Create instances data for InstancedRigidBodies
-  const instances = useMemo<InstancedRigidBodyProps[]>(() => {
+  const { instances, hiddenVoxels } = useMemo(() => {
     const result = generateVoxelInstances(VOXEL_SIZE);
     originalPositions.current = result.originalPositions;
+    
+    // Build coordinate mapping for ALL voxels (both visible and hidden)
+    result.instances.forEach((instance, index) => {
+      if (instance.userData?.coordinates) {
+        const { x, y, z } = (instance.userData as any).coordinates;
+        const coordKey = `${x},${y},${z}`;
+        voxelSystem.coordinateToIndex.set(coordKey, index);
+        voxelSystem.indexToCoordinate.set(index, coordKey);
+      }
+    });
+    
+    voxelSystem.maxInstances = result.instances.length;
     setPlanetReady(true);
-    return result.instances;
+    return { instances: result.instances, hiddenVoxels: result.hiddenVoxels };
   }, [VOXEL_SIZE]); 
   
-  const totalVoxels = instances.length; // Use actual instances length instead of fixed calculation
-  console.log(totalVoxels);
+  const totalVoxels = voxelSystem.maxInstances; // Use max instances for dynamic expansion
+  console.log("Total voxel slots:", totalVoxels);
 
   // Set colors on the instanced mesh when it's ready
   useEffect(() => {
