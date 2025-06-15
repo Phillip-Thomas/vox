@@ -432,7 +432,7 @@ export default function Player() {
       <CameraControls cameraRef={cameraRef} />
       <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, CUBE_SIZE_Y + 2, 0]} enabledRotations={[false, false, false]}>
         <CapsuleCollider args={[.5, .5]} />
-        <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
+        <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} far={10} />
         <capsuleGeometry args={[0.5, 0.5]} />
       </RigidBody>
     </>

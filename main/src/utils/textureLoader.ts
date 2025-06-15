@@ -37,7 +37,6 @@ function createMinecraftTexture(materialType: MaterialType): string {
     [MaterialType.SILVER]: '#808080 base + #C0C0C0 veins (silver)'
   };
   
-  console.log(`🎨 Creating ${materialType} texture with color: ${colorMap[materialType] || 'unknown'}`);
   
   switch (materialType) {
     case MaterialType.STONE:
