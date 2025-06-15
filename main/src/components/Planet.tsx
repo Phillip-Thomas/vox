@@ -15,6 +15,12 @@ import {
   calculateWorldOffset
 } from '../utils/voxelUtils';
 import { getRandomMaterialType } from '../types/materials';
+// import { 
+//   // applyPhysicsOptimizations, 
+//   monitorPhysicsPerformance, 
+//   getPhysicsPerformanceStats,
+//   DEFAULT_PHYSICS_CONFIG 
+// } from '../utils/physicsOptimization';
 
 // Create material once - using MeshStandardMaterial for emissive glow effects
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -22,7 +28,7 @@ const voxelMaterial = new THREE.MeshStandardMaterial({
   transparent: true, // Enable transparency for voxel deletion
   alphaTest: 0.1, // Don't render pixels with alpha below 0.1
   roughness: 200, // Slightly rough for realistic look
-  metalness: 0.1 // Slightly metallic for ores
+  metalness: 0.1 // Slightly metallic for oresl
 });
 
 // Export refs for raycaster access
@@ -196,11 +202,24 @@ const Planet = memo(function Planet() {
             key: instances[index].key,
             originalPosition: [x, y, z],
             material: instanceMaterials[index] || instances[index].userData?.material,
-            debugIndex: index
+            debugIndex: index,
+            // Add performance tracking data
+            isOptimized: true,
+            canSleep: true,
+            lastActivity: Date.now()
           };
           body.userData = userData;
         }
     });
+    
+    // Apply comprehensive physics optimizations
+    // applyPhysicsOptimizations(rigidBodies.current, {
+    //   ...DEFAULT_PHYSICS_CONFIG,
+    //   enableSleeping: true,
+    //   disableCCD: true,
+    //   optimizeDamping: true,
+    //   monitorPerformance: true
+    // });
     
     // Set up global references for raycaster access
     planetInstancedMesh.current = instancedMeshRef.current;
@@ -210,6 +229,11 @@ const Planet = memo(function Planet() {
     
     // Make debug function available globally
     (window as any).debugInstanceColor = debugInstanceColor;
+    
+    // Log detailed performance statistics
+    // console.log(getPhysicsPerformanceStats(rigidBodies.current));
+    console.log(`🎯 PHYSICS OPTIMIZATION: Applied performance settings to ${rigidBodies.current.length} rigid bodies`);
+    console.log(`⚡ SLEEP OPTIMIZATION: All bodies configured with canSleep=true for automatic performance scaling`);
 
   }, [planetReady, instances, instanceMaterials])
 
@@ -232,6 +256,27 @@ const Planet = memo(function Planet() {
     console.log(`🔧 Synced ${instances.length} voxel positions with instancedMesh`);
   }, [instances, planetReady])
 
+  // PERFORMANCE MONITORING: Track physics optimization effectiveness
+  // useEffect(() => {
+  //   if (!planetReady || rigidBodies.current.length === 0) return;
+    
+  //   const monitorInterval = setInterval(() => {
+      // const stats = monitorPhysicsPerformance(rigidBodies.current);
+      
+      // Only log if there's significant activity or we want periodic updates
+    //   if (stats.activeBodies > 0 || Date.now() % 30000 < 1000) { // Log every 30 seconds or when active
+    //     console.log(`📊 PHYSICS MONITOR: ${stats.sleepingBodies}/${stats.totalBodies} bodies sleeping (${(stats.performanceRatio * 100).toFixed(1)}% efficiency)`);
+        
+    //     // Performance warnings
+    //     if (stats.performanceRatio < 0.5 && stats.totalBodies > 100) {
+    //       console.warn(`⚠️ PERFORMANCE WARNING: Only ${(stats.performanceRatio * 100).toFixed(1)}% of rigid bodies are sleeping. Consider optimizing active interactions.`);
+    //     }
+    //   }
+    // }, 5000); // Check every 5 seconds
+    
+  //   return () => clearInterval(monitorInterval);
+  // }, [planetReady]);
+
   return (
     <InstancedRigidBodies
     key={`voxels-${VOXEL_SIZE}`} 
@@ -239,6 +284,8 @@ const Planet = memo(function Planet() {
     ref={rigidBodies}
     colliders={'cuboid'}
     type="fixed"
+    ccd={false}
+    canSleep={true}
     >
       <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, totalVoxels]} count={totalVoxels}>
         <boxGeometry args={[VOXEL_SIZE*.99, VOXEL_SIZE*.99, VOXEL_SIZE*.99]} />

@@ -37,58 +37,97 @@ export function generateVoxelInstances(voxelSize: number): {
         const position = voxelToWorldPosition(x, y, z, voxelSize, offset);
         const materialType = getRandomMaterialType();
         
-        // Create instance for every voxel
-        instances.push({
-          key: `voxel_${x}_${y}_${z}`,
-          position: isExposed ? position : [100000 + x, 100000 + y, 100000 + z], // Hide non-exposed voxels far away
-          rotation: [0, 0, 0],
-          userData: {
-            material: materialType,
-            coordinates: { x, y, z },
-            voxelType: 'terrain',
-            isExposed: isExposed
-          },
-          type: "fixed",
-        });
-        
-        // Track hidden voxels
         if (!isExposed) {
+          // Hidden voxels: NO PHYSICS OBJECT - just visual mesh
+          instances.push({
+            key: `voxel_${x}_${y}_${z}`,
+            position, // Keep at normal position for potential future exposure
+            rotation: [0, 0, 0],
+            userData: {
+              material: materialType,
+              coordinates: { x, y, z },
+              voxelType: 'terrain',
+              isExposed: false
+            }
+            // ⬇️ NO TYPE PROPERTY = no RigidBody/Collider created
+          });
           hiddenVoxels.add(instanceIndex);
+        } else {
+          // Exposed voxels: OPTIMIZED FIXED PHYSICS OBJECT
+          instances.push({
+            key: `voxel_${x}_${y}_${z}`,
+            position,
+            rotation: [0, 0, 0],
+            userData: {
+              material: materialType,
+              coordinates: { x, y, z },
+              voxelType: 'terrain',
+              isExposed: true
+            },
+            type: "fixed",
+            // MINIMAL PHYSICS OPTIMIZATIONS (fixed bodies only need these)
+            lockRotations: true,      // Prevent rotation calculations
+            lockTranslations: true,   // Prevent translation calculations
+            friction: 0,              // Skip tangent impulse calculations
+          });
         }
         
-        // Store original positions (visible position for all)
+        // Store original positions for all voxels
         positions.push(position);
         instanceIndex++;
       }
     }
   }
   
-  // Add the additional cube if it's exposed
+  // Add the additional cube (dynamic for interaction)
   const { x: centerX, y: topY, z: centerZ } = getCenterCubeCoordinates();
   const centerIsExposed = isVoxelExposed(centerX, topY, centerZ, voxelExists);
   const additionalPosition = voxelToWorldPosition(centerX, topY, centerZ, voxelSize, offset);
   
-  instances.push({
-    key: `voxel_${centerX}_${topY}_${centerZ}`,
-    position: centerIsExposed ? additionalPosition : [100000 + centerX, 100000 + topY, 100000 + centerZ],
-    rotation: [0, 0, 0],
-    userData: {
-      material: getRandomMaterialType(),
-      coordinates: { x: centerX, y: topY, z: centerZ },
-      voxelType: 'special',
-      isExposed: centerIsExposed
-    },
-    type: "dynamic",
-  });
-  
   if (!centerIsExposed) {
+    // Hidden center cube
+    instances.push({
+      key: `voxel_${centerX}_${topY}_${centerZ}`,
+      position: additionalPosition,
+      rotation: [0, 0, 0],
+      userData: {
+        material: getRandomMaterialType(),
+        coordinates: { x: centerX, y: topY, z: centerZ },
+        voxelType: 'special',
+        isExposed: false
+      }
+      // No type = no physics
+    });
     hiddenVoxels.add(instanceIndex);
+  } else {
+    // Exposed center cube - dynamic body with minimal optimizations
+    instances.push({
+      key: `voxel_${centerX}_${topY}_${centerZ}`,
+      position: additionalPosition,
+      rotation: [0, 0, 0],
+      userData: {
+        material: getRandomMaterialType(),
+        coordinates: { x: centerX, y: topY, z: centerZ },
+        voxelType: 'special',
+        isExposed: true
+      },
+      type: "dynamic",
+      // DYNAMIC BODY OPTIMIZATIONS
+      gravityScale: 1,          // Only dynamic bodies need gravity
+      linearDamping: 0.05,      // Light damping for settling
+      angularDamping: 0.05,     // Light angular damping
+      canSleep: true,           // Allow sleeping when inactive
+      // Don't use CCD unless needed for high-velocity impacts
+    });
   }
   
   positions.push(additionalPosition);
   
-  const exposedCount = instances.length - hiddenVoxels.size;
-
+  const exposedCount = instances.filter(inst => inst.userData?.isExposed).length;
+  const physicsCount = instances.filter(inst => inst.type).length;
+  
+  // Minimal performance logging
+  console.log(`🎯 VOXEL OPTIMIZATION: ${exposedCount} exposed, ${physicsCount} physics bodies, ${hiddenVoxels.size} visual-only`);
   
   return { instances, originalPositions: positions, hiddenVoxels };
 } 

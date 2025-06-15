@@ -15,7 +15,7 @@ const tempVector3_3 = new THREE.Vector3();
 const DEBUG = false;
 
 // Animation constants
-const ROTATE_TIME = 0.65; // 650ms - slower for comfortable body/camera rotation
+const ROTATE_TIME = 0.9; // 900ms - even slower for very comfortable body/camera rotation
 const BOUNDARY_CHECK_DELAY = 500; // Wait 0.5s after start before enabling boundary checks
 
 // Animation state interface

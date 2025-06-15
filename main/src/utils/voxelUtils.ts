@@ -1,6 +1,6 @@
-export const CUBE_SIZE_X = 18; // Reduced from 20 - Size on X axis in voxels
-export const CUBE_SIZE_Y = 18; // Reduced from 20 - Size on Y axis in voxels
-export const CUBE_SIZE_Z = 18; // Reduced from 20 - Size on Z axis in voxels
+export const CUBE_SIZE_X = 22; // Reduced from 20 - Size on X axis in voxels
+export const CUBE_SIZE_Y = 22; // Reduced from 20 - Size on Y axis in voxels
+export const CUBE_SIZE_Z = 22; // Reduced from 20 - Size on Z axis in voxels
 
 /**
  * Creates a set of all voxel positions including the special center cube
