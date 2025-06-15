@@ -8,6 +8,7 @@ import { PlayerContext, PlayerState, CubeFace, FACE_ORIENTATIONS } from './conte
 import Planet from './components/Planet.tsx';
 import Player from './components/Player.tsx';
 import QuadrantVisualizer from './components/QuadrantVisualizer.tsx';
+import { WorldGenerationControls } from './components/WorldGenerationControls.tsx';
 import { usePlanetGravity } from './hooks/usePlanetRotation';
 import './App.css';
 
@@ -128,8 +129,9 @@ const App: React.FC = () => {
       </GravityProvider>
       </PlayerContext.Provider>
       </PlanetContext.Provider>
+      <WorldGenerationControls />
     </KeyboardControls>
   );
-}
+};
 
 export default App; 
