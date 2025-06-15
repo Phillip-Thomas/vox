@@ -1,5 +1,6 @@
 import { useMemo, useContext, useRef, useEffect, useState, memo } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
 import { PlanetContext } from '../context/PlanetContext';
 import { generateVoxelInstances } from '../utils/instanceGenerator';
@@ -45,6 +46,12 @@ const glowingVoxelMaterial = new THREE.MeshStandardMaterial({
   emissive: new THREE.Color(0x000000), // Will be set per instance
   emissiveIntensity: 0.4
 });
+
+// MEMORY LEAK FIX: Create shared geometries to prevent recreation
+// Note: We'll create properly sized geometries and update them when voxel size changes
+let voxelGeometry = new THREE.BoxGeometry(1, 1, 1);
+let metallicVoxelGeometry = new THREE.BoxGeometry(1.01, 1.01, 1.01);
+let glowingVoxelGeometry = new THREE.BoxGeometry(1.01, 1.01, 1.01);
 
 // Export refs for raycaster access
 export const planetInstancedMesh = { current: null as THREE.InstancedMesh | null };
@@ -206,7 +213,10 @@ function Planet() {
   
   const totalVoxels = voxelSystem.maxInstances; // Use max instances for dynamic expansion
 
-  // Identify glowing voxels after both materials and instances are ready
+  // MEMORY LEAK FIX: Disable glowing voxels feature to save massive memory
+  // This was creating thousands of Vector3 and Color objects every time materials changed
+  // Comment out the entire glowing voxels processing for now
+  /*
   useEffect(() => {
     if (!materialsLoaded || !instances.length || !instanceMaterials.length) return;
     
@@ -235,8 +245,12 @@ function Planet() {
     });
     setGlowingVoxels(glowingData);
   }, [materialsLoaded, instances, instanceMaterials, VOXEL_SIZE]);
+  */
 
-  // Separate metallic and non-metallic voxels
+  // MEMORY LEAK FIX: Disable metallic voxels feature to save massive memory  
+  // This was creating thousands of Vector3 and Color objects every time materials changed
+  // Comment out the entire metallic voxels processing for now
+  /*
   useEffect(() => {
     if (!materialsLoaded || !instances.length || !instanceMaterials.length) return;
     
@@ -286,6 +300,7 @@ function Planet() {
     setMetallicVoxels(metallic);
     setNonMetallicVoxels(nonMetallic);
   }, [materialsLoaded, instances, instanceMaterials, VOXEL_SIZE]);
+  */
 
   // Set colors and textures on the instanced mesh when ready
   useEffect(() => {
@@ -337,6 +352,25 @@ function Planet() {
 
   }, [planetReady, instances, instanceMaterials])
 
+  // VISIBILITY FIX: Sync instancedMesh positions with physics bodies to hide internal voxels
+  useEffect(() => {
+    if (!instancedMeshRef.current || !rigidBodies.current.length || !instances.length) return;
+    
+    const mesh = instancedMeshRef.current;
+    const matrix = new THREE.Matrix4();
+    
+    // Set positions for each instance based on the instance data (not physics bodies)
+    instances.forEach((instance, index) => {
+      const [x, y, z] = instance.position as [number, number, number];
+      matrix.setPosition(x, y, z);
+      mesh.setMatrixAt(index, matrix);
+    });
+    
+    mesh.instanceMatrix.needsUpdate = true;
+    
+    console.log(`🔧 Synced ${instances.length} voxel positions with instancedMesh`);
+  }, [instances, planetReady])
+
   return (
     <InstancedRigidBodies
     key={`voxels-${VOXEL_SIZE}`} 
@@ -351,11 +385,9 @@ function Planet() {
         <primitive object={voxelMaterial} attach="material" />
       </instancedMesh>
       
-      {/* Render metallic voxels with proper shine materials */}
-      <MetallicVoxels metallicVoxels={metallicVoxels} voxelSize={VOXEL_SIZE} />
-      
-      {/* Keep the original glowing voxels for extra glow effect if needed */}
-      <GlowingVoxels glowingVoxels={glowingVoxels} voxelSize={VOXEL_SIZE} />
+      {/* MEMORY LEAK FIX: Disabled to save massive memory usage */}
+      {/* <MetallicVoxels metallicVoxels={metallicVoxels} voxelSize={VOXEL_SIZE} /> */}
+      {/* <GlowingVoxels glowingVoxels={glowingVoxels} voxelSize={VOXEL_SIZE} /> */}
     </InstancedRigidBodies>
   );
 }
@@ -393,26 +425,15 @@ function GlowingVoxels({ glowingVoxels, voxelSize }: {
     }
   }, [glowingVoxels, voxelSize]);
   
-  // Add subtle pulsing animation
-  useEffect(() => {
+  // Add subtle pulsing animation - OPTIMIZED: Use useFrame instead of separate RAF loop
+  useFrame(() => {
     if (!meshRef.current || glowingVoxels.positions.length === 0) return;
     
     const material = meshRef.current.material as THREE.MeshStandardMaterial;
-    let animationId: number;
-    
-    const animate = () => {
-      const time = Date.now() * 0.003; // Slightly faster pulsing
-      const intensity = 0.3 + Math.sin(time) * 0.2; // Pulse between 0.1 and 0.5
-      material.emissiveIntensity = intensity;
-      animationId = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    return () => {
-      if (animationId) cancelAnimationFrame(animationId);
-    };
-  }, [glowingVoxels]);
+    const time = Date.now() * 0.003; // Slightly faster pulsing
+    const intensity = 0.3 + Math.sin(time) * 0.2; // Pulse between 0.1 and 0.5
+    material.emissiveIntensity = intensity;
+  });
   
   if (glowingVoxels.positions.length === 0) return null;
   
@@ -433,66 +454,55 @@ function MetallicVoxels({ metallicVoxels, voxelSize }: {
   
 
   
-  useEffect(() => {
-    if (!meshRef.current || metallicVoxels.positions.length === 0) return;
+  // useEffect(() => {
+  //   if (!meshRef.current || metallicVoxels.positions.length === 0) return;
     
-    const mesh = meshRef.current;
-    const matrix = new THREE.Matrix4();
+  //   const mesh = meshRef.current;
+  //   const matrix = new THREE.Matrix4();
     
-    // Set positions and colors for each metallic voxel
-    metallicVoxels.positions.forEach((position, index) => {
-      matrix.setPosition(position);
-      mesh.setMatrixAt(index, matrix);
-      mesh.setColorAt(index, metallicVoxels.colors[index]);
-    });
+  //   // Set positions and colors for each metallic voxel
+  //   metallicVoxels.positions.forEach((position, index) => {
+  //     matrix.setPosition(position);
+  //     mesh.setMatrixAt(index, matrix);
+  //     mesh.setColorAt(index, metallicVoxels.colors[index]);
+  //   });
     
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  //   mesh.instanceMatrix.needsUpdate = true;
+  //   if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     
-    // Set emissive color on the material (we'll use the first emissive color as base)
-    if (metallicVoxels.emissiveColors.length > 0) {
-      const material = mesh.material as THREE.MeshStandardMaterial;
-      material.emissive = metallicVoxels.emissiveColors[0];
-      material.emissiveIntensity = 0.3;
+  //   // Set emissive color on the material (we'll use the first emissive color as base)
+  //   if (metallicVoxels.emissiveColors.length > 0) {
+  //     const material = mesh.material as THREE.MeshStandardMaterial;
+  //     material.emissive = metallicVoxels.emissiveColors[0];
+  //     material.emissiveIntensity = 0.3;
       
-      // Adjust material properties based on the dominant metal type
-      const dominantMetal = metallicVoxels.materials[0];
-      if (dominantMetal === MaterialType.GOLD) {
-        material.metalness = 1.0;
-        material.roughness = 0.05;
-        material.emissiveIntensity = 0.6;
-      } else if (dominantMetal === MaterialType.SILVER) {
-        material.metalness = 0.95;
-        material.roughness = 0.08;
-        material.emissiveIntensity = 0.55;
-      } else if (dominantMetal === MaterialType.COPPER) {
-        material.metalness = 0.9;
-        material.roughness = 0.1;
-        material.emissiveIntensity = 0.5;
-      }
-    }
-  }, [metallicVoxels, voxelSize]);
+  //     // Adjust material properties based on the dominant metal type
+  //     const dominantMetal = metallicVoxels.materials[0];
+  //     if (dominantMetal === MaterialType.GOLD) {
+  //       material.metalness = 1.0;
+  //       material.roughness = 0.05;
+  //       material.emissiveIntensity = 0.6;
+  //     } else if (dominantMetal === MaterialType.SILVER) {
+  //       material.metalness = 0.95;
+  //       material.roughness = 0.08;
+  //       material.emissiveIntensity = 0.55;
+  //     } else if (dominantMetal === MaterialType.COPPER) {
+  //       material.metalness = 0.9;
+  //       material.roughness = 0.1;
+  //       material.emissiveIntensity = 0.5;
+  //     }
+  //   }
+  // }, [metallicVoxels, voxelSize]);
   
-  // Add subtle pulsing animation
-  useEffect(() => {
-    if (!meshRef.current || metallicVoxels.positions.length === 0) return;
+  // // Add subtle pulsing animation - OPTIMIZED: Use useFrame instead of separate RAF loop
+  // useFrame(() => {
+  //   if (!meshRef.current || metallicVoxels.positions.length === 0) return;
     
-    const material = meshRef.current.material as THREE.MeshStandardMaterial;
-    let animationId: number;
-    
-    const animate = () => {
-      const time = Date.now() * 0.003; // Slightly faster pulsing
-      const intensity = 0.3 + Math.sin(time) * 0.2; // Pulse between 0.1 and 0.5
-      material.emissiveIntensity = intensity;
-      animationId = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    return () => {
-      if (animationId) cancelAnimationFrame(animationId);
-    };
-  }, [metallicVoxels]);
+  //   const material = meshRef.current.material as THREE.MeshStandardMaterial;
+  //   const time = Date.now() * 0.003; // Slightly faster pulsing
+  //   const intensity = 0.3 + Math.sin(time) * 0.2; // Pulse between 0.1 and 0.5
+  //   material.emissiveIntensity = intensity;
+  // });
   
   if (metallicVoxels.positions.length === 0) return null;
   

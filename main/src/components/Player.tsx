@@ -19,9 +19,15 @@ import {
 import { getRandomMaterialType } from '../types/materials';
 
 const SPEED = 5
+
+// MEMORY LEAK FIX: Create reusable objects outside component to avoid recreation
 const direction = new THREE.Vector3()
 const frontVector = new THREE.Vector3()
 const sideVector = new THREE.Vector3()
+const tempVector3 = new THREE.Vector3()
+const tempVector3_2 = new THREE.Vector3()
+const tempVector3_3 = new THREE.Vector3()
+const tempColor = new THREE.Color()
 
 // Highlight colors
 const HIGHLIGHT_COLOR = new THREE.Color(0x00ffff) // White highlight - works well with ambient lighting
@@ -54,20 +60,49 @@ const debugVoxelSystem = () => {
 // Make debug function available globally
 (window as any).debugVoxelSystem = debugVoxelSystem;
 
-// Three.js visual raycast hook
+// Three.js visual raycast hook - MEMORY LEAK FIXED VERSION
 function useVisualRaycast() {
   const raycaster = new THREE.Raycaster()
+  const lastCameraState = useRef({ position: new THREE.Vector3(), rotation: new THREE.Euler() })
+  const cachedResult = useRef<any>(null)
+  const cacheValidFrames = useRef(0)
+  
+  // MEMORY LEAK FIX: Reuse objects instead of creating new ones each frame
+  const tempPosition = useRef(new THREE.Vector3())
+  const tempRotation = useRef(new THREE.Euler())
+  const tempNDC = useRef(new THREE.Vector2(0, 0))
+  
+  // OPTIMIZATION: Set max distance to reduce raycast computation
+  raycaster.far = 10; // Only raycast up to 10 units away
   
   return (camera: THREE.Camera, instancedMesh: THREE.InstancedMesh | null) => {
     if (!instancedMesh) return null
     
-    // Cast ray from camera center (screen center)
-    const ndc = new THREE.Vector2(0, 0) // Screen center
-    raycaster.setFromCamera(ndc, camera)
+    // SMART CACHING: Only recalculate if camera moved significantly
+    // MEMORY LEAK FIX: Reuse temp objects instead of creating new ones
+    tempPosition.current.copy(camera.position)
+    tempRotation.current.copy(camera.rotation)
     
-    const hits = raycaster.intersectObject(instancedMesh)
-    if (hits[0] && hits[0].instanceId !== undefined) {
-      return {
+    const positionDelta = tempPosition.current.distanceTo(lastCameraState.current.position)
+    const rotationDelta = Math.abs(tempRotation.current.x - lastCameraState.current.rotation.x) + 
+                         Math.abs(tempRotation.current.y - lastCameraState.current.rotation.y)
+    
+    // If camera hasn't moved much and cache is fresh (< 3 frames), return cached result
+    if (positionDelta < 0.05 && rotationDelta < 0.02 && cacheValidFrames.current < 3 && cachedResult.current) {
+      cacheValidFrames.current++
+      return cachedResult.current
+    }
+    
+    // Cast ray from camera center (screen center)
+    // MEMORY LEAK FIX: Reuse NDC vector
+    raycaster.setFromCamera(tempNDC.current, camera)
+    
+    // OPTIMIZATION: Only get first intersection (not all)
+    const hits = raycaster.intersectObject(instancedMesh, false)
+    
+    let result = null
+    if (hits.length > 0 && hits[0].instanceId !== undefined) {
+      result = {
         instanceIndex: hits[0].instanceId,
         point: hits[0].point,
         distance: hits[0].distance,
@@ -76,7 +111,13 @@ function useVisualRaycast() {
       }
     }
     
-    return null
+    // Update cache - reuse existing objects
+    lastCameraState.current.position.copy(tempPosition.current)
+    lastCameraState.current.rotation.copy(tempRotation.current)
+    cachedResult.current = result
+    cacheValidFrames.current = 0
+    
+    return result
   }
 }
 
@@ -107,9 +148,9 @@ export default function Player() {
     
     // Store original color if not already stored
     if (!originalColors.has(instanceIndex)) {
-      const color = new THREE.Color()
-      mesh.getColorAt(instanceIndex, color)
-      originalColors.set(instanceIndex, color.clone())
+      // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
+      mesh.getColorAt(instanceIndex, tempColor)
+      originalColors.set(instanceIndex, tempColor.clone())
       
 
     }
@@ -250,9 +291,9 @@ export default function Player() {
     
     // Store original color before deletion (if not already stored)
     if (!originalColors.has(instanceIndex)) {
-      const color = new THREE.Color()
-      mesh.getColorAt(instanceIndex, color)
-      originalColors.set(instanceIndex, color.clone())
+      // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
+      mesh.getColorAt(instanceIndex, tempColor)
+      originalColors.set(instanceIndex, tempColor.clone())
     }
     
     // Move the rigid body far away (this should move the visual too since it's InstancedRigidBodies)
@@ -262,8 +303,9 @@ export default function Player() {
     rigidBody.setBodyType(2, true) // 2 = sensor (no collision)
     
     // Also set the color to fully transparent as backup
-    const transparentColor = new THREE.Color(0, 0, 0)
-    mesh.setColorAt(instanceIndex, transparentColor)
+    // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
+    tempColor.setRGB(0, 0, 0)
+    mesh.setColorAt(instanceIndex, tempColor)
     mesh.instanceColor!.needsUpdate = true
     
     
@@ -272,21 +314,28 @@ export default function Player() {
     exposeNeighboringVoxels(x, y, z)
   }
   
+  // Performance optimization: Throttle expensive operations
+  const frameCount = useRef(0);
+  
   useFrame((state, deltaTime) => {
     if (!ref.current) return
     
+    frameCount.current++;
     const { forward, backward, left, right, jump, delete: deleteKey } = get()
     const velocity = ref.current.linvel()
     
     // Get player position and position camera relative to player
     const translation = ref.current.translation()
     
-    // Check for boundary crossings and update gravity + rotate player
-    const currentPosition = new THREE.Vector3(translation.x, translation.y, translation.z);
-    const boundary = checkBoundaries(currentPosition);
-    if (boundary && setCurrentFace) {
-      // Use the original changeGravity function which handles both gravity and player rotation
-      changeGravity(boundary, ref.current, setCurrentFace, state.camera, currentFace);
+    // OPTIMIZATION: Only check boundaries every 3 frames (reduces CPU usage)
+    if (frameCount.current % 3 === 0) {
+      // MEMORY LEAK FIX: Reuse tempVector3 instead of creating new Vector3
+      tempVector3.set(translation.x, translation.y, translation.z);
+      const boundary = checkBoundaries(tempVector3);
+      if (boundary && setCurrentFace) {
+        // Use the original changeGravity function which handles both gravity and player rotation
+        changeGravity(boundary, ref.current, setCurrentFace, state.camera, currentFace);
+      }
     }
     
     // Only allow player movement if gravity is not changing
@@ -299,27 +348,26 @@ export default function Player() {
         // Ensure camera world matrix is up to date before getting direction
         state.camera?.updateMatrixWorld(true)
         
-        // Use actual camera direction for movement (where the player is actually looking)
-        const cameraForward = new THREE.Vector3()
-        state.camera?.getWorldDirection(cameraForward)
+        // MEMORY LEAK FIX: Reuse temp vectors instead of creating new ones
+        state.camera?.getWorldDirection(tempVector3) // cameraForward
         
         // Project camera forward onto the current face plane to get proper movement direction
         // Remove any component along the face's up direction to keep movement on the surface
-        const faceUp = faceOrientation.upDirection.clone()
-        const projectedForward = cameraForward.clone()
-        const dotProduct = faceUp.dot(cameraForward)
-        projectedForward.addScaledVector(faceUp, -dotProduct)
+        tempVector3_2.copy(faceOrientation.upDirection) // faceUp
+        tempVector3_3.copy(tempVector3) // projectedForward
+        const dotProduct = tempVector3_2.dot(tempVector3)
+        tempVector3_3.addScaledVector(tempVector3_2, -dotProduct)
         
         // Calculate right direction by crossing projected forward with face up
-        const cameraRight = new THREE.Vector3()
-        cameraRight.crossVectors(projectedForward, faceUp).normalize()
+        // Reuse tempVector3 for cameraRight since we don't need the original cameraForward anymore
+        tempVector3.crossVectors(tempVector3_3, tempVector3_2).normalize() // cameraRight
         
         // Build movement direction from input using projected camera directions
         direction.set(0, 0, 0)
-        if (forward) direction.add(projectedForward)
-        if (backward) direction.sub(projectedForward)
-        if (right) direction.add(cameraRight)
-        if (left) direction.sub(cameraRight)
+        if (forward) direction.add(tempVector3_3) // projectedForward
+        if (backward) direction.sub(tempVector3_3) // projectedForward
+        if (right) direction.add(tempVector3) // cameraRight
+        if (left) direction.sub(tempVector3) // cameraRight
         
         // Normalize and apply speed
         if (direction.length() > 0) {
@@ -328,14 +376,17 @@ export default function Player() {
       
         // Apply movement preserving only gravity component of velocity
         const currentVel = ref.current.linvel()
-        const currentVelVector = new THREE.Vector3(currentVel.x, currentVel.y, currentVel.z)
+        // MEMORY LEAK FIX: Reuse temp vectors instead of creating new ones
+        tempVector3.set(currentVel.x, currentVel.y, currentVel.z) // currentVelVector
         
         // Calculate gravity component of current velocity
-        const gravityDirection = faceOrientation.upDirection.clone().multiplyScalar(-1) // Gravity points toward surface
-        const gravityVelComponent = gravityDirection.multiplyScalar(gravityDirection.dot(currentVelVector))
+        tempVector3_2.copy(faceOrientation.upDirection).multiplyScalar(-1) // gravityDirection
+        const gravityComponent = tempVector3_2.dot(tempVector3)
+        tempVector3_2.multiplyScalar(gravityComponent) // gravityVelComponent
         
         // New velocity = surface movement + gravity component
-        const newVelocity = direction.clone().add(gravityVelComponent)
+        // Reuse tempVector3_3 for newVelocity
+        tempVector3_3.copy(direction).add(tempVector3_2)
         
         // Debug logging
         const beforeVel = ref.current.linvel()
@@ -346,9 +397,9 @@ export default function Player() {
         ref.current.setEnabled(true)
         
         ref.current.setLinvel({ 
-          x: newVelocity.x,
-          y: newVelocity.y,
-          z: newVelocity.z
+          x: tempVector3_3.x,
+          y: tempVector3_3.y,
+          z: tempVector3_3.z
         })
         
         // Check if it actually set
@@ -371,7 +422,7 @@ export default function Player() {
       }
     }
 
-    // Terrain manipulator - visual raycast from camera center
+    // Raycast for voxel interaction - run every frame for responsiveness
     const hitInfo = visualRaycast(state.camera, planetInstancedMesh.current)
     
     // Handle voxel highlighting - only for non-deleted voxels
@@ -432,7 +483,7 @@ export default function Player() {
       <CameraControls cameraRef={cameraRef} />
       <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, CUBE_SIZE_Y + 2, 0]} enabledRotations={[false, false, false]}>
         <CapsuleCollider args={[.5, .5]} />
-        <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} far={10} />
+        <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} far={100} />
         <capsuleGeometry args={[0.5, 0.5]} />
       </RigidBody>
     </>

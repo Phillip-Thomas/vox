@@ -57,10 +57,20 @@ export async function generateInstanceMaterials(voxelSize: number): Promise<{
   // Convert materials to colors and textures
   const materialCounts = new Map<MaterialType, number>();
   
+  // MEMORY LEAK FIX: Cache colors to avoid creating thousands of Color objects
+  const colorCache = new Map<MaterialType, THREE.Color>();
+  
   proceduralMaterials.forEach(materialType => {
     const material = MATERIALS[materialType];
     materials.push(materialType);
-    colors.push(material.color.clone());
+    
+    // Use cached color or create once and cache
+    let cachedColor = colorCache.get(materialType);
+    if (!cachedColor) {
+      cachedColor = material.color.clone();
+      colorCache.set(materialType, cachedColor);
+    }
+    colors.push(cachedColor);
     
     // Count materials
     materialCounts.set(materialType, (materialCounts.get(materialType) || 0) + 1);

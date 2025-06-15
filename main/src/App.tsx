@@ -11,6 +11,8 @@ import Player from './components/Player.tsx';
 import QuadrantVisualizer from './components/QuadrantVisualizer.tsx';
 import { WorldGenerationControls } from './components/WorldGenerationControls.tsx';
 import { usePlanetGravity } from './hooks/usePlanetRotation';
+import PerformanceMonitor from './components/PerformanceMonitor.tsx';
+import Crosshair from './components/Crosshair.tsx';
 import './App.css';
 
 
@@ -109,17 +111,20 @@ const App: React.FC = () => {
       <GravityProvider>
         <Canvas
           // camera={{ position: [0, 20, 20], fov: 75, near: 0.1, far: 1000 }}
-          shadows
+          shadows={false} // PERFORMANCE: Disable shadows to reduce CPU usage
           style={{ width: '100vw', height: '100vh' }}
+          gl={{ 
+            antialias: false, // PERFORMANCE: Disable antialiasing
+            alpha: false, // PERFORMANCE: Disable alpha channel
+          }}
+          performance={{ min: 0.5 }} // PERFORMANCE: Allow lower frame rates
         >
           <Stats />
           <Sky sunPosition={[100, 20, 100]} />
 
-          {/* Improved lighting setup for metallic materials */}
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-          <directionalLight position={[-10, 10, -5]} intensity={0.5} />
-          <hemisphereLight args={['#87CEEB', '#443333', 0.6]} />
+          {/* PERFORMANCE: Simplified lighting setup to reduce CPU usage */}
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow={false} />
 
           <PhysicsWrapper>
             <Planet />
@@ -142,6 +147,8 @@ const App: React.FC = () => {
           {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} makeDefault /> */}
           {/* <PointerLockControls makeDefault={true} /> */}
         </Canvas>
+        <Crosshair />
+        {/* <PerformanceMonitor /> */}
       </GravityProvider>
       </PlayerContext.Provider>
       </PlanetContext.Provider>
