@@ -28,6 +28,7 @@ const tempVector3 = new THREE.Vector3()
 const tempVector3_2 = new THREE.Vector3()
 const tempVector3_3 = new THREE.Vector3()
 const tempColor = new THREE.Color()
+const tempMatrix4 = new THREE.Matrix4()
 const tempVoxelSet = new Set<string>()
 
 // OPTIMIZATION 2: Memory pool for frequently used objects
@@ -335,15 +336,25 @@ export default function Player() {
       originalColors.set(instanceIndex, tempColor.clone())
     }
     
-    // Move the rigid body far away (this should move the visual too since it's InstancedRigidBodies)
+    // Move the rigid body far away (remove from physics)
     rigidBody.setTranslation({ x: 100000, y: 100000, z: 100000 }, true)
     
     // Disable the physics body by setting it to sensor mode  
     rigidBody.setBodyType(2, true) // 2 = sensor (no collision)
     
+    // CRITICAL FIX: Hide the visual instance by moving it far away in the instancedMesh
+    // Reuse temp objects to avoid memory leaks
+    tempMatrix4.identity()
+    tempMatrix4.setPosition(100000, 100000, 100000) // Move visual instance far away
+    tempVector3.set(0.001, 0.001, 0.001) // Make it tiny
+    tempMatrix4.scale(tempVector3)
+    mesh.setMatrixAt(instanceIndex, tempMatrix4)
+    mesh.instanceMatrix.needsUpdate = true
+    
     // Also set the color to fully transparent as backup
     // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
     tempColor.setRGB(0, 0, 0)
+    tempColor.setHex(0x000000) // Fully transparent/black
     mesh.setColorAt(instanceIndex, tempColor)
     mesh.instanceColor!.needsUpdate = true
     
@@ -485,7 +496,7 @@ export default function Player() {
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
       if (jump) {
         const currentVel = ref.current.linvel();
-        const jumpForce = .3;
+        const jumpForce = 1;
         const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
         ref.current.setLinvel({ 

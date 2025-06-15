@@ -15,12 +15,13 @@ import {
   calculateWorldOffset
 } from '../utils/voxelUtils';
 import { getRandomMaterialType } from '../types/materials';
-// import { 
-//   // applyPhysicsOptimizations, 
-//   monitorPhysicsPerformance, 
-//   getPhysicsPerformanceStats,
-//   DEFAULT_PHYSICS_CONFIG 
-// } from '../utils/physicsOptimization';
+import { 
+  applyPhysicsOptimizations, 
+  monitorPhysicsPerformance, 
+  getPhysicsPerformanceStats,
+  optimizeTerrainColliders,
+  DEFAULT_PHYSICS_CONFIG 
+} from '../utils/physicsOptimization';
 
 // Create material once - using MeshStandardMaterial for emissive glow effects
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -213,13 +214,13 @@ const Planet = memo(function Planet() {
     });
     
     // Apply comprehensive physics optimizations
-    // applyPhysicsOptimizations(rigidBodies.current, {
-    //   ...DEFAULT_PHYSICS_CONFIG,
-    //   enableSleeping: true,
-    //   disableCCD: true,
-    //   optimizeDamping: true,
-    //   monitorPerformance: true
-    // });
+    applyPhysicsOptimizations(rigidBodies.current, {
+      ...DEFAULT_PHYSICS_CONFIG,
+      enableSleeping: true,
+      disableCCD: true,
+      optimizeDamping: true,
+      monitorPerformance: true
+    });
     
     // Set up global references for raycaster access
     planetInstancedMesh.current = instancedMeshRef.current;
@@ -230,8 +231,14 @@ const Planet = memo(function Planet() {
     // Make debug function available globally
     (window as any).debugInstanceColor = debugInstanceColor;
     
+    // CRITICAL OPTIMIZATION: Disable collision detection for terrain colliders
+    setTimeout(() => {
+      const optimizedColliders = optimizeTerrainColliders(rigidBodies.current, instances);
+      console.log(`🚀 COLLIDER OPTIMIZATION: Disabled collision detection for ${optimizedColliders} terrain colliders`);
+    }, 100); // Small delay to ensure colliders are fully initialized
+    
     // Log detailed performance statistics
-    // console.log(getPhysicsPerformanceStats(rigidBodies.current));
+    console.log(getPhysicsPerformanceStats(rigidBodies.current));
     console.log(`🎯 PHYSICS OPTIMIZATION: Applied performance settings to ${rigidBodies.current.length} rigid bodies`);
     console.log(`⚡ SLEEP OPTIMIZATION: All bodies configured with canSleep=true for automatic performance scaling`);
 
@@ -257,25 +264,25 @@ const Planet = memo(function Planet() {
   }, [instances, planetReady])
 
   // PERFORMANCE MONITORING: Track physics optimization effectiveness
-  // useEffect(() => {
-  //   if (!planetReady || rigidBodies.current.length === 0) return;
+  useEffect(() => {
+    if (!planetReady || rigidBodies.current.length === 0) return;
     
-  //   const monitorInterval = setInterval(() => {
-      // const stats = monitorPhysicsPerformance(rigidBodies.current);
+    const monitorInterval = setInterval(() => {
+      const stats = monitorPhysicsPerformance(rigidBodies.current);
       
       // Only log if there's significant activity or we want periodic updates
-    //   if (stats.activeBodies > 0 || Date.now() % 30000 < 1000) { // Log every 30 seconds or when active
-    //     console.log(`📊 PHYSICS MONITOR: ${stats.sleepingBodies}/${stats.totalBodies} bodies sleeping (${(stats.performanceRatio * 100).toFixed(1)}% efficiency)`);
+      if (stats.activeBodies > 0 || Date.now() % 30000 < 1000) { // Log every 30 seconds or when active
+        console.log(`📊 PHYSICS MONITOR: ${stats.sleepingBodies}/${stats.totalBodies} bodies sleeping (${(stats.performanceRatio * 100).toFixed(1)}% efficiency)`);
         
-    //     // Performance warnings
-    //     if (stats.performanceRatio < 0.5 && stats.totalBodies > 100) {
-    //       console.warn(`⚠️ PERFORMANCE WARNING: Only ${(stats.performanceRatio * 100).toFixed(1)}% of rigid bodies are sleeping. Consider optimizing active interactions.`);
-    //     }
-    //   }
-    // }, 5000); // Check every 5 seconds
+        // Performance warnings
+        if (stats.performanceRatio < 0.5 && stats.totalBodies > 100) {
+          console.warn(`⚠️ PERFORMANCE WARNING: Only ${(stats.performanceRatio * 100).toFixed(1)}% of rigid bodies are sleeping. Consider optimizing active interactions.`);
+        }
+      }
+    }, 5000); // Check every 5 seconds
     
-  //   return () => clearInterval(monitorInterval);
-  // }, [planetReady]);
+    return () => clearInterval(monitorInterval);
+  }, [planetReady]);
 
   return (
     <InstancedRigidBodies
@@ -283,7 +290,7 @@ const Planet = memo(function Planet() {
     instances={instances}
     ref={rigidBodies}
     colliders={'cuboid'}
-    type="fixed"
+    type="kinematicPosition"
     ccd={false}
     canSleep={true}
     >
