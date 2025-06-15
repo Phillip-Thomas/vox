@@ -33,8 +33,13 @@ export function monitorPhysicsPerformance(rigidBodies: RapierRigidBody[]): {
   let sleepingBodies = 0;
   
   rigidBodies.forEach(body => {
-    if (body.isSleeping && body.isSleeping()) {
-      sleepingBodies++;
+    try {
+      // SAFETY: Check if body is valid and enabled before accessing properties
+      if (body && body.isEnabled && body.isEnabled() && body.isSleeping && body.isSleeping()) {
+        sleepingBodies++;
+      }
+    } catch (error) {
+      // Skip invalid bodies silently for performance monitoring
     }
   });
   
@@ -60,6 +65,11 @@ export function applyPhysicsOptimizations(
   
   rigidBodies.forEach((body, index) => {
     try {
+      // SAFETY: Check if body is valid and enabled before optimization
+      if (!body || !body.isEnabled || !body.isEnabled()) {
+        return; // Skip disabled/invalid bodies
+      }
+      
       // Disable CCD for performance (unless specifically needed)
       if (config.disableCCD && body.enableCcd) {
         body.enableCcd(false);
@@ -106,18 +116,23 @@ export function wakeUpBodiesInRegion(
   let awakened = 0;
   
   rigidBodies.forEach(body => {
-    if (body.isSleeping && body.isSleeping()) {
-      const translation = body.translation();
-      const distance = Math.sqrt(
-        Math.pow(translation.x - center[0], 2) +
-        Math.pow(translation.y - center[1], 2) +
-        Math.pow(translation.z - center[2], 2)
-      );
-      
-      if (distance <= radius) {
-        body.wakeUp();
-        awakened++;
+    try {
+      // SAFETY: Check if body is valid and enabled before accessing properties
+      if (body && body.isEnabled && body.isEnabled() && body.isSleeping && body.isSleeping()) {
+        const translation = body.translation();
+        const distance = Math.sqrt(
+          Math.pow(translation.x - center[0], 2) +
+          Math.pow(translation.y - center[1], 2) +
+          Math.pow(translation.z - center[2], 2)
+        );
+        
+        if (distance <= radius) {
+          body.wakeUp();
+          awakened++;
+        }
       }
+    } catch (error) {
+      // Skip invalid bodies silently
     }
   });
   
@@ -147,20 +162,29 @@ export function optimizeTerrainColliders(rigidBodies: RapierRigidBody[], instanc
   let optimizedColliders = 0;
   
   rigidBodies.forEach((body, index) => {
-    // Get all colliders attached to this body
-    const numColliders = body.numColliders();
-    for (let i = 0; i < numColliders; i++) {
-      const collider = body.collider(i);
-      if (collider && instances[index]?.userData?.voxelType === 'terrain') {
-        try {
-          // Disable collision detection phases for terrain voxels
-          if (collider.setActiveEvents) collider.setActiveEvents(0);           // No contact/intersection events
-        //   if (collider.setCollisionGroups) collider.setCollisionGroups(0);     // Won't collide with anything
-          optimizedColliders++;
-        } catch (error) {
-          console.warn('Could not optimize collider:', error);
+    try {
+      // CRITICAL: Check if body is valid and enabled before accessing colliders
+      if (!body || !body.isEnabled || !body.isEnabled()) {
+        return; // Skip disabled/invalid bodies
+      }
+      
+      // Get all colliders attached to this body - with safety check
+      const numColliders = body.numColliders();
+      for (let i = 0; i < numColliders; i++) {
+        const collider = body.collider(i);
+        if (collider && instances[index]?.userData?.voxelType === 'terrain') {
+          try {
+            // Disable collision detection phases for terrain voxels
+            if (collider.setActiveEvents) collider.setActiveEvents(0);           // No contact/intersection events
+          //   if (collider.setCollisionGroups) collider.setCollisionGroups(0);     // Won't collide with anything
+            optimizedColliders++;
+          } catch (error) {
+            console.warn('Could not optimize collider:', error);
+          }
         }
       }
+    } catch (error) {
+      console.warn(`Skipping invalid rigid body ${index}:`, error);
     }
   });
   

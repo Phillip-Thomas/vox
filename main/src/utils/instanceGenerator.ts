@@ -49,7 +49,7 @@ export function generateVoxelInstances(voxelSize: number): {
               voxelType: 'terrain',
               isExposed: false
             }
-            // ⬇️ NO TYPE PROPERTY = no RigidBody/Collider created
+
           });
           hiddenVoxels.add(instanceIndex);
         } else {
@@ -116,7 +116,8 @@ export function generateVoxelInstances(voxelSize: number): {
       gravityScale: 1,          // Only dynamic bodies need gravity
       linearDamping: 0.05,      // Light damping for settling
       angularDamping: 0.05,     // Light angular damping
-      canSleep: true,           // Allow sleeping when inactive
+      canSleep: true,  
+      onCollisionEnter: () => {console.log('collision')}       //potentially more efficient
       // Don't use CCD unless needed for high-velocity impacts
     });
   }

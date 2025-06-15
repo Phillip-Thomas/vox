@@ -211,7 +211,7 @@ export default function Player() {
     }
   }
   
-  // Function to expose a hidden voxel by moving it to its proper position
+  // Function to expose a hidden voxel - COMPACT LAYOUT AWARE
   const exposeVoxel = (x: number, y: number, z: number) => {
     const coordKey = `${x},${y},${z}`
     const instanceIndex = voxelSystem.coordinateToIndex.get(coordKey)
@@ -225,16 +225,81 @@ export default function Player() {
       return null
     }
     
+    console.log(`🌟 EXPOSING VOXEL: Instance ${instanceIndex} at (${x}, ${y}, ${z})`)
+    
     // Calculate proper world position
     const offset = calculateWorldOffset(2.0) // Use the voxel size
     const worldPosition = voxelToWorldPosition(x, y, z, 2.0, offset)
     
-    // Move the rigid body to its proper position
+    // Move the rigid body to its proper position and enable it
     rigidBody.setTranslation({ x: worldPosition[0], y: worldPosition[1], z: worldPosition[2] }, true)
+    rigidBody.setBodyType(1, true) // 1 = kinematic position
+    rigidBody.setEnabled(true) // Enable the body
+    
+    // Mark as exposed in userData
+    if (rigidBody.userData) {
+      (rigidBody.userData as any).isExposed = true;
+    }
     
     // Remove from deleted voxels if it was there
     voxelSystem.deletedVoxels.delete(coordKey)
     deletedVoxels.delete(instanceIndex)
+    
+             // Trigger compact layout rebuild to include this newly exposed voxel
+    const mesh = planetInstancedMesh.current;
+    if (voxelSystem.rebuildCompactLayout && mesh && planetInstanceMaterials.current && mesh.instanceMatrix && mesh.instanceColor) {
+      // CRITICAL FIX: Only process originally exposed voxels to avoid buffer overflow
+      const instances: any[] = [];
+      const colors: THREE.Color[] = [];
+      
+      for (let idx = 0; idx < voxelSystem.maxInstances; idx++) {
+        const coordKey = voxelSystem.indexToCoordinate.get(idx);
+        if (!coordKey) continue;
+        
+        // Skip deleted voxels - ONLY check coordinate-based deletion
+        if (voxelSystem.deletedVoxels.has(coordKey)) {
+          continue;
+        }
+        
+        // CRITICAL: Include voxels that were originally exposed OR newly exposed
+        const rigidBody = planetRigidBodies.current[idx];
+        if (!rigidBody || !rigidBody.userData) {
+          continue;
+        }
+        
+        // Check if voxel is exposed (either originally or newly exposed)
+        const isOriginallyExposed = (rigidBody.userData as any).isExposed;
+        const isNewlyExposed = rigidBody.isEnabled() && rigidBody.translation().x < 50000; // Not at hidden position
+        
+        if (!isOriginallyExposed && !isNewlyExposed) {
+          continue;
+        }
+        
+        const [x, y, z] = coordKey.split(',').map(Number);
+        const offset = calculateWorldOffset(2.0);
+        const worldPosition = voxelToWorldPosition(x, y, z, 2.0, offset);
+        
+        instances.push({
+          position: worldPosition,
+          userData: { isExposed: true }
+        });
+        
+        // Get original color from the mesh if possible
+        const originalColor = new THREE.Color();
+        const compactIndex = voxelSystem.originalToCompact.get(idx);
+        if (mesh.getColorAt && compactIndex !== undefined) {
+          mesh.getColorAt(compactIndex, originalColor);
+        } else {
+          // Fallback to white if we can't get the original color
+          originalColor.setHex(0xffffff);
+        }
+        colors.push(originalColor);
+      }
+      
+      voxelSystem.rebuildCompactLayout(mesh, instances, colors);
+      
+      console.log(`🔄 COMPACT LAYOUT REBUILT after exposing voxel ${instanceIndex}`);
+    }
     
     return instanceIndex
   }
@@ -305,7 +370,7 @@ export default function Player() {
     })
   }
 
-  // Function to delete a voxel (hide it by moving it far away)
+  // Function to delete a voxel - COMPACT LAYOUT AWARE
   const deleteVoxel = (instanceIndex: number) => {
     const mesh = planetInstancedMesh.current
     const rigidBody = planetRigidBodies.current[instanceIndex]
@@ -324,41 +389,74 @@ export default function Player() {
     deletedVoxels.add(instanceIndex)
     voxelSystem.deletedVoxels.add(coordKey)
     
-    // DON'T remove coordinate mappings - we need them to find hidden voxels later
-    // The mappings help us locate instances that are just moved far away
-    // voxelSystem.coordinateToIndex.delete(coordKey)
-    // voxelSystem.indexToCoordinate.delete(instanceIndex)
+    console.log(`🗑️ DELETING VOXEL: Instance ${instanceIndex} at (${x}, ${y}, ${z})`)
     
-    // Store original color before deletion (if not already stored)
-    if (!originalColors.has(instanceIndex)) {
-      // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
-      mesh.getColorAt(instanceIndex, tempColor)
-      originalColors.set(instanceIndex, tempColor.clone())
+    // PHYSICS DELETION: Move far away and disable to avoid concurrent access issues
+    try {
+      // Move the rigid body far away first
+      rigidBody.setTranslation({ x: 100000, y: 100000, z: 100000 }, true);
+      // Then disable it
+      rigidBody.setEnabled(false);
+    } catch (error) {
+      console.warn('Failed to disable rigid body:', error);
     }
     
-    // Move the rigid body far away (remove from physics)
-    rigidBody.setTranslation({ x: 100000, y: 100000, z: 100000 }, true)
-    
-    // Disable the physics body by setting it to sensor mode  
-    rigidBody.setBodyType(2, true) // 2 = sensor (no collision)
-    
-    // CRITICAL FIX: Hide the visual instance by moving it far away in the instancedMesh
-    // Reuse temp objects to avoid memory leaks
-    tempMatrix4.identity()
-    tempMatrix4.setPosition(100000, 100000, 100000) // Move visual instance far away
-    tempVector3.set(0.001, 0.001, 0.001) // Make it tiny
-    tempMatrix4.scale(tempVector3)
-    mesh.setMatrixAt(instanceIndex, tempMatrix4)
-    mesh.instanceMatrix.needsUpdate = true
-    
-    // Also set the color to fully transparent as backup
-    // MEMORY LEAK FIX: Reuse tempColor instead of creating new Color
-    tempColor.setRGB(0, 0, 0)
-    tempColor.setHex(0x000000) // Fully transparent/black
-    mesh.setColorAt(instanceIndex, tempColor)
-    mesh.instanceColor!.needsUpdate = true
-    
-    
+        // IMMEDIATE VISUAL DELETION: Rebuild compact layout immediately without physics access
+    if (voxelSystem.rebuildCompactLayout && planetInstanceMaterials.current && mesh.instanceMatrix && mesh.instanceColor) {
+      // CRITICAL FIX: Only process voxels that were originally exposed to avoid buffer overflow
+      // The mesh buffer was allocated based on exposed voxels, not all voxels
+      const instances: any[] = [];
+      const colors: THREE.Color[] = [];
+      
+      // Iterate through original instances to maintain proper indexing
+      for (let idx = 0; idx < voxelSystem.maxInstances; idx++) {
+        const coordKey = voxelSystem.indexToCoordinate.get(idx);
+        if (!coordKey) continue;
+        
+        // Skip deleted voxels - ONLY check coordinate-based deletion
+        if (voxelSystem.deletedVoxels.has(coordKey)) {
+          continue;
+        }
+        
+        // CRITICAL: Include voxels that were originally exposed OR newly exposed
+        const rigidBody = planetRigidBodies.current[idx];
+        if (!rigidBody || !rigidBody.userData) {
+          continue;
+        }
+        
+        // Check if voxel is exposed (either originally or newly exposed)
+        const isOriginallyExposed = (rigidBody.userData as any).isExposed;
+        const isNewlyExposed = rigidBody.isEnabled() && rigidBody.translation().x < 50000; // Not at hidden position
+        
+        if (!isOriginallyExposed && !isNewlyExposed) {
+          continue;
+        }
+        
+        const [x, y, z] = coordKey.split(',').map(Number);
+        const offset = calculateWorldOffset(2.0);
+        const worldPosition = voxelToWorldPosition(x, y, z, 2.0, offset);
+        
+        instances.push({
+          position: worldPosition,
+          userData: { isExposed: true }
+        });
+        
+        // Get original color from the mesh if possible
+        const originalColor = new THREE.Color();
+        const compactIndex = voxelSystem.originalToCompact.get(idx);
+        if (mesh.getColorAt && compactIndex !== undefined) {
+          mesh.getColorAt(compactIndex, originalColor);
+        } else {
+          // Fallback to white if we can't get the original color
+          originalColor.setHex(0xffffff);
+        }
+        colors.push(originalColor);
+      }
+      
+      console.log(`🔧 BUFFER SAFE: Processing ${instances.length} instances (buffer limit respected)`);
+      voxelSystem.rebuildCompactLayout(mesh, instances, colors);
+      console.log(`👻 IMMEDIATELY REBUILT LAYOUT excluding deleted voxel ${instanceIndex}`);
+    }
     
     // Check neighboring voxels to see if any should now be exposed
     exposeNeighboringVoxels(x, y, z)

@@ -1,4 +1,4 @@
-import { useMemo, useContext, useRef, useEffect, useState, memo } from 'react';
+import { useMemo, useContext, useRef, useEffect, useState, memo, useCallback } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { CuboidCollider, InstancedRigidBodies, InstancedRigidBodyProps, RapierRigidBody} from '@react-three/rapier';
@@ -50,6 +50,11 @@ export const voxelSystem = {
   indexToCoordinate: new Map<number, string>(),
   // Track maximum instance count for dynamic expansion
   maxInstances: 0,
+  // NEW: Track mapping between original indices and compact visual indices
+  originalToCompact: new Map<number, number>(),
+  compactToOriginal: new Map<number, number>(),
+  // NEW: Function to rebuild compact layout
+  rebuildCompactLayout: null as ((mesh: THREE.InstancedMesh, instances: any[], colors: THREE.Color[]) => void) | null,
 };
 
 // Debug function to check instance color
@@ -168,15 +173,32 @@ const Planet = memo(function Planet() {
     return { instances: result.instances };
   }, [VOXEL_SIZE]); 
   
-  const totalVoxels = voxelSystem.maxInstances; // Use max instances for dynamic expansion
+  // OPTIMIZATION: Only allocate GPU memory for exposed voxels + buffer for future expansion
+  const exposedVoxelCount = useMemo(() => {
+    return instances.length > 0 ? instances.filter((inst: any) => inst.userData?.isExposed).length : 0;
+  }, [instances]);
+  
+  // Allocate buffer size with 20% extra for dynamic voxel exposure during gameplay
+  const optimizedBufferSize = Math.max(exposedVoxelCount + Math.floor(exposedVoxelCount * 0.2), 1000);
+  
+  console.log(`🎯 GPU OPTIMIZATION: Exposed=${exposedVoxelCount}, Buffer=${optimizedBufferSize}, Saved=${voxelSystem.maxInstances - optimizedBufferSize} instances`);
+  
+  const totalVoxels = optimizedBufferSize; // Use optimized buffer size instead of maxInstances
 
-  // Set colors and textures on the instanced mesh when ready
+  // Set colors and textures on the instanced mesh when ready - OPTIMIZED for compact layout
   useEffect(() => {
     if (instancedMeshRef.current && instanceColors.length > 0 && materialsLoaded) {
-      instanceColors.forEach((color: THREE.Color, index: number) => {
-        instancedMeshRef.current!.setColorAt(index, color);
+      // OPTIMIZATION: Only set colors for exposed voxels in compact arrangement
+      let compactColorIndex = 0;
+      instances.forEach((instance: any, originalIndex: number) => {
+        if (instance.userData?.isExposed && instanceColors[originalIndex]) {
+          instancedMeshRef.current!.setColorAt(compactColorIndex, instanceColors[originalIndex]);
+          compactColorIndex++;
+        }
       });
-      instancedMeshRef.current.instanceColor!.needsUpdate = true;
+      if (instancedMeshRef.current.instanceColor) {
+        instancedMeshRef.current.instanceColor.needsUpdate = true;
+      }
       
       // Apply texture to the material if we have textures
       if (instanceTextures.length > 0 && instanceTextures[0]) {
@@ -244,24 +266,65 @@ const Planet = memo(function Planet() {
 
   }, [planetReady, instances, instanceMaterials])
 
-  // VISIBILITY FIX: Sync instancedMesh positions with physics bodies to hide internal voxels
+  // Create the rebuild compact layout function
+  const rebuildCompactLayout = useCallback((mesh: THREE.InstancedMesh, instances: any[], colors: THREE.Color[]) => {
+    const matrix = new THREE.Matrix4();
+    let compactIndex = 0;
+    
+    // Clear previous mappings
+    voxelSystem.originalToCompact.clear();
+    voxelSystem.compactToOriginal.clear();
+    
+    // Build compact layout with proper mappings
+    instances.forEach((instance: any, originalIndex: number) => {
+      // Check if voxel is exposed AND not deleted
+      const coordKey = voxelSystem.indexToCoordinate.get(originalIndex);
+      const isExposed = (instance.userData as any)?.isExposed;
+      const isDeleted = coordKey ? voxelSystem.deletedVoxels.has(coordKey) : false;
+      
+      if (isExposed && !isDeleted) {
+        // Set position matrix
+        const [x, y, z] = instance.position as [number, number, number];
+        matrix.setPosition(x, y, z);
+        mesh.setMatrixAt(compactIndex, matrix);
+        
+        // Set color
+        if (colors[originalIndex]) {
+          mesh.setColorAt(compactIndex, colors[originalIndex]);
+        }
+        
+        // Update mappings
+        voxelSystem.originalToCompact.set(originalIndex, compactIndex);
+        voxelSystem.compactToOriginal.set(compactIndex, originalIndex);
+        
+        compactIndex++;
+      }
+    });
+    
+    // Update mesh properties - with null safety checks
+    mesh.count = compactIndex;
+    if (mesh.instanceMatrix) {
+      mesh.instanceMatrix.needsUpdate = true;
+    }
+    if (mesh.instanceColor) {
+      mesh.instanceColor.needsUpdate = true;
+    }
+    
+    console.log(`🔄 REBUILT COMPACT LAYOUT: ${compactIndex} visible voxels, ${instances.length - compactIndex} hidden/deleted`);
+  }, []);
+
+  // Set the rebuild function in voxelSystem for Player.tsx access
+  useEffect(() => {
+    voxelSystem.rebuildCompactLayout = rebuildCompactLayout;
+  }, [rebuildCompactLayout]);
+
+  // OPTIMIZED VISIBILITY: Initial compact layout setup
   useEffect(() => {
     if (!instancedMeshRef.current || !rigidBodies.current.length || !instances.length) return;
     
     const mesh = instancedMeshRef.current;
-    const matrix = new THREE.Matrix4();
-    
-    // Set positions for each instance based on the instance data (not physics bodies)
-    instances.forEach((instance, index) => {
-      const [x, y, z] = instance.position as [number, number, number];
-      matrix.setPosition(x, y, z);
-      mesh.setMatrixAt(index, matrix);
-    });
-    
-    mesh.instanceMatrix.needsUpdate = true;
-    
-    console.log(`🔧 Synced ${instances.length} voxel positions with instancedMesh`);
-  }, [instances, planetReady])
+    rebuildCompactLayout(mesh, instances, instanceColors);
+  }, [instances, instanceColors, planetReady, rebuildCompactLayout])
 
   // PERFORMANCE MONITORING: Track physics optimization effectiveness
   useEffect(() => {
