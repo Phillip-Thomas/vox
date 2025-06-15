@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 // @ts-ignore - CapsuleCollider exists at runtime but not in types
@@ -16,12 +16,11 @@ const mouse = new THREE.Vector2(0, 0); // Screen center
 const SPEED = 5;
 
 interface EfficientPlayerProps {
-  planetSize?: number; // Cube half-size (cube extends from -planetSize to +planetSize)
+  planetSize?: number;
   onPositionChange?: (position: THREE.Vector3) => void;
 }
 
 export default function EfficientPlayer({ planetSize, onPositionChange }: EfficientPlayerProps) {
-  // Ensure planetSize is provided - no default to force explicit configuration
   if (planetSize === undefined) {
     throw new Error('EfficientPlayer: planetSize prop is required - configure in EfficientScene');
   }
@@ -31,18 +30,15 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
   
   // Track previous delete key state for single-press detection
   const prevDeleteKeyRef = useRef(false);
+
+  useEffect(() => {
+    if (ref.current && ref.current.isSleeping) {
+        ref.current.wakeUp();
+    }
+  }, [ref.current?.isSleeping])
   
   useFrame((state) => {
     if (!ref.current) return;
-    
-    // Debug: Check if canSleep is working properly (should never sleep)
-    if (ref.current.isSleeping) {
-      console.warn(`🚨 UNEXPECTED: Player is sleeping despite canSleep={false}! This indicates a Rapier issue.`);
-      // Force wake up as fallback
-      if (ref.current.wakeUp) {
-        ref.current.wakeUp();
-      }
-    }
     
     // Update player position for proximity-based collision
     if (onPositionChange) {
@@ -152,7 +148,7 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
         colliders={false}
         mass={1}
         type="dynamic" 
-        position={[0, planetSize*2+10, 0]}
+        position={[0, planetSize + 10, 0]}
         lockRotations={true}
         linearDamping={0.5}
         angularDamping={0.8}
@@ -167,7 +163,7 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
           position={[0, 1, 0]} 
           makeDefault 
           fov={75} 
-          far={100} 
+          far={1000} 
         />
         
         {/* Visual representation */}

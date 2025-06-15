@@ -4,6 +4,7 @@ import { RigidBody } from '@react-three/rapier';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { MATERIALS, MaterialType } from '../types/materials';
 import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator';
+export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
 // Simple material for all voxels
 const voxelMaterial = new THREE.MeshStandardMaterial({ 
@@ -12,8 +13,6 @@ const voxelMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.1
 });
 
-// Export for raycasting
-export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
 // Global functions to manage collision bodies
 export let addDynamicCollisionBody: ((x: number, y: number, z: number) => void) | null = null;
@@ -58,7 +57,7 @@ function VoxelCollisionBody({ x, y, z, onRef }: { x: number, y: number, z: numbe
         }
       }}
     >
-      {/* Visible collision box for testing - color-coded by material */}
+      {/* Visible collision box for testing - TEMPORARILY HIDDEN */}
       <mesh visible={true}>
         <boxGeometry args={[1.98, 1.98, 1.98]} />
         <meshBasicMaterial color={materialColor} transparent opacity={0.3} />
@@ -90,7 +89,10 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
   
   // Function to check if a voxel is within collision range of player
   const isWithinCollisionRange = (voxelX: number, voxelY: number, voxelZ: number): boolean => {
-    if (!playerPosition) return true; // If no player position, create all collision bodies
+    if (!playerPosition) {
+      console.log(`🔍 DEBUG: No player position, creating collision body at (${voxelX}, ${voxelY}, ${voxelZ})`);
+      return true; // If no player position, create all collision bodies
+    }
     
     // Convert voxel coordinates to world coordinates (voxels are at 2x scale)
     const voxelWorldX = voxelX * 2;
@@ -104,7 +106,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
       Math.pow(playerPosition.z - voxelWorldZ, 2)
     );
     
-    const isInRange = distance <= COLLISION_RANGE * 2; // Multiply by 2 for world scale
+    const isInRange = distance <= COLLISION_RANGE
     
     // CRITICAL: Don't create collision bodies too close to player (prevents getting stuck)
     // But allow collision bodies that are slightly below the player (for landing)
@@ -127,10 +129,10 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
     const generator = new ProceduralWorldGenerator();
     
     // Generate ALL voxels within the cube (not just exposed ones)
-    // Cube extends from -size to +size in all dimensions
-    for (let x = -size; x <= size; x++) {
-      for (let y = -size; y <= size; y++) {
-        for (let z = -size; z <= size; z++) {
+    // Cube extends from -size/2 to +size/2 in all dimensions
+    for (let x = -size / 2; x <= size / 2; x++) {
+      for (let y = -size / 2; y <= size / 2; y++) {
+        for (let z = -size / 2; z <= size / 2; z++) {
           // All positions within the cube bounds are part of the original terrain
           const material = generator.generateMaterialForPosition(x, y, z);
           const color = MATERIALS[material].color.clone();
@@ -149,7 +151,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
     
     // Only generate exposed voxels from the original terrain
     for (const terrainVoxel of originalTerrain) {
-      const isExposed = isVoxelExposed(terrainVoxel.x, terrainVoxel.y, terrainVoxel.z, size);
+      const isExposed = isVoxelExposed(terrainVoxel.x, terrainVoxel.y, terrainVoxel.z, size / 2);
       
       if (isExposed) {
         voxels.push({ 
@@ -349,7 +351,8 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
       }));
     setAllCollisionBodies(initialCollisionBodies);
     
-    console.log(`🎯 Creating collision bodies for ${initialCollisionBodies.length}/${initialVoxels.length} voxels within range (spawn-safe)`);;
+    console.log(`🎯 Creating collision bodies for ${initialCollisionBodies.length}/${initialVoxels.length} voxels within range (spawn-safe)`);
+    console.log(`🔍 DEBUG: Player spawn position will be (0, ${size+10}, 0), collision range = ${COLLISION_RANGE}`);;
     
     // Add all initial voxels (collision bodies will be linked when they're created)
     let addedCount = 0;
@@ -501,10 +504,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
         return updated;
       });
     }
-  }, [playerPosition]); // Remove allCollisionBodies dependency to allow more frequent updates
-  
-  // Debug: Log buffer size at render time
-  console.log(`🎯 RENDER TIME: dynamicBufferSize = ${dynamicBufferSize} for cube size ${size*2+1}³`);
+  }, [playerPosition]);
 
   return (
     <>
@@ -545,7 +545,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
 }
 
 // Helper function to determine if a voxel should be exposed
-function isVoxelExposed(x: number, y: number, z: number, cubeSize: number): boolean {
+function isVoxelExposed(x: number, y: number, z: number, cubeHalfSize: number): boolean {
   const neighbors = [
     [x+1, y, z], [x-1, y, z],
     [x, y+1, z], [x, y-1, z],
@@ -554,10 +554,10 @@ function isVoxelExposed(x: number, y: number, z: number, cubeSize: number): bool
   
   // Check if any neighbor is outside the cube bounds
   for (const [nx, ny, nz] of neighbors) {
-    // If neighbor is outside cube bounds (-cubeSize to +cubeSize), this voxel is exposed
-    if (nx < -cubeSize || nx > cubeSize || 
-        ny < -cubeSize || ny > cubeSize || 
-        nz < -cubeSize || nz > cubeSize) {
+    // If neighbor is outside cube bounds (-cubeHalfSize to +cubeHalfSize), this voxel is exposed
+    if (nx < -cubeHalfSize || nx > cubeHalfSize || 
+        ny < -cubeHalfSize || ny > cubeHalfSize || 
+        nz < -cubeHalfSize || nz > cubeHalfSize) {
       return true;
     }
   }

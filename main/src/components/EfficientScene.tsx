@@ -9,7 +9,7 @@ export default function EfficientScene() {
   // This is the SINGLE SOURCE OF TRUTH for planet size
   // All components (EfficientPlanet, EfficientPlayer) use this value
   // System dynamically allocates resources based on this size - no hardcoded limits!
-  const planetSize = 50; // Planet radius in voxel units
+  const planetSize = 100; // Planet radius in voxel units
   const [playerPosition, setPlayerPosition] = useState<THREE.Vector3>(new THREE.Vector3(0, planetSize*2+10, 0));
   
   return (
