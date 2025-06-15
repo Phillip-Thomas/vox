@@ -3,6 +3,27 @@ import * as THREE from 'three';
 import { CUBE_SIZE_X, CUBE_SIZE_Y, CUBE_SIZE_Z, calculateWorldOffset } from '../utils/voxelUtils';
 import { CubeFace, FACE_ORIENTATIONS } from '../context/PlayerContext';
 
+// MEMORY LEAK FIX: Create reusable temp objects outside component scope
+const tempVector3 = new THREE.Vector3();
+const tempQuaternion1 = new THREE.Quaternion();
+const tempQuaternion2 = new THREE.Quaternion();
+const tempQuaternion3 = new THREE.Quaternion();
+const tempVector3_2 = new THREE.Vector3();
+const tempVector3_3 = new THREE.Vector3();
+
+// Animation state interface
+interface RotationAnimation {
+  isActive: boolean;
+  startTime: number;
+  duration: number;
+  startRotation: { x: number; y: number; z: number; w: number };
+  targetRotation: { x: number; y: number; z: number; w: number };
+  startCameraUp: { x: number; y: number; z: number };
+  targetCameraUp: { x: number; y: number; z: number };
+  playerRigidBody: any;
+  camera: THREE.Camera;
+}
+
 export function usePlanetGravity(voxelSize: number) {
   const [gravity, setGravity] = useState<[number, number, number]>([0, -9.81, 0]);
   const [isChanging, setIsChanging] = useState(false);
@@ -10,6 +31,9 @@ export function usePlanetGravity(voxelSize: number) {
   const startTime = useRef<number>(Date.now());
   const [currentQuadrant, setCurrentQuadrant] = useState<CubeFace>('top');
   const offset = calculateWorldOffset(voxelSize);
+  
+  // Animation state for smooth transitions
+  const rotationAnimation = useRef<RotationAnimation | null>(null);
   
   // Calculate cube center in world coordinates
   // The calculateWorldOffset is designed to center the cube at the origin
@@ -27,7 +51,8 @@ export function usePlanetGravity(voxelSize: number) {
 
   const determineQuadrant = useCallback((playerPosition: THREE.Vector3): CubeFace => {
     // Calculate vector from cube center to player
-    const directionFromCenter = new THREE.Vector3().subVectors(playerPosition, cubeCenter);
+    // MEMORY LEAK FIX: Reuse tempVector3 instead of creating new Vector3
+    tempVector3.subVectors(playerPosition, cubeCenter);
     
     // Find which face normal the player's direction most closely aligns with
     let maxDot = -Infinity;
@@ -35,7 +60,7 @@ export function usePlanetGravity(voxelSize: number) {
     const dotProducts: Record<string, number> = {};
     
     Object.entries(faceNormals).forEach(([face, normal]) => {
-      const dot = directionFromCenter.dot(normal);
+      const dot = tempVector3.dot(normal);
       dotProducts[face] = dot;
       if (dot > maxDot) {
         maxDot = dot;
@@ -64,12 +89,56 @@ export function usePlanetGravity(voxelSize: number) {
     return null;
   }, [currentQuadrant, determineQuadrant, isChanging]);
 
+  // Function to update rotation animation (called from useFrame)
+  const updateRotationAnimation = useCallback((deltaTime: number) => {
+    if (!rotationAnimation.current || !rotationAnimation.current.isActive) return;
+
+    const animation = rotationAnimation.current;
+    const now = performance.now();
+    const elapsed = now - animation.startTime;
+    const progress = Math.min(elapsed / animation.duration, 1);
+    
+    // Use smooth easing function for natural transition
+    const easedProgress = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    
+    // MEMORY LEAK FIX: Reuse temp quaternions instead of cloning and creating new ones
+    tempQuaternion1.set(animation.startRotation.x, animation.startRotation.y, animation.startRotation.z, animation.startRotation.w);
+    tempQuaternion2.set(animation.targetRotation.x, animation.targetRotation.y, animation.targetRotation.z, animation.targetRotation.w);
+    tempQuaternion1.slerp(tempQuaternion2, easedProgress);
+    
+    animation.playerRigidBody.setRotation({
+      x: tempQuaternion1.x,
+      y: tempQuaternion1.y,
+      z: tempQuaternion1.z,
+      w: tempQuaternion1.w
+    }, true);
+    
+    // Smoothly interpolate camera up direction
+    // MEMORY LEAK FIX: Reuse temp vectors instead of cloning and creating new ones
+    tempVector3_2.set(animation.startCameraUp.x, animation.startCameraUp.y, animation.startCameraUp.z);
+    tempVector3_3.set(animation.targetCameraUp.x, animation.targetCameraUp.y, animation.targetCameraUp.z);
+    tempVector3_2.lerp(tempVector3_3, easedProgress);
+    animation.camera.up.copy(tempVector3_2);
+    
+    // Update projection matrix if it's a perspective or orthographic camera
+    if ('updateProjectionMatrix' in animation.camera && typeof animation.camera.updateProjectionMatrix === 'function') {
+      animation.camera.updateProjectionMatrix();
+    }
+    
+    // Check if animation is complete
+    if (progress >= 1) {
+      rotationAnimation.current.isActive = false;
+      rotationAnimation.current = null;
+      console.log(`🎯 Face transition animation completed in ${elapsed.toFixed(1)}ms`);
+    }
+  }, []);
+
   const changeGravity = useCallback((newFace: CubeFace, playerRigidBody: any, setCurrentFace: (face: CubeFace) => void, camera?: THREE.Camera, currentFace?: CubeFace) => {
     if (isChanging || !playerRigidBody) return;
 
     const newFaceOrientation = FACE_ORIENTATIONS[newFace];
     
-    
+    console.log(`📐 Final player quaternion: Starting transition to ${newFace}`);
 
     // Calculate rotation delta between current and new face
     playerRigidBody.lockRotations(false);
@@ -80,77 +149,44 @@ export function usePlanetGravity(voxelSize: number) {
       const currentUpDir = currentFaceOrientation.upDirection;
       const newUpDir = newFaceOrientation.upDirection;
       
-
-      
       // Calculate rotation needed to transform current up to new up
-      const deltaQuaternion = new THREE.Quaternion().setFromUnitVectors(currentUpDir, newUpDir);
-      
-      
+      // MEMORY LEAK FIX: Reuse tempQuaternion1 instead of creating new Quaternion
+      tempQuaternion1.setFromUnitVectors(currentUpDir, newUpDir);
       
       // Get current player rotation
       const currentPlayerRotation = playerRigidBody.rotation();
-      const currentPlayerQuat = new THREE.Quaternion(
+      // MEMORY LEAK FIX: Reuse tempQuaternion2 instead of creating new Quaternion
+      tempQuaternion2.set(
         currentPlayerRotation.x,
         currentPlayerRotation.y,
         currentPlayerRotation.z,
         currentPlayerRotation.w
       );
       
-      
-      
       // Apply delta rotation to current player rotation
-      const finalRotation = new THREE.Quaternion()
-        .multiplyQuaternions(deltaQuaternion, currentPlayerQuat);
-      
-      console.log(`📐 Final player quaternion:`, finalRotation);
+      // MEMORY LEAK FIX: Reuse tempQuaternion3 instead of creating new Quaternion
+      tempQuaternion3.multiplyQuaternions(tempQuaternion1, tempQuaternion2);
       
       // Get current camera up direction for smooth transition
-      const currentCameraUp = camera.up.clone();
-      const targetCameraUp = newUpDir.clone();
+      // MEMORY LEAK FIX: Reuse tempVector3_2 and tempVector3_3 instead of clone()
+      tempVector3_2.copy(camera.up);
+      tempVector3_3.copy(newUpDir);
       
-      console.log(`📷 Current camera up:`, currentCameraUp);
-      console.log(`📷 Target camera up:`, targetCameraUp);
+      console.log(`📷 Current camera up:`, tempVector3_2);
+      console.log(`📷 Target camera up:`, tempVector3_3);
       
-      // Smooth rotation transition using slerp
-      const startRotation = currentPlayerQuat.clone();
-      const targetRotation = finalRotation.clone();
-      let progress = 0;
-      const duration = 1000; // 1 second transition
-      const startTime = performance.now();
-      
-      const animateRotation = () => {
-        const now = performance.now();
-        progress = Math.min((now - startTime) / duration, 1);
-        
-        // Use smooth easing function for more natural transition
-        const easedProgress = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-        
-        const currentRotation = startRotation.clone().slerp(targetRotation, easedProgress);
-        
-        playerRigidBody.setRotation({
-          x: currentRotation.x,
-          y: currentRotation.y,
-          z: currentRotation.z,
-          w: currentRotation.w
-        }, true);
-        
-        // Smoothly interpolate camera up direction
-        const currentUp = currentCameraUp.clone().lerp(targetCameraUp, easedProgress);
-        camera.up.copy(currentUp);
-        
-        // Update projection matrix if it's a perspective or orthographic camera
-        if ('updateProjectionMatrix' in camera && typeof camera.updateProjectionMatrix === 'function') {
-          camera.updateProjectionMatrix();
-        }
-        
-        // console.log(`📷 Updated camera up to:`, camera.up, `(progress: ${easedProgress.toFixed(2)})`);
-        
-        if (progress < 1) {
-          requestAnimationFrame(animateRotation);
-        }
+             // PERFORMANCE FIX: Set up animation state instead of running synchronous loop
+       rotationAnimation.current = {
+         isActive: true,
+         startTime: performance.now(),
+         duration: 750, // Balanced: faster than original 1s but smooth enough
+        startRotation: { x: tempQuaternion2.x, y: tempQuaternion2.y, z: tempQuaternion2.z, w: tempQuaternion2.w },
+        targetRotation: { x: tempQuaternion3.x, y: tempQuaternion3.y, z: tempQuaternion3.z, w: tempQuaternion3.w },
+        startCameraUp: { x: tempVector3_2.x, y: tempVector3_2.y, z: tempVector3_2.z },
+        targetCameraUp: { x: tempVector3_3.x, y: tempVector3_3.y, z: tempVector3_3.z },
+        playerRigidBody,
+        camera
       };
-      
-      animateRotation();
 
       console.log(`🔄 Applied upDirection delta rotation from ${currentFace} to ${newFace}`);
     }
@@ -169,11 +205,11 @@ export function usePlanetGravity(voxelSize: number) {
       console.log(`⬇️ Gravity changed to: [${newFaceOrientation.gravity[0]}, ${newFaceOrientation.gravity[1]}, ${newFaceOrientation.gravity[2]}] (delayed by 200ms)`);
     }, 200);
     
-    // Reset changing state after rotation completes
+    // Reset changing state after rotation completes (reduced timeout to match shorter animation)
     setTimeout(() => {
       setIsChanging(false);
       console.log(`✅ Face transition completed successfully - Now on face: ${newFace}`);
-    }, 1500);
+    }, 1000); // Slightly longer than animation duration for safety
   }, [isChanging]);
 
 
@@ -181,6 +217,7 @@ export function usePlanetGravity(voxelSize: number) {
     gravity,
     checkBoundaries,
     changeGravity,
+    updateRotationAnimation,
     isChanging: isChanging,
     currentQuadrant
   };

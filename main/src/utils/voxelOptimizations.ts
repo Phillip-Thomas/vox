@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 
+// MEMORY LEAK FIX: Create reusable temp objects outside function scope
+const tempVector3 = new THREE.Vector3();
+
 // Occlusion culling - check if a voxel is completely surrounded by other voxels
 export function isVoxelOccluded(
   x: number, 
@@ -80,7 +83,12 @@ export function createChunks(
         
         // Calculate bounding box for the chunk
         if (chunk.voxels.length > 0) {
-          const positions = chunk.voxels.map(v => new THREE.Vector3(...v.position));
+          // MEMORY LEAK FIX: Reuse single Vector3 instead of creating array of Vector3 objects
+          const positions: THREE.Vector3[] = [];
+          chunk.voxels.forEach(v => {
+            tempVector3.set(v.position[0], v.position[1], v.position[2]);
+            positions.push(tempVector3.clone()); // Only clone when we need to store it
+          });
           chunk.boundingBox.setFromPoints(positions);
           chunk.boundingBox.expandByScalar(voxelSize * 0.5);
           chunks.push(chunk);

@@ -116,15 +116,19 @@ const App: React.FC = () => {
           gl={{ 
             antialias: false, // PERFORMANCE: Disable antialiasing
             alpha: false, // PERFORMANCE: Disable alpha channel
+            powerPreference: "high-performance", // OPTIMIZATION: Use high-performance GPU
+            stencil: false, // OPTIMIZATION: Disable stencil buffer
+            depth: true, // Keep depth buffer for 3D rendering
           }}
-          performance={{ min: 0.5 }} // PERFORMANCE: Allow lower frame rates
+          performance={{ min: 0.2 }} // OPTIMIZATION: Allow even lower frame rates to reduce load
+          frameloop="demand" // OPTIMIZATION: Only render when needed to reduce CPU usage
         >
           <Stats />
           <Sky sunPosition={[100, 20, 100]} />
 
           {/* PERFORMANCE: Simplified lighting setup to reduce CPU usage */}
           <ambientLight intensity={0.6} />
-          <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow={false} />
+          <directionalLight position={[10, 10, 5]} intensity={0.4} castShadow={false} />
 
           <PhysicsWrapper>
             <Planet />

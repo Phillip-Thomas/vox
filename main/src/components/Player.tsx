@@ -28,9 +28,38 @@ const tempVector3 = new THREE.Vector3()
 const tempVector3_2 = new THREE.Vector3()
 const tempVector3_3 = new THREE.Vector3()
 const tempColor = new THREE.Color()
+const tempVoxelSet = new Set<string>()
+
+// OPTIMIZATION 2: Memory pool for frequently used objects
+const MEMORY_POOL = {
+  vectors: Array.from({ length: 10 }, () => new THREE.Vector3()),
+  matrices: Array.from({ length: 5 }, () => new THREE.Matrix4()),
+  colors: Array.from({ length: 20 }, () => new THREE.Color()),
+  vectorIndex: 0,
+  matrixIndex: 0,
+  colorIndex: 0,
+  
+  getVector(): THREE.Vector3 {
+    const vector = this.vectors[this.vectorIndex];
+    this.vectorIndex = (this.vectorIndex + 1) % this.vectors.length;
+    return vector.set(0, 0, 0); // Reset to zero
+  },
+  
+  getMatrix(): THREE.Matrix4 {
+    const matrix = this.matrices[this.matrixIndex];
+    this.matrixIndex = (this.matrixIndex + 1) % this.matrices.length;
+    return matrix.identity(); // Reset to identity
+  },
+  
+  getColor(): THREE.Color {
+    const color = this.colors[this.colorIndex];
+    this.colorIndex = (this.colorIndex + 1) % this.colors.length;
+    return color.set(0xffffff); // Reset to white
+  }
+};
 
 // Highlight colors
-const HIGHLIGHT_COLOR = new THREE.Color(0x00ffff) // White highlight - works well with ambient lighting
+const HIGHLIGHT_COLOR = new THREE.Color(0x00ffff) // Cyan highlight - works well with ambient lighting
 const originalColors = new Map<number, THREE.Color>() // Store original colors
 
 // Track deleted voxels
@@ -126,7 +155,7 @@ export default function Player() {
   const [, get] = useKeyboardControls()
   const visualRaycast = useVisualRaycast()
   const { controls } = useThree()
-  const { checkBoundaries, isChanging, changeGravity } = useGravityContext();
+  const { checkBoundaries, isChanging, changeGravity, updateRotationAnimation } = useGravityContext();
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
   
@@ -249,16 +278,17 @@ export default function Player() {
       }
       
       // Check if this voxel should now be exposed
-      const currentVoxelData = new Set<string>()
+      // MEMORY LEAK FIX: Reuse a global Set instead of creating new one each time
+      tempVoxelSet.clear()
       
       // Rebuild the current state of existing voxels (excluding deleted ones)
       for (const voxelCoord of voxelSystem.allVoxels) {
         if (!voxelSystem.deletedVoxels.has(voxelCoord)) {
-          currentVoxelData.add(voxelCoord)
+          tempVoxelSet.add(voxelCoord)
         }
       }
       
-      if (isVoxelExposed(nx, ny, nz, currentVoxelData)) {
+      if (isVoxelExposed(nx, ny, nz, tempVoxelSet)) {
         // Since we already checked that coordinate mapping exists, this should work
         exposeVoxel(nx, ny, nz)
       }
@@ -323,6 +353,9 @@ export default function Player() {
     frameCount.current++;
     const { forward, backward, left, right, jump, delete: deleteKey } = get()
     const velocity = ref.current.linvel()
+    
+    // Update rotation animation if active
+    updateRotationAnimation(deltaTime);
     
     // Get player position and position camera relative to player
     const translation = ref.current.translation()
@@ -411,7 +444,7 @@ export default function Player() {
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
       if (jump) {
         const currentVel = ref.current.linvel();
-        const jumpForce = .25;
+        const jumpForce = .5;
         const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
         ref.current.setLinvel({ 
