@@ -72,6 +72,25 @@ export class ProceduralWorldGenerator {
   generateMaterialForPosition(x: number, y: number, z: number): MaterialType {
     const distanceFromCenter = this.getDistanceFromCenter(x, y, z);
     
+    // TEMPORARY TEST: Force some gold blocks in specific locations for testing
+    if ((x === 5 && y === 5 && z === 5) || 
+        (x === 10 && y === 10 && z === 10) ||
+        (x === 15 && y === 8 && z === 12)) {
+      console.log(`🧪 FORCED GOLD BLOCK at (${x}, ${y}, ${z})`);
+      return MaterialType.GOLD;
+    }
+    
+    // TEMPORARY TEST: Force some copper and silver blocks too
+    if ((x === 7 && y === 7 && z === 7) || (x === 12 && y === 6 && z === 8)) {
+      console.log(`🧪 FORCED COPPER BLOCK at (${x}, ${y}, ${z})`);
+      return MaterialType.COPPER;
+    }
+    
+    if (x === 8 && y === 9 && z === 6) {
+      console.log(`🧪 FORCED SILVER BLOCK at (${x}, ${y}, ${z})`);
+      return MaterialType.SILVER;
+    }
+    
     // Layer 1: Lava Core
     if (distanceFromCenter <= this.config.coreRadius) {
       return MaterialType.LAVA;
@@ -104,7 +123,7 @@ export class ProceduralWorldGenerator {
     // Add material for the additional center cube (make it grass since it's on top)
     materials.push(MaterialType.GRASS);
     
-    console.log(`Generated procedural world with core radius: ${this.config.coreRadius}, using rarity-based material distribution`);
+
     
     return materials;
   }

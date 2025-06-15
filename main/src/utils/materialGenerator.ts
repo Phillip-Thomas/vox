@@ -7,6 +7,7 @@ import {
 } from './voxelUtils';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { WorldGenerationConfig, DEFAULT_WORLD_CONFIG } from '../config/worldGeneration';
+import TextureManager from './textureLoader';
 
 // Create a global instance of the procedural world generator
 let worldGenerator = new ProceduralWorldGenerator(DEFAULT_WORLD_CONFIG);
@@ -28,26 +29,63 @@ export function getWorldGenerationConfig(): WorldGenerationConfig {
 /**
  * Generates materials and colors for ALL voxel instances using procedural generation
  */
-export function generateInstanceMaterials(voxelSize: number): {
+export async function generateInstanceMaterials(voxelSize: number): Promise<{
   instanceColors: THREE.Color[];
   instanceMaterials: MaterialType[];
-} {
-  if (!voxelSize) return { instanceColors: [], instanceMaterials: [] };
+  instanceTextures: (THREE.Texture | null)[];
+}> {
+  if (!voxelSize) return { instanceColors: [], instanceMaterials: [], instanceTextures: [] };
   
   const colors: THREE.Color[] = [];
   const materials: MaterialType[] = [];
+  const textures: (THREE.Texture | null)[] = [];
+  
+  // Load all textures first
+  const textureManager = TextureManager.getInstance();
+
+  
+  try {
+    await textureManager.loadAllTextures();
+
+  } catch (error) {
+    console.warn('Some textures failed to load, using fallbacks:', error);
+  }
   
   // Generate materials using the procedural world generator
   const proceduralMaterials = worldGenerator.generateWorldMaterials();
   
-  // Convert materials to colors
+  // Convert materials to colors and textures
+  const materialCounts = new Map<MaterialType, number>();
+  
   proceduralMaterials.forEach(materialType => {
     const material = MATERIALS[materialType];
     materials.push(materialType);
     colors.push(material.color.clone());
+    
+    // Count materials
+    materialCounts.set(materialType, (materialCounts.get(materialType) || 0) + 1);
+    
+
+    // Get texture if material has one
+    if (material.hasTexture) {
+      const texture = textureManager.getTexture(materialType);
+      textures.push(texture);
+    } else {
+      textures.push(null);
+    }
   });
   
-  console.log(`Generated ${materials.length} procedural materials for all voxels`);
+  // Debug: Log material distribution
+  console.log('📊 Material Distribution:');
+  materialCounts.forEach((count, materialType) => {
+    console.log(`   ${materialType}: ${count} blocks`);
+  });
   
-  return { instanceColors: colors, instanceMaterials: materials };
+  // Specifically highlight valuable materials
+  const valuableMaterials = [MaterialType.GOLD, MaterialType.SILVER, MaterialType.COPPER];
+  const valuableCount = valuableMaterials.reduce((sum, type) => sum + (materialCounts.get(type) || 0), 0);
+  console.log(`💎 Total valuable blocks: ${valuableCount} (Gold: ${materialCounts.get(MaterialType.GOLD) || 0}, Silver: ${materialCounts.get(MaterialType.SILVER) || 0}, Copper: ${materialCounts.get(MaterialType.COPPER) || 0})`);
+
+  
+  return { instanceColors: colors, instanceMaterials: materials, instanceTextures: textures };
 } 

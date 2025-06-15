@@ -155,12 +155,10 @@ export class AdaptivePerformance {
       // Performance too low, reduce quality
       this.currentProfile = profiles[currentIndex + 1];
       this.adjustmentCooldown = 300; // Wait 5 seconds before next adjustment
-      console.log(`Performance adjusted to ${this.currentProfile} (FPS: ${avgFPS.toFixed(1)})`);
     } else if (avgFPS > 50 && currentIndex > 0) {
       // Performance good, try increasing quality
       this.currentProfile = profiles[currentIndex - 1];
       this.adjustmentCooldown = 300;
-      console.log(`Performance adjusted to ${this.currentProfile} (FPS: ${avgFPS.toFixed(1)})`);
     }
     
     return this.currentProfile;

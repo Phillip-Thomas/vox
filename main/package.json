@@ -3,19 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-three/drei": "9.34.4",
-    "@react-three/fiber": "^9.1.2",
+    "@react-three/drei": "^9.88.0",
+    "@react-three/fiber": "^8.15.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@react-three/rapier": "^2.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "simplex-noise": "4.0.1",
-    "three": "0.145.0",
+    "three": "^0.160.0",
     "zustand": "3.7.2"
   },
   "devDependencies": {
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
-    "@types/three": "0.144.0",
+    "@types/three": "^0.160.0",
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"

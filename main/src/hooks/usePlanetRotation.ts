@@ -69,7 +69,7 @@ export function usePlanetGravity(voxelSize: number) {
 
     const newFaceOrientation = FACE_ORIENTATIONS[newFace];
     
-    console.log(`🔄 Face transition: ${currentFace || 'unknown'} → ${newFace}`);
+    
 
     // Calculate rotation delta between current and new face
     playerRigidBody.lockRotations(false);
@@ -80,13 +80,12 @@ export function usePlanetGravity(voxelSize: number) {
       const currentUpDir = currentFaceOrientation.upDirection;
       const newUpDir = newFaceOrientation.upDirection;
       
-      console.log(`📐 Current face ${currentFace} up:`, currentUpDir);
-      console.log(`📐 New face ${newFace} up:`, newUpDir);
+
       
       // Calculate rotation needed to transform current up to new up
       const deltaQuaternion = new THREE.Quaternion().setFromUnitVectors(currentUpDir, newUpDir);
       
-      console.log(`📐 Delta quaternion (upDirection method):`, deltaQuaternion);
+      
       
       // Get current player rotation
       const currentPlayerRotation = playerRigidBody.rotation();
@@ -97,7 +96,7 @@ export function usePlanetGravity(voxelSize: number) {
         currentPlayerRotation.w
       );
       
-      console.log(`📐 Current player quaternion:`, currentPlayerQuat);
+      
       
       // Apply delta rotation to current player rotation
       const finalRotation = new THREE.Quaternion()

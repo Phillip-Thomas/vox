@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, KeyboardControls, OrbitControls, PointerLockControls } from '@react-three/drei';
+import { EffectComposer, Bloom, ToneMapping } from '@react-three/postprocessing';
 import { Physics } from '@react-three/rapier';
 import * as THREE from 'three';
 import { PlanetContext } from './context/PlanetContext.ts';
@@ -114,12 +115,27 @@ const App: React.FC = () => {
           <Stats />
           <Sky sunPosition={[100, 20, 100]} />
 
-          <ambientLight intensity={0.3} />
+          {/* Improved lighting setup for metallic materials */}
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
+          <directionalLight position={[-10, 10, -5]} intensity={0.5} />
+          <hemisphereLight args={['#87CEEB', '#443333', 0.6]} />
 
           <PhysicsWrapper>
             <Planet />
             <Player />
           </PhysicsWrapper>
+          
+          {/* Post-processing effects for glow - TEMPORARILY DISABLED DUE TO SHADER ERROR */}
+          {/* <EffectComposer>
+            <Bloom 
+              intensity={0.5} // Subtle bloom intensity
+              luminanceThreshold={0.2} // Only bright areas glow
+              luminanceSmoothing={0.9} // Smooth transition
+              radius={0.8} // Glow radius
+            />
+            <ToneMapping />
+          </EffectComposer> */}
           
           {/* Visualize the angular bisector planes */}
           {/* <QuadrantVisualizer voxelSize={planetConfig.voxelSize} visible={true} /> */}

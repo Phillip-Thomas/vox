@@ -88,7 +88,7 @@ export function generateVoxelInstances(voxelSize: number): {
   positions.push(additionalPosition);
   
   const exposedCount = instances.length - hiddenVoxels.size;
-  console.log(`Generated ${instances.length} total voxels (${exposedCount} exposed, ${hiddenVoxels.size} hidden initially)`);
+
   
   return { instances, originalPositions: positions, hiddenVoxels };
 } 
