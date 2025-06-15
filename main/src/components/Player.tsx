@@ -246,6 +246,7 @@ export default function Player() {
     }
     
     // Only allow player movement if gravity is not changing
+    console.log("isChanging:", isChanging, "forward:", forward, "backward:", backward, "left:", left, "right:", right)
     if (!isChanging) {
       // Simple camera-relative movement
       direction.set(0, 0, 0)
@@ -292,11 +293,29 @@ export default function Player() {
         // New velocity = surface movement + gravity component
         const newVelocity = direction.clone().add(gravityVelComponent)
         
+        // Debug logging
+        const beforeVel = ref.current.linvel()
+        console.log("Before setLinvel:", beforeVel, "Setting to:", newVelocity)
+        
+        // Wake up the rigid body if it's sleeping and force it to be enabled
+        ref.current.wakeUp()
+        ref.current.setEnabled(true)
+        
         ref.current.setLinvel({ 
           x: newVelocity.x,
           y: newVelocity.y,
           z: newVelocity.z
         })
+        
+        // Check if it actually set
+        const afterVel = ref.current.linvel()
+        const position = ref.current.translation()
+        console.log("After setLinvel:", afterVel, "Position:", position)
+        
+        // Check rigid body state
+        console.log("RigidBody type:", ref.current.bodyType())
+        console.log("RigidBody enabled:", ref.current.isEnabled())
+        console.log("RigidBody sleeping:", ref.current.isSleeping())
       }
       
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
@@ -384,7 +403,7 @@ export default function Player() {
     return (
     <>
       <CameraControls cameraRef={cameraRef} />
-      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]} lockRotations>
+             <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 15, 0]} enabledRotations={[false, false, false]}>
         <CapsuleCollider args={[.5, .5]} />
         <PerspectiveCamera ref={cameraRef} position={[0, 1, 0]} makeDefault fov={75} />
         <capsuleGeometry args={[0.5, 0.5]} />
