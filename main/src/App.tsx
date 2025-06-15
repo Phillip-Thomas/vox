@@ -116,12 +116,17 @@ const App: React.FC = () => {
           gl={{ 
             antialias: false, // PERFORMANCE: Disable antialiasing
             alpha: false, // PERFORMANCE: Disable alpha channel
-            powerPreference: "high-performance", // OPTIMIZATION: Use high-performance GPU
-            stencil: false, // OPTIMIZATION: Disable stencil buffer
-            depth: true, // Keep depth buffer for 3D rendering
+            powerPreference: "high-performance", // OPTIMIZATION 5: Prefer discrete GPU
+            stencil: false, // OPTIMIZATION 5: Disable stencil buffer
+            depth: true, // Keep depth buffer for proper rendering
           }}
-          performance={{ min: 0.2 }} // OPTIMIZATION: Allow even lower frame rates to reduce load
-          frameloop="demand" // OPTIMIZATION: Only render when needed to reduce CPU usage
+          performance={{ 
+            min: 0.5, // PERFORMANCE: Allow lower frame rates
+            max: 1.0, // OPTIMIZATION 5: Cap at 60 FPS equivalent
+            debounce: 200 // OPTIMIZATION 5: Debounce performance adjustments
+          }}
+          frameloop="always" // Keep continuous rendering for consistent input handling
+          dpr={[1, 1.5]} // OPTIMIZATION 5: Limit device pixel ratio to reduce render resolution
         >
           <Stats />
           <Sky sunPosition={[100, 20, 100]} />

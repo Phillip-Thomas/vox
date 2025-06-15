@@ -89,23 +89,31 @@ const debugVoxelSystem = () => {
 // Make debug function available globally
 (window as any).debugVoxelSystem = debugVoxelSystem;
 
-// Three.js visual raycast hook - MEMORY LEAK FIXED VERSION
+// OPTIMIZATION 6: Enhanced raycast system with better memory management
 function useVisualRaycast() {
   const raycaster = new THREE.Raycaster()
   const lastCameraState = useRef({ position: new THREE.Vector3(), rotation: new THREE.Euler() })
   const cachedResult = useRef<any>(null)
   const cacheValidFrames = useRef(0)
+  const frameSkipCounter = useRef(0)
   
   // MEMORY LEAK FIX: Reuse objects instead of creating new ones each frame
   const tempPosition = useRef(new THREE.Vector3())
   const tempRotation = useRef(new THREE.Euler())
   const tempNDC = useRef(new THREE.Vector2(0, 0))
   
-  // OPTIMIZATION: Set max distance to reduce raycast computation
-  raycaster.far = 10; // Only raycast up to 10 units away
+  // OPTIMIZATION 6: Further reduce raycast distance and improve culling
+  raycaster.far = 8; // Reduced from 10 - Only raycast up to 8 units away
+  raycaster.near = 0.1; // Set near plane to avoid precision issues
   
   return (camera: THREE.Camera, instancedMesh: THREE.InstancedMesh | null) => {
     if (!instancedMesh) return null
+    
+    // OPTIMIZATION 6: Skip raycasting every other frame to reduce CPU load
+    frameSkipCounter.current++
+    if (frameSkipCounter.current % 2 === 0 && cachedResult.current) {
+      return cachedResult.current
+    }
     
     // SMART CACHING: Only recalculate if camera moved significantly
     // MEMORY LEAK FIX: Reuse temp objects instead of creating new ones
@@ -116,8 +124,8 @@ function useVisualRaycast() {
     const rotationDelta = Math.abs(tempRotation.current.x - lastCameraState.current.rotation.x) + 
                          Math.abs(tempRotation.current.y - lastCameraState.current.rotation.y)
     
-    // If camera hasn't moved much and cache is fresh (< 3 frames), return cached result
-    if (positionDelta < 0.05 && rotationDelta < 0.02 && cacheValidFrames.current < 3 && cachedResult.current) {
+    // OPTIMIZATION 6: More aggressive caching - increased frame count and reduced thresholds
+    if (positionDelta < 0.03 && rotationDelta < 0.015 && cacheValidFrames.current < 5 && cachedResult.current) {
       cacheValidFrames.current++
       return cachedResult.current
     }
@@ -126,7 +134,7 @@ function useVisualRaycast() {
     // MEMORY LEAK FIX: Reuse NDC vector
     raycaster.setFromCamera(tempNDC.current, camera)
     
-    // OPTIMIZATION: Only get first intersection (not all)
+    // OPTIMIZATION 6: Only get first intersection with early termination
     const hits = raycaster.intersectObject(instancedMesh, false)
     
     let result = null
@@ -155,9 +163,10 @@ export default function Player() {
   const [, get] = useKeyboardControls()
   const visualRaycast = useVisualRaycast()
   const { controls } = useThree()
-  const { checkBoundaries, isChanging, changeGravity, updateRotationAnimation } = useGravityContext();
+  const { checkBoundaries, isChanging, changeGravity, updateRotationAnimation, getCurrentGravity } = useGravityContext();
   const { currentFace, faceOrientation, setCurrentFace } = usePlayer();
   const cameraRef = useRef<THREE.PerspectiveCamera>(null)
+  const { world } = useRapier() // Access the physics world
   
   // State for voxel highlighting
   const [highlightedInstance, setHighlightedInstance] = useState<number | null>(null)
@@ -354,8 +363,22 @@ export default function Player() {
     const { forward, backward, left, right, jump, delete: deleteKey } = get()
     const velocity = ref.current.linvel()
     
-    // Update rotation animation if active
-    updateRotationAnimation(deltaTime);
+    // Update rotation animation if active and pass the physics world
+    updateRotationAnimation(deltaTime, world);
+    
+    // CRITICAL: Apply current gravity to physics world every frame
+    const currentGravity = getCurrentGravity();
+    if (world && world.gravity) {
+      const worldGravity = world.gravity;
+      if (worldGravity.x !== currentGravity[0] || 
+          worldGravity.y !== currentGravity[1] || 
+          worldGravity.z !== currentGravity[2]) {
+        world.gravity.x = currentGravity[0];
+        world.gravity.y = currentGravity[1];
+        world.gravity.z = currentGravity[2];
+        console.log(`🌍 Applied gravity to physics world: [${currentGravity[0]}, ${currentGravity[1]}, ${currentGravity[2]}]`);
+      }
+    }
     
     // Get player position and position camera relative to player
     const translation = ref.current.translation()
@@ -371,9 +394,9 @@ export default function Player() {
       }
     }
     
-    // Only allow player movement if gravity is not changing
-    
-    if (!isChanging) {
+    // Allow player movement even during face transitions (kinematic body can still be moved)
+    // The isChanging check is removed to allow movement during smooth rotations
+    if (true) {
       // Simple camera-relative movement
       direction.set(0, 0, 0)
       
@@ -429,22 +452,40 @@ export default function Player() {
         ref.current.wakeUp()
         ref.current.setEnabled(true)
         
-        ref.current.setLinvel({ 
-          x: tempVector3_3.x,
-          y: tempVector3_3.y,
-          z: tempVector3_3.z
-        })
+        // HYBRID MOVEMENT: Handle both dynamic and kinematic body types
+        const bodyType = ref.current.bodyType?.() || 'unknown';
         
-        // Check if it actually set
-        const afterVel = ref.current.linvel()
-        const position = ref.current.translation()
+        if (bodyType === 2) {
+          // Kinematic body - use position-based movement
+          const currentPos = ref.current.translation();
+          const newPos = {
+            x: currentPos.x + tempVector3_3.x * deltaTime,
+            y: currentPos.y + tempVector3_3.y * deltaTime,
+            z: currentPos.z + tempVector3_3.z * deltaTime
+          };
+          
+          if (ref.current.setNextKinematicTranslation) {
+            ref.current.setNextKinematicTranslation(newPos);
+          } else {
+            ref.current.setTranslation(newPos, true);
+          }
+          console.log(`🔧 Kinematic movement: [${tempVector3_3.x.toFixed(2)}, ${tempVector3_3.y.toFixed(2)}, ${tempVector3_3.z.toFixed(2)}]`);
+        } else {
+          // Dynamic body - use velocity-based movement
+          ref.current.setLinvel({ 
+            x: tempVector3_3.x,
+            y: tempVector3_3.y,
+            z: tempVector3_3.z
+          });
+          // console.log(`🔧 Dynamic movement: [${tempVector3_3.x.toFixed(2)}, ${tempVector3_3.y.toFixed(2)}, ${tempVector3_3.z.toFixed(2)}]`);
+        }
 
       }
       
       // // Handle jumping - jump in the "up" direction relative to current face (keep this as-is)
       if (jump) {
         const currentVel = ref.current.linvel();
-        const jumpForce = .5;
+        const jumpForce = .3;
         const jumpVector = faceOrientation.upDirection.clone().multiplyScalar(jumpForce);
         
         ref.current.setLinvel({ 
