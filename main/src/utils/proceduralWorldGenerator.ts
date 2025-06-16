@@ -21,8 +21,16 @@ export class ProceduralWorldGenerator {
 
   /**
    * Calculates the distance from the center of the world
+   * Supports both legacy cube-based coordinates and new planet-based coordinates
    */
   private getDistanceFromCenter(x: number, y: number, z: number): number {
+    // Check if we're using proportional planet-based generation
+    if (this.config.planetRadius && this.config.planetRadius > 0) {
+      // For planet-based generation, center is at (0, 0, 0)
+      return Math.sqrt(x * x + y * y + z * z);
+    }
+    
+    // Legacy cube-based generation
     const centerX = (CUBE_SIZE_X - 1) / 2;
     const centerY = (CUBE_SIZE_Y - 1) / 2;
     const centerZ = (CUBE_SIZE_Z - 1) / 2;
@@ -35,10 +43,47 @@ export class ProceduralWorldGenerator {
   }
 
   /**
-   * Determines if a position is on the surface (on any of the 6 outer faces of the cube)
+   * Gets the effective core radius based on configuration
+   */
+  private getCoreRadius(): number {
+    // Use proportional radius if available
+    if (this.config.planetRadius && this.config.coreRadiusPercent) {
+      return this.config.planetRadius * this.config.coreRadiusPercent;
+    }
+    
+    // Fallback to legacy static radius
+    return this.config.coreRadius;
+  }
+
+  /**
+   * Gets the effective planet radius
+   */
+  private getPlanetRadius(): number {
+    return this.config.planetRadius || Math.max(CUBE_SIZE_X, CUBE_SIZE_Y, CUBE_SIZE_Z) / 2;
+  }
+
+  /**
+   * Determines if a position is on the surface
+   * Always uses cube-based surface detection, but supports dynamic cube sizes
    */
   private isOnSurface(x: number, y: number, z: number): boolean {
-    // Check if this voxel is on any of the 6 outer faces of the cube
+    // Check if we're using proportional planet-based generation
+    if (this.config.planetRadius && this.config.planetRadius > 0) {
+      // For proportional generation, cube extends from -planetRadius to +planetRadius
+      const cubeHalfSize = this.config.planetRadius;
+      
+      // Surface is any of the 6 outer faces of the cube
+      return (
+        x === -cubeHalfSize ||        // Left face
+        x === cubeHalfSize ||         // Right face
+        y === -cubeHalfSize ||        // Bottom face  
+        y === cubeHalfSize ||         // Top face
+        z === -cubeHalfSize ||        // Front face
+        z === cubeHalfSize            // Back face
+      );
+    }
+    
+    // Legacy cube-based surface detection
     return (
       x === 0 ||                    // Left face
       x === CUBE_SIZE_X - 1 ||      // Right face
@@ -53,7 +98,16 @@ export class ProceduralWorldGenerator {
    * Determines if a position should be air (outside the world bounds or in cavities)
    */
   private isAir(x: number, y: number, z: number): boolean {
-    // For now, only positions outside the world bounds are air
+    // Check if we're using proportional planet-based generation
+    if (this.config.planetRadius && this.config.planetRadius > 0) {
+      const cubeHalfSize = this.config.planetRadius;
+      // Air is outside the cube boundaries
+      return x < -cubeHalfSize || x > cubeHalfSize || 
+             y < -cubeHalfSize || y > cubeHalfSize || 
+             z < -cubeHalfSize || z > cubeHalfSize;
+    }
+    
+    // Legacy cube-based bounds checking
     return x < 0 || x >= CUBE_SIZE_X || 
            y < 0 || y >= CUBE_SIZE_Y || 
            z < 0 || z >= CUBE_SIZE_Z;
@@ -71,6 +125,7 @@ export class ProceduralWorldGenerator {
    */
   generateMaterialForPosition(x: number, y: number, z: number): MaterialType {
     const distanceFromCenter = this.getDistanceFromCenter(x, y, z);
+    const coreRadius = this.getCoreRadius();
     
     // TEMPORARY TEST: Force some gold blocks in specific locations for testing
     if ((x === 5 && y === 5 && z === 5) || 
@@ -91,8 +146,13 @@ export class ProceduralWorldGenerator {
       return MaterialType.SILVER;
     }
     
+    // Skip air positions
+    if (this.isAir(x, y, z)) {
+      return MaterialType.STONE; // Fallback for air positions (shouldn't happen in practice)
+    }
+    
     // Layer 1: Lava Core
-    if (distanceFromCenter <= this.config.coreRadius) {
+    if (distanceFromCenter <= coreRadius) {
       return MaterialType.LAVA;
     }
     

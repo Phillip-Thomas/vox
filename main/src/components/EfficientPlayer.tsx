@@ -7,6 +7,7 @@ import { useKeyboardControls, PerspectiveCamera } from '@react-three/drei';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { efficientPlanetMesh } from './EfficientPlanet';
 import { MATERIALS, MaterialType } from '../types/materials';
+import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator';
 import CameraControls from './CameraControls';
 
 // Simple raycaster for voxel interaction
@@ -132,8 +133,9 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
         // Remove the voxel
         voxelSystem.removeVoxel(targetVoxel.x, targetVoxel.y, targetVoxel.z);
         
-        // Expose any neighbors that should now be visible
-        voxelSystem.exposeNeighbors(targetVoxel.x, targetVoxel.y, targetVoxel.z, generateMaterialForPosition);
+        // Expose any neighbors that should now be visible using proportional generation
+        const materialGenerator = (x: number, y: number, z: number) => generateMaterialForPosition(x, y, z, planetSize);
+        voxelSystem.exposeNeighbors(targetVoxel.x, targetVoxel.y, targetVoxel.z, materialGenerator);
         
         console.log('📊 Updated stats:', voxelSystem.getStats());
       }
@@ -176,16 +178,24 @@ export default function EfficientPlayer({ planetSize, onPositionChange }: Effici
   );
 }
 
-// Simple material generator for newly exposed voxels
-function generateMaterialForPosition(x: number, y: number, z: number): {material: string, color: THREE.Color} {
+// Proportional material generator for newly exposed voxels
+function generateMaterialForPosition(x: number, y: number, z: number, planetSize: number): {material: string, color: THREE.Color} {
   const distance = Math.sqrt(x*x + y*y + z*z);
+  const planetRadius = planetSize / 2;
   
-  // Simple material based on distance from center
-  if (distance < 3) {
-    return { material: MaterialType.LAVA, color: MATERIALS[MaterialType.LAVA].color.clone() };
-  } else if (distance < 8) {
-    return { material: MaterialType.STONE, color: MATERIALS[MaterialType.STONE].color.clone() };
-  } else {
-    return { material: MaterialType.DIRT, color: MATERIALS[MaterialType.DIRT].color.clone() };
-  }
+  // Create proportional world generation config matching the planet
+  const proportionalConfig = {
+    planetRadius: planetRadius,
+    coreRadiusPercent: 0.15, // Core is 15% of planet radius
+    surfaceThickness: Math.max(1, Math.floor(planetRadius * 0.05)), // Surface is 5% of radius, minimum 1 block
+    coreRadius: 2 // Legacy fallback
+  };
+  
+  const generator = new ProceduralWorldGenerator(proportionalConfig);
+  const materialType = generator.generateMaterialForPosition(x, y, z);
+  
+  return { 
+    material: materialType, 
+    color: MATERIALS[materialType].color.clone() 
+  };
 } 

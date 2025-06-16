@@ -126,7 +126,29 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
   // Generate complete original terrain (all voxels that should exist in the cube)
   const originalTerrain = useMemo(() => {
     const terrain: Array<{x: number, y: number, z: number, material: MaterialType, color: THREE.Color}> = [];
-    const generator = new ProceduralWorldGenerator();
+    
+    // Create proportional world generation config based on planet size
+    const planetRadius = size / 2; // Planet extends from -size/2 to +size/2, so radius is size/2
+    const proportionalConfig = {
+      planetRadius: planetRadius,
+      coreRadiusPercent: 0.15, // Core is 15% of planet radius
+      surfaceThickness: Math.max(1, Math.floor(planetRadius * 0.05)), // Surface is 5% of radius, minimum 1 block
+      coreRadius: 2 // Legacy fallback
+    };
+    
+    const generator = new ProceduralWorldGenerator(proportionalConfig);
+    
+    console.log(`🌍 PROPORTIONAL GENERATION: PlanetSize=${size}, Radius=${planetRadius}, CoreRadius=${(planetRadius * 0.15).toFixed(1)}, SurfaceThickness=${proportionalConfig.surfaceThickness}`);
+    
+    // Show comparison with old static system
+    const oldCoreRadius = 2; // Previous hardcoded value
+    const newCoreRadius = planetRadius * 0.15;
+    const scaleImprovement = newCoreRadius / oldCoreRadius;
+    console.log(`📊 SCALING COMPARISON: OldCoreRadius=${oldCoreRadius}, NewCoreRadius=${newCoreRadius.toFixed(1)}, ScaleImprovement=${scaleImprovement.toFixed(1)}x`);
+    console.log(`🎯 LAYER PROPORTIONS: Core=${(0.15*100).toFixed(0)}%, Surface=${((proportionalConfig.surfaceThickness/planetRadius)*100).toFixed(1)}%, Middle=${(100-15-((proportionalConfig.surfaceThickness/planetRadius)*100)).toFixed(1)}%`);
+    
+    // Material distribution counter for debugging
+    const materialCounts = new Map<MaterialType, number>();
     
     // Generate ALL voxels within the cube (not just exposed ones)
     // Cube extends from -size/2 to +size/2 in all dimensions
@@ -136,12 +158,24 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
           // All positions within the cube bounds are part of the original terrain
           const material = generator.generateMaterialForPosition(x, y, z);
           const color = MATERIALS[material].color.clone();
+          
+          // Count materials for debugging
+          materialCounts.set(material, (materialCounts.get(material) || 0) + 1);
+          
           terrain.push({ x, y, z, material, color });
         }
       }
     }
     
+    // Log material distribution
     console.log(`🧊 Generated complete original terrain with ${terrain.length} voxels (cube size: ${size}³)`);
+    console.log(`📊 MATERIAL DISTRIBUTION:`, Object.fromEntries(
+      Array.from(materialCounts.entries()).map(([material, count]) => [
+        material, 
+        `${count} (${((count/terrain.length)*100).toFixed(1)}%)`
+      ])
+    ));
+    
     return terrain;
   }, [size]);
 
