@@ -141,7 +141,7 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
       }
     }
     
-    console.log(`🧊 Generated complete original terrain with ${terrain.length} voxels (cube size: ${size*2+1}³)`);
+    console.log(`🧊 Generated complete original terrain with ${terrain.length} voxels (cube size: ${size}³)`);
     return terrain;
   }, [size]);
 

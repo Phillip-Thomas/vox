@@ -1,11 +1,13 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, KeyboardControls } from '@react-three/drei';
-import EfficientScene from './components/EfficientScene.tsx';
+import EfficientScene, { planetSize } from './components/EfficientScene.tsx';
 import Crosshair from './components/Crosshair.tsx';
 import './App.css';
 
 const App: React.FC = () => {
+  const totalVoxels = planetSize ** 3; // planetSize cubed
+
   return (
     <KeyboardControls
       map={[
@@ -59,6 +61,7 @@ const App: React.FC = () => {
         <p>Space: Jump</p>
         <p>E: Delete voxel</p>
         <p>Only surface voxels rendered!</p>
+        <p>Total voxels: {totalVoxels.toLocaleString()}</p>
       </div>
     </KeyboardControls>
   );
