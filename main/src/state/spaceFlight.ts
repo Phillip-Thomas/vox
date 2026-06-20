@@ -198,6 +198,18 @@ export function debugStartInSpace(): void {
   setSnapshot({ phase: 'deep_space', controlMode: 'flight', destination: null, target: null });
 }
 
+/**
+ * DEBUG (?descent=x,y): drop straight into the high-altitude descent over an
+ * already-loaded world, skipping the warp. The host sets currentWorld +
+ * arrivalMode='approach' alongside this so ShipController spawns looking down.
+ */
+export function debugStartInDescent(): void {
+  warp.active = false;
+  warp.progress = 0;
+  warp.midpointFired = false;
+  setSnapshot({ phase: 'descent', controlMode: 'flight', destination: null, target: null });
+}
+
 /** Reset to a clean on-foot surface state (e.g. first spawn / hard reset). */
 export function resetTravel(): void {
   warp.active = false;

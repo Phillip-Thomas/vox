@@ -11,6 +11,7 @@ import {
   deriveWorldPreviewTraits,
   previewSurfaceValue
 } from '../utils/worldPreview';
+import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
 
 interface GalaxyImpostorsProps {
   currentCoordinate: WorldCoordinate;
@@ -40,6 +41,13 @@ const MAX_ELEVATION = 0.44;
 
 const COLOR_SCRATCH = new THREE.Color();
 const LIGHT_DIRECTION = new THREE.Vector3(-0.35, 0.78, 0.5).normalize();
+
+/** Aim cone for target lock: dot(camForward, impostorDir) above this (~10deg). */
+const AIM_COS = 0.985;
+/** Targeting reticle ring colour (cheap unlit). */
+const LOCK_COLOR = new THREE.Color('#7dffb0');
+/** Reused scratch quaternion for billboarding the lock ring (no per-frame alloc). */
+const BILLBOARD_SCRATCH = new THREE.Quaternion();
 
 function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImpostor[] {
   const candidates: Array<{
@@ -166,28 +174,80 @@ function createPlanetSurfaceGeometry(planet: PlanetImpostor) {
 function DistantPlanet({
   planet,
   surfaceMaterial,
+  lockRingGeometry,
   cloudGeometry,
   atmosphereGeometry,
-  ringGeometry
+  ringGeometry,
+  targetedCoordRef
 }: {
   planet: PlanetImpostor;
   surfaceMaterial: THREE.Material;
+  lockRingGeometry: THREE.BufferGeometry;
   cloudGeometry: THREE.BufferGeometry;
   atmosphereGeometry: THREE.BufferGeometry;
   ringGeometry: THREE.BufferGeometry;
+  /** Live coordinate of the impostor currently locked (null = none). */
+  targetedCoordRef: React.MutableRefObject<WorldCoordinate | null>;
 }) {
   const surfaceGeometry = useMemo(() => createPlanetSurfaceGeometry(planet), [planet]);
+  const groupRef = useRef<THREE.Group>(null);
+  const lockRef = useRef<THREE.Mesh>(null);
+  // Smoothly-eased lock factor (0 = idle, 1 = fully locked) for scale + ring.
+  const lockT = useRef(0);
 
   useEffect(() => {
     return () => surfaceGeometry.dispose();
   }, [surfaceGeometry]);
 
+  useFrame(({ camera }, rawDt) => {
+    const grp = groupRef.current;
+    if (!grp) return;
+    const dt = Math.min(rawDt, 1 / 30);
+    const tc = targetedCoordRef.current;
+    const isTargeted =
+      tc !== null && tc.x === planet.coordinate.x && tc.y === planet.coordinate.y;
+    // Ease toward the target lock state (cheap, no allocation).
+    lockT.current = THREE.MathUtils.damp(lockT.current, isTargeted ? 1 : 0, 8, dt);
+    // Grow the planet slightly when locked: reads as "locking on / closing in".
+    const scale = planet.radius * (1 + 0.18 * lockT.current);
+    grp.scale.setScalar(scale);
+    const lock = lockRef.current;
+    if (lock) {
+      lock.visible = lockT.current > 0.01;
+      if (lock.visible) {
+        // Pulse the ring opacity while locked.
+        const pulse = 0.55 + 0.45 * Math.sin(performance.now() * 0.006);
+        (lock.material as THREE.MeshBasicMaterial).opacity = lockT.current * pulse;
+        // Ring sized in local (pre-scale) units relative to the planet sphere.
+        const ringScale = (1.6 + 0.25 * lockT.current) / scale * planet.radius;
+        lock.scale.setScalar(ringScale);
+        // Billboard the ring to face the camera (counter the parent's random tilt).
+        lock.quaternion.copy(camera.quaternion);
+        lock.quaternion.premultiply(grp.getWorldQuaternion(BILLBOARD_SCRATCH).invert());
+      }
+    }
+  });
+
   return (
     <group
+      ref={groupRef}
       position={[planet.position.x, planet.position.y, planet.position.z]}
       rotation={planet.rotation}
       scale={planet.radius}
     >
+      {/* Billboarded lock ring — hidden until this impostor is the aim target. */}
+      <mesh ref={lockRef} geometry={lockRingGeometry} visible={false} frustumCulled={false}>
+        <meshBasicMaterial
+          color={LOCK_COLOR}
+          transparent
+          opacity={0}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+          depthTest={false}
+          fog={false}
+          toneMapped={false}
+        />
+      </mesh>
       <mesh geometry={surfaceGeometry} material={surfaceMaterial} frustumCulled={false} />
       <mesh geometry={cloudGeometry} scale={1.022} frustumCulled={false}>
         <meshBasicMaterial
@@ -246,14 +306,59 @@ export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsPr
   const cloudGeometry = useMemo(() => new THREE.IcosahedronGeometry(1, 2), []);
   const atmosphereGeometry = useMemo(() => new THREE.SphereGeometry(1, 24, 12), []);
   const ringGeometry = useMemo(() => new THREE.RingGeometry(0.74, 1.05, 72), []);
+  // Thin reticle ring for the aim-lock highlight (unit-radius, scaled per-frame).
+  const lockRingGeometry = useMemo(() => new THREE.RingGeometry(0.92, 1.0, 64), []);
   const surfaceMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     vertexColors: true,
     fog: false,
     toneMapped: false
   }), []);
 
+  // Live coordinate of the impostor currently aimed at (read by each impostor's
+  // own useFrame to drive its highlight). Mutated in place, never re-renders.
+  const targetedCoordRef = useRef<WorldCoordinate | null>(null);
+  // Reused scratch for the camera-forward direction (no per-frame allocation).
+  const forwardScratch = useRef(new THREE.Vector3());
+
   useFrame(({ camera }) => {
     groupRef.current?.position.copy(camera.position);
+
+    // --- aim-cone targeting (deep_space only) -------------------------------
+    if (getSpaceFlightSnapshot().phase !== 'deep_space') {
+      if (targetedCoordRef.current !== null) {
+        targetedCoordRef.current = null;
+        setTarget(null);
+      }
+      return;
+    }
+
+    // Camera forward in world space (-Z). Each impostor's `position` is its
+    // offset from the camera-anchored group origin, i.e. its direction*distance
+    // from the camera, so the dot of the normalized offset with forward is the
+    // alignment.
+    const forward = forwardScratch.current.set(0, 0, -1).applyQuaternion(camera.quaternion);
+    let best: PlanetImpostor | null = null;
+    let bestDot = AIM_COS;
+    for (const planet of planets) {
+      const pos = planet.position;
+      const len = pos.length();
+      if (len < 1e-3) continue;
+      const dot = (pos.x * forward.x + pos.y * forward.y + pos.z * forward.z) / len;
+      if (dot > bestDot) {
+        bestDot = dot;
+        best = planet;
+      }
+    }
+
+    const nextCoord = best ? best.coordinate : null;
+    const prev = targetedCoordRef.current;
+    const changed = prev === null
+      ? nextCoord !== null
+      : nextCoord === null || prev.x !== nextCoord.x || prev.y !== nextCoord.y;
+    if (changed) {
+      targetedCoordRef.current = nextCoord;
+      setTarget(nextCoord); // store no-ops on unchanged coord anyway
+    }
   });
 
   useEffect(() => {
@@ -261,12 +366,14 @@ export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsPr
       cloudGeometry.dispose();
       atmosphereGeometry.dispose();
       ringGeometry.dispose();
+      lockRingGeometry.dispose();
       surfaceMaterial.dispose();
     };
   }, [
     cloudGeometry,
     atmosphereGeometry,
     ringGeometry,
+    lockRingGeometry,
     surfaceMaterial
   ]);
 
@@ -277,9 +384,11 @@ export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsPr
           key={`${planet.coordinate.x},${planet.coordinate.y}`}
           planet={planet}
           surfaceMaterial={surfaceMaterial}
+          lockRingGeometry={lockRingGeometry}
           cloudGeometry={cloudGeometry}
           atmosphereGeometry={atmosphereGeometry}
           ringGeometry={ringGeometry}
+          targetedCoordRef={targetedCoordRef}
         />
       ))}
     </group>

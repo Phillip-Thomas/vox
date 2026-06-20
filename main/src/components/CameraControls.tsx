@@ -79,6 +79,11 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('keydown', handleKeyDown);
 
+    // Exiting the ship hands control back here WITHOUT releasing pointer lock, so
+    // no pointerlockchange fires on mount. Seed the lock state from the current
+    // value so look works immediately instead of needing an Escape + re-click.
+    handlePointerLockChange();
+
     return () => {
       element.removeEventListener('click', handleClick);
       document.removeEventListener('pointerlockchange', handlePointerLockChange);

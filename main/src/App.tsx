@@ -8,6 +8,7 @@ import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
+import { getEngageCharge } from './components/ShipController.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -28,6 +29,7 @@ import type { ArrivalMode } from './utils/worldArrival.ts';
 import { WarpDriver, WarpFlash } from './components/effects/WarpOverlay.tsx';
 import {
   beginTravel,
+  debugStartInDescent,
   debugStartInSpace,
   exitShip,
   notifyLanded,
@@ -142,7 +144,7 @@ const App: React.FC = () => {
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
-  const { benchEnabled, profile, postProcess, overviewEnabled, flyDebug } = useMemo(() => {
+  const { benchEnabled, profile, postProcess, overviewEnabled, flyDebug, descentDebug } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
@@ -155,13 +157,25 @@ const App: React.FC = () => {
       // ?overview=1 -> non-interactive overhead debug camera (water inspection).
       overviewEnabled: params.get('overview') === '1',
       // ?fly=1 -> jump straight into deep-space flight for runtime checks.
-      flyDebug: params.get('fly') === '1'
+      flyDebug: params.get('fly') === '1',
+      // ?descent=x,y -> load directly into the high-altitude descent over (x,y).
+      descentDebug: (() => {
+        const raw = params.get('descent');
+        if (!raw) return null;
+        const [sx, sy] = raw.split(',');
+        return { x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) };
+      })()
     };
   }, []);
 
   // ?fly=1: drop straight into deep-space flight (once, on mount).
   useEffect(() => {
     if (flyDebug) debugStartInSpace();
+    if (descentDebug) {
+      setCurrentWorld(createCurrentWorld(descentDebug));
+      setArrivalMode('approach');
+      debugStartInDescent();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -249,6 +263,7 @@ const App: React.FC = () => {
       </Canvas>
       <Crosshair />
       <WarpFlash />
+      <TargetReticle />
 
       {flight.controlMode === 'flight' && (
         <div style={{
@@ -474,6 +489,74 @@ const App: React.FC = () => {
         </div>
       </div>
     </KeyboardControls>
+  );
+};
+
+/**
+ * Centred deep-space targeting reticle. Shown only when an impostor is locked in
+ * the aim cone (store `target` set while phase==='deep_space'). The charge bar
+ * reflects the held-W engage timer, polled per-frame from ShipController's
+ * module mutable via rAF so 60fps charging never re-renders the rest of the app.
+ */
+const TargetReticle: React.FC = () => {
+  const { phase, target } = useSpaceFlight();
+  const [charge, setCharge] = useState(0);
+  const active = phase === 'deep_space' && target !== null;
+
+  useEffect(() => {
+    if (!active) {
+      setCharge(0);
+      return;
+    }
+    let raf = 0;
+    const tick = () => {
+      setCharge(getEngageCharge());
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active]);
+
+  if (!active || !target) return null;
+  const pct = Math.round(Math.min(charge, 1) * 100);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 'calc(50% + 26px)',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      color: '#7dffb0',
+      fontFamily: 'monospace',
+      background: 'rgba(0,0,0,0.55)',
+      padding: '6px 12px',
+      borderRadius: 6,
+      fontSize: 12,
+      textAlign: 'center',
+      lineHeight: 1.4,
+      border: '1px solid rgba(125,255,176,0.45)',
+      pointerEvents: 'none',
+      minWidth: 180
+    }}>
+      <div style={{ fontWeight: 'bold', letterSpacing: 1 }}>
+        {pct >= 100 ? 'ENGAGING' : '▶ LOCK'} {target.x},{target.y}
+      </div>
+      <div style={{ opacity: 0.8, marginTop: 2 }}>hold W to warp</div>
+      <div style={{
+        marginTop: 5,
+        height: 4,
+        borderRadius: 2,
+        background: 'rgba(125,255,176,0.2)',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          height: '100%',
+          width: `${pct}%`,
+          background: '#7dffb0',
+          transition: 'width 0.05s linear'
+        }} />
+      </div>
+    </div>
   );
 };
 

@@ -7,6 +7,7 @@ import { vectorToRapier } from '../utils/surfaceControls';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
   beginLaunch,
+  beginTravel,
   getSpaceFlightSnapshot,
   LAUNCH_ALTITUDE,
   useSpaceFlight
@@ -23,8 +24,26 @@ const ROLL_SPEED = 1.6; // rad/s
 /** Below this distance-from-origin (minus surface) AND slow, treat as landed. */
 const LANDING_ALTITUDE = 6;
 const LANDING_SPEED = 14;
+/** Grace period (s) after entering descent before auto-land can fire, so the
+ *  player actually gets to fly down rather than landing the instant they arrive. */
+const LANDING_GRACE = 2.5;
 /** Pitch clamp (radians) while still in atmosphere; free pitch once in space. */
 const ATMOSPHERE_PITCH_CLAMP = Math.PI * 0.49;
+/** Seconds of held-thrust-while-locked needed to engage the travel warp. */
+const ENGAGE_CHARGE_TIME = 1.3;
+
+/**
+ * Engage-charge progress (0..1) for the deep-space "hold W to warp" mechanic,
+ * written by ShipController's per-frame loop and read by the DOM HUD reticle
+ * (App.tsx) via requestAnimationFrame. A plain module mutable keeps it off the
+ * React snapshot so it never triggers re-renders at 60fps.
+ */
+const engageState = { charge: 0 };
+
+/** Live read of the engage charge (0..1) for the HUD reticle. */
+export function getEngageCharge(): number {
+  return engageState.charge;
+}
 
 interface ShipControllerProps {
   planetSize: number;
@@ -78,6 +97,7 @@ export default function ShipController({
   const isLocked = useRef(false);
   const launchFired = useRef(false);
   const landedNotified = useRef(false);
+  const descentTime = useRef(0); // seconds spent in the descent phase (landing grace)
   const lastPublished = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
   const [, get] = useKeyboardControls();
 
@@ -166,6 +186,12 @@ export default function ShipController({
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('keydown', handleKeyDown);
 
+    // Boarding hands off from the FPS controller WITHOUT releasing pointer lock,
+    // so no pointerlockchange fires when we mount. Seed isLocked from the current
+    // lock state so mouse-look works immediately (otherwise the player has to
+    // Escape + re-click to regain camera rotation).
+    handlePointerLockChange();
+
     return () => {
       element.removeEventListener('click', handleClick);
       document.removeEventListener('pointerlockchange', handlePointerLockChange);
@@ -242,27 +268,47 @@ export default function ShipController({
     cam.quaternion.copy(quat);
 
     // 7) Phase-driven launch + landing transitions (read the live snapshot).
-    const snap = getSpaceFlightSnapshot().phase;
+    const liveSnap = getSpaceFlightSnapshot();
+    const snap = liveSnap.phase;
     const altitude = position.current.length() - surfaceRadius;
+
+    // 7a) Engage-to-warp: in deep space, holding forward thrust while a target is
+    // locked (the impostor stays in GalaxyImpostors' aim cone, which keeps
+    // `target` set) charges a timer; once full, begin travel to that target.
+    // Impostors are camera-relative so you can't physically close distance — the
+    // held-aim-thrust charge IS the engage mechanic. Releasing W or losing the
+    // lock resets the charge.
+    if (snap === 'deep_space' && liveSnap.target && controls.forward) {
+      engageState.charge += dt / ENGAGE_CHARGE_TIME;
+      if (engageState.charge >= 1) {
+        engageState.charge = 0;
+        beginTravel(liveSnap.target);
+      }
+    } else if (engageState.charge !== 0) {
+      engageState.charge = 0;
+    }
 
     if (snap === 'surface' && !launchFired.current && altitude > LAUNCH_ALTITUDE) {
       launchFired.current = true;
       beginLaunch();
     }
 
-    if (snap === 'descent' && !landedNotified.current) {
-      // Forgiving landing: near the surface (raycast or radial heuristic) + slow.
+    if (snap === 'descent') {
+      descentTime.current += dt;
+    } else {
+      descentTime.current = 0;
+    }
+
+    if (snap === 'descent' && !landedNotified.current && descentTime.current > LANDING_GRACE) {
+      // After the grace period, land when terrain is actually close beneath the
+      // ship. Use a downward (toward-origin) raycast against the streamed
+      // colliders — the |pos|-planetSize radial value is unreliable because the
+      // terrain surface sits well below the max radius in valleys/oceans.
       const speed = velocity.current.length();
-      const radialAltitude = altitude;
-      let nearGround = radialAltitude < LANDING_ALTITUDE;
-      if (!nearGround && radialAltitude < LANDING_ALTITUDE + 20) {
-        // Refine with a downward (toward-origin) raycast against terrain.
-        const dir = position.current.clone().normalize().negate();
-        const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(dir));
-        const hit = world.castRay(ray, LANDING_ALTITUDE + 4, true);
-        if (hit) nearGround = true;
-      }
-      if (nearGround && speed < LANDING_SPEED) {
+      const dir = position.current.clone().normalize().negate();
+      const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(dir));
+      const hit = world.castRay(ray, LANDING_ALTITUDE + 2, true);
+      if (hit && speed < LANDING_SPEED) {
         landedNotified.current = true;
         onGroundedChange?.(true);
       }
