@@ -5,7 +5,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { buildWaterFaces, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial.ts';
-import { getSunDirection } from './SkyController.tsx';
+import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 
 interface WaterBlocksProps {
   planetSize: number;
@@ -94,14 +94,16 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
     mesh.instanceMatrix.needsUpdate = true;
     mesh.__waterFilledFor = waterFaces;
 
-    console.log(
-      `[water] FILL faces=${waterFaces.length} capacity=${capacity} count=${mesh.count} ` +
-        `debug=${debug} radius(world)=[${minR.toFixed(1)}..${maxR.toFixed(1)}] ` +
-        `AABB min=(${min.x.toFixed(1)},${min.y.toFixed(1)},${min.z.toFixed(1)}) ` +
-        `max=(${max.x.toFixed(1)},${max.y.toFixed(1)},${max.z.toFixed(1)}) ` +
-        `mat=${(mesh.material as THREE.Material).type} ` +
-        `visible=${mesh.visible} inScene=${!!mesh.parent}`
-    );
+    if (debug) {
+      console.log(
+        `[water] FILL faces=${waterFaces.length} capacity=${capacity} count=${mesh.count} ` +
+          `debug=${debug} radius(world)=[${minR.toFixed(1)}..${maxR.toFixed(1)}] ` +
+          `AABB min=(${min.x.toFixed(1)},${min.y.toFixed(1)},${min.z.toFixed(1)}) ` +
+          `max=(${max.x.toFixed(1)},${max.y.toFixed(1)},${max.z.toFixed(1)}) ` +
+          `mat=${(mesh.material as THREE.Material).type} ` +
+          `visible=${mesh.visible} inScene=${!!mesh.parent}`
+      );
+    }
   }, [waterFaces, capacity, debug]);
 
   useLayoutEffect(() => {
@@ -116,7 +118,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
   const logFrame = useRef(0);
   useFrame(state => {
     if (!debug) {
-      updateWaterBlocksMaterial(material as THREE.MeshStandardMaterial, state.clock.elapsedTime, getSunDirection(), getGraphicsQuality());
+      updateWaterBlocksMaterial(material as THREE.MeshStandardMaterial, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
     }
 
     const mesh = meshRef.current;
@@ -128,7 +130,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
     }
 
     // Periodic heartbeat: confirm count persists + show camera vs water spatially.
-    if (++logFrame.current % 180 === 0) {
+    if (debug && ++logFrame.current % 180 === 0) {
       const cam = state.camera.position;
       console.log(
         `[water] tick count=${mesh.count} inScene=${!!mesh.parent} visible=${mesh.visible} ` +

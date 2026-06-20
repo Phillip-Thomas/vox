@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
-import EfficientScene, { planetSize, SceneDebugState, TERRAIN_SEEDS } from './components/EfficientScene.tsx';
+import EfficientScene, { planetSize, SceneDebugState } from './components/EfficientScene.tsx';
 import SkyController from './components/SkyController.tsx';
 import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
+import GalaxyImpostors from './components/GalaxyImpostors.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -16,21 +17,132 @@ import {
   QUALITY_PROFILES,
   setQualityProfile
 } from './config/graphicsSettings.ts';
+import type { CurrentWorld, WorldCoordinate } from './utils/worldCoordinates.ts';
+import {
+  coordinateKey,
+  coordinatesEqual,
+  createCurrentWorld,
+  normalizeCoordinatePart
+} from './utils/worldCoordinates.ts';
+import type { ArrivalMode } from './utils/worldArrival.ts';
+import { WarpDriver, WarpFlash } from './components/effects/WarpOverlay.tsx';
+import {
+  beginTravel,
+  debugStartInSpace,
+  exitShip,
+  notifyLanded,
+  setArrivalHandler,
+  useSpaceFlight
+} from './state/spaceFlight.ts';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
 
+const buttonBase: React.CSSProperties = {
+  color: 'white',
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 12
+};
+
+const inputBase: React.CSSProperties = {
+  width: '100%',
+  boxSizing: 'border-box',
+  padding: '6px 8px',
+  color: 'white',
+  background: '#111827',
+  border: '1px solid #334155',
+  borderRadius: 4,
+  fontFamily: 'monospace'
+};
+
 const App: React.FC = () => {
-  const totalVoxels = planetSize ** 3; // planetSize cubed
-  const [terrainSeed, setTerrainSeed] = useState(TERRAIN_SEEDS.DEFAULT);
+  const totalVoxels = planetSize ** 3;
+  const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => createCurrentWorld({ x: 0, y: 0 }));
+  const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
+  const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');
+  const [targetX, setTargetX] = useState('1');
+  const [targetY, setTargetY] = useState('0');
   const [debugEnabled, setDebugEnabled] = useState(false);
   const [debugColliders, setDebugColliders] = useState(false);
   const [debugState, setDebugState] = useState<SceneDebugState>({ player: null, planet: null });
   const [benchSample, setBenchSample] = useState<BenchmarkSample | null>(null);
+  const flight = useSpaceFlight();
+  const currentWorldKey = coordinateKey(currentWorld.coordinate);
+
+  // Register the warp-midpoint arrival handler: the actual world swap fires while
+  // the screen is fully white, so the EfficientScene remount + regen are hidden.
+  // Re-registered when currentWorld changes so "previous" tracks the world we
+  // were on at the moment of departure.
+  useEffect(() => {
+    setArrivalHandler(coordinate => {
+      const world = createCurrentWorld(coordinate);
+      if (coordinatesEqual(world.coordinate, currentWorld.coordinate)) return;
+      setPreviousWorld(currentWorld);
+      setCurrentWorld(world);
+      setArrivalMode('approach');
+      setTargetX(String(world.coordinate.x));
+      setTargetY(String(world.coordinate.y));
+    });
+    return () => setArrivalHandler(null);
+  }, [currentWorld]);
+  const compactOverlay = useMemo(
+    () => (typeof window === 'undefined' ? false : window.innerWidth <= 700),
+    []
+  );
+
+  const nearbyWorlds = useMemo(() => {
+    const offsets: Array<[number, number]> = [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [1, -1],
+      [-1, 1],
+      [-1, -1]
+    ];
+
+    return offsets.map(([dx, dy]) => createCurrentWorld({
+      x: currentWorld.coordinate.x + dx,
+      y: currentWorld.coordinate.y + dy
+    }));
+  }, [currentWorld.coordinate.x, currentWorld.coordinate.y]);
+
+  const jumpToWorld = (world: CurrentWorld) => {
+    if (coordinatesEqual(world.coordinate, currentWorld.coordinate)) return;
+    // Route through the warp: beginTravel plays the warp-in and the registered
+    // arrival handler performs the real world swap at the white-out midpoint.
+    beginTravel(world.coordinate);
+  };
+
+  const jumpToCoordinate = (coordinate: WorldCoordinate) => {
+    jumpToWorld(createCurrentWorld(coordinate));
+  };
+
+  const jumpToTarget = () => {
+    jumpToCoordinate({
+      x: normalizeCoordinatePart(Number(targetX)),
+      y: normalizeCoordinatePart(Number(targetY))
+    });
+  };
+
+  const jumpToRandomWorld = () => {
+    jumpToWorld(createCurrentWorld({
+      x: Math.floor(Math.random() * 201) - 100,
+      y: Math.floor(Math.random() * 201) - 100
+    }));
+  };
+
+  const returnToPreviousWorld = () => {
+    if (!previousWorld) return;
+    beginTravel(previousWorld.coordinate);
+  };
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
-  const { benchEnabled, profile, postProcess, overviewEnabled } = useMemo(() => {
+  const { benchEnabled, profile, postProcess, overviewEnabled, flyDebug } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
@@ -41,9 +153,28 @@ const App: React.FC = () => {
       profile: valid,
       postProcess: getGraphicsQuality().postProcess,
       // ?overview=1 -> non-interactive overhead debug camera (water inspection).
-      overviewEnabled: params.get('overview') === '1'
+      overviewEnabled: params.get('overview') === '1',
+      // ?fly=1 -> jump straight into deep-space flight for runtime checks.
+      flyDebug: params.get('fly') === '1'
     };
   }, []);
+
+  // ?fly=1: drop straight into deep-space flight (once, on mount).
+  useEffect(() => {
+    if (flyDebug) debugStartInSpace();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Exit the ship with F once landed back on the surface (FPS<->flight toggle is
+  // handled per-mode: boarding lives in SpaceshipPlaceholder, exit lives here).
+  useEffect(() => {
+    if (!(flight.phase === 'surface' && flight.controlMode === 'flight')) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.code === 'KeyF') exitShip();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [flight.phase, flight.controlMode]);
 
   return (
     <KeyboardControls
@@ -55,6 +186,9 @@ const App: React.FC = () => {
         { name: 'jump', keys: ['Space'] },
         { name: 'reset', keys: ['KeyR'] },
         { name: 'delete', keys: ['KeyE'] },
+        { name: 'board', keys: ['KeyF'] },
+        { name: 'rollLeft', keys: ['KeyQ'] },
+        { name: 'rollRight', keys: ['KeyE'] },
       ]}
     >
       <Canvas
@@ -62,7 +196,7 @@ const App: React.FC = () => {
         gl={{
           antialias: false,
           alpha: false,
-          powerPreference: "high-performance",
+          powerPreference: 'high-performance',
           stencil: false,
           depth: true,
         }}
@@ -80,32 +214,72 @@ const App: React.FC = () => {
       >
         {debugEnabled && <Stats />}
         {/* IBL-only: capture a representative midday sky once into an env
-            cubemap so metallic blocks have reflections. No `background` — the
-            visible sky now comes from SkyController's dynamic <Sky> dome, and
-            this static capture must not fight it. */}
+            cubemap so metallic blocks have reflections. No `background`; the
+            visible sky comes from SkyController's dynamic <Sky> dome. */}
         <Environment frames={1} resolution={256}>
           <Sky sunPosition={SUN_POSITION} />
         </Environment>
 
-        {/* Owns the visible sky, day/night sun + ambient, fog and stars. */}
         <SkyController />
+        <GalaxyImpostors currentCoordinate={currentWorld.coordinate} />
+        {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
+            keeps advancing across the world swap it fires at its midpoint. */}
+        <WarpDriver />
 
         <EfficientScene
-          terrainSeed={terrainSeed}
+          key={currentWorldKey}
+          terrainSeed={currentWorld.seed}
           debugColliders={debugColliders}
+          arrivalMode={arrivalMode}
           overview={overviewEnabled}
-          onDebugChange={setDebugState}
+          onGroundedChange={grounded => {
+            if (grounded) {
+              setArrivalMode(mode => mode === 'approach' ? 'surface' : mode);
+              notifyLanded();
+            }
+          }}
+          onDebugChange={debugEnabled ? setDebugState : undefined}
         />
 
         {benchEnabled && <BenchmarkProbe profile={profile} onSample={setBenchSample} />}
 
         {/* Phase 5: bloom (+ optional painterly) composer. Mounted only when
-            the active profile enables postprocessing; otherwise the renderer's
-            ACES tone mapping path is left exactly as-is (MEDIUM/LOW/POTATO
-            unchanged). Last child so its passes composite over everything. */}
+            the active profile enables postprocessing. */}
         {postProcess && <PostFX />}
       </Canvas>
       <Crosshair />
+      <WarpFlash />
+
+      {flight.controlMode === 'flight' && (
+        <div style={{
+          position: 'absolute',
+          bottom: 16,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: '#cfe8ff',
+          fontFamily: 'monospace',
+          background: 'rgba(0,0,0,0.6)',
+          padding: '10px 16px',
+          borderRadius: 8,
+          fontSize: 13,
+          textAlign: 'center',
+          lineHeight: 1.5,
+          border: '1px solid rgba(125,211,252,0.35)',
+          pointerEvents: 'none'
+        }}>
+          <div style={{ color: '#7dd3fc', fontWeight: 'bold', letterSpacing: 1 }}>
+            COCKPIT - {flight.phase.toUpperCase()}
+          </div>
+          <div>Coordinate {currentWorldKey} - Seed {currentWorld.seed}</div>
+          <div style={{ opacity: 0.75, marginTop: 4 }}>
+            {flight.phase === 'surface'
+              ? 'W/S thrust - mouse look - Q/E roll - Shift boost - climb to launch - F to exit'
+              : flight.phase === 'descent'
+                ? 'W/S thrust - mouse look - Q/E roll - descend slowly to land'
+                : 'W/S thrust - mouse look - Q/E roll - Shift boost'}
+          </div>
+        </div>
+      )}
 
       {benchEnabled && (
         <div style={{
@@ -120,7 +294,7 @@ const App: React.FC = () => {
           borderRadius: 6,
           lineHeight: 1.5
         }}>
-          <div><strong>BENCH</strong> · {profile}</div>
+          <div><strong>BENCH</strong> - {profile}</div>
           {benchSample ? (
             <>
               <div>fps ~{benchSample.fps}</div>
@@ -130,7 +304,7 @@ const App: React.FC = () => {
               <div>tris {benchSample.triangles.toLocaleString()}</div>
             </>
           ) : (
-            <div>measuring…</div>
+            <div>measuring...</div>
           )}
         </div>
       )}
@@ -152,6 +326,9 @@ const App: React.FC = () => {
         <p>E: Delete voxel</p>
         <p>Only surface voxels rendered!</p>
         <p>Total voxels: {totalVoxels.toLocaleString()}</p>
+        <p>Coordinate: {currentWorldKey}</p>
+        <p>Seed: {currentWorld.seed}</p>
+        <p>Ship: {arrivalMode === 'approach' ? 'approach' : 'landed'}</p>
         <label style={{ display: 'block', marginTop: 8 }}>
           <input
             type="checkbox"
@@ -183,119 +360,117 @@ const App: React.FC = () => {
         )}
       </div>
 
-      {/* Terrain Controls UI */}
       <div style={{
         position: 'absolute',
         bottom: 10,
         right: 10,
+        left: compactOverlay ? 10 : 'auto',
         color: 'white',
         fontFamily: 'monospace',
         background: 'rgba(0,0,0,0.8)',
         padding: '15px',
         borderRadius: '8px',
         fontSize: '14px',
-        minWidth: '200px'
+        width: compactOverlay ? 'auto' : 'min(260px, calc(100vw - 20px))',
+        maxWidth: 'calc(100vw - 20px)',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        overflowWrap: 'anywhere'
       }}>
-        <h4 style={{ margin: '0 0 10px 0', color: '#4CAF50' }}>🏔️ Terrain Presets</h4>
+        <h4 style={{ margin: '0 0 10px 0', color: '#7dd3fc' }}>World Coordinates</h4>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ fontSize: 12, lineHeight: 1.5, marginBottom: 10, overflowWrap: 'anywhere' }}>
+          <div>Current: {currentWorldKey}</div>
+          <div>Seed: {currentWorld.seed}</div>
+          <div>Arrival: {arrivalMode === 'approach' ? 'high altitude' : 'surface'}</div>
+          <div>Flight: {flight.phase} / {flight.controlMode}</div>
+          <div>LOD: one voxel world + visual neighbors</div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
+            X
+            <input
+              type="number"
+              value={targetX}
+              onChange={event => setTargetX(event.target.value)}
+              onKeyDown={event => {
+                if (event.key === 'Enter') jumpToTarget();
+              }}
+              style={inputBase}
+            />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
+            Y
+            <input
+              type="number"
+              value={targetY}
+              onChange={event => setTargetY(event.target.value)}
+              onKeyDown={event => {
+                if (event.key === 'Enter') jumpToTarget();
+              }}
+              style={inputBase}
+            />
+          </label>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr 1fr', gap: 6 }}>
           <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.DEFAULT)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: terrainSeed === TERRAIN_SEEDS.DEFAULT ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
+            onClick={jumpToTarget}
+            style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#0369a1' }}
           >
-            🌍 Default Terrain
+            Set Course
           </button>
-
           <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.MOUNTAINS)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: terrainSeed === TERRAIN_SEEDS.MOUNTAINS ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
+            onClick={jumpToRandomWorld}
+            style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#7c2d12' }}
           >
-            🏔️ Mountain World
+            Random
           </button>
-
           <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.HILLS)}
+            onClick={returnToPreviousWorld}
+            disabled={!previousWorld}
             style={{
-              padding: '6px 12px',
-              backgroundColor: terrainSeed === TERRAIN_SEEDS.HILLS ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
+              ...buttonBase,
+              padding: '7px 8px',
+              backgroundColor: previousWorld ? '#374151' : '#1f2937',
+              color: previousWorld ? 'white' : '#64748b',
+              cursor: previousWorld ? 'pointer' : 'default'
             }}
           >
-            🏞️ Rolling Hills
-          </button>
-
-          <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.VALLEYS)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: terrainSeed === TERRAIN_SEEDS.VALLEYS ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
-          >
-            🏜️ Deep Valleys
-          </button>
-
-          <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.ISLANDS)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: terrainSeed === TERRAIN_SEEDS.ISLANDS ? '#4CAF50' : '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
-          >
-            🏝️ Island World
-          </button>
-
-          <button
-            onClick={() => setTerrainSeed(TERRAIN_SEEDS.RANDOM())}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: '#FF9800',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px'
-            }}
-          >
-            🎲 Random Terrain
+            Previous
           </button>
         </div>
 
-        <div style={{ marginTop: '12px', fontSize: '11px', opacity: 0.8 }}>
-          <strong>Current Seed:</strong> {terrainSeed}
+        <div style={{ marginTop: 12, fontSize: 11, color: '#cbd5e1' }}>
+          Nearby
+        </div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 6,
+          marginTop: 6
+        }}>
+          {nearbyWorlds.map(world => (
+            <button
+              key={coordinateKey(world.coordinate)}
+              onClick={() => jumpToWorld(world)}
+              style={{
+                ...buttonBase,
+                padding: '6px 8px',
+                backgroundColor: '#172554',
+                border: '1px solid #1e3a8a',
+                fontSize: 11,
+                fontFamily: 'monospace'
+              }}
+            >
+              {coordinateKey(world.coordinate)}
+            </button>
+          ))}
         </div>
 
-        <div style={{ marginTop: '8px', fontSize: '10px', opacity: 0.6 }}>
-          Terrain updates automatically!
+        <div style={{ marginTop: 10, fontSize: 10, opacity: 0.68, lineHeight: 1.4, overflowWrap: 'anywhere' }}>
+          Set Course loads the destination as the active voxel planet. Distant worlds are visual-only LOD.
         </div>
       </div>
     </KeyboardControls>

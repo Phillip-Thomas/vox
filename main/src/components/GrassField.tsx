@@ -12,10 +12,8 @@ import {
   updateGrassMaterial
 } from '../utils/grassField';
 
-// How often (in frames) we re-check whether the grass set changed and rebuild.
-const REBUILD_POLL_FRAMES = 30;
-
 interface GrassFieldProps {
+  terrainSeed: number;
   /** Player world position, used for far-distance culling (optional). */
   playerPosition?: THREE.Vector3;
 }
@@ -38,7 +36,7 @@ interface GrassFieldProps {
  * that exceeds the current GPU buffer, bumps `capacity`. React then recreates
  * the <instancedMesh> with a bigger buffer, and a capacity-keyed effect fills it.
  */
-export default function GrassField({ playerPosition }: GrassFieldProps) {
+export default function GrassField({ terrainSeed, playerPosition }: GrassFieldProps) {
   // Density is fixed at mount; a profile switch is rare and would remount.
   const density = getGraphicsQuality().grassDensity;
 
@@ -67,13 +65,12 @@ export default function GrassField({ playerPosition }: GrassFieldProps) {
   };
 
   const signatureRef = useRef<string>('');
-  const frameRef = useRef(0);
 
   const rebuild = () => {
     const mesh = meshRef.current;
     if (!mesh || density <= 0) return;
     const quality = getGraphicsQuality();
-    buildGrassInstances(mesh, density, quality.grassMaxDistance, playerPosition ?? null);
+    buildGrassInstances(mesh, density, quality.grassMaxDistance, playerPosition ?? null, terrainSeed);
   };
 
   // Initial sizing: by the time React commits this effect the planet's voxels
@@ -89,7 +86,7 @@ export default function GrassField({ playerPosition }: GrassFieldProps) {
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
-    signatureRef.current = `${voxelSystem.getWorldId()}:${countGrassVoxels()}`;
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
@@ -107,21 +104,17 @@ export default function GrassField({ playerPosition }: GrassFieldProps) {
     // Drive wind (gated to freeze when animatedShaders is off).
     updateGrassMaterial(material, performance.now() / 1000, getGraphicsQuality());
 
-    // Throttled change detection (terrain edits / reload / empty->populated).
-    frameRef.current++;
-    if (frameRef.current % REBUILD_POLL_FRAMES === 0) {
-      const sig = `${voxelSystem.getWorldId()}:${countGrassVoxels()}`;
-      if (sig !== signatureRef.current) {
-        const needed = neededCapacity();
-        if (needed > capacity) {
-          // Buffer too small (e.g. first voxels appeared): grow it. The
-          // capacity-keyed effect rebuilds once React recreates the mesh.
-          growCapacity(needed);
-        } else if (mesh) {
-          // Fits in the current buffer: rebuild in place, no realloc.
-          signatureRef.current = sig;
-          rebuild();
-        }
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    if (sig !== signatureRef.current) {
+      const needed = neededCapacity();
+      if (needed > capacity) {
+        // Buffer too small (e.g. first voxels appeared): grow it. The
+        // capacity-keyed effect rebuilds once React recreates the mesh.
+        growCapacity(needed);
+      } else if (mesh) {
+        // Fits in the current buffer: rebuild in place, no realloc.
+        signatureRef.current = sig;
+        rebuild();
       }
     }
   });

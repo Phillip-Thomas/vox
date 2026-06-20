@@ -4,6 +4,7 @@ import { Sky } from '@react-three/drei';
 import { Sky as SkyImpl } from 'three-stdlib';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
+import { useSpaceFlight } from '../state/spaceFlight.ts';
 import SpaceSky from './SpaceSky.tsx';
 
 /**
@@ -21,6 +22,23 @@ export const DAY_LENGTH_SECONDS = 240;
 
 /** World-space distance the sun light is placed from the planet center. */
 const SUN_LIGHT_RADIUS = 220;
+
+/** Normal surface fog density (matches the initial FogExp2). */
+const SURFACE_FOG_DENSITY = 0.014;
+
+/**
+ * Thinner fog while flying the ship in-atmosphere (launch/descent). The surface
+ * density is tuned for a ground-level eye height; from approach altitude it fogs
+ * the long aerial sightlines to a flat wash (the same reason OverviewCamera
+ * disables fog). This keeps the planet readable on approach, then full fog
+ * returns the moment you're back on foot.
+ */
+const FLIGHT_FOG_DENSITY = 0.0022;
+
+/** Fog density for a given flight phase (in-atmosphere flight thins it out). */
+function fogDensityForPhase(phase: string): number {
+  return phase === 'descent' || phase === 'launch' ? FLIGHT_FOG_DENSITY : SURFACE_FOG_DENSITY;
+}
 
 /** Phase (0..1) used when animation is disabled — midday. */
 const STATIC_DAY_PHASE = 0.25;
@@ -85,6 +103,62 @@ const goldenSun = new THREE.Color('#ff9c4a');
 const nightSun = new THREE.Color('#2a3a6a');
 
 const tmpColor = new THREE.Color();
+
+// --- Deep-space mode palette -------------------------------------------------
+// In deep space we want true black void (no blue atmospheric haze, no fog
+// washing out distant impostors) plus a steady cool key light so the
+// MeshStandard ship/cockpit reads. These are space-only; the day/night cycle is
+// untouched in every other phase.
+const SPACE_FOG_COLOR = new THREE.Color('#000008'); // near-black void
+const SPACE_FOG_DENSITY = 0.00002;                  // effectively no fog (impostors stay crisp)
+const SPACE_SUN_COLOR = new THREE.Color('#dfe6ff'); // cool starlight key
+const SPACE_SUN_INTENSITY = 1.1;
+const SPACE_AMBIENT_COLOR = new THREE.Color('#26304d');
+const SPACE_AMBIENT_INTENSITY = 0.32;
+// Night-floor atmosphere uniforms (the darkest values applyDayPhase reaches at
+// daylight=0) so the drei <Sky> contributes no daytime blue in space.
+const SPACE_RAYLEIGH = 0.06;
+const SPACE_TURBIDITY = 0.4;
+const SPACE_MIE_COEFFICIENT = 0.002;
+const SPACE_MIE_DIRECTIONAL_G = 0.8;
+
+/**
+ * Force the sky/atmosphere/fog/lighting into deep-space mode. Drains the drei
+ * <Sky> to its night floor (no blue haze), collapses fog to a near-zero black
+ * void so distant impostors aren't fogged out, and gives the scene a steady cool
+ * key light (SpaceSky owns the starfield). No per-frame allocation.
+ */
+function applySpaceMode(
+  sunLight: THREE.DirectionalLight,
+  moonLight: THREE.DirectionalLight,
+  ambient: THREE.AmbientLight,
+  fog: THREE.FogExp2,
+  sky: SkyImpl | null
+) {
+  // Steady cool key light from the existing "sun" direction (whatever it last
+  // held); castShadow stays false (set in JSX). Not dimmed to the night floor.
+  sunLight.intensity = SPACE_SUN_INTENSITY;
+  sunLight.color.copy(SPACE_SUN_COLOR);
+
+  // No second light source needed in the void.
+  moonLight.intensity = 0;
+
+  ambient.intensity = SPACE_AMBIENT_INTENSITY;
+  ambient.color.copy(SPACE_AMBIENT_COLOR);
+
+  // Black void + (near) zero fog density so impostors at distance stay visible.
+  fog.color.copy(SPACE_FOG_COLOR);
+  fog.density = SPACE_FOG_DENSITY;
+
+  // Drain the atmospheric dome to its night floor (no daytime scattering/blue).
+  if (sky) {
+    const u = sky.material.uniforms;
+    u.rayleigh.value = SPACE_RAYLEIGH;
+    u.turbidity.value = SPACE_TURBIDITY;
+    u.mieCoefficient.value = SPACE_MIE_COEFFICIENT;
+    u.mieDirectionalG.value = SPACE_MIE_DIRECTIONAL_G;
+  }
+}
 
 function clamp01(value: number): number {
   return value < 0 ? 0 : value > 1 ? 1 : value;
@@ -156,6 +230,8 @@ function applyDayPhase(
   tmpColor.copy(nightFogColor).lerp(dayFogColor, daylight);
   tmpColor.lerp(goldenFogColor, golden * 0.8);
   fog.color.copy(tmpColor);
+  // Restore normal atmospheric depth (deep-space mode collapses this to ~0).
+  fog.density = SURFACE_FOG_DENSITY;
 
   // --- Atmospheric dome: collapse the Preetham scattering as night falls so the
   // sky goes genuinely dark and the custom star dome (SpaceSky) dominates. The
@@ -176,6 +252,8 @@ function applyDayPhase(
 
 export default function SkyController() {
   const scene = useThree(state => state.scene);
+  const { phase } = useSpaceFlight();
+  const inSpace = phase === 'deep_space';
 
   const skyRef = useRef<SkyImpl>(null);
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
@@ -184,7 +262,7 @@ export default function SkyController() {
 
   // FogExp2 gives cheap exponential atmospheric depth across the ~50u planet.
   // ~0.014 keeps the planet clearly visible while still reading depth.
-  const fog = useMemo(() => new THREE.FogExp2('#9ec9ff', 0.014), []);
+  const fog = useMemo(() => new THREE.FogExp2('#9ec9ff', SURFACE_FOG_DENSITY), []);
 
   // Sun position handed to <Sky>. We rotate the actual SkyImpl uniform in
   // useFrame, but seed it at a representative value so the initial frame looks
@@ -206,14 +284,22 @@ export default function SkyController() {
     };
   }, [scene, fog]);
 
-  // Apply a static midday state once on mount so the first frame is correct
-  // even if animation is disabled.
+  // Apply the correct mode once on mount / whenever the space<->surface boundary
+  // is crossed, so the first frame is right even on profiles with
+  // animatedShaders=false (which skip the per-frame update below). In deep space
+  // we collapse the atmosphere/fog and switch to the steady space key light; in
+  // every other phase we restore the static-midday day/night state.
   useEffect(() => {
     const sunLight = sunLightRef.current;
     const moonLight = moonLightRef.current;
     const ambient = ambientRef.current;
     if (!sunLight || !moonLight || !ambient) return;
+    if (inSpace) {
+      applySpaceMode(sunLight, moonLight, ambient, fog, skyRef.current);
+      return;
+    }
     applyDayPhase(forcedDayPhase ?? STATIC_DAY_PHASE, sunLight, moonLight, ambient, fog, skyRef.current);
+    fog.density = fogDensityForPhase(phase);
     const skyMat = skyRef.current?.material;
     if (skyMat) {
       (skyMat.uniforms.sunPosition.value as THREE.Vector3)
@@ -221,7 +307,7 @@ export default function SkyController() {
         .multiplyScalar(100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [inSpace, phase]);
 
   useFrame(state => {
     const sunLight = sunLightRef.current;
@@ -231,12 +317,24 @@ export default function SkyController() {
 
     const animated = getGraphicsQuality().animatedShaders;
 
-    // When not animated, the static mount effect already set everything; skip
-    // per-frame work entirely. (SpaceSky owns its own gated useFrame.)
+    // Deep space: always-on space backdrop, atmosphere/fog collapsed, steady key
+    // light — held regardless of the day cycle AND regardless of animatedShaders.
+    // The boundary effect above already applied it; the (static) values don't
+    // change per frame, so non-animated profiles need no per-frame work, and
+    // animated profiles only need a cheap re-assert to win over any stale state.
+    if (inSpace) {
+      if (!animated) return;
+      applySpaceMode(sunLight, moonLight, ambient, fog, skyRef.current);
+      return;
+    }
+
+    // When not animated, the static mount/boundary effect already set everything;
+    // skip per-frame work entirely. (SpaceSky owns its own gated useFrame.)
     if (!animated) return;
 
-    const phase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    applyDayPhase(phase, sunLight, moonLight, ambient, fog, skyRef.current);
+    const dayPhase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
+    applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog, skyRef.current);
+    fog.density = fogDensityForPhase(phase);
 
     // Drive the <Sky> shader's sun uniform to match.
     const skyMat = skyRef.current?.material;

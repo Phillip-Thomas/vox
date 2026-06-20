@@ -4,6 +4,7 @@ import { deterministicTangentForUp } from './surfaceControls';
 import { voxelSystem } from './efficientVoxelSystem';
 import { MaterialType } from '../types/materials';
 import type { GraphicsQuality } from '../config/graphicsSettings';
+import { seededVoxelUnit } from './seededHash';
 
 // A grass blade is a thin vertical plane standing on the voxel's outer surface.
 // Local space: width along X, height along +Y (root at y=0, tip at y=BLADE_HEIGHT),
@@ -58,14 +59,6 @@ export function createBladeGeometry(): THREE.BufferGeometry {
   return geo;
 }
 
-// Cheap, deterministic per-blade hash in [0,1).
-function hash(x: number, y: number, z: number, bladeIndex: number): number {
-  let h = (x * 374761393 + y * 668265263 + z * 2147483647 + bladeIndex * 1013904223) >>> 0;
-  h = (h ^ (h >>> 13)) >>> 0;
-  h = (h * 1274126177) >>> 0;
-  return (h >>> 0) / 4294967296;
-}
-
 const _world = new THREE.Vector3();
 const _up = new THREE.Vector3();
 const _tangent = new THREE.Vector3();
@@ -92,7 +85,8 @@ export function computeBladeMatrix(
   y: number,
   z: number,
   bladeIndex: number,
-  target: THREE.Matrix4
+  target: THREE.Matrix4,
+  worldSeed = 0
 ): THREE.Matrix4 {
   voxelCoordToWorld(x, y, z, _world);
 
@@ -106,16 +100,16 @@ export function computeBladeMatrix(
   deterministicTangentForUp(_up, _tangent); // unit, perpendicular to up
   _bitangent.crossVectors(_up, _tangent).normalize();
 
-  const r0 = hash(x, y, z, bladeIndex);
-  const r1 = hash(x, y, z, bladeIndex + 101);
-  const r2 = hash(x, y, z, bladeIndex + 202);
-  const r3 = hash(x, y, z, bladeIndex + 303);
+  const r0 = seededVoxelUnit(x, y, z, bladeIndex, worldSeed);
+  const r1 = seededVoxelUnit(x, y, z, bladeIndex + 101, worldSeed);
+  const r2 = seededVoxelUnit(x, y, z, bladeIndex + 202, worldSeed);
+  const r3 = seededVoxelUnit(x, y, z, bladeIndex + 303, worldSeed);
   // Per-clump seed so the few blades of one tuft share a rough location/heading
   // (bladeIndex / BLADES_PER_CLUMP), giving "tufts not lawn".
   const clump = Math.floor(bladeIndex / BLADES_PER_CLUMP);
-  const c0 = hash(x, y, z, clump * 7 + 11); // clump position u
-  const c1 = hash(x, y, z, clump * 7 + 23); // clump position v
-  const c2 = hash(x, y, z, clump * 7 + 37); // clump base heading
+  const c0 = seededVoxelUnit(x, y, z, clump * 7 + 11, worldSeed); // clump position u
+  const c1 = seededVoxelUnit(x, y, z, clump * 7 + 23, worldSeed); // clump position v
+  const c2 = seededVoxelUnit(x, y, z, clump * 7 + 37, worldSeed); // clump base heading
 
   // Orientation basis: columns are (tangent, up, bitangent) so local +Y -> up.
   _basis.makeBasis(_tangent, _up, _bitangent);
@@ -161,6 +155,10 @@ export interface GrassBuildResult {
   voxelCount: number;
 }
 
+export function isDecoratableGrassVoxel(voxel: { material: string; supportsSurfaceResources?: boolean }) {
+  return voxel.material === MaterialType.GRASS && voxel.supportsSurfaceResources !== false;
+}
+
 /**
  * Fill `mesh` with blade instances for every grass voxel currently exposed.
  * Each voxel gets `bladesPerVoxel(density)` blades (density tufts of
@@ -172,7 +170,8 @@ export function buildGrassInstances(
   mesh: THREE.InstancedMesh,
   density: number,
   maxDistance = 0,
-  playerWorld: THREE.Vector3 | null = null
+  playerWorld: THREE.Vector3 | null = null,
+  worldSeed = 0
 ): GrassBuildResult {
   const m = new THREE.Matrix4();
   let slot = 0;
@@ -183,7 +182,7 @@ export function buildGrassInstances(
   const bladeCount = bladesPerVoxel(density);
   const voxels = voxelSystem.getAllVoxels();
   for (const voxel of voxels.values()) {
-    if (voxel.material !== MaterialType.GRASS) continue;
+    if (!isDecoratableGrassVoxel(voxel)) continue;
     voxelCount++;
 
     const [x, y, z] = voxel.position;
@@ -195,7 +194,7 @@ export function buildGrassInstances(
 
     for (let b = 0; b < bladeCount; b++) {
       if (slot >= capacity) break;
-      computeBladeMatrix(x, y, z, b, m);
+      computeBladeMatrix(x, y, z, b, m, worldSeed);
       mesh.setMatrixAt(slot, m);
       slot++;
     }
@@ -212,7 +211,7 @@ export function countGrassVoxels(): number {
   let n = 0;
   const voxels = voxelSystem.getAllVoxels();
   for (const voxel of voxels.values()) {
-    if (voxel.material === MaterialType.GRASS) n++;
+    if (isDecoratableGrassVoxel(voxel)) n++;
   }
   return n;
 }

@@ -3,9 +3,12 @@ export interface WorldGenerationConfig {
   coreRadiusPercent: number;
 }
 
+export type TerrainProfile = 'mountains' | 'hills' | 'valleys' | 'islands' | 'balanced';
+
 // Terrain generation configuration for varied landscapes
 export interface TerrainGenerationConfig {
   seed: number; // Deterministic seed for terrain generation
+  terrainProfile?: TerrainProfile;
   heightVariation: number; // Maximum height variation in blocks
   mountainFrequency: number; // Frequency of mountain features (0.01-0.05)
   hillFrequency: number; // Frequency of hill features (0.03-0.1)

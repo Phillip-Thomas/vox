@@ -30,8 +30,11 @@ import type { GraphicsQuality } from '../config/graphicsSettings';
 // <emissivemap_fragment> (runs after). Never reference `normal` in <map_fragment>.
 // Never put backticks inside the GLSL template strings.
 
-const DEEP_WATER = new THREE.Color(0x0a3550).convertSRGBToLinear();
-const SHALLOW_WATER = new THREE.Color(0x2bb6c8).convertSRGBToLinear();
+// Deep nudged slightly warmer/darker (0x0a3550 -> 0x0b2e44) so it reads less
+// electric. Shallow desaturated from a near-neon teal (0x2bb6c8, S~79%) toward a
+// muted sea-glass cyan (0x3fa6b0, S~62%) so the shoreline stops popping.
+const DEEP_WATER = new THREE.Color(0x0b2e44).convertSRGBToLinear();
+const SHALLOW_WATER = new THREE.Color(0x3fa6b0).convertSRGBToLinear();
 const FOAM_COLOR = new THREE.Color(0xeef7ff).convertSRGBToLinear();
 const SSS_COLOR = new THREE.Color(0x33b88f).convertSRGBToLinear();
 const NIGHT_FLOOR = new THREE.Color(0x05222f).convertSRGBToLinear();
@@ -124,6 +127,24 @@ const WATER_GLSL = /* glsl */ `
     sky += sunCol * (glow + disk) * daylight;
     return sky;
   }
+
+  // Time-of-day TINT multiplier for the composed (unlit) water color. Warms the
+  // ocean at golden hour, leaves it neutral at noon, and pushes it toward dim
+  // cool MOONLIGHT at night (so the night sea is moonlit, not near-black).
+  // elev = dot(sunDir, up). Authored colors are LINEAR.
+  vec3 wsTimeOfDayTint(float elev) {
+    float daylight = smoothstep(-0.15, 0.25, elev);
+    // golden peaks when the sun is just above the horizon during the day
+    float golden = daylight * (1.0 - smoothstep(0.04, 0.30, elev));
+    vec3 warm = vec3(1.00, 0.61, 0.29);   // golden 0xff9c4a, linear-ish
+    vec3 cool = vec3(0.47, 0.55, 0.91);   // moonlight 0xaebfe8, linear-ish
+    vec3 neutral = vec3(1.0);
+    // day: neutral, warming toward golden hour
+    vec3 dayTint = mix(neutral, warm, golden * 0.85);
+    // night: dim cool moonlight (~0.5 of the cool color so it stays dark-ish)
+    vec3 nightTint = cool * 0.5;
+    return mix(nightTint, dayTint, daylight);
+  }
 `;
 
 export interface WaterBlocksUniforms {
@@ -131,6 +152,7 @@ export interface WaterBlocksUniforms {
   uAnimated: { value: number };
   uReflections: { value: number };
   uSunDir: { value: THREE.Vector3 };
+  uMoonDir: { value: THREE.Vector3 };
   uWaveAmp: { value: number };
   uChoppy: { value: number };
   uDeepColor: { value: THREE.Color };
@@ -159,6 +181,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uAnimated = { value: 1 };
     shader.uniforms.uReflections = { value: 1 };
     shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
+    shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     // Swell vertical amplitude (world units). Swell height peaks at ~1.05, so the
     // max crest lift is ~uWaveAmp*1.05. To keep the surface INSIDE its voxel cell
     // (never rising above the cell top), keep FACE_OFFSET + uWaveAmp*1.05 <= 1.0.
@@ -228,6 +251,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
         uniform float uAnimated;
         uniform float uWaveAmp;
         uniform vec3 uSunDir;
+        uniform vec3 uMoonDir;
         uniform vec3 uDeepColor;
         uniform vec3 uShallowColor;
         uniform vec3 uFoamColor;
@@ -269,14 +293,23 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           float ndv = clamp(dot(N, V), 0.0, 1.0);
           float fres = 0.02 + 0.98 * pow(1.0 - ndv, 5.0);
 
+          // --- Time-of-day: warm at sunset, neutral noon, cool-moonlit at night ---
+          float sunElev = dot(uSunDir, up);
+          float daylight = smoothstep(-0.15, 0.25, sunElev);
+          float night = 1.0 - daylight;
+          vec3 todTint = wsTimeOfDayTint(sunElev);
+
           // --- Refracted body: crest-driven color ramp (stylized SoT) ---
           float crestShade = smoothstep(-0.25, 0.30, h);           // trough->crest
           vec3 refracted = mix(uDeepColor, uShallowColor, crestShade);
-          // steepness-driven foam: whitecaps only where the surface is steep
+          // steepness-driven foam: whitecaps only where the surface is steep.
+          // Night-tint the foam by the same time-of-day tint so whitecaps aren't
+          // bright white against a dark/moonlit night ocean.
           float steep = length(gtSwell) * uWaveAmp;
           float foam = smoothstep(0.28, 0.62, steep) * surf;
           foam *= 0.6 + 0.4 * wsHash21(floor(P.xz * 3.0) + floor(P.yz));
-          refracted = mix(refracted, uFoamColor, clamp(foam, 0.0, 1.0));
+          vec3 foamCol = uFoamColor * todTint;
+          refracted = mix(refracted, foamCol, clamp(foam, 0.0, 1.0));
 
           // --- Reflected sky: jitter reflection ray by ripple slope (break mirror) ---
           vec3 R = reflect(-V, N);
@@ -296,12 +329,36 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           float ndh = clamp(dot(N, H), 0.0, 1.0);
           float spec = exp((ndh - 1.0) * 120.0);                   // soft core (exp, not pow600)
           float sparkleAmt = clamp(length(gtDetail) * uWaveAmp * 3.0, 0.0, 1.0);
-          float glint = (spec * 1.6 + exp((ndh - 1.0) * 600.0) * sparkleAmt) * lod;
+          float glint = (spec * 1.6 + exp((ndh - 1.0) * 600.0) * sparkleAmt) * lod * daylight;
           vec3 glintTerm = vec3(1.0, 0.96, 0.85) * glint;
 
+          // --- Moon glitter: mirror the sun glint, cooler + dimmer, gated to night
+          // so the night ocean catches the moon (and never shows by day). ---
+          vec3 Hm = normalize(uMoonDir + V);
+          float ndhm = clamp(dot(N, Hm), 0.0, 1.0);
+          float moonUp = smoothstep(-0.05, 0.20, dot(uMoonDir, up));
+          float specM = exp((ndhm - 1.0) * 140.0);
+          float moonGlint = (specM * 0.6 + exp((ndhm - 1.0) * 600.0) * sparkleAmt * 0.5)
+                          * lod * night * moonUp;
+          vec3 moonGlintTerm = vec3(0.47, 0.55, 0.91) * moonGlint;
+          // faint cool moon contribution to the night reflection (broad sheen)
+          float moonSheen = pow(clamp(dot(reflect(-V, N), uMoonDir), 0.0, 1.0), 3.0);
+          vec3 moonReflect = vec3(0.47, 0.55, 0.91) * moonSheen * 0.18 * night * moonUp;
+
           // --- Unlit composition: Fresnel-partitioned, routed through emissive ---
-          vec3 col = mix(refracted, reflected, fres * uReflections)
-                   + (sssTerm + glintTerm) * uReflections
+          // Body refracted color is time-of-day tinted (warm sunset, cool moonlit
+          // night). The reflected sky carries its own day/night via wsSkyColor.
+          // Clamp the reflected sky to ~1.5 linear so its bright sun DISK can't
+          // blow out under bloom (threshold 0.85), then Fresnel-blend it in.
+          vec3 reflClamped = min(reflected, vec3(1.5));
+          vec3 body = mix(refracted * todTint, reflClamped, fres * uReflections);
+
+          // Clamp the additive sun glint the same way: a bounded, tasteful sparkle.
+          vec3 glintClamped = min(glintTerm * uReflections, vec3(1.5));
+
+          vec3 col = body
+                   + glintClamped
+                   + (sssTerm + moonGlintTerm + moonReflect) * uReflections
                    + uNightFloor;
           vWaterEmissive = col;
           diffuseColor.rgb = vec3(0.0);    // kill Three's lit path (no double count)
@@ -324,11 +381,13 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
 }
 
 const _sunScratch = new THREE.Vector3();
+const _moonScratch = new THREE.Vector3();
 
 export function updateWaterBlocksMaterial(
   material: THREE.MeshStandardMaterial,
   time: number,
   sunDir: THREE.Vector3,
+  moonDir: THREE.Vector3,
   quality: GraphicsQuality
 ) {
   const shader = material.userData.shader as
@@ -340,4 +399,5 @@ export function updateWaterBlocksMaterial(
   if (u.uAnimated) u.uAnimated.value = quality.waterAnimated ? 1 : 0;
   if (u.uReflections) u.uReflections.value = quality.waterReflections === 'none' ? 0 : 1;
   if (u.uSunDir) u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
+  if (u.uMoonDir) u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
 }

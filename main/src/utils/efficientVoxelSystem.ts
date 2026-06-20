@@ -8,7 +8,12 @@ interface VoxelData {
   color: THREE.Color;
   meshSlot: number;
   worldId: number;
+  supportsSurfaceResources: boolean;
   rigidBodyRef?: { setEnabled?: (enabled: boolean) => void };
+}
+
+interface VoxelAddOptions {
+  supportsSurfaceResources?: boolean;
 }
 
 interface CollisionCallbacks {
@@ -38,6 +43,7 @@ export class EfficientVoxelSystem {
   private instanceData: THREE.InstancedBufferAttribute | null = null;
   private maxSlots: number;
   private worldId = 0;
+  private editVersion = 0;
   private collisionCallbacks: CollisionCallbacks | null = null;
 
   constructor(initialCapacity = 1000) {
@@ -58,6 +64,7 @@ export class EfficientVoxelSystem {
 
     if (this.mesh) {
       this.mesh.count = 0;
+      this.invalidateMeshBounds();
       if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
       if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
     }
@@ -65,6 +72,10 @@ export class EfficientVoxelSystem {
 
   getWorldId() {
     return this.worldId;
+  }
+
+  getEditVersion() {
+    return this.editVersion;
   }
 
   expandCapacity(newSize: number) {
@@ -130,7 +141,8 @@ export class EfficientVoxelSystem {
     z: number,
     material: string,
     color: THREE.Color,
-    rigidBodyRef?: VoxelData['rigidBodyRef']
+    rigidBodyRef?: VoxelData['rigidBodyRef'],
+    options: VoxelAddOptions = {}
   ) {
     const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
     if (this.exposedVoxels.has(coordKey)) return false;
@@ -144,10 +156,12 @@ export class EfficientVoxelSystem {
       color: color.clone(),
       meshSlot,
       rigidBodyRef,
-      worldId: this.worldId
+      worldId: this.worldId,
+      supportsSurfaceResources: options.supportsSurfaceResources ?? true
     };
 
     this.exposedVoxels.set(coordKey, voxelData);
+    this.editVersion += 1;
     this.slotToCoord.set(meshSlot, coordKey);
     this.updateMeshSlot(meshSlot, x, y, z, color, material);
     this.refreshNeighborAO(x, y, z);
@@ -176,6 +190,7 @@ export class EfficientVoxelSystem {
 
     this.collisionCallbacks?.remove(x, y, z, this.worldId);
     this.exposedVoxels.delete(coordKey);
+    this.editVersion += 1;
     this.releaseMeshSlot(voxelData.meshSlot);
     this.refreshNeighborAO(x, y, z);
     return true;
@@ -187,6 +202,10 @@ export class EfficientVoxelSystem {
 
   getVoxel(x: number, y: number, z: number) {
     return this.exposedVoxels.get(EfficientVoxelSystem.coordKey(x, y, z));
+  }
+
+  supportsSurfaceResources(x: number, y: number, z: number) {
+    return this.getVoxel(x, y, z)?.supportsSurfaceResources ?? false;
   }
 
   getAllVoxels() {
@@ -219,7 +238,15 @@ export class EfficientVoxelSystem {
       if (!this.shouldBeExposed(nx, ny, nz)) continue;
 
       const originalData = this.getOriginalTerrain(nx, ny, nz);
-      if (originalData && this.addVoxel(nx, ny, nz, originalData.material, originalData.color)) {
+      if (originalData && this.addVoxel(
+        nx,
+        ny,
+        nz,
+        originalData.material,
+        originalData.color,
+        undefined,
+        { supportsSurfaceResources: false }
+      )) {
         exposedCount++;
       }
     }
@@ -232,6 +259,7 @@ export class EfficientVoxelSystem {
       worldId: this.worldId,
       exposedVoxels: this.exposedVoxels.size,
       activeSlots: this.slotToCoord.size,
+      editVersion: this.editVersion,
       maxSlots: this.maxSlots,
       memoryEfficiency: `${((this.exposedVoxels.size / this.maxSlots) * 100).toFixed(1)}%`
     };
@@ -244,6 +272,7 @@ export class EfficientVoxelSystem {
       originalTerrain: this.originalTerrain.size,
       deletedTerrain: this.deletedTerrain.size,
       activeSlots: this.slotToCoord.size,
+      editVersion: this.editVersion,
       hasMesh: Boolean(this.mesh),
       hasCollisionCallbacks: Boolean(this.collisionCallbacks)
     };
@@ -276,6 +305,7 @@ export class EfficientVoxelSystem {
       this.instanceData.needsUpdate = true;
     }
 
+    this.invalidateMeshBounds();
     if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
     if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
   }
@@ -310,7 +340,14 @@ export class EfficientVoxelSystem {
     tempMatrix.identity();
     tempMatrix.setPosition(100000, 100000, 100000);
     this.mesh.setMatrixAt(slot, tempMatrix);
+    this.invalidateMeshBounds();
     if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
+  }
+
+  private invalidateMeshBounds() {
+    if (!this.mesh) return;
+    this.mesh.boundingBox = null;
+    this.mesh.boundingSphere = null;
   }
 
   private neighborCoords(x: number, y: number, z: number): Array<[number, number, number]> {

@@ -18,7 +18,7 @@ import type { GraphicsQuality } from '../config/graphicsSettings';
 // gets a slow whole-tree sway; leaves add a high-freq per-card flutter via aPhase.
 
 const BARK_COLOR = new THREE.Color(0x6b4a2f).convertSRGBToLinear(); // warm brown
-const LEAF_BASE = new THREE.Color(0x3f7d2a).convertSRGBToLinear(); // mid green
+const LEAF_BASE = new THREE.Color(0x4a7e26).convertSRGBToLinear(); // mid green, pulled toward the grass hue family (~93deg) for cohesion
 const LEAF_TIP = new THREE.Color(0x8fc24a).convertSRGBToLinear(); // bright green
 const LEAF_SSS = new THREE.Color(0xb7e06a).convertSRGBToLinear(); // backlit glow
 

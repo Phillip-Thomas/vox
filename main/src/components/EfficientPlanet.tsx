@@ -5,8 +5,7 @@ import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier'
 import { MATERIALS } from '../types/materials';
 import { createVoxelMaterial, updateVoxelMaterial } from '../utils/voxelMaterial';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator';
-import { createTerrainConfig } from '../utils/terrainConfig';
+import { getWorldGen } from '../utils/worldGenCache';
 import { TerrainVoxel, voxelSystem } from '../utils/efficientVoxelSystem';
 import { FACE_NORMALS } from '../utils/surfaceControls';
 import {
@@ -125,16 +124,9 @@ export default function EfficientPlanet({
   }, [surfaceUp]);
 
   const originalTerrain = useMemo<TerrainVoxel[]>(() => {
-    const planetRadius = size / 2;
-    const generator = new ProceduralWorldGenerator(
-      {
-        planetRadius,
-        coreRadiusPercent: 0.15
-      },
-      createTerrainConfig(terrainSeed, planetRadius)
-    );
+    const { generator, voxels } = getWorldGen(size, terrainSeed);
 
-    return generator.getAllVoxelPositions().map(position => {
+    return voxels.map(position => {
       const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
       return {
         ...position,

@@ -1,18 +1,41 @@
 import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import {
+  applyGravityCameraTransform,
+  clampCameraPitch,
+  rotateCameraForwardYaw,
+  transportCameraForward
+} from '../utils/gravityCamera';
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
   activeUp: THREE.Vector3;
-  suspendUpSync?: boolean;
+  getActiveUp?: () => THREE.Vector3;
   onPointerLockChange?: (locked: boolean) => void;
 }
 
-function CameraControls({ cameraRef, activeUp, suspendUpSync = false, onPointerLockChange }: CameraControlsProps) {
+const CAMERA_EYE_HEIGHT = 1;
+const MOUSE_SENSITIVITY = 0.002;
+const UP_SYNC_EPSILON = 0.9999;
+
+function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange }: CameraControlsProps) {
   const { gl } = useThree();
-  const cameraAngles = useRef({ yaw: 0, pitch: 0 });
+  const surfaceUp = useRef(activeUp.clone().normalize());
+  const surfaceForward = useRef(new THREE.Vector3(0, 0, -1));
+  const pitch = useRef(0);
   const isLockedRef = useRef(false);
+  const nextUp = useRef(new THREE.Vector3());
+
+  const syncSurfaceFrame = () => {
+    nextUp.current.copy(getActiveUp?.() ?? activeUp).normalize();
+
+    if (surfaceUp.current.dot(nextUp.current) < UP_SYNC_EPSILON) {
+      transportCameraForward(surfaceForward.current, surfaceUp.current, nextUp.current, surfaceForward.current);
+    }
+
+    surfaceUp.current.copy(nextUp.current);
+  };
 
   useEffect(() => {
     const element = gl.domElement;
@@ -35,13 +58,14 @@ function CameraControls({ cameraRef, activeUp, suspendUpSync = false, onPointerL
     const handleMouseMove = (event: MouseEvent) => {
       if (!isLockedRef.current) return;
 
-      const sensitivity = 0.002;
-      cameraAngles.current.yaw -= event.movementX * sensitivity;
-      cameraAngles.current.pitch -= event.movementY * sensitivity;
-      cameraAngles.current.pitch = Math.max(
-        -Math.PI / 2 + 0.1,
-        Math.min(Math.PI / 2 - 0.1, cameraAngles.current.pitch)
+      syncSurfaceFrame();
+      rotateCameraForwardYaw(
+        surfaceForward.current,
+        surfaceUp.current,
+        -event.movementX * MOUSE_SENSITIVITY,
+        surfaceForward.current
       );
+      pitch.current = clampCameraPitch(pitch.current - event.movementY * MOUSE_SENSITIVITY);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -66,10 +90,14 @@ function CameraControls({ cameraRef, activeUp, suspendUpSync = false, onPointerL
 
   useFrame(() => {
     if (!cameraRef.current) return;
-    if (!suspendUpSync) {
-      cameraRef.current.up.copy(activeUp);
-    }
-    cameraRef.current.rotation.set(cameraAngles.current.pitch, cameraAngles.current.yaw, 0, 'YXZ');
+    syncSurfaceFrame();
+    applyGravityCameraTransform(
+      cameraRef.current,
+      surfaceUp.current,
+      surfaceForward.current,
+      pitch.current,
+      CAMERA_EYE_HEIGHT
+    );
   });
 
   return null;

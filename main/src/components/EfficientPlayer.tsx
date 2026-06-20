@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { CapsuleCollider, RapierRigidBody, RigidBody, useBeforePhysicsStep, useRapier } from '@react-three/rapier';
@@ -46,13 +46,12 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
 const VISUAL_TRANSITION_TIME = 0.42;
+const PLAYER_LOCAL_UP = new THREE.Vector3(0, 1, 0);
 
 interface RotationAnimation {
   startTime: number;
   startRotation: THREE.Quaternion;
   targetRotation: THREE.Quaternion;
-  startCameraUp: THREE.Vector3;
-  targetCameraUp: THREE.Vector3;
 }
 
 export interface PlayerDebugState {
@@ -67,15 +66,21 @@ export interface PlayerDebugState {
 
 interface EfficientPlayerProps {
   planetSize: number;
+  initialPosition?: THREE.Vector3;
+  resetPosition?: THREE.Vector3;
   onPositionChange?: (position: THREE.Vector3) => void;
   onSurfaceChange?: (surface: SurfaceState) => void;
+  onGroundedChange?: (grounded: boolean) => void;
   onDebugChange?: (debug: PlayerDebugState) => void;
 }
 
 export default function EfficientPlayer({
   planetSize,
+  initialPosition,
+  resetPosition,
   onPositionChange,
   onSurfaceChange,
+  onGroundedChange,
   onDebugChange
 }: EfficientPlayerProps) {
   const ref = useRef<RapierRigidBody | null>(null);
@@ -84,8 +89,8 @@ export default function EfficientPlayer({
   const { world, rapier } = useRapier();
 
   const [surfaceState, setSurfaceState] = useState<SurfaceState>(() => getSurfaceState('top'));
-  const [cameraUpSuspended, setCameraUpSuspended] = useState(false);
   const surfaceRef = useRef<SurfaceState>(surfaceState);
+  const visualCameraUp = useRef(surfaceState.up.clone());
   const rotationAnimation = useRef<RotationAnimation | null>(null);
   const lastPlanarForward = useRef(new THREE.Vector3(0, 0, -1));
   const controlsActive = useRef(false);
@@ -93,12 +98,25 @@ export default function EfficientPlayer({
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
+  const lastGroundedNotification = useRef<boolean | null>(null);
   const jumpState = useRef<JumpState>({
     isGrounded: false,
     coyoteTimeRemaining: 0,
     jumpBufferRemaining: 0,
     previousJump: false
   });
+  const defaultSpawnPosition = useMemo(
+    () => new THREE.Vector3(0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0),
+    [planetSize]
+  );
+  const initialSpawnPosition = useMemo(
+    () => (initialPosition ?? defaultSpawnPosition).clone(),
+    [defaultSpawnPosition, initialPosition]
+  );
+  const resetSpawnPosition = useMemo(
+    () => (resetPosition ?? defaultSpawnPosition).clone(),
+    [defaultSpawnPosition, resetPosition]
+  );
 
   const setSurface = useCallback((next: SurfaceState) => {
     surfaceRef.current = next;
@@ -113,22 +131,19 @@ export default function EfficientPlayer({
   const updateVisualTransition = useCallback(() => {
     const animation = rotationAnimation.current;
     const body = ref.current;
-    const camera = cameraRef.current;
-    if (!animation || !body || !camera) return;
+    if (!animation || !body) return;
 
     const progress = Math.min((performance.now() - animation.startTime) / (VISUAL_TRANSITION_TIME * 1000), 1);
     const eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
     const rotation = animation.startRotation.clone().slerp(animation.targetRotation, eased);
-    const cameraUp = animation.startCameraUp.clone().lerp(animation.targetCameraUp, eased).normalize();
 
     body.setRotation(rotation, true);
-    camera.up.copy(cameraUp);
+    visualCameraUp.current.copy(PLAYER_LOCAL_UP).applyQuaternion(rotation).normalize();
 
     if (progress >= 1) {
       body.setRotation(animation.targetRotation, true);
-      camera.up.copy(animation.targetCameraUp);
+      visualCameraUp.current.copy(PLAYER_LOCAL_UP).applyQuaternion(animation.targetRotation).normalize();
       rotationAnimation.current = null;
-      setCameraUpSuspended(false);
     }
   }, []);
 
@@ -163,8 +178,7 @@ export default function EfficientPlayer({
     basis: { forward: THREE.Vector3; right: THREE.Vector3 }
   ) => {
     const body = ref.current;
-    const camera = cameraRef.current;
-    if (!body || !camera) return false;
+    if (!body) return false;
 
     const current = surfaceRef.current;
     if (current.face === targetFace || !areAdjacentFaces(current.face, targetFace)) return false;
@@ -203,11 +217,8 @@ export default function EfficientPlayer({
     rotationAnimation.current = {
       startTime: performance.now(),
       startRotation,
-      targetRotation,
-      startCameraUp: camera.up.clone(),
-      targetCameraUp: target.up.clone()
+      targetRotation
     };
-    setCameraUpSuspended(true);
     lastPlanarForward.current.copy(transported.forward);
     transitionCooldown.current = TRANSITION_LOCK_TIME;
     setSurface(target);
@@ -219,18 +230,17 @@ export default function EfficientPlayer({
     if (!body) return;
 
     const top = getSurfaceState('top');
-    body.setTranslation({ x: 0, y: planetSize + PLAYER_CENTER_CLEARANCE + 2, z: 0 }, true);
+    body.setTranslation(vectorToRapier(resetSpawnPosition), true);
     body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     body.setAngvel({ x: 0, y: 0, z: 0 }, true);
     body.setRotation(new THREE.Quaternion(), true);
     body.lockRotations(true, true);
-    cameraRef.current?.up.copy(top.up);
     rotationAnimation.current = null;
-    setCameraUpSuspended(false);
+    visualCameraUp.current.copy(top.up);
     lastPlanarForward.current.set(0, 0, -1);
     transitionCooldown.current = 0;
     setSurface(top);
-  }, [planetSize, setSurface]);
+  }, [resetSpawnPosition, setSurface]);
 
   const handlePointerLockChange = useCallback((locked: boolean) => {
     controlsActive.current = locked;
@@ -308,17 +318,21 @@ export default function EfficientPlayer({
     }
 
     transitionCooldown.current = Math.max(0, transitionCooldown.current - FIXED_PHYSICS_STEP);
-    const predictedPosition = predictPosition(position, nextVelocity, FIXED_PHYSICS_STEP);
-    const targetFace = chooseFaceFromPosition(predictedPosition, activeSurface.face, {
-      planetRadius: planetSize,
-      hysteresis: EDGE_HYSTERESIS,
-      bodyRadius: PLAYER_EDGE_RADIUS,
-      velocity: nextVelocity,
-      movementDirection: moveDirection
-    });
+    const transitionLocked = Boolean(rotationAnimation.current) || transitionCooldown.current > 0;
 
-    if (targetFace && beginTransition(targetFace, position, nextVelocity, basis)) {
-      return;
+    if (!transitionLocked) {
+      const predictedPosition = predictPosition(position, nextVelocity, FIXED_PHYSICS_STEP);
+      const targetFace = chooseFaceFromPosition(predictedPosition, activeSurface.face, {
+        planetRadius: planetSize,
+        hysteresis: EDGE_HYSTERESIS,
+        bodyRadius: PLAYER_EDGE_RADIUS,
+        velocity: nextVelocity,
+        movementDirection: moveDirection
+      });
+
+      if (targetFace && beginTransition(targetFace, position, nextVelocity, basis)) {
+        return;
+      }
     }
 
     body.setLinvel(vectorToRapier(nextVelocity), true);
@@ -332,6 +346,10 @@ export default function EfficientPlayer({
     updateVisualTransition();
     const position = vectorFromRapier(body.translation());
     onPositionChange?.(position);
+    if (lastGroundedNotification.current !== lastGrounded.current) {
+      lastGroundedNotification.current = lastGrounded.current;
+      onGroundedChange?.(lastGrounded.current);
+    }
 
     const controls = get();
     const deletePressed = controlsActive.current && controls.delete && !previousDeleteKey.current;
@@ -375,7 +393,7 @@ export default function EfficientPlayer({
       <CameraControls
         cameraRef={cameraRef}
         activeUp={surfaceState.up}
-        suspendUpSync={cameraUpSuspended}
+        getActiveUp={() => visualCameraUp.current}
         onPointerLockChange={handlePointerLockChange}
       />
       <RigidBody
@@ -383,7 +401,7 @@ export default function EfficientPlayer({
         colliders={false}
         mass={1}
         type="dynamic"
-        position={[0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0]}
+        position={[initialSpawnPosition.x, initialSpawnPosition.y, initialSpawnPosition.z]}
         lockRotations
         gravityScale={0}
         linearDamping={0.5}
@@ -399,7 +417,7 @@ export default function EfficientPlayer({
           makeDefault
           fov={75}
           near={0.05}
-          far={planetSize * 5}
+          far={planetSize * 120}
         />
 
         <mesh>

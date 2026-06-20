@@ -5,8 +5,9 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { deterministicTangentForUp } from '../utils/surfaceControls';
-import { MaterialType } from '../types/materials';
 import { generateTree } from '../utils/treeGen';
+import { seededVoxelUnit } from '../utils/seededHash';
+import { isDecoratableGrassVoxel } from '../utils/grassField';
 import {
   createBarkMaterial,
   createLeafMaterial,
@@ -14,8 +15,6 @@ import {
 } from '../utils/treeMaterials';
 import { getSunDirection } from './SkyController';
 
-// How often (frames) we re-check whether the grass set changed and rebuild.
-const REBUILD_POLL_FRAMES = 45;
 // Extra instance slots so small grass-count fluctuations don't force a realloc.
 const HEADROOM = 32;
 // Surface offset: lift the trunk base to the voxel's outer face (cell spans ±1).
@@ -26,15 +25,6 @@ interface TreeFieldProps {
   terrainSeed: number;
   /** Player/camera world position for far-distance culling (optional). */
   playerPosition?: THREE.Vector3;
-}
-
-// Deterministic per-voxel hash in [0,1) — selects which grass voxels get a tree
-// and seeds per-tree yaw/scale/tint. Same voxel always gets the same answer.
-function voxelHash(x: number, y: number, z: number, salt: number): number {
-  let h = (x * 374761393 + y * 668265263 + z * 2147483647 + salt * 1013904223) >>> 0;
-  h = (h ^ (h >>> 13)) >>> 0;
-  h = (h * 1274126177) >>> 0;
-  return (h >>> 0) / 4294967296;
 }
 
 // Reused scratch (avoid per-instance allocation).
@@ -51,13 +41,13 @@ const _m = new THREE.Matrix4();
 const _color = new THREE.Color();
 
 /** Count grass voxels whose hash selects them for a tree (cheap signature). */
-function countTreeVoxels(treeDensity: number): number {
+function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
   if (treeDensity <= 0) return 0;
   let n = 0;
   for (const voxel of voxelSystem.getAllVoxels().values()) {
-    if (voxel.material !== MaterialType.GRASS) continue;
+    if (!isDecoratableGrassVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
-    if (voxelHash(x, y, z, 7) < treeDensity) n++;
+    if (seededVoxelUnit(x, y, z, 7, terrainSeed) < treeDensity) n++;
   }
   return n;
 }
@@ -77,7 +67,7 @@ function countTreeVoxels(treeDensity: number): number {
  * resets on re-render); count is owned imperatively in the fill + self-healed in
  * useFrame.
  */
-export default function TreeField({ playerPosition }: TreeFieldProps) {
+export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProps) {
   const density = getGraphicsQuality().treeDensity;
 
   const archetype = useMemo(() => (density > 0 ? generateTree(1337) : null), [density]);
@@ -89,9 +79,8 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
 
   const [capacity, setCapacity] = useState(0);
   const signatureRef = useRef<string>('');
-  const frameRef = useRef(0);
 
-  const neededCapacity = () => countTreeVoxels(density);
+  const neededCapacity = () => countTreeVoxels(density, terrainSeed);
 
   const growCapacity = (needed: number) => {
     setCapacity(prev => {
@@ -114,9 +103,9 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
     let slot = 0;
     for (const voxel of voxelSystem.getAllVoxels().values()) {
       if (slot >= cap) break;
-      if (voxel.material !== MaterialType.GRASS) continue;
+      if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
-      if (voxelHash(x, y, z, 7) >= density) continue;
+      if (seededVoxelUnit(x, y, z, 7, terrainSeed) >= density) continue;
 
       voxelCoordToWorld(x, y, z, _world);
       if (maxDist > 0 && playerPosition) {
@@ -132,9 +121,9 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
       // Orientation basis: local +Y -> up (same approach as grass).
       _basis.makeBasis(_tangent, _up, _bitangent);
 
-      const yaw = voxelHash(x, y, z, 11) * Math.PI * 2;
+      const yaw = seededVoxelUnit(x, y, z, 11, terrainSeed) * Math.PI * 2;
       _yaw.makeRotationY(yaw);
-      const s = 0.7 + voxelHash(x, y, z, 23) * 0.7; // 0.7 .. 1.4
+      const s = 0.7 + seededVoxelUnit(x, y, z, 23, terrainSeed) * 0.7; // 0.7 .. 1.4
       _scaleM.makeScale(s, s, s);
 
       _translate.makeTranslation(
@@ -153,7 +142,7 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
 
       // Per-tree tint (also read by the leaf shader's instWorld hash, but a real
       // instanceColor gives bark/leaf subtle variation through Three's pipeline).
-      const tint = voxelHash(x, y, z, 31);
+      const tint = seededVoxelUnit(x, y, z, 31, terrainSeed);
       _color.setHSL(0.28 + (tint - 0.5) * 0.06, 0.5, 0.45 + tint * 0.12);
       trunk.setColorAt(slot, _color);
       leaf.setColorAt(slot, _color);
@@ -178,7 +167,7 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
-    signatureRef.current = `${voxelSystem.getWorldId()}:${countTreeVoxels(density)}`;
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
@@ -202,17 +191,14 @@ export default function TreeField({ playerPosition }: TreeFieldProps) {
       getGraphicsQuality()
     );
 
-    frameRef.current++;
-    if (frameRef.current % REBUILD_POLL_FRAMES === 0) {
-      const sig = `${voxelSystem.getWorldId()}:${countTreeVoxels(density)}`;
-      if (sig !== signatureRef.current) {
-        const needed = neededCapacity();
-        if (needed > capacity) {
-          growCapacity(needed);
-        } else {
-          signatureRef.current = sig;
-          rebuild();
-        }
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    if (sig !== signatureRef.current) {
+      const needed = neededCapacity();
+      if (needed > capacity) {
+        growCapacity(needed);
+      } else {
+        signatureRef.current = sig;
+        rebuild();
       }
     }
   });

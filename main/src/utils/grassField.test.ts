@@ -42,6 +42,12 @@ describe('computeBladeMatrix', () => {
     }
   });
 
+  it('varies placement by world seed', () => {
+    const a = computeBladeMatrix(3, 25, -4, 2, new THREE.Matrix4(), 111);
+    const b = computeBladeMatrix(3, 25, -4, 2, new THREE.Matrix4(), 222);
+    expect(a.elements.some((value, index) => Math.abs(value - b.elements[index]) > 0.001)).toBe(true);
+  });
+
   it('orients local +Y toward the planet outward normal', () => {
     // A voxel on +X face: world up should point roughly +X.
     const x = 25;
@@ -98,6 +104,33 @@ describe('buildGrassInstances', () => {
     expect(result.voxelCount).toBe(2);
     expect(result.count).toBe(2 * perVoxel);
     expect(mesh.count).toBe(2 * perVoxel);
+  });
+
+  it('ignores newly exposed grass voxels that should not host resources', () => {
+    voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, green);
+    voxelSystem.addVoxel(
+      1,
+      25,
+      0,
+      MaterialType.GRASS,
+      green,
+      undefined,
+      { supportsSurfaceResources: false }
+    );
+
+    expect(countGrassVoxels()).toBe(1);
+
+    const density = 4;
+    const perVoxel = bladesPerVoxel(density);
+    const mesh = new THREE.InstancedMesh(
+      createBladeGeometry(),
+      new THREE.MeshStandardMaterial(),
+      2 * perVoxel
+    );
+
+    const result = buildGrassInstances(mesh, density);
+    expect(result.voxelCount).toBe(1);
+    expect(result.count).toBe(perVoxel);
   });
 
   it('respects far-distance culling', () => {

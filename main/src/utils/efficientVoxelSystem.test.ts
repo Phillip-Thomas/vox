@@ -52,6 +52,37 @@ describe('EfficientVoxelSystem', () => {
     expect(remove).toHaveBeenCalledWith(0, 0, 0, system.getWorldId());
   });
 
+  it('tracks edit version across successful voxel adds and removes', () => {
+    const system = new EfficientVoxelSystem(10);
+    const initialVersion = system.getEditVersion();
+
+    system.addVoxel(0, 0, 0, 'stone', new THREE.Color('gray'));
+    expect(system.getEditVersion()).toBe(initialVersion + 1);
+
+    system.removeVoxel(0, 0, 0);
+    expect(system.getEditVersion()).toBe(initialVersion + 2);
+
+    system.removeVoxel(0, 0, 0);
+    expect(system.getEditVersion()).toBe(initialVersion + 2);
+  });
+
+  it('marks newly exposed terrain as unable to host surface resources', () => {
+    const system = new EfficientVoxelSystem(10);
+    const color = new THREE.Color('gray');
+    system.setOriginalTerrain([
+      { x: 0, y: 0, z: 0, material: 'grass', color },
+      { x: 1, y: 0, z: 0, material: 'grass', color }
+    ]);
+
+    system.addVoxel(1, 0, 0, 'grass', color);
+    expect(system.supportsSurfaceResources(1, 0, 0)).toBe(true);
+
+    system.removeVoxel(1, 0, 0);
+    expect(system.exposeNeighbors(1, 0, 0)).toBe(1);
+    expect(system.hasVoxel(0, 0, 0)).toBe(true);
+    expect(system.supportsSurfaceResources(0, 0, 0)).toBe(false);
+  });
+
   it('compacts slots and keeps slot-to-coordinate lookup authoritative after deletion', () => {
     const system = new EfficientVoxelSystem(10);
     const color = new THREE.Color('gray');
@@ -69,5 +100,38 @@ describe('EfficientVoxelSystem', () => {
     expect(system.getCoordForSlot(1)).toEqual({ x: 1, y: 0, z: 0 });
     expect(system.getCoordForSlot(2)).toBeNull();
     expect(system.getStats().activeSlots).toBe(2);
+  });
+
+  it('invalidates cached instanced mesh bounds when voxels are added after an empty bounds pass', () => {
+    const system = new EfficientVoxelSystem(10);
+    const mesh = new THREE.InstancedMesh(
+      new THREE.BoxGeometry(1.98, 1.98, 1.98),
+      new THREE.MeshBasicMaterial(),
+      10
+    );
+    const color = new THREE.Color('gray');
+
+    mesh.count = 0;
+    system.setMesh(mesh);
+
+    mesh.computeBoundingSphere();
+    expect(mesh.boundingSphere).not.toBeNull();
+
+    system.addVoxel(0, 0, 5, 'stone', color);
+    expect(mesh.boundingSphere).toBeNull();
+
+    mesh.updateMatrixWorld(true);
+    const raycaster = new THREE.Raycaster(
+      new THREE.Vector3(0, 0, 20),
+      new THREE.Vector3(0, 0, -1),
+      0,
+      30
+    );
+    const hit = raycaster
+      .intersectObject(mesh, false)
+      .find(intersection => intersection.instanceId !== undefined);
+
+    expect(hit?.instanceId).toBe(0);
+    expect(system.getCoordForSlot(hit?.instanceId ?? -1)).toEqual({ x: 0, y: 0, z: 5 });
   });
 });
