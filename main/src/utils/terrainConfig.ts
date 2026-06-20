@@ -57,7 +57,7 @@ export function createTerrainConfig(seed: number, planetRadius: number): Terrain
       hillFrequency: 0.05,
       valleyDepth: Math.max(18, Math.floor(planetRadius * 0.5)),
       terrainScale: 0.07,
-      seaLevelPercentile: 0.55
+      seaLevelPercentile: 0.30
     };
   }
 

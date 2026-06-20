@@ -52,7 +52,7 @@ export const SEA_LEVEL_RADIUS_PERCENT = 0.95;
 // Fallback sea-level percentile used when a terrain config does not specify one
 // (e.g. a bare config in a test). The percentile-based mechanism (computed from
 // the actual terrain) is the real driver of coverage per preset.
-export const DEFAULT_SEA_LEVEL_PERCENTILE = 0.42;
+export const DEFAULT_SEA_LEVEL_PERCENTILE = 0.22;
 
 /**
  * Sea-level radius in COORDINATE units for a given world config.

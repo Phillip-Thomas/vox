@@ -85,6 +85,29 @@ export class ProceduralWorldGenerator {
   // terrain so EVERY seed can have a visible waterline.
   private static readonly WATER_SHELL_MARGIN = 5;
 
+  // --- Surface material tuning knobs ----------------------------------------
+  // The surface shell is SLOPE-DRIVEN (see generateMaterialForPosition): flat /
+  // gentle ground is GRASS, moderate slopes are DIRT, steep faces & peaks are
+  // STONE. `surfaceSlope` returns max(|du|,|dv|) of the terrain-top radius across
+  // the two tangent axes (central differences over the cached surface-height
+  // field), i.e. the local rise-over-run of the planet's surface. Tuned against
+  // measured exposed-voxel distributions across seeds 12345/54321/13579.
+  //
+  // PEAK: terrainOffset above this is always STONE (rocky summits), independent
+  //   of slope, so the highest land reads rocky.
+  // STONE_SLOPE: slope at/above this is STONE (steep cliffs/scarps).
+  // DIRT_SLOPE: slope at/above this (but below STONE_SLOPE) is DIRT (eroded
+  //   hillsides / step walls). Below it is GRASS.
+  // GRASS_DEPTH: the near-surface sub-layer with proceduralSurfaceHeight in
+  //   (1, GRASS_DEPTH] is re-classified with the SAME slope rule, so GENTLE
+  //   step-walls just under the skin read grassy instead of bare dirt, while
+  //   STEEP walls (>= DIRT_SLOPE) still expose dirt/stone (no plastic green
+  //   cliffs). Deeper than this stays DIRT.
+  private static readonly PEAK = 5;
+  private static readonly STONE_SLOPE = 0.68;
+  private static readonly DIRT_SLOPE = 0.42;
+  private static readonly GRASS_DEPTH = 3;
+
   constructor(config: WorldGenerationConfig = DEFAULT_WORLD_CONFIG, terrainConfig?: Partial<TerrainGenerationConfig>) {
     this.config = config;
     this.terrainConfig = { ...DEFAULT_TERRAIN_CONFIG, ...terrainConfig };
@@ -107,17 +130,15 @@ export class ProceduralWorldGenerator {
     );
     const terrainOffset = proceduralSurfaceHeight - baseDistance;
 
-    if (proceduralSurfaceHeight <= 1 && proceduralSurfaceHeight > 0) {
-      if (terrainOffset > 4) return MaterialType.STONE;
-      if (terrainOffset < -3) return MaterialType.DIRT;
-      // Coastline / seabed: a surface voxel whose terrain top sits at or below
-      // sea level is shore or underwater ground, so it is SAND rather than
-      // GRASS. The terrain top in coordinate units along this column's dominant
-      // axis is (planetRadius + terrainOffset). No water voxel is placed here —
-      // the ocean is the single transparent <WaterShell> at the same sea level.
-      const terrainTopRadius = planetRadius + terrainOffset;
-      if (terrainTopRadius <= this.getSeaLevelRadius()) return MaterialType.SAND;
-      return MaterialType.GRASS;
+    // SURFACE SHELL (the visible skin) and the near-surface GRASS-SKIN sub-layer
+    // share a single SLOPE-DRIVEN rule: flat/gentle => GRASS, moderate => DIRT,
+    // steep/peak => STONE, submerged => SAND. Re-classifying the sub-layer makes
+    // gentle hillside step-walls read grassy while steep walls keep dirt/stone.
+    if (
+      (proceduralSurfaceHeight <= 1 && proceduralSurfaceHeight > 0) ||
+      (proceduralSurfaceHeight > 1 && proceduralSurfaceHeight <= ProceduralWorldGenerator.GRASS_DEPTH)
+    ) {
+      return this.surfaceShellMaterial(x, y, z, terrainOffset, planetRadius);
     }
 
     if (proceduralSurfaceHeight <= 5) return MaterialType.DIRT;
@@ -126,6 +147,67 @@ export class ProceduralWorldGenerator {
     if (depthRatio < 0.3) return this.getWeightedMaterial(x, y, z);
     if (depthRatio < 0.7) return this.coordinateRandom(x, y, z, 31) < 0.7 ? MaterialType.STONE : MaterialType.DIRT;
     return this.coordinateRandom(x, y, z, 43) < 0.8 ? MaterialType.STONE : MaterialType.DIRT;
+  }
+
+  /**
+   * Slope-driven material for a surface-shell (or grass-skin) voxel.
+   *   SAND  if the column's terrain top is at/below sea level (coast/seabed) —
+   *         checked FIRST so coastlines & water stay correct.
+   *   STONE if terrainOffset > PEAK (summits) OR slope >= STONE_SLOPE (cliffs).
+   *   DIRT  if slope >= DIRT_SLOPE (moderate hillsides / step walls).
+   *   GRASS otherwise (flat + gentle slopes — the genuine majority).
+   */
+  private surfaceShellMaterial(x: number, y: number, z: number, terrainOffset: number, planetRadius: number): MaterialType {
+    const terrainTopRadius = planetRadius + terrainOffset;
+    if (terrainTopRadius <= this.getSeaLevelRadius()) return MaterialType.SAND;
+    const slope = this.surfaceSlope(x, y, z);
+    if (terrainOffset > ProceduralWorldGenerator.PEAK || slope >= ProceduralWorldGenerator.STONE_SLOPE) {
+      return MaterialType.STONE;
+    }
+    if (slope >= ProceduralWorldGenerator.DIRT_SLOPE) return MaterialType.DIRT;
+    return MaterialType.GRASS;
+  }
+
+  /**
+   * Local terrain steepness at (x,y,z): the magnitude of the surface-top
+   * gradient across the two TANGENT axes (the non-dominant ones, matching
+   * getProceduralSurfaceHeight's dominant-axis selection). We sample the cached
+   * surface-height field at the +/-1 tangent neighbours and take the central
+   * difference per axis, then return max(|du|,|dv|) — the steepest of the two
+   * tangent directions (chosen over the Euclidean magnitude so a single steep
+   * direction, e.g. a scarp, reads as steep). Caches make this ~free.
+   */
+  private surfaceSlope(x: number, y: number, z: number): number {
+    const absX = Math.abs(x);
+    const absY = Math.abs(y);
+    const absZ = Math.abs(z);
+
+    // Tangent unit steps depend on which axis is dominant (mirrors
+    // getProceduralSurfaceHeight's u/v choice).
+    let du1: [number, number, number], du2: [number, number, number];
+    let dv1: [number, number, number], dv2: [number, number, number];
+    if (absX >= absY && absX >= absZ) {
+      // dominant x => tangents are y (u) and z (v)
+      du1 = [0, 1, 0]; du2 = [0, -1, 0];
+      dv1 = [0, 0, 1]; dv2 = [0, 0, -1];
+    } else if (absY >= absX && absY >= absZ) {
+      // dominant y => tangents are x (u) and z (v)
+      du1 = [1, 0, 0]; du2 = [-1, 0, 0];
+      dv1 = [0, 0, 1]; dv2 = [0, 0, -1];
+    } else {
+      // dominant z => tangents are x (u) and y (v)
+      du1 = [1, 0, 0]; du2 = [-1, 0, 0];
+      dv1 = [0, 1, 0]; dv2 = [0, -1, 0];
+    }
+
+    const hUp = this.getProceduralSurfaceHeight(x + du1[0], y + du1[1], z + du1[2]);
+    const hUm = this.getProceduralSurfaceHeight(x + du2[0], y + du2[1], z + du2[2]);
+    const hVp = this.getProceduralSurfaceHeight(x + dv1[0], y + dv1[1], z + dv1[2]);
+    const hVm = this.getProceduralSurfaceHeight(x + dv2[0], y + dv2[1], z + dv2[2]);
+
+    const du = (hUp - hUm) / 2;
+    const dv = (hVp - hVm) / 2;
+    return Math.max(Math.abs(du), Math.abs(dv));
   }
 
   getAllVoxelPositions() {
