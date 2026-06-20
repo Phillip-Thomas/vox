@@ -1,35 +1,24 @@
 import * as THREE from 'three';
 
-// --- Space sky dome (procedural starfield + nebula) -------------------------
+// --- Space sky dome (procedural deep-space: stars + nebulae + moon) ----------
 //
-// A single large inverted sphere drawn behind everything as the night backdrop.
-// One extra draw call, pure procedural fragment math (no textures): a layered
-// hash-based starfield with twinkle + a few colored stars, plus a low-frequency
-// fbm nebula concentrated along a great-circle band so it reads as a Milky Way.
+// A large inverted sphere composited as an ADDITIVE overlay on top of the drei
+// atmospheric <Sky>. Additive + night-gated means: by day it adds ~nothing (blue
+// sky shows through), and at night it layers a dense starfield, colourful nebulae,
+// a Milky Way band and a lit moon over the darkened atmosphere — so the stars are
+// never occluded/washed by the (opaque) atmosphere dome. One extra draw call,
+// pure procedural fragment math (no textures).
 //
-// Visibility is driven by a night factor (1 = full night, 0 = day) so the stars
-// fade in at dusk and out at dawn. A slow time-driven rotation inside the shader
-// makes the celestial sphere drift so the sky "changes over time".
-//
-// The dome is FrustumCulled=false / depthWrite=false / fog=false on the mesh +
-// material so it surrounds the camera, never z-fights the scene, and isn't
-// washed out by scene.fog. renderOrder is set very low so it draws first as the
-// backmost layer.
+// depthTest=true + depthWrite=false: the dome sits at radius 220, so the opaque
+// planet correctly occludes it (stars hidden behind terrain) while open sky shows
+// the cosmos. fog=false so scene fog never tints it.
 
-/** World-space radius of the dome. Inside the camera far plane (planetSize*5). */
 export const SPACE_DOME_RADIUS = 220;
-
-/** Drawn before everything else so it reads as the backdrop. */
 export const SPACE_DOME_RENDER_ORDER = -1000;
 
-/**
- * Map the SkyController daylight factor (0 at night, 1 at midday) to a night
- * factor in [0,1] with a slightly eased ramp so stars linger a touch into dusk
- * and clear cleanly by full day. Pure + deterministic for unit testing.
- */
+/** daylight (0 night .. 1 day) -> night factor (0..1), eased. */
 export function nightFactorFromDaylight(daylight: number): number {
   const n = 1 - Math.min(1, Math.max(0, daylight));
-  // Ease-in so stars don't pop instantly at the daylight threshold.
   return n * n * (3 - 2 * n);
 }
 
@@ -37,12 +26,12 @@ export interface SpaceSkyUniforms {
   uTime: { value: number };
   uNight: { value: number };
   uSunDir: { value: THREE.Vector3 };
+  uMoonDir: { value: THREE.Vector3 };
 }
 
 const VERT = /* glsl */ `
   varying vec3 vDir;
   void main() {
-    // Direction from the dome center to this vertex; used as the sampling ray.
     vDir = normalize(position);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
@@ -54,9 +43,9 @@ const FRAG = /* glsl */ `
   uniform float uTime;
   uniform float uNight;
   uniform vec3 uSunDir;
+  uniform vec3 uMoonDir;
   varying vec3 vDir;
 
-  // --- Hash / noise helpers (cheap, texture-free) ---------------------------
   float hash31(vec3 p) {
     p = fract(p * 0.1031);
     p += dot(p, p.yzx + 33.33);
@@ -88,51 +77,37 @@ const FRAG = /* glsl */ `
       f.z
     );
   }
-  // 4-octave fbm for the soft nebula clouds.
   float fbm(vec3 p) {
     float a = 0.5;
     float s = 0.0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
       s += a * vnoise(p);
-      p *= 2.02;
+      p *= 2.03;
       a *= 0.5;
     }
     return s;
   }
 
-  // One layer of stars: partition the sphere direction into cells, drop one star
-  // per cell with a hashed position/brightness/color and a per-star twinkle.
-  vec3 starLayer(vec3 dir, float cells, float density, float twinkle) {
+  // One star layer: cellularize the direction, drop a hashed star per cell.
+  vec3 starLayer(vec3 dir, float cells, float density, float twinkle, float sizePow) {
     vec3 p = dir * cells;
     vec3 cell = floor(p);
     vec3 f = fract(p) - 0.5;
-
     vec3 rnd = hash33(cell);
-    // Only a fraction of cells host a star.
     if (rnd.x > density) return vec3(0.0);
-
-    // Sub-cell jitter so stars aren't grid-aligned.
     vec2 jitter = (hash33(cell + 1.7).xy - 0.5) * 0.7;
     vec2 d = f.xy - jitter;
     float dist2 = dot(d, d) + f.z * f.z;
-
-    // Point falloff -> a tight bright core.
-    float core = exp(-dist2 * 90.0);
-
-    // Per-star brightness and twinkle phase.
+    float core = exp(-dist2 * sizePow);
     float bright = 0.35 + 0.65 * rnd.y;
-    float tw = 0.65 + 0.35 * sin(uTime * (1.5 + rnd.z * 3.0) + rnd.y * 6.28) * twinkle;
-
-    // A few stars are faintly colored: blue-white, warm, neutral.
+    float tw = 0.6 + 0.4 * sin(uTime * (1.5 + rnd.z * 3.0) + rnd.y * 6.28) * twinkle;
     vec3 col;
-    if (rnd.z < 0.18) col = vec3(0.65, 0.78, 1.0);      // blue
-    else if (rnd.z > 0.86) col = vec3(1.0, 0.82, 0.62); // warm
-    else col = vec3(1.0, 1.0, 0.97);                    // neutral white
-
+    if (rnd.z < 0.20) col = vec3(0.62, 0.76, 1.0);      // blue-white
+    else if (rnd.z > 0.84) col = vec3(1.0, 0.80, 0.58); // warm
+    else col = vec3(1.0, 1.0, 0.97);                    // neutral
     return col * core * bright * tw;
   }
 
-  // Slow rotation of the celestial sphere about a tilted axis.
   vec3 rotate(vec3 v, float ang) {
     vec3 axis = normalize(vec3(0.18, 1.0, 0.12));
     float c = cos(ang);
@@ -140,84 +115,125 @@ const FRAG = /* glsl */ `
     return v * c + cross(axis, v) * s + axis * dot(axis, v) * (1.0 - c);
   }
 
+  // Rich multi-colour nebula field: domain-warped fbm clouds with dust lanes,
+  // concentrated along a Milky Way band, tinted by a slow region field so
+  // different parts of the sky glow in different colours.
+  vec3 nebulaField(vec3 d) {
+    vec3 q = d * 2.2;
+    float warp = fbm(q * 0.6 + vec3(uTime * 0.004, 0.0, 0.0));
+    float base = fbm(q + warp * 1.2);
+    float lanes = fbm(q * 2.7 + 5.0);
+    float density = smoothstep(0.42, 0.95, base);
+    density *= mix(0.45, 1.0, lanes);                 // carve dark dust lanes
+
+    vec3 bandN = normalize(vec3(0.35, 0.25, 0.9));
+    float band = 1.0 - smoothstep(0.0, 0.62, abs(dot(d, bandN)));
+    density *= 0.30 + 0.95 * band;                    // brightest along the band
+
+    float region = fbm(d * 0.9 + 12.0);
+    vec3 cBlue = vec3(0.10, 0.22, 0.66);
+    vec3 cMag  = vec3(0.55, 0.10, 0.48);
+    vec3 cTeal = vec3(0.06, 0.42, 0.46);
+    vec3 cGold = vec3(0.48, 0.32, 0.12);
+    vec3 col = mix(cBlue, cMag, smoothstep(0.25, 0.55, region));
+    col = mix(col, cTeal, smoothstep(0.55, 0.74, region));
+    col = mix(col, cGold, smoothstep(0.80, 0.93, region));
+    return col * density;
+  }
+
+  // The moon: a lit disc with maria/crater mottling + limb darkening, and a soft
+  // halo. Self-lit (stylized full moon) so it is bright when up at night.
+  vec3 moon(vec3 dir, vec3 moonDir) {
+    float md = dot(dir, moonDir);
+    vec3 halo = vec3(0.42, 0.52, 0.78) * exp((md - 1.0) * 55.0) * 0.35;
+    if (md < 0.992) return halo;
+    float ang = acos(clamp(md, -1.0, 1.0));
+    float R = 0.072; // angular radius (~4 deg)
+    float disc = 1.0 - smoothstep(R * 0.86, R, ang);
+    vec3 ref = abs(moonDir.y) < 0.99 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+    vec3 t = normalize(cross(ref, moonDir));
+    vec3 b = cross(moonDir, t);
+    vec2 uv = vec2(dot(dir, t), dot(dir, b)) / R;
+    float maria = fbm(vec3(uv * 2.6, 0.0));
+    float surface = mix(0.7, 1.05, maria);
+    float r2 = clamp(dot(uv, uv), 0.0, 1.0);
+    float limb = sqrt(max(1.0 - r2 * 0.9, 0.0));
+    vec3 moonCol = vec3(0.96, 0.95, 0.86) * surface * (0.55 + 0.45 * limb);
+    return moonCol * disc + halo;
+  }
+
   void main() {
+    // Day: contribute nothing (additive). Early-out skips all the heavy noise.
+    if (uNight < 0.01) { gl_FragColor = vec4(0.0); return; }
+
     vec3 dir = normalize(vDir);
-    // Drift the sampling direction slowly over time (celestial rotation).
-    vec3 sdir = rotate(dir, uTime * 0.01);
+    vec3 sdir = rotate(dir, uTime * 0.01); // slow celestial drift (stars/nebula)
 
     vec3 color = vec3(0.0);
 
-    // --- Starfield: three layers at different scales for depth ---
-    color += starLayer(sdir, 90.0, 0.30, 1.0) * 1.4;
-    color += starLayer(sdir + 11.3, 150.0, 0.20, 0.8) * 1.0;
-    color += starLayer(sdir + 27.1, 240.0, 0.12, 0.6) * 0.7;
+    // Dense layered starfield (4 layers, varied size/twinkle).
+    color += starLayer(sdir, 80.0, 0.34, 1.0, 80.0) * 1.5;
+    color += starLayer(sdir + 11.3, 140.0, 0.24, 0.85, 110.0) * 1.1;
+    color += starLayer(sdir + 27.1, 220.0, 0.15, 0.6, 150.0) * 0.8;
+    color += starLayer(sdir + 53.7, 360.0, 0.10, 0.4, 200.0) * 0.55;
 
-    // --- Nebula / Milky Way band ---
-    // Distance from a great-circle plane (normal = tilted axis) -> a band.
-    vec3 bandNormal = normalize(vec3(0.35, 0.25, 0.9));
-    float band = 1.0 - smoothstep(0.0, 0.55, abs(dot(sdir, bandNormal)));
-    // Low-frequency fbm clouds, animated very slowly.
-    float clouds = fbm(sdir * 3.0 + vec3(0.0, uTime * 0.004, 0.0));
-    clouds = smoothstep(0.45, 1.0, clouds);
-    float neb = band * clouds;
-    // Two-tone galaxy: deep blue/purple shading toward teal in the densest parts.
-    vec3 nebColA = vec3(0.10, 0.06, 0.22); // deep purple-blue
-    vec3 nebColB = vec3(0.05, 0.20, 0.26); // teal
-    vec3 nebula = mix(nebColA, nebColB, clouds) * neb * 0.9;
-    color += nebula;
+    // Nebulae / Milky Way.
+    color += nebulaField(sdir) * 1.1;
 
-    // --- Base deep-space gradient (slightly bluer near the band axis) ---
-    vec3 deep = mix(vec3(0.010, 0.012, 0.030), vec3(0.020, 0.018, 0.045), band * 0.5);
-    color += deep;
+    // Deep-space base (dark, slightly blue). This is the night backdrop the stars
+    // sit on once the cosmos cross-fades in over the atmosphere.
+    color += vec3(0.010, 0.013, 0.030);
 
-    // Faint warm horizon glow opposite the sun residue (cheap, tasteful).
-    float horizon = pow(1.0 - abs(dir.y), 6.0);
-    color += vec3(0.04, 0.03, 0.05) * horizon;
+    // Moon (uses the un-rotated direction; driven by uMoonDir from the controller).
+    color += moon(dir, uMoonDir);
 
-    // Fade the entire dome in/out with the night factor.
-    gl_FragColor = vec4(color * uNight, 1.0);
+    // Normal-blend cross-fade: alpha = night. At full night the cosmos REPLACES
+    // the (never-truly-black) atmosphere instead of merely adding to its grey,
+    // so stars/nebula/moon read against true dark space. By day alpha=0 -> the
+    // blue atmospheric sky shows through untouched.
+    gl_FragColor = vec4(color, uNight);
   }
 `;
 
-/**
- * Build the dome's shader material. ShaderMaterial (not Raw) so it works cleanly
- * with three 0.160 without manually wiring projection matrices. fog disabled,
- * depthWrite off, BackSide so we see its inner surface from inside the dome.
- */
 export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
       uNight: { value: 1 },
-      uSunDir: { value: new THREE.Vector3(0, 1, 0) }
+      uSunDir: { value: new THREE.Vector3(0, 1, 0) },
+      uMoonDir: { value: new THREE.Vector3(0, -1, 0) }
     },
     vertexShader: VERT,
     fragmentShader: FRAG,
     side: THREE.BackSide,
     depthWrite: false,
-    depthTest: true,
-    fog: false,
-    transparent: false
+    depthTest: true,        // occluded by the opaque planet, shows in open sky
+    transparent: true,      // renders in the transparent pass, AFTER the opaque <Sky>
+    blending: THREE.NormalBlending, // cross-fade (alpha=night) so night REPLACES the grey atmosphere
+    fog: false
   });
 }
 
 const _sunScratch = new THREE.Vector3();
+const _moonScratch = new THREE.Vector3();
 
 /**
- * Push the day-cycle state into the dome material. `time` is frozen by the
- * caller when animatedShaders is off; `sunDir` is copied (SkyController mutates
- * its vector in place). Returns the resolved night factor for convenience.
+ * Push day-cycle state into the dome. `time` is frozen by the caller when
+ * animation is off; sun/moon dirs are copied (the controller mutates its vectors
+ * in place). Returns the resolved night factor.
  */
 export function updateSpaceSky(
   material: THREE.ShaderMaterial,
   time: number,
   daylight: number,
-  sunDir: THREE.Vector3
+  sunDir: THREE.Vector3,
+  moonDir: THREE.Vector3
 ): number {
   const u = material.uniforms as unknown as SpaceSkyUniforms;
   const night = nightFactorFromDaylight(daylight);
   u.uTime.value = time;
   u.uNight.value = night;
   u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
+  u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
   return night;
 }

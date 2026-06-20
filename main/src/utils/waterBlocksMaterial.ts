@@ -159,8 +159,13 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uAnimated = { value: 1 };
     shader.uniforms.uReflections = { value: 1 };
     shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
-    shader.uniforms.uWaveAmp = { value: 0.7 };
-    shader.uniforms.uChoppy = { value: 0.6 };
+    // Swell vertical amplitude (world units). Swell height peaks at ~1.05, so the
+    // max crest lift is ~uWaveAmp*1.05. To keep the surface INSIDE its voxel cell
+    // (never rising above the cell top), keep FACE_OFFSET + uWaveAmp*1.05 <= 1.0.
+    // With FACE_OFFSET=0.55, 0.42 caps crests at ~0.99 (< 1.0). Raising this makes
+    // bigger waves but they'll breach the grid unless FACE_OFFSET is also lowered.
+    shader.uniforms.uWaveAmp = { value: 0.42 };
+    shader.uniforms.uChoppy = { value: 0.6 }; // horizontal pinch; doesn't affect altitude
     shader.uniforms.uDeepColor = { value: DEEP_WATER.clone() };
     shader.uniforms.uShallowColor = { value: SHALLOW_WATER.clone() };
     shader.uniforms.uFoamColor = { value: FOAM_COLOR.clone() };

@@ -40,6 +40,38 @@ export function getSunDirection(): THREE.Vector3 {
   return sunDirection;
 }
 
+// Moon direction (world space, points from planet toward the moon). The moon
+// rides roughly opposite the sun so it is up exactly when the sun has set,
+// lighting the night. Shared like sunDirection so water/sky can read it.
+const moonDirection = new THREE.Vector3(0, -1, 0);
+
+/** Current moon direction in world space (normalized). Shared module vector. */
+export function getMoonDirection(): THREE.Vector3 {
+  return moonDirection;
+}
+
+// Slight tilt so the moon's arc isn't a perfect mirror of the sun's.
+const MOON_TILT = new THREE.Vector3(0.15, 0.0, -0.22);
+const moonColor = new THREE.Color('#aebfe8'); // cool moonlight
+
+// Debug: ?dayphase=0.75 freezes the day cycle at a phase (0=sunrise, .25=noon,
+// .5=sunset, .75=midnight) so the night sky/moon can be inspected immediately.
+const forcedDayPhase: number | null = (() => {
+  try {
+    const v = new URLSearchParams(window.location.search).get('dayphase');
+    if (v === null) return null;
+    const f = parseFloat(v);
+    return Number.isFinite(f) ? ((f % 1) + 1) % 1 : null;
+  } catch {
+    return null;
+  }
+})();
+
+/** Forced day phase from ?dayphase=, or null when the cycle runs normally. */
+export function getForcedDayPhase(): number | null {
+  return forcedDayPhase;
+}
+
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
 const dayFogColor = new THREE.Color('#9ec9ff');
 const goldenFogColor = new THREE.Color('#f0a060');
@@ -73,6 +105,7 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
 function applyDayPhase(
   phase: number,
   sunLight: THREE.DirectionalLight,
+  moonLight: THREE.DirectionalLight,
   ambient: THREE.AmbientLight,
   fog: THREE.FogExp2,
   sky: SkyImpl | null
@@ -97,10 +130,23 @@ function applyDayPhase(
   const golden = daylight * (1 - smoothstep(0.05, 0.32, elevation));
 
   // --- Sun (directional) light ---
-  sunLight.intensity = 0.15 + daylight * 1.05;
+  // Low night floor (~0.03) so night light comes from the MOON (cool), not a
+  // weird warm sun-from-below glow.
+  sunLight.intensity = 0.03 + daylight * 1.17;
   tmpColor.copy(nightSun).lerp(noonSun, daylight);
   tmpColor.lerp(goldenSun, golden * 0.85);
   sunLight.color.copy(tmpColor);
+
+  // --- Moon (directional) light: rises as the sun sets, lighting the night ---
+  // Roughly anti-sun (so it's up at night) with a slight tilt; rendered as a
+  // self-lit full moon by SpaceSky, so we light the world from its direction.
+  moonDirection.copy(sunDirection).multiplyScalar(-1).add(MOON_TILT).normalize();
+  moonLight.position.copy(moonDirection).multiplyScalar(SUN_LIGHT_RADIUS);
+  const night = 1.0 - daylight;
+  // Fade in only once the moon is actually above the horizon.
+  const moonUp = smoothstep(-0.05, 0.25, moonDirection.y);
+  moonLight.intensity = night * moonUp * 0.45;
+  moonLight.color.copy(moonColor);
 
   // --- Ambient (fill) light ---
   ambient.intensity = 0.18 + daylight * 0.42;
@@ -133,6 +179,7 @@ export default function SkyController() {
 
   const skyRef = useRef<SkyImpl>(null);
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
+  const moonLightRef = useRef<THREE.DirectionalLight>(null);
   const ambientRef = useRef<THREE.AmbientLight>(null);
 
   // FogExp2 gives cheap exponential atmospheric depth across the ~50u planet.
@@ -163,9 +210,10 @@ export default function SkyController() {
   // even if animation is disabled.
   useEffect(() => {
     const sunLight = sunLightRef.current;
+    const moonLight = moonLightRef.current;
     const ambient = ambientRef.current;
-    if (!sunLight || !ambient) return;
-    applyDayPhase(STATIC_DAY_PHASE, sunLight, ambient, fog, skyRef.current);
+    if (!sunLight || !moonLight || !ambient) return;
+    applyDayPhase(forcedDayPhase ?? STATIC_DAY_PHASE, sunLight, moonLight, ambient, fog, skyRef.current);
     const skyMat = skyRef.current?.material;
     if (skyMat) {
       (skyMat.uniforms.sunPosition.value as THREE.Vector3)
@@ -177,8 +225,9 @@ export default function SkyController() {
 
   useFrame(state => {
     const sunLight = sunLightRef.current;
+    const moonLight = moonLightRef.current;
     const ambient = ambientRef.current;
-    if (!sunLight || !ambient) return;
+    if (!sunLight || !moonLight || !ambient) return;
 
     const animated = getGraphicsQuality().animatedShaders;
 
@@ -186,8 +235,8 @@ export default function SkyController() {
     // per-frame work entirely. (SpaceSky owns its own gated useFrame.)
     if (!animated) return;
 
-    const phase = (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    applyDayPhase(phase, sunLight, ambient, fog, skyRef.current);
+    const phase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
+    applyDayPhase(phase, sunLight, moonLight, ambient, fog, skyRef.current);
 
     // Drive the <Sky> shader's sun uniform to match.
     const skyMat = skyRef.current?.material;
@@ -203,6 +252,7 @@ export default function SkyController() {
       <Sky ref={skyRef} sunPosition={initialSunPosition} />
       <SpaceSky />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />
+      <directionalLight ref={moonLightRef} castShadow={false} intensity={0} />
       <ambientLight ref={ambientRef} intensity={0.5} />
     </>
   );

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import EfficientPlanet, { PlanetStats } from './EfficientPlanet';
 import EfficientPlayer, { PlayerDebugState } from './EfficientPlayer';
 import GrassField from './GrassField';
+import TreeField from './TreeField';
 import WaterBlocks from './WaterBlocks.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
 import { getSurfaceState, SurfaceState } from '../utils/surfaceControls';
@@ -71,6 +72,7 @@ export default function EfficientScene({
         />
       )}
       <GrassField playerPosition={playerPosition} />
+      <TreeField planetSize={planetSize} terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} />
     </Physics>
   );

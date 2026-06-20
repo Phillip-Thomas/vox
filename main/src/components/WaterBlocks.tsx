@@ -12,7 +12,11 @@ interface WaterBlocksProps {
   terrainSeed: number;
 }
 
-const FACE_OFFSET = 0.99;
+// Rest position of the water surface along its cell's outward axis. The cell
+// spans ±1.0 world units (VOXEL_SCALE=2) so the cell TOP is at +1.0. We rest the
+// surface BELOW the top so wave crests have headroom to rise WITHOUT poking above
+// the voxel. Constraint: FACE_OFFSET + uWaveAmp*~1.05 <= 1.0 (see waterBlocksMaterial).
+const FACE_OFFSET = 0.55;
 const QUAD_SIZE = 2.0;
 
 const PLANE_NORMAL = new THREE.Vector3(0, 0, 1);

@@ -47,6 +47,7 @@ describe('createSpaceSkyMaterial', () => {
     expect(mat.uniforms.uTime.value).toBe(0);
     expect(mat.uniforms.uNight.value).toBe(1);
     expect(mat.uniforms.uSunDir.value).toBeInstanceOf(THREE.Vector3);
+    expect(mat.uniforms.uMoonDir.value).toBeInstanceOf(THREE.Vector3);
   });
 });
 
@@ -54,18 +55,21 @@ describe('updateSpaceSky', () => {
   it('writes time, night factor and a normalized sun direction', () => {
     const mat = createSpaceSkyMaterial();
     const sun = new THREE.Vector3(0, 10, 0); // un-normalized on purpose
-    const night = updateSpaceSky(mat, 12.5, 0, sun);
+    const moon = new THREE.Vector3(0, -10, 0);
+    const night = updateSpaceSky(mat, 12.5, 0, sun, moon);
 
     expect(mat.uniforms.uTime.value).toBe(12.5);
     expect(night).toBeCloseTo(1, 6);
     expect(mat.uniforms.uNight.value).toBeCloseTo(1, 6);
     expect(mat.uniforms.uSunDir.value.length()).toBeCloseTo(1, 6);
     expect(mat.uniforms.uSunDir.value.y).toBeCloseTo(1, 6);
+    expect(mat.uniforms.uMoonDir.value.length()).toBeCloseTo(1, 6);
+    expect(mat.uniforms.uMoonDir.value.y).toBeCloseTo(-1, 6);
   });
 
   it('drives night toward 0 at midday', () => {
     const mat = createSpaceSkyMaterial();
-    const night = updateSpaceSky(mat, 0, 1, new THREE.Vector3(0, 1, 0));
+    const night = updateSpaceSky(mat, 0, 1, new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, -1, 0));
     expect(night).toBeCloseTo(0, 6);
     expect(mat.uniforms.uNight.value).toBeCloseTo(0, 6);
   });
@@ -73,7 +77,9 @@ describe('updateSpaceSky', () => {
   it('does not mutate the passed-in sun vector', () => {
     const mat = createSpaceSkyMaterial();
     const sun = new THREE.Vector3(0, 10, 0);
-    updateSpaceSky(mat, 0, 0.5, sun);
+    const moon = new THREE.Vector3(0, -10, 0);
+    updateSpaceSky(mat, 0, 0.5, sun, moon);
     expect(sun.y).toBe(10); // caller's vector untouched
+    expect(moon.y).toBe(-10);
   });
 });

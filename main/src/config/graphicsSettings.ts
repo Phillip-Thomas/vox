@@ -18,6 +18,10 @@ export interface GraphicsQuality {
   grassDensity: number;
   /** Max world-space distance grass is drawn from the camera. (Phase 3) */
   grassMaxDistance: number;
+  /** Probability (0..1) a grass voxel sprouts a tree (0 disables trees). */
+  treeDensity: number;
+  /** Max world-space distance trees are drawn from the camera (0 = no cull). */
+  treeMaxDistance: number;
   /** Water reflection technique. (Phase 4) */
   waterReflections: WaterReflections;
   /** Animate the water surface. (Phase 4) */
@@ -37,6 +41,8 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     animatedShaders: true,
     grassDensity: 6,
     grassMaxDistance: 80,
+    treeDensity: 0.04,
+    treeMaxDistance: 160,
     waterReflections: 'screenspace',
     waterAnimated: true,
     postProcess: true,
@@ -48,6 +54,8 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     animatedShaders: true,
     grassDensity: 4,
     grassMaxDistance: 60,
+    treeDensity: 0.03,
+    treeMaxDistance: 120,
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: true,
@@ -59,6 +67,8 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     animatedShaders: true,
     grassDensity: 2,
     grassMaxDistance: 40,
+    treeDensity: 0.02,
+    treeMaxDistance: 80,
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: false,
@@ -70,6 +80,8 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     animatedShaders: false,
     grassDensity: 1,
     grassMaxDistance: 24,
+    treeDensity: 0.015,
+    treeMaxDistance: 50,
     waterReflections: 'fresnel',
     waterAnimated: false,
     postProcess: false,
@@ -81,6 +93,8 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     animatedShaders: false,
     grassDensity: 0,
     grassMaxDistance: 0,
+    treeDensity: 0,
+    treeMaxDistance: 0,
     waterReflections: 'none',
     waterAnimated: false,
     postProcess: false,

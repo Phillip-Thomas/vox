@@ -8,7 +8,7 @@ import {
   createSpaceSkyMaterial,
   updateSpaceSky
 } from '../utils/spaceSky.ts';
-import { getSunDirection, DAY_LENGTH_SECONDS } from './SkyController.tsx';
+import { getSunDirection, getMoonDirection, getForcedDayPhase, DAY_LENGTH_SECONDS } from './SkyController.tsx';
 
 /** Phase (0..1) used when animation is disabled — matches SkyController midday. */
 const STATIC_DAY_PHASE = 0.25;
@@ -52,17 +52,18 @@ export default function SpaceSky() {
   // Seed a static-midday state on mount so the first frame is correct even when
   // animation is disabled (stars effectively absent at midday -> uNight ~ 0).
   useMemo(() => {
-    updateSpaceSky(material, 0, daylightForPhase(STATIC_DAY_PHASE), getSunDirection());
+    updateSpaceSky(material, 0, daylightForPhase(STATIC_DAY_PHASE), getSunDirection(), getMoonDirection());
   }, [material]);
 
   useFrame(state => {
     const mat = matRef.current;
     if (!mat) return;
     const animated = getGraphicsQuality().animatedShaders;
-    if (!animated) return; // frozen: mount seed already applied
+    const forced = getForcedDayPhase();
+    if (!animated && forced === null) return; // frozen: mount seed already applied
 
-    const phase = (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    updateSpaceSky(mat, state.clock.elapsedTime, daylightForPhase(phase), getSunDirection());
+    const phase = forced ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
+    updateSpaceSky(mat, state.clock.elapsedTime, daylightForPhase(phase), getSunDirection(), getMoonDirection());
   });
 
   return (
