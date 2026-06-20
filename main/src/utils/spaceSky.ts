@@ -62,12 +62,15 @@ const FRAG = /* glsl */ `
   varying vec3 vDir;
 
   // --- Day atmosphere tunables ----------------------------------------------
-  #define DAY_ZENITH_TAU   0.32    // LOW peak optical depth at zenith (key to ACES + star survival)
-  #define DAY_STAR_GAIN    0.55    // dim star layers + nebula scaled to this by full day
-  #define DAY_COSMOS_DIM   0.85    // gentle global cosmos dim applied by full day
-  #define MIE_G            0.80
-  #define THIN_ZENITH      0.06    // thin-shell base air-mass at zenith
-  #define THIN_HORIZON     0.27    // limb pile-up strength
+  #define DAY_ZENITH_TAU      1.0   // peak optical depth scale (more atmosphere presence by day)
+  #define DAY_STAR_GAIN       0.40  // dim star layers + nebula scaled to this by full day
+  #define DAY_COSMOS_DIM      0.55  // global cosmos dim applied by full day (stars clearly fainter)
+  #define DAY_INSCATTER_GAIN  26.0  // sky luminance decoupled from the (thin) optical depth so the
+                                    // day sky reads as a real luminous blue, not ~0 under ACES
+  #define MOON_DAY_DIM        0.30  // daytime moon brightness vs full night
+  #define MIE_G               0.80
+  #define THIN_ZENITH         0.16  // thin-shell base air-mass at zenith (some atmosphere overhead too)
+  #define THIN_HORIZON        0.30  // limb pile-up strength
 
   float hash31(vec3 p) {
     p = fract(p * 0.1031);
@@ -209,8 +212,12 @@ const FRAG = /* glsl */ `
     float sunUp = smoothstep(-0.10, 0.18, s.y);      // drains in-scatter at night/twilight
     vec3  isR = kR * phaseR(mu)        * (1.0 - exp(-tauR)) * sunUp;
     vec3  isM = kM * phaseM(mu, MIE_G) * (1.0 - exp(-vec3(tauM))) * sunUp;
-    vec3  airglow = vec3(0.30, 0.45, 0.75) * smoothstep(0.28, -0.04, d.y) * day * 0.12;
-    inscatter = (isR + isM) * 1.15 + airglow;        // authored LOW so ACES doesn't clip
+    // Twilight horizon airglow, gated by sunUp so it tracks the day rather than
+    // sitting as an always-on band on the anti-sun horizon.
+    vec3  airglow = vec3(0.20, 0.34, 0.66) * smoothstep(0.30, -0.05, d.y) * day * sunUp * 0.20;
+    // Sky luminance is decoupled from the thin optical depth (×GAIN) so the day
+    // sky is a perceptible luminous blue under ACES instead of ~0.001 linear.
+    inscatter = (isR + isM) * DAY_INSCATTER_GAIN + airglow;
     T = exp(-(tauR + vec3(tauM)));                    // per-channel: blue dimmed most
   }
 
@@ -243,17 +250,23 @@ const FRAG = /* glsl */ `
     float mu        = dot(dir, s);
     float sunGlow   = smoothstep(0.92, 1.0, mu);            // suppress cosmos near sun
     float horizGlow = smoothstep(0.30, -0.05, dir.y);       // and near the bright limb
-    float cosmosFade = uDay * max(sunGlow, horizGlow);
-    vec3  Tc = mix(vec3(1.0), T, cosmosFade);               // cosmos attenuation
+    // Cosmos is attenuated by the transmittance EVERYWHERE by day (so the whole
+    // sky reads as "cosmos seen through atmosphere", not bare night), with EXTRA
+    // local wash where a real sky blows out: near the sun and the bright limb.
+    vec3  Tc = mix(vec3(1.0), T, uDay);
+    float localWash = uDay * max(sunGlow, horizGlow);
+    Tc *= (1.0 - 0.92 * localWash);
 
     vec3 dayCosmos = cosmos * mix(1.0, DAY_COSMOS_DIM, uDay);
 
-    // visible sun disc + soft aureole (replaces drei's sun), ACES-tamed, gated by elevation.
-    float disc = smoothstep(0.9995, 0.99985, mu);
-    vec3  sun  = (vec3(1.0, 0.92, 0.78) * disc * 6.0
-               + vec3(1.0, 0.80, 0.55) * pow(sunGlow, 3.0) * 0.6) * smoothstep(-0.05, 0.10, s.y);
+    // Visible sun: tight disc + a broad, soft aureole (replaces drei's sun).
+    // Gaussian falloff so ACES rolls into white gracefully rather than a hard step.
+    float disc    = smoothstep(0.99955, 0.99988, mu);
+    float aureole = pow(sunGlow, 2.0) * 0.45 + exp((mu - 1.0) * 110.0) * 0.9;
+    vec3  sun  = (vec3(1.0, 0.93, 0.80) * disc * 5.0
+               + vec3(1.0, 0.84, 0.60) * aureole) * smoothstep(-0.05, 0.10, s.y);
 
-    vec3 color = dayCosmos * Tc + inscatter + sun + moonCol;
+    vec3 color = dayCosmos * Tc + inscatter + sun + moonCol * mix(1.0, MOON_DAY_DIM, uDay);
     color += dither(dir);
     gl_FragColor = vec4(color, 1.0);
   }
