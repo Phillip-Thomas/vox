@@ -36,10 +36,10 @@ const FOAM_COLOR = new THREE.Color(0xeef7ff).convertSRGBToLinear();
 const SSS_COLOR = new THREE.Color(0x33b88f).convertSRGBToLinear();
 const NIGHT_FLOOR = new THREE.Color(0x05222f).convertSRGBToLinear();
 
-// Shared GLSL (injected into BOTH stages). highp for stable sin() at world coords.
+// Shared GLSL (injected into BOTH stages). Three already declares highp at the
+// top of both shaders, so we must NOT add a precision statement here (a precision
+// directive mid-shader errors on strict drivers).
 const WATER_GLSL = /* glsl */ `
-  precision highp float;
-
   float wsHash21(vec2 p) {
     p = fract(p * vec2(123.34, 456.21));
     p += dot(p, p + 45.32);

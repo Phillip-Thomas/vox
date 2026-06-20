@@ -130,6 +130,20 @@ Rule for every phase: end with `npm run verify` green + `?bench=1` perf within b
 - [x] Instrumentation added to `WaterBlocks.tsx`: `[water] FILL/tick` logs (count, AABB, radius, inScene) + `?waterdebug=1` opaque-magenta material — keep for future diagnosis.
 - [ ] USER SMOKE: reload (Ctrl+Shift+R) — console should have NO "Fragment shader is not compiled"; water should finally be VISIBLE.
 
+## Enhancement round 7 — 4-agent adversarial review + WATER v2 (stylized Gerstner) — verify GREEN
+Adversarial review (4 parallel reviewers: wave-math/continuity, BRDF/lighting/color, realism-vs-refs, teardown/perf) proved:
+- BLOCKER: v1 quads TORE at cube edges (displaced along per-quad object +Z → orthogonal vectors at shared vertices).
+- CORRECTNESS: shading normal 1.69× too steep & decoupled from uWaveAmp (FD not /2e, no Jacobian); energy double-count (lit diffuse + emissive reflection on top → ACES grey-out); tangent-frame pole seam at up.y=0.99.
+- QUALITY: sum-of-sines reads gelatinous → Gerstner; chrome-mirror reflection; pow(600) glint aliases; no distance LOD; fract-hash precision at world~50.
+WATER v2 (`waterBlocksMaterial.ts`, cache key `water-blocks-iq-v2`) — stylized Sea-of-Thieves direction (user-chosen):
+- [x] 3D-WORLD-SPACE wave field; displace along `normalize(worldPos)` + horizontal Gerstner choppy → continuous fn of world pos ⇒ NO tearing, NO tangent seam (fixes both blockers).
+- [x] ANALYTIC gradient normal using the SAME uWaveAmp as displacement (fixes 1.69× mismatch).
+- [x] UNLIT composition: `diffuseColor.rgb=0`, color = `mix(refracted, reflected, Fresnel)+SSS+glint` via emissive (fixes energy double-count).
+- [x] Crest-driven color ramp, steepness-driven foam, ripple-jittered sky reflection (breaks mirror), exp-based + sparkle sun glint (no pow600), distance LOD on detail, horizon haze.
+- [x] FrontSide (fixes backface lighting + gives free half-planet backface cull); Fresnel-driven alpha (see-through down, opaque grazing).
+- [x] `npm run verify` green (50 tests, 652 modules). (2 self-inflicted backtick-in-GLSL-comment + 1 mid-shader `precision` risk caught & removed.)
+- [~] RUNTIME VERIFY IN PROGRESS: headless-browser agent confirming GPU shader compile + screenshotting overview.
+
 ## Benchmark log (p50 / p95 frame-time ms, drawCalls, triangles @ profile)
 | Phase | p50 ms | p95 ms | draws | tris | profile | notes |
 |-------|--------|--------|-------|------|---------|-------|
