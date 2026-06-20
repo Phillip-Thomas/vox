@@ -4,6 +4,7 @@ import {
   SPACE_DOME_RADIUS,
   SPACE_DOME_RENDER_ORDER,
   createSpaceSkyMaterial,
+  dayFactorFromDaylight,
   nightFactorFromDaylight,
   updateSpaceSky
 } from './spaceSky';
@@ -31,6 +32,21 @@ describe('nightFactorFromDaylight', () => {
   });
 });
 
+describe('dayFactorFromDaylight', () => {
+  it('is 0 in full dark and 1 in full daylight (mirror of night)', () => {
+    expect(dayFactorFromDaylight(0)).toBeCloseTo(0, 6);
+    expect(dayFactorFromDaylight(1)).toBeCloseTo(1, 6);
+  });
+
+  it('stays within [0,1] and clamps out-of-range input', () => {
+    for (const d of [-1, -0.2, 0.3, 1.4, 5]) {
+      const v = dayFactorFromDaylight(d);
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
 describe('createSpaceSkyMaterial', () => {
   it('renders behind the scene with fog and depth-write disabled', () => {
     const mat = createSpaceSkyMaterial();
@@ -46,6 +62,7 @@ describe('createSpaceSkyMaterial', () => {
     const mat = createSpaceSkyMaterial();
     expect(mat.uniforms.uTime.value).toBe(0);
     expect(mat.uniforms.uNight.value).toBe(1);
+    expect(mat.uniforms.uDay.value).toBe(0);
     expect(mat.uniforms.uSunDir.value).toBeInstanceOf(THREE.Vector3);
     expect(mat.uniforms.uMoonDir.value).toBeInstanceOf(THREE.Vector3);
   });
@@ -72,6 +89,8 @@ describe('updateSpaceSky', () => {
     const night = updateSpaceSky(mat, 0, 1, new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, -1, 0));
     expect(night).toBeCloseTo(0, 6);
     expect(mat.uniforms.uNight.value).toBeCloseTo(0, 6);
+    // The faint daytime celestial layer is driven by uDay, full at midday.
+    expect(mat.uniforms.uDay.value).toBeCloseTo(1, 6);
   });
 
   it('does not mutate the passed-in sun vector', () => {

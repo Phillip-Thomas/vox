@@ -23,8 +23,10 @@ export const DAY_LENGTH_SECONDS = 240;
 /** World-space distance the sun light is placed from the planet center. */
 const SUN_LIGHT_RADIUS = 220;
 
-/** Normal surface fog density (matches the initial FogExp2). */
-const SURFACE_FOG_DENSITY = 0.014;
+/** Normal surface fog density (matches the initial FogExp2). Kept light so the
+ *  daytime world reads crisp and colourful — 0.014 hazed the whole scene to a
+ *  flat milky wash; ~0.005 gives gentle atmospheric depth without the washout. */
+const SURFACE_FOG_DENSITY = 0.005;
 
 /**
  * Thinner fog while flying the ship in-atmosphere (launch/descent). The surface
@@ -91,7 +93,7 @@ export function getForcedDayPhase(): number | null {
 }
 
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
-const dayFogColor = new THREE.Color('#9ec9ff');
+const dayFogColor = new THREE.Color('#8fbdf2'); // was #9ec9ff — slightly deeper so the horizon doesn't wash pale
 const goldenFogColor = new THREE.Color('#f0a060');
 const nightFogColor = new THREE.Color('#0a1024');
 
@@ -103,6 +105,22 @@ const goldenSun = new THREE.Color('#ff9c4a');
 const nightSun = new THREE.Color('#2a3a6a');
 
 const tmpColor = new THREE.Color();
+
+// --- Daytime Preetham tunables ----------------------------------------------
+// The full-day atmosphere uniforms. Previously turbidity≈10 / rayleigh≈3 gave a
+// hazy, washed-out pale blue. Lower turbidity clears the haze for a deeper, more
+// saturated blue with a crisper zenith→horizon gradient; a touch more rayleigh
+// deepens the blue without going navy; a slightly lower mie keeps the sun glow
+// tight and clean rather than a milky bloom. All three still drain to the night
+// floor through the same `daylight` interpolation so dusk→night stays correct.
+const DAY_RAYLEIGH = 4.1;        // was 3.0  — richer, deeper blue (less pale)
+const DAY_TURBIDITY = 4.5;       // was 10.0 — clears the washed-out haze
+const DAY_MIE_COEFFICIENT = 0.0035; // was 0.005 — tighter, cleaner sun glow
+const DAY_MIE_DIRECTIONAL_G = 0.82; // was 0.80 — slightly more forward sun disc
+// Night floors (unchanged — the values applyDayPhase reaches at daylight=0).
+const NIGHT_RAYLEIGH = 0.06;
+const NIGHT_TURBIDITY = 0.4;
+const NIGHT_MIE_COEFFICIENT = 0.002;
 
 // --- Deep-space mode palette -------------------------------------------------
 // In deep space we want true black void (no blue atmospheric haze, no fog
@@ -240,11 +258,13 @@ function applyDayPhase(
   // hour. The sun uniform is positioned elsewhere (useFrame / mount). ---
   if (sky) {
     const u = sky.material.uniforms;
-    // Day: full atmosphere. Night: nearly none (a faint floor avoids artifacts).
-    u.rayleigh.value = 0.06 + daylight * 2.94;       // ~3 day -> ~0.06 night
-    u.turbidity.value = 0.4 + daylight * 9.6;        // ~10 day -> ~0.4 night
-    u.mieCoefficient.value = 0.002 + daylight * 0.003;
-    u.mieDirectionalG.value = 0.8;
+    // Day: full (retuned) atmosphere. Night: nearly none (a faint floor avoids
+    // artifacts). Interpolating on `daylight` keeps the dusk→night drain intact.
+    u.rayleigh.value = NIGHT_RAYLEIGH + daylight * (DAY_RAYLEIGH - NIGHT_RAYLEIGH);
+    u.turbidity.value = NIGHT_TURBIDITY + daylight * (DAY_TURBIDITY - NIGHT_TURBIDITY);
+    u.mieCoefficient.value =
+      NIGHT_MIE_COEFFICIENT + daylight * (DAY_MIE_COEFFICIENT - NIGHT_MIE_COEFFICIENT);
+    u.mieDirectionalG.value = DAY_MIE_DIRECTIONAL_G;
   }
 
   return { sunDirection, daylight };

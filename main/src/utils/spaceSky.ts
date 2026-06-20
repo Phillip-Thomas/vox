@@ -22,9 +22,21 @@ export function nightFactorFromDaylight(daylight: number): number {
   return n * n * (3 - 2 * n);
 }
 
+/**
+ * daylight (0 night .. 1 day) -> day factor (0..1), eased. Drives the faint
+ * daytime celestial layer (brightest stars + a whisper of nebula over the blue
+ * sky). Kept independent from uNight so the night branch is byte-for-byte the
+ * same as before; this only governs the new low-strength day contribution.
+ */
+export function dayFactorFromDaylight(daylight: number): number {
+  const d = Math.min(1, Math.max(0, daylight));
+  return d * d * (3 - 2 * d);
+}
+
 export interface SpaceSkyUniforms {
   uTime: { value: number };
   uNight: { value: number };
+  uDay: { value: number };
   uSunDir: { value: THREE.Vector3 };
   uMoonDir: { value: THREE.Vector3 };
 }
@@ -42,9 +54,19 @@ const FRAG = /* glsl */ `
 
   uniform float uTime;
   uniform float uNight;
+  uniform float uDay;   // 0 night .. 1 day; drives the faint daytime celestial layer
   uniform vec3 uSunDir;
   uniform vec3 uMoonDir;
   varying vec3 vDir;
+
+  // --- Daytime celestial tunables -------------------------------------------
+  // A tasteful "whisper" of cosmos over the blue: only the brightest stars and a
+  // very faint nebula tint, fading out near the sun and toward the bright
+  // horizon. Strengths are deliberately tiny so it never greys the sky.
+  #define DAY_STAR_STRENGTH   0.85  // brightest-layer star intensity by day
+  #define DAY_NEBULA_STRENGTH 0.34  // nebula tint intensity by day
+  #define DAY_ALPHA_GAIN      2.6   // how aggressively bright features show through
+  #define DAY_MAX_ALPHA       0.85  // ceiling on the day layer's opacity
 
   float hash31(vec3 p) {
     p = fract(p * 0.1031);
@@ -162,9 +184,38 @@ const FRAG = /* glsl */ `
     return moonCol * disc + halo;
   }
 
+  // Faint daytime celestial layer: only the brightest stars + a whisper of
+  // nebula, blended OVER the blue via an alpha driven by the feature luminance
+  // (not a flat factor) so dim regions stay fully transparent and never grey the
+  // sky. No dense dim star layers, no dark space base — pure additive-feeling
+  // colour with luminance-keyed alpha. Returns premultiplied-style (col, alpha).
+  vec4 dayCelestial(vec3 dir) {
+    vec3 sdir = rotate(dir, uTime * 0.01);
+
+    // Only the brightest/sparsest star layer (the top night layer), dimmed.
+    vec3 color = starLayer(sdir, 80.0, 0.34, 1.0, 80.0) * DAY_STAR_STRENGTH;
+
+    // A whisper of nebula tint (no dark base, no dust-darkening below zero).
+    color += nebulaField(sdir) * DAY_NEBULA_STRENGTH;
+
+    // Fade the celestial out toward the bright sun and the washed-out horizon so
+    // the whisper only reads in the deeper-blue upper sky away from the sun.
+    float sunMask = 1.0 - smoothstep(0.70, 0.98, dot(dir, normalize(uSunDir)));
+    float horizon = smoothstep(-0.08, 0.22, dir.y); // dir.y is normalized vDir.y
+    color *= sunMask * horizon * uDay;
+
+    // Alpha tracks feature luminance: bright stars/nebula peek through, empty sky
+    // contributes nothing (alpha 0 -> blue untouched). Ceiling keeps it subtle.
+    float lum = max(color.r, max(color.g, color.b));
+    float alpha = clamp(lum * DAY_ALPHA_GAIN, 0.0, DAY_MAX_ALPHA);
+    return vec4(color, alpha);
+  }
+
   void main() {
-    // Day: contribute nothing (additive). Early-out skips all the heavy noise.
-    if (uNight < 0.01) { gl_FragColor = vec4(0.0); return; }
+    // Day: render only the faint celestial whisper (cheap — one star layer +
+    // nebula). At pure midday uDay~1 but the luminance-keyed alpha keeps it to a
+    // tasteful hint; toward dusk this hands off to the night branch below.
+    if (uNight < 0.01) { gl_FragColor = dayCelestial(normalize(vDir)); return; }
 
     vec3 dir = normalize(vDir);
     vec3 sdir = rotate(dir, uTime * 0.01); // slow celestial drift (stars/nebula)
@@ -200,6 +251,7 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
     uniforms: {
       uTime: { value: 0 },
       uNight: { value: 1 },
+      uDay: { value: 0 },
       uSunDir: { value: new THREE.Vector3(0, 1, 0) },
       uMoonDir: { value: new THREE.Vector3(0, -1, 0) }
     },
@@ -233,6 +285,7 @@ export function updateSpaceSky(
   const night = nightFactorFromDaylight(daylight);
   u.uTime.value = time;
   u.uNight.value = night;
+  u.uDay.value = dayFactorFromDaylight(daylight);
   u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
   u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
   return night;

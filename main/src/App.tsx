@@ -201,8 +201,6 @@ const App: React.FC = () => {
         { name: 'reset', keys: ['KeyR'] },
         { name: 'delete', keys: ['KeyE'] },
         { name: 'board', keys: ['KeyF'] },
-        { name: 'rollLeft', keys: ['KeyQ'] },
-        { name: 'rollRight', keys: ['KeyE'] },
       ]}
     >
       <Canvas
@@ -288,7 +286,7 @@ const App: React.FC = () => {
           <div>Coordinate {currentWorldKey} - Seed {currentWorld.seed}</div>
           <div style={{ opacity: 0.75, marginTop: 4 }}>
             {flight.phase === 'surface'
-              ? 'W/S thrust - mouse look - Q/E roll - climb out to space - F to exit ship'
+              ? 'LANDED - SPACE to launch - F to exit ship'
               : flight.phase === 'descent'
                 ? 'W/S thrust - mouse look - Q/E roll - fly low over ground, then F to land'
                 : 'W/S thrust - mouse look - Q/E roll - Shift boost - fly down to a planet'}

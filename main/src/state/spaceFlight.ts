@@ -28,7 +28,12 @@ import type { WorldCoordinate } from '../utils/worldCoordinates.ts';
 
 export type FlightPhase = 'surface' | 'launch' | 'deep_space' | 'approach' | 'descent';
 export type ControlMode = 'fps' | 'flight';
-export type WarpDirection = 'out' | 'in';
+/**
+ * 'travel' = the full interstellar jump (swaps the voxel world at the midpoint).
+ * 'enter'/'leave' = the short, softer "mini warp" that masks the deep-space ⇄
+ * atmosphere sky change (no world swap — just flips the phase at the midpoint).
+ */
+export type WarpKind = 'travel' | 'enter' | 'leave';
 
 export interface SpaceFlightSnapshot {
   phase: FlightPhase;
@@ -43,13 +48,19 @@ export interface WarpRuntime {
   active: boolean;
   /** 0..1 across the whole effect; peak white-out at 0.5. */
   progress: number;
-  direction: WarpDirection;
+  kind: WarpKind;
+  /** Seconds for this particular warp (full jump vs quick atmosphere crossing). */
+  duration: number;
+  /** Peak overlay strength (0..1) — full white for travel, softer for mini warps. */
+  intensity: number;
   /** Set once the midpoint side-effects (world swap / phase change) have fired. */
   midpointFired: boolean;
 }
 
-/** Seconds for a full warp transition (white-out included). */
+/** Seconds for a full interstellar warp (white-out included). */
 export const WARP_DURATION = 1.2;
+/** Seconds for the short atmosphere-crossing "mini warp". */
+export const MINI_WARP_DURATION = 0.85;
 
 /** Altitude (world units above the planet surface radius ~50) that auto-launches. */
 export const LAUNCH_ALTITUDE = 130;
@@ -66,7 +77,9 @@ let snapshot: SpaceFlightSnapshot = {
 const warp: WarpRuntime = {
   active: false,
   progress: 0,
-  direction: 'out',
+  kind: 'travel',
+  duration: WARP_DURATION,
+  intensity: 1,
   midpointFired: false
 };
 
@@ -118,10 +131,10 @@ export function getWarp(): WarpRuntime {
   return warp;
 }
 
-/** Overlay opacity: 0 at the ends, 1 at the white-out midpoint. */
+/** Overlay opacity: 0 at the ends, peak (intensity) at the white-out midpoint. */
 export function warpOpacity(): number {
   if (!warp.active) return 0;
-  return Math.sin(Math.min(warp.progress, 1) * Math.PI);
+  return Math.sin(Math.min(warp.progress, 1) * Math.PI) * warp.intensity;
 }
 
 // --- host wiring ------------------------------------------------------------
@@ -144,17 +157,6 @@ export function exitShip(): void {
   setSnapshot({ controlMode: 'fps' });
 }
 
-/** Begin the cosmetic warp-out that lifts the player from atmosphere to space. */
-export function beginLaunch(): void {
-  if (snapshot.phase !== 'surface' || snapshot.controlMode !== 'flight') return;
-  if (warp.active) return;
-  warp.active = true;
-  warp.progress = 0;
-  warp.direction = 'out';
-  warp.midpointFired = false;
-  setSnapshot({ phase: 'launch' });
-}
-
 /**
  * Begin a travel warp-in to a destination world. Valid from deep space (primary,
  * immersive path) or from the menu (fast travel) — either way the world swap is
@@ -164,9 +166,30 @@ export function beginTravel(dest: WorldCoordinate): void {
   if (warp.active) return;
   warp.active = true;
   warp.progress = 0;
-  warp.direction = 'in';
+  warp.kind = 'travel';
+  warp.duration = WARP_DURATION;
+  warp.intensity = 1;
   warp.midpointFired = false;
   setSnapshot({ phase: 'approach', destination: dest, target: dest });
+}
+
+/**
+ * Begin the short "mini warp" that masks the deep-space ⇄ atmosphere sky change.
+ * No world swap — the phase flips (enter/leaveAtmosphere) at the white-out
+ * midpoint, hidden by the flash. 'enter' from deep_space → descent; 'leave' from
+ * descent → deep_space.
+ */
+export function beginAtmosphereWarp(dir: 'enter' | 'leave'): void {
+  if (warp.active) return;
+  if (snapshot.controlMode !== 'flight') return;
+  if (dir === 'enter' && snapshot.phase !== 'deep_space') return;
+  if (dir === 'leave' && snapshot.phase !== 'descent') return;
+  warp.active = true;
+  warp.progress = 0;
+  warp.kind = dir;
+  warp.duration = MINI_WARP_DURATION;
+  warp.intensity = 0.82; // softer than the full interstellar white-out
+  warp.midpointFired = false;
 }
 
 /** Set/clear the impostor the player is currently aiming at while flying. */
@@ -243,23 +266,24 @@ export function resetTravel(): void {
  */
 export function tickWarp(dt: number): void {
   if (!warp.active) return;
-  warp.progress += dt / WARP_DURATION;
+  warp.progress += dt / warp.duration;
 
   if (!warp.midpointFired && warp.progress >= 0.5) {
     warp.midpointFired = true;
-    if (warp.direction === 'out') {
-      // Surface -> deep space. No coordinate change; the planet we left simply
-      // recedes below as the impostor field takes over.
-      setSnapshot({ phase: 'deep_space' });
-    } else {
+    if (warp.kind === 'travel') {
       // Interstellar arrival: swap the active voxel world (host handler) and drop
       // the ship into the destination system's DEEP SPACE — NOT straight into the
-      // atmosphere. The player then flies down and enters the atmosphere
-      // themselves (altitude-driven, see enterAtmosphere). controlMode is forced
-      // to 'flight' so menu fast-travel also arrives piloting the ship in space.
+      // atmosphere. controlMode is forced to 'flight' so menu fast-travel also
+      // arrives piloting the ship in space.
       const dest = snapshot.destination;
       if (dest && arrivalHandler) arrivalHandler(dest);
       setSnapshot({ phase: 'deep_space', controlMode: 'flight' });
+    } else if (warp.kind === 'enter') {
+      // Mini warp masking the space -> atmosphere sky change.
+      enterAtmosphere();
+    } else {
+      // Mini warp masking the atmosphere -> space sky change.
+      leaveAtmosphere();
     }
   }
 
