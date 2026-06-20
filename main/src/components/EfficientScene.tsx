@@ -63,6 +63,12 @@ export default function EfficientScene({
       : arrivalPose.playerSurfacePosition.clone()
   ));
   const [playerPosition, setPlayerPosition] = useState(() => initialPlayerPosition.clone());
+  // Where the ship last set down this world (null until you land). Drives the
+  // parked-ship position AND the on-foot exit spawn so you leave the ship exactly
+  // where you flew it down, not back at the deterministic arrival site. Resets to
+  // null on world swap (EfficientScene remounts).
+  const [landedShipPos, setLandedShipPos] = useState<THREE.Vector3 | null>(null);
+  const handleLanded = useCallback((rest: THREE.Vector3) => setLandedShipPos(rest.clone()), []);
   const [surfaceState, setSurfaceState] = useState<SurfaceState>(() => getSurfaceState('top'));
   const lastPublishedPlayerPosition = useRef(playerPosition.clone());
   const debugStateRef = useRef<SceneDebugState>({ player: null, planet: null });
@@ -100,11 +106,12 @@ export default function EfficientScene({
           boardingPosition={playerPosition}
           onGroundedChange={onGroundedChange}
           onPositionChange={publishPlayerPosition}
+          onLanded={handleLanded}
         />
       ) : (
         <EfficientPlayer
           planetSize={planetSize}
-          initialPosition={initialPlayerPosition}
+          initialPosition={landedShipPos ?? initialPlayerPosition}
           resetPosition={arrivalPose.playerSurfacePosition}
           onPositionChange={publishPlayerPosition}
           onSurfaceChange={setSurfaceState}
@@ -113,7 +120,7 @@ export default function EfficientScene({
         />
       )}
       <SpaceshipPlaceholder
-        position={arrivalPose.shipPosition}
+        position={landedShipPos ?? arrivalPose.shipPosition}
         terrainSeed={terrainSeed}
         activeApproach={arrivalMode === 'approach'}
         playerPosition={playerPosition}

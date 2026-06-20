@@ -181,6 +181,24 @@ export function setTarget(target: WorldCoordinate | null): void {
   setSnapshot({ target });
 }
 
+/**
+ * Enter the atmosphere of the currently-loaded world (deep space OR a landed
+ * ship lifting off → atmospheric descent flight). Altitude-driven, seamless — no
+ * warp; the only warp is the interstellar beginTravel.
+ */
+export function enterAtmosphere(): void {
+  if (snapshot.controlMode !== 'flight') return;
+  if (snapshot.phase !== 'deep_space' && snapshot.phase !== 'surface') return;
+  setSnapshot({ phase: 'descent' });
+}
+
+/** Leave the atmosphere back into deep space (climbing out). Seamless. */
+export function leaveAtmosphere(): void {
+  if (snapshot.controlMode !== 'flight') return;
+  if (snapshot.phase !== 'descent') return;
+  setSnapshot({ phase: 'deep_space', destination: null });
+}
+
 /** Called from the surface grounding callback once the ship touches down. */
 export function notifyLanded(): void {
   if (snapshot.phase !== 'descent') return;
@@ -234,13 +252,14 @@ export function tickWarp(dt: number): void {
       // recedes below as the impostor field takes over.
       setSnapshot({ phase: 'deep_space' });
     } else {
-      // Travel arrival: swap the active voxel world (host handler) into a
-      // high-altitude approach over the new planet. controlMode is left as-is —
-      // immersive travel keeps you in the ship ('flight'); menu fast-travel from
-      // foot stays 'fps' and reuses the existing approach-descent controller.
+      // Interstellar arrival: swap the active voxel world (host handler) and drop
+      // the ship into the destination system's DEEP SPACE — NOT straight into the
+      // atmosphere. The player then flies down and enters the atmosphere
+      // themselves (altitude-driven, see enterAtmosphere). controlMode is forced
+      // to 'flight' so menu fast-travel also arrives piloting the ship in space.
       const dest = snapshot.destination;
       if (dest && arrivalHandler) arrivalHandler(dest);
-      setSnapshot({ phase: 'descent' });
+      setSnapshot({ phase: 'deep_space', controlMode: 'flight' });
     }
   }
 

@@ -6,10 +6,10 @@ import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
 import { vectorToRapier } from '../utils/surfaceControls';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
-  beginLaunch,
   beginTravel,
+  enterAtmosphere,
   getSpaceFlightSnapshot,
-  LAUNCH_ALTITUDE,
+  leaveAtmosphere,
   useSpaceFlight
 } from '../state/spaceFlight.ts';
 
@@ -21,12 +21,22 @@ const BOOST_MULTIPLIER = 3.2;
 const DAMPING = 0.6;
 const MAX_SPEED = 320;
 const ROLL_SPEED = 1.6; // rad/s
-/** Below this distance-from-origin (minus surface) AND slow, treat as landed. */
-const LANDING_ALTITUDE = 6;
-const LANDING_SPEED = 14;
-/** Grace period (s) after entering descent before auto-land can fire, so the
- *  player actually gets to fly down rather than landing the instant they arrive. */
-const LANDING_GRACE = 2.5;
+/** Rest height of the landed ship above the terrain it touched. */
+const SHIP_GROUND_CLEARANCE = 2.5;
+/** Press F to land: cast this far toward the planet to find the touchdown point. */
+const LANDING_APPROACH_DIST = 90;
+/** Eased auto-land descent speed (u/s), used to size the touchdown duration. */
+const LANDING_DESCENT_SPEED = 22;
+const LANDING_MIN_DURATION = 1.2;
+const LANDING_MAX_DURATION = 3.5;
+/** Atmosphere boundary (altitude = |pos| - surfaceRadius). Tuned tight to the
+ *  ~50u planet so the descent is short, not a long trek. Flying DOWN past
+ *  ATMOS_ENTER enters the atmosphere; climbing UP past ATMOS_LEAVE reaches space.
+ *  The gap is hysteresis so the phase can't flap at the boundary. */
+const ATMOS_ENTER = 55;
+const ATMOS_LEAVE = 80;
+/** Climbing past this from a LANDED ship lifts off into atmospheric flight. */
+const LIFTOFF_ALTITUDE = 12;
 /** Pitch clamp (radians) while still in atmosphere; free pitch once in space. */
 const ATMOSPHERE_PITCH_CLAMP = Math.PI * 0.49;
 /** Seconds of held-thrust-while-locked needed to engage the travel warp. */
@@ -53,6 +63,8 @@ interface ShipControllerProps {
   boardingPosition: THREE.Vector3;
   onGroundedChange?: (grounded: boolean) => void;
   onPositionChange?: (position: THREE.Vector3) => void;
+  /** Reports where the ship set down so the parked ship + on-foot exit spawn THERE. */
+  onLanded?: (restPosition: THREE.Vector3) => void;
 }
 
 /**
@@ -75,7 +87,8 @@ export default function ShipController({
   arrivalPose,
   boardingPosition,
   onGroundedChange,
-  onPositionChange
+  onPositionChange,
+  onLanded
 }: ShipControllerProps) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const { gl } = useThree();
@@ -95,9 +108,9 @@ export default function ShipController({
   const pitchInput = useRef(0); // accumulated mouse Y this frame
   const yawInput = useRef(0); // accumulated mouse X this frame
   const isLocked = useRef(false);
-  const launchFired = useRef(false);
-  const landedNotified = useRef(false);
-  const descentTime = useRef(0); // seconds spent in the descent phase (landing grace)
+  // Active eased auto-landing (F-initiated), or null while flying freely. Landing
+  // is NEVER automatic — only this sequence sets the ship down.
+  const landingSeq = useRef<{ from: THREE.Vector3; to: THREE.Vector3; t: number; duration: number } | null>(null);
   const lastPublished = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
   const [, get] = useKeyboardControls();
 
@@ -114,8 +127,10 @@ export default function ShipController({
       // Just warped in above a fresh world: start high, looking down.
       pos = approach.clone();
     } else if (phaseAtMount === 'deep_space') {
-      // ?fly=1 debug entry: start well above the planet in open space.
-      pos = approach.clone().normalize().multiplyScalar(surfaceRadius + LAUNCH_ALTITUDE + 200);
+      // Interstellar arrival (and ?fly=1): start out in open space above the
+      // planet, just beyond the atmosphere boundary so the world is prominent and
+      // the descent is short. Faces the planet so it's dead ahead.
+      pos = approach.clone().normalize().multiplyScalar(surfaceRadius + ATMOS_LEAVE + 25);
     } else {
       // surface / launch: lift off from the boarding spot (or the parked ship).
       pos = boardingRef.current.clone();
@@ -148,8 +163,7 @@ export default function ShipController({
     position.current.copy(spawn.pos);
     velocity.current.set(0, 0, 0);
     orientation.current.copy(spawn.quat);
-    launchFired.current = false;
-    landedNotified.current = false;
+    landingSeq.current = null;
   }, [spawn]);
 
   // --- pointer lock + mouse look (mirrors CameraControls) -------------------
@@ -178,6 +192,29 @@ export default function ShipController({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && document.pointerLockElement === element) {
         document.exitPointerLock();
+        return;
+      }
+      // F begins a smooth auto-landing when flying in atmosphere over ground.
+      // (Landing is never automatic — it only happens when you ask for it.)
+      if (event.code === 'KeyF') {
+        const live = getSpaceFlightSnapshot();
+        if (live.controlMode !== 'flight' || live.phase !== 'descent') return;
+        if (landingSeq.current || !world) return;
+        const downDir = position.current.clone().normalize().negate();
+        const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
+        const hit = world.castRay(ray, LANDING_APPROACH_DIST, true);
+        if (!hit) return; // no ground within range (too high / over a gap)
+        const up = position.current.clone().normalize();
+        const to = position.current.clone()
+          .addScaledVector(downDir, hit.timeOfImpact)
+          .addScaledVector(up, SHIP_GROUND_CLEARANCE);
+        const dist = position.current.distanceTo(to);
+        landingSeq.current = {
+          from: position.current.clone(),
+          to,
+          t: 0,
+          duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION)
+        };
       }
     };
 
@@ -205,10 +242,30 @@ export default function ShipController({
     const cam = cameraRef.current;
     if (!cam) return;
     const dt = Math.min(rawDt, 1 / 30); // clamp big frame gaps
+
+    // Eased auto-landing (F-initiated): glide the ship down to the touchdown
+    // point, ignoring manual control, decelerating into a gentle set-down
+    // (easeOutCubic). Only THIS lands the ship — never automatically.
+    const seq = landingSeq.current;
+    if (seq) {
+      seq.t = Math.min(1, seq.t + dt / seq.duration);
+      const e = 1 - Math.pow(1 - seq.t, 3); // easeOutCubic — slow, settling finish
+      position.current.lerpVectors(seq.from, seq.to, e);
+      velocity.current.set(0, 0, 0);
+      cam.position.copy(position.current);
+      cam.quaternion.copy(orientation.current);
+      if (seq.t >= 1) {
+        landingSeq.current = null;
+        onLanded?.(seq.to.clone());
+        onGroundedChange?.(true);
+      }
+      return; // skip normal flight while the landing plays out
+    }
+
     const controls = get();
 
     const quat = orientation.current;
-    const inAtmosphere = position.current.length() < surfaceRadius + LAUNCH_ALTITUDE;
+    const inAtmosphere = position.current.length() < surfaceRadius + ATMOS_LEAVE;
 
     // 1) Apply accumulated look deltas as local rotations.
     const localRight = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
@@ -288,31 +345,20 @@ export default function ShipController({
       engageState.charge = 0;
     }
 
-    if (snap === 'surface' && !launchFired.current && altitude > LAUNCH_ALTITUDE) {
-      launchFired.current = true;
-      beginLaunch();
+    // 7b) Atmosphere boundary — altitude-driven and BIDIRECTIONAL with hysteresis,
+    // so you can always fly down to enter and up to leave (no dead-end). The only
+    // warp is the interstellar beginTravel above; crossing the atmosphere is
+    // seamless continuous flight.
+    if (
+      (snap === 'deep_space' && altitude < ATMOS_ENTER) ||
+      (snap === 'surface' && altitude > LIFTOFF_ALTITUDE)
+    ) {
+      enterAtmosphere();              // -> 'descent' (atmospheric flight)
+    } else if (snap === 'descent' && altitude > ATMOS_LEAVE) {
+      leaveAtmosphere();              // -> 'deep_space'
     }
-
-    if (snap === 'descent') {
-      descentTime.current += dt;
-    } else {
-      descentTime.current = 0;
-    }
-
-    if (snap === 'descent' && !landedNotified.current && descentTime.current > LANDING_GRACE) {
-      // After the grace period, land when terrain is actually close beneath the
-      // ship. Use a downward (toward-origin) raycast against the streamed
-      // colliders — the |pos|-planetSize radial value is unreliable because the
-      // terrain surface sits well below the max radius in valleys/oceans.
-      const speed = velocity.current.length();
-      const dir = position.current.clone().normalize().negate();
-      const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(dir));
-      const hit = world.castRay(ray, LANDING_ALTITUDE + 2, true);
-      if (hit && speed < LANDING_SPEED) {
-        landedNotified.current = true;
-        onGroundedChange?.(true);
-      }
-    }
+    // Landing is NOT automatic — press F (handleKeyDown) to start the eased
+    // touchdown sequence handled at the top of this frame loop.
 
     // 8) Publish position so grass/trees/water cull around the ship.
     if (lastPublished.current.distanceToSquared(position.current) > 1) {
