@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
-import { Sky } from '@react-three/drei';
-import { Sky as SkyImpl } from 'three-stdlib';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
@@ -10,8 +8,10 @@ import SpaceSky from './SpaceSky.tsx';
 /**
  * Phase 2 — sky, atmosphere, day/night and fog.
  *
- * Owns the visible sky dome (drei <Sky>), the key/fill lighting (a "sun"
- * directionalLight + ambientLight), scene fog, and a starfield. A slow
+ * Owns the key/fill lighting (a "sun" directionalLight + moon + ambientLight),
+ * scene fog, and the day/night cycle drive. The visible sky is the unified
+ * SpaceSky "cosmos-through-glass" dome (it reads getSunDirection()/
+ * getMoonDirection() and the daylight/golden math computed here). A slow
  * day/night cycle is driven from clock.elapsedTime. All time-driven motion is
  * gated on getGraphicsQuality().animatedShaders so LOW/POTATO profiles hold a
  * static midday with no per-frame cost.
@@ -106,22 +106,6 @@ const nightSun = new THREE.Color('#2a3a6a');
 
 const tmpColor = new THREE.Color();
 
-// --- Daytime Preetham tunables ----------------------------------------------
-// The full-day atmosphere uniforms. Previously turbidity≈10 / rayleigh≈3 gave a
-// hazy, washed-out pale blue. Lower turbidity clears the haze for a deeper, more
-// saturated blue with a crisper zenith→horizon gradient; a touch more rayleigh
-// deepens the blue without going navy; a slightly lower mie keeps the sun glow
-// tight and clean rather than a milky bloom. All three still drain to the night
-// floor through the same `daylight` interpolation so dusk→night stays correct.
-const DAY_RAYLEIGH = 4.1;        // was 3.0  — richer, deeper blue (less pale)
-const DAY_TURBIDITY = 4.5;       // was 10.0 — clears the washed-out haze
-const DAY_MIE_COEFFICIENT = 0.0035; // was 0.005 — tighter, cleaner sun glow
-const DAY_MIE_DIRECTIONAL_G = 0.82; // was 0.80 — slightly more forward sun disc
-// Night floors (unchanged — the values applyDayPhase reaches at daylight=0).
-const NIGHT_RAYLEIGH = 0.06;
-const NIGHT_TURBIDITY = 0.4;
-const NIGHT_MIE_COEFFICIENT = 0.002;
-
 // --- Deep-space mode palette -------------------------------------------------
 // In deep space we want true black void (no blue atmospheric haze, no fog
 // washing out distant impostors) plus a steady cool key light so the
@@ -133,25 +117,18 @@ const SPACE_SUN_COLOR = new THREE.Color('#dfe6ff'); // cool starlight key
 const SPACE_SUN_INTENSITY = 1.1;
 const SPACE_AMBIENT_COLOR = new THREE.Color('#26304d');
 const SPACE_AMBIENT_INTENSITY = 0.32;
-// Night-floor atmosphere uniforms (the darkest values applyDayPhase reaches at
-// daylight=0) so the drei <Sky> contributes no daytime blue in space.
-const SPACE_RAYLEIGH = 0.06;
-const SPACE_TURBIDITY = 0.4;
-const SPACE_MIE_COEFFICIENT = 0.002;
-const SPACE_MIE_DIRECTIONAL_G = 0.8;
 
 /**
- * Force the sky/atmosphere/fog/lighting into deep-space mode. Drains the drei
- * <Sky> to its night floor (no blue haze), collapses fog to a near-zero black
+ * Force the fog/lighting into deep-space mode. Collapses fog to a near-zero black
  * void so distant impostors aren't fogged out, and gives the scene a steady cool
- * key light (SpaceSky owns the starfield). No per-frame allocation.
+ * key light (SpaceSky owns the starfield, forced to full cosmos via daylight=0).
+ * No per-frame allocation.
  */
 function applySpaceMode(
   sunLight: THREE.DirectionalLight,
   moonLight: THREE.DirectionalLight,
   ambient: THREE.AmbientLight,
-  fog: THREE.FogExp2,
-  sky: SkyImpl | null
+  fog: THREE.FogExp2
 ) {
   // Steady cool key light from the existing "sun" direction (whatever it last
   // held); castShadow stays false (set in JSX). Not dimmed to the night floor.
@@ -167,15 +144,6 @@ function applySpaceMode(
   // Black void + (near) zero fog density so impostors at distance stay visible.
   fog.color.copy(SPACE_FOG_COLOR);
   fog.density = SPACE_FOG_DENSITY;
-
-  // Drain the atmospheric dome to its night floor (no daytime scattering/blue).
-  if (sky) {
-    const u = sky.material.uniforms;
-    u.rayleigh.value = SPACE_RAYLEIGH;
-    u.turbidity.value = SPACE_TURBIDITY;
-    u.mieCoefficient.value = SPACE_MIE_COEFFICIENT;
-    u.mieDirectionalG.value = SPACE_MIE_DIRECTIONAL_G;
-  }
 }
 
 function clamp01(value: number): number {
@@ -199,8 +167,7 @@ function applyDayPhase(
   sunLight: THREE.DirectionalLight,
   moonLight: THREE.DirectionalLight,
   ambient: THREE.AmbientLight,
-  fog: THREE.FogExp2,
-  sky: SkyImpl | null
+  fog: THREE.FogExp2
 ) {
   const angle = phase * Math.PI * 2;
   // Sun travels a vertical great circle: up at noon, down at midnight.
@@ -251,23 +218,11 @@ function applyDayPhase(
   // Restore normal atmospheric depth (deep-space mode collapses this to ~0).
   fog.density = SURFACE_FOG_DENSITY;
 
-  // --- Atmospheric dome: collapse the Preetham scattering as night falls so the
-  // sky goes genuinely dark and the custom star dome (SpaceSky) dominates. The
-  // drei <Sky> never reaches black on its own; scaling rayleigh/turbidity toward
-  // tiny values drains its brightness while keeping a normal blue day + golden
-  // hour. The sun uniform is positioned elsewhere (useFrame / mount). ---
-  if (sky) {
-    const u = sky.material.uniforms;
-    // Day: full (retuned) atmosphere. Night: nearly none (a faint floor avoids
-    // artifacts). Interpolating on `daylight` keeps the dusk→night drain intact.
-    u.rayleigh.value = NIGHT_RAYLEIGH + daylight * (DAY_RAYLEIGH - NIGHT_RAYLEIGH);
-    u.turbidity.value = NIGHT_TURBIDITY + daylight * (DAY_TURBIDITY - NIGHT_TURBIDITY);
-    u.mieCoefficient.value =
-      NIGHT_MIE_COEFFICIENT + daylight * (DAY_MIE_COEFFICIENT - NIGHT_MIE_COEFFICIENT);
-    u.mieDirectionalG.value = DAY_MIE_DIRECTIONAL_G;
-  }
+  // The visible sky (atmosphere + cosmos) is the SpaceSky dome; it reads
+  // getSunDirection()/getMoonDirection() and mirrors this daylight/golden math
+  // for its uDay/uGolden uniforms, so no Preetham uniforms to drive here.
 
-  return { sunDirection, daylight };
+  return { sunDirection, daylight, golden };
 }
 
 export default function SkyController() {
@@ -275,7 +230,6 @@ export default function SkyController() {
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
 
-  const skyRef = useRef<SkyImpl>(null);
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
   const moonLightRef = useRef<THREE.DirectionalLight>(null);
   const ambientRef = useRef<THREE.AmbientLight>(null);
@@ -283,18 +237,6 @@ export default function SkyController() {
   // FogExp2 gives cheap exponential atmospheric depth across the ~50u planet.
   // ~0.014 keeps the planet clearly visible while still reading depth.
   const fog = useMemo(() => new THREE.FogExp2('#9ec9ff', SURFACE_FOG_DENSITY), []);
-
-  // Sun position handed to <Sky>. We rotate the actual SkyImpl uniform in
-  // useFrame, but seed it at a representative value so the initial frame looks
-  // right before useFrame runs.
-  const initialSunPosition = useMemo<[number, number, number]>(
-    () => [
-      sunDirection.x * 100,
-      sunDirection.y * 100,
-      sunDirection.z * 100
-    ],
-    []
-  );
 
   useEffect(() => {
     const previousFog = scene.fog;
@@ -315,17 +257,11 @@ export default function SkyController() {
     const ambient = ambientRef.current;
     if (!sunLight || !moonLight || !ambient) return;
     if (inSpace) {
-      applySpaceMode(sunLight, moonLight, ambient, fog, skyRef.current);
+      applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
-    applyDayPhase(forcedDayPhase ?? STATIC_DAY_PHASE, sunLight, moonLight, ambient, fog, skyRef.current);
+    applyDayPhase(forcedDayPhase ?? STATIC_DAY_PHASE, sunLight, moonLight, ambient, fog);
     fog.density = fogDensityForPhase(phase);
-    const skyMat = skyRef.current?.material;
-    if (skyMat) {
-      (skyMat.uniforms.sunPosition.value as THREE.Vector3)
-        .copy(sunDirection)
-        .multiplyScalar(100);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inSpace, phase]);
 
@@ -344,7 +280,7 @@ export default function SkyController() {
     // animated profiles only need a cheap re-assert to win over any stale state.
     if (inSpace) {
       if (!animated) return;
-      applySpaceMode(sunLight, moonLight, ambient, fog, skyRef.current);
+      applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
 
@@ -353,21 +289,12 @@ export default function SkyController() {
     if (!animated) return;
 
     const dayPhase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog, skyRef.current);
+    applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
     fog.density = fogDensityForPhase(phase);
-
-    // Drive the <Sky> shader's sun uniform to match.
-    const skyMat = skyRef.current?.material;
-    if (skyMat) {
-      (skyMat.uniforms.sunPosition.value as THREE.Vector3)
-        .copy(sunDirection)
-        .multiplyScalar(100);
-    }
   });
 
   return (
     <>
-      <Sky ref={skyRef} sunPosition={initialSunPosition} />
       <SpaceSky />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />
       <directionalLight ref={moonLightRef} castShadow={false} intensity={0} />

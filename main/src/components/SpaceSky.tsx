@@ -32,21 +32,29 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
 }
 
 /**
- * Recompute the daylight factor for a given day phase. This mirrors
- * SkyController's applyDayPhase elevation->daylight mapping exactly so the star
- * fade stays locked to the visible sun without SkyController having to thread a
- * value down through props/context.
+ * Sun elevation (normalized y) for a day phase. Mirrors SkyController's
+ * applyDayPhase direction construction exactly so daylight/golden derived here
+ * stay locked to the visible sun without threading a value through props.
  */
-function daylightForPhase(phase: number): number {
+function sunElevationForPhase(phase: number): number {
   const angle = phase * Math.PI * 2;
   const dirY = Math.sin(angle);
-  // applyDayPhase normalizes a 3D direction; only the elevation (y) matters here
-  // and normalization preserves its sign and the smoothstep edges chosen below.
   const dirX = Math.cos(angle) * 0.55;
   const dirZ = Math.sin(angle * 0.5) * 0.35 + 0.2;
   const len = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ) || 1;
-  const elevation = dirY / len;
-  return smoothstep(-0.12, 0.18, elevation);
+  return dirY / len;
+}
+
+/** daylight (0..1) for a phase — matches SkyController's elevation->daylight. */
+function daylightForPhase(phase: number): number {
+  return smoothstep(-0.12, 0.18, sunElevationForPhase(phase));
+}
+
+/** golden-hour factor (0..1) for a phase — matches SkyController's `golden`. */
+function goldenForPhase(phase: number): number {
+  const elevation = sunElevationForPhase(phase);
+  const daylight = smoothstep(-0.12, 0.18, elevation);
+  return daylight * (1 - smoothstep(0.05, 0.32, elevation));
 }
 
 /**
@@ -62,19 +70,27 @@ export default function SpaceSky() {
   const inSpace = phase === 'deep_space';
 
   // Seed a static-midday state on mount so the first frame is correct even when
-  // animation is disabled (stars effectively absent at midday -> uNight ~ 0).
+  // animation is disabled (thin daytime atmosphere over surviving cosmos).
   useMemo(() => {
-    updateSpaceSky(material, 0, daylightForPhase(STATIC_DAY_PHASE), getSunDirection(), getMoonDirection());
+    updateSpaceSky(
+      material,
+      0,
+      daylightForPhase(STATIC_DAY_PHASE),
+      goldenForPhase(STATIC_DAY_PHASE),
+      getSunDirection(),
+      getMoonDirection()
+    );
   }, [material]);
 
   // In deep space the cosmos is ALWAYS fully visible. Force the dome to full
-  // night (daylight=0 -> uNight=1) the moment we enter space, so even on profiles
+  // night (daylight=0 -> uDay=0 -> early-out) the moment we enter space, so even on profiles
   // with animatedShaders=false (which skip the per-frame update below) the stars
   // are on immediately. Restoring normal phases is handled by the useFrame path.
   useEffect(() => {
     const mat = matRef.current ?? material;
     if (!inSpace) return;
-    updateSpaceSky(mat, 0, 0, getSunDirection(), getMoonDirection());
+    // daylight=0 -> uDay=0 -> early-out -> pure cosmos; golden irrelevant.
+    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection());
   }, [inSpace, material]);
 
   useFrame(state => {
@@ -98,20 +114,27 @@ export default function SpaceSky() {
     const animated = getGraphicsQuality().animatedShaders;
     const forced = getForcedDayPhase();
 
-    // Deep space: stars/nebula forced fully on (uNight=1) every frame regardless
+    // Deep space: stars/nebula forced fully on (uDay=0 -> early-out) every frame regardless
     // of the day cycle. When animated, keep advancing time for twinkle/drift;
     // when not, the mount/enter-space effect already seeded full night so we can
     // skip per-frame work entirely.
     if (inSpace) {
       if (!animated) return;
-      updateSpaceSky(mat, state.clock.elapsedTime, 0, getSunDirection(), getMoonDirection());
+      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection());
       return;
     }
 
     if (!animated && forced === null) return; // frozen: mount seed already applied
 
     const dayPhase = forced ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    updateSpaceSky(mat, state.clock.elapsedTime, daylightForPhase(dayPhase), getSunDirection(), getMoonDirection());
+    updateSpaceSky(
+      mat,
+      state.clock.elapsedTime,
+      daylightForPhase(dayPhase),
+      goldenForPhase(dayPhase),
+      getSunDirection(),
+      getMoonDirection()
+    );
   });
 
   return (
