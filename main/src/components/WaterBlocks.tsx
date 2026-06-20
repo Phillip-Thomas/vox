@@ -46,7 +46,9 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
     [planetSize, terrainSeed]
   );
 
-  const geometry = useMemo(() => new THREE.PlaneGeometry(QUAD_SIZE, QUAD_SIZE), []);
+  // Subdivided so the vertex-shader wave displacement actually curves the surface
+  // (a 1-segment quad has only 4 corners and can't show ripples).
+  const geometry = useMemo(() => new THREE.PlaneGeometry(QUAD_SIZE, QUAD_SIZE, 6, 6), []);
   const material = useMemo(
     () =>
       debug
