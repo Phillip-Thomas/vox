@@ -22,6 +22,17 @@ function makeGenerator() {
 }
 
 describe('water voxel classification', () => {
+  it('raises the default seed sea level by one voxel', () => {
+    const raisedConfig = createTerrainConfig(12345, worldConfig.planetRadius);
+    const baselineConfig = { ...raisedConfig, seaLevelOffset: 0 };
+    const raised = new ProceduralWorldGenerator(worldConfig, raisedConfig);
+    const baseline = new ProceduralWorldGenerator(worldConfig, baselineConfig);
+
+    expect(raisedConfig.seaLevelOffset).toBe(1);
+    expect(createTerrainConfig(54321, worldConfig.planetRadius).seaLevelOffset ?? 0).toBe(0);
+    expect(raised.getSeaLevelRadius()).toBeCloseTo(baseline.getSeaLevelRadius() + 1);
+  });
+
   it('water and air partition the empty cells by sea level', () => {
     const gen = makeGenerator();
     // Sea level is now the percentile-derived waterline from the generator

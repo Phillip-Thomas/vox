@@ -16,13 +16,20 @@ import { seededUnit } from './worldCoordinates';
  * of the preset's absolute terrain heights. Every preset therefore has VISIBLE
  * water, varying from rare (mountains) to dominant (valleys):
  *   valleys  0.55  (very common water / lots of ocean)
- *   default  0.42  (balanced earth-like)
+ *   default  +1 voxel above its generated percentile waterline
  *   islands  0.38  (archipelago — land pokes out of a broad sea)
  *   hills    0.28  (water in the low spots)
  *   mountains 0.15 (rare but PRESENT — small seas in the deepest valleys)
  *   random   default (0.42)
  */
 export function createTerrainConfig(seed: number, planetRadius: number): TerrainGenerationConfig {
+  if (seed === 12345) {
+    return {
+      ...createSeededTerrainConfig(seed, planetRadius),
+      seaLevelOffset: 1
+    };
+  }
+
   if (seed === 54321) {
     // Mountains: rare but present water.
     return {

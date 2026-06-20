@@ -431,6 +431,12 @@ export class ProceduralWorldGenerator {
     return Math.floor(this.getPlanetRadius()) + ProceduralWorldGenerator.WATER_SHELL_MARGIN;
   }
 
+  private applySeaLevelOffset(sea: number) {
+    const offset = this.terrainConfig.seaLevelOffset ?? 0;
+    if (offset === 0) return sea;
+    return Math.min(Math.max(sea + offset, 0), this.waterScanRadius() + 0.001);
+  }
+
   // --- Percentile-based sea level -------------------------------------------
   //
   // Sea-level radius in COORDINATE units, computed (and memoized) from a chosen
@@ -448,7 +454,7 @@ export class ProceduralWorldGenerator {
 
     const percentile = this.terrainConfig.seaLevelPercentile;
     if (!(percentile > 0)) {
-      this.seaLevelRadius = this.config.planetRadius * SEA_LEVEL_RADIUS_PERCENT;
+      this.seaLevelRadius = this.applySeaLevelOffset(this.config.planetRadius * SEA_LEVEL_RADIUS_PERCENT);
       return this.seaLevelRadius;
     }
 
@@ -480,6 +486,7 @@ export class ProceduralWorldGenerator {
 
     // Never exceed the outermost scannable shell.
     sea = Math.min(sea, this.waterScanRadius() + 0.001);
+    sea = this.applySeaLevelOffset(sea);
     this.seaLevelRadius = sea;
     return this.seaLevelRadius;
   }

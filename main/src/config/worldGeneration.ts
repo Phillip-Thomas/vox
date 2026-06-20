@@ -21,6 +21,9 @@ export interface TerrainGenerationConfig {
   // Higher => more ocean. This is what makes water vary per preset yet always
   // be present (even mountains get a small but visible sea at ~0.15).
   seaLevelPercentile: number;
+  // Additional sea-level radius adjustment in voxel/coordinate units after the
+  // percentile waterline is computed. Positive values flood one shell higher.
+  seaLevelOffset?: number;
 }
 
 export const DEFAULT_WORLD_CONFIG: WorldGenerationConfig = {
@@ -78,4 +81,5 @@ export const DEFAULT_TERRAIN_CONFIG: TerrainGenerationConfig = {
   valleyDepth: 12, // Up to 12 blocks deep valleys (doubled)
   terrainScale: 0.08, // Slightly smaller scale for more detail
   seaLevelPercentile: DEFAULT_SEA_LEVEL_PERCENTILE,
+  seaLevelOffset: 0,
 };
