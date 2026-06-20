@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function Crosshair() {
   return (
     <div style={{
@@ -21,7 +19,7 @@ export function Crosshair() {
         transform: 'translate(-50%, -50%)',
         boxShadow: '0 0 2px rgba(0, 0, 0, 0.5)'
       }} />
-      
+
       {/* Vertical line */}
       <div style={{
         position: 'absolute',
@@ -37,4 +35,4 @@ export function Crosshair() {
   );
 }
 
-export default Crosshair; 
+export default Crosshair;

@@ -1,388 +1,362 @@
 import * as THREE from 'three';
+import { voxelCoordToWorld } from './cubeGravityConstants';
+import { materialId } from '../types/materials';
 
-/**
- * EFFICIENT VOXEL SYSTEM
- * 
- * Core Concept: Only track and render EXPOSED voxels
- * - Sparse storage: Map<coordKey, voxelData>
- * - Fixed GPU buffer: Reuse slots when voxels are deleted
- * - Instant updates: Direct mesh manipulation
- * - No rebuilds: Just hide/show individual voxels
- */
-
-export interface VoxelData {
+interface VoxelData {
   position: [number, number, number];
   material: string;
   color: THREE.Color;
-  meshSlot: number; // Which slot in the instancedMesh this voxel occupies
-  rigidBodyRef?: any; // Reference to the RigidBody component for collision
+  meshSlot: number;
+  worldId: number;
+  rigidBodyRef?: { setEnabled?: (enabled: boolean) => void };
 }
 
+interface CollisionCallbacks {
+  request: (x: number, y: number, z: number, worldId: number) => void;
+  remove: (x: number, y: number, z: number, worldId: number) => void;
+}
+
+export interface TerrainVoxel {
+  x: number;
+  y: number;
+  z: number;
+  material: string;
+  color: THREE.Color;
+}
+
+const tempMatrix = new THREE.Matrix4();
+
 export class EfficientVoxelSystem {
-  // Core data: Only exposed voxels exist here
-  private exposedVoxels = new Map<string, VoxelData>(); // "x,y,z" -> VoxelData
-  
-  // Original terrain: The permanent record of what the planet originally looked like
-  private originalTerrain = new Map<string, {material: string, color: THREE.Color}>(); // "x,y,z" -> original voxel data
-  
-  // Deleted terrain: Positions that were originally terrain but have been deleted by player
-  private deletedTerrain = new Set<string>(); // "x,y,z" -> positions that were deleted
-  
-  // GPU management - Dynamic allocation
-  private availableSlots: number[] = []; // Reusable mesh slots
-  private nextSlot = 0; // Next new slot to use
-  private maxSlots: number;
-  
-  // References
+  private exposedVoxels = new Map<string, VoxelData>();
+  private originalTerrain = new Map<string, { material: string; color: THREE.Color }>();
+  private deletedTerrain = new Set<string>();
+  private slotToCoord = new Map<number, string>();
   private mesh: THREE.InstancedMesh | null = null;
-  private rigidBodies: any[] = [];
-  
-  constructor(initialCapacity: number = 1000) {
-    // Start with initial capacity, but allow dynamic growth
+  // Per-instance shader data: x = packed material id, y = packed AO face mask.
+  // Written exclusively inside updateMeshSlot so it stays in sync through slot
+  // compaction (releaseMeshSlot reuses that same path).
+  private instanceData: THREE.InstancedBufferAttribute | null = null;
+  private maxSlots: number;
+  private worldId = 0;
+  private collisionCallbacks: CollisionCallbacks | null = null;
+
+  constructor(initialCapacity = 1000) {
     this.maxSlots = initialCapacity;
-    this.availableSlots = [];
-    // Don't pre-populate available slots, allocate on demand
   }
-  
-  /**
-   * Dynamically expand the slot capacity if needed
-   */
+
+  static coordKey(x: number, y: number, z: number) {
+    return `${x},${y},${z}`;
+  }
+
+  reset() {
+    this.worldId += 1;
+    this.exposedVoxels.clear();
+    this.originalTerrain.clear();
+    this.deletedTerrain.clear();
+    this.slotToCoord.clear();
+    this.collisionCallbacks = null;
+
+    if (this.mesh) {
+      this.mesh.count = 0;
+      if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
+      if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
+    }
+  }
+
+  getWorldId() {
+    return this.worldId;
+  }
+
   expandCapacity(newSize: number) {
-    if (newSize <= this.maxSlots) return;
-    
-    const oldMaxSlots = this.maxSlots;
-    this.maxSlots = newSize;
-    
-    console.log(`🔄 DYNAMIC EXPANSION: Slot capacity expanded from ${oldMaxSlots} to ${this.maxSlots}`);
-    
-    // If we have a mesh, we need to inform about the expansion
-    // Note: Three.js InstancedMesh capacity is set at creation time and cannot be expanded
-    // This is handled at the Planet component level by setting initial capacity appropriately
+    if (newSize > this.maxSlots) {
+      this.maxSlots = newSize;
+    }
   }
-  
+
   setMesh(mesh: THREE.InstancedMesh) {
     this.mesh = mesh;
+
+    // Allocate the per-instance shader-data attribute sized to the mesh's GPU
+    // capacity (instanceMatrix.count is the allocated buffer size). expandCapacity
+    // only raises a logical limit and never reallocates the GPU buffer, and
+    // getAvailableSlot clamps to instanceMatrix.count, so this sizing is correct.
+    const capacity = mesh.instanceMatrix.count;
+    const data = new THREE.InstancedBufferAttribute(new Float32Array(capacity * 2), 2);
+    data.setUsage(THREE.DynamicDrawUsage);
+    mesh.geometry.setAttribute('aInstanceData', data);
+    this.instanceData = data;
   }
-  
-  setRigidBodies(bodies: any[]) {
-    this.rigidBodies = bodies;
+
+  clearMesh(mesh?: THREE.InstancedMesh | null) {
+    if (!mesh || this.mesh === mesh) {
+      this.mesh = null;
+      this.instanceData = null;
+    }
   }
-  
-  /**
-   * Set the original terrain - the permanent record of what the planet originally looked like
-   */
-  setOriginalTerrain(terrain: Array<{x: number, y: number, z: number, material: string, color: THREE.Color}>) {
+
+  setCollisionCallbacks(callbacks: CollisionCallbacks) {
+    this.collisionCallbacks = callbacks;
+  }
+
+  clearCollisionCallbacks() {
+    this.collisionCallbacks = null;
+  }
+
+  setOriginalTerrain(terrain: TerrainVoxel[]) {
     this.originalTerrain.clear();
     for (const voxel of terrain) {
-      const coordKey = `${voxel.x},${voxel.y},${voxel.z}`;
-      this.originalTerrain.set(coordKey, {
+      this.originalTerrain.set(EfficientVoxelSystem.coordKey(voxel.x, voxel.y, voxel.z), {
         material: voxel.material,
         color: voxel.color.clone()
       });
     }
-    console.log(`🌍 Set original terrain with ${this.originalTerrain.size} voxels`);
   }
-  
-  /**
-   * Check if a position was originally part of the terrain
-   */
-  wasOriginalTerrain(x: number, y: number, z: number): boolean {
-    return this.originalTerrain.has(`${x},${y},${z}`);
+
+  wasOriginalTerrain(x: number, y: number, z: number) {
+    return this.originalTerrain.has(EfficientVoxelSystem.coordKey(x, y, z));
   }
-  
-  /**
-   * Check if a position is currently deleted (was terrain but removed by player)
-   */
-  isDeleted(x: number, y: number, z: number): boolean {
-    return this.deletedTerrain.has(`${x},${y},${z}`);
+
+  isDeleted(x: number, y: number, z: number) {
+    return this.deletedTerrain.has(EfficientVoxelSystem.coordKey(x, y, z));
   }
-  
-  /**
-   * Get original terrain data for a position
-   */
-  getOriginalTerrain(x: number, y: number, z: number): {material: string, color: THREE.Color} | undefined {
-    return this.originalTerrain.get(`${x},${y},${z}`);
+
+  getOriginalTerrain(x: number, y: number, z: number) {
+    return this.originalTerrain.get(EfficientVoxelSystem.coordKey(x, y, z));
   }
-  
-  /**
-   * Add a voxel to the world (expose it)
-   */
-  addVoxel(x: number, y: number, z: number, material: string, color: THREE.Color, rigidBodyRef?: any): boolean {
-    const coordKey = `${x},${y},${z}`;
-    
-    // Don't add if already exists
-    if (this.exposedVoxels.has(coordKey)) {
-      return false;
-    }
-    
-    // Get a mesh slot
+
+  addVoxel(
+    x: number,
+    y: number,
+    z: number,
+    material: string,
+    color: THREE.Color,
+    rigidBodyRef?: VoxelData['rigidBodyRef']
+  ) {
+    const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
+    if (this.exposedVoxels.has(coordKey)) return false;
+
     const meshSlot = this.getAvailableSlot();
-    if (meshSlot === -1) {
-      console.warn('No available mesh slots');
-      return false;
-    }
-    
-    // Create voxel data
+    if (meshSlot === -1) return false;
+
     const voxelData: VoxelData = {
       position: [x, y, z],
       material,
       color: color.clone(),
       meshSlot,
-      rigidBodyRef
+      rigidBodyRef,
+      worldId: this.worldId
     };
-    
-    // Add to system
+
     this.exposedVoxels.set(coordKey, voxelData);
-    
-    // Update mesh
-    this.updateMeshSlot(meshSlot, x, y, z, color);
-    
-    // If no rigid body provided, request dynamic collision body creation
+    this.slotToCoord.set(meshSlot, coordKey);
+    this.updateMeshSlot(meshSlot, x, y, z, color, material);
+    this.refreshNeighborAO(x, y, z);
+
     if (!rigidBodyRef) {
-      // Import the function dynamically to avoid circular dependency
-      import('../components/EfficientPlanet').then(({ addDynamicCollisionBody }) => {
-        if (addDynamicCollisionBody) {
-          addDynamicCollisionBody(x, y, z);
-        }
-      });
+      this.collisionCallbacks?.request(x, y, z, this.worldId);
     }
-    
-    // console.log(`✅ Added voxel at (${x},${y},${z}) to slot ${meshSlot}`);
+
     return true;
   }
-  
-  /**
-   * Remove a voxel from the world
-   */
-  removeVoxel(x: number, y: number, z: number): boolean {
-    const coordKey = `${x},${y},${z}`;
+
+  removeVoxel(x: number, y: number, z: number) {
+    const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
     const voxelData = this.exposedVoxels.get(coordKey);
-    
-    if (!voxelData) {
-      return false; // Voxel doesn't exist
-    }
-    
-    // Mark as deleted if it was original terrain
+    if (!voxelData) return false;
+
     if (this.wasOriginalTerrain(x, y, z)) {
       this.deletedTerrain.add(coordKey);
-      console.log(`🗑️ Marked original terrain at (${x},${y},${z}) as deleted`);
     }
-    
-    // Hide the mesh slot
-    this.hideMeshSlot(voxelData.meshSlot);
-    
-    // Remove collision body completely
-    if (voxelData.rigidBodyRef) {
-      try {
-        voxelData.rigidBodyRef.setEnabled(false);
-        console.log(`🚫 Disabled collision for voxel at (${x},${y},${z})`);
-      } catch (error) {
-        console.warn(`Failed to disable collision for voxel at (${x},${y},${z}):`, error);
-      }
+
+    try {
+      voxelData.rigidBodyRef?.setEnabled?.(false);
+    } catch (error) {
+      console.warn(`Failed to disable collision for voxel ${coordKey}:`, error);
     }
-    
-    // Remove collision body from the planet component immediately
-    if ((window as any).removeDynamicCollisionBody) {
-      (window as any).removeDynamicCollisionBody(x, y, z);
-    }
-    
-    // Return slot to available pool
-    this.availableSlots.push(voxelData.meshSlot);
-    
-    // Remove from system
+
+    this.collisionCallbacks?.remove(x, y, z, this.worldId);
     this.exposedVoxels.delete(coordKey);
-    
-    console.log(`🗑️ Removed voxel at (${x},${y},${z}) from slot ${voxelData.meshSlot}`);
+    this.releaseMeshSlot(voxelData.meshSlot);
+    this.refreshNeighborAO(x, y, z);
     return true;
   }
-  
-  /**
-   * Check if a voxel exists at coordinates
-   */
-  hasVoxel(x: number, y: number, z: number): boolean {
-    return this.exposedVoxels.has(`${x},${y},${z}`);
+
+  hasVoxel(x: number, y: number, z: number) {
+    return this.exposedVoxels.has(EfficientVoxelSystem.coordKey(x, y, z));
   }
-  
-  /**
-   * Get voxel data at coordinates
-   */
-  getVoxel(x: number, y: number, z: number): VoxelData | undefined {
-    return this.exposedVoxels.get(`${x},${y},${z}`);
+
+  getVoxel(x: number, y: number, z: number) {
+    return this.exposedVoxels.get(EfficientVoxelSystem.coordKey(x, y, z));
   }
-  
-  /**
-   * Get all exposed voxels
-   */
-  getAllVoxels(): Map<string, VoxelData> {
+
+  getAllVoxels() {
     return new Map(this.exposedVoxels);
   }
-  
-  /**
-   * Check if a position should be exposed (has at least one missing neighbor)
-   * A position should be exposed if:
-   * 1. It was originally part of the terrain
-   * 2. It's not currently deleted
-   * 3. It has at least one neighbor that is missing (either outside original terrain or deleted)
-   */
-  shouldBeExposed(x: number, y: number, z: number): boolean {
-    // First check: This position must have been original terrain
-    if (!this.wasOriginalTerrain(x, y, z)) {
-      return false;
+
+  getCoordForSlot(slot: number) {
+    const coordKey = this.slotToCoord.get(slot);
+    if (!coordKey) return null;
+    const [x, y, z] = coordKey.split(',').map(Number);
+    return { x, y, z };
+  }
+
+  shouldBeExposed(x: number, y: number, z: number) {
+    if (!this.wasOriginalTerrain(x, y, z) || this.isDeleted(x, y, z)) return false;
+
+    for (const [nx, ny, nz] of this.neighborCoords(x, y, z)) {
+      if (!this.wasOriginalTerrain(nx, ny, nz)) return true;
+      if (this.isDeleted(nx, ny, nz)) return true;
     }
-    
-    // Second check: This position must not be currently deleted
-    if (this.isDeleted(x, y, z)) {
-      return false;
-    }
-    
-    const neighbors = [
-      [x+1, y, z], [x-1, y, z],
-      [x, y+1, z], [x, y-1, z],
-      [x, y, z+1], [x, y, z-1]
-    ];
-    
-    // Check if any neighbor is missing (either outside original terrain or deleted)
-    for (const [nx, ny, nz] of neighbors) {
-      const neighborWasOriginal = this.wasOriginalTerrain(nx, ny, nz);
-      const neighborHasVoxel = this.hasVoxel(nx, ny, nz);
-      
-      // If neighbor was original terrain but doesn't have a voxel (deleted), this voxel should be exposed
-      if (neighborWasOriginal && !neighborHasVoxel) {
-        return true;
-      }
-      // If neighbor was not original terrain (air/outside), this voxel should be exposed
-      if (!neighborWasOriginal) {
-        return true;
-      }
-    }
-    
+
     return false;
   }
-  
-  /**
-   * When a voxel is removed, check neighbors to see if they should be exposed
-   */
-  exposeNeighbors(x: number, y: number, z: number, materialGenerator: (x: number, y: number, z: number) => {material: string, color: THREE.Color}) {
-    console.log(`🔍 Checking neighbors of deleted voxel at (${x},${y},${z})`);
-    
-    const neighbors = [
-      [x+1, y, z], [x-1, y, z],
-      [x, y+1, z], [x, y-1, z],
-      [x, y, z+1], [x, y, z-1]
-    ];
-    
+
+  exposeNeighbors(x: number, y: number, z: number) {
     let exposedCount = 0;
-    
-    for (const [nx, ny, nz] of neighbors) {
-      // CRITICAL: Never expose a voxel in the same position that was just deleted
-      if (nx === x && ny === y && nz === z) {
-        continue;
-      }
-      
-      // Skip if already exposed
-      if (this.hasVoxel(nx, ny, nz)) {
-        continue;
-      }
-      
-      // Skip if not original terrain
-      if (!this.wasOriginalTerrain(nx, ny, nz)) {
-        continue;
-      }
-      
-      // Check if this position should now be exposed
-      const shouldExpose = this.shouldBeExposed(nx, ny, nz);
-      
-      if (shouldExpose) {
-        // Use original terrain data instead of generating new material
-        const originalData = this.getOriginalTerrain(nx, ny, nz);
-        if (originalData) {
-          this.addVoxel(nx, ny, nz, originalData.material, originalData.color);
-          exposedCount++;
-        }
+
+    for (const [nx, ny, nz] of this.neighborCoords(x, y, z)) {
+      if (this.hasVoxel(nx, ny, nz)) continue;
+      if (!this.shouldBeExposed(nx, ny, nz)) continue;
+
+      const originalData = this.getOriginalTerrain(nx, ny, nz);
+      if (originalData && this.addVoxel(nx, ny, nz, originalData.material, originalData.color)) {
+        exposedCount++;
       }
     }
-    
-    if (exposedCount > 0) {
-      console.log(`🌟 Exposed ${exposedCount} original terrain voxels after deletion of (${x},${y},${z})`);
-    }
+
+    return exposedCount;
   }
-  
-  // Private helper methods
-  
-  private getAvailableSlot(): number {
-    if (this.availableSlots.length > 0) {
-      return this.availableSlots.pop()!;
-    }
-    
-    // Check actual mesh capacity (not mesh.count which is render count)
-    if (this.mesh) {
-      // The actual capacity is stored in the geometry's attributes
-      const meshCapacity = this.mesh.instanceMatrix?.count || 0;
-      
-      if (this.nextSlot < meshCapacity) {
-        return this.nextSlot++;
-      } else {
-        console.warn(`⚠️ MESH CAPACITY REACHED: Slot ${this.nextSlot} >= Mesh capacity ${meshCapacity}`);
-        console.warn(`🔧 SOLUTION: The instancedMesh needs to be created with higher initial capacity`);
-        console.warn(`📊 Current usage: ${this.nextSlot}/${meshCapacity} slots, Available pool: ${this.availableSlots.length}`);
-        return -1; // Can't expand Three.js InstancedMesh at runtime
-      }
-    }
-    
-    // Fallback: allow slots up to maxSlots when no mesh is attached (for initialization)
-    if (this.nextSlot < this.maxSlots) {
-      return this.nextSlot++;
-    }
-    
-    // Dynamic expansion - increase maxSlots if needed
-    this.expandCapacity(this.maxSlots + 10000);
-    return this.nextSlot++;
-  }
-  
-  private updateMeshSlot(slot: number, x: number, y: number, z: number, color: THREE.Color) {
-    if (!this.mesh) return;
-    
-    // Set position matrix
-    const matrix = new THREE.Matrix4();
-    matrix.setPosition(x * 2, y * 2, z * 2); // Assuming 2-unit voxel size
-    this.mesh.setMatrixAt(slot, matrix);
-    
-    // Set color
-    this.mesh.setColorAt(slot, color);
-    
-    // Update mesh
-    if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
-    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
-    
-    // Update mesh count to include this slot
-    this.mesh.count = Math.max(this.mesh.count, slot + 1);
-  }
-  
-  private hideMeshSlot(slot: number) {
-    if (!this.mesh) return;
-    
-    // Move voxel far away (effectively hiding it)
-    const matrix = new THREE.Matrix4();
-    matrix.setPosition(100000, 100000, 100000);
-    this.mesh.setMatrixAt(slot, matrix);
-    
-    if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
-  }
-  
-  /**
-   * Get statistics about the system
-   */
+
   getStats() {
     return {
+      worldId: this.worldId,
       exposedVoxels: this.exposedVoxels.size,
-      availableSlots: this.availableSlots.length,
-      usedSlots: this.nextSlot - this.availableSlots.length,
+      activeSlots: this.slotToCoord.size,
       maxSlots: this.maxSlots,
-      memoryEfficiency: (this.exposedVoxels.size / this.maxSlots * 100).toFixed(1) + '%'
+      memoryEfficiency: `${((this.exposedVoxels.size / this.maxSlots) * 100).toFixed(1)}%`
     };
+  }
+
+  getSnapshot() {
+    return {
+      worldId: this.worldId,
+      exposedVoxels: this.exposedVoxels.size,
+      originalTerrain: this.originalTerrain.size,
+      deletedTerrain: this.deletedTerrain.size,
+      activeSlots: this.slotToCoord.size,
+      hasMesh: Boolean(this.mesh),
+      hasCollisionCallbacks: Boolean(this.collisionCallbacks)
+    };
+  }
+
+  private getAvailableSlot() {
+    const compactSlot = this.slotToCoord.size;
+    const meshCapacity = this.mesh?.instanceMatrix?.count ?? this.maxSlots;
+
+    if (compactSlot < meshCapacity) {
+      return compactSlot;
+    }
+
+    return -1;
+  }
+
+  private updateMeshSlot(slot: number, x: number, y: number, z: number, color: THREE.Color, material: string) {
+    if (!this.mesh) return;
+
+    tempMatrix.identity();
+    tempMatrix.setPosition(voxelCoordToWorld(x, y, z));
+    this.mesh.setMatrixAt(slot, tempMatrix);
+    this.mesh.setColorAt(slot, color);
+    this.mesh.count = Math.max(this.mesh.count, slot + 1);
+
+    if (this.instanceData) {
+      // x = material id (consumed by the voxel shader's PBR LUT).
+      // y = 6-bit face-occupancy mask -> per-corner baked AO in the vertex shader.
+      this.instanceData.setXY(slot, materialId(material), this.computeFaceMask(x, y, z));
+      this.instanceData.needsUpdate = true;
+    }
+
+    if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
+    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
+  }
+
+  private releaseMeshSlot(slot: number) {
+    const highestSlot = this.slotToCoord.size - 1;
+    const removedCoord = this.slotToCoord.get(slot);
+    if (!removedCoord) return;
+
+    if (slot !== highestSlot) {
+      const movedCoord = this.slotToCoord.get(highestSlot);
+      const movedVoxel = movedCoord ? this.exposedVoxels.get(movedCoord) : undefined;
+
+      if (movedCoord && movedVoxel) {
+        const [x, y, z] = movedVoxel.position;
+        movedVoxel.meshSlot = slot;
+        this.updateMeshSlot(slot, x, y, z, movedVoxel.color, movedVoxel.material);
+        this.slotToCoord.set(slot, movedCoord);
+      }
+    }
+
+    this.slotToCoord.delete(highestSlot);
+    this.hideMeshSlot(highestSlot);
+
+    if (this.mesh) {
+      this.mesh.count = this.slotToCoord.size;
+    }
+  }
+
+  private hideMeshSlot(slot: number) {
+    if (!this.mesh) return;
+    tempMatrix.identity();
+    tempMatrix.setPosition(100000, 100000, 100000);
+    this.mesh.setMatrixAt(slot, tempMatrix);
+    if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
+  }
+
+  private neighborCoords(x: number, y: number, z: number): Array<[number, number, number]> {
+    return [
+      [x + 1, y, z],
+      [x - 1, y, z],
+      [x, y + 1, z],
+      [x, y - 1, z],
+      [x, y, z + 1],
+      [x, y, z - 1]
+    ];
+  }
+
+  // A cell occludes ambient light if it is filled: original (non-deleted) terrain
+  // — including buried interior voxels — or a player-placed voxel.
+  private isSolid(x: number, y: number, z: number) {
+    const key = EfficientVoxelSystem.coordKey(x, y, z);
+    if (this.originalTerrain.has(key) && !this.deletedTerrain.has(key)) return true;
+    return this.exposedVoxels.has(key);
+  }
+
+  // Pack which of the 6 face-neighbours are solid into bits 0..5, matching
+  // neighborCoords order (+x,-x,+y,-y,+z,-z). 0..63, exact in float32.
+  private computeFaceMask(x: number, y: number, z: number) {
+    const n = this.neighborCoords(x, y, z);
+    let mask = 0;
+    for (let i = 0; i < 6; i++) {
+      const [nx, ny, nz] = n[i];
+      if (this.isSolid(nx, ny, nz)) mask |= 1 << i;
+    }
+    return mask;
+  }
+
+  // After an edit the occupancy around (x,y,z) changed, so recompute the AO mask
+  // of every exposed neighbour that already has a mesh slot.
+  private refreshNeighborAO(x: number, y: number, z: number) {
+    if (!this.instanceData) return;
+    let dirty = false;
+    for (const [nx, ny, nz] of this.neighborCoords(x, y, z)) {
+      const neighbor = this.exposedVoxels.get(EfficientVoxelSystem.coordKey(nx, ny, nz));
+      if (!neighbor) continue;
+      this.instanceData.setY(neighbor.meshSlot, this.computeFaceMask(nx, ny, nz));
+      dirty = true;
+    }
+    if (dirty) this.instanceData.needsUpdate = true;
   }
 }
 
-// Global instance - Dynamic allocation based on planet size
-// Initial capacity will be adjusted based on actual planet configuration
-export const voxelSystem = new EfficientVoxelSystem(1000); 
+export const voxelSystem = new EfficientVoxelSystem(1000);

@@ -1,576 +1,370 @@
-import React, { useRef, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { RigidBody } from '@react-three/rapier';
-import { voxelSystem } from '../utils/efficientVoxelSystem';
-import { MATERIALS, MaterialType } from '../types/materials';
+import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
+import { MATERIALS } from '../types/materials';
+import { createVoxelMaterial, updateVoxelMaterial } from '../utils/voxelMaterial';
+import { getGraphicsQuality } from '../config/graphicsSettings';
 import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator';
+import { createTerrainConfig } from '../utils/terrainConfig';
+import { TerrainVoxel, voxelSystem } from '../utils/efficientVoxelSystem';
+import { FACE_NORMALS } from '../utils/surfaceControls';
+import {
+  COLLIDER_HALF_EXTENT,
+  COLLISION_MIN_DISTANCE_FROM_PLAYER,
+  COLLISION_STREAM_RANGE,
+  voxelCoordToWorld
+} from '../utils/cubeGravityConstants';
+
 export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
-// Simple material for all voxels
-const voxelMaterial = new THREE.MeshStandardMaterial({ 
-  color: "#ffffff", // White base so instance colors show
-  roughness: 0.8,
-  metalness: 0.1
-});
+const voxelMaterial = createVoxelMaterial();
 
-
-// Global functions to manage collision bodies
-export let addDynamicCollisionBody: ((x: number, y: number, z: number) => void) | null = null;
-export let removeDynamicCollisionBody: ((x: number, y: number, z: number) => void) | null = null;
-
-interface EfficientPlanetProps {
-  size?: number; // Cube half-size in voxels (cube extends from -size to +size)
-  playerPosition?: THREE.Vector3; // Player position for proximity-based collision
+export interface PlanetStats {
+  worldId: number;
+  exposedVoxels: number;
+  activeColliders: number;
+  pendingColliders: number;
+  activeSlots: number;
 }
 
-// Component for individual voxel collision
-function VoxelCollisionBody({ x, y, z, onRef }: { x: number, y: number, z: number, onRef: (ref: any) => void }) {
-  const ref = useRef<any>(null);
-  
-  useEffect(() => {
-    if (ref.current) {
-      onRef(ref.current);
-    }
-  }, [onRef]);
-  
-  const position: [number, number, number] = [x * 2, y * 2, z * 2];
-  
-  // Get voxel material for color coding the collision box
+interface EfficientPlanetProps {
+  size: number;
+  playerPosition?: THREE.Vector3;
+  surfaceUp?: THREE.Vector3;
+  terrainSeed?: number;
+  debugColliders?: boolean;
+  onStatsChange?: (stats: PlanetStats) => void;
+}
+
+interface CollisionBody {
+  x: number;
+  y: number;
+  z: number;
+  key: string;
+  worldId: number;
+}
+
+interface PendingCollisionBody {
+  x: number;
+  y: number;
+  z: number;
+  worldId: number;
+}
+
+function coordKey(x: number, y: number, z: number) {
+  return `${x},${y},${z}`;
+}
+
+function VoxelCollisionBody({
+  x,
+  y,
+  z,
+  debug,
+  onRef
+}: {
+  x: number;
+  y: number;
+  z: number;
+  debug: boolean;
+  onRef: (ref: { setEnabled?: (enabled: boolean) => void } | null) => void;
+}) {
+  const ref = useRef<RapierRigidBody | null>(null);
   const voxelData = voxelSystem.getVoxel(x, y, z);
-  const materialColor = voxelData ? voxelData.color : new THREE.Color('red');
-  
+
+  useEffect(() => {
+    if (!voxelData) return undefined;
+    onRef(ref.current);
+    return () => onRef(null);
+  }, [onRef, voxelData]);
+
+  if (!voxelData) return null;
+
+  const position = voxelCoordToWorld(x, y, z);
+
   return (
-    <RigidBody
-      ref={ref}
-      type="fixed"
-      position={position}
-      colliders="cuboid"
-      onCollisionEnter={() => {
-        // Get voxel data to show material and color
-        const voxelData = voxelSystem.getVoxel(x, y, z);
-        if (voxelData) {
-          const material = voxelData.material;
-          const colorHex = `#${voxelData.color.getHexString()}`;
-          console.log(`💥 Collision detected at (${x},${y},${z}) - Material: ${material}, Color: ${colorHex}`);
-        } else {
-          console.log(`💥 Collision detected at (${x},${y},${z}) - No voxel data found`);
-        }
-      }}
-    >
-      {/* Visible collision box for testing - TEMPORARILY HIDDEN */}
-      <mesh visible={true}>
+    <RigidBody ref={ref} type="fixed" position={[position.x, position.y, position.z]} colliders={false}>
+      <CuboidCollider args={[COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT, COLLIDER_HALF_EXTENT]} />
+      <mesh visible={debug}>
         <boxGeometry args={[1.98, 1.98, 1.98]} />
-        <meshBasicMaterial color={materialColor} transparent opacity={0.3} />
+        <meshBasicMaterial color={voxelData.color} transparent opacity={0.28} />
       </mesh>
     </RigidBody>
   );
 }
 
-export default function EfficientPlanet({ size, playerPosition }: EfficientPlanetProps) {
-  // Ensure size is provided - no default to force explicit configuration
-  if (size === undefined) {
-    throw new Error('EfficientPlanet: size prop is required - configure in EfficientScene');
-  }
+export default function EfficientPlanet({
+  size,
+  playerPosition,
+  surfaceUp,
+  terrainSeed = 12345,
+  debugColliders = false,
+  onStatsChange
+}: EfficientPlanetProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  const initialized = useRef(false);
-  const rigidBodyRefs = useRef<Map<string, any>>(new Map()); // Store rigid body refs by coordinate
-  
-  // State to track ALL collision bodies (both initial and dynamic)
-  const [allCollisionBodies, setAllCollisionBodies] = useState<Array<{x: number, y: number, z: number, key: string}>>([]); 
-  
-  // Batch collision body creation refs - moved to top level
-  const pendingCollisionBodies = useRef<Array<{x: number, y: number, z: number}>>([]);
+  const rigidBodyRefs = useRef<Map<string, { setEnabled?: (enabled: boolean) => void }>>(new Map());
+  const pendingCollisionBodies = useRef<Map<string, PendingCollisionBody>>(new Map());
   const batchTimeout = useRef<number | null>(null);
-  const linkedCount = useRef(0);
-  
-  // DO NOT CHANGE THIS VALUE
-  const COLLISION_RANGE = 5;
   const lastUpdatePosition = useRef<THREE.Vector3 | null>(null);
-  
-  // Function to check if a voxel is within collision range of player
-  const isWithinCollisionRange = (voxelX: number, voxelY: number, voxelZ: number): boolean => {
-    if (!playerPosition) {
-      console.log(`🔍 DEBUG: No player position, creating collision body at (${voxelX}, ${voxelY}, ${voxelZ})`);
-      return true; // If no player position, create all collision bodies
-    }
-    
-    // Convert voxel coordinates to world coordinates (voxels are at 2x scale)
-    const voxelWorldX = voxelX * 2;
-    const voxelWorldY = voxelY * 2;
-    const voxelWorldZ = voxelZ * 2;
-    
-    // Calculate distance from player to voxel
-    const distance = Math.sqrt(
-      Math.pow(playerPosition.x - voxelWorldX, 2) +
-      Math.pow(playerPosition.y - voxelWorldY, 2) +
-      Math.pow(playerPosition.z - voxelWorldZ, 2)
-    );
-    
-    const isInRange = distance <= COLLISION_RANGE
-    
-    // CRITICAL: Don't create collision bodies too close to player (prevents getting stuck)
-    // But allow collision bodies that are slightly below the player (for landing)
-    const MIN_DISTANCE_FROM_PLAYER = 1.5; // Minimum 1.5 world units from player
-    const tooClose = distance < MIN_DISTANCE_FROM_PLAYER;
-    
-    // Special case: Allow collision bodies below the player (for landing)
-    const isBelow = voxelWorldY < (playerPosition.y - 2); // 2 units below player
-    const allowBelowPlayer = isBelow && distance < 4; // Allow within 4 units if below
-    
-    // Final decision: in range AND (not too close OR allowed below player)
-    const shouldCreate = isInRange && (!tooClose || allowBelowPlayer);
-    
-    return shouldCreate;
-  };
-  
-  // Generate complete original terrain (all voxels that should exist in the cube)
-  const originalTerrain = useMemo(() => {
-    const terrain: Array<{x: number, y: number, z: number, material: MaterialType, color: THREE.Color}> = [];
-    
-    // Create proportional world generation config based on planet size
-    const planetRadius = size / 2; // Planet extends from -size/2 to +size/2, so radius is size/2
-    const proportionalConfig = {
-      planetRadius: planetRadius,
-      coreRadiusPercent: 0.15, // Core is 15% of planet radius
-      surfaceThickness: Math.max(1, Math.floor(planetRadius * 0.05)), // Surface is 5% of radius, minimum 1 block
-      coreRadius: 2 // Legacy fallback
-    };
-    
-    const generator = new ProceduralWorldGenerator(proportionalConfig);
-    
-    console.log(`🌍 PROPORTIONAL GENERATION: PlanetSize=${size}, Radius=${planetRadius}, CoreRadius=${(planetRadius * 0.15).toFixed(1)}, SurfaceThickness=${proportionalConfig.surfaceThickness}`);
-    
-    // Show comparison with old static system
-    const oldCoreRadius = 2; // Previous hardcoded value
-    const newCoreRadius = planetRadius * 0.15;
-    const scaleImprovement = newCoreRadius / oldCoreRadius;
-    console.log(`📊 SCALING COMPARISON: OldCoreRadius=${oldCoreRadius}, NewCoreRadius=${newCoreRadius.toFixed(1)}, ScaleImprovement=${scaleImprovement.toFixed(1)}x`);
-    console.log(`🎯 LAYER PROPORTIONS: Core=${(0.15*100).toFixed(0)}%, Surface=${((proportionalConfig.surfaceThickness/planetRadius)*100).toFixed(1)}%, Middle=${(100-15-((proportionalConfig.surfaceThickness/planetRadius)*100)).toFixed(1)}%`);
-    
-    // Material distribution counter for debugging
-    const materialCounts = new Map<MaterialType, number>();
-    
-    // Generate ALL voxels within the cube (not just exposed ones)
-    // Cube extends from -size/2 to +size/2 in all dimensions
-    for (let x = -size / 2; x <= size / 2; x++) {
-      for (let y = -size / 2; y <= size / 2; y++) {
-        for (let z = -size / 2; z <= size / 2; z++) {
-          // All positions within the cube bounds are part of the original terrain
-          const material = generator.generateMaterialForPosition(x, y, z);
-          const color = MATERIALS[material].color.clone();
-          
-          // Count materials for debugging
-          materialCounts.set(material, (materialCounts.get(material) || 0) + 1);
-          
-          terrain.push({ x, y, z, material, color });
-        }
-      }
-    }
-    
-    // Log material distribution
-    console.log(`🧊 Generated complete original terrain with ${terrain.length} voxels (cube size: ${size}³)`);
-    console.log(`📊 MATERIAL DISTRIBUTION:`, Object.fromEntries(
-      Array.from(materialCounts.entries()).map(([material, count]) => [
-        material, 
-        `${count} (${((count/terrain.length)*100).toFixed(1)}%)`
-      ])
-    ));
-    
-    return terrain;
-  }, [size]);
+  const latestPlayerPosition = useRef<THREE.Vector3 | undefined>(playerPosition);
+  const latestSurfaceUp = useRef<THREE.Vector3>(surfaceUp?.clone() ?? FACE_NORMALS.top.clone());
+  const lastSurfaceUpKey = useRef('');
 
-  // Generate initial exposed voxels (only the ones that should be visible)
-  const initialVoxels = useMemo(() => {
-    const voxels: Array<{x: number, y: number, z: number, material: MaterialType, color: THREE.Color}> = [];
-    
-    // Only generate exposed voxels from the original terrain
-    for (const terrainVoxel of originalTerrain) {
-      const isExposed = isVoxelExposed(terrainVoxel.x, terrainVoxel.y, terrainVoxel.z, size / 2);
-      
-      if (isExposed) {
-        voxels.push({ 
-          x: terrainVoxel.x, 
-          y: terrainVoxel.y, 
-          z: terrainVoxel.z, 
-          material: terrainVoxel.material, 
-          color: terrainVoxel.color 
-        });
-      }
-    }
-    
-    console.log(`🧊 Generated ${voxels.length} exposed voxels from ${originalTerrain.length} original terrain voxels`);
-    console.log(`📊 Voxel Stats: CubeSize=${size*2+1}, Surface=${voxels.length}, Total=${originalTerrain.length}, Surface%=${((voxels.length/originalTerrain.length)*100).toFixed(1)}%`);
-    
-    return voxels;
-  }, [size, originalTerrain]);
-  
-  // Calculate dynamic buffer size based on ACTUAL exposed voxel count (not estimation)
-  const dynamicBufferSize = useMemo(() => {
-    // Validate size input
-    if (!size || size <= 0) {
-      console.error(`❌ Invalid planet size: ${size}. Using fallback.`);
-      return 5000; // Fallback size
-    }
-    
-    // Use the ACTUAL exposed voxel count instead of estimation
-    const actualSurfaceVoxels = initialVoxels.length;
-    
-    if (actualSurfaceVoxels === 0) {
-      // Fallback to estimation if initialVoxels hasn't been calculated yet
-      // For a cube, surface area = 6 * (2*size+1)² - but account for edges/corners
-      const cubeSize = size * 2 + 1;
-      const estimatedSurfaceVoxels = Math.max(6 * cubeSize * cubeSize - 12 * cubeSize + 8, 1000);
-      const expansionBuffer = Math.floor(estimatedSurfaceVoxels * 0.5);
-      const totalSize = estimatedSurfaceVoxels + expansionBuffer;
-      
-      console.log(`🎯 DYNAMIC BUFFER (ESTIMATED): CubeSize=${cubeSize}, EstimatedSurface=${estimatedSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
-      return totalSize;
-    }
-    
-    // Calculate buffer based on actual surface voxel count
-    const expansionBuffer = Math.floor(actualSurfaceVoxels * 0.3); // 30% buffer for dynamic growth
-    const totalSize = actualSurfaceVoxels + expansionBuffer;
-    
-    console.log(`🎯 DYNAMIC BUFFER (ACTUAL): CubeSize=${size*2+1}, ActualSurface=${actualSurfaceVoxels}, Buffer=${expansionBuffer}, Total=${totalSize}`);
-    
-    // Final validation - never return 0
-    if (totalSize <= 0) {
-      console.error(`❌ Calculated buffer size is ${totalSize}. Using emergency fallback.`);
-      return 5000;
-    }
-    
-    return totalSize;
-  }, [size, initialVoxels.length]); // Depends on both size AND actual voxel count
+  const [collisionBodies, setCollisionBodies] = useState<CollisionBody[]>([]);
 
-  // Initialize the voxel system
+  useFrame(({ clock }) => {
+    updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality());
+  });
+
   useEffect(() => {
-    if (!meshRef.current || initialized.current) return;
-    
-    // CRITICAL: Verify mesh capacity before using it
-    const actualCapacity = meshRef.current.instanceMatrix?.count || 0;
-    console.log(`🔍 MESH VERIFICATION: instancedMesh.count = ${meshRef.current.count} (render count), actualCapacity = ${actualCapacity}, dynamicBufferSize = ${dynamicBufferSize}`);
-    
-    if (actualCapacity === 0) {
-      console.error(`❌ CRITICAL ERROR: Mesh was created with 0 capacity! This will cause slot allocation failures.`);
-      console.error(`🔧 Expected capacity: ${dynamicBufferSize}, Actual capacity: ${actualCapacity}`);
-    } else if (actualCapacity < dynamicBufferSize) {
-      console.warn(`⚠️ CAPACITY MISMATCH: Expected ${dynamicBufferSize}, got ${actualCapacity}`);
-    } else {
-      console.log(`✅ MESH CAPACITY OK: ${actualCapacity} slots allocated`);
+    latestPlayerPosition.current = playerPosition;
+  }, [playerPosition]);
+
+  useEffect(() => {
+    latestSurfaceUp.current.copy(surfaceUp ?? FACE_NORMALS.top);
+  }, [surfaceUp]);
+
+  const originalTerrain = useMemo<TerrainVoxel[]>(() => {
+    const planetRadius = size / 2;
+    const generator = new ProceduralWorldGenerator(
+      {
+        planetRadius,
+        coreRadiusPercent: 0.15
+      },
+      createTerrainConfig(terrainSeed, planetRadius)
+    );
+
+    return generator.getAllVoxelPositions().map(position => {
+      const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
+      return {
+        ...position,
+        material,
+        color: MATERIALS[material].color.clone()
+      };
+    });
+  }, [size, terrainSeed]);
+
+  const initialVoxels = useMemo(() => {
+    const terrainPositions = new Set(originalTerrain.map(voxel => coordKey(voxel.x, voxel.y, voxel.z)));
+    return originalTerrain.filter(voxel => isVoxelExposedInTerrain(voxel.x, voxel.y, voxel.z, terrainPositions));
+  }, [originalTerrain]);
+
+  const dynamicBufferSize = useMemo(() => {
+    return Math.max(originalTerrain.length, initialVoxels.length, 5000);
+  }, [initialVoxels.length, originalTerrain.length]);
+
+  const isWithinCollisionRange = useCallback((x: number, y: number, z: number) => {
+    const position = latestPlayerPosition.current;
+    if (!position) return true;
+
+    const voxelWorld = voxelCoordToWorld(x, y, z);
+    const offset = voxelWorld.sub(position);
+    const distanceSq = offset.lengthSq();
+    if (distanceSq > COLLISION_STREAM_RANGE * COLLISION_STREAM_RANGE) return false;
+
+    const distance = Math.sqrt(distanceSq);
+    if (distance >= COLLISION_MIN_DISTANCE_FROM_PLAYER) return true;
+
+    const gravityDirection = latestSurfaceUp.current.clone().multiplyScalar(-1);
+    const supportDistance = offset.dot(gravityDirection);
+    return supportDistance > 0.4 && supportDistance < 5;
+  }, []);
+
+  const removeCollisionBody = useCallback((x: number, y: number, z: number, worldId: number) => {
+    const key = coordKey(x, y, z);
+    const pending = pendingCollisionBodies.current.get(key);
+    if (pending?.worldId === worldId) {
+      pendingCollisionBodies.current.delete(key);
     }
-    
-    // Configure the voxel system with dynamic capacity
+
+    const rigidBodyRef = rigidBodyRefs.current.get(key);
+    try {
+      rigidBodyRef?.setEnabled?.(false);
+    } catch (error) {
+      console.warn(`Failed to disable collision body ${key}:`, error);
+    }
+    rigidBodyRefs.current.delete(key);
+
+    setCollisionBodies(prev => prev.filter(body => !(body.worldId === worldId && body.x === x && body.y === y && body.z === z)));
+  }, []);
+
+  const flushPendingCollisionBodies = useCallback(() => {
+    const pending = Array.from(pendingCollisionBodies.current.values());
+    pendingCollisionBodies.current.clear();
+
+    setCollisionBodies(prev => {
+      const activeWorldId = voxelSystem.getWorldId();
+      const existing = new Set(prev.map(body => `${body.worldId}:${coordKey(body.x, body.y, body.z)}`));
+      const next = [...prev];
+
+      for (const body of pending) {
+        const key = coordKey(body.x, body.y, body.z);
+        const identity = `${body.worldId}:${key}`;
+        const voxelData = voxelSystem.getVoxel(body.x, body.y, body.z);
+
+        if (body.worldId !== activeWorldId || existing.has(identity) || !voxelData || voxelData.worldId !== body.worldId) {
+          continue;
+        }
+
+        if (!isWithinCollisionRange(body.x, body.y, body.z)) {
+          continue;
+        }
+
+        next.push({
+          ...body,
+          key: `collision-${body.worldId}-${body.x}-${body.y}-${body.z}`
+        });
+        existing.add(identity);
+      }
+
+      return next;
+    });
+  }, [isWithinCollisionRange]);
+
+  const requestCollisionBody = useCallback((x: number, y: number, z: number, worldId: number) => {
+    if (worldId !== voxelSystem.getWorldId()) return;
+    if (!voxelSystem.hasVoxel(x, y, z)) return;
+    if (!isWithinCollisionRange(x, y, z)) return;
+
+    const key = coordKey(x, y, z);
+    pendingCollisionBodies.current.set(key, { x, y, z, worldId });
+
+    if (batchTimeout.current !== null) {
+      window.clearTimeout(batchTimeout.current);
+    }
+
+    batchTimeout.current = window.setTimeout(flushPendingCollisionBodies, 10);
+  }, [flushPendingCollisionBodies, isWithinCollisionRange]);
+
+  useEffect(() => {
+    if (!meshRef.current) return undefined;
+
+    const activeMesh = meshRef.current;
+
+    if (batchTimeout.current !== null) {
+      window.clearTimeout(batchTimeout.current);
+      batchTimeout.current = null;
+    }
+
+    pendingCollisionBodies.current.clear();
+    rigidBodyRefs.current.clear();
+    setCollisionBodies([]);
+
+    voxelSystem.reset();
     voxelSystem.expandCapacity(dynamicBufferSize);
     voxelSystem.setMesh(meshRef.current);
+    voxelSystem.setCollisionCallbacks({ request: requestCollisionBody, remove: removeCollisionBody });
     voxelSystem.setOriginalTerrain(originalTerrain);
     efficientPlanetMesh.current = meshRef.current;
-    
-    // Batch collision body creation function
-    const flushPendingCollisionBodies = () => {
-      if (pendingCollisionBodies.current.length > 0) {
-        const toAdd = pendingCollisionBodies.current.map(body => ({
-          ...body,
-          key: `collision-${body.x}-${body.y}-${body.z}`
-        }));
-        
-        setAllCollisionBodies((prev: Array<{x: number, y: number, z: number, key: string}>) => {
-          // Create a set of existing collision body coordinates for fast lookup
-          const existingCoords = new Set(prev.map(body => `${body.x},${body.y},${body.z}`));
-          
-          // Filter out bodies that already exist
-          const newBodies = toAdd.filter(newBody => {
-            const coordKey = `${newBody.x},${newBody.y},${newBody.z}`;
-            return !existingCoords.has(coordKey);
-          });
-          
-          if (newBodies.length > 0) {
-            console.log(`🆕 Batch adding ${newBodies.length} collision bodies (filtered ${toAdd.length - newBodies.length} duplicates)`);
-            return [...prev, ...newBodies];
-          }
-          return prev;
-        });
-        
-        pendingCollisionBodies.current = [];
-      }
-    };
-    
-    // Set up collision body management functions
-    addDynamicCollisionBody = (x: number, y: number, z: number) => {
-      // Only create collision body if within range
-      if (!isWithinCollisionRange(x, y, z)) {
-        return; // Skip collision body creation for distant voxels
-      }
-      
-      // Check if collision body already exists or is pending
-      const coordKey = `${x},${y},${z}`;
-      const existsInState = allCollisionBodies.some(body => body.x === x && body.y === y && body.z === z);
-      const existsInPending = pendingCollisionBodies.current.some(body => body.x === x && body.y === y && body.z === z);
-      
-      if (existsInState || existsInPending) {
-        console.log(`⚠️ Collision body already exists or pending at (${x}, ${y}, ${z})`);
-        return;
-      }
-      
-      // Add to pending batch
-      pendingCollisionBodies.current.push({ x, y, z });
-      
-      // Clear existing timeout and set a new one
-      if (batchTimeout.current) {
-        clearTimeout(batchTimeout.current);
-      }
-      
-      // Batch process after a short delay
-      batchTimeout.current = setTimeout(flushPendingCollisionBodies, 10);
-    };
-    
-    removeDynamicCollisionBody = (x: number, y: number, z: number) => {
-      // Immediately remove from rigid body refs and disable collision
-      const coordKey = `${x},${y},${z}`;
-      const rigidBodyRef = rigidBodyRefs.current.get(coordKey);
-      
-      if (rigidBodyRef) {
-        try {
-          rigidBodyRef.setEnabled(false);
-          console.log(`🚫 Immediately disabled collision body at (${x},${y},${z})`);
-        } catch (error) {
-          console.warn(`Failed to disable collision body at (${x},${y},${z}):`, error);
-        }
-        rigidBodyRefs.current.delete(coordKey);
-      }
-      
-      // Remove from state (this will unmount the component)
-      setAllCollisionBodies((prev: Array<{x: number, y: number, z: number, key: string}>) => {
-        const filtered = prev.filter((body: {x: number, y: number, z: number, key: string}) => 
-          !(body.x === x && body.y === y && body.z === z)
-        );
-        if (filtered.length !== prev.length) {
-          console.log(`🗑️ Removed collision body at (${x},${y},${z}) from state`);
-        }
-        return filtered;
-      });
-          };
-      
-      // Make removal function available globally for immediate access
-      (window as any).removeDynamicCollisionBody = removeDynamicCollisionBody;
-      
-      // Initialize collision bodies only for voxels within range of player
-    // But exclude voxels too close to player spawn position to prevent getting stuck
-    const playerSpawnPos = new THREE.Vector3(0, size+10, 0); // Player spawn position (above cube top)
-    
-    const initialCollisionBodies = initialVoxels
-      .filter(voxel => {
-        // Check if within collision range
-        if (!isWithinCollisionRange(voxel.x, voxel.y, voxel.z)) return false;
-        
-        // Additional check: don't create collision bodies too close to spawn position
-        const voxelWorldPos = new THREE.Vector3(voxel.x * 2, voxel.y * 2, voxel.z * 2);
-        const distanceFromSpawn = playerSpawnPos.distanceTo(voxelWorldPos);
-        
-        // Allow collision bodies below spawn position (for landing)
-        const isBelowSpawn = voxel.y * 2 < (playerSpawnPos.y - 3); // 3 units below spawn
-        const minSpawnDistance = isBelowSpawn ? 2 : 3; // Closer if below spawn
-        
-        if (distanceFromSpawn < minSpawnDistance) {
-          console.log(`🚫 Skipping collision body at (${voxel.x},${voxel.y},${voxel.z}) - too close to spawn (${distanceFromSpawn.toFixed(1)} units, isBelowSpawn: ${isBelowSpawn})`);
-          return false;
-        }
-        
-        return true;
-      })
-      .map(voxel => ({
-        x: voxel.x,
-        y: voxel.y,
-        z: voxel.z,
-        key: `collision-${voxel.x}-${voxel.y}-${voxel.z}`
-      }));
-    setAllCollisionBodies(initialCollisionBodies);
-    
-    console.log(`🎯 Creating collision bodies for ${initialCollisionBodies.length}/${initialVoxels.length} voxels within range (spawn-safe)`);
-    console.log(`🔍 DEBUG: Player spawn position will be (0, ${size+10}, 0), collision range = ${COLLISION_RANGE}`);;
-    
-    // Add all initial voxels (collision bodies will be linked when they're created)
-    let addedCount = 0;
-    let failedCount = 0;
-    
-    console.log(`🚀 INITIALIZATION: Adding ${initialVoxels.length} initial voxels to system with ${dynamicBufferSize} allocated slots`);
-    
+
     for (const voxel of initialVoxels) {
-      const success = voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
-      if (success) {
-        addedCount++;
-      } else {
-        failedCount++;
-        
-        // Log detailed failure info occasionally, not on every failure
-        if (failedCount === 1 || failedCount % 1000 === 0) {
-          console.warn(`⚠️ Voxel slot allocation failure #${failedCount} at (${voxel.x}, ${voxel.y}, ${voxel.z})`);
-          console.warn(`📊 Progress: ${addedCount} added, ${failedCount} failed, ${initialVoxels.length - addedCount - failedCount} remaining`);
-        }
+      voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
+    }
+
+    flushPendingCollisionBodies();
+    return () => {
+      if (batchTimeout.current !== null) {
+        window.clearTimeout(batchTimeout.current);
+        batchTimeout.current = null;
       }
-    }
-    
-    console.log(`✅ VISUAL RENDERING: Added ${addedCount}/${initialVoxels.length} voxels to efficient system`);
-    if (failedCount > 0) {
-      console.error(`❌ VISUAL RENDERING: Failed to add ${failedCount} voxels due to insufficient slots`);
-      console.error(`🔍 This means ${failedCount} surface voxels will be invisible!`);
-    }
-    
-    console.log(`🎯 COLLISION SYSTEM: ${initialCollisionBodies.length}/${initialVoxels.length} voxels have collision bodies`);
-    console.log(`📏 COLLISION RANGE: Only voxels within ${COLLISION_RANGE} units of player get collision`);
-    console.log('📊 Final system stats:', voxelSystem.getStats());
-    
-    initialized.current = true;
-  }, [initialVoxels]);
-  
-  // Update collision bodies when player position changes
-  useEffect(() => {
-    if (!playerPosition || !initialized.current) return;
-    
-    // Check if player has moved significantly (at least 1 unit)
-    const hasMovedSignificantly = !lastUpdatePosition.current || 
-      lastUpdatePosition.current.distanceTo(playerPosition) > 1.0;
-    
-    if (!hasMovedSignificantly) return;
-    
-    lastUpdatePosition.current = playerPosition.clone();
-    
-    // Get all current voxels
+      pendingCollisionBodies.current.clear();
+      rigidBodyRefs.current.clear();
+      voxelSystem.clearCollisionCallbacks();
+      voxelSystem.clearMesh(activeMesh);
+      if (efficientPlanetMesh.current === activeMesh) {
+        efficientPlanetMesh.current = null;
+      }
+      voxelSystem.reset();
+    };
+  }, [dynamicBufferSize, flushPendingCollisionBodies, initialVoxels, originalTerrain, removeCollisionBody, requestCollisionBody]);
+
+  const syncCollisionBodies = useCallback(() => {
+    const activeWorldId = voxelSystem.getWorldId();
     const allVoxels = voxelSystem.getAllVoxels();
-    const currentCollisionBodies = new Set(allCollisionBodies.map(body => `${body.x},${body.y},${body.z}`));
-    
-    // Determine which voxels should have collision bodies
     const shouldHaveCollision = new Set<string>();
-    let checkedCount = 0;
-    let inRangeCount = 0;
-    
-    for (const [coordKey, voxelData] of allVoxels) {
-      const [x, y, z] = coordKey.split(',').map(Number);
-      checkedCount++;
-      
-      if (isWithinCollisionRange(x, y, z)) {
-        // Verify the voxel actually exists visually (has a mesh slot)
-        if (voxelData.meshSlot !== -1) {
-          shouldHaveCollision.add(coordKey);
-          inRangeCount++;
-        } else {
-          console.log(`⚠️ Voxel at (${x},${y},${z}) is in range but has no visual representation (meshSlot: ${voxelData.meshSlot})`);
-        }
+
+    for (const [key, voxelData] of allVoxels) {
+      const [x, y, z] = key.split(',').map(Number);
+      if (voxelData.worldId === activeWorldId && isWithinCollisionRange(x, y, z)) {
+        shouldHaveCollision.add(key);
       }
     }
-    
-    if (checkedCount > 0) {
-      console.log(`🔍 Checked ${checkedCount} voxels, ${inRangeCount} in range and visually present`);
-    }
-    
-    // Find bodies to add and remove
-    const toAdd: Array<{x: number, y: number, z: number}> = [];
-    const toRemove: Array<{x: number, y: number, z: number}> = [];
-    
-    // Bodies to add (voxels that should have collision but don't)
-    for (const coordKey of shouldHaveCollision) {
-      if (!currentCollisionBodies.has(coordKey)) {
-        const [x, y, z] = coordKey.split(',').map(Number);
-        toAdd.push({x, y, z});
-      }
-    }
-    
-    // Bodies to remove (collision bodies that are now out of range)
-    for (const body of allCollisionBodies) {
-      const coordKey = `${body.x},${body.y},${body.z}`;
-      if (!shouldHaveCollision.has(coordKey)) {
-        toRemove.push({x: body.x, y: body.y, z: body.z});
-      }
-    }
-    
-    // Apply changes
-    if (toAdd.length > 0 || toRemove.length > 0) {
-      setAllCollisionBodies(prev => {
-        let updated = [...prev];
-        
-        // Remove out-of-range bodies first
-        for (const remove of toRemove) {
-          updated = updated.filter(body => 
-            !(body.x === remove.x && body.y === remove.y && body.z === remove.z)
-          );
-          
-          // Also remove from rigid body refs
-          const coordKey = `${remove.x},${remove.y},${remove.z}`;
-          rigidBodyRefs.current.delete(coordKey);
+
+    setCollisionBodies(prev => {
+      const next = prev.filter(body => {
+        const keep = body.worldId === activeWorldId && shouldHaveCollision.has(coordKey(body.x, body.y, body.z));
+        if (!keep) {
+          rigidBodyRefs.current.delete(coordKey(body.x, body.y, body.z));
         }
-        
-        // Create a set of remaining coordinates to prevent duplicates
-        const remainingCoords = new Set(updated.map(body => `${body.x},${body.y},${body.z}`));
-        
-        // Add new bodies only if they don't already exist
-        for (const add of toAdd) {
-          const coordKey = `${add.x},${add.y},${add.z}`;
-          if (!remainingCoords.has(coordKey)) {
-            updated.push({
-              x: add.x,
-              y: add.y,
-              z: add.z,
-              key: `collision-${add.x}-${add.y}-${add.z}`
-            });
-            remainingCoords.add(coordKey);
-          }
-        }
-        
-        if (toAdd.length > 0 || toRemove.length > 0) {
-          console.log(`🔄 Updated collision bodies: +${toAdd.length}, -${toRemove.length} (total: ${updated.length}) at player pos (${playerPosition.x.toFixed(1)}, ${playerPosition.y.toFixed(1)}, ${playerPosition.z.toFixed(1)})`);
-          
-          // Debug: Show some of the added collision bodies
-          if (toAdd.length > 0) {
-            const sampleAdded = toAdd.slice(0, 3);
-            console.log(`📍 Sample added collision bodies:`, sampleAdded.map(v => `(${v.x},${v.y},${v.z})`).join(', '));
-            
-            // Debug: Check if these collision bodies have corresponding visual voxels
-            for (const add of sampleAdded) {
-              const voxelData = voxelSystem.getVoxel(add.x, add.y, add.z);
-              if (voxelData) {
-                console.log(`🔍 Collision body (${add.x},${add.y},${add.z}) -> Visual voxel meshSlot: ${voxelData.meshSlot}`);
-              } else {
-                console.log(`❌ Collision body (${add.x},${add.y},${add.z}) -> NO VISUAL VOXEL FOUND`);
-              }
-            }
-          }
-        }
-        
-        return updated;
+        return keep;
       });
-    }
-  }, [playerPosition]);
+
+      const existing = new Set(next.map(body => coordKey(body.x, body.y, body.z)));
+      for (const key of shouldHaveCollision) {
+        if (existing.has(key)) continue;
+        const [x, y, z] = key.split(',').map(Number);
+        next.push({ x, y, z, worldId: activeWorldId, key: `collision-${activeWorldId}-${x}-${y}-${z}` });
+      }
+
+      return next;
+    });
+
+  }, [isWithinCollisionRange]);
+
+  useEffect(() => {
+    if (!onStatsChange) return;
+    const stats = voxelSystem.getStats();
+    onStatsChange({
+      worldId: stats.worldId,
+      exposedVoxels: stats.exposedVoxels,
+      activeSlots: stats.activeSlots,
+      activeColliders: collisionBodies.length,
+      pendingColliders: pendingCollisionBodies.current.size
+    });
+  }, [collisionBodies.length, onStatsChange]);
+
+  useEffect(() => {
+    if (!playerPosition) return;
+
+    const surfaceKey = `${latestSurfaceUp.current.x.toFixed(3)},${latestSurfaceUp.current.y.toFixed(3)},${latestSurfaceUp.current.z.toFixed(3)}`;
+    const surfaceChanged = surfaceKey !== lastSurfaceUpKey.current;
+    const hasMovedSignificantly = !lastUpdatePosition.current || lastUpdatePosition.current.distanceTo(playerPosition) > 1;
+    if (!hasMovedSignificantly && !surfaceChanged) return;
+
+    lastUpdatePosition.current = playerPosition.clone();
+    lastSurfaceUpKey.current = surfaceKey;
+    syncCollisionBodies();
+  }, [playerPosition, surfaceUp, syncCollisionBodies]);
 
   return (
     <>
-      {/* Visual representation - instanced mesh for performance */}
-      <instancedMesh 
-        ref={meshRef} 
-        args={[undefined, undefined, dynamicBufferSize]} // Dynamic buffer size based on planet
-        count={0} // Will be updated by voxel system
-      >
+      <instancedMesh ref={meshRef} args={[undefined, undefined, dynamicBufferSize]} count={0} frustumCulled={false}>
         <boxGeometry args={[1.98, 1.98, 1.98]} />
         <primitive object={voxelMaterial} attach="material" />
       </instancedMesh>
-      
-      {/* All collision bodies - Managed by voxel system */}
-      {allCollisionBodies.map((body: {x: number, y: number, z: number, key: string}) => (
+
+      {collisionBodies.map(body => (
         <VoxelCollisionBody
           key={body.key}
           x={body.x}
           y={body.y}
           z={body.z}
-          onRef={(ref) => {
-            const coordKey = `${body.x},${body.y},${body.z}`;
-            rigidBodyRefs.current.set(coordKey, ref);
-            
-            // Update voxel system with rigid body reference if voxel exists
-            const voxelData = voxelSystem.getVoxel(body.x, body.y, body.z);
-            if (voxelData) {
-              voxelData.rigidBodyRef = ref;
-              linkedCount.current++;
-            
-            } 
-            
+          debug={debugColliders}
+          onRef={ref => {
+            const key = coordKey(body.x, body.y, body.z);
+            if (ref) {
+              rigidBodyRefs.current.set(key, ref);
+              const voxelData = voxelSystem.getVoxel(body.x, body.y, body.z);
+              if (voxelData && voxelData.worldId === body.worldId) {
+                voxelData.rigidBodyRef = ref;
+              }
+            } else {
+              rigidBodyRefs.current.delete(key);
+              const voxelData = voxelSystem.getVoxel(body.x, body.y, body.z);
+              if (voxelData) {
+                voxelData.rigidBodyRef = undefined;
+              }
+            }
           }}
         />
       ))}
@@ -578,23 +372,15 @@ export default function EfficientPlanet({ size, playerPosition }: EfficientPlane
   );
 }
 
-// Helper function to determine if a voxel should be exposed
-function isVoxelExposed(x: number, y: number, z: number, cubeHalfSize: number): boolean {
+function isVoxelExposedInTerrain(x: number, y: number, z: number, terrainPositions: Set<string>) {
   const neighbors = [
-    [x+1, y, z], [x-1, y, z],
-    [x, y+1, z], [x, y-1, z],
-    [x, y, z+1], [x, y, z-1]
+    [x + 1, y, z],
+    [x - 1, y, z],
+    [x, y + 1, z],
+    [x, y - 1, z],
+    [x, y, z + 1],
+    [x, y, z - 1]
   ];
-  
-  // Check if any neighbor is outside the cube bounds
-  for (const [nx, ny, nz] of neighbors) {
-    // If neighbor is outside cube bounds (-cubeHalfSize to +cubeHalfSize), this voxel is exposed
-    if (nx < -cubeHalfSize || nx > cubeHalfSize || 
-        ny < -cubeHalfSize || ny > cubeHalfSize || 
-        nz < -cubeHalfSize || nz > cubeHalfSize) {
-      return true;
-    }
-  }
-  
-  return false;
-} 
+
+  return neighbors.some(([nx, ny, nz]) => !terrainPositions.has(coordKey(nx, ny, nz)));
+}

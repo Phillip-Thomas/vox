@@ -1,0 +1,28 @@
+import * as THREE from 'three';
+
+const VOXEL_SCALE = 2;
+const VOXEL_HALF_EXTENT = VOXEL_SCALE / 2;
+export const COLLIDER_HALF_EXTENT = VOXEL_HALF_EXTENT - 0.01;
+
+export const FIXED_PHYSICS_STEP = 1 / 60;
+const PLAYER_CAPSULE_RADIUS = 0.5;
+const PLAYER_CAPSULE_HALF_HEIGHT = 0.5;
+export const PLAYER_CENTER_CLEARANCE = PLAYER_CAPSULE_RADIUS + PLAYER_CAPSULE_HALF_HEIGHT + VOXEL_HALF_EXTENT + 0.05;
+export const PLAYER_EDGE_RADIUS = PLAYER_CAPSULE_RADIUS + PLAYER_CAPSULE_HALF_HEIGHT;
+
+export const EDGE_HYSTERESIS = 0.75;
+export const TRANSITION_LOCK_TIME = 0.45;
+export const TRANSITION_MIN_INWARD_SPEED = 2.25;
+
+export const GROUND_PROBE_LENGTH = PLAYER_CENTER_CLEARANCE + 0.45;
+export const GROUND_PROBE_LIFT = 0.2;
+export const GROUND_PROBE_FOOT_OFFSET = 0.38;
+export const GROUND_NORMAL_MIN_DOT = 0.45;
+export const GROUNDED_INWARD_SPEED_CAP = 1.4;
+
+export const COLLISION_STREAM_RANGE = 18;
+export const COLLISION_MIN_DISTANCE_FROM_PLAYER = 1.35;
+
+export function voxelCoordToWorld(x: number, y: number, z: number, target = new THREE.Vector3()) {
+  return target.set(x * VOXEL_SCALE, y * VOXEL_SCALE, z * VOXEL_SCALE);
+}

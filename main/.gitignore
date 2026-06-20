@@ -6,6 +6,7 @@ node_modules/
 # Production builds
 /build
 /dist
+*.tsbuildinfo
 
 # Environment variables
 .env
@@ -57,6 +58,7 @@ dist
 # Temporary folders
 tmp/
 temp/
+.chrome-smoke/
 
 # Editor directories and files
 .vscode/
@@ -103,4 +105,4 @@ Thumbs.db
 
 # Package lock files (optional - uncomment if you want to ignore)
 # package-lock.json
-# yarn.lock 
+# yarn.lock

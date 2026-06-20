@@ -1,63 +1,32 @@
 # Voxel Game
 
-A procedurally generated voxel game built with React Three Fiber, inspired by No Man's Sky.
+A procedurally generated cube-world voxel game built with React Three Fiber and Rapier.
 
-## Features
+## Scripts
 
-- **Procedural Terrain Generation**: Using noise functions to create varied, natural-looking landscapes
-- **First-Person Navigation**: WASD movement with mouse look controls
-- **Voxel-Based World**: Efficient rendering of block-based terrain
-- **Lofi Graphics**: Simple, clean aesthetic suitable for mobile devices
-
-## Getting Started
-
-1. Install dependencies:
 ```bash
-npm install
+npm run dev
+npm run typecheck
+npm run test
+npm run build
+npm run verify
 ```
-
-2. Start the development server:
-```bash
-npm start
-```
-
-3. Open [http://localhost:3000](http://localhost:3000) to view the game in your browser.
 
 ## Controls
 
-- **Click** to enter pointer lock mode
-- **WASD** - Move around
-- **Mouse** - Look around
-- **Space** - Jump
+- Click the canvas to enter pointer lock.
+- `WASD` or arrow keys move across the active cube face.
+- Mouse controls the camera.
+- `Space` jumps.
+- `R` resets the player.
+- `E` deletes the targeted voxel.
 
-## Project Structure
+## Current Structure
 
-- `src/components/Game.js` - Main game component
-- `src/components/Terrain.js` - Procedural terrain generation
-- `src/components/Player.js` - Player movement and physics
-- `src/utils/noise.js` - Noise functions for terrain generation
-
-## Current Status
-
-This is the initial bare minimum implementation featuring:
-- Basic procedural terrain generation
-- Character navigation with physics
-- Simple voxel rendering
-
-## Next Steps
-
-Future features to implement:
-- Infinite terrain generation (chunking system)
-- Block placement/destruction
-- More varied terrain types
-- Mobile touch controls
-- Multiplayer support
-- Crafting system
-- Base building
-
-## Technical Details
-
-- Built with React Three Fiber for 3D rendering
-- Uses Three.js for 3D graphics
-- Custom noise functions for procedural generation
-- Optimized voxel rendering (only renders exposed faces) 
+- `src/App.tsx`: canvas setup and debug UI
+- `src/components/EfficientScene.tsx`: physics scene and state wiring
+- `src/components/EfficientPlanet.tsx`: terrain generation, instanced rendering, and streamed collision bodies
+- `src/components/EfficientPlayer.tsx`: player movement, jumping, deletion, and face transitions
+- `src/utils/surfaceControls.ts`: cube-face movement and transition math
+- `src/utils/proceduralWorldGenerator.ts`: deterministic terrain and material generation
+- `src/utils/efficientVoxelSystem.ts`: exposed voxel tracking and mesh slot allocation

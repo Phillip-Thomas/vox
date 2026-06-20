@@ -19,6 +19,5 @@
     "allowJs": true,
     "esModuleInterop": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
-} 
+  "include": ["src/main.tsx", "src/**/*.test.ts", "src/types.d.ts"]
+}

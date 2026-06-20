@@ -1,0 +1,120 @@
+// Central graphics quality configuration.
+//
+// Every expensive rendering effect added by the shader/rendering upgrade is
+// gated by one of these flags so the whole pipeline can be dialed down per
+// device. There was no pre-existing performance-profile system, so this module
+// is the single source of truth going forward.
+
+export type WaterReflections = 'none' | 'fresnel' | 'screenspace';
+
+export interface GraphicsQuality {
+  /** Triplanar procedural surface detail on voxels (Phase 1). */
+  triplanarDetail: boolean;
+  /** Baked per-corner ambient occlusion on voxels (Phase 1). */
+  bakedAO: boolean;
+  /** Animate emissive pulsing / time-driven shader effects. */
+  animatedShaders: boolean;
+  /** Grass blades per eligible grass voxel (0 disables grass). (Phase 3) */
+  grassDensity: number;
+  /** Max world-space distance grass is drawn from the camera. (Phase 3) */
+  grassMaxDistance: number;
+  /** Water reflection technique. (Phase 4) */
+  waterReflections: WaterReflections;
+  /** Animate the water surface. (Phase 4) */
+  waterAnimated: boolean;
+  /** Enable the postprocessing composer (bloom / painterly). (Phase 5) */
+  postProcess: boolean;
+  /** Use the painterly (Kuwahara) look instead of plain bloom. (Phase 5) */
+  painterly: boolean;
+}
+
+export type QualityProfile = 'ULTRA' | 'HIGH' | 'MEDIUM' | 'LOW' | 'POTATO';
+
+export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
+  ULTRA: {
+    triplanarDetail: true,
+    bakedAO: true,
+    animatedShaders: true,
+    grassDensity: 6,
+    grassMaxDistance: 80,
+    waterReflections: 'screenspace',
+    waterAnimated: true,
+    postProcess: true,
+    painterly: false
+  },
+  HIGH: {
+    triplanarDetail: true,
+    bakedAO: true,
+    animatedShaders: true,
+    grassDensity: 4,
+    grassMaxDistance: 60,
+    waterReflections: 'fresnel',
+    waterAnimated: true,
+    postProcess: true,
+    painterly: false
+  },
+  MEDIUM: {
+    triplanarDetail: false,
+    bakedAO: true,
+    animatedShaders: true,
+    grassDensity: 2,
+    grassMaxDistance: 40,
+    waterReflections: 'fresnel',
+    waterAnimated: true,
+    postProcess: false,
+    painterly: false
+  },
+  LOW: {
+    triplanarDetail: false,
+    bakedAO: true,
+    animatedShaders: false,
+    grassDensity: 1,
+    grassMaxDistance: 24,
+    waterReflections: 'fresnel',
+    waterAnimated: false,
+    postProcess: false,
+    painterly: false
+  },
+  POTATO: {
+    triplanarDetail: false,
+    bakedAO: false,
+    animatedShaders: false,
+    grassDensity: 0,
+    grassMaxDistance: 0,
+    waterReflections: 'none',
+    waterAnimated: false,
+    postProcess: false,
+    painterly: false
+  }
+};
+
+export const DEFAULT_PROFILE: QualityProfile = 'HIGH';
+
+let currentProfile: QualityProfile = DEFAULT_PROFILE;
+let current: GraphicsQuality = { ...QUALITY_PROFILES[DEFAULT_PROFILE] };
+const listeners = new Set<(q: GraphicsQuality) => void>();
+
+export function getGraphicsQuality(): GraphicsQuality {
+  return current;
+}
+
+export function getQualityProfile(): QualityProfile {
+  return currentProfile;
+}
+
+export function setQualityProfile(profile: QualityProfile) {
+  currentProfile = profile;
+  current = { ...QUALITY_PROFILES[profile] };
+  listeners.forEach(fn => fn(current));
+}
+
+/** Override individual flags (e.g. for debugging) without switching profile. */
+export function overrideGraphicsQuality(patch: Partial<GraphicsQuality>) {
+  current = { ...current, ...patch };
+  listeners.forEach(fn => fn(current));
+}
+
+export function subscribeGraphicsQuality(fn: (q: GraphicsQuality) => void): () => void {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
