@@ -144,9 +144,10 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
             <button {...holdBtn(KEY_CODES.rollRight)} style={btnStyle}>E</button>
           </>
         )}
-        <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>
-          {controlMode === 'flight' ? 'F' : 'F'}
-        </button>
+        {controlMode === 'fps' && (
+          <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
+        )}
+        <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
         <button {...holdBtn(KEY_CODES.jump)} style={{ ...btnStyle, width: 76, height: 76, borderRadius: 38 }}>
           {controlMode === 'flight' ? 'THR' : 'JMP'}
         </button>

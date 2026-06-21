@@ -38,6 +38,7 @@ export const KEY_CODES = {
   right: 'KeyD',
   jump: 'Space',
   board: 'KeyF',
+  mine: 'KeyE', // harvest/delete a block on foot (same key as roll-right in ship)
   rollLeft: 'KeyQ',
   rollRight: 'KeyE'
 } as const;
