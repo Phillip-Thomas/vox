@@ -79,16 +79,22 @@ describe('treeGen', () => {
     expect(diffCount || diffPos).toBe(true);
   });
 
-  it('respects the modest size budget (root at origin, sane height)', () => {
-    const { trunkGeometry, leafGeometry } = generateTree(42);
-    trunkGeometry.computeBoundingBox();
-    const box = trunkGeometry.boundingBox!;
-    // base near y=0, top within a few units of the configured height
-    expect(box.min.y).toBeGreaterThanOrEqual(-0.5);
-    expect(box.max.y).toBeLessThan(DEFAULT_TREE_PARAMS.height + 3);
-    expect(box.max.y).toBeGreaterThan(1.0);
-    // leaves sit up in the crown, not below ground
-    leafGeometry.computeBoundingBox();
-    expect(leafGeometry.boundingBox!.max.y).toBeGreaterThan(1.0);
+  it('respects the height budget across many seeds (no apical-leader oversizing)', () => {
+    const h = DEFAULT_TREE_PARAMS.height;
+    for (let seed = 0; seed <= 60; seed++) {
+      const { trunkGeometry, leafGeometry } = generateTree(seed);
+      trunkGeometry.computeBoundingBox();
+      const box = trunkGeometry.boundingBox!;
+      // The recursive apical leader must be budgeted so the trunk tops out near
+      // the configured height — NOT several times it (the old bug hit ~3-4x).
+      expect(box.max.y, `seed ${seed} trunk too tall`).toBeLessThan(h * 1.35);
+      expect(box.max.y, `seed ${seed} trunk too short`).toBeGreaterThan(h * 0.45);
+      // Base sits ~at origin; only a small dip from lean/base radius is allowed.
+      expect(box.min.y, `seed ${seed} base dips too far`).toBeGreaterThan(-1.2);
+      // Crown leaves live up in the canopy, never below ground.
+      leafGeometry.computeBoundingBox();
+      expect(leafGeometry.boundingBox!.max.y).toBeGreaterThan(1.0);
+      expect(leafGeometry.boundingBox!.min.y).toBeGreaterThan(-1.5);
+    }
   });
 });

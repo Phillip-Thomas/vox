@@ -62,15 +62,13 @@ const FRAG = /* glsl */ `
   varying vec3 vDir;
 
   // --- Day atmosphere tunables ----------------------------------------------
-  #define DAY_ZENITH_TAU      1.0   // peak optical depth scale (more atmosphere presence by day)
-  #define DAY_STAR_GAIN       0.40  // dim star layers + nebula scaled to this by full day
-  #define DAY_COSMOS_DIM      0.55  // global cosmos dim applied by full day (stars clearly fainter)
-  #define DAY_INSCATTER_GAIN  26.0  // sky luminance decoupled from the (thin) optical depth so the
-                                    // day sky reads as a real luminous blue, not ~0 under ACES
+  #define DAY_ZENITH_TAU      0.85  // peak optical depth scale (subtle atmosphere over the cosmos)
+  #define DAY_STAR_GAIN       0.58  // keep dim star layers + nebula visible through daylight glass
+  #define DAY_COSMOS_DIM      0.78  // preserve the cosmos as the base everywhere, even at full day
+  #define DAY_INSCATTER_GAIN  5.0   // thin blue atmospheric veil; low enough that it never becomes a flat half-dome
   #define MOON_DAY_DIM        0.30  // daytime moon brightness vs full night
   #define MIE_G               0.80
-  #define THIN_ZENITH         0.16  // thin-shell base air-mass at zenith (some atmosphere overhead too)
-  #define THIN_HORIZON        0.30  // limb pile-up strength
+  #define THIN_ZENITH         0.16  // thin-shell air-mass; kept uniform to avoid a visible hemisphere boundary
 
   float hash31(vec3 p) {
     p = fract(p * 0.1031);
@@ -197,8 +195,9 @@ const FRAG = /* glsl */ `
     return 0.0795774715 * (1.0 - g2) / (d * sqrt(max(d, 1e-4)));               // 1/(4pi) * HG
   }
 
-  // Thin-shell analytic air-mass: tiny at zenith, blows up toward the limb.
-  float airMass(float cy) { float c = max(cy, -0.05); return THIN_ZENITH + THIN_HORIZON / (c + 0.09); }
+  // Thin-shell analytic air-mass. Keep it uniform so the cosmos wraps cleanly
+  // around the dome instead of forming a blue horizon/hemisphere split.
+  float airMass(float cy) { return THIN_ZENITH + cy * 0.0; }
 
   // Returns LOW-radiance in-scatter + per-channel cosmos transmittance.
   void atmosphere(vec3 d, vec3 s, float day, float golden, out vec3 inscatter, out vec3 T) {
@@ -214,7 +213,7 @@ const FRAG = /* glsl */ `
     vec3  isM = kM * phaseM(mu, MIE_G) * (1.0 - exp(-vec3(tauM))) * sunUp;
     // Twilight horizon airglow, gated by sunUp so it tracks the day rather than
     // sitting as an always-on band on the anti-sun horizon.
-    vec3  airglow = vec3(0.20, 0.34, 0.66) * smoothstep(0.30, -0.05, d.y) * day * sunUp * 0.20;
+    vec3  airglow = vec3(0.20, 0.34, 0.66) * day * sunUp * 0.015;
     // Sky luminance is decoupled from the thin optical depth (×GAIN) so the day
     // sky is a perceptible luminous blue under ACES instead of ~0.001 linear.
     inscatter = (isR + isM) * DAY_INSCATTER_GAIN + airglow;
@@ -249,13 +248,12 @@ const FRAG = /* glsl */ `
 
     float mu        = dot(dir, s);
     float sunGlow   = smoothstep(0.92, 1.0, mu);            // suppress cosmos near sun
-    float horizGlow = smoothstep(0.30, -0.05, dir.y);       // and near the bright limb
     // Cosmos is attenuated by the transmittance EVERYWHERE by day (so the whole
-    // sky reads as "cosmos seen through atmosphere", not bare night), with EXTRA
-    // local wash where a real sky blows out: near the sun and the bright limb.
+    // sky reads as "cosmos seen through atmosphere", not bare night), with only
+    // a localized wash near the sun. Avoid dir.y limb wash so no half-dome seam.
     vec3  Tc = mix(vec3(1.0), T, uDay);
-    float localWash = uDay * max(sunGlow, horizGlow);
-    Tc *= (1.0 - 0.92 * localWash);
+    float localWash = uDay * sunGlow;
+    Tc *= (1.0 - 0.35 * localWash);
 
     vec3 dayCosmos = cosmos * mix(1.0, DAY_COSMOS_DIM, uDay);
 

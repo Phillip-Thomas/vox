@@ -172,60 +172,70 @@ function lsFromParams(p: TreeGenParams): LSParams {
 
 function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
   const P = lsFromParams(params);
-  const NODE_CAP = 900;
+  const NODE_CAP = 520;
   const up = new THREE.Vector3(0, 1, 0);
   const nodes: GrowNode[] = [
     { pos: new THREE.Vector3(), parent: -1, order: 0, dist: 0 }
   ];
   const tmpAxis = new THREE.Vector3();
 
-  // Grow ONE branch (emit `segs` curving sub-segments) from `parentIdx`, then
-  // recurse children + an apical leader. order increments per level -> taper.
+  // Internode length: the chain is laid one internode at a time up to an EXACT
+  // length budget, so a branch is never longer than its budget (no oversizing).
+  const STEP = Math.max(0.28, params.growStep * 1.7);
+
+  // Grow ONE branch as a chain of internodes consuming `budget` total length
+  // (this IS the apical line — no separate re-extending leader). Side branches
+  // fork periodically ALONG the chain and recurse with a shrunken budget, so the
+  // structure is genuinely fractal (trunk -> primary -> secondary -> twig) AND
+  // bounded: order increments per fork (taper via radiusFor); NODE_CAP backstops.
   function grow(
     parentIdx: number,
     dir: THREE.Vector3,
-    len: number,
     order: number,
-    divergence: number
+    divergence: number,
+    budget: number
   ) {
-    if (order > P.levels || len < params.growStep * 1.2 || nodes.length >= NODE_CAP)
-      return;
-    const segs = Math.max(2, P.segs - order);
-    const segLen = len / segs;
-    const curl = (rng() - 0.5) * 0.25 + (order > 0 ? 0.06 : 0.0);
+    if (order > P.levels || budget < STEP * 0.6 || nodes.length >= NODE_CAP) return;
     const d = dir.clone().normalize();
     let prev = parentIdx;
-    for (let s = 0; s < segs; s++) {
-      if (nodes.length >= NODE_CAP) break;
+    let remaining = budget;
+    let internode = 0;
+    // Trunk climbs (strong gravitropism); branches follow their own dir (P.upLerp
+    // may be negative for weeping droop).
+    const grav = order === 0 ? 0.16 : P.upLerp;
+    const forkEvery = order === 0 ? 2 : 1;
+    while (remaining >= STEP * 0.6 && nodes.length < NODE_CAP) {
       tmpAxis.copy(twPerp(d));
-      d.applyAxisAngle(tmpAxis, curl); // per-segment gnarl
-      d.lerp(up, order === 0 ? 0.04 : P.upLerp).normalize(); // gravitropism/droop
-      const np = nodes[prev].pos.clone().addScaledVector(d, segLen);
+      d.applyAxisAngle(tmpAxis, (rng() - 0.5) * 0.22); // per-internode gnarl
+      d.lerp(up, grav).normalize();
+      const seg = Math.min(STEP, remaining);
+      const np = nodes[prev].pos.clone().addScaledVector(d, seg);
       nodes.push({ pos: np, parent: prev, order, dist: nodes[prev].dist + 1 });
       prev = nodes.length - 1;
-    }
-    const tip = prev;
-    if (order >= P.levels) return;
-    const kids = order === 0 ? P.children + 1 : P.children; // trunk forks more
-    for (let k = 0; k < kids; k++) {
-      divergence += P.twist; // GOLDEN-ANGLE spiral between siblings
-      const childDir = d.clone();
-      childDir.applyAxisAngle(d, divergence); // spin around branch axis
-      childDir.applyAxisAngle(twPerp(d), P.angle * (0.7 + 0.6 * rng())); // tilt off parent
-      const childLen = len * P.lenFalloff * (0.85 + 0.3 * rng());
-      grow(tip, childDir, childLen, order + 1, divergence * 1.3);
-    }
-    // apical leader: a slightly-tilted continuation keeps a dominant trunk line.
-    if (order < P.levels - 1) {
-      const leadDir = d.clone().applyAxisAngle(twPerp(d), P.angle * 0.22);
-      grow(tip, leadDir, len * P.lenFalloff * 1.05, order, divergence * 1.11);
+      remaining -= seg;
+      internode++;
+
+      // Fork side branches along the chain (not just at the tip) for fractal fill.
+      if (order < P.levels && internode % forkEvery === 0 && remaining > STEP) {
+        const kids = order === 0 ? P.children : Math.max(1, P.children - 1);
+        for (let k = 0; k < kids; k++) {
+          divergence += P.twist; // GOLDEN-ANGLE spiral between siblings
+          const childDir = d.clone();
+          childDir.applyAxisAngle(d, divergence); // spin around the branch axis
+          childDir.applyAxisAngle(twPerp(d), P.angle * (0.7 + 0.6 * rng())); // tilt off parent
+          // Child reaches into the remaining crown, shorter than its parent.
+          const childBudget = (remaining * 0.55 + STEP) * P.lenFalloff * (0.8 + 0.4 * rng());
+          grow(prev, childDir, order + 1, divergence * 1.3, childBudget);
+        }
+      }
     }
   }
 
   const start = up
     .clone()
     .applyAxisAngle(new THREE.Vector3(1, 0, 0), (rng() - 0.5) * 0.1);
-  grow(0, start, params.height, 0, rng() * 6.28318);
+  // Trunk budget = the configured height exactly (it's laid as STEP internodes).
+  grow(0, start, 0, rng() * 6.28318, params.height);
   shapeNodes(nodes, params); // existing lean/twist/weeping droop still applies
   return nodes;
 }

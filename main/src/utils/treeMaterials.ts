@@ -128,7 +128,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-bark-v2';
+  material.customProgramCacheKey = () => 'tree-bark-v3';
   return material;
 }
 
@@ -324,7 +324,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
         leaf *= shade;                      // midrib / veins / rim from the SDF
 
         // Strengthened volumetric AO: deep interior darker (undersides are
-        // grounded later in <normal_fragment_begin> where `normal` exists).
+        // grounded later in normal_fragment_begin where the normal exists).
         float ao = mix(0.45, 1.0, smoothstep(0.0, 1.0, vCanopyY));
         leaf *= ao;
 
@@ -345,6 +345,8 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <normal_fragment_begin>',
         `#include <normal_fragment_begin>
+        // Ground the canopy undersides now that the normal exists (volumetric AO).
+        diffuseColor.rgb *= mix(0.80, 1.0, clamp(normal.y * 0.5 + 0.5, 0.0, 1.0));
         vLeafSSSTerm = vec3(0.0);
         {
           vec3 V = normalize(cameraPosition - vWorldPos);
@@ -361,6 +363,12 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           float mtrans = clamp((abs(dot(normal, uMoonDir)) + 0.4) / 1.4, 0.0, 1.0);
           float night = smoothstep(-0.05, 0.2, uMoonDir.y) * (1.0 - daylight);
           vLeafSSSTerm += uLeafSSS * mback * mtrans * night * depthW * 0.16;
+          // --- canopy interior glow / fake multi-scatter (port of tree1's soft
+          //     light-through-leaves). Daylight-gated + capped so alien canopies
+          //     don't over-warm into a white-out under ACES. ---
+          float interior = 1.0 - vCanopyY;            // deep interior glows
+          float sunWrap  = pow(clamp(dot(normal, uSunDir) * 0.5 + 0.5, 0.0, 1.0), 1.5);
+          vLeafSSSTerm += uLeafSSS * interior * sunWrap * daylight * 0.22;
         }`
       )
       .replace(
@@ -370,7 +378,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-leaf-v2';
+  material.customProgramCacheKey = () => 'tree-leaf-v3';
   return material;
 }
 
@@ -410,16 +418,20 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
-        // 5-petal flower alpha from polar UV.
+        // 5-petal flower alpha from polar UV, fwidth-cut for a crisp edge.
         vec2 fp = vLeafUv * 2.0 - 1.0;
         float ang = atan(fp.y, fp.x);
         float rad = length(fp);
         float petals = 0.62 + 0.28 * cos(ang * 5.0);
-        float flowerAlpha = 1.0 - smoothstep(petals - 0.12, petals, rad);
+        float fd = rad - petals;                 // <0 inside the flower
+        float faa = max(fwidth(fd), 1e-3);
+        float flowerAlpha = 1.0 - smoothstep(-faa, faa, fd);
         diffuseColor.a *= flowerAlpha;
-        // bright centre, saturated petals.
+        // bright centre, saturated petals + a small stamen dot.
         float centre = 1.0 - smoothstep(0.0, 0.28, rad);
+        float stamen = 1.0 - smoothstep(0.08, 0.14, rad);
         vec3 col = mix(uFlowerColor, uFlowerColor * 1.6, centre);
+        col = mix(col, vec3(1.0, 0.92, 0.55), stamen * 0.7);  // warm pollen centre
         col *= 0.92 + vTint * 0.16;
         diffuseColor.rgb *= col;`
       )
@@ -431,7 +443,7 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-blossom-v1';
+  material.customProgramCacheKey = () => 'tree-blossom-v3';
   return material;
 }
 
@@ -478,11 +490,13 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
-        // soft blobby crown silhouette with a nibbled edge.
+        // soft blobby crown silhouette with a nibbled edge, fwidth-cut.
         vec2 lp = vLeafUv * 2.0 - 1.0;
         float r = length(vec2(lp.x, lp.y * 1.1));
         float nibble = (twIHash21(floor(vLeafUv * 6.0)) - 0.5) * 0.22;
-        float a = 1.0 - smoothstep(0.78 + nibble, 1.0 + nibble, r);
+        float id = r - (0.9 + nibble);          // <0 inside the crown blob
+        float iaa = max(fwidth(id), 1e-3);
+        float a = 1.0 - smoothstep(-iaa, iaa, id);
         diffuseColor.a *= a;
         float g = sqrt(clamp(vCanopyY, 0.0, 1.0));
         vec3 leaf = mix(uLeafBase, uLeafTip, g) * (0.7 + 0.3 * g);
@@ -491,7 +505,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-impostor-v1';
+  material.customProgramCacheKey = () => 'tree-impostor-v3';
   return material;
 }
 
