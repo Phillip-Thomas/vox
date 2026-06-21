@@ -101,11 +101,45 @@ function makeRng(seed: number): () => number {
   };
 }
 
-interface GrowNode {
+export interface GrowNode {
   pos: THREE.Vector3;
   parent: number; // index into nodes, -1 for root
   order: number; // branch order (0 trunk, grows with branching depth)
   dist: number; // graph distance from root (in steps)
+}
+
+/**
+ * Which skeleton nodes carry leaf clusters, per silhouette. Pure + exported so
+ * the placement rule is unit-testable. The default (round/conical/umbrella) rule
+ * is the approved canopy look; frond + weeping/wispy are restricted to OUTER
+ * foliage so leaves don't sprout along their bare drooping stems.
+ */
+export function selectLeafCandidates(
+  nodes: GrowNode[],
+  silhouette: TreeSilhouette
+): number[] {
+  const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
+  const maxOrder = nodes.reduce((m, n) => Math.max(m, n.order), 0);
+  const childCount = new Array(nodes.length).fill(0);
+  for (const n of nodes) if (n.parent >= 0) childCount[n.parent]++;
+
+  const candidates: number[] = [];
+  for (let i = 1; i < nodes.length; i++) {
+    const isTip = childCount[i] === 0;
+    const node = nodes[i];
+    let ok: boolean;
+    if (silhouette === 'frond') {
+      // Inner rib + trunk are order 0 (bare); outer rib is order 1 (foliage).
+      ok = node.order >= 1;
+    } else if (silhouette === 'weeping' || silhouette === 'wispy') {
+      // Outer droops only: a real branch (not trunk) AND a tip or far-out node.
+      ok = node.order >= 1 && (isTip || node.dist >= maxDist * 0.65);
+    } else {
+      ok = isTip || node.order >= maxOrder - 1;
+    }
+    if (ok) candidates.push(i);
+  }
+  return candidates;
 }
 
 // --- Recursive L-system branching (replaces space colonization) --------------
@@ -296,10 +330,14 @@ function growFrondSkeleton(params: TreeGenParams, rng: () => number): GrowNode[]
       // arc out then droop down (gravity on the frond tip).
       const out = ribLen * t;
       const droop = ribLen * t * t * 0.7;
+      // Inner rib stays BARE (order 0, like the trunk); only the outer ~half of
+      // the frond carries foliage (order 1) so leaves cluster toward the frond
+      // ends instead of all along the stem. (buildLeafGeometry leafs order>=1.)
+      const ribOrder = r >= Math.ceil(ribSteps * 0.55) ? 1 : 0;
       nodes.push({
         pos: new THREE.Vector3(dirX * out, crownY + 0.2 - droop, dirZ * out),
         parent,
-        order: 1,
+        order: ribOrder,
         dist: pdist + 1
       });
       parent = nodes.length - 1;
@@ -497,20 +535,9 @@ function buildLeafGeometry(
   const silhouette = params.silhouette ?? 'round';
   const bloomAmount = params.bloomAmount ?? 0;
   const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
-  const maxOrder = nodes.reduce((m, n) => Math.max(m, n.order), 0);
 
-  // Candidate nodes: leaves now hang off the FRACTAL TWIGS — tips (no children)
-  // plus the highest-order nodes — so the canopy follows the recursive branch
-  // structure instead of a flat young-node shell.
-  const childCount = new Array(nodes.length).fill(0);
-  for (const n of nodes) if (n.parent >= 0) childCount[n.parent]++;
-
-  const candidates: number[] = [];
-  for (let i = 1; i < nodes.length; i++) {
-    const isTip = childCount[i] === 0;
-    const twiggy = nodes[i].order >= maxOrder - 1;
-    if (isTip || twiggy) candidates.push(i);
-  }
+  // Leaf-bearing nodes (per-silhouette; see selectLeafCandidates).
+  const candidates = selectLeafCandidates(nodes, silhouette);
 
   // Crown centre = mean of candidate positions (so outward dirs are meaningful).
   const crownCenter = new THREE.Vector3();

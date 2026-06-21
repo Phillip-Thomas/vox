@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { dominantFaceForPosition, FACE_NORMALS, getSurfaceState } from './surfaceControls';
+import { dominantFaceForPosition, FACE_NORMALS, getSurfaceState, quaternionForUp } from './surfaceControls';
 import type { CubeFace } from '../types/cube';
 
 describe('dominantFaceForPosition', () => {
@@ -32,6 +32,19 @@ describe('dominantFaceForPosition', () => {
       const s = getSurfaceState(dominantFaceForPosition(pos));
       // gravity should oppose the face normal (point toward planet center).
       expect(s.gravity.clone().normalize().dot(FACE_NORMALS[face])).toBeCloseTo(-1, 5);
+    }
+  });
+});
+
+describe('quaternionForUp', () => {
+  const faces: CubeFace[] = ['top', 'bottom', 'right', 'left', 'front', 'back'];
+  it('rotates the canonical +Y up onto each face normal', () => {
+    for (const face of faces) {
+      const up = FACE_NORMALS[face];
+      const q = quaternionForUp(up);
+      const rotated = new THREE.Vector3(0, 1, 0).applyQuaternion(q);
+      // local +Y, rotated by the spawn quaternion, must land on the face up.
+      expect(rotated.dot(up)).toBeCloseTo(1, 5);
     }
   });
 });

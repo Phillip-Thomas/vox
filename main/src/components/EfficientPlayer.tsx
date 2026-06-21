@@ -17,7 +17,9 @@ import {
   chooseFaceFromPosition,
   composeVelocity,
   dominantFaceForPosition,
+  FACE_NORMALS,
   getSurfaceState,
+  quaternionForUp,
   integrateLocalGravity,
   JETPACK_MAX_FUEL,
   JETPACK_MAX_UP_SPEED,
@@ -132,6 +134,13 @@ export default function EfficientPlayer({
   const initialSpawnPosition = useMemo(
     () => (initialPosition ?? defaultSpawnPosition).clone(),
     [defaultSpawnPosition, initialPosition]
+  );
+  // Initial body rotation aligned to the SPAWN face (not identity/top), so the
+  // capsule + camera are correctly oriented on the first frame after exiting the
+  // ship on any face — no tilted body poking into view before a transition fires.
+  const initialSpawnQuat = useMemo(
+    () => quaternionForUp(FACE_NORMALS[dominantFaceForPosition(initialSpawnPosition)]),
+    [initialSpawnPosition]
   );
   const resetSpawnPosition = useMemo(
     () => (resetPosition ?? defaultSpawnPosition).clone(),
@@ -457,6 +466,7 @@ export default function EfficientPlayer({
         mass={1}
         type="dynamic"
         position={[initialSpawnPosition.x, initialSpawnPosition.y, initialSpawnPosition.z]}
+        quaternion={[initialSpawnQuat.x, initialSpawnQuat.y, initialSpawnQuat.z, initialSpawnQuat.w]}
         lockRotations
         gravityScale={0}
         linearDamping={0.5}
