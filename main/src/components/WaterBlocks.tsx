@@ -3,10 +3,11 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
-import { buildWaterFaces, buildWaterVoxels, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
+import { buildWaterFaces, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
 import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 
 interface WaterBlocksProps {
@@ -82,16 +83,24 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
 
   // Static water CELLS (the flooded set) + a fast key lookup. Faces are derived
   // from these against the LIVE voxel state (so digging exposes side faces).
-  const waterVoxels = useMemo(
-    () => buildWaterVoxels(planetSize, terrainSeed),
-    [planetSize, terrainSeed]
-  );
+  const gen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
   // The generator's isWaterVoxel covers the FULL flooded set (interior + surface),
-  // so faces are correctly suppressed toward interior water, not just surface.
-  const isWater = useMemo(() => {
-    const gen = getWorldGen(planetSize, terrainSeed).generator;
-    return (x: number, y: number, z: number) => gen.isWaterVoxel(x, y, z);
-  }, [planetSize, terrainSeed]);
+  // so faces are suppressed toward interior water, not just the surface layer.
+  const isWater = useMemo(
+    () => (x: number, y: number, z: number) => gen.isWaterVoxel(x, y, z),
+    [gen]
+  );
+  // ALL water cells (not just the initially-exposed surface), so digging next to
+  // even deep water reveals that cell's side face. One cube scan per world.
+  const waterVoxels = useMemo(() => {
+    const R = Math.floor(planetSize / 2) + 6;
+    const out: Array<{ x: number; y: number; z: number }> = [];
+    for (let x = -R; x <= R; x++)
+      for (let y = -R; y <= R; y++)
+        for (let z = -R; z <= R; z++)
+          if (gen.isWaterVoxel(x, y, z)) out.push({ x, y, z });
+    return out;
+  }, [gen, planetSize]);
 
   // Subdivided so the vertex-shader wave displacement actually curves the surface
   // (a 1-segment quad has only 4 corners and can't show ripples).
@@ -125,16 +134,56 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
         const m = new THREE.Matrix4();
         const cellCenter = new THREE.Vector3();
         const facePos = new THREE.Vector3();
-        const normal = new THREE.Vector3();
-        const scale = new THREE.Vector3(1, 1, 1);
+        const nrm = new THREE.Vector3();
+        const up = new THREE.Vector3();
+        const right = new THREE.Vector3();
+        const yCol = new THREE.Vector3();
+        const topScale = new THREE.Vector3(1, 1, 1);
+        // Side walls span the cell FLOOR (-1) up to the water surface (FACE_OFFSET),
+        // sit at the cell BOUNDARY, and rise along the cell's outward CUBE AXIS — the
+        // same axis the top quad sits on — so the wall top meets the top sheet exactly
+        // (no poking above, no inset-too-far).
+        const SIDE_BOTTOM = -1.0;
+        const SIDE_BOUNDARY = 1.0;
+        const sideHeight = FACE_OFFSET - SIDE_BOTTOM;       // ~1.55
+        const sideCenterH = (FACE_OFFSET + SIDE_BOTTOM) / 2; // ~-0.225
         let slot = 0;
         for (const face of faces) {
           if (slot >= mesh.instanceMatrix.count) break;
           voxelCoordToWorld(face.x, face.y, face.z, cellCenter);
           const [nx, ny, nz] = FACE_NORMALS[face.faceDir];
-          normal.set(nx, ny, nz);
-          facePos.copy(cellCenter).addScaledVector(normal, FACE_OFFSET);
-          m.compose(facePos, FACE_QUATERNIONS[face.faceDir], scale);
+          nrm.set(nx, ny, nz);
+          // Outward cube axis for this cell (the dominant axis of its centre).
+          const ax = Math.abs(cellCenter.x), ay = Math.abs(cellCenter.y), az = Math.abs(cellCenter.z);
+          if (ax >= ay && ax >= az) up.set(Math.sign(cellCenter.x) || 1, 0, 0);
+          else if (ay >= ax && ay >= az) up.set(0, Math.sign(cellCenter.y) || 1, 0);
+          else up.set(0, 0, Math.sign(cellCenter.z) || 1);
+          const topness = nrm.dot(up);
+          if (topness > 0.5) {
+            // Outward/top face: flat 2x2 quad lowered for wave headroom (unchanged).
+            facePos.copy(cellCenter).addScaledVector(nrm, FACE_OFFSET);
+            m.compose(facePos, FACE_QUATERNIONS[face.faceDir], topScale);
+          } else if (topness < -0.5) {
+            // Bottom face (water with a void below): a flat quad at the floor
+            // boundary, same orientation scheme as the top — NOT a wall (the wall
+            // basis degenerates when nrm is antiparallel to up, which rotated it 90°).
+            facePos.copy(cellCenter).addScaledVector(nrm, SIDE_BOUNDARY);
+            m.compose(facePos, FACE_QUATERNIONS[face.faceDir], topScale);
+          } else {
+            // Side (or bottom) wall: boundary-placed quad, width = tangent,
+            // height = floor->surface along the outward cube axis. Use up x nrm
+            // (not nrm x up) so the basis (right, up, nrm) is RIGHT-HANDED and the
+            // quad's +z front normal points OUTWARD (nrm), not flipped inward.
+            right.crossVectors(up, nrm);
+            if (right.lengthSq() < 1e-6) right.set(0, 0, 1).cross(nrm);
+            right.normalize();                                // unit -> full cell width (±1)
+            yCol.copy(up).multiplyScalar(sideHeight / 2);     // scaled height column
+            facePos.copy(cellCenter)
+              .addScaledVector(nrm, SIDE_BOUNDARY)
+              .addScaledVector(up, sideCenterH);
+            m.makeBasis(right, yCol, nrm);
+            m.setPosition(facePos);
+          }
           mesh.setMatrixAt(slot, m);
           slot++;
         }
@@ -147,7 +196,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
       },
       slot => ({ count: slot, capacity })
     );
-  }, [waterVoxels, waterKeys, capacity, debug]);
+  }, [waterVoxels, isWater, capacity, debug]);
 
   useLayoutEffect(() => {
     if (meshRef.current) syncWater(meshRef.current, true);
