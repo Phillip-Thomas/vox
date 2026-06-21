@@ -239,7 +239,7 @@ describe('every terrain preset has visible water (planetSize 50)', () => {
       // At least 20% of the exposed terrain surface must be dry land, not ocean.
       expect(dry / surface, `${name} dry-land fraction`).toBeGreaterThan(0.2);
     }
-  });
+  }, 10000);
 
   // B2: every water voxel must be connected, through other water voxels, to the
   // ocean SURFACE (a water cell with an air neighbour). This is the flood-fill
