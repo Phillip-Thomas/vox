@@ -362,7 +362,10 @@ export default function EfficientPlanet({
   return (
     <>
       <instancedMesh ref={meshRef} args={[undefined, undefined, dynamicBufferSize]} count={0} frustumCulled={false}>
-        <boxGeometry args={[1.98, 1.98, 1.98]} />
+        {/* Full cell size (2.0) so adjacent voxels meet edge-to-edge — the old
+            1.98 left a 0.02-unit seam you could see through. Interior faces sit
+            between two solids (never visible) so no z-fighting is introduced. */}
+        <boxGeometry args={[2, 2, 2]} />
         <primitive object={voxelMaterial} attach="material" />
       </instancedMesh>
 

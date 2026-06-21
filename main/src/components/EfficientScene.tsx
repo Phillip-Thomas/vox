@@ -10,7 +10,7 @@ import OverviewCamera from './OverviewCamera.tsx';
 import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
-import { getSurfaceState, SurfaceState } from '../utils/surfaceControls';
+import { dominantFaceForPosition, getSurfaceState, SurfaceState } from '../utils/surfaceControls';
 import { FIXED_PHYSICS_STEP } from '../utils/cubeGravityConstants';
 import {
   ArrivalMode,
@@ -78,7 +78,9 @@ export default function EfficientScene({
   // null on world swap (EfficientScene remounts).
   const [landedShipPos, setLandedShipPos] = useState<THREE.Vector3 | null>(null);
   const handleLanded = useCallback((rest: THREE.Vector3) => setLandedShipPos(rest.clone()), []);
-  const [surfaceState, setSurfaceState] = useState<SurfaceState>(() => getSurfaceState('top'));
+  const [surfaceState, setSurfaceState] = useState<SurfaceState>(
+    () => getSurfaceState(dominantFaceForPosition(initialPlayerPosition))
+  );
   const lastPublishedPlayerPosition = useRef(playerPosition.clone());
   const debugStateRef = useRef<SceneDebugState>({ player: null, planet: null });
 

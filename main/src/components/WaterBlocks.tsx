@@ -3,9 +3,10 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
-import { buildWaterFaces, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
+import { buildWaterFaces, buildWaterVoxels, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
+import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 
 interface WaterBlocksProps {
@@ -26,7 +27,40 @@ const FACE_QUATERNIONS: THREE.Quaternion[] = FACE_NORMALS.map(([nx, ny, nz]) =>
 );
 
 interface FilledMesh extends THREE.InstancedMesh {
-  __waterFilledFor?: WaterFace[];
+  __waterSig?: string;
+}
+
+// Neighbour offsets, ordered to match FACE_NORMALS / faceDir (0=+x..5=-z).
+const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number, number]> = [
+  [1, 0, 0], [-1, 0, 0],
+  [0, 1, 0], [0, -1, 0],
+  [0, 0, 1], [0, 0, -1]
+];
+
+/**
+ * Recompute exposed water faces against the LIVE voxel state. A face is emitted
+ * for a water cell toward any neighbour that is NOT water and NOT currently solid
+ * (`voxelSystem.hasVoxel`). Because water-adjacent terrain is always exposed, a
+ * dug block flips to not-solid here and the water's side face appears — so water
+ * reads as a 3D block, not a flat sheet. At load (nothing dug) this matches the
+ * static generator faces.
+ */
+function computeLiveWaterFaces(
+  waterVoxels: ReadonlyArray<{ x: number; y: number; z: number }>,
+  isWater: (x: number, y: number, z: number) => boolean
+): WaterFace[] {
+  const faces: WaterFace[] = [];
+  for (const v of waterVoxels) {
+    for (let f = 0; f < 6; f++) {
+      const nx = v.x + NEIGHBOR_OFFSETS[f][0];
+      const ny = v.y + NEIGHBOR_OFFSETS[f][1];
+      const nz = v.z + NEIGHBOR_OFFSETS[f][2];
+      if (isWater(nx, ny, nz)) continue; // neighbour is water (interior) -> no face
+      if (voxelSystem.hasVoxel(nx, ny, nz)) continue; // hidden behind solid terrain
+      faces.push({ x: v.x, y: v.y, z: v.z, faceDir: f }); // air or dug-open -> face
+    }
+  }
+  return faces;
 }
 
 // ?waterdebug=1 → render the water as bright OPAQUE magenta (MeshBasicMaterial,
@@ -46,10 +80,18 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
   const meshRef = useRef<FilledMesh>(null);
   const debug = useMemo(() => isWaterDebug(), []);
 
-  const waterFaces = useMemo(
-    () => buildWaterFaces(planetSize, terrainSeed),
+  // Static water CELLS (the flooded set) + a fast key lookup. Faces are derived
+  // from these against the LIVE voxel state (so digging exposes side faces).
+  const waterVoxels = useMemo(
+    () => buildWaterVoxels(planetSize, terrainSeed),
     [planetSize, terrainSeed]
   );
+  // The generator's isWaterVoxel covers the FULL flooded set (interior + surface),
+  // so faces are correctly suppressed toward interior water, not just surface.
+  const isWater = useMemo(() => {
+    const gen = getWorldGen(planetSize, terrainSeed).generator;
+    return (x: number, y: number, z: number) => gen.isWaterVoxel(x, y, z);
+  }, [planetSize, terrainSeed]);
 
   // Subdivided so the vertex-shader wave displacement actually curves the surface
   // (a 1-segment quad has only 4 corners and can't show ripples).
@@ -62,24 +104,31 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
     [debug]
   );
 
-  const capacity = Math.max(waterFaces.length, 1);
+  // Buffer = natural surface faces + headroom for the extra side faces that
+  // digging exposes (each dig reveals at most a few). Generous so common digging
+  // never overflows; the fill clamps to capacity regardless.
+  const capacity = useMemo(
+    () => Math.max(1, buildWaterFaces(planetSize, terrainSeed).length + 2048),
+    [planetSize, terrainSeed]
+  );
 
-  const fill = useCallback((mesh: FilledMesh) => {
+  // Recompute faces against the live voxel state + refill, when the voxel edit
+  // signature changes (initial population, dig, place). `force` for the first fill.
+  const syncWater = useCallback((mesh: FilledMesh, force = false) => {
+    const sig = `${voxelSystem.getWorldId()}:${voxelSystem.getEditVersion()}`;
+    if (!force && mesh.__waterSig === sig) return;
+    mesh.__waterSig = sig;
     measureWarpMetric(
       'water:fill_instances',
       () => {
+        const faces = computeLiveWaterFaces(waterVoxels, isWater);
         const m = new THREE.Matrix4();
         const cellCenter = new THREE.Vector3();
         const facePos = new THREE.Vector3();
         const normal = new THREE.Vector3();
         const scale = new THREE.Vector3(1, 1, 1);
-        // Instrumentation: bounding box + radius range of the placed quads.
-        const min = new THREE.Vector3(Infinity, Infinity, Infinity);
-        const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
-        let minR = Infinity;
-        let maxR = -Infinity;
         let slot = 0;
-        for (const face of waterFaces) {
+        for (const face of faces) {
           if (slot >= mesh.instanceMatrix.count) break;
           voxelCoordToWorld(face.x, face.y, face.z, cellCenter);
           const [nx, ny, nz] = FACE_NORMALS[face.faceDir];
@@ -87,66 +136,37 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
           facePos.copy(cellCenter).addScaledVector(normal, FACE_OFFSET);
           m.compose(facePos, FACE_QUATERNIONS[face.faceDir], scale);
           mesh.setMatrixAt(slot, m);
-          min.min(facePos);
-          max.max(facePos);
-          const r = facePos.length();
-          if (r < minR) minR = r;
-          if (r > maxR) maxR = r;
           slot++;
         }
         mesh.count = slot;
         mesh.instanceMatrix.needsUpdate = true;
-        mesh.__waterFilledFor = waterFaces;
-
         if (debug) {
-          console.log(
-            `[water] FILL faces=${waterFaces.length} capacity=${capacity} count=${mesh.count} ` +
-              `debug=${debug} radius(world)=[${minR.toFixed(1)}..${maxR.toFixed(1)}] ` +
-              `AABB min=(${min.x.toFixed(1)},${min.y.toFixed(1)},${min.z.toFixed(1)}) ` +
-              `max=(${max.x.toFixed(1)},${max.y.toFixed(1)},${max.z.toFixed(1)}) ` +
-              `mat=${(mesh.material as THREE.Material).type} ` +
-              `visible=${mesh.visible} inScene=${!!mesh.parent}`
-          );
+          console.log(`[water] FILL faces=${faces.length} capacity=${capacity} count=${mesh.count}`);
         }
-
         return slot;
       },
-      slot => ({ faces: waterFaces.length, count: slot, capacity })
+      slot => ({ count: slot, capacity })
     );
-  }, [waterFaces, capacity, debug]);
+  }, [waterVoxels, waterKeys, capacity, debug]);
 
   useLayoutEffect(() => {
-    if (meshRef.current) fill(meshRef.current);
-  }, [fill]);
+    if (meshRef.current) syncWater(meshRef.current, true);
+  }, [syncWater]);
 
   useEffect(() => () => {
     geometry.dispose();
     material.dispose();
   }, [geometry, material]);
 
-  const logFrame = useRef(0);
   useFrame(state => {
     if (!debug) {
       updateWaterBlocksMaterial(material as THREE.MeshStandardMaterial, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
     }
-
     const mesh = meshRef.current;
     if (!mesh) return;
-
-    const expected = Math.min(waterFaces.length, mesh.instanceMatrix.count);
-    if (mesh.__waterFilledFor !== waterFaces || mesh.count !== expected) {
-      fill(mesh);
-    }
-
-    // Periodic heartbeat: confirm count persists + show camera vs water spatially.
-    if (debug && ++logFrame.current % 180 === 0) {
-      const cam = state.camera.position;
-      console.log(
-        `[water] tick count=${mesh.count} inScene=${!!mesh.parent} visible=${mesh.visible} ` +
-          `camPos=(${cam.x.toFixed(1)},${cam.y.toFixed(1)},${cam.z.toFixed(1)}) ` +
-          `camRadius=${cam.length().toFixed(1)}`
-      );
-    }
+    // Rebuild when terrain is edited (dig/place) so newly-exposed water side faces
+    // appear and re-covered ones disappear.
+    syncWater(mesh);
   });
 
   return (

@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useRapier } from '@react-three/rapier';
 import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
-import { vectorToRapier } from '../utils/surfaceControls';
+import { vectorToRapier, shipImpactOutcome } from '../utils/surfaceControls';
+import { isTouchActive } from '../utils/mobileInput';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
   beginAtmosphereWarp,
@@ -13,7 +14,10 @@ import {
   useSpaceFlight
 } from '../state/spaceFlight.ts';
 
-const MOUSE_SENSITIVITY = 0.0022;
+const MOUSE_SENSITIVITY = 0.0016;
+/** Camera orientation smoothing rate (higher = snappier). The physics `quat`
+ *  stays authoritative; the camera slerps toward it so look isn't twitchy. */
+const CAM_SMOOTH = 12;
 /** Forward thrust acceleration (world units / s^2). */
 const THRUST_ACCEL = 60;
 const BOOST_MULTIPLIER = 3.2;
@@ -23,6 +27,12 @@ const MAX_SPEED = 320;
 const ROLL_SPEED = 1.6; // rad/s
 /** Rest height of the landed ship above the terrain it touched. */
 const SHIP_GROUND_CLEARANCE = 2.5;
+/** Ship-vs-terrain collision: contact within this clearance triggers a response. */
+const CRASH_CLEARANCE = 2.0;
+/** Inward (toward-planet) speed above which contact is a CRASH, not a soft stop. */
+const CRASH_SPEED = 45;
+/** Forced crash-landing settle time (a quick jolt, faster than a gentle F-land). */
+const CRASH_LAND_DURATION = 0.5;
 /** Press F to land: cast this far toward the planet to find the touchdown point.
  *  Covers the full atmosphere band so F works anywhere once you're inside it. */
 const LANDING_APPROACH_DIST = 150;
@@ -59,6 +69,18 @@ const engageState = { charge: 0 };
 /** Live read of the engage charge (0..1) for the HUD reticle. */
 export function getEngageCharge(): number {
   return engageState.charge;
+}
+
+// Crash impact flash: timestamp of the last crash; the HUD reads a 0..1 fading
+// intensity so it can show a red impact vignette + "CRASHED" message.
+const CRASH_FLASH_MS = 1100;
+let crashFlashAt = -1e9;
+function triggerCrashFlash() {
+  crashFlashAt = performance.now();
+}
+/** Live read of the crash-flash intensity (0..1, fades over ~1s) for the HUD. */
+export function getCrashFlash(): number {
+  return Math.max(0, 1 - (performance.now() - crashFlashAt) / CRASH_FLASH_MS);
 }
 
 /**
@@ -126,6 +148,9 @@ export default function ShipController({
   const position = useRef(new THREE.Vector3());
   const velocity = useRef(new THREE.Vector3());
   const orientation = useRef(new THREE.Quaternion());
+  // Smoothed camera orientation (slerps toward `orientation`); kept in sync with
+  // `orientation` in the scripted branches so resuming free flight never snaps.
+  const displayQuat = useRef(new THREE.Quaternion());
   const pitchInput = useRef(0); // accumulated mouse Y this frame
   const yawInput = useRef(0); // accumulated mouse X this frame
   const rollInput = useRef({ left: false, right: false });
@@ -212,7 +237,7 @@ export default function ShipController({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isLocked.current) return;
+      if (!isLocked.current && !isTouchActive()) return;
       yawInput.current += -event.movementX * MOUSE_SENSITIVITY;
       pitchInput.current += -event.movementY * MOUSE_SENSITIVITY;
     };
@@ -320,6 +345,7 @@ export default function ShipController({
       pitchInput.current = 0;
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current);
+      displayQuat.current.copy(orientation.current);
       if (land.t >= 1) {
         landingSeq.current = null;
         lookOffset.current.yaw = 0;
@@ -342,6 +368,7 @@ export default function ShipController({
       pitchInput.current = 0;
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current);
+      displayQuat.current.copy(orientation.current);
       if (launch.t >= 1) {
         launchSeq.current = null;
         enterAtmosphere(); // surface -> descent (now airborne)
@@ -363,6 +390,7 @@ export default function ShipController({
       const peek = new THREE.Quaternion().setFromEuler(new THREE.Euler(lo.pitch, lo.yaw, 0, 'YXZ'));
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current).multiply(peek);
+      displayQuat.current.copy(cam.quaternion);
       return;
     }
 
@@ -424,9 +452,49 @@ export default function ShipController({
     // 5) Integrate position.
     position.current.addScaledVector(velocity.current, dt);
 
-    // 6) Drive the camera.
+    // 5b) Terrain collision (descent only) — the ship can't pass through the
+    // planet. Cast toward local-down; gentle contact soft-stops at the surface,
+    // a fast inward impact CRASHES (impact flash + forced crash-landing -> you
+    // must re-launch). Colliders stream around the ship because it publishes its
+    // position (step 8), so the cast hits real voxels once near the ground.
+    if (world && getSpaceFlightSnapshot().phase === 'descent' && !landingSeq.current && !launchSeq.current) {
+      const radial = position.current.clone().normalize();
+      const downDir = radial.clone().negate();
+      const speed = velocity.current.length();
+      const probe = Math.max(CRASH_CLEARANCE + 1, speed * dt + CRASH_CLEARANCE);
+      const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
+      const hit = world.castRay(ray, probe, true);
+      if (hit && hit.timeOfImpact <= speed * dt + CRASH_CLEARANCE) {
+        const inwardSpeed = -velocity.current.dot(radial); // speed toward the planet
+        const rest = position.current.clone()
+          .addScaledVector(downDir, hit.timeOfImpact)
+          .addScaledVector(radial, SHIP_GROUND_CLEARANCE);
+        if (shipImpactOutcome(inwardSpeed, CRASH_SPEED) === 'crash') {
+          // CRASH: forced crash-landing to the touchdown point + impact flash.
+          landingSeq.current = {
+            from: position.current.clone(),
+            to: rest,
+            fromQuat: orientation.current.clone(),
+            toQuat: levelOrientation(rest),
+            t: 0,
+            duration: CRASH_LAND_DURATION
+          };
+          velocity.current.set(0, 0, 0);
+          triggerCrashFlash();
+        } else {
+          // Soft contact: clamp to the surface and remove the inward velocity
+          // component so you skim along instead of sinking through.
+          position.current.copy(rest);
+          if (inwardSpeed > 0) velocity.current.addScaledVector(radial, inwardSpeed);
+        }
+      }
+    }
+
+    // 6) Drive the camera — slerp the displayed orientation toward the
+    // authoritative `quat` so look is smooth, not twitchy (frame-rate independent).
     cam.position.copy(position.current);
-    cam.quaternion.copy(quat);
+    displayQuat.current.slerp(quat, 1 - Math.exp(-CAM_SMOOTH * dt));
+    cam.quaternion.copy(displayQuat.current);
 
     // 7) Phase-driven launch + landing transitions (read the live snapshot).
     const liveSnap = getSpaceFlightSnapshot();

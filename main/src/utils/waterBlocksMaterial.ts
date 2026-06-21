@@ -285,8 +285,12 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           vec3 gtDetail = wsTangential(wsDetailGrad(P, wsT, lod), up);
 
           // True surface normal of the displaced height field (amplitude-exact):
-          // tilt up by the tangential slope = uWaveAmp * tangentialGradient.
-          vec3 N = normalize(up - (gtSwell + gtDetail) * uWaveAmp * surf);
+          // start from the FACE's own normal (fnrm) so vertical coastal water
+          // walls shade correctly — top faces have fnrm≈up so they're unchanged,
+          // but side faces keep their horizontal normal instead of snapping to
+          // radial up (which made them flat/invisible). Swell tilt only matters
+          // on tops (surf≈1), so it stays gated by surf.
+          vec3 N = normalize(fnrm - (gtSwell + gtDetail) * uWaveAmp * surf);
           normal = normalize((viewMatrix * vec4(N, 0.0)).xyz);
 
           vec3 V = normalize(cameraPosition - P);
@@ -306,7 +310,9 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           // Night-tint the foam by the same time-of-day tint so whitecaps aren't
           // bright white against a dark/moonlit night ocean.
           float steep = length(gtSwell) * uWaveAmp;
-          float foam = smoothstep(0.28, 0.62, steep) * surf;
+          // Foam mostly on tops, but keep a small floor so coastal side faces
+          // aren't bone-dry (they were fully gated out before).
+          float foam = smoothstep(0.28, 0.62, steep) * (0.25 + 0.75 * surf);
           foam *= 0.6 + 0.4 * wsHash21(floor(P.xz * 3.0) + floor(P.yz));
           vec3 foamCol = uFoamColor * todTint;
           refracted = mix(refracted, foamCol, clamp(foam, 0.0, 1.0));
@@ -376,7 +382,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'water-blocks-iq-v2';
+  material.customProgramCacheKey = () => 'water-blocks-iq-v3';
   return material;
 }
 

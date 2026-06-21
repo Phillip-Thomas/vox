@@ -48,9 +48,16 @@ export interface ControlFrame {
   right: THREE.Vector3;
 }
 
-const GRAVITY_STRENGTH = 9.81;
+export const GRAVITY_STRENGTH = 9.81;
 export const DEFAULT_MOVE_SPEED = 5;
-export const DEFAULT_JUMP_SPEED = 5.5;
+// Apex = v^2 / 2g. At 6.8 -> ~2.36 world units, clearing one 2-unit voxel with
+// margin (the old 5.5 only reached ~1.54, so you couldn't hop a single block).
+export const DEFAULT_JUMP_SPEED = 6.8;
+// Hold-jump jetpack: limited upward thrust once airborne, refills on the ground.
+export const JETPACK_THRUST = 16; // upward accel while held (u/s^2)
+export const JETPACK_MAX_FUEL = 1.4; // seconds of continuous thrust
+export const JETPACK_REFILL_RATE = 0.8; // fuel/sec refilled while grounded
+export const JETPACK_MAX_UP_SPEED = 7; // clamp climb rate so it's a hover, not a rocket
 const DEFAULT_COYOTE_TIME = 0.14;
 const DEFAULT_JUMP_BUFFER = 0.12;
 const DEFAULT_SURFACE_CLEARANCE = PLAYER_CENTER_CLEARANCE;
@@ -71,6 +78,30 @@ export const FACE_NORMALS: Record<CubeFace, THREE.Vector3> = {
   front: new THREE.Vector3(0, 0, 1),
   back: new THREE.Vector3(0, 0, -1)
 };
+
+/**
+ * Ship-vs-terrain contact outcome: a fast inward (toward-planet) impact is a
+ * crash; a gentle one is a soft stop. Pure so it's unit-testable.
+ */
+export function shipImpactOutcome(inwardSpeed: number, crashSpeed: number): 'crash' | 'soft' {
+  return inwardSpeed > crashSpeed ? 'crash' : 'soft';
+}
+
+/**
+ * The cube face a position sits on, by its dominant axis (= the face whose
+ * normal has the largest dot with the position). Unlike chooseFaceFromPosition
+ * (an edge-transition detector that returns null mid-face), this always returns
+ * a face, so it's the right call for INITIALIZING gravity from a spawn point on
+ * any of the 6 faces (e.g. exiting the ship where you landed it).
+ */
+export function dominantFaceForPosition(position: THREE.Vector3): CubeFace {
+  const ax = Math.abs(position.x);
+  const ay = Math.abs(position.y);
+  const az = Math.abs(position.z);
+  if (ax >= ay && ax >= az) return position.x >= 0 ? 'right' : 'left';
+  if (ay >= ax && ay >= az) return position.y >= 0 ? 'top' : 'bottom';
+  return position.z >= 0 ? 'front' : 'back';
+}
 
 export function getSurfaceState(face: CubeFace, phase: SurfacePhase = 'stable', targetFace: CubeFace | null = null): SurfaceState {
   const up = FACE_NORMALS[face].clone();

@@ -7,6 +7,7 @@ import {
   rotateCameraForwardYaw,
   transportCameraForward
 } from '../utils/gravityCamera';
+import { isTouchActive } from '../utils/mobileInput';
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
@@ -56,7 +57,8 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isLockedRef.current) return;
+      // Pointer lock on desktop, OR active touch-look on mobile (synthetic events).
+      if (!isLockedRef.current && !isTouchActive()) return;
 
       syncSurfaceFrame();
       rotateCameraForwardYaw(

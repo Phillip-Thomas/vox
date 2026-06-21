@@ -64,7 +64,11 @@ export function findTopFaceSurfaceVoxel(
 export function createWorldArrivalPose(size: number, terrainSeed: number): WorldArrivalPose {
   const surfaceVoxel = findTopFaceSurfaceVoxel(size, terrainSeed);
   const surfaceCenter = voxelCoordToWorld(surfaceVoxel.x, surfaceVoxel.y, surfaceVoxel.z);
-  const up = new THREE.Vector3(0, 1, 0);
+  // Outward normal at the surface site (not a hardcoded +Y) so arrival/ship poses
+  // are correct regardless of which face the site is on.
+  const up = surfaceCenter.lengthSq() > 1e-6
+    ? surfaceCenter.clone().normalize()
+    : new THREE.Vector3(0, 1, 0);
   const playerSurfacePosition = surfaceCenter
     .clone()
     .addScaledVector(up, PLAYER_CENTER_CLEARANCE + EXTRA_PLAYER_CLEARANCE);
