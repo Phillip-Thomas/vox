@@ -1,0 +1,37 @@
+{
+  "apply": true,
+  "create": [
+    {
+      "content": "199.36.158.100",
+      "name": "",
+      "ttl": 600,
+      "type": "A"
+    },
+    {
+      "content": "hosting-site=paravox-game",
+      "name": "",
+      "ttl": 600,
+      "type": "TXT"
+    },
+    {
+      "content": "JACFWtOD5x2Y_uyOFCYEzaiqeUGOwACWAmjPRmtRCm4",
+      "name": "_acme-challenge",
+      "ttl": 600,
+      "type": "TXT"
+    },
+    {
+      "content": "paravox-game.web.app",
+      "name": "www",
+      "ttl": 600,
+      "type": "CNAME"
+    },
+    {
+      "content": "KFrplKT84lRZukihqStm7fSpQTJzAfhn3oohyx9GpQ8",
+      "name": "_acme-challenge.www",
+      "ttl": 600,
+      "type": "TXT"
+    }
+  ],
+  "delete": [],
+  "kept_existing": []
+}

@@ -1,9 +1,11 @@
 # Porkbun DNS Plan
 
+Current target domain is `paravoxia.com`.
+
 Firebase Hosting custom domains were created for:
 
-- `paravox.com`
-- `www.paravox.com` redirecting to `paravox.com`
+- `paravoxia.com`
+- `www.paravoxia.com` redirecting to `paravoxia.com`
 
 Required Porkbun DNS updates:
 
@@ -11,15 +13,15 @@ Required Porkbun DNS updates:
 | --- | --- | --- | --- |
 | `@` | A | `199.36.158.100` | Add |
 | `@` | TXT | `hosting-site=paravox-game` | Add |
-| `_acme-challenge` | TXT | `CBX3cQPOrOc6AkwCQFsJK3NQj6rqf3liuc1_P2ENSOU` | Add |
+| `_acme-challenge` | TXT | `JACFWtOD5x2Y_uyOFCYEzaiqeUGOwACWAmjPRmtRCm4` | Add |
 | `www` | CNAME | `paravox-game.web.app` | Add |
-| `_acme-challenge.www` | TXT | `fVURMd_rpcMvj0MWseDbI6-J4Jxuc_2JPrw7UcUv9yI` | Add |
-| `@` | A | `13.248.169.48` | Remove |
-| `@` | A | `76.223.54.146` | Remove |
-| `www` | A | `13.248.169.48` | Remove |
-| `www` | A | `76.223.54.146` | Remove |
+| `_acme-challenge.www` | TXT | `KFrplKT84lRZukihqStm7fSpQTJzAfhn3oohyx9GpQ8` | Add |
+| `@` | A | `44.230.85.241` | Remove |
+| `@` | A | `52.33.207.7` | Remove |
+| `www` | CNAME | `uixie.porkbun.com` | Remove |
+| `_acme-challenge.www` | CNAME | `uixie.porkbun.com` | Remove |
 
-Keep existing `@` TXT `v=spf1 -all`.
+Keep existing `@` TXT `v=spf1 include:_spf.porkbun.com ~all`.
 
 Automation command once credentials are available:
 

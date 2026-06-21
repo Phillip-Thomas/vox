@@ -9,21 +9,22 @@ from pathlib import Path
 import requests
 
 API = "https://api.porkbun.com/api/json/v3"
-DOMAIN = "paravox.com"
+DOMAIN = "paravoxia.com"
 
 DESIRED = [
     {"name": "", "type": "A", "content": "199.36.158.100", "ttl": 600},
     {"name": "", "type": "TXT", "content": "hosting-site=paravox-game", "ttl": 600},
-    {"name": "_acme-challenge", "type": "TXT", "content": "CBX3cQPOrOc6AkwCQFsJK3NQj6rqf3liuc1_P2ENSOU", "ttl": 600},
+    {"name": "_acme-challenge", "type": "TXT", "content": "JACFWtOD5x2Y_uyOFCYEzaiqeUGOwACWAmjPRmtRCm4", "ttl": 600},
     {"name": "www", "type": "CNAME", "content": "paravox-game.web.app", "ttl": 600},
-    {"name": "_acme-challenge.www", "type": "TXT", "content": "fVURMd_rpcMvj0MWseDbI6-J4Jxuc_2JPrw7UcUv9yI", "ttl": 600},
+    {"name": "_acme-challenge.www", "type": "TXT", "content": "KFrplKT84lRZukihqStm7fSpQTJzAfhn3oohyx9GpQ8", "ttl": 600},
 ]
 
 REMOVE = [
-    {"name": "", "type": "A", "content": "13.248.169.48"},
-    {"name": "", "type": "A", "content": "76.223.54.146"},
-    {"name": "www", "type": "A", "content": "13.248.169.48"},
-    {"name": "www", "type": "A", "content": "76.223.54.146"},
+    {"name": "", "type": "ALIAS", "content": "uixie.porkbun.com"},
+    {"name": "", "type": "A", "content": "44.230.85.241"},
+    {"name": "", "type": "A", "content": "52.33.207.7"},
+    {"name": "www", "type": "CNAME", "content": "uixie.porkbun.com"},
+    {"name": "_acme-challenge.www", "type": "CNAME", "content": "uixie.porkbun.com"},
 ]
 
 

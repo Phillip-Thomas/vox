@@ -1,0 +1,237 @@
+{
+  "paravoxia.com": {
+    "create": {
+      "note": "already exists",
+      "payload": {
+        "error": {
+          "code": 409,
+          "details": [
+            {
+              "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+              "domain": "firebasehosting.googleapis.com",
+              "metadata": {
+                "name": "projects/paravox-game/sites/paravox-game"
+              },
+              "reason": "CD_ALREADY_EXISTS"
+            }
+          ],
+          "message": "Custom Domain \"projects/paravox-game/sites/paravox-game\" already exists.",
+          "status": "ALREADY_EXISTS"
+        }
+      },
+      "status": 409
+    },
+    "get": {
+      "payload": {
+        "cert": {
+          "state": "CERT_VALIDATING",
+          "type": "TEMPORARY",
+          "verification": {
+            "dns": {
+              "checkTime": "2026-06-21T02:14:48.142630368Z",
+              "desired": [
+                {
+                  "domainName": "_acme-challenge.paravoxia.com",
+                  "records": [
+                    {
+                      "domainName": "_acme-challenge.paravoxia.com",
+                      "rdata": "JACFWtOD5x2Y_uyOFCYEzaiqeUGOwACWAmjPRmtRCm4",
+                      "requiredAction": "ADD",
+                      "type": "TXT"
+                    }
+                  ]
+                }
+              ],
+              "discovered": [
+                {
+                  "domainName": "_acme-challenge.paravoxia.com",
+                  "records": [
+                    {
+                      "domainName": "_acme-challenge.paravoxia.com",
+                      "rdata": "JACFWtOD5x2Y_uyOFCYEzaiqeUGOwACWAmjPRmtRCm4",
+                      "type": "TXT"
+                    },
+                    {
+                      "domainName": "_acme-challenge.paravoxia.com",
+                      "rdata": "wZubPHJTlJNRig-nrVTnBbPqScSf3ECWUGqL02TGaaQ",
+                      "type": "TXT"
+                    },
+                    {
+                      "domainName": "_acme-challenge.paravoxia.com",
+                      "rdata": "xkQVcUI2iqrShFtN0dgaGEIX1xfkQOmDU04dnDEvmOQ",
+                      "type": "TXT"
+                    }
+                  ]
+                }
+              ]
+            },
+            "http": {
+              "desired": "aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
+              "discovered": "aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
+              "lastCheckTime": "2026-06-21T02:14:48.142630368Z",
+              "path": "/.well-known/acme-challenge/aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ"
+            }
+          }
+        },
+        "certPreference": "GROUPED",
+        "createTime": "2026-06-21T02:02:32.686988101Z",
+        "etag": "W/\"1782007352\"",
+        "hostState": "HOST_ACTIVE",
+        "name": "projects/paravox-game/sites/paravox-game/customDomains/paravoxia.com",
+        "ownershipState": "OWNERSHIP_ACTIVE",
+        "requiredDnsUpdates": {
+          "checkTime": "2026-06-21T02:14:34.302159248Z",
+          "desired": [
+            {
+              "domainName": "paravoxia.com",
+              "records": [
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "199.36.158.100",
+                  "type": "A"
+                },
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "hosting-site=paravox-game",
+                  "type": "TXT"
+                },
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "v=spf1 include:_spf.porkbun.com ~all",
+                  "type": "TXT"
+                }
+              ]
+            }
+          ],
+          "discovered": [
+            {
+              "domainName": "paravoxia.com",
+              "records": [
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "199.36.158.100",
+                  "type": "A"
+                },
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "hosting-site=paravox-game",
+                  "type": "TXT"
+                },
+                {
+                  "domainName": "paravoxia.com",
+                  "rdata": "v=spf1 include:_spf.porkbun.com ~all",
+                  "type": "TXT"
+                }
+              ]
+            }
+          ]
+        },
+        "updateTime": "2026-06-21T02:02:32.686988212Z"
+      },
+      "status": 200
+    }
+  },
+  "www.paravoxia.com": {
+    "create": {
+      "note": "already exists",
+      "payload": {
+        "error": {
+          "code": 409,
+          "details": [
+            {
+              "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+              "domain": "firebasehosting.googleapis.com",
+              "metadata": {
+                "name": "projects/paravox-game/sites/paravox-game"
+              },
+              "reason": "CD_ALREADY_EXISTS"
+            }
+          ],
+          "message": "Custom Domain \"projects/paravox-game/sites/paravox-game\" already exists.",
+          "status": "ALREADY_EXISTS"
+        }
+      },
+      "status": 409
+    },
+    "get": {
+      "payload": {
+        "cert": {
+          "state": "CERT_VALIDATING",
+          "type": "TEMPORARY",
+          "verification": {
+            "dns": {
+              "checkTime": "2026-06-21T02:14:39.095046135Z",
+              "desired": [
+                {
+                  "domainName": "_acme-challenge.www.paravoxia.com",
+                  "records": [
+                    {
+                      "domainName": "_acme-challenge.www.paravoxia.com",
+                      "rdata": "KFrplKT84lRZukihqStm7fSpQTJzAfhn3oohyx9GpQ8",
+                      "requiredAction": "ADD",
+                      "type": "TXT"
+                    }
+                  ]
+                }
+              ],
+              "discovered": [
+                {
+                  "domainName": "_acme-challenge.www.paravoxia.com",
+                  "records": [
+                    {
+                      "domainName": "_acme-challenge.www.paravoxia.com",
+                      "rdata": "KFrplKT84lRZukihqStm7fSpQTJzAfhn3oohyx9GpQ8",
+                      "type": "TXT"
+                    }
+                  ]
+                }
+              ]
+            },
+            "http": {
+              "desired": "n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
+              "discovered": "n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
+              "lastCheckTime": "2026-06-21T02:14:39.095046135Z",
+              "path": "/.well-known/acme-challenge/n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA"
+            }
+          }
+        },
+        "certPreference": "GROUPED",
+        "createTime": "2026-06-21T02:02:33.069175992Z",
+        "etag": "W/\"1782007353\"",
+        "hostState": "HOST_ACTIVE",
+        "name": "projects/paravox-game/sites/paravox-game/customDomains/www.paravoxia.com",
+        "ownershipState": "OWNERSHIP_ACTIVE",
+        "redirectTarget": "paravoxia.com",
+        "requiredDnsUpdates": {
+          "checkTime": "2026-06-21T02:14:34.690510878Z",
+          "desired": [
+            {
+              "domainName": "www.paravoxia.com",
+              "records": [
+                {
+                  "domainName": "www.paravoxia.com",
+                  "rdata": "paravox-game.web.app",
+                  "type": "CNAME"
+                }
+              ]
+            }
+          ],
+          "discovered": [
+            {
+              "domainName": "www.paravoxia.com",
+              "records": [
+                {
+                  "domainName": "www.paravoxia.com",
+                  "rdata": "paravox-game.web.app",
+                  "type": "CNAME"
+                }
+              ]
+            }
+          ]
+        },
+        "updateTime": "2026-06-21T02:02:33.069176152Z"
+      },
+      "status": 200
+    }
+  }
+}
