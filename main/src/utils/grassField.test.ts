@@ -5,7 +5,9 @@ import { voxelSystem } from './efficientVoxelSystem';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import {
   BLADES_PER_CLUMP,
+  applyGrassInstanceBuffer,
   bladesPerVoxel,
+  buildGrassInstanceBuffer,
   buildGrassInstances,
   computeBladeMatrix,
   countGrassVoxels,
@@ -161,5 +163,39 @@ describe('buildGrassInstances', () => {
     );
     const result = buildGrassInstances(mesh, 6); // wants 18, capacity 3
     expect(result.count).toBe(3);
+  });
+
+  it('precomputed grass instance buffers match the live builder matrices', () => {
+    const terrain = [
+      { x: 0, y: 25, z: 0, material: MaterialType.GRASS, color: green },
+      { x: 1, y: 25, z: 0, material: MaterialType.GRASS, color: green },
+      { x: 2, y: 25, z: 0, material: MaterialType.STONE, color: green }
+    ];
+    for (const voxel of terrain) {
+      voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
+    }
+
+    const density = 2;
+    const capacity = 2 * bladesPerVoxel(density);
+    const geometry = createBladeGeometry();
+    const liveMesh = new THREE.InstancedMesh(geometry, new THREE.MeshStandardMaterial(), capacity);
+    const cachedMesh = new THREE.InstancedMesh(geometry, new THREE.MeshStandardMaterial(), capacity);
+
+    const live = buildGrassInstances(liveMesh, density, 0, null, 777, 1.2, 0.9, 1, 1);
+    const buffer = buildGrassInstanceBuffer(terrain, {
+      density,
+      maxDistance: 0,
+      playerWorld: null,
+      worldSeed: 777,
+      heightMul: 1.2,
+      widthMul: 0.9,
+      densityMul: 1,
+      coverage: 1
+    });
+    const cached = applyGrassInstanceBuffer(cachedMesh, buffer);
+
+    expect(cached).toEqual(live);
+    expect(Array.from(cachedMesh.instanceMatrix.array.slice(0, cached.count * 16)))
+      .toEqual(Array.from(liveMesh.instanceMatrix.array.slice(0, live.count * 16)));
   });
 });

@@ -37,8 +37,11 @@ export default function BenchmarkProbe({
   log = true
 }: BenchmarkProbeProps) {
   const gl = useThree(state => state.gl);
+  const scene = useThree(state => state.scene);
+  const camera = useThree(state => state.camera);
   const samples = useRef<number[]>([]);
   const last = useRef<number>(0);
+  (window as unknown as { __three?: unknown }).__three = { gl, scene, camera };
 
   useFrame(() => {
     const now = performance.now();

@@ -1,0 +1,97 @@
+import { seededUnit } from './worldCoordinates';
+
+// --- Per-planet BIOME profile ------------------------------------------------
+//
+// The shared "what kind of world is this" anchor. Pure + deterministic:
+// terrainSeed -> a climate (lushness / aridity / temperature) + a vegetation
+// hue. Grass derives its density/height/dryness/colour from this (grassProfile),
+// and trees/terrain/atmosphere can derive from it later so a planet reads as ONE
+// cohesive biome instead of unrelated props.
+//
+// COHESION: the vegetation hue is pulled from this planet's TREE-leaf hue, so
+// grass + canopy share a colour family. VARIETY comes from the climate axes —
+// two green planets can still be a sparse short savanna vs a dense tall jungle.
+
+export type BiomeKind =
+  | 'verdant'    // lush, dense, deep green
+  | 'temperate'  // balanced meadow
+  | 'sparse'     // thin, short cover
+  | 'arid'       // dry, golden, patchy
+  | 'alien';     // non-green vegetation (teal/violet/coral/amber)
+
+export interface BiomeProfile {
+  seed: number;
+  kind: BiomeKind;
+  /** 0 sparse/short .. 1 dense/tall. Drives grass density + height. */
+  lushness: number;
+  /** 0 wet/green .. 1 desert. Drives dryness + golden bleaching + bare patches. */
+  aridity: number;
+  /** 0 cold .. 1 hot. Small hue bias (cold -> cooler, hot -> warmer). */
+  temperature: number;
+  /** Primary vegetation hue (sRGB 0..1), cohered with the trees. */
+  hue: number;
+  /** Base vegetation saturation. */
+  saturation: number;
+  /** True when vegetation sits outside the green family (alien accent planet). */
+  alien: boolean;
+}
+
+const SALT_LUSH = 51;
+const SALT_ARID = 52;
+const SALT_TEMP = 53;
+const SALT_SAT = 55;
+const SALT_VEGHUE = 56;
+const SALT_VEGHUE2 = 57;
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, v));
+}
+
+// Bold non-green vegetation accents (sRGB hue 0..1): amber, coral/red, magenta,
+// violet, deep blue, cyan-teal. These make alien planets read at a glance.
+const ALIEN_VEG_HUES = [0.07, 0.99, 0.90, 0.78, 0.62, 0.50];
+
+/**
+ * Build the deterministic per-planet biome — the SHARED vegetation/climate anchor
+ * that grass (and, next, trees/terrain) derive from. The vegetation hue is its
+ * OWN deliberately diverse palette (NOT read back from trees, which were ~70%
+ * green and made every planet look the same): ~55% green family spread wide,
+ * ~45% bold accent hues. Same seed -> identical biome.
+ */
+export function buildBiomeProfile(seed: number): BiomeProfile {
+  const s = seed | 0;
+
+  const lushness = seededUnit(s, SALT_LUSH); // 0..1, full range -> dramatic spread
+  // Aridity skews wetter, and lush worlds resist drying.
+  let aridity = Math.pow(seededUnit(s, SALT_ARID), 1.3);
+  aridity = clamp(aridity * (1.25 - lushness * 0.6), 0, 1);
+  const temperature = seededUnit(s, SALT_TEMP);
+
+  // Vegetation hue — diverse by design so planets look distinct.
+  const hueRoll = seededUnit(s, SALT_VEGHUE);
+  let hue: number;
+  let alien: boolean;
+  if (hueRoll < 0.55) {
+    // green family, but a WIDE spread: yellow-green .. emerald .. teal-green.
+    hue = 0.18 + seededUnit(s, SALT_VEGHUE2) * 0.30; // 0.18 .. 0.48
+    alien = false;
+  } else {
+    const idx = Math.min(
+      ALIEN_VEG_HUES.length - 1,
+      Math.floor(seededUnit(s, SALT_VEGHUE2) * ALIEN_VEG_HUES.length)
+    );
+    hue = ALIEN_VEG_HUES[idx];
+    alien = true;
+  }
+  // Bold saturation so the hue actually reads (arid worlds desaturate somewhat).
+  const saturation = clamp(0.5 + seededUnit(s, SALT_SAT) * 0.38 - aridity * 0.2, 0.22, 0.92);
+
+  let kind: BiomeKind;
+  if (alien) kind = 'alien';
+  else if (aridity > 0.58) kind = 'arid';
+  else if (lushness > 0.66) kind = 'verdant';
+  else if (lushness < 0.34) kind = 'sparse';
+  else kind = 'temperate';
+
+  return { seed: s, kind, lushness, aridity, temperature, hue, saturation, alien };
+}

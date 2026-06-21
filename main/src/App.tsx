@@ -25,6 +25,8 @@ import {
   createCurrentWorld,
   normalizeCoordinatePart
 } from './utils/worldCoordinates.ts';
+import { scheduleWorldPrewarm } from './utils/worldGenCache.ts';
+import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
 import { WarpDriver, WarpFlash } from './components/effects/WarpOverlay.tsx';
 import {
@@ -120,6 +122,9 @@ const App: React.FC = () => {
           y: normalizeCoordinatePart(y)
         };
         if (coordinatesEqual(coordinate, currentWorld.coordinate)) return;
+        const world = createCurrentWorld(coordinate);
+        scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
+        scheduleGrassInstancePrewarm(planetSize, world.seed);
         beginTravel(coordinate);
       }
     };
@@ -155,6 +160,8 @@ const App: React.FC = () => {
 
   const jumpToWorld = (world: CurrentWorld) => {
     if (coordinatesEqual(world.coordinate, currentWorld.coordinate)) return;
+    scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
+    scheduleGrassInstancePrewarm(planetSize, world.seed);
     // Route through the warp: beginTravel plays the warp-in and the registered
     // arrival handler performs the real world swap at the white-out midpoint.
     beginTravel(world.coordinate);
@@ -274,7 +281,7 @@ const App: React.FC = () => {
         </Environment>
 
         <SkyController />
-        <GalaxyImpostors currentCoordinate={currentWorld.coordinate} />
+        <GalaxyImpostors currentCoordinate={currentWorld.coordinate} planetSize={planetSize} />
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />

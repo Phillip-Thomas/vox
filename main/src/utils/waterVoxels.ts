@@ -1,6 +1,4 @@
-import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
-import { createTerrainConfig } from './terrainConfig';
-import { measureWarpMetric } from './warpMetrics';
+import { getWorldWaterFaces, getWorldWaterVoxels } from './worldGenCache';
 
 export interface WaterVoxel {
   x: number;
@@ -31,17 +29,6 @@ export const FACE_NORMALS: ReadonlyArray<readonly [number, number, number]> = [
   [0, 0, 1], [0, 0, -1]
 ] as const;
 
-function makeGenerator(size: number, terrainSeed: number): ProceduralWorldGenerator {
-  const planetRadius = size / 2;
-  return new ProceduralWorldGenerator(
-    {
-      planetRadius,
-      coreRadiusPercent: 0.15
-    },
-    createTerrainConfig(terrainSeed, planetRadius)
-  );
-}
-
 /**
  * Build the exposed water-surface voxels for a planet of the given size + seed.
  *
@@ -52,11 +39,7 @@ function makeGenerator(size: number, terrainSeed: number): ProceduralWorldGenera
  * and returns only the air-exposed surface voxels.
  */
 export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[] {
-  return measureWarpMetric(
-    'water:voxels_generate',
-    () => makeGenerator(size, terrainSeed).getExposedWaterVoxels(),
-    result => ({ voxels: result.length })
-  );
+  return getWorldWaterVoxels(size, terrainSeed);
 }
 
 /**
@@ -67,9 +50,5 @@ export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[
  * hollow-glass-box artifact (a flat quad has no interior) and tiles seamlessly.
  */
 export function buildWaterFaces(size: number, terrainSeed: number): WaterFace[] {
-  return measureWarpMetric(
-    'water:faces_generate',
-    () => makeGenerator(size, terrainSeed).getExposedWaterFaces(),
-    result => ({ faces: result.length })
-  );
+  return getWorldWaterFaces(size, terrainSeed);
 }

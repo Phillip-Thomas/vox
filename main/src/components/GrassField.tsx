@@ -5,13 +5,18 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import {
+  applyGrassInstanceBuffer,
+  applyGrassProfileToMaterial,
   bladesPerVoxel,
   buildGrassInstances,
   countGrassVoxels,
   createBladeGeometry,
   createGrassMaterial,
+  getPrewarmedGrassInstanceBuffer,
   updateGrassMaterial
 } from '../utils/grassField';
+import { buildGrassProfile } from '../utils/grassProfile';
+import { getSunDirection } from './SkyController';
 
 interface GrassFieldProps {
   terrainSeed: number;
@@ -45,6 +50,12 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   const material = useMemo(() => (density > 0 ? createGrassMaterial() : null), [density]);
   const meshRef = useRef<THREE.InstancedMesh>(null);
 
+  // Per-planet grass biome (colour family cohered with the tree profile, plus
+  // height/width/dryness/wind). Rebuilt only when the planet seed changes.
+  const profile = useMemo(() => buildGrassProfile(terrainSeed), [terrainSeed]);
+  const profileAppliedRef = useRef(false);
+  const useInitialPrewarmRef = useRef(true);
+
   // Headroom (extra blade slots) so small grass-count fluctuations from terrain
   // edits don't force a buffer reallocation every time.
   const HEADROOM = 256;
@@ -57,7 +68,7 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   /** Blade slots needed right now for all exposed grass voxels. */
   const neededCapacity = () => measureWarpMetric(
     'grass:count_capacity',
-    () => bladesPerVoxel(density) * countGrassVoxels(),
+    () => bladesPerVoxel(density, profile.densityMul) * countGrassVoxels(),
     needed => ({ needed })
   );
 
@@ -78,10 +89,32 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     measureWarpMetric(
       'grass:rebuild_instances',
       () => {
-        buildGrassInstances(mesh, density, quality.grassMaxDistance, playerPosition ?? null, terrainSeed);
-        return mesh.count;
+        const prewarmed = useInitialPrewarmRef.current
+          ? getPrewarmedGrassInstanceBuffer(
+            terrainSeed,
+            density,
+            quality.grassMaxDistance,
+            playerPosition ?? null,
+            profile
+          )
+          : null;
+        const result = prewarmed
+          ? applyGrassInstanceBuffer(mesh, prewarmed)
+          : buildGrassInstances(
+            mesh,
+            density,
+            quality.grassMaxDistance,
+            playerPosition ?? null,
+            terrainSeed,
+            profile.heightMul,
+            profile.widthMul,
+            profile.densityMul,
+            profile.coverage
+          );
+        useInitialPrewarmRef.current = false;
+        return { ...result, prewarmed: Boolean(prewarmed) };
       },
-      count => ({ count, capacity: mesh.instanceMatrix.count })
+      result => ({ count: result.count, capacity: mesh.instanceMatrix.count, prewarmed: result.prewarmed })
     );
   };
 
@@ -109,12 +142,24 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     };
   }, [geometry, material]);
 
+  // Re-apply the per-planet colours when the planet (or material) changes.
+  useEffect(() => {
+    profileAppliedRef.current = false;
+    useInitialPrewarmRef.current = true;
+  }, [profile, material]);
+
   useFrame(() => {
     const mesh = meshRef.current;
     if (!material || density <= 0) return;
 
-    // Drive wind (gated to freeze when animatedShaders is off).
-    updateGrassMaterial(material, performance.now() / 1000, getGraphicsQuality());
+    // Push per-planet colours once the shader has compiled (uniforms exist).
+    if (!profileAppliedRef.current && material.userData.shader) {
+      applyGrassProfileToMaterial(profile, material);
+      profileAppliedRef.current = true;
+    }
+
+    // Drive wind + sun (gated to freeze when animatedShaders is off).
+    updateGrassMaterial(material, performance.now() / 1000, getGraphicsQuality(), getSunDirection());
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {
