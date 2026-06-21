@@ -28,7 +28,7 @@
           "type": "TEMPORARY",
           "verification": {
             "dns": {
-              "checkTime": "2026-06-21T02:14:48.142630368Z",
+              "checkTime": "2026-06-21T02:17:48.667740841Z",
               "desired": [
                 {
                   "domainName": "_acme-challenge.paravoxia.com",
@@ -68,7 +68,7 @@
             "http": {
               "desired": "aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
               "discovered": "aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
-              "lastCheckTime": "2026-06-21T02:14:48.142630368Z",
+              "lastCheckTime": "2026-06-21T02:17:48.667740841Z",
               "path": "/.well-known/acme-challenge/aGeSqJwu1gBn52wZms6gkm8q0YdHHFJG3cqBhjlQCFNVqqDKlFkjC22uw1C8xWhZ"
             }
           }
@@ -80,7 +80,7 @@
         "name": "projects/paravox-game/sites/paravox-game/customDomains/paravoxia.com",
         "ownershipState": "OWNERSHIP_ACTIVE",
         "requiredDnsUpdates": {
-          "checkTime": "2026-06-21T02:14:34.302159248Z",
+          "checkTime": "2026-06-21T02:17:34.730404346Z",
           "desired": [
             {
               "domainName": "paravoxia.com",
@@ -160,7 +160,7 @@
           "type": "TEMPORARY",
           "verification": {
             "dns": {
-              "checkTime": "2026-06-21T02:14:39.095046135Z",
+              "checkTime": "2026-06-21T02:17:39.673841489Z",
               "desired": [
                 {
                   "domainName": "_acme-challenge.www.paravoxia.com",
@@ -190,7 +190,7 @@
             "http": {
               "desired": "n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
               "discovered": "n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA.M0-GObbb5ePi63ASQsPKBrDqfgayGnOWpyrEF0nHqug",
-              "lastCheckTime": "2026-06-21T02:14:39.095046135Z",
+              "lastCheckTime": "2026-06-21T02:17:39.673841489Z",
               "path": "/.well-known/acme-challenge/n9VCuDhrVPLRDVN3oV_RBMMV7Id4If5p1DLo9nDgpQzxjuEoByL5FfF8SbG4AyLA"
             }
           }
@@ -203,7 +203,7 @@
         "ownershipState": "OWNERSHIP_ACTIVE",
         "redirectTarget": "paravoxia.com",
         "requiredDnsUpdates": {
-          "checkTime": "2026-06-21T02:14:34.690510878Z",
+          "checkTime": "2026-06-21T02:17:35.173146323Z",
           "desired": [
             {
               "domainName": "www.paravoxia.com",
