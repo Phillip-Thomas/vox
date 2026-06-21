@@ -11,10 +11,13 @@ import {
   deriveWorldPreviewTraits,
   previewSurfaceValue
 } from '../utils/worldPreview';
+import { scheduleWorldPrewarm } from '../utils/worldGenCache';
+import { scheduleGrassInstancePrewarm } from '../utils/grassField';
 import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
 
 interface GalaxyImpostorsProps {
   currentCoordinate: WorldCoordinate;
+  planetSize: number;
 }
 
 interface PlanetImpostor {
@@ -295,7 +298,7 @@ function DistantPlanet({
   );
 }
 
-export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsProps) {
+export default function GalaxyImpostors({ currentCoordinate, planetSize }: GalaxyImpostorsProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   const planets = useMemo(
@@ -358,6 +361,10 @@ export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsPr
     if (changed) {
       targetedCoordRef.current = nextCoord;
       setTarget(nextCoord); // store no-ops on unchanged coord anyway
+      if (best) {
+        scheduleWorldPrewarm(planetSize, best.seed, { terrainData: true, waterFaces: true });
+        scheduleGrassInstancePrewarm(planetSize, best.seed);
+      }
     }
   });
 

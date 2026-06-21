@@ -16,6 +16,12 @@ interface VoxelAddOptions {
   supportsSurfaceResources?: boolean;
 }
 
+interface InitialTerrainPopulateOptions {
+  requestCollisions?: boolean;
+  originalTerrainByCoord?: OriginalTerrainMap;
+  initialTerrainMeshData?: InitialTerrainMeshData;
+}
+
 interface CollisionCallbacks {
   request: (x: number, y: number, z: number, worldId: number) => void;
   remove: (x: number, y: number, z: number, worldId: number) => void;
@@ -29,11 +35,26 @@ export interface TerrainVoxel {
   color: THREE.Color;
 }
 
+export interface OriginalTerrainData {
+  material: string;
+  color: THREE.Color;
+}
+
+export type OriginalTerrainMap = ReadonlyMap<string, OriginalTerrainData>;
+
+export interface InitialTerrainMeshData {
+  count: number;
+  matrices: Float32Array;
+  colors: Float32Array;
+  instanceData: Float32Array;
+}
+
 const tempMatrix = new THREE.Matrix4();
+const tempVector = new THREE.Vector3();
 
 export class EfficientVoxelSystem {
   private exposedVoxels = new Map<string, VoxelData>();
-  private originalTerrain = new Map<string, { material: string; color: THREE.Color }>();
+  private originalTerrain: OriginalTerrainMap = new Map();
   private deletedTerrain = new Set<string>();
   private slotToCoord = new Map<number, string>();
   private mesh: THREE.InstancedMesh | null = null;
@@ -57,7 +78,7 @@ export class EfficientVoxelSystem {
   reset() {
     this.worldId += 1;
     this.exposedVoxels.clear();
-    this.originalTerrain.clear();
+    this.originalTerrain = new Map();
     this.deletedTerrain.clear();
     this.slotToCoord.clear();
     this.collisionCallbacks = null;
@@ -114,13 +135,78 @@ export class EfficientVoxelSystem {
   }
 
   setOriginalTerrain(terrain: TerrainVoxel[]) {
-    this.originalTerrain.clear();
+    this.originalTerrain = EfficientVoxelSystem.buildOriginalTerrainMap(terrain);
+  }
+
+  populateInitialTerrain(
+    originalTerrain: TerrainVoxel[],
+    exposedTerrain: TerrainVoxel[],
+    options: InitialTerrainPopulateOptions = {}
+  ) {
+    this.originalTerrain = options.originalTerrainByCoord
+      ?? EfficientVoxelSystem.buildOriginalTerrainMap(originalTerrain);
+    this.exposedVoxels.clear();
+    this.deletedTerrain.clear();
+    this.slotToCoord.clear();
+
+    if (this.mesh) {
+      this.mesh.count = 0;
+    }
+    const shouldRequestCollisions = options.requestCollisions ?? true;
+    const meshCapacity = this.mesh?.instanceMatrix?.count ?? this.maxSlots;
+    const meshData = options.initialTerrainMeshData && options.initialTerrainMeshData.count >= exposedTerrain.length
+      ? options.initialTerrainMeshData
+      : undefined;
+
+    for (const voxel of exposedTerrain) {
+      const coordKey = EfficientVoxelSystem.coordKey(voxel.x, voxel.y, voxel.z);
+      if (this.exposedVoxels.has(coordKey)) continue;
+
+      const meshSlot = this.slotToCoord.size;
+      if (meshSlot >= meshCapacity) break;
+
+      const voxelData: VoxelData = {
+        position: [voxel.x, voxel.y, voxel.z],
+        material: voxel.material,
+        color: voxel.color.clone(),
+        meshSlot,
+        worldId: this.worldId,
+        supportsSurfaceResources: true
+      };
+
+      this.exposedVoxels.set(coordKey, voxelData);
+      this.slotToCoord.set(meshSlot, coordKey);
+      if (!meshData) {
+        this.writeMeshSlot(meshSlot, voxel.x, voxel.y, voxel.z, voxel.color, voxel.material);
+      }
+    }
+
+    const added = this.slotToCoord.size;
+    if (meshData) {
+      this.writeInitialMeshData(meshData, added);
+    }
+    this.editVersion += added;
+    this.markMeshDirty();
+
+    if (shouldRequestCollisions) {
+      for (const voxelData of this.exposedVoxels.values()) {
+        const [x, y, z] = voxelData.position;
+        this.collisionCallbacks?.request(x, y, z, this.worldId);
+      }
+    }
+
+    return added;
+  }
+
+  static buildOriginalTerrainMap(terrain: TerrainVoxel[]): Map<string, OriginalTerrainData> {
+    const terrainByCoord = new Map<string, OriginalTerrainData>();
     for (const voxel of terrain) {
-      this.originalTerrain.set(EfficientVoxelSystem.coordKey(voxel.x, voxel.y, voxel.z), {
+      terrainByCoord.set(EfficientVoxelSystem.coordKey(voxel.x, voxel.y, voxel.z), {
         material: voxel.material,
         color: voxel.color.clone()
       });
     }
+    return terrainByCoord;
   }
 
   wasOriginalTerrain(x: number, y: number, z: number) {
@@ -290,10 +376,15 @@ export class EfficientVoxelSystem {
   }
 
   private updateMeshSlot(slot: number, x: number, y: number, z: number, color: THREE.Color, material: string) {
+    this.writeMeshSlot(slot, x, y, z, color, material);
+    this.markMeshDirty();
+  }
+
+  private writeMeshSlot(slot: number, x: number, y: number, z: number, color: THREE.Color, material: string) {
     if (!this.mesh) return;
 
     tempMatrix.identity();
-    tempMatrix.setPosition(voxelCoordToWorld(x, y, z));
+    tempMatrix.setPosition(voxelCoordToWorld(x, y, z, tempVector));
     this.mesh.setMatrixAt(slot, tempMatrix);
     this.mesh.setColorAt(slot, color);
     this.mesh.count = Math.max(this.mesh.count, slot + 1);
@@ -302,12 +393,38 @@ export class EfficientVoxelSystem {
       // x = material id (consumed by the voxel shader's PBR LUT).
       // y = 6-bit face-occupancy mask -> per-corner baked AO in the vertex shader.
       this.instanceData.setXY(slot, materialId(material), this.computeFaceMask(x, y, z));
-      this.instanceData.needsUpdate = true;
+    }
+  }
+
+  private writeInitialMeshData(meshData: InitialTerrainMeshData, count: number) {
+    if (!this.mesh) return;
+
+    const matrixElements = count * 16;
+    this.mesh.instanceMatrix.array.set(meshData.matrices.subarray(0, matrixElements), 0);
+
+    const colorElements = count * 3;
+    if (!this.mesh.instanceColor || this.mesh.instanceColor.count < this.mesh.instanceMatrix.count) {
+      this.mesh.instanceColor = new THREE.InstancedBufferAttribute(
+        new Float32Array(this.mesh.instanceMatrix.count * 3),
+        3
+      );
+    }
+    this.mesh.instanceColor.array.set(meshData.colors.subarray(0, colorElements), 0);
+
+    if (this.instanceData) {
+      const instanceDataElements = count * 2;
+      this.instanceData.array.set(meshData.instanceData.subarray(0, instanceDataElements), 0);
     }
 
+    this.mesh.count = count;
+  }
+
+  private markMeshDirty() {
+    if (!this.mesh) return;
     this.invalidateMeshBounds();
     if (this.mesh.instanceMatrix) this.mesh.instanceMatrix.needsUpdate = true;
     if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
+    if (this.instanceData) this.instanceData.needsUpdate = true;
   }
 
   private releaseMeshSlot(slot: number) {

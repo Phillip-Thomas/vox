@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
-import { MATERIALS } from '../types/materials';
 import { createVoxelMaterial, updateVoxelMaterial } from '../utils/voxelMaterial';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getWorldGen } from '../utils/worldGenCache';
-import { TerrainVoxel, voxelSystem } from '../utils/efficientVoxelSystem';
+import { getWorldTerrainData } from '../utils/worldGenCache';
+import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { FACE_NORMALS } from '../utils/surfaceControls';
 import {
@@ -124,35 +123,10 @@ export default function EfficientPlanet({
     latestSurfaceUp.current.copy(surfaceUp ?? FACE_NORMALS.top);
   }, [surfaceUp]);
 
-  const originalTerrain = useMemo<TerrainVoxel[]>(() => {
-    return measureWarpMetric(
-      'planet:terrain_materialize',
-      () => {
-        const { generator, voxels } = getWorldGen(size, terrainSeed);
-
-        return voxels.map(position => {
-          const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
-          return {
-            ...position,
-            material,
-            color: MATERIALS[material].color.clone()
-          };
-        });
-      },
-      result => ({ voxels: result.length })
-    );
-  }, [size, terrainSeed]);
-
-  const initialVoxels = useMemo(() => {
-    return measureWarpMetric(
-      'planet:exposed_filter',
-      () => {
-        const terrainPositions = new Set(originalTerrain.map(voxel => coordKey(voxel.x, voxel.y, voxel.z)));
-        return originalTerrain.filter(voxel => isVoxelExposedInTerrain(voxel.x, voxel.y, voxel.z, terrainPositions));
-      },
-      result => ({ exposed: result.length, original: originalTerrain.length })
-    );
-  }, [originalTerrain]);
+  const { originalTerrain, originalTerrainByCoord, initialVoxels, initialTerrainMeshData } = useMemo(
+    () => getWorldTerrainData(size, terrainSeed),
+    [size, terrainSeed]
+  );
 
   const dynamicBufferSize = useMemo(() => {
     return Math.max(originalTerrain.length, initialVoxels.length, 5000);
@@ -241,6 +215,22 @@ export default function EfficientPlanet({
     batchTimeout.current = window.setTimeout(flushPendingCollisionBodies, 10);
   }, [flushPendingCollisionBodies, isWithinCollisionRange]);
 
+  const queueInitialCollisionBodies = useCallback(() => {
+    const activeWorldId = voxelSystem.getWorldId();
+    let queued = 0;
+
+    for (const [key, voxelData] of voxelSystem.getAllVoxels()) {
+      if (voxelData.worldId !== activeWorldId) continue;
+      const [x, y, z] = voxelData.position;
+      if (!isWithinCollisionRange(x, y, z)) continue;
+
+      pendingCollisionBodies.current.set(key, { x, y, z, worldId: activeWorldId });
+      queued++;
+    }
+
+    return queued;
+  }, [isWithinCollisionRange]);
+
   useEffect(() => {
     if (!meshRef.current) return undefined;
 
@@ -262,19 +252,27 @@ export default function EfficientPlanet({
         voxelSystem.expandCapacity(dynamicBufferSize);
         voxelSystem.setMesh(activeMesh);
         voxelSystem.setCollisionCallbacks({ request: requestCollisionBody, remove: removeCollisionBody });
-        voxelSystem.setOriginalTerrain(originalTerrain);
         efficientPlanetMesh.current = activeMesh;
 
-        for (const voxel of initialVoxels) {
-          voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
-        }
-
+        const added = voxelSystem.populateInitialTerrain(
+          originalTerrain,
+          initialVoxels,
+          {
+            initialTerrainMeshData,
+            originalTerrainByCoord,
+            requestCollisions: false
+          }
+        );
+        const queuedColliders = queueInitialCollisionBodies();
         flushPendingCollisionBodies();
+        return { added, queuedColliders };
       },
-      () => ({
+      result => ({
         buffer: dynamicBufferSize,
         original: originalTerrain.length,
-        exposed: initialVoxels.length
+        exposed: initialVoxels.length,
+        added: result.added,
+        queuedColliders: result.queuedColliders
       })
     );
     return () => {
@@ -291,7 +289,17 @@ export default function EfficientPlanet({
       }
       voxelSystem.reset();
     };
-  }, [dynamicBufferSize, flushPendingCollisionBodies, initialVoxels, originalTerrain, removeCollisionBody, requestCollisionBody]);
+  }, [
+    dynamicBufferSize,
+    flushPendingCollisionBodies,
+    initialVoxels,
+    initialTerrainMeshData,
+    originalTerrain,
+    originalTerrainByCoord,
+    queueInitialCollisionBodies,
+    removeCollisionBody,
+    requestCollisionBody
+  ]);
 
   const syncCollisionBodies = useCallback(() => {
     const activeWorldId = voxelSystem.getWorldId();
@@ -385,17 +393,4 @@ export default function EfficientPlanet({
       ))}
     </>
   );
-}
-
-function isVoxelExposedInTerrain(x: number, y: number, z: number, terrainPositions: Set<string>) {
-  const neighbors = [
-    [x + 1, y, z],
-    [x - 1, y, z],
-    [x, y + 1, z],
-    [x, y - 1, z],
-    [x, y, z + 1],
-    [x, y, z - 1]
-  ];
-
-  return neighbors.some(([nx, ny, nz]) => !terrainPositions.has(coordKey(nx, ny, nz)));
 }

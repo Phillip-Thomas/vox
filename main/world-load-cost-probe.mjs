@@ -23,6 +23,7 @@ if (!executablePath) {
 
 const url = process.argv[2] || 'http://127.0.0.1:5178/';
 const [destX = '1', destY = '0'] = (process.argv[3] || '1,0').split(',');
+const prewarm = process.argv.includes('--prewarm') || process.env.WORLD_LOAD_PREWARM === '1';
 
 const browser = await chromium.launch({
   executablePath,
@@ -40,12 +41,19 @@ page.on('pageerror', error => console.log('PAGEERR', error.message));
 
 await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-const report = await page.evaluate(async ([rawX, rawY]) => {
+const report = await page.evaluate(async ([rawX, rawY, shouldPrewarm]) => {
   const { createCurrentWorld } = await import('/src/utils/worldCoordinates.ts');
-  const { getWorldGen, clearWorldGenCache } = await import('/src/utils/worldGenCache.ts');
+  const { getWorldGen, getWorldTerrainData, clearWorldGenCache, prewarmWorldGen } = await import('/src/utils/worldGenCache.ts');
   const { createWorldArrivalPose } = await import('/src/utils/worldArrival.ts');
   const { MATERIALS } = await import('/src/types/materials.ts');
   const { buildWaterFaces } = await import('/src/utils/waterVoxels.ts');
+  const { getGraphicsQuality } = await import('/src/config/graphicsSettings.ts');
+  const { buildGrassProfile } = await import('/src/utils/grassProfile.ts');
+  const {
+    applyGrassInstanceBuffer,
+    getPrewarmedGrassInstanceBuffer,
+    prewarmGrassInstancesForWorld
+  } = await import('/src/utils/grassField.ts');
   const { buildTreeProfile, paramsFromProfile } = await import('/src/utils/treeProfile.ts');
   const { generateTree } = await import('/src/utils/treeGen.ts');
   const { EfficientVoxelSystem } = await import('/src/utils/efficientVoxelSystem.ts');
@@ -81,13 +89,27 @@ const report = await page.evaluate(async ([rawX, rawY]) => {
   }
 
   clearWorldGenCache();
+  if (shouldPrewarm) {
+    time(
+      'prewarm:worldgen_terrain_water_faces',
+      () => prewarmWorldGen(size, world.seed, { terrainData: true, waterFaces: true }),
+      result => ({
+        voxels: result.voxels.length,
+        original: result.originalTerrain?.length ?? 0,
+        exposed: result.initialVoxels?.length ?? 0,
+        meshInstances: result.initialTerrainMeshData?.count ?? 0,
+        faces: result.waterFaces?.length ?? 0
+      })
+    );
+  }
+
   const coldWorldGen = time(
-    'worldgen:cache_miss_build',
+    shouldPrewarm ? 'worldgen:get_after_prewarm' : 'worldgen:cache_miss_build',
     () => getWorldGen(size, world.seed),
     result => ({ voxels: result.voxels.length })
   );
 
-  time(
+  const arrivalPose = time(
     'scene:arrival_pose_cached',
     () => createWorldArrivalPose(size, world.seed),
     pose => ({
@@ -97,36 +119,26 @@ const report = await page.evaluate(async ([rawX, rawY]) => {
     })
   );
 
-  const originalTerrain = time(
-    'planet:terrain_materialize',
-    () => coldWorldGen.voxels.map(position => {
-      const material = coldWorldGen.generator.generateMaterialForPosition(position.x, position.y, position.z);
-      return {
-        ...position,
-        material,
-        color: MATERIALS[material].color.clone()
-      };
-    }),
-    result => ({ voxels: result.length })
+  const terrainData = time(
+    shouldPrewarm ? 'planet:get_terrain_after_prewarm' : 'planet:get_terrain_data',
+    () => getWorldTerrainData(size, world.seed),
+    result => ({
+      original: result.originalTerrain.length,
+      exposed: result.initialVoxels.length
+    })
   );
-
-  const initialVoxels = time(
-    'planet:exposed_filter',
-    () => {
-      const terrainPositions = new Set(originalTerrain.map(voxel => coordKey(voxel.x, voxel.y, voxel.z)));
-      return originalTerrain.filter(voxel => isVoxelExposedInTerrain(voxel.x, voxel.y, voxel.z, terrainPositions));
-    },
-    result => ({ exposed: result.length, original: originalTerrain.length })
-  );
+  const { originalTerrain, originalTerrainByCoord, initialVoxels } = terrainData;
+  const { initialTerrainMeshData } = terrainData;
 
   time(
     'planet:voxel_system_populate_fake_mesh',
     () => {
       const system = new EfficientVoxelSystem(1000);
+      const capacity = Math.max(originalTerrain.length, initialVoxels.length, 5000);
       const mesh = {
         count: 0,
-        instanceMatrix: { count: Math.max(originalTerrain.length, initialVoxels.length, 5000), needsUpdate: false },
-        instanceColor: { needsUpdate: false },
+        instanceMatrix: { count: capacity, needsUpdate: false, array: new Float32Array(capacity * 16) },
+        instanceColor: { count: capacity, needsUpdate: false, array: new Float32Array(capacity * 3) },
         geometry: { setAttribute() {} },
         setMatrixAt() {},
         setColorAt() {},
@@ -136,15 +148,22 @@ const report = await page.evaluate(async ([rawX, rawY]) => {
       system.reset();
       system.expandCapacity(mesh.instanceMatrix.count);
       system.setMesh(mesh);
-      system.setOriginalTerrain(originalTerrain);
-      for (const voxel of initialVoxels) {
-        system.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
-      }
-      return system.getStats();
+      const added = system.populateInitialTerrain(
+        originalTerrain,
+        initialVoxels,
+        {
+          initialTerrainMeshData,
+          originalTerrainByCoord,
+          requestCollisions: false
+        }
+      );
+      return { ...system.getStats(), added };
     },
     stats => ({
       exposed: stats.exposedVoxels,
       activeSlots: stats.activeSlots,
+      added: stats.added,
+      meshInstances: initialTerrainMeshData.count,
       maxSlots: stats.maxSlots
     })
   );
@@ -154,6 +173,43 @@ const report = await page.evaluate(async ([rawX, rawY]) => {
     () => buildWaterFaces(size, world.seed),
     result => ({ faces: result.length })
   );
+
+  const grassBuffer = time(
+    'grass:prewarm_instances',
+    () => prewarmGrassInstancesForWorld(size, world.seed, arrivalPose.approachPosition),
+    result => ({
+      count: result?.count ?? 0,
+      voxelCount: result?.voxelCount ?? 0
+    })
+  );
+
+  const grassProfile = buildGrassProfile(world.seed);
+  const quality = getGraphicsQuality();
+  const cachedGrass = getPrewarmedGrassInstanceBuffer(
+    world.seed,
+    quality.grassDensity,
+    quality.grassMaxDistance,
+    arrivalPose.approachPosition,
+    grassProfile
+  ) ?? grassBuffer;
+
+  if (cachedGrass) {
+    time(
+      'grass:apply_prewarmed_instances_fake_mesh',
+      () => {
+        const mesh = {
+          count: 0,
+          instanceMatrix: {
+            count: Math.max(cachedGrass.count + 256, 1),
+            needsUpdate: false,
+            array: new Float32Array(Math.max(cachedGrass.count + 256, 1) * 16)
+          }
+        };
+        return applyGrassInstanceBuffer(mesh, cachedGrass);
+      },
+      result => ({ count: result.count, voxelCount: result.voxelCount })
+    );
+  }
 
   const profile = time(
     'tree:profile',
@@ -174,9 +230,10 @@ const report = await page.evaluate(async ([rawX, rawY]) => {
   return {
     coordinate: `${world.coordinate.x},${world.coordinate.y}`,
     seed: world.seed,
+    prewarmed: shouldPrewarm,
     rows: rows.sort((a, b) => b.durationMs - a.durationMs)
   };
-}, [destX, destY]);
+}, [destX, destY, prewarm]);
 
 await browser.close();
 console.log(JSON.stringify(report, null, 2));

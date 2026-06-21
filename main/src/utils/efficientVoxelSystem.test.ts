@@ -1,6 +1,31 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as THREE from 'three';
-import { EfficientVoxelSystem } from './efficientVoxelSystem';
+import { EfficientVoxelSystem, type InitialTerrainMeshData, type TerrainVoxel } from './efficientVoxelSystem';
+
+function createTestMesh(capacity: number) {
+  const mesh = new THREE.InstancedMesh(
+    new THREE.BoxGeometry(1.98, 1.98, 1.98),
+    new THREE.MeshBasicMaterial({ vertexColors: true }),
+    capacity
+  );
+  mesh.count = 0;
+  return mesh;
+}
+
+function sliceAttribute(attribute: THREE.BufferAttribute | THREE.InterleavedBufferAttribute, count: number) {
+  return Array.from(attribute.array.slice(0, count * attribute.itemSize));
+}
+
+function captureInitialTerrainMeshData(mesh: THREE.InstancedMesh, count: number): InitialTerrainMeshData {
+  return {
+    count,
+    matrices: new Float32Array(mesh.instanceMatrix.array.slice(0, count * 16)),
+    colors: new Float32Array(mesh.instanceColor!.array.slice(0, count * 3)),
+    instanceData: new Float32Array(
+      (mesh.geometry.getAttribute('aInstanceData') as THREE.BufferAttribute).array.slice(0, count * 2)
+    )
+  };
+}
 
 describe('EfficientVoxelSystem', () => {
   it('resets all lifecycle state and increments world id', () => {
@@ -104,11 +129,7 @@ describe('EfficientVoxelSystem', () => {
 
   it('invalidates cached instanced mesh bounds when voxels are added after an empty bounds pass', () => {
     const system = new EfficientVoxelSystem(10);
-    const mesh = new THREE.InstancedMesh(
-      new THREE.BoxGeometry(1.98, 1.98, 1.98),
-      new THREE.MeshBasicMaterial(),
-      10
-    );
+    const mesh = createTestMesh(10);
     const color = new THREE.Color('gray');
 
     mesh.count = 0;
@@ -133,5 +154,144 @@ describe('EfficientVoxelSystem', () => {
 
     expect(hit?.instanceId).toBe(0);
     expect(system.getCoordForSlot(hit?.instanceId ?? -1)).toEqual({ x: 0, y: 0, z: 5 });
+  });
+
+  it('bulk initial terrain population matches one-by-one voxel adds', () => {
+    const terrain: TerrainVoxel[] = [
+      { x: 0, y: 0, z: 0, material: 'stone', color: new THREE.Color(0x858c90) },
+      { x: 1, y: 0, z: 0, material: 'grass', color: new THREE.Color(0x7cb342) },
+      { x: 0, y: 1, z: 0, material: 'gold', color: new THREE.Color(0xffd700) },
+      { x: 0, y: 0, z: 1, material: 'dirt', color: new THREE.Color(0x8b4513) }
+    ];
+    const initialVoxels = terrain.slice();
+
+    const sequential = new EfficientVoxelSystem(10);
+    const sequentialMesh = createTestMesh(10);
+    const sequentialRequest = vi.fn();
+    sequential.setMesh(sequentialMesh);
+    sequential.setCollisionCallbacks({ request: sequentialRequest, remove: vi.fn() });
+    sequential.setOriginalTerrain(terrain);
+    for (const voxel of initialVoxels) {
+      sequential.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
+    }
+
+    const bulk = new EfficientVoxelSystem(10);
+    const bulkMesh = createTestMesh(10);
+    const bulkRequest = vi.fn();
+    bulk.setMesh(bulkMesh);
+    bulk.setCollisionCallbacks({ request: bulkRequest, remove: vi.fn() });
+    const added = bulk.populateInitialTerrain(terrain, initialVoxels);
+
+    expect(added).toBe(initialVoxels.length);
+    expect(bulk.getSnapshot()).toEqual(sequential.getSnapshot());
+    expect(bulk.getStats()).toEqual(sequential.getStats());
+    expect(bulkRequest.mock.calls).toEqual(sequentialRequest.mock.calls);
+
+    for (let slot = 0; slot < initialVoxels.length; slot++) {
+      expect(bulk.getCoordForSlot(slot)).toEqual(sequential.getCoordForSlot(slot));
+    }
+
+    for (const voxel of initialVoxels) {
+      const sequentialVoxel = sequential.getVoxel(voxel.x, voxel.y, voxel.z);
+      const bulkVoxel = bulk.getVoxel(voxel.x, voxel.y, voxel.z);
+      expect(bulkVoxel?.position).toEqual(sequentialVoxel?.position);
+      expect(bulkVoxel?.material).toBe(sequentialVoxel?.material);
+      expect(bulkVoxel?.color.getHex()).toBe(sequentialVoxel?.color.getHex());
+      expect(bulkVoxel?.supportsSurfaceResources).toBe(true);
+    }
+
+    expect(sequentialMesh.count).toBe(initialVoxels.length);
+    expect(bulkMesh.count).toBe(sequentialMesh.count);
+    expect(sliceAttribute(bulkMesh.instanceMatrix, initialVoxels.length))
+      .toEqual(sliceAttribute(sequentialMesh.instanceMatrix, initialVoxels.length));
+    expect(sliceAttribute(bulkMesh.instanceColor!, initialVoxels.length))
+      .toEqual(sliceAttribute(sequentialMesh.instanceColor!, initialVoxels.length));
+    expect(sliceAttribute(
+      bulkMesh.geometry.getAttribute('aInstanceData') as THREE.BufferAttribute,
+      initialVoxels.length
+    )).toEqual(sliceAttribute(
+      sequentialMesh.geometry.getAttribute('aInstanceData') as THREE.BufferAttribute,
+      initialVoxels.length
+    ));
+  });
+
+  it('bulk initial terrain can defer collision requests for single-pass caller queuing', () => {
+    const system = new EfficientVoxelSystem(2);
+    const mesh = createTestMesh(2);
+    const request = vi.fn();
+    const terrain: TerrainVoxel[] = [
+      { x: 0, y: 0, z: 0, material: 'stone', color: new THREE.Color('gray') },
+      { x: 1, y: 0, z: 0, material: 'stone', color: new THREE.Color('gray') },
+      { x: 2, y: 0, z: 0, material: 'stone', color: new THREE.Color('gray') }
+    ];
+
+    system.setMesh(mesh);
+    system.setCollisionCallbacks({ request, remove: vi.fn() });
+
+    expect(system.populateInitialTerrain(terrain, terrain, { requestCollisions: false })).toBe(2);
+    expect(request).not.toHaveBeenCalled();
+    expect(system.getSnapshot().activeSlots).toBe(2);
+    expect(system.getEditVersion()).toBe(2);
+  });
+
+  it('bulk initial terrain can install precomputed mesh buffers exactly', () => {
+    const terrain: TerrainVoxel[] = [
+      { x: 0, y: 0, z: 0, material: 'stone', color: new THREE.Color(0x858c90) },
+      { x: 1, y: 0, z: 0, material: 'grass', color: new THREE.Color(0x7cb342) },
+      { x: 0, y: 1, z: 0, material: 'gold', color: new THREE.Color(0xffd700) },
+      { x: 0, y: 0, z: 1, material: 'dirt', color: new THREE.Color(0x8b4513) }
+    ];
+
+    const sequential = new EfficientVoxelSystem(10);
+    const sequentialMesh = createTestMesh(10);
+    sequential.setMesh(sequentialMesh);
+    sequential.setOriginalTerrain(terrain);
+    for (const voxel of terrain) {
+      sequential.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
+    }
+
+    const meshData = captureInitialTerrainMeshData(sequentialMesh, terrain.length);
+    const bulk = new EfficientVoxelSystem(10);
+    const bulkMesh = createTestMesh(10);
+    bulk.setMesh(bulkMesh);
+    const added = bulk.populateInitialTerrain(terrain, terrain, {
+      initialTerrainMeshData: meshData,
+      originalTerrainByCoord: EfficientVoxelSystem.buildOriginalTerrainMap(terrain),
+      requestCollisions: false
+    });
+
+    expect(added).toBe(terrain.length);
+    expect(sliceAttribute(bulkMesh.instanceMatrix, terrain.length))
+      .toEqual(sliceAttribute(sequentialMesh.instanceMatrix, terrain.length));
+    expect(sliceAttribute(bulkMesh.instanceColor!, terrain.length))
+      .toEqual(sliceAttribute(sequentialMesh.instanceColor!, terrain.length));
+    expect(sliceAttribute(
+      bulkMesh.geometry.getAttribute('aInstanceData') as THREE.BufferAttribute,
+      terrain.length
+    )).toEqual(sliceAttribute(
+      sequentialMesh.geometry.getAttribute('aInstanceData') as THREE.BufferAttribute,
+      terrain.length
+    ));
+  });
+
+  it('does not mutate a supplied shared original-terrain map on reset', () => {
+    const system = new EfficientVoxelSystem(4);
+    const terrain: TerrainVoxel[] = [
+      { x: 0, y: 0, z: 0, material: 'stone', color: new THREE.Color('gray') },
+      { x: 1, y: 0, z: 0, material: 'grass', color: new THREE.Color('green') }
+    ];
+    const sharedTerrain = EfficientVoxelSystem.buildOriginalTerrainMap(terrain);
+
+    system.populateInitialTerrain(terrain, terrain, {
+      originalTerrainByCoord: sharedTerrain,
+      requestCollisions: false
+    });
+
+    expect(system.wasOriginalTerrain(1, 0, 0)).toBe(true);
+    system.reset();
+
+    expect(sharedTerrain.size).toBe(terrain.length);
+    expect(sharedTerrain.get('1,0,0')?.material).toBe('grass');
+    expect(sharedTerrain.get('1,0,0')?.color.getHex()).toBe(new THREE.Color('green').getHex());
   });
 });

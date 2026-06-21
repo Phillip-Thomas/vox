@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
 import { buildWaterVoxels, buildWaterFaces, FACE_NORMALS } from './waterVoxels';
+import { clearWorldGenCache } from './worldGenCache';
 
 // Neighbour offsets indexed to match FACE_NORMALS / getExposedWaterFaces.
 const FACE_OFFSETS: ReadonlyArray<readonly [number, number, number]> = [
@@ -19,6 +20,17 @@ const worldConfig = {
 
 function makeGenerator() {
   return new ProceduralWorldGenerator(worldConfig, createTerrainConfig(12345, worldConfig.planetRadius));
+}
+
+function makeGeneratorFor(size: number, seed: number) {
+  const planetRadius = size / 2;
+  return new ProceduralWorldGenerator(
+    {
+      planetRadius,
+      coreRadiusPercent: 0.15
+    },
+    createTerrainConfig(seed, planetRadius)
+  );
 }
 
 describe('water voxel classification', () => {
@@ -81,6 +93,17 @@ describe('water voxel classification', () => {
     const c = buildWaterVoxels(24, 54321);
     expect(JSON.stringify(a)).not.toEqual(JSON.stringify(c));
   });
+
+  it.each([12345, 54321, 13579])(
+    'cached buildWaterVoxels is byte-equivalent to a fresh generator for seed %i',
+    (seed) => {
+      const size = 24;
+      clearWorldGenCache();
+      const cached = buildWaterVoxels(size, seed);
+      const fresh = makeGeneratorFor(size, seed).getExposedWaterVoxels();
+      expect(cached).toEqual(fresh);
+    }
+  );
 });
 
 describe('water surface faces', () => {
@@ -147,6 +170,17 @@ describe('water surface faces', () => {
     const c = buildWaterFaces(24, 54321);
     expect(JSON.stringify(a)).not.toEqual(JSON.stringify(c));
   });
+
+  it.each([12345, 54321, 13579])(
+    'cached buildWaterFaces is byte-equivalent to a fresh generator for seed %i',
+    (seed) => {
+      const size = 24;
+      clearWorldGenCache();
+      const cached = buildWaterFaces(size, seed);
+      const fresh = makeGeneratorFor(size, seed).getExposedWaterFaces();
+      expect(cached).toEqual(fresh);
+    }
+  );
 });
 
 // Part A guarantee: EVERY terrain preset must produce visible water at the real
