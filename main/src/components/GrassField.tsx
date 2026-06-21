@@ -55,6 +55,10 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   const profile = useMemo(() => buildGrassProfile(terrainSeed), [terrainSeed]);
   const profileAppliedRef = useRef(false);
   const useInitialPrewarmRef = useRef(true);
+  // Player position at the last cull re-center; we re-run the (alloc-free) rebuild
+  // once the player has moved enough so the distance cull FOLLOWS the camera and
+  // grass streams in continuously (mirrors TreeField), not only on a terrain edit.
+  const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
 
   // Headroom (extra blade slots) so small grass-count fluctuations from terrain
   // edits don't force a buffer reallocation every time.
@@ -172,7 +176,13 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
         // Fits in the current buffer: rebuild in place, no realloc.
         signatureRef.current = sig;
         rebuild();
+        if (playerPosition) lastBucketPos.current.copy(playerPosition);
       }
+    } else if (mesh && playerPosition && lastBucketPos.current.distanceToSquared(playerPosition) > 100) {
+      // Player moved >10u since the last re-center — re-run the distance cull so
+      // grass appears in newly-entered areas without needing a terrain edit.
+      lastBucketPos.current.copy(playerPosition);
+      rebuild();
     }
   });
 

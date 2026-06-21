@@ -114,6 +114,15 @@ export function getSurfaceState(face: CubeFace, phase: SurfacePhase = 'stable', 
   };
 }
 
+// Rotation that takes the canonical "up" (+Y, the identity body orientation) to
+// the given surface up. Used to spawn the player body already aligned to whatever
+// face it lands on, instead of identity (top) — otherwise the capsule is tilted
+// and pokes into the first-person view after exiting the ship on another face.
+const TOP_UP = new THREE.Vector3(0, 1, 0);
+export function quaternionForUp(up: THREE.Vector3): THREE.Quaternion {
+  return new THREE.Quaternion().setFromUnitVectors(TOP_UP, tempVector.copy(up).normalize());
+}
+
 export function gravityTupleForFace(face: CubeFace): [number, number, number] {
   const gravity = FACE_NORMALS[face].clone().multiplyScalar(-GRAVITY_STRENGTH);
   return [gravity.x, gravity.y, gravity.z];

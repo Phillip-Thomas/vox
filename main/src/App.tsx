@@ -77,7 +77,12 @@ const App: React.FC = () => {
         return createCurrentWorld({ x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) });
       }
     } catch { /* ignore */ }
-    return createCurrentWorld({ x: 0, y: 0 });
+    // No ?world= override -> spawn on a RANDOM planet each fresh load (not 0,0),
+    // mirroring the Random button's range, so every session starts somewhere new.
+    return createCurrentWorld({
+      x: Math.floor(Math.random() * 201) - 100,
+      y: Math.floor(Math.random() * 201) - 100
+    });
   });
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
   const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');

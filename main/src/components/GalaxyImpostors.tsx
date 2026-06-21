@@ -11,8 +11,6 @@ import {
   deriveWorldPreviewTraits,
   previewSurfaceValue
 } from '../utils/worldPreview';
-import { scheduleWorldPrewarm } from '../utils/worldGenCache';
-import { scheduleGrassInstancePrewarm } from '../utils/grassField';
 import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
 
 interface GalaxyImpostorsProps {
@@ -298,7 +296,7 @@ function DistantPlanet({
   );
 }
 
-export default function GalaxyImpostors({ currentCoordinate, planetSize }: GalaxyImpostorsProps) {
+export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   const planets = useMemo(
@@ -361,10 +359,11 @@ export default function GalaxyImpostors({ currentCoordinate, planetSize }: Galax
     if (changed) {
       targetedCoordRef.current = nextCoord;
       setTarget(nextCoord); // store no-ops on unchanged coord anyway
-      if (best) {
-        scheduleWorldPrewarm(planetSize, best.seed, { terrainData: true, waterFaces: true });
-        scheduleGrassInstancePrewarm(planetSize, best.seed);
-      }
+      // NOTE: no prewarm here. Prewarming on every aim-target change ran heavy
+      // SYNCHRONOUS world gen (terrain materialize + water flood fill) and froze
+      // the frame whenever you panned across impostors — worse than the one-time
+      // warp load. The actual world swap happens at the warp white-out midpoint
+      // (spaceFlight arrival handler), which already masks that gen.
     }
   });
 

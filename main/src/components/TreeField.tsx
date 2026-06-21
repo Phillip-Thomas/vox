@@ -75,7 +75,7 @@ function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
  * on re-render); count is owned imperatively in the fill + self-healed in
  * useFrame across all meshes.
  */
-export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProps) {
+export default function TreeField({ planetSize, terrainSeed, playerPosition }: TreeFieldProps) {
   const density = getGraphicsQuality().treeDensity;
 
   // Per-planet species: profile from terrainSeed ONLY.
@@ -155,7 +155,12 @@ export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProp
     const quality = getGraphicsQuality();
     const maxDist = quality.treeMaxDistance;
     const maxDistSq = maxDist * maxDist;
-    const impostorDist = maxDist * IMPOSTOR_FRAC;
+    // Full-geometry (near) trees must reach at least the longest line across a
+    // cube face (~face diagonal ≈ planetSize*1.5) so trees don't pop to flat
+    // impostors within a single face. Floor the impostor cutover at that, clamped
+    // to maxDist (so impostors still exist beyond it; LOW just renders all-near).
+    const nearFloor = Math.min(maxDist, planetSize * 1.5);
+    const impostorDist = Math.max(maxDist * IMPOSTOR_FRAC, nearFloor);
     const impostorDistSq = impostorDist * impostorDist;
     const cap = trunk.instanceMatrix.count;
 

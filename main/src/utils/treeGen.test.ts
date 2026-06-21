@@ -1,12 +1,62 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { generateTree, DEFAULT_TREE_PARAMS } from './treeGen';
+import { generateTree, DEFAULT_TREE_PARAMS, selectLeafCandidates, GrowNode } from './treeGen';
+
+function node(order: number, dist: number, parent: number): GrowNode {
+  return { pos: new THREE.Vector3(), order, dist, parent };
+}
 
 function posArray(geo: THREE.BufferGeometry): Float32Array {
   return (geo.attributes.position as THREE.BufferAttribute).array as Float32Array;
 }
 
+describe('selectLeafCandidates', () => {
+  // Frond: trunk (order 0) + inner rib (order 0) + outer rib (order 1).
+  const frond: GrowNode[] = [
+    node(0, 0, -1),           // 0 root/trunk
+    node(0, 1, 0),            // 1 trunk
+    node(0, 2, 1),            // 2 inner rib (bare)
+    node(1, 3, 2),            // 3 outer rib (foliage)
+    node(1, 4, 3)             // 4 outer rib tip (foliage)
+  ];
+
+  it('frond leaves only on order>=1 nodes (never the bare trunk/inner rib)', () => {
+    const c = selectLeafCandidates(frond, 'frond');
+    expect(c.length).toBeGreaterThan(0);
+    for (const i of c) expect(frond[i].order).toBeGreaterThanOrEqual(1);
+    // the bare trunk/inner-rib indices must be excluded
+    expect(c).not.toContain(1);
+    expect(c).not.toContain(2);
+  });
+
+  it('weeping/wispy leaves never on the trunk (order 0)', () => {
+    const tree: GrowNode[] = [
+      node(0, 0, -1), node(0, 1, 0), node(0, 2, 1), // trunk
+      node(1, 3, 2), node(2, 5, 3)                  // branch + far tip
+    ];
+    for (const sil of ['weeping', 'wispy'] as const) {
+      const c = selectLeafCandidates(tree, sil);
+      for (const i of c) expect(tree[i].order).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('round keeps the default tip/twiggy rule (unchanged approved look)', () => {
+    const tree: GrowNode[] = [
+      node(0, 0, -1), node(0, 1, 0), node(1, 2, 1), node(2, 3, 2) // tip at order 2
+    ];
+    const c = selectLeafCandidates(tree, 'round');
+    expect(c).toContain(3); // the tip
+  });
+});
+
 describe('treeGen', () => {
+  it('frond and weeping trees still produce non-empty leaf geometry', () => {
+    for (const silhouette of ['frond', 'weeping'] as const) {
+      const { leafGeometry } = generateTree(777, { ...DEFAULT_TREE_PARAMS, silhouette });
+      expect(leafGeometry.attributes.position.count).toBeGreaterThan(0);
+    }
+  });
+
   it('produces non-empty trunk and leaf geometry', () => {
     const { trunkGeometry, leafGeometry } = generateTree(12345);
     expect(trunkGeometry.attributes.position.count).toBeGreaterThan(0);
