@@ -213,11 +213,11 @@ function applyDayPhase(
   const night = 1.0 - daylight;
   // Fade in only once the moon is actually above the horizon.
   const moonUp = smoothstep(-0.05, 0.25, moonDirection.y);
-  moonLight.intensity = night * moonUp * 0.45;
+  moonLight.intensity = night * moonUp * 0.75;
   moonLight.color.copy(moonColor);
 
   // --- Ambient (fill) light ---
-  ambient.intensity = 0.18 + daylight * 0.42;
+  ambient.intensity = 0.24 + daylight * 0.42;
   ambient.color.copy(nightAmbient).lerp(dayAmbient, daylight);
 
   // --- Fog color: night navy -> day blue, warming at golden hour ---
