@@ -1,0 +1,33 @@
+{
+  "label": "treedbg",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "tree",
+      "world": "-1,-70",
+      "day": 0.25,
+      "resolved": "tree",
+      "metrics": {
+        "fps": 13,
+        "p50": 16.7,
+        "p95": 17.7,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "underCanopy",
+      "world": "-1,-70",
+      "day": 0.25,
+      "resolved": "underCanopy",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

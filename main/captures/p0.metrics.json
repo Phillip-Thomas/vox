@@ -1,0 +1,54 @@
+{
+  "label": "p0",
+  "url": "http://localhost:5173/?agent=1&world=0%2C0&dayphase=0.25&profile=HIGH",
+  "world": "0,0",
+  "day": "0.25",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "overhead",
+      "resolved": "overhead",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 16.9,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "underCanopy",
+      "resolved": "underCanopy",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "coast",
+      "resolved": "coast",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "horizon",
+      "resolved": "horizon",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

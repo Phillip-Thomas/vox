@@ -1,0 +1,20 @@
+{
+  "label": "treebright",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "-1_-70-tree-bare-canopy",
+      "world": "-1,-70",
+      "day": 0.25,
+      "resolved": "-1_-70-tree-bare-canopy",
+      "metrics": {
+        "fps": 7,
+        "p50": 16.7,
+        "p95": 18.4,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

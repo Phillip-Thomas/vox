@@ -1,0 +1,33 @@
+{
+  "label": "umbclose",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "tree",
+      "world": "99,-4",
+      "day": 0.2135,
+      "resolved": "tree",
+      "metrics": {
+        "fps": 13,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "underCanopy",
+      "world": "99,-4",
+      "day": 0.2135,
+      "resolved": "underCanopy",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 16.9,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

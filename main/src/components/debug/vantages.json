@@ -1,0 +1,58 @@
+[
+  {
+    "name": "-2_9-face-edge-cliff",
+    "world": [-2, 9],
+    "day": 0.0977,
+    "pos": [5.4, 52.989, -50.181],
+    "quat": [0.0309, -0.7406, 0.0341, 0.6704],
+    "reason": "nice view of the edge of a world face where we can nearly see down the cliff... sky is also very visible"
+  },
+  {
+    "name": "-2_9-ship",
+    "world": [-2, 9],
+    "day": 0.3491,
+    "pos": [13.947, 52.989, -6.389],
+    "quat": [-0.097, 0.5529, 0.065, 0.825],
+    "reason": "good view of the ship"
+  },
+  {
+    "name": "-1_-70-approach-grass-grid",
+    "world": [-1, -70],
+    "day": 0.4734,
+    "pos": [-8.173, 101.244, -12.206],
+    "quat": [-0.055, 0.7635, 0.6387, -0.0777],
+    "reason": "angle of the approach as we are about to land... demonstrates the grid like nature of grass I soon hope to fix"
+  },
+  {
+    "name": "-1_-70-sky-star-rings",
+    "world": [-1, -70],
+    "day": 0.6251,
+    "pos": [-8.405, 101.238, -12.109],
+    "quat": [0.0865, 0.7484, 0.2114, 0.6226],
+    "reason": "view of the issue with the sky where although most is beautiful there is a point where the stars become too obviously patterned in concentric circles"
+  },
+  {
+    "name": "-1_-70-tree-bare-canopy",
+    "world": [-1, -70],
+    "day": 0.8533,
+    "pos": [10.036, 52.989, -0.802],
+    "quat": [0.0338, -0.639, 0.0281, 0.7679],
+    "reason": "view of one type of tree where it seems the canopy is upside down mathematically and the branches are all bare"
+  },
+  {
+    "name": "-1_-70-water-edge-misalign",
+    "world": [-1, -70],
+    "day": 0.1235,
+    "pos": [28.651, 52.989, -10.651],
+    "quat": [-0.1015, -0.4152, -0.0467, 0.9029],
+    "reason": "view of a body of water, and also highlights an issue where water voxels on the edge of a face dont align with the rest, they sit higher for some reason"
+  },
+  {
+    "name": "99_-4-upside-down-canopy",
+    "world": [99, -4],
+    "day": 0.2135,
+    "pos": [16.806, 50.989, 15.782],
+    "quat": [-0.0169, 0.955, 0.0554, 0.291],
+    "reason": "more examples of the upside down canopy trees... seems to only be specific to this species"
+  }
+]

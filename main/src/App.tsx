@@ -12,6 +12,7 @@ import { getEngageCharge, getCrashFlash } from './components/ShipController.tsx'
 import { getJetpackFuel } from './components/EfficientPlayer.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
 import { isTouchDevice } from './utils/mobileInput.ts';
+import PoseRecorder from './components/debug/PoseRecorder.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -202,18 +203,22 @@ const App: React.FC = () => {
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
-  const { benchEnabled, profile, postProcess, overviewEnabled, flyDebug, descentDebug } = useMemo(() => {
+  const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, flyDebug, descentDebug } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
     if (valid !== getQualityProfile()) setQualityProfile(valid);
     if (params.get('painterly') === '1') overrideGraphicsQuality({ painterly: true });
+    if (params.get('ao') === '0') overrideGraphicsQuality({ contactAO: false });
+    if (params.get('outline') === '0') overrideGraphicsQuality({ outline: false });
     return {
       benchEnabled: params.get('bench') === '1',
       profile: valid,
       postProcess: getGraphicsQuality().postProcess,
       // ?overview=1 -> non-interactive overhead debug camera (water inspection).
       overviewEnabled: params.get('overview') === '1',
+      // ?agent=1 -> verification harness: scriptable camera + window.__game bridge.
+      agentEnabled: params.get('agent') === '1',
       // ?fly=1 -> jump straight into deep-space flight for runtime checks.
       flyDebug: params.get('fly') === '1',
       // ?descent=x,y -> load directly into the high-altitude descent over (x,y).
@@ -303,11 +308,12 @@ const App: React.FC = () => {
           <Sky sunPosition={SUN_POSITION} />
         </Environment>
 
-        <SkyController />
+        <SkyController terrainSeed={currentWorld.seed} />
         <GalaxyImpostors currentCoordinate={currentWorld.coordinate} planetSize={planetSize} />
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
+        <PoseRecorder coordinate={currentWorld.coordinate} />
 
         <EfficientScene
           key={currentWorldKey}
@@ -315,6 +321,7 @@ const App: React.FC = () => {
           debugColliders={debugColliders}
           arrivalMode={arrivalMode}
           overview={overviewEnabled}
+          agent={agentEnabled}
           onGroundedChange={grounded => {
             if (grounded) {
               setArrivalMode(mode => mode === 'approach' ? 'surface' : mode);
@@ -328,13 +335,14 @@ const App: React.FC = () => {
 
         {/* Phase 5: bloom (+ optional painterly) composer. Mounted only when
             the active profile enables postprocessing. */}
-        {postProcess && <PostFX />}
+        {postProcess && <PostFX terrainSeed={currentWorld.seed} />}
       </Canvas>
       <Crosshair />
       <WarpFlash />
       <TargetReticle />
       {flight.controlMode === 'fps' && <JetpackMeter />}
       {flight.controlMode === 'flight' && <CrashFlash />}
+      <VantageToast />
       {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
       {/* HUD show/hide toggle — works as a click (desktop) or tap (mobile); the
@@ -590,6 +598,62 @@ const App: React.FC = () => {
         </div>
       </div>
     </KeyboardControls>
+  );
+};
+
+/**
+ * Brief confirmation toast for the vantage recorder (PoseRecorder): shows when a
+ * vantage is pinned (C) or all pins are copied (V).
+ */
+const VantageToast: React.FC = () => {
+  const [msg, setMsg] = useState<string | null>(null);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const show = (text: string) => {
+      setMsg(text);
+      clearTimeout(timer);
+      timer = setTimeout(() => setMsg(null), 2200);
+    };
+    const onPinned = (e: Event) => {
+      const d = (e as CustomEvent).detail as { reason: string; count: number };
+      show(`📌 Pinned (${d.count}): ${d.reason}`);
+    };
+    const onCopied = (e: Event) => {
+      const d = (e as CustomEvent).detail as { count: number };
+      show(`📋 Copied ${d.count} vantage${d.count === 1 ? '' : 's'} to clipboard`);
+    };
+    window.addEventListener('vantage:pinned', onPinned);
+    window.addEventListener('vantage:copied', onCopied);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('vantage:pinned', onPinned);
+      window.removeEventListener('vantage:copied', onCopied);
+    };
+  }, []);
+
+  if (!msg) return null;
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 16,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      background: 'rgba(0,0,0,0.78)',
+      color: '#9effa1',
+      fontFamily: 'monospace',
+      fontSize: 13,
+      padding: '8px 14px',
+      borderRadius: 8,
+      border: '1px solid rgba(158,255,161,0.4)',
+      pointerEvents: 'none',
+      zIndex: 30,
+      maxWidth: '80vw',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+      {msg}
+    </div>
   );
 };
 

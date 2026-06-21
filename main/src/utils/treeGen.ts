@@ -188,7 +188,11 @@ function lsFromParams(p: TreeGenParams): LSParams {
     case 'conical':
       return { ...base, levels: 4, children: 2, angle: 0.42, upLerp: 0.1, segs: 6 };
     case 'umbrella':
-      return { ...base, levels: 3, children: 3, angle: 0.85, upLerp: -0.02 };
+      // Broad dome (acacia-like). Uses the round tree's proven branching (moderate
+      // angle + climbing upLerp) so foliage domes UP; the WIDER crownRadius (2.6,
+      // from silhouettePreset) is what makes it broad. The old wide angle 0.85 +
+      // negative upLerp fanned sub-branches DOWNWARD -> drooping "upside-down" canopy.
+      return { ...base, levels: 3, children: 3, angle: 0.6, upLerp: 0.05 };
     case 'weeping':
       return { ...base, levels: 3, children: 3, angle: 0.65, upLerp: -0.1 };
     case 'wispy':
@@ -659,6 +663,9 @@ function buildLeafGeometry(
     if (silhouette === 'weeping') {
       outward.y -= 0.8; // droop the canopy normal downward
       outward.normalize();
+    } else if (silhouette === 'umbrella') {
+      outward.y += 0.6; // dome the wide canopy UP (was reading upside-down)
+      outward.normalize();
     }
 
     // canopyY: 0 deep interior .. 1 crust (distance from centre, remapped).
@@ -691,6 +698,11 @@ function buildLeafGeometry(
       cardN.normalize();
       if (silhouette === 'weeping') {
         cardN.y -= 0.5;
+        cardN.normalize();
+      } else if (silhouette === 'umbrella') {
+        // Tilt the leaf normals UP so the wide canopy is lit/domed from above
+        // instead of shading like undersides (the "upside-down canopy").
+        cardN.y += 0.7;
         cardN.normalize();
       }
 

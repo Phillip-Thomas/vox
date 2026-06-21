@@ -140,11 +140,14 @@ export function computeBladeMatrix(
   _scale.makeScale(widthScale, heightScale, widthScale);
 
   // Clump center jitter (wide) + tight per-blade jitter around it, all in the
-  // tangent plane; then push out to the surface along up.
-  const cu = (c0 - 0.5) * 0.95; // clump center, spread across the voxel face
-  const cv = (c1 - 0.5) * 0.95;
-  const bu = (r2 - 0.5) * 0.22; // blade scatter within the tuft
-  const bv = (r3 - 0.5) * 0.22;
+  // tangent plane; then push out to the surface along up. The cell spans ±1
+  // (VOXEL_SCALE=2); spread clumps the FULL cell + a little into neighbours
+  // (±~1.05) so there are no bare cell borders — those borders are what read as a
+  // regular GRID from above. Wider per-blade scatter further breaks the lattice.
+  const cu = (c0 - 0.5) * 2.1; // clump center, full cell + slight neighbour overlap
+  const cv = (c1 - 0.5) * 2.1;
+  const bu = (r2 - 0.5) * 0.34; // blade scatter within the tuft
+  const bv = (r3 - 0.5) * 0.34;
   _offset.copy(_up).multiplyScalar(SURFACE_OFFSET);
   _offset.addScaledVector(_tangent, cu + bu);
   _offset.addScaledVector(_bitangent, cv + bv);
