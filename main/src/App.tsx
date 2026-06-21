@@ -36,6 +36,7 @@ import {
   setArrivalHandler,
   useSpaceFlight
 } from './state/spaceFlight.ts';
+import { isWarpMetricsEnabled, markWarpMetric } from './utils/warpMetrics.ts';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
@@ -90,6 +91,7 @@ const App: React.FC = () => {
   // were on at the moment of departure.
   useEffect(() => {
     setArrivalHandler(coordinate => {
+      markWarpMetric('app:arrival_handler:start', { x: coordinate.x, y: coordinate.y });
       const world = createCurrentWorld(coordinate);
       if (coordinatesEqual(world.coordinate, currentWorld.coordinate)) return;
       setPreviousWorld(currentWorld);
@@ -97,9 +99,37 @@ const App: React.FC = () => {
       setArrivalMode('approach');
       setTargetX(String(world.coordinate.x));
       setTargetY(String(world.coordinate.y));
+      markWarpMetric('app:arrival_handler:state_queued', {
+        x: world.coordinate.x,
+        y: world.coordinate.y,
+        seed: world.seed
+      });
     });
     return () => setArrivalHandler(null);
   }, [currentWorld]);
+
+  useEffect(() => {
+    if (!isWarpMetricsEnabled()) return;
+    const win = window as unknown as {
+      __paravoxiaWarpProbe?: { travelTo: (x: number, y: number) => void };
+    };
+    const probe = {
+      travelTo: (x: number, y: number) => {
+        const coordinate = {
+          x: normalizeCoordinatePart(x),
+          y: normalizeCoordinatePart(y)
+        };
+        if (coordinatesEqual(coordinate, currentWorld.coordinate)) return;
+        beginTravel(coordinate);
+      }
+    };
+    win.__paravoxiaWarpProbe = probe;
+    return () => {
+      if (win.__paravoxiaWarpProbe === probe) {
+        delete win.__paravoxiaWarpProbe;
+      }
+    };
+  }, [currentWorld.coordinate]);
   const compactOverlay = useMemo(
     () => (typeof window === 'undefined' ? false : window.innerWidth <= 700),
     []

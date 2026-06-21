@@ -1,5 +1,10 @@
 import { useSyncExternalStore } from 'react';
 import type { WorldCoordinate } from '../utils/worldCoordinates.ts';
+import {
+  finishWarpMetrics,
+  markWarpMetric,
+  startWarpMetrics
+} from '../utils/warpMetrics.ts';
 
 /**
  * Travel state machine for No Man's Sky-style seamless inter-world flight.
@@ -164,12 +169,14 @@ export function exitShip(): void {
  */
 export function beginTravel(dest: WorldCoordinate): void {
   if (warp.active) return;
+  startWarpMetrics(`${dest.x},${dest.y}`);
   warp.active = true;
   warp.progress = 0;
   warp.kind = 'travel';
   warp.duration = WARP_DURATION;
   warp.intensity = 1;
   warp.midpointFired = false;
+  markWarpMetric('travel:begin', { x: dest.x, y: dest.y, durationMs: WARP_DURATION * 1000 });
   setSnapshot({ phase: 'approach', destination: dest, target: dest });
 }
 
@@ -276,8 +283,11 @@ export function tickWarp(dt: number): void {
       // atmosphere. controlMode is forced to 'flight' so menu fast-travel also
       // arrives piloting the ship in space.
       const dest = snapshot.destination;
+      markWarpMetric('travel:midpoint', { progress: warp.progress });
       if (dest && arrivalHandler) arrivalHandler(dest);
+      markWarpMetric('travel:midpoint_handler_returned');
       setSnapshot({ phase: 'deep_space', controlMode: 'flight' });
+      markWarpMetric('travel:deep_space_snapshot_set');
     } else if (warp.kind === 'enter') {
       // Mini warp masking the space -> atmosphere sky change.
       enterAtmosphere();
@@ -290,5 +300,6 @@ export function tickWarp(dt: number): void {
   if (warp.progress >= 1) {
     warp.active = false;
     warp.progress = 1;
+    if (warp.kind === 'travel') finishWarpMetrics();
   }
 }

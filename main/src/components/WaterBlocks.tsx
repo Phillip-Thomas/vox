@@ -5,6 +5,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { buildWaterFaces, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial.ts';
+import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 
 interface WaterBlocksProps {
@@ -64,46 +65,54 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
   const capacity = Math.max(waterFaces.length, 1);
 
   const fill = useCallback((mesh: FilledMesh) => {
-    const m = new THREE.Matrix4();
-    const cellCenter = new THREE.Vector3();
-    const facePos = new THREE.Vector3();
-    const normal = new THREE.Vector3();
-    const scale = new THREE.Vector3(1, 1, 1);
-    // Instrumentation: bounding box + radius range of the placed quads.
-    const min = new THREE.Vector3(Infinity, Infinity, Infinity);
-    const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
-    let minR = Infinity;
-    let maxR = -Infinity;
-    let slot = 0;
-    for (const face of waterFaces) {
-      if (slot >= mesh.instanceMatrix.count) break;
-      voxelCoordToWorld(face.x, face.y, face.z, cellCenter);
-      const [nx, ny, nz] = FACE_NORMALS[face.faceDir];
-      normal.set(nx, ny, nz);
-      facePos.copy(cellCenter).addScaledVector(normal, FACE_OFFSET);
-      m.compose(facePos, FACE_QUATERNIONS[face.faceDir], scale);
-      mesh.setMatrixAt(slot, m);
-      min.min(facePos);
-      max.max(facePos);
-      const r = facePos.length();
-      if (r < minR) minR = r;
-      if (r > maxR) maxR = r;
-      slot++;
-    }
-    mesh.count = slot;
-    mesh.instanceMatrix.needsUpdate = true;
-    mesh.__waterFilledFor = waterFaces;
+    measureWarpMetric(
+      'water:fill_instances',
+      () => {
+        const m = new THREE.Matrix4();
+        const cellCenter = new THREE.Vector3();
+        const facePos = new THREE.Vector3();
+        const normal = new THREE.Vector3();
+        const scale = new THREE.Vector3(1, 1, 1);
+        // Instrumentation: bounding box + radius range of the placed quads.
+        const min = new THREE.Vector3(Infinity, Infinity, Infinity);
+        const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
+        let minR = Infinity;
+        let maxR = -Infinity;
+        let slot = 0;
+        for (const face of waterFaces) {
+          if (slot >= mesh.instanceMatrix.count) break;
+          voxelCoordToWorld(face.x, face.y, face.z, cellCenter);
+          const [nx, ny, nz] = FACE_NORMALS[face.faceDir];
+          normal.set(nx, ny, nz);
+          facePos.copy(cellCenter).addScaledVector(normal, FACE_OFFSET);
+          m.compose(facePos, FACE_QUATERNIONS[face.faceDir], scale);
+          mesh.setMatrixAt(slot, m);
+          min.min(facePos);
+          max.max(facePos);
+          const r = facePos.length();
+          if (r < minR) minR = r;
+          if (r > maxR) maxR = r;
+          slot++;
+        }
+        mesh.count = slot;
+        mesh.instanceMatrix.needsUpdate = true;
+        mesh.__waterFilledFor = waterFaces;
 
-    if (debug) {
-      console.log(
-        `[water] FILL faces=${waterFaces.length} capacity=${capacity} count=${mesh.count} ` +
-          `debug=${debug} radius(world)=[${minR.toFixed(1)}..${maxR.toFixed(1)}] ` +
-          `AABB min=(${min.x.toFixed(1)},${min.y.toFixed(1)},${min.z.toFixed(1)}) ` +
-          `max=(${max.x.toFixed(1)},${max.y.toFixed(1)},${max.z.toFixed(1)}) ` +
-          `mat=${(mesh.material as THREE.Material).type} ` +
-          `visible=${mesh.visible} inScene=${!!mesh.parent}`
-      );
-    }
+        if (debug) {
+          console.log(
+            `[water] FILL faces=${waterFaces.length} capacity=${capacity} count=${mesh.count} ` +
+              `debug=${debug} radius(world)=[${minR.toFixed(1)}..${maxR.toFixed(1)}] ` +
+              `AABB min=(${min.x.toFixed(1)},${min.y.toFixed(1)},${min.z.toFixed(1)}) ` +
+              `max=(${max.x.toFixed(1)},${max.y.toFixed(1)},${max.z.toFixed(1)}) ` +
+              `mat=${(mesh.material as THREE.Material).type} ` +
+              `visible=${mesh.visible} inScene=${!!mesh.parent}`
+          );
+        }
+
+        return slot;
+      },
+      slot => ({ faces: waterFaces.length, count: slot, capacity })
+    );
   }, [waterFaces, capacity, debug]);
 
   useLayoutEffect(() => {

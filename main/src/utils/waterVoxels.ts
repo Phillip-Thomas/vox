@@ -1,5 +1,6 @@
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
+import { measureWarpMetric } from './warpMetrics';
 
 export interface WaterVoxel {
   x: number;
@@ -51,7 +52,11 @@ function makeGenerator(size: number, terrainSeed: number): ProceduralWorldGenera
  * and returns only the air-exposed surface voxels.
  */
 export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[] {
-  return makeGenerator(size, terrainSeed).getExposedWaterVoxels();
+  return measureWarpMetric(
+    'water:voxels_generate',
+    () => makeGenerator(size, terrainSeed).getExposedWaterVoxels(),
+    result => ({ voxels: result.length })
+  );
 }
 
 /**
@@ -62,5 +67,9 @@ export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[
  * hollow-glass-box artifact (a flat quad has no interior) and tiles seamlessly.
  */
 export function buildWaterFaces(size: number, terrainSeed: number): WaterFace[] {
-  return makeGenerator(size, terrainSeed).getExposedWaterFaces();
+  return measureWarpMetric(
+    'water:faces_generate',
+    () => makeGenerator(size, terrainSeed).getExposedWaterFaces(),
+    result => ({ faces: result.length })
+  );
 }

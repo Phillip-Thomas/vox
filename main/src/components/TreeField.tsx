@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
+import { measureWarpMetric } from '../utils/warpMetrics';
 import { deterministicTangentForUp } from '../utils/surfaceControls';
 import { generateTree } from '../utils/treeGen';
 import { buildTreeProfile, paramsFromProfile } from '../utils/treeProfile';
@@ -78,13 +79,27 @@ export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProp
   const density = getGraphicsQuality().treeDensity;
 
   // Per-planet species: profile from terrainSeed ONLY.
-  const profile = useMemo(() => buildTreeProfile(terrainSeed), [terrainSeed]);
+  const profile = useMemo(
+    () => measureWarpMetric('tree:profile', () => buildTreeProfile(terrainSeed)),
+    [terrainSeed]
+  );
   const hasBlossom = profile.bloomAmount > 0;
 
   // Geometry built ONCE per world (terrainSeed + density). FIXES the old
   // hardcoded generateTree(1337).
   const archetype = useMemo(
-    () => (density > 0 ? generateTree(terrainSeed, paramsFromProfile(profile)) : null),
+    () => measureWarpMetric(
+      'tree:archetype_generate',
+      () => (density > 0 ? generateTree(terrainSeed, paramsFromProfile(profile)) : null),
+      result => result
+        ? {
+            trunkVerts: result.trunkGeometry.attributes.position.count,
+            leafVerts: result.leafGeometry.attributes.position.count,
+            blossomVerts: result.blossomGeometry?.attributes.position.count ?? 0,
+            impostorVerts: result.impostorGeometry.attributes.position.count
+          }
+        : { skipped: true }
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [terrainSeed, density]
   );
@@ -113,7 +128,11 @@ export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProp
   // max-distance cull actually FOLLOW the camera instead of freezing at spawn.
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
 
-  const neededCapacity = () => countTreeVoxels(density, terrainSeed);
+  const neededCapacity = () => measureWarpMetric(
+    'tree:count_capacity',
+    () => countTreeVoxels(density, terrainSeed),
+    needed => ({ needed })
+  );
 
   const growCapacity = (needed: number) => {
     setCapacity(prev => {
@@ -130,6 +149,9 @@ export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProp
     if (!trunk || !leaf || !impostor || density <= 0) return;
     const blossom = blossomRef.current; // may be null when planet doesn't bloom
 
+    measureWarpMetric(
+      'tree:rebuild_instances',
+      () => {
     const quality = getGraphicsQuality();
     const maxDist = quality.treeMaxDistance;
     const maxDistSq = maxDist * maxDist;
@@ -209,6 +231,10 @@ export default function TreeField({ terrainSeed, playerPosition }: TreeFieldProp
       blossom.count = nearSlot;
       blossom.instanceMatrix.needsUpdate = true;
     }
+        return { near: nearSlot, far: farSlot, capacity: cap };
+      },
+      result => result
+    );
   };
 
   useEffect(() => {

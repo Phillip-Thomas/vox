@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
+import { measureWarpMetric } from '../utils/warpMetrics';
 import {
   bladesPerVoxel,
   buildGrassInstances,
@@ -54,7 +55,11 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   const [capacity, setCapacity] = useState(0);
 
   /** Blade slots needed right now for all exposed grass voxels. */
-  const neededCapacity = () => bladesPerVoxel(density) * countGrassVoxels();
+  const neededCapacity = () => measureWarpMetric(
+    'grass:count_capacity',
+    () => bladesPerVoxel(density) * countGrassVoxels(),
+    needed => ({ needed })
+  );
 
   /** Grow `capacity` (never shrink) to fit `needed`, with margin + headroom. */
   const growCapacity = (needed: number) => {
@@ -70,7 +75,14 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     const mesh = meshRef.current;
     if (!mesh || density <= 0) return;
     const quality = getGraphicsQuality();
-    buildGrassInstances(mesh, density, quality.grassMaxDistance, playerPosition ?? null, terrainSeed);
+    measureWarpMetric(
+      'grass:rebuild_instances',
+      () => {
+        buildGrassInstances(mesh, density, quality.grassMaxDistance, playerPosition ?? null, terrainSeed);
+        return mesh.count;
+      },
+      count => ({ count, capacity: mesh.instanceMatrix.count })
+    );
   };
 
   // Initial sizing: by the time React commits this effect the planet's voxels

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { getGraphicsQuality } from '../../config/graphicsSettings.ts';
 import { getWarp, tickWarp, warpOpacity } from '../../state/spaceFlight.ts';
+import { recordWarpMetricFrame } from '../../utils/warpMetrics.ts';
 
 /**
  * In-Canvas driver: advances the warp each rendered frame. Mounted once in the
@@ -67,6 +68,7 @@ export function WarpFlash() {
     window.addEventListener('resize', resize);
 
     const tick = (now: number) => {
+      recordWarpMetricFrame(now);
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       t += dt;

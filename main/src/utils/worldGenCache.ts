@@ -1,5 +1,6 @@
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
+import { markWarpMetric, measureWarpMetric } from './warpMetrics';
 
 /**
  * Memoized world-generation, keyed by (size, terrainSeed).
@@ -47,21 +48,28 @@ export function getWorldGen(size: number, terrainSeed: number): CachedWorldGen {
     // Mark most-recently-used.
     cache.delete(key);
     cache.set(key, existing);
+    markWarpMetric('worldgen:cache_hit', { key, voxels: existing.voxels.length });
     return existing;
   }
 
-  const planetRadius = size / 2;
-  const generator = new ProceduralWorldGenerator(
-    {
-      planetRadius,
-      coreRadiusPercent: 0.15
+  const entry = measureWarpMetric(
+    'worldgen:cache_miss_build',
+    () => {
+      const planetRadius = size / 2;
+      const generator = new ProceduralWorldGenerator(
+        {
+          planetRadius,
+          coreRadiusPercent: 0.15
+        },
+        createTerrainConfig(terrainSeed, planetRadius)
+      );
+      return {
+        generator,
+        voxels: generator.getAllVoxelPositions()
+      };
     },
-    createTerrainConfig(terrainSeed, planetRadius)
+    result => ({ key, voxels: result.voxels.length })
   );
-  const entry: CachedWorldGen = {
-    generator,
-    voxels: generator.getAllVoxelPositions()
-  };
 
   cache.set(key, entry);
 

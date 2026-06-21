@@ -16,6 +16,7 @@ import {
   ArrivalMode,
   createWorldArrivalPose
 } from '../utils/worldArrival';
+import { measureWarpMetric } from '../utils/warpMetrics';
 
 export const planetSize = 50;
 
@@ -54,7 +55,15 @@ export default function EfficientScene({
 }: EfficientSceneProps) {
   const { controlMode } = useSpaceFlight();
   const arrivalPose = useMemo(
-    () => createWorldArrivalPose(planetSize, terrainSeed),
+    () => measureWarpMetric(
+      'scene:arrival_pose',
+      () => createWorldArrivalPose(planetSize, terrainSeed),
+      pose => ({
+        surfaceX: pose.surfaceVoxel.x,
+        surfaceY: pose.surfaceVoxel.y,
+        surfaceZ: pose.surfaceVoxel.z
+      })
+    ),
     [terrainSeed]
   );
   const [initialPlayerPosition] = useState(() => (

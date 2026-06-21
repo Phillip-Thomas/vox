@@ -82,7 +82,7 @@ export const DEFAULT_TREE_PARAMS: TreeGenParams = {
   baseRadius: 0.32,
   radialSegments: 5,
   leafSize: 0.55,
-  maxLeafCards: 320,
+  maxLeafCards: 420,
   silhouette: 'round',
   leanTwist: 0,
   bloomAmount: 0
@@ -205,7 +205,9 @@ function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
     const grav = order === 0 ? 0.16 : P.upLerp;
     const forkEvery = order === 0 ? 2 : 1;
     while (remaining >= STEP * 0.6 && nodes.length < NODE_CAP) {
-      tmpAxis.copy(twPerp(d));
+      // per-internode gnarl: spin the bend AXIS randomly around the branch so the
+      // wander isn't biased into one plane (a fixed twPerp made stems one-sided).
+      tmpAxis.copy(twPerp(d)).applyAxisAngle(d, rng() * Math.PI * 2);
       d.applyAxisAngle(tmpAxis, (rng() - 0.5) * 0.22); // per-internode gnarl
       d.lerp(up, grav).normalize();
       const seg = Math.min(STEP, remaining);
@@ -219,10 +221,15 @@ function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
       if (order < P.levels && internode % forkEvery === 0 && remaining > STEP) {
         const kids = order === 0 ? P.children : Math.max(1, P.children - 1);
         for (let k = 0; k < kids; k++) {
-          divergence += P.twist; // GOLDEN-ANGLE spiral between siblings
+          divergence += P.twist; // GOLDEN-ANGLE azimuth between siblings
           const childDir = d.clone();
-          childDir.applyAxisAngle(d, divergence); // spin around the branch axis
+          // CRITICAL ORDER: tilt OFF the parent axis FIRST, THEN spin that tilted
+          // vector around the axis. Spinning before tilting rotated d around its
+          // own axis (a no-op), collapsing every child into one plane -> one-sided
+          // trees. Tilt-then-spin fans the children radially around the trunk in a
+          // golden-angle spiral, so the crown grows thick and all-round.
           childDir.applyAxisAngle(twPerp(d), P.angle * (0.7 + 0.6 * rng())); // tilt off parent
+          childDir.applyAxisAngle(d, divergence); // radial spin around branch axis
           // Child reaches into the remaining crown, shorter than its parent.
           const childBudget = (remaining * 0.55 + STEP) * P.lenFalloff * (0.8 + 0.4 * rng());
           grow(prev, childDir, order + 1, divergence * 1.3, childBudget);
@@ -542,7 +549,7 @@ function buildLeafGeometry(
 
   // Cards per cluster: chunkier for broad canopies, fewer for needle/wispy.
   const cardsPerCluster =
-    silhouette === 'conical' || silhouette === 'wispy' ? 3 : silhouette === 'frond' ? 3 : 5;
+    silhouette === 'conical' || silhouette === 'wispy' ? 4 : silhouette === 'frond' ? 3 : 6;
 
   const corners: [number, number][] = [
     [-1, -1],
@@ -607,8 +614,8 @@ function buildLeafGeometry(
   // actually drops vs the old square cards.
   const GOLDEN = Math.PI * (3 - Math.sqrt(5)); // 2.39996 rad
   const leavesPerTwig = Math.max(
-    3,
-    Math.round(cardsPerCluster * 2 * (params.attractorCount / 260))
+    4,
+    Math.round(cardsPerCluster * 2.4 * (params.attractorCount / 260))
   );
   // Keep the total leaf count bounded by the existing budget.
   const maxNodes = Math.max(1, Math.round(maxLeafCards / leavesPerTwig));

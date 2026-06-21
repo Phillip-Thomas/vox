@@ -90,6 +90,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         uniform float uWind;
         attribute float aStiff;
         varying float vBarkV;
+        varying float vBarkU;
         varying float vBarkStiff;
         ${TREE_WIND_GLSL}`
       )
@@ -97,6 +98,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         '#include <begin_vertex>',
         `#include <begin_vertex>
         vBarkV = transformed.y;
+        vBarkU = uv.x;
         vBarkStiff = aStiff;
         #ifdef USE_INSTANCING
           vec3 twInstWorld = instanceMatrix[3].xyz;
@@ -113,22 +115,39 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         uniform vec3 uBarkColor;
         uniform vec3 uLeafBase;
         varying float vBarkV;
+        varying float vBarkU;
         varying float vBarkStiff;
         float twBHash(float n) { return fract(sin(n) * 43758.5453); }`
       )
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
-        float band = sin(vBarkV * 9.0) * 0.5 + 0.5;
-        float grain = twBHash(floor(vBarkV * 22.0));
-        vec3 bark = uBarkColor * (0.82 + 0.22 * band) * (0.9 + 0.18 * grain);
+        // --- procedural bark: vertical ridges running AROUND the trunk + fibrous
+        //     height grain + dark crevices, so the stem reads as textured wood
+        //     instead of a smooth tube. vBarkU = around (0..1), vBarkV = height. --
+        float ridges = sin(vBarkU * 6.2831853 * 5.0) * 0.5 + 0.5;       // ~5 ridges
+        float fiber  = sin(vBarkV * 26.0 + ridges * 3.0) * 0.5 + 0.5;   // up-fibers
+        float grain  = twBHash(floor(vBarkV * 30.0) + floor(vBarkU * 7.0) * 13.0);
+        float crevice = smoothstep(0.42, 0.0, ridges);                  // deep grooves
+        vec3 bark = uBarkColor;
+        bark *= 0.66 + 0.42 * ridges;        // ridge highlight vs groove shadow
+        bark *= 0.86 + 0.20 * fiber;         // vertical fibers
+        bark *= 0.82 + 0.30 * grain;         // mottled wood
+        bark *= 1.0 - 0.45 * crevice;        // darken the crevices
         // young twigs harmonize faintly toward the canopy colour.
         bark = mix(bark, mix(bark, uLeafBase, 0.35), smoothstep(0.6, 1.0, vBarkStiff));
         diffuseColor.rgb *= bark;`
+      )
+      .replace(
+        '#include <roughnessmap_fragment>',
+        `#include <roughnessmap_fragment>
+        // crevices are rougher than the smooth ridge crowns -> bark catches light.
+        float twCrev = smoothstep(0.42, 0.0, sin(vBarkU * 6.2831853 * 5.0) * 0.5 + 0.5);
+        roughnessFactor = clamp(roughnessFactor + 0.08 * twCrev - 0.04, 0.0, 1.0);`
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-bark-v3';
+  material.customProgramCacheKey = () => 'tree-bark-v4';
   return material;
 }
 

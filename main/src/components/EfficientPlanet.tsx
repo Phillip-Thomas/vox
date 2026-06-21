@@ -7,6 +7,7 @@ import { createVoxelMaterial, updateVoxelMaterial } from '../utils/voxelMaterial
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getWorldGen } from '../utils/worldGenCache';
 import { TerrainVoxel, voxelSystem } from '../utils/efficientVoxelSystem';
+import { measureWarpMetric } from '../utils/warpMetrics';
 import { FACE_NORMALS } from '../utils/surfaceControls';
 import {
   COLLIDER_HALF_EXTENT,
@@ -124,21 +125,33 @@ export default function EfficientPlanet({
   }, [surfaceUp]);
 
   const originalTerrain = useMemo<TerrainVoxel[]>(() => {
-    const { generator, voxels } = getWorldGen(size, terrainSeed);
+    return measureWarpMetric(
+      'planet:terrain_materialize',
+      () => {
+        const { generator, voxels } = getWorldGen(size, terrainSeed);
 
-    return voxels.map(position => {
-      const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
-      return {
-        ...position,
-        material,
-        color: MATERIALS[material].color.clone()
-      };
-    });
+        return voxels.map(position => {
+          const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
+          return {
+            ...position,
+            material,
+            color: MATERIALS[material].color.clone()
+          };
+        });
+      },
+      result => ({ voxels: result.length })
+    );
   }, [size, terrainSeed]);
 
   const initialVoxels = useMemo(() => {
-    const terrainPositions = new Set(originalTerrain.map(voxel => coordKey(voxel.x, voxel.y, voxel.z)));
-    return originalTerrain.filter(voxel => isVoxelExposedInTerrain(voxel.x, voxel.y, voxel.z, terrainPositions));
+    return measureWarpMetric(
+      'planet:exposed_filter',
+      () => {
+        const terrainPositions = new Set(originalTerrain.map(voxel => coordKey(voxel.x, voxel.y, voxel.z)));
+        return originalTerrain.filter(voxel => isVoxelExposedInTerrain(voxel.x, voxel.y, voxel.z, terrainPositions));
+      },
+      result => ({ exposed: result.length, original: originalTerrain.length })
+    );
   }, [originalTerrain]);
 
   const dynamicBufferSize = useMemo(() => {
@@ -242,18 +255,28 @@ export default function EfficientPlanet({
     rigidBodyRefs.current.clear();
     setCollisionBodies([]);
 
-    voxelSystem.reset();
-    voxelSystem.expandCapacity(dynamicBufferSize);
-    voxelSystem.setMesh(meshRef.current);
-    voxelSystem.setCollisionCallbacks({ request: requestCollisionBody, remove: removeCollisionBody });
-    voxelSystem.setOriginalTerrain(originalTerrain);
-    efficientPlanetMesh.current = meshRef.current;
+    measureWarpMetric(
+      'planet:voxel_system_populate',
+      () => {
+        voxelSystem.reset();
+        voxelSystem.expandCapacity(dynamicBufferSize);
+        voxelSystem.setMesh(activeMesh);
+        voxelSystem.setCollisionCallbacks({ request: requestCollisionBody, remove: removeCollisionBody });
+        voxelSystem.setOriginalTerrain(originalTerrain);
+        efficientPlanetMesh.current = activeMesh;
 
-    for (const voxel of initialVoxels) {
-      voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
-    }
+        for (const voxel of initialVoxels) {
+          voxelSystem.addVoxel(voxel.x, voxel.y, voxel.z, voxel.material, voxel.color);
+        }
 
-    flushPendingCollisionBodies();
+        flushPendingCollisionBodies();
+      },
+      () => ({
+        buffer: dynamicBufferSize,
+        original: originalTerrain.length,
+        exposed: initialVoxels.length
+      })
+    );
     return () => {
       if (batchTimeout.current !== null) {
         window.clearTimeout(batchTimeout.current);
