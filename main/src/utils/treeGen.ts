@@ -23,7 +23,19 @@ import * as THREE from 'three';
 export interface TreeArchetype {
   trunkGeometry: THREE.BufferGeometry;
   leafGeometry: THREE.BufferGeometry;
+  /** Blossom cards (subset of leaf clusters); empty when bloomAmount is 0. */
+  blossomGeometry: THREE.BufferGeometry;
+  /** 2-quad cross billboard for far-distance LOD. */
+  impostorGeometry: THREE.BufferGeometry;
 }
+
+export type TreeSilhouette =
+  | 'round'
+  | 'conical'
+  | 'umbrella'
+  | 'weeping'
+  | 'wispy'
+  | 'frond';
 
 export interface TreeGenParams {
   /** Approx total tree height in world units. */
@@ -50,6 +62,12 @@ export interface TreeGenParams {
   leafSize: number;
   /** Max leaf cards placed (keeps vert count bounded). */
   maxLeafCards: number;
+  /** Read-at-a-glance canopy shape; reshapes the attractor cloud + leaf placement. */
+  silhouette?: TreeSilhouette;
+  /** Trunk lean magnitude in radians (already clamped <=0.35). */
+  leanTwist?: number;
+  /** 0..1 fraction of leaf clusters baked as flowering (drives aFlower). */
+  bloomAmount?: number;
 }
 
 export const DEFAULT_TREE_PARAMS: TreeGenParams = {
@@ -64,7 +82,10 @@ export const DEFAULT_TREE_PARAMS: TreeGenParams = {
   baseRadius: 0.32,
   radialSegments: 5,
   leafSize: 0.55,
-  maxLeafCards: 320
+  maxLeafCards: 320,
+  silhouette: 'round',
+  leanTwist: 0,
+  bloomAmount: 0
 };
 
 // --- Seeded hash RNG ---------------------------------------------------------
@@ -83,135 +104,240 @@ function makeRng(seed: number): () => number {
 interface GrowNode {
   pos: THREE.Vector3;
   parent: number; // index into nodes, -1 for root
-  order: number; // branch order (0 trunk-ish, grows with branching depth)
+  order: number; // branch order (0 trunk, grows with branching depth)
   dist: number; // graph distance from root (in steps)
 }
 
-// --- Space colonization ------------------------------------------------------
-function growSkeleton(params: TreeGenParams, rng: () => number): GrowNode[] {
-  const {
-    height,
-    crownRadius,
-    crownCenterFrac,
-    attractorCount,
-    growStep,
-    killRadiusMul,
-    influenceRadiusMul,
-    maxIterations
-  } = params;
+// --- Recursive L-system branching (replaces space colonization) --------------
+//
+// The old space-colonization crown read flat + non-fractal. This builds a
+// genuinely RECURSIVE skeleton: trunk -> primary -> secondary -> twig, where
+// every level emits `children` sub-branches plus an apical "leader shoot" that
+// continues the dominant line (so the trunk stays believable). order increments
+// per recursion level, so the existing radiusFor() (sqrt subtree weight) tapers
+// trunk->twig automatically, and length *= lenFalloff per level gives the
+// self-similar feel. Children diverge by the GOLDEN ANGLE around the branch
+// axis -> spiral phyllotactic forks. Bounded by levels<=4, children<=3, NODE_CAP.
 
-  const killRadius = killRadiusMul * growStep;
-  const influenceRadius = influenceRadiusMul * growStep;
-  const crownCenterY = height * crownCenterFrac;
+// A perpendicular unit vector to d (stable: avoids the degenerate parallel case).
+function twPerp(d: THREE.Vector3): THREE.Vector3 {
+  const a =
+    Math.abs(d.y) < 0.95 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0);
+  return a.cross(d).normalize();
+}
 
-  // Scatter attractors in an ellipsoid (slightly squashed vertically) above base.
-  const attractors: THREE.Vector3[] = [];
-  let guard = 0;
-  while (attractors.length < attractorCount && guard < attractorCount * 20) {
-    guard++;
-    // rejection-sample a unit ball
-    const x = rng() * 2 - 1;
-    const y = rng() * 2 - 1;
-    const z = rng() * 2 - 1;
-    if (x * x + y * y + z * z > 1) continue;
-    attractors.push(
-      new THREE.Vector3(
-        x * crownRadius,
-        crownCenterY + y * crownRadius * 1.05,
-        z * crownRadius
-      )
-    );
+interface LSParams {
+  levels: number;
+  children: number;
+  angle: number;
+  twist: number;
+  lenFalloff: number;
+  segs: number;
+  upLerp: number;
+}
+
+// Map the existing silhouette/density knobs to L-system tuning. Deterministic
+// and bounded — no new TreeGenParams required (the overhaul derives everything
+// from params already on disk).
+function lsFromParams(p: TreeGenParams): LSParams {
+  const density = Math.min(1, Math.max(0.4, p.attractorCount / 260));
+  const base: LSParams = {
+    levels: 3,
+    children: 3,
+    angle: 0.6,
+    twist: 2.39996, // golden angle (radians)
+    lenFalloff: 0.72,
+    segs: 5,
+    upLerp: 0.03
+  };
+  switch (p.silhouette) {
+    case 'conical':
+      return { ...base, levels: 4, children: 2, angle: 0.42, upLerp: 0.1, segs: 6 };
+    case 'umbrella':
+      return { ...base, levels: 3, children: 3, angle: 0.85, upLerp: -0.02 };
+    case 'weeping':
+      return { ...base, levels: 3, children: 3, angle: 0.65, upLerp: -0.1 };
+    case 'wispy':
+      return { ...base, levels: 4, children: 2, angle: 0.55, lenFalloff: 0.78 };
+    case 'round':
+    default:
+      return {
+        ...base,
+        levels: density > 0.75 ? 4 : 3,
+        children: density > 0.7 ? 3 : 2,
+        angle: 0.6
+      };
+  }
+}
+
+function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
+  const P = lsFromParams(params);
+  const NODE_CAP = 900;
+  const up = new THREE.Vector3(0, 1, 0);
+  const nodes: GrowNode[] = [
+    { pos: new THREE.Vector3(), parent: -1, order: 0, dist: 0 }
+  ];
+  const tmpAxis = new THREE.Vector3();
+
+  // Grow ONE branch (emit `segs` curving sub-segments) from `parentIdx`, then
+  // recurse children + an apical leader. order increments per level -> taper.
+  function grow(
+    parentIdx: number,
+    dir: THREE.Vector3,
+    len: number,
+    order: number,
+    divergence: number
+  ) {
+    if (order > P.levels || len < params.growStep * 1.2 || nodes.length >= NODE_CAP)
+      return;
+    const segs = Math.max(2, P.segs - order);
+    const segLen = len / segs;
+    const curl = (rng() - 0.5) * 0.25 + (order > 0 ? 0.06 : 0.0);
+    const d = dir.clone().normalize();
+    let prev = parentIdx;
+    for (let s = 0; s < segs; s++) {
+      if (nodes.length >= NODE_CAP) break;
+      tmpAxis.copy(twPerp(d));
+      d.applyAxisAngle(tmpAxis, curl); // per-segment gnarl
+      d.lerp(up, order === 0 ? 0.04 : P.upLerp).normalize(); // gravitropism/droop
+      const np = nodes[prev].pos.clone().addScaledVector(d, segLen);
+      nodes.push({ pos: np, parent: prev, order, dist: nodes[prev].dist + 1 });
+      prev = nodes.length - 1;
+    }
+    const tip = prev;
+    if (order >= P.levels) return;
+    const kids = order === 0 ? P.children + 1 : P.children; // trunk forks more
+    for (let k = 0; k < kids; k++) {
+      divergence += P.twist; // GOLDEN-ANGLE spiral between siblings
+      const childDir = d.clone();
+      childDir.applyAxisAngle(d, divergence); // spin around branch axis
+      childDir.applyAxisAngle(twPerp(d), P.angle * (0.7 + 0.6 * rng())); // tilt off parent
+      const childLen = len * P.lenFalloff * (0.85 + 0.3 * rng());
+      grow(tip, childDir, childLen, order + 1, divergence * 1.3);
+    }
+    // apical leader: a slightly-tilted continuation keeps a dominant trunk line.
+    if (order < P.levels - 1) {
+      const leadDir = d.clone().applyAxisAngle(twPerp(d), P.angle * 0.22);
+      grow(tip, leadDir, len * P.lenFalloff * 1.05, order, divergence * 1.11);
+    }
   }
 
-  // Seed nodes: a short straight trunk reaching toward the crown so the first
-  // attractors have something to pull on (otherwise growth can stall).
+  const start = up
+    .clone()
+    .applyAxisAngle(new THREE.Vector3(1, 0, 0), (rng() - 0.5) * 0.1);
+  grow(0, start, params.height, 0, rng() * 6.28318);
+  shapeNodes(nodes, params); // existing lean/twist/weeping droop still applies
+  return nodes;
+}
+
+// Public entry: frond palms stay hand-built, everything else is the L-system.
+function growSkeleton(params: TreeGenParams, rng: () => number): GrowNode[] {
+  const silhouette = params.silhouette ?? 'round';
+  if (silhouette === 'frond') {
+    return growFrondSkeleton(params, rng);
+  }
+  return growLSystem(params, rng);
+}
+
+// --- FROND (palm) skeleton ---------------------------------------------------
+// Palms get a bare slightly-leaning trunk + a hand-built whorl of 7..11 frond
+// rib chains arcing outward and drooping down. No space colonization (a palm
+// crown is a fan, not a branching cloud).
+function growFrondSkeleton(params: TreeGenParams, rng: () => number): GrowNode[] {
+  const { height, growStep } = params;
   const nodes: GrowNode[] = [];
   nodes.push({ pos: new THREE.Vector3(0, 0, 0), parent: -1, order: 0, dist: 0 });
-  const trunkSeedTop = Math.max(0, crownCenterY - crownRadius * 0.9);
-  const seedSteps = Math.max(1, Math.floor(trunkSeedTop / growStep));
-  for (let i = 1; i <= seedSteps; i++) {
+
+  // Straight-ish trunk up to the crown.
+  const trunkSteps = Math.max(3, Math.floor(height / growStep));
+  let prev = 0;
+  for (let i = 1; i <= trunkSteps; i++) {
     nodes.push({
       pos: new THREE.Vector3(0, i * growStep, 0),
-      parent: i - 1,
+      parent: prev,
       order: 0,
       dist: i
     });
+    prev = nodes.length - 1;
   }
+  const crownIdx = prev;
+  const crownY = trunkSteps * growStep;
+  const crownDist = trunkSteps;
 
-  const alive = new Array(attractors.length).fill(true);
-  let remaining = attractors.length;
-  const pull = new THREE.Vector3();
-  const dir = new THREE.Vector3();
-
-  for (let iter = 0; iter < maxIterations && remaining > 0; iter++) {
-    // For each node accumulate the averaged direction toward influencing attractors.
-    const influence = new Map<number, THREE.Vector3>();
-
-    for (let a = 0; a < attractors.length; a++) {
-      if (!alive[a]) continue;
-      const ap = attractors[a];
-      // nearest node
-      let best = -1;
-      let bestD = Infinity;
-      for (let n = 0; n < nodes.length; n++) {
-        const d = nodes[n].pos.distanceToSquared(ap);
-        if (d < bestD) {
-          bestD = d;
-          best = n;
-        }
-      }
-      if (best < 0) continue;
-      const bd = Math.sqrt(bestD);
-      if (bd > influenceRadius) continue;
-      dir.copy(ap).sub(nodes[best].pos).normalize();
-      const acc = influence.get(best);
-      if (acc) acc.add(dir);
-      else influence.set(best, dir.clone());
-    }
-
-    if (influence.size === 0) break; // nothing in range; stop
-
-    // Spawn a new node from each influenced node, stepping toward the mean pull.
-    const newNodes: GrowNode[] = [];
-    influence.forEach((sum, nodeIdx) => {
-      if (sum.lengthSq() < 1e-8) return;
-      pull.copy(sum).normalize();
-      const parent = nodes[nodeIdx];
-      const np = parent.pos.clone().addScaledVector(pull, growStep);
-      // Branch order increases when a node sprouts more than one child over its
-      // lifetime; approximate by bumping order if the parent already has a child.
-      const childCount = newNodes.filter(nn => nn.parent === nodeIdx).length;
-      newNodes.push({
-        pos: np,
-        parent: nodeIdx,
-        order: parent.order + (childCount > 0 ? 1 : 0),
-        dist: parent.dist + 1
+  // Whorl of fronds radiating from the crown apex.
+  const fronds = 7 + Math.floor(rng() * 5); // 7..11
+  const ribSteps = 5;
+  const ribLen = Math.max(1.2, height * 0.45);
+  for (let f = 0; f < fronds; f++) {
+    const ang = (f / fronds) * Math.PI * 2 + rng() * 0.3;
+    const dirX = Math.cos(ang);
+    const dirZ = Math.sin(ang);
+    let parent = crownIdx;
+    let pdist = crownDist;
+    for (let r = 1; r <= ribSteps; r++) {
+      const t = r / ribSteps;
+      // arc out then droop down (gravity on the frond tip).
+      const out = ribLen * t;
+      const droop = ribLen * t * t * 0.7;
+      nodes.push({
+        pos: new THREE.Vector3(dirX * out, crownY + 0.2 - droop, dirZ * out),
+        parent,
+        order: 1,
+        dist: pdist + 1
       });
-    });
-
-    if (newNodes.length === 0) break;
-    const base = nodes.length;
-    for (let i = 0; i < newNodes.length; i++) {
-      // remap parent indices unchanged (they reference existing nodes)
-      nodes.push(newNodes[i]);
-    }
-    void base;
-
-    // Kill attractors close to ANY node (consumed).
-    for (let a = 0; a < attractors.length; a++) {
-      if (!alive[a]) continue;
-      const ap = attractors[a];
-      for (let n = 0; n < nodes.length; n++) {
-        if (nodes[n].pos.distanceToSquared(ap) <= killRadius * killRadius) {
-          alive[a] = false;
-          remaining--;
-          break;
-        }
-      }
+      parent = nodes.length - 1;
+      pdist += 1;
     }
   }
 
+  shapeNodes(nodes, params);
   return nodes;
+}
+
+// --- Post-growth shaping: lean / twist / weeping droop -----------------------
+// Applied AFTER growth so it bends the existing skeleton. leanTwist is clamped
+// upstream (<=0.35) so trunk tube tangents don't kink. Weeping droops tip nodes.
+function shapeNodes(nodes: GrowNode[], params: TreeGenParams): void {
+  const lean = params.leanTwist ?? 0;
+  const silhouette = params.silhouette ?? 'round';
+  const weeping = silhouette === 'weeping';
+  if (Math.abs(lean) < 1e-4 && !weeping) return;
+
+  const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
+  const base = nodes[0].pos;
+  // lean axis: tilt around +X, spiral sign from lean's sign.
+  const spiralSign = lean >= 0 ? 1 : -1;
+
+  for (let i = 1; i < nodes.length; i++) {
+    const node = nodes[i];
+    const frac = node.dist / maxDist;
+
+    if (Math.abs(lean) > 1e-4) {
+      // Rotate node.pos around base by lean*frac, plus a gentle spiral in xz.
+      const ang = lean * frac;
+      const dx = node.pos.x - base.x;
+      const dy = node.pos.y - base.y;
+      const dz = node.pos.z - base.z;
+      // tilt in the x/y plane
+      const cx = Math.cos(ang);
+      const sx = Math.sin(ang);
+      const nx = dx * cx - dy * sx;
+      const ny = dx * sx + dy * cx;
+      // spiral twist around y grows with height
+      const spin = spiralSign * lean * frac * 1.5;
+      const cs = Math.cos(spin);
+      const ss = Math.sin(spin);
+      const sxz = nx * cs - dz * ss;
+      const szx = nx * ss + dz * cs;
+      node.pos.set(base.x + sxz, base.y + ny, base.z + szx);
+    }
+
+    if (weeping && frac > 0.6) {
+      // pull tip nodes downward (willow droop), smooth falloff.
+      const droopFrac = (frac - 0.6) / 0.4;
+      node.pos.y -= droopFrac * droopFrac * params.crownRadius * 1.4;
+    }
+  }
 }
 
 // Count descendants per node so we can taper radius by "how much wood hangs above".
@@ -327,101 +453,319 @@ function buildTrunkGeometry(
   return geo;
 }
 
-// --- Leaf card geometry ------------------------------------------------------
-// A leaf card is a quad centred on a tip/young node, oriented with a random-ish
-// basis so the canopy isn't all coplanar. Cards are pre-merged. Each card gets
-// an aPhase (random) for wind flutter and aStiff ~1 (tips flex most).
+// --- Leaf CLUSTER geometry ---------------------------------------------------
+// A leaf CLUSTER is a chunky bunch of N cards (3..5 by silhouette) fanned around
+// an OUTWARD direction = normalize(node.pos - crownCenter). The card normal IS
+// that outward dir — CRITICAL so canopy AO/SSS read volumetric (cards facing
+// random directions invert AO/SSS from below). New per-vertex attributes:
+//   aCanopyY : 0 deep-interior .. 1 sun-kissed crust (baked CPU, drives gradient+AO)
+//   aFlower  : 1 if this cluster blooms (baked from bloomAmount), else 0
+//
+// We build leaf + blossom in ONE pass so they share matrices/positions: leaf
+// gets every cluster, blossom gets only the aFlower>0 clusters (smaller cards).
+interface LeafBuildResult {
+  leaf: THREE.BufferGeometry;
+  blossom: THREE.BufferGeometry;
+  /** Average crown world-local centre + colourable tip ratio for the impostor. */
+  crownCenter: THREE.Vector3;
+  crownRadius: number;
+}
+
 function buildLeafGeometry(
   nodes: GrowNode[],
   params: TreeGenParams,
   rng: () => number
-): THREE.BufferGeometry {
+): LeafBuildResult {
   const { leafSize, maxLeafCards } = params;
+  const silhouette = params.silhouette ?? 'round';
+  const bloomAmount = params.bloomAmount ?? 0;
   const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
+  const maxOrder = nodes.reduce((m, n) => Math.max(m, n.order), 0);
 
-  // Candidate nodes: leaf-ish = tips (no children) plus young high nodes.
+  // Candidate nodes: leaves now hang off the FRACTAL TWIGS — tips (no children)
+  // plus the highest-order nodes — so the canopy follows the recursive branch
+  // structure instead of a flat young-node shell.
   const childCount = new Array(nodes.length).fill(0);
   for (const n of nodes) if (n.parent >= 0) childCount[n.parent]++;
 
   const candidates: number[] = [];
   for (let i = 1; i < nodes.length; i++) {
     const isTip = childCount[i] === 0;
-    const young = nodes[i].dist / maxDist > 0.45;
-    if (isTip || young) candidates.push(i);
+    const twiggy = nodes[i].order >= maxOrder - 1;
+    if (isTip || twiggy) candidates.push(i);
   }
 
+  // Crown centre = mean of candidate positions (so outward dirs are meaningful).
+  const crownCenter = new THREE.Vector3();
+  for (const idx of candidates) crownCenter.add(nodes[idx].pos);
+  if (candidates.length > 0) crownCenter.multiplyScalar(1 / candidates.length);
+  let crownRadius = 0.001;
+  for (const idx of candidates) {
+    crownRadius = Math.max(crownRadius, nodes[idx].pos.distanceTo(crownCenter));
+  }
+
+  // Leaf attribute buffers.
+  const lPos: number[] = [];
+  const lNrm: number[] = [];
+  const lUv: number[] = [];
+  const lStiff: number[] = [];
+  const lPhase: number[] = [];
+  const lCanopyY: number[] = [];
+  const lFlower: number[] = [];
+  const lRand: number[] = [];
+  const lIdx: number[] = [];
+
+  // Blossom attribute buffers (only flowering clusters).
+  const bPos: number[] = [];
+  const bNrm: number[] = [];
+  const bUv: number[] = [];
+  const bStiff: number[] = [];
+  const bPhase: number[] = [];
+  const bIdx: number[] = [];
+
+  const outward = new THREE.Vector3();
+  const u = new THREE.Vector3();
+  const v = new THREE.Vector3();
+  const cardN = new THREE.Vector3();
+  const helper = new THREE.Vector3();
+  const center = new THREE.Vector3();
+
+  // Cards per cluster: chunkier for broad canopies, fewer for needle/wispy.
+  const cardsPerCluster =
+    silhouette === 'conical' || silhouette === 'wispy' ? 3 : silhouette === 'frond' ? 3 : 5;
+
+  const corners: [number, number][] = [
+    [-1, -1],
+    [1, -1],
+    [1, 1],
+    [-1, 1]
+  ];
+  const cuv: [number, number][] = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [0, 1]
+  ];
+
+  // emit one quad into a target set of buffers.
+  const emitQuad = (
+    pos: number[],
+    nrm: number[],
+    uv: number[],
+    stiffArr: number[],
+    phaseArr: number[],
+    canopyArr: number[] | null,
+    flowerArr: number[] | null,
+    randArr: number[] | null,
+    idxArr: number[],
+    cx: number,
+    cy: number,
+    cz: number,
+    ax: THREE.Vector3,
+    ay: THREE.Vector3,
+    nv: THREE.Vector3,
+    hs: number,
+    fl: number,
+    ph: number,
+    canopyY: number,
+    flower: number,
+    leafRand: number
+  ) => {
+    const base = pos.length / 3;
+    for (let k = 0; k < 4; k++) {
+      const [su, sv] = corners[k];
+      pos.push(
+        cx + (ax.x * su + ay.x * sv) * hs,
+        cy + (ax.y * su + ay.y * sv) * hs,
+        cz + (ax.z * su + ay.z * sv) * hs
+      );
+      nrm.push(nv.x, nv.y, nv.z);
+      uv.push(cuv[k][0], cuv[k][1]);
+      stiffArr.push(fl);
+      phaseArr.push(ph);
+      if (canopyArr) canopyArr.push(canopyY);
+      if (flowerArr) flowerArr.push(flower);
+      if (randArr) randArr.push(leafRand);
+    }
+    idxArr.push(base, base + 1, base + 2, base, base + 2, base + 3);
+  };
+
+  // Golden-angle phyllotaxis spray: each TWIG node fans a Vogel disk of small,
+  // leaf-SHAPED cards (alpha-cut in the shader). r = sqrt(t) packs them denser
+  // at the centre — the reference's phyllotaxis look. More + smaller cards, but
+  // because the alpha cut removes the card corners, filled area (overdraw)
+  // actually drops vs the old square cards.
+  const GOLDEN = Math.PI * (3 - Math.sqrt(5)); // 2.39996 rad
+  const leavesPerTwig = Math.max(
+    3,
+    Math.round(cardsPerCluster * 2 * (params.attractorCount / 260))
+  );
+  // Keep the total leaf count bounded by the existing budget.
+  const maxNodes = Math.max(1, Math.round(maxLeafCards / leavesPerTwig));
+  let placed = 0;
+
+  for (const idx of candidates) {
+    if (placed >= maxNodes) break;
+    center.copy(nodes[idx].pos);
+
+    // Outward direction from crown centre (special-cased for weeping/frond).
+    outward.copy(center).sub(crownCenter);
+    if (outward.lengthSq() < 1e-6) outward.set(0, 1, 0);
+    outward.normalize();
+    if (silhouette === 'weeping') {
+      outward.y -= 0.8; // droop the canopy normal downward
+      outward.normalize();
+    }
+
+    // canopyY: 0 deep interior .. 1 crust (distance from centre, remapped).
+    const baseCanopyY = Math.min(1, center.distanceTo(crownCenter) / crownRadius);
+    const flower = bloomAmount > 0 && rng() < bloomAmount ? 1 : 0;
+    const ph = rng() * Math.PI * 2;
+    const fl = Math.min(1, 0.7 + (nodes[idx].dist / maxDist) * 0.5);
+
+    for (let i = 0; i < leavesPerTwig; i++) {
+      const t = (i + 0.5) / leavesPerTwig; // 0..1 outward through the spray
+      const phi = i * GOLDEN;
+      const r = Math.sqrt(t) * leafSize * 0.9; // Vogel: denser at centre
+
+      // (u,v) basis perpendicular to outward for the spray disk.
+      helper.set(0, 1, 0);
+      if (Math.abs(outward.y) > 0.95) helper.set(1, 0, 0);
+      u.copy(helper).cross(outward).normalize();
+      v.copy(outward).cross(u).normalize();
+
+      // card centre = node + in-plane offset + push outward along the twig.
+      center.copy(nodes[idx].pos);
+      center
+        .addScaledVector(u, Math.cos(phi) * r)
+        .addScaledVector(v, Math.sin(phi) * r)
+        .addScaledVector(outward, leafSize * (0.2 + 0.5 * t));
+
+      // card normal stays OUTWARD from crown centre (CRITICAL for AO/SSS volume).
+      cardN.copy(center).sub(crownCenter);
+      if (cardN.lengthSq() < 1e-6) cardN.copy(outward);
+      cardN.normalize();
+      if (silhouette === 'weeping') {
+        cardN.y -= 0.5;
+        cardN.normalize();
+      }
+
+      // build a card basis perpendicular to cardN.
+      helper.set(0, 1, 0);
+      if (Math.abs(cardN.y) > 0.95) helper.set(1, 0, 0);
+      u.copy(helper).cross(cardN).normalize();
+      v.copy(cardN).cross(u).normalize();
+
+      const hs = leafSize * (0.42 + 0.3 * rng()); // smaller cards, denser crown
+      const leafRand = rng();
+      const canopyY = Math.min(1, baseCanopyY + (t - 0.5) * 0.25);
+
+      emitQuad(
+        lPos, lNrm, lUv, lStiff, lPhase, lCanopyY, lFlower, lRand, lIdx,
+        center.x, center.y, center.z, u, v, cardN, hs, fl, ph,
+        Math.max(0, Math.min(1, canopyY)), flower, leafRand
+      );
+
+      // Blossom: a couple of smaller flower cards per flowering twig (outer ones).
+      if (flower > 0 && i < 2) {
+        emitQuad(
+          bPos, bNrm, bUv, bStiff, bPhase, null, null, null, bIdx,
+          center.x + cardN.x * hs * 0.3,
+          center.y + cardN.y * hs * 0.3,
+          center.z + cardN.z * hs * 0.3,
+          u, v, cardN, hs * 0.6, fl, ph, 0, 0, leafRand
+        );
+      }
+    }
+    placed++;
+  }
+
+  const leaf = new THREE.BufferGeometry();
+  leaf.setAttribute('position', new THREE.Float32BufferAttribute(lPos, 3));
+  leaf.setAttribute('normal', new THREE.Float32BufferAttribute(lNrm, 3));
+  leaf.setAttribute('uv', new THREE.Float32BufferAttribute(lUv, 2));
+  leaf.setAttribute('aStiff', new THREE.Float32BufferAttribute(lStiff, 1));
+  leaf.setAttribute('aPhase', new THREE.Float32BufferAttribute(lPhase, 1));
+  leaf.setAttribute('aCanopyY', new THREE.Float32BufferAttribute(lCanopyY, 1));
+  leaf.setAttribute('aFlower', new THREE.Float32BufferAttribute(lFlower, 1));
+  leaf.setAttribute('aLeafRand', new THREE.Float32BufferAttribute(lRand, 1));
+  leaf.setIndex(lIdx);
+  leaf.computeBoundingSphere();
+
+  const blossom = new THREE.BufferGeometry();
+  blossom.setAttribute('position', new THREE.Float32BufferAttribute(bPos, 3));
+  blossom.setAttribute('normal', new THREE.Float32BufferAttribute(bNrm, 3));
+  blossom.setAttribute('uv', new THREE.Float32BufferAttribute(bUv, 2));
+  blossom.setAttribute('aStiff', new THREE.Float32BufferAttribute(bStiff, 1));
+  blossom.setAttribute('aPhase', new THREE.Float32BufferAttribute(bPhase, 1));
+  // The shared leaf vertex shader declares aCanopyY/aFlower; blossoms don't use
+  // them, but provide zeroed buffers so the attribute bindings are explicit.
+  blossom.setAttribute('aCanopyY', new THREE.Float32BufferAttribute(new Array(bStiff.length).fill(0), 1));
+  blossom.setAttribute('aFlower', new THREE.Float32BufferAttribute(new Array(bStiff.length).fill(0), 1));
+  blossom.setAttribute('aLeafRand', new THREE.Float32BufferAttribute(new Array(bStiff.length).fill(0), 1));
+  blossom.setIndex(bIdx);
+  blossom.computeBoundingSphere();
+
+  return { leaf, blossom, crownCenter, crownRadius };
+}
+
+// --- Impostor (far LOD) ------------------------------------------------------
+// A 2-quad CROSS billboard spanning the crown — ~8 verts, one draw call for all
+// far trees. Shares aStiff/aPhase/aCanopyY/aFlower attrs so it can reuse the leaf
+// material (stripped variant) without per-attribute branching.
+function buildImpostorGeometry(
+  crownCenter: THREE.Vector3,
+  crownRadius: number,
+  height: number
+): THREE.BufferGeometry {
+  const cy = crownCenter.y;
+  const r = Math.max(crownRadius, 0.6) * 1.15;
   const positions: number[] = [];
   const normals: number[] = [];
   const uvs: number[] = [];
   const stiff: number[] = [];
   const phase: number[] = [];
+  const canopyY: number[] = [];
+  const flower: number[] = [];
+  const leafRand: number[] = [];
   const indices: number[] = [];
+  void height;
 
-  const u = new THREE.Vector3();
-  const v = new THREE.Vector3();
-  const nrm = new THREE.Vector3();
-  const tmp = new THREE.Vector3();
-
-  // Cards per candidate, scaled so we hit roughly maxLeafCards.
-  const cardsPerCandidate = Math.max(1, Math.round(maxLeafCards / Math.max(candidates.length, 1)));
-  let placed = 0;
-
-  for (const idx of candidates) {
-    if (placed >= maxLeafCards) break;
-    const center = nodes[idx].pos;
-    for (let c = 0; c < cardsPerCandidate && placed < maxLeafCards; c++) {
-      // random orientation basis from two hashed directions
-      u.set(rng() * 2 - 1, rng() * 2 - 1, rng() * 2 - 1);
-      if (u.lengthSq() < 1e-6) u.set(1, 0, 0);
-      u.normalize();
-      tmp.set(rng() * 2 - 1, rng() * 2 - 1, rng() * 2 - 1);
-      v.copy(tmp).sub(u.clone().multiplyScalar(tmp.dot(u)));
-      if (v.lengthSq() < 1e-6) v.set(0, 1, 0);
-      v.normalize();
-      nrm.copy(u).cross(v).normalize();
-
-      // small offset off the node so cards form a puff, not a single point
-      const offMag = leafSize * 0.8;
-      const ox = (rng() * 2 - 1) * offMag;
-      const oy = (rng() * 2 - 1) * offMag;
-      const oz = (rng() * 2 - 1) * offMag;
-      const cx = center.x + ox;
-      const cy = center.y + oy;
-      const cz = center.z + oz;
-
-      const hs = leafSize * (0.7 + rng() * 0.6);
-      const base = positions.length / 3;
-      const ph = rng() * Math.PI * 2;
-      const fl = Math.min(1, 0.7 + nodes[idx].dist / maxDist * 0.5);
-
-      // 4 corners: (-u-v),(+u-v),(+u+v),(-u+v)
-      const corners: [number, number][] = [
-        [-1, -1],
-        [1, -1],
-        [1, 1],
-        [-1, 1]
-      ];
-      const cuv: [number, number][] = [
-        [0, 0],
-        [1, 0],
-        [1, 1],
-        [0, 1]
-      ];
-      for (let k = 0; k < 4; k++) {
-        const [su, sv] = corners[k];
-        positions.push(
-          cx + (u.x * su + v.x * sv) * hs,
-          cy + (u.y * su + v.y * sv) * hs,
-          cz + (u.z * su + v.z * sv) * hs
-        );
-        normals.push(nrm.x, nrm.y, nrm.z);
-        uvs.push(cuv[k][0], cuv[k][1]);
-        stiff.push(fl);
-        phase.push(ph);
-      }
-      indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
-      placed++;
+  // Two perpendicular vertical quads (X-plane and Z-plane).
+  const planes: Array<[THREE.Vector3, THREE.Vector3]> = [
+    [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1)],
+    [new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0)]
+  ];
+  for (const [ax, nrm] of planes) {
+    const base = positions.length / 3;
+    const corners: [number, number][] = [
+      [-1, -1],
+      [1, -1],
+      [1, 1],
+      [-1, 1]
+    ];
+    const cuv: [number, number][] = [
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1]
+    ];
+    for (let k = 0; k < 4; k++) {
+      const [sx, sy] = corners[k];
+      positions.push(
+        crownCenter.x + ax.x * sx * r,
+        cy + sy * r,
+        crownCenter.z + ax.z * sx * r
+      );
+      normals.push(nrm.x, nrm.y, nrm.z);
+      uvs.push(cuv[k][0], cuv[k][1]);
+      stiff.push(0.5);
+      phase.push(0);
+      canopyY.push((sy + 1) * 0.5);
+      flower.push(0);
+      leafRand.push(0);
     }
+    indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
   }
 
   const geo = new THREE.BufferGeometry();
@@ -430,15 +774,19 @@ function buildLeafGeometry(
   geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geo.setAttribute('aStiff', new THREE.Float32BufferAttribute(stiff, 1));
   geo.setAttribute('aPhase', new THREE.Float32BufferAttribute(phase, 1));
+  geo.setAttribute('aCanopyY', new THREE.Float32BufferAttribute(canopyY, 1));
+  geo.setAttribute('aFlower', new THREE.Float32BufferAttribute(flower, 1));
+  geo.setAttribute('aLeafRand', new THREE.Float32BufferAttribute(leafRand, 1));
   geo.setIndex(indices);
   geo.computeBoundingSphere();
   return geo;
 }
 
 /**
- * Generate one deterministic tree archetype (trunk + leaves) for `seed`.
- * Same seed + params always yields identical geometry (vertex counts and
- * positions). Geometry is in LOCAL space, origin at trunk base, +Y up.
+ * Generate one deterministic tree archetype (trunk + leaf clusters + blossoms +
+ * impostor) for `seed`. Same seed + params always yields identical geometry
+ * (vertex counts and positions). Geometry is in LOCAL space, origin at trunk
+ * base, +Y up.
  */
 export function generateTree(
   seed: number,
@@ -447,6 +795,20 @@ export function generateTree(
   const rng = makeRng(seed);
   const nodes = growSkeleton(params, rng);
   const trunkGeometry = buildTrunkGeometry(nodes, params);
-  const leafGeometry = buildLeafGeometry(nodes, params, rng);
-  return { trunkGeometry, leafGeometry };
+  const { leaf, blossom, crownCenter, crownRadius } = buildLeafGeometry(
+    nodes,
+    params,
+    rng
+  );
+  const impostorGeometry = buildImpostorGeometry(
+    crownCenter,
+    crownRadius,
+    params.height
+  );
+  return {
+    trunkGeometry,
+    leafGeometry: leaf,
+    blossomGeometry: blossom,
+    impostorGeometry
+  };
 }

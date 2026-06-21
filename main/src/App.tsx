@@ -61,7 +61,18 @@ const inputBase: React.CSSProperties = {
 
 const App: React.FC = () => {
   const totalVoxels = planetSize ** 3;
-  const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => createCurrentWorld({ x: 0, y: 0 }));
+  const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => {
+    // ?world=x,y -> spawn on foot directly on that coordinate's planet (debug: lets
+    // you inspect a specific seed's terrain/trees without travelling there).
+    try {
+      const raw = new URLSearchParams(window.location.search).get('world');
+      if (raw) {
+        const [sx, sy] = raw.split(',');
+        return createCurrentWorld({ x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) });
+      }
+    } catch { /* ignore */ }
+    return createCurrentWorld({ x: 0, y: 0 });
+  });
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
   const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');
   const [targetX, setTargetX] = useState('1');
