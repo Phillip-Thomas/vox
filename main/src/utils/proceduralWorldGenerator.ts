@@ -76,6 +76,13 @@ export class ProceduralWorldGenerator {
   // Lazily-computed sea-level radius (coordinate units) derived from a chosen
   // PERCENTILE of the actual terrain surface-radius distribution.
   private seaLevelRadius: number | null = null;
+  // Lazily-computed flooded-water set (keys "x,y,z"): empty cells at/below the
+  // waterline that are CONNECTED to the ocean surface (Minecraft-style flow into
+  // voids). Replaces the old per-cell dominant-axis threshold.
+  private floodedWater: Set<string> | null = null;
+  // Minimum share of sampled terrain columns that must stay above the waterline,
+  // so sea level can never submerge a whole planet (fixes "sea above ground").
+  private static readonly MIN_LAND_FRACTION = 0.3;
 
   // The terrain only fills [-floor(R), floor(R)]^3, but some presets/seeds push
   // their surface a few voxels PAST the cube edge (a bulging planet). To still
@@ -241,16 +248,79 @@ export class ProceduralWorldGenerator {
   // neighbour (one step further from center along the dominant axis) is air —
   // i.e. the true top of the ocean, useful for the shader to ripple only the top.
 
-  /** Public: is this empty cell flooded (at/below sea level)? */
+  /** Public: is this empty cell flooded (connected to the ocean, at/below sea level)? */
   isWaterVoxel(x: number, y: number, z: number): boolean {
-    if (this.shouldVoxelExist(x, y, z)) return false;
-    return this.dominantAxisRadius(x, y, z) <= this.getSeaLevelRadius();
+    return this.getFloodedWater().has(`${x},${y},${z}`);
   }
 
-  /** Public: is this empty cell open air (above sea level)? */
+  /** Public: is this empty cell open air (empty and not flooded)? */
   isAirVoxel(x: number, y: number, z: number): boolean {
     if (this.shouldVoxelExist(x, y, z)) return false;
-    return this.dominantAxisRadius(x, y, z) > this.getSeaLevelRadius();
+    return !this.getFloodedWater().has(`${x},${y},${z}`);
+  }
+
+  /**
+   * Flood fill (cached): every empty cell at/below the waterline that is
+   * CONNECTED — through other empty sub-waterline cells — to the ocean surface
+   * (a fillable cell touching open air above the line, or the scan boundary).
+   * This is the Minecraft *result*: water flows DOWN into connected voids, caves
+   * and depressions and stops at the waterline, gap-free; sealed pockets with no
+   * path to the surface stay dry. Compares the DOMINANT-AXIS radius (max|x|,|y|,
+   * |z|) — the same metric the cube-sphere terrain uses — so water aligns with
+   * the land; connectivity (not a smooth sphere) is what fixes unfilled voids.
+   * Computed once per generator.
+   */
+  private getFloodedWater(): Set<string> {
+    if (this.floodedWater !== null) return this.floodedWater;
+    const sea = this.getSeaLevelRadius();
+    const R = this.waterScanRadius();
+    const flooded = new Set<string>();
+    const stack: Array<[number, number, number]> = [];
+
+    const fillable = (x: number, y: number, z: number) =>
+      !this.shouldVoxelExist(x, y, z) && this.dominantAxisRadius(x, y, z) <= sea;
+    // Open air = anything outside the scan box (open space) OR an empty cell above
+    // the waterline. A fillable cell next to open air is the ocean surface.
+    const openAir = (x: number, y: number, z: number) =>
+      Math.abs(x) > R || Math.abs(y) > R || Math.abs(z) > R
+        ? true
+        : !this.shouldVoxelExist(x, y, z) && this.dominantAxisRadius(x, y, z) > sea;
+
+    const neigh: Array<[number, number, number]> = [
+      [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]
+    ];
+
+    // Seed from the ocean surface: fillable cells with an open-air neighbour.
+    for (let x = -R; x <= R; x++) {
+      for (let y = -R; y <= R; y++) {
+        for (let z = -R; z <= R; z++) {
+          if (!fillable(x, y, z)) continue;
+          let surface = false;
+          for (const [dx, dy, dz] of neigh) {
+            if (openAir(x + dx, y + dy, z + dz)) { surface = true; break; }
+          }
+          if (!surface) continue;
+          const key = `${x},${y},${z}`;
+          if (!flooded.has(key)) { flooded.add(key); stack.push([x, y, z]); }
+        }
+      }
+    }
+
+    // Flood through connected fillable cells (flows down into voids/caves).
+    while (stack.length) {
+      const [x, y, z] = stack.pop()!;
+      for (const [dx, dy, dz] of neigh) {
+        const nx = x + dx, ny = y + dy, nz = z + dz;
+        if (Math.abs(nx) > R || Math.abs(ny) > R || Math.abs(nz) > R) continue;
+        const key = `${nx},${ny},${nz}`;
+        if (flooded.has(key) || !fillable(nx, ny, nz)) continue;
+        flooded.add(key);
+        stack.push([nx, ny, nz]);
+      }
+    }
+
+    this.floodedWater = flooded;
+    return flooded;
   }
 
   /**
@@ -476,17 +546,33 @@ export class ProceduralWorldGenerator {
     // percentile directly and the per-preset gradient is preserved.
     let sea = tops[idx];
 
+    // Optional manual nudge (per-preset seaLevelOffset).
+    sea = this.applySeaLevelOffset(sea);
+
+    // LAND-FRACTION CLAMP (fixes "sea level above ground"): never let the
+    // waterline rise above the point where MIN_LAND_FRACTION of columns stay dry.
+    // tops is ascending, so the top at index (1 - landFraction) leaves that
+    // fraction above it. This caps the percentile AND any offset over-flooding.
+    const landIdx = Math.min(
+      tops.length - 1,
+      Math.max(0, Math.floor((1 - ProceduralWorldGenerator.MIN_LAND_FRACTION) * (tops.length - 1)))
+    );
+    sea = Math.min(sea, tops[landIdx]);
+
     // GUARANTEE water exists: a column with terrain top T only floods if there
-    // is an empty integer shell ceil(T) <= sea. For very tight/high
-    // distributions the chosen percentile can land just below every column's
-    // first empty shell (zero water). If so, raise sea to the smallest shell
-    // that floods at least one column, so every preset/seed keeps visible water.
+    // is an empty integer shell ceil(T) <= sea. If the clamp/percentile landed
+    // below every column's first empty shell (zero water), raise sea to the
+    // smallest shell that floods at least one column (water existence wins by a
+    // hair over the land clamp).
     const minFloodShell = Math.min(...tops.map(t => Math.floor(t) + 1));
     if (sea < minFloodShell) sea = minFloodShell + 0.001;
 
-    // Never exceed the outermost scannable shell.
-    sea = Math.min(sea, this.waterScanRadius() + 0.001);
-    sea = this.applySeaLevelOffset(sea);
+    // Cap at the RENDERED terrain shell. Terrain only generates within
+    // [-floor(R), floor(R)] (getAllVoxelPositions), so any waterline above
+    // floor(R) would float an ocean ABOVE the top land shell — exactly the "sea
+    // level above ground" bug. Keeping sea <= floor(R) confines water to dips at
+    // or below the surface, leaving the top land shells dry.
+    sea = Math.min(sea, Math.floor(this.getPlanetRadius()));
     this.seaLevelRadius = sea;
     return this.seaLevelRadius;
   }

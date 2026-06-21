@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { CapsuleCollider, RapierRigidBody, RigidBody, useBeforePhysicsStep, useRapier } from '@react-three/rapier';
@@ -16,8 +16,13 @@ import {
   areAdjacentFaces,
   chooseFaceFromPosition,
   composeVelocity,
+  dominantFaceForPosition,
   getSurfaceState,
   integrateLocalGravity,
+  JETPACK_MAX_FUEL,
+  JETPACK_MAX_UP_SPEED,
+  JETPACK_REFILL_RATE,
+  JETPACK_THRUST,
   makeTangentBasis,
   movementDirectionFromBasis,
   planarCameraBasis,
@@ -41,10 +46,18 @@ import {
   TRANSITION_LOCK_TIME,
   TRANSITION_MIN_INWARD_SPEED
 } from '../utils/cubeGravityConstants';
+import { isTouchActive } from '../utils/mobileInput';
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
+
+// Jetpack fuel as a normalized 0..1 value, exposed module-side so the HUD can
+// poll it per-frame (mirrors ShipController.getEngageCharge) without re-rendering.
+let jetpackFuelDisplay = 1;
+export function getJetpackFuel(): number {
+  return jetpackFuelDisplay;
+}
 const VISUAL_TRANSITION_TIME = 0.42;
 const PLAYER_LOCAL_UP = new THREE.Vector3(0, 1, 0);
 
@@ -88,7 +101,13 @@ export default function EfficientPlayer({
   const [, get] = useKeyboardControls();
   const { world, rapier } = useRapier();
 
-  const [surfaceState, setSurfaceState] = useState<SurfaceState>(() => getSurfaceState('top'));
+  // Seed gravity from the SPAWN position's face, not a hardcoded 'top'. Exiting
+  // the ship spawns you wherever you landed it (any of the 6 faces); initializing
+  // to 'top' left gravity pointing the wrong way for the first frames (and mid-
+  // face it never auto-corrected, since chooseFaceFromPosition only fires at edges).
+  const [surfaceState, setSurfaceState] = useState<SurfaceState>(
+    () => getSurfaceState(initialPosition ? dominantFaceForPosition(initialPosition) : 'top')
+  );
   const surfaceRef = useRef<SurfaceState>(surfaceState);
   const visualCameraUp = useRef(surfaceState.up.clone());
   const rotationAnimation = useRef<RotationAnimation | null>(null);
@@ -105,6 +124,7 @@ export default function EfficientPlayer({
     jumpBufferRemaining: 0,
     previousJump: false
   });
+  const jetpackFuel = useRef(JETPACK_MAX_FUEL);
   const defaultSpawnPosition = useMemo(
     () => new THREE.Vector3(0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0),
     [planetSize]
@@ -127,6 +147,18 @@ export default function EfficientPlayer({
       gravity: next.gravity.clone()
     });
   }, [onSurfaceChange]);
+
+  // Emit the initial (spawn-position-derived) surface once on mount so the scene
+  // and planet orient collision streaming correctly from the first frame after a
+  // spawn or ship exit, not just after the first edge transition.
+  useEffect(() => {
+    onSurfaceChange?.({
+      ...surfaceRef.current,
+      up: surfaceRef.current.up.clone(),
+      gravity: surfaceRef.current.gravity.clone()
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateVisualTransition = useCallback(() => {
     const animation = rotationAnimation.current;
@@ -280,7 +312,10 @@ export default function EfficientPlayer({
     const grounded = checkGrounded(position, activeSurface.up);
     lastGrounded.current = grounded;
 
-    const movementInput = controlsActive.current
+    // Input is enabled by pointer lock (desktop) OR active touch controls (mobile).
+    const active = controlsActive.current || isTouchActive();
+
+    const movementInput = active
       ? {
           forward: controls.forward,
           backward: controls.backward,
@@ -307,7 +342,7 @@ export default function EfficientPlayer({
 
     const jump = updateJumpState(
       jumpState.current,
-      controlsActive.current && controls.jump,
+      active && controls.jump,
       grounded,
       FIXED_PHYSICS_STEP
     );
@@ -316,6 +351,25 @@ export default function EfficientPlayer({
     if (jump.shouldJump) {
       nextVelocity = applyJumpImpulse(nextVelocity, activeSurface.up, DEFAULT_JUMP_SPEED);
     }
+
+    // Hold-jump jetpack: once airborne, holding jump burns limited fuel for a
+    // gentle upward thrust (controlled hover/boost), capped so it's not a rocket.
+    // Fuel refills while grounded. shouldJump (the ground impulse) takes priority.
+    const jumpHeld = active && controls.jump;
+    if (grounded) {
+      jetpackFuel.current = Math.min(
+        JETPACK_MAX_FUEL,
+        jetpackFuel.current + JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP
+      );
+    } else if (jumpHeld && !jump.shouldJump && jetpackFuel.current > 0) {
+      jetpackFuel.current = Math.max(0, jetpackFuel.current - FIXED_PHYSICS_STEP);
+      const upSpeed = nextVelocity.dot(activeSurface.up);
+      if (upSpeed < JETPACK_MAX_UP_SPEED) {
+        const add = Math.min(JETPACK_THRUST * FIXED_PHYSICS_STEP, JETPACK_MAX_UP_SPEED - upSpeed);
+        nextVelocity.addScaledVector(activeSurface.up, add);
+      }
+    }
+    jetpackFuelDisplay = jetpackFuel.current / JETPACK_MAX_FUEL;
 
     transitionCooldown.current = Math.max(0, transitionCooldown.current - FIXED_PHYSICS_STEP);
     const transitionLocked = Boolean(rotationAnimation.current) || transitionCooldown.current > 0;
@@ -352,8 +406,9 @@ export default function EfficientPlayer({
     }
 
     const controls = get();
-    const deletePressed = controlsActive.current && controls.delete && !previousDeleteKey.current;
-    previousDeleteKey.current = controlsActive.current && controls.delete;
+    const deleteActive = controlsActive.current || isTouchActive();
+    const deletePressed = deleteActive && controls.delete && !previousDeleteKey.current;
+    previousDeleteKey.current = deleteActive && controls.delete;
     if (deletePressed) {
       handleVoxelDeletion(cameraRef.current);
     }

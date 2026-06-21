@@ -8,7 +8,10 @@ import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
-import { getEngageCharge } from './components/ShipController.tsx';
+import { getEngageCharge, getCrashFlash } from './components/ShipController.tsx';
+import { getJetpackFuel } from './components/EfficientPlayer.tsx';
+import TouchControls from './components/mobile/TouchControls.tsx';
+import { isTouchDevice } from './utils/mobileInput.ts';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -84,6 +87,8 @@ const App: React.FC = () => {
   const [debugColliders, setDebugColliders] = useState(false);
   const [debugState, setDebugState] = useState<SceneDebugState>({ player: null, planet: null });
   const [benchSample, setBenchSample] = useState<BenchmarkSample | null>(null);
+  const [hudVisible, setHudVisible] = useState(true);
+  const isTouch = useMemo(() => isTouchDevice(), []);
   const flight = useSpaceFlight();
   const currentWorldKey = coordinateKey(currentWorld.coordinate);
 
@@ -238,6 +243,19 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [flight.phase, flight.controlMode]);
 
+  // Press H to hide/show the HUD panels (desktop). On mobile the corner toggle
+  // button does the same via tap. Ignored while typing in the coordinate inputs.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.code !== 'KeyH') return;
+      const el = document.activeElement;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
+      setHudVisible(v => !v);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   return (
     <KeyboardControls
       map={[
@@ -310,6 +328,36 @@ const App: React.FC = () => {
       <Crosshair />
       <WarpFlash />
       <TargetReticle />
+      {flight.controlMode === 'fps' && <JetpackMeter />}
+      {flight.controlMode === 'flight' && <CrashFlash />}
+      {isTouch && <TouchControls controlMode={flight.controlMode} />}
+
+      {/* HUD show/hide toggle — works as a click (desktop) or tap (mobile); the
+          H key does the same on desktop. Always visible so you can bring panels
+          back. */}
+      <button
+        onClick={() => setHudVisible(v => !v)}
+        aria-label={hudVisible ? 'Hide menus' : 'Show menus'}
+        style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 44,
+          height: 44,
+          fontSize: 20,
+          lineHeight: '44px',
+          textAlign: 'center',
+          color: 'white',
+          background: 'rgba(0,0,0,0.6)',
+          border: '1px solid rgba(125,211,252,0.35)',
+          borderRadius: 8,
+          cursor: 'pointer',
+          padding: 0,
+          zIndex: 20
+        }}
+      >
+        {hudVisible ? '✕' : '☰'}
+      </button>
 
       {flight.controlMode === 'flight' && (
         <div style={{
@@ -378,7 +426,8 @@ const App: React.FC = () => {
         fontFamily: 'monospace',
         background: 'rgba(0,0,0,0.7)',
         padding: '10px',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        display: hudVisible ? undefined : 'none'
       }}>
         <h3>Efficient Voxel System</h3>
         <p>WASD: Move</p>
@@ -426,6 +475,7 @@ const App: React.FC = () => {
         bottom: 10,
         right: 10,
         left: compactOverlay ? 10 : 'auto',
+        display: hudVisible ? undefined : 'none',
         color: 'white',
         fontFamily: 'monospace',
         background: 'rgba(0,0,0,0.8)',
@@ -535,6 +585,94 @@ const App: React.FC = () => {
         </div>
       </div>
     </KeyboardControls>
+  );
+};
+
+/**
+ * Ship crash feedback: a red impact vignette + "CRASHED" message that fades over
+ * ~1s after a fast terrain impact. Polls ShipController's module-side flash value.
+ */
+const CrashFlash: React.FC = () => {
+  const [intensity, setIntensity] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      setIntensity(getCrashFlash());
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  if (intensity <= 0) return null;
+  return (
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        boxShadow: `inset 0 0 ${120 * intensity}px ${40 * intensity}px rgba(220,40,30,${0.55 * intensity})`
+      }} />
+      <div style={{
+        position: 'absolute',
+        top: '38%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        color: '#ff5544',
+        fontFamily: 'monospace',
+        fontWeight: 'bold',
+        letterSpacing: 2,
+        fontSize: 26,
+        textShadow: '0 0 8px rgba(0,0,0,0.8)',
+        opacity: intensity
+      }}>
+        CRASHED — SPACE to re-launch
+      </div>
+    </div>
+  );
+};
+
+/**
+ * On-foot jetpack fuel bar. Polls EfficientPlayer's module-side fuel value per
+ * frame via rAF (no re-render churn) and only shows while fuel is below full
+ * (i.e. recently/currently used), so it stays out of the way otherwise.
+ */
+const JetpackMeter: React.FC = () => {
+  const [fuel, setFuel] = useState(1);
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      setFuel(getJetpackFuel());
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  if (fuel >= 0.999) return null;
+  const pct = Math.round(Math.max(0, Math.min(1, fuel)) * 100);
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: 64,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 140,
+      pointerEvents: 'none',
+      textAlign: 'center',
+      fontFamily: 'monospace',
+      fontSize: 10,
+      color: '#9fd0ff'
+    }}>
+      <div style={{ marginBottom: 3, letterSpacing: 1, opacity: 0.85 }}>JETPACK</div>
+      <div style={{ height: 5, borderRadius: 3, background: 'rgba(125,211,252,0.2)', overflow: 'hidden' }}>
+        <div style={{
+          height: '100%',
+          width: `${pct}%`,
+          background: pct > 25 ? '#7dd3fc' : '#fca5a5',
+          transition: 'width 0.08s linear'
+        }} />
+      </div>
+    </div>
   );
 };
 

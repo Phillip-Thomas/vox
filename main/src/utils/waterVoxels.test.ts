@@ -34,7 +34,7 @@ function makeGeneratorFor(size: number, seed: number) {
 }
 
 describe('water voxel classification', () => {
-  it('raises the default seed sea level by one voxel', () => {
+  it('default seed sea-level offset raises the waterline but never floods land away', () => {
     const raisedConfig = createTerrainConfig(12345, worldConfig.planetRadius);
     const baselineConfig = { ...raisedConfig, seaLevelOffset: 0 };
     const raised = new ProceduralWorldGenerator(worldConfig, raisedConfig);
@@ -42,7 +42,13 @@ describe('water voxel classification', () => {
 
     expect(raisedConfig.seaLevelOffset).toBe(1);
     expect(createTerrainConfig(54321, worldConfig.planetRadius).seaLevelOffset ?? 0).toBe(0);
-    expect(raised.getSeaLevelRadius()).toBeCloseTo(baseline.getSeaLevelRadius() + 1);
+    // The +1 offset can only RAISE the waterline (never lower it), and is capped
+    // by the land-fraction clamp so it can't submerge the planet — so the raised
+    // sea level is >= baseline and at most +1 above it.
+    const r = raised.getSeaLevelRadius();
+    const b = baseline.getSeaLevelRadius();
+    expect(r).toBeGreaterThanOrEqual(b);
+    expect(r).toBeLessThanOrEqual(b + 1 + 1e-6);
   });
 
   it('water and air partition the empty cells by sea level', () => {
@@ -208,5 +214,73 @@ describe('every terrain preset has visible water (planetSize 50)', () => {
     const valleys = buildWaterFaces(PLANET_SIZE, 13579).length;
     const mountains = buildWaterFaces(PLANET_SIZE, 54321).length;
     expect(valleys).toBeGreaterThan(mountains);
+  });
+
+  // B3: sea level must never submerge the planet. Test the user-facing invariant
+  // directly: a meaningful share of the rendered terrain SURFACE is dry (has an
+  // air neighbour) rather than underwater (water neighbour) on every preset.
+  it('leaves dry land surface above the waterline on every preset (not submerged)', () => {
+    for (const { name, seed } of PRESETS) {
+      const gen = makeGeneratorFor(PLANET_SIZE, seed);
+      let dry = 0;
+      let wet = 0;
+      for (const { x, y, z } of gen.getAllVoxelPositions()) {
+        let touchesAir = false;
+        let touchesWater = false;
+        for (const [dx, dy, dz] of FACE_OFFSETS) {
+          if (gen.isAirVoxel(x + dx, y + dy, z + dz)) touchesAir = true;
+          if (gen.isWaterVoxel(x + dx, y + dy, z + dz)) touchesWater = true;
+        }
+        if (touchesAir) dry++;
+        else if (touchesWater) wet++;
+      }
+      const surface = dry + wet;
+      expect(surface, `${name} should have a terrain surface`).toBeGreaterThan(0);
+      // At least 20% of the exposed terrain surface must be dry land, not ocean.
+      expect(dry / surface, `${name} dry-land fraction`).toBeGreaterThan(0.2);
+    }
+  });
+
+  // B2: every water voxel must be connected, through other water voxels, to the
+  // ocean SURFACE (a water cell with an air neighbour). This is the flood-fill
+  // invariant — no orphaned water; sealed pockets are excluded by construction.
+  it('every water voxel is connected to the ocean surface (flood-fill invariant)', () => {
+    const gen = makeGeneratorFor(PLANET_SIZE, 13579); // valleys: lots of water
+    const R = PLANET_SIZE / 2 + 8;
+    const NEIGH = FACE_OFFSETS;
+    const key = (x: number, y: number, z: number) => `${x},${y},${z}`;
+    const water = new Set<string>();
+    const surface: Array<[number, number, number]> = [];
+
+    for (let x = -R; x <= R; x++) {
+      for (let y = -R; y <= R; y++) {
+        for (let z = -R; z <= R; z++) {
+          if (!gen.isWaterVoxel(x, y, z)) continue;
+          water.add(key(x, y, z));
+          for (const [dx, dy, dz] of NEIGH) {
+            if (gen.isAirVoxel(x + dx, y + dy, z + dz)) { surface.push([x, y, z]); break; }
+          }
+        }
+      }
+    }
+    expect(water.size).toBeGreaterThan(0);
+    expect(surface.length).toBeGreaterThan(0);
+
+    // BFS from every surface water cell through water neighbours.
+    const seen = new Set<string>();
+    const stack = [...surface];
+    for (const [x, y, z] of surface) seen.add(key(x, y, z));
+    while (stack.length) {
+      const [x, y, z] = stack.pop()!;
+      for (const [dx, dy, dz] of NEIGH) {
+        const k = key(x + dx, y + dy, z + dz);
+        if (water.has(k) && !seen.has(k)) {
+          seen.add(k);
+          stack.push([x + dx, y + dy, z + dz]);
+        }
+      }
+    }
+    // Reachable surface-connected water == ALL water (no orphans).
+    expect(seen.size).toBe(water.size);
   });
 });
