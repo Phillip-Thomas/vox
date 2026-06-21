@@ -1,5 +1,4 @@
 import { seededUnit } from './worldCoordinates';
-import { buildTreeProfile } from './treeProfile';
 
 // --- Per-planet BIOME profile ------------------------------------------------
 //
@@ -40,28 +39,27 @@ export interface BiomeProfile {
 const SALT_LUSH = 51;
 const SALT_ARID = 52;
 const SALT_TEMP = 53;
-const SALT_HUEJIT = 54;
 const SALT_SAT = 55;
+const SALT_VEGHUE = 56;
+const SALT_VEGHUE2 = 57;
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
-const _hsl = { h: 0, s: 0, l: 0 };
+// Bold non-green vegetation accents (sRGB hue 0..1): amber, coral/red, magenta,
+// violet, deep blue, cyan-teal. These make alien planets read at a glance.
+const ALIEN_VEG_HUES = [0.07, 0.99, 0.90, 0.78, 0.62, 0.50];
 
 /**
- * Build the deterministic per-planet biome. Same seed -> identical biome.
+ * Build the deterministic per-planet biome — the SHARED vegetation/climate anchor
+ * that grass (and, next, trees/terrain) derive from. The vegetation hue is its
+ * OWN deliberately diverse palette (NOT read back from trees, which were ~70%
+ * green and made every planet look the same): ~55% green family spread wide,
+ * ~45% bold accent hues. Same seed -> identical biome.
  */
 export function buildBiomeProfile(seed: number): BiomeProfile {
   const s = seed | 0;
-
-  // Cohesion: read the planet's tree-leaf hue (linear -> sRGB for HSL).
-  const leaf = buildTreeProfile(s).leafColor.clone().convertLinearToSRGB();
-  leaf.getHSL(_hsl);
-  const baseHue = _hsl.h;
-  // Alien when the leaf hue is outside the green family (~matches treeProfile's
-  // ~30% alien rate). Green family is roughly hue 0.18 .. 0.46.
-  const alien = !(baseHue > 0.18 && baseHue < 0.46);
 
   const lushness = seededUnit(s, SALT_LUSH); // 0..1, full range -> dramatic spread
   // Aridity skews wetter, and lush worlds resist drying.
@@ -69,8 +67,24 @@ export function buildBiomeProfile(seed: number): BiomeProfile {
   aridity = clamp(aridity * (1.25 - lushness * 0.6), 0, 1);
   const temperature = seededUnit(s, SALT_TEMP);
 
-  const hue = (baseHue + (seededUnit(s, SALT_HUEJIT) - 0.5) * 0.06 + 1) % 1;
-  const saturation = clamp(0.42 + seededUnit(s, SALT_SAT) * 0.36 - aridity * 0.22, 0.12, 0.88);
+  // Vegetation hue — diverse by design so planets look distinct.
+  const hueRoll = seededUnit(s, SALT_VEGHUE);
+  let hue: number;
+  let alien: boolean;
+  if (hueRoll < 0.55) {
+    // green family, but a WIDE spread: yellow-green .. emerald .. teal-green.
+    hue = 0.18 + seededUnit(s, SALT_VEGHUE2) * 0.30; // 0.18 .. 0.48
+    alien = false;
+  } else {
+    const idx = Math.min(
+      ALIEN_VEG_HUES.length - 1,
+      Math.floor(seededUnit(s, SALT_VEGHUE2) * ALIEN_VEG_HUES.length)
+    );
+    hue = ALIEN_VEG_HUES[idx];
+    alien = true;
+  }
+  // Bold saturation so the hue actually reads (arid worlds desaturate somewhat).
+  const saturation = clamp(0.5 + seededUnit(s, SALT_SAT) * 0.38 - aridity * 0.2, 0.22, 0.92);
 
   let kind: BiomeKind;
   if (alien) kind = 'alien';

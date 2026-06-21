@@ -37,9 +37,10 @@ describe('buildBiomeProfile', () => {
     }
     // Expect several distinct biome kinds, not one dominant type.
     expect(kinds.size).toBeGreaterThanOrEqual(4);
-    // Alien planets should be a real minority (~20-40%), not absent or universal.
+    // Alien (non-green) planets should be a substantial fraction (~45%), so the
+    // galaxy shows bold non-green worlds, but not the majority.
     const frac = alienCount / total;
-    expect(frac).toBeGreaterThan(0.1);
-    expect(frac).toBeLessThan(0.5);
+    expect(frac).toBeGreaterThan(0.25);
+    expect(frac).toBeLessThan(0.6);
   });
 });

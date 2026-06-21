@@ -75,12 +75,14 @@ export function buildGrassProfile(terrainSeed: number): GrassProfile {
   const sssColor = new THREE.Color()
     .setHSL((tHue + 0.015) % 1, clamp(sat + 0.14, 0, 1), 0.6)
     .convertSRGBToLinear();
-  // Dry patches: warm straw/gold, hue-shifted toward amber regardless of veg hue.
+  // Dry patches: a SUN-BLEACHED version of THIS planet's hue (paler, desaturated,
+  // nudged warm) — not a fixed gold. A fixed gold turned alien (teal/violet)
+  // biomes olive when they dried; this keeps each planet's identity even arid.
   const dryColor = new THREE.Color()
-    .setHSL(clamp(0.09 + temperature * 0.04, 0.06, 0.16), 0.55, 0.46)
+    .setHSL((tHue + 0.04) % 1, clamp(sat * 0.45, 0.08, 0.4), 0.52)
     .convertSRGBToLinear();
 
-  const dryness = clamp(aridity * 0.9, 0, 0.9);
+  const dryness = clamp(aridity * 0.85, 0, 0.85);
 
   // --- Density (the headline per-planet knob) --------------------------------
   // 0.35x (sparse) .. ~1.85x (jungle) of the global quality density.

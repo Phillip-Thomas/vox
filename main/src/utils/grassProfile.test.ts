@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { coordinateToSeed } from './worldCoordinates';
 import { buildGrassProfile } from './grassProfile';
-import { buildTreeProfile } from './treeProfile';
+import { buildBiomeProfile } from './biomeProfile';
 
 const _hsl = { h: 0, s: 0, l: 0 };
 function hueOf(c: THREE.Color): number {
@@ -41,14 +41,14 @@ describe('buildGrassProfile', () => {
     expect(baseColors.size).toBeGreaterThan(20);
   });
 
-  it('coheres the grass hue with the planet tree-leaf hue', () => {
-    // The grass hue is nudged at most ~0.04 off the leaf hue, so the biome reads
-    // as one family. Check the circular hue distance stays small for many seeds.
+  it('coheres the grass hue with the shared biome hue', () => {
+    // Grass derives its hue from the biome (only a small temperature nudge), so
+    // the planet reads as one biome. Check circular hue distance stays small.
     for (let i = 0; i < 200; i++) {
       const seed = coordinateToSeed(i, i * 17 + 3);
-      const leafHue = hueOf(buildTreeProfile(seed).leafColor);
+      const biomeHue = buildBiomeProfile(seed).hue;
       const grassHue = hueOf(buildGrassProfile(seed).baseColor);
-      let d = Math.abs(leafHue - grassHue);
+      let d = Math.abs(biomeHue - grassHue);
       d = Math.min(d, 1 - d); // circular
       expect(d).toBeLessThan(0.08);
     }
