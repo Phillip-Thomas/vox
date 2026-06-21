@@ -1,0 +1,98 @@
+{
+  "label": "lookB",
+  "profile": "HIGH",
+  "painterly": true,
+  "results": [
+    {
+      "view": "-2_9-face-edge-cliff",
+      "world": "-2,9",
+      "day": 0.0977,
+      "resolved": "-2_9-face-edge-cliff",
+      "metrics": {
+        "fps": 7,
+        "p50": 16.7,
+        "p95": 19.6,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "-2_9-ship",
+      "world": "-2,9",
+      "day": 0.3491,
+      "resolved": "-2_9-ship",
+      "metrics": {
+        "fps": 53,
+        "p50": 16.7,
+        "p95": 22.4,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "-1_-70-approach-grass-grid",
+      "world": "-1,-70",
+      "day": 0.4734,
+      "resolved": "-1_-70-approach-grass-grid",
+      "metrics": {
+        "fps": 50,
+        "p50": 16.7,
+        "p95": 17.1,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "-1_-70-sky-star-rings",
+      "world": "-1,-70",
+      "day": 0.6251,
+      "resolved": "-1_-70-sky-star-rings",
+      "metrics": {
+        "fps": 52,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "-1_-70-tree-bare-canopy",
+      "world": "-1,-70",
+      "day": 0.8533,
+      "resolved": "-1_-70-tree-bare-canopy",
+      "metrics": {
+        "fps": 52,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "-1_-70-water-edge-misalign",
+      "world": "-1,-70",
+      "day": 0.1235,
+      "resolved": "-1_-70-water-edge-misalign",
+      "metrics": {
+        "fps": 53,
+        "p50": 16.7,
+        "p95": 23.4,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    },
+    {
+      "view": "99_-4-upside-down-canopy",
+      "world": "99,-4",
+      "day": 0.2135,
+      "resolved": "99_-4-upside-down-canopy",
+      "metrics": {
+        "fps": 54,
+        "p50": 16.7,
+        "p95": 17.5,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

@@ -30,6 +30,12 @@ export interface GraphicsQuality {
   postProcess: boolean;
   /** Use the painterly (Kuwahara) look instead of plain bloom. (Phase 5) */
   painterly: boolean;
+  /** Unified per-biome + time-of-day color grade (cohesion pass). */
+  colorGrade: boolean;
+  /** Screen-space contact ambient occlusion (N8AO) — grounds objects. */
+  contactAO: boolean;
+  /** Stylized depth outline (edge darkening) — locks the look. */
+  outline: boolean;
 }
 
 export type QualityProfile = 'ULTRA' | 'HIGH' | 'MEDIUM' | 'LOW' | 'POTATO';
@@ -46,7 +52,10 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     waterReflections: 'screenspace',
     waterAnimated: true,
     postProcess: true,
-    painterly: false
+    painterly: false,
+    colorGrade: true,
+    contactAO: true,
+    outline: true
   },
   HIGH: {
     triplanarDetail: true,
@@ -59,7 +68,10 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: true,
-    painterly: false
+    painterly: false,
+    colorGrade: true,
+    contactAO: true,
+    outline: true
   },
   MEDIUM: {
     triplanarDetail: false,
@@ -72,7 +84,10 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: false,
-    painterly: false
+    painterly: false,
+    colorGrade: false,
+    contactAO: false,
+    outline: false
   },
   LOW: {
     triplanarDetail: false,
@@ -85,7 +100,10 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     waterReflections: 'fresnel',
     waterAnimated: false,
     postProcess: false,
-    painterly: false
+    painterly: false,
+    colorGrade: false,
+    contactAO: false,
+    outline: false
   },
   POTATO: {
     triplanarDetail: false,
@@ -98,7 +116,10 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     waterReflections: 'none',
     waterAnimated: false,
     postProcess: false,
-    painterly: false
+    painterly: false,
+    colorGrade: false,
+    contactAO: false,
+    outline: false
   }
 };
 

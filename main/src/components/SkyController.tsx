@@ -3,6 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
+import { buildBiomeProfile } from '../utils/biomeProfile.ts';
 import SpaceSky from './SpaceSky.tsx';
 
 /**
@@ -90,6 +91,14 @@ const forcedDayPhase: number | null = (() => {
 /** Forced day phase from ?dayphase=, or null when the cycle runs normally. */
 export function getForcedDayPhase(): number | null {
   return forcedDayPhase;
+}
+
+// The day phase currently being rendered (forced value, or the running cycle's
+// live phase). Lets tools like the vantage recorder capture the ACTUAL
+// time-of-day on screen, not just an explicit ?dayphase.
+let liveDayPhase = forcedDayPhase ?? 0.25;
+export function getCurrentDayPhase(): number {
+  return forcedDayPhase ?? liveDayPhase;
 }
 
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
@@ -204,11 +213,11 @@ function applyDayPhase(
   const night = 1.0 - daylight;
   // Fade in only once the moon is actually above the horizon.
   const moonUp = smoothstep(-0.05, 0.25, moonDirection.y);
-  moonLight.intensity = night * moonUp * 0.45;
+  moonLight.intensity = night * moonUp * 0.75;
   moonLight.color.copy(moonColor);
 
   // --- Ambient (fill) light ---
-  ambient.intensity = 0.18 + daylight * 0.42;
+  ambient.intensity = 0.24 + daylight * 0.42;
   ambient.color.copy(nightAmbient).lerp(dayAmbient, daylight);
 
   // --- Fog color: night navy -> day blue, warming at golden hour ---
@@ -225,10 +234,32 @@ function applyDayPhase(
   return { sunDirection, daylight, golden };
 }
 
-export default function SkyController() {
+interface SkyControllerProps {
+  /** Current planet seed — drives a SUBTLE per-biome fog tint + density so each
+   *  world's atmosphere feels distinct (Phase 1 cohesion). */
+  terrainSeed?: number;
+}
+
+// Subtle per-biome fog: a low-saturation atmosphere tint + small density variation,
+// so planets differ without the fog ever becoming heavy. Derived once per seed.
+const FOG_BIOME_MIX = 0.16; // how far the time-of-day fog lerps toward the biome tint
+function biomeFog(terrainSeed: number): { tint: THREE.Color; densityMul: number } {
+  const b = buildBiomeProfile(terrainSeed);
+  // Alien worlds tint toward their vegetation hue; otherwise a gentle warm(arid)/
+  // cool(cold) shift by temperature. Low saturation keeps it subtle.
+  const hue = b.alien ? b.hue : (0.06 + b.temperature * 0.12);
+  const tint = new THREE.Color().setHSL(hue, 0.16 + b.aridity * 0.12, 0.62);
+  // Lush worlds a touch hazier, arid/sparse crisper (0.8 .. ~1.3).
+  const densityMul = 0.8 + b.lushness * 0.5;
+  return { tint, densityMul };
+}
+
+export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
   const scene = useThree(state => state.scene);
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
+
+  const fogBiome = useMemo(() => biomeFog(terrainSeed), [terrainSeed]);
 
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
   const moonLightRef = useRef<THREE.DirectionalLight>(null);
@@ -260,10 +291,12 @@ export default function SkyController() {
       applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
-    applyDayPhase(forcedDayPhase ?? STATIC_DAY_PHASE, sunLight, moonLight, ambient, fog);
-    fog.density = fogDensityForPhase(phase);
+    liveDayPhase = forcedDayPhase ?? STATIC_DAY_PHASE;
+    const r = applyDayPhase(liveDayPhase, sunLight, moonLight, ambient, fog);
+    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
+    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inSpace, phase]);
+  }, [inSpace, phase, fogBiome]);
 
   useFrame(state => {
     const sunLight = sunLightRef.current;
@@ -289,8 +322,10 @@ export default function SkyController() {
     if (!animated) return;
 
     const dayPhase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
-    applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
-    fog.density = fogDensityForPhase(phase);
+    liveDayPhase = dayPhase;
+    const r = applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
+    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
+    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
   });
 
   return (

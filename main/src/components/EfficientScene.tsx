@@ -7,6 +7,7 @@ import GrassField from './GrassField';
 import TreeField from './TreeField';
 import WaterBlocks from './WaterBlocks.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
+import AgentCamera from './debug/AgentCamera.tsx';
 import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
@@ -41,6 +42,9 @@ interface EfficientSceneProps {
   /** DEBUG (?overview=1): mount a non-interactive overhead camera instead of the
    *  pointer-lock player so the ocean can be inspected/screenshotted. */
   overview?: boolean;
+  /** DEBUG (?agent=1): mount the scriptable verification-harness camera + the
+   *  window.__game bridge instead of any player/ship camera. */
+  agent?: boolean;
   onGroundedChange?: (grounded: boolean) => void;
   onDebugChange?: (debug: SceneDebugState) => void;
 }
@@ -50,6 +54,7 @@ export default function EfficientScene({
   debugColliders = false,
   arrivalMode = 'surface',
   overview = false,
+  agent = false,
   onGroundedChange,
   onDebugChange
 }: EfficientSceneProps) {
@@ -107,7 +112,9 @@ export default function EfficientScene({
         debugColliders={debugColliders}
         onStatsChange={planet => updateDebugState({ planet })}
       />
-      {overview ? (
+      {agent ? (
+        <AgentCamera planetSize={planetSize} onPositionChange={publishPlayerPosition} />
+      ) : overview ? (
         <OverviewCamera planetSize={planetSize} />
       ) : controlMode === 'flight' ? (
         <ShipController

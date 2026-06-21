@@ -1,0 +1,20 @@
+{
+  "label": "b4b",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "-1_-70-sky-star-rings",
+      "world": "-1,-70",
+      "day": 0.6251,
+      "resolved": "-1_-70-sky-star-rings",
+      "metrics": {
+        "fps": 7,
+        "p50": 16.7,
+        "p95": 17.1,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}

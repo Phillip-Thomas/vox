@@ -227,12 +227,23 @@ const FRAG = /* glsl */ `
     vec3 dir  = normalize(vDir);
     vec3 sdir = rotate(dir, uTime * 0.01); // slow celestial drift (stars/nebula)
 
+    // Domain-warp the star direction with smooth noise BEFORE cellularizing.
+    // starLayer voxelizes dir*cells: a pure unit direction is a constant-radius
+    // sphere shell, and binning that shell into the cartesian grid produces
+    // visible CONCENTRIC RINGS. A small smooth warp makes the shell irregular so
+    // the stars look randomly scattered (no rings). Shared across layers (cheap).
+    vec3 wdir = sdir + 0.045 * vec3(
+      vnoise(sdir * 2.7 + 13.0),
+      vnoise(sdir * 2.7 + 31.0),
+      vnoise(sdir * 2.7 + 57.0)
+    );
+
     // ---- COSMOS (night math; dim layers knocked down by day) ----
     float dayKnock = mix(1.0, DAY_STAR_GAIN, uDay);
-    vec3 cosmos  = starLayer(sdir,        80.0, 0.34, 1.0,  80.0) * 1.5;            // brightest: full
-    cosmos += starLayer(sdir + 11.3, 140.0, 0.24, 0.85, 110.0) * 1.1  * dayKnock;   // dimmer: knock down
-    cosmos += starLayer(sdir + 27.1, 220.0, 0.15, 0.6,  150.0) * 0.8  * dayKnock;
-    cosmos += starLayer(sdir + 53.7, 360.0, 0.10, 0.4,  200.0) * 0.55 * dayKnock;
+    vec3 cosmos  = starLayer(wdir,        80.0, 0.34, 1.0,  80.0) * 1.5;            // brightest: full
+    cosmos += starLayer(wdir + 11.3, 140.0, 0.24, 0.85, 110.0) * 1.1  * dayKnock;   // dimmer: knock down
+    cosmos += starLayer(wdir + 27.1, 220.0, 0.15, 0.6,  150.0) * 0.8  * dayKnock;
+    cosmos += starLayer(wdir + 53.7, 360.0, 0.10, 0.4,  200.0) * 0.55 * dayKnock;
     cosmos += nebulaField(sdir) * 1.1 * dayKnock;
     cosmos += vec3(0.010, 0.013, 0.030);                                           // deep-space base
     // Moon kept separate so the per-channel horizon transmittance doesn't redden it.

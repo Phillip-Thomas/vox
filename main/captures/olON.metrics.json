@@ -1,0 +1,20 @@
+{
+  "label": "olON",
+  "profile": "HIGH",
+  "painterly": false,
+  "results": [
+    {
+      "view": "-2_9-face-edge-cliff",
+      "world": "-2,9",
+      "day": 0.0977,
+      "resolved": "-2_9-face-edge-cliff",
+      "metrics": {
+        "fps": 60,
+        "p50": 16.7,
+        "p95": 17,
+        "drawCalls": 1,
+        "triangles": 1
+      }
+    }
+  ]
+}
