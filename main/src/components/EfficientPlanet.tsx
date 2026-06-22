@@ -7,6 +7,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getWorldTerrainData } from '../utils/worldGenCache';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
+import { markTerrainPopulated, resetSceneReady } from '../state/appState';
 import { FACE_NORMALS } from '../utils/surfaceControls';
 import {
   COLLIDER_HALF_EXTENT,
@@ -275,6 +276,9 @@ export default function EfficientPlanet({
         queuedColliders: result.queuedColliders
       })
     );
+    // The voxel mesh now has instances (count > 0); tell the app shell so the
+    // loading gate / Play button can reveal once a few frames have also painted.
+    markTerrainPopulated();
     return () => {
       if (batchTimeout.current !== null) {
         window.clearTimeout(batchTimeout.current);
@@ -288,6 +292,8 @@ export default function EfficientPlanet({
         efficientPlanetMesh.current = null;
       }
       voxelSystem.reset();
+      // World swap / unmount: the next world must re-prove readiness.
+      resetSceneReady();
     };
   }, [
     dynamicBufferSize,

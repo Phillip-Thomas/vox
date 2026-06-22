@@ -7,6 +7,7 @@ import GrassField from './GrassField';
 import TreeField from './TreeField';
 import WaterBlocks from './WaterBlocks.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
+import MenuCamera from './MenuCamera.tsx';
 import AgentCamera from './debug/AgentCamera.tsx';
 import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
@@ -45,6 +46,9 @@ interface EfficientSceneProps {
   /** DEBUG (?agent=1): mount the scriptable verification-harness camera + the
    *  window.__game bridge instead of any player/ship camera. */
   agent?: boolean;
+  /** Landing screen: mount the cinematic orbit camera (no player/ship) so the
+   *  world renders + warms up behind the menu. */
+  cinematic?: boolean;
   onGroundedChange?: (grounded: boolean) => void;
   onDebugChange?: (debug: SceneDebugState) => void;
 }
@@ -55,6 +59,7 @@ export default function EfficientScene({
   arrivalMode = 'surface',
   overview = false,
   agent = false,
+  cinematic = false,
   onGroundedChange,
   onDebugChange
 }: EfficientSceneProps) {
@@ -116,6 +121,12 @@ export default function EfficientScene({
         <AgentCamera planetSize={planetSize} onPositionChange={publishPlayerPosition} />
       ) : overview ? (
         <OverviewCamera planetSize={planetSize} />
+      ) : cinematic ? (
+        <MenuCamera
+          planetSize={planetSize}
+          streamTarget={arrivalPose.playerSurfacePosition}
+          onPositionChange={publishPlayerPosition}
+        />
       ) : controlMode === 'flight' ? (
         <ShipController
           planetSize={planetSize}

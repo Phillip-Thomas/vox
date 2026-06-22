@@ -13,5 +13,43 @@ body,
 }
 
 body {
-  background: #000;
+  background: #05080f;
+  /* Game surface: never let a tap select HUD/menu text, raise the iOS
+     copy/paste callout, flash the tap highlight, or rubber-band scroll. */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: none;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Opt back into selection/caret only where the user actually types (the
+   coordinate / Set Course fields). */
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+  touch-action: auto;
+}
+
+/* --- UI animation primitives (used by the landing menu / loading) --- */
+@keyframes pvFloatIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pvShimmer {
+  0%   { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+@keyframes pvPulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}
+@keyframes pvSpin {
+  to { transform: rotate(360deg); }
 } 

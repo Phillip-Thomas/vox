@@ -92,11 +92,21 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
     onPointerCancel: () => releaseKey(code)
   });
 
+  // `userSelect` alone is ignored by iOS Safari for touch — the WebkitUserSelect
+  // + WebkitTouchCallout pair is what actually stops a press from selecting the
+  // label text or popping the copy/paste callout mid-play.
+  const noSelect: React.CSSProperties = {
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
+    WebkitTouchCallout: 'none',
+    WebkitTapHighlightColor: 'transparent'
+  };
+
   const btnStyle: React.CSSProperties = {
     width: 64, height: 64, borderRadius: 32,
     background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(125,211,252,0.5)',
     color: '#cfe8ff', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold',
-    touchAction: 'none', userSelect: 'none'
+    touchAction: 'none', ...noSelect
   };
 
   return (
@@ -107,7 +117,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
         onPointerMove={onLookMove}
         onPointerUp={onLookUp}
         onPointerCancel={onLookUp}
-        style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', pointerEvents: 'auto', touchAction: 'none' }}
+        style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', pointerEvents: 'auto', touchAction: 'none', ...noSelect }}
       />
 
       {/* left movement joystick */}
@@ -121,7 +131,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
           position: 'absolute', left: 24, bottom: 24,
           width: JOYSTICK_SIZE, height: JOYSTICK_SIZE, borderRadius: JOYSTICK_SIZE / 2,
           background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(125,211,252,0.35)',
-          pointerEvents: 'auto', touchAction: 'none'
+          pointerEvents: 'auto', touchAction: 'none', ...noSelect
         }}
       >
         <div style={{
