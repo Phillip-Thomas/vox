@@ -11,6 +11,9 @@ dist/
 build/
 *.local
 
+# Agentic Byproducts
+captures/
+
 # Environment variables
 .env
 .env.local

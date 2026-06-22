@@ -13,6 +13,11 @@ import { getJetpackFuel } from './components/EfficientPlayer.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
 import { isTouchDevice } from './utils/mobileInput.ts';
 import PoseRecorder from './components/debug/PoseRecorder.tsx';
+import { subscribeInventory, getInventory } from './game/systems/inventorySystem.ts';
+import { getLookedAtMaterial } from './game/systems/targeting.ts';
+import { materialToLegacyBlock } from './game/adapters.ts';
+import { BLOCKS } from './game/data/blocks.ts';
+import { RESOURCES, type ResourceId } from './game/data/resources.ts';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -343,6 +348,8 @@ const App: React.FC = () => {
       {flight.controlMode === 'fps' && <JetpackMeter />}
       {flight.controlMode === 'flight' && <CrashFlash />}
       <VantageToast />
+      {flight.controlMode === 'fps' && <LookedAtIndicator />}
+      <InventoryPanel />
       {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
       {/* HUD show/hide toggle — works as a click (desktop) or tap (mobile); the
@@ -653,6 +660,58 @@ const VantageToast: React.FC = () => {
       textOverflow: 'ellipsis'
     }}>
       {msg}
+    </div>
+  );
+};
+
+/**
+ * Tiny readout of the material currently under the crosshair (the player's voxel
+ * ray-march publishes it; we poll a few times/sec). Sits just under the crosshair.
+ */
+const LookedAtIndicator: React.FC = () => {
+  const [name, setName] = useState<string | null>(null);
+  useEffect(() => {
+    const id = setInterval(() => {
+      const mat = getLookedAtMaterial();
+      setName(mat ? BLOCKS[materialToLegacyBlock(mat)].name : null);
+    }, 120);
+    return () => clearInterval(id);
+  }, []);
+  if (!name) return null;
+  return (
+    <div style={{
+      position: 'absolute', top: 'calc(50% + 18px)', left: '50%', transform: 'translateX(-50%)',
+      color: '#dfe7ee', fontFamily: 'monospace', fontSize: 12, letterSpacing: 0.5,
+      textShadow: '0 1px 3px rgba(0,0,0,0.9)', pointerEvents: 'none', zIndex: 25, opacity: 0.85
+    }}>
+      {name}
+    </div>
+  );
+};
+
+/**
+ * Harvested-resource inventory (live, subscribes to inventorySystem). Hidden until
+ * something is gathered. Bottom-left, themed to the HUD.
+ */
+const InventoryPanel: React.FC = () => {
+  const [inv, setInv] = useState<Partial<Record<ResourceId, number>>>(getInventory());
+  useEffect(() => subscribeInventory(() => setInv(getInventory())), []);
+  const entries = (Object.entries(inv) as [ResourceId, number][]).filter(([, n]) => n > 0);
+  if (entries.length === 0) return null;
+  return (
+    <div style={{
+      position: 'absolute', left: 14, bottom: 14, minWidth: 150,
+      background: 'rgba(10,14,20,0.6)', border: '1px solid rgba(150,180,210,0.25)',
+      borderRadius: 8, padding: '8px 10px', color: '#e6edf3', fontFamily: 'monospace',
+      fontSize: 12, pointerEvents: 'none', zIndex: 25, backdropFilter: 'blur(3px)'
+    }}>
+      <div style={{ opacity: 0.55, fontSize: 10, letterSpacing: 1, marginBottom: 4 }}>INVENTORY</div>
+      {entries.map(([id, n]) => (
+        <div key={id} style={{ display: 'flex', justifyContent: 'space-between', gap: 14 }}>
+          <span>{RESOURCES[id].name}</span>
+          <span style={{ opacity: 0.85 }}>{n}</span>
+        </div>
+      ))}
     </div>
   );
 };

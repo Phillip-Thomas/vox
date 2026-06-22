@@ -1,5 +1,7 @@
 import { DEFAULT_TERRAIN_CONFIG, DEFAULT_WORLD_CONFIG, SEA_LEVEL_RADIUS_PERCENT, TerrainGenerationConfig, WorldGenerationConfig } from '../config/worldGeneration';
-import { MATERIALS, MaterialType } from '../types/materials';
+import { MaterialType } from '../types/materials';
+import { buildPlanetProfile, type PlanetProfile } from '../game/PlanetProfile';
+import type { ResourceId } from '../game/data/resources';
 
 class SimpleNoise {
   private gradients = new Map<string, [number, number]>();
@@ -71,6 +73,21 @@ export class ProceduralWorldGenerator {
   private config: WorldGenerationConfig;
   private terrainConfig: TerrainGenerationConfig;
   private noise: SimpleNoise;
+  // Deterministic planet identity (archetype/biome mix/resource biases). The
+  // generator consumes this so the SAME seed's archetype drives BOTH the surface
+  // material skin and the ore distribution — see archetypeSurface + getOreMaterial.
+  private profile: PlanetProfile;
+
+  // Deep-ore resource -> render material. Only resources with a distinct ore
+  // material appear as veins; others fall through to STONE.
+  private static readonly ORE_MATERIAL: Partial<Record<ResourceId, MaterialType>> = {
+    copper_ore: MaterialType.COPPER,
+    gold_trace: MaterialType.GOLD,
+    iron_trace: MaterialType.SILVER,
+    charged_crystal: MaterialType.CRYSTAL,
+    void_glass: MaterialType.CRYSTAL,
+    basalt_glass: MaterialType.BASALT
+  };
   private surfaceHeightCache = new Map<string, number>();
   private existenceCache = new Map<string, boolean>();
   // Lazily-computed sea-level radius (coordinate units) derived from a chosen
@@ -119,6 +136,12 @@ export class ProceduralWorldGenerator {
     this.config = config;
     this.terrainConfig = { ...DEFAULT_TERRAIN_CONFIG, ...terrainConfig };
     this.noise = new SimpleNoise(this.terrainConfig.seed);
+    this.profile = buildPlanetProfile(this.terrainConfig.seed);
+  }
+
+  /** The deterministic planet identity for this generator's seed. */
+  getPlanetProfile(): PlanetProfile {
+    return this.profile;
   }
 
   generateMaterialForPosition(x: number, y: number, z: number): MaterialType {
@@ -166,13 +189,55 @@ export class ProceduralWorldGenerator {
    */
   private surfaceShellMaterial(x: number, y: number, z: number, terrainOffset: number, planetRadius: number): MaterialType {
     const terrainTopRadius = planetRadius + terrainOffset;
-    if (terrainTopRadius <= this.getSeaLevelRadius()) return MaterialType.SAND;
-    const slope = this.surfaceSlope(x, y, z);
-    if (terrainOffset > ProceduralWorldGenerator.PEAK || slope >= ProceduralWorldGenerator.STONE_SLOPE) {
-      return MaterialType.STONE;
+    let base: MaterialType;
+    if (terrainTopRadius <= this.getSeaLevelRadius()) {
+      base = MaterialType.SAND;
+    } else {
+      const slope = this.surfaceSlope(x, y, z);
+      if (terrainOffset > ProceduralWorldGenerator.PEAK || slope >= ProceduralWorldGenerator.STONE_SLOPE) {
+        base = MaterialType.STONE;
+      } else if (slope >= ProceduralWorldGenerator.DIRT_SLOPE) {
+        base = MaterialType.DIRT;
+      } else {
+        base = MaterialType.GRASS;
+      }
     }
-    if (slope >= ProceduralWorldGenerator.DIRT_SLOPE) return MaterialType.DIRT;
-    return MaterialType.GRASS;
+    return this.archetypeSurface(base, x, y, z);
+  }
+
+  /**
+   * Restyle the slope-derived surface material by the planet's ARCHETYPE so each
+   * world reads distinctly (desert sand, volcanic basalt+lava, frozen ice, crystal
+   * fields, metallic rock). Coastline SAND is preserved (water stays correct), and
+   * temperate/verdant/oceanic/fungal keep the approved grass/dirt/stone look.
+   * Because grass + trees only spawn on GRASS voxels, swapping the ground material
+   * AUTOMATICALLY removes vegetation on non-verdant worlds (free cohesion).
+   */
+  private archetypeSurface(base: MaterialType, x: number, y: number, z: number): MaterialType {
+    if (base === MaterialType.SAND) return base; // never restyle coast/seabed
+    const ground = base === MaterialType.GRASS || base === MaterialType.DIRT;
+
+    switch (this.profile.archetype) {
+      case 'arid':
+        return ground ? MaterialType.SAND : base;
+      case 'volcanic':
+        if (base === MaterialType.STONE) return MaterialType.BASALT;
+        if (ground) {
+          return this.coordinateRandom(x, y, z, 71) < 0.05 ? MaterialType.LAVA : MaterialType.BASALT;
+        }
+        return base;
+      case 'frozen':
+        return MaterialType.ICE; // ice sheet over the whole landmass (coast SAND kept above)
+      case 'crystal':
+        if (base === MaterialType.GRASS) {
+          return this.coordinateRandom(x, y, z, 73) < 0.18 ? MaterialType.CRYSTAL : MaterialType.STONE;
+        }
+        return base === MaterialType.DIRT ? MaterialType.STONE : base;
+      case 'metallic':
+        return ground ? MaterialType.STONE : base;
+      default:
+        return base; // verdant / oceanic / fungal: keep grass/dirt/stone
+    }
   }
 
   /**
@@ -411,7 +476,9 @@ export class ProceduralWorldGenerator {
     return Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
   }
 
-  private shouldVoxelExist(x: number, y: number, z: number) {
+  // Public query: is there terrain at this voxel? (used by tools/tests + callers
+  // that need existence without a material.)
+  shouldVoxelExist(x: number, y: number, z: number) {
     const key = `${x},${y},${z}`;
     const cached = this.existenceCache.get(key);
     if (cached !== undefined) return cached;
@@ -620,16 +687,32 @@ export class ProceduralWorldGenerator {
     return radii;
   }
 
-  private getWeightedMaterial(x: number, y: number, z: number) {
-    const materialTypes = Object.values(MaterialType).filter(type => MATERIALS[type].rarity > 0);
-    const totalWeight = materialTypes.reduce((sum, type) => sum + MATERIALS[type].rarity, 0);
-    let random = this.coordinateRandom(x, y, z, 19) * totalWeight;
+  /**
+   * Deep-ore material at a position, weighted by THIS PLANET's contextual resource
+   * biases (PlanetProfile.resourceBiases) rather than a single global rarity. So a
+   * metallic moon shows copper/iron/gold veins, a crystal world glows with charged
+   * crystal, an anomaly hides void glass — and ores stay a minority of deep rock
+   * (heavy STONE base). Same seed -> identical veins (coordinateRandom is salted).
+   */
+  private getWeightedMaterial(x: number, y: number, z: number): MaterialType {
+    const ORE_SCALE = 8;          // how strongly resource bias converts to vein weight
+    const STONE_BASE = 60;        // keeps ores a minority of deep rock
+    const weights: Array<[MaterialType, number]> = [[MaterialType.STONE, STONE_BASE]];
+    let total = STONE_BASE;
 
-    for (const materialType of materialTypes) {
-      random -= MATERIALS[materialType].rarity;
-      if (random <= 0) return materialType;
+    for (const [rid, mat] of Object.entries(ProceduralWorldGenerator.ORE_MATERIAL)) {
+      const bias = this.profile.resourceBiases[rid as ResourceId];
+      if (!bias || bias <= 0) continue;
+      const w = bias * ORE_SCALE;
+      weights.push([mat as MaterialType, w]);
+      total += w;
     }
 
+    let random = this.coordinateRandom(x, y, z, 19) * total;
+    for (const [mat, w] of weights) {
+      random -= w;
+      if (random <= 0) return mat;
+    }
     return MaterialType.STONE;
   }
 

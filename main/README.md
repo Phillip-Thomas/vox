@@ -30,3 +30,7 @@ npm run verify
 - `src/utils/surfaceControls.ts`: cube-face movement and transition math
 - `src/utils/proceduralWorldGenerator.ts`: deterministic terrain and material generation
 - `src/utils/efficientVoxelSystem.ts`: exposed voxel tracking and mesh slot allocation
+
+## Architecture Notes
+
+- `docs/planet-system-handoff.md`: current handoff for the planet profile, biome, block, resource, harvesting, scanner, and crafting architecture.

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const VOXEL_SCALE = 2;
+export const VOXEL_SCALE = 2;
 const VOXEL_HALF_EXTENT = VOXEL_SCALE / 2;
 export const COLLIDER_HALF_EXTENT = VOXEL_HALF_EXTENT - 0.01;
 

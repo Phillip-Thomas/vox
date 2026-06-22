@@ -46,13 +46,21 @@ import {
   PLAYER_CENTER_CLEARANCE,
   PLAYER_EDGE_RADIUS,
   TRANSITION_LOCK_TIME,
-  TRANSITION_MIN_INWARD_SPEED
+  TRANSITION_MIN_INWARD_SPEED,
+  VOXEL_SCALE
 } from '../utils/cubeGravityConstants';
 import { isTouchActive } from '../utils/mobileInput';
+import { MaterialType } from '../types/materials';
+import { harvestMaterial } from '../game/systems/harvestingSystem';
+import { setLookedAtMaterial } from '../game/systems/targeting';
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
+// Scratch for the cheap "what am I looking at" voxel ray-march (avoids a
+// 125k-instance InstancedMesh raycast every frame).
+const _lookOrigin = new THREE.Vector3();
+const _lookDir = new THREE.Vector3();
 
 // Jetpack fuel as a normalized 0..1 value, exposed module-side so the HUD can
 // poll it per-frame (mirrors ShipController.getEngageCharge) without re-rendering.
@@ -301,9 +309,35 @@ export default function EfficientPlayer({
     const coord = voxelSystem.getCoordForSlot(hit.instanceId);
     if (!coord) return;
 
+    // Harvest BEFORE removing (we need the voxel's material to roll drops).
+    const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
     if (voxelSystem.removeVoxel(coord.x, coord.y, coord.z)) {
+      if (voxel) harvestMaterial(voxel.material as MaterialType);
       voxelSystem.exposeNeighbors(coord.x, coord.y, coord.z);
     }
+  }, []);
+
+  // Cheap ray-march to find the voxel under the crosshair, for the "looking at"
+  // readout. Marches in voxel space (round(world/VOXEL_SCALE)) over the reach —
+  // O(reach) Map lookups instead of testing every instance.
+  const updateLookedAt = useCallback((camera: THREE.Camera | null) => {
+    if (!camera || !(controlsActive.current || isTouchActive())) {
+      setLookedAtMaterial(null);
+      return;
+    }
+    camera.getWorldPosition(_lookOrigin);
+    camera.getWorldDirection(_lookDir);
+    let found: MaterialType | null = null;
+    for (let t = 1.0; t <= BLOCK_REACH; t += 0.45) {
+      const vx = Math.round((_lookOrigin.x + _lookDir.x * t) / VOXEL_SCALE);
+      const vy = Math.round((_lookOrigin.y + _lookDir.y * t) / VOXEL_SCALE);
+      const vz = Math.round((_lookOrigin.z + _lookDir.z * t) / VOXEL_SCALE);
+      if (voxelSystem.hasVoxel(vx, vy, vz)) {
+        found = (voxelSystem.getVoxel(vx, vy, vz)?.material ?? null) as MaterialType | null;
+        break;
+      }
+    }
+    setLookedAtMaterial(found);
   }, []);
 
   useBeforePhysicsStep(() => {
@@ -420,6 +454,11 @@ export default function EfficientPlayer({
     previousDeleteKey.current = deleteActive && controls.delete;
     if (deletePressed) {
       handleVoxelDeletion(cameraRef.current);
+    }
+
+    // Update the "looking at" readout a few times/sec (cheap voxel march).
+    if (frameCount.current % 4 === 0) {
+      updateLookedAt(cameraRef.current);
     }
 
     if (frameCount.current % 10 === 0) {

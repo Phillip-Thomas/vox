@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
+import { GENERATION_SCHEMA_VERSION } from '../game/schema';
 import { markWarpMetric, measureWarpMetric } from './warpMetrics';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { MATERIALS, materialId } from '../types/materials';
@@ -68,7 +69,9 @@ const meshMatrix = new THREE.Matrix4();
 const meshPosition = new THREE.Vector3();
 
 function cacheKey(size: number, terrainSeed: number): string {
-  return `${size}:${terrainSeed}`;
+  // Schema version in the key so a generation change never serves stale cached
+  // terrain from an older schema within a session.
+  return `v${GENERATION_SCHEMA_VERSION}:${size}:${terrainSeed}`;
 }
 
 function coordKey(x: number, y: number, z: number) {
