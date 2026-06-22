@@ -8,15 +8,17 @@ import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
-import { getEngageCharge, getCrashFlash } from './components/ShipController.tsx';
-import { getJetpackFuel } from './components/EfficientPlayer.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
 import { isTouchDevice } from './utils/mobileInput.ts';
 import PoseRecorder from './components/debug/PoseRecorder.tsx';
-import { subscribeInventory, getInventory } from './game/systems/inventorySystem.ts';
-import { getLookedAtVoxel } from './game/systems/targeting.ts';
-import { BLOCKS } from './game/data/blocks.ts';
-import { RESOURCES, type ResourceId } from './game/data/resources.ts';
+import SceneReadyProbe from './components/SceneReadyProbe.tsx';
+import VantageToast from './components/hud/VantageToast.tsx';
+import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
+import InventoryPanel from './components/hud/InventoryPanel.tsx';
+import CrashFlash from './components/hud/CrashFlash.tsx';
+import JetpackMeter from './components/hud/JetpackMeter.tsx';
+import TargetReticle from './components/hud/TargetReticle.tsx';
+import CockpitReadout from './components/hud/CockpitReadout.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -47,6 +49,15 @@ import {
   useSpaceFlight
 } from './state/spaceFlight.ts';
 import { isWarpMetricsEnabled, markWarpMetric } from './utils/warpMetrics.ts';
+import {
+  useAppState,
+  getAppStateSnapshot,
+  setGameCanvas,
+  getGameCanvas,
+  returnToMenu
+} from './state/appState.ts';
+import LandingMenu from './components/ui/LandingMenu.tsx';
+import PauseMenu, { type NavApi } from './components/ui/PauseMenu.tsx';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
@@ -100,6 +111,33 @@ const App: React.FC = () => {
   const [hudVisible, setHudVisible] = useState(true);
   const isTouch = useMemo(() => isTouchDevice(), []);
   const flight = useSpaceFlight();
+  const { phase: appPhase } = useAppState();
+  const [paused, setPaused] = useState(false);
+
+  // Esc (and any pointer-lock loss / focus change) opens the pause + star map
+  // while playing on desktop — a raw Esc keydown is swallowed during lock, so we
+  // react to the lock state instead. Re-acquiring lock closes it.
+  useEffect(() => {
+    const onLockChange = () => {
+      if (document.pointerLockElement) { setPaused(false); return; }
+      if (getAppStateSnapshot().phase === 'playing' && !isTouch) setPaused(true);
+    };
+    document.addEventListener('pointerlockchange', onLockChange);
+    return () => document.removeEventListener('pointerlockchange', onLockChange);
+  }, [isTouch]);
+
+  const resumeFromPause = () => {
+    setPaused(false);
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
+    }
+  };
+
+  const quitToMenu = () => {
+    setPaused(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+    returnToMenu();
+  };
   const currentWorldKey = coordinateKey(currentWorld.coordinate);
 
   // Register the warp-midpoint arrival handler: the actual world swap fires while
@@ -207,7 +245,7 @@ const App: React.FC = () => {
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
-  const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, flyDebug, descentDebug } = useMemo(() => {
+  const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, flyDebug, descentDebug, debugUiEnabled } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
@@ -231,7 +269,10 @@ const App: React.FC = () => {
         if (!raw) return null;
         const [sx, sy] = raw.split(',');
         return { x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) };
-      })()
+      })(),
+      // ?debug=1 -> reveal the developer overlays (voxel stats, collider toggle,
+      // raw coordinate panel). Hidden from the production UI otherwise.
+      debugUiEnabled: params.get('debug') === '1'
     };
   }, []);
 
@@ -270,6 +311,34 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // Travelling from the star map closes the menu and (desktop) re-grabs lock so
+  // the warp plays in first person.
+  const travel = (action: () => void) => {
+    action();
+    setPaused(false);
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
+    }
+  };
+
+  const nav: NavApi = {
+    currentLabel: currentWorldKey,
+    seed: currentWorld.seed,
+    arrivalLabel: arrivalMode === 'approach' ? 'HIGH ORBIT' : 'SURFACE',
+    targetX,
+    targetY,
+    setTargetX,
+    setTargetY,
+    onSetCourse: () => travel(jumpToTarget),
+    onRandom: () => travel(jumpToRandomWorld),
+    onPrevious: () => travel(returnToPreviousWorld),
+    hasPrevious: !!previousWorld,
+    nearby: nearbyWorlds.map(world => ({
+      label: coordinateKey(world.coordinate),
+      onClick: () => travel(() => jumpToWorld(world))
+    }))
+  };
+
   return (
     <KeyboardControls
       map={[
@@ -302,6 +371,9 @@ const App: React.FC = () => {
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.0;
+          // Stash the canvas so the DOM "Play Now" button can request pointer
+          // lock directly inside the click gesture (see LandingMenu).
+          setGameCanvas(gl.domElement);
         }}
       >
         {debugEnabled && <Stats />}
@@ -317,6 +389,7 @@ const App: React.FC = () => {
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
+        <SceneReadyProbe />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
         <EfficientScene
@@ -326,6 +399,7 @@ const App: React.FC = () => {
           arrivalMode={arrivalMode}
           overview={overviewEnabled}
           agent={agentEnabled}
+          cinematic={appPhase === 'menu'}
           onGroundedChange={grounded => {
             if (grounded) {
               setArrivalMode(mode => mode === 'approach' ? 'surface' : mode);
@@ -341,73 +415,49 @@ const App: React.FC = () => {
             the active profile enables postprocessing. */}
         {postProcess && <PostFX terrainSeed={currentWorld.seed} />}
       </Canvas>
-      <Crosshair />
+
+      {/* Persistent warp flash (only fires during travel, harmless otherwise). */}
       <WarpFlash />
-      <TargetReticle />
-      {flight.controlMode === 'fps' && <JetpackMeter />}
-      {flight.controlMode === 'flight' && <CrashFlash />}
-      <VantageToast />
-      {flight.controlMode === 'fps' && <LookedAtIndicator />}
-      <InventoryPanel />
-      {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
-      {/* HUD show/hide toggle — works as a click (desktop) or tap (mobile); the
-          H key does the same on desktop. Always visible so you can bring panels
-          back. */}
-      <button
-        onClick={() => setHudVisible(v => !v)}
-        aria-label={hudVisible ? 'Hide menus' : 'Show menus'}
-        style={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          width: 44,
-          height: 44,
-          fontSize: 20,
-          lineHeight: '44px',
-          textAlign: 'center',
-          color: 'white',
-          background: 'rgba(0,0,0,0.6)',
-          border: '1px solid rgba(125,211,252,0.35)',
-          borderRadius: 8,
-          cursor: 'pointer',
-          padding: 0,
-          zIndex: 20
-        }}
-      >
-        {hudVisible ? '✕' : '☰'}
-      </button>
+      {/* --- Landing screen (over the live cinematic render) --- */}
+      <LandingMenu />
 
-      {flight.controlMode === 'flight' && (
-        <div style={{
-          position: 'absolute',
-          bottom: 16,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: '#cfe8ff',
-          fontFamily: 'monospace',
-          background: 'rgba(0,0,0,0.6)',
-          padding: '10px 16px',
-          borderRadius: 8,
-          fontSize: 13,
-          textAlign: 'center',
-          lineHeight: 1.5,
-          border: '1px solid rgba(125,211,252,0.35)',
-          pointerEvents: 'none'
-        }}>
-          <div style={{ color: '#7dd3fc', fontWeight: 'bold', letterSpacing: 1 }}>
-            COCKPIT - {flight.phase.toUpperCase()}
-          </div>
-          <div>Coordinate {currentWorldKey} - Seed {currentWorld.seed}</div>
-          <div style={{ opacity: 0.75, marginTop: 4 }}>
-            {flight.phase === 'surface'
-              ? 'LANDED - SPACE to launch - F to exit ship'
-              : flight.phase === 'descent'
-                ? 'W/S thrust - mouse look - Q/E roll - fly low over ground, then F to land'
-                : 'W/S thrust - mouse look - Q/E roll - Shift boost - fly down to a planet'}
-          </div>
-        </div>
+      {/* --- Minimal, diegetic in-game HUD --- */}
+      {appPhase === 'playing' && (
+        <>
+          <Crosshair />
+          <TargetReticle />
+          {flight.controlMode === 'fps' && <JetpackMeter />}
+          {flight.controlMode === 'flight' && <CrashFlash />}
+          {flight.controlMode === 'fps' && <LookedAtIndicator />}
+          <InventoryPanel />
+          <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
+          {isTouch && <TouchControls controlMode={flight.controlMode} />}
+
+          {/* Pause + star map. On desktop Esc also opens it (via pointer-lock
+              loss); this button is the touch/always-available entry point. */}
+          <button
+            onClick={() => { if (document.pointerLockElement) document.exitPointerLock(); setPaused(true); }}
+            aria-label="Pause and open star map"
+            style={{
+              position: 'absolute', top: 14, right: 14, width: 44, height: 44,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, color: '#cfe8ff',
+              background: 'rgba(8,13,24,0.55)', border: '1px solid rgba(125,211,252,0.28)',
+              borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
+              backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
+            }}
+          >☰</button>
+        </>
       )}
+
+      {/* --- Pause / star map menu --- */}
+      <PauseMenu open={paused} onResume={resumeFromPause} onQuitToMenu={quitToMenu} nav={nav} />
+
+      {/* --- Developer overlays (?debug=1) --- */}
+      {debugUiEnabled && (
+      <>
+      <VantageToast />
 
       {benchEnabled && (
         <div style={{
@@ -603,275 +653,9 @@ const App: React.FC = () => {
           Set Course loads the destination as the active voxel planet. Distant worlds are visual-only LOD.
         </div>
       </div>
+      </>
+      )}
     </KeyboardControls>
-  );
-};
-
-/**
- * Brief confirmation toast for the vantage recorder (PoseRecorder): shows when a
- * vantage is pinned (C) or all pins are copied (V).
- */
-const VantageToast: React.FC = () => {
-  const [msg, setMsg] = useState<string | null>(null);
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    const show = (text: string) => {
-      setMsg(text);
-      clearTimeout(timer);
-      timer = setTimeout(() => setMsg(null), 2200);
-    };
-    const onPinned = (e: Event) => {
-      const d = (e as CustomEvent).detail as { reason: string; count: number };
-      show(`📌 Pinned (${d.count}): ${d.reason}`);
-    };
-    const onCopied = (e: Event) => {
-      const d = (e as CustomEvent).detail as { count: number };
-      show(`📋 Copied ${d.count} vantage${d.count === 1 ? '' : 's'} to clipboard`);
-    };
-    window.addEventListener('vantage:pinned', onPinned);
-    window.addEventListener('vantage:copied', onCopied);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('vantage:pinned', onPinned);
-      window.removeEventListener('vantage:copied', onCopied);
-    };
-  }, []);
-
-  if (!msg) return null;
-  return (
-    <div style={{
-      position: 'absolute',
-      top: 16,
-      left: '50%',
-      transform: 'translateX(-50%)',
-      background: 'rgba(0,0,0,0.78)',
-      color: '#9effa1',
-      fontFamily: 'monospace',
-      fontSize: 13,
-      padding: '8px 14px',
-      borderRadius: 8,
-      border: '1px solid rgba(158,255,161,0.4)',
-      pointerEvents: 'none',
-      zIndex: 30,
-      maxWidth: '80vw',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }}>
-      {msg}
-    </div>
-  );
-};
-
-/**
- * Tiny readout of the material currently under the crosshair (the player's voxel
- * ray-march publishes it; we poll a few times/sec). Sits just under the crosshair.
- */
-const LookedAtIndicator: React.FC = () => {
-  const [name, setName] = useState<string | null>(null);
-  useEffect(() => {
-    const id = setInterval(() => {
-      const target = getLookedAtVoxel();
-      setName(target
-        ? target.deposit
-          ? `${BLOCKS[target.blockId].name}: ${RESOURCES[target.deposit.resourceId].name}`
-          : BLOCKS[target.blockId].name
-        : null);
-    }, 120);
-    return () => clearInterval(id);
-  }, []);
-  if (!name) return null;
-  return (
-    <div style={{
-      position: 'absolute', top: 'calc(50% + 18px)', left: '50%', transform: 'translateX(-50%)',
-      color: '#dfe7ee', fontFamily: 'monospace', fontSize: 12, letterSpacing: 0.5,
-      textShadow: '0 1px 3px rgba(0,0,0,0.9)', pointerEvents: 'none', zIndex: 25, opacity: 0.85
-    }}>
-      {name}
-    </div>
-  );
-};
-
-/**
- * Harvested-resource inventory (live, subscribes to inventorySystem). Hidden until
- * something is gathered. Bottom-left, themed to the HUD.
- */
-const InventoryPanel: React.FC = () => {
-  const [inv, setInv] = useState<Partial<Record<ResourceId, number>>>(getInventory());
-  useEffect(() => subscribeInventory(() => setInv(getInventory())), []);
-  const entries = (Object.entries(inv) as [ResourceId, number][]).filter(([, n]) => n > 0);
-  if (entries.length === 0) return null;
-  return (
-    <div style={{
-      position: 'absolute', left: 14, bottom: 14, minWidth: 150,
-      background: 'rgba(10,14,20,0.6)', border: '1px solid rgba(150,180,210,0.25)',
-      borderRadius: 8, padding: '8px 10px', color: '#e6edf3', fontFamily: 'monospace',
-      fontSize: 12, pointerEvents: 'none', zIndex: 25, backdropFilter: 'blur(3px)'
-    }}>
-      <div style={{ opacity: 0.55, fontSize: 10, letterSpacing: 1, marginBottom: 4 }}>INVENTORY</div>
-      {entries.map(([id, n]) => (
-        <div key={id} style={{ display: 'flex', justifyContent: 'space-between', gap: 14 }}>
-          <span>{RESOURCES[id].name}</span>
-          <span style={{ opacity: 0.85 }}>{n}</span>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-/**
- * Ship crash feedback: a red impact vignette + "CRASHED" message that fades over
- * ~1s after a fast terrain impact. Polls ShipController's module-side flash value.
- */
-const CrashFlash: React.FC = () => {
-  const [intensity, setIntensity] = useState(0);
-  useEffect(() => {
-    let raf = 0;
-    const tick = () => {
-      setIntensity(getCrashFlash());
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  if (intensity <= 0) return null;
-  return (
-    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        boxShadow: `inset 0 0 ${120 * intensity}px ${40 * intensity}px rgba(220,40,30,${0.55 * intensity})`
-      }} />
-      <div style={{
-        position: 'absolute',
-        top: '38%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        color: '#ff5544',
-        fontFamily: 'monospace',
-        fontWeight: 'bold',
-        letterSpacing: 2,
-        fontSize: 26,
-        textShadow: '0 0 8px rgba(0,0,0,0.8)',
-        opacity: intensity
-      }}>
-        CRASHED — SPACE to re-launch
-      </div>
-    </div>
-  );
-};
-
-/**
- * On-foot jetpack fuel bar. Polls EfficientPlayer's module-side fuel value per
- * frame via rAF (no re-render churn) and only shows while fuel is below full
- * (i.e. recently/currently used), so it stays out of the way otherwise.
- */
-const JetpackMeter: React.FC = () => {
-  const [fuel, setFuel] = useState(1);
-  useEffect(() => {
-    let raf = 0;
-    const tick = () => {
-      setFuel(getJetpackFuel());
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  if (fuel >= 0.999) return null;
-  const pct = Math.round(Math.max(0, Math.min(1, fuel)) * 100);
-  return (
-    <div style={{
-      position: 'absolute',
-      bottom: 64,
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 140,
-      pointerEvents: 'none',
-      textAlign: 'center',
-      fontFamily: 'monospace',
-      fontSize: 10,
-      color: '#9fd0ff'
-    }}>
-      <div style={{ marginBottom: 3, letterSpacing: 1, opacity: 0.85 }}>JETPACK</div>
-      <div style={{ height: 5, borderRadius: 3, background: 'rgba(125,211,252,0.2)', overflow: 'hidden' }}>
-        <div style={{
-          height: '100%',
-          width: `${pct}%`,
-          background: pct > 25 ? '#7dd3fc' : '#fca5a5',
-          transition: 'width 0.08s linear'
-        }} />
-      </div>
-    </div>
-  );
-};
-
-/**
- * Centred deep-space targeting reticle. Shown only when an impostor is locked in
- * the aim cone (store `target` set while phase==='deep_space'). The charge bar
- * reflects the held-W engage timer, polled per-frame from ShipController's
- * module mutable via rAF so 60fps charging never re-renders the rest of the app.
- */
-const TargetReticle: React.FC = () => {
-  const { phase, target } = useSpaceFlight();
-  const [charge, setCharge] = useState(0);
-  const active = phase === 'deep_space' && target !== null;
-
-  useEffect(() => {
-    if (!active) {
-      setCharge(0);
-      return;
-    }
-    let raf = 0;
-    const tick = () => {
-      setCharge(getEngageCharge());
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [active]);
-
-  if (!active || !target) return null;
-  const pct = Math.round(Math.min(charge, 1) * 100);
-
-  return (
-    <div style={{
-      position: 'absolute',
-      top: 'calc(50% + 26px)',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      color: '#7dffb0',
-      fontFamily: 'monospace',
-      background: 'rgba(0,0,0,0.55)',
-      padding: '6px 12px',
-      borderRadius: 6,
-      fontSize: 12,
-      textAlign: 'center',
-      lineHeight: 1.4,
-      border: '1px solid rgba(125,255,176,0.45)',
-      pointerEvents: 'none',
-      minWidth: 180
-    }}>
-      <div style={{ fontWeight: 'bold', letterSpacing: 1 }}>
-        {pct >= 100 ? 'ENGAGING' : '▶ LOCK'} {target.x},{target.y}
-      </div>
-      <div style={{ opacity: 0.8, marginTop: 2 }}>hold W to warp</div>
-      <div style={{
-        marginTop: 5,
-        height: 4,
-        borderRadius: 2,
-        background: 'rgba(125,255,176,0.2)',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          height: '100%',
-          width: `${pct}%`,
-          background: '#7dffb0',
-          transition: 'width 0.05s linear'
-        }} />
-      </div>
-    </div>
   );
 };
 
