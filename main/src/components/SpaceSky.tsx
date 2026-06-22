@@ -6,10 +6,38 @@ import {
   SPACE_DOME_RADIUS,
   SPACE_DOME_RENDER_ORDER,
   createSpaceSkyMaterial,
-  updateSpaceSky
+  updateSpaceSky,
+  setSpaceSkyAtmosphere
 } from '../utils/spaceSky.ts';
 import { getSunDirection, getMoonDirection, getForcedDayPhase, DAY_LENGTH_SECONDS } from './SkyController.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
+import { buildPlanetProfile } from '../game/PlanetProfile.ts';
+
+// Per-planet DAYTIME atmosphere palette, by archetype (grounded-but-fantastical):
+// a hue + saturation -> luminous low-sky, deep upper-sky, sun-bloom tint. Deep
+// space / night are unaffected (the day branch alone reads these).
+const ARCHETYPE_SKY: Record<string, { h: number; s: number }> = {
+  verdant:  { h: 0.58, s: 0.50 },  // blue
+  oceanic:  { h: 0.57, s: 0.55 },
+  arid:     { h: 0.07, s: 0.55 },  // amber/dusty
+  volcanic: { h: 0.02, s: 0.70 },  // red/ember
+  frozen:   { h: 0.55, s: 0.30 },  // pale icy blue
+  crystal:  { h: 0.76, s: 0.55 },  // violet
+  metallic: { h: 0.60, s: 0.28 },  // steely
+  fungal:   { h: 0.30, s: 0.55 },  // toxic green
+  anomaly:  { h: 0.80, s: 0.60 }   // exotic magenta (overridden by veg hue)
+};
+
+function atmospherePalette(seed: number): { low: THREE.Color; high: THREE.Color; glow: THREE.Color } {
+  const p = buildPlanetProfile(seed);
+  const base = ARCHETYPE_SKY[p.archetype] ?? { h: 0.58, s: 0.45 };
+  const h = p.archetype === 'anomaly' ? p.palette.vegetationHue : base.h;
+  return {
+    low:  new THREE.Color().setHSL(h, base.s * 0.55, 0.86),
+    high: new THREE.Color().setHSL(h, base.s, 0.34),
+    glow: new THREE.Color().setHSL((h + 0.02) % 1.0, base.s * 0.5, 0.92)
+  };
+}
 
 /** Phase (0..1) used when animation is disabled — matches SkyController midday. */
 const STATIC_DAY_PHASE = 0.25;
@@ -62,12 +90,18 @@ function goldenForPhase(phase: number): number {
  * JSX. Owns its own gated useFrame that reads the shared sun direction and the
  * same 240s clock so its motion/visibility stays consistent with the sky.
  */
-export default function SpaceSky() {
+export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const matRef = useRef<THREE.ShaderMaterial>(null);
   const material = useMemo(() => createSpaceSkyMaterial(), []);
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
+
+  // Per-planet daytime atmosphere tint (static per seed; night/space unaffected).
+  useEffect(() => {
+    const { low, high, glow } = atmospherePalette(terrainSeed);
+    setSpaceSkyAtmosphere(matRef.current ?? material, low, high, glow);
+  }, [material, terrainSeed]);
 
   // Seed a static-midday state on mount so the first frame is correct even when
   // animation is disabled (thin daytime atmosphere over surviving cosmos).

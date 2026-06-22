@@ -330,7 +330,7 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
 
   return (
     <>
-      <SpaceSky />
+      <SpaceSky terrainSeed={terrainSeed} />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />
       <directionalLight ref={moonLightRef} castShadow={false} intensity={0} />
       <ambientLight ref={ambientRef} intensity={0.5} />
