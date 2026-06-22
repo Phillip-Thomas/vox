@@ -54,5 +54,13 @@
     "pos": [16.806, 50.989, 15.782],
     "quat": [-0.0169, 0.955, 0.0554, 0.291],
     "reason": "more examples of the upside down canopy trees... seems to only be specific to this species"
+  },
+  {
+    "name": "-92_-79-upside-down-tree-canopy",
+    "world": [-92, -79],
+    "day": 0.0949,
+    "pos": [17.095, 13.419, 52.989],
+    "quat": [-0.4536, 0.5781, 0.5336, -0.4187],
+    "reason": "upside down tree canopy (weeping silhouette)"
   }
 ]
