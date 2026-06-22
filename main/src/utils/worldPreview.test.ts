@@ -5,14 +5,18 @@ import {
   deriveWorldPreviewTraits,
   previewSurfaceValue
 } from './worldPreview';
+import { buildPlanetProfile } from '../game/PlanetProfile';
 
 describe('world preview traits', () => {
   it('derives preview ocean coverage from the same terrain config used by real worlds', () => {
     const seed = 627655627;
     const traits = deriveWorldPreviewTraits(seed);
     const terrainConfig = createTerrainConfig(seed, 25);
+    const profile = buildPlanetProfile(seed);
 
     expect(traits.terrainProfile).toBe(terrainConfig.terrainProfile);
+    expect(traits.terrainProfile).toBe(profile.terrainProfile);
+    expect(traits.archetype).toBe(profile.archetype);
     expect(traits.oceanCoverage).toBe(terrainConfig.seaLevelPercentile);
     expect(traits.relief).toBeCloseTo(terrainConfig.heightVariation / 25);
     expect(traits.valleyStrength).toBeCloseTo(terrainConfig.valleyDepth / 25);

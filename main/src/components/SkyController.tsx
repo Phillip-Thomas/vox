@@ -4,7 +4,15 @@ import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
 import { buildBiomeProfile } from '../utils/biomeProfile.ts';
+import { localSunElevation, daylightFromElevation, goldenFromElevation } from '../utils/dayNight.ts';
+import { getPlayerUp } from '../state/playerFrame.ts';
 import SpaceSky from './SpaceSky.tsx';
+
+// Sun/moon are ~CONSTANT directional lights so the lit/dark hemispheres are a
+// permanent spatial terminator (chase-the-light); the player's LOCAL daylight
+// drives the sky + ambient, not the sun's global brightness.
+const SUN_INTENSITY = 1.2;
+const MOON_INTENSITY = 0.6;
 
 /**
  * Phase 2 — sky, atmosphere, day/night and fog.
@@ -111,7 +119,6 @@ const nightAmbient = new THREE.Color('#1a2138');
 
 const noonSun = new THREE.Color('#fff4e0');
 const goldenSun = new THREE.Color('#ff9c4a');
-const nightSun = new THREE.Color('#2a3a6a');
 
 const tmpColor = new THREE.Color();
 
@@ -155,14 +162,7 @@ function applySpaceMode(
   fog.density = SPACE_FOG_DENSITY;
 }
 
-function clamp01(value: number): number {
-  return value < 0 ? 0 : value > 1 ? 1 : value;
-}
 
-function smoothstep(edge0: number, edge1: number, x: number): number {
-  const t = clamp01((x - edge0) / (edge1 - edge0));
-  return t * t * (3 - 2 * t);
-}
 
 /**
  * Resolve all time-of-day driven values from a day phase in [0,1).
@@ -191,33 +191,30 @@ function applyDayPhase(
     .copy(sunDirection)
     .multiplyScalar(SUN_LIGHT_RADIUS);
 
-  // Daylight factor: 1 when sun is high, 0 once it is below the horizon.
-  const elevation = sunDirection.y; // -1..1
-  const daylight = smoothstep(-0.12, 0.18, elevation);
-  // Golden factor: peaks when the sun is near the horizon during the day.
-  const golden = daylight * (1 - smoothstep(0.05, 0.32, elevation));
+  // LOCAL daylight: the sun's elevation relative to the PLAYER's up (the sun
+  // lights the hemisphere it faces). The terminator is a real, walkable boundary
+  // that also sweeps as the sun rotates — chase the light or the dark.
+  const elevation = localSunElevation(sunDirection, getPlayerUp());
+  const daylight = daylightFromElevation(elevation);
+  const golden = goldenFromElevation(elevation);
 
   // --- Sun (directional) light ---
-  // Low night floor (~0.03) so night light comes from the MOON (cool), not a
-  // weird warm sun-from-below glow.
-  sunLight.intensity = 0.03 + daylight * 1.17;
-  tmpColor.copy(nightSun).lerp(noonSun, daylight);
-  tmpColor.lerp(goldenSun, golden * 0.85);
+  // CONSTANT: the sun always shines, so the lit hemisphere is permanent and N·L
+  // gives the day/night terminator on terrain. The player's local daylight drives
+  // the sky + ambient below, NOT the sun's brightness.
+  sunLight.intensity = SUN_INTENSITY;
+  tmpColor.copy(noonSun).lerp(goldenSun, golden * 0.85);
   sunLight.color.copy(tmpColor);
 
-  // --- Moon (directional) light: rises as the sun sets, lighting the night ---
-  // Roughly anti-sun (so it's up at night) with a slight tilt; rendered as a
-  // self-lit full moon by SpaceSky, so we light the world from its direction.
+  // --- Moon (directional) light: lights the anti-sun (night) hemisphere ---
+  // Also ~constant; N·L keeps it off the day side, so the far side reads cool-night.
   moonDirection.copy(sunDirection).multiplyScalar(-1).add(MOON_TILT).normalize();
   moonLight.position.copy(moonDirection).multiplyScalar(SUN_LIGHT_RADIUS);
-  const night = 1.0 - daylight;
-  // Fade in only once the moon is actually above the horizon.
-  const moonUp = smoothstep(-0.05, 0.25, moonDirection.y);
-  moonLight.intensity = night * moonUp * 0.75;
+  moonLight.intensity = MOON_INTENSITY;
   moonLight.color.copy(moonColor);
 
-  // --- Ambient (fill) light ---
-  ambient.intensity = 0.24 + daylight * 0.42;
+  // --- Ambient (fill) light: LOCAL — dark on the player's night side, lifted by day.
+  ambient.intensity = 0.14 + daylight * 0.46;
   ambient.color.copy(nightAmbient).lerp(dayAmbient, daylight);
 
   // --- Fog color: night navy -> day blue, warming at golden hour ---
@@ -330,7 +327,7 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
 
   return (
     <>
-      <SpaceSky />
+      <SpaceSky terrainSeed={terrainSeed} />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />
       <directionalLight ref={moonLightRef} castShadow={false} intensity={0} />
       <ambientLight ref={ambientRef} intensity={0.5} />

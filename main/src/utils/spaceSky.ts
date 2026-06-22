@@ -41,6 +41,11 @@ export interface SpaceSkyUniforms {
   uGolden: { value: number };
   uSunDir: { value: THREE.Vector3 };
   uMoonDir: { value: THREE.Vector3 };
+  uUp: { value: THREE.Vector3 };  // player's local up — orients atmosphere/horizon
+  // Per-planet daytime atmosphere palette (set once per planet, not per frame).
+  uAtmoLow: { value: THREE.Color };   // luminous horizon / low-sky
+  uAtmoHigh: { value: THREE.Color };  // deeper upper-sky
+  uSunGlow: { value: THREE.Color };   // sun bloom / aureole tint
 }
 
 const VERT = /* glsl */ `
@@ -59,6 +64,10 @@ const FRAG = /* glsl */ `
   uniform float uGolden;  // 0..1 golden-hour factor (warms horizon + sun halo)
   uniform vec3 uSunDir;
   uniform vec3 uMoonDir;
+  uniform vec3 uUp;        // player's local up (orients the horizon gradient)
+  uniform vec3 uAtmoLow;   // luminous horizon / low-sky (per planet)
+  uniform vec3 uAtmoHigh;  // deeper upper-sky (per planet)
+  uniform vec3 uSunGlow;   // sun bloom tint (per planet)
   varying vec3 vDir;
 
   // --- Day atmosphere tunables ----------------------------------------------
@@ -252,30 +261,32 @@ const FRAG = /* glsl */ `
     // ---- NIGHT / DEEP-SPACE: byte-identical, no scattering ALU ----
     if (uDay < 0.01) { gl_FragColor = vec4(cosmos + moonCol, 1.0); return; }
 
-    // ---- DAY: thin scattering over surviving cosmos ----
+    // ---- DAY: luminous per-planet atmosphere LAYERED OVER the preserved cosmos.
+    // The day is a real lit sky (so it never reads like dim night), but the cosmos
+    // (stars/nebula/moon) stays visible THROUGH it — only gently dimmed, and washed
+    // only right around the sun. Night/deep-space took the early-out above, so it
+    // is byte-identical (untouched).
     vec3 s = normalize(uSunDir);
-    vec3 inscatter, T;
-    atmosphere(dir, s, uDay, uGolden, inscatter, T);
+    float mu = dot(dir, s);
+    float toSun = pow(max(mu, 0.0), 3.0);
+    float sunUp = smoothstep(-0.06, 0.12, dot(s, uUp));   // sun above the LOCAL horizon
 
-    float mu        = dot(dir, s);
-    float sunGlow   = smoothstep(0.92, 1.0, mu);            // suppress cosmos near sun
-    // Cosmos is attenuated by the transmittance EVERYWHERE by day (so the whole
-    // sky reads as "cosmos seen through atmosphere", not bare night), with only
-    // a localized wash near the sun. Avoid dir.y limb wash so no half-dome seam.
-    vec3  Tc = mix(vec3(1.0), T, uDay);
-    float localWash = uDay * sunGlow;
-    Tc *= (1.0 - 0.35 * localWash);
+    // Vertical from the player's LOCAL up (not world-Y), so the luminous low-sky ->
+    // deep upper-sky gradient tracks the real horizon on every face.
+    float up = clamp(dot(dir, uUp) * 0.5 + 0.5, 0.0, 1.0);
+    vec3 sky = mix(uAtmoHigh, uAtmoLow, pow(1.0 - up, 1.4));
+    sky = mix(sky, uSunGlow, toSun * 0.55);
+    vec3 atmo = sky * uDay * sunUp;
 
-    vec3 dayCosmos = cosmos * mix(1.0, DAY_COSMOS_DIM, uDay);
-
-    // Visible sun: tight disc + a broad, soft aureole (replaces drei's sun).
-    // Gaussian falloff so ACES rolls into white gracefully rather than a hard step.
+    // Visible sun: tight disc + broad tinted aureole (stronger/warmer at golden hr).
     float disc    = smoothstep(0.99955, 0.99988, mu);
-    float aureole = pow(sunGlow, 2.0) * 0.45 + exp((mu - 1.0) * 110.0) * 0.9;
-    vec3  sun  = (vec3(1.0, 0.93, 0.80) * disc * 5.0
-               + vec3(1.0, 0.84, 0.60) * aureole) * smoothstep(-0.05, 0.10, s.y);
+    float aureole = pow(max(mu, 0.0), 26.0) * 0.6 + exp((mu - 1.0) * 60.0) * 0.7;
+    vec3  sun = (vec3(1.0, 0.95, 0.86) * disc * 5.0
+               + uSunGlow * aureole * (1.0 + uGolden * 1.4)) * sunUp;
 
-    vec3 color = dayCosmos * Tc + inscatter + sun + moonCol * mix(1.0, MOON_DAY_DIM, uDay);
+    // Cosmos preserved by day (gentle dim), washed only right around the sun.
+    float cosmosDim = mix(1.0, 0.68, uDay) * (1.0 - 0.45 * uDay * toSun);
+    vec3 color = cosmos * cosmosDim + atmo + sun + moonCol * mix(1.0, MOON_DAY_DIM, uDay);
     color += dither(dir);
     gl_FragColor = vec4(color, 1.0);
   }
@@ -288,7 +299,12 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
       uDay: { value: 0 },
       uGolden: { value: 0 },
       uSunDir: { value: new THREE.Vector3(0, 1, 0) },
-      uMoonDir: { value: new THREE.Vector3(0, -1, 0) }
+      uMoonDir: { value: new THREE.Vector3(0, -1, 0) },
+      uUp: { value: new THREE.Vector3(0, 1, 0) },
+      // Default nebular-blue atmosphere (overridden per-planet via setSpaceSkyAtmosphere).
+      uAtmoLow: { value: new THREE.Color(0.85, 0.78, 0.98) },
+      uAtmoHigh: { value: new THREE.Color(0.20, 0.30, 0.62) },
+      uSunGlow: { value: new THREE.Color(1.0, 0.82, 0.95) }
     },
     vertexShader: VERT,
     fragmentShader: FRAG,
@@ -303,6 +319,8 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
 
 const _sunScratch = new THREE.Vector3();
 const _moonScratch = new THREE.Vector3();
+const _upScratch = new THREE.Vector3();
+const _defaultUp = new THREE.Vector3(0, 1, 0);
 
 /**
  * Push day-cycle state into the dome. `time` is frozen by the caller when
@@ -316,7 +334,8 @@ export function updateSpaceSky(
   daylight: number,
   golden: number,
   sunDir: THREE.Vector3,
-  moonDir: THREE.Vector3
+  moonDir: THREE.Vector3,
+  up: THREE.Vector3 = _defaultUp
 ): number {
   const u = material.uniforms as unknown as SpaceSkyUniforms;
   const day = dayFactorFromDaylight(daylight);
@@ -325,5 +344,23 @@ export function updateSpaceSky(
   u.uGolden.value = golden;
   u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
   u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
+  u.uUp.value.copy(_upScratch.copy(up).normalize());
   return day;
+}
+
+/**
+ * Set the per-planet daytime atmosphere palette (luminous low-sky, deep upper-sky,
+ * sun-bloom tint). Called once when the planet changes — NOT per frame. Night /
+ * deep space are unaffected (the day branch alone reads these).
+ */
+export function setSpaceSkyAtmosphere(
+  material: THREE.ShaderMaterial,
+  low: THREE.Color,
+  high: THREE.Color,
+  glow: THREE.Color
+): void {
+  const u = material.uniforms as unknown as SpaceSkyUniforms;
+  u.uAtmoLow.value.copy(low);
+  u.uAtmoHigh.value.copy(high);
+  u.uSunGlow.value.copy(glow);
 }

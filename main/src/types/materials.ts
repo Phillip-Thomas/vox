@@ -9,7 +9,11 @@ export enum MaterialType {
   COPPER = 'copper',
   GOLD = 'gold',
   SILVER = 'silver',
-  SAND = 'sand'
+  SAND = 'sand',
+  // Biome-identity surface/rock materials (Phase 2 — archetype-driven terrain).
+  BASALT = 'basalt',
+  ICE = 'ice',
+  CRYSTAL = 'crystal'
 }
 
 interface Material {
@@ -86,6 +90,28 @@ export const MATERIALS: Record<MaterialType, Material> = {
     rarity: 0,
     roughness: 0.95,
     metalness: 0.0
+  },
+  // --- Biome-identity materials (placed deterministically by the generator from
+  // the planet archetype; rarity 0 so legacy weighted ore selection ignores them).
+  [MaterialType.BASALT]: {
+    color: new THREE.Color(0x2c2a30), // near-black volcanic rock
+    rarity: 0,
+    roughness: 0.88,
+    metalness: 0.0
+  },
+  [MaterialType.ICE]: {
+    color: new THREE.Color(0xcfe6f5), // pale blue-white
+    rarity: 0,
+    roughness: 0.28,
+    metalness: 0.0
+  },
+  [MaterialType.CRYSTAL]: {
+    color: new THREE.Color(0x6fe0ff), // glowing cyan crystal
+    rarity: 0,
+    roughness: 0.18,
+    metalness: 0.55,
+    emissive: new THREE.Color(0x1a9ad0),
+    emissiveIntensity: 0.55
   }
 };
 
@@ -102,8 +128,12 @@ export const MATERIAL_ORDER: MaterialType[] = [
   MaterialType.GOLD,
   MaterialType.SILVER,
   // APPEND ONLY — never reorder. Existing ids are baked into the per-instance
-  // shader attribute (aInstanceData.x). SAND is the newest id (Phase 4).
-  MaterialType.SAND
+  // shader attribute (aInstanceData.x). SAND was Phase 4; BASALT/ICE/CRYSTAL are
+  // Phase 2 archetype materials (newest ids).
+  MaterialType.SAND,
+  MaterialType.BASALT,
+  MaterialType.ICE,
+  MaterialType.CRYSTAL
 ];
 
 export const MATERIAL_ID: Record<string, number> = Object.fromEntries(

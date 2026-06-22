@@ -12,6 +12,7 @@ import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { MATERIALS, materialId } from '../types/materials';
+import { blockToRenderMaterial } from '../game/adapters';
 import type {
   InitialTerrainMeshData,
   OriginalTerrainData,
@@ -102,6 +103,8 @@ function buildOriginalTerrainMap(terrain: TerrainVoxel[]): OriginalTerrainMap {
   const terrainByCoord = new Map<string, OriginalTerrainData>();
   for (const voxel of terrain) {
     terrainByCoord.set(coordKey(voxel.x, voxel.y, voxel.z), {
+      blockId: voxel.blockId,
+      deposit: voxel.deposit ?? null,
       material: voxel.material,
       color: voxel.color.clone()
     });
@@ -151,9 +154,13 @@ function freshTerrainData(size: number, seed: number): {
   const generator = freshGenerator(size, seed);
   const voxels = generator.getAllVoxelPositions();
   const originalTerrain = voxels.map(position => {
-    const material = generator.generateMaterialForPosition(position.x, position.y, position.z);
+    const blockId = generator.generateBlockForPosition(position.x, position.y, position.z);
+    const deposit = generator.generateDepositForPosition(position.x, position.y, position.z);
+    const material = blockToRenderMaterial(blockId);
     return {
       ...position,
+      blockId,
+      deposit,
       material,
       color: MATERIALS[material].color.clone()
     };

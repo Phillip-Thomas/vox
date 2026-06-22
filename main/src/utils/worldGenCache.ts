@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { createTerrainConfig } from './terrainConfig';
+import { GENERATION_SCHEMA_VERSION } from '../game/schema';
+import { blockToRenderMaterial } from '../game/adapters';
 import { markWarpMetric, measureWarpMetric } from './warpMetrics';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { MATERIALS, materialId } from '../types/materials';
@@ -68,7 +70,9 @@ const meshMatrix = new THREE.Matrix4();
 const meshPosition = new THREE.Vector3();
 
 function cacheKey(size: number, terrainSeed: number): string {
-  return `${size}:${terrainSeed}`;
+  // Schema version in the key so a generation change never serves stale cached
+  // terrain from an older schema within a session.
+  return `v${GENERATION_SCHEMA_VERSION}:${size}:${terrainSeed}`;
 }
 
 function coordKey(x: number, y: number, z: number) {
@@ -92,6 +96,8 @@ function buildOriginalTerrainMap(terrain: TerrainVoxel[]): OriginalTerrainMap {
   const terrainByCoord = new Map<string, OriginalTerrainData>();
   for (const voxel of terrain) {
     terrainByCoord.set(coordKey(voxel.x, voxel.y, voxel.z), {
+      blockId: voxel.blockId,
+      deposit: voxel.deposit ?? null,
       material: voxel.material,
       color: voxel.color.clone()
     });
@@ -222,9 +228,13 @@ export function getWorldTerrainData(
       'planet:terrain_materialize',
       () => {
         const originalTerrain = entry.voxels.map(position => {
-          const material = entry.generator.generateMaterialForPosition(position.x, position.y, position.z);
+          const blockId = entry.generator.generateBlockForPosition(position.x, position.y, position.z);
+          const deposit = entry.generator.generateDepositForPosition(position.x, position.y, position.z);
+          const material = blockToRenderMaterial(blockId);
           return {
             ...position,
+            blockId,
+            deposit,
             material,
             color: MATERIALS[material].color.clone()
           };

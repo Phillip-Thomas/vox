@@ -6,13 +6,40 @@ import {
   SPACE_DOME_RADIUS,
   SPACE_DOME_RENDER_ORDER,
   createSpaceSkyMaterial,
-  updateSpaceSky
+  updateSpaceSky,
+  setSpaceSkyAtmosphere
 } from '../utils/spaceSky.ts';
-import { getSunDirection, getMoonDirection, getForcedDayPhase, DAY_LENGTH_SECONDS } from './SkyController.tsx';
+import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
+import { buildPlanetProfile } from '../game/PlanetProfile.ts';
+import { localDaylight, localGolden } from '../utils/dayNight.ts';
+import { getPlayerUp } from '../state/playerFrame.ts';
 
-/** Phase (0..1) used when animation is disabled — matches SkyController midday. */
-const STATIC_DAY_PHASE = 0.25;
+// Per-planet DAYTIME atmosphere palette, by archetype (grounded-but-fantastical):
+// a hue + saturation -> luminous low-sky, deep upper-sky, sun-bloom tint. Deep
+// space / night are unaffected (the day branch alone reads these).
+const ARCHETYPE_SKY: Record<string, { h: number; s: number }> = {
+  verdant:  { h: 0.58, s: 0.50 },  // blue
+  oceanic:  { h: 0.57, s: 0.55 },
+  arid:     { h: 0.07, s: 0.55 },  // amber/dusty
+  volcanic: { h: 0.02, s: 0.70 },  // red/ember
+  frozen:   { h: 0.55, s: 0.30 },  // pale icy blue
+  crystal:  { h: 0.76, s: 0.55 },  // violet
+  metallic: { h: 0.60, s: 0.28 },  // steely
+  fungal:   { h: 0.30, s: 0.55 },  // toxic green
+  anomaly:  { h: 0.80, s: 0.60 }   // exotic magenta (overridden by veg hue)
+};
+
+function atmospherePalette(seed: number): { low: THREE.Color; high: THREE.Color; glow: THREE.Color } {
+  const p = buildPlanetProfile(seed);
+  const base = ARCHETYPE_SKY[p.archetype] ?? { h: 0.58, s: 0.45 };
+  const h = p.archetype === 'anomaly' ? p.palette.vegetationHue : base.h;
+  return {
+    low:  new THREE.Color().setHSL(h, base.s * 0.55, 0.86),
+    high: new THREE.Color().setHSL(h, base.s, 0.34),
+    glow: new THREE.Color().setHSL((h + 0.02) % 1.0, base.s * 0.5, 0.92)
+  };
+}
 
 // In deep space the dome must follow the camera (it's a skybox) AND sit beyond
 // ALL scene content — the voxel planet at the origin (up to a few hundred units
@@ -22,64 +49,30 @@ const STATIC_DAY_PHASE = 0.25;
 // rather than the stars punching through the planet/impostors.
 const DEEP_SPACE_DOME_SCALE = 32; // 220 * 32 ≈ 7040 world units
 
-function clamp01(value: number): number {
-  return value < 0 ? 0 : value > 1 ? 1 : value;
-}
-
-function smoothstep(edge0: number, edge1: number, x: number): number {
-  const t = clamp01((x - edge0) / (edge1 - edge0));
-  return t * t * (3 - 2 * t);
-}
-
-/**
- * Sun elevation (normalized y) for a day phase. Mirrors SkyController's
- * applyDayPhase direction construction exactly so daylight/golden derived here
- * stay locked to the visible sun without threading a value through props.
- */
-function sunElevationForPhase(phase: number): number {
-  const angle = phase * Math.PI * 2;
-  const dirY = Math.sin(angle);
-  const dirX = Math.cos(angle) * 0.55;
-  const dirZ = Math.sin(angle * 0.5) * 0.35 + 0.2;
-  const len = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ) || 1;
-  return dirY / len;
-}
-
-/** daylight (0..1) for a phase — matches SkyController's elevation->daylight. */
-function daylightForPhase(phase: number): number {
-  return smoothstep(-0.12, 0.18, sunElevationForPhase(phase));
-}
-
-/** golden-hour factor (0..1) for a phase — matches SkyController's `golden`. */
-function goldenForPhase(phase: number): number {
-  const elevation = sunElevationForPhase(phase);
-  const daylight = smoothstep(-0.12, 0.18, elevation);
-  return daylight * (1 - smoothstep(0.05, 0.32, elevation));
-}
-
 /**
  * Procedural starfield + nebula backdrop. Rendered from within SkyController's
  * JSX. Owns its own gated useFrame that reads the shared sun direction and the
  * same 240s clock so its motion/visibility stays consistent with the sky.
  */
-export default function SpaceSky() {
+export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const matRef = useRef<THREE.ShaderMaterial>(null);
   const material = useMemo(() => createSpaceSkyMaterial(), []);
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
 
-  // Seed a static-midday state on mount so the first frame is correct even when
-  // animation is disabled (thin daytime atmosphere over surviving cosmos).
+  // Per-planet daytime atmosphere tint (static per seed; night/space unaffected).
+  useEffect(() => {
+    const { low, high, glow } = atmospherePalette(terrainSeed);
+    setSpaceSkyAtmosphere(matRef.current ?? material, low, high, glow);
+  }, [material, terrainSeed]);
+
+  // Seed the dome on mount from the LOCAL day/night (sun vs the player's up) so
+  // the first frame is correct even when shader animation is disabled.
   useMemo(() => {
-    updateSpaceSky(
-      material,
-      0,
-      daylightForPhase(STATIC_DAY_PHASE),
-      goldenForPhase(STATIC_DAY_PHASE),
-      getSunDirection(),
-      getMoonDirection()
-    );
+    const sun = getSunDirection();
+    const up = getPlayerUp();
+    updateSpaceSky(material, 0, localDaylight(sun, up), localGolden(sun, up), sun, getMoonDirection(), up);
   }, [material]);
 
   // In deep space the cosmos is ALWAYS fully visible. Force the dome to full
@@ -90,7 +83,7 @@ export default function SpaceSky() {
     const mat = matRef.current ?? material;
     if (!inSpace) return;
     // daylight=0 -> uDay=0 -> early-out -> pure cosmos; golden irrelevant.
-    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection());
+    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp());
   }, [inSpace, material]);
 
   useFrame(state => {
@@ -112,28 +105,29 @@ export default function SpaceSky() {
     const mat = matRef.current;
     if (!mat) return;
     const animated = getGraphicsQuality().animatedShaders;
-    const forced = getForcedDayPhase();
 
-    // Deep space: stars/nebula forced fully on (uDay=0 -> early-out) every frame regardless
-    // of the day cycle. When animated, keep advancing time for twinkle/drift;
-    // when not, the mount/enter-space effect already seeded full night so we can
-    // skip per-frame work entirely.
+    // Deep space: stars/nebula forced fully on (uDay=0 -> early-out). When animated,
+    // keep advancing time for twinkle/drift; otherwise the seed already applied.
     if (inSpace) {
       if (!animated) return;
-      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection());
+      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp());
       return;
     }
 
-    if (!animated && forced === null) return; // frozen: mount seed already applied
-
-    const dayPhase = forced ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
+    // Surface: LOCAL day/night from the live sun direction vs the player's up, so
+    // it tracks both the sun's motion AND the player moving around the planet
+    // (chase-the-light). Updated every frame — it's just uniform writes; shader
+    // twinkle stays frozen on non-animated profiles (time = 0).
+    const sun = getSunDirection();
+    const up = getPlayerUp();
     updateSpaceSky(
       mat,
-      state.clock.elapsedTime,
-      daylightForPhase(dayPhase),
-      goldenForPhase(dayPhase),
-      getSunDirection(),
-      getMoonDirection()
+      animated ? state.clock.elapsedTime : 0,
+      localDaylight(sun, up),
+      localGolden(sun, up),
+      sun,
+      getMoonDirection(),
+      up
     );
   });
 

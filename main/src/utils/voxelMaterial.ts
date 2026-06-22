@@ -13,6 +13,23 @@ import { GraphicsQuality } from '../config/graphicsSettings';
 
 const N = MATERIAL_ORDER.length;
 
+export const VOXEL_SHADER_DETAIL_MATERIALS = new Set<MaterialType>([
+  MaterialType.STONE,
+  MaterialType.DIRT,
+  MaterialType.GRASS,
+  MaterialType.COPPER,
+  MaterialType.GOLD,
+  MaterialType.SILVER,
+  MaterialType.SAND,
+  MaterialType.BASALT,
+  MaterialType.ICE,
+  MaterialType.CRYSTAL
+]);
+
+export function hasVoxelShaderDetail(material: MaterialType): boolean {
+  return VOXEL_SHADER_DETAIL_MATERIALS.has(material);
+}
+
 function glslFloatArray(name: string, values: number[]): string {
   const body = values.map(v => v.toFixed(4)).join(', ');
   return `const float ${name}[${N}] = float[${N}](${body});`;
@@ -46,8 +63,25 @@ function buildLUTs() {
     metal: glslFloatArray('VOXEL_METAL', metal),
     emissive: glslVec3Array('VOXEL_EMISSIVE', emissive),
     lavaId: MATERIAL_ORDER.indexOf(MaterialType.LAVA),
+    materialIds: buildMaterialIdGLSL(),
     palette: buildPaletteGLSL()
   };
+}
+
+function buildMaterialIdGLSL(): string {
+  return [
+    `const int MAT_STONE = ${MATERIAL_ORDER.indexOf(MaterialType.STONE)};`,
+    `const int MAT_DIRT = ${MATERIAL_ORDER.indexOf(MaterialType.DIRT)};`,
+    `const int MAT_GRASS = ${MATERIAL_ORDER.indexOf(MaterialType.GRASS)};`,
+    `const int MAT_LAVA = ${MATERIAL_ORDER.indexOf(MaterialType.LAVA)};`,
+    `const int MAT_SAND = ${MATERIAL_ORDER.indexOf(MaterialType.SAND)};`,
+    `const int MAT_BASALT = ${MATERIAL_ORDER.indexOf(MaterialType.BASALT)};`,
+    `const int MAT_ICE = ${MATERIAL_ORDER.indexOf(MaterialType.ICE)};`,
+    `const int MAT_CRYSTAL = ${MATERIAL_ORDER.indexOf(MaterialType.CRYSTAL)};`,
+    `const int MAT_COPPER = ${MATERIAL_ORDER.indexOf(MaterialType.COPPER)};`,
+    `const int MAT_GOLD = ${MATERIAL_ORDER.indexOf(MaterialType.GOLD)};`,
+    `const int MAT_SILVER = ${MATERIAL_ORDER.indexOf(MaterialType.SILVER)};`
+  ].join('\n        ');
 }
 
 // Stylized art-direction palette, authored in sRGB then linearized for the
@@ -81,7 +115,22 @@ function buildPaletteGLSL(): string {
     `const vec3 MOSS_BASE   = ${lin(0x5f9a2e)};`,
     `const vec3 MOSS_LIGHT  = ${lin(0x83c043)};`,
     // ORE vein fleck (bright mineral catch-light).
-    `const vec3 ORE_VEIN    = ${lin(0xd8ddd0)};`
+    `const vec3 ORE_VEIN    = ${lin(0xd8ddd0)};`,
+    // BASALT: cool black volcanic stone with sparse warm mineral glow.
+    `const vec3 BASALT_DARK  = ${lin(0x15151a)};`,
+    `const vec3 BASALT_BASE  = ${lin(0x2c2a30)};`,
+    `const vec3 BASALT_EDGE  = ${lin(0x4a454b)};`,
+    `const vec3 BASALT_WARM  = ${lin(0xff6a25)};`,
+    // ICE: blue-white translucent facets.
+    `const vec3 ICE_DEEP     = ${lin(0x78aeca)};`,
+    `const vec3 ICE_BASE     = ${lin(0xcfe6f5)};`,
+    `const vec3 ICE_WHITE    = ${lin(0xf4fbff)};`,
+    `const vec3 ICE_GLOW     = ${lin(0x9ee8ff)};`,
+    // CRYSTAL: cyan facets with violet shadow and bright ridge highlights.
+    `const vec3 CRYSTAL_DARK = ${lin(0x176a91)};`,
+    `const vec3 CRYSTAL_BASE = ${lin(0x6fe0ff)};`,
+    `const vec3 CRYSTAL_HI   = ${lin(0xc8fbff)};`,
+    `const vec3 CRYSTAL_VIO  = ${lin(0x7a69ff)};`
   ].join('\n        ');
 }
 
@@ -178,27 +227,41 @@ const NOISE_GLSL = /* glsl */ `
 
   // Per-material triplanar HEIGHT field used ONLY for the bump gradient. Each
   // branch's silhouette matches the material's color detail in vmSurface below.
-  // Returns roughly 0..1. mid follows MATERIAL_ORDER:
-  //   0 STONE 1 DIRT 2 WOOD 3 LAVA 4 GRASS 5 COPPER 6 GOLD 7 SILVER 8 SAND
+  // Returns roughly 0..1. mid follows MATERIAL_ORDER through MAT_* constants.
   float vmHeight(vec3 p, vec3 w, int mid) {
-    if (mid == 1) {
+    if (mid == MAT_DIRT) {
       // DIRT: big clumpy clods + small pebble bumps.
       float clods = vmTriFbm(p, w, 0.9);
       float pebbles = vmTriSpeckle(p, w, 3.2, 0.86);
       return clods * 0.85 + pebbles * 0.5;
-    } else if (mid == 0) {
+    } else if (mid == MAT_STONE) {
       // STONE: cracked / striated ridges.
       float crack = vmTriRidge(p, w, 1.1);
       float layer = vmTriFbm2(p, w, 0.35);
       return crack * 0.7 + layer * 0.4;
-    } else if (mid == 8) {
+    } else if (mid == MAT_SAND) {
       // SAND: fine grain + slow large ripples.
       float ripple = sin(p.x * 1.6 + p.z * 1.1 + vmTriFbm2(p, w, 0.5) * 3.0) * 0.5 + 0.5;
       float grain = vmTriFbm(p, w, 5.0);
       return ripple * 0.5 + grain * 0.45;
-    } else if (mid == 4) {
+    } else if (mid == MAT_GRASS) {
       // GRASS block: soft mossy lumps.
       return vmTriFbm(p, w, 1.3) * 0.7;
+    } else if (mid == MAT_BASALT) {
+      // BASALT: fractured plates with subtle horizontal strata.
+      float plates = vmTriRidge(p, w, 1.45);
+      float strata = sin((p.y + p.x * 0.2 + p.z * 0.13) * 2.1) * 0.5 + 0.5;
+      return plates * 0.85 + strata * 0.28;
+    } else if (mid == MAT_ICE) {
+      // ICE: smoother broad facets with shallow internal cracks.
+      float facets = vmTriRidge(p, w, 0.95);
+      float frost = vmTriFbm(p, w, 2.4);
+      return facets * 0.48 + frost * 0.22;
+    } else if (mid == MAT_CRYSTAL) {
+      // CRYSTAL: hard angular ridges and glinting micro facets.
+      float ridge = vmTriRidge(p, w, 2.0);
+      float facet = vmTriFbm2(p, w, 0.7);
+      return ridge * 0.9 + facet * 0.35;
     }
     // WOOD / ORES / LAVA: gentle generic relief.
     return vmTriFbm2(p, w, 0.9) * 0.5;
@@ -225,7 +288,7 @@ const SURFACE_GLSL = /* glsl */ `
     float macroMul = mix(0.90, 1.12, macro);
     col *= macroMul;
 
-    if (mid == 1) {
+    if (mid == MAT_DIRT) {
       // DIRT --------------------------------------------------------------
       float clods = vmTriFbm(p, w, 0.9);
       float crev  = vmTriFbm2(p, w, 1.7);             // organic dark patches
@@ -242,7 +305,7 @@ const SURFACE_GLSL = /* glsl */ `
       dirt *= clamp(baseLuma / max(dRef, 1e-3), 0.75, 1.3) * macroMul;
       col = mix(col, dirt, 0.92);
 
-    } else if (mid == 0) {
+    } else if (mid == MAT_STONE) {
       // STONE -------------------------------------------------------------
       float crack = vmTriRidge(p, w, 1.1);
       float fleck = vmTriSpeckle(p, w, 4.5, 0.90) * fade;
@@ -253,7 +316,43 @@ const SURFACE_GLSL = /* glsl */ `
       stone *= clamp(baseLuma / max(sRef, 1e-3), 0.8, 1.25) * macroMul;
       col = mix(col, stone, 0.9);
 
-    } else if (mid == 8) {
+    } else if (mid == MAT_BASALT) {
+      // BASALT ------------------------------------------------------------
+      float plates = vmTriRidge(p, w, 1.45);
+      float strata = sin((p.y + p.x * 0.2 + p.z * 0.13) * 2.1) * 0.5 + 0.5;
+      float warm = vmTriSpeckle(p, w, 3.8, 0.92) * fade;
+      vec3 basalt = mix(BASALT_DARK, BASALT_BASE, smoothstep(0.18, 0.52, plates));
+      basalt = mix(basalt, BASALT_EDGE, smoothstep(0.66, 1.0, plates) * 0.6);
+      basalt *= mix(0.82, 1.08, strata);
+      basalt = mix(basalt, BASALT_WARM, warm * 0.45);
+      float bRef = dot(BASALT_BASE, vec3(0.299, 0.587, 0.114));
+      basalt *= clamp(baseLuma / max(bRef, 1e-3), 0.75, 1.35) * macroMul;
+      col = mix(col, basalt, 0.92);
+
+    } else if (mid == MAT_ICE) {
+      // ICE ---------------------------------------------------------------
+      float facets = vmTriRidge(p, w, 0.95);
+      float frost = vmTriFbm(p, w, 2.4);
+      vec3 ice = mix(ICE_DEEP, ICE_BASE, smoothstep(0.18, 0.68, frost));
+      ice = mix(ice, ICE_WHITE, smoothstep(0.58, 1.0, facets) * 0.72);
+      ice += ICE_GLOW * smoothstep(0.35, 0.9, 1.0 - facets) * 0.08;
+      float iRef = dot(ICE_BASE, vec3(0.299, 0.587, 0.114));
+      ice *= clamp(baseLuma / max(iRef, 1e-3), 0.82, 1.2) * macroMul;
+      col = mix(col, ice, 0.9);
+
+    } else if (mid == MAT_CRYSTAL) {
+      // CRYSTAL -----------------------------------------------------------
+      float ridge = vmTriRidge(p, w, 2.0);
+      float facet = vmTriFbm2(p, w, 0.7);
+      float glint = vmTriSpeckle(p, w, 5.2, 0.88) * fade;
+      vec3 crystal = mix(CRYSTAL_DARK, CRYSTAL_BASE, smoothstep(0.25, 0.8, facet));
+      crystal = mix(crystal, CRYSTAL_VIO, smoothstep(0.1, 0.32, ridge) * 0.28);
+      crystal = mix(crystal, CRYSTAL_HI, smoothstep(0.72, 1.0, ridge) * 0.72 + glint * 0.42);
+      float cRef = dot(CRYSTAL_BASE, vec3(0.299, 0.587, 0.114));
+      crystal *= clamp(baseLuma / max(cRef, 1e-3), 0.8, 1.28) * macroMul;
+      col = mix(col, crystal, 0.94);
+
+    } else if (mid == MAT_SAND) {
       // SAND --------------------------------------------------------------
       float ripple = sin(p.x * 1.6 + p.z * 1.1 + vmTriFbm2(p, w, 0.5) * 3.0) * 0.5 + 0.5;
       float sparkle = vmTriSpeckle(p, w, 7.0, 0.82) * fade;
@@ -264,7 +363,7 @@ const SURFACE_GLSL = /* glsl */ `
       sand *= clamp(baseLuma / max(saRef, 1e-3), 0.85, 1.2) * macroMul;
       col = mix(col, sand, 0.85);
 
-    } else if (mid == 4) {
+    } else if (mid == MAT_GRASS) {
       // GRASS BLOCK -------------------------------------------------------
       // Top faces read mossy (match blades); sides are dirt with a thin grass
       // fringe near the top edge.
@@ -283,7 +382,7 @@ const SURFACE_GLSL = /* glsl */ `
       g *= clamp(baseLuma / max(gRef, 1e-3), 0.8, 1.25) * macroMul;
       col = mix(col, g, 0.9);
 
-    } else if (mid == 5 || mid == 6 || mid == 7) {
+    } else if (mid == MAT_COPPER || mid == MAT_GOLD || mid == MAT_SILVER) {
       // ORES: keep metal LUT; add subtle mineral vein speckle catch-light.
       float vein = vmTriSpeckle(p, w, 3.0, 0.85) * fade;
       col = mix(col, ORE_VEIN, vein * 0.18);
@@ -304,7 +403,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     metalness: 0.02
   });
 
-  const { rough, metal, emissive, lavaId, palette } = buildLUTs();
+  const { rough, metal, emissive, lavaId, materialIds, palette } = buildLUTs();
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
@@ -359,6 +458,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         varying vec3 vWorldPos;
         varying vec3 vWorldNormal;
         ${palette}
+        ${materialIds}
         ${NOISE_GLSL}
         ${SURFACE_GLSL}
         ${rough}
@@ -420,9 +520,18 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         if (uTriplanar > 0.5) {
           int rmid = int(vMatId + 0.5);
           vec3 rw = vmTriW(vWorldNormal);
-          if (rmid == 0) {
+          if (rmid == MAT_STONE) {
             float crack = vmTriRidge(vWorldPos, rw, 1.1);
             roughnessFactor *= mix(1.05, 0.86, smoothstep(0.4, 0.95, crack));
+          } else if (rmid == MAT_BASALT) {
+            float plate = vmTriRidge(vWorldPos, rw, 1.45);
+            roughnessFactor *= mix(1.08, 0.82, smoothstep(0.55, 1.0, plate));
+          } else if (rmid == MAT_ICE) {
+            float facet = vmTriRidge(vWorldPos, rw, 0.95);
+            roughnessFactor *= mix(0.72, 1.12, smoothstep(0.2, 0.8, facet));
+          } else if (rmid == MAT_CRYSTAL) {
+            float ridge = vmTriRidge(vWorldPos, rw, 2.0);
+            roughnessFactor *= mix(0.72, 0.45, smoothstep(0.65, 1.0, ridge));
           }
         }`
       )
@@ -441,6 +550,19 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
             float phase = dot(vWorldPos, vec3(0.15));
             float pulse = 0.85 + 0.15 * sin(uTime * 1.5 + phase);
             e *= mix(1.0, pulse, uAnimated);
+          } else if (mid == MAT_BASALT) {
+            vec3 ew = vmTriW(vWorldNormal);
+            float ember = vmTriSpeckle(vWorldPos, ew, 3.8, 0.94) * vmDetailFade();
+            e += BASALT_WARM * ember * 0.18;
+          } else if (mid == MAT_ICE) {
+            vec3 ew = vmTriW(vWorldNormal);
+            float inner = 1.0 - vmTriRidge(vWorldPos, ew, 0.95);
+            e += ICE_GLOW * smoothstep(0.45, 0.9, inner) * 0.04;
+          } else if (mid == MAT_CRYSTAL) {
+            vec3 ew = vmTriW(vWorldNormal);
+            float ridge = vmTriRidge(vWorldPos, ew, 2.0);
+            float glint = vmTriSpeckle(vWorldPos, ew, 5.2, 0.9) * vmDetailFade();
+            e += CRYSTAL_HI * (smoothstep(0.72, 1.0, ridge) * 0.18 + glint * 0.22);
           }
           totalEmissiveRadiance += e;
         }`
@@ -454,7 +576,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
 
   // Single shared material on one mesh: a stable key avoids per-object recompiles
   // and reserves room for future variants (e.g. painterly).
-  material.customProgramCacheKey = () => 'voxel-pbr-v2';
+  material.customProgramCacheKey = () => 'voxel-pbr-v3';
 
   return material;
 }

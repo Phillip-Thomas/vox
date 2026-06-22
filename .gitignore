@@ -12,6 +12,9 @@ build/
 .firebase/
 *.local
 
+# Agentic Byproducts
+captures/
+
 # Environment variables
 .env
 .env.local
@@ -102,4 +105,9 @@ $RECYCLE.BIN/
 
 # Vite
 vite.config.js.timestamp-*
-vite.config.ts.timestamp-* 
+vite.config.ts.timestamp-*
+
+# Shadegent shader-painting harness — its OWN separate git repo, not part of the
+# game. Ignored here so the game repo commits cleanly; commit it on its own (or
+# convert to a submodule later if you want it linked).
+shadegent/

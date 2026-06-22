@@ -1,5 +1,6 @@
 import { DEFAULT_SEA_LEVEL_PERCENTILE } from '../config/worldGeneration';
 import type { TerrainGenerationConfig, TerrainProfile } from '../config/worldGeneration';
+import { buildPlanetProfile, type PlanetProfile } from '../game/PlanetProfile';
 import { seededUnit } from './worldCoordinates';
 
 /**
@@ -23,82 +24,34 @@ import { seededUnit } from './worldCoordinates';
  *   random   default (0.42)
  */
 export function createTerrainConfig(seed: number, planetRadius: number): TerrainGenerationConfig {
+  const profile = buildPlanetProfile(seed);
+  const config = createTerrainConfigFromProfile(profile, planetRadius);
+
   if (seed === 12345) {
     return {
-      ...createSeededTerrainConfig(seed, planetRadius),
+      ...config,
       seaLevelOffset: 1
     };
   }
 
-  if (seed === 54321) {
-    // Mountains: rare but present water.
-    return {
-      seed,
-      terrainProfile: 'mountains',
-      heightVariation: Math.max(15, Math.floor(planetRadius * 0.6)),
-      mountainFrequency: 0.01,
-      hillFrequency: 0.025,
-      valleyDepth: Math.max(8, Math.floor(planetRadius * 0.2)),
-      terrainScale: 0.06,
-      seaLevelPercentile: 0.15
-    };
-  }
-
-  if (seed === 98765) {
-    // Rolling hills: water in the low spots.
-    return {
-      seed,
-      terrainProfile: 'hills',
-      heightVariation: Math.max(3, Math.floor(planetRadius * 0.15)),
-      mountainFrequency: 0.03,
-      hillFrequency: 0.08,
-      valleyDepth: Math.max(2, Math.floor(planetRadius * 0.08)),
-      terrainScale: 0.12,
-      seaLevelPercentile: 0.28
-    };
-  }
-
-  if (seed === 13579) {
-    // Deep valleys: very common water.
-    return {
-      seed,
-      terrainProfile: 'valleys',
-      heightVariation: Math.max(12, Math.floor(planetRadius * 0.4)),
-      mountainFrequency: 0.02,
-      hillFrequency: 0.05,
-      valleyDepth: Math.max(18, Math.floor(planetRadius * 0.5)),
-      terrainScale: 0.07,
-      seaLevelPercentile: 0.30
-    };
-  }
-
-  if (seed === 24680) {
-    // Islands: broad sea with land poking out.
-    return {
-      seed,
-      terrainProfile: 'islands',
-      heightVariation: Math.max(5, Math.floor(planetRadius * 0.25)),
-      mountainFrequency: 0.04,
-      hillFrequency: 0.1,
-      valleyDepth: Math.max(4, Math.floor(planetRadius * 0.2)),
-      terrainScale: 0.15,
-      seaLevelPercentile: 0.38
-    };
-  }
-
-  return createSeededTerrainConfig(seed, planetRadius);
+  return config;
 }
 
-function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainGenerationConfig {
-  const profile = terrainProfileForSeed(seed);
+export function createTerrainConfigFromProfile(
+  profile: PlanetProfile | TerrainProfile,
+  planetRadius: number,
+  seedOverride = 0
+): TerrainGenerationConfig {
+  const seed = typeof profile === 'string' ? seedOverride : profile.seed;
+  const terrainProfile = typeof profile === 'string' ? profile : profile.terrainProfile;
   const roughness = seededUnit(seed, 211);
   const scaleJitter = seededUnit(seed, 223);
   const waterJitter = seededUnit(seed, 227) - 0.5;
 
-  if (profile === 'mountains') {
+  if (terrainProfile === 'mountains') {
     return {
       seed,
-      terrainProfile: profile,
+      terrainProfile,
       heightVariation: Math.max(12, Math.floor(planetRadius * (0.54 + roughness * 0.24))),
       mountainFrequency: 0.009 + scaleJitter * 0.01,
       hillFrequency: 0.02 + seededUnit(seed, 229) * 0.02,
@@ -108,10 +61,10 @@ function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainG
     };
   }
 
-  if (profile === 'hills') {
+  if (terrainProfile === 'hills') {
     return {
       seed,
-      terrainProfile: profile,
+      terrainProfile,
       heightVariation: Math.max(4, Math.floor(planetRadius * (0.16 + roughness * 0.14))),
       mountainFrequency: 0.022 + scaleJitter * 0.02,
       hillFrequency: 0.06 + seededUnit(seed, 241) * 0.05,
@@ -121,10 +74,10 @@ function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainG
     };
   }
 
-  if (profile === 'valleys') {
+  if (terrainProfile === 'valleys') {
     return {
       seed,
-      terrainProfile: profile,
+      terrainProfile,
       heightVariation: Math.max(9, Math.floor(planetRadius * (0.32 + roughness * 0.2))),
       mountainFrequency: 0.014 + scaleJitter * 0.014,
       hillFrequency: 0.035 + seededUnit(seed, 263) * 0.035,
@@ -134,10 +87,10 @@ function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainG
     };
   }
 
-  if (profile === 'islands') {
+  if (terrainProfile === 'islands') {
     return {
       seed,
-      terrainProfile: profile,
+      terrainProfile,
       heightVariation: Math.max(5, Math.floor(planetRadius * (0.2 + roughness * 0.18))),
       mountainFrequency: 0.03 + scaleJitter * 0.025,
       hillFrequency: 0.075 + seededUnit(seed, 277) * 0.06,
@@ -149,7 +102,7 @@ function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainG
 
   return {
     seed,
-    terrainProfile: profile,
+    terrainProfile,
     heightVariation: Math.max(10, Math.floor(planetRadius * (0.34 + roughness * 0.24))),
     mountainFrequency: 0.012 + scaleJitter * 0.014,
     hillFrequency: 0.035 + seededUnit(seed, 293) * 0.035,
@@ -157,15 +110,6 @@ function createSeededTerrainConfig(seed: number, planetRadius: number): TerrainG
     terrainScale: 0.07 + seededUnit(seed, 311) * 0.045,
     seaLevelPercentile: clamp01(DEFAULT_SEA_LEVEL_PERCENTILE + 0.08 + waterJitter * 0.12)
   };
-}
-
-function terrainProfileForSeed(seed: number): TerrainProfile {
-  const roll = seededUnit(seed, 199);
-  if (roll < 0.18) return 'mountains';
-  if (roll < 0.36) return 'hills';
-  if (roll < 0.54) return 'valleys';
-  if (roll < 0.72) return 'islands';
-  return 'balanced';
 }
 
 function clamp01(value: number) {

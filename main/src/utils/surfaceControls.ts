@@ -354,6 +354,20 @@ export function wrapPositionAroundEdge(
   return target;
 }
 
+/**
+ * Reproject a velocity onto a (possibly very different) face frame WITHOUT any
+ * rotation — keep the tangential + any inward component, DROP the outward
+ * component along `up`. Robust for ANY pair of ups including antiparallel
+ * (top<->bottom after tunnelling), where setFromUnitVectors would be degenerate.
+ * Used by the surface resolver's snap/escape corrections so a face change can
+ * never convert outward/falling speed into a tangential launch.
+ */
+export function reprojectVelocityOntoFace(velocity: THREE.Vector3, up: THREE.Vector3): THREE.Vector3 {
+  const along = velocity.dot(up); // outward component (along +up)
+  if (along <= 0) return velocity.clone();
+  return velocity.clone().addScaledVector(up, -along);
+}
+
 export function transitionAssistVelocity(velocity: THREE.Vector3, targetUp: THREE.Vector3, minimumInwardSpeed = 2) {
   const gravityDirection = targetUp.clone().multiplyScalar(-1);
   const inwardSpeed = velocity.dot(gravityDirection);
