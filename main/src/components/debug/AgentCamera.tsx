@@ -3,6 +3,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import storedVantages from './vantages.json';
+import { setPlayerUp } from '../../state/playerFrame';
 
 // User-authored vantages (recorded via PoseRecorder, filed into vantages.json):
 // exact camera pose pinned to a specific world/seed. Replayed verbatim — far
@@ -142,6 +143,7 @@ export default function AgentCamera({ planetSize, onPositionChange }: AgentCamer
       cam.lookAt(t);
       cam.updateMatrixWorld(true);
       onPositionChange?.(streamAt.clone());
+      setPlayerUp(streamAt); // so the sky's LOCAL day/night reflects this vantage
     };
 
     const surfaceTop = () => new THREE.Vector3(0, worldRadius, 0);
@@ -163,6 +165,7 @@ export default function AgentCamera({ planetSize, onPositionChange }: AgentCamer
         cam.updateMatrixWorld(true);
         // stream around the surface beneath the pinned camera.
         const dir = cam.position.clone().normalize();
+        setPlayerUp(dir); // local up at this vantage drives the sky's day/night
         onPositionChange?.(dir.multiplyScalar(worldRadius));
         return name;
       }

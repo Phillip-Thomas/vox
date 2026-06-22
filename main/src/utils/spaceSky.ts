@@ -41,6 +41,7 @@ export interface SpaceSkyUniforms {
   uGolden: { value: number };
   uSunDir: { value: THREE.Vector3 };
   uMoonDir: { value: THREE.Vector3 };
+  uUp: { value: THREE.Vector3 };  // player's local up — orients atmosphere/horizon
   // Per-planet daytime atmosphere palette (set once per planet, not per frame).
   uAtmoLow: { value: THREE.Color };   // luminous horizon / low-sky
   uAtmoHigh: { value: THREE.Color };  // deeper upper-sky
@@ -63,6 +64,7 @@ const FRAG = /* glsl */ `
   uniform float uGolden;  // 0..1 golden-hour factor (warms horizon + sun halo)
   uniform vec3 uSunDir;
   uniform vec3 uMoonDir;
+  uniform vec3 uUp;        // player's local up (orients the horizon gradient)
   uniform vec3 uAtmoLow;   // luminous horizon / low-sky (per planet)
   uniform vec3 uAtmoHigh;  // deeper upper-sky (per planet)
   uniform vec3 uSunGlow;   // sun bloom tint (per planet)
@@ -267,11 +269,11 @@ const FRAG = /* glsl */ `
     vec3 s = normalize(uSunDir);
     float mu = dot(dir, s);
     float toSun = pow(max(mu, 0.0), 3.0);
-    float sunUp = smoothstep(-0.06, 0.12, s.y);
+    float sunUp = smoothstep(-0.06, 0.12, dot(s, uUp));   // sun above the LOCAL horizon
 
-    // Vertical proxy (kept from the old model: world-up). Luminous low-sky -> deep
-    // upper-sky gradient, tinted per planet, brightening toward the sun.
-    float up = clamp(dir.y * 0.5 + 0.5, 0.0, 1.0);
+    // Vertical from the player's LOCAL up (not world-Y), so the luminous low-sky ->
+    // deep upper-sky gradient tracks the real horizon on every face.
+    float up = clamp(dot(dir, uUp) * 0.5 + 0.5, 0.0, 1.0);
     vec3 sky = mix(uAtmoHigh, uAtmoLow, pow(1.0 - up, 1.4));
     sky = mix(sky, uSunGlow, toSun * 0.55);
     vec3 atmo = sky * uDay * sunUp;
@@ -298,6 +300,7 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
       uGolden: { value: 0 },
       uSunDir: { value: new THREE.Vector3(0, 1, 0) },
       uMoonDir: { value: new THREE.Vector3(0, -1, 0) },
+      uUp: { value: new THREE.Vector3(0, 1, 0) },
       // Default nebular-blue atmosphere (overridden per-planet via setSpaceSkyAtmosphere).
       uAtmoLow: { value: new THREE.Color(0.85, 0.78, 0.98) },
       uAtmoHigh: { value: new THREE.Color(0.20, 0.30, 0.62) },
@@ -316,6 +319,8 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
 
 const _sunScratch = new THREE.Vector3();
 const _moonScratch = new THREE.Vector3();
+const _upScratch = new THREE.Vector3();
+const _defaultUp = new THREE.Vector3(0, 1, 0);
 
 /**
  * Push day-cycle state into the dome. `time` is frozen by the caller when
@@ -329,7 +334,8 @@ export function updateSpaceSky(
   daylight: number,
   golden: number,
   sunDir: THREE.Vector3,
-  moonDir: THREE.Vector3
+  moonDir: THREE.Vector3,
+  up: THREE.Vector3 = _defaultUp
 ): number {
   const u = material.uniforms as unknown as SpaceSkyUniforms;
   const day = dayFactorFromDaylight(daylight);
@@ -338,6 +344,7 @@ export function updateSpaceSky(
   u.uGolden.value = golden;
   u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
   u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
+  u.uUp.value.copy(_upScratch.copy(up).normalize());
   return day;
 }
 

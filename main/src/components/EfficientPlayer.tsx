@@ -40,6 +40,7 @@ import {
 } from '../utils/surfaceControls';
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
+import { setPlayerUp } from '../state/playerFrame';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -475,6 +476,10 @@ export default function EfficientPlayer({
       activeUp = surfaceRef.current.up;
       activeGravity = surfaceRef.current.gravity;
     }
+
+    // Publish the local up so the sky/lighting can drive LOCAL day/night
+    // (chase-the-light): the sun lights the hemisphere this up faces.
+    setPlayerUp(activeUp);
 
     const grounded = checkGrounded(position, activeUp);
     lastGrounded.current = grounded;
