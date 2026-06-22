@@ -1,10 +1,16 @@
 import * as THREE from 'three';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { materialId } from '../types/materials';
+import type { MaterialType } from '../types/materials';
+import { materialToLegacyBlock } from '../game/adapters';
+import type { BlockId } from '../game/data/blocks';
+import type { ResourceDeposit } from '../game/generation/resourceDeposits';
 
 interface VoxelData {
   position: [number, number, number];
   material: string;
+  blockId: BlockId;
+  deposit: ResourceDeposit | null;
   color: THREE.Color;
   meshSlot: number;
   worldId: number;
@@ -14,6 +20,8 @@ interface VoxelData {
 
 interface VoxelAddOptions {
   supportsSurfaceResources?: boolean;
+  blockId?: BlockId;
+  deposit?: ResourceDeposit | null;
 }
 
 interface InitialTerrainPopulateOptions {
@@ -31,11 +39,15 @@ export interface TerrainVoxel {
   x: number;
   y: number;
   z: number;
+  blockId?: BlockId;
+  deposit?: ResourceDeposit | null;
   material: string;
   color: THREE.Color;
 }
 
 export interface OriginalTerrainData {
+  blockId?: BlockId;
+  deposit?: ResourceDeposit | null;
   material: string;
   color: THREE.Color;
 }
@@ -168,6 +180,8 @@ export class EfficientVoxelSystem {
       const voxelData: VoxelData = {
         position: [voxel.x, voxel.y, voxel.z],
         material: voxel.material,
+        blockId: voxel.blockId ?? materialToLegacyBlock(voxel.material as MaterialType),
+        deposit: voxel.deposit ?? null,
         color: voxel.color.clone(),
         meshSlot,
         worldId: this.worldId,
@@ -202,6 +216,8 @@ export class EfficientVoxelSystem {
     const terrainByCoord = new Map<string, OriginalTerrainData>();
     for (const voxel of terrain) {
       terrainByCoord.set(EfficientVoxelSystem.coordKey(voxel.x, voxel.y, voxel.z), {
+        blockId: voxel.blockId ?? materialToLegacyBlock(voxel.material as MaterialType),
+        deposit: voxel.deposit ?? null,
         material: voxel.material,
         color: voxel.color.clone()
       });
@@ -239,6 +255,8 @@ export class EfficientVoxelSystem {
     const voxelData: VoxelData = {
       position: [x, y, z],
       material,
+      blockId: options.blockId ?? materialToLegacyBlock(material as MaterialType),
+      deposit: options.deposit ?? null,
       color: color.clone(),
       meshSlot,
       rigidBodyRef,
@@ -331,7 +349,11 @@ export class EfficientVoxelSystem {
         originalData.material,
         originalData.color,
         undefined,
-        { supportsSurfaceResources: false }
+        {
+          supportsSurfaceResources: false,
+          blockId: originalData.blockId,
+          deposit: originalData.deposit ?? null
+        }
       )) {
         exposedCount++;
       }

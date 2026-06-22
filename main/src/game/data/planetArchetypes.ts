@@ -8,6 +8,7 @@
 //
 // Type-only references (BiomeId, ResourceId, TerrainProfile) — no runtime cycle.
 
+import { seededUnit } from '../../utils/worldCoordinates.ts';
 import type { TerrainProfile } from '../../config/worldGeneration.ts';
 import type { BiomeId } from './biomes.ts';
 import type { ResourceId } from './resources.ts';
@@ -115,3 +116,17 @@ export const TOTAL_ARCHETYPE_WEIGHT = ALL_ARCHETYPE_IDS.reduce(
   (sum, id) => sum + PLANET_ARCHETYPES[id].weight,
   0
 );
+
+const SALT_ARCHETYPE = 101;
+
+/** Deterministic weighted archetype for a planet seed. Shared so PlanetProfile
+ *  and the biome anchor agree on a planet's identity (climate reconciliation). */
+export function archetypeForSeed(seed: number): ArchetypeId {
+  const roll = seededUnit(seed | 0, SALT_ARCHETYPE) * TOTAL_ARCHETYPE_WEIGHT;
+  let acc = 0;
+  for (const id of ALL_ARCHETYPE_IDS) {
+    acc += PLANET_ARCHETYPES[id].weight;
+    if (roll <= acc) return id;
+  }
+  return ALL_ARCHETYPE_IDS[ALL_ARCHETYPE_IDS.length - 1];
+}

@@ -6,6 +6,7 @@ import { MaterialType } from '../types/materials.ts';
 import { coordinateToSeed } from './worldCoordinates.ts';
 import { buildPlanetProfile } from '../game/PlanetProfile.ts';
 import type { ArchetypeId } from '../game/data/planetArchetypes.ts';
+import { blockToRenderMaterial } from '../game/adapters.ts';
 
 const R = 24; // within floor(planetRadius=25)
 
@@ -77,6 +78,19 @@ describe('profile-driven generation determinism', () => {
             expect(a.generateMaterialForPosition(x, y, z)).toBe(b.generateMaterialForPosition(x, y, z));
             break;
           }
+        }
+      }
+    }
+  });
+
+  it('block-first output projects to the legacy material output', () => {
+    const gen = genForSeed(coordinateToSeed(-4, 11));
+    for (let x = -R; x <= R; x += 4) {
+      for (let y = -R; y <= R; y += 4) {
+        for (let z = -R; z <= R; z += 4) {
+          if (!gen.shouldVoxelExist(x, y, z)) continue;
+          const blockId = gen.generateBlockForPosition(x, y, z);
+          expect(gen.generateMaterialForPosition(x, y, z)).toBe(blockToRenderMaterial(blockId));
         }
       }
     }

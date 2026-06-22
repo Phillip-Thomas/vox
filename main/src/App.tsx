@@ -14,8 +14,7 @@ import TouchControls from './components/mobile/TouchControls.tsx';
 import { isTouchDevice } from './utils/mobileInput.ts';
 import PoseRecorder from './components/debug/PoseRecorder.tsx';
 import { subscribeInventory, getInventory } from './game/systems/inventorySystem.ts';
-import { getLookedAtMaterial } from './game/systems/targeting.ts';
-import { materialToLegacyBlock } from './game/adapters.ts';
+import { getLookedAtVoxel } from './game/systems/targeting.ts';
 import { BLOCKS } from './game/data/blocks.ts';
 import { RESOURCES, type ResourceId } from './game/data/resources.ts';
 import {
@@ -672,8 +671,12 @@ const LookedAtIndicator: React.FC = () => {
   const [name, setName] = useState<string | null>(null);
   useEffect(() => {
     const id = setInterval(() => {
-      const mat = getLookedAtMaterial();
-      setName(mat ? BLOCKS[materialToLegacyBlock(mat)].name : null);
+      const target = getLookedAtVoxel();
+      setName(target
+        ? target.deposit
+          ? `${BLOCKS[target.blockId].name}: ${RESOURCES[target.deposit.resourceId].name}`
+          : BLOCKS[target.blockId].name
+        : null);
     }, 120);
     return () => clearInterval(id);
   }, []);

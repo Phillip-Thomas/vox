@@ -8,6 +8,10 @@ import { PLANET_ARCHETYPES, ALL_ARCHETYPE_IDS, type ArchetypeId } from './data/p
 import { blockToRenderMaterial, materialToLegacyBlock } from './adapters.ts';
 import { buildPlanetProfile } from './PlanetProfile.ts';
 import { GENERATION_SCHEMA_VERSION } from './schema.ts';
+import { hasVoxelShaderDetail } from '../utils/voxelMaterial.ts';
+import { buildPlanetManifest } from './generation/buildPlanetManifest.ts';
+import { resourceCanOccurOnProfile } from './generation/resourceDeposits.ts';
+import { scanPlanet } from './systems/scannerSystem.ts';
 
 const VALID_MATERIALS = new Set<string>(Object.values(MaterialType));
 const VALID_RESOURCES = new Set<string>(ALL_RESOURCE_IDS);
@@ -42,6 +46,12 @@ describe('data integrity', () => {
       expect(block, `no canonical block for ${m}`).toBeDefined();
       expect(BLOCKS[block].renderMaterial).toBe(m);
     }
+  });
+
+  it('new archetype materials have authored shader detail', () => {
+    expect(hasVoxelShaderDetail(MaterialType.BASALT)).toBe(true);
+    expect(hasVoxelShaderDetail(MaterialType.ICE)).toBe(true);
+    expect(hasVoxelShaderDetail(MaterialType.CRYSTAL)).toBe(true);
   });
 
   it('resource affinities reference real biomes/archetypes', () => {
@@ -95,6 +105,40 @@ describe('PlanetProfile determinism', () => {
       expect(total).toBeGreaterThan(0.999);
       expect(total).toBeLessThan(1.001);
     }
+  });
+});
+
+describe('planet manifest and scanner', () => {
+  it('manifest resources are possible on the source profile', () => {
+    for (const seed of sampleSeeds(80)) {
+      const profile = buildPlanetProfile(seed);
+      const manifest = buildPlanetManifest(profile);
+      const resources = [
+        ...manifest.commonResources,
+        ...manifest.rareResources,
+        ...manifest.hiddenResources
+      ];
+
+      for (const resourceId of resources) {
+        expect(resourceCanOccurOnProfile(profile, resourceId), `${resourceId} claimed for ${profile.archetype}`).toBe(true);
+      }
+    }
+  });
+
+  it('scanner level hides and reveals resources by resource scanLevel', () => {
+    const profile = sampleSeeds(600)
+      .map(buildPlanetProfile)
+      .find(candidate => buildPlanetManifest(candidate).hiddenResources.length > 0);
+    expect(profile).toBeDefined();
+
+    const low = scanPlanet({ seed: profile!.seed, scanLevel: 0 });
+    const high = scanPlanet({ seed: profile!.seed, scanLevel: 5 });
+
+    for (const resourceId of [...low.commonResources, ...low.rareResources]) {
+      expect(RESOURCES[resourceId].scanLevel).toBeLessThanOrEqual(0);
+    }
+    expect(low.hiddenResources.length).toBeGreaterThan(0);
+    expect(high.hiddenResources).toEqual([]);
   });
 });
 

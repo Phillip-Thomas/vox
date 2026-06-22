@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MaterialType } from '../../types/materials.ts';
-import { dropsForMaterial, harvestMaterial } from './harvestingSystem.ts';
+import { dropsForBlock, dropsForMaterial, harvestMaterial, harvestVoxel } from './harvestingSystem.ts';
 import { getInventory, getResourceCount, resetInventory, addResource, subscribeInventory, totalItems } from './inventorySystem.ts';
 import { RESOURCES } from '../data/resources.ts';
 
@@ -18,6 +18,29 @@ describe('dropsForMaterial', () => {
   it('lava and dirt yield nothing harvestable', () => {
     expect(dropsForMaterial(MaterialType.LAVA)).toEqual([]);
     expect(dropsForMaterial(MaterialType.DIRT)).toEqual([]);
+  });
+});
+
+describe('dropsForBlock / harvestVoxel', () => {
+  it('adds deposit identity without duplicating block drops', () => {
+    const deposit = { resourceId: 'charged_crystal' as const, richness: 1, scanLevel: 2 };
+    expect(dropsForBlock('crystal_crust', deposit)).toEqual(expect.arrayContaining(['silica', 'charged_crystal']));
+    expect(dropsForBlock('crystal_crust', deposit).filter(id => id === 'charged_crystal')).toHaveLength(1);
+  });
+
+  it('blocks harvesting when the tool tier is too low and does not bank drops', () => {
+    const result = harvestVoxel({ blockId: 'basalt', toolTier: 1 });
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('tool_tier');
+    expect(totalItems()).toBe(0);
+  });
+
+  it('banks deposit resources when harvest permission succeeds', () => {
+    const deposit = { resourceId: 'copper_ore' as const, richness: 1.2, scanLevel: 1 };
+    const result = harvestVoxel({ blockId: 'copper_block', deposit, toolTier: 1 });
+    expect(result.success).toBe(true);
+    expect(result.drops.some(drop => drop.id === 'copper_ore')).toBe(true);
+    expect(getResourceCount('copper_ore')).toBeGreaterThan(0);
   });
 });
 

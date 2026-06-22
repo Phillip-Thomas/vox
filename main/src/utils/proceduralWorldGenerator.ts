@@ -1,7 +1,15 @@
 import { DEFAULT_TERRAIN_CONFIG, DEFAULT_WORLD_CONFIG, SEA_LEVEL_RADIUS_PERCENT, TerrainGenerationConfig, WorldGenerationConfig } from '../config/worldGeneration';
 import { MaterialType } from '../types/materials';
 import { buildPlanetProfile, type PlanetProfile } from '../game/PlanetProfile';
-import type { ResourceId } from '../game/data/resources';
+import { blockToRenderMaterial } from '../game/adapters';
+import type { BlockId } from '../game/data/blocks';
+import {
+  depthBandForRadius,
+  resourceToDepositBlock,
+  sampleDepositAt,
+  sampleLocalBiomeAt,
+  type ResourceDeposit
+} from '../game/generation/resourceDeposits';
 
 class SimpleNoise {
   private gradients = new Map<string, [number, number]>();
@@ -75,19 +83,9 @@ export class ProceduralWorldGenerator {
   private noise: SimpleNoise;
   // Deterministic planet identity (archetype/biome mix/resource biases). The
   // generator consumes this so the SAME seed's archetype drives BOTH the surface
-  // material skin and the ore distribution — see archetypeSurface + getOreMaterial.
+  // material skin and the ore distribution â€” see archetypeSurface + getOreMaterial.
   private profile: PlanetProfile;
 
-  // Deep-ore resource -> render material. Only resources with a distinct ore
-  // material appear as veins; others fall through to STONE.
-  private static readonly ORE_MATERIAL: Partial<Record<ResourceId, MaterialType>> = {
-    copper_ore: MaterialType.COPPER,
-    gold_trace: MaterialType.GOLD,
-    iron_trace: MaterialType.SILVER,
-    charged_crystal: MaterialType.CRYSTAL,
-    void_glass: MaterialType.CRYSTAL,
-    basalt_glass: MaterialType.BASALT
-  };
   private surfaceHeightCache = new Map<string, number>();
   private existenceCache = new Map<string, boolean>();
   // Lazily-computed sea-level radius (coordinate units) derived from a chosen
@@ -145,11 +143,40 @@ export class ProceduralWorldGenerator {
   }
 
   generateMaterialForPosition(x: number, y: number, z: number): MaterialType {
-    if (!this.shouldVoxelExist(x, y, z)) return MaterialType.STONE;
+    return blockToRenderMaterial(this.generateBlockForPosition(x, y, z));
+  }
+
+  generateBlockForPosition(x: number, y: number, z: number): BlockId {
+    const baseBlock = this.generateBaseBlockForPosition(x, y, z);
+    const deposit = this.generateDepositForPosition(x, y, z, baseBlock);
+    if (!deposit) return baseBlock;
+    return resourceToDepositBlock(deposit.resourceId) ?? baseBlock;
+  }
+
+  generateDepositForPosition(x: number, y: number, z: number, blockId = this.generateBaseBlockForPosition(x, y, z)): ResourceDeposit | null {
+    if (!this.shouldVoxelExist(x, y, z)) return null;
+    if (blockId === 'lava') return null;
+
+    const distanceFromCenter = this.getDistanceFromCenter(x, y, z);
+    const localBiome = sampleLocalBiomeAt({ x, y, z, profile: this.profile });
+    const depthBand = depthBandForRadius(distanceFromCenter, this.getCoreRadius(), this.getPlanetRadius());
+    return sampleDepositAt({
+      x,
+      y,
+      z,
+      blockId,
+      profile: this.profile,
+      localBiome,
+      depthBand
+    });
+  }
+
+  private generateBaseBlockForPosition(x: number, y: number, z: number): BlockId {
+    if (!this.shouldVoxelExist(x, y, z)) return 'stone';
 
     const distanceFromCenter = this.getDistanceFromCenter(x, y, z);
     const coreRadius = this.getCoreRadius();
-    if (distanceFromCenter <= coreRadius) return MaterialType.LAVA;
+    if (distanceFromCenter <= coreRadius) return 'lava';
 
     const proceduralSurfaceHeight = this.getProceduralSurfaceHeight(x, y, z);
     const planetRadius = this.getPlanetRadius();
@@ -168,38 +195,38 @@ export class ProceduralWorldGenerator {
       (proceduralSurfaceHeight <= 1 && proceduralSurfaceHeight > 0) ||
       (proceduralSurfaceHeight > 1 && proceduralSurfaceHeight <= ProceduralWorldGenerator.GRASS_DEPTH)
     ) {
-      return this.surfaceShellMaterial(x, y, z, terrainOffset, planetRadius);
+      return this.surfaceShellBlock(x, y, z, terrainOffset, planetRadius);
     }
 
-    if (proceduralSurfaceHeight <= 5) return MaterialType.DIRT;
+    if (proceduralSurfaceHeight <= 5) return 'dirt';
 
     const depthRatio = (distanceFromCenter - coreRadius) / (planetRadius - coreRadius);
-    if (depthRatio < 0.3) return this.getWeightedMaterial(x, y, z);
-    if (depthRatio < 0.7) return this.coordinateRandom(x, y, z, 31) < 0.7 ? MaterialType.STONE : MaterialType.DIRT;
-    return this.coordinateRandom(x, y, z, 43) < 0.8 ? MaterialType.STONE : MaterialType.DIRT;
+    if (depthRatio < 0.3) return 'stone';
+    if (depthRatio < 0.7) return this.coordinateRandom(x, y, z, 31) < 0.7 ? 'stone' : 'dirt';
+    return this.coordinateRandom(x, y, z, 43) < 0.8 ? 'stone' : 'dirt';
   }
 
   /**
    * Slope-driven material for a surface-shell (or grass-skin) voxel.
-   *   SAND  if the column's terrain top is at/below sea level (coast/seabed) —
+   *   SAND  if the column's terrain top is at/below sea level (coast/seabed) â€”
    *         checked FIRST so coastlines & water stay correct.
    *   STONE if terrainOffset > PEAK (summits) OR slope >= STONE_SLOPE (cliffs).
    *   DIRT  if slope >= DIRT_SLOPE (moderate hillsides / step walls).
-   *   GRASS otherwise (flat + gentle slopes — the genuine majority).
+   *   GRASS otherwise (flat + gentle slopes â€” the genuine majority).
    */
-  private surfaceShellMaterial(x: number, y: number, z: number, terrainOffset: number, planetRadius: number): MaterialType {
+  private surfaceShellBlock(x: number, y: number, z: number, terrainOffset: number, planetRadius: number): BlockId {
     const terrainTopRadius = planetRadius + terrainOffset;
-    let base: MaterialType;
+    let base: BlockId;
     if (terrainTopRadius <= this.getSeaLevelRadius()) {
-      base = MaterialType.SAND;
+      base = 'sand';
     } else {
       const slope = this.surfaceSlope(x, y, z);
       if (terrainOffset > ProceduralWorldGenerator.PEAK || slope >= ProceduralWorldGenerator.STONE_SLOPE) {
-        base = MaterialType.STONE;
+        base = 'stone';
       } else if (slope >= ProceduralWorldGenerator.DIRT_SLOPE) {
-        base = MaterialType.DIRT;
+        base = 'dirt';
       } else {
-        base = MaterialType.GRASS;
+        base = 'grass';
       }
     }
     return this.archetypeSurface(base, x, y, z);
@@ -213,28 +240,28 @@ export class ProceduralWorldGenerator {
    * Because grass + trees only spawn on GRASS voxels, swapping the ground material
    * AUTOMATICALLY removes vegetation on non-verdant worlds (free cohesion).
    */
-  private archetypeSurface(base: MaterialType, x: number, y: number, z: number): MaterialType {
-    if (base === MaterialType.SAND) return base; // never restyle coast/seabed
-    const ground = base === MaterialType.GRASS || base === MaterialType.DIRT;
+  private archetypeSurface(base: BlockId, x: number, y: number, z: number): BlockId {
+    if (base === 'sand') return base; // never restyle coast/seabed
+    const ground = base === 'grass' || base === 'dirt';
 
     switch (this.profile.archetype) {
       case 'arid':
-        return ground ? MaterialType.SAND : base;
+        return ground ? 'sand' : base;
       case 'volcanic':
-        if (base === MaterialType.STONE) return MaterialType.BASALT;
+        if (base === 'stone') return 'basalt';
         if (ground) {
-          return this.coordinateRandom(x, y, z, 71) < 0.05 ? MaterialType.LAVA : MaterialType.BASALT;
+          return this.coordinateRandom(x, y, z, 71) < 0.05 ? 'lava' : 'basalt';
         }
         return base;
       case 'frozen':
-        return MaterialType.ICE; // ice sheet over the whole landmass (coast SAND kept above)
+        return 'ice'; // ice sheet over the whole landmass (coast sand kept above)
       case 'crystal':
-        if (base === MaterialType.GRASS) {
-          return this.coordinateRandom(x, y, z, 73) < 0.18 ? MaterialType.CRYSTAL : MaterialType.STONE;
+        if (base === 'grass') {
+          return this.coordinateRandom(x, y, z, 73) < 0.18 ? 'crystal_crust' : 'stone';
         }
-        return base === MaterialType.DIRT ? MaterialType.STONE : base;
+        return base === 'dirt' ? 'stone' : base;
       case 'metallic':
-        return ground ? MaterialType.STONE : base;
+        return ground ? 'stone' : base;
       default:
         return base; // verdant / oceanic / fungal: keep grass/dirt/stone
     }
@@ -245,7 +272,7 @@ export class ProceduralWorldGenerator {
    * gradient across the two TANGENT axes (the non-dominant ones, matching
    * getProceduralSurfaceHeight's dominant-axis selection). We sample the cached
    * surface-height field at the +/-1 tangent neighbours and take the central
-   * difference per axis, then return max(|du|,|dv|) — the steepest of the two
+   * difference per axis, then return max(|du|,|dv|) â€” the steepest of the two
    * tangent directions (chosen over the Euclidean magnitude so a single steep
    * direction, e.g. a scarp, reads as steep). Caches make this ~free.
    */
@@ -303,14 +330,14 @@ export class ProceduralWorldGenerator {
   //
   // A position (x,y,z) is WATER iff it is empty (`!shouldVoxelExist`) AND sits
   // at or below sea level (cube-sphere dominant-axis radius `max(|x|,|y|,|z|) <=
-  // seaLevelRadius`) — an air pocket flooded by the ocean. Above sea level the
+  // seaLevelRadius`) â€” an air pocket flooded by the ocean. Above sea level the
   // same empty position is plain AIR.
   //
   // We only render EXPOSED water: a water voxel with >= 1 face-neighbour that is
   // AIR (the visible ocean surface plus any air-facing coastal sides). Interior
   // water (every neighbour water or solid) is culled, keeping the rendered set
   // bounded like the terrain surface. `isTopSurface` marks voxels whose OUTWARD
-  // neighbour (one step further from center along the dominant axis) is air —
+  // neighbour (one step further from center along the dominant axis) is air â€”
   // i.e. the true top of the ocean, useful for the shader to ripple only the top.
 
   /** Public: is this empty cell flooded (connected to the ocean, at/below sea level)? */
@@ -326,12 +353,12 @@ export class ProceduralWorldGenerator {
 
   /**
    * Flood fill (cached): every empty cell at/below the waterline that is
-   * CONNECTED — through other empty sub-waterline cells — to the ocean surface
+   * CONNECTED â€” through other empty sub-waterline cells â€” to the ocean surface
    * (a fillable cell touching open air above the line, or the scan boundary).
    * This is the Minecraft *result*: water flows DOWN into connected voids, caves
    * and depressions and stops at the waterline, gap-free; sealed pockets with no
    * path to the surface stay dry. Compares the DOMINANT-AXIS radius (max|x|,|y|,
-   * |z|) — the same metric the cube-sphere terrain uses — so water aligns with
+   * |z|) â€” the same metric the cube-sphere terrain uses â€” so water aligns with
    * the land; connectivity (not a smooth sphere) is what fixes unfilled voids.
    * Computed once per generator.
    */
@@ -433,7 +460,7 @@ export class ProceduralWorldGenerator {
   /**
    * Scan the cube and return one entry per EXPOSED water FACE: a water voxel
    * coordinate plus which of its 6 neighbours is air. This is the surface-quad
-   * representation used by the renderer — instead of drawing a volumetric cube
+   * representation used by the renderer â€” instead of drawing a volumetric cube
    * per water voxel (which reads as a hollow glass box because you see through
    * to the interior back-faces), we draw one flat quad per air-facing face.
    *
@@ -442,7 +469,7 @@ export class ProceduralWorldGenerator {
    *
    * Overwhelmingly these are the OUTWARD/top faces (the ocean sheet); coastal
    * side faces that touch air are also included. Bounded like the terrain
-   * surface — interior water (no air neighbour) emits no faces.
+   * surface â€” interior water (no air neighbour) emits no faces.
    */
   getExposedWaterFaces(): Array<{ x: number; y: number; z: number; faceDir: number }> {
     const out: Array<{ x: number; y: number; z: number; faceDir: number }> = [];
@@ -583,7 +610,7 @@ export class ProceduralWorldGenerator {
   // (terrain top radius along a column = planetRadius + terrainOffset, where
   // terrainOffset is the noise displacement evaluated AT the face). Sorting the
   // samples and picking the Nth percentile yields a waterline GUARANTEED to
-  // flood ~that fraction of the surface — so every preset has visible water and
+  // flood ~that fraction of the surface â€” so every preset has visible water and
   // the amount varies purely by `seaLevelPercentile`. If the percentile is 0 we
   // fall back to the legacy fixed fraction (no flooding intent).
   getSeaLevelRadius(): number {
@@ -636,7 +663,7 @@ export class ProceduralWorldGenerator {
 
     // Cap at the RENDERED terrain shell. Terrain only generates within
     // [-floor(R), floor(R)] (getAllVoxelPositions), so any waterline above
-    // floor(R) would float an ocean ABOVE the top land shell — exactly the "sea
+    // floor(R) would float an ocean ABOVE the top land shell â€” exactly the "sea
     // level above ground" bug. Keeping sea <= floor(R) confines water to dips at
     // or below the surface, leaving the top land shells dry.
     sea = Math.min(sea, Math.floor(this.getPlanetRadius()));
@@ -658,7 +685,7 @@ export class ProceduralWorldGenerator {
 
     // For each of the 6 faces, fix the dominant axis at +/-R and sweep the two
     // tangent axes. getProceduralSurfaceHeight returns surfaceDistance +
-    // terrainOffset; on the face surfaceDistance = planetRadius - R ≈ 0, so the
+    // terrainOffset; on the face surfaceDistance = planetRadius - R â‰ˆ 0, so the
     // returned value is the terrainOffset there, and the top radius = R + offset.
     const faces: Array<[number, number, number]> = [
       [1, 0, 0], [-1, 0, 0],
@@ -687,35 +714,7 @@ export class ProceduralWorldGenerator {
     return radii;
   }
 
-  /**
-   * Deep-ore material at a position, weighted by THIS PLANET's contextual resource
-   * biases (PlanetProfile.resourceBiases) rather than a single global rarity. So a
-   * metallic moon shows copper/iron/gold veins, a crystal world glows with charged
-   * crystal, an anomaly hides void glass — and ores stay a minority of deep rock
-   * (heavy STONE base). Same seed -> identical veins (coordinateRandom is salted).
-   */
-  private getWeightedMaterial(x: number, y: number, z: number): MaterialType {
-    const ORE_SCALE = 8;          // how strongly resource bias converts to vein weight
-    const STONE_BASE = 60;        // keeps ores a minority of deep rock
-    const weights: Array<[MaterialType, number]> = [[MaterialType.STONE, STONE_BASE]];
-    let total = STONE_BASE;
-
-    for (const [rid, mat] of Object.entries(ProceduralWorldGenerator.ORE_MATERIAL)) {
-      const bias = this.profile.resourceBiases[rid as ResourceId];
-      if (!bias || bias <= 0) continue;
-      const w = bias * ORE_SCALE;
-      weights.push([mat as MaterialType, w]);
-      total += w;
-    }
-
-    let random = this.coordinateRandom(x, y, z, 19) * total;
-    for (const [mat, w] of weights) {
-      random -= w;
-      if (random <= 0) return mat;
-    }
-    return MaterialType.STONE;
-  }
-
+  /** Salted coordinate hash used for local terrain styling choices. */
   private coordinateRandom(x: number, y: number, z: number, salt: number) {
     let hash = Math.imul(x | 0, 374761393) ^
       Math.imul(y | 0, 668265263) ^

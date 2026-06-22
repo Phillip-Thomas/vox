@@ -51,12 +51,13 @@ import {
 } from '../utils/cubeGravityConstants';
 import { isTouchActive } from '../utils/mobileInput';
 import { MaterialType } from '../types/materials';
-import { harvestMaterial } from '../game/systems/harvestingSystem';
-import { setLookedAtMaterial } from '../game/systems/targeting';
+import { canHarvestVoxel, harvestVoxel } from '../game/systems/harvestingSystem';
+import { setLookedAtVoxel, type LookedAtVoxel } from '../game/systems/targeting';
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
+const PLAYER_TOOL_TIER = 3;
 // Scratch for the cheap "what am I looking at" voxel ray-march (avoids a
 // 125k-instance InstancedMesh raycast every frame).
 const _lookOrigin = new THREE.Vector3();
@@ -309,10 +310,13 @@ export default function EfficientPlayer({
     const coord = voxelSystem.getCoordForSlot(hit.instanceId);
     if (!coord) return;
 
-    // Harvest BEFORE removing (we need the voxel's material to roll drops).
     const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
+    if (!voxel || !canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: PLAYER_TOOL_TIER })) {
+      return;
+    }
+
     if (voxelSystem.removeVoxel(coord.x, coord.y, coord.z)) {
-      if (voxel) harvestMaterial(voxel.material as MaterialType);
+      harvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: PLAYER_TOOL_TIER });
       voxelSystem.exposeNeighbors(coord.x, coord.y, coord.z);
     }
   }, []);
@@ -322,22 +326,29 @@ export default function EfficientPlayer({
   // O(reach) Map lookups instead of testing every instance.
   const updateLookedAt = useCallback((camera: THREE.Camera | null) => {
     if (!camera || !(controlsActive.current || isTouchActive())) {
-      setLookedAtMaterial(null);
+      setLookedAtVoxel(null);
       return;
     }
     camera.getWorldPosition(_lookOrigin);
     camera.getWorldDirection(_lookDir);
-    let found: MaterialType | null = null;
+    let found: LookedAtVoxel | null = null;
     for (let t = 1.0; t <= BLOCK_REACH; t += 0.45) {
       const vx = Math.round((_lookOrigin.x + _lookDir.x * t) / VOXEL_SCALE);
       const vy = Math.round((_lookOrigin.y + _lookDir.y * t) / VOXEL_SCALE);
       const vz = Math.round((_lookOrigin.z + _lookDir.z * t) / VOXEL_SCALE);
       if (voxelSystem.hasVoxel(vx, vy, vz)) {
-        found = (voxelSystem.getVoxel(vx, vy, vz)?.material ?? null) as MaterialType | null;
+        const voxel = voxelSystem.getVoxel(vx, vy, vz);
+        found = voxel
+          ? {
+              material: voxel.material as MaterialType,
+              blockId: voxel.blockId,
+              deposit: voxel.deposit
+            }
+          : null;
         break;
       }
     }
-    setLookedAtMaterial(found);
+    setLookedAtVoxel(found);
   }, []);
 
   useBeforePhysicsStep(() => {

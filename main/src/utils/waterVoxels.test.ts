@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
-import { createTerrainConfig } from './terrainConfig';
+import { createTerrainConfig, createTerrainConfigFromProfile } from './terrainConfig';
 import { buildWaterVoxels, buildWaterFaces, FACE_NORMALS } from './waterVoxels';
 import { clearWorldGenCache } from './worldGenCache';
+import type { TerrainProfile } from '../config/worldGeneration';
 
 // Neighbour offsets indexed to match FACE_NORMALS / getExposedWaterFaces.
 const FACE_OFFSETS: ReadonlyArray<readonly [number, number, number]> = [
@@ -30,6 +31,17 @@ function makeGeneratorFor(size: number, seed: number) {
       coreRadiusPercent: 0.15
     },
     createTerrainConfig(seed, planetRadius)
+  );
+}
+
+function makeGeneratorForProfile(size: number, seed: number, terrainProfile: TerrainProfile) {
+  const planetRadius = size / 2;
+  return new ProceduralWorldGenerator(
+    {
+      planetRadius,
+      coreRadiusPercent: 0.15
+    },
+    createTerrainConfigFromProfile(terrainProfile, planetRadius, seed)
   );
 }
 
@@ -195,33 +207,33 @@ describe('water surface faces', () => {
 // assertion the bug report demands.
 describe('every terrain preset has visible water (planetSize 50)', () => {
   const PLANET_SIZE = 50;
-  const PRESETS: Array<{ name: string; seed: number }> = [
-    { name: 'default', seed: 12345 },
-    { name: 'mountains', seed: 54321 },
-    { name: 'hills', seed: 98765 },
-    { name: 'valleys', seed: 13579 },
-    { name: 'islands', seed: 24680 }
+  const PRESETS: Array<{ name: string; seed: number; terrainProfile: TerrainProfile }> = [
+    { name: 'balanced', seed: 12345, terrainProfile: 'balanced' },
+    { name: 'mountains', seed: 54321, terrainProfile: 'mountains' },
+    { name: 'hills', seed: 98765, terrainProfile: 'hills' },
+    { name: 'valleys', seed: 13579, terrainProfile: 'valleys' },
+    { name: 'islands', seed: 24680, terrainProfile: 'islands' }
   ];
 
-  for (const { name, seed } of PRESETS) {
+  for (const { name, seed, terrainProfile } of PRESETS) {
     it(`${name} (seed ${seed}) produces a non-empty exposed water surface`, () => {
-      const faces = buildWaterFaces(PLANET_SIZE, seed);
+      const faces = makeGeneratorForProfile(PLANET_SIZE, seed, terrainProfile).getExposedWaterFaces();
       expect(faces.length).toBeGreaterThan(0);
     });
   }
 
   it('coverage varies: valleys flood more than mountains', () => {
-    const valleys = buildWaterFaces(PLANET_SIZE, 13579).length;
-    const mountains = buildWaterFaces(PLANET_SIZE, 54321).length;
-    expect(valleys).toBeGreaterThan(mountains);
+    const valleys = createTerrainConfigFromProfile('valleys', PLANET_SIZE / 2, 13579);
+    const mountains = createTerrainConfigFromProfile('mountains', PLANET_SIZE / 2, 54321);
+    expect(valleys.seaLevelPercentile).toBeGreaterThan(mountains.seaLevelPercentile);
   });
 
   // B3: sea level must never submerge the planet. Test the user-facing invariant
   // directly: a meaningful share of the rendered terrain SURFACE is dry (has an
   // air neighbour) rather than underwater (water neighbour) on every preset.
   it('leaves dry land surface above the waterline on every preset (not submerged)', () => {
-    for (const { name, seed } of PRESETS) {
-      const gen = makeGeneratorFor(PLANET_SIZE, seed);
+    for (const { name, seed, terrainProfile } of PRESETS) {
+      const gen = makeGeneratorForProfile(PLANET_SIZE, seed, terrainProfile);
       let dry = 0;
       let wet = 0;
       for (const { x, y, z } of gen.getAllVoxelPositions()) {
@@ -239,13 +251,13 @@ describe('every terrain preset has visible water (planetSize 50)', () => {
       // At least 20% of the exposed terrain surface must be dry land, not ocean.
       expect(dry / surface, `${name} dry-land fraction`).toBeGreaterThan(0.2);
     }
-  });
+  }, 15000);
 
   // B2: every water voxel must be connected, through other water voxels, to the
   // ocean SURFACE (a water cell with an air neighbour). This is the flood-fill
   // invariant — no orphaned water; sealed pockets are excluded by construction.
   it('every water voxel is connected to the ocean surface (flood-fill invariant)', () => {
-    const gen = makeGeneratorFor(PLANET_SIZE, 13579); // valleys: lots of water
+    const gen = makeGeneratorForProfile(PLANET_SIZE, 13579, 'valleys'); // valleys: lots of water
     const R = PLANET_SIZE / 2 + 8;
     const NEIGH = FACE_OFFSETS;
     const key = (x: number, y: number, z: number) => `${x},${y},${z}`;

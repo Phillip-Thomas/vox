@@ -1,4 +1,5 @@
 import { seededUnit } from './worldCoordinates';
+import { archetypeForSeed, PLANET_ARCHETYPES } from '../game/data/planetArchetypes';
 
 // --- Per-planet BIOME profile ------------------------------------------------
 //
@@ -46,6 +47,14 @@ const SALT_VEGHUE2 = 57;
 function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
+const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+
+// How strongly a planet's CLIMATE is pulled toward its archetype's climate
+// centre. This removes contradictions (no tropical-lush grass on a frozen world)
+// WITHOUT collapsing diversity: only lushness/aridity/temperature are reconciled;
+// the vegetation HUE / saturation / alien-ness keep their own wide independent
+// roll, so e.g. purple grass on a verdant world is preserved by design.
+const CLIMATE_RECONCILE = 0.6;
 
 // Bold non-green vegetation accents (sRGB hue 0..1): amber, coral/red, magenta,
 // violet, deep blue, cyan-teal. These make alien planets read at a glance.
@@ -61,11 +70,17 @@ const ALIEN_VEG_HUES = [0.07, 0.99, 0.90, 0.78, 0.62, 0.50];
 export function buildBiomeProfile(seed: number): BiomeProfile {
   const s = seed | 0;
 
-  const lushness = seededUnit(s, SALT_LUSH); // 0..1, full range -> dramatic spread
+  // Reconcile the climate axes toward this planet's archetype centre so the
+  // climate never contradicts the surface identity (frozen=cold, volcanic=hot,
+  // arid=dry). Hue/saturation/alien below are deliberately NOT reconciled.
+  const climate = PLANET_ARCHETYPES[archetypeForSeed(s)].climateBias;
+
+  const lushness = clamp(mix(seededUnit(s, SALT_LUSH), climate.lushness, CLIMATE_RECONCILE), 0, 1);
   // Aridity skews wetter, and lush worlds resist drying.
   let aridity = Math.pow(seededUnit(s, SALT_ARID), 1.3);
   aridity = clamp(aridity * (1.25 - lushness * 0.6), 0, 1);
-  const temperature = seededUnit(s, SALT_TEMP);
+  aridity = clamp(mix(aridity, climate.aridity, CLIMATE_RECONCILE), 0, 1);
+  const temperature = clamp(mix(seededUnit(s, SALT_TEMP), climate.temperature, CLIMATE_RECONCILE), 0, 1);
 
   // Vegetation hue — diverse by design so planets look distinct.
   const hueRoll = seededUnit(s, SALT_VEGHUE);

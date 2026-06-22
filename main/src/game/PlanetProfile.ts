@@ -15,18 +15,15 @@
 // Determinism: ONLY salted `seededUnit(seed, salt)` — no order-dependent random
 // streams, so adding fields here never reshuffles existing planets.
 
-import { seededUnit } from '../utils/worldCoordinates.ts';
 import { buildBiomeProfile, type BiomeProfile } from '../utils/biomeProfile.ts';
 import type { TerrainProfile } from '../config/worldGeneration.ts';
 import { GENERATION_SCHEMA_VERSION } from './schema.ts';
 import {
-  PLANET_ARCHETYPES, ALL_ARCHETYPE_IDS, TOTAL_ARCHETYPE_WEIGHT,
+  PLANET_ARCHETYPES, archetypeForSeed,
   type ArchetypeId, type HazardId
 } from './data/planetArchetypes.ts';
 import { BIOMES, type BiomeId } from './data/biomes.ts';
 import { RESOURCES, ALL_RESOURCE_IDS, type ResourceId } from './data/resources.ts';
-
-const SALT_ARCHETYPE = 101;
 
 export interface PlanetPalette {
   /** Primary vegetation hue (0..1 sRGB), cohered across grass/trees. */
@@ -52,16 +49,6 @@ export interface PlanetProfile {
   palette: PlanetPalette;
   progressionTier: number;
   traits: string[];
-}
-
-function pickArchetype(seed: number): ArchetypeId {
-  const roll = seededUnit(seed, SALT_ARCHETYPE) * TOTAL_ARCHETYPE_WEIGHT;
-  let acc = 0;
-  for (const id of ALL_ARCHETYPE_IDS) {
-    acc += PLANET_ARCHETYPES[id].weight;
-    if (roll <= acc) return id;
-  }
-  return ALL_ARCHETYPE_IDS[ALL_ARCHETYPE_IDS.length - 1];
 }
 
 function normalizeBiomeWeights(raw: Partial<Record<BiomeId, number>>): Partial<Record<BiomeId, number>> {
@@ -112,7 +99,7 @@ function computeResourceBiases(
 /** Build the deterministic PlanetProfile for a coordinate seed. Pure. */
 export function buildPlanetProfile(seed: number): PlanetProfile {
   const s = seed | 0;
-  const archetype = pickArchetype(s);
+  const archetype = archetypeForSeed(s);
   const arch = PLANET_ARCHETYPES[archetype];
   const biome = buildBiomeProfile(s);
   const biomeWeights = normalizeBiomeWeights(arch.biomeWeights);
