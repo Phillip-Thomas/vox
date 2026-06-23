@@ -7,6 +7,7 @@ import GrassField from './GrassField';
 import TreeField from './TreeField';
 import LooseStoneField from './LooseStoneField';
 import { PlayerTorch, Campfires } from './Lights';
+import StructureField, { BuildGhost } from './StructureField';
 import WaterBlocks from './WaterBlocks.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
 import MenuCamera from './MenuCamera.tsx';
@@ -161,6 +162,8 @@ export default function EfficientScene({
       <LooseStoneField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <PlayerTorch playerPosition={playerPosition} />
       <Campfires terrainSeed={terrainSeed} />
+      <StructureField terrainSeed={terrainSeed} />
+      <BuildGhost />
       <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} />
     </Physics>
   );

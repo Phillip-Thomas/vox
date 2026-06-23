@@ -147,6 +147,7 @@ supersedes them.
 | Torch + campfire lighting | **BUILT** (intensities un-tuned) |
 | Crafting engine (`canCraft`/`craft`) + Fabricator UI (key C / ⚒) | **BUILT** |
 | Era store + `repairMaw()` | **BUILT** (repair not yet reachable in-game) |
+| **Shelter building S1** — foundation/wall/ceiling (wood), build mode (B), snap ghost, place(E)/deconstruct(X), instanced render + colliders | **BUILT** (S2 doors/materials, S3 enclosure, S4 integrity, S5 persistence pending) |
 | Emergent recipes (refined/components/Maw line/suits/modules) | **DEFINED**; craftable today via the all-access menu |
 | Devices as placeable objects + per-device crafting UI | **NOT BUILT** |
 | Era gating (personal menu = primitive only; Emergent behind devices) | **NOT BUILT** (menu is still the Phase-2 all-access fabricator) |
@@ -165,18 +166,29 @@ supersedes them.
 
 ## 6. Direction — next steps (in order)
 
-1. **The Emergent bridge** (closes Primitive): add Maw Repair Kit + Workbench/
-   Fabricator-Core recipes and a ship-wreck salvage source (`hull_scrap`,
-   `power_core`); crafting the repair calls `repairMaw()` → era flips to Emergent.
-2. **Placeable devices**: Smelter/Assembler/Survey Console become `placeable` items
-   you craft (primitive), place, and walk up to (reuse the targeting ray + `KeyF`
-   prompt). A device opens its own panel = `recipesForStation(device.station)`.
-3. **Era gating**: filter the personal Fabricator to `recipesForEra('primitive')`;
-   retire `getAccessibleStations()` for per-device proximity.
-4. **Survival (Light Hazard)**: suit-charge drain vs `archetype.hazards`; consume
-   `getHazardProtection`. Then scanner-gated reveal + warp-range gate.
-5. **Persistence**: snapshot all stores keyed by `GENERATION_SCHEMA_VERSION`.
-6. **Game modes** (Sandbox/Expedition/Endurance) and eventually **Paravox Machina** + plot.
+**We are deliberately staying in the Primitive era for a good while** — deepening
+survival on the crash planet before re-enabling space tech. So the Emergent bridge is
+NOT next; shelter is.
+
+1. **Shelter building (IN PROGRESS)** — Ark-style prefab pieces snapped to the voxel
+   grid as face-panels, sealed-enclosure detection via flood-fill, integrity, and a
+   persistent home base. Plan: `~/.claude/plans/shelter-building.md`. **S1 BUILT**
+   (foundation/wall/ceiling in wood, build mode B, snap ghost, place E / deconstruct
+   X, instanced render + colliders). Next: **S2** doorway+door + thatch/stone
+   materials, **S3** enclosure flood-fill → `isSheltered()`, **S4** integrity,
+   **S5** home-base persistence.
+2. **Light-Hazard survival** — an exposure/comfort meter that `archetype.hazards`
+   drain while EXPOSED and that being SHELTERED / near a campfire / in the right
+   Carapace restores (consumes `isSheltered()` + suit/campfire). This is what gives
+   shelter — and the already-built campfires/suits — gameplay teeth.
+3. **Persistence** — localStorage snapshot of structures + campfires + inventory +
+   loadout, keyed by `GENERATION_SCHEMA_VERSION` + worldId (first real consumer: the
+   home base).
+
+LATER (deferred until we leave Primitive): the **Emergent bridge** (Maw Repair Kit +
+ship-wreck salvage → `repairMaw()` flips the era), **placeable devices** (Smelter/
+Assembler/Survey Console + per-device crafting), **era gating** (primitive-only
+Fabricator), warp/scanner gates, **game modes**, and **Paravox Machina** + plot.
 
 Naming convention (Paravoxia-native, do NOT borrow from other games): Maw line,
 Carapace suits, Survey Lens / Lift Cell / Range Coil modules, Smelter / Assembler /
@@ -205,11 +217,14 @@ game/data/      items.ts  resources.ts  blocks.ts  recipes.ts  stations.ts  eras
 game/systems/   inventorySystem  harvestingSystem  loadoutSystem  mawSystem
                 craftingSystem  progressionSystem  treeHarvest  stonePickup
                 campfires  miningProgress  targeting  scannerSystem
-components/     EfficientPlayer (mining loop, looked-at)  EfficientScene (mounts fields)
+components/     EfficientPlayer (mining + build loop, looked-at)  EfficientScene (mounts fields)
                 TreeField  LooseStoneField  Lights (PlayerTorch, Campfires)
-                hud/InventoryPanel  hud/MiningProgress  hud/MawChargeMeter  hud/LookedAtIndicator
+                StructureField (+BuildGhost, structureFieldHandle)
+                hud/InventoryPanel  hud/MiningProgress  hud/MawChargeMeter  hud/LookedAtIndicator  hud/BuildIndicator
                 ui/CraftingPanel
-utils/          looseStone.ts (shared rock geo+material)
+game/data/      ... buildPieces.ts (build pieces + cost + stats)
+game/systems/   ... structureSystem (placed panels)  buildState (mode+selection)  buildGhost (snap readout)
+utils/          looseStone.ts (shared rock geo+material)  buildPlacement.ts (snap math)
 state/          playerFrame.ts (player up + world position globals)
 ```
 

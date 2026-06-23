@@ -64,8 +64,14 @@ import { clearMiningProgress, setMiningProgress } from '../game/systems/miningPr
 import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
 import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
+import { isBuildEnabled, getSelectedPiece } from '../game/systems/buildState';
+import { canAfford, placePiece, removePiece } from '../game/systems/structureSystem';
+import { resolveBuildTarget, type BuildHit } from '../utils/buildPlacement';
+import { faceIndexForNormal } from '../game/systems/structureSystem';
+import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
 import { treeFieldHandle } from './TreeField';
 import { looseStoneHandle } from './LooseStoneField';
+import { structureFieldHandle } from './StructureField';
 import { setLookedAt, type LookedAt } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 
@@ -170,6 +176,9 @@ export default function EfficientPlayer({
   const mineState = useRef<{ key: string | null; elapsed: number; duration: number; tickAt: number; usesCharge: boolean }>(
     { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false }
   );
+  // Build mode uses EDGE presses (place once per press), not hold.
+  const prevBuildKey = useRef(false);
+  const prevDeconKey = useRef(false);
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
@@ -547,6 +556,59 @@ export default function EfficientPlayer({
     setMiningProgress(true, Math.min(1, ms.elapsed / ms.duration), false);
   }, [pickHarvestTarget, commitMine]);
 
+  // Per-frame build mode: snap the selected piece under the crosshair (publish the
+  // ghost), place it on a fresh press of the harvest key, deconstruct on a press of
+  // the deconstruct key. `place`/`decon` are the EDGE (this frame's down, not held).
+  const updateBuild = useCallback((place: boolean, decon: boolean, camera: THREE.Camera | null) => {
+    if (!camera) { clearBuildGhost(); return; }
+    const piece = getSelectedPiece();
+    raycaster.far = BLOCK_REACH;
+    raycaster.setFromCamera(mouse, camera); // crosshair = screen centre
+
+    // Nearest hit across terrain + structure → a normalized BuildHit.
+    const voxelMesh = efficientPlanetMesh.current;
+    const structMesh = structureFieldHandle.mesh;
+    const meshes = [voxelMesh, structMesh].filter(Boolean) as THREE.Object3D[];
+    let hitInfo: BuildHit | null = null;
+    let deconHit: { cell: { x: number; y: number; z: number }; face: number } | null = null;
+    for (const h of raycaster.intersectObjects(meshes, false)) {
+      if (h.instanceId === undefined || !h.face) continue;
+      if (h.object === voxelMesh) {
+        const coord = voxelSystem.getCoordForSlot(h.instanceId);
+        if (!coord) continue;
+        hitInfo = {
+          cell: [coord.x, coord.y, coord.z], point: h.point, isPanel: false,
+          normalIdx: faceIndexForNormal(h.face.normal.x, h.face.normal.y, h.face.normal.z)
+        };
+      } else {
+        const p = structureFieldHandle.slotPiece[h.instanceId];
+        if (!p) continue;
+        hitInfo = { cell: p.cell, point: h.point, isPanel: true, panelType: p.type, panelFace: p.face, normalIdx: -1 };
+        deconHit = { cell: { x: p.cell[0], y: p.cell[1], z: p.cell[2] }, face: p.face };
+      }
+      break; // nearest
+    }
+
+    // Deconstruct the panel under the crosshair.
+    if (decon) {
+      if (deconHit && removePiece([deconHit.cell.x, deconHit.cell.y, deconHit.cell.z], deconHit.face)) playSfx('mine');
+      else playSfx('blocked');
+    }
+
+    const target = hitInfo ? resolveBuildTarget(hitInfo, piece) : null;
+    if (!target) {
+      clearBuildGhost();
+      if (place) playSfx('blocked');
+      return;
+    }
+    const ok = target.valid && canAfford(piece);
+    setBuildGhost(target.cell, target.face, ok);
+    if (place) {
+      if (ok && placePiece(target.cell, target.face, piece)) playSfx('mine');
+      else playSfx('blocked');
+    }
+  }, []);
+
   // "Looking at" readout for the crosshair label. The terrain voxel uses a CHEAP
   // ray-march (round(world/VOXEL_SCALE) Map lookups, not a 125k-instance raycast);
   // trees + loose stones are picked up with a cheap raycast of their (few, near)
@@ -771,10 +833,25 @@ export default function EfficientPlayer({
 
     const controls = get();
     const deleteActive = controlsActive.current || isTouchActive();
-    // Hold-to-mine: progress accumulates while the key/touch is held on a voxel,
-    // and the block only breaks once it has fully charged (time scales with block
-    // hardness / tool tier — see mineDurationMs).
-    updateMining(deleteActive && controls.delete, delta, cameraRef.current);
+    const harvestHeld = deleteActive && controls.delete;
+    if (isBuildEnabled()) {
+      // Build mode: the harvest key PLACES (edge), not mines. Mining is suppressed.
+      updateMining(false, delta, cameraRef.current);
+      const placeEdge = harvestHeld && !prevBuildKey.current;
+      const deconHeld = deleteActive && Boolean((controls as Record<string, boolean>).deconstruct);
+      const deconEdge = deconHeld && !prevDeconKey.current;
+      updateBuild(placeEdge, deconEdge, cameraRef.current);
+      prevBuildKey.current = harvestHeld;
+      prevDeconKey.current = deconHeld;
+    } else {
+      // Hold-to-mine: progress accumulates while the key/touch is held on a voxel,
+      // and the block only breaks once it has fully charged (time scales with block
+      // hardness / tool tier — see mineDurationMs).
+      clearBuildGhost();
+      prevBuildKey.current = false;
+      prevDeconKey.current = false;
+      updateMining(harvestHeld, delta, cameraRef.current);
+    }
 
     // Update the "looking at" readout a few times/sec (cheap voxel march).
     if (frameCount.current % 4 === 0) {

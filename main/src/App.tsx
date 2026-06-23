@@ -18,6 +18,7 @@ import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
 import JetpackMeter from './components/hud/JetpackMeter.tsx';
 import MawChargeMeter from './components/hud/MawChargeMeter.tsx';
+import BuildIndicator from './components/hud/BuildIndicator.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
 import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
@@ -38,6 +39,7 @@ import {
   normalizeCoordinatePart
 } from './utils/worldCoordinates.ts';
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
+import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled } from './game/systems/buildState.ts';
 import { scheduleWorldPrewarm } from './utils/worldGenCache.ts';
 import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
@@ -169,6 +171,26 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, isTouch, flight.controlMode]);
+
+  // B toggles build mode (on foot); 1/2/3 select the piece while building. Build
+  // mode keeps pointer lock — it does NOT release the cursor like the Fabricator.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+      if (craftingOpenRef.current || paused) return;
+      if (e.code === 'KeyB') toggleBuildMode();
+      else if (isBuildEnabled() && e.code.startsWith('Digit')) {
+        const n = Number(e.code.slice(5));
+        if (n >= 1) selectPieceByIndex(n - 1);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, flight.controlMode]);
+
+  // Leaving foot mode (ship/menu) exits build mode.
+  useEffect(() => { if (flight.controlMode !== 'fps') setBuildEnabled(false); }, [flight.controlMode]);
 
   const resumeFromPause = () => {
     setPaused(false);
@@ -396,6 +418,7 @@ const App: React.FC = () => {
         { name: 'reset', keys: ['KeyR'] },
         { name: 'delete', keys: ['KeyE'] },
         { name: 'board', keys: ['KeyF'] },
+        { name: 'deconstruct', keys: ['KeyX'] },
       ]}
     >
       <AudioDirector terrainSeed={currentWorld.seed} />
@@ -478,6 +501,7 @@ const App: React.FC = () => {
           {flight.controlMode === 'fps' && <MiningProgress />}
           {flight.controlMode === 'fps' && <JetpackMeter />}
           {flight.controlMode === 'fps' && <MawChargeMeter />}
+          {flight.controlMode === 'fps' && <BuildIndicator />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InventoryPanel />}
