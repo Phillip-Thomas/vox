@@ -7,6 +7,7 @@
 import { MaterialType } from '../../types/materials.ts';
 import { materialToLegacyBlock } from '../adapters.ts';
 import { BLOCKS, type BlockId } from '../data/blocks.ts';
+import type { HarvestClass } from '../data/items.ts';
 import { RESOURCES, type ResourceId } from '../data/resources.ts';
 import type { ResourceDeposit } from '../generation/resourceDeposits.ts';
 import { addResource } from './inventorySystem.ts';
@@ -43,6 +44,14 @@ export function dropsForBlock(blockId: BlockId, deposit?: ResourceDeposit | null
 /** Pure: which resources a material's canonical block yields (legacy wrapper). */
 export function dropsForMaterial(material: MaterialType): ResourceId[] {
   return dropsForBlock(materialToLegacyBlock(material));
+}
+
+/** Material class of a block, for tool selection (rock/crystal/ice → 'stone',
+ *  else 'soft'; trees are handled as 'wood' by the caller). */
+export function harvestClassForBlock(blockId: BlockId): HarvestClass {
+  const tags = BLOCKS[blockId].tags;
+  if (tags.includes('rock') || tags.includes('crystal') || tags.includes('ice')) return 'stone';
+  return 'soft';
 }
 
 export function requiredToolTierForVoxel(blockId: BlockId, deposit?: ResourceDeposit | null): number {
@@ -97,14 +106,21 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
 export const BASE_MINE_MS = 2000; // ms to break a hardness-1 block at tool tier 0
 export const MIN_MINE_MS = 150;   // floor so top-tier mining still feels physical
 
-export function mineDurationMs(input: HarvestVoxelInput): number {
+/**
+ * Core hold-time math, shared by voxel mining and tree harvesting. `speedMul`
+ * folds in per-tool mining speed + the bare-handed (unfuelled) penalty: <1 slows
+ * the break, >1 speeds it. Below-required tier → Infinity (cannot break).
+ */
+export function computeMineDuration(hardness: number, requiredTier: number, toolTier: number, speedMul = 1): number {
+  if (toolTier < requiredTier) return Infinity;
+  const tierSpeed = 1 + 0.8 * toolTier;             // better tool = faster
+  const overBonus = 1 + 0.5 * (toolTier - requiredTier); // overkill tool = faster still
+  return Math.max(MIN_MINE_MS, (hardness * BASE_MINE_MS) / (tierSpeed * overBonus * speedMul));
+}
+
+export function mineDurationMs(input: HarvestVoxelInput, opts?: { speedMul?: number }): number {
   const required = requiredToolTierForVoxel(input.blockId, input.deposit);
-  const tier = input.toolTier ?? 0;
-  if (tier < required) return Infinity; // wrong tool — cannot break
-  const hardness = BLOCKS[input.blockId].hardness;
-  const tierSpeed = 1 + 0.8 * tier;              // better tool = faster
-  const overBonus = 1 + 0.5 * (tier - required); // overkill tool = faster still
-  return Math.max(MIN_MINE_MS, (hardness * BASE_MINE_MS) / (tierSpeed * overBonus));
+  return computeMineDuration(BLOCKS[input.blockId].hardness, required, input.toolTier ?? 0, opts?.speedMul ?? 1);
 }
 
 /**

@@ -15,16 +15,21 @@
 // `unlocked` set so wiring it later is additive.
 
 import type { CraftedItemId, ItemStack } from './items.ts';
+import type { EraId } from './eras.ts';
 import type { StationId } from './stations.ts';
 
-export type RecipeId = CraftedItemId;
+// Everything craftable. Excludes the items that are GRANTED or HARVESTED rather
+// than crafted (the Faulty Maw starter, foraged wood), so RECIPES stays complete.
+export type RecipeId = Exclude<CraftedItemId, 'faulty_maw' | 'wood'>;
 
 export interface Recipe {
   id: RecipeId;
   outputs: ItemStack[];
   inputs: ItemStack[];
   station: StationId;
-  /** Phase 3: tech node that must be unlocked before this recipe is craftable. */
+  /** Which era this recipe belongs to (gates where it can be crafted). */
+  era: EraId;
+  /** Future: finer tech node that must be unlocked before this recipe is craftable. */
   requiredTech?: string;
 }
 
@@ -32,85 +37,101 @@ export interface Recipe {
 function recipe(
   id: RecipeId,
   station: StationId,
+  era: EraId,
   inputs: ItemStack[],
   outQty = 1
 ): Recipe {
-  return { id, station, inputs, outputs: [{ id, qty: outQty }] };
+  return { id, station, era, inputs, outputs: [{ id, qty: outQty }] };
 }
 
 export const RECIPES: Record<RecipeId, Recipe> = {
+  // Primitive — hand-crafted at the personal Fabricator ----------------------
+  // Biofuel powers the Faulty Maw. Made from foraged fibre (mine grass by hand),
+  // so the cold open bootstraps with no station and no ore.
+  biofuel: recipe('biofuel', 'hand', 'primitive', [
+    { id: 'biofiber', qty: 3 }
+  ]),
+  // Stone tools — biofiber + wood + foraged stone. The Hatchet speeds wood; the
+  // Pickaxe is the first tool that can break stone/ore voxels.
+  stone_hatchet: recipe('stone_hatchet', 'hand', 'primitive', [
+    { id: 'wood', qty: 2 }, { id: 'biofiber', qty: 2 }, { id: 'stone', qty: 1 }
+  ]),
+  stone_pickaxe: recipe('stone_pickaxe', 'hand', 'primitive', [
+    { id: 'wood', qty: 2 }, { id: 'biofiber', qty: 1 }, { id: 'stone', qty: 2 }
+  ]),
+
   // Refined materials (Smelter) ----------------------------------------------
-  refined_alloy: recipe('refined_alloy', 'smelter', [
+  refined_alloy: recipe('refined_alloy', 'smelter', 'emergent', [
     { id: 'copper_ore', qty: 2 }, { id: 'iron_trace', qty: 1 }
   ]),
-  silica_pane: recipe('silica_pane', 'smelter', [
+  silica_pane: recipe('silica_pane', 'smelter', 'emergent', [
     { id: 'silica', qty: 2 }
   ]),
-  biocomposite: recipe('biocomposite', 'smelter', [
+  biocomposite: recipe('biocomposite', 'smelter', 'emergent', [
     { id: 'biofiber', qty: 2 }, { id: 'resin', qty: 1 }
   ]),
-  cryo_cell: recipe('cryo_cell', 'smelter', [
+  cryo_cell: recipe('cryo_cell', 'smelter', 'emergent', [
     { id: 'frost_crystal', qty: 1 }, { id: 'silica_pane', qty: 1 }
   ]),
-  thermal_ceramic: recipe('thermal_ceramic', 'smelter', [
+  thermal_ceramic: recipe('thermal_ceramic', 'smelter', 'emergent', [
     { id: 'basalt_glass', qty: 1 }, { id: 'refined_alloy', qty: 1 }
   ]),
-  charge_cell: recipe('charge_cell', 'smelter', [
+  charge_cell: recipe('charge_cell', 'smelter', 'emergent', [
     { id: 'charged_crystal', qty: 1 }, { id: 'refined_alloy', qty: 1 }
   ]),
-  void_core: recipe('void_core', 'smelter', [
+  void_core: recipe('void_core', 'smelter', 'emergent', [
     { id: 'void_glass', qty: 1 }, { id: 'charge_cell', qty: 1 }
   ]),
 
   // Components (Assembler) ---------------------------------------------------
-  logic_wafer: recipe('logic_wafer', 'assembler', [
+  logic_wafer: recipe('logic_wafer', 'assembler', 'emergent', [
     { id: 'silica_pane', qty: 1 }, { id: 'refined_alloy', qty: 1 }
   ]),
-  strut_frame: recipe('strut_frame', 'assembler', [
+  strut_frame: recipe('strut_frame', 'assembler', 'emergent', [
     { id: 'refined_alloy', qty: 2 }, { id: 'biocomposite', qty: 1 }
   ]),
 
   // Tools — the Maw line (each consumes the prior tier) ----------------------
-  iron_maw: recipe('iron_maw', 'assembler', [
+  iron_maw: recipe('iron_maw', 'assembler', 'emergent', [
     { id: 'strut_frame', qty: 1 }, { id: 'logic_wafer', qty: 1 }
   ]),
-  frost_maw: recipe('frost_maw', 'assembler', [
+  frost_maw: recipe('frost_maw', 'assembler', 'emergent', [
     { id: 'iron_maw', qty: 1 }, { id: 'cryo_cell', qty: 1 }, { id: 'logic_wafer', qty: 1 }
   ]),
-  arc_maw: recipe('arc_maw', 'assembler', [
+  arc_maw: recipe('arc_maw', 'assembler', 'emergent', [
     { id: 'frost_maw', qty: 1 }, { id: 'charge_cell', qty: 1 }, { id: 'gold_trace', qty: 1 }
   ]),
-  void_maw: recipe('void_maw', 'assembler', [
+  void_maw: recipe('void_maw', 'assembler', 'emergent', [
     { id: 'arc_maw', qty: 1 }, { id: 'void_core', qty: 1 }
   ]),
 
   // Suits — the Carapace line (Assembler) ------------------------------------
-  thermal_carapace: recipe('thermal_carapace', 'assembler', [
+  thermal_carapace: recipe('thermal_carapace', 'assembler', 'emergent', [
     { id: 'biocomposite', qty: 1 }, { id: 'cryo_cell', qty: 1 }, { id: 'thermal_ceramic', qty: 1 }
   ]),
-  filter_carapace: recipe('filter_carapace', 'assembler', [
+  filter_carapace: recipe('filter_carapace', 'assembler', 'emergent', [
     { id: 'biocomposite', qty: 1 }, { id: 'logic_wafer', qty: 1 }
   ]),
-  shielded_carapace: recipe('shielded_carapace', 'assembler', [
+  shielded_carapace: recipe('shielded_carapace', 'assembler', 'emergent', [
     { id: 'strut_frame', qty: 1 }, { id: 'charge_cell', qty: 1 }
   ]),
 
   // Modules — survey optics (Survey Console) ---------------------------------
-  survey_lens_2: recipe('survey_lens_2', 'survey_console', [
+  survey_lens_2: recipe('survey_lens_2', 'survey_console', 'emergent', [
     { id: 'silica_pane', qty: 1 }, { id: 'logic_wafer', qty: 1 }
   ]),
-  survey_lens_3: recipe('survey_lens_3', 'survey_console', [
+  survey_lens_3: recipe('survey_lens_3', 'survey_console', 'emergent', [
     { id: 'survey_lens_2', qty: 1 }, { id: 'charge_cell', qty: 1 }
   ]),
-  survey_lens_4: recipe('survey_lens_4', 'survey_console', [
+  survey_lens_4: recipe('survey_lens_4', 'survey_console', 'emergent', [
     { id: 'survey_lens_3', qty: 1 }, { id: 'void_core', qty: 1 }
   ]),
 
   // Modules — personal & ship (Assembler) ------------------------------------
-  lift_cell: recipe('lift_cell', 'assembler', [
+  lift_cell: recipe('lift_cell', 'assembler', 'emergent', [
     { id: 'strut_frame', qty: 1 }, { id: 'refined_alloy', qty: 1 }
   ]),
-  range_coil: recipe('range_coil', 'assembler', [
+  range_coil: recipe('range_coil', 'assembler', 'emergent', [
     { id: 'charge_cell', qty: 1 }, { id: 'logic_wafer', qty: 1 }
   ])
 };
@@ -123,4 +144,8 @@ export function getRecipe(id: RecipeId): Recipe {
 
 export function recipesForStation(station: StationId): Recipe[] {
   return ALL_RECIPES.filter(r => r.station === station);
+}
+
+export function recipesForEra(era: EraId): Recipe[] {
+  return ALL_RECIPES.filter(r => r.era === era);
 }

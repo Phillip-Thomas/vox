@@ -8,7 +8,7 @@
 //
 // Type-only references (BiomeId, ResourceId, TerrainProfile) — no runtime cycle.
 
-import { seededUnit } from '../../utils/worldCoordinates.ts';
+import { coordinateToSeed, seededUnit, type WorldCoordinate } from '../../utils/worldCoordinates.ts';
 import type { TerrainProfile } from '../../config/worldGeneration.ts';
 import type { BiomeId } from './biomes.ts';
 import type { ResourceId } from './resources.ts';
@@ -129,4 +129,38 @@ export function archetypeForSeed(seed: number): ArchetypeId {
     if (roll <= acc) return id;
   }
   return ALL_ARCHETYPE_IDS[ALL_ARCHETYPE_IDS.length - 1];
+}
+
+// --- Crash-landing start -----------------------------------------------------
+//
+// A fresh game must crash you somewhere SURVIVABLE that has the Primitive era's
+// necessities: trees (wood), grass (biofiber), stone, and no early hazard. These
+// archetypes qualify (lush, treed, hazards 'none'). Exploration/travel afterwards
+// is unconstrained — only the very first planet is pinned hospitable.
+export const STARTING_ARCHETYPES: ArchetypeId[] = ['verdant', 'oceanic'];
+
+export function isHospitableStart(seed: number): boolean {
+  return STARTING_ARCHETYPES.includes(archetypeForSeed(seed));
+}
+
+/**
+ * Pick a starting-world coordinate whose planet is a hospitable starting archetype.
+ * Tries random coordinates (so fresh sessions vary) then falls back to an
+ * exhaustive scan, so it ALWAYS returns a survivable crash site. Deterministic
+ * given `rand`.
+ */
+export function findHospitableStart(rand: () => number = Math.random): WorldCoordinate {
+  const range = 100;
+  for (let i = 0; i < 500; i++) {
+    const x = Math.floor(rand() * (range * 2 + 1)) - range;
+    const y = Math.floor(rand() * (range * 2 + 1)) - range;
+    if (isHospitableStart(coordinateToSeed(x, y))) return { x, y };
+  }
+  // Fallback scan (the random pass effectively always succeeds — ~31% per try).
+  for (let x = -range; x <= range; x++) {
+    for (let y = -range; y <= range; y++) {
+      if (isHospitableStart(coordinateToSeed(x, y))) return { x, y };
+    }
+  }
+  return { x: 0, y: 0 };
 }

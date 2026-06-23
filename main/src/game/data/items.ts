@@ -33,8 +33,13 @@ export type ItemKind =
   | 'consumable'  // one-shot items (charge cells, repair kits) — future
   | 'placeable';  // crafting stations / structures — future (needs StationId)
 
-/** Ids for everything that is NOT a raw resource (resources reuse their ResourceId). */
+/** Ids for items NOT in the terrain RESOURCES registry — crafted goods AND
+ *  primitive-harvested materials (e.g. `wood` from trees). The `kind` field still
+ *  classifies them (wood is kind 'resource'); this union just means "id not minted
+ *  by the terrain economy". */
 export type CraftedItemId =
+  // primitive — the crash-landing starter, its fuel, foraged wood, and stone tools
+  | 'faulty_maw' | 'biofuel' | 'wood' | 'stone_hatchet' | 'stone_pickaxe'
   // refined materials
   | 'refined_alloy' | 'silica_pane' | 'biocomposite'
   | 'cryo_cell' | 'thermal_ceramic' | 'charge_cell' | 'void_core'
@@ -49,6 +54,12 @@ export type CraftedItemId =
   | 'lift_cell' | 'range_coil';
 
 export type ItemId = ResourceId | CraftedItemId;
+
+/** What a harvest target is made of, for picking the right tool. Trees are 'wood',
+ *  rock/ore/crystal/ice voxels are 'stone', everything else (soil/grass/organic) is
+ *  'soft'. A tool's `harvestSpeed` per class is how the Hatchet (fast wood) and
+ *  Pickaxe (slow stone) specialize. */
+export type HarvestClass = 'wood' | 'stone' | 'soft';
 
 /** Passive effect of an upgrade module (consumed by loadout/ship/scanner systems). */
 export interface ModuleEffect {
@@ -69,6 +80,13 @@ export interface ItemDefinition {
   description: string;
   /** kind 'tool': effective mining tier while this is the best tool owned. */
   toolTier?: number;
+  /** kind 'tool': default mining-speed multiplier (>1 faster, <1 slower). Default 1. */
+  mineSpeedMul?: number;
+  /** kind 'tool': per-material speed overrides (Hatchet→wood, Pickaxe→stone).
+   *  Falls back to mineSpeedMul (then 1) for unlisted classes. */
+  harvestSpeed?: Partial<Record<HarvestClass, number>>;
+  /** kind 'tool': true if the tool runs on Maw charge (the Faulty Maw does). */
+  usesCharge?: boolean;
   /** kind 'suit': protection (0..1+) per hazard. */
   hazardProtect?: Partial<Record<HazardId, number>>;
   /** kind 'module': passive upgrade payload. */
@@ -105,6 +123,30 @@ function resourceToItem(def: ResourceDefinition): ItemDefinition {
 // --- Crafted items ------------------------------------------------------------
 
 const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
+  // Primitive — crash-landing starter ----------------------------------------
+  faulty_maw: {
+    id: 'faulty_maw', name: 'Faulty Maw', kind: 'tool', tier: 0, stackable: false,
+    toolTier: 0, mineSpeedMul: 1, usesCharge: true,
+    description: 'Your damaged Maw. Drained and barely holding together — it cuts only soft matter, and only while fuelled. Repair it to cut stone and ore.'
+  },
+  biofuel: {
+    id: 'biofuel', name: 'Biofuel', kind: 'consumable', tier: 0, stackable: true,
+    description: 'A wad of pressed plant fibre that burns hot. Loads charge into the Maw.'
+  },
+  wood: {
+    id: 'wood', name: 'Wood', kind: 'resource', tier: 0, stackable: true,
+    description: 'Harvested from trees. The backbone of primitive tools and structures.'
+  },
+  stone_hatchet: {
+    id: 'stone_hatchet', name: 'Stone Hatchet', kind: 'tool', tier: 0, stackable: false,
+    toolTier: 0, harvestSpeed: { wood: 2.5, soft: 1, stone: 0.6 },
+    description: 'A knapped stone blade lashed to a haft. Chops wood far faster than bare cutting.'
+  },
+  stone_pickaxe: {
+    id: 'stone_pickaxe', name: 'Stone Pickaxe', kind: 'tool', tier: 1, stackable: false,
+    toolTier: 1, harvestSpeed: { stone: 0.5, soft: 0.8, wood: 0.5 },
+    description: 'A heavy stone head for breaking rock. Slow, but the only way to mine stone and ore before the Maw is repaired.'
+  },
   // Refined materials --------------------------------------------------------
   refined_alloy: {
     id: 'refined_alloy', name: 'Refined Alloy', kind: 'refined', tier: 1, stackable: true,
@@ -146,7 +188,8 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
   // Tools — the Maw line -----------------------------------------------------
   iron_maw: {
     id: 'iron_maw', name: 'Iron Maw', kind: 'tool', tier: 1, stackable: false, toolTier: 1,
-    description: 'A resonant field-cutter that collapses voxel bonds. Cleaves stone and base metals.'
+    mineSpeedMul: 1.2,
+    description: 'The repaired Maw: a resonant field-cutter that collapses voxel bonds. Self-powered — no fuel needed — and cleaves stone and base metals.'
   },
   frost_maw: {
     id: 'frost_maw', name: 'Frost Maw', kind: 'tool', tier: 2, stackable: false, toolTier: 2,

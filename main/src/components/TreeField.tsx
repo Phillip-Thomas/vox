@@ -5,11 +5,12 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { measureWarpMetric } from '../utils/warpMetrics';
-import { deterministicTangentForUp } from '../utils/surfaceControls';
+import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from '../utils/surfaceControls';
 import { generateTree } from '../utils/treeGen';
 import { buildTreeProfile, paramsFromProfile } from '../utils/treeProfile';
 import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
+import { getTreeHarvestVersion, isTreeHarvested, resetTreeHarvest } from '../game/systems/treeHarvest';
 import {
   createBarkMaterial,
   createLeafMaterial,
@@ -35,6 +36,17 @@ interface TreeFieldProps {
   playerPosition?: THREE.Vector3;
 }
 
+/**
+ * Module handle for tree harvesting: the NEAR trunk/leaf instanced meshes plus a
+ * slot→voxel map (instanceId from a raycast → the tree's grass-voxel coord). The
+ * player's harvest raycast reads this (mirrors EfficientPlanet's `efficientPlanetMesh`).
+ */
+export const treeFieldHandle: {
+  trunk: THREE.InstancedMesh | null;
+  leaf: THREE.InstancedMesh | null;
+  slotVoxel: Array<[number, number, number]>;
+} = { trunk: null, leaf: null, slotVoxel: [] };
+
 // Reused scratch (avoid per-instance allocation).
 const _world = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -55,7 +67,7 @@ function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
   for (const voxel of voxelSystem.getAllVoxels().values()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
-    if (seededVoxelUnit(x, y, z, 7, terrainSeed) < treeDensity) n++;
+    if (seededVoxelUnit(x, y, z, 7, terrainSeed) < treeDensity && !isTreeHarvested(x, y, z)) n++;
   }
   return n;
 }
@@ -172,6 +184,7 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
       if (seededVoxelUnit(x, y, z, 7, terrainSeed) >= density) continue;
+      if (isTreeHarvested(x, y, z)) continue; // felled — don't re-place it
 
       voxelCoordToWorld(x, y, z, _world);
 
@@ -183,9 +196,12 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
       if (near && nearSlot >= cap) continue;
       if (!near && farSlot >= cap) continue;
 
-      // Local up = outward normal (correct on all 6 cube faces).
-      if (_world.lengthSq() < 1e-6) _up.set(0, 1, 0);
-      else _up.copy(_world).normalize();
+      // Local up = the CUBE FACE NORMAL of the face this voxel sits on (dominant
+      // axis), matching how the PLAYER stands (FACE_NORMALS[dominantFace]) and the
+      // water surface. NOT radial normalize(worldPos): that tilts away from the
+      // flat face off-centre, so a patch of trees all leaned the same way (toward
+      // gravity) instead of standing perpendicular to the ground.
+      _up.copy(FACE_NORMALS[dominantFaceForPosition(_world)]);
       deterministicTangentForUp(_up, _tangent);
       _bitangent.crossVectors(_up, _tangent).normalize();
 
@@ -228,6 +244,9 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
         if (blossom) {
           blossom.setMatrixAt(nearSlot, _m);
         }
+        // Record which tree-voxel this near slot draws, so a raycast hit on the
+        // trunk/leaf mesh (instanceId === slot) maps back to the harvestable tree.
+        treeFieldHandle.slotVoxel[nearSlot] = [x, y, z];
         nearSlot++;
       } else {
         impostor.setMatrixAt(farSlot, _m);
@@ -245,6 +264,11 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
       blossom.count = nearSlot;
       blossom.instanceMatrix.needsUpdate = true;
     }
+    // Publish the near meshes + trim the slot map so the harvest raycast only sees
+    // currently-drawn trees.
+    treeFieldHandle.trunk = trunk;
+    treeFieldHandle.leaf = leaf;
+    treeFieldHandle.slotVoxel.length = nearSlot;
         return { near: nearSlot, far: farSlot, capacity: cap };
       },
       result => result
@@ -257,10 +281,22 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [density]);
 
+  // Harvested-tree state is keyed by world-relative voxel coord, so it must reset
+  // when the world changes (else a felled coord wrongly hides a tree on the new
+  // planet). Clear the pick handle on unmount so a stale mesh is never raycast.
+  useEffect(() => {
+    resetTreeHarvest();
+    return () => {
+      treeFieldHandle.trunk = null;
+      treeFieldHandle.leaf = null;
+      treeFieldHandle.slotVoxel.length = 0;
+    };
+  }, [terrainSeed]);
+
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
-    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getTreeHarvestVersion()}`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
@@ -317,7 +353,7 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
       getGraphicsQuality()
     );
 
-    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getTreeHarvestVersion()}`;
     if (sig !== signatureRef.current) {
       const needed = neededCapacity();
       if (needed > capacity) {

@@ -13,7 +13,7 @@
 // callers (they only see the getters).
 
 import type { HazardId } from '../data/planetArchetypes.ts';
-import { getItem, type ItemId } from '../data/items.ts';
+import { getItem, type HarvestClass, type ItemDefinition, type ItemId } from '../data/items.ts';
 import { addItem, getInventory, getItemCount } from './inventorySystem.ts';
 
 // Baselines for a player carrying nothing. Tool tier 0 = bare-handed extraction
@@ -29,14 +29,50 @@ function ownedItemIds(): ItemId[] {
     .map(([id]) => id);
 }
 
-/** Highest mining tier among owned tools (the Maw line); BASE if none owned. */
-export function getEquippedToolTier(): number {
-  let tier = BASE_TOOL_TIER;
+/** The best (highest tool tier) tool currently owned, or null if none. */
+export function getEquippedTool(): ItemDefinition | null {
+  let best: ItemDefinition | null = null;
   for (const id of ownedItemIds()) {
     const def = getItem(id);
-    if (def.kind === 'tool' && def.toolTier != null) tier = Math.max(tier, def.toolTier);
+    if (def.kind !== 'tool') continue;
+    if (!best || (def.toolTier ?? 0) > (best.toolTier ?? 0)) best = def;
   }
-  return tier;
+  return best;
+}
+
+/** Highest mining tier among owned tools (capability gate); BASE if none owned. */
+export function getEquippedToolTier(): number {
+  return Math.max(BASE_TOOL_TIER, getEquippedTool()?.toolTier ?? BASE_TOOL_TIER);
+}
+
+/** A tool's speed for a given material class (its override, else its default, else 1). */
+export function toolSpeedFor(tool: ItemDefinition | null, klass: HarvestClass): number {
+  if (!tool) return 1;
+  return tool.harvestSpeed?.[klass] ?? tool.mineSpeedMul ?? 1;
+}
+
+/**
+ * Pick the best owned tool to harvest a given material class — the "right tool for
+ * the job": among tools strong enough (toolTier ≥ requiredTier), the one with the
+ * highest speed for that class. So the Hatchet wins on wood and the Pickaxe is used
+ * on stone, regardless of which has the higher tier. Null if nothing qualifies.
+ */
+export function selectTool(klass: HarvestClass, requiredTier: number): ItemDefinition | null {
+  let best: ItemDefinition | null = null;
+  let bestSpeed = -1;
+  for (const id of ownedItemIds()) {
+    const def = getItem(id);
+    if (def.kind !== 'tool' || (def.toolTier ?? 0) < requiredTier) continue;
+    const speed = toolSpeedFor(def, klass);
+    if (speed > bestSpeed) { best = def; bestSpeed = speed; }
+  }
+  return best;
+}
+
+/** True while the player still carries a charge-using tool (the Faulty Maw) — the
+ *  signal for whether the charge meter is relevant (gone once the Maw is repaired). */
+export function ownsChargeTool(): boolean {
+  return ownedItemIds().some(id => getItem(id).usesCharge === true);
 }
 
 /** Combined hazard protection from all owned suits (max per hazard). */
@@ -82,7 +118,7 @@ export function getWarpRange(): number {
 // loop (stone + base metals) is playable. Idempotent: only grants if no tool is
 // owned, so it survives world swaps without stacking. Phase 2 replaces this with
 // a real hand-craft recipe.
-export const STARTER_TOOL: ItemId = 'iron_maw';
+export const STARTER_TOOL: ItemId = 'faulty_maw';
 
 export function ensureStarterLoadout(): void {
   const ownsTool = ownedItemIds().some(id => getItem(id).kind === 'tool');

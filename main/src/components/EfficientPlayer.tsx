@@ -58,9 +58,12 @@ import {
 } from '../utils/cubeGravityConstants';
 import { isTouchActive } from '../utils/mobileInput';
 import { MaterialType } from '../types/materials';
-import { canHarvestVoxel, harvestVoxel, mineDurationMs } from '../game/systems/harvestingSystem';
-import { ensureStarterLoadout, getEquippedToolTier } from '../game/systems/loadoutSystem';
+import { canHarvestVoxel, computeMineDuration, harvestClassForBlock, harvestVoxel, mineDurationMs, requiredToolTierForVoxel } from '../game/systems/harvestingSystem';
+import { ensureStarterLoadout, getEquippedToolTier, selectTool, toolSpeedFor } from '../game/systems/loadoutSystem';
 import { clearMiningProgress, setMiningProgress } from '../game/systems/miningProgress';
+import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
+import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
+import { treeFieldHandle } from './TreeField';
 import { setLookedAtVoxel, type LookedAtVoxel } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 
@@ -69,6 +72,8 @@ const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
 // Cadence of the "chipping" mine sound while holding to harvest (ms).
 const MINE_TICK_MS = 260;
+// Speed multiplier when mining with an unfuelled charge-tool (bare-handed rate).
+const BARE_HAND_MUL = 0.35;
 // Continuous smooth-gravity field is now the DEFAULT (no faces/transitions/
 // resolver — can't fall off or get stuck by construction). The discrete 6-face
 // state machine stays available via ?gravity=discrete as a one-session safety
@@ -158,8 +163,8 @@ export default function EfficientPlayer({
   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
   // time, and when the last chip sound played. Reset when the key is released,
   // the crosshair leaves the voxel, or the block breaks.
-  const mineState = useRef<{ key: string | null; elapsed: number; duration: number; tickAt: number }>(
-    { key: null, elapsed: 0, duration: 0, tickAt: 0 }
+  const mineState = useRef<{ key: string | null; elapsed: number; duration: number; tickAt: number; usesCharge: boolean }>(
+    { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false }
   );
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
@@ -380,22 +385,44 @@ export default function EfficientPlayer({
   // exists. Idempotent — only grants a starting Maw if no tool is owned yet.
   useEffect(() => { ensureStarterLoadout(); }, []);
 
-  // Raycast the voxel under the crosshair; null if nothing in reach.
-  const pickMineTarget = useCallback((camera: THREE.Camera | null) => {
+  // Raycast the crosshair against BOTH the voxel terrain and the (near) tree
+  // meshes, returning whichever is closer. Trees aren't voxels — a hit on the
+  // trunk/leaf instanced mesh maps back to its grass-voxel coord via the
+  // TreeField slot→voxel handle.
+  const pickHarvestTarget = useCallback((camera: THREE.Camera | null) => {
     if (!camera) return null;
-    const mesh = efficientPlanetMesh.current;
-    if (!mesh) return null;
-
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
-    const hit = raycaster.intersectObject(mesh, false).find(intersection => intersection.instanceId !== undefined);
-    if (!hit || hit.instanceId === undefined) return null;
 
-    const coord = voxelSystem.getCoordForSlot(hit.instanceId);
-    if (!coord) return null;
-    const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
-    if (!voxel) return null;
-    return { coord, voxel };
+    // Terrain voxel.
+    let voxelTarget: { coord: { x: number; y: number; z: number }; voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>> } | null = null;
+    let voxelDist = Infinity;
+    const mesh = efficientPlanetMesh.current;
+    if (mesh) {
+      const hit = raycaster.intersectObject(mesh, false).find(i => i.instanceId !== undefined);
+      if (hit && hit.instanceId !== undefined) {
+        const coord = voxelSystem.getCoordForSlot(hit.instanceId);
+        const voxel = coord ? voxelSystem.getVoxel(coord.x, coord.y, coord.z) : null;
+        if (coord && voxel) { voxelTarget = { coord, voxel }; voxelDist = hit.distance; }
+      }
+    }
+
+    // Tree (nearest trunk/leaf instance that maps to a live tree-voxel).
+    let treeCoord: { x: number; y: number; z: number } | null = null;
+    let treeDist = Infinity;
+    const treeMeshes = [treeFieldHandle.trunk, treeFieldHandle.leaf].filter(Boolean) as THREE.InstancedMesh[];
+    if (treeMeshes.length > 0) {
+      for (const h of raycaster.intersectObjects(treeMeshes, false)) {
+        if (h.instanceId === undefined) continue;
+        const v = treeFieldHandle.slotVoxel[h.instanceId];
+        if (v && !isTreeHarvested(v[0], v[1], v[2])) { treeCoord = { x: v[0], y: v[1], z: v[2] }; treeDist = h.distance; break; }
+      }
+    }
+
+    if (treeCoord && treeDist <= voxelDist) return { kind: 'tree' as const, coord: treeCoord };
+    if (voxelTarget) return { kind: 'voxel' as const, coord: voxelTarget.coord, voxel: voxelTarget.voxel };
+    if (treeCoord) return { kind: 'tree' as const, coord: treeCoord };
+    return null;
   }, []);
 
   // Actually break + harvest a voxel once mining has charged to completion.
@@ -424,30 +451,48 @@ export default function EfficientPlayer({
       return;
     }
 
-    const target = pickMineTarget(camera);
+    const target = pickHarvestTarget(camera);
     if (!target) {
       if (ms.key !== null) { ms.key = null; ms.elapsed = 0; }
       clearMiningProgress();
       return;
     }
 
-    const { coord, voxel } = target;
-    const toolTier = getEquippedToolTier();
-    const key = `${coord.x},${coord.y},${coord.z}`;
+    const { coord } = target;
+    const key = `${target.kind}:${coord.x},${coord.y},${coord.z}`;
 
-    // Tool too weak: no progress, one "blocked" chirp per fresh target.
-    if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier })) {
+    // Capability gate (voxels only — trees are soft, tier 0). Uses the best tier
+    // OWNED; below it, one "blocked" chirp per fresh target, no progress.
+    if (target.kind === 'voxel'
+      && !canHarvestVoxel({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: getEquippedToolTier() })) {
       if (ms.key !== `!${key}`) { playSfx('blocked'); ms.key = `!${key}`; ms.elapsed = 0; }
       setMiningProgress(true, 0, true);
       return;
     }
 
-    // New target (or resumed after release): start a fresh charge with an
-    // immediate chip so the player gets instant feedback.
+    // New target (or resumed after release): pick the RIGHT tool for this material
+    // (Hatchet→wood, Pickaxe→stone, …) and start a fresh charge with an immediate
+    // chip. Speed folds in that tool's per-material rate and, if it's the Faulty
+    // Maw, its charge: empty + no Biofuel → slow bare-handed rate (auto-refuels if
+    // a Biofuel is held). A non-charge tool (Hatchet/Pickaxe) never drains charge.
     if (ms.key !== key) {
+      const isTree = target.kind === 'tree';
+      const klass = isTree ? 'wood' : harvestClassForBlock(target.voxel.blockId);
+      const requiredTier = isTree
+        ? TREE_TOOL_TIER
+        : requiredToolTierForVoxel(target.voxel.blockId, target.voxel.deposit);
+      const tool = selectTool(klass, requiredTier);
+      const usesCharge = tool?.usesCharge ?? false;
+      if (usesCharge && !isMawPowered()) refuelFromInventory();
+      const powered = !usesCharge || isMawPowered();
+      const tier = tool?.toolTier ?? 0;
+      const speedMul = toolSpeedFor(tool, klass) * (powered ? 1 : BARE_HAND_MUL);
       ms.key = key;
       ms.elapsed = 0;
-      ms.duration = mineDurationMs({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier });
+      ms.usesCharge = usesCharge;
+      ms.duration = isTree
+        ? computeMineDuration(TREE_HARDNESS, TREE_TOOL_TIER, tier, speedMul)
+        : mineDurationMs({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: tier }, { speedMul });
       ms.tickAt = 0;
       playSfx('mine');
     }
@@ -455,7 +500,13 @@ export default function EfficientPlayer({
     ms.elapsed += dt * 1000;
 
     if (ms.elapsed >= ms.duration) {
-      commitMine(coord, voxel, toolTier);
+      if (ms.usesCharge && isMawPowered()) consumeMawCharge(CHARGE_PER_BREAK);
+      if (target.kind === 'tree') {
+        harvestTree(coord.x, coord.y, coord.z);
+        playSfx('mine');
+      } else {
+        commitMine(coord, target.voxel, getEquippedToolTier());
+      }
       ms.key = null; ms.elapsed = 0; ms.tickAt = 0;
       clearMiningProgress();
       return;
@@ -466,7 +517,7 @@ export default function EfficientPlayer({
       ms.tickAt = ms.elapsed;
     }
     setMiningProgress(true, Math.min(1, ms.elapsed / ms.duration), false);
-  }, [pickMineTarget, commitMine]);
+  }, [pickHarvestTarget, commitMine]);
 
   // Cheap ray-march to find the voxel under the crosshair, for the "looking at"
   // readout. Marches in voxel space (round(world/VOXEL_SCALE)) over the reach —

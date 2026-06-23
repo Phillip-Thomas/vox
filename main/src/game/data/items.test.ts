@@ -21,12 +21,25 @@ describe('item registry', () => {
     expect(isItemId('not_a_real_item')).toBe(false);
   });
 
-  it('tools carry an ascending, gap-free toolTier 1..4 (the Maw line)', () => {
+  it('tools cover tool tiers 0..4 (Faulty Maw + stone tools + the Maw line)', () => {
     const tools = ALL_ITEM_IDS.map(getItem).filter(i => i.kind === 'tool');
-    const tiers = tools.map(t => t.toolTier).sort((a, b) => (a ?? 0) - (b ?? 0));
-    expect(tiers).toEqual([1, 2, 3, 4]);
+    const tiers = new Set(tools.map(t => t.toolTier));
+    expect([0, 1, 2, 3, 4].every(t => tiers.has(t))).toBe(true);
+    expect(getItem('faulty_maw').toolTier).toBe(0);   // soft only
+    expect(getItem('stone_pickaxe').toolTier).toBe(1); // unlocks stone/ore
     expect(getItem('iron_maw').toolTier).toBe(1);
     expect(getItem('void_maw').toolTier).toBe(4);
+  });
+
+  it('the Hatchet specializes in wood, the Pickaxe in stone', () => {
+    expect(getItem('stone_hatchet').harvestSpeed?.wood).toBeGreaterThan(1);
+    expect(getItem('stone_pickaxe').harvestSpeed?.stone).toBeGreaterThan(0);
+    expect(getItem('stone_pickaxe').harvestSpeed?.stone).toBeLessThan(1); // slow
+  });
+
+  it('the Faulty Maw runs on charge; the repaired Iron Maw does not', () => {
+    expect(getItem('faulty_maw').usesCharge).toBe(true);
+    expect(getItem('iron_maw').usesCharge).toBeFalsy();
   });
 
   it('suits declare hazard protection; modules declare an effect', () => {

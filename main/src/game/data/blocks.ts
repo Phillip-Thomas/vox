@@ -39,7 +39,9 @@ export interface BlockDefinition {
 export const BLOCKS: Record<BlockId, BlockDefinition> = {
   stone: {
     id: 'stone', name: 'Stone', renderMaterial: MaterialType.STONE,
-    hardness: 1.5, toolTier: 0, drops: ['stone'], tags: ['rock']
+    // toolTier 1: the Faulty Maw (tier 0) can't cut stone — you need a Stone Pick
+    // or the Repaired Maw. Soft blocks (dirt/sand/grass/wood) stay tier 0.
+    hardness: 1.5, toolTier: 1, drops: ['stone'], tags: ['rock']
   },
   dirt: {
     id: 'dirt', name: 'Dirt', renderMaterial: MaterialType.DIRT,

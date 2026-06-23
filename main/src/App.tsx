@@ -17,6 +17,7 @@ import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
 import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
 import JetpackMeter from './components/hud/JetpackMeter.tsx';
+import MawChargeMeter from './components/hud/MawChargeMeter.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
 import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
@@ -36,6 +37,7 @@ import {
   createCurrentWorld,
   normalizeCoordinatePart
 } from './utils/worldCoordinates.ts';
+import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { scheduleWorldPrewarm } from './utils/worldGenCache.ts';
 import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
@@ -97,12 +99,11 @@ const App: React.FC = () => {
         return createCurrentWorld({ x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) });
       }
     } catch { /* ignore */ }
-    // No ?world= override -> spawn on a RANDOM planet each fresh load (not 0,0),
-    // mirroring the Random button's range, so every session starts somewhere new.
-    return createCurrentWorld({
-      x: Math.floor(Math.random() * 201) - 100,
-      y: Math.floor(Math.random() * 201) - 100
-    });
+    // No ?world= override -> CRASH-LAND on a fresh but HOSPITABLE planet (verdant/
+    // oceanic): trees, grass, biofiber, stone, no early hazard — the Primitive era's
+    // necessities. Varies per session (random among hospitable), never 0,0-fixed.
+    // Travel afterwards (Random/Set Course) is unconstrained.
+    return createCurrentWorld(findHospitableStart());
   });
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
   const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');
@@ -476,6 +477,7 @@ const App: React.FC = () => {
           <TargetReticle />
           {flight.controlMode === 'fps' && <MiningProgress />}
           {flight.controlMode === 'fps' && <JetpackMeter />}
+          {flight.controlMode === 'fps' && <MawChargeMeter />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InventoryPanel />}

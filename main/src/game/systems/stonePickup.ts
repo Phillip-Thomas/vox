@@ -1,0 +1,57 @@
+// --- Loose-stone pickup ------------------------------------------------------
+//
+// Small stones scattered on the ground that the player collects just by walking
+// near them (no tool, no aim). They're the BOOTSTRAP for stone: the Faulty Maw
+// can't break stone voxels (tier 0), so loose stones give the first `stone` needed
+// to craft a Pickaxe — which can then mine stone/ore. Same shape as treeHarvest: a
+// collected-coord Set + version that LooseStoneField folds into its rebuild
+// signature so a picked-up stone vanishes. Reset on world swap.
+
+import { addItem } from './inventorySystem.ts';
+
+const STONE_MIN = 1;
+const STONE_MAX = 2;
+
+const collected = new Set<string>();
+let version = 0;
+const listeners = new Set<() => void>();
+
+function emit() {
+  listeners.forEach(l => l());
+}
+
+function key(x: number, y: number, z: number): string {
+  return `${x},${y},${z}`;
+}
+
+export function isStoneCollected(x: number, y: number, z: number): boolean {
+  return collected.has(key(x, y, z));
+}
+
+export function getStonePickupVersion(): number {
+  return version;
+}
+
+export function resetStonePickup(): void {
+  if (collected.size > 0) {
+    collected.clear();
+    version++;
+    emit();
+  }
+}
+
+export function subscribeStonePickup(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+/** Collect the loose stone at a voxel coord: mark it gone and bank the stone. */
+export function collectStone(x: number, y: number, z: number): number {
+  if (collected.has(key(x, y, z))) return 0;
+  collected.add(key(x, y, z));
+  version++;
+  emit();
+  const n = STONE_MIN + Math.floor(Math.random() * (STONE_MAX - STONE_MIN + 1));
+  addItem('stone', n);
+  return n;
+}

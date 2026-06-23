@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { voxelCoordToWorld } from './cubeGravityConstants';
-import { deterministicTangentForUp } from './surfaceControls';
+import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from './surfaceControls';
 import { voxelSystem } from './efficientVoxelSystem';
 import { MaterialType } from '../types/materials';
 import { getGraphicsQuality, type GraphicsQuality } from '../config/graphicsSettings';
@@ -103,12 +103,10 @@ export function computeBladeMatrix(
 ): THREE.Matrix4 {
   voxelCoordToWorld(x, y, z, _world);
 
-  // Local up. Voxels at the exact origin can't define one; fall back to +Y.
-  if (_world.lengthSq() < 1e-6) {
-    _up.set(0, 1, 0);
-  } else {
-    _up.copy(_world).normalize();
-  }
+  // Local up = the CUBE FACE NORMAL of this voxel's face (dominant axis), matching
+  // the player + trees + water — NOT radial normalize(worldPos), which tilts off
+  // the flat face off-centre and made blades lean toward gravity.
+  _up.copy(FACE_NORMALS[dominantFaceForPosition(_world)]);
 
   deterministicTangentForUp(_up, _tangent); // unit, perpendicular to up
   _bitangent.crossVectors(_up, _tangent).normalize();
