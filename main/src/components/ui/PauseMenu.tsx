@@ -6,6 +6,7 @@ import {
   QUALITY_PROFILES,
   type QualityProfile
 } from '../../config/graphicsSettings.ts';
+import AudioControls from './AudioControls.tsx';
 
 export interface NavApi {
   currentLabel: string;
@@ -122,6 +123,10 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
               ? 'Cinematic: bloom, reflections, grass & trees at full reach.'
               : 'Performance: lighter shading for smoother framerates.'}
           </div>
+        </Section>
+
+        <Section title="Audio">
+          <AudioControls />
         </Section>
 
         <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>

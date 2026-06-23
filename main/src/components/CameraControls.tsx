@@ -8,6 +8,7 @@ import {
   transportCameraForward
 } from '../utils/gravityCamera';
 import { isTouchActive } from '../utils/mobileInput';
+import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
@@ -16,8 +17,8 @@ interface CameraControlsProps {
   onPointerLockChange?: (locked: boolean) => void;
 }
 
-const CAMERA_EYE_HEIGHT = 1;
 const MOUSE_SENSITIVITY = 0.002;
+const DESKTOP_LOOK_SMOOTH = 36;
 const UP_SYNC_EPSILON = 0.9999;
 
 function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange }: CameraControlsProps) {
@@ -27,6 +28,9 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
   const pitch = useRef(0);
   const isLockedRef = useRef(false);
   const nextUp = useRef(new THREE.Vector3());
+  const displayQuat = useRef(new THREE.Quaternion());
+  const targetQuat = useRef(new THREE.Quaternion());
+  const hasDisplayQuat = useRef(false);
 
   const syncSurfaceFrame = () => {
     nextUp.current.copy(getActiveUp?.() ?? activeUp).normalize();
@@ -95,16 +99,27 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     };
   }, [gl.domElement, onPointerLockChange]);
 
-  useFrame(() => {
+  useFrame((_, rawDt) => {
     if (!cameraRef.current) return;
+    const dt = Math.min(rawDt, 1 / 30);
     syncSurfaceFrame();
     applyGravityCameraTransform(
       cameraRef.current,
       surfaceUp.current,
       surfaceForward.current,
       pitch.current,
-      CAMERA_EYE_HEIGHT
+      PLAYER_EYE_HEIGHT
     );
+    targetQuat.current.copy(cameraRef.current.quaternion);
+    const smoothDesktopLook = isLockedRef.current && !isTouchActive();
+    if (!hasDisplayQuat.current || !smoothDesktopLook) {
+      displayQuat.current.copy(targetQuat.current);
+      hasDisplayQuat.current = true;
+      return;
+    }
+    displayQuat.current.slerp(targetQuat.current, 1 - Math.exp(-DESKTOP_LOOK_SMOOTH * dt));
+    cameraRef.current.quaternion.copy(displayQuat.current);
+    cameraRef.current.updateMatrixWorld(true);
   });
 
   return null;

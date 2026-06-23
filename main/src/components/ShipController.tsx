@@ -13,11 +13,12 @@ import {
   getSpaceFlightSnapshot,
   useSpaceFlight
 } from '../state/spaceFlight.ts';
+import { playSfx, setShipThrustSfx } from '../audio/sfxEngine.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
  *  stays authoritative; the camera slerps toward it so look isn't twitchy. */
-const CAM_SMOOTH = 12;
+const CAM_SMOOTH = 22;
 /** Forward thrust acceleration (world units / s^2). */
 const THRUST_ACCEL = 60;
 const BOOST_MULTIPLIER = 3.2;
@@ -64,11 +65,11 @@ const ENGAGE_CHARGE_TIME = 1.3;
  * (App.tsx) via requestAnimationFrame. A plain module mutable keeps it off the
  * React snapshot so it never triggers re-renders at 60fps.
  */
-const engageState = { charge: 0 };
+const engageState = { charge: 0, waitingForFreshForward: false };
 
-/** Live read of the engage charge (0..1) for the HUD reticle. */
-export function getEngageCharge(): number {
-  return engageState.charge;
+/** Live read of the engage state for the HUD reticle. */
+export function getEngageState(): { charge: number; waitingForFreshForward: boolean } {
+  return engageState;
 }
 
 // Crash impact flash: timestamp of the last crash; the HUD reads a 0..1 fading
@@ -155,6 +156,10 @@ export default function ShipController({
   const yawInput = useRef(0); // accumulated mouse X this frame
   const rollInput = useRef({ left: false, right: false });
   const isLocked = useRef(false);
+  const warpEngageRef = useRef({
+    targetKey: null as string | null,
+    armed: false
+  });
   // Active eased auto-landing (F-initiated), or null while flying freely. Landing
   // is NEVER automatic — only this sequence sets the ship down. It also slerps the
   // orientation to level so the parked ship rests upright on the surface.
@@ -162,6 +167,7 @@ export default function ShipController({
     from: THREE.Vector3; to: THREE.Vector3;
     fromQuat: THREE.Quaternion; toQuat: THREE.Quaternion;
     t: number; duration: number;
+    crashed?: boolean;
   } | null>(null);
   // Active launch ascension (Space-initiated from a parked ship), or null.
   const launchSeq = useRef<{ from: THREE.Vector3; to: THREE.Vector3; t: number; duration: number } | null>(null);
@@ -219,6 +225,8 @@ export default function ShipController({
     landingSeq.current = null;
   }, [spawn]);
 
+  useEffect(() => () => setShipThrustSfx(0), []);
+
   // --- pointer lock + mouse look (mirrors CameraControls) -------------------
   useEffect(() => {
     const element = gl.domElement;
@@ -274,7 +282,8 @@ export default function ShipController({
           fromQuat: orientation.current.clone(),
           toQuat: levelOrientation(to), // level out as we touch down
           t: 0,
-          duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION)
+          duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION),
+          crashed: false
         };
       }
 
@@ -285,6 +294,7 @@ export default function ShipController({
         const parked = live.controlMode === 'flight' && live.phase === 'surface';
         if (!parked || landingSeq.current || launchSeq.current) return;
         const up = position.current.clone().normalize();
+        playSfx('shipLaunch');
         launchSeq.current = {
           from: position.current.clone(),
           to: position.current.clone().addScaledVector(up, LAUNCH_RISE),
@@ -336,6 +346,7 @@ export default function ShipController({
     // orientation, then settle as landed (-> parked). Manual control is suspended.
     const land = landingSeq.current;
     if (land) {
+      setShipThrustSfx(land.crashed ? 0 : 0.18);
       land.t = Math.min(1, land.t + dt / land.duration);
       const e = 1 - Math.pow(1 - land.t, 3); // easeOutCubic — settling finish
       position.current.lerpVectors(land.from, land.to, e);
@@ -348,6 +359,8 @@ export default function ShipController({
       displayQuat.current.copy(orientation.current);
       if (land.t >= 1) {
         landingSeq.current = null;
+        setShipThrustSfx(0);
+        if (!land.crashed) playSfx('shipLand');
         lookOffset.current.yaw = 0;
         lookOffset.current.pitch = 0;
         onLanded?.(land.to.clone());
@@ -360,6 +373,7 @@ export default function ShipController({
     // airborne with full control.
     const launch = launchSeq.current;
     if (launch) {
+      setShipThrustSfx(0.55);
       launch.t = Math.min(1, launch.t + dt / launch.duration);
       const e = launch.t * launch.t * (3 - 2 * launch.t); // smoothstep
       position.current.lerpVectors(launch.from, launch.to, e);
@@ -381,6 +395,7 @@ export default function ShipController({
     // to launch before you can fly. No thrust, no rotation.
     const parkedSnap = getSpaceFlightSnapshot();
     if (parkedSnap.controlMode === 'flight' && parkedSnap.phase === 'surface') {
+      setShipThrustSfx(0);
       const lo = lookOffset.current;
       lo.yaw = THREE.MathUtils.clamp(lo.yaw + yawInput.current, -MAX_PEEK, MAX_PEEK);
       lo.pitch = THREE.MathUtils.clamp(lo.pitch + pitchInput.current, -MAX_PEEK, MAX_PEEK);
@@ -438,6 +453,7 @@ export default function ShipController({
     let accel = 0;
     if (controls.forward) accel += THRUST_ACCEL * boost;
     if (controls.backward) accel -= THRUST_ACCEL;
+    setShipThrustSfx(controls.forward ? (controls.jump ? 1 : 0.58) : controls.backward ? 0.34 : 0);
     if (accel !== 0) {
       velocity.current.addScaledVector(localForward, accel * dt);
     }
@@ -477,9 +493,12 @@ export default function ShipController({
             fromQuat: orientation.current.clone(),
             toQuat: levelOrientation(rest),
             t: 0,
-            duration: CRASH_LAND_DURATION
+            duration: CRASH_LAND_DURATION,
+            crashed: true
           };
           velocity.current.set(0, 0, 0);
+          setShipThrustSfx(0);
+          playSfx('shipCrash');
           triggerCrashFlash();
         } else {
           // Soft contact: clamp to the surface and remove the inward velocity
@@ -501,20 +520,41 @@ export default function ShipController({
     const snap = liveSnap.phase;
     const altitude = position.current.length() - surfaceRadius;
 
-    // 7a) Engage-to-warp: in deep space, holding forward thrust while a target is
-    // locked (the impostor stays in GalaxyImpostors' aim cone, which keeps
-    // `target` set) charges a timer; once full, begin travel to that target.
-    // Impostors are camera-relative so you can't physically close distance — the
-    // held-aim-thrust charge IS the engage mechanic. Releasing W or losing the
-    // lock resets the charge.
-    if (snap === 'deep_space' && liveSnap.target && controls.forward) {
-      engageState.charge += dt / ENGAGE_CHARGE_TIME;
-      if (engageState.charge >= 1) {
-        engageState.charge = 0;
-        beginTravel(liveSnap.target);
-      }
-    } else if (engageState.charge !== 0) {
+    // 7a) Engage-to-warp: forward thrust must begin after the current target
+    // lock appears. Holding W or the touch stick before highlight still flies
+    // normally, but it will not charge warp until released and pressed again.
+    const forwardDown = controls.forward;
+    const targetKey = snap === 'deep_space' && liveSnap.target
+      ? `${liveSnap.target.x},${liveSnap.target.y}`
+      : null;
+    const engage = warpEngageRef.current;
+    if (!targetKey || !liveSnap.target) {
+      engage.targetKey = null;
+      engage.armed = false;
       engageState.charge = 0;
+      engageState.waitingForFreshForward = false;
+    } else {
+      if (engage.targetKey !== targetKey) {
+        engage.targetKey = targetKey;
+        engage.armed = !forwardDown;
+        engageState.charge = 0;
+      }
+      if (!forwardDown) {
+        engage.armed = true;
+        engageState.charge = 0;
+      }
+      engageState.waitingForFreshForward = forwardDown && !engage.armed;
+      if (forwardDown && engage.armed) {
+        engageState.charge += dt / ENGAGE_CHARGE_TIME;
+        if (engageState.charge >= 1) {
+          engageState.charge = 0;
+          engage.armed = false;
+          engageState.waitingForFreshForward = false;
+          beginTravel(liveSnap.target);
+        }
+      } else if (engageState.charge !== 0) {
+        engageState.charge = 0;
+      }
     }
 
     // 7b) Atmosphere boundary — altitude-driven and BIDIRECTIONAL with hysteresis,

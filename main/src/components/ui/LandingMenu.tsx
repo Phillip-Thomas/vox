@@ -8,6 +8,9 @@ import {
   type QualityProfile
 } from '../../config/graphicsSettings.ts';
 import { theme, glassPanel } from '../../ui/theme.ts';
+import AudioControls from './AudioControls.tsx';
+import { unlockMusicAudio } from '../../audio/musicEngine.ts';
+import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
 
 /**
  * The landing screen. Renders over the SAME live <Canvas> that becomes the game:
@@ -22,10 +25,15 @@ import { theme, glassPanel } from '../../ui/theme.ts';
  */
 const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTATO'];
 
+function unlockAudio(): void {
+  void unlockMusicAudio();
+  void unlockSfxAudio();
+}
+
 const LandingMenu: React.FC = () => {
   const { phase, sceneReady } = useAppState();
   const isTouch = isTouchDevice();
-  const [panel, setPanel] = useState<null | 'controls' | 'graphics'>(null);
+  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio'>(null);
   const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
   // Keep the overlay mounted briefly after Play so it can fade out over the
   // now-live game instead of cutting hard.
@@ -45,6 +53,7 @@ const LandingMenu: React.FC = () => {
 
   const play = () => {
     if (!sceneReady || leaving) return;
+    unlockAudio();
     // Pointer lock MUST be requested synchronously inside this gesture. The
     // player's CameraControls seeds its lock state from document.pointerLockElement
     // on mount, so requesting before it mounts is fine (skip on touch).
@@ -61,6 +70,7 @@ const LandingMenu: React.FC = () => {
 
   return (
     <div
+      onPointerDown={unlockAudio}
       style={{
         position: 'fixed',
         inset: 0,
@@ -165,6 +175,7 @@ const LandingMenu: React.FC = () => {
 
           <GhostLink active={panel === 'controls'} onClick={() => setPanel(p => p === 'controls' ? null : 'controls')}>Controls</GhostLink>
           <GhostLink active={panel === 'graphics'} onClick={() => setPanel(p => p === 'graphics' ? null : 'graphics')}>Graphics</GhostLink>
+          <GhostLink active={panel === 'audio'} onClick={() => setPanel(p => p === 'audio' ? null : 'audio')}>Audio</GhostLink>
         </div>
 
         {panel === 'controls' && (
@@ -205,6 +216,13 @@ const LandingMenu: React.FC = () => {
                 ? 'Cinematic: bloom, reflections, grass & trees at full reach.'
                 : 'Performance: lighter shading for smoother framerates.'}
             </div>
+          </Panel>
+        )}
+
+        {panel === 'audio' && (
+          <Panel>
+            <PanelTitle>Audio</PanelTitle>
+            <AudioControls compact />
           </Panel>
         )}
       </div>

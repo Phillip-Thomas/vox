@@ -29,8 +29,14 @@ export interface BiomeProfile {
   aridity: number;
   /** 0 cold .. 1 hot. Small hue bias (cold -> cooler, hot -> warmer). */
   temperature: number;
-  /** Primary vegetation hue (sRGB 0..1), cohered with the trees. */
+  /** Primary vegetation hue (sRGB 0..1) — the planet's colour IDENTITY. Water +
+   * terrain tint read this directly; grass + canopy read the SPLIT PAIR below. */
   hue: number;
+  /** Grass hue: the veg hue shifted one way of a split-complementary PAIR. */
+  grassHue: number;
+  /** Canopy hue: shifted the OTHER way, so grass + leaves are distinct-but-
+   * coordinated complementing colours (not one flat hue). See VEG_PAIR_SPLIT. */
+  leafHue: number;
   /** Base vegetation saturation. */
   saturation: number;
   /** True when vegetation sits outside the green family (alien accent planet). */
@@ -59,6 +65,13 @@ const CLIMATE_RECONCILE = 0.6;
 // Bold non-green vegetation accents (sRGB hue 0..1): amber, coral/red, magenta,
 // violet, deep blue, cyan-teal. These make alien planets read at a glance.
 const ALIEN_VEG_HUES = [0.07, 0.99, 0.90, 0.78, 0.62, 0.50];
+
+// Split-complementary distance between GRASS and CANOPY hues (total, in hue
+// units; ~0.20 ≈ 72°). Both stay anchored to the biome identity hue, but sit on
+// OPPOSITE sides of it so grass + leaves read as a designed, complementing pair
+// instead of the same flat colour. Grass shifts the WARM/yellow way (it's the
+// brighter element underfoot), canopy the COOL/blue way (deeper, overhead).
+const VEG_PAIR_SPLIT = 0.2;
 
 /**
  * Build the deterministic per-planet biome — the SHARED vegetation/climate anchor
@@ -101,6 +114,11 @@ export function buildBiomeProfile(seed: number): BiomeProfile {
   // Bold saturation so the hue actually reads (arid worlds desaturate somewhat).
   const saturation = clamp(0.5 + seededUnit(s, SALT_SAT) * 0.38 - aridity * 0.2, 0.22, 0.92);
 
+  // Split-complementary veg PAIR around the identity hue: grass warm/yellow side,
+  // canopy cool/blue side. Distinct but coordinated (the user's "moderate split").
+  const grassHue = (hue - VEG_PAIR_SPLIT / 2 + 1) % 1;
+  const leafHue = (hue + VEG_PAIR_SPLIT / 2 + 1) % 1;
+
   let kind: BiomeKind;
   if (alien) kind = 'alien';
   else if (aridity > 0.58) kind = 'arid';
@@ -108,5 +126,5 @@ export function buildBiomeProfile(seed: number): BiomeProfile {
   else if (lushness < 0.34) kind = 'sparse';
   else kind = 'temperate';
 
-  return { seed: s, kind, lushness, aridity, temperature, hue, saturation, alien };
+  return { seed: s, kind, lushness, aridity, temperature, hue, grassHue, leafHue, saturation, alien };
 }

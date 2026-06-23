@@ -24,8 +24,8 @@ const CockpitReadout: React.FC<CockpitReadoutProps> = ({ coordinateLabel, seed }
     ? (flight.phase === 'surface'
         ? 'THR to launch · F to exit'
         : flight.phase === 'descent'
-          ? 'THR thrust · drag to look · F to land'
-          : 'THR thrust · drag to look · aim at a planet')
+          ? 'stick thrust · drag to look · F to land'
+          : 'stick thrust · drag to look · aim at a planet')
     : (flight.phase === 'surface'
         ? 'LANDED - SPACE to launch - F to exit ship'
         : flight.phase === 'descent'

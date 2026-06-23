@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MaterialType } from '../../types/materials.ts';
-import { dropsForBlock, dropsForMaterial, harvestMaterial, harvestVoxel } from './harvestingSystem.ts';
+import { dropsForBlock, dropsForMaterial, harvestMaterial, harvestVoxel, mineDurationMs, MIN_MINE_MS } from './harvestingSystem.ts';
 import { getInventory, getResourceCount, resetInventory, addResource, subscribeInventory, totalItems } from './inventorySystem.ts';
 import { RESOURCES } from '../data/resources.ts';
 
@@ -41,6 +41,35 @@ describe('dropsForBlock / harvestVoxel', () => {
     expect(result.success).toBe(true);
     expect(result.drops.some(drop => drop.id === 'copper_ore')).toBe(true);
     expect(getResourceCount('copper_ore')).toBeGreaterThan(0);
+  });
+});
+
+describe('mineDurationMs', () => {
+  it('returns Infinity when the tool is too weak to break the block', () => {
+    expect(mineDurationMs({ blockId: 'basalt', toolTier: 1 })).toBe(Infinity);
+    expect(mineDurationMs({ blockId: 'gold_block', toolTier: 2 })).toBe(Infinity);
+  });
+
+  it('takes longer for harder blocks at the same tool tier', () => {
+    const dirt = mineDurationMs({ blockId: 'dirt', toolTier: 1 });   // hardness 0.5
+    const stone = mineDurationMs({ blockId: 'stone', toolTier: 1 }); // hardness 1.5
+    expect(stone).toBeGreaterThan(dirt);
+  });
+
+  it('gets faster as the tool tier rises (tools start bad, upgrades help)', () => {
+    const t1 = mineDurationMs({ blockId: 'copper_block', toolTier: 1 });
+    const t2 = mineDurationMs({ blockId: 'copper_block', toolTier: 2 });
+    const t4 = mineDurationMs({ blockId: 'copper_block', toolTier: 4 });
+    expect(t2).toBeLessThan(t1);
+    expect(t4).toBeLessThan(t2);
+    expect(t1).toBeGreaterThanOrEqual(MIN_MINE_MS);
+  });
+
+  it('a deposit can raise the required tier and gate (Infinity) a low tool', () => {
+    const deposit = { resourceId: 'gold_trace' as const, richness: 1, scanLevel: 3 };
+    // gold_trace needs tool tier 3; a tier-2 tool on an otherwise-tier-1 block is gated.
+    expect(mineDurationMs({ blockId: 'silver_block', deposit, toolTier: 2 })).toBe(Infinity);
+    expect(mineDurationMs({ blockId: 'silver_block', deposit, toolTier: 3 })).toBeLessThan(Infinity);
   });
 });
 

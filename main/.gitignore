@@ -1,3 +1,5 @@
+captures/
+
 # Dependencies
 node_modules/
 /.pnp
@@ -102,6 +104,8 @@ Thumbs.db
 
 # Output of 'npm pack'
 *.tgz
+
+captures/
 
 # Package lock files (optional - uncomment if you want to ignore)
 # package-lock.json

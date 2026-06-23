@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -18,6 +18,7 @@ import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
 import JetpackMeter from './components/hud/JetpackMeter.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
+import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
 import {
   DEFAULT_PROFILE,
@@ -58,6 +59,9 @@ import {
 } from './state/appState.ts';
 import LandingMenu from './components/ui/LandingMenu.tsx';
 import PauseMenu, { type NavApi } from './components/ui/PauseMenu.tsx';
+import CraftingPanel from './components/ui/CraftingPanel.tsx';
+import AudioDirector from './components/audio/AudioDirector.tsx';
+import { playSfx } from './audio/sfxEngine.ts';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
@@ -113,6 +117,27 @@ const App: React.FC = () => {
   const flight = useSpaceFlight();
   const { phase: appPhase } = useAppState();
   const [paused, setPaused] = useState(false);
+  const [craftingOpen, setCraftingOpen] = useState(false);
+  // Ref mirror so the pointer-lock listener (bound once) can read the live value
+  // without a stale closure — same trick the lock handler uses for app phase.
+  const craftingOpenRef = useRef(false);
+
+  // Open/close the Fabricator. Opening releases pointer lock so the cursor can
+  // click recipes; the lock handler below knows to NOT treat that as a pause.
+  const openCrafting = () => {
+    if (getAppStateSnapshot().phase !== 'playing') return;
+    craftingOpenRef.current = true;
+    setCraftingOpen(true);
+    setPaused(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+  };
+  const closeCrafting = () => {
+    craftingOpenRef.current = false;
+    setCraftingOpen(false);
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
+    }
+  };
 
   // Esc (and any pointer-lock loss / focus change) opens the pause + star map
   // while playing on desktop — a raw Esc keydown is swallowed during lock, so we
@@ -120,11 +145,29 @@ const App: React.FC = () => {
   useEffect(() => {
     const onLockChange = () => {
       if (document.pointerLockElement) { setPaused(false); return; }
+      if (craftingOpenRef.current) return; // Fabricator released lock on purpose
       if (getAppStateSnapshot().phase === 'playing' && !isTouch) setPaused(true);
     };
     document.addEventListener('pointerlockchange', onLockChange);
     return () => document.removeEventListener('pointerlockchange', onLockChange);
   }, [isTouch]);
+
+  // C toggles the Fabricator on foot; Esc closes it (its lock is already released,
+  // so the lock-based pause path doesn't fire). Re-bound when pause/mode changes.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === 'KeyC') {
+        if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+        if (craftingOpenRef.current) closeCrafting();
+        else if (!paused) openCrafting();
+      } else if (e.code === 'Escape' && craftingOpenRef.current) {
+        closeCrafting();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, isTouch, flight.controlMode]);
 
   const resumeFromPause = () => {
     setPaused(false);
@@ -292,7 +335,9 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!(flight.phase === 'surface' && flight.controlMode === 'flight')) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.code === 'KeyF') exitShip();
+      if (event.code !== 'KeyF' || event.repeat) return;
+      playSfx('exitShip');
+      exitShip();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -352,6 +397,8 @@ const App: React.FC = () => {
         { name: 'board', keys: ['KeyF'] },
       ]}
     >
+      <AudioDirector terrainSeed={currentWorld.seed} />
+
       <Canvas
         shadows={false}
         gl={{
@@ -427,6 +474,7 @@ const App: React.FC = () => {
         <>
           <Crosshair />
           <TargetReticle />
+          {flight.controlMode === 'fps' && <MiningProgress />}
           {flight.controlMode === 'fps' && <JetpackMeter />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
@@ -434,10 +482,31 @@ const App: React.FC = () => {
           <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
+          {/* Open the Fabricator (crafting). Desktop also has the C key; this is
+              the touch/always-available entry point. On foot only. */}
+          {flight.controlMode === 'fps' && (
+            <button
+              onClick={openCrafting}
+              aria-label="Open fabricator (craft)"
+              style={{
+                position: 'absolute', top: 14, right: 66, width: 44, height: 44,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, color: '#cfe8ff',
+                background: 'rgba(8,13,24,0.55)', border: '1px solid rgba(125,211,252,0.28)',
+                borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
+                backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
+              }}
+            >⚒</button>
+          )}
+
           {/* Pause + star map. On desktop Esc also opens it (via pointer-lock
               loss); this button is the touch/always-available entry point. */}
           <button
-            onClick={() => { if (document.pointerLockElement) document.exitPointerLock(); setPaused(true); }}
+            onClick={() => {
+              craftingOpenRef.current = false; setCraftingOpen(false);
+              if (document.pointerLockElement) document.exitPointerLock();
+              setPaused(true);
+            }}
             aria-label="Pause and open star map"
             style={{
               position: 'absolute', top: 14, right: 14, width: 44, height: 44,
@@ -450,6 +519,9 @@ const App: React.FC = () => {
           >☰</button>
         </>
       )}
+
+      {/* --- Fabricator (crafting) --- */}
+      <CraftingPanel open={craftingOpen} onClose={closeCrafting} />
 
       {/* --- Pause / star map menu --- */}
       <PauseMenu open={paused} onResume={resumeFromPause} onQuitToMenu={quitToMenu} nav={nav} />

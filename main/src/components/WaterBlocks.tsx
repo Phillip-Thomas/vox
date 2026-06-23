@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { buildWaterFaces, FACE_NORMALS, WaterFace } from '../utils/waterVoxels.ts';
-import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial.ts';
+import { createWaterBlocksMaterial, updateWaterBlocksMaterial, applyWaterProfileToMaterial } from '../utils/waterBlocksMaterial.ts';
+import { buildWaterProfile } from '../utils/waterProfile.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { getWorldGen } from '../utils/worldGenCache.ts';
@@ -113,6 +114,16 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
     [debug]
   );
 
+  // Per-planet water colours (deep/shallow/sss/foam/night) derived from the shared
+  // biome, so the ocean coheres with grass/trees instead of being the same teal on
+  // every world. Rebuilt only when the planet seed changes; pushed into the shader
+  // uniforms once it has compiled (see useFrame).
+  const profile = useMemo(() => buildWaterProfile(terrainSeed), [terrainSeed]);
+  const profileAppliedRef = useRef(false);
+  useEffect(() => {
+    profileAppliedRef.current = false;
+  }, [profile, material]);
+
   // Buffer = natural surface faces + headroom for the extra side faces that
   // digging exposes (each dig reveals at most a few). Generous so common digging
   // never overflows; the fill clamps to capacity regardless.
@@ -209,7 +220,13 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
 
   useFrame(state => {
     if (!debug) {
-      updateWaterBlocksMaterial(material as THREE.MeshStandardMaterial, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
+      const waterMat = material as THREE.MeshStandardMaterial;
+      // Push per-planet colours once the shader has compiled (uniforms exist).
+      if (!profileAppliedRef.current && waterMat.userData.shader) {
+        applyWaterProfileToMaterial(profile, waterMat);
+        profileAppliedRef.current = true;
+      }
+      updateWaterBlocksMaterial(waterMat, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
     }
     const mesh = meshRef.current;
     if (!mesh) return;

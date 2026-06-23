@@ -42,6 +42,7 @@ const _tangent = new THREE.Vector3();
 const _bitangent = new THREE.Vector3();
 const _basis = new THREE.Matrix4();
 const _yaw = new THREE.Matrix4();
+const _tilt = new THREE.Matrix4();
 const _scaleM = new THREE.Matrix4();
 const _translate = new THREE.Matrix4();
 const _scratch = new THREE.Matrix4();
@@ -193,6 +194,13 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
 
       const yaw = seededVoxelUnit(x, y, z, 11, terrainSeed) * Math.PI * 2;
       _yaw.makeRotationY(yaw);
+      // Per-instance lean: a SLIGHT tilt away from vertical whose MAGNITUDE varies
+      // per tree (0..~8deg) and whose DIRECTION is randomized by the yaw above
+      // (the tilt tips toward local +X, then yaw spins that around up). This is
+      // what makes a forest look naturally varied instead of every trunk tipped
+      // the same way; mirrors the per-blade tilt grass uses.
+      const tilt = seededVoxelUnit(x, y, z, 17, terrainSeed) * 0.14; // 0 .. ~8deg
+      _tilt.makeRotationX(tilt);
       const s = 0.8 + seededVoxelUnit(x, y, z, 23, terrainSeed) * 0.5; // 0.8 .. 1.3
       _scaleM.makeScale(s, s, s);
 
@@ -202,10 +210,11 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
         _world.z + _up.z * SURFACE_OFFSET
       );
 
-      // m = translate * basis * yaw * scale
+      // m = translate * basis * yaw * tilt * scale
+      // (tilt tips the trunk slightly; yaw spins that lean to a random heading.)
       _m.copy(_translate);
       _m.multiply(_basis);
-      _m.multiply(_scratch.copy(_yaw).multiply(_scaleM));
+      _m.multiply(_scratch.copy(_yaw).multiply(_tilt).multiply(_scaleM));
 
       // NOTE: no per-instance setColorAt. The per-PLANET leaf/flower colours come
       // from the material uniforms (applyTreeProfileToMaterials), and per-instance

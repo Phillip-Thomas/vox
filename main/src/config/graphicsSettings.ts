@@ -14,6 +14,8 @@ export interface GraphicsQuality {
   bakedAO: boolean;
   /** Animate emissive pulsing / time-driven shader effects. */
   animatedShaders: boolean;
+  /** Sun-lit cloud banks + crepuscular shafts on the sky dome (pricey: +~4 fbm). */
+  skyClouds: boolean;
   /** Grass blades per eligible grass voxel (0 disables grass). (Phase 3) */
   grassDensity: number;
   /** Max world-space distance grass is drawn from the camera. (Phase 3) */
@@ -45,6 +47,7 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     triplanarDetail: true,
     bakedAO: true,
     animatedShaders: true,
+    skyClouds: true,
     grassDensity: 6,
     grassMaxDistance: 80,
     treeDensity: 0.04,
@@ -61,6 +64,7 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     triplanarDetail: true,
     bakedAO: true,
     animatedShaders: true,
+    skyClouds: true,
     grassDensity: 4,
     grassMaxDistance: 60,
     treeDensity: 0.03,
@@ -77,6 +81,7 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     triplanarDetail: false,
     bakedAO: true,
     animatedShaders: true,
+    skyClouds: false,
     grassDensity: 2,
     grassMaxDistance: 40,
     treeDensity: 0.02,
@@ -93,6 +98,7 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     triplanarDetail: false,
     bakedAO: true,
     animatedShaders: false,
+    skyClouds: false,
     grassDensity: 1,
     grassMaxDistance: 24,
     treeDensity: 0.015,
@@ -109,6 +115,7 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     triplanarDetail: false,
     bakedAO: false,
     animatedShaders: false,
+    skyClouds: false,
     grassDensity: 0,
     grassMaxDistance: 0,
     treeDensity: 0,

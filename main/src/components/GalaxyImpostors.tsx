@@ -45,10 +45,67 @@ const LIGHT_DIRECTION = new THREE.Vector3(-0.35, 0.78, 0.5).normalize();
 
 /** Aim cone for target lock: dot(camForward, impostorDir) above this (~10deg). */
 const AIM_COS = 0.985;
+/** Slightly inflated planet silhouette used for target line-of-sight checks. */
+const OCCLUSION_RADIUS_SCALE = 1.08;
+/** The loaded voxel planet is cube-like; its visual corners reach faceRadius*sqrt(3). */
+const LOCAL_PLANET_OCCLUSION_SCALE = Math.sqrt(3);
 /** Targeting reticle ring colour (cheap unlit). */
 const LOCK_COLOR = new THREE.Color('#7dffb0');
 /** Reused scratch quaternion for billboarding the lock ring (no per-frame alloc). */
 const BILLBOARD_SCRATCH = new THREE.Quaternion();
+
+function isPlanetOccludedByCloserPlanet(
+  target: PlanetImpostor,
+  planets: PlanetImpostor[],
+  targetDistance: number
+): boolean {
+  if (targetDistance < 1e-3) return false;
+  const invTargetDistance = 1 / targetDistance;
+  const dirX = target.position.x * invTargetDistance;
+  const dirY = target.position.y * invTargetDistance;
+  const dirZ = target.position.z * invTargetDistance;
+
+  for (const blocker of planets) {
+    if (blocker === target) continue;
+    const projection =
+      blocker.position.x * dirX +
+      blocker.position.y * dirY +
+      blocker.position.z * dirZ;
+    if (projection <= 0 || projection >= targetDistance) continue;
+
+    const blockerDistanceSq = blocker.position.lengthSq();
+    const closestDistanceSq = Math.max(0, blockerDistanceSq - projection * projection);
+    const occlusionRadius = blocker.radius * OCCLUSION_RADIUS_SCALE;
+    if (closestDistanceSq <= occlusionRadius * occlusionRadius) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isPlanetOccludedByLoadedWorld(
+  target: PlanetImpostor,
+  cameraPosition: THREE.Vector3,
+  targetDistance: number,
+  planetSize: number
+): boolean {
+  if (targetDistance < 1e-3 || cameraPosition.lengthSq() < 1e-3) return false;
+  const invTargetDistance = 1 / targetDistance;
+  const dirX = target.position.x * invTargetDistance;
+  const dirY = target.position.y * invTargetDistance;
+  const dirZ = target.position.z * invTargetDistance;
+  const projection = -(
+    cameraPosition.x * dirX +
+    cameraPosition.y * dirY +
+    cameraPosition.z * dirZ
+  );
+  if (projection <= 0 || projection >= targetDistance) return false;
+
+  const closestDistanceSq = Math.max(0, cameraPosition.lengthSq() - projection * projection);
+  const occlusionRadius = planetSize * LOCAL_PLANET_OCCLUSION_SCALE;
+  return closestDistanceSq <= occlusionRadius * occlusionRadius;
+}
 
 function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImpostor[] {
   const candidates: Array<{
@@ -244,7 +301,7 @@ function DistantPlanet({
           opacity={0}
           side={THREE.DoubleSide}
           depthWrite={false}
-          depthTest={false}
+          depthTest
           fog={false}
           toneMapped={false}
         />
@@ -296,7 +353,7 @@ function DistantPlanet({
   );
 }
 
-export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsProps) {
+export default function GalaxyImpostors({ currentCoordinate, planetSize }: GalaxyImpostorsProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   const planets = useMemo(
@@ -346,6 +403,8 @@ export default function GalaxyImpostors({ currentCoordinate }: GalaxyImpostorsPr
       if (len < 1e-3) continue;
       const dot = (pos.x * forward.x + pos.y * forward.y + pos.z * forward.z) / len;
       if (dot > bestDot) {
+        if (isPlanetOccludedByLoadedWorld(planet, camera.position, len, planetSize)) continue;
+        if (isPlanetOccludedByCloserPlanet(planet, planets, len)) continue;
         bestDot = dot;
         best = planet;
       }

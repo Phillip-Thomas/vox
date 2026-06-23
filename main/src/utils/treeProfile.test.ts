@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
 import { coordinateToSeed } from './worldCoordinates';
+import { buildBiomeProfile } from './biomeProfile';
 import {
   buildTreeProfile,
   paramsFromProfile,
@@ -7,6 +9,12 @@ import {
   LEAF_LIGHT,
   FLOWER_LIGHT_CAP
 } from './treeProfile';
+
+const _hsl = { h: 0, s: 0, l: 0 };
+function hueOf(c: THREE.Color): number {
+  c.clone().convertLinearToSRGB().getHSL(_hsl);
+  return _hsl.h;
+}
 
 describe('buildTreeProfile', () => {
   it('is byte-stable across repeated calls for the same seed', () => {
@@ -39,6 +47,20 @@ describe('buildTreeProfile', () => {
     // We expect real variety in both shape and colour.
     expect(silhouettes.size).toBeGreaterThan(3);
     expect(leafColors.size).toBeGreaterThan(20);
+  });
+
+  it('coheres the leaf hue with the biome CANOPY side of the veg pair', () => {
+    // Canopy derives from biome.leafHue (the cool side of the split-complementary
+    // pair) plus a small per-tree signature offset (+/-0.03), so it complements
+    // the grass rather than matching it. Check circular distance stays tight.
+    for (let i = 0; i < 200; i++) {
+      const seed = coordinateToSeed(i, i * 17 + 3);
+      const canopySide = buildBiomeProfile(seed).leafHue;
+      const leafHue = hueOf(buildTreeProfile(seed).leafColor);
+      let d = Math.abs(canopySide - leafHue);
+      d = Math.min(d, 1 - d); // circular
+      expect(d).toBeLessThan(0.05);
+    }
   });
 
   it('keeps every valid silhouette reachable', () => {

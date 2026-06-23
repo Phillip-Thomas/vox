@@ -83,6 +83,30 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
   };
 }
 
+// --- Mining time (hold-to-harvest) -------------------------------------------
+//
+// Breaking a voxel is NOT instant: it takes time proportional to the block's
+// hardness, divided by how capable the tool is. A low-tier tool on a hard block
+// is deliberately slow ("tools start bad"); each tool tier — and exceeding the
+// block's required tier — speeds it up. Pure + tunable so the feel can be
+// balanced without touching the player loop.
+//
+// Examples (BASE 2000): Iron Maw (t1) on stone ~1.1s, on copper ~2.4s;
+// Void Maw (t4) on copper ~0.42s. A tool below the required tier returns
+// Infinity (can never break it).
+export const BASE_MINE_MS = 2000; // ms to break a hardness-1 block at tool tier 0
+export const MIN_MINE_MS = 150;   // floor so top-tier mining still feels physical
+
+export function mineDurationMs(input: HarvestVoxelInput): number {
+  const required = requiredToolTierForVoxel(input.blockId, input.deposit);
+  const tier = input.toolTier ?? 0;
+  if (tier < required) return Infinity; // wrong tool — cannot break
+  const hardness = BLOCKS[input.blockId].hardness;
+  const tierSpeed = 1 + 0.8 * tier;              // better tool = faster
+  const overBonus = 1 + 0.5 * (tier - required); // overkill tool = faster still
+  return Math.max(MIN_MINE_MS, (hardness * BASE_MINE_MS) / (tierSpeed * overBonus));
+}
+
 /**
  * Legacy material wrapper. It grants a high tool tier so existing tests and
  * temporary material-based callers keep working during the block-first migration.

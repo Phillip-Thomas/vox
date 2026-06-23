@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { seededUnit } from './worldCoordinates';
+import { buildBiomeProfile } from './biomeProfile';
 import { DEFAULT_TREE_PARAMS, type TreeGenParams } from './treeGen';
 
 // --- Per-planet tree profile -------------------------------------------------
@@ -16,7 +17,7 @@ import { DEFAULT_TREE_PARAMS, type TreeGenParams } from './treeGen';
 //
 // The 9 design parameters (leaf colour + flower colour both mandatory):
 //   1 silhouette       — read-at-a-glance canopy shape (6 presets)
-//   2 leafColor        — base canopy colour (green family OR alien accent)
+//   2 leafColor        — base canopy colour (anchored to the biome vegetation hue)
 //   3 leafTipColor     — derived sun-kissed crust colour
 //   4 leafSSSColor     — derived backlit glow tint
 //   5 flowerColor      — independent blossom accent (always pops)
@@ -77,7 +78,6 @@ export interface TreeProfile {
 
 // Salts — one constant per parameter so colours/shape never alias each other.
 const SALT_SILHOUETTE = 1;
-const SALT_LEAF_HUEROLL = 2;
 const SALT_LEAF_HUE = 3;
 const SALT_LEAF_SAT = 4;
 const SALT_FLOWER_HUE = 5;
@@ -87,8 +87,6 @@ const SALT_LEAN = 8;
 const SALT_DENSITY = 9;
 const SALT_LEAFSCALE = 10;
 
-// Alien (non-green) leaf hue accents, used ~30% of planets. Values in [0,1).
-const ALIEN_LEAF_HUES = [0.5, 0.08, 0.95, 0.83]; // teal, amber, coral, violet
 // Bright flower accents — always pop against any canopy.
 const FLOWER_HUES = [0.95, 0.0, 0.12, 0.83, 0.92, 0.58]; // coral,red,gold,violet,pink,sky
 
@@ -113,19 +111,15 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
   const leafMode: LeafMode =
     silhouette === 'conical' ? 1 : silhouette === 'frond' ? 2 : 0;
 
-  // 2 — leaf colour (MANDATORY). Mostly cohesive greens; ~30% alien accents.
-  const hueRoll = seededUnit(s, SALT_LEAF_HUEROLL);
-  let leafHue: number;
-  if (hueRoll < 0.7) {
-    // green -> lime -> teal family (~72..150deg), harmonizes with grass 0x4a7a24.
-    leafHue = 0.2 + seededUnit(s, SALT_LEAF_HUE) * 0.22;
-  } else {
-    const ai = Math.min(
-      ALIEN_LEAF_HUES.length - 1,
-      Math.floor(seededUnit(s, SALT_LEAF_HUE) * ALIEN_LEAF_HUES.length)
-    );
-    leafHue = ALIEN_LEAF_HUES[ai];
-  }
+  // 2 — leaf colour (MANDATORY). Anchored to the planet's BIOME canopy hue — the
+  // COOL/blue side of the biome's split-complementary veg pair (grass takes the
+  // warm side), so canopy + grass read as a coordinated, complementing pair
+  // rather than the same flat colour — plus a small per-tree signature offset so
+  // two same-biome worlds still differ. Saturation/lightness and the flower
+  // accent below stay the tree's OWN, so blossoms remain the independent pop.
+  const biome = buildBiomeProfile(s);
+  const hueJitter = (seededUnit(s, SALT_LEAF_HUE) - 0.5) * 0.06; // +/-0.03
+  const leafHue = (biome.leafHue + hueJitter + 1) % 1;
   const leafSat = clamp(0.45 + seededUnit(s, SALT_LEAF_SAT) * 0.22, 0, 0.7);
   const leafColor = new THREE.Color()
     .setHSL(leafHue, leafSat, LEAF_LIGHT)
@@ -164,8 +158,12 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
     trunkHeight = Math.max(trunkHeight, 5.5);
   }
 
-  // 8 — lean / twist (clamped so trunk tube tangents don't kink).
-  const leanTwist = clamp((seededUnit(s, SALT_LEAN) - 0.5) * 0.6, -0.35, 0.35);
+  // 8 — lean / twist. Kept SMALL and per-PLANET: this only bakes a subtle trunk
+  // bend + spiral character into the shared geometry. The visible tree-to-tree
+  // lean (slight, varied direction) comes from a PER-INSTANCE tilt in TreeField,
+  // so a forest never reads as "every trunk tipped the same large angle". Clamped
+  // so trunk tube tangents don't kink.
+  const leanTwist = clamp((seededUnit(s, SALT_LEAN) - 0.5) * 0.2, -0.1, 0.1);
 
   // 9 — fullness knobs.
   const canopyDensity = 0.5 + seededUnit(s, SALT_DENSITY) * 0.5; // 0.5..1.0

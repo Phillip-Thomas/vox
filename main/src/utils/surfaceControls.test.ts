@@ -16,7 +16,12 @@ import {
   updateJumpState,
   wrapPositionAroundEdge
 } from './surfaceControls';
-import { PLAYER_CENTER_CLEARANCE, PLAYER_EDGE_RADIUS } from './cubeGravityConstants';
+import {
+  PLAYER_CENTER_CLEARANCE,
+  PLAYER_EDGE_RADIUS,
+  PLAYER_STANDING_HEIGHT,
+  VOXEL_SCALE
+} from './cubeGravityConstants';
 import type { CubeFace } from '../types/cube';
 
 const faces = Object.keys(FACE_NORMALS) as CubeFace[];
@@ -28,6 +33,11 @@ function expectVectorClose(actual: THREE.Vector3, expected: THREE.Vector3, preci
 }
 
 describe('surface controls', () => {
+  it('uses a standing player height that blocks 1-high channels but fits 2-high tunnels', () => {
+    expect(PLAYER_STANDING_HEIGHT).toBeGreaterThan(VOXEL_SCALE);
+    expect(PLAYER_STANDING_HEIGHT).toBeLessThan(VOXEL_SCALE * 2);
+  });
+
   it('defines gravity as negative face up for every face', () => {
     for (const face of faces) {
       const state = getSurfaceState(face);

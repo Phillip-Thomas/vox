@@ -72,7 +72,8 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
   useMemo(() => {
     const sun = getSunDirection();
     const up = getPlayerUp();
-    updateSpaceSky(material, 0, localDaylight(sun, up), localGolden(sun, up), sun, getMoonDirection(), up);
+    const cloudQuality = getGraphicsQuality().skyClouds ? 1.0 : 0.0;
+    updateSpaceSky(material, 0, localDaylight(sun, up), localGolden(sun, up), sun, getMoonDirection(), up, cloudQuality);
   }, [material]);
 
   // In deep space the cosmos is ALWAYS fully visible. Force the dome to full
@@ -82,8 +83,8 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
   useEffect(() => {
     const mat = matRef.current ?? material;
     if (!inSpace) return;
-    // daylight=0 -> uDay=0 -> early-out -> pure cosmos; golden irrelevant.
-    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp());
+    // daylight=0 -> uDay=0 -> early-out -> pure cosmos; golden + clouds off in the void.
+    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0);
   }, [inSpace, material]);
 
   useFrame(state => {
@@ -104,13 +105,15 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
 
     const mat = matRef.current;
     if (!mat) return;
-    const animated = getGraphicsQuality().animatedShaders;
+    const q = getGraphicsQuality();
+    const animated = q.animatedShaders;
+    const cloudQuality = q.skyClouds ? 1.0 : 0.0;
 
     // Deep space: stars/nebula forced fully on (uDay=0 -> early-out). When animated,
     // keep advancing time for twinkle/drift; otherwise the seed already applied.
     if (inSpace) {
       if (!animated) return;
-      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp());
+      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0);
       return;
     }
 
@@ -127,7 +130,8 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
       localGolden(sun, up),
       sun,
       getMoonDirection(),
-      up
+      up,
+      cloudQuality
     );
   });
 

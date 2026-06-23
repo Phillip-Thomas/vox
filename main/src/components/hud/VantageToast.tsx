@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 /**
  * Brief confirmation toast for the vantage recorder (PoseRecorder): shows when a
- * vantage is pinned (C) or all pins are copied (V). Debug-only aid.
+ * vantage is pinned (`) or all pins are copied (V). Debug-only aid.
  */
 const VantageToast: React.FC = () => {
   const [msg, setMsg] = useState<string | null>(null);

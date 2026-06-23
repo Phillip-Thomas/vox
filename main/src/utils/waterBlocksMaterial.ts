@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { GraphicsQuality } from '../config/graphicsSettings';
+import type { WaterProfile } from './waterProfile';
 
 // --- Water material v2 — stylized spherical Gerstner ocean -------------------
 //
@@ -384,6 +385,26 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
 
   material.customProgramCacheKey = () => 'water-blocks-iq-v3';
   return material;
+}
+
+/**
+ * Push the per-planet water colours from the profile into the material (call once
+ * the shader has compiled, like applyGrassProfileToMaterial). Colours are
+ * uniforms, so the program stays shared across planets — only the .value swaps.
+ */
+export function applyWaterProfileToMaterial(
+  profile: WaterProfile,
+  material: THREE.MeshStandardMaterial
+): void {
+  const u = (material.userData.shader as
+    | { uniforms?: Partial<WaterBlocksUniforms> }
+    | undefined)?.uniforms;
+  if (!u) return;
+  if (u.uDeepColor) u.uDeepColor.value = profile.deepColor;
+  if (u.uShallowColor) u.uShallowColor.value = profile.shallowColor;
+  if (u.uSSSColor) u.uSSSColor.value = profile.sssColor;
+  if (u.uFoamColor) u.uFoamColor.value = profile.foamColor;
+  if (u.uNightFloor) u.uNightFloor.value = profile.nightFloor;
 }
 
 const _sunScratch = new THREE.Vector3();

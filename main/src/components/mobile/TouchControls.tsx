@@ -22,6 +22,7 @@ interface TouchControlsProps {
 
 const JOYSTICK_SIZE = 132;
 const KNOB_SIZE = 58;
+const LOOK_SENSITIVITY = 1.22;
 
 export default function TouchControls({ controlMode }: TouchControlsProps) {
   const [knob, setKnob] = useState({ x: 0, y: 0 });
@@ -78,7 +79,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
     const dx = e.clientX - lookLast.current.x;
     const dy = e.clientY - lookLast.current.y;
     lookLast.current = { x: e.clientX, y: e.clientY };
-    dispatchLook(dx, dy);
+    dispatchLook(dx * LOOK_SENSITIVITY, dy * LOOK_SENSITIVITY);
   };
   const onLookUp = (e: React.PointerEvent) => {
     if (lookId.current === e.pointerId) lookId.current = null;

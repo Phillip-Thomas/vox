@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
-import { createVoxelMaterial, updateVoxelMaterial } from '../utils/voxelMaterial';
+import { createVoxelMaterial, updateVoxelMaterial, applyTerrainProfileToMaterial } from '../utils/voxelMaterial';
+import { buildTerrainProfile } from '../utils/terrainProfile';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getWorldTerrainData } from '../utils/worldGenCache';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
@@ -112,7 +113,21 @@ export default function EfficientPlanet({
 
   const [collisionBodies, setCollisionBodies] = useState<CollisionBody[]>([]);
 
+  // Per-planet biome tint for the organic ground, derived from the shared biome.
+  // Applied to the shared voxel material's uniforms once the shader has compiled
+  // and re-applied when the planet seed changes (the material is a singleton, so
+  // we drive uniforms rather than rebuild it).
+  const terrainProfile = useMemo(() => buildTerrainProfile(terrainSeed), [terrainSeed]);
+  const terrainTintAppliedRef = useRef(false);
+  useEffect(() => {
+    terrainTintAppliedRef.current = false;
+  }, [terrainProfile]);
+
   useFrame(({ clock }) => {
+    if (!terrainTintAppliedRef.current && voxelMaterial.userData.shader) {
+      applyTerrainProfileToMaterial(terrainProfile, voxelMaterial);
+      terrainTintAppliedRef.current = true;
+    }
     updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality());
   });
 

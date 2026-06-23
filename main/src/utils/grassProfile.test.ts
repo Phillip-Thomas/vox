@@ -41,14 +41,15 @@ describe('buildGrassProfile', () => {
     expect(baseColors.size).toBeGreaterThan(20);
   });
 
-  it('coheres the grass hue with the shared biome hue', () => {
-    // Grass derives its hue from the biome (only a small temperature nudge), so
-    // the planet reads as one biome. Check circular hue distance stays small.
+  it('coheres the grass hue with the biome GRASS side of the veg pair', () => {
+    // Grass derives from biome.grassHue (the warm side of the split-complementary
+    // pair, plus a small temperature nudge), NOT the raw identity hue — so it
+    // complements the canopy. Check circular distance to biome.grassHue is tight.
     for (let i = 0; i < 200; i++) {
       const seed = coordinateToSeed(i, i * 17 + 3);
-      const biomeHue = buildBiomeProfile(seed).hue;
+      const grassSide = buildBiomeProfile(seed).grassHue;
       const grassHue = hueOf(buildGrassProfile(seed).baseColor);
-      let d = Math.abs(biomeHue - grassHue);
+      let d = Math.abs(grassSide - grassHue);
       d = Math.min(d, 1 - d); // circular
       expect(d).toBeLessThan(0.08);
     }

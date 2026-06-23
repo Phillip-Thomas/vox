@@ -59,12 +59,14 @@ function clamp(v: number, lo: number, hi: number): number {
 export function buildGrassProfile(terrainSeed: number): GrassProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
-  const { hue, saturation, lushness, aridity, temperature } = biome;
+  const { grassHue, saturation, lushness, aridity, temperature } = biome;
 
   // --- Colours ---------------------------------------------------------------
   // Lush worlds are a touch brighter/deeper; arid worlds desaturate. Temperature
-  // nudges hue a hair (cold -> cooler/bluer, hot -> warmer/yellower).
-  const tHue = (hue + (temperature - 0.5) * 0.04 + 1) % 1;
+  // nudges hue a hair (cold -> cooler/bluer, hot -> warmer/yellower). Grass reads
+  // the warm/yellow side of the biome's split-complementary veg pair (the canopy
+  // takes the cool side), so grass + leaves complement rather than match.
+  const tHue = (grassHue + (temperature - 0.5) * 0.04 + 1) % 1;
   const sat = clamp(saturation - aridity * 0.15, 0.1, 0.9);
   const baseColor = new THREE.Color()
     .setHSL(tHue, clamp(sat + 0.08, 0, 1), 0.24 + lushness * 0.08)

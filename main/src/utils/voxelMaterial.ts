@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { MATERIAL_ORDER, MATERIALS, MaterialType } from '../types/materials';
 import { GraphicsQuality } from '../config/graphicsSettings';
+import type { TerrainProfile } from './terrainProfile';
 
 // Builds the shared voxel MeshStandardMaterial. We keep Three's full PBR /
 // IBL / lighting pipeline and only INJECT inputs via onBeforeCompile:
@@ -410,6 +411,10 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uAnimated = { value: 1 };
     shader.uniforms.uTriplanar = { value: 1 };
     shader.uniforms.uAO = { value: 1 };
+    // Per-planet biome tint for ORGANIC ground (dirt/grass/sand). Defaults to a
+    // no-op (strength 0) so terrain is unchanged until a profile is applied.
+    shader.uniforms.uTerrainTint = { value: new THREE.Color(1, 1, 1) };
+    shader.uniforms.uTerrainTintStrength = { value: 0 };
     material.userData.shader = shader;
 
     // --- Vertex: forward material id + world pos/normal, bake per-corner AO.
@@ -453,6 +458,8 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         uniform float uTime;
         uniform float uAnimated;
         uniform float uTriplanar;
+        uniform vec3 uTerrainTint;
+        uniform float uTerrainTintStrength;
         varying float vMatId;
         varying float vAO;
         varying vec3 vWorldPos;
@@ -481,6 +488,20 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           // up: how planet-outward this face points (for grass-block tops).
           float up = clamp(dot(vWorldNormal, normalize(vWorldPos)), 0.0, 1.0);
           diffuseColor.rgb = vmSurface(diffuseColor.rgb, vWorldPos, w, mid, fade, up);
+        }
+        // Per-planet biome tint on ORGANIC ground only (dirt/grass/sand) so soil
+        // coheres with the planet's grass/water; mineral materials stay neutral.
+        // Luma-preserving: rescale the tint to the pixel's brightness then blend,
+        // so we shift HUE without lightening/darkening. Runs on every quality tier
+        // (independent of uTriplanar) so even flat slabs carry the biome.
+        if (uTerrainTintStrength > 0.0) {
+          int tmid = int(vMatId + 0.5);
+          if (tmid == MAT_DIRT || tmid == MAT_GRASS || tmid == MAT_SAND) {
+            float pLuma = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+            float tLuma = max(dot(uTerrainTint, vec3(0.299, 0.587, 0.114)), 1e-3);
+            vec3 tintAtLuma = uTerrainTint * (pLuma / tLuma);
+            diffuseColor.rgb = mix(diffuseColor.rgb, tintAtLuma, uTerrainTintStrength);
+          }
         }`
       )
       .replace(
@@ -575,10 +596,29 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
   };
 
   // Single shared material on one mesh: a stable key avoids per-object recompiles
-  // and reserves room for future variants (e.g. painterly).
-  material.customProgramCacheKey = () => 'voxel-pbr-v3';
+  // and reserves room for future variants (e.g. painterly). Bumped to v4 when the
+  // per-planet biome tint uniforms + soil blend were added to the shader.
+  material.customProgramCacheKey = () => 'voxel-pbr-v4';
 
   return material;
+}
+
+/**
+ * Push the per-planet terrain tint from the profile into the material (call once
+ * the shader has compiled; re-call when the planet seed changes). The palette is
+ * baked GLSL, so we only drive the soil hue-nudge uniforms — the program stays
+ * shared across planets.
+ */
+export function applyTerrainProfileToMaterial(
+  profile: TerrainProfile,
+  material: THREE.MeshStandardMaterial
+): void {
+  const u = (material.userData.shader as
+    | { uniforms?: Record<string, { value: unknown }> }
+    | undefined)?.uniforms;
+  if (!u) return;
+  if (u.uTerrainTint) (u.uTerrainTint.value as THREE.Color).copy(profile.tintColor);
+  if (u.uTerrainTintStrength) (u.uTerrainTintStrength.value as number) = profile.tintStrength;
 }
 
 /** Push time + quality-derived toggles into the shader (called from useFrame). */

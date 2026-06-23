@@ -48,6 +48,8 @@ import {
   GROUND_PROBE_FOOT_OFFSET,
   GROUND_PROBE_LENGTH,
   GROUND_PROBE_LIFT,
+  PLAYER_CAPSULE_HALF_HEIGHT,
+  PLAYER_CAPSULE_RADIUS,
   PLAYER_CENTER_CLEARANCE,
   PLAYER_EDGE_RADIUS,
   TRANSITION_LOCK_TIME,
@@ -56,13 +58,17 @@ import {
 } from '../utils/cubeGravityConstants';
 import { isTouchActive } from '../utils/mobileInput';
 import { MaterialType } from '../types/materials';
-import { canHarvestVoxel, harvestVoxel } from '../game/systems/harvestingSystem';
+import { canHarvestVoxel, harvestVoxel, mineDurationMs } from '../game/systems/harvestingSystem';
+import { ensureStarterLoadout, getEquippedToolTier } from '../game/systems/loadoutSystem';
+import { clearMiningProgress, setMiningProgress } from '../game/systems/miningProgress';
 import { setLookedAtVoxel, type LookedAtVoxel } from '../game/systems/targeting';
+import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
-const PLAYER_TOOL_TIER = 3;
+// Cadence of the "chipping" mine sound while holding to harvest (ms).
+const MINE_TICK_MS = 260;
 // Continuous smooth-gravity field is now the DEFAULT (no faces/transitions/
 // resolver — can't fall off or get stuck by construction). The discrete 6-face
 // state machine stays available via ?gravity=discrete as a one-session safety
@@ -149,7 +155,12 @@ export default function EfficientPlayer({
   const rotationAnimation = useRef<RotationAnimation | null>(null);
   const lastPlanarForward = useRef(new THREE.Vector3(0, 0, -1));
   const controlsActive = useRef(false);
-  const previousDeleteKey = useRef(false);
+  // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
+  // time, and when the last chip sound played. Reset when the key is released,
+  // the crosshair leaves the voxel, or the block breaks.
+  const mineState = useRef<{ key: string | null; elapsed: number; duration: number; tickAt: number }>(
+    { key: null, elapsed: 0, duration: 0, tickAt: 0 }
+  );
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
@@ -202,6 +213,8 @@ export default function EfficientPlayer({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => () => setJetpackSfx(false), []);
 
   const updateVisualTransition = useCallback(() => {
     const animation = rotationAnimation.current;
@@ -363,29 +376,97 @@ export default function EfficientPlayer({
     jumpState.current.previousJump = get().jump;
   }, [get]);
 
-  const handleVoxelDeletion = useCallback((camera: THREE.Camera | null) => {
-    if (!camera) return;
+  // Bootstrap the player's gear so the early loop is playable before crafting
+  // exists. Idempotent — only grants a starting Maw if no tool is owned yet.
+  useEffect(() => { ensureStarterLoadout(); }, []);
+
+  // Raycast the voxel under the crosshair; null if nothing in reach.
+  const pickMineTarget = useCallback((camera: THREE.Camera | null) => {
+    if (!camera) return null;
     const mesh = efficientPlanetMesh.current;
-    if (!mesh) return;
+    if (!mesh) return null;
 
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
     const hit = raycaster.intersectObject(mesh, false).find(intersection => intersection.instanceId !== undefined);
-    if (!hit || hit.instanceId === undefined) return;
+    if (!hit || hit.instanceId === undefined) return null;
 
     const coord = voxelSystem.getCoordForSlot(hit.instanceId);
-    if (!coord) return;
-
+    if (!coord) return null;
     const voxel = voxelSystem.getVoxel(coord.x, coord.y, coord.z);
-    if (!voxel || !canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: PLAYER_TOOL_TIER })) {
+    if (!voxel) return null;
+    return { coord, voxel };
+  }, []);
+
+  // Actually break + harvest a voxel once mining has charged to completion.
+  const commitMine = useCallback((
+    coord: { x: number; y: number; z: number },
+    voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>>,
+    toolTier: number
+  ) => {
+    if (voxelSystem.removeVoxel(coord.x, coord.y, coord.z)) {
+      playSfx('mine');
+      harvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier });
+      voxelSystem.exposeNeighbors(coord.x, coord.y, coord.z);
+    } else {
+      playSfx('blocked');
+    }
+  }, []);
+
+  // Per-frame hold-to-mine. `held` = the harvest key/touch is down this frame;
+  // `dt` is seconds since last frame. Progress accumulates only while the
+  // crosshair stays on the same voxel and the tool is strong enough; the block
+  // breaks when elapsed reaches its hardness/tool-derived duration.
+  const updateMining = useCallback((held: boolean, dt: number, camera: THREE.Camera | null) => {
+    const ms = mineState.current;
+    if (!held) {
+      if (ms.key !== null) { ms.key = null; ms.elapsed = 0; clearMiningProgress(); }
       return;
     }
 
-    if (voxelSystem.removeVoxel(coord.x, coord.y, coord.z)) {
-      harvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: PLAYER_TOOL_TIER });
-      voxelSystem.exposeNeighbors(coord.x, coord.y, coord.z);
+    const target = pickMineTarget(camera);
+    if (!target) {
+      if (ms.key !== null) { ms.key = null; ms.elapsed = 0; }
+      clearMiningProgress();
+      return;
     }
-  }, []);
+
+    const { coord, voxel } = target;
+    const toolTier = getEquippedToolTier();
+    const key = `${coord.x},${coord.y},${coord.z}`;
+
+    // Tool too weak: no progress, one "blocked" chirp per fresh target.
+    if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier })) {
+      if (ms.key !== `!${key}`) { playSfx('blocked'); ms.key = `!${key}`; ms.elapsed = 0; }
+      setMiningProgress(true, 0, true);
+      return;
+    }
+
+    // New target (or resumed after release): start a fresh charge with an
+    // immediate chip so the player gets instant feedback.
+    if (ms.key !== key) {
+      ms.key = key;
+      ms.elapsed = 0;
+      ms.duration = mineDurationMs({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier });
+      ms.tickAt = 0;
+      playSfx('mine');
+    }
+
+    ms.elapsed += dt * 1000;
+
+    if (ms.elapsed >= ms.duration) {
+      commitMine(coord, voxel, toolTier);
+      ms.key = null; ms.elapsed = 0; ms.tickAt = 0;
+      clearMiningProgress();
+      return;
+    }
+
+    if (ms.elapsed - ms.tickAt >= MINE_TICK_MS) {
+      playSfx('mine');
+      ms.tickAt = ms.elapsed;
+    }
+    setMiningProgress(true, Math.min(1, ms.elapsed / ms.duration), false);
+  }, [pickMineTarget, commitMine]);
 
   // Cheap ray-march to find the voxel under the crosshair, for the "looking at"
   // readout. Marches in voxel space (round(world/VOXEL_SCALE)) over the reach —
@@ -423,6 +504,7 @@ export default function EfficientPlayer({
 
     const controls = get();
     if (controls.reset) {
+      setJetpackSfx(false);
       resetPlayer();
       return;
     }
@@ -521,6 +603,7 @@ export default function EfficientPlayer({
     jumpState.current = jump.next;
 
     if (jump.shouldJump) {
+      playSfx('jump');
       nextVelocity = applyJumpImpulse(nextVelocity, activeUp, DEFAULT_JUMP_SPEED);
     }
 
@@ -528,12 +611,14 @@ export default function EfficientPlayer({
     // gentle upward thrust (controlled hover/boost), capped so it's not a rocket.
     // Fuel refills while grounded. shouldJump (the ground impulse) takes priority.
     const jumpHeld = active && controls.jump;
+    let jetpackActive = false;
     if (grounded) {
       jetpackFuel.current = Math.min(
         JETPACK_MAX_FUEL,
         jetpackFuel.current + JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP
       );
     } else if (jumpHeld && !jump.shouldJump && jetpackFuel.current > 0) {
+      jetpackActive = true;
       jetpackFuel.current = Math.max(0, jetpackFuel.current - FIXED_PHYSICS_STEP);
       const upSpeed = nextVelocity.dot(activeUp);
       if (upSpeed < JETPACK_MAX_UP_SPEED) {
@@ -542,6 +627,7 @@ export default function EfficientPlayer({
       }
     }
     jetpackFuelDisplay = jetpackFuel.current / JETPACK_MAX_FUEL;
+    setJetpackSfx(jetpackActive, Math.max(0.35, jetpackFuelDisplay));
 
     // (cooldown already decremented at the top of the step, before the resolver.)
     // Edge-walk is part of the DISCRETE system only; the smooth field never needs it.
@@ -565,7 +651,7 @@ export default function EfficientPlayer({
     body.setLinvel(vectorToRapier(nextVelocity), true);
   });
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     const body = ref.current;
     if (!body) return;
 
@@ -574,17 +660,18 @@ export default function EfficientPlayer({
     const position = vectorFromRapier(body.translation());
     onPositionChange?.(position);
     if (lastGroundedNotification.current !== lastGrounded.current) {
+      const previous = lastGroundedNotification.current;
       lastGroundedNotification.current = lastGrounded.current;
+      if (previous === false && lastGrounded.current) playSfx('land');
       onGroundedChange?.(lastGrounded.current);
     }
 
     const controls = get();
     const deleteActive = controlsActive.current || isTouchActive();
-    const deletePressed = deleteActive && controls.delete && !previousDeleteKey.current;
-    previousDeleteKey.current = deleteActive && controls.delete;
-    if (deletePressed) {
-      handleVoxelDeletion(cameraRef.current);
-    }
+    // Hold-to-mine: progress accumulates while the key/touch is held on a voxel,
+    // and the block only breaks once it has fully charged (time scales with block
+    // hardness / tool tier — see mineDurationMs).
+    updateMining(deleteActive && controls.delete, delta, cameraRef.current);
 
     // Update the "looking at" readout a few times/sec (cheap voxel march).
     if (frameCount.current % 4 === 0) {
@@ -643,7 +730,7 @@ export default function EfficientPlayer({
         canSleep={false}
         ccd
       >
-        <CapsuleCollider args={[0.5, 0.5]} />
+        <CapsuleCollider args={[PLAYER_CAPSULE_HALF_HEIGHT, PLAYER_CAPSULE_RADIUS]} />
 
         <PerspectiveCamera
           ref={cameraRef}
@@ -659,7 +746,7 @@ export default function EfficientPlayer({
             gravity reorients near an edge (the "blue horizontal plane" artifact).
             Overview/agent cameras don't mount this rig, so nothing else needs it. */}
         <mesh visible={false}>
-          <capsuleGeometry args={[0.5, 1]} />
+          <capsuleGeometry args={[PLAYER_CAPSULE_RADIUS, PLAYER_CAPSULE_HALF_HEIGHT * 2]} />
           <meshStandardMaterial color="#3f7fd9" roughness={0.75} />
         </mesh>
       </RigidBody>

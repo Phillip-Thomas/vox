@@ -1,0 +1,45 @@
+{
+  "licenseNote": "Default Paravoxia music assets are CC0 OpenGameArt downloads. Keep this file in sync if assets are replaced.",
+  "assets": [
+    {
+      "file": "deep_space_out_there.ogg",
+      "title": "Space Music: Out There",
+      "author": "yd",
+      "license": "CC0",
+      "source": "https://opengameart.org/content/space-music-out-there",
+      "role": "deep-space loop"
+    },
+    {
+      "file": "menu_ambientmain.ogg",
+      "title": "Tragic ambient main menu",
+      "author": "brandon75689",
+      "license": "CC0",
+      "source": "https://opengameart.org/content/tragic-ambient-main-menu",
+      "role": "menu and mystery layer"
+    },
+    {
+      "file": "surface_project_utopia.ogg",
+      "title": "Project Utopia (seamless loop)",
+      "author": "congusbongus",
+      "license": "CC0",
+      "source": "https://opengameart.org/content/project-utopia-seamless-loop",
+      "role": "dry, strange, and night-side surface accent"
+    },
+    {
+      "file": "shimmer_dream_ambience.mp3",
+      "title": "Dream Ambience",
+      "author": "TokyoGeisha",
+      "license": "CC0",
+      "source": "https://opengameart.org/content/dream-ambience",
+      "role": "shimmer and celestial lift"
+    },
+    {
+      "file": "warp_surreal_truth.mp3",
+      "title": "The Surreal Truth",
+      "author": "Joth",
+      "license": "CC0",
+      "source": "https://opengameart.org/content/ambience-pack-1-sci-fi-horror",
+      "role": "warp and transition tension"
+    }
+  ]
+}

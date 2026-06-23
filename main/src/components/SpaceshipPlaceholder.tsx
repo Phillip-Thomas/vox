@@ -4,6 +4,7 @@ import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { seededUnit } from '../utils/worldCoordinates';
 import { enterShip, useSpaceFlight } from '../state/spaceFlight.ts';
+import { playSfx } from '../audio/sfxEngine.ts';
 
 const BOARD_RANGE = 3.5;
 const BOARD_RANGE_SQ = BOARD_RANGE * BOARD_RANGE;
@@ -55,7 +56,9 @@ export default function SpaceshipPlaceholder({
   useEffect(() => {
     if (!nearby || !boardable) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.code === 'KeyF') enterShip();
+      if (event.code !== 'KeyF' || event.repeat) return;
+      playSfx('boardShip');
+      enterShip();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);

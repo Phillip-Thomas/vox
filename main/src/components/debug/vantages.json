@@ -62,5 +62,13 @@
     "pos": [17.095, 13.419, 52.989],
     "quat": [-0.4536, 0.5781, 0.5336, -0.4187],
     "reason": "upside down tree canopy (weeping silhouette)"
+  },
+  {
+    "name": "39_-71-godray",
+    "world": [39, -71],
+    "day": 0.4156,
+    "pos": [-50.745, 4.194, -49.485],
+    "quat": [-0.2227, 0.4854, -0.0298, 0.8449],
+    "reason": "godray hard cutoff vantage (verify smooth radial fade)"
   }
 ]

@@ -9,8 +9,8 @@ import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
 // Lets the USER fly/walk to a good camera position+rotation during NORMAL play
 // and pin it WITH A REASON, so Claude can file it into vantages.json and the
 // harness (AgentCamera + tools/capture.mjs) replays it EXACTLY on the right
-// world/seed. Keys:
-//   C  -> pin: prompts for a reason / thing-of-interest, records the exact world-
+// world/seed. Keys (debug-only; ` chosen so gameplay keys like C stay free):
+//   `  -> pin: prompts for a reason / thing-of-interest, records the exact world-
 //         space camera pose + the current WORLD COORDINATE (= seed) + dayphase.
 //   V  -> copy ALL pinned vantages to the clipboard as JSON (paste to Claude).
 // Pins also accumulate on window.__poses + localStorage. A toast confirms each
@@ -29,14 +29,14 @@ export default function PoseRecorder({ coordinate }: PoseRecorderProps) {
 
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('[poses] C = pin a vantage (with reason)   V = copy all pins to clipboard');
+    console.log('[poses] ` = pin a vantage (with reason)   V = copy all pins to clipboard');
     const w = window as unknown as { __poses?: unknown[] };
 
     const onKey = (event: KeyboardEvent) => {
       const el = document.activeElement;
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
 
-      if (event.code === 'KeyC') {
+      if (event.code === 'Backquote') {
         // (Pointer lock is auto-released while the prompt is open; click to re-lock.)
         const reason = window.prompt('Pin vantage — reason / thing of interest:', '');
         if (reason === null) return; // cancelled
