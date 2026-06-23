@@ -221,9 +221,18 @@ export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
     40,
     Math.round(base.attractorCount * profile.canopyDensity)
   );
+  // Some shapes need a denser card budget than the base. Weeping must clothe a
+  // full crown AND hang cascading curtains; conical must fill a solid cone so the
+  // trunk doesn't show between whorls. A normal budget leaves bare gaps.
+  const leafBudgetMul =
+    profile.silhouette === 'weeping'
+      ? 1.7
+      : profile.silhouette === 'conical'
+        ? 1.6
+        : 1;
   const maxLeafCards = Math.max(
     60,
-    Math.round(base.maxLeafCards * profile.canopyDensity)
+    Math.round(base.maxLeafCards * profile.canopyDensity * leafBudgetMul)
   );
   const leafSize = base.leafSize * profile.leafScale;
 
