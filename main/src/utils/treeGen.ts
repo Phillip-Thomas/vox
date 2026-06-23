@@ -120,6 +120,7 @@ export function selectLeafCandidates(
 ): number[] {
   const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
   const maxOrder = nodes.reduce((m, n) => Math.max(m, n.order), 0);
+  const maxY = nodes.reduce((m, n) => Math.max(m, n.pos.y), 0);
   const childCount = new Array(nodes.length).fill(0);
   for (const n of nodes) if (n.parent >= 0) childCount[n.parent]++;
 
@@ -134,6 +135,11 @@ export function selectLeafCandidates(
     } else if (silhouette === 'wispy') {
       // Outer droops only: a real branch (not trunk) AND a tip or far-out node.
       ok = node.order >= 1 && (isTip || node.dist >= maxDist * 0.65);
+    } else if (silhouette === 'conical') {
+      // A cone must be SOLID: clothe EVERY branch node (order>=1) AND the central
+      // leader above the clear trunk (node.pos.y >= 30% of height) so the spire is
+      // foliage, not bare wood. Only the lower ~third of the trunk stays clear.
+      ok = isTip || node.order >= 1 || node.pos.y >= maxY * 0.3;
     } else {
       // round / conical / umbrella / weeping: foliage on tips + outer twigs so
       // the crown is fully ENVELOPED (no bare spiking top). For weeping the
@@ -171,6 +177,9 @@ interface LSParams {
   lenFalloff: number;
   segs: number;
   upLerp: number;
+  /** Fraction of the trunk budget the central leader climbs before terminating;
+   *  <1 stops a dominant leader from spiking bare above the crown (weeping). */
+  leaderFrac: number;
 }
 
 // Map the existing silhouette/density knobs to L-system tuning. Deterministic
@@ -185,11 +194,18 @@ function lsFromParams(p: TreeGenParams): LSParams {
     twist: 2.39996, // golden angle (radians)
     lenFalloff: 0.72,
     segs: 5,
-    upLerp: 0.03
+    upLerp: 0.03,
+    leaderFrac: 1 // full-height central leader (default)
   };
   switch (p.silhouette) {
     case 'conical':
-      return { ...base, levels: 4, children: 2, angle: 0.42, upLerp: 0.1, segs: 6 };
+      // Conifer (spruce/cypress): a tapered, dense, taller-than-wide crown. The
+      // budget taper shortens branches toward the top (wide base -> narrow top);
+      // a LOW leaderFrac stops the central leader early so the upper forks dome
+      // over into a solid leafy top instead of a bare leader spiking out (the same
+      // fix that cured weeping). Inclusive candidates + denser budget + larger
+      // cards keep the cone solid with no trunk showing through.
+      return { ...base, levels: 4, children: 2, angle: 0.5, upLerp: 0.1, segs: 6 };
     case 'umbrella':
       // Broad dome (acacia-like). Uses the round tree's proven branching (moderate
       // angle + climbing upLerp) so foliage domes UP; the WIDER crownRadius (2.6,
@@ -197,12 +213,22 @@ function lsFromParams(p: TreeGenParams): LSParams {
       // negative upLerp fanned sub-branches DOWNWARD -> drooping "upside-down" canopy.
       return { ...base, levels: 3, children: 3, angle: 0.6, upLerp: 0.05 };
     case 'weeping':
-      // Branches CLIMB (positive upLerp) to build a rounded fountain crown — the
-      // willow "weep" comes from drooping outer tips + draping leaf cards, NOT
-      // from drooping whole branches (the old upLerp:-0.1 made bare boughs sag
-      // up/out while foliage bunched low -> upside-down canopy). Wider angle +
-      // slower falloff = long arching boughs that spread then cascade.
-      return { ...base, levels: 3, children: 3, angle: 0.74, upLerp: 0.05, lenFalloff: 0.8 };
+      // Branches CLIMB into a full ROUNDED crown that envelops the apex (so there
+      // is no bare spiking top); the willow "weep" then lives entirely in the
+      // draping leaf cards (radial curtains, see buildLeafGeometry) plus a mild
+      // outer-tip curl (shapeNodes). leaderFrac<1 terminates the central leader
+      // early so the upper forks dome over instead of a thin bare leader spiking
+      // up. The old upLerp:-0.1 sagged bare boughs up/out while foliage bunched
+      // low -> upside-down canopy.
+      return {
+        ...base,
+        levels: 3,
+        children: 3,
+        angle: 0.66,
+        upLerp: 0.13,
+        lenFalloff: 0.82,
+        leaderFrac: 0.6
+      };
     case 'wispy':
       return { ...base, levels: 4, children: 2, angle: 0.55, lenFalloff: 0.78 };
     case 'round':
@@ -251,6 +277,11 @@ function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
     const grav = order === 0 ? 0.16 : P.upLerp;
     const forkEvery = order === 0 ? 2 : 1;
     while (remaining >= STEP * 0.6 && nodes.length < NODE_CAP) {
+      // Central-leader cutoff: a dominant straight leader grown to full height
+      // spikes BARE above off-axis climbing branches. For shapes with leaderFrac<1
+      // (weeping) stop the apical line once it has climbed leaderFrac of its budget
+      // and let the upper forks dome the crown over (no bare spike).
+      if (order === 0 && budget - remaining >= P.leaderFrac * budget) break;
       // per-internode gnarl: spin the bend AXIS randomly around the branch so the
       // wander isn't biased into one plane (a fixed twPerp made stems one-sided).
       tmpAxis.copy(twPerp(d)).applyAxisAngle(d, rng() * Math.PI * 2);
@@ -661,10 +692,32 @@ function buildLeafGeometry(
   );
   // Keep the total leaf count bounded by the existing budget.
   const maxNodes = Math.max(1, Math.round(maxLeafCards / leavesPerTwig));
-  let placed = 0;
+  // Even coverage under the card budget. Taking the first N candidates in
+  // (depth-first) creation order piles foliage onto the earliest-explored
+  // branches and leaves the upper crown + apex bare — the bare-spiking-top
+  // symptom. Instead: clothe every TIP first (branch/leader ENDS read as dead
+  // spikes when bare), then fill the remaining budget by uniformly SAMPLING the
+  // interior nodes so the whole skeleton is enveloped.
+  const childCount = new Array(nodes.length).fill(0);
+  for (const n of nodes) if (n.parent >= 0) childCount[n.parent]++;
+  const strideSample = (arr: number[], n: number): number[] => {
+    if (n >= arr.length) return arr.slice();
+    const out: number[] = [];
+    const stride = arr.length / n;
+    for (let k = 0; k < n; k++) out.push(arr[Math.floor(k * stride)]);
+    return out;
+  };
+  let leafNodes: number[];
+  if (candidates.length <= maxNodes) {
+    leafNodes = candidates;
+  } else {
+    const tips = candidates.filter(i => childCount[i] === 0);
+    const interior = candidates.filter(i => childCount[i] !== 0);
+    const tipPick = strideSample(tips, Math.min(tips.length, maxNodes));
+    leafNodes = tipPick.concat(strideSample(interior, maxNodes - tipPick.length));
+  }
 
-  for (const idx of candidates) {
-    if (placed >= maxNodes) break;
+  for (const idx of leafNodes) {
     center.copy(nodes[idx].pos);
 
     // Outward direction from crown centre (special-cased for weeping/frond).
@@ -682,6 +735,21 @@ function buildLeafGeometry(
     const ph = rng() * Math.PI * 2;
     const fl = Math.min(1, 0.7 + (nodes[idx].dist / maxDist) * 0.5);
 
+    // Weeping curtain weight = how PERIPHERAL the twig is (horizontal radius from
+    // the crown axis) x how LOW it sits in the crown. Curtains hang from the SIDES
+    // and the LOWER crown; the rounded top + central axis barely droop, so the
+    // apex/upper crown stay domed and clothed (no bare spike). 0 for other shapes.
+    const horiz = Math.hypot(
+      nodes[idx].pos.x - crownCenter.x,
+      nodes[idx].pos.z - crownCenter.z
+    );
+    const vy = (nodes[idx].pos.y - crownCenter.y) / Math.max(crownRadius, 1e-3);
+    const weepW =
+      silhouette === 'weeping'
+        ? Math.min(1, horiz / Math.max(crownRadius, 1e-3)) *
+          Math.max(0, Math.min(1, 0.62 - 0.6 * vy))
+        : 0;
+
     for (let i = 0; i < leavesPerTwig; i++) {
       const t = (i + 0.5) / leavesPerTwig; // 0..1 outward through the spray
       const phi = i * GOLDEN;
@@ -694,22 +762,41 @@ function buildLeafGeometry(
       v.copy(outward).cross(u).normalize();
 
       // card centre = node + in-plane offset + push outward along the twig.
+      // Weeping pushes out LESS (strands hang ~vertically); conical also pushes
+      // out less so cards stay near the leader and overlap to hide the trunk.
+      const outPush =
+        silhouette === 'weeping' || silhouette === 'conical'
+          ? leafSize * (0.1 + 0.3 * t)
+          : leafSize * (0.2 + 0.5 * t);
       center.copy(nodes[idx].pos);
       center
         .addScaledVector(u, Math.cos(phi) * r)
         .addScaledVector(v, Math.sin(phi) * r)
-        .addScaledVector(outward, leafSize * (0.2 + 0.5 * t));
+        .addScaledVector(outward, outPush);
 
       // card normal stays OUTWARD from crown centre (CRITICAL for AO/SSS volume).
       cardN.copy(center).sub(crownCenter);
       if (cardN.lengthSq() < 1e-6) cardN.copy(outward);
       cardN.normalize();
       if (silhouette === 'weeping') {
-        // Willow weep: drape the card DOWNWARD into a hanging strand (further out
-        // through the spray = lower), AFTER the normal is fixed so AO/SSS still
-        // read from the crown volume. The old `cardN.y -= 0.5` tilted normals
-        // down and inverted the canopy shading — drop the position, not the normal.
-        center.y -= leafSize * (0.6 + 1.9 * t);
+        // Willow weep: drape the card DOWNWARD into a hanging strand, AFTER the
+        // normal is fixed so AO/SSS still read from the crown volume (the old
+        // `cardN.y -= 0.5` tilted normals down and inverted the canopy shading —
+        // drop the POSITION, not the normal). weepW already domes the top, so
+        // side/lower twigs cascade while the apex + upper crown stay clothed.
+        center.y -= leafSize * (0.2 + 3.4 * weepW) * (0.35 + 0.95 * t);
+      } else if (silhouette === 'conical') {
+        // Face cards mostly HORIZONTAL (radial from the trunk axis) so foliage
+        // covers the near-vertical leader + branches from any side view. A card
+        // facing UP (the default for high on-axis nodes) reads edge-on and leaves
+        // the stem showing — the conifer's persistent bare-top/shelf artifact.
+        cardN.set(
+          center.x - crownCenter.x,
+          (center.y - crownCenter.y) * 0.2,
+          center.z - crownCenter.z
+        );
+        if (cardN.lengthSq() < 1e-6) cardN.set(1, 0, 0);
+        cardN.normalize();
       } else if (silhouette === 'umbrella') {
         // Tilt the leaf normals UP so the wide canopy is lit/domed from above
         // instead of shading like undersides (the "upside-down canopy").
@@ -723,7 +810,13 @@ function buildLeafGeometry(
       u.copy(helper).cross(cardN).normalize();
       v.copy(cardN).cross(u).normalize();
 
-      const hs = leafSize * (0.42 + 0.3 * rng()); // smaller cards, denser crown
+      // Weeping/conical use slightly larger cards so foliage occludes the thin
+      // branches (weeping's dome + curtains, conical's leader) and read solid.
+      const hs =
+        leafSize *
+        (silhouette === 'weeping' || silhouette === 'conical'
+          ? 0.55 + 0.32 * rng()
+          : 0.42 + 0.3 * rng());
       const leafRand = rng();
       const canopyY = Math.min(1, baseCanopyY + (t - 0.5) * 0.25);
 
@@ -744,7 +837,6 @@ function buildLeafGeometry(
         );
       }
     }
-    placed++;
   }
 
   const leaf = new THREE.BufferGeometry();
