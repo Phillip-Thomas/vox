@@ -131,10 +131,13 @@ export function selectLeafCandidates(
     if (silhouette === 'frond') {
       // Inner rib + trunk are order 0 (bare); outer rib is order 1 (foliage).
       ok = node.order >= 1;
-    } else if (silhouette === 'weeping' || silhouette === 'wispy') {
+    } else if (silhouette === 'wispy') {
       // Outer droops only: a real branch (not trunk) AND a tip or far-out node.
       ok = node.order >= 1 && (isTip || node.dist >= maxDist * 0.65);
     } else {
+      // round / conical / umbrella / weeping: foliage on tips + outer twigs so
+      // the crown is fully ENVELOPED (no bare spiking top). For weeping the
+      // climbing crown is clothed here and the droop lives in the leaf cards.
       ok = isTip || node.order >= maxOrder - 1;
     }
     if (ok) candidates.push(i);
@@ -194,7 +197,12 @@ function lsFromParams(p: TreeGenParams): LSParams {
       // negative upLerp fanned sub-branches DOWNWARD -> drooping "upside-down" canopy.
       return { ...base, levels: 3, children: 3, angle: 0.6, upLerp: 0.05 };
     case 'weeping':
-      return { ...base, levels: 3, children: 3, angle: 0.65, upLerp: -0.1 };
+      // Branches CLIMB (positive upLerp) to build a rounded fountain crown — the
+      // willow "weep" comes from drooping outer tips + draping leaf cards, NOT
+      // from drooping whole branches (the old upLerp:-0.1 made bare boughs sag
+      // up/out while foliage bunched low -> upside-down canopy). Wider angle +
+      // slower falloff = long arching boughs that spread then cascade.
+      return { ...base, levels: 3, children: 3, angle: 0.74, upLerp: 0.05, lenFalloff: 0.8 };
     case 'wispy':
       return { ...base, levels: 4, children: 2, angle: 0.55, lenFalloff: 0.78 };
     case 'round':
@@ -391,10 +399,13 @@ function shapeNodes(nodes: GrowNode[], params: TreeGenParams): void {
       node.pos.set(base.x + sxz, base.y + ny, base.z + szx);
     }
 
-    if (weeping && frac > 0.6) {
-      // pull tip nodes downward (willow droop), smooth falloff.
-      const droopFrac = (frac - 0.6) / 0.4;
-      node.pos.y -= droopFrac * droopFrac * params.crownRadius * 1.4;
+    if (weeping && node.order >= 1 && frac > 0.55) {
+      // Fountain droop: curl only the OUTER BRANCH tips down (not the trunk,
+      // order 0) and gently — the canopy must stay seated ON the climbing crown,
+      // not be dragged below it. Cumulative along a chain (children droop more),
+      // so boughs arch over willow-style. Most of the weep is in the leaf cards.
+      const droopFrac = (frac - 0.55) / 0.45;
+      node.pos.y -= droopFrac * droopFrac * params.crownRadius * 0.55;
     }
   }
 }
@@ -660,10 +671,7 @@ function buildLeafGeometry(
     outward.copy(center).sub(crownCenter);
     if (outward.lengthSq() < 1e-6) outward.set(0, 1, 0);
     outward.normalize();
-    if (silhouette === 'weeping') {
-      outward.y -= 0.8; // droop the canopy normal downward
-      outward.normalize();
-    } else if (silhouette === 'umbrella') {
+    if (silhouette === 'umbrella') {
       outward.y += 0.6; // dome the wide canopy UP (was reading upside-down)
       outward.normalize();
     }
@@ -697,8 +705,11 @@ function buildLeafGeometry(
       if (cardN.lengthSq() < 1e-6) cardN.copy(outward);
       cardN.normalize();
       if (silhouette === 'weeping') {
-        cardN.y -= 0.5;
-        cardN.normalize();
+        // Willow weep: drape the card DOWNWARD into a hanging strand (further out
+        // through the spray = lower), AFTER the normal is fixed so AO/SSS still
+        // read from the crown volume. The old `cardN.y -= 0.5` tilted normals
+        // down and inverted the canopy shading — drop the position, not the normal.
+        center.y -= leafSize * (0.6 + 1.9 * t);
       } else if (silhouette === 'umbrella') {
         // Tilt the leaf normals UP so the wide canopy is lit/domed from above
         // instead of shading like undersides (the "upside-down canopy").
