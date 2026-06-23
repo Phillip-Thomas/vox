@@ -228,7 +228,7 @@ export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
     profile.silhouette === 'weeping'
       ? 1.7
       : profile.silhouette === 'conical'
-        ? 1.6
+        ? 1.85
         : 1;
   const maxLeafCards = Math.max(
     60,

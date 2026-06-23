@@ -205,15 +205,7 @@ function lsFromParams(p: TreeGenParams): LSParams {
       // over into a solid leafy top instead of a bare leader spiking out (the same
       // fix that cured weeping). Inclusive candidates + denser budget + larger
       // cards keep the cone solid with no trunk showing through.
-      return {
-        ...base,
-        levels: 4,
-        children: 2,
-        angle: 0.5,
-        upLerp: 0.2,
-        segs: 6,
-        leaderFrac: 0.72
-      };
+      return { ...base, levels: 4, children: 2, angle: 0.5, upLerp: 0.1, segs: 6 };
     case 'umbrella':
       // Broad dome (acacia-like). Uses the round tree's proven branching (moderate
       // angle + climbing upLerp) so foliage domes UP; the WIDER crownRadius (2.6,
@@ -793,6 +785,18 @@ function buildLeafGeometry(
         // drop the POSITION, not the normal). weepW already domes the top, so
         // side/lower twigs cascade while the apex + upper crown stay clothed.
         center.y -= leafSize * (0.2 + 3.4 * weepW) * (0.35 + 0.95 * t);
+      } else if (silhouette === 'conical') {
+        // Face cards mostly HORIZONTAL (radial from the trunk axis) so foliage
+        // covers the near-vertical leader + branches from any side view. A card
+        // facing UP (the default for high on-axis nodes) reads edge-on and leaves
+        // the stem showing — the conifer's persistent bare-top/shelf artifact.
+        cardN.set(
+          center.x - crownCenter.x,
+          (center.y - crownCenter.y) * 0.2,
+          center.z - crownCenter.z
+        );
+        if (cardN.lengthSq() < 1e-6) cardN.set(1, 0, 0);
+        cardN.normalize();
       } else if (silhouette === 'umbrella') {
         // Tilt the leaf normals UP so the wide canopy is lit/domed from above
         // instead of shading like undersides (the "upside-down canopy").
