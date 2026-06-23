@@ -66,7 +66,7 @@ import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../
 import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
 import { isBuildEnabled, getSelectedPiece } from '../game/systems/buildState';
 import { canAfford, placePiece, removePiece } from '../game/systems/structureSystem';
-import { resolveBuildTarget, type BuildHit } from '../utils/buildPlacement';
+import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
 import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
 import { treeFieldHandle } from './TreeField';
@@ -595,7 +595,14 @@ export default function EfficientPlayer({
       else playSfx('blocked');
     }
 
-    const target = hitInfo ? resolveBuildTarget(hitInfo, piece) : null;
+    let target = hitInfo ? resolveBuildTarget(hitInfo, piece) : null;
+    // Fallback: aiming across a foundation at eye height doesn't hit the thin floor
+    // panel, so find the cell the ray passes through (walls snap to the faced edge /
+    // a wall below = stacking; ceilings cap the cell).
+    if (!target || !target.valid) {
+      if (piece === 'wall') target = marchWallTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH) ?? target;
+      else if (piece === 'ceiling') target = marchCeilingTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH) ?? target;
+    }
     if (!target) {
       clearBuildGhost();
       if (place) playSfx('blocked');

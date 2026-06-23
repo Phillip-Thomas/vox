@@ -10,11 +10,11 @@
 // "up" = the cube-face normal at the cell (face interiors; edges are a later pass).
 
 import * as THREE from 'three';
-import { voxelCoordToWorld } from './cubeGravityConstants';
+import { VOXEL_SCALE, voxelCoordToWorld } from './cubeGravityConstants';
 import { dominantFaceForPosition, FACE_NORMALS } from './surfaceControls';
 import { voxelSystem } from './efficientVoxelSystem';
 import {
-  FACE_DIRS, faceIndexForNormal, hasFoundation, hasPanel, hasWallInCell
+  FACE_DIRS, faceIndexForNormal, getPieceAt, hasFoundation, hasPanel, hasWallInCell
 } from '../game/systems/structureSystem';
 import type { BuildPieceType } from '../game/data/buildPieces';
 
@@ -112,6 +112,48 @@ export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType): BuildT
     const cell = hit.cell;
     const valid = (hasFoundation(cell[0], cell[1], cell[2]) || hasWallInCell(cell[0], cell[1], cell[2])) && !hasPanel(cell[0], cell[1], cell[2], upIdx);
     return { cell, face: upIdx, valid };
+  }
+  return null;
+}
+
+// --- March fallbacks (find the cell the ray passes THROUGH) ------------------
+// Used when the crosshair isn't on a panel surface — e.g. aiming forward across a
+// foundation at eye height (the floor panel is below the ray). The wall snaps to
+// the vertical face you face; supported by a foundation in the cell OR a wall on
+// the same face one cell below (stacking, by induction back to a foundation).
+
+const _mp = new THREE.Vector3();
+const _tan = new THREE.Vector3();
+
+export function marchWallTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number): BuildTarget | null {
+  const step = VOXEL_SCALE * 0.25;
+  for (let t = 0.5; t <= reach; t += step) {
+    _mp.copy(dir).multiplyScalar(t).add(origin);
+    const cx = Math.round(_mp.x / VOXEL_SCALE), cy = Math.round(_mp.y / VOXEL_SCALE), cz = Math.round(_mp.z / VOXEL_SCALE);
+    if (voxelSystem.hasVoxel(cx, cy, cz)) continue; // inside terrain
+    const up = upAtCell([cx, cy, cz]);
+    const upIdx = faceIndexForNormal(up.x, up.y, up.z);
+    _tan.copy(dir).addScaledVector(up, -dir.dot(up)); // faced direction in the tangent plane
+    const face = nearestVerticalFace(_tan, upIdx);
+    if (face < 0 || hasPanel(cx, cy, cz, face)) continue;
+    const ux = Math.round(up.x), uy = Math.round(up.y), uz = Math.round(up.z);
+    const wallBelow = getPieceAt(cx - ux, cy - uy, cz - uz, face);
+    const supported = hasFoundation(cx, cy, cz) || (wallBelow?.type === 'wall');
+    if (supported) return { cell: [cx, cy, cz], face, valid: true };
+  }
+  return null;
+}
+
+export function marchCeilingTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number): BuildTarget | null {
+  const step = VOXEL_SCALE * 0.25;
+  for (let t = 0.5; t <= reach; t += step) {
+    _mp.copy(dir).multiplyScalar(t).add(origin);
+    const cx = Math.round(_mp.x / VOXEL_SCALE), cy = Math.round(_mp.y / VOXEL_SCALE), cz = Math.round(_mp.z / VOXEL_SCALE);
+    if (voxelSystem.hasVoxel(cx, cy, cz)) continue;
+    const up = upAtCell([cx, cy, cz]);
+    const upIdx = faceIndexForNormal(up.x, up.y, up.z);
+    if (hasPanel(cx, cy, cz, upIdx)) continue;
+    if (hasFoundation(cx, cy, cz) || hasWallInCell(cx, cy, cz)) return { cell: [cx, cy, cz], face: upIdx, valid: true };
   }
   return null;
 }
