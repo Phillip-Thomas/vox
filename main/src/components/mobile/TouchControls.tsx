@@ -108,6 +108,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
     color: '#cfe8ff', fontFamily: 'monospace', fontSize: 13, fontWeight: 'bold',
     touchAction: 'none', ...noSelect
   };
+  const bigBtnStyle: React.CSSProperties = { ...btnStyle, width: 72, height: 72, borderRadius: 36 };
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', touchAction: 'none' }}>
@@ -143,24 +144,29 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
         }} />
       </div>
 
-      {/* action buttons (bottom-right) */}
+      {/* action buttons (bottom-right). A 2-column grid so the cluster keeps a
+          fixed, narrow footprint (~150px) and never extends left into the
+          movement joystick on phone-width screens — the old single row of up to
+          4 buttons did. Primary thrust/jump lands in the bottom-right thumb spot. */}
       <div style={{
-        position: 'absolute', right: 24, bottom: 24,
-        display: 'flex', gap: 12, alignItems: 'flex-end', pointerEvents: 'auto'
+        position: 'absolute', right: 20, bottom: 20,
+        display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: 12,
+        justifyItems: 'center', alignItems: 'center', pointerEvents: 'auto'
       }}>
-        {controlMode === 'flight' && (
+        {controlMode === 'flight' ? (
           <>
             <button {...holdBtn(KEY_CODES.rollLeft)} style={btnStyle}>Q</button>
             <button {...holdBtn(KEY_CODES.rollRight)} style={btnStyle}>E</button>
+            <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
+            <button {...holdBtn(KEY_CODES.jump)} style={bigBtnStyle}>THR</button>
+          </>
+        ) : (
+          <>
+            <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
+            <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
+            <button {...holdBtn(KEY_CODES.jump)} style={{ ...bigBtnStyle, gridColumn: 2 }}>JMP</button>
           </>
         )}
-        {controlMode === 'fps' && (
-          <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
-        )}
-        <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
-        <button {...holdBtn(KEY_CODES.jump)} style={{ ...btnStyle, width: 76, height: 76, borderRadius: 38 }}>
-          {controlMode === 'flight' ? 'THR' : 'JMP'}
-        </button>
       </div>
     </div>
   );
