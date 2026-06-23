@@ -430,7 +430,7 @@ const App: React.FC = () => {
           {flight.controlMode === 'fps' && <JetpackMeter />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
-          <InventoryPanel />
+          {flight.controlMode === 'fps' && <InventoryPanel />}
           <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
