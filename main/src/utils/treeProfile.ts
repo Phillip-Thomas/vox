@@ -236,8 +236,9 @@ export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
   );
   const leafSize = base.leafSize * profile.leafScale;
 
-  // wispy thins the crown further.
-  const wispyMul = profile.silhouette === 'wispy' ? 0.6 : 1;
+  // wispy thins the crown (airy/see-through) but not so far that branch tips read
+  // bare/dead — 0.72 keeps a light lacy canopy that still clothes the twig ends.
+  const wispyMul = profile.silhouette === 'wispy' ? 0.72 : 1;
 
   return {
     ...base,

@@ -21,7 +21,12 @@ import type { TreeProfile } from './treeProfile';
 // ACES NOTE: leaf base authored L<=0.40, flower L<=0.58, SSS weighted by canopy
 // depth so dense interiors don't over-brighten under Filmic tonemapping.
 
-const BARK_COLOR = new THREE.Color(0x6b4a2f).convertSRGBToLinear(); // warm brown
+// Warm brown bark. NOTE: ColorManagement is on (R3F default), so the Color
+// constructor already linearizes the sRGB hex — calling convertSRGBToLinear()
+// here too would linearize TWICE and crush the bark to ~near-black (the "pure
+// black trunk" bug). Bark has no emissive lift to hide it, so it must be a single
+// conversion. (The leaf colours keep their existing authored calibration.)
+const BARK_COLOR = new THREE.Color(0x6b4a2f);
 // Fallback leaf colours (overridden per-planet from the TreeProfile).
 const LEAF_BASE = new THREE.Color(0x4a7e26).convertSRGBToLinear();
 const LEAF_TIP = new THREE.Color(0x8fc24a).convertSRGBToLinear();
@@ -70,7 +75,11 @@ export interface TreeMaterialUniforms {
  */
 export function createBarkMaterial(): THREE.MeshStandardMaterial {
   const material = new THREE.MeshStandardMaterial({
-    color: 0x6b4a2f,
+    // WHITE base (like the leaf material): the procedural bark in the fragment
+    // shader IS the albedo (diffuseColor.rgb *= bark, where bark = uBarkColor x
+    // grain). A brown base here would multiply the brown twice -> a near-black
+    // trunk. White keeps per-instance instanceColor tinting working too.
+    color: 0xffffff,
     roughness: 0.95,
     metalness: 0.0
   });
