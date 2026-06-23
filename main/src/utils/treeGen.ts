@@ -133,8 +133,10 @@ export function selectLeafCandidates(
       // Inner rib + trunk are order 0 (bare); outer rib is order 1 (foliage).
       ok = node.order >= 1;
     } else if (silhouette === 'wispy') {
-      // Outer droops only: a real branch (not trunk) AND a tip or far-out node.
-      ok = node.order >= 1 && (isTip || node.dist >= maxDist * 0.65);
+      // Light outer foliage: real branches (not the trunk), clothing the outer
+      // half so fine twig-ends carry airy leaf clouds without burying the open
+      // branch structure that gives wispy its see-through character.
+      ok = node.order >= 1 && (isTip || node.dist >= maxDist * 0.5);
     } else if (silhouette === 'conical') {
       // A cone must be SOLID: clothe EVERY branch node (order>=1) AND the central
       // leader above the clear trunk (node.pos.y >= 30% of height) so the spire is
@@ -230,7 +232,19 @@ function lsFromParams(p: TreeGenParams): LSParams {
         leaderFrac: 0.6
       };
     case 'wispy':
-      return { ...base, levels: 4, children: 2, angle: 0.55, lenFalloff: 0.78 };
+      // Airy, taller habit (birch-like): enough children to keep fine twigs clothed
+      // (no bare boughs) but a low canopy density (treeProfile wispyMul) keeps the
+      // crown light and lacy; a leaderFrac cutoff domes the top so no bare leader
+      // spikes up. Taller proportion distinguishes it from the compact round crown.
+      return {
+        ...base,
+        levels: 4,
+        children: 3,
+        angle: 0.62,
+        upLerp: 0.04,
+        lenFalloff: 0.8,
+        leaderFrac: 0.72
+      };
     case 'round':
     default:
       return {
@@ -373,10 +387,11 @@ function growFrondSkeleton(params: TreeGenParams, rng: () => number): GrowNode[]
       // arc out then droop down (gravity on the frond tip).
       const out = ribLen * t;
       const droop = ribLen * t * t * 0.7;
-      // Inner rib stays BARE (order 0, like the trunk); only the outer ~half of
-      // the frond carries foliage (order 1) so leaves cluster toward the frond
-      // ends instead of all along the stem. (buildLeafGeometry leafs order>=1.)
-      const ribOrder = r >= Math.ceil(ribSteps * 0.55) ? 1 : 0;
+      // Only a short base petiole stays BARE (order 0, like the trunk); the rest
+      // of the rib carries foliage (order 1) so fronds read leafy along most of
+      // their length (palm fronds are leafy nearly to the base) instead of showing
+      // a long bare rachis arcing over the crown. (buildLeafGeometry leafs order>=1.)
+      const ribOrder = r >= Math.ceil(ribSteps * 0.35) ? 1 : 0;
       nodes.push({
         pos: new THREE.Vector3(dirX * out, crownY + 0.2 - droop, dirZ * out),
         parent,
@@ -713,7 +728,17 @@ function buildLeafGeometry(
   } else {
     const tips = candidates.filter(i => childCount[i] === 0);
     const interior = candidates.filter(i => childCount[i] !== 0);
-    const tipPick = strideSample(tips, Math.min(tips.length, maxNodes));
+    // ALWAYS clothe the highest tips. Plain stride sampling can skip the single
+    // topmost tip, leaving a bare twig/leader poking above the crown (the most
+    // common residual defect across silhouettes). Force-include the top tips by
+    // height, then stride-sample the rest for even coverage.
+    const tipBudget = Math.min(tips.length, maxNodes);
+    const topCount = Math.min(tipBudget, Math.max(3, Math.round(tipBudget * 0.18)));
+    const byHeight = tips.slice().sort((a, b) => nodes[b].pos.y - nodes[a].pos.y);
+    const tipSet = new Set(byHeight.slice(0, topCount));
+    const rest = tips.filter(i => !tipSet.has(i));
+    for (const i of strideSample(rest, tipBudget - tipSet.size)) tipSet.add(i);
+    const tipPick = [...tipSet];
     leafNodes = tipPick.concat(strideSample(interior, maxNodes - tipPick.length));
   }
 
