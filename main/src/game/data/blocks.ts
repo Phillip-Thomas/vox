@@ -33,6 +33,8 @@ export interface BlockDefinition {
   toolTier: number;
   /** Default resources yielded on harvest (drop tables can refine later). */
   drops: ResourceId[];
+  /** Chance-based extra drops rolled independently of the guaranteed `drops`. */
+  bonusDrops?: Array<{ id: ResourceId; chance: number; min: number; max: number }>;
   tags: BlockTag[];
 }
 
@@ -41,7 +43,10 @@ export const BLOCKS: Record<BlockId, BlockDefinition> = {
     id: 'stone', name: 'Stone', renderMaterial: MaterialType.STONE,
     // toolTier 1: the Faulty Maw (tier 0) can't cut stone — you need a Stone Pick
     // or the Repaired Maw. Soft blocks (dirt/sand/grass/wood) stay tier 0.
-    hardness: 1.5, toolTier: 1, drops: ['stone'], tags: ['rock']
+    hardness: 1.5, toolTier: 1, drops: ['stone'],
+    // ~35% of the time a broken stone also yields a flint nodule.
+    bonusDrops: [{ id: 'flint', chance: 0.35, min: 1, max: 1 }],
+    tags: ['rock']
   },
   dirt: {
     id: 'dirt', name: 'Dirt', renderMaterial: MaterialType.DIRT,

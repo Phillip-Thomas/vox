@@ -17,6 +17,7 @@ import type { ArchetypeId } from './planetArchetypes.ts';
 
 export type ResourceId =
   | 'stone'          // tier 0 — ubiquitous building basic
+  | 'flint'          // tier 1 — knappable stone byproduct (primitive tools/fire)
   | 'silica'         // tier 1 — glass/electronics base
   | 'copper_ore'     // tier 1 — early metal
   | 'iron_trace'     // tier 1 — structural metal
@@ -67,6 +68,13 @@ export const RESOURCES: Record<ResourceId, ResourceDefinition> = {
     id: 'stone', name: 'Stone', tier: 0, category: 'mineral',
     baseFrequency: 1.0, depthBands: ['surface', 'shallow', 'mid', 'deep'],
     clusterSize: 1, toolTier: 0, yield: [1, 2], scanLevel: 0
+  },
+  flint: {
+    id: 'flint', name: 'Flint', tier: 1, category: 'mineral',
+    // Not vein-generated (baseFrequency 0) — it only appears as a chance byproduct
+    // of breaking stone (see blocks.ts bonusDrops). toolTier 1 = needs a Pickaxe.
+    baseFrequency: 0, depthBands: ['surface', 'shallow', 'mid', 'deep'],
+    clusterSize: 1, toolTier: 1, yield: [1, 1], scanLevel: 0
   },
   silica: {
     id: 'silica', name: 'Silica', tier: 1, category: 'mineral',

@@ -6,6 +6,7 @@ import EfficientPlayer, { PlayerDebugState } from './EfficientPlayer';
 import GrassField from './GrassField';
 import TreeField from './TreeField';
 import LooseStoneField from './LooseStoneField';
+import { PlayerTorch, Campfires } from './Lights';
 import WaterBlocks from './WaterBlocks.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
 import MenuCamera from './MenuCamera.tsx';
@@ -158,6 +159,8 @@ export default function EfficientScene({
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <TreeField planetSize={planetSize} terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <LooseStoneField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <PlayerTorch playerPosition={playerPosition} />
+      <Campfires terrainSeed={terrainSeed} />
       <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} />
     </Physics>
   );

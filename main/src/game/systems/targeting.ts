@@ -1,6 +1,7 @@
-// Targeting readout: the voxel the player is currently looking at (set by a
-// cheap voxel ray-march in EfficientPlayer, read by the HUD). Module-singleton so
-// no per-frame React state churn.
+// Targeting readout: what the player is currently looking at (set by EfficientPlayer
+// each frame, read by the HUD). Module-singleton so no per-frame React churn. Covers
+// voxels AND the non-voxel harvestables (trees, loose stones) so all three get a
+// crosshair label.
 
 import type { MaterialType } from '../../types/materials.ts';
 import { materialToLegacyBlock } from '../adapters.ts';
@@ -8,25 +9,42 @@ import type { BlockId } from '../data/blocks.ts';
 import type { ResourceDeposit } from '../generation/resourceDeposits.ts';
 
 export interface LookedAtVoxel {
+  kind: 'voxel';
   material: MaterialType;
   blockId: BlockId;
   deposit: ResourceDeposit | null;
 }
 
-let lookedAt: LookedAtVoxel | null = null;
+export type LookedAt =
+  | LookedAtVoxel
+  | { kind: 'tree' }
+  | { kind: 'stone' };
+
+let lookedAt: LookedAt | null = null;
+
+export function setLookedAt(value: LookedAt | null): void {
+  lookedAt = value;
+}
+
+export function getLookedAt(): LookedAt | null {
+  return lookedAt;
+}
+
+// --- Back-compat voxel helpers ----------------------------------------------
+export function setLookedAtVoxel(voxel: Omit<LookedAtVoxel, 'kind'> | null): void {
+  lookedAt = voxel ? { kind: 'voxel', ...voxel } : null;
+}
 
 export function setLookedAtMaterial(material: MaterialType | null): void {
-  lookedAt = material ? { material, blockId: materialToLegacyBlock(material), deposit: null } : null;
-}
-
-export function setLookedAtVoxel(voxel: LookedAtVoxel | null): void {
-  lookedAt = voxel;
-}
-
-export function getLookedAtMaterial(): MaterialType | null {
-  return lookedAt?.material ?? null;
+  lookedAt = material
+    ? { kind: 'voxel', material, blockId: materialToLegacyBlock(material), deposit: null }
+    : null;
 }
 
 export function getLookedAtVoxel(): LookedAtVoxel | null {
-  return lookedAt;
+  return lookedAt?.kind === 'voxel' ? lookedAt : null;
+}
+
+export function getLookedAtMaterial(): MaterialType | null {
+  return lookedAt?.kind === 'voxel' ? lookedAt.material : null;
 }

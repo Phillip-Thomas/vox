@@ -59,6 +59,14 @@ export const RECIPES: Record<RecipeId, Recipe> = {
   stone_pickaxe: recipe('stone_pickaxe', 'hand', 'primitive', [
     { id: 'wood', qty: 2 }, { id: 'biofiber', qty: 1 }, { id: 'stone', qty: 2 }
   ]),
+  // Light sources. Torch = carried (small light). Campfire = placed where you
+  // stand (bigger, stationary). Both struck from flint + biofuel + wood.
+  torch: recipe('torch', 'hand', 'primitive', [
+    { id: 'flint', qty: 1 }, { id: 'biofuel', qty: 1 }, { id: 'wood', qty: 1 }
+  ]),
+  campfire: recipe('campfire', 'hand', 'primitive', [
+    { id: 'flint', qty: 2 }, { id: 'biofuel', qty: 1 }, { id: 'wood', qty: 3 }
+  ]),
 
   // Refined materials (Smelter) ----------------------------------------------
   refined_alloy: recipe('refined_alloy', 'smelter', 'emergent', [

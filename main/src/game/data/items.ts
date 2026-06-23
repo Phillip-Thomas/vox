@@ -31,6 +31,7 @@ export type ItemKind =
   | 'suit'        // the Carapace line — hazard protection
   | 'module'      // ship/scanner/jetpack upgrade modules
   | 'consumable'  // one-shot items (charge cells, repair kits) — future
+  | 'light'       // light sources (carried torch, placed campfire)
   | 'placeable';  // crafting stations / structures — future (needs StationId)
 
 /** Ids for items NOT in the terrain RESOURCES registry — crafted goods AND
@@ -40,6 +41,8 @@ export type ItemKind =
 export type CraftedItemId =
   // primitive — the crash-landing starter, its fuel, foraged wood, and stone tools
   | 'faulty_maw' | 'biofuel' | 'wood' | 'stone_hatchet' | 'stone_pickaxe'
+  // primitive light sources
+  | 'torch' | 'campfire'
   // refined materials
   | 'refined_alloy' | 'silica_pane' | 'biocomposite'
   | 'cryo_cell' | 'thermal_ceramic' | 'charge_cell' | 'void_core'
@@ -146,6 +149,14 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
     id: 'stone_pickaxe', name: 'Stone Pickaxe', kind: 'tool', tier: 1, stackable: false,
     toolTier: 1, harvestSpeed: { stone: 0.5, soft: 0.8, wood: 0.5 },
     description: 'A heavy stone head for breaking rock. Slow, but the only way to mine stone and ore before the Maw is repaired.'
+  },
+  torch: {
+    id: 'torch', name: 'Torch', kind: 'light', tier: 0, stackable: true,
+    description: 'A resin-soaked brand. Carried with you — a small pool of warm light in the dark.'
+  },
+  campfire: {
+    id: 'campfire', name: 'Campfire', kind: 'light', tier: 0, stackable: true,
+    description: 'A stacked fire ring. Placed where you stand and stays put, casting a bright, wide glow.'
   },
   // Refined materials --------------------------------------------------------
   refined_alloy: {

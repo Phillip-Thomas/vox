@@ -4,7 +4,9 @@ import { getItem } from '../../game/data/items.ts';
 import { getAccessibleStations, getStation, type StationId } from '../../game/data/stations.ts';
 import { recipesForStation, type Recipe } from '../../game/data/recipes.ts';
 import { canCraft, craft, type CraftContext } from '../../game/systems/craftingSystem.ts';
-import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
+import { getItemCount, removeItem, subscribeInventory } from '../../game/systems/inventorySystem.ts';
+import { placeCampfire } from '../../game/systems/campfires.ts';
+import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
 
 interface CraftingPanelProps {
   open: boolean;
@@ -113,7 +115,17 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext }> = ({ recipe, ct
         </div>
       </div>
       <button
-        onClick={() => { if (affordable) craft(recipe, ctx); }}
+        onClick={() => {
+          if (!affordable) return;
+          const res = craft(recipe, ctx);
+          // A campfire is placed where you stand, not stockpiled — drop it to the
+          // player's feet and consume the just-crafted item.
+          if (res.ok && recipe.id === 'campfire') {
+            const feet = getPlayerWorldPosition().addScaledVector(getPlayerUp(), -1.1);
+            placeCampfire(feet, getPlayerUp());
+            removeItem('campfire', 1);
+          }
+        }}
         disabled={!affordable}
         style={{
           flexShrink: 0,

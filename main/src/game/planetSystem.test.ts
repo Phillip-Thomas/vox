@@ -166,7 +166,9 @@ describe('distribution / progression guarantees', () => {
   });
 
   it('each tier-1 resource is reachable on a healthy fraction of planets', () => {
-    const tier1: ResourceId[] = ALL_RESOURCE_IDS.filter(r => RESOURCES[r].tier === 1);
+    // Only vein-distributed resources (baseFrequency > 0). Some tier-1 resources
+    // are byproducts, not veins — e.g. flint only drops from broken stone.
+    const tier1: ResourceId[] = ALL_RESOURCE_IDS.filter(r => RESOURCES[r].tier === 1 && RESOURCES[r].baseFrequency > 0);
     for (const r of tier1) {
       const frac = profiles.filter(p => (p.resourceBiases[r] ?? 0) > 0).length / profiles.length;
       expect(frac, `tier1 ${r} too rare (${frac})`).toBeGreaterThan(0.4);

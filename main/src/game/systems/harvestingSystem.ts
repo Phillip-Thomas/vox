@@ -85,6 +85,15 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
     drops.push({ id, qty });
   }
 
+  // Chance-based extras (e.g. flint from stone), rolled independently.
+  for (const bonus of BLOCKS[input.blockId].bonusDrops ?? []) {
+    if (Math.random() >= bonus.chance) continue;
+    const qty = bonus.min + Math.floor(Math.random() * (bonus.max - bonus.min + 1));
+    if (qty <= 0) continue;
+    if (input.bank !== false) addResource(bonus.id, qty);
+    drops.push({ id: bonus.id, qty });
+  }
+
   return {
     success: true,
     drops,

@@ -40,7 +40,7 @@ import {
 } from '../utils/surfaceControls';
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
-import { setPlayerUp } from '../state/playerFrame';
+import { setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -63,8 +63,10 @@ import { ensureStarterLoadout, getEquippedToolTier, selectTool, toolSpeedFor } f
 import { clearMiningProgress, setMiningProgress } from '../game/systems/miningProgress';
 import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
 import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
+import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
 import { treeFieldHandle } from './TreeField';
-import { setLookedAtVoxel, type LookedAtVoxel } from '../game/systems/targeting';
+import { looseStoneHandle } from './LooseStoneField';
+import { setLookedAt, type LookedAt } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 
 const raycaster = new THREE.Raycaster();
@@ -72,6 +74,8 @@ const mouse = new THREE.Vector2(0, 0);
 const BLOCK_REACH = 8;
 // Cadence of the "chipping" mine sound while holding to harvest (ms).
 const MINE_TICK_MS = 260;
+// Loose stones are picked up, not mined — a short, tool-independent hold.
+const STONE_PICKUP_MS = 280;
 // Speed multiplier when mining with an unfuelled charge-tool (bare-handed rate).
 const BARE_HAND_MUL = 0.35;
 // Continuous smooth-gravity field is now the DEFAULT (no faces/transitions/
@@ -385,44 +389,59 @@ export default function EfficientPlayer({
   // exists. Idempotent — only grants a starting Maw if no tool is owned yet.
   useEffect(() => { ensureStarterLoadout(); }, []);
 
-  // Raycast the crosshair against BOTH the voxel terrain and the (near) tree
-  // meshes, returning whichever is closer. Trees aren't voxels — a hit on the
-  // trunk/leaf instanced mesh maps back to its grass-voxel coord via the
-  // TreeField slot→voxel handle.
-  const pickHarvestTarget = useCallback((camera: THREE.Camera | null) => {
+  // Raycast the crosshair against the voxel terrain, the (near) tree meshes, and
+  // the loose-stone mesh, returning whichever is CLOSEST. Trees/stones aren't
+  // voxels — a hit on their instanced mesh maps back to its voxel coord via the
+  // field's slot→voxel handle.
+  type HarvestTarget =
+    | { kind: 'voxel'; coord: { x: number; y: number; z: number }; voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>> }
+    | { kind: 'tree'; coord: { x: number; y: number; z: number } }
+    | { kind: 'stone'; coord: { x: number; y: number; z: number } };
+  const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {
     if (!camera) return null;
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
 
+    let best: HarvestTarget | null = null;
+    let bestDist = Infinity;
+
     // Terrain voxel.
-    let voxelTarget: { coord: { x: number; y: number; z: number }; voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>> } | null = null;
-    let voxelDist = Infinity;
     const mesh = efficientPlanetMesh.current;
     if (mesh) {
       const hit = raycaster.intersectObject(mesh, false).find(i => i.instanceId !== undefined);
       if (hit && hit.instanceId !== undefined) {
         const coord = voxelSystem.getCoordForSlot(hit.instanceId);
         const voxel = coord ? voxelSystem.getVoxel(coord.x, coord.y, coord.z) : null;
-        if (coord && voxel) { voxelTarget = { coord, voxel }; voxelDist = hit.distance; }
+        if (coord && voxel && hit.distance < bestDist) { best = { kind: 'voxel', coord, voxel }; bestDist = hit.distance; }
       }
     }
 
-    // Tree (nearest trunk/leaf instance that maps to a live tree-voxel).
-    let treeCoord: { x: number; y: number; z: number } | null = null;
-    let treeDist = Infinity;
+    // Trees (nearest trunk/leaf instance mapping to a live tree-voxel).
     const treeMeshes = [treeFieldHandle.trunk, treeFieldHandle.leaf].filter(Boolean) as THREE.InstancedMesh[];
     if (treeMeshes.length > 0) {
       for (const h of raycaster.intersectObjects(treeMeshes, false)) {
         if (h.instanceId === undefined) continue;
         const v = treeFieldHandle.slotVoxel[h.instanceId];
-        if (v && !isTreeHarvested(v[0], v[1], v[2])) { treeCoord = { x: v[0], y: v[1], z: v[2] }; treeDist = h.distance; break; }
+        if (v && !isTreeHarvested(v[0], v[1], v[2])) {
+          if (h.distance < bestDist) { best = { kind: 'tree', coord: { x: v[0], y: v[1], z: v[2] } }; bestDist = h.distance; }
+          break;
+        }
       }
     }
 
-    if (treeCoord && treeDist <= voxelDist) return { kind: 'tree' as const, coord: treeCoord };
-    if (voxelTarget) return { kind: 'voxel' as const, coord: voxelTarget.coord, voxel: voxelTarget.voxel };
-    if (treeCoord) return { kind: 'tree' as const, coord: treeCoord };
-    return null;
+    // Loose stones.
+    if (looseStoneHandle.mesh) {
+      for (const h of raycaster.intersectObject(looseStoneHandle.mesh, false)) {
+        if (h.instanceId === undefined) continue;
+        const v = looseStoneHandle.slotVoxel[h.instanceId];
+        if (v && !isStoneCollected(v[0], v[1], v[2])) {
+          if (h.distance < bestDist) { best = { kind: 'stone', coord: { x: v[0], y: v[1], z: v[2] } }; bestDist = h.distance; }
+          break;
+        }
+      }
+    }
+
+    return best;
   }, []);
 
   // Actually break + harvest a voxel once mining has charged to completion.
@@ -476,23 +495,29 @@ export default function EfficientPlayer({
     // Maw, its charge: empty + no Biofuel → slow bare-handed rate (auto-refuels if
     // a Biofuel is held). A non-charge tool (Hatchet/Pickaxe) never drains charge.
     if (ms.key !== key) {
-      const isTree = target.kind === 'tree';
-      const klass = isTree ? 'wood' : harvestClassForBlock(target.voxel.blockId);
-      const requiredTier = isTree
-        ? TREE_TOOL_TIER
-        : requiredToolTierForVoxel(target.voxel.blockId, target.voxel.deposit);
-      const tool = selectTool(klass, requiredTier);
-      const usesCharge = tool?.usesCharge ?? false;
-      if (usesCharge && !isMawPowered()) refuelFromInventory();
-      const powered = !usesCharge || isMawPowered();
-      const tier = tool?.toolTier ?? 0;
-      const speedMul = toolSpeedFor(tool, klass) * (powered ? 1 : BARE_HAND_MUL);
+      if (target.kind === 'stone') {
+        // Loose stones are picked up by hand — quick, tool/charge independent.
+        ms.usesCharge = false;
+        ms.duration = STONE_PICKUP_MS;
+      } else {
+        const isTree = target.kind === 'tree';
+        const klass = isTree ? 'wood' : harvestClassForBlock(target.voxel.blockId);
+        const requiredTier = isTree
+          ? TREE_TOOL_TIER
+          : requiredToolTierForVoxel(target.voxel.blockId, target.voxel.deposit);
+        const tool = selectTool(klass, requiredTier);
+        const usesCharge = tool?.usesCharge ?? false;
+        if (usesCharge && !isMawPowered()) refuelFromInventory();
+        const powered = !usesCharge || isMawPowered();
+        const tier = tool?.toolTier ?? 0;
+        const speedMul = toolSpeedFor(tool, klass) * (powered ? 1 : BARE_HAND_MUL);
+        ms.usesCharge = usesCharge;
+        ms.duration = isTree
+          ? computeMineDuration(TREE_HARDNESS, TREE_TOOL_TIER, tier, speedMul)
+          : mineDurationMs({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: tier }, { speedMul });
+      }
       ms.key = key;
       ms.elapsed = 0;
-      ms.usesCharge = usesCharge;
-      ms.duration = isTree
-        ? computeMineDuration(TREE_HARDNESS, TREE_TOOL_TIER, tier, speedMul)
-        : mineDurationMs({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: tier }, { speedMul });
       ms.tickAt = 0;
       playSfx('mine');
     }
@@ -503,6 +528,9 @@ export default function EfficientPlayer({
       if (ms.usesCharge && isMawPowered()) consumeMawCharge(CHARGE_PER_BREAK);
       if (target.kind === 'tree') {
         harvestTree(coord.x, coord.y, coord.z);
+        playSfx('mine');
+      } else if (target.kind === 'stone') {
+        collectStone(coord.x, coord.y, coord.z);
         playSfx('mine');
       } else {
         commitMine(coord, target.voxel, getEquippedToolTier());
@@ -519,34 +547,57 @@ export default function EfficientPlayer({
     setMiningProgress(true, Math.min(1, ms.elapsed / ms.duration), false);
   }, [pickHarvestTarget, commitMine]);
 
-  // Cheap ray-march to find the voxel under the crosshair, for the "looking at"
-  // readout. Marches in voxel space (round(world/VOXEL_SCALE)) over the reach —
-  // O(reach) Map lookups instead of testing every instance.
+  // "Looking at" readout for the crosshair label. The terrain voxel uses a CHEAP
+  // ray-march (round(world/VOXEL_SCALE) Map lookups, not a 125k-instance raycast);
+  // trees + loose stones are picked up with a cheap raycast of their (few, near)
+  // instances. Whichever is closest wins, so the label matches what you'd harvest.
   const updateLookedAt = useCallback((camera: THREE.Camera | null) => {
     if (!camera || !(controlsActive.current || isTouchActive())) {
-      setLookedAtVoxel(null);
+      setLookedAt(null);
       return;
     }
     camera.getWorldPosition(_lookOrigin);
     camera.getWorldDirection(_lookDir);
-    let found: LookedAtVoxel | null = null;
+
+    let found: LookedAt | null = null;
+    let foundDist = Infinity;
     for (let t = 1.0; t <= BLOCK_REACH; t += 0.45) {
       const vx = Math.round((_lookOrigin.x + _lookDir.x * t) / VOXEL_SCALE);
       const vy = Math.round((_lookOrigin.y + _lookDir.y * t) / VOXEL_SCALE);
       const vz = Math.round((_lookOrigin.z + _lookDir.z * t) / VOXEL_SCALE);
       if (voxelSystem.hasVoxel(vx, vy, vz)) {
         const voxel = voxelSystem.getVoxel(vx, vy, vz);
-        found = voxel
-          ? {
-              material: voxel.material as MaterialType,
-              blockId: voxel.blockId,
-              deposit: voxel.deposit
-            }
-          : null;
+        if (voxel) {
+          found = { kind: 'voxel', material: voxel.material as MaterialType, blockId: voxel.blockId, deposit: voxel.deposit };
+          foundDist = t;
+        }
         break;
       }
     }
-    setLookedAtVoxel(found);
+
+    raycaster.far = BLOCK_REACH;
+    raycaster.setFromCamera(mouse, camera);
+    const treeMeshes = [treeFieldHandle.trunk, treeFieldHandle.leaf].filter(Boolean) as THREE.InstancedMesh[];
+    for (const h of (treeMeshes.length ? raycaster.intersectObjects(treeMeshes, false) : [])) {
+      if (h.instanceId === undefined) continue;
+      const v = treeFieldHandle.slotVoxel[h.instanceId];
+      if (v && !isTreeHarvested(v[0], v[1], v[2])) {
+        if (h.distance < foundDist) { found = { kind: 'tree' }; foundDist = h.distance; }
+        break;
+      }
+    }
+    if (looseStoneHandle.mesh) {
+      for (const h of raycaster.intersectObject(looseStoneHandle.mesh, false)) {
+        if (h.instanceId === undefined) continue;
+        const v = looseStoneHandle.slotVoxel[h.instanceId];
+        if (v && !isStoneCollected(v[0], v[1], v[2])) {
+          if (h.distance < foundDist) { found = { kind: 'stone' }; foundDist = h.distance; }
+          break;
+        }
+      }
+    }
+
+    setLookedAt(found);
   }, []);
 
   useBeforePhysicsStep(() => {
@@ -710,6 +761,7 @@ export default function EfficientPlayer({
     updateVisualTransition();
     const position = vectorFromRapier(body.translation());
     onPositionChange?.(position);
+    setPlayerWorldPosition(position); // global for non-Canvas code (campfire placement)
     if (lastGroundedNotification.current !== lastGrounded.current) {
       const previous = lastGroundedNotification.current;
       lastGroundedNotification.current = lastGrounded.current;

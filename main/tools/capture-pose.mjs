@@ -26,7 +26,10 @@ const fx = vx + qw * tx + (qy * tz - qz * ty);
 const fy = vy + qw * ty + (qz * tx - qx * tz);
 const fz = vz + qw * tz + (qx * ty - qy * tx);
 const D = 7;
-const target = [pos[0] + fx * D, pos[1] + fy * D, pos[2] + fz * D];
+const targetArg = arg('target', '');
+const target = targetArg
+  ? targetArg.split(',').map(Number)
+  : [pos[0] + fx * D, pos[1] + fy * D, pos[2] + fz * D];
 
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch({ executablePath: EXE, headless: false, args: ['--ignore-gpu-blocklist', '--enable-gpu', '--use-angle=d3d11'] });

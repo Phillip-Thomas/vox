@@ -21,6 +21,7 @@ const KIND_ORDER: { kind: ItemKind; label: string }[] = [
   { kind: 'suit', label: 'Suits' },
   { kind: 'module', label: 'Modules' },
   { kind: 'consumable', label: 'Consumables' },
+  { kind: 'light', label: 'Lights' },
   { kind: 'placeable', label: 'Structures' }
 ];
 
