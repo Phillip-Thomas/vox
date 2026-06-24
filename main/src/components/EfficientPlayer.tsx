@@ -64,10 +64,11 @@ import { clearMiningProgress, setMiningProgress } from '../game/systems/miningPr
 import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
 import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
-import { isBuildEnabled, getSelectedPiece, getSelectedMaterial } from '../game/systems/buildState';
-import { canAfford, placePiece, placeDoorway, removePiece, hasPanel, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
-import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, type BuildHit } from '../utils/buildPlacement';
+import { isBuildEnabled, getSelectedPiece, getSelectedMaterial, getBuildRotation } from '../game/systems/buildState';
+import { canAfford, placePiece, placeDoorway, placeVolume, toggleDoor, removePiece, hasPanel, getPieceAt, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
+import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, volumeOrientFromForward, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
+import { BUILD_PIECES } from '../game/data/buildPieces';
 import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
 import { treeFieldHandle } from './TreeField';
 import { looseStoneHandle } from './LooseStoneField';
@@ -77,7 +78,21 @@ import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
+const _buildFwd = new THREE.Vector3();
 const BLOCK_REACH = 8;
+const LADDER_CLIMB_SPEED = 4; // m/s up (jump) / down (back) while against a ladder
+
+/** True if the player's cell carries a climbable (ladder) panel on any face. */
+function isOnLadder(pos: THREE.Vector3): boolean {
+  const cx = Math.round(pos.x / VOXEL_SCALE);
+  const cy = Math.round(pos.y / VOXEL_SCALE);
+  const cz = Math.round(pos.z / VOXEL_SCALE);
+  for (let f = 0; f < 6; f++) {
+    const p = getPieceAt(cx, cy, cz, f);
+    if (p && BUILD_PIECES[p.type].climb) return true;
+  }
+  return false;
+}
 // Cadence of the "chipping" mine sound while holding to harvest (ms).
 const MINE_TICK_MS = 260;
 // Loose stones are picked up, not mined — a short, tool-independent hold.
@@ -179,6 +194,7 @@ export default function EfficientPlayer({
   // Build mode uses EDGE presses (place once per press), not hold.
   const prevBuildKey = useRef(false);
   const prevDeconKey = useRef(false);
+  const prevInteractKey = useRef(false);
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
@@ -616,18 +632,43 @@ export default function EfficientPlayer({
       return;
     }
     const material = getSelectedMaterial();
+    const family = BUILD_PIECES[piece].family;
     // Doorways are 2-tall: the upper cell (one step along build-up) must also be free.
     const upIdx = faceIndexForNormal(up.x, up.y, up.z);
     const upDir = FACE_DIRS[upIdx];
     const upperFree = piece !== 'doorway'
       || !hasPanel(target.cell[0] + upDir[0], target.cell[1] + upDir[1], target.cell[2] + upDir[2], target.face);
+    // Volume pieces (stairs/roof) orient to where you're looking, snapped to 4 ways.
+    let orient = 0;
+    if (family === 'volume') {
+      camera.getWorldDirection(_buildFwd);
+      orient = (volumeOrientFromForward(upIdx, _buildFwd) + getBuildRotation()) % 4; // auto facing + R nudge
+    }
     const ok = target.valid && upperFree && canAfford(piece, material);
-    setBuildGhost(target.cell, target.face, piece, ok);
+    setBuildGhost(target.cell, target.face, piece, ok, upIdx, orient);
     if (place) {
-      const placed = piece === 'doorway'
-        ? (ok && placeDoorway(target.cell, target.face, upIdx, material))
-        : (ok && placePiece(target.cell, target.face, piece, material));
+      let placed = false;
+      if (ok) {
+        if (piece === 'doorway') placed = placeDoorway(target.cell, target.face, upIdx, material);
+        else if (family === 'volume') placed = placeVolume(target.cell, upIdx, orient, piece, material);
+        else placed = placePiece(target.cell, target.face, piece, material);
+      }
       playSfx(placed ? 'mine' : 'blocked');
+    }
+  }, []);
+
+  // Toggle the openable piece (door) under the crosshair — works in or out of build
+  // mode, so you can open/close doors while living in your shelter.
+  const tryToggleDoor = useCallback((camera: THREE.Camera | null) => {
+    const group = structureFieldHandle.group;
+    if (!camera || !group) return;
+    raycaster.far = BLOCK_REACH;
+    raycaster.setFromCamera(mouse, camera);
+    for (const h of raycaster.intersectObjects(group.children, false)) {
+      const p = (h.object.userData as { piece?: StructurePiece }).piece;
+      if (!p) continue;
+      if (BUILD_PIECES[p.type].openable) { if (toggleDoor(p.cell, p.face)) playSfx('mine'); }
+      return; // nearest only
     }
   }, []);
 
@@ -689,7 +730,7 @@ export default function EfficientPlayer({
     if (!body) return;
 
     const controls = get();
-    if (controls.reset) {
+    if (controls.reset && !isBuildEnabled()) { // R rotates the build piece while building
       setJetpackSfx(false);
       resetPlayer();
       return;
@@ -815,6 +856,13 @@ export default function EfficientPlayer({
     jetpackFuelDisplay = jetpackFuel.current / JETPACK_MAX_FUEL;
     setJetpackSfx(jetpackActive, Math.max(0.35, jetpackFuelDisplay));
 
+    // Ladder: cling + climb, overriding gravity, while in a cell with a ladder.
+    // Jump = up, back = down, neither = hold position.
+    if (isOnLadder(position)) {
+      const climb = controls.jump ? LADDER_CLIMB_SPEED : (controls.backward ? -LADDER_CLIMB_SPEED : 0);
+      nextVelocity.addScaledVector(activeUp, climb - nextVelocity.dot(activeUp));
+    }
+
     // (cooldown already decremented at the top of the step, before the resolver.)
     // Edge-walk is part of the DISCRETE system only; the smooth field never needs it.
     const transitionLocked = Boolean(rotationAnimation.current) || transitionCooldown.current > 0;
@@ -874,6 +922,11 @@ export default function EfficientPlayer({
       prevDeconKey.current = false;
       updateMining(harvestHeld, delta, cameraRef.current);
     }
+
+    // Door toggle (interact key, V) — independent of build mode.
+    const interactHeld = deleteActive && Boolean((controls as Record<string, boolean>).interact);
+    if (interactHeld && !prevInteractKey.current) tryToggleDoor(cameraRef.current);
+    prevInteractKey.current = interactHeld;
 
     // Update the "looking at" readout a few times/sec (cheap voxel march).
     if (frameCount.current % 4 === 0) {

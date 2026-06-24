@@ -39,7 +39,7 @@ import {
   normalizeCoordinatePart
 } from './utils/worldCoordinates.ts';
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
-import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled } from './game/systems/buildState.ts';
+import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled, cycleBuildRotation } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
 import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits, savePlayerPose } from './game/systems/persistence.ts';
 import { voxelSystem } from './utils/efficientVoxelSystem.ts';
@@ -195,9 +195,10 @@ const App: React.FC = () => {
       if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
       if (craftingOpenRef.current || paused) return;
       if (e.code === 'KeyB') toggleBuildMode();
+      else if (isBuildEnabled() && e.code === 'KeyR') cycleBuildRotation(); // R rotates while building (reset is suppressed in build mode)
       else if (isBuildEnabled() && e.code.startsWith('Digit')) {
         const n = Number(e.code.slice(5));
-        if (n >= 1) selectPieceByIndex(n - 1);
+        selectPieceByIndex(n === 0 ? 9 : n - 1); // 1..9 → 0..8, 0 → 10th piece
       }
     };
     window.addEventListener('keydown', onKey);
@@ -482,6 +483,7 @@ const App: React.FC = () => {
         { name: 'delete', keys: ['KeyE'] },
         { name: 'board', keys: ['KeyF'] },
         { name: 'deconstruct', keys: ['KeyX'] },
+        { name: 'interact', keys: ['KeyV'] },
       ]}
     >
       <AudioDirector terrainSeed={currentWorld.seed} />

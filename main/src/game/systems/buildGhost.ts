@@ -9,16 +9,20 @@ export interface BuildGhostState {
   face: number;
   type: BuildPieceType;
   valid: boolean; // can afford + valid target
+  up: number;     // volume pieces: build-up axis + yaw step for the ghost orientation
+  orient: number;
 }
 
-const state: BuildGhostState = { active: false, cell: [0, 0, 0], face: 0, type: 'foundation', valid: false };
+const state: BuildGhostState = { active: false, cell: [0, 0, 0], face: 0, type: 'foundation', valid: false, up: 2, orient: 0 };
 
-export function setBuildGhost(cell: [number, number, number], face: number, type: BuildPieceType, valid: boolean): void {
+export function setBuildGhost(cell: [number, number, number], face: number, type: BuildPieceType, valid: boolean, up = 2, orient = 0): void {
   state.active = true;
   state.cell = cell;
   state.face = face;
   state.type = type;
   state.valid = valid;
+  state.up = up;
+  state.orient = orient;
 }
 
 export function clearBuildGhost(): void {

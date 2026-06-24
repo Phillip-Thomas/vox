@@ -147,7 +147,7 @@ supersedes them.
 | Torch + campfire lighting | **BUILT** (intensities un-tuned) |
 | Crafting engine (`canCraft`/`craft`) + Fabricator UI (key C / ⚒) | **BUILT** |
 | Era store + `repairMaw()` | **BUILT** (repair not yet reachable in-game) |
-| **Shelter building** — build mode (B), snap ghost, place(E)/deconstruct(X); foundation/wall/ceiling + **doorway/window/gable** (Batch A pt1); MATERIAL-parameterized (wood now; thatch/stone = data); builds wrap around cube edges (per-face foundations + player-footing up) | **BUILT** (Batch A pt2 = stairs/sloped-roof volume class; pt3 = ladder/door interaction; then S3 enclosure, S4 integrity, S5 persistence) |
+| **Shelter building** — build mode (B), snap ghost, place(E)/deconstruct(X), select 1-9/0; foundation/wall/ceiling + doorway/window/gable + **stairs/sloped-roof (volume, oriented to facing) + ladder (climb) + door (toggle, V key)** — full **Batch A**; MATERIAL-parameterized (wood now; thatch/stone = data); builds wrap around cube edges (per-face foundations + player-footing up) | **BUILT** (Batch A complete; next: S3 enclosure flood-fill, S4 integrity, S5 home-base, S6 hazards) |
 | Emergent recipes (refined/components/Maw line/suits/modules) | **DEFINED**; craftable today via the all-access menu |
 | Devices as placeable objects + per-device crafting UI | **NOT BUILT** |
 | Era gating (personal menu = primitive only; Emergent behind devices) | **NOT BUILT** (menu is still the Phase-2 all-access fabricator) |

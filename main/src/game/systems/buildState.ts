@@ -10,6 +10,7 @@ import { ALL_BUILD_MATERIALS, type BuildMaterialId } from '../data/buildMaterial
 let enabled = false;
 let selected: BuildPieceType = 'foundation';
 let selectedMaterial: BuildMaterialId = 'wood';
+let rotation = 0; // 0..3 yaw nudge added on top of the auto facing (volume pieces)
 const listeners = new Set<() => void>();
 
 function emit() { listeners.forEach(l => l()); }
@@ -17,6 +18,13 @@ function emit() { listeners.forEach(l => l()); }
 export function isBuildEnabled(): boolean { return enabled; }
 export function getSelectedPiece(): BuildPieceType { return selected; }
 export function getSelectedMaterial(): BuildMaterialId { return selectedMaterial; }
+export function getBuildRotation(): number { return rotation; }
+
+/** Cycle the manual rotation nudge (R while building). Added to the auto facing. */
+export function cycleBuildRotation(): void {
+  rotation = (rotation + 1) % 4;
+  emit();
+}
 
 export function cycleSelectedMaterial(): void {
   const i = ALL_BUILD_MATERIALS.indexOf(selectedMaterial);

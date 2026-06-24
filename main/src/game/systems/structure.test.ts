@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  placePiece, placeDoorway, removePiece, hasFoundationInCell, hasFoundationOnFace, hasPanel, getPieces, resetStructures,
+  placePiece, placeDoorway, placeVolume, toggleDoor, removePiece, hasFoundationInCell, hasFoundationOnFace,
+  hasPanel, hasVolume, getVolumeAt, getPieceAt, getPieces, resetStructures,
   faceIndexForNormal, oppositeFace, setFreeBuild, canAfford
 } from './structureSystem.ts';
 import { pieceCost } from '../data/buildMaterials.ts';
@@ -69,6 +70,33 @@ describe('doorway (2 cells tall)', () => {
     expect(removePiece([0, 1, 0], 0)).toBe(true);
     expect(hasPanel(0, 0, 0, 0)).toBe(false);
     expect(hasPanel(0, 1, 0, 0)).toBe(false);
+  });
+});
+
+describe('volume pieces (stairs/roof) + door toggle', () => {
+  it('places an oriented volume piece in a cell and blocks a second in the same cell', () => {
+    setFreeBuild(true);
+    expect(placeVolume([0, 0, 0], 2, 1, 'stairs', 'wood')).toBe(true);
+    expect(hasVolume(0, 0, 0)).toBe(true);
+    const v = getVolumeAt(0, 0, 0);
+    expect(v?.type).toBe('stairs');
+    expect(v?.up).toBe(2);
+    expect(v?.orient).toBe(1);
+    expect(placeVolume([0, 0, 0], 2, 0, 'sloped_roof', 'wood')).toBe(false); // cell's volume slot taken
+    // a panel can still occupy the same cell's faces (volume slot is separate)
+    expect(placePiece([0, 0, 0], 0, 'wall', 'wood')).toBe(true);
+  });
+
+  it('a door toggles open/closed; non-openable pieces do not', () => {
+    setFreeBuild(true);
+    expect(placePiece([1, 0, 0], 0, 'door', 'wood')).toBe(true);
+    expect(getPieceAt(1, 0, 0, 0)?.open).toBeFalsy(); // closed by default
+    expect(toggleDoor([1, 0, 0], 0)).toBe(true);
+    expect(getPieceAt(1, 0, 0, 0)?.open).toBe(true);
+    expect(toggleDoor([1, 0, 0], 0)).toBe(true);
+    expect(getPieceAt(1, 0, 0, 0)?.open).toBe(false);
+    placePiece([2, 0, 0], 0, 'wall', 'wood');
+    expect(toggleDoor([2, 0, 0], 0)).toBe(false); // a wall isn't openable
   });
 });
 

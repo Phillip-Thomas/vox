@@ -18,7 +18,7 @@ import { VOXEL_SCALE, voxelCoordToWorld } from './cubeGravityConstants';
 import { voxelSystem } from './efficientVoxelSystem';
 import {
   FACE_DIRS, faceIndexForNormal, getPieceAt, hasFoundationInCell, hasFoundationOnFace,
-  hasPanel, hasWallInCell
+  hasPanel, hasVolume, hasWallInCell, VOLUME_FACE
 } from '../game/systems/structureSystem';
 import { BUILD_PIECES, type BuildPieceType } from '../game/data/buildPieces';
 
@@ -96,6 +96,36 @@ function tangentOffset(cell: [number, number, number], point: THREE.Vector3, upI
   return _off;
 }
 
+// --- Volume orientation (stairs/roof): shared by the renderer + placement -----
+// Local frame: up = +Y, the piece ascends/slopes along +Z. volumeQuat maps that into
+// the world for a given build-up axis + yaw step; volumeOrientFromForward picks the
+// yaw whose +Z best matches where the player looks.
+export function volumeQuat(upIdx: number, orient: number): THREE.Quaternion {
+  const u = FACE_DIRS[upIdx] ?? FACE_DIRS[2];
+  const up = new THREE.Vector3(u[0], u[1], u[2]);
+  const base = new THREE.Quaternion();
+  if (up.y > 0.999) base.identity();
+  else if (up.y < -0.999) base.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI);
+  else base.setFromUnitVectors(new THREE.Vector3(0, 1, 0), up);
+  return new THREE.Quaternion().setFromAxisAngle(up, (orient || 0) * Math.PI / 2).multiply(base);
+}
+
+export function volumeOrientFromForward(upIdx: number, forward: THREE.Vector3): number {
+  const u = FACE_DIRS[upIdx] ?? FACE_DIRS[2];
+  const up = new THREE.Vector3(u[0], u[1], u[2]);
+  const f = forward.clone().addScaledVector(up, -forward.dot(up));
+  if (f.lengthSq() < 1e-6) return 0;
+  f.normalize();
+  const z = new THREE.Vector3();
+  let best = 0, bestDot = -Infinity;
+  for (let o = 0; o < 4; o++) {
+    z.set(0, 0, 1).applyQuaternion(volumeQuat(upIdx, o));
+    const d = z.dot(f);
+    if (d > bestDot) { bestDot = d; best = o; }
+  }
+  return best;
+}
+
 export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType, up: THREE.Vector3): BuildTarget | null {
   const upIdx = faceIndexForNormal(up.x, up.y, up.z);
   const downIdx = upIdx ^ 1;
@@ -120,6 +150,24 @@ export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType, up: THR
       const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
       const valid = !voxelSystem.hasVoxel(cell[0], cell[1], cell[2]) && free(cell, downIdx);
       return { cell, face: downIdx, valid };
+    }
+    return null;
+  }
+
+  if (family === 'volume') {
+    // Stairs/roof place like a foundation: in the empty cell on top of the surface
+    // you point at (terrain top-face, a foundation, or another volume to stack).
+    const volFree = (c: [number, number, number]) =>
+      !voxelSystem.hasVoxel(c[0], c[1], c[2]) && !hasVolume(c[0], c[1], c[2]);
+    if (!hit.isPanel) {
+      if (hit.normalIdx !== upIdx) return null;
+      const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
+      return { cell, face: VOLUME_FACE, valid: volFree(cell) };
+    }
+    // On a foundation top-face, or stacked on the volume you point at.
+    if (hit.panelType === 'foundation' || hit.panelType === 'stairs' || hit.panelType === 'sloped_roof') {
+      const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
+      return { cell, face: VOLUME_FACE, valid: volFree(cell) };
     }
     return null;
   }

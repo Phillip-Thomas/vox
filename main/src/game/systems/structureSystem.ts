@@ -29,15 +29,24 @@ export function faceIndexForNormal(nx: number, ny: number, nz: number): number {
   return best;
 }
 
+/** Sentinel "face" for a volume piece (stairs/roof) — one per cell, distinct from
+ *  the 6 panel faces, so a cell can hold panels AND a volume. */
+export const VOLUME_FACE = 6;
+
 export interface StructurePiece {
   id: number;
   cell: [number, number, number];
-  face: number; // 0..5 (index into FACE_DIRS)
+  face: number; // 0..5 (FACE_DIRS), or VOLUME_FACE for volume pieces
   type: BuildPieceType;
   material: BuildMaterialId;
   /** Doorways are 2 cells tall: a 'lower' + 'upper' half, linked via `partner`. */
   tall?: 'lower' | 'upper';
   partner?: [number, number, number];
+  /** Volume pieces: the build-up axis (0..5) + yaw step (0..3) they're oriented by. */
+  up?: number;
+  orient?: number;
+  /** Openable pieces (door): true when open (passable, not sealing). */
+  open?: boolean;
 }
 
 const pieces = new Map<string, StructurePiece>(); // key: "x,y,z:face"
@@ -121,6 +130,40 @@ export function placeDoorway(cell: [number, number, number], face: number, upIdx
   }
   pieces.set(panelKey(cell[0], cell[1], cell[2], face), { id: nextId++, cell: [...cell] as [number, number, number], face, type: 'doorway', material, tall: 'lower', partner: upper });
   pieces.set(panelKey(upper[0], upper[1], upper[2], face), { id: nextId++, cell: upper, face, type: 'doorway', material, tall: 'upper', partner: [...cell] as [number, number, number] });
+  version++;
+  emit();
+  return true;
+}
+
+export function hasVolume(x: number, y: number, z: number): boolean {
+  return pieces.has(panelKey(x, y, z, VOLUME_FACE));
+}
+
+export function getVolumeAt(x: number, y: number, z: number): StructurePiece | undefined {
+  return pieces.get(panelKey(x, y, z, VOLUME_FACE));
+}
+
+/** Place a volume piece (stairs/sloped_roof) in a cell, oriented by `up` (build-up
+ *  axis 0..5) + `orient` (yaw step 0..3). Validates occupancy + cost; spends. */
+export function placeVolume(cell: [number, number, number], up: number, orient: number, type: BuildPieceType, material: BuildMaterialId): boolean {
+  const [x, y, z] = cell;
+  if (hasVolume(x, y, z)) return false;
+  const cost = pieceCost(type, material);
+  if (!freeBuild) {
+    if (!hasItems(cost)) return false;
+    for (const c of cost) removeItem(c.id, c.qty);
+  }
+  pieces.set(panelKey(x, y, z, VOLUME_FACE), { id: nextId++, cell: [x, y, z], face: VOLUME_FACE, type, material, up, orient });
+  version++;
+  emit();
+  return true;
+}
+
+/** Toggle an openable piece (door) between closed (solid+sealing) and open. */
+export function toggleDoor(cell: [number, number, number], face: number): boolean {
+  const p = pieces.get(panelKey(cell[0], cell[1], cell[2], face));
+  if (!p || !BUILD_PIECES[p.type].openable) return false;
+  p.open = !p.open;
   version++;
   emit();
   return true;
