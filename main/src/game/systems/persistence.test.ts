@@ -3,9 +3,11 @@ import * as THREE from 'three';
 import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
   restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
-  saveVoxelEdits, restoreVoxelEditsForWorld
+  saveVoxelEdits, restoreVoxelEditsForWorld,
+  savePlayerPose, loadPlayerPose
 } from './persistence.ts';
 import { voxelSystem, type TerrainVoxel } from '../../utils/efficientVoxelSystem.ts';
+import { setPlayerWorldPosition, setPlayerLook } from '../../state/playerFrame.ts';
 import { addItem, getItemCount, resetInventory } from './inventorySystem.ts';
 import { setMawCharge, getMawCharge, resetMaw } from './mawSystem.ts';
 import { advanceEraTo, getCurrentEra, markMilestone, hasMilestone, resetProgression } from './progressionSystem.ts';
@@ -130,6 +132,26 @@ describe('terrain voxel edits round-trip', () => {
     load(block(2)); // terrain gen "changed" → different original-terrain size
     restoreVoxelEditsForWorld(888);
     expect(voxelSystem.isDeleted(0, 1, 0)).toBe(false); // refused, not applied
+  });
+});
+
+describe('player pose + time-of-day', () => {
+  it('round-trips time-of-day in the global save', () => {
+    saveGlobal({ x: 0, y: 0 }, 0.42);
+    expect(loadGlobal()!.dayPhase).toBeCloseTo(0.42);
+  });
+
+  it('round-trips player position + look per world', () => {
+    setPlayerWorldPosition(new THREE.Vector3(12, -3, 40));
+    setPlayerLook(new THREE.Vector3(1, 0, 0), 0.3);
+    savePlayerPose(555);
+
+    const p = loadPlayerPose(555);
+    expect(p).toBeTruthy();
+    expect(p!.pos).toEqual([12, -3, 40]);
+    expect(p!.forward[0]).toBeCloseTo(1); // normalized +X
+    expect(p!.pitch).toBeCloseTo(0.3);
+    expect(loadPlayerPose(556)).toBeNull(); // different world: no pose
   });
 });
 
