@@ -78,6 +78,10 @@ export class EfficientVoxelSystem {
   private worldId = 0;
   private editVersion = 0;
   private collisionCallbacks: CollisionCallbacks | null = null;
+  // Edit notifications for persistence. Fired ONLY by user-facing add/removeVoxel —
+  // suppressed during populate/replay so loading a world never triggers an autosave.
+  private editListeners = new Set<() => void>();
+  private suppressEdits = false;
 
   constructor(initialCapacity = 1000) {
     this.maxSlots = initialCapacity;
@@ -109,6 +113,59 @@ export class EfficientVoxelSystem {
 
   getEditVersion() {
     return this.editVersion;
+  }
+
+  /** Subscribe to USER voxel edits (mine/place) — for autosave. Not fired during
+   *  populate or diff replay. Returns an unsubscribe fn. */
+  subscribeVoxelEdits(cb: () => void): () => void {
+    this.editListeners.add(cb);
+    return () => this.editListeners.delete(cb);
+  }
+
+  private emitEdit() {
+    if (!this.suppressEdits) this.editListeners.forEach(l => l());
+  }
+
+  /** Count of generated original-terrain voxels for this world — a cheap generation
+   *  fingerprint: if terrain gen changes (without a schema bump) this shifts, so a
+   *  saved diff with a different fingerprint is refused (stale). */
+  getOriginalTerrainSize(): number {
+    return this.originalTerrain.size;
+  }
+
+  /** Snapshot of the player's removed-voxel coords (the persistable terrain diff). */
+  getDeletedVoxels(): Array<[number, number, number]> {
+    return [...this.deletedTerrain].map(k => k.split(',').map(Number) as [number, number, number]);
+  }
+
+  /**
+   * Re-apply a saved removal diff after `populateInitialTerrain`, reproducing the
+   * live-dug shell WITHOUT looping `removeVoxel` (which no-ops on not-yet-exposed
+   * coords and never re-exposes interiors). Two batched passes, edit events
+   * suppressed:
+   *   1. mark every removed coord deleted + tear down any currently-exposed slot,
+   *   2. expose the revealed interiors (gets supportsSurfaceResources:false, exactly
+   *      as `exposeNeighbors` does for live digging).
+   * One mesh refresh at the end. Bumps editVersion so the foliage fields rebuild.
+   */
+  applyTerrainDiff(removed: ReadonlyArray<[number, number, number]>): void {
+    if (removed.length === 0) return;
+    this.suppressEdits = true;
+    for (const [x, y, z] of removed) {
+      if (!this.wasOriginalTerrain(x, y, z)) continue; // only original cells can be dug
+      const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
+      this.deletedTerrain.add(coordKey);
+      const voxelData = this.exposedVoxels.get(coordKey);
+      if (voxelData) {
+        this.collisionCallbacks?.remove(x, y, z, this.worldId);
+        this.exposedVoxels.delete(coordKey);
+        this.releaseMeshSlot(voxelData.meshSlot);
+        this.editVersion += 1;
+      }
+    }
+    for (const [x, y, z] of removed) this.exposeNeighbors(x, y, z);
+    this.markMeshDirty();
+    this.suppressEdits = false;
   }
 
   expandCapacity(newSize: number) {
@@ -274,6 +331,7 @@ export class EfficientVoxelSystem {
       this.collisionCallbacks?.request(x, y, z, this.worldId);
     }
 
+    this.emitEdit();
     return true;
   }
 
@@ -297,6 +355,7 @@ export class EfficientVoxelSystem {
     this.editVersion += 1;
     this.releaseMeshSlot(voxelData.meshSlot);
     this.refreshNeighborAO(x, y, z);
+    this.emitEdit();
     return true;
   }
 

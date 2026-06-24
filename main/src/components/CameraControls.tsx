@@ -9,6 +9,7 @@ import {
 } from '../utils/gravityCamera';
 import { isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
+import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
@@ -24,8 +25,10 @@ const UP_SYNC_EPSILON = 0.9999;
 function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange }: CameraControlsProps) {
   const { gl } = useThree();
   const surfaceUp = useRef(activeUp.clone().normalize());
-  const surfaceForward = useRef(new THREE.Vector3(0, 0, -1));
-  const pitch = useRef(0);
+  // Seed from the restored look (set by persistence before this mounts) so a reload
+  // faces the same way; defaults to forward/level for a fresh game.
+  const surfaceForward = useRef(getPlayerLook().forward);
+  const pitch = useRef(getPlayerLook().pitch);
   const isLockedRef = useRef(false);
   const nextUp = useRef(new THREE.Vector3());
   const displayQuat = useRef(new THREE.Quaternion());
@@ -103,6 +106,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     if (!cameraRef.current) return;
     const dt = Math.min(rawDt, 1 / 30);
     syncSurfaceFrame();
+    setPlayerLook(surfaceForward.current, pitch.current); // publish look for persistence
     applyGravityCameraTransform(
       cameraRef.current,
       surfaceUp.current,

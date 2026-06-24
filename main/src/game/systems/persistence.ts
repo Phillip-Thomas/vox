@@ -18,6 +18,7 @@ import { getPieces, restorePieces, type StructurePiece } from './structureSystem
 import { getCampfires, restoreCampfires } from './campfires.ts';
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
+import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
 import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
@@ -103,4 +104,33 @@ export function restoreTreesForWorld(seed: number): void {
 }
 export function restoreStonesForWorld(seed: number): void {
   const w = loadWorld(seed); if (w?.stones) for (const s of w.stones) markStoneCollected(s[0], s[1], s[2]);
+}
+
+// --- Terrain voxel edits (SEPARATE key per world) ---------------------------
+// Kept out of the WorldSave blob so a big dig doesn't re-serialize on every
+// unrelated autosave and can't take structures down with it on a quota error.
+interface VoxelSave {
+  fingerprint: number;                          // original-terrain size (gen canary)
+  removed: Array<[number, number, number]>;     // dug-out coords
+  added: Array<[number, number, number]>;       // FUTURE: player-placed blocks
+}
+const worldVoxelKey = (seed: number) => `${PREFIX}.world.${seed}.voxels`;
+
+export function saveVoxelEdits(seed: number): void {
+  const data: VoxelSave = {
+    fingerprint: voxelSystem.getOriginalTerrainSize(),
+    removed: voxelSystem.getDeletedVoxels(),
+    added: []
+  };
+  write(worldVoxelKey(seed), data);
+}
+
+/** Replay this world's terrain diff. Call AFTER populateInitialTerrain (so coords are
+ *  solid) and BEFORE the collision flush. Refuses a stale save (gen fingerprint
+ *  mismatch). Must run synchronously while the live world matches `seed`. */
+export function restoreVoxelEditsForWorld(seed: number): void {
+  const save = read<VoxelSave>(worldVoxelKey(seed));
+  if (!save) return;
+  if (save.fingerprint !== voxelSystem.getOriginalTerrainSize()) return; // terrain gen changed → drop
+  voxelSystem.applyTerrainDiff(save.removed ?? []);
 }

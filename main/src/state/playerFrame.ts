@@ -8,6 +8,10 @@ import * as THREE from 'three';
 
 const _up = new THREE.Vector3(0, 1, 0);
 const _pos = new THREE.Vector3(0, 0, 0);
+// Camera look: surface-tangent forward (yaw) + pitch. Published by CameraControls,
+// read by persistence (save) and seeded on restore so a reload faces the same way.
+const _forward = new THREE.Vector3(0, 0, -1);
+let _pitch = 0;
 
 export function setPlayerUp(up: THREE.Vector3): void {
   if (up.lengthSq() > 1e-9) _up.copy(up).normalize();
@@ -26,4 +30,13 @@ export function setPlayerWorldPosition(pos: THREE.Vector3): void {
 
 export function getPlayerWorldPosition(): THREE.Vector3 {
   return _pos.clone();
+}
+
+export function setPlayerLook(forward: THREE.Vector3, pitch: number): void {
+  if (forward.lengthSq() > 1e-9) _forward.copy(forward).normalize();
+  _pitch = pitch;
+}
+
+export function getPlayerLook(): { forward: THREE.Vector3; pitch: number } {
+  return { forward: _forward.clone(), pitch: _pitch };
 }

@@ -6,6 +6,7 @@ import { createVoxelMaterial, updateVoxelMaterial, applyTerrainProfileToMaterial
 import { buildTerrainProfile } from '../utils/terrainProfile';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getWorldTerrainData } from '../utils/worldGenCache';
+import { restoreVoxelEditsForWorld, saveVoxelEdits } from '../game/systems/persistence';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { markTerrainPopulated, resetSceneReady } from '../state/appState';
@@ -279,6 +280,10 @@ export default function EfficientPlanet({
             requestCollisions: false
           }
         );
+        // Replay this world's saved terrain edits (digging) onto the freshly
+        // generated shell, BEFORE colliders are queued — so removed voxels get no
+        // collider and revealed interiors do. Refused if the gen fingerprint differs.
+        restoreVoxelEditsForWorld(terrainSeed);
         const queuedColliders = queueInitialCollisionBodies();
         flushPendingCollisionBodies();
         return { added, queuedColliders };
@@ -306,6 +311,9 @@ export default function EfficientPlanet({
       if (efficientPlanetMesh.current === activeMesh) {
         efficientPlanetMesh.current = null;
       }
+      // Persist this world's dig BEFORE reset() clears deletedTerrain (App-level
+      // autosave cleanup races this child cleanup, so save here where ordering holds).
+      saveVoxelEdits(terrainSeed);
       voxelSystem.reset();
       // World swap / unmount: the next world must re-prove readiness.
       resetSceneReady();
@@ -319,7 +327,8 @@ export default function EfficientPlanet({
     originalTerrainByCoord,
     queueInitialCollisionBodies,
     removeCollisionBody,
-    requestCollisionBody
+    requestCollisionBody,
+    terrainSeed
   ]);
 
   const syncCollisionBodies = useCallback(() => {

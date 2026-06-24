@@ -2,8 +2,10 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import * as THREE from 'three';
 import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
-  restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld
+  restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
+  saveVoxelEdits, restoreVoxelEditsForWorld
 } from './persistence.ts';
+import { voxelSystem, type TerrainVoxel } from '../../utils/efficientVoxelSystem.ts';
 import { addItem, getItemCount, resetInventory } from './inventorySystem.ts';
 import { setMawCharge, getMawCharge, resetMaw } from './mawSystem.ts';
 import { advanceEraTo, getCurrentEra, markMilestone, hasMilestone, resetProgression } from './progressionSystem.ts';
@@ -80,6 +82,54 @@ describe('per-world save round-trip', () => {
     resetStructures();
     restoreStructuresForWorld(SEED + 1); // a different planet
     expect(getPieces()).toHaveLength(0);
+  });
+});
+
+describe('terrain voxel edits round-trip', () => {
+  const DIRS: Array<[number, number, number]> = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+  function block(r: number): TerrainVoxel[] {
+    const t: TerrainVoxel[] = [];
+    for (let x = -r; x <= r; x++) for (let y = -r; y <= r; y++) for (let z = -r; z <= r; z++) {
+      t.push({ x, y, z, material: 'stone', color: new THREE.Color('gray') });
+    }
+    return t;
+  }
+  function surface(all: TerrainVoxel[]): TerrainVoxel[] {
+    const set = new Set(all.map(v => `${v.x},${v.y},${v.z}`));
+    return all.filter(v => DIRS.some(d => !set.has(`${v.x + d[0]},${v.y + d[1]},${v.z + d[2]}`)));
+  }
+  function mesh() {
+    const m = new THREE.InstancedMesh(new THREE.BoxGeometry(2, 2, 2), new THREE.MeshBasicMaterial(), 2000);
+    m.count = 0; return m;
+  }
+  function load(all: TerrainVoxel[]) {
+    voxelSystem.reset();
+    voxelSystem.setMesh(mesh());
+    voxelSystem.populateInitialTerrain(all, surface(all), {});
+  }
+
+  it('saves a dig and replays it on a fresh load of the same world', () => {
+    const all = block(1);
+    load(all);
+    voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
+    saveVoxelEdits(777);
+
+    load(all); // simulate reload: identical terrain regen
+    expect(voxelSystem.isDeleted(0, 1, 0)).toBe(false); // gone after fresh populate
+    restoreVoxelEditsForWorld(777);
+    expect(voxelSystem.isDeleted(0, 1, 0)).toBe(true);  // dig restored
+    expect(voxelSystem.hasVoxel(0, 1, 0)).toBe(false);
+  });
+
+  it('refuses a stale save when the generation fingerprint differs', () => {
+    const all = block(1);
+    load(all);
+    voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
+    saveVoxelEdits(888);
+
+    load(block(2)); // terrain gen "changed" → different original-terrain size
+    restoreVoxelEditsForWorld(888);
+    expect(voxelSystem.isDeleted(0, 1, 0)).toBe(false); // refused, not applied
   });
 });
 

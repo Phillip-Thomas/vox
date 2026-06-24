@@ -77,6 +77,67 @@ describe('EfficientVoxelSystem', () => {
     expect(remove).toHaveBeenCalledWith(0, 0, 0, system.getWorldId());
   });
 
+  // The persistence lynchpin: replaying a saved dig (applyTerrainDiff) must reproduce
+  // the EXACT shell that live mining (removeVoxel + exposeNeighbors per coord) produces
+  // — same exposed coords AND same supportsSurfaceResources flags — and be order-free.
+  describe('applyTerrainDiff (terrain-edit replay)', () => {
+    const DIRS: Array<[number, number, number]> = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+    function block(r: number): TerrainVoxel[] {
+      const t: TerrainVoxel[] = [];
+      for (let x = -r; x <= r; x++) for (let y = -r; y <= r; y++) for (let z = -r; z <= r; z++) {
+        t.push({ x, y, z, material: 'stone', color: new THREE.Color('gray') });
+      }
+      return t;
+    }
+    function surface(all: TerrainVoxel[]): TerrainVoxel[] {
+      const set = new Set(all.map(v => `${v.x},${v.y},${v.z}`));
+      return all.filter(v => DIRS.some(d => !set.has(`${v.x + d[0]},${v.y + d[1]},${v.z + d[2]}`)));
+    }
+    function sys(all: TerrainVoxel[]): EfficientVoxelSystem {
+      const s = new EfficientVoxelSystem(2000);
+      s.setMesh(createTestMesh(2000));
+      s.populateInitialTerrain(all, surface(all), {});
+      return s;
+    }
+    function shell(s: EfficientVoxelSystem): string {
+      return [...s.getAllVoxels().entries()]
+        .map(([k, v]) => `${k}:${v.supportsSurfaceResources ? 1 : 0}`)
+        .sort()
+        .join('|');
+    }
+
+    it('reproduces a single dig exactly (coords + surface-resource flags)', () => {
+      const all = block(1);
+      const live = sys(all);
+      live.removeVoxel(0, 1, 0); live.exposeNeighbors(0, 1, 0);
+      const replay = sys(all);
+      replay.applyTerrainDiff([[0, 1, 0]]);
+      expect(shell(replay)).toBe(shell(live));
+    });
+
+    it('reproduces a 2-deep tunnel and is ORDER-INDEPENDENT', () => {
+      const all = block(1);
+      const live = sys(all);
+      live.removeVoxel(0, 1, 0); live.exposeNeighbors(0, 1, 0); // dig top
+      live.removeVoxel(0, 0, 0); live.exposeNeighbors(0, 0, 0); // dig newly-revealed center
+      const target = shell(live);
+
+      const fwd = sys(all); fwd.applyTerrainDiff([[0, 1, 0], [0, 0, 0]]);
+      const rev = sys(all); rev.applyTerrainDiff([[0, 0, 0], [0, 1, 0]]); // reversed order
+      expect(shell(fwd)).toBe(target);
+      expect(shell(rev)).toBe(target); // deep coord not yet exposed at populate — still works
+    });
+
+    it('records the diff and bumps editVersion so foliage rebuilds', () => {
+      const all = block(1);
+      const s = sys(all);
+      const before = s.getEditVersion();
+      s.applyTerrainDiff([[0, 1, 0]]);
+      expect(s.getDeletedVoxels()).toContainEqual([0, 1, 0]);
+      expect(s.getEditVersion()).toBeGreaterThan(before);
+    });
+  });
+
   it('tracks edit version across successful voxel adds and removes', () => {
     const system = new EfficientVoxelSystem(10);
     const initialVersion = system.getEditVersion();

@@ -153,7 +153,7 @@ supersedes them.
 | Era gating (personal menu = primitive only; Emergent behind devices) | **NOT BUILT** (menu is still the Phase-2 all-access fabricator) |
 | Maw Repair Kit / Fabricator Core recipes + ship-wreck salvage | **NOT BUILT** |
 | Suit/hazard survival, scanner-gated reveal, warp-range gate | **DESIGNED** (loadout getters exist; nothing consumes them yet) |
-| Persistence (localStorage) | **BUILT** — `game/systems/persistence.ts`, schema-versioned keys. GLOBAL (inventory/maw/era/lastWorld) + PER-WORLD (structures/campfires/harvested-trees/collected-stones, keyed by seed). Boot restores global + spawns at saved base; fields reset-then-load per world; autosave debounced + on tab-hide/unload + on world-change cleanup. (Terrain voxel edits still NOT persisted — separate concern.) |
+| Persistence (localStorage) | **BUILT** — `game/systems/persistence.ts`, schema-versioned keys. GLOBAL (inventory/maw/era/lastWorld) + PER-WORLD (structures/campfires/harvested-trees/collected-stones, keyed by seed). Boot restores global + spawns at saved base; fields reset-then-load per world; autosave debounced + on tab-hide/unload + on world-change cleanup. **Terrain voxel edits (mined blocks) ALSO persist** — separate `.world.{seed}.voxels` key with a gen fingerprint; `voxelSystem.applyTerrainDiff` replays the dig after populate (batched, not a removeVoxel loop); saved via `subscribeVoxelEdits` (debounced) + EfficientPlanet cleanup before `reset()`. |
 | Paravox Machina tier | **DESIGNED** (hooks only) |
 
 > **Key current inconsistency:** the Fabricator (key C) still shows ALL recipes

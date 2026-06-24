@@ -41,7 +41,8 @@ import {
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
-import { loadGlobal, restoreGlobal, saveGlobal, saveWorld } from './game/systems/persistence.ts';
+import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits } from './game/systems/persistence.ts';
+import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { subscribeInventory } from './game/systems/inventorySystem.ts';
 import { subscribeCampfires } from './game/systems/campfires.ts';
 import { subscribeMaw } from './game/systems/mawSystem.ts';
@@ -362,22 +363,36 @@ const App: React.FC = () => {
   useEffect(() => {
     const coord = currentWorld.coordinate;
     const seed = currentWorld.seed;
-    const doSave = () => { saveGlobal(coord); saveWorld(seed); };
+    let lastVoxelVersion = -1;
+    // `withVoxels`: save the terrain diff only on LIVE paths (world is still loaded,
+    // deletedTerrain intact). On a world-change cleanup we MUST skip it — EfficientPlanet's
+    // own cleanup saves voxels before its reset() clears them, and that child cleanup runs
+    // BEFORE this parent cleanup (so reading deletedTerrain here would be empty).
+    const doSave = (withVoxels: boolean) => {
+      saveGlobal(coord);
+      saveWorld(seed);
+      if (withVoxels) {
+        const v = voxelSystem.getEditVersion();
+        if (v !== lastVoxelVersion) { lastVoxelVersion = v; saveVoxelEdits(seed); }
+      }
+    };
     let timer = 0;
-    const schedule = () => { if (timer) return; timer = window.setTimeout(() => { timer = 0; doSave(); }, 700); };
+    const schedule = () => { if (timer) return; timer = window.setTimeout(() => { timer = 0; doSave(true); }, 700); };
     const unsubs = [
       subscribeStructures(schedule), subscribeInventory(schedule), subscribeCampfires(schedule),
-      subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule), subscribeStonePickup(schedule)
+      subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule),
+      subscribeStonePickup(schedule), voxelSystem.subscribeVoxelEdits(schedule)
     ];
-    const onHidden = () => { if (document.visibilityState === 'hidden') doSave(); };
+    const onHidden = () => { if (document.visibilityState === 'hidden') doSave(true); };
     document.addEventListener('visibilitychange', onHidden);
-    window.addEventListener('beforeunload', doSave);
+    const onUnload = () => doSave(true);
+    window.addEventListener('beforeunload', onUnload);
     return () => {
       if (timer) clearTimeout(timer);
       unsubs.forEach(u => u());
       document.removeEventListener('visibilitychange', onHidden);
-      window.removeEventListener('beforeunload', doSave);
-      doSave(); // persist the world we're leaving before its stores reset
+      window.removeEventListener('beforeunload', onUnload);
+      doSave(false); // structures/global of the world we're leaving (voxels: EfficientPlanet)
     };
   }, [currentWorld.coordinate, currentWorld.seed]);
 
