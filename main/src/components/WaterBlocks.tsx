@@ -128,20 +128,41 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
   // digging exposes (each dig reveals at most a few). Generous so common digging
   // never overflows; the fill clamps to capacity regardless.
   const capacity = useMemo(
-    () => Math.max(1, buildWaterFaces(planetSize, terrainSeed).length + 2048),
+    () => Math.max(1, buildWaterFaces(planetSize, terrainSeed).length + 8192),
     [planetSize, terrainSeed]
   );
+
+  // Dig-to-fill persistence: re-extend the flood for any already-dug cells (the
+  // deletions are persisted, the dynamic flood is not) so water that flowed into a
+  // dug channel before a reload comes back. Fixpoint so cascade order is moot. Runs
+  // once per world generator; cheap (bounded by the edit count).
+  useEffect(() => {
+    const deleted = voxelSystem.getDeletedTerrainKeys();
+    if (deleted.length === 0) return;
+    const isLiveSolid = (x: number, y: number, z: number) =>
+      gen.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const k of deleted) {
+        const [x, y, z] = k.split(',').map(Number);
+        if (gen.extendFloodForDugCell(x, y, z, isLiveSolid).length > 0) changed = true;
+      }
+    }
+  }, [gen]);
 
   // Recompute faces against the live voxel state + refill, when the voxel edit
   // signature changes (initial population, dig, place). `force` for the first fill.
   const syncWater = useCallback((mesh: FilledMesh, force = false) => {
-    const sig = `${voxelSystem.getWorldId()}:${voxelSystem.getEditVersion()}`;
+    const sig = `${voxelSystem.getWorldId()}:${voxelSystem.getEditVersion()}:${gen.getWaterEditVersion()}`;
     if (!force && mesh.__waterSig === sig) return;
     mesh.__waterSig = sig;
     measureWarpMetric(
       'water:fill_instances',
       () => {
-        const faces = computeLiveWaterFaces(waterVoxels, isWater);
+        // Static flooded set + the runtime dig-to-fill cells, so newly-filled
+        // cells emit their own faces (not just suppress their neighbours').
+        const faces = computeLiveWaterFaces(waterVoxels.concat(gen.getDynamicWaterCells()), isWater);
         const m = new THREE.Matrix4();
         const cellCenter = new THREE.Vector3();
         const facePos = new THREE.Vector3();
@@ -207,7 +228,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed }: WaterBlocksProps) {
       },
       slot => ({ count: slot, capacity })
     );
-  }, [waterVoxels, isWater, capacity, debug]);
+  }, [gen, waterVoxels, isWater, capacity, debug]);
 
   useLayoutEffect(() => {
     if (meshRef.current) syncWater(meshRef.current, true);

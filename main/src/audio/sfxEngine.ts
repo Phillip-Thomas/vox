@@ -7,7 +7,9 @@ export type SfxEvent =
   | 'exitShip'
   | 'shipLaunch'
   | 'shipLand'
-  | 'shipCrash';
+  | 'shipCrash'
+  | 'splashEnter'
+  | 'splashExit';
 
 interface ContinuousLoop {
   source: AudioBufferSourceNode;
@@ -18,6 +20,9 @@ interface ContinuousLoop {
 class SfxEngine {
   private context: AudioContext | null = null;
   private outputGain: GainNode | null = null;
+  // Master lowpass spliced before destination: open (20kHz) on land so the dry
+  // path is byte-identical, ramped down to a muffled cutoff underwater.
+  private submergeFilter: BiquadFilterNode | null = null;
   private jetpack: ContinuousLoop | null = null;
   private shipThrust: ContinuousLoop | null = null;
   private volume = 0.78;
@@ -77,7 +82,31 @@ class SfxEngine {
         this.playTone({ type: 'sawtooth', from: 70, to: 32, duration: 0.34, gain: 0.09 });
         this.playNoise({ type: 'lowpass', from: 900, to: 110, duration: 0.3, gain: 0.08 });
         break;
+      case 'splashEnter':
+        // Plunge: a quick lowpass-swept gulp + a bubble burst, as the muffle clamps on.
+        this.playNoise({ type: 'lowpass', from: 1400, to: 280, duration: 0.24, gain: 0.07 });
+        this.playNoise({ type: 'bandpass', from: 800, to: 1700, duration: 0.18, gain: 0.03, q: 1.2 });
+        break;
+      case 'splashExit':
+        // Surface: a brighter rising "gasp" as the muffle releases + droplets.
+        this.playNoise({ type: 'highpass', from: 320, to: 1300, duration: 0.26, gain: 0.055 });
+        this.playTone({ type: 'sine', from: 170, to: 330, duration: 0.18, gain: 0.02 });
+        break;
     }
+  }
+
+  /**
+   * Muffle the whole sfx bus underwater. `amount` 0 = open/dry, 1 = fully muffled.
+   * Edge-driven by AudioDirector on submerge/emerge so the cutoff snaps (the
+   * "clunk") on entry and releases (the "gasp") on exit.
+   */
+  setSubmerged(amount: number): void {
+    const a = clamp01(amount);
+    const context = this.ensureContext();
+    if (!context || !this.submergeFilter) return;
+    void context.resume();
+    const cutoff = 20000 - a * (20000 - 560); // 20kHz (transparent) -> ~560Hz (muffled)
+    rampParam(context, this.submergeFilter.frequency, cutoff, a > 0.5 ? 0.08 : 0.16);
   }
 
   setJetpackActive(active: boolean, intensity = 1): void {
@@ -108,9 +137,17 @@ class SfxEngine {
     const context = new ContextCtor();
     const outputGain = context.createGain();
     outputGain.gain.value = this.muted ? 0 : this.volume;
-    outputGain.connect(context.destination);
+    // Master muffle filter between the output bus and destination. Initialized
+    // fully open (20kHz) so on land the chain is acoustically transparent.
+    const submergeFilter = context.createBiquadFilter();
+    submergeFilter.type = 'lowpass';
+    submergeFilter.frequency.value = 20000;
+    submergeFilter.Q.value = 0.7;
+    outputGain.connect(submergeFilter);
+    submergeFilter.connect(context.destination);
     this.context = context;
     this.outputGain = outputGain;
+    this.submergeFilter = submergeFilter;
     return context;
   }
 
@@ -255,6 +292,10 @@ export function playSfx(event: SfxEvent): void {
 
 export function setJetpackSfx(active: boolean, intensity?: number): void {
   getSfxEngine().setJetpackActive(active, intensity);
+}
+
+export function setSubmergedSfx(amount: number): void {
+  getSfxEngine().setSubmerged(amount);
 }
 
 export function setShipThrustSfx(level: number): void {

@@ -5,6 +5,7 @@ import { getItemCount, subscribeInventory } from '../game/systems/inventorySyste
 import { getCampfires, resetCampfires, subscribeCampfires, type Campfire } from '../game/systems/campfires';
 import { restoreCampfiresForWorld } from '../game/systems/persistence';
 import { getPlayerUp } from '../state/playerFrame';
+import { getGraphicsQuality } from '../config/graphicsSettings';
 
 // Warm fire palette + tuned point-light values (physically-correct lights, decay 2).
 const TORCH_COLOR = '#ffb15a';
@@ -68,6 +69,31 @@ function CampfireObject({ fire }: { fire: Campfire }) {
     fire.pos[2] + fire.up[2] * 0.2
   ], [fire.pos, fire.up]);
 
+  const flameRef = useRef<THREE.Mesh>(null);
+  const coreRef = useRef<THREE.Mesh>(null);
+  const lightRef = useRef<THREE.PointLight>(null);
+
+  // Minimal live fire: an irregular flicker (two detuned sines → never a clean pulse;
+  // range ~0.56..1.0, so the light stays warm + visible) drives the light intensity,
+  // flame emissive, and a small wobble of the flame cones. Quality-gated each frame
+  // (read fresh so a runtime quality change applies) so LOW/POTATO stay static.
+  useFrame(state => {
+    if (!getGraphicsQuality().animatedShaders) return;
+    const t = state.clock.elapsedTime;
+    const flicker = 0.78 + 0.16 * Math.sin(t * 11.3) + 0.06 * Math.sin(t * 27.7);
+    if (lightRef.current) lightRef.current.intensity = CAMPFIRE_INTENSITY * flicker;
+    const flameMat = flameRef.current?.material;
+    if (flameRef.current && flameMat instanceof THREE.MeshStandardMaterial) {
+      flameRef.current.scale.set(1 + 0.06 * Math.sin(t * 9.1), 1 + 0.14 * Math.sin(t * 7.3 + 1.7), 1 + 0.06 * Math.cos(t * 8.4));
+      flameMat.emissiveIntensity = 3.2 * flicker;
+    }
+    const coreMat = coreRef.current?.material;
+    if (coreRef.current && coreMat instanceof THREE.MeshStandardMaterial) {
+      coreRef.current.scale.setScalar(1 + 0.18 * Math.sin(t * 13.1 + 0.5));
+      coreMat.emissiveIntensity = 5.5 * flicker;
+    }
+  });
+
   return (
     <group position={pos} quaternion={quat}>
       {/* ring of stones (flat) */}
@@ -84,12 +110,16 @@ function CampfireObject({ fire }: { fire: Campfire }) {
         <cylinderGeometry args={[0.08, 0.08, 1.0, 5]} />
         <meshStandardMaterial color="#4d3320" roughness={0.9} flatShading />
       </mesh>
-      {/* glowing flame */}
-      <mesh position={[0, 0.45, 0]}>
+      {/* glowing flame (outer) + a brighter inner core, both animated */}
+      <mesh ref={flameRef} position={[0, 0.45, 0]}>
         <coneGeometry args={[0.28, 0.7, 7]} />
         <meshStandardMaterial color={FIRE_COLOR} emissive={FIRE_COLOR} emissiveIntensity={3.2} roughness={1} />
       </mesh>
-      <pointLight position={[0, 0.7, 0]} color={FIRE_COLOR} intensity={CAMPFIRE_INTENSITY} distance={CAMPFIRE_DISTANCE} decay={2} castShadow={false} />
+      <mesh ref={coreRef} position={[0, 0.34, 0]}>
+        <coneGeometry args={[0.15, 0.42, 6]} />
+        <meshStandardMaterial color="#ffd27a" emissive="#ffcf6a" emissiveIntensity={5.5} roughness={1} />
+      </mesh>
+      <pointLight ref={lightRef} position={[0, 0.7, 0]} color={FIRE_COLOR} intensity={CAMPFIRE_INTENSITY} distance={CAMPFIRE_DISTANCE} decay={2} castShadow={false} />
     </group>
   );
 }

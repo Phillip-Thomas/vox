@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  placePiece, placeDoorway, placeVolume, toggleDoor, removePiece, hasFoundationInCell, hasFoundationOnFace,
+  placePiece, placeDoorway, fitDoor, placeVolume, toggleDoor, removePiece, hasFoundationInCell, hasFoundationOnFace,
   hasPanel, hasVolume, getVolumeAt, getPieceAt, getPieces, resetStructures,
   faceIndexForNormal, oppositeFace, setFreeBuild, canAfford
 } from './structureSystem.ts';
@@ -70,6 +70,38 @@ describe('doorway (2 cells tall)', () => {
     expect(removePiece([0, 1, 0], 0)).toBe(true);
     expect(hasPanel(0, 0, 0, 0)).toBe(false);
     expect(hasPanel(0, 1, 0, 0)).toBe(false);
+  });
+});
+
+describe('door fits into a doorway as a leaf (not on bare walls)', () => {
+  it('requires a doorway, adds a closeable leaf to both halves, toggles + removes together', () => {
+    setFreeBuild(true);
+    expect(fitDoor([0, 0, 0], 0, 'wood')).toBe(false); // no doorway here → no door
+
+    expect(placeDoorway([0, 0, 0], 0, 2, 'wood')).toBe(true); // build-up = +Y (idx 2)
+    expect(fitDoor([0, 0, 0], 0, 'wood')).toBe(true);         // fit a leaf into it
+    expect(getPieceAt(0, 0, 0, 0)?.leaf).toBe(true);
+    expect(getPieceAt(0, 1, 0, 0)?.leaf).toBe(true);          // both halves get the leaf
+    expect(fitDoor([0, 0, 0], 0, 'wood')).toBe(false);        // already doored
+
+    expect(getPieceAt(0, 0, 0, 0)?.open).toBeFalsy();         // closed by default
+    expect(toggleDoor([0, 1, 0], 0)).toBe(true);              // toggle from either half
+    expect(getPieceAt(0, 0, 0, 0)?.open).toBe(true);
+    expect(getPieceAt(0, 1, 0, 0)?.open).toBe(true);
+
+    expect(removePiece([0, 1, 0], 0)).toBe(true);             // removes both halves
+    expect(hasPanel(0, 0, 0, 0)).toBe(false);
+    expect(hasPanel(0, 1, 0, 0)).toBe(false);
+  });
+});
+
+describe('build frame is stored on each piece (corner-build consistency)', () => {
+  it('placePiece records the build-up axis so connecting pieces can inherit it', () => {
+    setFreeBuild(true);
+    placePiece([5, 0, 0], 3, 'foundation', 'wood', 2); // up = +Y
+    expect(getPieceAt(5, 0, 0, 3)?.up).toBe(2);
+    placePiece([6, 0, 0], 1, 'wall', 'wood', 0); // a wall framed to +X
+    expect(getPieceAt(6, 0, 0, 1)?.up).toBe(0);
   });
 });
 

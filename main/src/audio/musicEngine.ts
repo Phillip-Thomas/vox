@@ -75,12 +75,16 @@ const ZERO_PROCEDURAL: ProceduralMusicTargets = {
 class MusicEngine {
   private context: AudioContext | null = null;
   private musicGain: GainNode | null = null;
+  // Master lowpass spliced musicGain -> submergeFilter -> visibilityGain. Open
+  // (20kHz) on land so the music chain is transparent; ramped down underwater.
+  private submergeFilter: BiquadFilterNode | null = null;
   private visibilityGain: GainNode | null = null;
   private procedural: ProceduralRuntime | null = null;
   private unlocked = false;
   private outputVolume = 0.72;
   private muted = false;
   private visibilityDucked = false;
+  private submerged = false;
   private proceduralTargets = ZERO_PROCEDURAL;
   private readonly layers = new Map<MusicLayerId, RuntimeLayer>();
 
@@ -124,6 +128,13 @@ class MusicEngine {
   setVisibilityDucked(ducked: boolean): void {
     this.visibilityDucked = ducked;
     this.applyVisibility(ducked ? 0.35 : 0.45);
+  }
+
+  // Muffle the music bus underwater (mirrors the visibility duck). Edge-driven by
+  // AudioDirector so the cutoff snaps on submerge and releases on emerge.
+  setSubmerged(submerged: boolean): void {
+    this.submerged = submerged;
+    this.applySubmerge(submerged ? 0.12 : 0.2);
   }
 
   setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void {
@@ -291,14 +302,20 @@ class MusicEngine {
 
     const context = new ContextCtor();
     const musicGain = context.createGain();
+    const submergeFilter = context.createBiquadFilter();
     const visibilityGain = context.createGain();
     musicGain.gain.value = 0;
     visibilityGain.gain.value = 1;
-    musicGain.connect(visibilityGain);
+    submergeFilter.type = 'lowpass';
+    submergeFilter.frequency.value = 20000; // open on land (acoustically transparent)
+    submergeFilter.Q.value = 0.7;
+    musicGain.connect(submergeFilter);
+    submergeFilter.connect(visibilityGain);
     visibilityGain.connect(context.destination);
 
     this.context = context;
     this.musicGain = musicGain;
+    this.submergeFilter = submergeFilter;
     this.visibilityGain = visibilityGain;
     return context;
   }
@@ -311,6 +328,11 @@ class MusicEngine {
   private applyVisibility(fadeSeconds: number): void {
     if (!this.context || !this.visibilityGain) return;
     rampGain(this.context, this.visibilityGain.gain, this.visibilityDucked ? 0.18 : 1, fadeSeconds);
+  }
+
+  private applySubmerge(fadeSeconds: number): void {
+    if (!this.context || !this.submergeFilter) return;
+    rampGain(this.context, this.submergeFilter.frequency, this.submerged ? 540 : 20000, fadeSeconds);
   }
 
   private loadAll(): void {
@@ -614,4 +636,8 @@ export function getMusicEngine(): MusicEngine {
 
 export function unlockMusicAudio(): Promise<void> {
   return getMusicEngine().unlock();
+}
+
+export function setSubmergedMusic(submerged: boolean): void {
+  getMusicEngine().setSubmerged(submerged);
 }

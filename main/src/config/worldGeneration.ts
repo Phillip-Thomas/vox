@@ -24,6 +24,20 @@ export interface TerrainGenerationConfig {
   // Additional sea-level radius adjustment in voxel/coordinate units after the
   // percentile waterline is computed. Positive values flood one shell higher.
   seaLevelOffset?: number;
+  // --- Ocean basins (deep, explorable seas) ---------------------------------
+  // A LOW-frequency mask carves broad, DEEP sea floors well below the land base so
+  // oceans are explorably deep — while small valley depressions OUTSIDE the mask
+  // still flood as shallow puddles. The existing mountain/hill noise riding on top
+  // of a carved basin reads as trenches / seamounts / ridges (free seabed relief).
+  //   oceanFrequency: scale of the ocean/continent pattern (lower = broader seas).
+  //   oceanCoverage:  noise threshold — a column is ocean where oceanNoise < this
+  //                   (higher => more of the planet is deep ocean).
+  //   oceanDepth:     how far the seabed is carved down, in coordinate units.
+  //   oceanEdge:      ramp width that softens basin shoulders (no cliffs at coast).
+  oceanFrequency?: number;
+  oceanCoverage?: number;
+  oceanDepth?: number;
+  oceanEdge?: number;
 }
 
 export const DEFAULT_WORLD_CONFIG: WorldGenerationConfig = {
@@ -82,4 +96,8 @@ export const DEFAULT_TERRAIN_CONFIG: TerrainGenerationConfig = {
   terrainScale: 0.08, // Slightly smaller scale for more detail
   seaLevelPercentile: DEFAULT_SEA_LEVEL_PERCENTILE,
   seaLevelOffset: 0,
+  oceanFrequency: 0.05, // raw-tangent freq: a few broad ocean/continent regions across the planet
+  oceanCoverage: 0.0,   // ocean where the mask noise < this (~half the planet trends ocean)
+  oceanDepth: 12,       // seabed floor sits ~this far below the land base (deep, explorable)
+  oceanEdge: 0.2,       // mask ramp width — smaller = steeper continental shelves
 };

@@ -10,6 +10,16 @@ import {
 import { isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
+import { getPlayerSubmergence } from '../state/playerSubmersion';
+
+// Underwater camera sway — a lazy roll about the view axis + a gentle nod, scaled
+// by submergence, so the camera reads as floating in a fluid (invisible in a
+// screenshot, strongly felt in motion). Amplitudes are tiny on purpose (<~1.3°)
+// to avoid sim-sickness. Applied in the camera's LOCAL frame after the look
+// transform, recomputed fresh each frame (no accumulation/drift).
+const LOCAL_ROLL_AXIS = new THREE.Vector3(0, 0, 1);
+const LOCAL_PITCH_AXIS = new THREE.Vector3(1, 0, 0);
+const _swayQuat = new THREE.Quaternion();
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
@@ -102,7 +112,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     };
   }, [gl.domElement, onPointerLockChange]);
 
-  useFrame((_, rawDt) => {
+  useFrame((state, rawDt) => {
     if (!cameraRef.current) return;
     const dt = Math.min(rawDt, 1 / 30);
     syncSurfaceFrame();
@@ -114,6 +124,17 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       pitch.current,
       PLAYER_EYE_HEIGHT
     );
+
+    // Underwater float-sway, scaled by submergence (0 = no effect on land).
+    const submergence = getPlayerSubmergence();
+    if (submergence > 0.01) {
+      const t = state.clock.elapsedTime;
+      const roll = (Math.sin(t * 0.5) * 0.015 + Math.sin(t * 0.23) * 0.008) * submergence;
+      const nod = Math.sin(t * 0.43) * 0.010 * submergence;
+      cameraRef.current.quaternion.multiply(_swayQuat.setFromAxisAngle(LOCAL_ROLL_AXIS, roll));
+      cameraRef.current.quaternion.multiply(_swayQuat.setFromAxisAngle(LOCAL_PITCH_AXIS, nod));
+    }
+
     targetQuat.current.copy(cameraRef.current.quaternion);
     const smoothDesktopLook = isLockedRef.current && !isTouchActive();
     if (!hasDisplayQuat.current || !smoothDesktopLook) {

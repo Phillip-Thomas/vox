@@ -16,6 +16,7 @@ import {
   areAdjacentFaces,
   chooseFaceFromPosition,
   composeVelocity,
+  composeSwimVelocity,
   dominantFaceForPosition,
   FACE_NORMALS,
   GRAVITY_STRENGTH,
@@ -41,6 +42,7 @@ import {
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
 import { getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
+import { setPlayerSubmerged } from '../state/playerSubmersion';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -52,23 +54,34 @@ import {
   PLAYER_CAPSULE_RADIUS,
   PLAYER_CENTER_CLEARANCE,
   PLAYER_EDGE_RADIUS,
+  PLAYER_EYE_HEIGHT,
   TRANSITION_LOCK_TIME,
   TRANSITION_MIN_INWARD_SPEED,
   VOXEL_SCALE
 } from '../utils/cubeGravityConstants';
 import { isTouchActive } from '../utils/mobileInput';
 import { MaterialType } from '../types/materials';
-import { canHarvestVoxel, computeMineDuration, harvestClassForBlock, harvestVoxel, mineDurationMs, requiredToolTierForVoxel } from '../game/systems/harvestingSystem';
+import { canHarvestVoxel, computeMineDuration, harvestClassForBlock, harvestVoxel, isInstantHarvest, mineDurationMs, requiredToolTierForVoxel } from '../game/systems/harvestingSystem';
 import { ensureStarterLoadout, getEquippedToolTier, selectTool, toolSpeedFor } from '../game/systems/loadoutSystem';
 import { clearMiningProgress, setMiningProgress } from '../game/systems/miningProgress';
 import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
 import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
 import { isBuildEnabled, getSelectedPiece, getSelectedMaterial, getBuildRotation } from '../game/systems/buildState';
-import { canAfford, placePiece, placeDoorway, placeVolume, toggleDoor, removePiece, hasPanel, getPieceAt, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
+import { canAfford, placePiece, placeDoorway, fitDoor, placeVolume, toggleDoor, removePiece, hasPanel, getPieceAt, oppositeFace, isOpenable, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
 import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, volumeOrientFromForward, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
 import { BUILD_PIECES } from '../game/data/buildPieces';
+import { tickVitals, tickOxygen, applyStamina, canSprint, feed, drink, getVitals } from '../game/systems/survivalVitals';
+import { getWaterskinFill, useWaterskin, fillWaterskin } from '../game/systems/consumeSystem';
+import { EDIBLE_ITEM_IDS, getItem } from '../game/data/items';
+import { getItemCount, removeItem } from '../game/systems/inventorySystem';
+import { getWorldGen } from '../utils/worldGenCache';
+import { getAppStateSnapshot } from '../state/appState';
+import { setInteraction, type ActiveInteraction } from '../game/systems/interactionSystem';
+import { isBoardable } from '../state/shipProximity';
+import { enterShip } from '../state/spaceFlight';
+import { getSpaceFlightSnapshot } from '../state/spaceFlight';
 import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
 import { treeFieldHandle } from './TreeField';
 import { looseStoneHandle } from './LooseStoneField';
@@ -79,17 +92,24 @@ import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(0, 0);
 const _buildFwd = new THREE.Vector3();
+const _effUp = new THREE.Vector3();
 const BLOCK_REACH = 8;
 const LADDER_CLIMB_SPEED = 4; // m/s up (jump) / down (back) while against a ladder
+const SPRINT_MULTIPLIER = 1.6; // move-speed boost while sprinting (Shift), drains stamina
 
-/** True if the player's cell carries a climbable (ladder) panel on any face. */
+/** True if a climbable (ladder) panel borders the player's cell. A panel is keyed to
+ *  ONE of the two cells it sits between, so we check the cell's own faces AND each
+ *  neighbour's facing face — the player on either side of the ladder detects it. */
 function isOnLadder(pos: THREE.Vector3): boolean {
   const cx = Math.round(pos.x / VOXEL_SCALE);
   const cy = Math.round(pos.y / VOXEL_SCALE);
   const cz = Math.round(pos.z / VOXEL_SCALE);
   for (let f = 0; f < 6; f++) {
-    const p = getPieceAt(cx, cy, cz, f);
-    if (p && BUILD_PIECES[p.type].climb) return true;
+    const own = getPieceAt(cx, cy, cz, f);
+    if (own && BUILD_PIECES[own.type].climb) return true;
+    const d = FACE_DIRS[f];
+    const nb = getPieceAt(cx + d[0], cy + d[1], cz + d[2], oppositeFace(f));
+    if (nb && BUILD_PIECES[nb.type].climb) return true;
   }
   return false;
 }
@@ -111,6 +131,15 @@ const SMOOTH_GRAVITY = typeof window === 'undefined'
 // 125k-instance InstancedMesh raycast every frame).
 const _lookOrigin = new THREE.Vector3();
 const _lookDir = new THREE.Vector3();
+const _wO = new THREE.Vector3(); // water look-ray scratch (lookingAtWater only —
+const _wD = new THREE.Vector3(); // distinct from _lookOrigin/_lookDir used by updateLookedAt)
+// Scratch for the per-step submersion test (eye position) + swim look direction.
+const _eye = new THREE.Vector3();
+const _swimLook = new THREE.Vector3();
+// Asymmetric submersion smoothing rates (per second): crossing the waterline is a
+// "moment". Out is faster than in so surfacing clears the underwater state crisply.
+const SUBMERGE_IN_RATE = 6;
+const SUBMERGE_OUT_RATE = 9;
 
 // Rotation taking oldUp -> newUp, robust for the ANTIPARALLEL case (top<->bottom
 // after a straight tunnel-through) where setFromUnitVectors is degenerate.
@@ -151,6 +180,7 @@ export interface PlayerDebugState {
 
 interface EfficientPlayerProps {
   planetSize: number;
+  terrainSeed: number;
   initialPosition?: THREE.Vector3;
   resetPosition?: THREE.Vector3;
   onPositionChange?: (position: THREE.Vector3) => void;
@@ -161,6 +191,7 @@ interface EfficientPlayerProps {
 
 export default function EfficientPlayer({
   planetSize,
+  terrainSeed,
   initialPosition,
   resetPosition,
   onPositionChange,
@@ -195,6 +226,8 @@ export default function EfficientPlayer({
   const prevBuildKey = useRef(false);
   const prevDeconKey = useRef(false);
   const prevInteractKey = useRef(false);
+  const resolvedRef = useRef<(ActiveInteraction & { perform: () => void }) | null>(null);
+  const prevEatKey = useRef(false);
   const frameCount = useRef(0);
   const transitionCooldown = useRef(0);
   const lastGrounded = useRef(false);
@@ -206,6 +239,11 @@ export default function EfficientPlayer({
     previousJump: false
   });
   const jetpackFuel = useRef(JETPACK_MAX_FUEL);
+  // Submersion: the live water classifier (same singleton WaterBlocks renders from)
+  // + a smoothed 0..1 of how far the EYE is underwater. Drives the swim physics
+  // branch and is published to playerSubmersion for audio / fog / post / particles.
+  const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
+  const submergence = useRef(0);
   const defaultSpawnPosition = useMemo(
     () => new THREE.Vector3(0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0),
     [planetSize]
@@ -249,6 +287,9 @@ export default function EfficientPlayer({
   }, []);
 
   useEffect(() => () => setJetpackSfx(false), []);
+  // Reset submersion when the on-foot controller unmounts (board ship / leave
+  // world) so the underwater audio muffle + fog can't get stuck on.
+  useEffect(() => () => setPlayerSubmerged(0, 0), []);
 
   const updateVisualTransition = useCallback(() => {
     const animation = rotationAnimation.current;
@@ -479,10 +520,17 @@ export default function EfficientPlayer({
       playSfx('mine');
       harvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier });
       voxelSystem.exposeNeighbors(coord.x, coord.y, coord.z);
+      // Dig-to-fill: if the dug cell is below the waterline next to water, flood it
+      // (and any connected sub-waterline void) so water flows in instead of leaving
+      // a dry hole. Submersion + the water mesh pick it up via the extended flood.
+      waterGen.extendFloodForDugCell(
+        coord.x, coord.y, coord.z,
+        (x, y, z) => waterGen.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z)
+      );
     } else {
       playSfx('blocked');
     }
-  }, []);
+  }, [waterGen]);
 
   // Per-frame hold-to-mine. `held` = the harvest key/touch is down this frame;
   // `dt` is seconds since last frame. Progress accumulates only while the
@@ -547,6 +595,8 @@ export default function EfficientPlayer({
       playSfx('mine');
     }
 
+    if (isInstantHarvest() && Number.isFinite(ms.duration)) ms.duration = 0; // debug: instant
+
     ms.elapsed += dt * 1000;
 
     if (ms.elapsed >= ms.duration) {
@@ -603,7 +653,7 @@ export default function EfficientPlayer({
       } else {
         const p = (h.object.userData as { piece?: StructurePiece }).piece;
         if (!p) continue;
-        hitInfo = { cell: p.cell, point: h.point, isPanel: true, panelType: p.type, panelFace: p.face, normalIdx: -1 };
+        hitInfo = { cell: p.cell, point: h.point, isPanel: true, panelType: p.type, panelFace: p.face, panelUp: p.up, normalIdx: -1 };
         deconHit = { cell: { x: p.cell[0], y: p.cell[1], z: p.cell[2] }, face: p.face };
       }
       break; // nearest
@@ -615,9 +665,12 @@ export default function EfficientPlayer({
       else playSfx('blocked');
     }
 
-    // Build frame = the player's footing (gravity up) so building orients to the
-    // surface you stand on — including the adjacent face when you wrap a cube edge.
-    const up = getPlayerUp();
+    // Build frame: when attaching to a STRUCTURE, inherit its build-up axis so pieces
+    // keep the foundation's grid (consistent around cube edges, regardless of where you
+    // stand); on bare terrain, use the player's footing.
+    const up = (hitInfo && hitInfo.panelUp != null)
+      ? _effUp.set(FACE_DIRS[hitInfo.panelUp][0], FACE_DIRS[hitInfo.panelUp][1], FACE_DIRS[hitInfo.panelUp][2])
+      : getPlayerUp();
     let target = hitInfo ? resolveBuildTarget(hitInfo, piece, up) : null;
     // Fallback: aiming across a foundation at eye height doesn't hit the thin floor
     // panel, so find the cell the ray passes through (walls snap to the faced edge /
@@ -636,7 +689,8 @@ export default function EfficientPlayer({
     // Doorways are 2-tall: the upper cell (one step along build-up) must also be free.
     const upIdx = faceIndexForNormal(up.x, up.y, up.z);
     const upDir = FACE_DIRS[upIdx];
-    const upperFree = piece !== 'doorway'
+    const isTall = piece === 'doorway'; // doors fit an existing doorway (already 2-tall)
+    const upperFree = !isTall
       || !hasPanel(target.cell[0] + upDir[0], target.cell[1] + upDir[1], target.cell[2] + upDir[2], target.face);
     // Volume pieces (stairs/roof) orient to where you're looking, snapped to 4 ways.
     let orient = 0;
@@ -650,27 +704,101 @@ export default function EfficientPlayer({
       let placed = false;
       if (ok) {
         if (piece === 'doorway') placed = placeDoorway(target.cell, target.face, upIdx, material);
+        else if (piece === 'door') placed = fitDoor(target.cell, target.face, material); // fit a leaf into the doorway
         else if (family === 'volume') placed = placeVolume(target.cell, upIdx, orient, piece, material);
-        else placed = placePiece(target.cell, target.face, piece, material);
+        else placed = placePiece(target.cell, target.face, piece, material, upIdx);
       }
       playSfx(placed ? 'mine' : 'blocked');
     }
   }, []);
 
+  // True when the player's cell is flooded water (drink / fill the waterskin here).
+  const isInWater = useCallback((pos: THREE.Vector3): boolean => {
+    const gen = getWorldGen(planetSize, terrainSeed).generator;
+    return gen.isWaterVoxel(
+      Math.round(pos.x / VOXEL_SCALE), Math.round(pos.y / VOXEL_SCALE), Math.round(pos.z / VOXEL_SCALE)
+    );
+  }, [planetSize, terrainSeed]);
+
+  // G — consume from inventory: eat the richest food you hold (if hungry), else sip
+  // the waterskin (if thirsty + filled). One key, picks what helps.
+  const tryConsume = useCallback(() => {
+    const vit = getVitals();
+    if (vit.hunger < 100) {
+      for (const id of EDIBLE_ITEM_IDS) { // richest-first
+        if (getItemCount(id) > 0 && removeItem(id, 1)) {
+          const def = getItem(id);
+          feed(def.foodValue ?? 0, def.waterValue ?? 0);
+          playSfx('mine');
+          return;
+        }
+      }
+    }
+    if (vit.thirst < 100 && getWaterskinFill() > 0) { useWaterskin(); playSfx('mine'); return; }
+    playSfx('blocked');
+  }, []);
+
   // Toggle the openable piece (door) under the crosshair — works in or out of build
   // mode, so you can open/close doors while living in your shelter.
-  const tryToggleDoor = useCallback((camera: THREE.Camera | null) => {
+  const tryToggleDoor = useCallback((camera: THREE.Camera | null): boolean => {
     const group = structureFieldHandle.group;
-    if (!camera || !group) return;
+    if (!camera || !group) return false;
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
     for (const h of raycaster.intersectObjects(group.children, false)) {
       const p = (h.object.userData as { piece?: StructurePiece }).piece;
       if (!p) continue;
-      if (BUILD_PIECES[p.type].openable) { if (toggleDoor(p.cell, p.face)) playSfx('mine'); }
-      return; // nearest only
+      if (isOpenable(p) && toggleDoor(p.cell, p.face)) { playSfx('mine'); return true; }
+      return false; // nearest piece isn't an openable door
     }
+    return false;
   }, []);
+
+  // --- Systemic context interaction (F) -------------------------------------
+  // A door under the crosshair → its open-state verb (else null).
+  const lookedAtDoor = useCallback((camera: THREE.Camera | null): { open: boolean } | null => {
+    const group = structureFieldHandle.group;
+    if (!camera || !group) return null;
+    raycaster.far = BLOCK_REACH;
+    raycaster.setFromCamera(mouse, camera);
+    for (const h of raycaster.intersectObjects(group.children, false)) {
+      const p = (h.object.userData as { piece?: StructurePiece }).piece;
+      if (!p) continue;
+      return isOpenable(p) ? { open: Boolean(p.open) } : null;
+    }
+    return null;
+  }, []);
+
+  // The look-ray reaches a water cell before any solid terrain (within reach).
+  const lookingAtWater = useCallback((camera: THREE.Camera | null): boolean => {
+    if (!camera) return false;
+    camera.getWorldPosition(_wO);
+    camera.getWorldDirection(_wD);
+    const gen = getWorldGen(planetSize, terrainSeed).generator;
+    for (let t = 0.5; t <= BLOCK_REACH; t += 0.45) {
+      const vx = Math.round((_wO.x + _wD.x * t) / VOXEL_SCALE);
+      const vy = Math.round((_wO.y + _wD.y * t) / VOXEL_SCALE);
+      const vz = Math.round((_wO.z + _wD.z * t) / VOXEL_SCALE);
+      if (voxelSystem.hasVoxel(vx, vy, vz)) return false;
+      if (gen.isWaterVoxel(vx, vy, vz)) return true;
+    }
+    return false;
+  }, [planetSize, terrainSeed]);
+
+  // Resolve the single best available interaction (priority: door → board → drink →
+  // consume) into { verb, perform }. Drives the HUD prompt + the primary key.
+  const resolveInteraction = useCallback((camera: THREE.Camera | null, position: THREE.Vector3): (ActiveInteraction & { perform: () => void }) | null => {
+    const door = lookedAtDoor(camera);
+    if (door) return { id: 'door', verb: door.open ? 'Close Door' : 'Open Door', perform: () => { tryToggleDoor(camera); } };
+    if (isBoardable()) return { id: 'board', verb: 'Enter Ship', perform: () => { playSfx('boardShip'); enterShip(); } };
+    if (lookingAtWater(camera) || isInWater(position)) {
+      return { id: 'drink', verb: 'Drink', perform: () => { drink(60); if (getItemCount('waterskin') > 0) fillWaterskin(); playSfx('mine'); } };
+    }
+    return null; // eat/drink-from-skin is on its own key (G), not the F context prompt
+  }, [lookedAtDoor, lookingAtWater, isInWater, tryToggleDoor, tryConsume]);
+
+  // Clear the prompt when the on-foot player unmounts (boarding / world swap).
+  useEffect(() => () => setInteraction(null), []);
 
   // "Looking at" readout for the crosshair label. The terrain voxel uses a CHEAP
   // ray-march (round(world/VOXEL_SCALE) Map lookups, not a 125k-instance raycast);
@@ -774,11 +902,13 @@ export default function EfficientPlayer({
         planetRadius: planetSize
       });
       if (resolved.mode === 'escape') {
+        applyStamina(FIXED_PHYSICS_STEP, false); // regen even on reorientation frames (no sprint here)
         beginReorient(resolved.face, resolved.velocityCorrection ?? preVelocity, resolved.positionClamp);
         return;
       }
       const reorientLocked = Boolean(rotationAnimation.current) || transitionCooldown.current > 0;
       if (resolved.mode === 'snap' && !reorientLocked) {
+        applyStamina(FIXED_PHYSICS_STEP, false);
         beginReorient(resolved.face, preVelocity);
         return;
       }
@@ -789,6 +919,25 @@ export default function EfficientPlayer({
     // Publish the local up so the sky/lighting can drive LOCAL day/night
     // (chase-the-light): the sun lights the hemisphere this up faces.
     setPlayerUp(activeUp);
+
+    // --- Submersion: test the EYE (not the capsule center) against the live water
+    // classification, smoothed asymmetrically so crossing the waterline is a
+    // discrete "moment". Single source of truth — published for swim physics here
+    // plus audio/fog/post/particles via playerSubmersion. Cheap: one Set lookup.
+    const eyeWorld = _eye.copy(position).addScaledVector(activeUp, PLAYER_EYE_HEIGHT);
+    const wet = waterGen.isWaterVoxel(
+      Math.round(eyeWorld.x / VOXEL_SCALE),
+      Math.round(eyeWorld.y / VOXEL_SCALE),
+      Math.round(eyeWorld.z / VOXEL_SCALE)
+    );
+    const subRate = wet ? SUBMERGE_IN_RATE : SUBMERGE_OUT_RATE;
+    submergence.current += ((wet ? 1 : 0) - submergence.current) * Math.min(1, subRate * FIXED_PHYSICS_STEP);
+    // Depth below the surface (cube dominant-axis, world units, >= 0) for fog falloff.
+    const eyeDomVoxel = Math.max(Math.abs(eyeWorld.x), Math.abs(eyeWorld.y), Math.abs(eyeWorld.z)) / VOXEL_SCALE;
+    const depthBelow = Math.max(0, (waterGen.getSeaLevelRadius() - eyeDomVoxel) * VOXEL_SCALE);
+    setPlayerSubmerged(submergence.current, depthBelow);
+    const swimFactor = Math.min(1, submergence.current / 0.5);
+    const submerged = submergence.current > 0.5;
 
     const grounded = checkGrounded(position, activeUp);
     lastGrounded.current = grounded;
@@ -819,7 +968,13 @@ export default function EfficientPlayer({
       FIXED_PHYSICS_STEP,
       grounded
     );
-    let nextVelocity = composeVelocity(gravityVelocity, moveDirection, activeUp, DEFAULT_MOVE_SPEED);
+    // Sprint (Shift): faster on-foot move while grounded + actually moving + stamina left.
+    // The `grounded` gate means an airborne sprint-hold doesn't drain — applyStamina runs
+    // every step, so any not-sprinting frame (including airborne) REGENERATES stamina.
+    const moving = moveDirection.lengthSq() > 0.0001;
+    const sprinting = active && controls.sprint === true && grounded && moving && canSprint();
+    applyStamina(FIXED_PHYSICS_STEP, sprinting);
+    let nextVelocity = composeVelocity(gravityVelocity, moveDirection, activeUp, DEFAULT_MOVE_SPEED * (sprinting ? SPRINT_MULTIPLIER : 1));
 
     const jump = updateJumpState(
       jumpState.current,
@@ -829,7 +984,11 @@ export default function EfficientPlayer({
     );
     jumpState.current = jump.next;
 
-    if (jump.shouldJump) {
+    // On a ladder, jump/back drive the climb (below) — suppress the jump impulse +
+    // jetpack so they don't fire the SFX / burn fuel while climbing.
+    const onLadder = isOnLadder(position);
+
+    if (jump.shouldJump && !submerged && !onLadder) {
       playSfx('jump');
       nextVelocity = applyJumpImpulse(nextVelocity, activeUp, DEFAULT_JUMP_SPEED);
     }
@@ -844,7 +1003,7 @@ export default function EfficientPlayer({
         JETPACK_MAX_FUEL,
         jetpackFuel.current + JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP
       );
-    } else if (jumpHeld && !jump.shouldJump && jetpackFuel.current > 0) {
+    } else if (jumpHeld && !jump.shouldJump && jetpackFuel.current > 0 && !submerged && !onLadder) {
       jetpackActive = true;
       jetpackFuel.current = Math.max(0, jetpackFuel.current - FIXED_PHYSICS_STEP);
       const upSpeed = nextVelocity.dot(activeUp);
@@ -856,11 +1015,31 @@ export default function EfficientPlayer({
     jetpackFuelDisplay = jetpackFuel.current / JETPACK_MAX_FUEL;
     setJetpackSfx(jetpackActive, Math.max(0.35, jetpackFuelDisplay));
 
-    // Ladder: cling + climb, overriding gravity, while in a cell with a ladder.
-    // Jump = up, back = down, neither = hold position.
-    if (isOnLadder(position)) {
-      const climb = controls.jump ? LADDER_CLIMB_SPEED : (controls.backward ? -LADDER_CLIMB_SPEED : 0);
+    // Ladder: cling + climb, overriding gravity, while bordering a ladder.
+    // Jump = up, back/descend = down, neither = hold position.
+    if (onLadder) {
+      const down = controls.backward || (controls as Record<string, boolean>).descend;
+      const climb = controls.jump ? LADDER_CLIMB_SPEED : (down ? -LADDER_CLIMB_SPEED : 0);
       nextVelocity.addScaledVector(activeUp, climb - nextVelocity.dot(activeUp));
+    }
+
+    // Underwater: blend a full-3D buoyant swim over the walk velocity by how
+    // submerged the EYE is. At full submersion this replaces walking entirely;
+    // while wading it blends, so the waterline transition is smooth. Swim toward
+    // the camera look (incl. pitch) + jump=up / descend=down; slight positive
+    // buoyancy drifts you gently to the surface when idle. The land path above is
+    // byte-for-byte unchanged when swimFactor is 0.
+    if (submergence.current > 0.001 && cameraRef.current) {
+      const look = cameraRef.current.getWorldDirection(_swimLook);
+      const swimVelocity = composeSwimVelocity(currentVelocity, look, activeUp, {
+        forward: movementInput.forward,
+        backward: movementInput.backward,
+        left: movementInput.left,
+        right: movementInput.right,
+        ascend: active && controls.jump === true,
+        descend: active && (controls as Record<string, boolean>).descend === true
+      }, FIXED_PHYSICS_STEP);
+      nextVelocity.lerp(swimVelocity, swimFactor);
     }
 
     // (cooldown already decremented at the top of the step, before the resolver.)
@@ -894,6 +1073,16 @@ export default function EfficientPlayer({
     const position = vectorFromRapier(body.translation());
     onPositionChange?.(position);
     setPlayerWorldPosition(position); // global for non-Canvas code (campfire placement)
+
+    // Gentle survival decay — only on-foot on a surface while actually playing
+    // (paused in menus / flight / space / cinematic). Real dt; silent (HUD polls).
+    const flightSnap = getSpaceFlightSnapshot();
+    const decayActive = getAppStateSnapshot().phase === 'playing'
+      && flightSnap.phase === 'surface' && flightSnap.controlMode === 'fps';
+    tickVitals(Math.min(delta, 0.05), decayActive); // clamp so a tab-away/stall can't binge-decay
+    // Breath: drain while the eye is submerged (in normal surface play), refill
+    // otherwise; drowning bleeds HP at empty (non-lethal — see tickOxygen).
+    tickOxygen(Math.min(delta, 0.05), decayActive && submergence.current > 0.5);
     if (lastGroundedNotification.current !== lastGrounded.current) {
       const previous = lastGroundedNotification.current;
       lastGroundedNotification.current = lastGrounded.current;
@@ -923,10 +1112,31 @@ export default function EfficientPlayer({
       updateMining(harvestHeld, delta, cameraRef.current);
     }
 
-    // Door toggle (interact key, V) — independent of build mode.
-    const interactHeld = deleteActive && Boolean((controls as Record<string, boolean>).interact);
-    if (interactHeld && !prevInteractKey.current) tryToggleDoor(cameraRef.current);
+    // Systemic context interaction (F): resolve the best action EVERY frame (cheap, and
+    // avoids firing a stale cached action on a target you've looked away from), publish it
+    // for the HUD prompt, and perform on the key edge. Skipped in build mode (F is free
+    // there — building owns the controls).
+    if (isBuildEnabled()) {
+      resolvedRef.current = null;
+      setInteraction(null);
+    } else {
+      const it = resolveInteraction(cameraRef.current, position);
+      resolvedRef.current = it;
+      setInteraction(it ? { id: it.id, verb: it.verb } : null);
+    }
+    const interactHeld = deleteActive && (controls as Record<string, boolean>).interact === true;
+    if (interactHeld && !prevInteractKey.current && resolvedRef.current) {
+      const wasBoard = resolvedRef.current.id === 'board';
+      resolvedRef.current.perform();
+      if (wasBoard) setInteraction(null); // boarding unmounts the player — clear the prompt now
+    }
     prevInteractKey.current = interactHeld;
+
+    // Eat / drink-from-skin on its OWN key (G) — kept off the F context prompt so it
+    // doesn't show constantly whenever you're carrying food.
+    const eatHeld = deleteActive && (controls as Record<string, boolean>).eat === true;
+    if (eatHeld && !prevEatKey.current) tryConsume();
+    prevEatKey.current = eatHeld;
 
     // Update the "looking at" readout a few times/sec (cheap voxel march).
     if (frameCount.current % 4 === 0) {

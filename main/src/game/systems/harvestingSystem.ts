@@ -115,6 +115,12 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
 export const BASE_MINE_MS = 2000; // ms to break a hardness-1 block at tool tier 0
 export const MIN_MINE_MS = 150;   // floor so top-tier mining still feels physical
 
+// Debug (?debug=1): zero the hold time so harvesting is instant. The tool-tier gate
+// still applies (a too-weak tool returns Infinity → never breaks). Set by App.
+let instantHarvest = false;
+export function setInstantHarvest(on: boolean): void { instantHarvest = on; }
+export function isInstantHarvest(): boolean { return instantHarvest; }
+
 /**
  * Core hold-time math, shared by voxel mining and tree harvesting. `speedMul`
  * folds in per-tool mining speed + the bare-handed (unfuelled) penalty: <1 slows

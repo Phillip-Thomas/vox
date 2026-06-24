@@ -6,9 +6,12 @@ import EfficientPlayer, { PlayerDebugState } from './EfficientPlayer';
 import GrassField from './GrassField';
 import TreeField from './TreeField';
 import LooseStoneField from './LooseStoneField';
+import ForageField from './ForageField';
 import { PlayerTorch, Campfires } from './Lights';
 import StructureField, { BuildGhost } from './StructureField';
 import WaterBlocks from './WaterBlocks.tsx';
+import UnderwaterDome from './UnderwaterDome.tsx';
+import UnderwaterParticles from './UnderwaterParticles.tsx';
 import OverviewCamera from './OverviewCamera.tsx';
 import MenuCamera from './MenuCamera.tsx';
 import AgentCamera from './debug/AgentCamera.tsx';
@@ -153,6 +156,7 @@ export default function EfficientScene({
       ) : (
         <EfficientPlayer
           planetSize={planetSize}
+          terrainSeed={terrainSeed}
           initialPosition={landedShipPos ?? initialPlayerPosition}
           resetPosition={arrivalPose.playerSurfacePosition}
           onPositionChange={publishPlayerPosition}
@@ -170,11 +174,17 @@ export default function EfficientScene({
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <TreeField planetSize={planetSize} terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <LooseStoneField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <ForageField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <PlayerTorch playerPosition={playerPosition} />
       <Campfires terrainSeed={terrainSeed} />
       <StructureField terrainSeed={terrainSeed} />
       <BuildGhost />
       <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} />
+      {/* Underwater: the surface-seen-from-below dome + near-field marine snow /
+          bubbles. Both self-gate on submergence (invisible above water) and on
+          the underwater graphics knobs, so they're cheap to leave mounted. */}
+      <UnderwaterDome />
+      <UnderwaterParticles />
     </Physics>
   );
 }

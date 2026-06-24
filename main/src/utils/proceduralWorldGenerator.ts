@@ -87,6 +87,7 @@ export class ProceduralWorldGenerator {
   private profile: PlanetProfile;
 
   private surfaceHeightCache = new Map<string, number>();
+  private landOffsetCache = new Map<string, number>();
   private existenceCache = new Map<string, boolean>();
   // Lazily-computed sea-level radius (coordinate units) derived from a chosen
   // PERCENTILE of the actual terrain surface-radius distribution.
@@ -95,6 +96,13 @@ export class ProceduralWorldGenerator {
   // waterline that are CONNECTED to the ocean surface (Minecraft-style flow into
   // voids). Replaces the old per-cell dominant-axis threshold.
   private floodedWater: Set<string> | null = null;
+  // Runtime "dig-to-fill" water: cells flooded at PLAY time when a solid block is
+  // removed below the waterline next to water. They EXTEND floodedWater (so
+  // isWaterVoxel + the player's submersion test pick them up for free); the
+  // renderer also iterates them so the dug cell visibly fills. waterEditVersion
+  // bumps so the water mesh rebuilds. Reset only when a fresh generator is built.
+  private dynamicWaterCells: Array<{ x: number; y: number; z: number }> = [];
+  private waterEditVersion = 0;
   // Minimum share of sampled terrain columns that must stay above the waterline,
   // so sea level can never submerge a whole planet (fixes "sea above ground").
   private static readonly MIN_LAND_FRACTION = 0.3;
@@ -106,6 +114,10 @@ export class ProceduralWorldGenerator {
   // past floor(R)); this only lets the ocean occupy the empty shells around the
   // terrain so EVERY seed can have a visible waterline.
   private static readonly WATER_SHELL_MARGIN = 5;
+
+  // Deep oceans never carve the seabed below this fraction of the planet radius,
+  // so there is always a solid floor under the sea (bounded, explorable depth).
+  private static readonly MIN_SEABED_FRACTION = 0.45;
 
   // --- Surface material tuning knobs ----------------------------------------
   // The surface shell is SLOPE-DRIVEN (see generateMaterialForPosition): flat /
@@ -499,6 +511,65 @@ export class ProceduralWorldGenerator {
     return out;
   }
 
+  getWaterEditVersion(): number {
+    return this.waterEditVersion;
+  }
+
+  getDynamicWaterCells(): ReadonlyArray<{ x: number; y: number; z: number }> {
+    return this.dynamicWaterCells;
+  }
+
+  /**
+   * Dig-to-fill: when a solid cell is removed, flood it (and any connected open
+   * sub-waterline cells) if it sits at/below sea level and TOUCHES existing water.
+   * `isLiveSolid` reports LIVE terrain solidity (static terrain minus dug cells)
+   * so we extend the cached flood incrementally instead of re-scanning the whole
+   * planet. Cascades like Minecraft water flowing into a dug channel/cave; returns
+   * the newly-flooded cells (also appended to the dynamic set + bumps the version).
+   */
+  extendFloodForDugCell(
+    x: number,
+    y: number,
+    z: number,
+    isLiveSolid: (x: number, y: number, z: number) => boolean
+  ): Array<{ x: number; y: number; z: number }> {
+    const sea = this.getSeaLevelRadius();
+    const flooded = this.getFloodedWater();
+    const R = this.waterScanRadius();
+    const neigh: ReadonlyArray<readonly [number, number, number]> = [
+      [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]
+    ];
+    const fillable = (cx: number, cy: number, cz: number) =>
+      Math.abs(cx) <= R && Math.abs(cy) <= R && Math.abs(cz) <= R &&
+      !flooded.has(`${cx},${cy},${cz}`) &&
+      !isLiveSolid(cx, cy, cz) &&
+      this.dominantAxisRadius(cx, cy, cz) <= sea;
+    const touchesWater = (cx: number, cy: number, cz: number) =>
+      neigh.some(([dx, dy, dz]) => flooded.has(`${cx + dx},${cy + dy},${cz + dz}`));
+
+    // Only fill a dug cell that is itself fillable AND connected to the ocean
+    // (touches an already-flooded cell), so isolated above-water digs stay dry.
+    if (!fillable(x, y, z) || !touchesWater(x, y, z)) return [];
+
+    const added: Array<{ x: number; y: number; z: number }> = [];
+    const stack: Array<[number, number, number]> = [[x, y, z]];
+    flooded.add(`${x},${y},${z}`);
+    added.push({ x, y, z });
+    while (stack.length) {
+      const [cx, cy, cz] = stack.pop()!;
+      for (const [dx, dy, dz] of neigh) {
+        const nx = cx + dx, ny = cy + dy, nz = cz + dz;
+        if (!fillable(nx, ny, nz)) continue;
+        flooded.add(`${nx},${ny},${nz}`);
+        added.push({ x: nx, y: ny, z: nz });
+        stack.push([nx, ny, nz]);
+      }
+    }
+    this.dynamicWaterCells.push(...added);
+    this.waterEditVersion++;
+    return added;
+  }
+
   private dominantAxisRadius(x: number, y: number, z: number) {
     return Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
   }
@@ -526,29 +597,64 @@ export class ProceduralWorldGenerator {
     const absY = Math.abs(y);
     const absZ = Math.abs(z);
 
-    let surfaceDistance: number;
-    let u: number;
-    let v: number;
+    const surfaceDistance =
+      absX >= absY && absX >= absZ ? planetRadius - absX
+        : absY >= absX && absY >= absZ ? planetRadius - absY
+          : planetRadius - absZ;
 
-    if (absX >= absY && absX >= absZ) {
-      surfaceDistance = planetRadius - absX;
-      u = y;
-      v = z;
-    } else if (absY >= absX && absY >= absZ) {
-      surfaceDistance = planetRadius - absY;
-      u = x;
-      v = z;
-    } else {
-      surfaceDistance = planetRadius - absZ;
-      u = x;
-      v = y;
+    let terrainOffset = this.getLandOffset(x, y, z);
+
+    // OCEAN BASINS: inside a low-frequency ocean mask, blend the seabed toward a
+    // FIXED floor radius so deep seas are a CONSISTENT, explorable depth on every
+    // seed (instead of varying wildly with the local land noise). It only ever
+    // LOWERS terrain (never raises land) and keeps ~18% of the land relief, so the
+    // floor still has trenches / seamounts / ridges. Small depressions OUTSIDE the
+    // mask still flood as shallow puddles. Sea level is sampled from the LAND offset
+    // (sampleSurfaceRadii → getLandOffset), so it stays HIGH above these basins.
+    const oceanMask = this.oceanMaskAt(x, y, z);
+    if (oceanMask > 0) {
+      const floorOffset = -(this.terrainConfig.oceanDepth ?? 0); // floor radius = planetRadius - oceanDepth
+      const target = Math.min(terrainOffset, floorOffset);
+      terrainOffset += (target - terrainOffset) * (oceanMask * 0.82);
     }
 
+    // Hard seabed floor: never carve the terrain top below MIN_SEABED_FRACTION of
+    // the planet radius, so deep oceans ALWAYS have a solid bottom (no planet-
+    // eating runaway) and ocean depth is bounded (~sea - this floor).
+    const minOffset = ProceduralWorldGenerator.MIN_SEABED_FRACTION * this.getPlanetRadius() - this.getPlanetRadius();
+    if (terrainOffset < minOffset) terrainOffset = minOffset;
+
+    const height = surfaceDistance + terrainOffset;
+    this.surfaceHeightCache.set(key, height);
+    return height;
+  }
+
+  // Tangent (u,v) noise coordinates for a cell — the same dominant-axis projection
+  // getProceduralSurfaceHeight uses, factored out so getLandOffset + the ocean mask
+  // share one definition.
+  private tangentNoiseCoords(x: number, y: number, z: number): [number, number] {
+    const absX = Math.abs(x), absY = Math.abs(y), absZ = Math.abs(z);
+    let u: number, v: number;
+    if (absX >= absY && absX >= absZ) { u = y; v = z; }
+    else if (absY >= absX && absY >= absZ) { u = x; v = z; }
+    else { u = x; v = y; }
     const scale = this.terrainConfig.terrainScale;
     const seedOffset = this.terrainConfig.seed * 0.001;
-    const noiseX = (u + seedOffset) * scale;
-    const noiseY = (v + seedOffset) * scale;
+    return [(u + seedOffset) * scale, (v + seedOffset) * scale];
+  }
 
+  /**
+   * The LAND surface offset (terrain noise only — mountains/hills/detail/valleys),
+   * with NO ocean carve and no surfaceDistance. Cached. The sea-level sampler uses
+   * this so the waterline is set from the land/continent distribution and stays
+   * high above the carved ocean basins (the basins are explorably deep as a result).
+   */
+  private getLandOffset(x: number, y: number, z: number): number {
+    const key = `${x},${y},${z}`;
+    const cached = this.landOffsetCache.get(key);
+    if (cached !== undefined) return cached;
+
+    const [noiseX, noiseY] = this.tangentNoiseCoords(x, y, z);
     const mountainNoise = this.noise.fractalNoise(
       noiseX * this.terrainConfig.mountainFrequency,
       noiseY * this.terrainConfig.mountainFrequency,
@@ -564,18 +670,37 @@ export class ProceduralWorldGenerator {
     const detailNoise = this.noise.fractalNoise(noiseX * 0.3, noiseY * 0.3, 4, 0.5);
     const valleyNoise = this.noise.fractalNoise(noiseX * 0.04, noiseY * 0.04, 3, 0.6);
 
-    let terrainOffset = 0;
-    terrainOffset += mountainNoise * this.terrainConfig.heightVariation * 1.5;
-    terrainOffset += hillNoise * this.terrainConfig.heightVariation * 0.8;
-    terrainOffset += detailNoise * this.terrainConfig.heightVariation * 0.4;
-
+    let offset = 0;
+    offset += mountainNoise * this.terrainConfig.heightVariation * 1.5;
+    offset += hillNoise * this.terrainConfig.heightVariation * 0.8;
+    offset += detailNoise * this.terrainConfig.heightVariation * 0.4;
     if (valleyNoise < -0.1) {
-      terrainOffset -= this.terrainConfig.valleyDepth * Math.abs(valleyNoise + 0.1) * 5;
+      offset -= this.terrainConfig.valleyDepth * Math.abs(valleyNoise + 0.1) * 5;
     }
 
-    const height = surfaceDistance + terrainOffset;
-    this.surfaceHeightCache.set(key, height);
-    return height;
+    this.landOffsetCache.set(key, offset);
+    return offset;
+  }
+
+  // Ocean mask 0..1 at a cell: 1 deep inside a broad ocean region, ramping to 0 at
+  // the basin shoulder. Sampled from the RAW tangent coords (u,v) at oceanFrequency
+  // — NOT the terrain's (u+seedOffset)*scale coords, whose span is sub-grid-cell at
+  // low frequency (so it wouldn't vary across the planet). A per-seed shift gives
+  // each world a distinct ocean/continent layout.
+  private oceanMaskAt(x: number, y: number, z: number): number {
+    const oceanFreq = this.terrainConfig.oceanFrequency ?? 0;
+    if (oceanFreq <= 0 || (this.terrainConfig.oceanDepth ?? 0) <= 0) return 0;
+    const absX = Math.abs(x), absY = Math.abs(y), absZ = Math.abs(z);
+    let u: number, v: number;
+    if (absX >= absY && absX >= absZ) { u = y; v = z; }
+    else if (absY >= absX && absY >= absZ) { u = x; v = z; }
+    else { u = x; v = y; }
+    const shift = (this.terrainConfig.seed % 997) * 0.137; // decorrelate the layout per seed
+    const oceanNoise = this.noise.fractalNoise(u * oceanFreq + shift, v * oceanFreq - shift, 4, 0.5);
+    const into = (this.terrainConfig.oceanCoverage ?? 0) - oceanNoise; // > 0 inside ocean regions
+    if (into <= 0) return 0;
+    const t = Math.min(1, into / Math.max(0.001, this.terrainConfig.oceanEdge ?? 0.2));
+    return t * t * (3 - 2 * t); // smoothstep
   }
 
   private getDistanceFromCenter(x: number, y: number, z: number) {
@@ -704,9 +829,9 @@ export class ProceduralWorldGenerator {
           // dominant axis abs is R so surfaceDistance = planetRadius - R. The
           // terrain top radius (matching the SAND classification in
           // generateMaterialForPosition) is planetRadius + terrainOffset.
-          const surfaceHeight = this.getProceduralSurfaceHeight(x, y, z);
-          const terrainOffset = surfaceHeight - (planetRadius - R);
-          radii.push(planetRadius + terrainOffset);
+          // Sea level is set from the LAND surface (no ocean carve), so it sits high
+          // above the carved basins → deep, explorable seas (not dragged down shallow).
+          radii.push(planetRadius + this.getLandOffset(x, y, z));
         }
       }
     }

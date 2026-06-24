@@ -18,7 +18,7 @@
 // On unmount we restore `ACESFilmicToneMapping` so toggling profiles at runtime
 // can't leave the renderer in a bad state.
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import {
@@ -35,11 +35,20 @@ import { getSunDirection } from '../SkyController.tsx';
 import { PainterlyEffect } from './PainterlyEffect.ts';
 import { ColorGradeEffect, getColorGrade } from './ColorGradeEffect.ts';
 import { OutlineEffect } from './OutlineEffect.ts';
+import { UnderwaterEffect, getUnderwater } from './UnderwaterEffect.ts';
+import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
+import { getVitals } from '../../game/systems/survivalVitals.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
 const ColorGrade = wrapEffect(ColorGradeEffect);
 const EdgeOutline = wrapEffect(OutlineEffect);
+const Underwater = wrapEffect(UnderwaterEffect);
+
+// Scratch for projecting the sun direction to screen space (god-ray origin).
+const _sunDir = new THREE.Vector3();
+const _camFwd = new THREE.Vector3();
+const _sunPoint = new THREE.Vector3();
 
 interface PostFXProps {
   /** Planet seed — drives the per-biome color grade. */
@@ -84,25 +93,60 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
   const colorGrade = quality.colorGrade;
   const contactAO = quality.contactAO;
   const outline = quality.outline;
+  const underwaterPostFX = quality.underwaterPostFX;
+  const underwaterGodrays = quality.underwaterGodrays;
 
   const grade = useMemo(() => biomeGrade(terrainSeed), [terrainSeed]);
+  // Edge-triggered submerge/emerge wipe + previous submerged state for it.
+  const prevSubmerged = useRef(false);
+  const wipe = useRef(0);
 
   // Drive the grade through the module handle (no props/ref — see ColorGradeEffect).
   // Per-biome tint/sat are static; warmth + contrast track the sun: warm at golden
   // hour, cooler + slightly punchier at night.
-  useFrame(() => {
+  useFrame((state, delta) => {
     const eff = getColorGrade();
-    if (!eff) return;
-    const sunY = getSunDirection().y;
-    const daylight = THREE.MathUtils.smoothstep(sunY, -0.12, 0.18);
-    const golden = daylight * (1 - THREE.MathUtils.smoothstep(sunY, 0.05, 0.32));
-    eff.setGrade(
-      grade.tint,
-      grade.tintAmount,
-      grade.saturation,
-      golden * 0.8 - (1 - daylight) * 0.35,
-      grade.contrast + (1 - daylight) * 0.05
-    );
+    if (eff) {
+      const sunY = getSunDirection().y;
+      const daylight = THREE.MathUtils.smoothstep(sunY, -0.12, 0.18);
+      const golden = daylight * (1 - THREE.MathUtils.smoothstep(sunY, 0.05, 0.32));
+      eff.setGrade(
+        grade.tint,
+        grade.tintAmount,
+        grade.saturation,
+        golden * 0.8 - (1 - daylight) * 0.35,
+        grade.contrast + (1 - daylight) * 0.05
+      );
+    }
+
+    // Drive the underwater pass from the single submergence signal.
+    if (underwaterPostFX) {
+      const uw = getUnderwater();
+      if (uw) {
+        const submergence = getPlayerSubmergence();
+        const submerged = submergence > 0.5;
+        // Edge-trigger the crossing wipe (1 -> 0 over ~0.35s).
+        if (submerged !== prevSubmerged.current) { prevSubmerged.current = submerged; wipe.current = 1; }
+        if (wipe.current > 0) wipe.current = Math.max(0, wipe.current - delta / 0.35);
+
+        // Project the sun direction to screen-space for the god-ray origin.
+        let sunUvX = -100;
+        let sunUvY = -100;
+        _sunDir.copy(getSunDirection());
+        state.camera.getWorldDirection(_camFwd);
+        if (_camFwd.dot(_sunDir) > 0.0) {
+          _sunPoint.copy(state.camera.position).addScaledVector(_sunDir, 2000).project(state.camera);
+          if (_sunPoint.z < 1.0) { sunUvX = _sunPoint.x * 0.5 + 0.5; sunUvY = _sunPoint.y * 0.5 + 0.5; }
+        }
+
+        // Low-oxygen vignette pulse (the M3 breath visual hooks in here).
+        const oxygen = getVitals().oxygen;
+        const vignette = oxygen < 25 ? 0.5 + 0.5 * Math.sin(state.clock.elapsedTime * 7.0) : 0;
+
+        uw.uniforms.get('uGodrays')!.value = underwaterGodrays ? 1 : 0;
+        uw.setFrame(submergence, state.clock.elapsedTime, sunUvX, sunUvY, wipe.current, vignette);
+      }
+    }
   });
 
   return (
@@ -149,6 +193,13 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       {/* Unified per-biome + time-of-day color grade (cohesion). Just before
           tone mapping so it grades the composited HDR frame once. */}
       {colorGrade ? <ColorGrade /> : <></>}
+
+      {/* Depth-based underwater pass (extinction + haze + godrays + wobble +
+          vignette + crossing wipe). A no-op above water (driven submergence=0);
+          fades in with the same signal as the fog/audio/particles. After the
+          grade so the water is the final medium, before ACES. Gated ULTRA/HIGH;
+          lower tiers use the always-on FogExp2 underwater override instead. */}
+      {underwaterPostFX ? <Underwater /> : <></>}
 
       {/* MUST be last: applies ACES once, replacing the renderer's tone map. */}
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />

@@ -18,8 +18,11 @@ import { getPieces, restorePieces, type StructurePiece } from './structureSystem
 import { getCampfires, restoreCampfires } from './campfires.ts';
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
+import { getCollectedForage, markForageCollected } from './foragePickup.ts';
 import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
 import { getPlayerWorldPosition, getPlayerLook } from '../../state/playerFrame.ts';
+import { getVitals, setVitals, type VitalsState } from './survivalVitals.ts';
+import { getWaterskinFill, setWaterskinFill } from './consumeSystem.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
 import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
@@ -47,13 +50,15 @@ export interface GlobalSave {
   era: EraId;
   milestones: string[];
   lastWorld: WorldCoordinate | null;
-  dayPhase?: number; // time-of-day to resume at (0..1); SkyController offset
+  dayPhase?: number;       // time-of-day to resume at (0..1); SkyController offset
+  vitals?: VitalsState;    // survival meters (health/hunger/thirst/warmth/stamina)
+  waterskin?: number;      // carried-water fill level
 }
 
 export function saveGlobal(lastWorld: WorldCoordinate | null, dayPhase?: number): void {
   const data: GlobalSave = {
     inventory: getInventory(), mawCharge: getMawCharge(), era: getCurrentEra(),
-    milestones: getMilestones(), lastWorld, dayPhase
+    milestones: getMilestones(), lastWorld, dayPhase, vitals: getVitals(), waterskin: getWaterskinFill()
   };
   write(GLOBAL_KEY, data);
 }
@@ -69,6 +74,8 @@ export function restoreGlobal(save: GlobalSave): void {
   setMawCharge(save.mawCharge ?? 0);
   if (save.era) advanceEraTo(save.era);
   for (const m of save.milestones ?? []) markMilestone(m);
+  if (save.vitals) setVitals(save.vitals);
+  if (save.waterskin != null) setWaterskinFill(save.waterskin);
 }
 
 // --- Per-world ---------------------------------------------------------------
@@ -77,6 +84,7 @@ interface WorldSave {
   campfires: Array<{ pos: [number, number, number]; up: [number, number, number] }>;
   trees: Array<[number, number, number]>;
   stones: Array<[number, number, number]>;
+  forage?: Array<[number, number, number]>;
 }
 
 export function saveWorld(seed: number): void {
@@ -84,7 +92,8 @@ export function saveWorld(seed: number): void {
     structures: getPieces(),
     campfires: getCampfires().map(c => ({ pos: c.pos, up: c.up })),
     trees: getHarvestedTrees(),
-    stones: getCollectedStones()
+    stones: getCollectedStones(),
+    forage: getCollectedForage()
   };
   write(worldKey(seed), data);
 }
@@ -106,6 +115,9 @@ export function restoreTreesForWorld(seed: number): void {
 }
 export function restoreStonesForWorld(seed: number): void {
   const w = loadWorld(seed); if (w?.stones) for (const s of w.stones) markStoneCollected(s[0], s[1], s[2]);
+}
+export function restoreForageForWorld(seed: number): void {
+  const w = loadWorld(seed); if (w?.forage) for (const f of w.forage) markForageCollected(f[0], f[1], f[2]);
 }
 
 // --- Terrain voxel edits (SEPARATE key per world) ---------------------------

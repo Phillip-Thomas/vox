@@ -37,6 +37,7 @@ export const KEY_CODES = {
   left: 'KeyA',
   right: 'KeyD',
   jump: 'Space',
+  descend: 'ControlLeft', // swim down while submerged (mobile DIVE button)
   board: 'KeyF',
   mine: 'KeyE', // harvest/delete a block on foot (same key as roll-right in ship)
   rollLeft: 'KeyQ',

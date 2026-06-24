@@ -20,7 +20,6 @@ const HALF = VOXEL_SCALE / 2;
 const _zAxis = new THREE.Vector3(0, 0, 1);
 const FACE_VEC = FACE_DIRS.map(d => new THREE.Vector3(d[0], d[1], d[2]));
 const FACE_QUAT = FACE_VEC.map(n => new THREE.Quaternion().setFromUnitVectors(_zAxis, n));
-const FACE_QUAT_ARR = FACE_QUAT.map(q => [q.x, q.y, q.z, q.w] as [number, number, number, number]);
 const FACE_EULER = FACE_QUAT.map(q => { const e = new THREE.Euler().setFromQuaternion(q); return [e.x, e.y, e.z] as [number, number, number]; });
 
 function panelCenter(cell: [number, number, number], face: number): [number, number, number] {
@@ -68,9 +67,15 @@ function makeLadder() {
   }
   return mergeGeometries(parts)!;
 }
-// A door slab: fills the cell, a touch thicker than a wall; swings open via transform.
+// A door slab with its pivot at the LEFT vertical edge (x=0), so it hinges from the
+// edge (not the centre). One cell tall; doors are placed as a 2-cell-tall linked pair.
 function makeDoor() {
-  return new THREE.BoxGeometry(PANEL * 0.92, PANEL, THICK * 1.4);
+  return new THREE.BoxGeometry(PANEL * 0.96, PANEL, THICK * 1.4).translate(PANEL * 0.48, 0, 0);
+}
+// Centred 2-tall preview for the build ghost (the placed slab is edge-pivoted).
+function makeDoorGhost() {
+  const slab = () => new THREE.BoxGeometry(PANEL * 0.96, PANEL, THICK * 1.4);
+  return mergeGeometries([slab(), slab().translate(0, VOXEL_SCALE, 0)])!;
 }
 
 // --- Volume geometry (local frame: up = +Y, ascends/slopes along +Z) ---------
@@ -91,14 +96,36 @@ function makeSlopedRoof() {
   return new THREE.BoxGeometry(PANEL, THICK * 1.6, len).rotateX(-Math.PI / 4);
 }
 
-// Solid (blocks movement) vs passable. Doors are solid only while closed.
+// Solid (blocks movement) vs passable. A doorway is passable as an empty frame, but
+// solid when its door leaf is fitted + closed; legacy 'door' pieces solid while closed.
 function solidFor(p: StructurePiece): boolean {
   const def = BUILD_PIECES[p.type];
+  if (p.type === 'doorway') return Boolean(p.leaf) && !p.open;
   if (def.openable) return !p.open;
   return !def.passable;
 }
 
-const _Y = new THREE.Vector3(0, 1, 0); // door-swing axis (local vertical)
+const _Y = new THREE.Vector3(0, 1, 0); // door-swing axis (local vertical of the panel frame)
+
+// Orientation for a wall-family panel that has an UP/DOWN asymmetry (doorway lintel,
+// door hinge, gable apex, ladder rungs): map local +Z → face normal AND local +Y → the
+// build-up axis, so the piece's "vertical" follows the FOUNDATION's frame rather than
+// world +Y. This is why a doorway only rendered right on +Y faces before. Falls back to
+// FACE_QUAT when up is parallel to the normal (foundation/ceiling) or absent.
+function panelQuat(faceIdx: number, upIdx: number): THREE.Quaternion {
+  const z = FACE_VEC[faceIdx].clone();
+  const y = FACE_VEC[upIdx].clone().addScaledVector(z, -FACE_VEC[upIdx].dot(z));
+  if (y.lengthSq() < 1e-6) return FACE_QUAT[faceIdx];
+  y.normalize();
+  const x = new THREE.Vector3().crossVectors(y, z).normalize(); // right-handed (det +1)
+  return new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, y, z));
+}
+// Render quaternion: up-aware for wall-family panels (with a stored up), plain face
+// orientation otherwise (flat foundation/ceiling, or legacy pieces with no up).
+function pieceQuat(faceIdx: number, type: BuildPieceType, up: number | undefined): THREE.Quaternion {
+  if (up != null && BUILD_PIECES[type].family === 'wall') return panelQuat(faceIdx, up);
+  return FACE_QUAT[faceIdx];
+}
 function cellCenter(cell: [number, number, number]): [number, number, number] {
   const v = voxelCoordToWorld(cell[0], cell[1], cell[2], new THREE.Vector3());
   return [v.x, v.y, v.z];
@@ -181,6 +208,24 @@ export default function StructureField({ terrainSeed }: { terrainSeed: number })
             />
           );
         })}
+        {/* Door LEAVES: a swinging slab inside each doorway fitted with a door. The
+            doorway frame (above) stays static; the leaf hinges from its edge. Carries
+            the doorway piece in userData so the F-interact raycast toggles it. */}
+        {list.map(p => {
+          if (p.type !== 'doorway' || !p.leaf) return null;
+          const tr = doorLeafTransform(p);
+          return (
+            <mesh
+              key={`${p.id}-leaf`}
+              geometry={GEO.door}
+              material={MAT[p.material]}
+              position={tr.pos}
+              quaternion={tr.quat}
+              userData={{ piece: p }}
+              frustumCulled={false}
+            />
+          );
+        })}
       </group>
       {list.filter(solidFor).map(p => {
         if (BUILD_PIECES[p.type].shape === 'volume') {
@@ -209,11 +254,20 @@ function pieceTransform(p: StructurePiece): { pos: [number, number, number]; qua
     const q = volumeQuat(p.up ?? 2, p.orient ?? 0);
     return { pos: cellCenter(p.cell), quat: [q.x, q.y, q.z, q.w] };
   }
-  if (p.type === 'door' && p.open) {
-    const q = FACE_QUAT[p.face].clone().multiply(new THREE.Quaternion().setFromAxisAngle(_Y, DOOR_SWING));
-    return { pos: panelCenter(p.cell, p.face), quat: [q.x, q.y, q.z, q.w] };
-  }
-  return { pos: panelCenter(p.cell, p.face), quat: FACE_QUAT_ARR[p.face] };
+  if (p.type === 'door') return doorLeafTransform(p); // legacy door pieces
+  const pq = pieceQuat(p.face, p.type, p.up);
+  return { pos: panelCenter(p.cell, p.face), quat: [pq.x, pq.y, pq.z, pq.w] };
+}
+
+/** Edge-hinged swinging-leaf transform: position the (edge-pivoted) slab at the panel's
+ *  hinge edge (local +X of the up-aware frame) and swing about the build-up axis when open. */
+function doorLeafTransform(p: StructurePiece): { pos: [number, number, number]; quat: [number, number, number, number] } {
+  const q = pieceQuat(p.face, p.type, p.up).clone();
+  const t = new THREE.Vector3(1, 0, 0).applyQuaternion(q);
+  const c = panelCenter(p.cell, p.face);
+  const hinge: [number, number, number] = [c[0] - t.x * (PANEL / 2), c[1] - t.y * (PANEL / 2), c[2] - t.z * (PANEL / 2)];
+  if (p.open) q.multiply(new THREE.Quaternion().setFromAxisAngle(_Y, DOOR_SWING));
+  return { pos: hinge, quat: [q.x, q.y, q.z, q.w] };
 }
 
 /** Translucent preview of the selected piece at the snap target (green=ok, red=blocked). */
@@ -221,7 +275,7 @@ export function BuildGhost() {
   const flat = useMemo(() => makeFlatPanel(), []);
   const GEO = useMemo<Record<BuildPieceType, THREE.BufferGeometry>>(() => ({
     foundation: flat, wall: flat, ceiling: flat, doorway: makeDoorwayGhost(), window: makeWindow(),
-    gable: makeGable(), stairs: makeStairs(), sloped_roof: makeSlopedRoof(), ladder: makeLadder(), door: makeDoor()
+    gable: makeGable(), stairs: makeStairs(), sloped_roof: makeSlopedRoof(), ladder: makeLadder(), door: makeDoorGhost()
   }), [flat]);
   const material = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x7dffa0, transparent: true, opacity: 0.4, depthWrite: false }), []);
   const ref = useRef<THREE.Mesh>(null);
@@ -241,7 +295,7 @@ export function BuildGhost() {
     } else {
       const c = panelCenter(g.cell, g.face);
       mesh.position.set(c[0], c[1], c[2]);
-      mesh.quaternion.copy(FACE_QUAT[g.face]);
+      mesh.quaternion.copy(pieceQuat(g.face, g.type, g.up)); // up-aware: matches the placed piece
     }
     material.color.setHex(g.valid ? 0x7dffa0 : 0xff6b6b);
   });

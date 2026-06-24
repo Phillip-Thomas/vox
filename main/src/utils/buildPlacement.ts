@@ -2,10 +2,13 @@
 //
 // Targeting is RAYCAST-based so the ghost sits under the crosshair, with a march
 // fallback for aiming across a foundation at eye height. The build frame ("up") is
-// the PLAYER'S FOOTING (gravity up), snapped to the nearest axis — NOT the cell's
-// dominant face. That's what lets you build AROUND A CUBE EDGE: the same edge cell
-// can carry a foundation on its −Y face (built from the +Y surface) AND its −X face
-// (built from the +X surface), because foundations are tracked PER FACE.
+// DUAL-MODE (passed in by the caller): when attaching to an existing STRUCTURE piece
+// it inherits that piece's stored build-up axis (so connecting pieces keep the
+// foundation's grid no matter where you stand); on bare TERRAIN it's the PLAYER'S
+// FOOTING (gravity up), snapped to the nearest axis. That's what lets you build AROUND
+// A CUBE EDGE: the same edge cell can carry a foundation on its −Y face (built from the
+// +Y surface) AND its −X face (built from the +X surface) — foundations are tracked PER
+// FACE, and pieces built onto each inherit that foundation's frame consistently.
 //
 //   foundation → on the top face of terrain (relative to your footing), or extend
 //                off another foundation
@@ -28,6 +31,9 @@ export interface BuildHit {
   isPanel: boolean;
   panelType?: BuildPieceType;
   panelFace?: number;
+  /** The hit structure piece's build-up axis (0..5), so connecting pieces inherit the
+   *  structure's frame instead of the player's footing (consistent across cube edges). */
+  panelUp?: number;
   normalIdx: number; // terrain hit: voxel face index hit (else -1)
 }
 
@@ -133,6 +139,16 @@ export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType, up: THR
   const free = (c: [number, number, number], f: number) => !hasPanel(c[0], c[1], c[2], f);
   // Wall variants (doorway/window/gable) snap exactly like a wall.
   const family = BUILD_PIECES[piece].family;
+
+  // A DOOR only fits into an existing doorway frame (never on a bare wall/foundation):
+  // target the doorway panel under the crosshair; valid if it has no leaf yet.
+  if (piece === 'door') {
+    if (hit.isPanel && hit.panelType === 'doorway' && hit.panelFace !== undefined) {
+      const dw = getPieceAt(hit.cell[0], hit.cell[1], hit.cell[2], hit.panelFace);
+      return { cell: hit.cell, face: hit.panelFace, valid: dw?.type === 'doorway' && !dw.leaf };
+    }
+    return null;
+  }
 
   if (family === 'foundation') {
     if (hit.isPanel && hit.panelType === 'foundation') {

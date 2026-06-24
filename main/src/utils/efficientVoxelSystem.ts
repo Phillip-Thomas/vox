@@ -290,6 +290,12 @@ export class EfficientVoxelSystem {
     return this.deletedTerrain.has(EfficientVoxelSystem.coordKey(x, y, z));
   }
 
+  /** All currently-dug original-terrain cells ("x,y,z" keys). Used by the water
+   *  system to re-flood dug channels after a reload (deletions are persisted). */
+  getDeletedTerrainKeys(): string[] {
+    return [...this.deletedTerrain];
+  }
+
   getOriginalTerrain(x: number, y: number, z: number) {
     return this.originalTerrain.get(EfficientVoxelSystem.coordKey(x, y, z));
   }

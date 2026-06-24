@@ -15,6 +15,10 @@ import { placePiece, getPieces, resetStructures, hasPanel, setFreeBuild } from '
 import { placeCampfire, getCampfires, resetCampfires } from './campfires.ts';
 import { markTreeHarvested, isTreeHarvested, resetTreeHarvest } from './treeHarvest.ts';
 import { collectStone, isStoneCollected, resetStonePickup } from './stonePickup.ts';
+import { getVitals, setVitals, resetVitals } from './survivalVitals.ts';
+import { collectForage, isForageCollected, resetForagePickup } from './foragePickup.ts';
+import { getWaterskinFill, fillWaterskin, resetWaterskin } from './consumeSystem.ts';
+import { restoreForageForWorld } from './persistence.ts';
 
 // localStorage isn't present in the vitest node env — stub a Map-backed one.
 class MemStorage {
@@ -32,7 +36,8 @@ const SEED = 12345;
 beforeEach(() => {
   (globalThis as unknown as { localStorage: MemStorage }).localStorage = new MemStorage();
   resetInventory(); resetMaw(); resetProgression();
-  resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup();
+  resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetVitals();
+  resetForagePickup(); resetWaterskin();
   setFreeBuild(true); // skip build cost in the round-trip
 });
 
@@ -40,9 +45,11 @@ describe('global save round-trip', () => {
   it('restores inventory + maw charge + era + milestones + lastWorld', () => {
     addItem('wood', 7); addItem('stone', 3);
     setMawCharge(40); advanceEraTo('emergent'); markMilestone('maw_repaired');
+    setVitals({ health: 70, hunger: 55, thirst: 40, warmth: 88, stamina: 30 });
+    fillWaterskin(55);
     saveGlobal({ x: 5, y: -2 });
 
-    resetInventory(); resetMaw(); resetProgression(); // wipe (simulate reload)
+    resetInventory(); resetMaw(); resetProgression(); resetVitals(); resetWaterskin(); // wipe (simulate reload)
     const save = loadGlobal();
     expect(save).toBeTruthy();
     expect(save!.lastWorld).toEqual({ x: 5, y: -2 });
@@ -53,6 +60,8 @@ describe('global save round-trip', () => {
     expect(getMawCharge()).toBe(40);
     expect(getCurrentEra()).toBe('emergent');
     expect(hasMilestone('maw_repaired')).toBe(true);
+    expect(getVitals()).toEqual({ health: 70, hunger: 55, thirst: 40, warmth: 88, stamina: 30, oxygen: 100 });
+    expect(getWaterskinFill()).toBe(55);
   });
 });
 
@@ -63,19 +72,22 @@ describe('per-world save round-trip', () => {
     placeCampfire(new THREE.Vector3(1, 1, 1), new THREE.Vector3(0, 1, 0));
     markTreeHarvested(4, 5, 6);
     collectStone(7, 8, 9);
+    collectForage(2, 2, 2, 'berry');
     saveWorld(SEED);
 
-    resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); // wipe
+    resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetForagePickup(); // wipe
     restoreStructuresForWorld(SEED);
     restoreCampfiresForWorld(SEED);
     restoreTreesForWorld(SEED);
     restoreStonesForWorld(SEED);
+    restoreForageForWorld(SEED);
 
     expect(hasPanel(1, 2, 3, 3)).toBe(true);
     expect(hasPanel(1, 2, 3, 0)).toBe(true);
     expect(getCampfires()).toHaveLength(1);
     expect(isTreeHarvested(4, 5, 6)).toBe(true);
     expect(isStoneCollected(7, 8, 9)).toBe(true);
+    expect(isForageCollected(2, 2, 2)).toBe(true);
   });
 
   it('a different world seed does not load this world\'s data', () => {

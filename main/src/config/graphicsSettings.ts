@@ -38,6 +38,16 @@ export interface GraphicsQuality {
   contactAO: boolean;
   /** Stylized depth outline (edge darkening) — locks the look. */
   outline: boolean;
+  /** Depth-based underwater post pass (Beer-Lambert extinction + haze + wobble +
+   *  godrays + Snell window). Needs the composer, so ULTRA/HIGH only; lower tiers
+   *  fall back to the always-on FogExp2 underwater override. */
+  underwaterPostFX: boolean;
+  /** Animated caustic light net projected onto the seabed (in-scene, cheap-ish). */
+  underwaterCaustics: boolean;
+  /** Crepuscular god-ray shafts in the underwater post pass. */
+  underwaterGodrays: boolean;
+  /** Marine-snow motes + rising bubble particles while submerged. */
+  underwaterParticles: boolean;
 }
 
 export type QualityProfile = 'ULTRA' | 'HIGH' | 'MEDIUM' | 'LOW' | 'POTATO';
@@ -58,7 +68,11 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     painterly: false,
     colorGrade: true,
     contactAO: true,
-    outline: true
+    outline: true,
+    underwaterPostFX: true,
+    underwaterCaustics: true,
+    underwaterGodrays: true,
+    underwaterParticles: true
   },
   HIGH: {
     triplanarDetail: true,
@@ -75,7 +89,11 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     painterly: false,
     colorGrade: true,
     contactAO: true,
-    outline: true
+    outline: true,
+    underwaterPostFX: true,
+    underwaterCaustics: true,
+    underwaterGodrays: true,
+    underwaterParticles: true
   },
   MEDIUM: {
     triplanarDetail: false,
@@ -92,7 +110,11 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     painterly: false,
     colorGrade: false,
     contactAO: false,
-    outline: false
+    outline: false,
+    underwaterPostFX: false,
+    underwaterCaustics: true,
+    underwaterGodrays: false,
+    underwaterParticles: true
   },
   LOW: {
     triplanarDetail: false,
@@ -109,7 +131,11 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     painterly: false,
     colorGrade: false,
     contactAO: false,
-    outline: false
+    outline: false,
+    underwaterPostFX: false,
+    underwaterCaustics: true,
+    underwaterGodrays: false,
+    underwaterParticles: false
   },
   POTATO: {
     triplanarDetail: false,
@@ -126,7 +152,11 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     painterly: false,
     colorGrade: false,
     contactAO: false,
-    outline: false
+    outline: false,
+    underwaterPostFX: false,
+    underwaterCaustics: false,
+    underwaterGodrays: false,
+    underwaterParticles: false
   }
 };
 

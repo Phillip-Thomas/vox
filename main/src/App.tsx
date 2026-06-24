@@ -17,7 +17,10 @@ import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
 import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
 import JetpackMeter from './components/hud/JetpackMeter.tsx';
+import OxygenMeter from './components/hud/OxygenMeter.tsx';
 import MawChargeMeter from './components/hud/MawChargeMeter.tsx';
+import VitalsMeter from './components/hud/VitalsMeter.tsx';
+import InteractionPrompt from './components/hud/InteractionPrompt.tsx';
 import BuildIndicator from './components/hud/BuildIndicator.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
 import MiningProgress from './components/hud/MiningProgress.tsx';
@@ -41,6 +44,7 @@ import {
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled, cycleBuildRotation } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
+import { setInstantHarvest } from './game/systems/harvestingSystem.ts';
 import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits, savePlayerPose } from './game/systems/persistence.ts';
 import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { subscribeInventory } from './game/systems/inventorySystem.ts';
@@ -49,6 +53,8 @@ import { subscribeMaw } from './game/systems/mawSystem.ts';
 import { subscribeProgression } from './game/systems/progressionSystem.ts';
 import { subscribeTreeHarvest } from './game/systems/treeHarvest.ts';
 import { subscribeStonePickup } from './game/systems/stonePickup.ts';
+import { subscribeVitals } from './game/systems/survivalVitals.ts';
+import { subscribeWaterskin } from './game/systems/consumeSystem.ts';
 import { scheduleWorldPrewarm } from './utils/worldGenCache.ts';
 import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
@@ -360,7 +366,7 @@ const App: React.FC = () => {
   }, []);
 
   // ?debug=1 → free building (no resource cost) so the build catalog can be tested.
-  useEffect(() => { setFreeBuild(debugUiEnabled); }, [debugUiEnabled]);
+  useEffect(() => { setFreeBuild(debugUiEnabled); setInstantHarvest(debugUiEnabled); }, [debugUiEnabled]);
 
   // Autosave: persist this world's data (debounced on store changes, and on tab
   // hide / unload to catch a server kill). Saving on cleanup captures the OLD world
@@ -387,7 +393,8 @@ const App: React.FC = () => {
     const unsubs = [
       subscribeStructures(schedule), subscribeInventory(schedule), subscribeCampfires(schedule),
       subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule),
-      subscribeStonePickup(schedule), voxelSystem.subscribeVoxelEdits(schedule)
+      subscribeStonePickup(schedule), voxelSystem.subscribeVoxelEdits(schedule),
+      subscribeVitals(schedule), subscribeWaterskin(schedule) // eat/drink + waterskin fill
     ];
     // Movement/time don't fire a store event, so tick a light save (pose + day) to
     // survive a server kill while just walking around.
@@ -481,9 +488,11 @@ const App: React.FC = () => {
         { name: 'jump', keys: ['Space'] },
         { name: 'reset', keys: ['KeyR'] },
         { name: 'delete', keys: ['KeyE'] },
-        { name: 'board', keys: ['KeyF'] },
+        { name: 'interact', keys: ['KeyF'] }, // primary context interact: drink/door/board/eat
         { name: 'deconstruct', keys: ['KeyX'] },
-        { name: 'interact', keys: ['KeyV'] },
+        { name: 'sprint', keys: ['ShiftLeft', 'ShiftRight'] },
+        { name: 'eat', keys: ['KeyG'] }, // consume food / sip waterskin (its own key, not the F prompt)
+        { name: 'descend', keys: ['ControlLeft', 'KeyZ'] },
       ]}
     >
       <AudioDirector terrainSeed={currentWorld.seed} />
@@ -565,10 +574,13 @@ const App: React.FC = () => {
           <TargetReticle />
           {flight.controlMode === 'fps' && <MiningProgress />}
           {flight.controlMode === 'fps' && <JetpackMeter />}
+          {flight.controlMode === 'fps' && <OxygenMeter />}
           {flight.controlMode === 'fps' && <MawChargeMeter />}
+          {flight.controlMode === 'fps' && <VitalsMeter />}
           {flight.controlMode === 'fps' && <BuildIndicator />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
+          {flight.controlMode === 'fps' && <InteractionPrompt />}
           {flight.controlMode === 'fps' && <InventoryPanel />}
           <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}

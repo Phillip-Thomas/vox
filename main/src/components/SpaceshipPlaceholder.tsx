@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { seededUnit } from '../utils/worldCoordinates';
-import { enterShip, useSpaceFlight } from '../state/spaceFlight.ts';
-import { playSfx } from '../audio/sfxEngine.ts';
+import { useSpaceFlight } from '../state/spaceFlight.ts';
+import { setBoardable } from '../state/shipProximity.ts';
 
 const BOARD_RANGE = 3.5;
 const BOARD_RANGE_SQ = BOARD_RANGE * BOARD_RANGE;
@@ -24,8 +23,7 @@ export default function SpaceshipPlaceholder({
   playerPosition
 }: SpaceshipPlaceholderProps) {
   const { phase, controlMode } = useSpaceFlight();
-  const [nearby, setNearby] = useState(false);
-  const nearbyRef = useRef(false);
+  const boardableRef = useRef(false);
 
   // Boarding is only offered while on foot on the surface.
   const boardable = phase === 'surface' && controlMode === 'fps';
@@ -35,34 +33,18 @@ export default function SpaceshipPlaceholder({
     return new THREE.Color().setHSL(hue, 0.72, activeApproach ? 0.62 : 0.48);
   }, [activeApproach, terrainSeed]);
 
-  // Proximity check: compare the live player position against the ship position.
+  // Proximity check → publish "boardable" for the on-foot interaction resolver, which
+  // owns the unified "[F] Enter Ship" prompt + the F key (no one-off listener/prompt here).
   useFrame(() => {
-    if (!boardable || !playerPosition) {
-      if (nearbyRef.current) {
-        nearbyRef.current = false;
-        setNearby(false);
-      }
-      return;
-    }
-    const close = playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
-    if (close !== nearbyRef.current) {
-      nearbyRef.current = close;
-      setNearby(close);
+    const close = boardable && !!playerPosition && playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
+    if (close !== boardableRef.current) {
+      boardableRef.current = close;
+      setBoardable(close);
     }
   });
 
-  // Raw 'KeyF' listener so boarding works even without pointer lock focus on the
-  // KeyboardControls map. Only active when the prompt is showing.
-  useEffect(() => {
-    if (!nearby || !boardable) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.code !== 'KeyF' || event.repeat) return;
-      playSfx('boardShip');
-      enterShip();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [nearby, boardable]);
+  // Clear the flag if this ship unmounts (world swap) so no stale prompt lingers.
+  useEffect(() => () => setBoardable(false), []);
 
   // While flying (controlMode==='flight') the ship IS the avatar / cockpit; hide
   // the parked exterior so it doesn't float in the cockpit view. It reappears
@@ -75,27 +57,6 @@ export default function SpaceshipPlaceholder({
       rotation={[0, Math.PI * 0.18, 0]}
       scale={1.15}
     >
-      {nearby && (
-        <Html center distanceFactor={10} position={[0, 1.6, 0]} occlude={false}>
-          <div
-            style={{
-              padding: '4px 10px',
-              borderRadius: 6,
-              background: 'rgba(0,0,0,0.72)',
-              color: '#7dd3fc',
-              fontFamily: 'monospace',
-              fontSize: 13,
-              whiteSpace: 'nowrap',
-              border: '1px solid #1e3a8a',
-              pointerEvents: 'none',
-              userSelect: 'none'
-            }}
-          >
-            Press F to board
-          </div>
-        </Html>
-      )}
-
       <mesh rotation={[0, 0, Math.PI / 2]}>
         <capsuleGeometry args={[0.42, 2.5, 6, 14]} />
         <meshStandardMaterial color="#d7dde6" roughness={0.42} metalness={0.18} />

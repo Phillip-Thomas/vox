@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, type FC } from 'react';
 import { useAppState } from '../../state/appState.ts';
 import { getWarp, useSpaceFlight } from '../../state/spaceFlight.ts';
 import { getPlayerUp } from '../../state/playerFrame.ts';
+import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
 import { localDaylight } from '../../utils/dayNight.ts';
 import { buildPlanetProfile } from '../../game/PlanetProfile.ts';
 import { getSunDirection } from '../SkyController.tsx';
@@ -33,6 +34,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   const sceneRef = useRef<MusicScene>(scene);
   const planetMoodRef = useRef<PlanetMusicMood>(planetMood);
   const warpActiveRef = useRef(false);
+  const submergedRef = useRef(false);
 
   useEffect(() => {
     planetMoodRef.current = planetMood;
@@ -77,6 +79,18 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         getMusicEngine().playTransitionCue(cue);
       }
       warpActiveRef.current = warp.active;
+
+      // Underwater: muffle the whole mix (sfx + music lowpass) and snap a splash
+      // on the threshold crossing. Edge-driven so the cutoff ramps once per
+      // transition (the "clunk"/"gasp"), not every frame. EfficientPlayer resets
+      // submergence to 0 on unmount, so boarding the ship can't leave it stuck.
+      const submerged = getPlayerSubmergence() > 0.5;
+      if (submerged !== submergedRef.current) {
+        submergedRef.current = submerged;
+        getSfxEngine().setSubmerged(submerged ? 1 : 0);
+        getMusicEngine().setSubmerged(submerged);
+        getSfxEngine().play(submerged ? 'splashEnter' : 'splashExit');
+      }
 
       const daylight = sceneRef.current === 'deepSpace'
         ? 0.5

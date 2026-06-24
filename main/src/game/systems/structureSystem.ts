@@ -45,8 +45,10 @@ export interface StructurePiece {
   /** Volume pieces: the build-up axis (0..5) + yaw step (0..3) they're oriented by. */
   up?: number;
   orient?: number;
-  /** Openable pieces (door): true when open (passable, not sealing). */
+  /** Openable pieces: true when open (passable, not sealing). */
   open?: boolean;
+  /** A doorway fitted with a door leaf — closeable (solid+sealing when closed). */
+  leaf?: boolean;
 }
 
 const pieces = new Map<string, StructurePiece>(); // key: "x,y,z:face"
@@ -99,8 +101,9 @@ export function canAfford(type: BuildPieceType, material: BuildMaterialId): bool
   return freeBuild || hasItems(pieceCost(type, material));
 }
 
-/** Place a piece at (cell, face) in a material. Validates occupancy + cost; spends. */
-export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType, material: BuildMaterialId): boolean {
+/** Place a piece at (cell, face) in a material. `up` = the build-up axis (0..5) this
+ *  piece was placed in, so connecting pieces can inherit its frame. Validates + spends. */
+export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType, material: BuildMaterialId, up?: number): boolean {
   const [x, y, z] = cell;
   if (hasPanel(x, y, z, face)) return false;
   const cost = pieceCost(type, material);
@@ -108,7 +111,7 @@ export function placePiece(cell: [number, number, number], face: number, type: B
     if (!hasItems(cost)) return false;
     for (const c of cost) removeItem(c.id, c.qty);
   }
-  pieces.set(panelKey(x, y, z, face), { id: nextId++, cell: [x, y, z], face, type, material });
+  pieces.set(panelKey(x, y, z, face), { id: nextId++, cell: [x, y, z], face, type, material, up });
   version++;
   emit();
   return true;
@@ -128,11 +131,37 @@ export function placeDoorway(cell: [number, number, number], face: number, upIdx
     if (!hasItems(cost)) return false;
     for (const c of cost) removeItem(c.id, c.qty);
   }
-  pieces.set(panelKey(cell[0], cell[1], cell[2], face), { id: nextId++, cell: [...cell] as [number, number, number], face, type: 'doorway', material, tall: 'lower', partner: upper });
-  pieces.set(panelKey(upper[0], upper[1], upper[2], face), { id: nextId++, cell: upper, face, type: 'doorway', material, tall: 'upper', partner: [...cell] as [number, number, number] });
+  pieces.set(panelKey(cell[0], cell[1], cell[2], face), { id: nextId++, cell: [...cell] as [number, number, number], face, type: 'doorway', material, up: upIdx, tall: 'lower', partner: upper });
+  pieces.set(panelKey(upper[0], upper[1], upper[2], face), { id: nextId++, cell: upper, face, type: 'doorway', material, up: upIdx, tall: 'upper', partner: [...cell] as [number, number, number] });
   version++;
   emit();
   return true;
+}
+
+/** Fit a door LEAF into an existing doorway (a door only goes in a doorway, never on a
+ *  bare wall/foundation). Marks BOTH doorway halves leaf+closed; charges the door cost.
+ *  `cell`/`face` may be either doorway half. */
+export function fitDoor(cell: [number, number, number], face: number, material: BuildMaterialId): boolean {
+  const p = pieces.get(panelKey(cell[0], cell[1], cell[2], face));
+  if (!p || p.type !== 'doorway' || p.leaf) return false; // only an un-doored doorway
+  const cost = pieceCost('door', material);
+  if (!freeBuild) {
+    if (!hasItems(cost)) return false;
+    for (const c of cost) removeItem(c.id, c.qty);
+  }
+  p.leaf = true; p.open = false;
+  if (p.partner) {
+    const q = pieces.get(panelKey(p.partner[0], p.partner[1], p.partner[2], face));
+    if (q) { q.leaf = true; q.open = false; }
+  }
+  version++;
+  emit();
+  return true;
+}
+
+/** Is this piece toggleable (an openable piece, or a doorway fitted with a leaf)? */
+export function isOpenable(p: StructurePiece): boolean {
+  return Boolean(p.leaf) || Boolean(BUILD_PIECES[p.type].openable);
 }
 
 export function hasVolume(x: number, y: number, z: number): boolean {
@@ -159,11 +188,17 @@ export function placeVolume(cell: [number, number, number], up: number, orient: 
   return true;
 }
 
-/** Toggle an openable piece (door) between closed (solid+sealing) and open. */
+/** Toggle an openable piece (door) between closed (solid+sealing) and open. A 2-tall
+ *  door toggles BOTH halves together (partner link). */
 export function toggleDoor(cell: [number, number, number], face: number): boolean {
   const p = pieces.get(panelKey(cell[0], cell[1], cell[2], face));
-  if (!p || !BUILD_PIECES[p.type].openable) return false;
-  p.open = !p.open;
+  if (!p || !isOpenable(p)) return false;
+  const next = !p.open;
+  p.open = next;
+  if (p.partner) {
+    const q = pieces.get(panelKey(p.partner[0], p.partner[1], p.partner[2], face));
+    if (q) q.open = next;
+  }
   version++;
   emit();
   return true;

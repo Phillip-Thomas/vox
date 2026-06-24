@@ -58,6 +58,27 @@ export const JETPACK_THRUST = 16; // upward accel while held (u/s^2)
 export const JETPACK_MAX_FUEL = 1.4; // seconds of continuous thrust
 export const JETPACK_REFILL_RATE = 0.8; // fuel/sec refilled while grounded
 export const JETPACK_MAX_UP_SPEED = 7; // clamp climb rate so it's a hover, not a rocket
+
+// --- Swimming (underwater 6-DOF) ---------------------------------------------
+// Submerged movement is a SEPARATE model from walking: full 3D (swim toward the
+// look direction), heavy/inertial, with slight positive buoyancy so you drift
+// gently up to the surface when idle. composeSwimVelocity is blended over the
+// walk result by the submergence factor so wading in at the waterline is smooth.
+export const SWIM_SPEED = 4.2;          // active swim speed (u/s) — slower than walking (5)
+export const SWIM_ACCEL = 6;            // responsiveness toward the swim wish (per s); low = floaty
+export const SWIM_BUOYANCY_RISE = 1.2;  // idle upward drift speed (u/s) — slow rise to surface
+export const SWIM_BUOYANCY_ACCEL = 1.6; // how fast idle velocity approaches the buoyant rise
+export const SWIM_MAX_RISE = 2.0;       // clamp passive upward speed so floating up is gentle, not a pop
+
+export interface SwimInput {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+  ascend: boolean;  // swim up (jump / Space)
+  descend: boolean; // swim down (descend key)
+}
+
 const DEFAULT_COYOTE_TIME = 0.14;
 const DEFAULT_JUMP_BUFFER = 0.12;
 const DEFAULT_SURFACE_CLEARANCE = PLAYER_CENTER_CLEARANCE;
@@ -69,6 +90,9 @@ const tempPosition = new THREE.Vector3();
 const tempVector = new THREE.Vector3();
 const tempVector2 = new THREE.Vector3();
 const tempQuaternion = new THREE.Quaternion();
+const tempSwimRight = new THREE.Vector3();
+const tempSwimWish = new THREE.Vector3();
+const tempSwimTarget = new THREE.Vector3();
 
 export const FACE_NORMALS: Record<CubeFace, THREE.Vector3> = {
   top: new THREE.Vector3(0, 1, 0),
@@ -426,4 +450,67 @@ export function updateJumpState(
 export function applyJumpImpulse(velocity: THREE.Vector3, up: THREE.Vector3, jumpSpeed = DEFAULT_JUMP_SPEED) {
   const tangent = projectOntoPlane(velocity, up);
   return tangent.addScaledVector(up, jumpSpeed);
+}
+
+/**
+ * Underwater 6-DOF swim velocity. Unlike composeVelocity (which forces movement
+ * into the surface-tangent plane and preserves the gravity axis), this steers in
+ * FULL 3D toward where the camera looks, plus an explicit up/down axis, and is
+ * heavy/inertial (velocity approaches the wish over ~1/SWIM_ACCEL seconds, so
+ * releasing input glides to a stop instead of snapping). With no input the target
+ * is a slow buoyant rise along `up` (you drift gently to the surface). Caller
+ * blends the result over the walk velocity by the submergence factor.
+ *
+ *  - lookForward: the camera's full (pitched) world forward — swim where you aim.
+ *  - up:          local gravity up (vertical swim axis + buoyancy direction).
+ * Pure: returns a fresh vector; only touches module scratch.
+ */
+export function composeSwimVelocity(
+  currentVelocity: THREE.Vector3,
+  lookForward: THREE.Vector3,
+  up: THREE.Vector3,
+  input: SwimInput,
+  deltaTime = FIXED_PHYSICS_STEP,
+  speed = SWIM_SPEED
+): THREE.Vector3 {
+  // Right = forward x up (degenerate only if looking straight along up; then any
+  // tangent works, so fall back to a deterministic one).
+  tempSwimRight.crossVectors(lookForward, up);
+  if (tempSwimRight.lengthSq() < 1e-6) deterministicTangentForUp(up, tempSwimRight);
+  else tempSwimRight.normalize();
+
+  const wish = tempSwimWish.set(0, 0, 0);
+  if (input.forward) wish.add(lookForward);
+  if (input.backward) wish.sub(lookForward);
+  if (input.right) wish.add(tempSwimRight);
+  if (input.left) wish.sub(tempSwimRight);
+  let vert = 0;
+  if (input.ascend) vert += 1;
+  if (input.descend) vert -= 1;
+  wish.addScaledVector(up, vert);
+
+  const hasInput = wish.lengthSq() > 1e-6;
+  if (hasInput) wish.normalize();
+
+  // Target velocity: active swim toward the wish, or a gentle idle rise.
+  const target = hasInput
+    ? tempSwimTarget.copy(wish).multiplyScalar(speed)
+    : tempSwimTarget.copy(up).multiplyScalar(SWIM_BUOYANCY_RISE);
+
+  const response = THREE.MathUtils.clamp(
+    (hasInput ? SWIM_ACCEL : SWIM_BUOYANCY_ACCEL) * deltaTime,
+    0,
+    1
+  );
+  const next = currentVelocity.clone().lerp(target, response);
+
+  // Clamp PASSIVE upward speed so the buoyant float-up (and coasting up after you
+  // release the controls) reads as gentle, not a pop. Active input — including
+  // swimming toward an upward look or pressing ascend — is never capped here.
+  if (!hasInput) {
+    const upSpeed = next.dot(up);
+    if (upSpeed > SWIM_MAX_RISE) next.addScaledVector(up, SWIM_MAX_RISE - upSpeed);
+  }
+
+  return next;
 }

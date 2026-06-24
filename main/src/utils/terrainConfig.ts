@@ -47,6 +47,13 @@ export function createTerrainConfigFromProfile(
   const roughness = seededUnit(seed, 211);
   const scaleJitter = seededUnit(seed, 223);
   const waterJitter = seededUnit(seed, 227) - 0.5;
+  // Oceanic archetype = a true WATER WORLD: more of the planet is deep sea, the
+  // basins go deeper, and the waterline sits higher so land reads as islands
+  // poking out of a broad ocean (vs the deep-but-not-dominant seas elsewhere).
+  const isOceanic = typeof profile !== 'string' && profile.archetype === 'oceanic';
+  const oceanWorld = isOceanic
+    ? { oceanCoverage: 0.16, oceanDepth: 14, oceanEdge: 0.16 }
+    : {};
 
   if (terrainProfile === 'mountains') {
     return {
@@ -96,7 +103,8 @@ export function createTerrainConfigFromProfile(
       hillFrequency: 0.075 + seededUnit(seed, 277) * 0.06,
       valleyDepth: Math.max(5, Math.floor(planetRadius * (0.2 + seededUnit(seed, 281) * 0.2))),
       terrainScale: 0.12 + seededUnit(seed, 283) * 0.06,
-      seaLevelPercentile: clamp01(0.42 + waterJitter * 0.12)
+      seaLevelPercentile: clamp01((isOceanic ? 0.58 : 0.42) + waterJitter * 0.12),
+      ...oceanWorld
     };
   }
 

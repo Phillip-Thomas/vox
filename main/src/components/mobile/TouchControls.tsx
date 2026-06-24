@@ -166,6 +166,8 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
             <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
             <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
             <button {...holdBtn(KEY_CODES.jump)} style={{ ...bigBtnStyle, gridColumn: 2 }}>JMP</button>
+            {/* Swim down while submerged (JMP = swim up). Harmless on land. */}
+            <button {...holdBtn(KEY_CODES.descend)} style={btnStyle}>DIVE</button>
           </>
         )}
       </div>

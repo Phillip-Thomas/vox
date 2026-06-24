@@ -6,6 +6,7 @@ import { useSpaceFlight } from '../state/spaceFlight.ts';
 import { buildBiomeProfile } from '../utils/biomeProfile.ts';
 import { localSunElevation, daylightFromElevation, goldenFromElevation } from '../utils/dayNight.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
+import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
 import SpaceSky from './SpaceSky.tsx';
 
 // Sun/moon are ~CONSTANT directional lights so the lit/dark hemispheres are a
@@ -128,6 +129,41 @@ const noonSun = new THREE.Color('#fff4e0');
 const goldenSun = new THREE.Color('#ff9c4a');
 
 const tmpColor = new THREE.Color();
+
+// --- Underwater fog override -------------------------------------------------
+// When the eye is submerged, blend the scene fog toward a dense blue-green by the
+// submergence factor, deepening with depth. This is the CHEAP, ALL-TIERS path —
+// it gives a believable underwater wash even on POTATO/LOW where there's no
+// post-processing composer (the depth-based extinction pass is layered on top for
+// ULTRA/HIGH). Applied over the day/night base fog so time-of-day still reads.
+const UW_FOG_SHALLOW = new THREE.Color('#1d6f78'); // near-surface teal
+const UW_FOG_DEEP = new THREE.Color('#062330');    // deep blue-green murk
+const UW_FOG_DENSITY = 0.085;                      // dense underwater haze
+const UW_DEPTH_RANGE = 26;                          // world units to reach full-deep tint
+const _uwColor = new THREE.Color();
+
+/**
+ * Blend `fog` from its day/night base toward the underwater palette by
+ * submergence (0 = restore base, 1 = full underwater). Pure-ish: only mutates
+ * `fog` + the module scratch color. Cheap enough to run every frame on any tier.
+ */
+function applyWaterFog(
+  fog: THREE.FogExp2,
+  baseColor: THREE.Color,
+  baseDensity: number,
+  submergence: number,
+  depthBelow: number
+) {
+  if (submergence <= 0.001) {
+    fog.color.copy(baseColor);
+    fog.density = baseDensity;
+    return;
+  }
+  const depthT = THREE.MathUtils.clamp(depthBelow / UW_DEPTH_RANGE, 0, 1);
+  _uwColor.copy(UW_FOG_SHALLOW).lerp(UW_FOG_DEEP, depthT);
+  fog.color.copy(baseColor).lerp(_uwColor, submergence);
+  fog.density = THREE.MathUtils.lerp(baseDensity, UW_FOG_DENSITY, submergence);
+}
 
 // --- Deep-space mode palette -------------------------------------------------
 // In deep space we want true black void (no blue atmospheric haze, no fog
@@ -272,6 +308,11 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
   // FogExp2 gives cheap exponential atmospheric depth across the ~50u planet.
   // ~0.014 keeps the planet clearly visible while still reading depth.
   const fog = useMemo(() => new THREE.FogExp2('#9ec9ff', SURFACE_FOG_DENSITY), []);
+  // The day/night fog BEFORE the underwater override, captured each update so the
+  // submerged blend always lerps from the correct base (and restores it on
+  // surfacing) — needed on non-animated tiers where the base isn't recomputed.
+  const baseFogColor = useRef(new THREE.Color('#9ec9ff'));
+  const baseFogDensity = useRef(SURFACE_FOG_DENSITY);
 
   useEffect(() => {
     const previousFog = scene.fog;
@@ -299,6 +340,9 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
     const r = applyDayPhase(liveDayPhase, sunLight, moonLight, ambient, fog);
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
+    baseFogColor.current.copy(fog.color);
+    baseFogDensity.current = fog.density;
+    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inSpace, phase, fogBiome]);
 
@@ -321,15 +365,23 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
       return;
     }
 
-    // When not animated, the static mount/boundary effect already set everything;
-    // skip per-frame work entirely. (SpaceSky owns its own gated useFrame.)
-    if (!animated) return;
+    // When not animated, the static mount/boundary effect already set the base
+    // day/night fog; we still blend the underwater override over it each frame
+    // (submergence changes per frame), then skip the rest. (SpaceSky owns its own
+    // gated useFrame.)
+    if (!animated) {
+      applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
+      return;
+    }
 
     const dayPhase = forcedDayPhase ?? ((state.clock.elapsedTime / DAY_LENGTH_SECONDS) + dayPhaseOffset) % 1;
     liveDayPhase = dayPhase;
     const r = applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
+    baseFogColor.current.copy(fog.color);
+    baseFogDensity.current = fog.density;
+    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
   });
 
   return (

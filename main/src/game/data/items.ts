@@ -43,6 +43,8 @@ export type CraftedItemId =
   | 'faulty_maw' | 'biofuel' | 'wood' | 'stone_hatchet' | 'stone_pickaxe'
   // primitive light sources
   | 'torch' | 'campfire'
+  // primitive forage + survival
+  | 'berry' | 'root' | 'waterskin'
   // refined materials
   | 'refined_alloy' | 'silica_pane' | 'biocomposite'
   | 'cryo_cell' | 'thermal_ceramic' | 'charge_cell' | 'void_core'
@@ -94,6 +96,10 @@ export interface ItemDefinition {
   hazardProtect?: Partial<Record<HazardId, number>>;
   /** kind 'module': passive upgrade payload. */
   moduleEffect?: ModuleEffect;
+  /** kind 'consumable': hunger restored when eaten (0..100 of the vitals scale). */
+  foodValue?: number;
+  /** kind 'consumable': thirst restored when consumed. */
+  waterValue?: number;
 }
 
 // --- Resource -> Item projection ---------------------------------------------
@@ -157,6 +163,21 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
   campfire: {
     id: 'campfire', name: 'Campfire', kind: 'light', tier: 0, stackable: true,
     description: 'A stacked fire ring. Placed where you stand and stays put, casting a bright, wide glow.'
+  },
+  // Primitive forage + survival ----------------------------------------------
+  berry: {
+    id: 'berry', name: 'Wildberries', kind: 'consumable', tier: 0, stackable: true,
+    foodValue: 12, waterValue: 6,
+    description: 'A handful of tart wild berries. Eases hunger and a little thirst — forbidden, organic, alive.'
+  },
+  root: {
+    id: 'root', name: 'Starch Root', kind: 'consumable', tier: 0, stackable: true,
+    foodValue: 24,
+    description: 'A fibrous tuber dug from the soil. Filling, if earthy.'
+  },
+  waterskin: {
+    id: 'waterskin', name: 'Waterskin', kind: 'consumable', tier: 0, stackable: false,
+    description: 'A stitched fibre pouch. Fill it at water, then drink anywhere — carry the wet with you.'
   },
   // Refined materials --------------------------------------------------------
   refined_alloy: {
@@ -275,6 +296,12 @@ export function getItem(id: ItemId): ItemDefinition {
 export function isItemId(id: string): id is ItemId {
   return id in ITEMS;
 }
+
+/** Items that restore hunger when eaten, richest-first (so "eat best" is a head pick). */
+export const EDIBLE_ITEM_IDS: ItemId[] = ALL_ITEM_IDS
+  .filter(id => (ITEMS[id].foodValue ?? 0) > 0)
+  // foodValue DESC, then id ASC so the "eat best" pick is deterministic across builds.
+  .sort((a, b) => (ITEMS[b].foodValue ?? 0) - (ITEMS[a].foodValue ?? 0) || a.localeCompare(b));
 
 /** A quantity of one item — the shared currency for inventory, recipes, costs. */
 export interface ItemStack {

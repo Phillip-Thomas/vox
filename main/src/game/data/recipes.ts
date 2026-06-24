@@ -19,8 +19,9 @@ import type { EraId } from './eras.ts';
 import type { StationId } from './stations.ts';
 
 // Everything craftable. Excludes the items that are GRANTED or HARVESTED rather
-// than crafted (the Faulty Maw starter, foraged wood), so RECIPES stays complete.
-export type RecipeId = Exclude<CraftedItemId, 'faulty_maw' | 'wood'>;
+// than crafted (the Faulty Maw starter, foraged wood + berries + roots), so
+// RECIPES stays complete.
+export type RecipeId = Exclude<CraftedItemId, 'faulty_maw' | 'wood' | 'berry' | 'root'>;
 
 export interface Recipe {
   id: RecipeId;
@@ -66,6 +67,12 @@ export const RECIPES: Record<RecipeId, Recipe> = {
   ]),
   campfire: recipe('campfire', 'hand', 'primitive', [
     { id: 'flint', qty: 2 }, { id: 'biofuel', qty: 1 }, { id: 'wood', qty: 3 }
+  ]),
+  // A fibre pouch to carry water — fill it at any water, drink anywhere after.
+  // Uses only the guaranteed primitive organics (biofiber by hand + wood from trees),
+  // so it's craftable from the cold open even on a sparse planet.
+  waterskin: recipe('waterskin', 'hand', 'primitive', [
+    { id: 'biofiber', qty: 4 }, { id: 'wood', qty: 1 }
   ]),
 
   // Refined materials (Smelter) ----------------------------------------------
