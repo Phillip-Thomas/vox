@@ -147,13 +147,13 @@ supersedes them.
 | Torch + campfire lighting | **BUILT** (intensities un-tuned) |
 | Crafting engine (`canCraft`/`craft`) + Fabricator UI (key C / ⚒) | **BUILT** |
 | Era store + `repairMaw()` | **BUILT** (repair not yet reachable in-game) |
-| **Shelter building S1** — foundation/wall/ceiling (wood), build mode (B), snap ghost, place(E)/deconstruct(X), instanced render + colliders | **BUILT** (S2 doors/materials, S3 enclosure, S4 integrity, S5 persistence pending) |
+| **Shelter building** — build mode (B), snap ghost, place(E)/deconstruct(X); foundation/wall/ceiling + **doorway/window/gable** (Batch A pt1); MATERIAL-parameterized (wood now; thatch/stone = data); builds wrap around cube edges (per-face foundations + player-footing up) | **BUILT** (Batch A pt2 = stairs/sloped-roof volume class; pt3 = ladder/door interaction; then S3 enclosure, S4 integrity, S5 persistence) |
 | Emergent recipes (refined/components/Maw line/suits/modules) | **DEFINED**; craftable today via the all-access menu |
 | Devices as placeable objects + per-device crafting UI | **NOT BUILT** |
 | Era gating (personal menu = primitive only; Emergent behind devices) | **NOT BUILT** (menu is still the Phase-2 all-access fabricator) |
 | Maw Repair Kit / Fabricator Core recipes + ship-wreck salvage | **NOT BUILT** |
 | Suit/hazard survival, scanner-gated reveal, warp-range gate | **DESIGNED** (loadout getters exist; nothing consumes them yet) |
-| Persistence (localStorage) | **NOT BUILT** (state is JSON, persistence-ready) |
+| Persistence (localStorage) | **BUILT** — `game/systems/persistence.ts`, schema-versioned keys. GLOBAL (inventory/maw/era/lastWorld) + PER-WORLD (structures/campfires/harvested-trees/collected-stones, keyed by seed). Boot restores global + spawns at saved base; fields reset-then-load per world; autosave debounced + on tab-hide/unload + on world-change cleanup. (Terrain voxel edits still NOT persisted — separate concern.) |
 | Paravox Machina tier | **DESIGNED** (hooks only) |
 
 > **Key current inconsistency:** the Fabricator (key C) still shows ALL recipes
@@ -174,16 +174,17 @@ NOT next; shelter is.
    grid as face-panels, sealed-enclosure detection via flood-fill, integrity, and a
    persistent home base. Plan: `~/.claude/plans/shelter-building.md`. **S1 BUILT**
    (foundation/wall/ceiling in wood, build mode B, snap ghost, place E / deconstruct
-   X, instanced render + colliders). Next: **S2** doorway+door + thatch/stone
-   materials, **S3** enclosure flood-fill → `isSheltered()`, **S4** integrity,
-   **S5** home-base persistence.
+   X, instanced render + colliders). Next: **S2** the expanded piece catalog
+   (panel + new VOLUME class: doorway/door, window, stairs, sloped roof, gable/triangle
+   wall, ladder, pillar, half-wall, railing, hatch, ramp — see the plan's §1b catalog)
+   + thatch/stone materials, **S3** enclosure flood-fill → `isSheltered()`, **S4**
+   integrity, **S5** home-base persistence.
 2. **Light-Hazard survival** — an exposure/comfort meter that `archetype.hazards`
    drain while EXPOSED and that being SHELTERED / near a campfire / in the right
    Carapace restores (consumes `isSheltered()` + suit/campfire). This is what gives
    shelter — and the already-built campfires/suits — gameplay teeth.
-3. **Persistence** — localStorage snapshot of structures + campfires + inventory +
-   loadout, keyed by `GENERATION_SCHEMA_VERSION` + worldId (first real consumer: the
-   home base).
+3. ~~**Persistence**~~ — **DONE** (see state table): localStorage save/restore of
+   structures/campfires/trees/stones (per-world) + inventory/maw/era + base spawn.
 
 LATER (deferred until we leave Primitive): the **Emergent bridge** (Maw Repair Kit +
 ship-wreck salvage → `repairMaw()` flips the era), **placeable devices** (Smelter/

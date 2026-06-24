@@ -1,31 +1,34 @@
 // --- Build placement (resolve a snap target from a raycast hit) --------------
 //
-// Targeting is RAYCAST-based (not a ray-march) so the ghost sits exactly under the
-// crosshair. The caller raycasts the voxel + structure meshes and passes the nearest
-// hit; this resolves the (cell, face) the selected piece snaps to, plus whether it's
-// a valid placement. Foundation-anchored with vertical wall STACKING:
-//   foundation → on the top face of a terrain voxel, or extend off another foundation
-//   wall       → on a foundation cell's vertical face, OR stacked atop a wall below
+// Targeting is RAYCAST-based so the ghost sits under the crosshair, with a march
+// fallback for aiming across a foundation at eye height. The build frame ("up") is
+// the PLAYER'S FOOTING (gravity up), snapped to the nearest axis — NOT the cell's
+// dominant face. That's what lets you build AROUND A CUBE EDGE: the same edge cell
+// can carry a foundation on its −Y face (built from the +Y surface) AND its −X face
+// (built from the +X surface), because foundations are tracked PER FACE.
+//
+//   foundation → on the top face of terrain (relative to your footing), or extend
+//                off another foundation
+//   wall       → a vertical face of a cell whose down-face (rel. footing) has a
+//                foundation, OR stacked atop a wall below
 //   ceiling    → the up face of a foundation/walled cell
-// "up" = the cube-face normal at the cell (face interiors; edges are a later pass).
 
 import * as THREE from 'three';
 import { VOXEL_SCALE, voxelCoordToWorld } from './cubeGravityConstants';
-import { dominantFaceForPosition, FACE_NORMALS } from './surfaceControls';
 import { voxelSystem } from './efficientVoxelSystem';
 import {
-  FACE_DIRS, faceIndexForNormal, getPieceAt, hasFoundation, hasPanel, hasWallInCell
+  FACE_DIRS, faceIndexForNormal, getPieceAt, hasFoundationInCell, hasFoundationOnFace,
+  hasPanel, hasWallInCell
 } from '../game/systems/structureSystem';
-import type { BuildPieceType } from '../game/data/buildPieces';
+import { BUILD_PIECES, type BuildPieceType } from '../game/data/buildPieces';
 
-/** Normalized raycast hit handed to the resolver. */
 export interface BuildHit {
   cell: [number, number, number];
-  point: THREE.Vector3;     // world-space hit point (exact, under the crosshair)
-  isPanel: boolean;         // hit a placed structure panel vs terrain
+  point: THREE.Vector3;
+  isPanel: boolean;
   panelType?: BuildPieceType;
-  panelFace?: number;       // the hit panel's face (0..5)
-  normalIdx: number;        // terrain hit: the voxel face index hit (else -1)
+  panelFace?: number;
+  normalIdx: number; // terrain hit: voxel face index hit (else -1)
 }
 
 export interface BuildTarget {
@@ -36,11 +39,8 @@ export interface BuildTarget {
 
 const _c = new THREE.Vector3();
 const _off = new THREE.Vector3();
-
-function upAtCell(cell: [number, number, number]): THREE.Vector3 {
-  voxelCoordToWorld(cell[0], cell[1], cell[2], _c);
-  return FACE_NORMALS[dominantFaceForPosition(_c)];
-}
+const _up = new THREE.Vector3();
+const _mp = new THREE.Vector3();
 
 function nearestVerticalFace(off: THREE.Vector3, upIdx: number): number {
   const downIdx = upIdx ^ 1;
@@ -54,106 +54,139 @@ function nearestVerticalFace(off: THREE.Vector3, upIdx: number): number {
   return best;
 }
 
-/** Tangent offset of the hit point within the hit cell, projected off `up`. */
-function tangentOffset(cell: [number, number, number], point: THREE.Vector3, up: THREE.Vector3): THREE.Vector3 {
+/** How far a ceiling may cantilever (tangent tiles) from a directly-supported one. */
+const MAX_CEILING_CANTILEVER = 3;
+
+function directlySupported(x: number, y: number, z: number): boolean {
+  return hasFoundationInCell(x, y, z) || hasWallInCell(x, y, z);
+}
+
+/**
+ * A ceiling at `cell` (on the up face) is supported if the cell is directly over a
+ * wall/foundation, OR it connects — across already-placed ceiling tiles in the
+ * tangent plane — to a directly-supported ceiling within MAX_CEILING_CANTILEVER
+ * tiles. Lets flat roofs/floors extend out a bit, but not float forever.
+ */
+function ceilingSupported(cell: [number, number, number], upIdx: number): boolean {
+  if (directlySupported(cell[0], cell[1], cell[2])) return true;
+  const downIdx = upIdx ^ 1;
+  const k = (c: number[]) => `${c[0]},${c[1]},${c[2]}`;
+  const visited = new Set<string>([k(cell)]);
+  const queue: Array<{ c: [number, number, number]; d: number }> = [{ c: cell, d: 0 }];
+  while (queue.length) {
+    const { c, d } = queue.shift()!;
+    if (d > 0 && hasPanel(c[0], c[1], c[2], upIdx) && directlySupported(c[0], c[1], c[2])) return true;
+    if (d >= MAX_CEILING_CANTILEVER) continue;
+    for (let f = 0; f < 6; f++) {
+      if (f === upIdx || f === downIdx) continue;
+      const n: [number, number, number] = [c[0] + FACE_DIRS[f][0], c[1] + FACE_DIRS[f][1], c[2] + FACE_DIRS[f][2]];
+      const nk = k(n);
+      // Traverse only over EXISTING ceiling tiles (the target cell at d=0 has none yet).
+      if (!visited.has(nk) && hasPanel(n[0], n[1], n[2], upIdx)) { visited.add(nk); queue.push({ c: n, d: d + 1 }); }
+    }
+  }
+  return false;
+}
+
+function tangentOffset(cell: [number, number, number], point: THREE.Vector3, upIdx: number): THREE.Vector3 {
+  _up.set(FACE_DIRS[upIdx][0], FACE_DIRS[upIdx][1], FACE_DIRS[upIdx][2]);
   voxelCoordToWorld(cell[0], cell[1], cell[2], _c);
   _off.copy(point).sub(_c);
-  _off.addScaledVector(up, -_off.dot(up));
+  _off.addScaledVector(_up, -_off.dot(_up));
   return _off;
 }
 
-export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType): BuildTarget | null {
-  const up = upAtCell(hit.cell);
+export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType, up: THREE.Vector3): BuildTarget | null {
   const upIdx = faceIndexForNormal(up.x, up.y, up.z);
   const downIdx = upIdx ^ 1;
-  const ux = Math.round(up.x), uy = Math.round(up.y), uz = Math.round(up.z);
+  const u = FACE_DIRS[upIdx];
+  const free = (c: [number, number, number], f: number) => !hasPanel(c[0], c[1], c[2], f);
+  // Wall variants (doorway/window/gable) snap exactly like a wall.
+  const family = BUILD_PIECES[piece].family;
 
-  if (piece === 'foundation') {
+  if (family === 'foundation') {
     if (hit.isPanel && hit.panelType === 'foundation') {
-      // Extend the platform: step one cell in the tangent direction you point at.
-      const face = nearestVerticalFace(tangentOffset(hit.cell, hit.point, up), upIdx);
+      const face = nearestVerticalFace(tangentOffset(hit.cell, hit.point, upIdx), upIdx);
       if (face < 0) return null;
       const d = FACE_DIRS[face];
       const cell: [number, number, number] = [hit.cell[0] + d[0], hit.cell[1] + d[1], hit.cell[2] + d[2]];
-      const restsOnGround = voxelSystem.hasVoxel(cell[0] - ux, cell[1] - uy, cell[2] - uz);
-      const valid = !voxelSystem.hasVoxel(cell[0], cell[1], cell[2]) && !hasFoundation(cell[0], cell[1], cell[2]) && (restsOnGround || hasFoundation(hit.cell[0], hit.cell[1], hit.cell[2]));
+      const restsOnGround = voxelSystem.hasVoxel(cell[0] - u[0], cell[1] - u[1], cell[2] - u[2]);
+      const valid = !voxelSystem.hasVoxel(cell[0], cell[1], cell[2]) && free(cell, downIdx)
+        && (restsOnGround || hasFoundationOnFace(hit.cell[0], hit.cell[1], hit.cell[2], downIdx));
       return { cell, face: downIdx, valid };
     }
     if (!hit.isPanel) {
-      // On terrain: only the TOP face (you set a foundation on the ground).
-      if (hit.normalIdx !== upIdx) return null;
-      const cell: [number, number, number] = [hit.cell[0] + ux, hit.cell[1] + uy, hit.cell[2] + uz];
-      const valid = !voxelSystem.hasVoxel(cell[0], cell[1], cell[2]) && !hasFoundation(cell[0], cell[1], cell[2]);
+      if (hit.normalIdx !== upIdx) return null; // only the surface you stand on
+      const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
+      const valid = !voxelSystem.hasVoxel(cell[0], cell[1], cell[2]) && free(cell, downIdx);
       return { cell, face: downIdx, valid };
     }
     return null;
   }
 
-  if (piece === 'wall') {
-    if (hit.isPanel && hit.panelType === 'wall' && hit.panelFace !== undefined) {
-      // STACK atop the wall you're looking at: same face, one cell up. Supported by
-      // the wall below (which was itself only placeable if supported → induction).
-      const cell: [number, number, number] = [hit.cell[0] + ux, hit.cell[1] + uy, hit.cell[2] + uz];
-      const valid = !hasPanel(cell[0], cell[1], cell[2], hit.panelFace);
-      return { cell, face: hit.panelFace, valid };
+  if (family === 'wall') {
+    const hitIsWall = hit.panelType !== undefined && BUILD_PIECES[hit.panelType].family === 'wall';
+    if (hit.isPanel && hitIsWall && hit.panelFace !== undefined) {
+      const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
+      return { cell, face: hit.panelFace, valid: free(cell, hit.panelFace) }; // stack atop the wall
     }
     if (hit.isPanel && hit.panelType === 'foundation') {
-      // First-course wall on the foundation cell's vertical face you point at.
-      const face = nearestVerticalFace(tangentOffset(hit.cell, hit.point, up), upIdx);
+      const face = nearestVerticalFace(tangentOffset(hit.cell, hit.point, upIdx), upIdx);
       if (face < 0) return null;
-      const valid = hasFoundation(hit.cell[0], hit.cell[1], hit.cell[2]) && !hasPanel(hit.cell[0], hit.cell[1], hit.cell[2], face);
+      const valid = hasFoundationOnFace(hit.cell[0], hit.cell[1], hit.cell[2], downIdx) && free(hit.cell, face);
       return { cell: hit.cell, face, valid };
     }
     return null;
   }
 
-  // ceiling: cap the foundation/walled cell you're looking at.
-  if (hit.isPanel && (hit.panelType === 'foundation' || hit.panelType === 'wall')) {
-    const cell = hit.cell;
-    const valid = (hasFoundation(cell[0], cell[1], cell[2]) || hasWallInCell(cell[0], cell[1], cell[2])) && !hasPanel(cell[0], cell[1], cell[2], upIdx);
-    return { cell, face: upIdx, valid };
+  // ceiling
+  const hitFam = hit.isPanel && hit.panelType !== undefined ? BUILD_PIECES[hit.panelType].family : null;
+  if (hitFam === 'ceiling') {
+    // Extend a flat roof/floor off the edge you point at (cantilevered up to max).
+    const face = nearestVerticalFace(tangentOffset(hit.cell, hit.point, upIdx), upIdx);
+    if (face < 0) return null;
+    const d = FACE_DIRS[face];
+    const cell: [number, number, number] = [hit.cell[0] + d[0], hit.cell[1] + d[1], hit.cell[2] + d[2]];
+    return { cell, face: upIdx, valid: free(cell, upIdx) && ceilingSupported(cell, upIdx) };
+  }
+  if (hitFam === 'wall' || hitFam === 'foundation') {
+    const c = hit.cell;
+    return { cell: c, face: upIdx, valid: free(c, upIdx) && ceilingSupported(c, upIdx) };
   }
   return null;
 }
 
-// --- March fallbacks (find the cell the ray passes THROUGH) ------------------
-// Used when the crosshair isn't on a panel surface — e.g. aiming forward across a
-// foundation at eye height (the floor panel is below the ray). The wall snaps to
-// the vertical face you face; supported by a foundation in the cell OR a wall on
-// the same face one cell below (stacking, by induction back to a foundation).
+// --- March fallbacks (cell the ray passes THROUGH; for eye-height forward aim) ---
 
-const _mp = new THREE.Vector3();
-const _tan = new THREE.Vector3();
-
-export function marchWallTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number): BuildTarget | null {
-  const step = VOXEL_SCALE * 0.25;
-  for (let t = 0.5; t <= reach; t += step) {
-    _mp.copy(dir).multiplyScalar(t).add(origin);
-    const cx = Math.round(_mp.x / VOXEL_SCALE), cy = Math.round(_mp.y / VOXEL_SCALE), cz = Math.round(_mp.z / VOXEL_SCALE);
-    if (voxelSystem.hasVoxel(cx, cy, cz)) continue; // inside terrain
-    const up = upAtCell([cx, cy, cz]);
-    const upIdx = faceIndexForNormal(up.x, up.y, up.z);
-    _tan.copy(dir).addScaledVector(up, -dir.dot(up)); // faced direction in the tangent plane
-    const face = nearestVerticalFace(_tan, upIdx);
-    if (face < 0 || hasPanel(cx, cy, cz, face)) continue;
-    const ux = Math.round(up.x), uy = Math.round(up.y), uz = Math.round(up.z);
-    const wallBelow = getPieceAt(cx - ux, cy - uy, cz - uz, face);
-    const supported = hasFoundation(cx, cy, cz) || (wallBelow?.type === 'wall');
-    if (supported) return { cell: [cx, cy, cz], face, valid: true };
-  }
-  return null;
-}
-
-export function marchCeilingTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number): BuildTarget | null {
+export function marchWallTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number, up: THREE.Vector3): BuildTarget | null {
+  const upIdx = faceIndexForNormal(up.x, up.y, up.z);
+  const u = FACE_DIRS[upIdx];
+  _up.set(u[0], u[1], u[2]);
   const step = VOXEL_SCALE * 0.25;
   for (let t = 0.5; t <= reach; t += step) {
     _mp.copy(dir).multiplyScalar(t).add(origin);
     const cx = Math.round(_mp.x / VOXEL_SCALE), cy = Math.round(_mp.y / VOXEL_SCALE), cz = Math.round(_mp.z / VOXEL_SCALE);
     if (voxelSystem.hasVoxel(cx, cy, cz)) continue;
-    const up = upAtCell([cx, cy, cz]);
-    const upIdx = faceIndexForNormal(up.x, up.y, up.z);
-    if (hasPanel(cx, cy, cz, upIdx)) continue;
-    if (hasFoundation(cx, cy, cz) || hasWallInCell(cx, cy, cz)) return { cell: [cx, cy, cz], face: upIdx, valid: true };
+    _off.copy(dir).addScaledVector(_up, -dir.dot(_up)); // faced tangent direction
+    const face = nearestVerticalFace(_off, upIdx);
+    if (face < 0 || hasPanel(cx, cy, cz, face)) continue;
+    const below = getPieceAt(cx - u[0], cy - u[1], cz - u[2], face);
+    const wallBelow = below !== undefined && BUILD_PIECES[below.type].family === 'wall';
+    if (hasFoundationOnFace(cx, cy, cz, upIdx ^ 1) || wallBelow) {
+      return { cell: [cx, cy, cz], face, valid: true };
+    }
+  }
+  return null;
+}
+
+export function marchCeilingTarget(origin: THREE.Vector3, dir: THREE.Vector3, reach: number, up: THREE.Vector3): BuildTarget | null {
+  const upIdx = faceIndexForNormal(up.x, up.y, up.z);
+  const step = VOXEL_SCALE * 0.25;
+  for (let t = 0.5; t <= reach; t += step) {
+    _mp.copy(dir).multiplyScalar(t).add(origin);
+    const cx = Math.round(_mp.x / VOXEL_SCALE), cy = Math.round(_mp.y / VOXEL_SCALE), cz = Math.round(_mp.z / VOXEL_SCALE);
+    if (voxelSystem.hasVoxel(cx, cy, cz) || hasPanel(cx, cy, cz, upIdx)) continue;
+    if (ceilingSupported([cx, cy, cz], upIdx)) return { cell: [cx, cy, cz], face: upIdx, valid: true };
   }
   return null;
 }

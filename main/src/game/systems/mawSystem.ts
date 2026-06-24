@@ -51,6 +51,12 @@ export function consumeMawCharge(amount: number): void {
   emit();
 }
 
+/** Set charge directly (for restoring a save). */
+export function setMawCharge(amount: number): void {
+  charge = Math.max(0, Math.min(MAX_MAW_CHARGE, amount));
+  emit();
+}
+
 /**
  * If the Maw is empty, burn one Biofuel from the inventory to refill it. Returns
  * true if a Biofuel was consumed. Called from the mining loop so refueling is

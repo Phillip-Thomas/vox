@@ -45,6 +45,11 @@ export function hasMilestone(id: string): boolean {
   return milestones.has(id);
 }
 
+/** Snapshot of reached milestone ids (for persistence). */
+export function getMilestones(): string[] {
+  return [...milestones];
+}
+
 export function resetProgression(): void {
   currentEra = 'primitive';
   milestones.clear();

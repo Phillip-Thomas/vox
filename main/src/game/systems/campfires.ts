@@ -33,6 +33,12 @@ export function getCampfires(): readonly Campfire[] {
   return campfires;
 }
 
+/** Re-insert campfires from a save (preserves positions; reissues ids). */
+export function restoreCampfires(saved: ReadonlyArray<{ pos: [number, number, number]; up: [number, number, number] }>): void {
+  for (const c of saved) campfires.push({ id: nextId++, pos: [...c.pos], up: [...c.up] });
+  if (saved.length > 0) { version++; emit(); }
+}
+
 export function getCampfireVersion(): number {
   return version;
 }

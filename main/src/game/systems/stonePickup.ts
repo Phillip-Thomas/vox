@@ -32,6 +32,21 @@ export function getStonePickupVersion(): number {
   return version;
 }
 
+/** Snapshot of collected-stone coords (for persistence). */
+export function getCollectedStones(): Array<[number, number, number]> {
+  return [...collected].map(k => k.split(',').map(Number) as [number, number, number]);
+}
+
+/** Mark a stone collected WITHOUT banking stone (for restoring a save — the
+ *  inventory is restored separately). */
+export function markStoneCollected(x: number, y: number, z: number): void {
+  if (!collected.has(key(x, y, z))) {
+    collected.add(key(x, y, z));
+    version++;
+    emit();
+  }
+}
+
 export function resetStonePickup(): void {
   if (collected.size > 0) {
     collected.clear();

@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem';
 import { getCampfires, resetCampfires, subscribeCampfires, type Campfire } from '../game/systems/campfires';
+import { restoreCampfiresForWorld } from '../game/systems/persistence';
 import { getPlayerUp } from '../state/playerFrame';
 
 // Warm fire palette + tuned point-light values (physically-correct lights, decay 2).
@@ -43,8 +44,8 @@ export function PlayerTorch({ playerPosition }: { playerPosition: THREE.Vector3 
 export function Campfires({ terrainSeed }: { terrainSeed: number }) {
   const [list, setList] = useState<readonly Campfire[]>(() => getCampfires());
   useEffect(() => subscribeCampfires(() => setList([...getCampfires()])), []);
-  // Campfire positions are world-relative — clear them on world swap.
-  useEffect(() => { resetCampfires(); }, [terrainSeed]);
+  // World-relative — clear, then load this world's saved campfires.
+  useEffect(() => { resetCampfires(); restoreCampfiresForWorld(terrainSeed); setList([...getCampfires()]); }, [terrainSeed]);
   return (
     <>
       {list.map(c => <CampfireObject key={c.id} fire={c} />)}

@@ -49,6 +49,11 @@ export function getTreeHarvestVersion(): number {
   return version;
 }
 
+/** Snapshot of harvested-tree coords (for persistence). */
+export function getHarvestedTrees(): Array<[number, number, number]> {
+  return [...harvested].map(k => k.split(',').map(Number) as [number, number, number]);
+}
+
 export function resetTreeHarvest(): void {
   if (harvested.size > 0) {
     harvested.clear();

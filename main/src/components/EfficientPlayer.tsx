@@ -40,7 +40,7 @@ import {
 } from '../utils/surfaceControls';
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
-import { setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
+import { getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -64,8 +64,8 @@ import { clearMiningProgress, setMiningProgress } from '../game/systems/miningPr
 import { CHARGE_PER_BREAK, consumeMawCharge, isMawPowered, refuelFromInventory } from '../game/systems/mawSystem';
 import { harvestTree, isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { collectStone, isStoneCollected } from '../game/systems/stonePickup';
-import { isBuildEnabled, getSelectedPiece } from '../game/systems/buildState';
-import { canAfford, placePiece, removePiece } from '../game/systems/structureSystem';
+import { isBuildEnabled, getSelectedPiece, getSelectedMaterial } from '../game/systems/buildState';
+import { canAfford, placePiece, placeDoorway, removePiece, hasPanel, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
 import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
 import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
@@ -565,15 +565,19 @@ export default function EfficientPlayer({
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera); // crosshair = screen centre
 
-    // Nearest hit across terrain + structure → a normalized BuildHit.
+    // Nearest hit across terrain + structure (structure = the group of per-piece
+    // meshes, each carrying its StructurePiece in userData) → a normalized BuildHit.
     const voxelMesh = efficientPlanetMesh.current;
-    const structMesh = structureFieldHandle.mesh;
-    const meshes = [voxelMesh, structMesh].filter(Boolean) as THREE.Object3D[];
+    const structGroup = structureFieldHandle.group;
+    const meshes: THREE.Object3D[] = [];
+    if (voxelMesh) meshes.push(voxelMesh);
+    if (structGroup) for (const child of structGroup.children) meshes.push(child);
     let hitInfo: BuildHit | null = null;
     let deconHit: { cell: { x: number; y: number; z: number }; face: number } | null = null;
     for (const h of raycaster.intersectObjects(meshes, false)) {
-      if (h.instanceId === undefined || !h.face) continue;
+      if (!h.face) continue;
       if (h.object === voxelMesh) {
+        if (h.instanceId === undefined) continue;
         const coord = voxelSystem.getCoordForSlot(h.instanceId);
         if (!coord) continue;
         hitInfo = {
@@ -581,7 +585,7 @@ export default function EfficientPlayer({
           normalIdx: faceIndexForNormal(h.face.normal.x, h.face.normal.y, h.face.normal.z)
         };
       } else {
-        const p = structureFieldHandle.slotPiece[h.instanceId];
+        const p = (h.object.userData as { piece?: StructurePiece }).piece;
         if (!p) continue;
         hitInfo = { cell: p.cell, point: h.point, isPanel: true, panelType: p.type, panelFace: p.face, normalIdx: -1 };
         deconHit = { cell: { x: p.cell[0], y: p.cell[1], z: p.cell[2] }, face: p.face };
@@ -595,24 +599,35 @@ export default function EfficientPlayer({
       else playSfx('blocked');
     }
 
-    let target = hitInfo ? resolveBuildTarget(hitInfo, piece) : null;
+    // Build frame = the player's footing (gravity up) so building orients to the
+    // surface you stand on — including the adjacent face when you wrap a cube edge.
+    const up = getPlayerUp();
+    let target = hitInfo ? resolveBuildTarget(hitInfo, piece, up) : null;
     // Fallback: aiming across a foundation at eye height doesn't hit the thin floor
     // panel, so find the cell the ray passes through (walls snap to the faced edge /
     // a wall below = stacking; ceilings cap the cell).
     if (!target || !target.valid) {
-      if (piece === 'wall') target = marchWallTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH) ?? target;
-      else if (piece === 'ceiling') target = marchCeilingTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH) ?? target;
+      if (piece === 'wall') target = marchWallTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH, up) ?? target;
+      else if (piece === 'ceiling') target = marchCeilingTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH, up) ?? target;
     }
     if (!target) {
       clearBuildGhost();
       if (place) playSfx('blocked');
       return;
     }
-    const ok = target.valid && canAfford(piece);
-    setBuildGhost(target.cell, target.face, ok);
+    const material = getSelectedMaterial();
+    // Doorways are 2-tall: the upper cell (one step along build-up) must also be free.
+    const upIdx = faceIndexForNormal(up.x, up.y, up.z);
+    const upDir = FACE_DIRS[upIdx];
+    const upperFree = piece !== 'doorway'
+      || !hasPanel(target.cell[0] + upDir[0], target.cell[1] + upDir[1], target.cell[2] + upDir[2], target.face);
+    const ok = target.valid && upperFree && canAfford(piece, material);
+    setBuildGhost(target.cell, target.face, piece, ok);
     if (place) {
-      if (ok && placePiece(target.cell, target.face, piece)) playSfx('mine');
-      else playSfx('blocked');
+      const placed = piece === 'doorway'
+        ? (ok && placeDoorway(target.cell, target.face, upIdx, material))
+        : (ok && placePiece(target.cell, target.face, piece, material));
+      playSfx(placed ? 'mine' : 'blocked');
     }
   }, []);
 

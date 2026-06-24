@@ -6,6 +6,7 @@
 // fraction. Module-singleton + version/subscribe, persistence-ready (the home base).
 
 import { BUILD_PIECES, type BuildPieceType } from '../data/buildPieces.ts';
+import { pieceCost, type BuildMaterialId } from '../data/buildMaterials.ts';
 import { addItem, hasItems, removeItem } from './inventorySystem.ts';
 
 /** The 6 axis face directions; index 0..5. Opposite of i is `i ^ 1`. */
@@ -33,20 +34,32 @@ export interface StructurePiece {
   cell: [number, number, number];
   face: number; // 0..5 (index into FACE_DIRS)
   type: BuildPieceType;
+  material: BuildMaterialId;
+  /** Doorways are 2 cells tall: a 'lower' + 'upper' half, linked via `partner`. */
+  tall?: 'lower' | 'upper';
+  partner?: [number, number, number];
 }
 
 const pieces = new Map<string, StructurePiece>(); // key: "x,y,z:face"
-const foundationCells = new Set<string>();        // key: "x,y,z"
 let nextId = 1;
 let version = 0;
 const listeners = new Set<() => void>();
 
 function emit() { listeners.forEach(l => l()); }
-function cellKey(x: number, y: number, z: number): string { return `${x},${y},${z}`; }
 function panelKey(x: number, y: number, z: number, face: number): string { return `${x},${y},${z}:${face}`; }
 
-export function hasFoundation(x: number, y: number, z: number): boolean {
-  return foundationCells.has(cellKey(x, y, z));
+/** True if THIS face of the cell holds a foundation (a cell can carry foundations
+ *  on several faces — e.g. wrapping around a cube edge, one per adjacent surface). */
+export function hasFoundationOnFace(x: number, y: number, z: number, face: number): boolean {
+  return pieces.get(panelKey(x, y, z, face))?.type === 'foundation';
+}
+
+/** True if ANY face of the cell holds a foundation (used for ceiling support). */
+export function hasFoundationInCell(x: number, y: number, z: number): boolean {
+  for (let f = 0; f < 6; f++) {
+    if (pieces.get(panelKey(x, y, z, f))?.type === 'foundation') return true;
+  }
+  return false;
 }
 
 export function hasPanel(x: number, y: number, z: number, face: number): boolean {
@@ -57,43 +70,78 @@ export function getPieceAt(x: number, y: number, z: number, face: number): Struc
   return pieces.get(panelKey(x, y, z, face));
 }
 
-/** True if any of the cell's faces holds a wall (used for ceiling support). */
+/** True if any of the cell's faces holds a wall-family piece (wall/doorway/window/
+ *  gable) — used for ceiling support. */
 export function hasWallInCell(x: number, y: number, z: number): boolean {
   for (let f = 0; f < 6; f++) {
     const p = pieces.get(panelKey(x, y, z, f));
-    if (p && p.type === 'wall') return true;
+    if (p && BUILD_PIECES[p.type].family === 'wall') return true;
   }
   return false;
 }
 
-export function canAfford(type: BuildPieceType): boolean {
-  return hasItems(BUILD_PIECES[type].cost);
+// Free build (debug): skip resource cost/refund so the catalog can be exercised
+// without grinding. Injected (not URL-read here) — App sets it from ?debug=1.
+let freeBuild = false;
+export function setFreeBuild(on: boolean): void { freeBuild = on; }
+export function isFreeBuild(): boolean { return freeBuild; }
+
+export function canAfford(type: BuildPieceType, material: BuildMaterialId): boolean {
+  return freeBuild || hasItems(pieceCost(type, material));
 }
 
-/** Place a piece at (cell, face). Validates occupancy + cost; spends resources. */
-export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType): boolean {
+/** Place a piece at (cell, face) in a material. Validates occupancy + cost; spends. */
+export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType, material: BuildMaterialId): boolean {
   const [x, y, z] = cell;
   if (hasPanel(x, y, z, face)) return false;
-  if (!hasItems(BUILD_PIECES[type].cost)) return false;
-  for (const c of BUILD_PIECES[type].cost) removeItem(c.id, c.qty);
-  pieces.set(panelKey(x, y, z, face), { id: nextId++, cell: [x, y, z], face, type });
-  if (type === 'foundation') foundationCells.add(cellKey(x, y, z));
+  const cost = pieceCost(type, material);
+  if (!freeBuild) {
+    if (!hasItems(cost)) return false;
+    for (const c of cost) removeItem(c.id, c.qty);
+  }
+  pieces.set(panelKey(x, y, z, face), { id: nextId++, cell: [x, y, z], face, type, material });
   version++;
   emit();
   return true;
 }
 
-/** Remove a piece, refunding half its cost (rounded down). */
+/**
+ * Place a 2-cell-tall doorway (a lower + upper half on the same wall face), so the
+ * opening clears the player's height. `upIdx` = the build-up face index; the upper
+ * half sits in the cell one step along it. Cost is charged once for the pair.
+ */
+export function placeDoorway(cell: [number, number, number], face: number, upIdx: number, material: BuildMaterialId): boolean {
+  const u = FACE_DIRS[upIdx];
+  const upper: [number, number, number] = [cell[0] + u[0], cell[1] + u[1], cell[2] + u[2]];
+  if (hasPanel(cell[0], cell[1], cell[2], face) || hasPanel(upper[0], upper[1], upper[2], face)) return false;
+  const cost = pieceCost('doorway', material);
+  if (!freeBuild) {
+    if (!hasItems(cost)) return false;
+    for (const c of cost) removeItem(c.id, c.qty);
+  }
+  pieces.set(panelKey(cell[0], cell[1], cell[2], face), { id: nextId++, cell: [...cell] as [number, number, number], face, type: 'doorway', material, tall: 'lower', partner: upper });
+  pieces.set(panelKey(upper[0], upper[1], upper[2], face), { id: nextId++, cell: upper, face, type: 'doorway', material, tall: 'upper', partner: [...cell] as [number, number, number] });
+  version++;
+  emit();
+  return true;
+}
+
+/** Remove a piece (and its linked half, for a 2-tall doorway), refunding once. */
 export function removePiece(cell: [number, number, number], face: number): boolean {
   const [x, y, z] = cell;
   const key = panelKey(x, y, z, face);
   const piece = pieces.get(key);
   if (!piece) return false;
   pieces.delete(key);
-  if (piece.type === 'foundation') foundationCells.delete(cellKey(x, y, z));
-  for (const c of BUILD_PIECES[piece.type].cost) {
-    const refund = Math.floor(c.qty / 2);
-    if (refund > 0) addItem(c.id, refund);
+  if (piece.partner) {
+    const p = piece.partner;
+    pieces.delete(panelKey(p[0], p[1], p[2], face)); // remove the linked doorway half
+  }
+  if (!freeBuild) {
+    for (const c of pieceCost(piece.type, piece.material)) {
+      const refund = Math.floor(c.qty / 2);
+      if (refund > 0) addItem(c.id, refund);
+    }
   }
   version++;
   emit();
@@ -104,14 +152,21 @@ export function getPieces(): StructurePiece[] {
   return [...pieces.values()];
 }
 
+/** Re-insert pieces from a save, bypassing cost (reissues ids). */
+export function restorePieces(saved: ReadonlyArray<Omit<StructurePiece, 'id'>>): void {
+  for (const p of saved) {
+    pieces.set(panelKey(p.cell[0], p.cell[1], p.cell[2], p.face), { ...p, id: nextId++ });
+  }
+  if (saved.length > 0) { version++; emit(); }
+}
+
 export function getStructureVersion(): number {
   return version;
 }
 
 export function resetStructures(): void {
-  if (pieces.size > 0 || foundationCells.size > 0) {
+  if (pieces.size > 0) {
     pieces.clear();
-    foundationCells.clear();
     version++;
     emit();
   }

@@ -40,6 +40,14 @@ import {
 } from './utils/worldCoordinates.ts';
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled } from './game/systems/buildState.ts';
+import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
+import { loadGlobal, restoreGlobal, saveGlobal, saveWorld } from './game/systems/persistence.ts';
+import { subscribeInventory } from './game/systems/inventorySystem.ts';
+import { subscribeCampfires } from './game/systems/campfires.ts';
+import { subscribeMaw } from './game/systems/mawSystem.ts';
+import { subscribeProgression } from './game/systems/progressionSystem.ts';
+import { subscribeTreeHarvest } from './game/systems/treeHarvest.ts';
+import { subscribeStonePickup } from './game/systems/stonePickup.ts';
 import { scheduleWorldPrewarm } from './utils/worldGenCache.ts';
 import { scheduleGrassInstancePrewarm } from './utils/grassField.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
@@ -91,6 +99,9 @@ const inputBase: React.CSSProperties = {
 
 const App: React.FC = () => {
   const totalVoxels = planetSize ** 3;
+  // Load the saved game ONCE, before children mount: restores global stores
+  // (inventory/maw/era) and gives us the base coordinate to spawn back at.
+  const [bootSave] = useState(() => { const s = loadGlobal(); if (s) restoreGlobal(s); return s; });
   const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => {
     // ?world=x,y -> spawn on foot directly on that coordinate's planet (debug: lets
     // you inspect a specific seed's terrain/trees without travelling there).
@@ -101,10 +112,10 @@ const App: React.FC = () => {
         return createCurrentWorld({ x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) });
       }
     } catch { /* ignore */ }
-    // No ?world= override -> CRASH-LAND on a fresh but HOSPITABLE planet (verdant/
-    // oceanic): trees, grass, biofiber, stone, no early hazard — the Primitive era's
-    // necessities. Varies per session (random among hospitable), never 0,0-fixed.
-    // Travel afterwards (Random/Set Course) is unconstrained.
+    // Returning player -> spawn back at your saved base (so reloads don't strand you).
+    if (bootSave?.lastWorld) return createCurrentWorld(bootSave.lastWorld);
+    // Fresh game -> CRASH-LAND on a HOSPITABLE planet (verdant/oceanic): trees, grass,
+    // biofiber, stone, no early hazard — the Primitive era's necessities.
     return createCurrentWorld(findHospitableStart());
   });
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
@@ -341,6 +352,34 @@ const App: React.FC = () => {
       debugUiEnabled: params.get('debug') === '1'
     };
   }, []);
+
+  // ?debug=1 → free building (no resource cost) so the build catalog can be tested.
+  useEffect(() => { setFreeBuild(debugUiEnabled); }, [debugUiEnabled]);
+
+  // Autosave: persist this world's data (debounced on store changes, and on tab
+  // hide / unload to catch a server kill). Saving on cleanup captures the OLD world
+  // BEFORE the field reset-then-load wipes its stores on a world change.
+  useEffect(() => {
+    const coord = currentWorld.coordinate;
+    const seed = currentWorld.seed;
+    const doSave = () => { saveGlobal(coord); saveWorld(seed); };
+    let timer = 0;
+    const schedule = () => { if (timer) return; timer = window.setTimeout(() => { timer = 0; doSave(); }, 700); };
+    const unsubs = [
+      subscribeStructures(schedule), subscribeInventory(schedule), subscribeCampfires(schedule),
+      subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule), subscribeStonePickup(schedule)
+    ];
+    const onHidden = () => { if (document.visibilityState === 'hidden') doSave(); };
+    document.addEventListener('visibilitychange', onHidden);
+    window.addEventListener('beforeunload', doSave);
+    return () => {
+      if (timer) clearTimeout(timer);
+      unsubs.forEach(u => u());
+      document.removeEventListener('visibilitychange', onHidden);
+      window.removeEventListener('beforeunload', doSave);
+      doSave(); // persist the world we're leaving before its stores reset
+    };
+  }, [currentWorld.coordinate, currentWorld.seed]);
 
   // ?fly=1: drop straight into deep-space flight (once, on mount).
   useEffect(() => {

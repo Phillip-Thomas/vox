@@ -5,15 +5,24 @@
 // Build mode keeps pointer lock (you aim) — unlike the crafting menu.
 
 import { BUILD_PIECE_ORDER, type BuildPieceType } from '../data/buildPieces.ts';
+import { ALL_BUILD_MATERIALS, type BuildMaterialId } from '../data/buildMaterials.ts';
 
 let enabled = false;
 let selected: BuildPieceType = 'foundation';
+let selectedMaterial: BuildMaterialId = 'wood';
 const listeners = new Set<() => void>();
 
 function emit() { listeners.forEach(l => l()); }
 
 export function isBuildEnabled(): boolean { return enabled; }
 export function getSelectedPiece(): BuildPieceType { return selected; }
+export function getSelectedMaterial(): BuildMaterialId { return selectedMaterial; }
+
+export function cycleSelectedMaterial(): void {
+  const i = ALL_BUILD_MATERIALS.indexOf(selectedMaterial);
+  selectedMaterial = ALL_BUILD_MATERIALS[(i + 1) % ALL_BUILD_MATERIALS.length];
+  emit();
+}
 
 export function setBuildEnabled(on: boolean): void {
   if (enabled !== on) { enabled = on; emit(); }

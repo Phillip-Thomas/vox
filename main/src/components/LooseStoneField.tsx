@@ -9,6 +9,7 @@ import { isDecoratableGrassVoxel } from '../utils/grassField';
 import {
   collectStone, getStonePickupVersion, isStoneCollected, resetStonePickup
 } from '../game/systems/stonePickup';
+import { restoreStonesForWorld } from '../game/systems/persistence';
 import { buildStoneGeometry, createStoneMaterial } from '../utils/looseStone';
 import { playSfx } from '../audio/sfxEngine.ts';
 
@@ -153,8 +154,8 @@ export default function LooseStoneField({ terrainSeed, playerPosition }: LooseSt
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
-  // Reset collected state on world swap (coords are world-relative).
-  useEffect(() => { resetStonePickup(); }, [terrainSeed]);
+  // World-relative — clear, then load this world's already-collected stones.
+  useEffect(() => { resetStonePickup(); restoreStonesForWorld(terrainSeed); }, [terrainSeed]);
 
   // Dispose GPU resources on unmount only (geometry/material are stable useMemos,
   // so this cleanup must NOT fire on a mere terrainSeed change). Clear the handle.

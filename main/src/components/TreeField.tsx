@@ -11,6 +11,7 @@ import { buildTreeProfile, paramsFromProfile } from '../utils/treeProfile';
 import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
 import { getTreeHarvestVersion, isTreeHarvested, resetTreeHarvest } from '../game/systems/treeHarvest';
+import { restoreTreesForWorld } from '../game/systems/persistence';
 import {
   createBarkMaterial,
   createLeafMaterial,
@@ -286,6 +287,7 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
   // planet). Clear the pick handle on unmount so a stale mesh is never raycast.
   useEffect(() => {
     resetTreeHarvest();
+    restoreTreesForWorld(terrainSeed); // load this world's already-felled trees
     return () => {
       treeFieldHandle.trunk = null;
       treeFieldHandle.leaf = null;
