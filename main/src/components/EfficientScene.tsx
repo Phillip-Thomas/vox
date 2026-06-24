@@ -22,6 +22,8 @@ import {
   createWorldArrivalPose
 } from '../utils/worldArrival';
 import { measureWarpMetric } from '../utils/warpMetrics';
+import { loadPlayerPose } from '../game/systems/persistence.ts';
+import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
 
 export const planetSize = 50;
 
@@ -79,11 +81,19 @@ export default function EfficientScene({
     ),
     [terrainSeed]
   );
-  const [initialPlayerPosition] = useState(() => (
-    arrivalMode === 'approach'
-      ? arrivalPose.approachPosition.clone()
-      : arrivalPose.playerSurfacePosition.clone()
-  ));
+  const [initialPlayerPosition] = useState(() => {
+    if (arrivalMode === 'approach') return arrivalPose.approachPosition.clone();
+    // Returning to a saved world: spawn where you stood, facing how you faced
+    // (seed the camera look before CameraControls mounts).
+    const saved = loadPlayerPose(terrainSeed);
+    if (saved) {
+      setPlayerLook(new THREE.Vector3(...saved.forward), saved.pitch);
+      const pos = new THREE.Vector3(...saved.pos);
+      setPlayerWorldPosition(pos); // correct immediately, before the first frame publishes
+      return pos;
+    }
+    return arrivalPose.playerSurfacePosition.clone();
+  });
   const [playerPosition, setPlayerPosition] = useState(() => initialPlayerPosition.clone());
   // Where the ship last set down this world (null until you land). Drives the
   // parked-ship position AND the on-foot exit spawn so you leave the ship exactly

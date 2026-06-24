@@ -109,6 +109,13 @@ export function getCurrentDayPhase(): number {
   return forcedDayPhase ?? liveDayPhase;
 }
 
+// Offset added to the running cycle so a restored save resumes at its saved
+// time-of-day (then keeps cycling). Set once at boot by persistence.
+let dayPhaseOffset = 0;
+export function setDayPhaseOffset(phase: number): void {
+  dayPhaseOffset = ((phase % 1) + 1) % 1;
+}
+
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
 const dayFogColor = new THREE.Color('#8fbdf2'); // was #9ec9ff — slightly deeper so the horizon doesn't wash pale
 const goldenFogColor = new THREE.Color('#f0a060');
@@ -318,7 +325,7 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
     // skip per-frame work entirely. (SpaceSky owns its own gated useFrame.)
     if (!animated) return;
 
-    const dayPhase = forcedDayPhase ?? (state.clock.elapsedTime / DAY_LENGTH_SECONDS) % 1;
+    const dayPhase = forcedDayPhase ?? ((state.clock.elapsedTime / DAY_LENGTH_SECONDS) + dayPhaseOffset) % 1;
     liveDayPhase = dayPhase;
     const r = applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));

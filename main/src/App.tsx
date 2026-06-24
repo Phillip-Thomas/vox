@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import EfficientScene, { planetSize, SceneDebugState } from './components/EfficientScene.tsx';
-import SkyController from './components/SkyController.tsx';
+import SkyController, { getCurrentDayPhase, setDayPhaseOffset } from './components/SkyController.tsx';
 import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
@@ -41,7 +41,7 @@ import {
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
-import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits } from './game/systems/persistence.ts';
+import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits, savePlayerPose } from './game/systems/persistence.ts';
 import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { subscribeInventory } from './game/systems/inventorySystem.ts';
 import { subscribeCampfires } from './game/systems/campfires.ts';
@@ -102,7 +102,11 @@ const App: React.FC = () => {
   const totalVoxels = planetSize ** 3;
   // Load the saved game ONCE, before children mount: restores global stores
   // (inventory/maw/era) and gives us the base coordinate to spawn back at.
-  const [bootSave] = useState(() => { const s = loadGlobal(); if (s) restoreGlobal(s); return s; });
+  const [bootSave] = useState(() => {
+    const s = loadGlobal();
+    if (s) { restoreGlobal(s); if (s.dayPhase != null) setDayPhaseOffset(s.dayPhase); }
+    return s;
+  });
   const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => {
     // ?world=x,y -> spawn on foot directly on that coordinate's planet (debug: lets
     // you inspect a specific seed's terrain/trees without travelling there).
@@ -369,8 +373,9 @@ const App: React.FC = () => {
     // own cleanup saves voxels before its reset() clears them, and that child cleanup runs
     // BEFORE this parent cleanup (so reading deletedTerrain here would be empty).
     const doSave = (withVoxels: boolean) => {
-      saveGlobal(coord);
+      saveGlobal(coord, getCurrentDayPhase());
       saveWorld(seed);
+      savePlayerPose(seed);
       if (withVoxels) {
         const v = voxelSystem.getEditVersion();
         if (v !== lastVoxelVersion) { lastVoxelVersion = v; saveVoxelEdits(seed); }
@@ -383,16 +388,20 @@ const App: React.FC = () => {
       subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule),
       subscribeStonePickup(schedule), voxelSystem.subscribeVoxelEdits(schedule)
     ];
+    // Movement/time don't fire a store event, so tick a light save (pose + day) to
+    // survive a server kill while just walking around.
+    const periodic = window.setInterval(() => { saveGlobal(coord, getCurrentDayPhase()); savePlayerPose(seed); }, 20000);
     const onHidden = () => { if (document.visibilityState === 'hidden') doSave(true); };
     document.addEventListener('visibilitychange', onHidden);
     const onUnload = () => doSave(true);
     window.addEventListener('beforeunload', onUnload);
     return () => {
       if (timer) clearTimeout(timer);
+      clearInterval(periodic);
       unsubs.forEach(u => u());
       document.removeEventListener('visibilitychange', onHidden);
       window.removeEventListener('beforeunload', onUnload);
-      doSave(false); // structures/global of the world we're leaving (voxels: EfficientPlanet)
+      doSave(false); // structures/global/pose of the world we're leaving (voxels: EfficientPlanet)
     };
   }, [currentWorld.coordinate, currentWorld.seed]);
 

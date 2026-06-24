@@ -19,6 +19,7 @@ import { getCampfires, restoreCampfires } from './campfires.ts';
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
 import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
+import { getPlayerWorldPosition, getPlayerLook } from '../../state/playerFrame.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
 import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
@@ -46,12 +47,13 @@ export interface GlobalSave {
   era: EraId;
   milestones: string[];
   lastWorld: WorldCoordinate | null;
+  dayPhase?: number; // time-of-day to resume at (0..1); SkyController offset
 }
 
-export function saveGlobal(lastWorld: WorldCoordinate | null): void {
+export function saveGlobal(lastWorld: WorldCoordinate | null, dayPhase?: number): void {
   const data: GlobalSave = {
     inventory: getInventory(), mawCharge: getMawCharge(), era: getCurrentEra(),
-    milestones: getMilestones(), lastWorld
+    milestones: getMilestones(), lastWorld, dayPhase
   };
   write(GLOBAL_KEY, data);
 }
@@ -115,6 +117,31 @@ interface VoxelSave {
   added: Array<[number, number, number]>;       // FUTURE: player-placed blocks
 }
 const worldVoxelKey = (seed: number) => `${PREFIX}.world.${seed}.voxels`;
+
+// --- Player pose (per world: where you stood + which way you faced) ----------
+interface PlayerPose {
+  pos: [number, number, number];
+  forward: [number, number, number];
+  pitch: number;
+}
+const worldPlayerKey = (seed: number) => `${PREFIX}.world.${seed}.player`;
+
+export function savePlayerPose(seed: number): void {
+  const p = getPlayerWorldPosition();
+  const look = getPlayerLook();
+  const data: PlayerPose = {
+    pos: [p.x, p.y, p.z],
+    forward: [look.forward.x, look.forward.y, look.forward.z],
+    pitch: look.pitch
+  };
+  write(worldPlayerKey(seed), data);
+}
+
+/** Saved pose for a world, or null. EfficientScene uses `pos` as the spawn point and
+ *  seeds the camera look from `forward`/`pitch` (via setPlayerLook) before mount. */
+export function loadPlayerPose(seed: number): PlayerPose | null {
+  return read<PlayerPose>(worldPlayerKey(seed));
+}
 
 export function saveVoxelEdits(seed: number): void {
   const data: VoxelSave = {
