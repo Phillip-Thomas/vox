@@ -89,7 +89,7 @@ import { setLookedAt, type LookedAt } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 import type { CommandContext } from '../game/commands.ts';
 import type { PlayerActionMode } from '../game/playerPose.ts';
-import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
+import { sendMultiplayerCommandEvents, sendMultiplayerPredictedEvents } from '../game/multiplayerSession.ts';
 import {
   shouldDisplacePlayerForWorldCollisionChange,
   shouldReconcilePlayerForWorldCollisionChange,
@@ -883,7 +883,12 @@ export default function EfficientPlayer({
       if (!p) continue;
       if (isOpenable(p)) {
         const result = toggleDoorCommand(commandContext, { piece: p });
-        if (result.ok) { sendMultiplayerCommandEvents(result); playSfx('mine'); return true; }
+        if (result.ok) {
+          sendMultiplayerPredictedEvents(result);
+          sendMultiplayerCommandEvents(result);
+          playSfx('mine');
+          return true;
+        }
       }
       return false; // nearest piece isn't an openable door
     }

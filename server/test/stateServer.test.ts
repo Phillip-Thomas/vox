@@ -216,6 +216,73 @@ describe('state server', () => {
     alice.ws.close();
   });
 
+  it('broadcasts predicted door toggles immediately and rolls them back on reject', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    alice.ws.send(JSON.stringify({
+      type: 'predict_world_event',
+      commandId: 'door-fast',
+      worldId: '0,0',
+      event: {
+        type: 'door_toggled',
+        payload: { cell: [1, 2, 3], face: 0, open: true }
+      },
+      rollback: {
+        setDoorOpen: { cell: [1, 2, 3], face: 0, open: false }
+      }
+    }));
+
+    const predicted = await waitForMessage(
+      bob.messages,
+      'predicted_world_event',
+      message => message.commandId === 'door-fast'
+    );
+    expect(predicted).toMatchObject({
+      commandId: 'door-fast',
+      worldId: '0,0',
+      event: {
+        seq: 0,
+        commandId: 'door-fast',
+        type: 'door_toggled',
+        playerId: 'alice',
+        payload: { cell: [1, 2, 3], face: 0, open: true }
+      }
+    });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'door-fast',
+      commandType: 'door_toggled',
+      worldId: '0,0',
+      payload: { actorId: 'bob', cell: [1, 2, 3], face: 0, open: true }
+    }));
+
+    await expectRejected(alice.messages, 'door-fast', 'invalid_actor');
+    const rollback = await waitForMessage(
+      bob.messages,
+      'prediction_rollback',
+      message => message.commandId === 'door-fast'
+    );
+    expect(rollback).toMatchObject({
+      commandId: 'door-fast',
+      rollback: { setDoorOpen: { cell: [1, 2, 3], face: 0, open: false } }
+    });
+
+    bob.ws.close();
+    alice.ws.close();
+  });
+
   it('rejects command actor spoofing and inactive shard targets', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const started = await startTestServer();

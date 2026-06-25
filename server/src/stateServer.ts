@@ -27,6 +27,7 @@ import {
   encodeServerMessage,
   parseClientMessage,
   type ClientMessage,
+  type JsonObject,
   type PlayerIdentity,
   type ServerMessage
 } from './protocol.js';
@@ -246,6 +247,9 @@ async function handleSocketMessage(
     case 'command':
       await handleCommand(ws, state, rooms, socketsBySessionId, persistence, message);
       return;
+    case 'predict_world_event':
+      handlePredictedWorldEvent(ws, state, rooms, socketsBySessionId, message);
+      return;
     case 'pose_update':
       handlePose(ws, state, rooms, socketsBySessionId, message);
       return;
@@ -323,32 +327,35 @@ async function handleCommand(
   persistence: MultiplayerPersistence,
   message: Extract<ClientMessage, { type: 'command' }>
 ): Promise<void> {
+  const reject = (code: string, reason: string) => {
+    rejectCommand(ws, state, message, code, reason, socketsBySessionId);
+  };
   if (!state.room) {
-    rejectCommand(ws, state, message, 'not_in_room', 'Join a room before sending commands.');
+    reject('not_in_room', 'Join a room before sending commands.');
     return;
   }
   if (!state.session) {
-    rejectCommand(ws, state, message, 'not_in_room', 'Join a room before sending commands.');
+    reject('not_in_room', 'Join a room before sending commands.');
     return;
   }
   if (canonicalWorldId(message.worldId) !== message.worldId) {
-    rejectCommand(ws, state, message, 'invalid_world', 'Command world must be a canonical coordinate key.');
+    reject('invalid_world', 'Command world must be a canonical coordinate key.');
     return;
   }
   if (!state.room.shards.has(message.worldId)) {
-    rejectCommand(ws, state, message, 'invalid_world', 'Command world is not active in this room.');
+    reject('invalid_world', 'Command world is not active in this room.');
     return;
   }
   const envelopeError = validateCommandEnvelope(state, message);
   if (envelopeError) {
-    rejectCommand(ws, state, message, envelopeError.code, envelopeError.reason);
+    reject(envelopeError.code, envelopeError.reason);
     return;
   }
   const canonicalResolution = resolveServerCanonicalCommandPayload(message.commandType, message.payload, {
     worldId: message.worldId
   });
   if (canonicalResolution && 'code' in canonicalResolution) {
-    rejectCommand(ws, state, message, canonicalResolution.code, canonicalResolution.reason);
+    reject(canonicalResolution.code, canonicalResolution.reason);
     return;
   }
   const playerState = isServerAuthoritativeCommand(message.commandType)
@@ -358,14 +365,14 @@ async function handleCommand(
     : undefined;
   const authoritativeResolution = resolveServerAuthoritativeCommand(message.commandType, message.payload, playerState);
   if (authoritativeResolution && 'code' in authoritativeResolution) {
-    rejectCommand(ws, state, message, authoritativeResolution.code, authoritativeResolution.reason);
+    reject(authoritativeResolution.code, authoritativeResolution.reason);
     return;
   }
   const commandPayload = authoritativeResolution?.commandPayload ?? canonicalResolution?.commandPayload ?? message.payload;
   if (!authoritativeResolution) {
     const mutationValidationError = sharedMutationValidationError(message.commandType, commandPayload);
     if (mutationValidationError) {
-      rejectCommand(ws, state, message, 'validation_failed', mutationValidationError);
+      reject('validation_failed', mutationValidationError);
       return;
     }
   }
@@ -376,26 +383,26 @@ async function handleCommand(
     if (sameCommandFingerprint(cached.fingerprint, fingerprint)) {
       send(ws, cached.response as ServerMessage);
     } else {
-      rejectCommand(ws, state, message, 'replay', 'Command id was already used for a different command.');
+      reject('replay', 'Command id was already used for a different command.');
     }
     return;
   }
   const rateLimitReason = consumeCommandRateLimit(state.session, message.commandType);
   if (rateLimitReason) {
-    rejectCommand(ws, state, message, 'rate_limited', rateLimitReason);
+    reject('rate_limited', rateLimitReason);
     return;
   }
   if (authoritativeResolution) {
     if (!persistence.configured) {
       if (!canDebitPlayerInventory(state.room, state.player!.playerId, authoritativeResolution.debit)) {
-        rejectCommand(ws, state, message, 'validation_failed', 'Insufficient authoritative inventory for command.');
+        reject('validation_failed', 'Insufficient authoritative inventory for command.');
         return;
       }
       if (authoritativeResolution.campfireClaim) {
         const key = `campfire:${authoritativeResolution.campfireClaim.campfireId}`;
         const existingCommandId = shard.mutationClaims.get(key);
         if (existingCommandId && existingCommandId !== message.commandId) {
-          rejectCommand(ws, state, message, 'conflict', 'Campfire placement target was already claimed by another command.');
+          reject('conflict', 'Campfire placement target was already claimed by another command.');
           return;
         }
         shard.mutationClaims.set(key, message.commandId);
@@ -406,7 +413,7 @@ async function handleCommand(
         message.commandId
       );
       if (structureClaimError) {
-        rejectCommand(ws, state, message, structureClaimError.code, structureClaimError.reason);
+        reject(structureClaimError.code, structureClaimError.reason);
         return;
       }
       applyInMemoryStructureClaims(shard, authoritativeResolution.structureClaims, message.commandId);
@@ -439,13 +446,13 @@ async function handleCommand(
       }
     } catch (error) {
       if (error instanceof CommandReplayMismatchError) {
-        rejectCommand(ws, state, message, 'replay', 'Command id was already used for a different command.');
+        reject('replay', 'Command id was already used for a different command.');
       } else if (error instanceof CommandConflictError) {
-        rejectCommand(ws, state, message, 'conflict', 'World mutation target was already claimed by another command.');
+        reject('conflict', 'World mutation target was already claimed by another command.');
       } else if (error instanceof CommandInventoryError) {
-        rejectCommand(ws, state, message, 'validation_failed', 'Insufficient authoritative inventory for command.');
+        reject('validation_failed', 'Insufficient authoritative inventory for command.');
       } else {
-        rejectCommand(ws, state, message, 'persistence_failed', error instanceof Error ? error.message : 'Could not persist command.');
+        reject('persistence_failed', error instanceof Error ? error.message : 'Could not persist command.');
       }
       return;
     }
@@ -453,6 +460,7 @@ async function handleCommand(
     rooms.appendKnownShardEvents(state.room, message.worldId, events);
     const accepted = acceptedCommandResponse(message, events);
     shard.commandCache.set(message.commandId, { fingerprint, response: accepted });
+    shard.predictedRollbacks.delete(message.commandId);
     send(ws, accepted);
     broadcastWorldEvents(state, socketsBySessionId, message.worldId, events);
     return;
@@ -463,7 +471,7 @@ async function handleCommand(
   if (memoryClaimKey) {
     const existingCommandId = shard.mutationClaims.get(memoryClaimKey);
     if (existingCommandId && existingCommandId !== message.commandId) {
-      rejectCommand(ws, state, message, 'conflict', 'World mutation target was already claimed by another command.');
+      reject('conflict', 'World mutation target was already claimed by another command.');
       return;
     }
     shard.mutationClaims.set(memoryClaimKey, message.commandId);
@@ -482,11 +490,11 @@ async function handleCommand(
       : rooms.appendShardEvent(state.room, message.worldId, state.player!.playerId, message.commandType, commandPayload, message.commandId);
   } catch (error) {
     if (error instanceof CommandReplayMismatchError) {
-      rejectCommand(ws, state, message, 'replay', 'Command id was already used for a different command.');
+      reject('replay', 'Command id was already used for a different command.');
     } else if (error instanceof CommandConflictError) {
-      rejectCommand(ws, state, message, 'conflict', 'World mutation target was already claimed by another command.');
+      reject('conflict', 'World mutation target was already claimed by another command.');
     } else {
-      rejectCommand(ws, state, message, 'persistence_failed', error instanceof Error ? error.message : 'Could not persist command.');
+      reject('persistence_failed', error instanceof Error ? error.message : 'Could not persist command.');
     }
     return;
   }
@@ -498,8 +506,62 @@ async function handleCommand(
   rooms.appendKnownShardEvent(state.room, message.worldId, event);
   const accepted = acceptedCommandResponse(message, [event]);
   shard.commandCache.set(message.commandId, { fingerprint, response: accepted });
+  shard.predictedRollbacks.delete(message.commandId);
   send(ws, accepted);
   broadcastWorldEvents(state, socketsBySessionId, message.worldId, [event]);
+}
+
+function handlePredictedWorldEvent(
+  ws: WebSocket,
+  state: SocketState,
+  rooms: InMemoryRoomStore,
+  socketsBySessionId: Map<string, WebSocket>,
+  message: Extract<ClientMessage, { type: 'predict_world_event' }>
+): void {
+  if (!state.room || !state.session) {
+    send(ws, { type: 'error', code: 'not_in_room', message: 'Join a room before predicting world events.' });
+    return;
+  }
+  if (canonicalWorldId(message.worldId) !== message.worldId || !state.room.shards.has(message.worldId)) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'Predicted event world is not active in this room.' });
+    return;
+  }
+  const event = createPredictedWorldEvent(state.player!.playerId, message);
+  if (!event) {
+    send(ws, { type: 'error', code: 'invalid_prediction', message: 'Predicted world event is not allowed.' });
+    return;
+  }
+
+  const shard = rooms.getOrCreateShard(state.room, message.worldId);
+  if (message.rollback) shard.predictedRollbacks.set(message.commandId, message.rollback);
+  broadcastRoom(state, socketsBySessionId, {
+    type: 'predicted_world_event',
+    roomId: state.room.roomId,
+    worldId: message.worldId,
+    commandId: message.commandId,
+    event
+  });
+}
+
+function createPredictedWorldEvent(
+  playerId: string,
+  message: Extract<ClientMessage, { type: 'predict_world_event' }>
+): ShardEvent | null {
+  const event = readObject(message.event);
+  const payload = readObject(event?.payload);
+  if (event?.type !== 'door_toggled' || !payload) return null;
+  const cell = readIntCoord(payload.cell);
+  const face = readInt(payload.face);
+  if (!cell || face === null || typeof payload.open !== 'boolean') return null;
+  return {
+    seq: 0,
+    eventId: `${message.commandId}:predicted`,
+    commandId: message.commandId,
+    type: 'door_toggled',
+    playerId,
+    payload: { cell, face, open: payload.open },
+    timeMs: Date.now()
+  };
 }
 
 function validateCommandEnvelope(
@@ -603,15 +665,52 @@ function stableStringify(value: unknown): string {
   return JSON.stringify(value);
 }
 
+function readObject(value: unknown): JsonObject | null {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+    ? value as JsonObject
+    : null;
+}
+
+function readInt(value: unknown): number | null {
+  return typeof value === 'number' && Number.isInteger(value) ? value : null;
+}
+
+function readIntCoord(value: unknown): [number, number, number] | null {
+  if (!Array.isArray(value) || value.length !== 3) return null;
+  const [x, y, z] = value;
+  return Number.isInteger(x) && Number.isInteger(y) && Number.isInteger(z)
+    ? [x, y, z]
+    : null;
+}
+
 function rejectCommand(
   ws: WebSocket,
   state: SocketState,
   message: Extract<ClientMessage, { type: 'command' }>,
   code: string,
-  reason: string
+  reason: string,
+  socketsBySessionId?: Map<string, WebSocket>
 ): void {
   logCommandReject(state, message, code, reason);
   send(ws, { type: 'command_rejected', commandId: message.commandId, code, reason });
+  if (socketsBySessionId) rollbackPredictedCommand(state, socketsBySessionId, message);
+}
+
+function rollbackPredictedCommand(
+  state: SocketState,
+  socketsBySessionId: Map<string, WebSocket>,
+  message: Extract<ClientMessage, { type: 'command' }>
+): void {
+  if (!state.room) return;
+  const shard = state.room.shards.get(message.worldId);
+  const rollback = shard?.predictedRollbacks.get(message.commandId);
+  if (!shard || rollback === undefined) return;
+  shard.predictedRollbacks.delete(message.commandId);
+  broadcastRoom(state, socketsBySessionId, {
+    type: 'prediction_rollback',
+    commandId: message.commandId,
+    rollback
+  });
 }
 
 function logCommandReject(

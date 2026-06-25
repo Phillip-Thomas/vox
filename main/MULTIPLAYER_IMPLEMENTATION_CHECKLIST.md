@@ -500,6 +500,14 @@ snap instantly. Server `npm run verify` passed with 26 tests and full `main` `np
 passed with 462 tests. `https://paravox-game.web.app/` and `https://paravoxia.com/` both served
 the deployed asset.
 
+Evidence: 2026-06-25 predicted door interaction batch deployed Cloud Run revision
+`paravoxia-state-server-00017-6bx` and Hosting asset `/assets/index-jokzAUl7.js`. Door toggles
+now send a narrow `predicted_world_event` before the durable command; peers apply it immediately
+without advancing ordered world-event cursors, then authoritative `world_event` confirms the same
+state. Server-side rollback storage broadcasts `prediction_rollback` if the matching command is
+rejected. Server `npm run verify` passed with 27 tests and full `main` `npm run verify` passed
+with 462 tests. Live room smoke and live predicted-door rollback smoke both passed.
+
 ## Phase 2 - Persistent Shards
 
 - [ ] Harden scheduled persistence and crash recovery.

@@ -10,6 +10,7 @@ export type MultiplayerClientMessage =
   | { type: 'subscribe_world'; worldId: string; lastAppliedSeq: number }
   | { type: 'ack_world_events'; worldId: string; appliedSeq: number }
   | { type: 'command'; commandId: string; commandType: string; worldId: string; payload: JsonObject }
+  | { type: 'predict_world_event'; commandId: string; worldId: string; event: JsonObject; rollback?: JsonObject }
   | { type: 'pose_update'; worldId: string; seq: number; pose: JsonObject }
   | { type: 'teleport_marker'; worldId: string; marker: JsonObject }
   | { type: 'ping'; nonce: string; clientTimeMs?: number };
@@ -27,6 +28,7 @@ export type MultiplayerServerMessage =
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
+  | { type: 'predicted_world_event'; roomId: string; worldId: string; commandId: string; event: unknown }
   | { type: 'command_accepted'; commandId: string; worldId: string; seq: number; events: unknown[]; deltas?: unknown }
   | { type: 'command_rejected'; commandId: string; code: string; reason: string }
   | { type: 'prediction_rollback'; commandId: string; rollback: unknown }
@@ -176,6 +178,11 @@ export function isMultiplayerServerMessage(value: unknown): value is Multiplayer
       return typeof value.roomId === 'string'
         && typeof value.worldId === 'string'
         && Number.isInteger(value.seq)
+        && 'event' in value;
+    case 'predicted_world_event':
+      return typeof value.roomId === 'string'
+        && typeof value.worldId === 'string'
+        && typeof value.commandId === 'string'
         && 'event' in value;
     case 'command_accepted':
       return typeof value.commandId === 'string'

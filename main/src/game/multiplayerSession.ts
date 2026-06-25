@@ -95,6 +95,7 @@ const pendingWorldEventsByWorld = new Map<string, Map<number, WorldEventMessage>
 const requestedWorldEventBackfill = new Map<string, number>();
 const pendingReliableCommands = new Map<string, PendingReliableCommand>();
 const AUTHORITATIVE_GATE_EVENT_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed']);
+const PREDICTED_WORLD_EVENT_TYPES = new Set(['door_toggled']);
 let snapshot: MultiplayerSessionSnapshot = {
   status: 'offline',
   enabled: isCoopAuthEnabled(),
@@ -221,6 +222,30 @@ export function sendMultiplayerCommandEvents(result: CommandResult): number {
       }
       sent++;
     }
+  });
+  return sent;
+}
+
+export function sendMultiplayerPredictedEvents(result: CommandResult): number {
+  if (!connection || snapshot.status !== 'connected' || !result.ok) return 0;
+  const rollback = result.rollback === undefined ? null : toJsonObject(result.rollback);
+  let sent = 0;
+  result.events.forEach((event, index) => {
+    if (!PREDICTED_WORLD_EVENT_TYPES.has(event.type)) return;
+    const payload = toJsonObject(event.payload);
+    if (!payload) return;
+    const worldId = snapshot.worldId ?? event.worldId;
+    connection?.send({
+      type: 'predict_world_event',
+      commandId: multiplayerEventCommandId(result.commandId, event, index),
+      worldId,
+      event: {
+        type: event.type,
+        payload
+      },
+      ...(rollback ? { rollback } : {})
+    });
+    sent++;
   });
   return sent;
 }
@@ -421,6 +446,13 @@ function handleServerMessage(
       return;
     case 'world_event':
       handleWorldEvent(message);
+      return;
+    case 'predicted_world_event':
+      applyReplicatedWorldEvent(message.event, {
+        localPlayerId: snapshot.playerId,
+        ignoreLocalPlayer: true,
+        worldId: message.worldId
+      });
       return;
     case 'command_accepted':
       handleCommandAccepted(message);

@@ -41,6 +41,7 @@ export interface ShardState {
   poses: Map<string, JsonObject>;
   commandCache: Map<string, CachedCommandResponse>;
   mutationClaims: Map<string, string>;
+  predictedRollbacks: Map<string, unknown>;
 }
 
 export interface CommandFingerprint {
@@ -328,7 +329,8 @@ export function createShard(worldId: string): ShardState {
     events: [],
     poses: new Map(),
     commandCache: new Map(),
-    mutationClaims: new Map()
+    mutationClaims: new Map(),
+    predictedRollbacks: new Map()
   };
 }
 

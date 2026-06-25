@@ -32,6 +32,14 @@ export interface ClientCommandMessage {
   payload: JsonObject;
 }
 
+export interface ClientPredictWorldEventMessage {
+  type: 'predict_world_event';
+  commandId: string;
+  worldId: string;
+  event: JsonObject;
+  rollback?: JsonObject;
+}
+
 export interface ClientRequestWorldEventsMessage {
   type: 'request_world_events';
   worldId: string;
@@ -82,6 +90,7 @@ export type ClientMessage =
   | ClientSubscribeWorldMessage
   | ClientAckWorldEventsMessage
   | ClientCommandMessage
+  | ClientPredictWorldEventMessage
   | ClientPoseMessage
   | ClientTeleportMarkerMessage
   | ClientPingMessage;
@@ -94,6 +103,7 @@ export type ServerMessage =
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
+  | { type: 'predicted_world_event'; roomId: string; worldId: string; commandId: string; event: unknown }
   | { type: 'command_accepted'; commandId: string; worldId: string; seq: number; events: unknown[]; deltas?: unknown }
   | { type: 'command_rejected'; commandId: string; code: string; reason: string }
   | { type: 'prediction_rollback'; commandId: string; rollback: unknown }
@@ -144,6 +154,11 @@ export function isClientMessage(value: unknown): value is ClientMessage {
         && typeof value.commandType === 'string'
         && typeof value.worldId === 'string'
         && isObject(value.payload);
+    case 'predict_world_event':
+      return typeof value.commandId === 'string'
+        && typeof value.worldId === 'string'
+        && isObject(value.event)
+        && (value.rollback === undefined || isObject(value.rollback));
     case 'pose_update':
       return typeof value.worldId === 'string'
         && Number.isInteger(value.seq)
