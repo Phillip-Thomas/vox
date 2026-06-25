@@ -26,6 +26,7 @@ import TargetReticle from './components/hud/TargetReticle.tsx';
 import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
 import MultiplayerStatusBadge from './components/hud/MultiplayerStatusBadge.tsx';
+import OrbitalMinimap from './components/hud/OrbitalMinimap.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -804,6 +805,11 @@ const App: React.FC = () => {
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
           {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel />}
+          <OrbitalMinimap
+            coordinateLabel={currentWorldKey}
+            worldId={currentWorldIdentity.worldId}
+            planetSize={planetSize}
+          />
           <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
           <MultiplayerStatusBadge />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}

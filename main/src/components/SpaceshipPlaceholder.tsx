@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { seededUnit } from '../utils/worldCoordinates';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
-import { setBoardable } from '../state/shipProximity.ts';
+import { setBoardable, setShipPosition } from '../state/shipProximity.ts';
 
 const BOARD_RANGE = 3.5;
 const BOARD_RANGE_SQ = BOARD_RANGE * BOARD_RANGE;
@@ -43,8 +43,13 @@ export default function SpaceshipPlaceholder({
     }
   });
 
-  // Clear the flag if this ship unmounts (world swap) so no stale prompt lingers.
-  useEffect(() => () => setBoardable(false), []);
+  useEffect(() => {
+    setShipPosition(position);
+    return () => {
+      setShipPosition(null);
+      setBoardable(false);
+    };
+  }, [position]);
 
   // While flying (controlMode==='flight') the ship IS the avatar / cockpit; hide
   // the parked exterior so it doesn't float in the cockpit view. It reappears
