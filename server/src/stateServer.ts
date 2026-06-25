@@ -41,7 +41,8 @@ import {
   type CommandFingerprint,
   type PlayerSession,
   type RoomState,
-  type ShardEvent
+  type ShardEvent,
+  roomRoster
 } from './rooms.js';
 import { canonicalWorldId } from './worldAuthority.js';
 
@@ -113,10 +114,8 @@ export function createStateServer({
     });
 
     ws.on('close', () => {
-      if (state.session) {
-        socketsBySessionId.delete(state.session.sessionId);
-        rooms.removeSession(state.session.sessionId);
-      }
+      const room = detachSession(state, rooms, socketsBySessionId);
+      if (room) broadcastRoomRoster(room, socketsBySessionId);
     });
   });
 
@@ -295,6 +294,7 @@ async function handleCreateRoom(
   attachSession(ws, state, room, rooms, socketsBySessionId);
   send(ws, { type: 'room_created', roomId: room.roomId, inviteCode: room.inviteCode, ownerPlayerId: room.ownerPlayerId });
   await sendRoomJoined(ws, state, rooms, persistence, worldId);
+  broadcastRoomRoster(room, socketsBySessionId);
 }
 
 async function handleJoinRoom(
@@ -314,9 +314,11 @@ async function handleJoinRoom(
   if (message.resume) {
     state.session?.appliedSeqByWorld.set(message.resume.worldId, message.resume.lastAppliedSeq);
     await sendRoomResume(ws, state, rooms, persistence, message.resume.worldId, message.resume.lastAppliedSeq);
+    broadcastRoomRoster(room, socketsBySessionId);
     return;
   }
   await sendRoomJoined(ws, state, rooms, persistence, firstWorldId(room));
+  broadcastRoomRoster(room, socketsBySessionId);
 }
 
 async function handleCommand(
@@ -859,13 +861,23 @@ function attachSession(
   rooms: InMemoryRoomStore,
   socketsBySessionId: Map<string, WebSocket>
 ): void {
-  if (state.session) {
-    socketsBySessionId.delete(state.session.sessionId);
-    rooms.removeSession(state.session.sessionId);
-  }
+  detachSession(state, rooms, socketsBySessionId);
   state.room = room;
   state.session = rooms.addSession(room, state.player!);
   socketsBySessionId.set(state.session.sessionId, ws);
+}
+
+function detachSession(
+  state: SocketState,
+  rooms: InMemoryRoomStore,
+  socketsBySessionId: Map<string, WebSocket>
+): RoomState | null {
+  if (!state.session) return null;
+  const room = state.room;
+  socketsBySessionId.delete(state.session.sessionId);
+  rooms.removeSession(state.session.sessionId);
+  state.session = null;
+  return room;
 }
 
 async function sendRoomJoined(
@@ -946,7 +958,19 @@ async function hydrateShardEvents(
 
 function broadcastRoom(state: SocketState, socketsBySessionId: Map<string, WebSocket>, message: ServerMessage): void {
   if (!state.room) return;
-  for (const session of state.room.sessions.values()) {
+  broadcastToRoom(state.room, socketsBySessionId, message);
+}
+
+function broadcastRoomRoster(room: RoomState, socketsBySessionId: Map<string, WebSocket>): void {
+  broadcastToRoom(room, socketsBySessionId, {
+    type: 'room_roster',
+    roomId: room.roomId,
+    players: roomRoster(room)
+  });
+}
+
+function broadcastToRoom(room: RoomState, socketsBySessionId: Map<string, WebSocket>, message: ServerMessage): void {
+  for (const session of room.sessions.values()) {
     const socket = socketsBySessionId.get(session.sessionId);
     if (socket?.readyState === WebSocket.OPEN) send(socket, message);
   }

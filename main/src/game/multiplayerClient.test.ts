@@ -38,12 +38,21 @@ describe('multiplayer server message validation', () => {
       commandId: 'door-fast',
       event: { seq: 0, type: 'door_toggled', playerId: 'alice', payload: { cell: [1, 2, 3], face: 0, open: true } }
     })).toBe(true);
+    expect(isMultiplayerServerMessage({
+      type: 'room_roster',
+      roomId: 'room',
+      players: [
+        { playerId: 'alice', displayName: 'Alice', connected: true, owner: true },
+        { playerId: 'bob', connected: false }
+      ]
+    })).toBe(true);
   });
 
   it('rejects malformed protocol messages', () => {
     expect(isMultiplayerServerMessage({ type: 'hello', protocolVersion: 999, serverTimeMs: 1 })).toBe(false);
     expect(isMultiplayerServerMessage({ type: 'world_snapshot', roomId: 'r', worldId: '0,0', seq: 1 })).toBe(false);
     expect(isMultiplayerServerMessage({ type: 'pose_update', playerId: 'remote', worldId: '0,0', seq: 1, pose: [] })).toBe(false);
+    expect(isMultiplayerServerMessage({ type: 'room_roster', roomId: 'r', players: [{ playerId: 'bob', connected: 'yes' }] })).toBe(false);
   });
 });
 

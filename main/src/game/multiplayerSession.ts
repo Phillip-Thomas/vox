@@ -2,6 +2,7 @@ import {
   createMultiplayerConnection,
   type JsonObject,
   type MultiplayerConnection,
+  type MultiplayerRoomPlayer,
   type MultiplayerServerMessage,
   type MultiplayerSocketStatus
 } from './multiplayerClient.ts';
@@ -12,6 +13,7 @@ import {
   getFirebaseClientConfig,
   getMultiplayerStateServerUrl,
   isCoopAuthEnabled,
+  isLocalCoopAuthEnabled,
   type MultiplayerAuthEnv
 } from './multiplayerAuth.ts';
 import { getLocalActorId, resetLocalActorId, setLocalActorId } from './playerActors.ts';
@@ -55,6 +57,7 @@ export interface MultiplayerSessionSnapshot {
   worldId: string | null;
   seq: number;
   error: string | null;
+  players: MultiplayerRoomPlayer[];
 }
 
 export interface MultiplayerConfigStatus {
@@ -105,7 +108,8 @@ let snapshot: MultiplayerSessionSnapshot = {
   inviteCode: null,
   worldId: null,
   seq: 0,
-  error: null
+  error: null,
+  players: []
 };
 
 const listeners = new Set<Listener>();
@@ -122,8 +126,9 @@ export function getMultiplayerSessionSnapshot(): MultiplayerSessionSnapshot {
 export function resolveMultiplayerConfig(env: MultiplayerAuthEnv = import.meta.env): MultiplayerConfigStatus {
   const enabled = isCoopAuthEnabled(env);
   const serverUrl = getMultiplayerStateServerUrl(env);
+  const localAuth = isLocalCoopAuthEnabled(env);
   if (!enabled) return { ok: false, enabled, serverUrl, reason: 'disabled' };
-  if (!getFirebaseClientConfig(env)) return { ok: false, enabled, serverUrl, reason: 'missing_firebase_config' };
+  if (!localAuth && !getFirebaseClientConfig(env)) return { ok: false, enabled, serverUrl, reason: 'missing_firebase_config' };
   if (!serverUrl) return { ok: false, enabled, serverUrl, reason: 'missing_state_server_url' };
   return { ok: true, enabled, serverUrl, reason: 'ready' };
 }
@@ -158,7 +163,8 @@ export function disconnectCoopRoom(): void {
     inviteCode: null,
     worldId: null,
     seq: 0,
-    error: null
+    error: null,
+    players: []
   });
 }
 
@@ -292,7 +298,8 @@ async function beginCoopSession(
       enabled: config.enabled,
       serverUrl: config.serverUrl,
       status: config.reason === 'disabled' ? 'disabled' : 'config_missing',
-      error: configMessage(config.reason)
+      error: configMessage(config.reason),
+      players: []
     });
     return;
   }
@@ -347,7 +354,7 @@ async function beginCoopSession(
     setSnapshot({
       ...snapshot,
       status: 'error',
-      error: error instanceof Error ? error.message : 'Could not start co-op session.'
+      error: error instanceof Error ? friendlyTransportError(error.message) : 'Could not start co-op session.'
     });
   }
 }
@@ -367,7 +374,7 @@ function handleSocketStatus(status: MultiplayerSocketStatus, generation: number)
       scheduleReconnect();
     } else {
       clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
-      setSnapshot({ ...snapshot, status: snapshot.roomId ? 'closed' : 'offline' });
+      setSnapshot({ ...snapshot, status: snapshot.roomId ? 'closed' : 'offline', players: [] });
     }
   } else if (status === 'error') {
     stopPoseForwarding();
@@ -375,7 +382,7 @@ function handleSocketStatus(status: MultiplayerSocketStatus, generation: number)
       scheduleReconnect();
     } else {
       clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
-      setSnapshot({ ...snapshot, status });
+      setSnapshot({ ...snapshot, status, players: [] });
     }
   } else {
     setSnapshot({ ...snapshot, status });
@@ -385,10 +392,10 @@ function handleSocketStatus(status: MultiplayerSocketStatus, generation: number)
 function handleSocketError(message: string, generation: number): void {
   if (generation !== connectionGeneration) return;
   if (canReconnect()) {
-    scheduleReconnect(message);
+    scheduleReconnect(friendlyTransportError(message));
     return;
   }
-  setSnapshot({ ...snapshot, status: 'error', error: message });
+  setSnapshot({ ...snapshot, status: 'error', error: friendlyTransportError(message) });
 }
 
 function handleServerMessage(
@@ -433,6 +440,10 @@ function handleServerMessage(
       });
       startPoseForwarding();
       return;
+    case 'room_roster':
+      if (message.roomId !== snapshot.roomId) return;
+      setSnapshot({ ...snapshot, players: normalizedRoster(message.players) });
+      return;
     case 'world_snapshot':
       applyServerWorldClock(message.snapshot, message.worldId);
       applyRemotePoseSnapshot(message.snapshot, message.worldId, snapshot.playerId);
@@ -473,12 +484,12 @@ function handleServerMessage(
       applyRemotePoseUpdate(message, snapshot.playerId);
       return;
     case 'error':
-      setSnapshot({ ...snapshot, status: 'error', error: message.message });
+      setSnapshot({ ...snapshot, status: 'error', error: friendlyServerError(message.code, message.message) });
       return;
     case 'disconnect':
       stopPoseForwarding();
       clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
-      setSnapshot({ ...snapshot, status: 'closed', error: message.reason });
+      setSnapshot({ ...snapshot, status: 'closed', error: friendlyServerError(message.code, message.reason), players: [] });
       return;
     default:
       return;
@@ -738,8 +749,50 @@ function emptyConnectedFields(current: MultiplayerSessionSnapshot): MultiplayerS
     roomId: null,
     inviteCode: null,
     worldId: null,
-    seq: 0
+    seq: 0,
+    players: []
   };
+}
+
+function normalizedRoster(players: MultiplayerRoomPlayer[]): MultiplayerRoomPlayer[] {
+  return [...players].sort((a, b) => {
+    if (a.connected !== b.connected) return a.connected ? -1 : 1;
+    if (Boolean(a.owner) !== Boolean(b.owner)) return a.owner ? -1 : 1;
+    return playerLabel(a).localeCompare(playerLabel(b));
+  });
+}
+
+function playerLabel(player: MultiplayerRoomPlayer): string {
+  return player.displayName || shortPlayerId(player.playerId);
+}
+
+export function shortPlayerId(playerId: string): string {
+  if (playerId.length <= 10) return playerId;
+  return `${playerId.slice(0, 4)}...${playerId.slice(-4)}`;
+}
+
+function friendlyServerError(code: string, message: string): string {
+  switch (code) {
+    case 'auth_failed':
+      return 'Co-op sign-in failed. Refresh and try the room again.';
+    case 'room_not_found':
+      return 'Invite code was not found. Check the code and try again.';
+    case 'invalid_world':
+      return 'This room points at a world the server will not open.';
+    case 'auth_required':
+      return 'Co-op session expired before the room opened.';
+    case 'invalid_message':
+      return 'Co-op version mismatch. Refresh both browsers.';
+    case 'not_in_room':
+      return 'Join or create a room before sending co-op actions.';
+    default:
+      return message || 'Co-op server returned an error.';
+  }
+}
+
+function friendlyTransportError(message: string): string {
+  if (/socket failed/i.test(message)) return 'Co-op server is unavailable. Reconnecting if the room is still open.';
+  return message;
 }
 
 function configMessage(reason: MultiplayerConfigStatus['reason']): string {

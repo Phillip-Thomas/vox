@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS, resolveMultiplayerConfig } from './multiplayerSession.ts';
+import { MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS, resolveMultiplayerConfig, shortPlayerId } from './multiplayerSession.ts';
 
 const readyEnv = {
   VITE_PARAVOXIA_COOP: '1',
@@ -40,5 +40,23 @@ describe('multiplayer session config', () => {
       serverUrl: 'http://127.0.0.1:8080',
       reason: 'ready'
     });
+  });
+
+  it('allows local validation auth to bypass Firebase web config', () => {
+    expect(resolveMultiplayerConfig({
+      VITE_PARAVOXIA_COOP: '1',
+      VITE_PARAVOXIA_LOCAL_AUTH: '1',
+      VITE_PARAVOXIA_STATE_SERVER_URL: 'http://127.0.0.1:8080'
+    })).toEqual({
+      ok: true,
+      enabled: true,
+      serverUrl: 'http://127.0.0.1:8080',
+      reason: 'ready'
+    });
+  });
+
+  it('shortens anonymous player ids for compact crew labels', () => {
+    expect(shortPlayerId('alice')).toBe('alice');
+    expect(shortPlayerId('0123456789abcdef')).toBe('0123...cdef');
   });
 });

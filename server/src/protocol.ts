@@ -7,6 +7,11 @@ export interface PlayerIdentity {
   displayName?: string;
 }
 
+export interface RoomRosterPlayer extends PlayerIdentity {
+  connected: boolean;
+  owner?: boolean;
+}
+
 export interface ClientAuthMessage {
   type: 'auth';
   protocolVersion: number;
@@ -100,6 +105,7 @@ export type ServerMessage =
   | { type: 'auth_ok'; player: PlayerIdentity; serverTimeMs: number }
   | { type: 'room_created'; roomId: string; inviteCode: string; ownerPlayerId: string }
   | { type: 'room_joined'; roomId: string; inviteCode: string; playerId: string; worldId: string }
+  | { type: 'room_roster'; roomId: string; players: RoomRosterPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }

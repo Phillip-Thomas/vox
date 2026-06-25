@@ -1,11 +1,13 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Billboard, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import type { PlayerPose, Vec3Tuple } from '../game/playerPose.ts';
 
 interface PlayerAvatarProps {
   pose: PlayerPose;
   color?: string;
+  label?: string;
 }
 
 const UP_Y = new THREE.Vector3(0, 1, 0);
@@ -117,7 +119,7 @@ export function createPlayerAvatarPresentation(
   };
 }
 
-export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR }: PlayerAvatarProps) {
+export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label }: PlayerAvatarProps) {
   const groupRef = useRef<THREE.Group | null>(null);
   const hasInitialized = useRef(false);
   const frameTargetPosition = useRef(new THREE.Vector3());
@@ -126,6 +128,7 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR }: Pla
   const targetRef = useRef(target);
   targetRef.current = target;
   const presentation = useMemo(() => createPlayerAvatarPresentation(pose, color), [color, pose]);
+  const labelWidth = useMemo(() => Math.max(0.52, Math.min(1.25, (label?.length ?? 0) * 0.075 + 0.18)), [label]);
 
   useLayoutEffect(() => {
     if (!groupRef.current) return;
@@ -188,6 +191,24 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR }: Pla
           <coneGeometry args={[0.14, 0.42, 12]} />
           <meshBasicMaterial color="#60a5fa" transparent opacity={0.82} />
         </mesh>
+      )}
+      {label && (
+        <Billboard position={[0, 1.72, 0]}>
+          <mesh position={[0, 0, -0.012]}>
+            <planeGeometry args={[labelWidth, 0.22]} />
+            <meshBasicMaterial color="#05080f" transparent opacity={0.58} depthWrite={false} />
+          </mesh>
+          <Text
+            fontSize={0.115}
+            color="#e6eef7"
+            anchorX="center"
+            anchorY="middle"
+            outlineColor="#05080f"
+            outlineWidth={0.008}
+          >
+            {label}
+          </Text>
+        </Billboard>
       )}
     </group>
   );

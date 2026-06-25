@@ -2,6 +2,13 @@ export const MULTIPLAYER_PROTOCOL_VERSION = 1;
 
 export type JsonObject = Record<string, unknown>;
 
+export interface MultiplayerRoomPlayer {
+  playerId: string;
+  displayName?: string;
+  connected: boolean;
+  owner?: boolean;
+}
+
 export type MultiplayerClientMessage =
   | { type: 'auth'; protocolVersion: number; token: string }
   | { type: 'create_room'; startWorldId?: string }
@@ -25,6 +32,7 @@ export type MultiplayerServerMessage =
   | { type: 'auth_ok'; player: { playerId: string; displayName?: string }; serverTimeMs: number }
   | { type: 'room_created'; roomId: string; inviteCode: string; ownerPlayerId: string }
   | { type: 'room_joined'; roomId: string; inviteCode: string; playerId: string; worldId: string }
+  | { type: 'room_roster'; roomId: string; players: MultiplayerRoomPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
@@ -162,6 +170,10 @@ export function isMultiplayerServerMessage(value: unknown): value is Multiplayer
         && typeof value.inviteCode === 'string'
         && typeof value.playerId === 'string'
         && typeof value.worldId === 'string';
+    case 'room_roster':
+      return typeof value.roomId === 'string'
+        && Array.isArray(value.players)
+        && value.players.every(isRoomRosterPlayer);
     case 'world_snapshot':
       return typeof value.roomId === 'string'
         && typeof value.worldId === 'string'
@@ -225,6 +237,14 @@ function isPlayerIdentity(value: unknown): value is { playerId: string; displayN
   return isObject(value)
     && typeof value.playerId === 'string'
     && optionalString(value.displayName);
+}
+
+function isRoomRosterPlayer(value: unknown): value is MultiplayerRoomPlayer {
+  return isObject(value)
+    && typeof value.playerId === 'string'
+    && optionalString(value.displayName)
+    && typeof value.connected === 'boolean'
+    && (value.owner === undefined || typeof value.owner === 'boolean');
 }
 
 function optionalString(value: unknown): boolean {

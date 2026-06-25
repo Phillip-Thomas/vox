@@ -6,6 +6,7 @@ import {
   getMultiplayerSessionSnapshot,
   joinCoopRoom,
   resolveMultiplayerConfig,
+  shortPlayerId,
   subscribeMultiplayerSession,
   type MultiplayerSessionSnapshot,
   type MultiplayerSessionStatus
@@ -26,6 +27,8 @@ const CoopPanel: React.FC<CoopPanelProps> = ({ startWorldId }) => {
   const connected = snapshot.status === 'connected' || snapshot.status === 'closed';
   const canUseCoop = config.ok && !busy;
   const status = statusCopy(snapshot, config.reason);
+  const roster = snapshot.players.length > 0 ? snapshot.players : fallbackRoster(snapshot);
+  const connectedCount = roster.filter(player => player.connected).length;
 
   useEffect(() => subscribeMultiplayerSession(() => setSnapshot(getMultiplayerSessionSnapshot())), []);
 
@@ -107,11 +110,39 @@ const CoopPanel: React.FC<CoopPanelProps> = ({ startWorldId }) => {
         <div style={{ display: 'grid', gap: 7, fontSize: 12, color: theme.color.textDim }}>
           <InfoRow label="Room" value={snapshot.roomId ?? 'pending'} />
           <InfoRow label="World" value={snapshot.worldId ?? startWorldId} />
+          <InfoRow label="Crew" value={`${connectedCount}/${Math.max(1, roster.length)} linked`} />
           {snapshot.inviteCode && (
             <div style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto', gap: 8, alignItems: 'center' }}>
               <span style={infoLabel}>Invite</span>
               <code style={codeValue}>{snapshot.inviteCode}</code>
               <button onClick={copyInvite} style={miniButton}>{copied ? 'Copied' : 'Copy'}</button>
+            </div>
+          )}
+          {roster.length > 0 && (
+            <div style={rosterBox}>
+              {roster.map(player => (
+                <div key={player.playerId} style={rosterRow}>
+                  <span style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: '50%',
+                    background: player.connected ? theme.color.good : theme.color.textFaint,
+                    boxShadow: player.connected ? `0 0 10px ${theme.color.good}` : 'none'
+                  }} />
+                  <span style={{
+                    minWidth: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    color: player.connected ? theme.color.text : theme.color.textFaint
+                  }}>
+                    {player.displayName || shortPlayerId(player.playerId)}
+                  </span>
+                  <span style={rosterTag}>
+                    {player.playerId === snapshot.playerId ? 'you' : player.owner ? 'host' : player.connected ? 'linked' : 'away'}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
           <button onClick={disconnectCoopRoom} style={quietButton}>Disconnect</button>
@@ -174,6 +205,15 @@ function statusCopy(
   if (busyStatuses.has(snapshot.status)) return { label: 'Opening', tone: 'busy' };
   if (configReason === 'ready') return { label: 'Ready', tone: 'idle' };
   return { label: 'Offline', tone: 'warn' };
+}
+
+function fallbackRoster(snapshot: MultiplayerSessionSnapshot): MultiplayerSessionSnapshot['players'] {
+  if (!snapshot.playerId || !snapshot.roomId) return [];
+  return [{
+    playerId: snapshot.playerId,
+    connected: snapshot.status === 'connected',
+    owner: true
+  }];
 }
 
 function configMessage(reason: ReturnType<typeof resolveMultiplayerConfig>['reason']): string {
@@ -245,6 +285,31 @@ const miniButton: React.CSSProperties = {
   borderRadius: theme.radius.sm,
   padding: '5px 8px',
   cursor: 'pointer'
+};
+
+const rosterBox: React.CSSProperties = {
+  display: 'grid',
+  gap: 5,
+  padding: '7px 8px',
+  background: 'rgba(5,8,15,0.28)',
+  border: '1px solid rgba(125,211,252,0.16)',
+  borderRadius: theme.radius.sm
+};
+
+const rosterRow: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'auto minmax(0, 1fr) auto',
+  alignItems: 'center',
+  gap: 7,
+  minHeight: 20
+};
+
+const rosterTag: React.CSSProperties = {
+  fontFamily: theme.font.mono,
+  fontSize: 9,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: theme.color.textFaint
 };
 
 const quietButton: React.CSSProperties = {

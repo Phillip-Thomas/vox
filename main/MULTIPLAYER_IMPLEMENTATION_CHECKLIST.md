@@ -290,7 +290,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Add create-room UI.
 - [x] Add join-room UI.
 - [x] Add invite/share room code UI.
-- [ ] Add player list UI.
+- [x] Add player list UI.
 - [x] Add connection status UI.
 - [x] Add reconnect UI state.
 - [ ] Add command dispatch adapter: offline in-process vs online WebSocket.
@@ -338,8 +338,8 @@ code, tests, and manual evidence for that item exist.
 - [ ] Progression behavior matches the chosen progression ownership model.
 - [ ] Vitals are server-owned or server-verifiable according to Phase 1 policy.
 - [ ] Oxygen/drown state supports each player independently.
-- [ ] Swim/submersion state replicates enough for remote presentation.
-- [ ] Jetpack fuel replicates enough for authority and remote presentation.
+- [x] Swim/submersion state replicates enough for remote presentation.
+- [x] Jetpack fuel replicates enough for authority and remote presentation.
 - [x] World clock is server-owned in co-op.
 - [x] Respawn/reset is command-routed and replicated.
 - [ ] Warp request is command-routed.
@@ -368,12 +368,12 @@ code, tests, and manual evidence for that item exist.
 - [x] Co-op path supports create room.
 - [x] Co-op path supports join room.
 - [x] Room flow explains invite code/link.
-- [ ] Player list shows connected/disconnected players.
-- [ ] Remote avatars show name/display identity.
-- [ ] Remote avatars clearly show swim/jetpack/mine/build/torch-relevant state.
-- [ ] Add minimal ping/marker system or explicitly defer it.
+- [x] Player list shows connected/disconnected players.
+- [x] Remote avatars show name/display identity.
+- [x] Remote avatars clearly show swim/jetpack/mine/build/torch-relevant state.
+- [x] Add minimal ping/marker system or explicitly defer it.
 - [ ] Add host/owner controls if kick/ban is in scope.
-- [ ] Add clear errors for auth failure, room not found, server unavailable, and version mismatch.
+- [x] Add clear errors for auth failure, room not found, server unavailable, and version mismatch.
 
 ### 1.9 Phase 1 Verification Matrix
 
@@ -507,6 +507,15 @@ without advancing ordered world-event cursors, then authoritative `world_event` 
 state. Server-side rollback storage broadcasts `prediction_rollback` if the matching command is
 rejected. Server `npm run verify` passed with 27 tests and full `main` `npm run verify` passed
 with 462 tests. Live room smoke and live predicted-door rollback smoke both passed.
+
+Evidence: 2026-06-25 co-op UX closeout batch added protocol-level `room_roster` messages backed by
+server room membership/session state, client roster snapshots, menu crew manifest rows,
+connected-player counts in the in-game badge, and roster-backed remote avatar nameplates. Ping/
+marker UI and host kick/ban controls are explicitly deferred out of this batch. Targeted server
+and client tests passed before full verification. Full verification passed with `main` 69 test
+files / 473 tests plus production build and `server` 4 test files / 30 tests plus build. Desktop
+and mobile screenshots are recorded under
+`.codex/design-runs/2026-06-25-coop-ux-closeout/screenshots/`.
 
 ## Phase 2 - Persistent Shards
 

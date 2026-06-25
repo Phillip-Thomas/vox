@@ -77,6 +77,11 @@ export interface RoomSummary {
   worldIds: string[];
 }
 
+export interface RoomRosterPlayer extends PlayerIdentity {
+  connected: boolean;
+  owner: boolean;
+}
+
 export interface LoadedRoomState {
   roomId: string;
   inviteCode: string;
@@ -261,12 +266,27 @@ export class InMemoryRoomStore {
     };
   }
 
+  roster(room: RoomState): RoomRosterPlayer[] {
+    return roomRoster(room);
+  }
+
   private createInviteCode(): string {
     for (;;) {
       const code = randomBytes(4).toString('base64url').slice(0, 6).toUpperCase();
       if (!this.inviteIndex.has(code)) return code;
     }
   }
+}
+
+export function roomRoster(room: RoomState): RoomRosterPlayer[] {
+  const connectedPlayers = new Set([...room.sessions.values()].map(session => session.player.playerId));
+  return [...room.members.values()]
+    .sort((a, b) => a.playerId.localeCompare(b.playerId))
+    .map(member => ({
+      ...member,
+      connected: connectedPlayers.has(member.playerId),
+      owner: member.playerId === room.ownerPlayerId
+    }));
 }
 
 export function ensurePlayerInventory(room: RoomState, playerId: string): Map<string, number> {

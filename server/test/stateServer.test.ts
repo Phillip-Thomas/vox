@@ -154,6 +154,47 @@ describe('state server', () => {
     ws.close();
   });
 
+  it('broadcasts room roster updates as players join and disconnect', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    const initialRoster = await waitForType(alice.messages, 'room_roster');
+    expect(initialRoster.players).toEqual([
+      { playerId: 'alice', displayName: 'Alice', connected: true, owner: true }
+    ]);
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    const aliceRosterAfterJoin = await waitForMessage(
+      alice.messages,
+      'room_roster',
+      message => message.players.some(player => player.playerId === 'bob' && player.connected)
+    );
+    expect(aliceRosterAfterJoin.players).toEqual([
+      { playerId: 'alice', displayName: 'Alice', connected: true, owner: true },
+      { playerId: 'bob', displayName: 'Bob', connected: true, owner: false }
+    ]);
+
+    const startIndex = alice.messages.length;
+    bob.ws.close();
+    const rosterAfterDisconnect = await waitForMessage(
+      alice.messages,
+      'room_roster',
+      message => message.players.some(player => player.playerId === 'bob' && !player.connected),
+      startIndex
+    );
+    expect(rosterAfterDisconnect.players).toEqual([
+      { playerId: 'alice', displayName: 'Alice', connected: true, owner: true },
+      { playerId: 'bob', displayName: 'Bob', connected: false, owner: false }
+    ]);
+
+    alice.ws.close();
+  });
+
   it('broadcasts player respawn events and includes them in late-join snapshots', async () => {
     const started = await startTestServer();
     const alice = await connectAndAuth(started.wsUrl, 'alice-token');

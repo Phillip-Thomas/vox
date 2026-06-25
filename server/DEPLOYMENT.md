@@ -81,6 +81,11 @@ reachable because application auth is enforced at `/v1/**` and `/play`.
 For local development only, `PARAVOXIA_AUTH_DISABLED=true` can be used to bypass
 Firebase token verification.
 
+For local browser validation against an auth-disabled state server, the web app can
+also use `VITE_PARAVOXIA_LOCAL_AUTH=1`. Do not set this in production; production
+clients should keep using Firebase anonymous auth, and the Cloud Run service should
+keep `PARAVOXIA_AUTH_DISABLED=false`.
+
 ## Neon
 
 Use the pooled Neon connection string for Cloud Run. Run migrations before using

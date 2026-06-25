@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createPlayerPose } from '../game/playerPose.ts';
-import { selectPosePlaybackPoses } from './PlayerAvatarPoseHarness.tsx';
+import { playerLabelsFromRoster, selectPosePlaybackPoses } from './PlayerAvatarPoseHarness.tsx';
 
 describe('PlayerAvatarPoseHarness', () => {
   const poses = [
@@ -23,5 +23,14 @@ describe('PlayerAvatarPoseHarness', () => {
   it('filters playback to the active world', () => {
     expect(selectPosePlaybackPoses(poses, { worldId: '0,0', localActorId: 'local' }).map(pose => pose.playerId))
       .toEqual(['remote-a', 'remote-b']);
+  });
+
+  it('maps roster display names onto remote avatar labels', () => {
+    const labels = playerLabelsFromRoster([
+      { playerId: 'remote-a', displayName: 'Alice', connected: true },
+      { playerId: '0123456789abcdef', connected: true }
+    ]);
+    expect(labels.get('remote-a')).toBe('Alice');
+    expect(labels.get('0123456789abcdef')).toBe('0123...cdef');
   });
 });

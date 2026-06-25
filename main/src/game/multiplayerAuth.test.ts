@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { getFirebaseClientConfig, getMultiplayerStateServerUrl, isCoopAuthEnabled } from './multiplayerAuth.ts';
+import {
+  getFirebaseClientConfig,
+  getMultiplayerStateServerUrl,
+  isCoopAuthEnabled,
+  isLocalCoopAuthEnabled
+} from './multiplayerAuth.ts';
 
 describe('multiplayer auth config', () => {
   it('keeps co-op auth opt-in', () => {
     expect(isCoopAuthEnabled({})).toBe(false);
     expect(isCoopAuthEnabled({ VITE_PARAVOXIA_COOP: '1' })).toBe(true);
     expect(isCoopAuthEnabled({ VITE_PARAVOXIA_COOP: 'true' })).toBe(true);
+    expect(isLocalCoopAuthEnabled({})).toBe(false);
+    expect(isLocalCoopAuthEnabled({ VITE_PARAVOXIA_LOCAL_AUTH: '1' })).toBe(true);
   });
 
   it('requires the Firebase web app config before initializing auth', () => {

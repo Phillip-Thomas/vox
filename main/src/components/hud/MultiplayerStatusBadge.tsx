@@ -13,8 +13,9 @@ const MultiplayerStatusBadge: React.FC = () => {
 
   if (!shouldShow(snapshot)) return null;
   const tone = snapshot.status === 'connected' ? theme.color.good : snapshot.status === 'error' ? theme.color.danger : theme.color.accent;
+  const connectedPlayers = snapshot.players.filter(player => player.connected).length || (snapshot.status === 'connected' ? 1 : 0);
   const label = snapshot.status === 'connected'
-    ? `Co-op ${snapshot.inviteCode ?? snapshot.roomId ?? ''}`
+    ? `Co-op ${snapshot.inviteCode ?? snapshot.roomId ?? ''} · ${connectedPlayers} linked`
     : snapshot.status === 'error'
       ? 'Co-op error'
       : `Co-op ${snapshot.status}`;

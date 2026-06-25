@@ -9,6 +9,7 @@ export interface MultiplayerAuthEnv {
   VITE_FIREBASE_PROJECT_ID?: string;
   VITE_FIREBASE_APP_ID?: string;
   VITE_PARAVOXIA_STATE_SERVER_URL?: string;
+  VITE_PARAVOXIA_LOCAL_AUTH?: string;
 }
 
 export interface MultiplayerSession {
@@ -22,6 +23,10 @@ let auth: Auth | null = null;
 
 export function isCoopAuthEnabled(env: MultiplayerAuthEnv = import.meta.env): boolean {
   return env.VITE_PARAVOXIA_COOP === '1' || env.VITE_PARAVOXIA_COOP === 'true';
+}
+
+export function isLocalCoopAuthEnabled(env: MultiplayerAuthEnv = import.meta.env): boolean {
+  return env.VITE_PARAVOXIA_LOCAL_AUTH === '1' || env.VITE_PARAVOXIA_LOCAL_AUTH === 'true';
 }
 
 export function getFirebaseClientConfig(env: MultiplayerAuthEnv = import.meta.env): FirebaseOptions | null {
@@ -49,6 +54,14 @@ export function getMultiplayerStateServerUrl(env: MultiplayerAuthEnv = import.me
 
 export async function ensureAnonymousPlayerSession(env: MultiplayerAuthEnv = import.meta.env): Promise<MultiplayerSession | null> {
   if (!isCoopAuthEnabled(env)) return null;
+  if (isLocalCoopAuthEnabled(env)) {
+    const uid = getLocalAuthUid();
+    return {
+      uid,
+      idToken: uid,
+      anonymous: true
+    };
+  }
   const config = getFirebaseClientConfig(env);
   if (!config) return null;
   if (!app) {
@@ -64,4 +77,24 @@ export async function ensureAnonymousPlayerSession(env: MultiplayerAuthEnv = imp
     idToken,
     anonymous: credential.user.isAnonymous
   };
+}
+
+function getLocalAuthUid(): string {
+  const key = 'paravoxia.localAuthUid';
+  try {
+    const storage = globalThis.sessionStorage;
+    const existing = storage?.getItem(key);
+    if (existing) return existing;
+    const created = `local-${randomLocalId()}`;
+    storage?.setItem(key, created);
+    return created;
+  } catch {
+    return `local-${randomLocalId()}`;
+  }
+}
+
+function randomLocalId(): string {
+  const crypto = globalThis.crypto;
+  if (crypto?.randomUUID) return crypto.randomUUID();
+  return Math.random().toString(36).slice(2, 12);
 }
