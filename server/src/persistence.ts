@@ -1,10 +1,14 @@
 import type { Database } from './neon.js';
 import { sharedMutationClaimForCommand, type SharedMutationClaim } from './commandAuthority.js';
 import {
+  defaultServerPlayerState,
   inventoryCreditsForAcceptedCommand,
   starterInventory,
   type AuthoritativeCommandResolution,
-  type ItemStack
+  type AuthoritativeStructureClaim,
+  type AuthoritativePlayerStatePatch,
+  type ItemStack,
+  type ServerPlayerState
 } from './economyAuthority.js';
 import type { PlayerIdentity } from './protocol.js';
 import type { LoadedRoomState, RoomState, ShardEvent } from './rooms.js';
@@ -30,6 +34,12 @@ interface RoomRow {
 interface PlayerRow {
   player_id: string;
   display_name: string | null;
+}
+
+interface PlayerStateRow {
+  vitals: Record<string, unknown> | null;
+  maw: Record<string, unknown> | null;
+  waterskin: Record<string, unknown> | null;
 }
 
 interface WorldShardRow {
@@ -152,6 +162,20 @@ export class MultiplayerPersistence {
     };
   }
 
+  async loadPlayerState(playerId: string): Promise<ServerPlayerState> {
+    if (!this.configured) return defaultServerPlayerState();
+    const rows = await this.database.query<PlayerStateRow>(
+      `
+        select vitals, maw, waterskin
+        from player_state
+        where player_id = $1
+        limit 1
+      `,
+      [playerId]
+    );
+    return rowToPlayerState(rows[0]);
+  }
+
   async appendCommandEvent(input: {
     room: RoomState;
     worldId: string;
@@ -193,6 +217,9 @@ export class MultiplayerPersistence {
     if (eventCount <= 0) throw new Error(`Command ${input.commandId} did not resolve any events.`);
     const debit = toSqlStacks(input.resolution.debit);
     const credit = toSqlStacks(input.resolution.credit);
+    const structureClaims = toSqlStructureClaims(input.resolution.structureClaims);
+    const statePatch = toPlayerStatePatchSql(input.resolution.playerStatePatch);
+    const defaultState = defaultServerPlayerState();
 
     const rows = await this.database.query<EventRow>(
       `
@@ -251,6 +278,58 @@ export class MultiplayerPersistence {
           where $11::text is null
              or exists (select 1 from campfire_claim)
         ),
+        structure_claims as (
+          select mode, structure_id, required_structure_id, cell, face, type, material, state
+          from jsonb_to_recordset($22::jsonb) as claim(
+            mode text,
+            structure_id text,
+            required_structure_id text,
+            cell integer[],
+            face integer,
+            type text,
+            material text,
+            state jsonb
+          )
+        ),
+        inserted_structure_claims as (
+          insert into world_structures (
+            room_id, world_id, structure_id, owner_player_id, placed_by_player_id,
+            cell, face, type, material, state
+          )
+          select $1::uuid, $2, structure_id, $4, $4, cell, face, type, material, state
+          from structure_claims
+          where mode = 'insert'
+            and not exists (select 1 from existing_command)
+            and not exists (select 1 from missing_debit)
+          on conflict do nothing
+          returning structure_id
+        ),
+        inserted_door_leaf_claims as (
+          insert into world_structures (
+            room_id, world_id, structure_id, owner_player_id, placed_by_player_id,
+            cell, face, type, material, state
+          )
+          select $1::uuid, $2, claim.structure_id, existing.owner_player_id, $4,
+                 claim.cell, claim.face, claim.type, claim.material, claim.state
+          from structure_claims claim
+          join world_structures existing
+            on existing.room_id = $1::uuid
+           and existing.world_id = $2
+           and existing.structure_id = claim.required_structure_id
+           and existing.type = 'doorway'
+          where claim.mode = 'door_leaf'
+            and not exists (select 1 from existing_command)
+            and not exists (select 1 from missing_debit)
+          on conflict do nothing
+          returning structure_id
+        ),
+        structure_ready as (
+          select 1
+          where (select count(*) from structure_claims) = (
+            (select count(*) from inserted_structure_claims)
+            + (select count(*) from inserted_door_leaf_claims)
+          )
+        ),
         inserted_command as (
           insert into world_commands (
             room_id, world_id, command_id, actor_player_id, command_type, payload, status
@@ -259,6 +338,7 @@ export class MultiplayerPersistence {
           where not exists (select 1 from existing_command)
             and not exists (select 1 from missing_debit)
             and exists (select 1 from campfire_ready)
+            and exists (select 1 from structure_ready)
           on conflict (room_id, world_id, command_id) do nothing
           returning command_id
         ),
@@ -292,6 +372,31 @@ export class MultiplayerPersistence {
           set qty = player_inventory.qty + excluded.qty,
               updated_at = now()
           returning item_id
+        ),
+        player_state_update as (
+          insert into player_state (player_id, vitals, maw, waterskin, updated_at)
+          select $4,
+                 coalesce($15::jsonb, $19::jsonb),
+                 coalesce($16::jsonb, $20::jsonb),
+                 coalesce($17::jsonb, $21::jsonb),
+                 now()
+          where $18::boolean
+            and exists (select 1 from inserted_command)
+          on conflict (player_id) do update
+          set vitals = case
+                when $15::jsonb is null then player_state.vitals
+                else excluded.vitals
+              end,
+              maw = case
+                when $16::jsonb is null then player_state.maw
+                else excluded.maw
+              end,
+              waterskin = case
+                when $17::jsonb is null then player_state.waterskin
+                else excluded.waterskin
+              end,
+              updated_at = now()
+          returning player_id
         ),
         next_seq as (
           update world_shards
@@ -359,7 +464,15 @@ export class MultiplayerPersistence {
         input.resolution.campfireClaim?.campfireId ?? null,
         input.resolution.campfireClaim?.position ?? null,
         input.resolution.campfireClaim?.up ?? null,
-        JSON.stringify(input.resolution.campfireClaim?.state ?? {})
+        JSON.stringify(input.resolution.campfireClaim?.state ?? {}),
+        statePatch.vitals,
+        statePatch.maw,
+        statePatch.waterskin,
+        statePatch.hasPatch,
+        JSON.stringify({ ...defaultState.vitals, exhausted: defaultState.exhausted }),
+        JSON.stringify({ charge: defaultState.mawCharge }),
+        JSON.stringify({ fill: defaultState.waterskinFill }),
+        JSON.stringify(structureClaims)
       ]
     );
 
@@ -380,6 +493,12 @@ export class MultiplayerPersistence {
     if (
       input.resolution.campfireClaim
       && await this.hasCampfire(input.room.roomId, input.worldId, input.resolution.campfireClaim.campfireId)
+    ) {
+      throw new CommandConflictError(input.commandId);
+    }
+    if (
+      input.resolution.structureClaims?.length
+      && await this.hasStructureClaimConflict(input.room.roomId, input.worldId, input.resolution.structureClaims)
     ) {
       throw new CommandConflictError(input.commandId);
     }
@@ -796,6 +915,38 @@ export class MultiplayerPersistence {
     return rows.length > 0;
   }
 
+  private async hasStructureClaimConflict(
+    roomId: string,
+    worldId: string,
+    claims: AuthoritativeStructureClaim[]
+  ): Promise<boolean> {
+    for (const claim of claims) {
+      if (claim.mode === 'insert') {
+        if (await this.hasStructure(roomId, worldId, claim.structureId)) return true;
+        continue;
+      }
+      if (await this.hasStructure(roomId, worldId, claim.structureId)) return true;
+      if (!await this.hasStructure(roomId, worldId, claim.requiredStructureId, 'doorway')) return true;
+    }
+    return false;
+  }
+
+  private async hasStructure(roomId: string, worldId: string, structureId: string, type?: string): Promise<boolean> {
+    const rows = await this.database.query<{ structure_id: string }>(
+      `
+        select structure_id
+        from world_structures
+        where room_id = $1::uuid
+          and world_id = $2
+          and structure_id = $3
+          and ($4::text is null or type = $4)
+        limit 1
+      `,
+      [roomId, worldId, structureId, type ?? null]
+    );
+    return rows.length > 0;
+  }
+
   private async upsertPlayer(player: PlayerIdentity): Promise<void> {
     const inserted = await this.database.query<{ player_id: string }>(
       `
@@ -807,6 +958,7 @@ export class MultiplayerPersistence {
       [player.playerId, player.displayName ?? null]
     );
     if (inserted.length > 0) {
+      const defaultState = defaultServerPlayerState();
       for (const stack of starterInventory()) {
         await this.database.query(
           `
@@ -817,6 +969,19 @@ export class MultiplayerPersistence {
           [player.playerId, stack.id, stack.qty]
         );
       }
+      await this.database.query(
+        `
+          insert into player_state (player_id, vitals, maw, waterskin, updated_at)
+          values ($1, $2::jsonb, $3::jsonb, $4::jsonb, now())
+          on conflict (player_id) do nothing
+        `,
+        [
+          player.playerId,
+          JSON.stringify({ ...defaultState.vitals, exhausted: defaultState.exhausted }),
+          JSON.stringify({ charge: defaultState.mawCharge }),
+          JSON.stringify({ fill: defaultState.waterskinFill })
+        ]
+      );
     }
     await this.database.query(
       `
@@ -881,4 +1046,75 @@ function toNumber(value: string | number): number {
 
 function toSqlStacks(stacks: ItemStack[]): Array<{ item_id: string; qty: number }> {
   return stacks.map(stack => ({ item_id: stack.id, qty: stack.qty }));
+}
+
+function toSqlStructureClaims(claims: AuthoritativeStructureClaim[] | undefined): Array<{
+  mode: string;
+  structure_id: string;
+  required_structure_id: string | null;
+  cell: [number, number, number];
+  face: number;
+  type: string;
+  material: string;
+  state: Record<string, unknown>;
+}> {
+  return (claims ?? []).map(claim => ({
+    mode: claim.mode,
+    structure_id: claim.structureId,
+    required_structure_id: claim.mode === 'door_leaf' ? claim.requiredStructureId : null,
+    cell: claim.cell,
+    face: claim.face,
+    type: claim.structureType,
+    material: claim.material,
+    state: claim.state
+  }));
+}
+
+function toPlayerStatePatchSql(patch: AuthoritativePlayerStatePatch | undefined): {
+  vitals: string | null;
+  maw: string | null;
+  waterskin: string | null;
+  hasPatch: boolean;
+} {
+  if (!patch) return { vitals: null, maw: null, waterskin: null, hasPatch: false };
+  const vitals = patch.vitals
+    ? JSON.stringify({ ...patch.vitals, exhausted: patch.exhausted ?? false })
+    : null;
+  const maw = patch.mawCharge !== undefined
+    ? JSON.stringify({ charge: patch.mawCharge })
+    : null;
+  const waterskin = patch.waterskinFill !== undefined
+    ? JSON.stringify({ fill: patch.waterskinFill })
+    : null;
+  return {
+    vitals,
+    maw,
+    waterskin,
+    hasPatch: vitals !== null || maw !== null || waterskin !== null
+  };
+}
+
+function rowToPlayerState(row: PlayerStateRow | undefined): ServerPlayerState {
+  const defaults = defaultServerPlayerState();
+  if (!row) return defaults;
+  const vitals = row.vitals ?? {};
+  const maw = row.maw ?? {};
+  const waterskin = row.waterskin ?? {};
+  return {
+    vitals: {
+      health: readFiniteNumber(vitals.health, defaults.vitals.health),
+      hunger: readFiniteNumber(vitals.hunger, defaults.vitals.hunger),
+      thirst: readFiniteNumber(vitals.thirst, defaults.vitals.thirst),
+      warmth: readFiniteNumber(vitals.warmth, defaults.vitals.warmth),
+      stamina: readFiniteNumber(vitals.stamina, defaults.vitals.stamina),
+      oxygen: readFiniteNumber(vitals.oxygen, defaults.vitals.oxygen)
+    },
+    exhausted: typeof vitals.exhausted === 'boolean' ? vitals.exhausted : defaults.exhausted,
+    mawCharge: readFiniteNumber(maw.charge, defaults.mawCharge),
+    waterskinFill: readFiniteNumber(waterskin.fill, defaults.waterskinFill)
+  };
+}
+
+function readFiniteNumber(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }

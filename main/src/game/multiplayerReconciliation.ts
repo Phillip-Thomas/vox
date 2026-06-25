@@ -6,6 +6,8 @@ import type { BuildPieceType } from './data/buildPieces.ts';
 import type { ActorId } from './playerActors.ts';
 import { addItem, getItemCount, removeItem } from './systems/inventorySystem.ts';
 import { setMawCharge } from './systems/mawSystem.ts';
+import { setWaterskinFill } from './systems/consumeSystem.ts';
+import { setVitals, type VitalsState } from './systems/survivalVitals.ts';
 import { removeCampfireIfOwnedBy } from './systems/campfires.ts';
 import { unmarkForageCollected } from './systems/foragePickup.ts';
 import { unmarkStoneCollected } from './systems/stonePickup.ts';
@@ -31,6 +33,8 @@ interface RollbackApplyResult {
   removedStructures: number;
   removedCampfires: number;
   restoredStructures: number;
+  restoredVitals: boolean;
+  restoredWaterskin: boolean;
 }
 
 export function applyRejectedCommandRollback(rollback: unknown, options: RollbackApplyOptions): RollbackApplyResult {
@@ -43,7 +47,9 @@ export function applyRejectedCommandRollback(rollback: unknown, options: Rollbac
     restoredResources: 0,
     removedStructures: 0,
     removedCampfires: 0,
-    restoredStructures: 0
+    restoredStructures: 0,
+    restoredVitals: false,
+    restoredWaterskin: false
   };
   if (!payload) return result;
 
@@ -66,6 +72,20 @@ export function applyRejectedCommandRollback(rollback: unknown, options: Rollbac
   if (mawChargeBefore !== null) {
     setMawCharge(mawChargeBefore, options.actorId);
     result.changed = true;
+  }
+
+  const vitalsBefore = readVitals(payload.vitalsBefore);
+  if (vitalsBefore) {
+    setVitals(vitalsBefore, options.actorId);
+    result.changed = true;
+    result.restoredVitals = true;
+  }
+
+  const waterskinFillBefore = readFiniteNumber(payload.waterskinFillBefore);
+  if (waterskinFillBefore !== null) {
+    setWaterskinFill(waterskinFillBefore, options.actorId);
+    result.changed = true;
+    result.restoredWaterskin = true;
   }
 
   const removePlacedStructure = readObject(payload.removePlacedStructure);
@@ -164,6 +184,25 @@ function readStructurePieces(value: unknown): Array<Omit<StructurePiece, 'id'>> 
     pieces.push(next);
   }
   return pieces;
+}
+
+function readVitals(value: unknown): Partial<VitalsState> | null {
+  const payload = readObject(value);
+  if (!payload) return null;
+  const vitals: Partial<VitalsState> = {};
+  const health = readFiniteNumber(payload.health);
+  const hunger = readFiniteNumber(payload.hunger);
+  const thirst = readFiniteNumber(payload.thirst);
+  const warmth = readFiniteNumber(payload.warmth);
+  const stamina = readFiniteNumber(payload.stamina);
+  const oxygen = readFiniteNumber(payload.oxygen);
+  if (health !== null) vitals.health = health;
+  if (hunger !== null) vitals.hunger = hunger;
+  if (thirst !== null) vitals.thirst = thirst;
+  if (warmth !== null) vitals.warmth = warmth;
+  if (stamina !== null) vitals.stamina = stamina;
+  if (oxygen !== null) vitals.oxygen = oxygen;
+  return Object.keys(vitals).length > 0 ? vitals : null;
 }
 
 function readObject(value: unknown): Record<string, unknown> | null {

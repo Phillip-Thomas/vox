@@ -32,47 +32,114 @@ if (bobJoined.inviteCode !== created.inviteCode) {
   throw new Error(`Invite code mismatch: ${bobJoined.inviteCode} vs ${created.inviteCode}`);
 }
 
-const commandId = `smoke-mine-${Date.now()}`;
+const timestamp = Date.now();
+const forgedTreeCommandId = `smoke-forged-tree-${timestamp}`;
+const forgedVoxelCommandId = `smoke-forged-voxel-${timestamp}`;
+const structureCommandId = `smoke-structure-${timestamp}`;
+const unaffordableStructureCommandId = `smoke-no-wood-structure-${timestamp}`;
+const invalidForageCommandId = `smoke-invalid-forage-${timestamp}`;
+const outOfBoundsResourceCommandId = `smoke-oob-resource-${timestamp}`;
+const forgedDepositCommandId = `smoke-forged-deposit-${timestamp}`;
 const replicatedCommands = [
   await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId,
-    commandType: 'voxel_mined',
-    worldId: bobJoined.worldId,
-    payload: { coord: [0, 1, 0] }
-  }),
-  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId: `smoke-water-${Date.now()}`,
-    commandType: 'water_flooded',
-    worldId: bobJoined.worldId,
-    payload: { cells: [[0, 1, 0]] }
-  }),
-  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId: `smoke-tree-${Date.now()}`,
+    commandId: forgedTreeCommandId,
     commandType: 'resource_taken',
     worldId: bobJoined.worldId,
-    payload: { source: 'tree', coord: [1, 2, 3], id: 'wood', qty: 2 }
+    payload: { source: 'tree', coord: [21, 2, 3], id: 'void_glass', qty: 999 }
   }),
   await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId: `smoke-structure-${Date.now()}`,
+    commandId: forgedVoxelCommandId,
+    commandType: 'voxel_mined',
+    worldId: bobJoined.worldId,
+    payload: {
+      coord: [0, 1, 0],
+      blockId: 'stone',
+      deposit: null,
+      drops: [{ id: 'void_glass', qty: 999 }],
+      exposedNeighbors: 999,
+      flooded: []
+    }
+  }),
+  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
+    commandId: structureCommandId,
     commandType: 'structure_placed',
     worldId: bobJoined.worldId,
-    payload: { cell: [0, 0, 0], face: 3, type: 'foundation', material: 'wood', up: 2 }
-  }),
-  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId: `smoke-door-${Date.now()}`,
-    commandType: 'door_toggled',
-    worldId: bobJoined.worldId,
-    payload: { cell: [0, 0, 0], face: 3, open: true }
-  }),
-  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
-    commandId: `smoke-campfire-${Date.now()}`,
-    commandType: 'campfire_placed',
-    worldId: bobJoined.worldId,
-    payload: { pos: [1, 1, 1], up: [0, 1, 0] }
+    payload: { cell: [23, 0, 0], face: 0, type: 'foundation', material: 'wood', state: { forged: true } }
   })
 ];
-const accepted = replicatedCommands[0]!.accepted;
-const bobWorldEvent = replicatedCommands[0]!.worldEvent;
+const forgedTree = replicatedCommands[0]!;
+const forgedVoxel = replicatedCommands[1]!;
+const structure = replicatedCommands[2]!;
+const treePayload = readEventPayload(forgedTree.accepted.events[0]);
+if (treePayload.id !== 'wood' || treePayload.qty === 999) {
+  throw new Error(`Forged tree yield was not canonicalized: ${JSON.stringify(treePayload)}`);
+}
+const voxelPayload = readEventPayload(forgedVoxel.accepted.events[0]);
+const voxelDrops = Array.isArray(voxelPayload.drops) ? voxelPayload.drops : [];
+if (voxelDrops.some(drop => readPayload(drop).id === 'void_glass')) {
+  throw new Error(`Forged voxel yield kept void_glass: ${JSON.stringify(voxelPayload)}`);
+}
+if (!voxelDrops.some(drop => readPayload(drop).id === 'stone')) {
+  throw new Error(`Canonical voxel yield did not include stone: ${JSON.stringify(voxelPayload)}`);
+}
+const structurePayload = readEventPayload(structure.accepted.events[0]);
+if (
+  structurePayload.type !== 'foundation'
+  || structurePayload.material !== 'wood'
+  || readPayload(structurePayload.state).forged === true
+) {
+  throw new Error(`Structure placement was not canonicalized: ${JSON.stringify(structurePayload)}`);
+}
+
+aliceSocket.send({
+  type: 'command',
+  commandId: invalidForageCommandId,
+  commandType: 'resource_taken',
+  worldId: bobJoined.worldId,
+  payload: { source: 'forage', kind: 'biofuel', coord: [21, 2, 1], id: 'biofuel', qty: 1 }
+});
+const rejected = await aliceSocket.waitForCommandRejected(invalidForageCommandId);
+if (rejected.code !== 'validation_failed') {
+  throw new Error(`Invalid forage rejected with unexpected code: ${rejected.code}`);
+}
+aliceSocket.send({
+  type: 'command',
+  commandId: outOfBoundsResourceCommandId,
+  commandType: 'resource_taken',
+  worldId: bobJoined.worldId,
+  payload: { source: 'tree', coord: [26, 0, 0], id: 'wood', qty: 1 }
+});
+const outOfBoundsRejected = await aliceSocket.waitForCommandRejected(outOfBoundsResourceCommandId);
+if (outOfBoundsRejected.code !== 'validation_failed') {
+  throw new Error(`Out-of-bounds resource rejected with unexpected code: ${outOfBoundsRejected.code}`);
+}
+aliceSocket.send({
+  type: 'command',
+  commandId: forgedDepositCommandId,
+  commandType: 'voxel_mined',
+  worldId: bobJoined.worldId,
+  payload: {
+    coord: [22, 2, 0],
+    blockId: 'stone',
+    deposit: { resourceId: 'void_glass', richness: 1, scanLevel: 4 },
+    drops: [{ id: 'void_glass', qty: 999 }]
+  }
+});
+const forgedDepositRejected = await aliceSocket.waitForCommandRejected(forgedDepositCommandId);
+if (forgedDepositRejected.code !== 'validation_failed') {
+  throw new Error(`Forged deposit rejected with unexpected code: ${forgedDepositRejected.code}`);
+}
+bobSocket.send({
+  type: 'command',
+  commandId: unaffordableStructureCommandId,
+  commandType: 'structure_placed',
+  worldId: bobJoined.worldId,
+  payload: { cell: [24, 0, 0], face: 0, type: 'foundation', material: 'wood' }
+});
+const unaffordableStructureRejected = await bobSocket.waitForCommandRejected(unaffordableStructureCommandId);
+if (unaffordableStructureRejected.code !== 'validation_failed') {
+  throw new Error(`Unaffordable structure rejected with unexpected code: ${unaffordableStructureRejected.code}`);
+}
 
 const charlieSocket = await connectPlayer(serverUrl, charlie.idToken);
 charlieSocket.send({ type: 'join_room', inviteCode: created.inviteCode });
@@ -82,8 +149,14 @@ const snapshotEvents = readSnapshotEvents(charlieSnapshot.snapshot);
 if (charlieJoined.roomId !== created.roomId || charlieSnapshot.seq !== replicatedCommands.at(-1)!.accepted.seq) {
   throw new Error(`Late-join snapshot mismatch: room ${charlieJoined.roomId}, seq ${charlieSnapshot.seq}`);
 }
-if (!snapshotEvents.some(event => event.seq === accepted.seq && event.type === 'voxel_mined')) {
-  throw new Error(`Late-join snapshot did not include replicated command ${commandId}`);
+if (!snapshotEvents.some(event => event.seq === forgedTree.accepted.seq && event.type === 'resource_taken')) {
+  throw new Error(`Late-join snapshot did not include replicated command ${forgedTreeCommandId}`);
+}
+if (!snapshotEvents.some(event => event.seq === forgedVoxel.accepted.seq && event.type === 'voxel_mined')) {
+  throw new Error(`Late-join snapshot did not include replicated command ${forgedVoxelCommandId}`);
+}
+if (!snapshotEvents.some(event => event.seq === structure.accepted.seq && event.type === 'structure_placed')) {
+  throw new Error(`Late-join snapshot did not include replicated command ${structureCommandId}`);
 }
 
 aliceSocket.close();
@@ -96,11 +169,27 @@ console.log(JSON.stringify({
   inviteCode: created.inviteCode,
   worldId: bobJoined.worldId,
   players: [alice.localId, bob.localId, charlie.localId],
-  replicatedCommand: {
-    commandId,
-    seq: accepted.seq,
-    event: bobWorldEvent.event
+  canonicalResource: {
+    commandId: forgedTreeCommandId,
+    seq: forgedTree.accepted.seq,
+    payload: treePayload
   },
+  canonicalVoxel: {
+    commandId: forgedVoxelCommandId,
+    seq: forgedVoxel.accepted.seq,
+    payload: voxelPayload
+  },
+  authoritativeStructure: {
+    commandId: structureCommandId,
+    seq: structure.accepted.seq,
+    payload: structurePayload
+  },
+  rejectedCommands: [
+    { commandId: invalidForageCommandId, code: rejected.code },
+    { commandId: outOfBoundsResourceCommandId, code: outOfBoundsRejected.code },
+    { commandId: forgedDepositCommandId, code: forgedDepositRejected.code },
+    { commandId: unaffordableStructureCommandId, code: unaffordableStructureRejected.code }
+  ],
   replicatedCommandTypes: replicatedCommands.map(command => readWorldEventType(command.worldEvent.event)),
   lateJoinSnapshot: {
     player: charlie.localId,
@@ -143,6 +232,9 @@ async function connectPlayer(baseUrl: string, idToken: string): Promise<SmokeSoc
     waitForCommandAccepted(commandId) {
       return waitForMessage(messages, 'command_accepted', message => message.commandId === commandId);
     },
+    waitForCommandRejected(commandId) {
+      return waitForMessage(messages, 'command_rejected', message => message.commandId === commandId);
+    },
     waitForWorldEventSeq(seq) {
       return waitForMessage(messages, 'world_event', message => message.seq === seq);
     },
@@ -160,6 +252,7 @@ interface SmokeSocket {
   ): void;
   waitFor<T extends ServerMessage['type']>(type: T): Promise<Extract<ServerMessage, { type: T }>>;
   waitForCommandAccepted(commandId: string): Promise<Extract<ServerMessage, { type: 'command_accepted' }>>;
+  waitForCommandRejected(commandId: string): Promise<Extract<ServerMessage, { type: 'command_rejected' }>>;
   waitForWorldEventSeq(seq: number): Promise<Extract<ServerMessage, { type: 'world_event' }>>;
   close(): void;
 }
@@ -236,6 +329,16 @@ function readWorldEventType(event: unknown): string | undefined {
   if (typeof event !== 'object' || event === null || Array.isArray(event)) return undefined;
   const type = (event as { type?: unknown }).type;
   return typeof type === 'string' ? type : undefined;
+}
+
+function readPayload(value: unknown): Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+}
+
+function readEventPayload(value: unknown): Record<string, unknown> {
+  return readPayload(readPayload(value).payload);
 }
 
 function requiredEnv(name: string): string {

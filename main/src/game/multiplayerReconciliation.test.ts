@@ -6,17 +6,25 @@ import { applyRejectedCommandRollback } from './multiplayerReconciliation.ts';
 import {
   collectForageCommand,
   collectStoneCommand,
+  consumeItemCommand,
   craftAndPlaceCampfireCommand,
   createOfflineCommandContext,
+  drinkFromWaterskinCommand,
+  fillWaterskinCommand,
   mineVoxelCommand,
-  placeStructureCommand
+  placeStructureCommand,
+  refuelMawCommand,
+  repairMawCommand,
+  spendMawChargeCommand
 } from './gameplayCommands.ts';
 import { createSimulationRng } from './rng.ts';
 import { createWorldIdentity } from './worldIdentity.ts';
 import { RECIPES } from './data/recipes.ts';
 import { getAccessibleStations } from './data/stations.ts';
 import { addItem, getItemCount, resetAllInventories } from './systems/inventorySystem.ts';
-import { getMawCharge, resetAllMawState } from './systems/mawSystem.ts';
+import { getMawCharge, resetAllMawState, setMawCharge } from './systems/mawSystem.ts';
+import { getVitals, resetAllVitals, setVitals } from './systems/survivalVitals.ts';
+import { getWaterskinFill, resetAllWaterskins, setWaterskinFill } from './systems/consumeSystem.ts';
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts';
 import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
@@ -43,6 +51,8 @@ function populateGlobalVoxel(): void {
 beforeEach(() => {
   resetAllInventories();
   resetAllMawState();
+  resetAllVitals();
+  resetAllWaterskins();
   resetForagePickup();
   resetStonePickup();
   resetTreeHarvest();
@@ -162,5 +172,73 @@ describe('multiplayer reconciliation rollback', () => {
     expect(getItemCount('flint', actorId)).toBe(2);
     expect(getItemCount('biofuel', actorId)).toBe(1);
     expect(getItemCount('wood', actorId)).toBe(3);
+  });
+
+  it('restores predicted vitals, waterskin, and Maw state on rejection', () => {
+    setVitals({ hunger: 50, thirst: 40 }, actorId);
+    addItem('berry', 1, actorId);
+    const consumed = consumeItemCommand(context(), { itemId: 'berry' });
+    expect(consumed.ok).toBe(true);
+    if (!consumed.ok) throw new Error('consumeItem should have succeeded');
+    expect(getItemCount('berry', actorId)).toBe(0);
+    expect(getVitals(actorId).hunger).toBe(62);
+
+    const consumeRollback = applyRejectedCommandRollback(consumed.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(consumeRollback.restoredVitals).toBe(true);
+    expect(getItemCount('berry', actorId)).toBe(1);
+    expect(getVitals(actorId)).toMatchObject({ hunger: 50, thirst: 40 });
+
+    addItem('waterskin', 1, actorId);
+    const filled = fillWaterskinCommand(context(), { amount: 25 });
+    expect(filled.ok).toBe(true);
+    if (!filled.ok) throw new Error('fillWaterskin should have succeeded');
+    expect(getWaterskinFill(actorId)).toBe(25);
+
+    const fillRollback = applyRejectedCommandRollback(filled.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(fillRollback.restoredWaterskin).toBe(true);
+    expect(getWaterskinFill(actorId)).toBe(0);
+
+    setVitals({ thirst: 20 }, actorId);
+    setWaterskinFill(40, actorId);
+    const drank = drinkFromWaterskinCommand(context(), { amount: 30 });
+    expect(drank.ok).toBe(true);
+    if (!drank.ok) throw new Error('drinkFromWaterskin should have succeeded');
+    expect(getWaterskinFill(actorId)).toBe(10);
+    expect(getVitals(actorId).thirst).toBe(50);
+
+    applyRejectedCommandRollback(drank.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(getWaterskinFill(actorId)).toBe(40);
+    expect(getVitals(actorId).thirst).toBe(20);
+
+    addItem('biofuel', 1, actorId);
+    const refueled = refuelMawCommand(context());
+    expect(refueled.ok).toBe(true);
+    if (!refueled.ok) throw new Error('refuelMaw should have succeeded');
+    expect(getMawCharge(actorId)).toBe(50);
+    expect(getItemCount('biofuel', actorId)).toBe(0);
+
+    applyRejectedCommandRollback(refueled.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(getMawCharge(actorId)).toBe(0);
+    expect(getItemCount('biofuel', actorId)).toBe(1);
+
+    setMawCharge(50, actorId);
+    const spent = spendMawChargeCommand(context(), { amount: 4 });
+    expect(spent.ok).toBe(true);
+    if (!spent.ok) throw new Error('spendMawCharge should have succeeded');
+    expect(getMawCharge(actorId)).toBe(46);
+
+    applyRejectedCommandRollback(spent.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(getMawCharge(actorId)).toBe(50);
+
+    addItem('faulty_maw', 1, actorId);
+    const repaired = repairMawCommand(context());
+    expect(repaired.ok).toBe(true);
+    if (!repaired.ok) throw new Error('repairMaw should have succeeded');
+    expect(getItemCount('faulty_maw', actorId)).toBe(0);
+    expect(getItemCount('iron_maw', actorId)).toBe(1);
+
+    applyRejectedCommandRollback(repaired.rollback, { actorId, rejectCode: 'validation_failed' });
+    expect(getItemCount('faulty_maw', actorId)).toBe(1);
+    expect(getItemCount('iron_maw', actorId)).toBe(0);
   });
 });

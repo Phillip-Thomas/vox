@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { commandAccepted, commandRejected, type CommandContext, type CommandResult } from './commands.ts';
 import { createDomainEvent, type DomainEvent } from './events.ts';
 import { LOCAL_ACTOR_ID, type ActorId } from './playerActors.ts';
-import { createLocalSimulationRng, type SimulationRng } from './rng.ts';
+import { createLocalSimulationRng, createSimulationRng, type SimulationRng } from './rng.ts';
 import { worldIdentityFromCurrentWorld, type WorldIdentity } from './worldIdentity.ts';
 import type { CurrentWorld } from '../utils/worldCoordinates.ts';
 import type { BlockId } from './data/blocks.ts';
@@ -30,7 +30,7 @@ import {
 } from './systems/structureSystem.ts';
 import { placeCampfire } from './systems/campfires.ts';
 import { addResource, getItemCount, removeItem } from './systems/inventorySystem.ts';
-import { drink, feed, resetVitals } from './systems/survivalVitals.ts';
+import { drink, feed, getVitals, resetVitals } from './systems/survivalVitals.ts';
 import { fillWaterskin, getWaterskinFill, useWaterskin } from './systems/consumeSystem.ts';
 import { addMawCharge, BIOFUEL_CHARGE, CHARGE_PER_BREAK, consumeMawCharge, getMawCharge, refuelFromInventory, repairMaw } from './systems/mawSystem.ts';
 
@@ -159,6 +159,22 @@ function mineDepositIdentity(context: CommandContext, coord: Vec3Like, deposit?:
   };
 }
 
+function deterministicCommandRng(key: string): SimulationRng {
+  return createSimulationRng(key);
+}
+
+function vecKey(coord: Vec3Like): string {
+  return `${coord.x},${coord.y},${coord.z}`;
+}
+
+function coordKey(x: number, y: number, z: number): string {
+  return `${x},${y},${z}`;
+}
+
+function depositKey(deposit?: ResourceDeposit | null): string {
+  return deposit ? `${deposit.resourceId}:${deposit.richness}:${deposit.scanLevel}` : 'none';
+}
+
 export function harvestVoxelCommand(
   context: CommandContext,
   input: { coord?: Vec3Like; blockId: BlockId; deposit?: ResourceDeposit | null; toolTier: number; commandId?: string }
@@ -169,7 +185,9 @@ export function harvestVoxelCommand(
     deposit: input.deposit,
     toolTier: input.toolTier,
     bank: false,
-    rng: context.rng
+    rng: deterministicCommandRng(
+      `voxel_mined:${context.world.worldId}:${input.coord ? vecKey(input.coord) : 'none'}:${input.blockId}:${depositKey(input.deposit)}`
+    )
   });
   if (!result.success) return rejected(ref, result.reason ?? 'voxel harvest rejected');
   bankDrops(result.drops, context.actorId);
@@ -210,7 +228,9 @@ export function mineVoxelCommand(
     deposit: voxel.deposit,
     toolTier: input.toolTier,
     bank: false,
-    rng: context.rng
+    rng: deterministicCommandRng(
+      `voxel_mined:${context.world.worldId}:${vecKey(input.coord)}:${voxel.blockId}:${depositKey(voxel.deposit)}`
+    )
   });
   if (!harvest.success) return rejected(ref, harvest.reason ?? 'voxel harvest rejected');
 
@@ -297,7 +317,13 @@ export function harvestTreeCommand(
   input: { x: number; y: number; z: number; commandId?: string }
 ): CommandResult {
   const ref = commandRef('harvestTree', input.commandId);
-  const result = harvestTree(input.x, input.y, input.z, context.rng, context.actorId);
+  const result = harvestTree(
+    input.x,
+    input.y,
+    input.z,
+    deterministicCommandRng(`resource_taken:tree:${context.world.worldId}:${coordKey(input.x, input.y, input.z)}`),
+    context.actorId
+  );
   if (result.wood <= 0) return conflict(ref, 'tree already harvested');
   return accepted(context, ref, [
     event(context, 'resource_taken', {
@@ -320,7 +346,13 @@ export function collectStoneCommand(
   input: { x: number; y: number; z: number; commandId?: string }
 ): CommandResult {
   const ref = commandRef('collectStone', input.commandId);
-  const qty = collectStone(input.x, input.y, input.z, context.rng, context.actorId);
+  const qty = collectStone(
+    input.x,
+    input.y,
+    input.z,
+    deterministicCommandRng(`resource_taken:loose_stone:${context.world.worldId}:${coordKey(input.x, input.y, input.z)}`),
+    context.actorId
+  );
   if (qty <= 0) return conflict(ref, 'stone already collected');
   return accepted(context, ref, [
     event(context, 'resource_taken', {
@@ -343,7 +375,14 @@ export function collectForageCommand(
   input: { x: number; y: number; z: number; kind: 'berry' | 'root'; commandId?: string }
 ): CommandResult {
   const ref = commandRef('collectForage', input.commandId);
-  const result = collectForage(input.x, input.y, input.z, input.kind, context.rng, context.actorId);
+  const result = collectForage(
+    input.x,
+    input.y,
+    input.z,
+    input.kind,
+    deterministicCommandRng(`resource_taken:forage:${input.kind}:${context.world.worldId}:${coordKey(input.x, input.y, input.z)}`),
+    context.actorId
+  );
   if (!result) return conflict(ref, 'forage already collected');
   return accepted(context, ref, [
     event(context, 'resource_taken', {
@@ -544,11 +583,17 @@ export function consumeItemCommand(
   const ref = commandRef('consumeItem', input.commandId);
   const def = getItem(input.itemId);
   if ((def.foodValue ?? 0) <= 0 && (def.waterValue ?? 0) <= 0) return rejected(ref, 'item is not consumable');
+  const vitalsBefore = getVitals(context.actorId);
   if (!removeItem(input.itemId, 1, context.actorId)) return rejected(ref, 'item not available');
   feed(def.foodValue ?? 0, def.waterValue ?? 0, context.actorId);
   return accepted(context, ref, [
     event(context, 'item_consumed', { itemId: input.itemId, food: def.foodValue ?? 0, water: def.waterValue ?? 0 })
-  ]);
+  ], {
+    rollback: {
+      refundItems: [{ id: input.itemId, qty: 1 }],
+      vitalsBefore
+    }
+  });
 }
 
 export function drinkWaterCommand(
@@ -557,6 +602,8 @@ export function drinkWaterCommand(
 ): CommandResult {
   const ref = commandRef('drinkWater', input.commandId);
   const amount = input.amount ?? 60;
+  const vitalsBefore = getVitals(context.actorId);
+  const waterskinFillBefore = getWaterskinFill(context.actorId);
   drink(amount, context.actorId);
   let filled = false;
   if (input.fillWaterskinIfOwned && getItemCount('waterskin', context.actorId) > 0) {
@@ -565,7 +612,12 @@ export function drinkWaterCommand(
   }
   return accepted(context, ref, [
     event(context, 'water_drank', { amount, filledWaterskin: filled })
-  ]);
+  ], {
+    rollback: {
+      vitalsBefore,
+      waterskinFillBefore
+    }
+  });
 }
 
 export function fillWaterskinCommand(
@@ -579,7 +631,11 @@ export function fillWaterskinCommand(
   if (filled <= 0) return conflict(ref, 'waterskin already full');
   return accepted(context, ref, [
     event(context, 'waterskin_filled', { amount: filled, fill: getWaterskinFill(context.actorId) })
-  ]);
+  ], {
+    rollback: {
+      waterskinFillBefore: before
+    }
+  });
 }
 
 export function drinkFromWaterskinCommand(
@@ -587,19 +643,32 @@ export function drinkFromWaterskinCommand(
   input: { amount?: number; commandId?: string } = {}
 ): CommandResult {
   const ref = commandRef('drinkFromWaterskin', input.commandId);
+  const vitalsBefore = getVitals(context.actorId);
+  const waterskinFillBefore = getWaterskinFill(context.actorId);
   const amount = useWaterskin(input.amount, context.actorId);
   if (amount <= 0) return conflict(ref, 'waterskin empty');
   return accepted(context, ref, [
     event(context, 'water_drank', { source: 'waterskin', amount, fill: getWaterskinFill(context.actorId) })
-  ]);
+  ], {
+    rollback: {
+      vitalsBefore,
+      waterskinFillBefore
+    }
+  });
 }
 
 export function refuelMawCommand(context: CommandContext, input: { commandId?: string } = {}): CommandResult {
   const ref = commandRef('refuelMaw', input.commandId);
+  const mawChargeBefore = getMawCharge(context.actorId);
   if (!refuelFromInventory(context.actorId)) return conflict(ref, 'Maw did not refuel');
   return accepted(context, ref, [
     event(context, 'maw_refueled', { amount: BIOFUEL_CHARGE, charge: getMawCharge(context.actorId) })
-  ]);
+  ], {
+    rollback: {
+      refundItems: [{ id: 'biofuel', qty: 1 }],
+      mawChargeBefore
+    }
+  });
 }
 
 export function addMawChargeCommand(context: CommandContext, input: { amount: number; commandId?: string }): CommandResult {
@@ -621,15 +690,26 @@ export function spendMawChargeCommand(context: CommandContext, input: { amount: 
   if (amount <= 0) return conflict(ref, 'Maw charge unchanged');
   return accepted(context, ref, [
     event(context, 'maw_charge_spent', { amount, charge: getMawCharge(context.actorId) })
-  ]);
+  ], {
+    rollback: {
+      mawChargeBefore: before
+    }
+  });
 }
 
 export function repairMawCommand(context: CommandContext, input: { commandId?: string } = {}): CommandResult {
   const ref = commandRef('repairMaw', input.commandId);
+  const mawChargeBefore = getMawCharge(context.actorId);
   if (!repairMaw(context.actorId)) return rejected(ref, 'Maw repair rejected');
   return accepted(context, ref, [
     event(context, 'maw_repaired', {})
-  ]);
+  ], {
+    rollback: {
+      removeItems: [{ id: 'iron_maw', qty: 1 }],
+      refundItems: [{ id: 'faulty_maw', qty: 1 }],
+      mawChargeBefore
+    }
+  });
 }
 
 export function respawnCommand(

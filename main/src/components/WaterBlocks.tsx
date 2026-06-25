@@ -4,7 +4,13 @@ import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { buildWaterFaces, WaterFace } from '../utils/waterVoxels.ts';
-import { composeWaterFaceMatrix, createWaterFacePlacementScratch, WATER_QUAD_SIZE } from '../utils/waterFacePlacement.ts';
+import {
+  composeWaterEdgeCapMatrix,
+  composeWaterFaceMatrix,
+  createWaterFacePlacementScratch,
+  WATER_FACE_OFFSET,
+  WATER_QUAD_SIZE
+} from '../utils/waterFacePlacement.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial, applyWaterProfileToMaterial } from '../utils/waterBlocksMaterial.ts';
 import { buildWaterProfile } from '../utils/waterProfile.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
@@ -26,6 +32,13 @@ interface WaterBlocksProps {
 
 interface FilledMesh extends THREE.InstancedMesh {
   __waterSig?: string;
+}
+
+interface WaterFaceGroup {
+  x: number;
+  y: number;
+  z: number;
+  dirs: number[];
 }
 
 // Neighbour offsets, ordered to match FACE_NORMALS / faceDir (0=+x..5=-z).
@@ -74,8 +87,47 @@ function isWaterDebug(): boolean {
   }
 }
 
+function createWaterEdgeCapGeometry(radius = WATER_FACE_OFFSET, arcSegments = 8, lengthSegments = 6): THREE.BufferGeometry {
+  const positions: number[] = [];
+  const normals: number[] = [];
+  const uvs: number[] = [];
+  const indices: number[] = [];
+
+  for (let i = 0; i <= arcSegments; i++) {
+    const theta = (i / arcSegments) * Math.PI * 0.5;
+    const cos = Math.cos(theta);
+    const sin = Math.sin(theta);
+    for (let j = 0; j <= lengthSegments; j++) {
+      const z = -1 + (j / lengthSegments) * 2;
+      positions.push(radius * cos, radius * sin, z);
+      normals.push(cos, sin, 0);
+      uvs.push(i / arcSegments, j / lengthSegments);
+    }
+  }
+
+  const row = lengthSegments + 1;
+  for (let i = 0; i < arcSegments; i++) {
+    for (let j = 0; j < lengthSegments; j++) {
+      const a = i * row + j;
+      const b = (i + 1) * row + j;
+      const c = (i + 1) * row + j + 1;
+      const d = i * row + j + 1;
+      indices.push(a, b, d, b, c, d);
+    }
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(indices);
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
 function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps) {
   const meshRef = useRef<FilledMesh>(null);
+  const capMeshRef = useRef<FilledMesh>(null);
   const debug = useMemo(() => isWaterDebug(), []);
 
   // Static water CELLS (the flooded set) + a fast key lookup. Faces are derived
@@ -113,6 +165,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   // Subdivided so the vertex-shader wave displacement actually curves the surface
   // (a 1-segment quad has only 4 corners and can't show ripples).
   const geometry = useMemo(() => new THREE.PlaneGeometry(WATER_QUAD_SIZE, WATER_QUAD_SIZE, 6, 6), []);
+  const edgeCapGeometry = useMemo(() => createWaterEdgeCapGeometry(), []);
   const material = useMemo(
     () =>
       debug
@@ -160,10 +213,11 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
 
   // Recompute faces against the live voxel state + refill, when the voxel edit
   // signature changes (initial population, dig, place). `force` for the first fill.
-  const syncWater = useCallback((mesh: FilledMesh, force = false) => {
+  const syncWater = useCallback((mesh: FilledMesh, capMesh: FilledMesh, force = false) => {
     const sig = `${voxelSystem.getWorldId()}:${voxelSystem.getEditVersion()}:${gen.getWaterEditVersion()}`;
     if (!force && mesh.__waterSig === sig) return;
     mesh.__waterSig = sig;
+    capMesh.__waterSig = sig;
     measureWarpMetric(
       'water:fill_instances',
       () => {
@@ -173,18 +227,45 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
         const m = new THREE.Matrix4();
         const cellCenter = new THREE.Vector3();
         const placement = createWaterFacePlacementScratch();
+        const surfaceGroups = new Map<string, WaterFaceGroup>();
         let slot = 0;
         for (const face of faces) {
           if (slot >= mesh.instanceMatrix.count) break;
           voxelCoordToWorld(face.x, face.y, face.z, cellCenter);
-          composeWaterFaceMatrix(face.faceDir, cellCenter, m, placement);
+          const kind = composeWaterFaceMatrix(face.faceDir, cellCenter, m, placement);
           mesh.setMatrixAt(slot, m);
+          if (kind === 'surface') {
+            const key = `${face.x},${face.y},${face.z}`;
+            let group = surfaceGroups.get(key);
+            if (!group) {
+              group = { x: face.x, y: face.y, z: face.z, dirs: [] };
+              surfaceGroups.set(key, group);
+            }
+            group.dirs.push(face.faceDir);
+          }
           slot++;
         }
         mesh.count = slot;
         mesh.instanceMatrix.needsUpdate = true;
+
+        let capSlot = 0;
+        for (const group of surfaceGroups.values()) {
+          if (capSlot >= capMesh.instanceMatrix.count) break;
+          if (group.dirs.length < 2) continue;
+          voxelCoordToWorld(group.x, group.y, group.z, cellCenter);
+          for (let i = 0; i < group.dirs.length - 1; i++) {
+            for (let j = i + 1; j < group.dirs.length; j++) {
+              if (capSlot >= capMesh.instanceMatrix.count) break;
+              if (!composeWaterEdgeCapMatrix(group.dirs[i], group.dirs[j], cellCenter, m, placement)) continue;
+              capMesh.setMatrixAt(capSlot, m);
+              capSlot++;
+            }
+          }
+        }
+        capMesh.count = capSlot;
+        capMesh.instanceMatrix.needsUpdate = true;
         if (debug) {
-          console.log(`[water] FILL faces=${faces.length} capacity=${capacity} count=${mesh.count}`);
+          console.log(`[water] FILL faces=${faces.length} capacity=${capacity} count=${mesh.count} caps=${capMesh.count}`);
         }
         return slot;
       },
@@ -193,13 +274,14 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   }, [gen, waterVoxels, isWater, capacity, debug]);
 
   useLayoutEffect(() => {
-    if (meshRef.current) syncWater(meshRef.current, true);
+    if (meshRef.current && capMeshRef.current) syncWater(meshRef.current, capMeshRef.current, true);
   }, [syncWater]);
 
   useEffect(() => () => {
     geometry.dispose();
+    edgeCapGeometry.dispose();
     material.dispose();
-  }, [geometry, material]);
+  }, [geometry, edgeCapGeometry, material]);
 
   useFrame(state => {
     if (!debug) {
@@ -212,19 +294,28 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
       updateWaterBlocksMaterial(waterMat, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
     }
     const mesh = meshRef.current;
-    if (!mesh) return;
+    const capMesh = capMeshRef.current;
+    if (!mesh || !capMesh) return;
     // Rebuild when terrain is edited (dig/place) so newly-exposed water side faces
     // appear and re-covered ones disappear.
-    syncWater(mesh);
+    syncWater(mesh, capMesh);
   });
 
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[geometry, material, capacity]}
-      frustumCulled={false}
-      renderOrder={2}
-    />
+    <group>
+      <instancedMesh
+        ref={meshRef}
+        args={[geometry, material, capacity]}
+        frustumCulled={false}
+        renderOrder={2}
+      />
+      <instancedMesh
+        ref={capMeshRef}
+        args={[edgeCapGeometry, material, capacity]}
+        frustumCulled={false}
+        renderOrder={2}
+      />
+    </group>
   );
 }
 

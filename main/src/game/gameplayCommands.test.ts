@@ -91,7 +91,7 @@ describe('gameplay command wrappers', () => {
     expect(events.map(event => event.type)).toEqual(['resource_taken', 'resource_taken', 'resource_taken']);
   });
 
-  it('resolves voxel drops with command-provided deterministic RNG', () => {
+  it('resolves voxel drops deterministically for the command target', () => {
     const firstEvents: DomainEvent[] = [];
     const secondEvents: DomainEvent[] = [];
 
@@ -110,6 +110,44 @@ describe('gameplay command wrappers', () => {
     expect(first.ok).toBe(true);
     expect(second.ok).toBe(true);
     expect(secondEvents[0].payload).toEqual(firstEvents[0].payload);
+  });
+
+  it('predicts harvest yields from stable world target keys instead of local RNG state', () => {
+    const firstCtx = createOfflineCommandContext(createWorldIdentity({ x: 0, y: 0 }), {
+      rng: createSimulationRng('first-local-rng'),
+      now: () => 123
+    });
+    const firstTree = harvestTreeCommand(firstCtx, { x: 4, y: 5, z: 6 });
+    expect(firstTree.ok).toBe(true);
+    if (!firstTree.ok) throw new Error('first tree harvest should have succeeded');
+
+    resetInventory();
+    resetTreeHarvest();
+    const secondCtx = createOfflineCommandContext(createWorldIdentity({ x: 0, y: 0 }), {
+      rng: createSimulationRng('second-local-rng'),
+      now: () => 456
+    });
+    const secondTree = harvestTreeCommand(secondCtx, { x: 4, y: 5, z: 6 });
+    expect(secondTree.ok).toBe(true);
+    if (!secondTree.ok) throw new Error('second tree harvest should have succeeded');
+    expect(secondTree.events[0].payload).toEqual(firstTree.events[0].payload);
+
+    resetInventory();
+    const firstVoxel = harvestVoxelCommand(firstCtx, {
+      coord: { x: 1, y: 2, z: 3 },
+      blockId: 'stone',
+      toolTier: 1
+    });
+    resetInventory();
+    const secondVoxel = harvestVoxelCommand(secondCtx, {
+      coord: { x: 1, y: 2, z: 3 },
+      blockId: 'stone',
+      toolTier: 1
+    });
+    expect(firstVoxel.ok).toBe(true);
+    expect(secondVoxel.ok).toBe(true);
+    if (!firstVoxel.ok || !secondVoxel.ok) throw new Error('voxel harvest should have succeeded');
+    expect(secondVoxel.events[0].payload).toEqual(firstVoxel.events[0].payload);
   });
 
   it('mines a voxel as one terrain, drop, water, and Maw command', () => {

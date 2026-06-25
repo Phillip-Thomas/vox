@@ -17,7 +17,10 @@ import {
 } from './persistence.js';
 import {
   inventoryCreditsForAcceptedCommand,
-  resolveServerAuthoritativeCommand
+  isServerAuthoritativeCommand,
+  resolveServerCanonicalCommandPayload,
+  resolveServerAuthoritativeCommand,
+  type AuthoritativeStructureClaim
 } from './economyAuthority.js';
 import {
   PROTOCOL_VERSION,
@@ -30,13 +33,16 @@ import {
 import {
   InMemoryRoomStore,
   applyPlayerInventoryDelta,
+  applyPlayerStatePatch,
   canDebitPlayerInventory,
   createWorldSnapshot,
+  ensurePlayerState,
   type CommandFingerprint,
   type PlayerSession,
   type RoomState,
   type ShardEvent
 } from './rooms.js';
+import { canonicalWorldId } from './worldAuthority.js';
 
 export interface StateServerOptions {
   config: ServerConfig;
@@ -161,7 +167,12 @@ async function routeHttp(
     if (req.method === 'POST' && url.pathname === '/v1/rooms') {
       const body = await readJsonBody(req);
       const startWorldId = typeof body.startWorldId === 'string' ? body.startWorldId : '0,0';
-      const room = rooms.createRoom(player, startWorldId);
+      const worldId = canonicalWorldId(startWorldId);
+      if (!worldId) {
+        sendJson(res, 400, { error: 'invalid_world', message: 'startWorldId must be a coordinate key like "0,0".' });
+        return;
+      }
+      const room = rooms.createRoom(player, worldId);
       await persistence.persistRoom(room);
       sendJson(res, 201, rooms.summarize(room));
       return;
@@ -270,11 +281,16 @@ async function handleCreateRoom(
   persistence: MultiplayerPersistence,
   startWorldId: string
 ): Promise<void> {
-  const room = rooms.createRoom(state.player!, startWorldId);
+  const worldId = canonicalWorldId(startWorldId);
+  if (!worldId) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'startWorldId must be a coordinate key like "0,0".' });
+    return;
+  }
+  const room = rooms.createRoom(state.player!, worldId);
   await persistence.persistRoom(room);
   attachSession(ws, state, room, rooms, socketsBySessionId);
   send(ws, { type: 'room_created', roomId: room.roomId, inviteCode: room.inviteCode, ownerPlayerId: room.ownerPlayerId });
-  await sendRoomJoined(ws, state, rooms, persistence, startWorldId);
+  await sendRoomJoined(ws, state, rooms, persistence, worldId);
 }
 
 async function handleJoinRoom(
@@ -315,6 +331,10 @@ async function handleCommand(
     rejectCommand(ws, state, message, 'not_in_room', 'Join a room before sending commands.');
     return;
   }
+  if (canonicalWorldId(message.worldId) !== message.worldId) {
+    rejectCommand(ws, state, message, 'invalid_world', 'Command world must be a canonical coordinate key.');
+    return;
+  }
   if (!state.room.shards.has(message.worldId)) {
     rejectCommand(ws, state, message, 'invalid_world', 'Command world is not active in this room.');
     return;
@@ -324,14 +344,26 @@ async function handleCommand(
     rejectCommand(ws, state, message, envelopeError.code, envelopeError.reason);
     return;
   }
-  const authoritativeResolution = resolveServerAuthoritativeCommand(message.commandType, message.payload);
+  const canonicalResolution = resolveServerCanonicalCommandPayload(message.commandType, message.payload, {
+    worldId: message.worldId
+  });
+  if (canonicalResolution && 'code' in canonicalResolution) {
+    rejectCommand(ws, state, message, canonicalResolution.code, canonicalResolution.reason);
+    return;
+  }
+  const playerState = isServerAuthoritativeCommand(message.commandType)
+    ? persistence.configured
+      ? await persistence.loadPlayerState(state.player!.playerId)
+      : ensurePlayerState(state.room, state.player!.playerId)
+    : undefined;
+  const authoritativeResolution = resolveServerAuthoritativeCommand(message.commandType, message.payload, playerState);
   if (authoritativeResolution && 'code' in authoritativeResolution) {
     rejectCommand(ws, state, message, authoritativeResolution.code, authoritativeResolution.reason);
     return;
   }
-  const commandPayload = authoritativeResolution?.commandPayload ?? message.payload;
+  const commandPayload = authoritativeResolution?.commandPayload ?? canonicalResolution?.commandPayload ?? message.payload;
   if (!authoritativeResolution) {
-    const mutationValidationError = sharedMutationValidationError(message.commandType, message.payload);
+    const mutationValidationError = sharedMutationValidationError(message.commandType, commandPayload);
     if (mutationValidationError) {
       rejectCommand(ws, state, message, 'validation_failed', mutationValidationError);
       return;
@@ -368,6 +400,16 @@ async function handleCommand(
         }
         shard.mutationClaims.set(key, message.commandId);
       }
+      const structureClaimError = validateInMemoryStructureClaims(
+        shard,
+        authoritativeResolution.structureClaims,
+        message.commandId
+      );
+      if (structureClaimError) {
+        rejectCommand(ws, state, message, structureClaimError.code, structureClaimError.reason);
+        return;
+      }
+      applyInMemoryStructureClaims(shard, authoritativeResolution.structureClaims, message.commandId);
     }
 
     let events: ShardEvent[];
@@ -386,6 +428,7 @@ async function handleCommand(
           debit: authoritativeResolution.debit,
           credit: authoritativeResolution.credit
         });
+        applyPlayerStatePatch(state.room, state.player!.playerId, authoritativeResolution.playerStatePatch);
         events = rooms.appendShardEvents(
           state.room,
           message.worldId,
@@ -415,7 +458,7 @@ async function handleCommand(
     return;
   }
   const memoryClaimKey = !persistence.configured
-    ? sharedMutationClaimForCommand(message.commandType, message.payload)?.key
+    ? sharedMutationClaimForCommand(message.commandType, commandPayload)?.key
     : null;
   if (memoryClaimKey) {
     const existingCommandId = shard.mutationClaims.get(memoryClaimKey);
@@ -434,9 +477,9 @@ async function handleCommand(
         actor: state.player!,
         commandId: message.commandId,
         commandType: message.commandType,
-        payload: message.payload
+        payload: commandPayload
       })
-      : rooms.appendShardEvent(state.room, message.worldId, state.player!.playerId, message.commandType, message.payload, message.commandId);
+      : rooms.appendShardEvent(state.room, message.worldId, state.player!.playerId, message.commandType, commandPayload, message.commandId);
   } catch (error) {
     if (error instanceof CommandReplayMismatchError) {
       rejectCommand(ws, state, message, 'replay', 'Command id was already used for a different command.');
@@ -449,7 +492,7 @@ async function handleCommand(
   }
   if (!persistence.configured) {
     applyPlayerInventoryDelta(state.room, state.player!.playerId, {
-      credit: inventoryCreditsForAcceptedCommand(message.commandType, message.payload)
+      credit: inventoryCreditsForAcceptedCommand(message.commandType, commandPayload)
     });
   }
   rooms.appendKnownShardEvent(state.room, message.worldId, event);
@@ -588,6 +631,60 @@ function logCommandReject(
     commandId: message.commandId,
     commandType: message.commandType
   }));
+}
+
+function validateInMemoryStructureClaims(
+  shard: { mutationClaims: Map<string, string>; events: ShardEvent[] },
+  claims: AuthoritativeStructureClaim[] | undefined,
+  commandId: string
+): { code: string; reason: string } | null {
+  for (const claim of claims ?? []) {
+    const key = structureClaimKey(claim.structureId);
+    const existingCommandId = shard.mutationClaims.get(key);
+    if (existingCommandId && existingCommandId !== commandId) {
+      return { code: 'conflict', reason: 'Structure placement target was already claimed by another command.' };
+    }
+    if (claim.mode === 'door_leaf') {
+      const doorKey = structureClaimKey(claim.structureId);
+      const existingDoorCommandId = shard.mutationClaims.get(doorKey);
+      if (existingDoorCommandId && existingDoorCommandId !== commandId) {
+        return { code: 'conflict', reason: 'Door was already fitted at this doorway.' };
+      }
+      if (!hasAcceptedDoorway(shard.events, claim.requiredStructureId)) {
+        return { code: 'validation_failed', reason: 'Door fitting requires an existing doorway.' };
+      }
+    }
+  }
+  return null;
+}
+
+function applyInMemoryStructureClaims(
+  shard: { mutationClaims: Map<string, string> },
+  claims: AuthoritativeStructureClaim[] | undefined,
+  commandId: string
+): void {
+  for (const claim of claims ?? []) {
+    shard.mutationClaims.set(structureClaimKey(claim.structureId), commandId);
+  }
+}
+
+function hasAcceptedDoorway(events: ShardEvent[], requiredStructureId: string): boolean {
+  return events.some(event => {
+    if (event.type !== 'structure_placed') return false;
+    const payload = event.payload;
+    if (payload.type !== 'doorway') return false;
+    const cell = Array.isArray(payload.cell) && payload.cell.length === 3
+      && payload.cell.every(value => Number.isInteger(value))
+      ? payload.cell as [number, number, number]
+      : null;
+    return cell !== null
+      && Number.isInteger(payload.face)
+      && requiredStructureId === `slot:${cell.join(',')}:${payload.face}`;
+  });
+}
+
+function structureClaimKey(structureId: string): string {
+  return `structure:${structureId}`;
 }
 
 async function handleRequestWorldEvents(

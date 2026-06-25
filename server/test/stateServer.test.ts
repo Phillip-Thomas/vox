@@ -39,6 +39,17 @@ describe('state server', () => {
     const room = await created.json() as { inviteCode: string; worldIds: string[] };
     expect(room.worldIds).toEqual(['5,-2']);
 
+    const badWorld = await fetch(`${started.baseUrl}/v1/rooms`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer alice-token',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ startWorldId: 'not-a-world' })
+    });
+    expect(badWorld.status).toBe(400);
+    expect(await badWorld.json()).toMatchObject({ error: 'invalid_world' });
+
     const joined = await fetch(`${started.baseUrl}/v1/rooms/${room.inviteCode}/join`, {
       method: 'POST',
       headers: { authorization: 'Bearer bob-token' }
@@ -69,7 +80,7 @@ describe('state server', () => {
       commandId: 'cmd-1',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [0, 1, 0] }
+      payload: { coord: [0, 1, 0], blockId: 'grass' }
     }));
     const accepted = await waitForType(messages, 'command_accepted');
     expect(accepted).toMatchObject({ commandId: 'cmd-1', worldId: '0,0', seq: 1 });
@@ -116,7 +127,7 @@ describe('state server', () => {
       commandId: 'cmd-2',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [1, 1, 0] }
+      payload: { coord: [1, 1, 0], blockId: 'grass' }
     }));
     await waitForMessage(messages, 'command_accepted', message => message.commandId === 'cmd-2');
 
@@ -158,11 +169,21 @@ describe('state server', () => {
       commandId: 'wrong-world',
       commandType: 'voxel_mined',
       worldId: '9,9',
-      payload: { coord: [0, 1, 0] }
+      payload: { coord: [0, 1, 0], blockId: 'grass' }
     }));
     const wrongWorld = await waitForMessage(alice.messages, 'command_rejected', message => message.commandId === 'wrong-world');
     expect(wrongWorld).toMatchObject({ code: 'invalid_world' });
     expect(started.server.rooms.getRoom(created.roomId)?.shards.has('9,9')).toBe(false);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'noncanonical-world',
+      commandType: 'voxel_mined',
+      worldId: '00,0',
+      payload: { coord: [0, 1, 0], blockId: 'grass' }
+    }));
+    const noncanonicalWorld = await waitForMessage(alice.messages, 'command_rejected', message => message.commandId === 'noncanonical-world');
+    expect(noncanonicalWorld).toMatchObject({ code: 'invalid_world' });
 
     alice.ws.send(JSON.stringify({
       type: 'command',
@@ -192,7 +213,7 @@ describe('state server', () => {
       commandId: 'stable-command-id',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [0, 1, 0] }
+      payload: { coord: [0, 1, 0], blockId: 'grass' }
     };
     alice.ws.send(JSON.stringify(command));
     const accepted = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === command.commandId);
@@ -210,7 +231,7 @@ describe('state server', () => {
 
     alice.ws.send(JSON.stringify({
       ...command,
-      payload: { coord: [1, 1, 0] }
+      payload: { coord: [1, 1, 0], blockId: 'grass' }
     }));
     const replay = await waitForMessage(alice.messages, 'command_rejected', message => message.commandId === command.commandId);
     expect(replay).toMatchObject({ code: 'replay' });
@@ -221,7 +242,7 @@ describe('state server', () => {
         commandId: `burst-${i}`,
         commandType: 'resource_taken',
         worldId: '0,0',
-        payload: { source: 'tree', coord: [i, 2, 3], id: 'wood', qty: 1 }
+        payload: { source: 'tree', coord: [i + 1, 20, 3], id: 'wood', qty: 1 }
       }));
     }
     const limited = await waitForMessage(alice.messages, 'command_rejected', message => message.code === 'rate_limited');
@@ -244,13 +265,22 @@ describe('state server', () => {
     bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
     await waitForType(bob.messages, 'room_joined');
     await waitForType(bob.messages, 'world_snapshot');
+    const room = started.server.rooms.getRoom(created.roomId);
+    room?.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 8]
+    ]));
+    room?.playerInventories.set('bob', new Map([
+      ['faulty_maw', 1],
+      ['wood', 8]
+    ]));
 
     alice.ws.send(JSON.stringify({
       type: 'command',
       commandId: 'mine-first',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [4, 1, 0] }
+      payload: { coord: [4, 1, 0], blockId: 'grass' }
     }));
     await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'mine-first');
 
@@ -259,7 +289,7 @@ describe('state server', () => {
       commandId: 'mine-second',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [4, 1, 0] }
+      payload: { coord: [4, 1, 0], blockId: 'grass' }
     }));
     await expectRejected(bob.messages, 'mine-second', 'conflict');
 
@@ -312,6 +342,95 @@ describe('state server', () => {
     bob.ws.close();
   });
 
+  it('authorizes structure placement and door fitting against server inventory', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+    const room = started.server.rooms.getRoom(created.roomId);
+    if (!room) throw new Error('room should exist');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'foundation-no-wood',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [6, 0, 0], face: 0, type: 'foundation', material: 'wood' }
+    }));
+    await expectRejected(alice.messages, 'foundation-no-wood', 'validation_failed');
+
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 8]
+    ]));
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'door-without-doorway',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [7, 0, 0], face: 0, type: 'door', material: 'wood' }
+    }));
+    await expectRejected(alice.messages, 'door-without-doorway', 'validation_failed');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(8);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'doorway-authorized',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [7, 0, 0], face: 0, type: 'doorway', material: 'wood', up: 2, state: { forged: true } }
+    }));
+    const doorway = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'doorway-authorized');
+    expect(doorway).toMatchObject({
+      commandId: 'doorway-authorized',
+      seq: 1,
+      events: [{ type: 'structure_placed', payload: { cell: [7, 0, 0], face: 0, type: 'doorway', material: 'wood', up: 2 } }]
+    });
+    expect((doorway.events[0] as { payload: Record<string, unknown> }).payload.state).toBeUndefined();
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(6);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'door-authorized',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [7, 0, 0], face: 0, type: 'door', material: 'wood' }
+    }));
+    const door = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'door-authorized');
+    expect(door).toMatchObject({
+      commandId: 'door-authorized',
+      seq: 2,
+      events: [{ type: 'structure_placed', payload: { cell: [7, 0, 0], face: 0, type: 'door', material: 'wood' } }]
+    });
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(4);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'door-duplicate',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [7, 0, 0], face: 0, type: 'door', material: 'wood' }
+    }));
+    await expectRejected(alice.messages, 'door-duplicate', 'conflict');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(4);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'bad-volume-orient',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [8, 0, 0], face: 6, type: 'stairs', material: 'wood', up: 2, orient: 9 }
+    }));
+    await expectRejected(alice.messages, 'bad-volume-orient', 'validation_failed');
+
+    alice.ws.close();
+  });
+
   it('authorizes campfire craft/place against server inventory atomically', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const started = await startTestServer();
@@ -331,40 +450,13 @@ describe('state server', () => {
     }));
     await expectRejected(alice.messages, 'campfire-too-soon', 'validation_failed');
 
-    const seedCommands = [
-      {
-        commandId: 'seed-biofiber',
-        commandType: 'resource_taken',
-        payload: { source: 'forage', kind: 'biofiber', coord: [1, 0, 0], id: 'biofiber', qty: 3 }
-      },
-      {
-        commandId: 'craft-biofuel',
-        commandType: 'recipe_crafted',
-        payload: { recipeId: 'biofuel' }
-      },
-      {
-        commandId: 'seed-wood',
-        commandType: 'resource_taken',
-        payload: { source: 'tree', coord: [2, 0, 0], id: 'wood', qty: 3 }
-      },
-      {
-        commandId: 'seed-flint',
-        commandType: 'resource_taken',
-        payload: { source: 'loose_stone', coord: [3, 0, 0], id: 'flint', qty: 2 }
-      }
-    ];
-    for (const command of seedCommands) {
-      alice.ws.send(JSON.stringify({
-        type: 'command',
-        commandId: command.commandId,
-        commandType: command.commandType,
-        worldId: '0,0',
-        payload: command.payload
-      }));
-      await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === command.commandId);
-    }
-
     const roomBeforeCraft = started.server.rooms.getRoom(created.roomId);
+    roomBeforeCraft?.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['biofuel', 1],
+      ['wood', 3],
+      ['flint', 2]
+    ]));
     expect(roomBeforeCraft?.playerInventories.get('alice')).toEqual(new Map([
       ['faulty_maw', 1],
       ['biofuel', 1],
@@ -383,10 +475,10 @@ describe('state server', () => {
     expect(accepted).toMatchObject({
       commandId: 'campfire-authorized',
       worldId: '0,0',
-      seq: 6,
+      seq: 2,
       events: [
-        { seq: 5, type: 'recipe_crafted', payload: { recipeId: 'campfire' } },
-        { seq: 6, type: 'campfire_placed', payload: { pos: [1.25, 2.5, 3.75], up: [0, 1, 0] } }
+        { seq: 1, type: 'recipe_crafted', payload: { recipeId: 'campfire' } },
+        { seq: 2, type: 'campfire_placed', payload: { pos: [1.25, 2.5, 3.75], up: [0, 1, 0] } }
       ]
     });
     expect(started.server.rooms.getRoom(created.roomId)?.playerInventories.get('alice')).toEqual(new Map([
@@ -412,6 +504,208 @@ describe('state server', () => {
     alice.ws.close();
   });
 
+  it('canonicalizes resource and mining yields before inventory credit', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'forged-tree-yield',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'tree', coord: [21, 0, 0], id: 'void_glass', qty: 999 }
+    }));
+    const tree = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'forged-tree-yield');
+    const treeEvent = tree.events[0] as { payload: { qty: number } };
+    expect(treeEvent).toMatchObject({ type: 'resource_taken', payload: { source: 'tree', coord: [21, 0, 0], id: 'wood' } });
+    expect(treeEvent.payload.qty).toBeGreaterThanOrEqual(2);
+    expect(treeEvent.payload.qty).toBeLessThanOrEqual(4);
+    const afterTreeInventory = started.server.rooms.getRoom(created.roomId)?.playerInventories.get('alice');
+    expect(afterTreeInventory?.has('void_glass')).toBe(false);
+    expect(afterTreeInventory?.get('wood')).toBe(treeEvent.payload.qty);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'forged-voxel-yield',
+      commandType: 'voxel_mined',
+      worldId: '0,0',
+      payload: {
+        coord: [22, 1, 0],
+        blockId: 'stone',
+        deposit: null,
+        drops: [{ id: 'void_glass', qty: 999 }],
+        exposedNeighbors: 999,
+        flooded: [],
+        maw: { usesCharge: false, refueled: 0, chargeSpent: 0, charge: 0 }
+      }
+    }));
+    const mined = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'forged-voxel-yield');
+    const minedEvent = mined.events[0] as { payload: { drops: Array<{ id: string; qty: number }> } };
+    const minedPayload = minedEvent.payload;
+    expect(minedEvent).toMatchObject({ type: 'voxel_mined', payload: { coord: [22, 1, 0], blockId: 'stone' } });
+    expect(minedPayload.drops.some(drop => drop.id === 'void_glass')).toBe(false);
+    expect(minedPayload.drops.some(drop => drop.id === 'stone')).toBe(true);
+    const afterMineInventory = started.server.rooms.getRoom(created.roomId)?.playerInventories.get('alice');
+    expect(afterMineInventory?.has('void_glass')).toBe(false);
+    expect(afterMineInventory?.get('stone')).toBeGreaterThanOrEqual(1);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'invalid-forage-kind',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'forage', kind: 'biofuel', coord: [23, 0, 0], id: 'biofuel', qty: 1 }
+    }));
+    await expectRejected(alice.messages, 'invalid-forage-kind', 'validation_failed');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'out-of-bounds-resource',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'tree', coord: [26, 0, 0], id: 'wood', qty: 1 }
+    }));
+    await expectRejected(alice.messages, 'out-of-bounds-resource', 'validation_failed');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'out-of-bounds-voxel',
+      commandType: 'voxel_mined',
+      worldId: '0,0',
+      payload: { coord: [0, 0, -26], blockId: 'stone' }
+    }));
+    await expectRejected(alice.messages, 'out-of-bounds-voxel', 'validation_failed');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'forged-deposit',
+      commandType: 'voxel_mined',
+      worldId: '0,0',
+      payload: {
+        coord: [22, 2, 0],
+        blockId: 'stone',
+        deposit: { resourceId: 'void_glass', richness: 999, scanLevel: 4 },
+        drops: [{ id: 'void_glass', qty: 999 }]
+      }
+    }));
+    await expectRejected(alice.messages, 'forged-deposit', 'validation_failed');
+
+    alice.ws.close();
+  });
+
+  it('authorizes consumables, waterskin, and Maw state against server player state', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+    const room = started.server.rooms.getRoom(created.roomId);
+    if (!room) throw new Error('room should exist');
+    const playerState = room.playerStates.get('alice');
+    if (!playerState) throw new Error('player state should exist');
+    playerState.vitals.hunger = 50;
+    playerState.vitals.thirst = 40;
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'eat-without-berry',
+      commandType: 'item_consumed',
+      worldId: '0,0',
+      payload: { itemId: 'berry', food: 999, water: 999 }
+    }));
+    await expectRejected(alice.messages, 'eat-without-berry', 'validation_failed');
+
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['berry', 1],
+      ['waterskin', 1],
+      ['biofuel', 1]
+    ]));
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'eat-berry',
+      commandType: 'item_consumed',
+      worldId: '0,0',
+      payload: { itemId: 'berry', food: 999, water: 999 }
+    }));
+    const ate = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'eat-berry');
+    expect(ate.events[0]).toMatchObject({ type: 'item_consumed', payload: { itemId: 'berry', food: 12, water: 6 } });
+    expect(room.playerInventories.get('alice')?.has('berry')).toBe(false);
+    expect(room.playerStates.get('alice')).toMatchObject({ vitals: { hunger: 62, thirst: 46 } });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'fill-waterskin',
+      commandType: 'waterskin_filled',
+      worldId: '0,0',
+      payload: { amount: 25 }
+    }));
+    const filled = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'fill-waterskin');
+    expect(filled.events[0]).toMatchObject({ type: 'waterskin_filled', payload: { amount: 25, fill: 25 } });
+    expect(room.playerStates.get('alice')?.waterskinFill).toBe(25);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'drink-from-waterskin',
+      commandType: 'water_drank',
+      worldId: '0,0',
+      payload: { source: 'waterskin', amount: 10, fill: 999 }
+    }));
+    const drank = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'drink-from-waterskin');
+    expect(drank.events[0]).toMatchObject({ type: 'water_drank', payload: { source: 'waterskin', amount: 10, fill: 15 } });
+    expect(room.playerStates.get('alice')).toMatchObject({ waterskinFill: 15, vitals: { thirst: 56 } });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'maw-refuel',
+      commandType: 'maw_refueled',
+      worldId: '0,0',
+      payload: { amount: 999, charge: 999 }
+    }));
+    const refueled = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-refuel');
+    expect(refueled.events[0]).toMatchObject({ type: 'maw_refueled', payload: { amount: 50, charge: 50 } });
+    expect(room.playerInventories.get('alice')?.has('biofuel')).toBe(false);
+    expect(room.playerStates.get('alice')?.mawCharge).toBe(50);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'maw-spend',
+      commandType: 'maw_charge_spent',
+      worldId: '0,0',
+      payload: { amount: 4, charge: 999 }
+    }));
+    const spent = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-spend');
+    expect(spent.events[0]).toMatchObject({ type: 'maw_charge_spent', payload: { amount: 4, charge: 46 } });
+    expect(room.playerStates.get('alice')?.mawCharge).toBe(46);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'maw-repair',
+      commandType: 'maw_repaired',
+      worldId: '0,0',
+      payload: { ignored: true }
+    }));
+    const repaired = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-repair');
+    expect(repaired.events[0]).toMatchObject({ type: 'maw_repaired', payload: {} });
+    expect(room.playerInventories.get('alice')).toEqual(new Map([
+      ['waterskin', 1],
+      ['iron_maw', 1]
+    ]));
+    expect(room.playerStates.get('alice')?.mawCharge).toBe(0);
+
+    alice.ws.close();
+  });
+
   it('hydrates persistent world events by room and world cursor', async () => {
     const persistence = new FakePersistence();
     const firstServer = await startTestServer({ persistence });
@@ -426,7 +720,7 @@ describe('state server', () => {
       commandId: 'persisted-cmd-1',
       commandType: 'voxel_mined',
       worldId: '0,0',
-      payload: { coord: [2, 1, 0] }
+      payload: { coord: [2, 1, 0], blockId: 'grass' }
     }));
     await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'persisted-cmd-1');
 

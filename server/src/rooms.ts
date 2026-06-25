@@ -1,6 +1,12 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import type { JsonObject, PlayerIdentity } from './protocol.js';
-import { starterInventory, type ItemStack } from './economyAuthority.js';
+import {
+  defaultServerPlayerState,
+  starterInventory,
+  type AuthoritativePlayerStatePatch,
+  type ItemStack,
+  type ServerPlayerState
+} from './economyAuthority.js';
 
 export interface PlayerSession {
   sessionId: string;
@@ -57,6 +63,7 @@ export interface RoomState {
   sessions: Map<string, PlayerSession>;
   members: Map<string, PlayerIdentity>;
   playerInventories: Map<string, Map<string, number>>;
+  playerStates: Map<string, ServerPlayerState>;
   shards: Map<string, ShardState>;
 }
 
@@ -94,6 +101,7 @@ export class InMemoryRoomStore {
       sessions: new Map(),
       members: new Map([[owner.playerId, owner]]),
       playerInventories: new Map([[owner.playerId, createStarterInventory()]]),
+      playerStates: new Map([[owner.playerId, defaultServerPlayerState()]]),
       shards: new Map([[startWorldId, createShard(startWorldId)]])
     };
     this.rooms.set(roomId, room);
@@ -108,6 +116,7 @@ export class InMemoryRoomStore {
     if (!room) return null;
     room.members.set(player.playerId, player);
     ensurePlayerInventory(room, player.playerId);
+    ensurePlayerState(room, player.playerId);
     return room;
   }
 
@@ -131,6 +140,7 @@ export class InMemoryRoomStore {
       sessions: new Map(),
       members: new Map(loaded.members.map(member => [member.playerId, member])),
       playerInventories: new Map(loaded.members.map(member => [member.playerId, createStarterInventory()])),
+      playerStates: new Map(loaded.members.map(member => [member.playerId, defaultServerPlayerState()])),
       shards: new Map(loaded.worldIds.map(worldId => [worldId, createShard(worldId)]))
     };
     this.rooms.set(room.roomId, room);
@@ -141,6 +151,7 @@ export class InMemoryRoomStore {
   addMember(room: RoomState, player: PlayerIdentity): void {
     room.members.set(player.playerId, player);
     ensurePlayerInventory(room, player.playerId);
+    ensurePlayerState(room, player.playerId);
   }
 
   addSession(room: RoomState, player: PlayerIdentity): PlayerSession {
@@ -155,6 +166,7 @@ export class InMemoryRoomStore {
     };
     room.members.set(player.playerId, player);
     ensurePlayerInventory(room, player.playerId);
+    ensurePlayerState(room, player.playerId);
     room.sessions.set(session.sessionId, session);
     return session;
   }
@@ -265,6 +277,15 @@ export function ensurePlayerInventory(room: RoomState, playerId: string): Map<st
   return inventory;
 }
 
+export function ensurePlayerState(room: RoomState, playerId: string): ServerPlayerState {
+  let state = room.playerStates.get(playerId);
+  if (!state) {
+    state = defaultServerPlayerState();
+    room.playerStates.set(playerId, state);
+  }
+  return state;
+}
+
 export function canDebitPlayerInventory(room: RoomState, playerId: string, stacks: ItemStack[]): boolean {
   const inventory = ensurePlayerInventory(room, playerId);
   return stacks.every(stack => (inventory.get(stack.id) ?? 0) >= stack.qty);
@@ -284,6 +305,19 @@ export function applyPlayerInventoryDelta(
   for (const stack of delta.credit ?? []) {
     inventory.set(stack.id, (inventory.get(stack.id) ?? 0) + stack.qty);
   }
+}
+
+export function applyPlayerStatePatch(
+  room: RoomState,
+  playerId: string,
+  patch: AuthoritativePlayerStatePatch | undefined
+): void {
+  if (!patch) return;
+  const state = ensurePlayerState(room, playerId);
+  if (patch.vitals) state.vitals = { ...patch.vitals };
+  if (patch.exhausted !== undefined) state.exhausted = patch.exhausted;
+  if (patch.mawCharge !== undefined) state.mawCharge = patch.mawCharge;
+  if (patch.waterskinFill !== undefined) state.waterskinFill = patch.waterskinFill;
 }
 
 export function createShard(worldId: string): ShardState {

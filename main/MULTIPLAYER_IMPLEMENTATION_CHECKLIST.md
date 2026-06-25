@@ -315,11 +315,11 @@ code, tests, and manual evidence for that item exist.
 
 - [ ] Mining is server-validated and replicated.
 - [x] Mining terrain removal is replicated from accepted room events.
-- [ ] Mining drop identity/quantity is server-resolved.
+- [x] Mining drop identity/quantity is server-resolved.
 - [x] Mining water flood is deterministic and replicated/derived from accepted room events.
 - [ ] Voxel collision rebuild happens after authoritative terrain updates.
 - [x] Replicated voxel removals replay through terrain diffs so visible terrain/collision rebuild.
-- [ ] Structure placement is server-validated and replicated.
+- [x] Structure placement is server-validated and replicated.
 - [x] Structure placement is replicated from accepted room events.
 - [ ] Structure removal/refund routes to the correct actor.
 - [x] Structure removal is replicated from accepted room events without local viewer refunds.
@@ -329,12 +329,12 @@ code, tests, and manual evidence for that item exist.
 - [x] `placeVolume` orientation is carried in replicated structure placement events.
 - [x] Forage/stone/tree collection is first-wins and server-arbitrated.
 - [x] Forage/stone/tree collection visibility is replicated from accepted room events.
-- [ ] Campfire placement is atomic and replicated.
+- [x] Campfire placement is atomic and replicated.
 - [x] Campfire placement visibility is replicated from accepted room events.
 - [ ] Inventory changes are server-owned.
-- [ ] Crafting is transactional.
-- [ ] Consume/drink/waterskin commands are explicit and server-owned.
-- [ ] Maw refuel/repair/charge-spend is server-owned.
+- [x] Crafting is transactional.
+- [x] Consume/drink/waterskin commands are explicit and server-owned.
+- [x] Maw refuel/repair/charge-spend is server-owned.
 - [ ] Progression behavior matches the chosen progression ownership model.
 - [ ] Vitals are server-owned or server-verifiable according to Phase 1 policy.
 - [ ] Oxygen/drown state supports each player independently.
@@ -354,12 +354,12 @@ code, tests, and manual evidence for that item exist.
 - [x] Reject commands for the wrong world/shard.
 - [x] Reject replayed command ids with a different envelope while allowing idempotent retries.
 - [x] Enforce command rate limits.
-- [ ] Validate inventory affordability server-side.
+- [x] Validate inventory affordability server-side.
 - [ ] Validate structure placement ownership/permissions server-side.
-- [ ] Validate mine/collect target plausibility server-side.
+- [x] Validate mine/collect target plausibility server-side.
 - [ ] Validate pose plausibility bounds, with cube-edge transition exceptions.
-- [ ] Never trust client-generated resource yields.
-- [ ] Never trust client-generated world identity.
+- [x] Never trust client-generated resource yields.
+- [x] Never trust client-generated world identity.
 - [x] Log suspicious rejects for later tuning.
 
 ### 1.8 Co-op UX
@@ -393,7 +393,7 @@ code, tests, and manual evidence for that item exist.
 - [ ] Remote player swimming is visible as swimming.
 - [ ] Remote player jetpack is visible as jetpack.
 - [ ] Remote player mining/building is visually legible.
-- [ ] Craft/campfire command is atomic under reject/rollback.
+- [x] Craft/campfire command is atomic under reject/rollback.
 - [ ] R-key reset/respawn is visible to the other player.
 - [ ] Warp behavior matches the chosen party-travel rule.
 - [x] Cloud Run restart does not lose persisted Neon-backed worlds.
@@ -429,6 +429,47 @@ Evidence: 2026-06-25 client reconciliation batch deployed Hosting asset
 `/assets/index-B3Jr1C7y.js`. Full `npm run verify` passed, authoritative shared mutations now
 gate dependent client events, and rejected predictions rollback local-only rewards/state while
 conflict rejects keep the winning shared-world mutation intact.
+
+Evidence: 2026-06-25 authoritative crafting batch deployed Cloud Run revision
+`paravoxia-state-server-00011-fht`. Server `npm run verify` passed. Live smoke rejected a
+material-short `craft_campfire` as `validation_failed`, accepted server-seeded crafting inventory,
+emitted atomic `recipe_crafted` + `campfire_placed` events at seq `5`/`6`, replicated both events
+to a second player, and included the campfire in a late-join Neon-backed snapshot.
+
+Evidence: 2026-06-25 consumable/player-state authority batch deployed Cloud Run revision
+`paravoxia-state-server-00012-shc` and Hosting asset `/assets/index-BPLuEbBz.js`. Server
+`npm run verify` and full `main` `npm run verify` passed. Live smoke rejected missing
+`item_consumed` inventory as `validation_failed`, accepted canonical server payloads for
+`item_consumed`, `waterskin_filled`, waterskin `water_drank`, `maw_refueled`,
+`maw_charge_spent`, and `maw_repaired` through seq `9`, and late-join Neon snapshot included all
+six action event types.
+
+Evidence: 2026-06-25 resource-yield authority batch deployed Cloud Run revision
+`paravoxia-state-server-00013-fgb` and Hosting asset `/assets/index-cDNoKsHa.js`. Server
+`npm run verify` and full `main` `npm run verify` passed. Live smoke rewrote forged
+`resource_taken` tree payload `{ id: "void_glass", qty: 999 }` to canonical wood, rewrote forged
+`voxel_mined` drops from `void_glass` to canonical stone, rejected invalid forage `biofuel` as
+`validation_failed`, replicated the accepted canonical events to a second player, and included
+both canonical events in a late-join Neon-backed snapshot.
+
+Evidence: 2026-06-25 target-plausibility authority batch deployed Cloud Run revision
+`paravoxia-state-server-00014-4jl` with no Hosting change. Server `npm run verify` passed.
+Room creation now canonicalizes valid coordinate-key world IDs and rejects invalid ones; command
+world IDs must be canonical active shards. Server tests reject noncanonical command worlds,
+out-of-bounds mine/collect targets, and block-incompatible forged deposits. Live smoke accepted
+canonical server-owned resource/mining yields, rejected invalid forage, rejected out-of-bounds
+resource pickup, rejected forged `void_glass` deposit on `stone`, replicated accepted canonical
+events to a second player, and included them in a late-join Neon-backed snapshot.
+
+Evidence: 2026-06-25 structure-placement authority batch deployed Cloud Run revision
+`paravoxia-state-server-00016-44p` with no Hosting change. Server `npm run verify` passed with
+24 tests. `structure_placed` now resolves through the server economy authority: known
+piece/material validation, canonical payloads, wood affordability checks, authoritative inventory
+debits, structure slot claims for normal pieces/volumes/two-cell doorways, and door-leaf claims
+that require an existing doorway. Live smoke accepted a foundation only after server-earned wood,
+stripped forged structure state, rejected an unaffordable foundation as `validation_failed`,
+replicated the accepted structure to a second player, and included it in a late-join Neon-backed
+snapshot.
 
 ## Phase 2 - Persistent Shards
 
