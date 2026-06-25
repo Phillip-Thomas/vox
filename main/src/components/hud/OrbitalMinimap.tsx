@@ -128,7 +128,7 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
         height: canvasSize,
         margin: '0 auto',
         borderRadius: 8,
-        background: 'radial-gradient(circle at 50% 48%, rgba(56,189,248,0.13), rgba(5,8,15,0.08) 58%, rgba(5,8,15,0) 72%)'
+        background: 'linear-gradient(180deg, rgba(56,189,248,0.10), rgba(5,8,15,0.04) 58%, rgba(5,8,15,0) 100%)'
       }}>
         <Canvas
           dpr={[1, 1.5]}
@@ -138,13 +138,6 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
         >
           <OrbitalMinimapScene model={model} />
         </Canvas>
-        <div style={{
-          position: 'absolute',
-          inset: 9,
-          border: '1px solid rgba(125,211,252,0.16)',
-          borderRadius: '50%',
-          boxShadow: 'inset 0 0 18px rgba(125,211,252,0.10)'
-        }} />
       </div>
 
       <div style={{
@@ -173,7 +166,6 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
 
 const OrbitalMinimapScene: React.FC<{ model: OrbitalMinimapModel }> = ({ model }) => {
   const rig = useRef<THREE.Group>(null);
-  const sweep = useRef<THREE.Mesh>(null);
   const targetMapQuaternion = useMemo(() => mapQuaternionForFace(model.local), [model.local.face]);
 
   useFrame((_, dt) => {
@@ -181,7 +173,6 @@ const OrbitalMinimapScene: React.FC<{ model: OrbitalMinimapModel }> = ({ model }
       const blend = 1 - Math.exp(-dt * 7.5);
       rig.current.quaternion.slerp(targetMapQuaternion, blend);
     }
-    if (sweep.current) sweep.current.rotation.y += dt * 1.28;
   });
 
   return (
@@ -191,14 +182,6 @@ const OrbitalMinimapScene: React.FC<{ model: OrbitalMinimapModel }> = ({ model }
       <pointLight position={[2.8, 3, 3.2]} intensity={9} color="#7dd3fc" />
       <pointLight position={[-2.2, -1.8, 2.4]} intensity={3} color="#f59e0b" />
       <group ref={rig}>
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[FRAME_HALF_SIZE * 1.28, 0.006, 8, 112]} />
-          <meshBasicMaterial color="#38bdf8" transparent opacity={0.34} />
-        </mesh>
-        <mesh ref={sweep}>
-          <boxGeometry args={[FRAME_HALF_SIZE * 1.52, 0.008, 0.008]} />
-          <meshBasicMaterial color="#7dd3fc" transparent opacity={0.38} depthWrite={false} />
-        </mesh>
         <ShardFrame local={model.local} />
         {model.markers.map(marker => <OrbitalMarkerMesh key={marker.id} marker={marker} />)}
         <LocalMarkerMesh local={model.local} />

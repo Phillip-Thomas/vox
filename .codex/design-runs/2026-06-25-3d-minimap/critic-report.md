@@ -4,7 +4,7 @@
 
 - Desktop and mobile screenshots reviewed after final polish.
 - WebGL pixel reads are nonblank in both viewports.
-- Pixel hashes differ across frames, confirming motion.
+- Pixel hashes are stable at idle, which is expected after removing the decorative scanner motion.
 - No console errors were captured.
 - Typecheck, tests, and production build passed.
 
@@ -22,7 +22,8 @@
 - The dashed scaffold is faint enough not to compete with the arrow; no extra solid cube fill is needed in this pass.
 - The caticorner angle is now based on discrete camera-relative 30/15 degree offsets, which reads less arbitrary than the previous vector-tuned angle.
 - The projection now maps planet-size surface coordinates to the minimap face edge, addressing the mismatch where the arrow looked too far from an imminent face boundary.
+- The removed circular scanner shell lowers visual clutter and keeps the minimap from reading as a generic radar bubble.
 
 ## Verdict
 
-Pass. The minimap is appealing, purposeful, game-specific, correctly framed, caticorner enough to read as 3D, and verifies as real animated 3D content.
+Pass. The minimap is appealing, purposeful, game-specific, correctly framed, caticorner enough to read as 3D, and verifies as real rendered 3D content.

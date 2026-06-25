@@ -87,7 +87,7 @@ async function capture(browser, name, viewport) {
     box,
     firstStats,
     secondStats,
-    animated: firstStats.ok && secondStats.ok && firstStats.hash !== secondStats.hash,
+    changedHash: firstStats.ok && secondStats.ok && firstStats.hash !== secondStats.hash,
     consoleErrors: consoleErrors.slice(0, 10)
   };
 }
@@ -108,7 +108,6 @@ async function capture(browser, name, viewport) {
       || !result.secondStats.ok
       || result.firstStats.lit < 80
       || result.secondStats.lit < 80
-      || !result.animated
       || result.consoleErrors.length > 0
       || !result.box
     ));
