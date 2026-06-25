@@ -3,6 +3,7 @@ import {
   isTreeHarvested, markTreeHarvested, getTreeHarvestVersion, resetTreeHarvest, harvestTree
 } from './treeHarvest.ts';
 import { getItemCount, resetInventory } from './inventorySystem.ts';
+import { createSimulationRng } from '../rng.ts';
 
 beforeEach(() => { resetTreeHarvest(); resetInventory(); });
 
@@ -43,5 +44,13 @@ describe('harvestTree', () => {
     const before = getItemCount('wood');
     expect(harvestTree(7, 8, 9)).toEqual({ wood: 0 });
     expect(getItemCount('wood')).toBe(before);
+  });
+
+  it('can use command-provided deterministic RNG', () => {
+    const first = harvestTree(7, 8, 9, createSimulationRng('tree-command', '0,0'));
+    resetTreeHarvest(); resetInventory();
+    const second = harvestTree(7, 8, 9, createSimulationRng('tree-command', '0,0'));
+
+    expect(second).toEqual(first);
   });
 });

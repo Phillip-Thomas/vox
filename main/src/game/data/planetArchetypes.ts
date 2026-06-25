@@ -9,6 +9,7 @@
 // Type-only references (BiomeId, ResourceId, TerrainProfile) — no runtime cycle.
 
 import { coordinateToSeed, seededUnit, type WorldCoordinate } from '../../utils/worldCoordinates.ts';
+import { createLocalSimulationRng } from '../rng.ts';
 import type { TerrainProfile } from '../../config/worldGeneration.ts';
 import type { BiomeId } from './biomes.ts';
 import type { ResourceId } from './resources.ts';
@@ -149,11 +150,12 @@ export function isHospitableStart(seed: number): boolean {
  * exhaustive scan, so it ALWAYS returns a survivable crash site. Deterministic
  * given `rand`.
  */
-export function findHospitableStart(rand: () => number = Math.random): WorldCoordinate {
+export function findHospitableStart(rand?: () => number): WorldCoordinate {
+  const next = rand ?? createLocalSimulationRng('hospitable-start').next;
   const range = 100;
   for (let i = 0; i < 500; i++) {
-    const x = Math.floor(rand() * (range * 2 + 1)) - range;
-    const y = Math.floor(rand() * (range * 2 + 1)) - range;
+    const x = Math.floor(next() * (range * 2 + 1)) - range;
+    const y = Math.floor(next() * (range * 2 + 1)) - range;
     if (isHospitableStart(coordinateToSeed(x, y))) return { x, y };
   }
   // Fallback scan (the random pass effectively always succeeds — ~31% per try).

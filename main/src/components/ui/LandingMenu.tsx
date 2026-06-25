@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppState, enterPlaying, getGameCanvas } from '../../state/appState.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import {
@@ -9,6 +9,8 @@ import {
 } from '../../config/graphicsSettings.ts';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import AudioControls from './AudioControls.tsx';
+import CoopPanel from './CoopPanel.tsx';
+import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
 import { unlockMusicAudio } from '../../audio/musicEngine.ts';
 import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
 
@@ -30,11 +32,17 @@ function unlockAudio(): void {
   void unlockSfxAudio();
 }
 
-const LandingMenu: React.FC = () => {
+interface LandingMenuProps {
+  startWorldId: string;
+}
+
+const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
   const { phase, sceneReady } = useAppState();
   const isTouch = isTouchDevice();
-  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio'>(null);
+  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop'>(null);
   const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
+  const coopEnabled = useMemo(() => isCoopAuthEnabled(), []);
+  const compactMenu = useMemo(() => (typeof window === 'undefined' ? false : window.innerWidth <= 700), []);
   // Keep the overlay mounted briefly after Play so it can fade out over the
   // now-live game instead of cutting hard.
   const [gone, setGone] = useState(phase !== 'menu');
@@ -176,6 +184,9 @@ const LandingMenu: React.FC = () => {
           <GhostLink active={panel === 'controls'} onClick={() => setPanel(p => p === 'controls' ? null : 'controls')}>Controls</GhostLink>
           <GhostLink active={panel === 'graphics'} onClick={() => setPanel(p => p === 'graphics' ? null : 'graphics')}>Graphics</GhostLink>
           <GhostLink active={panel === 'audio'} onClick={() => setPanel(p => p === 'audio' ? null : 'audio')}>Audio</GhostLink>
+          {coopEnabled && (
+            <GhostLink active={panel === 'coop'} onClick={() => setPanel(p => p === 'coop' ? null : 'coop')}>Co-op</GhostLink>
+          )}
         </div>
 
         {panel === 'controls' && (
@@ -225,12 +236,19 @@ const LandingMenu: React.FC = () => {
             <AudioControls compact />
           </Panel>
         )}
+
+        {panel === 'coop' && (
+          <Panel>
+            <CoopPanel startWorldId={startWorldId} />
+          </Panel>
+        )}
       </div>
 
       <div style={{
         position: 'absolute', right: 'min(8vw, 88px)', bottom: 'max(12vh, 96px)',
         textAlign: 'right', color: theme.color.textFaint, fontFamily: theme.font.mono,
-        fontSize: 11, letterSpacing: '0.08em', lineHeight: 1.6, pointerEvents: 'none'
+        fontSize: 11, letterSpacing: '0.08em', lineHeight: 1.6, pointerEvents: 'none',
+        display: compactMenu && panel ? 'none' : undefined
       }}>
         <div>EXPLORE · FLY · BUILD</div>
         <div style={{ opacity: 0.7 }}>v0.1 · early build</div>

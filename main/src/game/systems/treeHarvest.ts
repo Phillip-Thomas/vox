@@ -11,6 +11,8 @@
 // Module-singleton, plain state (persistence-ready, same as inventory/maw).
 
 import { addItem } from './inventorySystem.ts';
+import { defaultSimulationRng, type SimulationRng } from '../rng.ts';
+import type { ActorId } from '../playerActors.ts';
 
 /** Hold-time feel for felling a tree (fed to computeMineDuration). */
 export const TREE_HARDNESS = 1.2;
@@ -44,6 +46,13 @@ export function markTreeHarvested(x: number, y: number, z: number): void {
   }
 }
 
+export function unmarkTreeHarvested(x: number, y: number, z: number): boolean {
+  if (!harvested.delete(key(x, y, z))) return false;
+  version++;
+  emit();
+  return true;
+}
+
 /** Bumped whenever the harvested set changes — TreeField watches this to rebuild. */
 export function getTreeHarvestVersion(): number {
   return version;
@@ -68,10 +77,10 @@ export function subscribeTreeHarvest(cb: () => void): () => void {
 }
 
 /** Fell the tree at a voxel coord: mark it gone and bank the wood. */
-export function harvestTree(x: number, y: number, z: number): { wood: number } {
+export function harvestTree(x: number, y: number, z: number, rng: SimulationRng = defaultSimulationRng, actorId?: ActorId): { wood: number } {
   if (isTreeHarvested(x, y, z)) return { wood: 0 };
   markTreeHarvested(x, y, z);
-  const wood = WOOD_MIN + Math.floor(Math.random() * (WOOD_MAX - WOOD_MIN + 1));
-  addItem('wood', wood);
+  const wood = rng.int(WOOD_MIN, WOOD_MAX);
+  addItem('wood', wood, actorId);
   return { wood };
 }

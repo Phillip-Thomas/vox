@@ -8,12 +8,13 @@ import {
   releaseKey,
   setTouchActive
 } from '../../utils/mobileInput';
+import { isBuildEnabled, subscribeBuildState } from '../../game/systems/buildState';
 
 // On-screen virtual controls for touch devices. Feeds the EXISTING input paths
 // by synthesizing keyboard + mousemove events (see mobileInput.ts), so neither
 // the on-foot nor the ship controller needs input-consumption changes. Movement
-// = left joystick (-> WASD), camera = right-half drag (-> mouse look), actions =
-// on-screen buttons (-> Space / F / Q / E).
+// = left joystick (-> WASD), camera = any non-control drag (-> mouse look),
+// actions = on-screen buttons (-> Space / F / Q / E).
 
 interface TouchControlsProps {
   /** 'fps' on foot, 'flight' in the ship — selects which action buttons show. */
@@ -22,10 +23,12 @@ interface TouchControlsProps {
 
 const JOYSTICK_SIZE = 132;
 const KNOB_SIZE = 58;
-const LOOK_SENSITIVITY = 1.22;
+const LOOK_SENSITIVITY_X = 1.72;
+const LOOK_SENSITIVITY_Y = 1.38;
 
 export default function TouchControls({ controlMode }: TouchControlsProps) {
   const [knob, setKnob] = useState({ x: 0, y: 0 });
+  const [buildActive, setBuildActive] = useState(() => isBuildEnabled());
   const joyId = useRef<number | null>(null);
   const joyCenter = useRef({ x: 0, y: 0 });
   const lookId = useRef<number | null>(null);
@@ -38,6 +41,8 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
       releaseAllKeys();
     };
   }, []);
+
+  useEffect(() => subscribeBuildState(() => setBuildActive(isBuildEnabled())), []);
 
   // --- left movement joystick ------------------------------------------------
   const onJoyDown = (e: React.PointerEvent) => {
@@ -68,18 +73,25 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
     applyJoystickToKeys(dx / max, -dy / max);
   };
 
-  // --- right-half camera look ------------------------------------------------
-  const onLookDown = (e: React.PointerEvent) => {
+  // --- camera look -----------------------------------------------------------
+  // Full-screen behind the explicit controls. The joystick/action buttons are
+  // painted above it and capture their own pointers, while every other patch of
+  // glass remains a reliable look-drag surface. This avoids the old mobile
+  // dead-zone where the left 45% of the screen felt like an invisible blocker.
+  const beginLook = (e: React.PointerEvent) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     lookId.current = e.pointerId;
     lookLast.current = { x: e.clientX, y: e.clientY };
+  };
+  const onLookDown = (e: React.PointerEvent) => {
+    beginLook(e);
   };
   const onLookMove = (e: React.PointerEvent) => {
     if (lookId.current !== e.pointerId) return;
     const dx = e.clientX - lookLast.current.x;
     const dy = e.clientY - lookLast.current.y;
     lookLast.current = { x: e.clientX, y: e.clientY };
-    dispatchLook(dx * LOOK_SENSITIVITY, dy * LOOK_SENSITIVITY);
+    dispatchLook(dx * LOOK_SENSITIVITY_X, dy * LOOK_SENSITIVITY_Y);
   };
   const onLookUp = (e: React.PointerEvent) => {
     if (lookId.current === e.pointerId) lookId.current = null;
@@ -87,10 +99,15 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
 
   // --- action buttons --------------------------------------------------------
   const holdBtn = (code: string) => ({
-    onPointerDown: (e: React.PointerEvent) => { e.preventDefault(); pressKey(code); },
-    onPointerUp: () => releaseKey(code),
+    onPointerDown: (e: React.PointerEvent) => {
+      e.preventDefault();
+      beginLook(e);
+      pressKey(code);
+    },
+    onPointerMove: onLookMove,
+    onPointerUp: (e: React.PointerEvent) => { releaseKey(code); onLookUp(e); },
     onPointerLeave: () => releaseKey(code),
-    onPointerCancel: () => releaseKey(code)
+    onPointerCancel: (e: React.PointerEvent) => { releaseKey(code); onLookUp(e); }
   });
 
   // `userSelect` alone is ignored by iOS Safari for touch — the WebkitUserSelect
@@ -113,13 +130,13 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', touchAction: 'none' }}>
-      {/* right-half look region (under the buttons) */}
+      {/* look region (under the controls) */}
       <div
         onPointerDown={onLookDown}
         onPointerMove={onLookMove}
         onPointerUp={onLookUp}
         onPointerCancel={onLookUp}
-        style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', pointerEvents: 'auto', touchAction: 'none', ...noSelect }}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'auto', touchAction: 'none', ...noSelect }}
       />
 
       {/* left movement joystick */}
@@ -130,7 +147,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
         onPointerUp={onJoyUp}
         onPointerCancel={onJoyUp}
         style={{
-          position: 'absolute', left: 24, bottom: 24,
+          position: 'absolute', left: 24, bottom: 24, zIndex: 1,
           width: JOYSTICK_SIZE, height: JOYSTICK_SIZE, borderRadius: JOYSTICK_SIZE / 2,
           background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(125,211,252,0.35)',
           pointerEvents: 'auto', touchAction: 'none', ...noSelect
@@ -150,7 +167,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
           movement joystick on phone-width screens — the old single row of up to
           4 buttons did. Primary thrust/jump lands in the bottom-right thumb spot. */}
       <div style={{
-        position: 'absolute', right: 20, bottom: 20,
+        position: 'absolute', right: 20, bottom: 20, zIndex: 1,
         display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: 12,
         justifyItems: 'center', alignItems: 'center', pointerEvents: 'auto'
       }}>
@@ -162,13 +179,22 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
             <button {...holdBtn(KEY_CODES.jump)} style={bigBtnStyle}>THR</button>
           </>
         ) : (
-          <>
-            <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
-            <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
-            <button {...holdBtn(KEY_CODES.jump)} style={{ ...bigBtnStyle, gridColumn: 2 }}>JMP</button>
-            {/* Swim down while submerged (JMP = swim up). Harmless on land. */}
-            <button {...holdBtn(KEY_CODES.descend)} style={btnStyle}>DIVE</button>
-          </>
+          buildActive ? (
+            <>
+              <button {...holdBtn(KEY_CODES.deconstruct)} style={btnStyle}>REM</button>
+              <button {...holdBtn(KEY_CODES.buildRotate)} style={btnStyle}>ROT</button>
+              <button {...holdBtn(KEY_CODES.jump)} style={btnStyle}>JMP</button>
+              <button {...holdBtn(KEY_CODES.mine)} style={bigBtnStyle}>PLACE</button>
+            </>
+          ) : (
+            <>
+              <button {...holdBtn(KEY_CODES.mine)} style={btnStyle}>MINE</button>
+              <button {...holdBtn(KEY_CODES.board)} style={btnStyle}>F</button>
+              <button {...holdBtn(KEY_CODES.jump)} style={{ ...bigBtnStyle, gridColumn: 2 }}>JMP</button>
+              {/* Swim down while submerged (JMP = swim up). Harmless on land. */}
+              <button {...holdBtn(KEY_CODES.descend)} style={btnStyle}>DIVE</button>
+            </>
+          )
         )}
       </div>
     </div>

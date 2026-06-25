@@ -3,6 +3,7 @@ import {
   isStoneCollected, getStonePickupVersion, resetStonePickup, collectStone
 } from './stonePickup.ts';
 import { getItemCount, resetInventory } from './inventorySystem.ts';
+import { createSimulationRng } from '../rng.ts';
 
 beforeEach(() => { resetStonePickup(); resetInventory(); });
 
@@ -28,5 +29,13 @@ describe('loose stone pickup', () => {
     collectStone(4, 5, 6);
     resetStonePickup();
     expect(isStoneCollected(4, 5, 6)).toBe(false);
+  });
+
+  it('can use command-provided deterministic RNG', () => {
+    const first = collectStone(1, 2, 3, createSimulationRng('stone-command', '0,0'));
+    resetStonePickup(); resetInventory();
+    const second = collectStone(1, 2, 3, createSimulationRng('stone-command', '0,0'));
+
+    expect(second).toBe(first);
   });
 });

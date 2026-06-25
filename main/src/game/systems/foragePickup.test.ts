@@ -3,6 +3,7 @@ import {
   collectForage, isForageCollected, getCollectedForage, markForageCollected, resetForagePickup
 } from './foragePickup.ts';
 import { resetInventory, getItemCount } from './inventorySystem.ts';
+import { createSimulationRng } from '../rng.ts';
 
 beforeEach(() => { resetForagePickup(); resetInventory(); });
 
@@ -28,5 +29,13 @@ describe('forage pickup', () => {
     markForageCollected(5, 5, 5);
     expect(isForageCollected(5, 5, 5)).toBe(true);
     expect(getItemCount('berry')).toBe(0); // mark doesn't grant
+  });
+
+  it('can use command-provided deterministic RNG', () => {
+    const first = collectForage(2, 0, 3, 'berry', createSimulationRng('forage-command', '0,0'));
+    resetForagePickup(); resetInventory();
+    const second = collectForage(2, 0, 3, 'berry', createSimulationRng('forage-command', '0,0'));
+
+    expect(second).toEqual(first);
   });
 });

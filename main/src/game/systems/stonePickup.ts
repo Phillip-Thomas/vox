@@ -8,6 +8,8 @@
 // signature so a picked-up stone vanishes. Reset on world swap.
 
 import { addItem } from './inventorySystem.ts';
+import { defaultSimulationRng, type SimulationRng } from '../rng.ts';
+import type { ActorId } from '../playerActors.ts';
 
 const STONE_MIN = 1;
 const STONE_MAX = 2;
@@ -47,6 +49,13 @@ export function markStoneCollected(x: number, y: number, z: number): void {
   }
 }
 
+export function unmarkStoneCollected(x: number, y: number, z: number): boolean {
+  if (!collected.delete(key(x, y, z))) return false;
+  version++;
+  emit();
+  return true;
+}
+
 export function resetStonePickup(): void {
   if (collected.size > 0) {
     collected.clear();
@@ -61,12 +70,12 @@ export function subscribeStonePickup(cb: () => void): () => void {
 }
 
 /** Collect the loose stone at a voxel coord: mark it gone and bank the stone. */
-export function collectStone(x: number, y: number, z: number): number {
+export function collectStone(x: number, y: number, z: number, rng: SimulationRng = defaultSimulationRng, actorId?: ActorId): number {
   if (collected.has(key(x, y, z))) return 0;
   collected.add(key(x, y, z));
   version++;
   emit();
-  const n = STONE_MIN + Math.floor(Math.random() * (STONE_MAX - STONE_MIN + 1));
-  addItem('stone', n);
+  const n = rng.int(STONE_MIN, STONE_MAX);
+  addItem('stone', n, actorId);
   return n;
 }

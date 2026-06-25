@@ -13,6 +13,7 @@
 
 import { addItem, getItemCount, removeItem } from './inventorySystem.ts';
 import { advanceEraTo, markMilestone } from './progressionSystem.ts';
+import { getLocalActorId, type ActorId } from '../playerActors.ts';
 
 export const MAX_MAW_CHARGE = 100;
 /** Charge restored by loading one Biofuel. */
@@ -20,40 +21,53 @@ export const BIOFUEL_CHARGE = 50;
 /** Charge spent per voxel broken with a charge-using tool. */
 export const CHARGE_PER_BREAK = 4;
 
-let charge = 0;
+const charges = new Map<ActorId, number>();
+export type MawSnapshot = Record<ActorId, number>;
 const listeners = new Set<() => void>();
 
 function emit() {
   listeners.forEach(l => l());
 }
 
-export function getMawCharge(): number {
-  return charge;
+function actorKey(actorId?: ActorId): ActorId {
+  return actorId ?? getLocalActorId();
 }
 
-export function getMawChargeFraction(): number {
-  return charge / MAX_MAW_CHARGE;
+function chargeFor(actorId?: ActorId): number {
+  return charges.get(actorKey(actorId)) ?? 0;
 }
 
-export function isMawPowered(): boolean {
-  return charge > 0;
+function setChargeFor(actorId: ActorId | undefined, amount: number): void {
+  charges.set(actorKey(actorId), Math.max(0, Math.min(MAX_MAW_CHARGE, amount)));
 }
 
-export function addMawCharge(amount: number): void {
+export function getMawCharge(actorId?: ActorId): number {
+  return chargeFor(actorId);
+}
+
+export function getMawChargeFraction(actorId?: ActorId): number {
+  return getMawCharge(actorId) / MAX_MAW_CHARGE;
+}
+
+export function isMawPowered(actorId?: ActorId): boolean {
+  return getMawCharge(actorId) > 0;
+}
+
+export function addMawCharge(amount: number, actorId?: ActorId): void {
   if (amount <= 0) return;
-  charge = Math.min(MAX_MAW_CHARGE, charge + amount);
+  setChargeFor(actorId, getMawCharge(actorId) + amount);
   emit();
 }
 
-export function consumeMawCharge(amount: number): void {
+export function consumeMawCharge(amount: number, actorId?: ActorId): void {
   if (amount <= 0) return;
-  charge = Math.max(0, charge - amount);
+  setChargeFor(actorId, getMawCharge(actorId) - amount);
   emit();
 }
 
 /** Set charge directly (for restoring a save). */
-export function setMawCharge(amount: number): void {
-  charge = Math.max(0, Math.min(MAX_MAW_CHARGE, amount));
+export function setMawCharge(amount: number, actorId?: ActorId): void {
+  setChargeFor(actorId, amount);
   emit();
 }
 
@@ -62,11 +76,11 @@ export function setMawCharge(amount: number): void {
  * true if a Biofuel was consumed. Called from the mining loop so refueling is
  * seamless — craft Biofuel and it loads itself when needed.
  */
-export function refuelFromInventory(): boolean {
-  if (charge > 0) return false;
-  if (getItemCount('biofuel') <= 0) return false;
-  if (removeItem('biofuel', 1)) {
-    addMawCharge(BIOFUEL_CHARGE);
+export function refuelFromInventory(actorId?: ActorId): boolean {
+  if (getMawCharge(actorId) > 0) return false;
+  if (getItemCount('biofuel', actorId) <= 0) return false;
+  if (removeItem('biofuel', 1, actorId)) {
+    addMawCharge(BIOFUEL_CHARGE, actorId);
     return true;
   }
   return false;
@@ -78,18 +92,35 @@ export function refuelFromInventory(): boolean {
  * is layered on by the crafting flow in a later phase; this is the canonical state
  * transition. Returns false if there is no Faulty Maw to repair.
  */
-export function repairMaw(): boolean {
-  if (!removeItem('faulty_maw', 1)) return false;
-  addItem('iron_maw', 1);
-  charge = 0; // the repaired Maw is self-powered; charge no longer applies
+export function repairMaw(actorId?: ActorId): boolean {
+  if (!removeItem('faulty_maw', 1, actorId)) return false;
+  addItem('iron_maw', 1, actorId);
+  setChargeFor(actorId, 0); // the repaired Maw is self-powered; charge no longer applies
   emit();
-  markMilestone('maw_repaired');
-  advanceEraTo('emergent');
+  markMilestone('maw_repaired', actorId);
+  advanceEraTo('emergent', actorId);
   return true;
 }
 
-export function resetMaw(): void {
-  charge = 0;
+export function resetMaw(actorId?: ActorId): void {
+  setChargeFor(actorId, 0);
+  emit();
+}
+
+export function resetAllMawState(): void {
+  charges.clear();
+  emit();
+}
+
+export function getMawSnapshot(): MawSnapshot {
+  return Object.fromEntries(charges) as MawSnapshot;
+}
+
+export function applyMawSnapshot(snapshot: MawSnapshot, options: { replace?: boolean } = {}): void {
+  if (options.replace ?? true) charges.clear();
+  for (const [actorId, amount] of Object.entries(snapshot) as [ActorId, number][]) {
+    setChargeFor(actorId, amount);
+  }
   emit();
 }
 

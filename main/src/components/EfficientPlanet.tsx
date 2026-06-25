@@ -7,6 +7,12 @@ import { buildTerrainProfile } from '../utils/terrainProfile';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getWorldTerrainData } from '../utils/worldGenCache';
 import { restoreVoxelEditsForWorld, saveVoxelEdits } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
+import {
+  applyPendingReplicatedTerrainDiff,
+  clearActiveReplicatedTerrainWorld,
+  setActiveReplicatedTerrainWorld
+} from '../game/multiplayerReplication.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { markTerrainPopulated, resetSceneReady } from '../state/appState';
@@ -35,6 +41,7 @@ interface EfficientPlanetProps {
   playerPosition?: THREE.Vector3;
   surfaceUp?: THREE.Vector3;
   terrainSeed?: number;
+  persistenceWorld?: WorldIdentity;
   debugColliders?: boolean;
   onStatsChange?: (stats: PlanetStats) => void;
 }
@@ -100,9 +107,11 @@ export default function EfficientPlanet({
   playerPosition,
   surfaceUp,
   terrainSeed = 12345,
+  persistenceWorld,
   debugColliders = false,
   onStatsChange
 }: EfficientPlanetProps) {
+  const worldPersistenceRef = persistenceWorld ?? terrainSeed;
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const rigidBodyRefs = useRef<Map<string, { setEnabled?: (enabled: boolean) => void }>>(new Map());
   const pendingCollisionBodies = useRef<Map<string, PendingCollisionBody>>(new Map());
@@ -280,20 +289,26 @@ export default function EfficientPlanet({
             requestCollisions: false
           }
         );
+        if (persistenceWorld) setActiveReplicatedTerrainWorld(persistenceWorld.worldId);
         // Replay this world's saved terrain edits (digging) onto the freshly
         // generated shell, BEFORE colliders are queued — so removed voxels get no
         // collider and revealed interiors do. Refused if the gen fingerprint differs.
-        restoreVoxelEditsForWorld(terrainSeed);
+        restoreVoxelEditsForWorld(worldPersistenceRef);
+        const replicatedTerrain = persistenceWorld
+          ? applyPendingReplicatedTerrainDiff(persistenceWorld.worldId)
+          : { applied: 0, queued: 0 };
         const queuedColliders = queueInitialCollisionBodies();
         flushPendingCollisionBodies();
-        return { added, queuedColliders };
+        return { added, queuedColliders, replicatedTerrain };
       },
       result => ({
         buffer: dynamicBufferSize,
         original: originalTerrain.length,
         exposed: initialVoxels.length,
         added: result.added,
-        queuedColliders: result.queuedColliders
+        queuedColliders: result.queuedColliders,
+        replicatedTerrainApplied: result.replicatedTerrain.applied,
+        replicatedTerrainQueued: result.replicatedTerrain.queued
       })
     );
     // The voxel mesh now has instances (count > 0); tell the app shell so the
@@ -313,7 +328,8 @@ export default function EfficientPlanet({
       }
       // Persist this world's dig BEFORE reset() clears deletedTerrain (App-level
       // autosave cleanup races this child cleanup, so save here where ordering holds).
-      saveVoxelEdits(terrainSeed);
+      saveVoxelEdits(worldPersistenceRef);
+      if (persistenceWorld) clearActiveReplicatedTerrainWorld(persistenceWorld.worldId);
       voxelSystem.reset();
       // World swap / unmount: the next world must re-prove readiness.
       resetSceneReady();
@@ -325,10 +341,12 @@ export default function EfficientPlanet({
     initialTerrainMeshData,
     originalTerrain,
     originalTerrainByCoord,
+    persistenceWorld,
     queueInitialCollisionBodies,
     removeCollisionBody,
     requestCollisionBody,
-    terrainSeed
+    terrainSeed,
+    worldPersistenceRef
   ]);
 
   const syncCollisionBodies = useCallback(() => {

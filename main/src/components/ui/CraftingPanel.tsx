@@ -3,14 +3,17 @@ import { theme, glassPanel } from '../../ui/theme.ts';
 import { getItem } from '../../game/data/items.ts';
 import { getAccessibleStations, getStation, type StationId } from '../../game/data/stations.ts';
 import { recipesForStation, type Recipe } from '../../game/data/recipes.ts';
-import { canCraft, craft, type CraftContext } from '../../game/systems/craftingSystem.ts';
-import { getItemCount, removeItem, subscribeInventory } from '../../game/systems/inventorySystem.ts';
-import { placeCampfire } from '../../game/systems/campfires.ts';
+import { canCraft, type CraftContext } from '../../game/systems/craftingSystem.ts';
+import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
+import type { CommandContext } from '../../game/commands.ts';
+import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gameplayCommands.ts';
+import { sendMultiplayerAuthoritativeCommand, sendMultiplayerCommandEvents } from '../../game/multiplayerSession.ts';
 
 interface CraftingPanelProps {
   open: boolean;
   onClose: () => void;
+  commandContext: CommandContext;
 }
 
 /**
@@ -20,7 +23,7 @@ interface CraftingPanelProps {
  * materials are met. Subscribes to the inventory so counts + craftability update
  * live as you craft. Pointer-lock / pause coordination is handled by App.
  */
-const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose }) => {
+const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandContext }) => {
   const [, force] = useState(0);
   useEffect(() => subscribeInventory(() => force(n => n + 1)), []);
   if (!open) return null;
@@ -56,14 +59,14 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose }) => {
         </div>
 
         {stations.map(stationId => (
-          <StationSection key={stationId} stationId={stationId} ctx={ctx} />
+          <StationSection key={stationId} stationId={stationId} ctx={ctx} commandContext={commandContext} />
         ))}
       </div>
     </div>
   );
 };
 
-const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext }> = ({ stationId, ctx }) => {
+const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext; commandContext: CommandContext }> = ({ stationId, ctx, commandContext }) => {
   const recipes = recipesForStation(stationId);
   if (recipes.length === 0) return null;
   const station = getStation(stationId);
@@ -74,13 +77,13 @@ const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext }> = ({
       </div>
       <div style={{ fontSize: 11, color: theme.color.textFaint, marginBottom: 12 }}>{station.description}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {recipes.map(r => <RecipeRow key={r.id} recipe={r} ctx={ctx} />)}
+        {recipes.map(r => <RecipeRow key={r.id} recipe={r} ctx={ctx} commandContext={commandContext} />)}
       </div>
     </div>
   );
 };
 
-const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext }> = ({ recipe, ctx }) => {
+const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: CommandContext }> = ({ recipe, ctx, commandContext }) => {
   const out = getItem(recipe.id);
   const check = canCraft(recipe, ctx);
   const affordable = check.ok;
@@ -117,13 +120,22 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext }> = ({ recipe, ct
       <button
         onClick={() => {
           if (!affordable) return;
-          const res = craft(recipe, ctx);
-          // A campfire is placed where you stand, not stockpiled — drop it to the
-          // player's feet and consume the just-crafted item.
-          if (res.ok && recipe.id === 'campfire') {
+          if (recipe.id === 'campfire') {
+            // A campfire is placed where you stand, not stockpiled — drop it to the
+            // player's feet and consume the just-crafted item.
             const feet = getPlayerWorldPosition().addScaledVector(getPlayerUp(), -1.1);
-            placeCampfire(feet, getPlayerUp());
-            removeItem('campfire', 1);
+            const up = getPlayerUp();
+            const result = craftAndPlaceCampfireCommand(commandContext, { recipe, craftContext: ctx, position: feet, up });
+            if (result.ok) {
+              sendMultiplayerAuthoritativeCommand(result, 'craft_campfire', {
+                recipeId: recipe.id,
+                pos: [feet.x, feet.y, feet.z],
+                up: [up.x, up.y, up.z]
+              });
+            }
+          } else {
+            const result = craftRecipeCommand(commandContext, { recipe, craftContext: ctx });
+            if (result.ok) sendMultiplayerCommandEvents(result);
           }
         }}
         disabled={!affordable}

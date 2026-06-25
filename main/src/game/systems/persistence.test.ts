@@ -19,6 +19,8 @@ import { getVitals, setVitals, resetVitals } from './survivalVitals.ts';
 import { collectForage, isForageCollected, resetForagePickup } from './foragePickup.ts';
 import { getWaterskinFill, fillWaterskin, resetWaterskin } from './consumeSystem.ts';
 import { restoreForageForWorld } from './persistence.ts';
+import { createWorldIdentity } from '../worldIdentity.ts';
+import { GENERATION_SCHEMA_VERSION } from '../schema.ts';
 
 // localStorage isn't present in the vitest node env — stub a Map-backed one.
 class MemStorage {
@@ -32,6 +34,11 @@ class MemStorage {
 }
 
 const SEED = 12345;
+const PREFIX = `pvx.v${GENERATION_SCHEMA_VERSION}`;
+const WORLD = createWorldIdentity({ x: 5, y: -2 });
+const OTHER_WORLD = createWorldIdentity({ x: -4, y: 8 });
+const worldKey = () => `${PREFIX}.world.${WORLD.worldId}`;
+const legacyWorldKey = () => `${PREFIX}.world.${WORLD.seed}`;
 
 beforeEach(() => {
   (globalThis as unknown as { localStorage: MemStorage }).localStorage = new MemStorage();
@@ -97,6 +104,53 @@ describe('per-world save round-trip', () => {
     restoreStructuresForWorld(SEED + 1); // a different planet
     expect(getPieces()).toHaveLength(0);
   });
+
+  it('writes world-id keys for world-aware save paths', () => {
+    placePiece([1, 2, 3], 3, 'foundation', 'wood');
+
+    saveWorld(WORLD);
+
+    const storage = globalThis.localStorage;
+    expect(storage.getItem(worldKey())).toBeTruthy();
+    expect(storage.getItem(legacyWorldKey())).toBeNull();
+  });
+
+  it('migrates a legacy seed-keyed save when restoring with a known world identity', () => {
+    placePiece([1, 2, 3], 3, 'foundation', 'wood');
+    saveWorld(WORLD.seed);
+    resetStructures();
+
+    restoreStructuresForWorld(WORLD);
+
+    expect(hasPanel(1, 2, 3, 3)).toBe(true);
+    expect(globalThis.localStorage.getItem(worldKey())).toBeTruthy();
+  });
+
+  it('keeps orphan seed-only saves quarantined without a world identity', () => {
+    placePiece([1, 2, 3], 3, 'foundation', 'wood');
+    saveWorld(WORLD.seed);
+    resetStructures();
+
+    restoreStructuresForWorld(WORLD.seed);
+
+    expect(hasPanel(1, 2, 3, 3)).toBe(true);
+    expect(globalThis.localStorage.getItem(legacyWorldKey())).toBeTruthy();
+    expect(globalThis.localStorage.getItem(worldKey())).toBeNull();
+  });
+
+  it('prefers the world-id save over a stale legacy seed save', () => {
+    placePiece([1, 0, 0], 3, 'foundation', 'wood');
+    saveWorld(WORLD.seed);
+    resetStructures();
+    placePiece([2, 0, 0], 3, 'foundation', 'wood');
+    saveWorld(WORLD);
+    resetStructures();
+
+    restoreStructuresForWorld(WORLD);
+
+    expect(hasPanel(2, 0, 0, 3)).toBe(true);
+    expect(hasPanel(1, 0, 0, 3)).toBe(false);
+  });
 });
 
 describe('terrain voxel edits round-trip', () => {
@@ -135,6 +189,48 @@ describe('terrain voxel edits round-trip', () => {
     expect(voxelSystem.hasVoxel(0, 1, 0)).toBe(false);
   });
 
+  it('uses world-id keys and can migrates legacy seed-keyed voxel edits', () => {
+    const all = block(1);
+    load(all);
+    voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
+    saveVoxelEdits(WORLD.seed);
+
+    load(all);
+    restoreVoxelEditsForWorld(WORLD);
+
+    expect(voxelSystem.isDeleted(0, 1, 0)).toBe(true);
+    const raw = globalThis.localStorage.getItem(`${worldKey()}.voxels`);
+    expect(raw).toBeTruthy();
+    expect(JSON.parse(raw!).generationSchemaVersion).toBe(GENERATION_SCHEMA_VERSION);
+  });
+
+  it('persists deleted terrain as the durable diff without editVersion', () => {
+    const all = block(1);
+    load(all);
+    voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
+
+    saveVoxelEdits(WORLD);
+
+    const raw = globalThis.localStorage.getItem(`${worldKey()}.voxels`);
+    expect(raw).toBeTruthy();
+    const saved = JSON.parse(raw!);
+    expect(saved.removed).toEqual([[0, 1, 0]]);
+    expect(saved.fingerprint).toBe(all.length);
+    expect(saved.editVersion).toBeUndefined();
+  });
+
+  it('does not restore one world id\'s voxel diff into another world', () => {
+    const all = block(1);
+    load(all);
+    voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
+    saveVoxelEdits(WORLD);
+
+    load(all);
+    restoreVoxelEditsForWorld(OTHER_WORLD);
+
+    expect(voxelSystem.isDeleted(0, 1, 0)).toBe(false);
+  });
+
   it('refuses a stale save when the generation fingerprint differs', () => {
     const all = block(1);
     load(all);
@@ -164,6 +260,17 @@ describe('player pose + time-of-day', () => {
     expect(p!.forward[0]).toBeCloseTo(1); // normalized +X
     expect(p!.pitch).toBeCloseTo(0.3);
     expect(loadPlayerPose(556)).toBeNull(); // different world: no pose
+  });
+
+  it('migrates legacy seed-keyed player pose to the world-id key', () => {
+    setPlayerWorldPosition(new THREE.Vector3(4, 5, 6));
+    setPlayerLook(new THREE.Vector3(0, 0, 1), 0.2);
+    savePlayerPose(WORLD.seed);
+
+    const p = loadPlayerPose(WORLD);
+
+    expect(p?.pos).toEqual([4, 5, 6]);
+    expect(globalThis.localStorage.getItem(`${worldKey()}.player`)).toBeTruthy();
   });
 });
 

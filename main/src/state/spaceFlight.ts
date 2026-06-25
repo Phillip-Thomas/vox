@@ -1,10 +1,27 @@
 import { useSyncExternalStore } from 'react';
 import type { WorldCoordinate } from '../utils/worldCoordinates.ts';
+import { getLocalActorId } from '../game/playerActors.ts';
+import {
+  setPlayerFlightState
+} from '../game/systems/playerFlightSystem.ts';
+import type {
+  SpaceFlightSnapshot,
+  WarpRuntime,
+  ShardHandoffState
+} from '../game/playerFlight.ts';
 import {
   finishWarpMetrics,
   markWarpMetric,
   startWarpMetrics
 } from '../utils/warpMetrics.ts';
+
+export type {
+  ControlMode,
+  FlightPhase,
+  SpaceFlightSnapshot,
+  WarpKind,
+  WarpRuntime
+} from '../game/playerFlight.ts';
 
 /**
  * Travel state machine for No Man's Sky-style seamless inter-world flight.
@@ -30,37 +47,6 @@ import {
  * progress lives in a separate MUTABLE runtime object that is NOT part of the
  * snapshot — overlay/cockpit read it every frame without triggering re-renders.
  */
-
-export type FlightPhase = 'surface' | 'launch' | 'deep_space' | 'approach' | 'descent';
-export type ControlMode = 'fps' | 'flight';
-/**
- * 'travel' = the full interstellar jump (swaps the voxel world at the midpoint).
- * 'enter'/'leave' = the short, softer "mini warp" that masks the deep-space ⇄
- * atmosphere sky change (no world swap — just flips the phase at the midpoint).
- */
-export type WarpKind = 'travel' | 'enter' | 'leave';
-
-export interface SpaceFlightSnapshot {
-  phase: FlightPhase;
-  controlMode: ControlMode;
-  /** Locked-in destination once a travel warp has begun. */
-  destination: WorldCoordinate | null;
-  /** Impostor currently aimed at / locked while flying (pre-travel). */
-  target: WorldCoordinate | null;
-}
-
-export interface WarpRuntime {
-  active: boolean;
-  /** 0..1 across the whole effect; peak white-out at 0.5. */
-  progress: number;
-  kind: WarpKind;
-  /** Seconds for this particular warp (full jump vs quick atmosphere crossing). */
-  duration: number;
-  /** Peak overlay strength (0..1) — full white for travel, softer for mini warps. */
-  intensity: number;
-  /** Set once the midpoint side-effects (world swap / phase change) have fired. */
-  midpointFired: boolean;
-}
 
 /** Seconds for a full interstellar warp (white-out included). */
 export const WARP_DURATION = 1.2;
@@ -89,6 +75,7 @@ const warp: WarpRuntime = {
 };
 
 const listeners = new Set<() => void>();
+let localFlightSeq = 0;
 
 /**
  * Handler the host (App.tsx) registers to perform the ACTUAL world swap
@@ -104,7 +91,35 @@ function emit(): void {
 
 function setSnapshot(patch: Partial<SpaceFlightSnapshot>): void {
   snapshot = { ...snapshot, ...patch };
+  publishLocalFlightState();
   emit();
+}
+
+function currentHandoffState(): ShardHandoffState | undefined {
+  if (warp.kind !== 'travel') return undefined;
+  if (warp.active) {
+    return {
+      status: warp.midpointFired ? 'midpoint' : 'requested',
+      destination: snapshot.destination
+    };
+  }
+  if (warp.progress >= 1 && snapshot.destination) {
+    return {
+      status: 'complete',
+      destination: snapshot.destination
+    };
+  }
+  return undefined;
+}
+
+function publishLocalFlightState(): void {
+  setPlayerFlightState({
+    playerId: getLocalActorId(),
+    seq: ++localFlightSeq,
+    timeMs: Date.now(),
+    ...snapshot,
+    handoff: currentHandoffState()
+  });
 }
 
 // --- subscription (useSyncExternalStore) ------------------------------------
@@ -301,5 +316,6 @@ export function tickWarp(dt: number): void {
     warp.active = false;
     warp.progress = 1;
     if (warp.kind === 'travel') finishWarpMetrics();
+    publishLocalFlightState();
   }
 }

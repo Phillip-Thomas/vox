@@ -9,8 +9,11 @@
 import type { Recipe } from '../data/recipes.ts';
 import type { StationId } from '../data/stations.ts';
 import { addItem, hasItems, removeItem } from './inventorySystem.ts';
+import type { ActorId } from '../playerActors.ts';
 
 export interface CraftContext {
+  /** Actor whose inventory pays for and receives recipe stacks. Defaults local. */
+  actorId?: ActorId;
   /** Stations the player can currently use (see stations.getAccessibleStations). */
   stations: StationId[];
   /** Unlocked tech ids (Phase 3). Absent → no recipe is tech-gated. */
@@ -35,7 +38,7 @@ export function recipeReady(recipe: Recipe, ctx: CraftContext): boolean {
 export function canCraft(recipe: Recipe, ctx: CraftContext): CraftCheck {
   if (!ctx.stations.includes(recipe.station)) return { ok: false, blockedBy: 'station' };
   if (recipe.requiredTech && !ctx.unlocked?.has(recipe.requiredTech)) return { ok: false, blockedBy: 'tech' };
-  if (!hasItems(recipe.inputs)) return { ok: false, blockedBy: 'materials' };
+  if (!hasItems(recipe.inputs, ctx.actorId)) return { ok: false, blockedBy: 'materials' };
   return { ok: true };
 }
 
@@ -47,7 +50,7 @@ export function craft(recipe: Recipe, ctx: CraftContext): CraftCheck {
   const check = canCraft(recipe, ctx);
   if (!check.ok) return check;
   // hasItems already guaranteed every input is fully covered, so these all succeed.
-  for (const stack of recipe.inputs) removeItem(stack.id, stack.qty);
-  for (const stack of recipe.outputs) addItem(stack.id, stack.qty);
+  for (const stack of recipe.inputs) removeItem(stack.id, stack.qty, ctx.actorId);
+  for (const stack of recipe.outputs) addItem(stack.id, stack.qty, ctx.actorId);
   return { ok: true };
 }

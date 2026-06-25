@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { getCurrentDayPhase } from '../SkyController.tsx';
+import { getCurrentDayPhase } from '../../game/worldClock.ts';
 import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
 
 // --- Collaborative vantage recorder ------------------------------------------

@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { Object3D, AmbientLight, DirectionalLight, HemisphereLight } from 'three'
 import { ThreeElements } from '@react-three/fiber'
 
@@ -18,4 +20,4 @@ declare module '@react-three/fiber' {
     hemisphereLight: JSX.IntrinsicElements['hemisphereLight']
     primitive: JSX.IntrinsicElements['primitive'] & { object: Object3D }
   }
-} 
+}

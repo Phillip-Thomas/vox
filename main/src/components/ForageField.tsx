@@ -9,9 +9,13 @@ import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
 import { buildGrassProfile } from '../utils/grassProfile';
 import {
-  collectForage, getForagePickupVersion, isForageCollected, resetForagePickup
+  getForagePickupVersion, isForageCollected, resetForagePickup
 } from '../game/systems/foragePickup';
+import type { CommandContext } from '../game/commands.ts';
+import { collectForageCommand } from '../game/gameplayCommands.ts';
+import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
 import { restoreForageForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
 
 // Edible plants — the FOOD bootstrap. Biome-gated (lush planets feed you, arid ones
@@ -25,7 +29,9 @@ const SURFACE_OFFSET = 0.55;  // bush base rests just above the voxel face
 const HEADROOM = 32;
 
 interface ForageFieldProps {
+  commandContext: CommandContext;
   terrainSeed: number;
+  persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
 }
 
@@ -70,7 +76,7 @@ function isForageVoxel(x: number, y: number, z: number, seed: number, density: n
 }
 
 /** Scattered edible plants, collected by proximity (walk near → +berries/root). */
-export default function ForageField({ terrainSeed, playerPosition }: ForageFieldProps) {
+export default function ForageField({ commandContext, terrainSeed, persistenceWorld, playerPosition }: ForageFieldProps) {
   const geometry = useMemo(() => buildForageGeometry(), []);
   const material = useMemo(() => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0 }), []);
   const density = useMemo(() => {
@@ -153,7 +159,10 @@ export default function ForageField({ terrainSeed, playerPosition }: ForageField
   }, [capacity]);
 
   // World-relative — clear, then load this world's already-collected forage.
-  useEffect(() => { resetForagePickup(); restoreForageForWorld(terrainSeed); }, [terrainSeed]);
+  useEffect(() => {
+    resetForagePickup();
+    restoreForageForWorld(persistenceWorld ?? terrainSeed);
+  }, [persistenceWorld, terrainSeed]);
 
   // Dispose GPU resources on unmount only (geometry/material are stable useMemos, so
   // this must NOT fire on a mere terrainSeed change).
@@ -165,8 +174,16 @@ export default function ForageField({ terrainSeed, playerPosition }: ForageField
       for (const node of nearNodes.current) {
         if (isForageCollected(node.x, node.y, node.z)) continue;
         if (node.w.distanceToSquared(playerPosition) <= rSq) {
-          collectForage(node.x, node.y, node.z, isRootNode(node.x, node.y, node.z, terrainSeed) ? 'root' : 'berry');
-          playSfx('mine'); // a soft confirmation
+          const result = collectForageCommand(commandContext, {
+            x: node.x,
+            y: node.y,
+            z: node.z,
+            kind: isRootNode(node.x, node.y, node.z, terrainSeed) ? 'root' : 'berry'
+          });
+          if (result.ok) {
+            sendMultiplayerCommandEvents(result);
+            playSfx('mine'); // a soft confirmation
+          }
         }
       }
     }

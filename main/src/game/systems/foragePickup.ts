@@ -7,6 +7,8 @@
 
 import { addItem } from './inventorySystem.ts';
 import type { ItemId } from '../data/items.ts';
+import { defaultSimulationRng, type SimulationRng } from '../rng.ts';
+import type { ActorId } from '../playerActors.ts';
 
 const collected = new Set<string>();
 let version = 0;
@@ -35,6 +37,13 @@ export function markForageCollected(x: number, y: number, z: number): void {
   }
 }
 
+export function unmarkForageCollected(x: number, y: number, z: number): boolean {
+  if (!collected.delete(key(x, y, z))) return false;
+  version++;
+  emit();
+  return true;
+}
+
 export function resetForagePickup(): void {
   if (collected.size > 0) {
     collected.clear();
@@ -50,13 +59,20 @@ export function subscribeForagePickup(cb: () => void): () => void {
 
 /** Collect a forage node: mark gone + bank its yield. `kind` (decided by the field
  *  from a seeded hash) picks berries vs a root. Returns the granted stack, or null. */
-export function collectForage(x: number, y: number, z: number, kind: 'berry' | 'root'): { id: ItemId; qty: number } | null {
+export function collectForage(
+  x: number,
+  y: number,
+  z: number,
+  kind: 'berry' | 'root',
+  rng: SimulationRng = defaultSimulationRng,
+  actorId?: ActorId
+): { id: ItemId; qty: number } | null {
   if (collected.has(key(x, y, z))) return null;
   collected.add(key(x, y, z));
   version++;
   emit();
-  if (kind === 'root') { addItem('root', 1); return { id: 'root', qty: 1 }; }
-  const n = 1 + Math.floor(Math.random() * 2); // 1-2 berries
-  addItem('berry', n);
+  if (kind === 'root') { addItem('root', 1, actorId); return { id: 'root', qty: 1 }; }
+  const n = rng.int(1, 2); // 1-2 berries
+  addItem('berry', n, actorId);
   return { id: 'berry', qty: n };
 }

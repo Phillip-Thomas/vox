@@ -12,6 +12,7 @@ import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
 import { getTreeHarvestVersion, isTreeHarvested, resetTreeHarvest } from '../game/systems/treeHarvest';
 import { restoreTreesForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 import {
   createBarkMaterial,
   createLeafMaterial,
@@ -33,6 +34,7 @@ const IMPOSTOR_FRAC = 0.5;
 interface TreeFieldProps {
   planetSize: number;
   terrainSeed: number;
+  persistenceWorld?: WorldIdentity;
   /** Player/camera world position for far-distance culling (optional). */
   playerPosition?: THREE.Vector3;
 }
@@ -89,7 +91,7 @@ function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
  * on re-render); count is owned imperatively in the fill + self-healed in
  * useFrame across all meshes.
  */
-export default function TreeField({ planetSize, terrainSeed, playerPosition }: TreeFieldProps) {
+export default function TreeField({ planetSize, terrainSeed, persistenceWorld, playerPosition }: TreeFieldProps) {
   const density = getGraphicsQuality().treeDensity;
 
   // Per-planet species: profile from terrainSeed ONLY.
@@ -287,13 +289,13 @@ export default function TreeField({ planetSize, terrainSeed, playerPosition }: T
   // planet). Clear the pick handle on unmount so a stale mesh is never raycast.
   useEffect(() => {
     resetTreeHarvest();
-    restoreTreesForWorld(terrainSeed); // load this world's already-felled trees
+    restoreTreesForWorld(persistenceWorld ?? terrainSeed); // load this world's already-felled trees
     return () => {
       treeFieldHandle.trunk = null;
       treeFieldHandle.leaf = null;
       treeFieldHandle.slotVoxel.length = 0;
     };
-  }, [terrainSeed]);
+  }, [persistenceWorld, terrainSeed]);
 
   useEffect(() => {
     if (capacity <= 0) return;

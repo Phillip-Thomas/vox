@@ -10,6 +10,7 @@ import { BLOCKS, type BlockId } from '../data/blocks.ts';
 import type { HarvestClass } from '../data/items.ts';
 import { RESOURCES, type ResourceId } from '../data/resources.ts';
 import type { ResourceDeposit } from '../generation/resourceDeposits.ts';
+import { defaultSimulationRng, type SimulationRng } from '../rng.ts';
 import { addResource } from './inventorySystem.ts';
 
 export interface Drop {
@@ -22,6 +23,7 @@ export interface HarvestVoxelInput {
   deposit?: ResourceDeposit | null;
   toolTier?: number;
   bank?: boolean;
+  rng?: SimulationRng;
 }
 
 export interface HarvestResult {
@@ -74,10 +76,11 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
     };
   }
 
+  const rng = input.rng ?? defaultSimulationRng;
   const drops: Drop[] = [];
   for (const id of dropsForBlock(input.blockId, input.deposit)) {
     const [lo, hi] = RESOURCES[id].yield;
-    const rolled = lo + Math.floor(Math.random() * (hi - lo + 1));
+    const rolled = rng.int(lo, hi);
     const richness = input.deposit?.resourceId === id ? input.deposit.richness : 1;
     const qty = Math.max(0, Math.round(rolled * richness));
     if (qty <= 0) continue;
@@ -87,8 +90,8 @@ export function harvestVoxel(input: HarvestVoxelInput): HarvestResult {
 
   // Chance-based extras (e.g. flint from stone), rolled independently.
   for (const bonus of BLOCKS[input.blockId].bonusDrops ?? []) {
-    if (Math.random() >= bonus.chance) continue;
-    const qty = bonus.min + Math.floor(Math.random() * (bonus.max - bonus.min + 1));
+    if (!rng.chance(bonus.chance)) continue;
+    const qty = rng.int(bonus.min, bonus.max);
     if (qty <= 0) continue;
     if (input.bank !== false) addResource(bonus.id, qty);
     drops.push({ id: bonus.id, qty });
@@ -142,6 +145,6 @@ export function mineDurationMs(input: HarvestVoxelInput, opts?: { speedMul?: num
  * Legacy material wrapper. It grants a high tool tier so existing tests and
  * temporary material-based callers keep working during the block-first migration.
  */
-export function harvestMaterial(material: MaterialType): Drop[] {
-  return harvestVoxel({ blockId: materialToLegacyBlock(material), toolTier: 99 }).drops;
+export function harvestMaterial(material: MaterialType, rng?: SimulationRng): Drop[] {
+  return harvestVoxel({ blockId: materialToLegacyBlock(material), toolTier: 99, rng }).drops;
 }

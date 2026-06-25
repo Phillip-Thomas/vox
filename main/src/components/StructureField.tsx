@@ -5,9 +5,15 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { VOXEL_SCALE, voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import {
-  FACE_DIRS, getPieces, resetStructures, subscribeStructures, type StructurePiece
+  FACE_DIRS,
+  getPieces,
+  isStructurePieceSolid,
+  resetStructures,
+  subscribeStructures,
+  type StructurePiece
 } from '../game/systems/structureSystem';
 import { restoreStructuresForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { BUILD_PIECES, type BuildPieceType } from '../game/data/buildPieces';
 import { BUILD_MATERIALS, type BuildMaterialId } from '../game/data/buildMaterials';
 import { getBuildGhost } from '../game/systems/buildGhost';
@@ -96,15 +102,6 @@ function makeSlopedRoof() {
   return new THREE.BoxGeometry(PANEL, THICK * 1.6, len).rotateX(-Math.PI / 4);
 }
 
-// Solid (blocks movement) vs passable. A doorway is passable as an empty frame, but
-// solid when its door leaf is fitted + closed; legacy 'door' pieces solid while closed.
-function solidFor(p: StructurePiece): boolean {
-  const def = BUILD_PIECES[p.type];
-  if (p.type === 'doorway') return Boolean(p.leaf) && !p.open;
-  if (def.openable) return !p.open;
-  return !def.passable;
-}
-
 const _Y = new THREE.Vector3(0, 1, 0); // door-swing axis (local vertical of the panel frame)
 
 // Orientation for a wall-family panel that has an UP/DOWN asymmetry (doorway lintel,
@@ -159,7 +156,7 @@ function createBuildMaterial(colorHex: number): THREE.MeshStandardMaterial {
 }
 
 /** Renders all placed structure pieces + a fixed collider per solid piece. */
-export default function StructureField({ terrainSeed }: { terrainSeed: number }) {
+export default function StructureField({ terrainSeed, persistenceWorld }: { terrainSeed: number; persistenceWorld?: WorldIdentity }) {
   const groupRef = useRef<THREE.Group>(null);
   const [list, setList] = useState<StructurePiece[]>(() => getPieces());
 
@@ -180,7 +177,11 @@ export default function StructureField({ terrainSeed }: { terrainSeed: number })
 
   useEffect(() => subscribeStructures(() => setList(getPieces())), []);
   // World-relative: clear, then load THIS world's saved structures.
-  useEffect(() => { resetStructures(); restoreStructuresForWorld(terrainSeed); setList(getPieces()); }, [terrainSeed]);
+  useEffect(() => {
+    resetStructures();
+    restoreStructuresForWorld(persistenceWorld ?? terrainSeed);
+    setList(getPieces());
+  }, [persistenceWorld, terrainSeed]);
   useEffect(() => {
     structureFieldHandle.group = groupRef.current;
     return () => {
@@ -227,7 +228,7 @@ export default function StructureField({ terrainSeed }: { terrainSeed: number })
           );
         })}
       </group>
-      {list.filter(solidFor).map(p => {
+      {list.filter(isStructurePieceSolid).map(p => {
         if (BUILD_PIECES[p.type].shape === 'volume') {
           // Tilted ramp/slab collider, in the piece's oriented frame (matches the mesh).
           const e = new THREE.Euler().setFromQuaternion(volumeQuat(p.up ?? 2, p.orient ?? 0));

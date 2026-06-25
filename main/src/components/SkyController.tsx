@@ -7,6 +7,12 @@ import { buildBiomeProfile } from '../utils/biomeProfile.ts';
 import { localSunElevation, daylightFromElevation, goldenFromElevation } from '../utils/dayNight.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
+import {
+  STATIC_DAY_PHASE,
+  getWorldClockSource,
+  resolveWorldDayPhase,
+  setCurrentDayPhase
+} from '../game/worldClock.ts';
 import SpaceSky from './SpaceSky.tsx';
 
 // Sun/moon are ~CONSTANT directional lights so the lit/dark hemispheres are a
@@ -22,13 +28,11 @@ const MOON_INTENSITY = 0.6;
  * scene fog, and the day/night cycle drive. The visible sky is the unified
  * SpaceSky "cosmos-through-glass" dome (it reads getSunDirection()/
  * getMoonDirection() and the daylight/golden math computed here). A slow
- * day/night cycle is driven from clock.elapsedTime. All time-driven motion is
- * gated on getGraphicsQuality().animatedShaders so LOW/POTATO profiles hold a
- * static midday with no per-frame cost.
+ * day/night cycle is resolved through the game world-clock seam, with the local
+ * client owning that clock until a server source is attached. All time-driven
+ * decorative shader motion is gated on getGraphicsQuality().animatedShaders.
+ * Server-owned co-op time still drives the day/night phase on every graphics tier.
  */
-
-/** Length of one full day/night cycle in seconds. */
-export const DAY_LENGTH_SECONDS = 240;
 
 /** World-space distance the sun light is placed from the planet center. */
 const SUN_LIGHT_RADIUS = 220;
@@ -51,9 +55,6 @@ const FLIGHT_FOG_DENSITY = 0.0022;
 function fogDensityForPhase(phase: string): number {
   return phase === 'descent' || phase === 'launch' ? FLIGHT_FOG_DENSITY : SURFACE_FOG_DENSITY;
 }
-
-/** Phase (0..1) used when animation is disabled — midday. */
-const STATIC_DAY_PHASE = 0.25;
 
 // ---------------------------------------------------------------------------
 // Shared sun direction. Later phases (e.g. Phase 4 water fresnel) read this to
@@ -100,21 +101,6 @@ const forcedDayPhase: number | null = (() => {
 /** Forced day phase from ?dayphase=, or null when the cycle runs normally. */
 export function getForcedDayPhase(): number | null {
   return forcedDayPhase;
-}
-
-// The day phase currently being rendered (forced value, or the running cycle's
-// live phase). Lets tools like the vantage recorder capture the ACTUAL
-// time-of-day on screen, not just an explicit ?dayphase.
-let liveDayPhase = forcedDayPhase ?? 0.25;
-export function getCurrentDayPhase(): number {
-  return forcedDayPhase ?? liveDayPhase;
-}
-
-// Offset added to the running cycle so a restored save resumes at its saved
-// time-of-day (then keeps cycling). Set once at boot by persistence.
-let dayPhaseOffset = 0;
-export function setDayPhaseOffset(phase: number): void {
-  dayPhaseOffset = ((phase % 1) + 1) % 1;
 }
 
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
@@ -278,6 +264,8 @@ interface SkyControllerProps {
   /** Current planet seed — drives a SUBTLE per-biome fog tint + density so each
    *  world's atmosphere feels distinct (Phase 1 cohesion). */
   terrainSeed?: number;
+  /** Current world identity metadata for the server-ownable clock seam. */
+  worldId?: string;
 }
 
 // Subtle per-biome fog: a low-saturation atmosphere tint + small density variation,
@@ -294,7 +282,7 @@ function biomeFog(terrainSeed: number): { tint: THREE.Color; densityMul: number 
   return { tint, densityMul };
 }
 
-export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
+export default function SkyController({ terrainSeed = 0, worldId }: SkyControllerProps) {
   const scene = useThree(state => state.scene);
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
@@ -323,10 +311,9 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
   }, [scene, fog]);
 
   // Apply the correct mode once on mount / whenever the space<->surface boundary
-  // is crossed, so the first frame is right even on profiles with
-  // animatedShaders=false (which skip the per-frame update below). In deep space
-  // we collapse the atmosphere/fog and switch to the steady space key light; in
-  // every other phase we restore the static-midday day/night state.
+  // is crossed, so the first frame is right even before a server clock snapshot
+  // arrives. In deep space we collapse the atmosphere/fog and switch to the steady
+  // space key light; in every other phase we restore the static-midday fallback.
   useEffect(() => {
     const sunLight = sunLightRef.current;
     const moonLight = moonLightRef.current;
@@ -336,8 +323,9 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
       applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
-    liveDayPhase = forcedDayPhase ?? STATIC_DAY_PHASE;
-    const r = applyDayPhase(liveDayPhase, sunLight, moonLight, ambient, fog);
+    const staticDayPhase = forcedDayPhase ?? STATIC_DAY_PHASE;
+    setCurrentDayPhase(staticDayPhase);
+    const r = applyDayPhase(staticDayPhase, sunLight, moonLight, ambient, fog);
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
     baseFogColor.current.copy(fog.color);
@@ -353,6 +341,8 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
     if (!sunLight || !moonLight || !ambient) return;
 
     const animated = getGraphicsQuality().animatedShaders;
+    const clockSource = getWorldClockSource(state.clock.elapsedTime, worldId);
+    const shouldUpdateDayPhase = animated || clockSource.owner === 'server' || forcedDayPhase != null;
 
     // Deep space: always-on space backdrop, atmosphere/fog collapsed, steady key
     // light — held regardless of the day cycle AND regardless of animatedShaders.
@@ -365,17 +355,19 @@ export default function SkyController({ terrainSeed = 0 }: SkyControllerProps) {
       return;
     }
 
-    // When not animated, the static mount/boundary effect already set the base
-    // day/night fog; we still blend the underwater override over it each frame
-    // (submergence changes per frame), then skip the rest. (SpaceSky owns its own
-    // gated useFrame.)
-    if (!animated) {
+    // Offline LOW/POTATO keeps the old static-midday behavior, but server-owned
+    // co-op time must still drive day/night so players on different graphics
+    // tiers stay in the same phase.
+    if (!shouldUpdateDayPhase) {
       applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
       return;
     }
 
-    const dayPhase = forcedDayPhase ?? ((state.clock.elapsedTime / DAY_LENGTH_SECONDS) + dayPhaseOffset) % 1;
-    liveDayPhase = dayPhase;
+    const dayPhase = resolveWorldDayPhase({
+      source: clockSource,
+      forcedDayPhase
+    });
+    setCurrentDayPhase(dayPhase);
     const r = applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;

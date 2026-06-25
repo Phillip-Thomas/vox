@@ -45,6 +45,10 @@ export function setSelectedPiece(type: BuildPieceType): void {
   if (selected !== type) { selected = type; emit(); }
 }
 
+export function setSelectedMaterial(material: BuildMaterialId): void {
+  if (selectedMaterial !== material) { selectedMaterial = material; emit(); }
+}
+
 /** Select by palette index (e.g. number keys 1..N). Ignores out-of-range. */
 export function selectPieceByIndex(i: number): void {
   if (i >= 0 && i < BUILD_PIECE_ORDER.length) setSelectedPiece(BUILD_PIECE_ORDER[i]);

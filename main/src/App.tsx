@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import EfficientScene, { planetSize, SceneDebugState } from './components/EfficientScene.tsx';
-import SkyController, { getCurrentDayPhase, setDayPhaseOffset } from './components/SkyController.tsx';
+import SkyController from './components/SkyController.tsx';
 import Crosshair from './components/Crosshair.tsx';
 import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx';
 import PostFX from './components/effects/PostFX.tsx';
@@ -25,6 +25,7 @@ import BuildIndicator from './components/hud/BuildIndicator.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
 import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
+import MultiplayerStatusBadge from './components/hud/MultiplayerStatusBadge.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -42,7 +43,13 @@ import {
   normalizeCoordinatePart
 } from './utils/worldCoordinates.ts';
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
-import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled, cycleBuildRotation } from './game/systems/buildState.ts';
+import { createOfflineCommandContext } from './game/gameplayCommands.ts';
+import { ensureAnonymousPlayerSession } from './game/multiplayerAuth.ts';
+import { getMultiplayerSessionSnapshot, subscribeMultiplayerSession } from './game/multiplayerSession.ts';
+import { getLocalActorId, subscribeLocalActorId } from './game/playerActors.ts';
+import { worldIdentityFromCurrentWorld } from './game/worldIdentity.ts';
+import { getCurrentDayPhase, setDayPhaseOffset } from './game/worldClock.ts';
+import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled, cycleBuildRotation, subscribeBuildState } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
 import { setInstantHarvest } from './game/systems/harvestingSystem.ts';
 import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits, savePlayerPose } from './game/systems/persistence.ts';
@@ -104,6 +111,148 @@ const inputBase: React.CSSProperties = {
   fontFamily: 'monospace'
 };
 
+const debugCloseButton: React.CSSProperties = {
+  position: 'absolute',
+  top: 6,
+  right: 6,
+  width: 24,
+  height: 24,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#cbd5e1',
+  background: 'rgba(15,23,42,0.9)',
+  border: '1px solid rgba(148,163,184,0.5)',
+  borderRadius: 999,
+  cursor: 'pointer',
+  fontSize: 14,
+  lineHeight: 1,
+  zIndex: 1,
+  pointerEvents: 'auto'
+};
+
+const mobileDebugDockStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 'calc(10px + env(safe-area-inset-top, 0px))',
+  left: 'calc(10px + env(safe-area-inset-left, 0px))',
+  right: 'calc(10px + env(safe-area-inset-right, 0px))',
+  zIndex: 30,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: 6,
+  pointerEvents: 'none'
+};
+
+const mobileDebugButtonRow: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  pointerEvents: 'auto'
+};
+
+const mobileDebugPill: React.CSSProperties = {
+  minHeight: 38,
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 8,
+  color: '#d8f3ff',
+  background: 'rgba(8,13,24,0.82)',
+  border: '1px solid rgba(125,211,252,0.35)',
+  borderRadius: 999,
+  padding: '8px 11px',
+  fontFamily: 'monospace',
+  fontSize: 12,
+  fontWeight: 700,
+  letterSpacing: 0,
+  cursor: 'pointer',
+  touchAction: 'manipulation',
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)'
+};
+
+const mobileDebugMiniButton: React.CSSProperties = {
+  width: 38,
+  height: 38,
+  color: '#d8f3ff',
+  background: 'rgba(8,13,24,0.82)',
+  border: '1px solid rgba(125,211,252,0.28)',
+  borderRadius: 999,
+  fontFamily: 'monospace',
+  fontSize: 16,
+  cursor: 'pointer',
+  touchAction: 'manipulation',
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)'
+};
+
+const mobileDebugSheet: React.CSSProperties = {
+  marginTop: 52,
+  width: 'min(360px, 100%)',
+  maxHeight: 'min(360px, 38vh)',
+  display: 'flex',
+  flexDirection: 'column',
+  color: '#e6eef7',
+  background: 'rgba(8,13,24,0.9)',
+  border: '1px solid rgba(125,211,252,0.32)',
+  borderRadius: 8,
+  boxShadow: '0 18px 50px rgba(0,0,0,0.5)',
+  overflow: 'hidden',
+  pointerEvents: 'auto',
+  touchAction: 'pan-y',
+  backdropFilter: 'blur(16px) saturate(120%)',
+  WebkitBackdropFilter: 'blur(16px) saturate(120%)'
+};
+
+const mobileDebugSheetHeader: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  minHeight: 46,
+  padding: '8px 8px 8px 12px',
+  borderBottom: '1px solid rgba(125,211,252,0.18)'
+};
+
+const mobileDebugScroll: React.CSSProperties = {
+  minHeight: 0,
+  overflowY: 'auto',
+  overscrollBehavior: 'contain',
+  padding: '10px 12px 12px',
+  fontFamily: 'monospace',
+  fontSize: 11,
+  lineHeight: 1.45
+};
+
+const mobileDebugRow: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: 10,
+  padding: '5px 0',
+  borderBottom: '1px solid rgba(148,163,184,0.14)',
+  overflowWrap: 'anywhere'
+};
+
+const mobileDebugSectionLabel: React.CSSProperties = {
+  margin: '12px 0 6px',
+  color: '#7dd3fc',
+  fontSize: 11,
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: 0
+};
+
+function parseWorldIdCoordinate(worldId: string): WorldCoordinate | null {
+  const [rawX, rawY, extra] = worldId.split(',');
+  if (extra !== undefined || rawX == null || rawY == null) return null;
+  const x = Number(rawX);
+  const y = Number(rawY);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  return {
+    x: normalizeCoordinatePart(x),
+    y: normalizeCoordinatePart(y)
+  };
+}
+
 const App: React.FC = () => {
   const totalVoxels = planetSize ** 3;
   // Load the saved game ONCE, before children mount: restores global stores
@@ -136,6 +285,9 @@ const App: React.FC = () => {
   const [debugEnabled, setDebugEnabled] = useState(false);
   const [debugColliders, setDebugColliders] = useState(false);
   const [debugState, setDebugState] = useState<SceneDebugState>({ player: null, planet: null });
+  const [debugHudVisible, setDebugHudVisible] = useState(true);
+  const [mobileDebugOpen, setMobileDebugOpen] = useState(false);
+  const [buildHudTick, setBuildHudTick] = useState(0);
   const [benchSample, setBenchSample] = useState<BenchmarkSample | null>(null);
   const [hudVisible, setHudVisible] = useState(true);
   const isTouch = useMemo(() => isTouchDevice(), []);
@@ -143,9 +295,28 @@ const App: React.FC = () => {
   const { phase: appPhase } = useAppState();
   const [paused, setPaused] = useState(false);
   const [craftingOpen, setCraftingOpen] = useState(false);
+  const [localActorId, setLocalActorIdState] = useState(() => getLocalActorId());
   // Ref mirror so the pointer-lock listener (bound once) can read the live value
   // without a stale closure — same trick the lock handler uses for app phase.
   const craftingOpenRef = useRef(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    ensureAnonymousPlayerSession()
+      .then(session => {
+        if (!session || cancelled) return;
+        console.info('[co-op] Firebase anonymous session ready', { uid: session.uid });
+      })
+      .catch(error => {
+        if (!cancelled) console.warn('[co-op] Firebase anonymous sign-in failed', error);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => subscribeLocalActorId(() => setLocalActorIdState(getLocalActorId())), []);
+  useEffect(() => subscribeBuildState(() => setBuildHudTick(n => n + 1)), []);
 
   // Open/close the Fabricator. Opening releases pointer lock so the cursor can
   // click recipes; the lock handler below knows to NOT treat that as a pause.
@@ -227,7 +398,38 @@ const App: React.FC = () => {
     if (document.pointerLockElement) document.exitPointerLock();
     returnToMenu();
   };
+
+  const toggleBuildHud = () => {
+    if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+    craftingOpenRef.current = false;
+    setCraftingOpen(false);
+    setPaused(false);
+    toggleBuildMode();
+  };
   const currentWorldKey = coordinateKey(currentWorld.coordinate);
+  const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
+  const currentWorldIdentity = useMemo(() => worldIdentityFromCurrentWorld(currentWorld), [currentWorld.worldId, currentWorld.seed]);
+  const commandContext = useMemo(
+    () => createOfflineCommandContext(currentWorldIdentity, { actorId: localActorId }),
+    [currentWorldIdentity.worldId, currentWorldIdentity.generationSchemaVersion, localActorId]
+  );
+
+  useEffect(() => {
+    const alignToCoopWorld = () => {
+      const session = getMultiplayerSessionSnapshot();
+      if (session.status !== 'connected' || !session.worldId || session.worldId === currentWorldIdentity.worldId) return;
+      const coordinate = parseWorldIdCoordinate(session.worldId);
+      if (!coordinate) return;
+      const world = createCurrentWorld(coordinate);
+      setPreviousWorld(currentWorld);
+      setCurrentWorld(world);
+      setArrivalMode('surface');
+      setTargetX(String(world.coordinate.x));
+      setTargetY(String(world.coordinate.y));
+    };
+    alignToCoopWorld();
+    return subscribeMultiplayerSession(alignToCoopWorld);
+  }, [currentWorld, currentWorldIdentity.worldId]);
 
   // Register the warp-midpoint arrival handler: the actual world swap fires while
   // the screen is fully white, so the EfficientScene remount + regen are hidden.
@@ -368,12 +570,31 @@ const App: React.FC = () => {
   // ?debug=1 → free building (no resource cost) so the build catalog can be tested.
   useEffect(() => { setFreeBuild(debugUiEnabled); setInstantHarvest(debugUiEnabled); }, [debugUiEnabled]);
 
+  const showDebugHud = debugUiEnabled && appPhase === 'playing';
+
+  // If the URL enters/leaves debug mode in a hot dev session, restore the overlay
+  // affordance instead of leaving the user with permanently hidden controls.
+  useEffect(() => {
+    setDebugHudVisible(true);
+    setMobileDebugOpen(false);
+  }, [debugUiEnabled, appPhase]);
+  const mobileDebugLayout = isTouch;
+  const debugPanelsOpen = debugHudVisible && (!mobileDebugLayout || mobileDebugOpen);
+  const hideDebugHud = () => {
+    setMobileDebugOpen(false);
+    setDebugHudVisible(false);
+  };
+  const reopenDebugHud = () => {
+    setDebugHudVisible(true);
+    setMobileDebugOpen(mobileDebugLayout);
+  };
+
   // Autosave: persist this world's data (debounced on store changes, and on tab
   // hide / unload to catch a server kill). Saving on cleanup captures the OLD world
   // BEFORE the field reset-then-load wipes its stores on a world change.
   useEffect(() => {
     const coord = currentWorld.coordinate;
-    const seed = currentWorld.seed;
+    const world = currentWorldIdentity;
     let lastVoxelVersion = -1;
     // `withVoxels`: save the terrain diff only on LIVE paths (world is still loaded,
     // deletedTerrain intact). On a world-change cleanup we MUST skip it — EfficientPlanet's
@@ -381,11 +602,11 @@ const App: React.FC = () => {
     // BEFORE this parent cleanup (so reading deletedTerrain here would be empty).
     const doSave = (withVoxels: boolean) => {
       saveGlobal(coord, getCurrentDayPhase());
-      saveWorld(seed);
-      savePlayerPose(seed);
+      saveWorld(world);
+      savePlayerPose(world);
       if (withVoxels) {
         const v = voxelSystem.getEditVersion();
-        if (v !== lastVoxelVersion) { lastVoxelVersion = v; saveVoxelEdits(seed); }
+        if (v !== lastVoxelVersion) { lastVoxelVersion = v; saveVoxelEdits(world); }
       }
     };
     let timer = 0;
@@ -398,7 +619,7 @@ const App: React.FC = () => {
     ];
     // Movement/time don't fire a store event, so tick a light save (pose + day) to
     // survive a server kill while just walking around.
-    const periodic = window.setInterval(() => { saveGlobal(coord, getCurrentDayPhase()); savePlayerPose(seed); }, 20000);
+    const periodic = window.setInterval(() => { saveGlobal(coord, getCurrentDayPhase()); savePlayerPose(world); }, 20000);
     const onHidden = () => { if (document.visibilityState === 'hidden') doSave(true); };
     document.addEventListener('visibilitychange', onHidden);
     const onUnload = () => doSave(true);
@@ -411,7 +632,7 @@ const App: React.FC = () => {
       window.removeEventListener('beforeunload', onUnload);
       doSave(false); // structures/global/pose of the world we're leaving (voxels: EfficientPlanet)
     };
-  }, [currentWorld.coordinate, currentWorld.seed]);
+  }, [currentWorld.coordinate, currentWorldIdentity]);
 
   // ?fly=1: drop straight into deep-space flight (once, on mount).
   useEffect(() => {
@@ -521,7 +742,7 @@ const App: React.FC = () => {
           setGameCanvas(gl.domElement);
         }}
       >
-        {debugEnabled && <Stats />}
+        {showDebugHud && debugPanelsOpen && debugEnabled && <Stats />}
         {/* IBL-only: capture a representative midday sky once into an env
             cubemap so metallic blocks have reflections. No `background`; the
             visible sky comes from SkyController's dynamic <Sky> dome. */}
@@ -529,7 +750,7 @@ const App: React.FC = () => {
           <Sky sunPosition={SUN_POSITION} />
         </Environment>
 
-        <SkyController terrainSeed={currentWorld.seed} />
+        <SkyController terrainSeed={currentWorld.seed} worldId={currentWorldIdentity.worldId} />
         <GalaxyImpostors currentCoordinate={currentWorld.coordinate} planetSize={planetSize} />
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
@@ -539,6 +760,7 @@ const App: React.FC = () => {
 
         <EfficientScene
           key={currentWorldKey}
+          commandContext={commandContext}
           terrainSeed={currentWorld.seed}
           debugColliders={debugColliders}
           arrivalMode={arrivalMode}
@@ -551,7 +773,7 @@ const App: React.FC = () => {
               notifyLanded();
             }
           }}
-          onDebugChange={debugEnabled ? setDebugState : undefined}
+          onDebugChange={showDebugHud && debugPanelsOpen && debugEnabled ? setDebugState : undefined}
         />
 
         {benchEnabled && <BenchmarkProbe profile={profile} onSample={setBenchSample} />}
@@ -565,7 +787,7 @@ const App: React.FC = () => {
       <WarpFlash />
 
       {/* --- Landing screen (over the live cinematic render) --- */}
-      <LandingMenu />
+      <LandingMenu startWorldId={currentWorldIdentity.worldId} />
 
       {/* --- Minimal, diegetic in-game HUD --- */}
       {appPhase === 'playing' && (
@@ -581,9 +803,29 @@ const App: React.FC = () => {
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
-          {flight.controlMode === 'fps' && <InventoryPanel />}
+          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel />}
           <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
+          <MultiplayerStatusBadge />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}
+
+          {/* Open build mode/editor HUD. Desktop also has B; this is the
+              touch/always-available entry point. On foot only. */}
+          {flight.controlMode === 'fps' && (
+            <button
+              onClick={toggleBuildHud}
+              aria-label={buildModeOpen ? 'Close build editor' : 'Open build editor'}
+              title={buildModeOpen ? 'Close build editor' : 'Open build editor'}
+              style={{
+                position: 'absolute', top: 14, right: 118, width: 44, height: 44,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18, color: buildModeOpen ? '#bfffd6' : '#cfe8ff',
+                background: buildModeOpen ? 'rgba(21,128,61,0.58)' : 'rgba(8,13,24,0.55)',
+                border: `1px solid ${buildModeOpen ? 'rgba(125,255,160,0.58)' : 'rgba(125,211,252,0.28)'}`,
+                borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
+                backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
+              }}
+            >▧</button>
+          )}
 
           {/* Open the Fabricator (crafting). Desktop also has the C key; this is
               the touch/always-available entry point. On foot only. */}
@@ -624,211 +866,421 @@ const App: React.FC = () => {
       )}
 
       {/* --- Fabricator (crafting) --- */}
-      <CraftingPanel open={craftingOpen} onClose={closeCrafting} />
+      <CraftingPanel open={craftingOpen} onClose={closeCrafting} commandContext={commandContext} />
 
       {/* --- Pause / star map menu --- */}
       <PauseMenu open={paused} onResume={resumeFromPause} onQuitToMenu={quitToMenu} nav={nav} />
 
       {/* --- Developer overlays (?debug=1) --- */}
-      {debugUiEnabled && (
-      <>
-      <VantageToast />
-
-      {benchEnabled && (
-        <div style={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          color: '#9effa1',
-          fontFamily: 'monospace',
-          fontSize: 12,
-          background: 'rgba(0,0,0,0.8)',
-          padding: '8px 10px',
-          borderRadius: 6,
-          lineHeight: 1.5
-        }}>
-          <div><strong>BENCH</strong> - {profile}</div>
-          {benchSample ? (
-            <>
-              <div>fps ~{benchSample.fps}</div>
-              <div>p50 {benchSample.p50} ms</div>
-              <div>p95 {benchSample.p95} ms</div>
-              <div>draws {benchSample.drawCalls}</div>
-              <div>tris {benchSample.triangles.toLocaleString()}</div>
-            </>
-          ) : (
-            <div>measuring...</div>
+      {showDebugHud && (
+        <>
+          {!debugHudVisible && (
+            mobileDebugLayout ? (
+              <div style={mobileDebugDockStyle}>
+                <div style={mobileDebugButtonRow}>
+                  <button type="button" onClick={reopenDebugHud} style={mobileDebugPill}>
+                    DBG <span style={{ opacity: 0.64, fontWeight: 500 }}>{currentWorldKey}</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={reopenDebugHud}
+                style={{
+                  position: 'absolute',
+                  top: 10,
+                  left: 10,
+                  zIndex: 30,
+                  color: '#cfe8ff',
+                  background: 'rgba(8,13,24,0.78)',
+                  border: '1px solid rgba(125,211,252,0.35)',
+                  borderRadius: 999,
+                  padding: '7px 10px',
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
+                }}
+              >Show debug HUDs</button>
+            )
           )}
-        </div>
-      )}
 
-      <div style={{
-        position: 'absolute',
-        top: 10,
-        left: 10,
-        color: 'white',
-        fontFamily: 'monospace',
-        background: 'rgba(0,0,0,0.7)',
-        padding: '10px',
-        borderRadius: '5px',
-        display: hudVisible ? undefined : 'none'
-      }}>
-        <h3>Efficient Voxel System</h3>
-        <p>WASD: Move</p>
-        <p>Space: Jump</p>
-        <p>R: Reset</p>
-        <p>E: Delete voxel</p>
-        <p>Only surface voxels rendered!</p>
-        <p>Total voxels: {totalVoxels.toLocaleString()}</p>
-        <p>Coordinate: {currentWorldKey}</p>
-        <p>Seed: {currentWorld.seed}</p>
-        <p>Ship: {arrivalMode === 'approach' ? 'approach' : 'landed'}</p>
-        <label style={{ display: 'block', marginTop: 8 }}>
-          <input
-            type="checkbox"
-            checked={debugEnabled}
-            onChange={event => setDebugEnabled(event.target.checked)}
-          /> Debug
-        </label>
-        <label style={{ display: 'block', marginTop: 4, opacity: debugEnabled ? 1 : 0.45 }}>
-          <input
-            type="checkbox"
-            checked={debugColliders}
-            disabled={!debugEnabled}
-            onChange={event => setDebugColliders(event.target.checked)}
-          /> Colliders
-        </label>
-        {debugEnabled && (
-          <div style={{ marginTop: 10, fontSize: 11, lineHeight: 1.35 }}>
-            <div>Face: {debugState.player?.face ?? 'top'}</div>
-            <div>Target: {debugState.player?.targetFace ?? 'none'}</div>
-            <div>Grounded: {debugState.player?.grounded ? 'yes' : 'no'}</div>
-            <div>Controls: {debugState.player?.controlsActive ? 'locked' : 'idle'}</div>
-            <div>Speed: {(debugState.player?.speed ?? 0).toFixed(2)}</div>
-            <div>Gravity: {(debugState.player?.gravity ?? [0, -9.81, 0]).map(value => value.toFixed(1)).join(', ')}</div>
-            <div>Position: {(debugState.player?.position ?? [0, 0, 0]).map(value => value.toFixed(1)).join(', ')}</div>
-            <div>World: {debugState.planet?.worldId ?? 0}</div>
-            <div>Voxels: {debugState.planet?.exposedVoxels ?? 0}</div>
-            <div>Colliders: {debugState.planet?.activeColliders ?? 0}</div>
-          </div>
-        )}
-      </div>
+          {debugHudVisible && (
+            mobileDebugLayout ? (
+              <>
+                <VantageToast />
+                <div style={mobileDebugDockStyle}>
+                  {!mobileDebugOpen ? (
+                    <div style={mobileDebugButtonRow}>
+                      <button type="button" onClick={() => setMobileDebugOpen(true)} style={mobileDebugPill}>
+                        DBG <span style={{ opacity: 0.64, fontWeight: 500 }}>{currentWorldKey}</span>
+                      </button>
+                      <button type="button" aria-label="Hide debug HUDs" onClick={hideDebugHud} style={mobileDebugMiniButton}>×</button>
+                    </div>
+                  ) : (
+                    <section aria-label="Mobile debug HUD" style={mobileDebugSheet}>
+                      <div style={mobileDebugSheetHeader}>
+                        <div style={{ flex: 1, minWidth: 0, fontFamily: 'monospace' }}>
+                          <div style={{ color: '#7dd3fc', fontSize: 12, fontWeight: 700 }}>DEBUG</div>
+                          <div style={{ color: 'rgba(207,224,255,0.68)', fontSize: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {currentWorldKey} / {flight.controlMode}
+                          </div>
+                        </div>
+                        <button type="button" onClick={() => setMobileDebugOpen(false)} style={{ ...buttonBase, height: 34, padding: '0 10px', backgroundColor: '#172554' }}>
+                          Min
+                        </button>
+                        <button type="button" aria-label="Hide debug HUDs" onClick={hideDebugHud} style={mobileDebugMiniButton}>×</button>
+                      </div>
 
-      <div style={{
-        position: 'absolute',
-        bottom: 10,
-        right: 10,
-        left: compactOverlay ? 10 : 'auto',
-        display: hudVisible ? undefined : 'none',
-        color: 'white',
-        fontFamily: 'monospace',
-        background: 'rgba(0,0,0,0.8)',
-        padding: '15px',
-        borderRadius: '8px',
-        fontSize: '14px',
-        width: compactOverlay ? 'auto' : 'min(260px, calc(100vw - 20px))',
-        maxWidth: 'calc(100vw - 20px)',
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-        overflowWrap: 'anywhere'
-      }}>
-        <h4 style={{ margin: '0 0 10px 0', color: '#7dd3fc' }}>World Coordinates</h4>
+                      <div style={mobileDebugScroll}>
+                        {benchEnabled && (
+                          <>
+                            <div style={mobileDebugSectionLabel}>Bench {profile}</div>
+                            {benchSample ? (
+                              <>
+                                <div style={mobileDebugRow}><span>FPS</span><strong>~{benchSample.fps}</strong></div>
+                                <div style={mobileDebugRow}><span>p50 / p95</span><strong>{benchSample.p50} / {benchSample.p95} ms</strong></div>
+                                <div style={mobileDebugRow}><span>Draws</span><strong>{benchSample.drawCalls}</strong></div>
+                                <div style={mobileDebugRow}><span>Triangles</span><strong>{benchSample.triangles.toLocaleString()}</strong></div>
+                              </>
+                            ) : (
+                              <div style={{ opacity: 0.72 }}>measuring...</div>
+                            )}
+                          </>
+                        )}
 
-        <div style={{ fontSize: 12, lineHeight: 1.5, marginBottom: 10, overflowWrap: 'anywhere' }}>
-          <div>Current: {currentWorldKey}</div>
-          <div>Seed: {currentWorld.seed}</div>
-          <div>Arrival: {arrivalMode === 'approach' ? 'high altitude' : 'surface'}</div>
-          <div>Flight: {flight.phase} / {flight.controlMode}</div>
-          <div>LOD: one voxel world + visual neighbors</div>
-        </div>
+                        <div style={mobileDebugSectionLabel}>Runtime</div>
+                        <div style={mobileDebugRow}><span>World</span><strong>{currentWorldKey}</strong></div>
+                        <div style={mobileDebugRow}><span>Seed</span><strong>{currentWorld.seed}</strong></div>
+                        <div style={mobileDebugRow}><span>Ship</span><strong>{arrivalMode === 'approach' ? 'approach' : 'landed'}</strong></div>
+                        <div style={mobileDebugRow}><span>Flight</span><strong>{flight.phase} / {flight.controlMode}</strong></div>
+                        <div style={mobileDebugRow}><span>Total voxels</span><strong>{totalVoxels.toLocaleString()}</strong></div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
-            X
-            <input
-              type="number"
-              value={targetX}
-              onChange={event => setTargetX(event.target.value)}
-              onKeyDown={event => {
-                if (event.key === 'Enter') jumpToTarget();
-              }}
-              style={inputBase}
-            />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
-            Y
-            <input
-              type="number"
-              value={targetY}
-              onChange={event => setTargetY(event.target.value)}
-              onKeyDown={event => {
-                if (event.key === 'Enter') jumpToTarget();
-              }}
-              style={inputBase}
-            />
-          </label>
-        </div>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 36, padding: '8px 0 4px' }}>
+                          <input
+                            type="checkbox"
+                            checked={debugEnabled}
+                            onChange={event => setDebugEnabled(event.target.checked)}
+                            style={{ width: 18, height: 18, accentColor: '#38bdf8' }}
+                          />
+                          Runtime debug
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 36, padding: '4px 0 8px', opacity: debugEnabled ? 1 : 0.45 }}>
+                          <input
+                            type="checkbox"
+                            checked={debugColliders}
+                            disabled={!debugEnabled}
+                            onChange={event => setDebugColliders(event.target.checked)}
+                            style={{ width: 18, height: 18, accentColor: '#38bdf8' }}
+                          />
+                          Colliders
+                        </label>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr 1fr', gap: 6 }}>
-          <button
-            onClick={jumpToTarget}
-            style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#0369a1' }}
-          >
-            Set Course
-          </button>
-          <button
-            onClick={jumpToRandomWorld}
-            style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#7c2d12' }}
-          >
-            Random
-          </button>
-          <button
-            onClick={returnToPreviousWorld}
-            disabled={!previousWorld}
-            style={{
-              ...buttonBase,
-              padding: '7px 8px',
-              backgroundColor: previousWorld ? '#374151' : '#1f2937',
-              color: previousWorld ? 'white' : '#64748b',
-              cursor: previousWorld ? 'pointer' : 'default'
-            }}
-          >
-            Previous
-          </button>
-        </div>
+                        {debugEnabled && (
+                          <>
+                            <div style={mobileDebugSectionLabel}>Telemetry</div>
+                            <div style={mobileDebugRow}><span>Face</span><strong>{debugState.player?.face ?? 'top'}</strong></div>
+                            <div style={mobileDebugRow}><span>Target</span><strong>{debugState.player?.targetFace ?? 'none'}</strong></div>
+                            <div style={mobileDebugRow}><span>Grounded</span><strong>{debugState.player?.grounded ? 'yes' : 'no'}</strong></div>
+                            <div style={mobileDebugRow}><span>Controls</span><strong>{debugState.player?.controlsActive ? 'locked' : 'idle'}</strong></div>
+                            <div style={mobileDebugRow}><span>Speed</span><strong>{(debugState.player?.speed ?? 0).toFixed(2)}</strong></div>
+                            <div style={mobileDebugRow}><span>Gravity</span><strong>{(debugState.player?.gravity ?? [0, -9.81, 0]).map(value => value.toFixed(1)).join(', ')}</strong></div>
+                            <div style={mobileDebugRow}><span>Position</span><strong>{(debugState.player?.position ?? [0, 0, 0]).map(value => value.toFixed(1)).join(', ')}</strong></div>
+                            <div style={mobileDebugRow}><span>World ID</span><strong>{debugState.planet?.worldId ?? 0}</strong></div>
+                            <div style={mobileDebugRow}><span>Exposed voxels</span><strong>{debugState.planet?.exposedVoxels ?? 0}</strong></div>
+                            <div style={mobileDebugRow}><span>Colliders</span><strong>{debugState.planet?.activeColliders ?? 0}</strong></div>
+                          </>
+                        )}
 
-        <div style={{ marginTop: 12, fontSize: 11, color: '#cbd5e1' }}>
-          Nearby
-        </div>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 6,
-          marginTop: 6
-        }}>
-          {nearbyWorlds.map(world => (
-            <button
-              key={coordinateKey(world.coordinate)}
-              onClick={() => jumpToWorld(world)}
-              style={{
-                ...buttonBase,
-                padding: '6px 8px',
-                backgroundColor: '#172554',
-                border: '1px solid #1e3a8a',
-                fontSize: 11,
-                fontFamily: 'monospace'
-              }}
-            >
-              {coordinateKey(world.coordinate)}
-            </button>
-          ))}
-        </div>
+                        <div style={mobileDebugSectionLabel}>Course</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+                          <label style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            X
+                            <input
+                              type="number"
+                              value={targetX}
+                              onChange={event => setTargetX(event.target.value)}
+                              onKeyDown={event => {
+                                if (event.key === 'Enter') jumpToTarget();
+                              }}
+                              style={inputBase}
+                            />
+                          </label>
+                          <label style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            Y
+                            <input
+                              type="number"
+                              value={targetY}
+                              onChange={event => setTargetY(event.target.value)}
+                              onKeyDown={event => {
+                                if (event.key === 'Enter') jumpToTarget();
+                              }}
+                              style={inputBase}
+                            />
+                          </label>
+                        </div>
 
-        <div style={{ marginTop: 10, fontSize: 10, opacity: 0.68, lineHeight: 1.4, overflowWrap: 'anywhere' }}>
-          Set Course loads the destination as the active voxel planet. Distant worlds are visual-only LOD.
-        </div>
-      </div>
-      </>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr 1fr', gap: 6 }}>
+                          <button onClick={jumpToTarget} style={{ ...buttonBase, minHeight: 34, padding: '7px 8px', backgroundColor: '#0369a1' }}>
+                            Set
+                          </button>
+                          <button onClick={jumpToRandomWorld} style={{ ...buttonBase, minHeight: 34, padding: '7px 8px', backgroundColor: '#7c2d12' }}>
+                            Random
+                          </button>
+                          <button
+                            onClick={returnToPreviousWorld}
+                            disabled={!previousWorld}
+                            style={{
+                              ...buttonBase,
+                              minHeight: 34,
+                              padding: '7px 8px',
+                              backgroundColor: previousWorld ? '#374151' : '#1f2937',
+                              color: previousWorld ? 'white' : '#64748b',
+                              cursor: previousWorld ? 'pointer' : 'default'
+                            }}
+                          >
+                            Prev
+                          </button>
+                        </div>
+
+                        <div style={mobileDebugSectionLabel}>Nearby</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                          {nearbyWorlds.map(world => (
+                            <button
+                              key={coordinateKey(world.coordinate)}
+                              onClick={() => jumpToWorld(world)}
+                              style={{
+                                ...buttonBase,
+                                minHeight: 32,
+                                padding: '6px 8px',
+                                backgroundColor: '#172554',
+                                border: '1px solid #1e3a8a',
+                                fontSize: 11,
+                                fontFamily: 'monospace'
+                              }}
+                            >
+                              {coordinateKey(world.coordinate)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </section>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <VantageToast />
+
+                <div>
+                  {benchEnabled && (
+                    <div style={{
+                      position: 'absolute',
+                      top: 10,
+                      right: 10,
+                      zIndex: 30,
+                      pointerEvents: 'auto',
+                      color: '#9effa1',
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                      background: 'rgba(0,0,0,0.8)',
+                      padding: '8px 34px 8px 10px',
+                      borderRadius: 6,
+                      lineHeight: 1.5
+                    }}>
+                      <button type="button" aria-label="Hide debug HUDs" onClick={hideDebugHud} style={debugCloseButton}>×</button>
+                      <div><strong>BENCH</strong> - {profile}</div>
+                      {benchSample ? (
+                        <>
+                          <div>fps ~{benchSample.fps}</div>
+                          <div>p50 {benchSample.p50} ms</div>
+                          <div>p95 {benchSample.p95} ms</div>
+                          <div>draws {benchSample.drawCalls}</div>
+                          <div>tris {benchSample.triangles.toLocaleString()}</div>
+                        </>
+                      ) : (
+                        <div>measuring...</div>
+                      )}
+                    </div>
+                  )}
+
+                  <div style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    zIndex: 30,
+                    pointerEvents: 'auto',
+                    color: 'white',
+                    fontFamily: 'monospace',
+                    background: 'rgba(0,0,0,0.7)',
+                    padding: '10px 38px 10px 10px',
+                    borderRadius: '5px',
+                    display: hudVisible ? undefined : 'none'
+                  }}>
+                    <button type="button" aria-label="Hide debug HUDs" onClick={hideDebugHud} style={debugCloseButton}>×</button>
+                    <h3>Efficient Voxel System</h3>
+                    <p>WASD: Move</p>
+                    <p>Space: Jump</p>
+                    <p>R: Reset</p>
+                    <p>E: Delete voxel</p>
+                    <p>Only surface voxels rendered!</p>
+                    <p>Total voxels: {totalVoxels.toLocaleString()}</p>
+                    <p>Coordinate: {currentWorldKey}</p>
+                    <p>Seed: {currentWorld.seed}</p>
+                    <p>Ship: {arrivalMode === 'approach' ? 'approach' : 'landed'}</p>
+                    <label style={{ display: 'block', marginTop: 8 }}>
+                      <input
+                        type="checkbox"
+                        checked={debugEnabled}
+                        onChange={event => setDebugEnabled(event.target.checked)}
+                      /> Debug
+                    </label>
+                    <label style={{ display: 'block', marginTop: 4, opacity: debugEnabled ? 1 : 0.45 }}>
+                      <input
+                        type="checkbox"
+                        checked={debugColliders}
+                        disabled={!debugEnabled}
+                        onChange={event => setDebugColliders(event.target.checked)}
+                      /> Colliders
+                    </label>
+                    {debugEnabled && (
+                      <div style={{ marginTop: 10, fontSize: 11, lineHeight: 1.35 }}>
+                        <div>Face: {debugState.player?.face ?? 'top'}</div>
+                        <div>Target: {debugState.player?.targetFace ?? 'none'}</div>
+                        <div>Grounded: {debugState.player?.grounded ? 'yes' : 'no'}</div>
+                        <div>Controls: {debugState.player?.controlsActive ? 'locked' : 'idle'}</div>
+                        <div>Speed: {(debugState.player?.speed ?? 0).toFixed(2)}</div>
+                        <div>Gravity: {(debugState.player?.gravity ?? [0, -9.81, 0]).map(value => value.toFixed(1)).join(', ')}</div>
+                        <div>Position: {(debugState.player?.position ?? [0, 0, 0]).map(value => value.toFixed(1)).join(', ')}</div>
+                        <div>World: {debugState.planet?.worldId ?? 0}</div>
+                        <div>Voxels: {debugState.planet?.exposedVoxels ?? 0}</div>
+                        <div>Colliders: {debugState.planet?.activeColliders ?? 0}</div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 10,
+                    right: 10,
+                    left: compactOverlay ? 10 : 'auto',
+                    zIndex: 30,
+                    pointerEvents: 'auto',
+                    display: hudVisible ? undefined : 'none',
+                    color: 'white',
+                    fontFamily: 'monospace',
+                    background: 'rgba(0,0,0,0.8)',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    width: compactOverlay ? 'auto' : 'min(260px, calc(100vw - 20px))',
+                    maxWidth: 'calc(100vw - 20px)',
+                    boxSizing: 'border-box',
+                    overflow: 'hidden',
+                    overflowWrap: 'anywhere'
+                  }}>
+                    <button type="button" aria-label="Hide debug HUDs" onClick={hideDebugHud} style={debugCloseButton}>×</button>
+                    <h4 style={{ margin: '0 0 10px 0', color: '#7dd3fc' }}>World Coordinates</h4>
+
+                    <div style={{ fontSize: 12, lineHeight: 1.5, marginBottom: 10, overflowWrap: 'anywhere' }}>
+                      <div>Current: {currentWorldKey}</div>
+                      <div>Seed: {currentWorld.seed}</div>
+                      <div>Arrival: {arrivalMode === 'approach' ? 'high altitude' : 'surface'}</div>
+                      <div>Flight: {flight.phase} / {flight.controlMode}</div>
+                      <div>LOD: one voxel world + visual neighbors</div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+                      <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
+                        X
+                        <input
+                          type="number"
+                          value={targetX}
+                          onChange={event => setTargetX(event.target.value)}
+                          onKeyDown={event => {
+                            if (event.key === 'Enter') jumpToTarget();
+                          }}
+                          style={inputBase}
+                        />
+                      </label>
+                      <label style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 11 }}>
+                        Y
+                        <input
+                          type="number"
+                          value={targetY}
+                          onChange={event => setTargetY(event.target.value)}
+                          onKeyDown={event => {
+                            if (event.key === 'Enter') jumpToTarget();
+                          }}
+                          style={inputBase}
+                        />
+                      </label>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr 1fr', gap: 6 }}>
+                      <button
+                        onClick={jumpToTarget}
+                        style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#0369a1' }}
+                      >
+                        Set Course
+                      </button>
+                      <button
+                        onClick={jumpToRandomWorld}
+                        style={{ ...buttonBase, padding: '7px 8px', backgroundColor: '#7c2d12' }}
+                      >
+                        Random
+                      </button>
+                      <button
+                        onClick={returnToPreviousWorld}
+                        disabled={!previousWorld}
+                        style={{
+                          ...buttonBase,
+                          padding: '7px 8px',
+                          backgroundColor: previousWorld ? '#374151' : '#1f2937',
+                          color: previousWorld ? 'white' : '#64748b',
+                          cursor: previousWorld ? 'pointer' : 'default'
+                        }}
+                      >
+                        Previous
+                      </button>
+                    </div>
+
+                    <div style={{ marginTop: 12, fontSize: 11, color: '#cbd5e1' }}>
+                      Nearby
+                    </div>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: 6,
+                      marginTop: 6
+                    }}>
+                      {nearbyWorlds.map(world => (
+                        <button
+                          key={coordinateKey(world.coordinate)}
+                          onClick={() => jumpToWorld(world)}
+                          style={{
+                            ...buttonBase,
+                            padding: '6px 8px',
+                            backgroundColor: '#172554',
+                            border: '1px solid #1e3a8a',
+                            fontSize: 11,
+                            fontFamily: 'monospace'
+                          }}
+                        >
+                          {coordinateKey(world.coordinate)}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div style={{ marginTop: 10, fontSize: 10, opacity: 0.68, lineHeight: 1.4, overflowWrap: 'anywhere' }}>
+                      Set Course loads the destination as the active voxel planet. Distant worlds are visual-only LOD.
+                    </div>
+                  </div>
+                </div>
+              </>
+            )
+          )}
+        </>
       )}
     </KeyboardControls>
   );

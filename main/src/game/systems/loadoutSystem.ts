@@ -15,6 +15,7 @@
 import type { HazardId } from '../data/planetArchetypes.ts';
 import { getItem, type HarvestClass, type ItemDefinition, type ItemId } from '../data/items.ts';
 import { addItem, getInventory, getItemCount } from './inventorySystem.ts';
+import type { ActorId } from '../playerActors.ts';
 
 // Baselines for a player carrying nothing. Tool tier 0 = bare-handed extraction
 // of soft terrain (dirt/sand/grass/wood/stone); scan level 1 shows the most
@@ -23,16 +24,16 @@ const BASE_TOOL_TIER = 0;
 const BASE_SCAN_LEVEL = 1;
 const BASE_WARP_RANGE = 1;
 
-function ownedItemIds(): ItemId[] {
-  return (Object.entries(getInventory()) as [ItemId, number][])
+function ownedItemIds(actorId?: ActorId): ItemId[] {
+  return (Object.entries(getInventory(actorId)) as [ItemId, number][])
     .filter(([, n]) => (n ?? 0) > 0)
     .map(([id]) => id);
 }
 
 /** The best (highest tool tier) tool currently owned, or null if none. */
-export function getEquippedTool(): ItemDefinition | null {
+export function getEquippedTool(actorId?: ActorId): ItemDefinition | null {
   let best: ItemDefinition | null = null;
-  for (const id of ownedItemIds()) {
+  for (const id of ownedItemIds(actorId)) {
     const def = getItem(id);
     if (def.kind !== 'tool') continue;
     if (!best || (def.toolTier ?? 0) > (best.toolTier ?? 0)) best = def;
@@ -41,8 +42,8 @@ export function getEquippedTool(): ItemDefinition | null {
 }
 
 /** Highest mining tier among owned tools (capability gate); BASE if none owned. */
-export function getEquippedToolTier(): number {
-  return Math.max(BASE_TOOL_TIER, getEquippedTool()?.toolTier ?? BASE_TOOL_TIER);
+export function getEquippedToolTier(actorId?: ActorId): number {
+  return Math.max(BASE_TOOL_TIER, getEquippedTool(actorId)?.toolTier ?? BASE_TOOL_TIER);
 }
 
 /** A tool's speed for a given material class (its override, else its default, else 1). */
@@ -57,10 +58,10 @@ export function toolSpeedFor(tool: ItemDefinition | null, klass: HarvestClass): 
  * highest speed for that class. So the Hatchet wins on wood and the Pickaxe is used
  * on stone, regardless of which has the higher tier. Null if nothing qualifies.
  */
-export function selectTool(klass: HarvestClass, requiredTier: number): ItemDefinition | null {
+export function selectTool(klass: HarvestClass, requiredTier: number, actorId?: ActorId): ItemDefinition | null {
   let best: ItemDefinition | null = null;
   let bestSpeed = -1;
-  for (const id of ownedItemIds()) {
+  for (const id of ownedItemIds(actorId)) {
     const def = getItem(id);
     if (def.kind !== 'tool' || (def.toolTier ?? 0) < requiredTier) continue;
     const speed = toolSpeedFor(def, klass);
@@ -71,14 +72,14 @@ export function selectTool(klass: HarvestClass, requiredTier: number): ItemDefin
 
 /** True while the player still carries a charge-using tool (the Faulty Maw) — the
  *  signal for whether the charge meter is relevant (gone once the Maw is repaired). */
-export function ownsChargeTool(): boolean {
-  return ownedItemIds().some(id => getItem(id).usesCharge === true);
+export function ownsChargeTool(actorId?: ActorId): boolean {
+  return ownedItemIds(actorId).some(id => getItem(id).usesCharge === true);
 }
 
 /** Combined hazard protection from all owned suits (max per hazard). */
-export function getSuitProtection(): Partial<Record<HazardId, number>> {
+export function getSuitProtection(actorId?: ActorId): Partial<Record<HazardId, number>> {
   const out: Partial<Record<HazardId, number>> = {};
-  for (const id of ownedItemIds()) {
+  for (const id of ownedItemIds(actorId)) {
     const def = getItem(id);
     if (def.kind !== 'suit' || !def.hazardProtect) continue;
     for (const [hazard, value] of Object.entries(def.hazardProtect) as [HazardId, number][]) {
@@ -89,14 +90,14 @@ export function getSuitProtection(): Partial<Record<HazardId, number>> {
 }
 
 /** Protection (0 = none) against a specific hazard. */
-export function getHazardProtection(hazard: HazardId): number {
-  return getSuitProtection()[hazard] ?? 0;
+export function getHazardProtection(hazard: HazardId, actorId?: ActorId): number {
+  return getSuitProtection(actorId)[hazard] ?? 0;
 }
 
 /** Live scanner level — gates which resources a planet survey reveals. */
-export function getScanLevel(): number {
+export function getScanLevel(actorId?: ActorId): number {
   let level = BASE_SCAN_LEVEL;
-  for (const id of ownedItemIds()) {
+  for (const id of ownedItemIds(actorId)) {
     const eff = getItem(id).moduleEffect;
     if (eff?.scanLevel != null) level = Math.max(level, eff.scanLevel);
   }
@@ -104,11 +105,11 @@ export function getScanLevel(): number {
 }
 
 /** Live warp range — base plus every Range Coil owned. */
-export function getWarpRange(): number {
+export function getWarpRange(actorId?: ActorId): number {
   let range = BASE_WARP_RANGE;
-  for (const id of ownedItemIds()) {
+  for (const id of ownedItemIds(actorId)) {
     const eff = getItem(id).moduleEffect;
-    if (eff?.warpRangeAdd != null) range += eff.warpRangeAdd * getItemCount(id);
+    if (eff?.warpRangeAdd != null) range += eff.warpRangeAdd * getItemCount(id, actorId);
   }
   return range;
 }
@@ -120,7 +121,7 @@ export function getWarpRange(): number {
 // a real hand-craft recipe.
 export const STARTER_TOOL: ItemId = 'faulty_maw';
 
-export function ensureStarterLoadout(): void {
-  const ownsTool = ownedItemIds().some(id => getItem(id).kind === 'tool');
-  if (!ownsTool) addItem(STARTER_TOOL, 1);
+export function ensureStarterLoadout(actorId?: ActorId): void {
+  const ownsTool = ownedItemIds(actorId).some(id => getItem(id).kind === 'tool');
+  if (!ownsTool) addItem(STARTER_TOOL, 1, actorId);
 }

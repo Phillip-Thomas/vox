@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem';
 import { getCampfires, resetCampfires, subscribeCampfires, type Campfire } from '../game/systems/campfires';
 import { restoreCampfiresForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { getPlayerUp } from '../state/playerFrame';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 
@@ -42,11 +43,15 @@ export function PlayerTorch({ playerPosition }: { playerPosition: THREE.Vector3 
 }
 
 /** All placed campfires (stationary, brighter lights + a small fire mesh). */
-export function Campfires({ terrainSeed }: { terrainSeed: number }) {
+export function Campfires({ terrainSeed, persistenceWorld }: { terrainSeed: number; persistenceWorld?: WorldIdentity }) {
   const [list, setList] = useState<readonly Campfire[]>(() => getCampfires());
   useEffect(() => subscribeCampfires(() => setList([...getCampfires()])), []);
   // World-relative — clear, then load this world's saved campfires.
-  useEffect(() => { resetCampfires(); restoreCampfiresForWorld(terrainSeed); setList([...getCampfires()]); }, [terrainSeed]);
+  useEffect(() => {
+    resetCampfires();
+    restoreCampfiresForWorld(persistenceWorld ?? terrainSeed);
+    setList([...getCampfires()]);
+  }, [persistenceWorld, terrainSeed]);
   return (
     <>
       {list.map(c => <CampfireObject key={c.id} fire={c} />)}

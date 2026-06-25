@@ -520,6 +520,41 @@ export class ProceduralWorldGenerator {
   }
 
   /**
+   * Replay dynamic flood cells received from the room log. These cells came from
+   * a peer's local `extendFloodForDugCell` result, so this only bounds them to the
+   * same water scan and waterline before extending the cached flooded set.
+   */
+  applyDynamicWaterCells(cells: ReadonlyArray<{ x: number; y: number; z: number }>): number {
+    const flooded = this.getFloodedWater();
+    const sea = this.getSeaLevelRadius();
+    const R = this.waterScanRadius();
+    const added: Array<{ x: number; y: number; z: number }> = [];
+
+    for (const cell of cells) {
+      if (
+        Math.abs(cell.x) > R
+        || Math.abs(cell.y) > R
+        || Math.abs(cell.z) > R
+        || this.dominantAxisRadius(cell.x, cell.y, cell.z) > sea
+      ) {
+        continue;
+      }
+
+      const key = `${cell.x},${cell.y},${cell.z}`;
+      if (flooded.has(key)) continue;
+      flooded.add(key);
+      added.push({ x: cell.x, y: cell.y, z: cell.z });
+    }
+
+    if (added.length > 0) {
+      this.dynamicWaterCells.push(...added);
+      this.waterEditVersion++;
+    }
+
+    return added.length;
+  }
+
+  /**
    * Dig-to-fill: when a solid cell is removed, flood it (and any connected open
    * sub-waterline cells) if it sits at/below sea level and TOUCHES existing water.
    * `isLiveSolid` reports LIVE terrain solidity (static terrain minus dug cells)

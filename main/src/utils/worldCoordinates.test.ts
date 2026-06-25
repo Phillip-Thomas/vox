@@ -36,6 +36,7 @@ describe('world coordinate identity', () => {
 
   it('creates a current world from normalized coordinates and seed', () => {
     const world = createCurrentWorld({ x: -2.2, y: 5.8 });
+    expect(world.worldId).toBe('-2,5');
     expect(world.coordinate).toEqual({ x: -2, y: 5 });
     expect(world.seed).toBe(coordinateToSeed(-2, 5));
   });

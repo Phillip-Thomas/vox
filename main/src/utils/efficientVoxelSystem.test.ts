@@ -136,6 +136,18 @@ describe('EfficientVoxelSystem', () => {
       expect(s.getDeletedVoxels()).toContainEqual([0, 1, 0]);
       expect(s.getEditVersion()).toBeGreaterThan(before);
     });
+
+    it('does not emit user-edit notifications while replaying a terrain diff', () => {
+      const all = block(1);
+      const s = sys(all);
+      const onEdit = vi.fn();
+      s.subscribeVoxelEdits(onEdit);
+
+      s.applyTerrainDiff([[0, 1, 0]]);
+
+      expect(onEdit).not.toHaveBeenCalled();
+      expect(s.getDeletedVoxels()).toContainEqual([0, 1, 0]);
+    });
   });
 
   it('tracks edit version across successful voxel adds and removes', () => {

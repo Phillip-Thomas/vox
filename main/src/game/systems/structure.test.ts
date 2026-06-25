@@ -2,12 +2,13 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   placePiece, placeDoorway, fitDoor, placeVolume, toggleDoor, removePiece, hasFoundationInCell, hasFoundationOnFace,
   hasPanel, hasVolume, getVolumeAt, getPieceAt, getPieces, resetStructures,
-  faceIndexForNormal, oppositeFace, setFreeBuild, canAfford
+  faceIndexForNormal, oppositeFace, setFreeBuild, canAfford, isStructurePieceSolid,
+  getStructureVersion, subscribeStructures
 } from './structureSystem.ts';
 import { pieceCost } from '../data/buildMaterials.ts';
-import { addItem, getItemCount, resetInventory } from './inventorySystem.ts';
+import { addItem, getItemCount, resetAllInventories } from './inventorySystem.ts';
 
-beforeEach(() => { resetStructures(); resetInventory(); setFreeBuild(false); });
+beforeEach(() => { resetStructures(); resetAllInventories(); setFreeBuild(false); });
 
 function stockWood(n: number) { addItem('wood', n); }
 const FOUNDATION_WOOD = pieceCost('foundation', 'wood')[0].qty;
@@ -56,6 +57,12 @@ describe('placePiece / cost', () => {
     expect(hasFoundationOnFace(0, 0, 0, 3)).toBe(true);
     expect(hasFoundationOnFace(0, 0, 0, 1)).toBe(true);
   });
+
+  it('records owner metadata for actor-scoped placement', () => {
+    addItem('wood', FOUNDATION_WOOD, 'alice');
+    expect(placePiece([0, 0, 0], 3, 'foundation', 'wood', undefined, 'alice')).toBe(true);
+    expect(getPieceAt(0, 0, 0, 3)).toMatchObject({ ownerId: 'alice', placedBy: 'alice' });
+  });
 });
 
 describe('doorway (2 cells tall)', () => {
@@ -92,6 +99,21 @@ describe('door fits into a doorway as a leaf (not on bare walls)', () => {
     expect(removePiece([0, 1, 0], 0)).toBe(true);             // removes both halves
     expect(hasPanel(0, 0, 0, 0)).toBe(false);
     expect(hasPanel(0, 1, 0, 0)).toBe(false);
+  });
+
+  it('treats fitted closed doorways as solid physics and open doorways as passable', () => {
+    setFreeBuild(true);
+
+    expect(placeDoorway([0, 0, 0], 0, 2, 'wood')).toBe(true);
+    expect(isStructurePieceSolid(getPieceAt(0, 0, 0, 0)!)).toBe(false);
+
+    expect(fitDoor([0, 0, 0], 0, 'wood')).toBe(true);
+    expect(isStructurePieceSolid(getPieceAt(0, 0, 0, 0)!)).toBe(true);
+    expect(isStructurePieceSolid(getPieceAt(0, 1, 0, 0)!)).toBe(true);
+
+    expect(toggleDoor([0, 0, 0], 0)).toBe(true);
+    expect(isStructurePieceSolid(getPieceAt(0, 0, 0, 0)!)).toBe(false);
+    expect(isStructurePieceSolid(getPieceAt(0, 1, 0, 0)!)).toBe(false);
   });
 });
 
@@ -130,6 +152,27 @@ describe('volume pieces (stairs/roof) + door toggle', () => {
     placePiece([2, 0, 0], 0, 'wall', 'wood');
     expect(toggleDoor([2, 0, 0], 0)).toBe(false); // a wall isn't openable
   });
+
+  it('bumps structure version and subscribers for collider-affecting edits', () => {
+    setFreeBuild(true);
+    let emits = 0;
+    const unsubscribe = subscribeStructures(() => { emits += 1; });
+    const start = getStructureVersion();
+
+    expect(placePiece([1, 0, 0], 0, 'door', 'wood')).toBe(true);
+    const placed = getStructureVersion();
+    expect(placed).toBeGreaterThan(start);
+
+    expect(toggleDoor([1, 0, 0], 0)).toBe(true);
+    const toggled = getStructureVersion();
+    expect(toggled).toBeGreaterThan(placed);
+    expect(isStructurePieceSolid(getPieceAt(1, 0, 0, 0)!)).toBe(false);
+
+    expect(removePiece([1, 0, 0], 0)).toBe(true);
+    expect(getStructureVersion()).toBeGreaterThan(toggled);
+    expect(emits).toBe(3);
+    unsubscribe();
+  });
 });
 
 describe('free build (debug)', () => {
@@ -151,6 +194,16 @@ describe('removePiece', () => {
     expect(hasFoundationInCell(0, 0, 0)).toBe(false);
     expect(getPieces()).toHaveLength(0);
     expect(getItemCount('wood')).toBe(Math.floor(FOUNDATION_WOOD / 2));
+  });
+
+  it('refunds removed pieces to the owner, not the actor doing removal', () => {
+    addItem('wood', FOUNDATION_WOOD, 'alice');
+    placePiece([0, 0, 0], 3, 'foundation', 'wood', undefined, 'alice');
+
+    expect(removePiece([0, 0, 0], 3, 'bob')).toBe(true);
+
+    expect(getItemCount('wood', 'alice')).toBe(Math.floor(FOUNDATION_WOOD / 2));
+    expect(getItemCount('wood', 'bob')).toBe(0);
   });
 
   it('removing a missing panel is a no-op', () => {

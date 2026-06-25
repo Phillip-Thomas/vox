@@ -168,6 +168,49 @@ export class EfficientVoxelSystem {
     this.suppressEdits = false;
   }
 
+  restoreOriginalTerrainVoxel(x: number, y: number, z: number): boolean {
+    const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
+    const originalData = this.originalTerrain.get(coordKey);
+    if (!originalData || !this.deletedTerrain.has(coordKey)) return false;
+
+    const previousSuppressEdits = this.suppressEdits;
+    this.suppressEdits = true;
+    let changed = false;
+    this.deletedTerrain.delete(coordKey);
+    this.editVersion += 1;
+    changed = true;
+
+    if (this.shouldBeExposed(x, y, z)) {
+      changed = this.addVoxel(
+        x,
+        y,
+        z,
+        originalData.material,
+        originalData.color,
+        undefined,
+        {
+          supportsSurfaceResources: true,
+          blockId: originalData.blockId,
+          deposit: originalData.deposit ?? null
+        }
+      ) || changed;
+    } else {
+      changed = this.removeExposedVoxelIfPresent(x, y, z) || changed;
+    }
+
+    for (const [nx, ny, nz] of this.neighborCoords(x, y, z)) {
+      if (!this.wasOriginalTerrain(nx, ny, nz) || this.isDeleted(nx, ny, nz)) continue;
+      if (this.shouldBeExposed(nx, ny, nz)) continue;
+      changed = this.removeExposedVoxelIfPresent(nx, ny, nz) || changed;
+    }
+
+    this.refreshNeighborAO(x, y, z);
+    this.markMeshDirty();
+    this.suppressEdits = previousSuppressEdits;
+    if (changed) this.emitEdit();
+    return changed;
+  }
+
   expandCapacity(newSize: number) {
     if (newSize > this.maxSlots) {
       this.maxSlots = newSize;
@@ -362,6 +405,25 @@ export class EfficientVoxelSystem {
     this.releaseMeshSlot(voxelData.meshSlot);
     this.refreshNeighborAO(x, y, z);
     this.emitEdit();
+    return true;
+  }
+
+  private removeExposedVoxelIfPresent(x: number, y: number, z: number): boolean {
+    const coordKey = EfficientVoxelSystem.coordKey(x, y, z);
+    const voxelData = this.exposedVoxels.get(coordKey);
+    if (!voxelData) return false;
+
+    try {
+      voxelData.rigidBodyRef?.setEnabled?.(false);
+    } catch (error) {
+      console.warn(`Failed to disable collision for voxel ${coordKey}:`, error);
+    }
+
+    this.collisionCallbacks?.remove(x, y, z, this.worldId);
+    this.exposedVoxels.delete(coordKey);
+    this.editVersion += 1;
+    this.releaseMeshSlot(voxelData.meshSlot);
+    this.refreshNeighborAO(x, y, z);
     return true;
   }
 

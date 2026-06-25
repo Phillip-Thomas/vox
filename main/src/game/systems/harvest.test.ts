@@ -3,6 +3,7 @@ import { MaterialType } from '../../types/materials.ts';
 import { dropsForBlock, dropsForMaterial, harvestMaterial, harvestVoxel, mineDurationMs, MIN_MINE_MS } from './harvestingSystem.ts';
 import { getInventory, getResourceCount, resetInventory, addResource, subscribeInventory, totalItems } from './inventorySystem.ts';
 import { RESOURCES } from '../data/resources.ts';
+import { createSimulationRng } from '../rng.ts';
 
 beforeEach(() => resetInventory());
 
@@ -41,6 +42,14 @@ describe('dropsForBlock / harvestVoxel', () => {
     expect(result.success).toBe(true);
     expect(result.drops.some(drop => drop.id === 'copper_ore')).toBe(true);
     expect(getResourceCount('copper_ore')).toBeGreaterThan(0);
+  });
+
+  it('can be driven by an explicit deterministic RNG', () => {
+    const input = { blockId: 'stone' as const, toolTier: 1, bank: false };
+    const first = harvestVoxel({ ...input, rng: createSimulationRng('stone-command', '0,0') });
+    const second = harvestVoxel({ ...input, rng: createSimulationRng('stone-command', '0,0') });
+
+    expect(second).toEqual(first);
   });
 });
 

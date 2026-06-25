@@ -7,9 +7,13 @@ import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from
 import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
 import {
-  collectStone, getStonePickupVersion, isStoneCollected, resetStonePickup
+  getStonePickupVersion, isStoneCollected, resetStonePickup
 } from '../game/systems/stonePickup';
+import type { CommandContext } from '../game/commands.ts';
+import { collectStoneCommand } from '../game/gameplayCommands.ts';
+import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
 import { restoreStonesForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { buildStoneGeometry, createStoneMaterial } from '../utils/looseStone';
 import { playSfx } from '../audio/sfxEngine.ts';
 
@@ -29,7 +33,9 @@ const SURFACE_OFFSET = 1.25;
 const HEADROOM = 32;
 
 interface LooseStoneFieldProps {
+  commandContext: CommandContext;
   terrainSeed: number;
+  persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
 }
 
@@ -78,7 +84,7 @@ function countStones(terrainSeed: number, playerPosition?: THREE.Vector3): numbe
  * its signature) so a picked-up stone disappears. Capacity grows like GrassField/
  * TreeField because voxels stream in after mount.
  */
-export default function LooseStoneField({ terrainSeed, playerPosition }: LooseStoneFieldProps) {
+export default function LooseStoneField({ commandContext, terrainSeed, persistenceWorld, playerPosition }: LooseStoneFieldProps) {
   // Irregular boulder (~0.55 base radius; voxels are VOXEL_SCALE=2 wide) + a
   // procedural stone material, so rocks read as natural stone, not flat gems.
   const geometry = useMemo(() => buildStoneGeometry(), []);
@@ -155,7 +161,10 @@ export default function LooseStoneField({ terrainSeed, playerPosition }: LooseSt
   }, [capacity]);
 
   // World-relative — clear, then load this world's already-collected stones.
-  useEffect(() => { resetStonePickup(); restoreStonesForWorld(terrainSeed); }, [terrainSeed]);
+  useEffect(() => {
+    resetStonePickup();
+    restoreStonesForWorld(persistenceWorld ?? terrainSeed);
+  }, [persistenceWorld, terrainSeed]);
 
   // Dispose GPU resources on unmount only (geometry/material are stable useMemos,
   // so this cleanup must NOT fire on a mere terrainSeed change). Clear the handle.
@@ -173,8 +182,11 @@ export default function LooseStoneField({ terrainSeed, playerPosition }: LooseSt
       for (const s of nearStones.current) {
         if (isStoneCollected(s.x, s.y, s.z)) continue;
         if (s.w.distanceToSquared(playerPosition) <= rSq) {
-          collectStone(s.x, s.y, s.z);
-          playSfx('mine'); // a short chip as confirmation the stone was gathered
+          const result = collectStoneCommand(commandContext, { x: s.x, y: s.y, z: s.z });
+          if (result.ok) {
+            sendMultiplayerCommandEvents(result);
+            playSfx('mine'); // a short chip as confirmation the stone was gathered
+          }
         }
       }
     }

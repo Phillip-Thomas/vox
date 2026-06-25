@@ -4,8 +4,8 @@
 // Two scopes, both keyed by GENERATION_SCHEMA_VERSION (a schema bump silently drops
 // stale saves — see schema.ts):
 //   GLOBAL    pvx.v{N}.global        inventory + maw charge + era/milestones + lastWorld
-//   PER-WORLD pvx.v{N}.world.{seed}  structures + campfires + harvested trees + stones
-//             (these are WORLD-RELATIVE coords, so keyed by the world's seed)
+//   PER-WORLD pvx.v{N}.world.{worldId} structures + campfires + harvested trees + stones
+//             (these are WORLD-RELATIVE coords, so keyed by coordinate-derived worldId)
 //
 // Loadout is DERIVED from inventory — not persisted separately. Terrain voxel edits
 // are NOT persisted here (separate concern in efficientVoxelSystem).
@@ -15,7 +15,7 @@ import { getInventory, resetInventory, addItem } from './inventorySystem.ts';
 import { getMawCharge, setMawCharge } from './mawSystem.ts';
 import { getCurrentEra, getMilestones, advanceEraTo, markMilestone } from './progressionSystem.ts';
 import { getPieces, restorePieces, type StructurePiece } from './structureSystem.ts';
-import { getCampfires, restoreCampfires } from './campfires.ts';
+import { getCampfires, restoreCampfires, type Campfire } from './campfires.ts';
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
 import { getCollectedForage, markForageCollected } from './foragePickup.ts';
@@ -25,11 +25,34 @@ import { getVitals, setVitals, type VitalsState } from './survivalVitals.ts';
 import { getWaterskinFill, setWaterskinFill } from './consumeSystem.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
-import type { WorldCoordinate } from '../../utils/worldCoordinates.ts';
+import type { CurrentWorld, WorldCoordinate } from '../../utils/worldCoordinates.ts';
+import type { WorldIdentity } from '../worldIdentity.ts';
 
 const PREFIX = `pvx.v${GENERATION_SCHEMA_VERSION}`;
 const GLOBAL_KEY = `${PREFIX}.global`;
-const worldKey = (seed: number) => `${PREFIX}.world.${seed}`;
+type WorldSaveRef = number | Pick<WorldIdentity, 'worldId' | 'seed'> | CurrentWorld;
+
+function isLegacySeed(ref: WorldSaveRef): ref is number {
+  return typeof ref === 'number';
+}
+
+function legacySeed(ref: WorldSaveRef): number {
+  return isLegacySeed(ref) ? ref : ref.seed;
+}
+
+function worldIdFor(ref: WorldSaveRef): string | null {
+  return isLegacySeed(ref) ? null : ref.worldId;
+}
+
+function scopedWorldKey(ref: WorldSaveRef, suffix = ''): { primary: string; legacy?: string } {
+  const worldId = worldIdFor(ref);
+  const legacy = `${PREFIX}.world.${legacySeed(ref)}${suffix}`;
+  // Seed-only callers have no recoverable coordinate. Keep them quarantined in
+  // the legacy namespace; only a world-aware ref is allowed to promote legacy
+  // data into a coordinate-derived worldId key.
+  if (!worldId) return { primary: legacy };
+  return { primary: `${PREFIX}.world.${worldId}${suffix}`, legacy };
+}
 
 function storage(): Storage | null {
   try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch { return null; }
@@ -41,6 +64,13 @@ function read<T>(key: string): T | null {
 function write(key: string, value: unknown): void {
   const s = storage(); if (!s) return;
   try { s.setItem(key, JSON.stringify(value)); } catch { /* quota / serialization — ignore */ }
+}
+function readScoped<T>(keys: { primary: string; legacy?: string }): T | null {
+  const primary = read<T>(keys.primary);
+  if (primary || !keys.legacy) return primary;
+  const legacy = read<T>(keys.legacy);
+  if (legacy) write(keys.primary, legacy);
+  return legacy;
 }
 
 // --- Global ------------------------------------------------------------------
@@ -80,55 +110,61 @@ export function restoreGlobal(save: GlobalSave): void {
 
 // --- Per-world ---------------------------------------------------------------
 interface WorldSave {
+  worldId?: string;
+  seed?: number;
   structures: StructurePiece[];
-  campfires: Array<{ pos: [number, number, number]; up: [number, number, number] }>;
+  campfires: Array<Omit<Campfire, 'id'>>;
   trees: Array<[number, number, number]>;
   stones: Array<[number, number, number]>;
   forage?: Array<[number, number, number]>;
 }
 
-export function saveWorld(seed: number): void {
+export function saveWorld(world: WorldSaveRef): void {
   const data: WorldSave = {
+    worldId: worldIdFor(world) ?? undefined,
+    seed: legacySeed(world),
     structures: getPieces(),
-    campfires: getCampfires().map(c => ({ pos: c.pos, up: c.up })),
+    campfires: getCampfires().map(({ id: _id, ...campfire }) => campfire),
     trees: getHarvestedTrees(),
     stones: getCollectedStones(),
     forage: getCollectedForage()
   };
-  write(worldKey(seed), data);
+  write(scopedWorldKey(world).primary, data);
 }
 
-function loadWorld(seed: number): WorldSave | null {
-  return read<WorldSave>(worldKey(seed));
+function loadWorld(world: WorldSaveRef): WorldSave | null {
+  return readScoped<WorldSave>(scopedWorldKey(world));
 }
 
 // Per-field restores — each field calls its own in its reset-then-load effect, so
 // entering a world (boot OR warp) clears memory then loads THAT world's data.
-export function restoreStructuresForWorld(seed: number): void {
-  const w = loadWorld(seed); if (w?.structures) restorePieces(w.structures);
+export function restoreStructuresForWorld(world: WorldSaveRef): void {
+  const w = loadWorld(world); if (w?.structures) restorePieces(w.structures);
 }
-export function restoreCampfiresForWorld(seed: number): void {
-  const w = loadWorld(seed); if (w?.campfires) restoreCampfires(w.campfires);
+export function restoreCampfiresForWorld(world: WorldSaveRef): void {
+  const w = loadWorld(world); if (w?.campfires) restoreCampfires(w.campfires);
 }
-export function restoreTreesForWorld(seed: number): void {
-  const w = loadWorld(seed); if (w?.trees) for (const t of w.trees) markTreeHarvested(t[0], t[1], t[2]);
+export function restoreTreesForWorld(world: WorldSaveRef): void {
+  const w = loadWorld(world); if (w?.trees) for (const t of w.trees) markTreeHarvested(t[0], t[1], t[2]);
 }
-export function restoreStonesForWorld(seed: number): void {
-  const w = loadWorld(seed); if (w?.stones) for (const s of w.stones) markStoneCollected(s[0], s[1], s[2]);
+export function restoreStonesForWorld(world: WorldSaveRef): void {
+  const w = loadWorld(world); if (w?.stones) for (const s of w.stones) markStoneCollected(s[0], s[1], s[2]);
 }
-export function restoreForageForWorld(seed: number): void {
-  const w = loadWorld(seed); if (w?.forage) for (const f of w.forage) markForageCollected(f[0], f[1], f[2]);
+export function restoreForageForWorld(world: WorldSaveRef): void {
+  const w = loadWorld(world); if (w?.forage) for (const f of w.forage) markForageCollected(f[0], f[1], f[2]);
 }
 
 // --- Terrain voxel edits (SEPARATE key per world) ---------------------------
 // Kept out of the WorldSave blob so a big dig doesn't re-serialize on every
 // unrelated autosave and can't take structures down with it on a quota error.
 interface VoxelSave {
+  worldId?: string;
+  seed?: number;
+  generationSchemaVersion?: number;
   fingerprint: number;                          // original-terrain size (gen canary)
   removed: Array<[number, number, number]>;     // dug-out coords
   added: Array<[number, number, number]>;       // FUTURE: player-placed blocks
 }
-const worldVoxelKey = (seed: number) => `${PREFIX}.world.${seed}.voxels`;
 
 // --- Player pose (per world: where you stood + which way you faced) ----------
 interface PlayerPose {
@@ -136,9 +172,7 @@ interface PlayerPose {
   forward: [number, number, number];
   pitch: number;
 }
-const worldPlayerKey = (seed: number) => `${PREFIX}.world.${seed}.player`;
-
-export function savePlayerPose(seed: number): void {
+export function savePlayerPose(world: WorldSaveRef): void {
   const p = getPlayerWorldPosition();
   const look = getPlayerLook();
   const data: PlayerPose = {
@@ -146,30 +180,34 @@ export function savePlayerPose(seed: number): void {
     forward: [look.forward.x, look.forward.y, look.forward.z],
     pitch: look.pitch
   };
-  write(worldPlayerKey(seed), data);
+  write(scopedWorldKey(world, '.player').primary, data);
 }
 
 /** Saved pose for a world, or null. EfficientScene uses `pos` as the spawn point and
  *  seeds the camera look from `forward`/`pitch` (via setPlayerLook) before mount. */
-export function loadPlayerPose(seed: number): PlayerPose | null {
-  return read<PlayerPose>(worldPlayerKey(seed));
+export function loadPlayerPose(world: WorldSaveRef): PlayerPose | null {
+  return readScoped<PlayerPose>(scopedWorldKey(world, '.player'));
 }
 
-export function saveVoxelEdits(seed: number): void {
+export function saveVoxelEdits(world: WorldSaveRef): void {
   const data: VoxelSave = {
+    worldId: worldIdFor(world) ?? undefined,
+    seed: legacySeed(world),
+    generationSchemaVersion: GENERATION_SCHEMA_VERSION,
     fingerprint: voxelSystem.getOriginalTerrainSize(),
     removed: voxelSystem.getDeletedVoxels(),
     added: []
   };
-  write(worldVoxelKey(seed), data);
+  write(scopedWorldKey(world, '.voxels').primary, data);
 }
 
 /** Replay this world's terrain diff. Call AFTER populateInitialTerrain (so coords are
  *  solid) and BEFORE the collision flush. Refuses a stale save (gen fingerprint
  *  mismatch). Must run synchronously while the live world matches `seed`. */
-export function restoreVoxelEditsForWorld(seed: number): void {
-  const save = read<VoxelSave>(worldVoxelKey(seed));
+export function restoreVoxelEditsForWorld(world: WorldSaveRef): void {
+  const save = readScoped<VoxelSave>(scopedWorldKey(world, '.voxels'));
   if (!save) return;
+  if (save.generationSchemaVersion != null && save.generationSchemaVersion !== GENERATION_SCHEMA_VERSION) return;
   if (save.fingerprint !== voxelSystem.getOriginalTerrainSize()) return; // terrain gen changed → drop
   voxelSystem.applyTerrainDiff(save.removed ?? []);
 }

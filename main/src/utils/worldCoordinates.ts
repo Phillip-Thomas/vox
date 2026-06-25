@@ -4,6 +4,7 @@ export interface WorldCoordinate {
 }
 
 export interface CurrentWorld {
+  worldId: string;
   coordinate: WorldCoordinate;
   seed: number;
 }
@@ -41,6 +42,7 @@ export function coordinateToSeed(x: number, y: number): number {
 export function createCurrentWorld(coordinate: WorldCoordinate): CurrentWorld {
   const normalized = normalizeCoordinate(coordinate);
   return {
+    worldId: coordinateKey(normalized),
     coordinate: normalized,
     seed: coordinateToSeed(normalized.x, normalized.y)
   };

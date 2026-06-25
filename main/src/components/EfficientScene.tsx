@@ -17,6 +17,7 @@ import MenuCamera from './MenuCamera.tsx';
 import AgentCamera from './debug/AgentCamera.tsx';
 import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
+import PlayerAvatarPoseHarness from './PlayerAvatarPoseHarness.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
 import { dominantFaceForPosition, getSurfaceState, SurfaceState } from '../utils/surfaceControls';
 import { FIXED_PHYSICS_STEP } from '../utils/cubeGravityConstants';
@@ -27,6 +28,7 @@ import {
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { loadPlayerPose } from '../game/systems/persistence.ts';
 import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
+import type { CommandContext } from '../game/commands.ts';
 
 export const planetSize = 50;
 
@@ -45,6 +47,7 @@ export interface SceneDebugState {
 }
 
 interface EfficientSceneProps {
+  commandContext: CommandContext;
   terrainSeed?: number;
   debugColliders?: boolean;
   arrivalMode?: ArrivalMode;
@@ -62,6 +65,7 @@ interface EfficientSceneProps {
 }
 
 export default function EfficientScene({
+  commandContext,
   terrainSeed = TERRAIN_SEEDS.DEFAULT,
   debugColliders = false,
   arrivalMode = 'surface',
@@ -88,7 +92,7 @@ export default function EfficientScene({
     if (arrivalMode === 'approach') return arrivalPose.approachPosition.clone();
     // Returning to a saved world: spawn where you stood, facing how you faced
     // (seed the camera look before CameraControls mounts).
-    const saved = loadPlayerPose(terrainSeed);
+    const saved = loadPlayerPose(commandContext.world);
     if (saved) {
       setPlayerLook(new THREE.Vector3(...saved.forward), saved.pitch);
       const pos = new THREE.Vector3(...saved.pos);
@@ -130,6 +134,7 @@ export default function EfficientScene({
         playerPosition={playerPosition}
         surfaceUp={surfaceState.up}
         terrainSeed={terrainSeed}
+        persistenceWorld={commandContext.world}
         debugColliders={debugColliders}
         onStatsChange={planet => updateDebugState({ planet })}
       />
@@ -155,6 +160,7 @@ export default function EfficientScene({
         />
       ) : (
         <EfficientPlayer
+          commandContext={commandContext}
           planetSize={planetSize}
           terrainSeed={terrainSeed}
           initialPosition={landedShipPos ?? initialPlayerPosition}
@@ -171,15 +177,16 @@ export default function EfficientScene({
         activeApproach={arrivalMode === 'approach'}
         playerPosition={playerPosition}
       />
+      <PlayerAvatarPoseHarness worldId={commandContext.world.worldId} />
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
-      <TreeField planetSize={planetSize} terrainSeed={terrainSeed} playerPosition={playerPosition} />
-      <LooseStoneField terrainSeed={terrainSeed} playerPosition={playerPosition} />
-      <ForageField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <TreeField planetSize={planetSize} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
+      <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
+      <ForageField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
       <PlayerTorch playerPosition={playerPosition} />
-      <Campfires terrainSeed={terrainSeed} />
-      <StructureField terrainSeed={terrainSeed} />
+      <Campfires terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />
+      <StructureField terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />
       <BuildGhost />
-      <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} />
+      <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} worldId={commandContext.world.worldId} />
       {/* Underwater: the surface-seen-from-below dome + near-field marine snow /
           bubbles. Both self-gate on submergence (invisible above water) and on
           the underwater graphics knobs, so they're cheap to leave mounted. */}
