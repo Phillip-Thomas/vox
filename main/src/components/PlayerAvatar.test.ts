@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { createPlayerPose } from '../game/playerPose.ts';
 import { getPlayerLook, getPlayerWorldPosition, setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
-import { createPlayerAvatarPresentation, createPlayerAvatarTransform } from './PlayerAvatar.tsx';
+import {
+  REMOTE_AVATAR_MAX_LEAD_DISTANCE,
+  REMOTE_AVATAR_VELOCITY_LEAD_SECONDS,
+  createPlayerAvatarPresentation,
+  createPlayerAvatarRenderTarget,
+  createPlayerAvatarTransform
+} from './PlayerAvatar.tsx';
 
 describe('PlayerAvatar transform', () => {
   it('derives a render transform from pose without writing local player singletons', () => {
@@ -61,5 +67,36 @@ describe('PlayerAvatar transform', () => {
     }));
     expect(build.bodyColor).toBe('#86efac');
     expect(build.showBuildPreview).toBe(true);
+  });
+
+  it('leads remote movement targets by velocity and clamps extreme speeds', () => {
+    const walking = createPlayerAvatarRenderTarget(createPlayerPose({
+      playerId: 'remote-walk',
+      worldId: '0,0',
+      position: [1, 2, 3],
+      velocity: [4, 0, 0]
+    }));
+    expect(walking.position[0]).toBeCloseTo(1 + 4 * REMOTE_AVATAR_VELOCITY_LEAD_SECONDS);
+    expect(walking.position[1]).toBeCloseTo(2);
+    expect(walking.position[2]).toBeCloseTo(3);
+
+    const sprinting = createPlayerAvatarRenderTarget(createPlayerPose({
+      playerId: 'remote-sprint',
+      worldId: '0,0',
+      position: [1, 2, 3],
+      velocity: [100, 0, 0]
+    }));
+    expect(sprinting.position[0]).toBeCloseTo(1 + REMOTE_AVATAR_MAX_LEAD_DISTANCE);
+  });
+
+  it('does not velocity-lead teleport poses', () => {
+    const target = createPlayerAvatarRenderTarget(createPlayerPose({
+      playerId: 'remote-respawn',
+      worldId: '0,0',
+      position: [1, 2, 3],
+      velocity: [4, 0, 0],
+      teleport: true
+    }));
+    expect(target.position).toEqual([1, 2, 3]);
   });
 });

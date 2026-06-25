@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveMultiplayerConfig } from './multiplayerSession.ts';
+import { MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS, resolveMultiplayerConfig } from './multiplayerSession.ts';
 
 const readyEnv = {
   VITE_PARAVOXIA_COOP: '1',
@@ -11,6 +11,10 @@ const readyEnv = {
 };
 
 describe('multiplayer session config', () => {
+  it('uses a low-latency pose publish cadence', () => {
+    expect(MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS).toBeLessThanOrEqual(34);
+  });
+
   it('keeps co-op disabled until the build flag is enabled', () => {
     expect(resolveMultiplayerConfig({}).reason).toBe('disabled');
   });

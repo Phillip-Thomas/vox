@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { PlayerPose, Vec3Tuple } from '../game/playerPose.ts';
 
@@ -10,6 +11,9 @@ interface PlayerAvatarProps {
 const UP_Y = new THREE.Vector3(0, 1, 0);
 const FALLBACK_FORWARD = new THREE.Vector3(0, 0, -1);
 const DEFAULT_AVATAR_COLOR = '#7dd3fc';
+export const REMOTE_AVATAR_VELOCITY_LEAD_SECONDS = 0.08;
+export const REMOTE_AVATAR_MAX_LEAD_DISTANCE = 0.75;
+export const REMOTE_AVATAR_CHASE_RATE = 24;
 
 function vector(tuple: Vec3Tuple): THREE.Vector3 {
   return new THREE.Vector3(tuple[0], tuple[1], tuple[2]);
@@ -40,6 +44,38 @@ export function createPlayerAvatarTransform(pose: PlayerPose): {
   return {
     position: pose.position,
     quaternion: [q.x, q.y, q.z, q.w]
+  };
+}
+
+function velocityLead(velocity: Vec3Tuple): Vec3Tuple {
+  const speed = Math.hypot(velocity[0], velocity[1], velocity[2]);
+  if (speed <= 1e-6) return [0, 0, 0];
+  const leadSeconds = Math.min(
+    REMOTE_AVATAR_VELOCITY_LEAD_SECONDS,
+    REMOTE_AVATAR_MAX_LEAD_DISTANCE / speed
+  );
+  return [
+    velocity[0] * leadSeconds,
+    velocity[1] * leadSeconds,
+    velocity[2] * leadSeconds
+  ];
+}
+
+export function createPlayerAvatarRenderTarget(pose: PlayerPose): {
+  position: Vec3Tuple;
+  quaternion: [number, number, number, number];
+} {
+  const transform = createPlayerAvatarTransform(pose);
+  if (pose.teleport || pose.warp) return transform;
+
+  const lead = velocityLead(pose.velocity);
+  return {
+    ...transform,
+    position: [
+      transform.position[0] + lead[0],
+      transform.position[1] + lead[1],
+      transform.position[2] + lead[2]
+    ]
   };
 }
 
@@ -82,13 +118,37 @@ export function createPlayerAvatarPresentation(
 }
 
 export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR }: PlayerAvatarProps) {
-  const transform = useMemo(() => createPlayerAvatarTransform(pose), [pose]);
+  const groupRef = useRef<THREE.Group | null>(null);
+  const hasInitialized = useRef(false);
+  const frameTargetPosition = useRef(new THREE.Vector3());
+  const frameTargetQuaternion = useRef(new THREE.Quaternion());
+  const target = useMemo(() => createPlayerAvatarRenderTarget(pose), [pose]);
+  const targetRef = useRef(target);
+  targetRef.current = target;
   const presentation = useMemo(() => createPlayerAvatarPresentation(pose, color), [color, pose]);
+
+  useLayoutEffect(() => {
+    if (!groupRef.current) return;
+    if (hasInitialized.current && !pose.teleport && !pose.warp) return;
+    groupRef.current.position.fromArray(target.position);
+    groupRef.current.quaternion.fromArray(target.quaternion);
+    hasInitialized.current = true;
+  }, [pose.teleport, pose.warp, target]);
+
+  useFrame((_, delta) => {
+    const group = groupRef.current;
+    if (!group || !hasInitialized.current) return;
+    const next = targetRef.current;
+    frameTargetPosition.current.fromArray(next.position);
+    frameTargetQuaternion.current.fromArray(next.quaternion);
+    const alpha = 1 - Math.exp(-Math.min(delta, 0.05) * REMOTE_AVATAR_CHASE_RATE);
+    group.position.lerp(frameTargetPosition.current, alpha);
+    group.quaternion.slerp(frameTargetQuaternion.current, alpha);
+  });
 
   return (
     <group
-      position={transform.position}
-      quaternion={transform.quaternion}
+      ref={groupRef}
       userData={{ playerId: pose.playerId, worldId: pose.worldId, action: pose.action }}
     >
       <mesh position={presentation.bodyPosition} rotation={presentation.bodyRotation} castShadow receiveShadow>

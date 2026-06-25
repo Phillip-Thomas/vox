@@ -307,7 +307,7 @@ code, tests, and manual evidence for that item exist.
 - [ ] Add client prediction for high-value actions.
 - [x] Add rollback on reject.
 - [x] Send pose updates at target rate.
-- [ ] Interpolate remote poses.
+- [x] Interpolate remote poses.
 - [x] Render remote players through `PlayerAvatar`.
 - [x] Ensure remote player state never writes local singleton stores.
 
@@ -492,6 +492,13 @@ Evidence: 2026-06-25 respawn replication batch deployed Hosting asset
 world events now apply as remote teleport poses, stale pre-respawn pose packets are ignored, and
 state-server regression coverage verifies respawn broadcast plus late-join snapshot replay.
 `https://paravox-game.web.app/` and `https://paravoxia.com/` both served the deployed asset.
+
+Evidence: 2026-06-25 movement latency batch deployed Hosting asset `/assets/index-DB3baw41.js`.
+The deployed source has 30Hz local pose sampling and WebSocket pose publishing; this batch added
+render-side remote avatar smoothing with a small clamped velocity lead, while respawn/warp still
+snap instantly. Server `npm run verify` passed with 26 tests and full `main` `npm run verify`
+passed with 462 tests. `https://paravox-game.web.app/` and `https://paravoxia.com/` both served
+the deployed asset.
 
 ## Phase 2 - Persistent Shards
 
