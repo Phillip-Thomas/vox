@@ -30,6 +30,7 @@ import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
 import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts';
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { getPieceAt, resetStructures, restorePieces } from './systems/structureSystem.ts';
+import { getWorldCollisionChangeSnapshot, resetWorldCollisionChangesForTests } from './worldCollisionReconciliation.ts';
 
 beforeEach(() => {
   resetPlayerPoses();
@@ -42,6 +43,7 @@ beforeEach(() => {
   resetForagePickup();
   resetCampfires();
   resetStructures();
+  resetWorldCollisionChangesForTests();
 });
 
 describe('multiplayer replication', () => {
@@ -142,6 +144,10 @@ describe('multiplayer replication', () => {
 
     expect(applyReplicatedWorldEvent(event, { localPlayerId: 'alice', ignoreLocalPlayer: true, terrain })).toBe(true);
     expect(applied).toEqual([[[0, 1, 0]]]);
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'terrain_diff',
+      cells: [[0, 1, 0]]
+    });
 
     expect(applyReplicatedWorldEvent({ ...event, playerId: 'alice' }, { localPlayerId: 'alice', ignoreLocalPlayer: true, terrain })).toBe(false);
     expect(applied).toEqual([[[0, 1, 0]]]);
@@ -192,6 +198,7 @@ describe('multiplayer replication', () => {
     expect(applyReplicatedWorldSnapshotTerrain(snapshot, '0,0', { terrain })).toEqual({ applied: 0, queued: 2 });
     expect(getPendingReplicatedTerrainDiffCount('0,0')).toBe(2);
     expect(applied).toEqual([]);
+    expect(getWorldCollisionChangeSnapshot()).toBeNull();
 
     originalTerrainSize = 128;
     setActiveReplicatedTerrainWorld('other-world');
@@ -202,6 +209,11 @@ describe('multiplayer replication', () => {
     expect(applyPendingReplicatedTerrainDiff('0,0', terrain)).toEqual({ applied: 2, queued: 0 });
     expect(getPendingReplicatedTerrainDiffCount('0,0')).toBe(0);
     expect(applied).toEqual([[[0, 1, 0], [1, 1, 0]]]);
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'terrain_diff',
+      worldId: '0,0',
+      cells: [[0, 1, 0], [1, 1, 0]]
+    });
   });
 
   it('rejects malformed mining coords', () => {
@@ -285,6 +297,11 @@ describe('multiplayer replication', () => {
       payload: { cell: [0, 0, 0], face: 3 }
     })).toBe(true);
     expect(getPieceAt(0, 0, 0, 3)).toBeUndefined();
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'structure_removed',
+      cells: [[0, 0, 0]],
+      solidAfter: false
+    });
 
     expect(applyReplicatedWorldEvent({
       seq: 6,
@@ -376,6 +393,11 @@ describe('multiplayer replication', () => {
     })).toBe(true);
     expect(getPieceAt(0, 0, 0, 0)).toMatchObject({ type: 'doorway', tall: 'lower' });
     expect(getPieceAt(0, 1, 0, 0)).toMatchObject({ type: 'doorway', tall: 'upper' });
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'structure_placed',
+      cells: [[0, 0, 0], [0, 1, 0]],
+      solidAfter: false
+    });
 
     expect(applyReplicatedWorldEvent({
       seq: 2,
@@ -384,6 +406,11 @@ describe('multiplayer replication', () => {
       payload: { cell: [0, 0, 0], face: 0, type: 'door', material: 'wood' }
     })).toBe(true);
     expect(getPieceAt(0, 0, 0, 0)).toMatchObject({ leaf: true, open: false });
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'structure_placed',
+      cells: [[0, 0, 0], [0, 1, 0]],
+      solidAfter: true
+    });
 
     expect(applyReplicatedWorldEvent({
       seq: 3,
@@ -393,6 +420,23 @@ describe('multiplayer replication', () => {
     })).toBe(true);
     expect(getPieceAt(0, 0, 0, 0)).toMatchObject({ open: true });
     expect(getPieceAt(0, 1, 0, 0)).toMatchObject({ open: true });
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'door_toggled',
+      cells: [[0, 0, 0], [0, 1, 0]],
+      solidAfter: false
+    });
+
+    expect(applyReplicatedWorldEvent({
+      seq: 4,
+      type: 'door_toggled',
+      playerId: 'bob',
+      payload: { cell: [0, 0, 0], face: 0, open: false }
+    })).toBe(true);
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'door_toggled',
+      cells: [[0, 0, 0], [0, 1, 0]],
+      solidAfter: true
+    });
   });
 
   it('does not apply local echoed world events', () => {

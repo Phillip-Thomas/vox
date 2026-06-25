@@ -317,13 +317,13 @@ code, tests, and manual evidence for that item exist.
 - [x] Mining terrain removal is replicated from accepted room events.
 - [x] Mining drop identity/quantity is server-resolved.
 - [x] Mining water flood is deterministic and replicated/derived from accepted room events.
-- [ ] Voxel collision rebuild happens after authoritative terrain updates.
+- [x] Voxel collision rebuild happens after authoritative terrain updates.
 - [x] Replicated voxel removals replay through terrain diffs so visible terrain/collision rebuild.
 - [x] Structure placement is server-validated and replicated.
 - [x] Structure placement is replicated from accepted room events.
 - [ ] Structure removal/refund routes to the correct actor.
 - [x] Structure removal is replicated from accepted room events without local viewer refunds.
-- [ ] Door toggle rebuilds collision and triggers reconciliation when needed.
+- [x] Door toggle rebuilds collision and triggers reconciliation when needed.
 - [x] Door toggle open/closed state is replicated from accepted room events.
 - [ ] `placeVolume` orientation replicates correctly.
 - [x] `placeVolume` orientation is carried in replicated structure placement events.
@@ -387,8 +387,8 @@ code, tests, and manual evidence for that item exist.
 - [x] Disconnect does not destroy the shard.
 - [x] Concurrent mining of same voxel is first-wins.
 - [x] Concurrent pickup of same forage/stone is first-wins.
-- [ ] Door toggle updates collision for both players.
-- [ ] Player affected by remote collider change reconciles cleanly.
+- [x] Door toggle updates collision for both players.
+- [x] Player affected by remote collider change reconciles cleanly.
 - [ ] Mining into water updates water/swim/oxygen behavior for both players.
 - [ ] Remote player swimming is visible as swimming.
 - [ ] Remote player jetpack is visible as jetpack.
@@ -470,6 +470,13 @@ that require an existing doorway. Live smoke accepted a foundation only after se
 stripped forged structure state, rejected an unaffordable foundation as `validation_failed`,
 replicated the accepted structure to a second player, and included it in a late-join Neon-backed
 snapshot.
+
+Evidence: 2026-06-25 collider reconciliation batch deployed Hosting asset
+`/assets/index-C7cSUfXO.js`. Full `main` `npm run verify` passed with 456 tests. Replicated
+terrain diffs now emit collision-change notifications only after authoritative terrain apply,
+structure placement/removal and door toggles emit affected collision cells, and the local player
+controller wakes/reconciles nearby collider changes while avoiding cube-edge transition locks.
+`https://paravox-game.web.app/` and `https://paravoxia.com/` both served the deployed asset.
 
 ## Phase 2 - Persistent Shards
 

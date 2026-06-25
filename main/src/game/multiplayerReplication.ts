@@ -9,6 +9,8 @@ import { restoreCampfires } from './systems/campfires.ts';
 import {
   applyDoorLeaf,
   FACE_DIRS,
+  getPieceAt,
+  isStructurePieceSolid,
   removePieceWithoutRefund,
   restorePieces,
   setDoorOpen,
@@ -17,6 +19,7 @@ import {
 } from './systems/structureSystem.ts';
 import type { BuildMaterialId } from './data/buildMaterials.ts';
 import type { BuildPieceType } from './data/buildPieces.ts';
+import { notifyWorldCollisionChanged, type CollisionCell } from './worldCollisionReconciliation.ts';
 
 export interface RemotePoseUpdate {
   playerId: string;
@@ -157,6 +160,11 @@ export function applyPendingReplicatedTerrainDiff(
   pendingTerrainDiffsByWorld.delete(worldId);
   const unique = uniqueCoords(pending);
   terrain.applyTerrainDiff(unique);
+  notifyWorldCollisionChanged({
+    kind: 'terrain_diff',
+    worldId,
+    cells: unique
+  });
   return { applied: unique.length, queued: 0 };
 }
 
@@ -258,11 +266,11 @@ export function applyReplicatedWorldEvent(
     case 'resource_taken':
       return applyReplicatedResourceTaken(parsed.payload);
     case 'structure_placed':
-      return applyReplicatedStructurePlaced(parsed.payload, parsed.playerId);
+      return applyReplicatedStructurePlaced(parsed.payload, parsed.playerId, options.worldId);
     case 'structure_removed':
-      return applyReplicatedStructureRemoved(parsed.payload);
+      return applyReplicatedStructureRemoved(parsed.payload, options.worldId);
     case 'door_toggled':
-      return applyReplicatedDoorToggled(parsed.payload);
+      return applyReplicatedDoorToggled(parsed.payload, options.worldId);
     case 'campfire_placed':
       return applyReplicatedCampfirePlaced(parsed.payload, parsed.playerId);
     default:
@@ -331,13 +339,17 @@ export function applyReplicatedResourceTaken(payload: JsonObject): boolean {
   }
 }
 
-export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: string): boolean {
+export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: string, worldId?: string): boolean {
   const cell = readCoord(payload.cell);
   const face = readInt(payload.face);
   const type = readString(payload.type);
   const material = readString(payload.material);
   if (!cell || face === null || !type || !material) return false;
-  if (type === 'door') return applyDoorLeaf(cell, face);
+  if (type === 'door') {
+    const applied = applyDoorLeaf(cell, face);
+    if (applied) notifyStructureCollisionChanged('structure_placed', cell, face, worldId);
+    return applied;
+  }
   if (type === 'doorway') {
     const up = readInt(payload.up);
     if (up === null || !FACE_DIRS[up]) return false;
@@ -367,6 +379,7 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
         placedBy: playerId
       }
     ]);
+    notifyStructureCollisionChanged('structure_placed', cell, face, worldId);
     return true;
   }
 
@@ -384,21 +397,34 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
   if (orient !== null) piece.orient = orient;
   if (face === VOLUME_FACE && up === null) return false;
   restorePieces([piece]);
+  notifyStructureCollisionChanged('structure_placed', cell, face, worldId);
   return true;
 }
 
-export function applyReplicatedStructureRemoved(payload: JsonObject): boolean {
+export function applyReplicatedStructureRemoved(payload: JsonObject, worldId?: string): boolean {
   const cell = readCoord(payload.cell);
   const face = readInt(payload.face);
   if (!cell || face === null) return false;
-  return removePieceWithoutRefund(cell, face);
+  const cells = structureCollisionCellsFromStore(cell, face);
+  const removed = removePieceWithoutRefund(cell, face);
+  if (removed) {
+    notifyWorldCollisionChanged({
+      kind: 'structure_removed',
+      worldId,
+      cells,
+      solidAfter: false
+    });
+  }
+  return removed;
 }
 
-export function applyReplicatedDoorToggled(payload: JsonObject): boolean {
+export function applyReplicatedDoorToggled(payload: JsonObject, worldId?: string): boolean {
   const cell = readCoord(payload.cell);
   const face = readInt(payload.face);
   if (!cell || face === null || typeof payload.open !== 'boolean') return false;
-  return setDoorOpen(cell, face, payload.open);
+  const applied = setDoorOpen(cell, face, payload.open);
+  if (applied) notifyStructureCollisionChanged('door_toggled', cell, face, worldId);
+  return applied;
 }
 
 export function applyReplicatedCampfirePlaced(payload: JsonObject, playerId: string): boolean {
@@ -451,6 +477,11 @@ function replayReplicatedTerrainDiff(
   const unique = uniqueCoords(coords);
   if (!worldId || canApplyTerrainDiff(worldId, terrain)) {
     terrain.applyTerrainDiff(unique);
+    notifyWorldCollisionChanged({
+      kind: 'terrain_diff',
+      worldId,
+      cells: unique
+    });
     return { applied: unique.length, queued: 0 };
   }
 
@@ -500,6 +531,32 @@ function uniqueCoords(coords: ReadonlyArray<[number, number, number]>): Array<[n
     unique.push(coord);
   }
   return unique;
+}
+
+function notifyStructureCollisionChanged(
+  kind: 'structure_placed' | 'door_toggled',
+  cell: [number, number, number],
+  face: number,
+  worldId?: string
+): void {
+  const piece = getPieceAt(cell[0], cell[1], cell[2], face);
+  notifyWorldCollisionChanged({
+    kind,
+    worldId,
+    cells: structureCollisionCellsFromPiece(piece, cell),
+    solidAfter: piece ? isStructurePieceSolid(piece) : false
+  });
+}
+
+function structureCollisionCellsFromStore(cell: [number, number, number], face: number): CollisionCell[] {
+  return structureCollisionCellsFromPiece(getPieceAt(cell[0], cell[1], cell[2], face), cell);
+}
+
+function structureCollisionCellsFromPiece(piece: StructurePiece | undefined, fallback: [number, number, number]): CollisionCell[] {
+  if (!piece) return [[fallback[0], fallback[1], fallback[2]]];
+  const cells: CollisionCell[] = [[piece.cell[0], piece.cell[1], piece.cell[2]]];
+  if (piece.partner) cells.push([piece.partner[0], piece.partner[1], piece.partner[2]]);
+  return cells;
 }
 
 function readObject(value: unknown): JsonObject | null {

@@ -90,6 +90,13 @@ import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 import type { CommandContext } from '../game/commands.ts';
 import type { PlayerActionMode } from '../game/playerPose.ts';
 import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
+import {
+  shouldDisplacePlayerForWorldCollisionChange,
+  shouldReconcilePlayerForWorldCollisionChange,
+  subscribeWorldCollisionChanges,
+  type WorldCollisionChange,
+  WORLD_COLLISION_PLAYER_SOLIDIFY_LIFT
+} from '../game/worldCollisionReconciliation.ts';
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { clampVitalsDelta } from '../game/tickDiscipline.ts';
 import {
@@ -521,6 +528,55 @@ export default function EfficientPlayer({
   // Bootstrap the player's gear so the early loop is playable before crafting
   // exists. Idempotent — only grants a starting Maw if no tool is owned yet.
   useEffect(() => { ensureStarterLoadout(commandContext.actorId); }, [commandContext.actorId]);
+
+  useEffect(() => {
+    let frame: number | null = null;
+    const pendingCollisionChange = { current: null as WorldCollisionChange | null };
+
+    const reconcile = () => {
+      frame = null;
+      const body = ref.current;
+      if (!body || rotationAnimation.current || transitionCooldown.current > 0) return;
+
+      const position = vectorFromRapier(body.translation());
+      const change = pendingCollisionChange.current;
+      if (!change || !shouldReconcilePlayerForWorldCollisionChange(change, position, commandContext.world.worldId)) return;
+
+      body.wakeUp();
+      if (!shouldDisplacePlayerForWorldCollisionChange(change)) return;
+
+      const up = surfaceRef.current.up.clone().normalize();
+      const adjusted = position.clone().addScaledVector(up, WORLD_COLLISION_PLAYER_SOLIDIFY_LIFT);
+      const velocity = vectorFromRapier(body.linvel());
+      const inwardSpeed = velocity.dot(up);
+      if (inwardSpeed < 0) velocity.addScaledVector(up, -inwardSpeed);
+
+      body.setTranslation(vectorToRapier(adjusted), true);
+      body.setLinvel(vectorToRapier(velocity), true);
+      setPlayerWorldPosition(adjusted);
+      onPositionChange?.(adjusted);
+    };
+
+    const unsubscribe = subscribeWorldCollisionChanges(change => {
+      const body = ref.current;
+      if (!body || rotationAnimation.current || transitionCooldown.current > 0) return;
+      const position = vectorFromRapier(body.translation());
+      if (!shouldReconcilePlayerForWorldCollisionChange(change, position, commandContext.world.worldId)) return;
+
+      pendingCollisionChange.current = change;
+      if (frame !== null && typeof window !== 'undefined') window.cancelAnimationFrame(frame);
+      if (typeof window === 'undefined' || typeof window.requestAnimationFrame !== 'function') {
+        reconcile();
+      } else {
+        frame = window.requestAnimationFrame(reconcile);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      if (frame !== null && typeof window !== 'undefined') window.cancelAnimationFrame(frame);
+    };
+  }, [commandContext.world.worldId, onPositionChange]);
 
   // Raycast the crosshair against the voxel terrain, the (near) tree meshes, and
   // the loose-stone mesh, returning whichever is CLOSEST. Trees/stones aren't
