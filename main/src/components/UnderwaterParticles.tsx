@@ -2,13 +2,13 @@
  * UnderwaterParticles — two GPU Points systems that sell underwater volume:
  *
  *   1. Marine Snow  — ~900 soft translucent motes drifting via sin-based Brownian
- *      noise in the vertex shader. Camera-centered, infinite wrap.
- *   2. Rising Bubbles — ~250 bright-rim bubbles with upward velocity + horizontal
- *      wobble in the vertex shader, respawning at box bottom when they exit top.
+ *      noise in the vertex shader. World-anchored around the camera, infinite wrap.
+ *   2. Rising Bubbles — ~250 bright-rim bubbles with local-up velocity + horizontal
+ *      wobble in the vertex shader, respawning below the swimmer when they exit top.
  *
- * Both systems are centered on the camera every frame via a `uCameraPos` uniform.
- * Wrap-around is computed entirely in GLSL (positions stored in a local [-half,half]
- * box, then offset by camera and modulo'd back). Zero per-frame JS allocation.
+ * Both systems are kept in a camera-adjacent volume via a `uCameraPos` uniform,
+ * but particles are anchored in world space before wrapping. This gives forward
+ * swimmer motion real parallax instead of making bubbles feel attached to camera.
  *
  * Visibility toggled (not mounted/unmounted) to avoid re-allocation.
  * Overall opacity driven by `uSubmergence` so they fade in with the waterline.
@@ -18,6 +18,7 @@ import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getPlayerUp } from '../state/playerFrame';
 import { getPlayerSubmergence } from '../state/playerSubmersion';
 
 // ---------------------------------------------------------------------------
@@ -95,6 +96,22 @@ float wrapBox(float v, float half_) {
   float size = half_ * 2.0;
   return mod(v + half_, size) - half_;
 }
+
+void waterParticleBasis(vec3 up, out vec3 right, out vec3 forward) {
+  vec3 ref = abs(up.y) < 0.92 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+  right = normalize(cross(ref, up));
+  forward = normalize(cross(up, right));
+}
+
+vec3 wrapAroundCamera(vec3 worldPos, vec3 cameraPos, vec3 up, float half_) {
+  vec3 right; vec3 forward;
+  waterParticleBasis(up, right, forward);
+  vec3 d = worldPos - cameraPos;
+  return cameraPos
+    + right * wrapBox(dot(d, right), half_)
+    + up * wrapBox(dot(d, up), half_)
+    + forward * wrapBox(dot(d, forward), half_);
+}
 `;
 
 // ---------------------------------------------------------------------------
@@ -107,6 +124,7 @@ attribute float aSize;
 
 uniform float uTime;
 uniform vec3  uCameraPos;
+uniform vec3  uUp;
 uniform float uBoxHalf;
 
 varying float vEdgeFade; // 0..1, fades near box boundary
@@ -123,18 +141,17 @@ void main() {
   pos.y += 0.12 * sin(t * 0.22 + aSeed.y) + 0.05 * sin(t * 0.61 + aSeed.z);
   pos.z += 0.15 * sin(t * 0.27 + aSeed.z) + 0.06 * sin(t * 0.55 + aSeed.x);
 
-  // Camera-center + infinite wrap: offset by camera then wrap back into box
-  pos += uCameraPos;
-  pos.x = wrapBox(pos.x - uCameraPos.x + uCameraPos.x, uBoxHalf) + uCameraPos.x;
-  pos.y = wrapBox(pos.y - uCameraPos.y + uCameraPos.y, uBoxHalf) + uCameraPos.y;
-  pos.z = wrapBox(pos.z - uCameraPos.z + uCameraPos.z, uBoxHalf) + uCameraPos.z;
+  vec3 up = normalize(uUp);
+  pos = wrapAroundCamera(pos, uCameraPos, up, uBoxHalf);
 
   // Re-express local offset relative to camera for edge-fade
   vec3 localOff = pos - uCameraPos;
+  vec3 right; vec3 forward;
+  waterParticleBasis(up, right, forward);
   // Fade out near the box walls (inner 70% = full alpha, then ramp to 0)
-  float fx = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(localOff.x));
-  float fy = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(localOff.y));
-  float fz = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(localOff.z));
+  float fx = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(dot(localOff, right)));
+  float fy = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(dot(localOff, up)));
+  float fz = 1.0 - smoothstep(uBoxHalf * 0.70, uBoxHalf, abs(dot(localOff, forward)));
   vEdgeFade = fx * fy * fz;
 
   vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
@@ -175,6 +192,7 @@ attribute float aSize;
 
 uniform float uTime;
 uniform vec3  uCameraPos;
+uniform vec3  uUp;
 uniform float uBoxHalf;
 
 varying float vEdgeFade;
@@ -184,33 +202,29 @@ ${WRAP_GLSL}
 
 void main() {
   vec3 pos = position;
+  vec3 up = normalize(uUp);
+  vec3 right; vec3 forward;
+  waterParticleBasis(up, right, forward);
 
-  // Rising: move upward at per-bubble speed, wrap at top of box
-  float boxSize = uBoxHalf * 2.0;
+  // Rising: move toward the local water surface, not global +Y.
   float rise    = uTime * aSeed.y * 1.2; // world-units risen
-  pos.y += rise;
-  // Wrap within local box before camera-centering (keep in [-boxHalf, boxHalf])
-  pos.y = wrapBox(pos.y, uBoxHalf);
+  pos += up * rise;
 
-  // Horizontal sin wobble
-  pos.x += 0.25 * sin(uTime * 1.1 + aSeed.x);
-  pos.z += 0.20 * sin(uTime * 0.9 + aSeed.z);
+  // Horizontal sin wobble in the plane perpendicular to local up.
+  pos += right * (0.25 * sin(uTime * 1.1 + aSeed.x));
+  pos += forward * (0.20 * sin(uTime * 0.9 + aSeed.z));
 
-  // Camera-center + wrap
-  pos += uCameraPos;
-  pos.x = wrapBox(pos.x - uCameraPos.x + uCameraPos.x, uBoxHalf) + uCameraPos.x;
-  pos.y = wrapBox(pos.y - uCameraPos.y + uCameraPos.y, uBoxHalf) + uCameraPos.y;
-  pos.z = wrapBox(pos.z - uCameraPos.z + uCameraPos.z, uBoxHalf) + uCameraPos.z;
+  pos = wrapAroundCamera(pos, uCameraPos, up, uBoxHalf);
 
   // Edge fade
   vec3 localOff = pos - uCameraPos;
-  float fx = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(localOff.x));
-  float fy = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(localOff.y));
-  float fz = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(localOff.z));
+  float fx = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(dot(localOff, right)));
+  float fy = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(dot(localOff, up)));
+  float fz = 1.0 - smoothstep(uBoxHalf * 0.72, uBoxHalf, abs(dot(localOff, forward)));
   vEdgeFade = fx * fy * fz;
 
   // Near-top bubbles fade just before they wrap (reduces pop)
-  float normY  = (localOff.y + uBoxHalf) / (uBoxHalf * 2.0); // 0=bottom,1=top
+  float normY  = (dot(localOff, up) + uBoxHalf) / (uBoxHalf * 2.0); // 0=bottom,1=top
   vEdgeFade   *= 1.0 - smoothstep(0.80, 1.0, normY);
 
   vRimAlpha = 1.0;
@@ -276,6 +290,7 @@ export default function UnderwaterParticles({
     uniforms: {
       uTime:        { value: 0 },
       uCameraPos:   { value: new THREE.Vector3() },
+      uUp:          { value: new THREE.Vector3(0, 1, 0) },
       uSubmergence: { value: 0 },
       uBoxHalf:     { value: BOX_HALF },
     },
@@ -290,6 +305,7 @@ export default function UnderwaterParticles({
     uniforms: {
       uTime:        { value: 0 },
       uCameraPos:   { value: new THREE.Vector3() },
+      uUp:          { value: new THREE.Vector3(0, 1, 0) },
       uSubmergence: { value: 0 },
       uBoxHalf:     { value: BOX_HALF },
     },
@@ -327,11 +343,13 @@ export default function UnderwaterParticles({
     // Marine snow uniforms
     snowMat.uniforms.uTime.value        = t;
     snowMat.uniforms.uCameraPos.value.copy(_camPos.current);
+    snowMat.uniforms.uUp.value.copy(getPlayerUp());
     snowMat.uniforms.uSubmergence.value = submergence;
 
     // Bubble uniforms
     bubbleMat.uniforms.uTime.value        = t;
     bubbleMat.uniforms.uCameraPos.value.copy(_camPos.current);
+    bubbleMat.uniforms.uUp.value.copy(getPlayerUp());
     bubbleMat.uniforms.uSubmergence.value = submergence;
   });
 

@@ -18,8 +18,9 @@ import { Uniform, Color, Vector2 } from 'three';
 //      couple of metres and the residual is blue-green (the bulk of "underwater").
 //   3. Volumetric HAZE: distance inscatter toward a water colour, brighter toward
 //      the sun's screen position.
-//   4. GOD RAYS: a cheap radial blur of bright (surface/Snell) pixels toward the
-//      sun's screen position (GPU Gems 3 light-shafts). Quality-gated.
+//   4. GOD RAYS: soft shafts sourced only from the sun/Snell aperture. Earlier
+//      versions blurred every bright scene pixel toward the sun, which copied
+//      nearby voxel texture highlights into repeated underwater artifacts.
 //   5. VIGNETTE: gentle radial darken (deepened by the low-oxygen pulse).
 //   6. WIPE: a brief refraction-distorted water-line band on the submerge/emerge
 //      crossing, driven by an edge-triggered uWipe.
@@ -72,23 +73,46 @@ const fragmentShader = /* glsl */ `
     vec3 haze = mix(uHaze, uHazeSun, pow(sun, 2.0));
     col = mix(col, haze, fog);
 
-    // 4. God rays — radial blur of bright pixels toward the sun (only the bright
-    // surface / Snell-window pixels streak, so the dark seabed doesn't smear).
+    // Nearby voxel detail stays readable, but underwater should still feel like
+    // a medium. Gently cool/desaturate warm close surfaces so sand/stone texture
+    // does not overpower the whole view before fog has much distance to work on.
+    float mediumWash = s * mix(0.09, 0.22, fog);
+    float luma = dot(col, vec3(0.299, 0.587, 0.114));
+    vec3 cooled = mix(vec3(luma) * uHaze, col * vec3(0.82, 0.98, 1.12), 0.72);
+    col = mix(col, cooled, mediumWash);
+    col += (uHazeSun * 0.45 + vec3(0.02, 0.18, 0.22)) * s * (1.0 - fog) * 0.055;
+
+    // 4. God rays. Source-gate the samples to the sun/Snell aperture, then tint
+    // the shaft analytically. This keeps terrain highlights from being copied
+    // into repeating bands while preserving the sun-peeking-through-water effect.
     if (uGodrays > 0.5 && uSunScreen.x > -10.0) {
-      vec2 dir = (uSunScreen - uv) * (1.0 / 24.0) * 0.92;
+      vec2 apertureUv = clamp(uSunScreen, vec2(0.02), vec2(0.98));
+      float offscreenFade = exp(-length(uSunScreen - apertureUv) * 1.75);
+      vec2 toAperture = apertureUv - uv;
+      float apertureDist = length(toAperture);
+      vec2 dir = toAperture * (1.0 / 28.0) * 0.96;
       vec2 coord = uv;
       float decay = 1.0;
       vec3 shaft = vec3(0.0);
-      for (int i = 0; i < 24; i++) {
+      for (int i = 0; i < 28; i++) {
         coord += dir;
         if (coord.x < 0.0 || coord.x > 1.0 || coord.y < 0.0 || coord.y > 1.0) break;
+        float aperture = smoothstep(0.66, 0.0, length(coord - apertureUv));
         vec3 smp = texture2D(inputBuffer, coord).rgb;
         float lum = dot(smp, vec3(0.333));
-        smp *= step(0.72, lum);
-        shaft += smp * decay;
-        decay *= 0.96;
+        float brightSource = smoothstep(0.62, 1.05, lum);
+        shaft += uHazeSun * aperture * (0.25 + 0.75 * brightSource) * decay;
+        decay *= 0.94;
       }
-      col += shaft * (1.0 / 24.0) * 0.5 * s;
+      float angle = atan(toAperture.y, toAperture.x);
+      float bands =
+        0.82
+        + 0.10 * sin(angle * 11.0 + uTime * 0.18)
+        + 0.06 * sin(angle * 19.0 - uTime * 0.13);
+      bands = clamp(bands, 0.62, 1.0);
+      float viewFalloff = smoothstep(1.25, 0.08, apertureDist);
+      float waterColumn = smoothstep(0.10, 0.78, fog);
+      col += shaft * (1.0 / 28.0) * 0.62 * s * offscreenFade * viewFalloff * waterColumn * bands;
     }
 
     // 5. Vignette — gentle radial darken, deepened by the low-oxygen pulse.
@@ -127,11 +151,11 @@ export interface UnderwaterEffectOptions {
 
 export class UnderwaterEffect extends Effect {
   constructor({
-    sigma = new Color(0.34, 0.10, 0.06),
-    deepTint = new Color(0.02, 0.12, 0.18),
-    haze = new Color(0.05, 0.22, 0.30),
-    hazeSun = new Color(0.30, 0.50, 0.55),
-    fogDensity = 0.05,
+    sigma = new Color(0.24, 0.075, 0.045),
+    deepTint = new Color(0.015, 0.10, 0.15),
+    haze = new Color(0.035, 0.20, 0.28),
+    hazeSun = new Color(0.36, 0.62, 0.68),
+    fogDensity = 0.037,
     godrays = true,
     wobble = 1.0
   }: UnderwaterEffectOptions = {}) {

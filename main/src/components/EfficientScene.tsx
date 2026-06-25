@@ -139,7 +139,7 @@ export default function EfficientScene({
         onStatsChange={planet => updateDebugState({ planet })}
       />
       {agent ? (
-        <AgentCamera planetSize={planetSize} onPositionChange={publishPlayerPosition} />
+        <AgentCamera planetSize={planetSize} terrainSeed={terrainSeed} onPositionChange={publishPlayerPosition} />
       ) : overview ? (
         <OverviewCamera planetSize={planetSize} />
       ) : cinematic ? (

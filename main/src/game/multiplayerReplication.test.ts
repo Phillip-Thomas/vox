@@ -116,6 +116,14 @@ describe('multiplayer replication', () => {
     expect(remote?.playerId).toBe('bob');
     expect(getPlayerPose('bob')?.position).toEqual([1, 2, 3]);
     expect(getPlayerPose('bob')?.jetpackActive).toBe(true);
+
+    expect(applyRemotePoseUpdate({
+      playerId: 'bob',
+      worldId: '0,0',
+      seq: 2,
+      pose: { position: [9, 9, 9], action: 'walk' }
+    }, 'alice')).toBeNull();
+    expect(getPlayerPose('bob')?.position).toEqual([1, 2, 3]);
   });
 
   it('extracts and applies server snapshot poses for remote players only', () => {
@@ -369,6 +377,54 @@ describe('multiplayer replication', () => {
     expect(getCampfires()).toHaveLength(1);
   });
 
+  it('applies replicated respawns as teleport poses and ignores stale pre-respawn poses', () => {
+    setPlayerPose({
+      playerId: 'bob',
+      worldId: '0,0',
+      seq: 12,
+      position: [1, 2, 3],
+      velocity: [4, 0, 0],
+      forward: [0, 0, 1],
+      up: [0, 1, 0],
+      pitch: 0.25,
+      action: 'jetpack',
+      jetpackActive: true,
+      submergence: 0.5,
+      miningProgress: 0.4
+    });
+
+    expect(applyReplicatedWorldEvent({
+      seq: 8,
+      type: 'player_respawned',
+      playerId: 'bob',
+      payload: { position: [9, 10.5, -2], up: [0, 1, 0] },
+      timeMs: 456
+    }, { worldId: '0,0' })).toBe(true);
+
+    expect(getPlayerPose('bob')).toMatchObject({
+      playerId: 'bob',
+      worldId: '0,0',
+      seq: 13,
+      timeMs: 456,
+      position: [9, 10.5, -2],
+      velocity: [0, 0, 0],
+      action: 'idle',
+      teleport: true,
+      submergence: 0,
+      miningProgress: 0,
+      jetpackActive: false,
+      shipPhase: 'surface'
+    });
+
+    expect(applyRemotePoseUpdate({
+      playerId: 'bob',
+      worldId: '0,0',
+      seq: 12,
+      pose: { position: [1, 2, 3], action: 'jetpack', jetpackActive: true }
+    }, 'alice')).toBeNull();
+    expect(getPlayerPose('bob')?.position).toEqual([9, 10.5, -2]);
+  });
+
   it('replays shared world events from snapshots for late joiners', () => {
     const snapshot = {
       world: {
@@ -408,6 +464,13 @@ describe('multiplayer replication', () => {
             type: 'water_flooded',
             playerId: 'bob',
             payload: { cells: [[0, 1, 0]] }
+          },
+          {
+            seq: 7,
+            type: 'player_respawned',
+            playerId: 'bob',
+            payload: { position: [5, 6, 7], up: [0, 1, 0] },
+            timeMs: 789
           }
         ]
       }
@@ -422,7 +485,7 @@ describe('multiplayer replication', () => {
       localPlayerId: 'alice',
       ignoreLocalPlayer: true,
       terrain
-    })).toEqual({ applied: 5, queuedTerrain: 1, queuedWater: 1 });
+    })).toEqual({ applied: 6, queuedTerrain: 1, queuedWater: 1 });
 
     expect(getPendingReplicatedTerrainDiffCount('0,0')).toBe(1);
     expect(getPendingReplicatedWaterFloodCount('0,0')).toBe(1);
@@ -430,6 +493,14 @@ describe('multiplayer replication', () => {
     expect(isStoneCollected(2, 2, 3)).toBe(true);
     expect(getPieceAt(0, 0, 0, 3)).toMatchObject({ type: 'foundation', ownerId: 'bob' });
     expect(getCampfires()).toHaveLength(1);
+    expect(getPlayerPose('bob')).toMatchObject({
+      worldId: '0,0',
+      seq: 7,
+      timeMs: 789,
+      position: [5, 6, 7],
+      teleport: true,
+      action: 'idle'
+    });
     expect(getPieceAt(9, 9, 9, 0)).toBeUndefined();
   });
 

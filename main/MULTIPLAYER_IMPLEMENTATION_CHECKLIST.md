@@ -341,7 +341,7 @@ code, tests, and manual evidence for that item exist.
 - [ ] Swim/submersion state replicates enough for remote presentation.
 - [ ] Jetpack fuel replicates enough for authority and remote presentation.
 - [x] World clock is server-owned in co-op.
-- [ ] Respawn/reset is command-routed and replicated.
+- [x] Respawn/reset is command-routed and replicated.
 - [ ] Warp request is command-routed.
 - [ ] Shard handoff payload includes ship/player pose and spawn slot.
 - [ ] Players can split worlds only if Phase 1 shard survival is implemented.
@@ -394,7 +394,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Remote player jetpack is visible as jetpack.
 - [x] Remote player mining/building is visually legible.
 - [x] Craft/campfire command is atomic under reject/rollback.
-- [ ] R-key reset/respawn is visible to the other player.
+- [x] R-key reset/respawn is visible to the other player.
 - [ ] Warp behavior matches the chosen party-travel rule.
 - [x] Cloud Run restart does not lose persisted Neon-backed worlds.
 - [x] Two private rooms on the same `worldId` do not share mutation events.
@@ -479,12 +479,19 @@ controller wakes/reconciles nearby collider changes while avoiding cube-edge tra
 `https://paravox-game.web.app/` and `https://paravoxia.com/` both served the deployed asset.
 
 Evidence: 2026-06-25 remote water/avatar presentation batch deployed Hosting asset
-`/assets/index-ddS8sQMt.js`. Full `main` `npm run verify` passed with 458 tests. Replicated
+`/assets/index-BYR6lfRd.js`. Full `main` `npm run verify` passed with 458 tests. Replicated
 `water_flooded` events are now covered against the real world generator queried by swim/oxygen
 state, proving received flood cells become `isWaterVoxel` on the joining/remote client.
 Remote avatars now present swim posture, jetpack flame, mining tool/progress, and build preview
 states from pose data. `https://paravox-game.web.app/` and `https://paravoxia.com/` both served
 the deployed asset.
+
+Evidence: 2026-06-25 respawn replication batch deployed Hosting asset
+`/assets/index-DUHvBBZc.js` with no server runtime change. Server `npm run verify` passed with
+25 tests and full `main` `npm run verify` passed with 459 tests. `player_respawned` reliable
+world events now apply as remote teleport poses, stale pre-respawn pose packets are ignored, and
+state-server regression coverage verifies respawn broadcast plus late-join snapshot replay.
+`https://paravox-game.web.app/` and `https://paravoxia.com/` both served the deployed asset.
 
 ## Phase 2 - Persistent Shards
 

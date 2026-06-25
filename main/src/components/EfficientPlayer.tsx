@@ -128,6 +128,8 @@ const _effUp = new THREE.Vector3();
 const BLOCK_REACH = 8;
 const LADDER_CLIMB_SPEED = 4; // m/s up (jump) / down (back) while against a ladder
 const SPRINT_MULTIPLIER = 1.6; // move-speed boost while sprinting (Shift), drains stamina
+const LOOKED_AT_UPDATE_FRAMES = 4;
+const PLAYER_POSE_UPDATE_FRAMES = 2;
 
 /** True if a climbable (ladder) panel borders the player's cell. A panel is keyed to
  *  ONE of the two cells it sits between, so we check the cell's own faces AND each
@@ -1287,8 +1289,11 @@ export default function EfficientPlayer({
     prevEatKey.current = eatHeld;
 
     // Update the "looking at" readout a few times/sec (cheap voxel march).
-    if (frameCount.current % 4 === 0) {
+    if (frameCount.current % LOOKED_AT_UPDATE_FRAMES === 0) {
       updateLookedAt(cameraRef.current);
+    }
+
+    if (frameCount.current % PLAYER_POSE_UPDATE_FRAMES === 0) {
       const velocity = vectorFromRapier(body.linvel());
       const look = getPlayerLook();
       const forward = cameraRef.current?.getWorldDirection(_poseForward) ?? look.forward;

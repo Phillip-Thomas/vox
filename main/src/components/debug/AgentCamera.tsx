@@ -4,6 +4,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import storedVantages from './vantages.json';
 import { setPlayerUp } from '../../state/playerFrame';
+import { setPlayerSubmerged } from '../../state/playerSubmersion';
+import { VOXEL_SCALE } from '../../utils/cubeGravityConstants';
+import { getWorldGen } from '../../utils/worldGenCache';
 
 // User-authored vantages (recorded via PoseRecorder, filed into vantages.json):
 // exact camera pose pinned to a specific world/seed. Replayed verbatim — far
@@ -63,6 +66,7 @@ declare global {
 
 interface AgentCameraProps {
   planetSize: number;
+  terrainSeed: number;
   /** Publish the camera position so grass/trees/water stream around the vantage. */
   onPositionChange?: (position: THREE.Vector3) => void;
 }
@@ -98,10 +102,11 @@ function topInstancePos(mesh: THREE.InstancedMesh, out: THREE.Vector3): boolean 
   return true;
 }
 
-export default function AgentCamera({ planetSize, onPositionChange }: AgentCameraProps) {
+export default function AgentCamera({ planetSize, terrainSeed, onPositionChange }: AgentCameraProps) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const gl = useThree(state => state.gl);
   const scene = useThree(state => state.scene);
+  const waterGen = getWorldGen(planetSize, terrainSeed).generator;
 
   const frameTimes = useRef<number[]>([]);
   const lastTime = useRef(0);
@@ -137,6 +142,17 @@ export default function AgentCamera({ planetSize, onPositionChange }: AgentCamer
     // `streamAt` is the SURFACE point published as the "player position" so grass/
     // trees/water stream around the SUBJECT, not the (often far) camera — otherwise
     // distance culling empties the scene at overhead/horizon vantages.
+    const publishScriptedSubmersion = (eye: THREE.Vector3) => {
+      const wet = waterGen.isWaterVoxel(
+        Math.round(eye.x / VOXEL_SCALE),
+        Math.round(eye.y / VOXEL_SCALE),
+        Math.round(eye.z / VOXEL_SCALE)
+      );
+      const eyeDomVoxel = Math.max(Math.abs(eye.x), Math.abs(eye.y), Math.abs(eye.z)) / VOXEL_SCALE;
+      const depthBelow = Math.max(0, (waterGen.getSeaLevelRadius() - eyeDomVoxel) * VOXEL_SCALE);
+      setPlayerSubmerged(wet ? 1 : 0, depthBelow);
+    };
+
     const apply = (p: THREE.Vector3, t: THREE.Vector3, streamAt: THREE.Vector3) => {
       cam.position.copy(p);
       cam.up.set(0, 1, 0);
@@ -144,6 +160,7 @@ export default function AgentCamera({ planetSize, onPositionChange }: AgentCamer
       cam.updateMatrixWorld(true);
       onPositionChange?.(streamAt.clone());
       setPlayerUp(streamAt); // so the sky's LOCAL day/night reflects this vantage
+      publishScriptedSubmersion(p);
     };
 
     const surfaceTop = () => new THREE.Vector3(0, worldRadius, 0);
@@ -233,8 +250,11 @@ export default function AgentCamera({ planetSize, onPositionChange }: AgentCamer
     // default vantage so the first frame isn't empty
     view('overhead');
 
-    return () => { delete window.__game; };
-  }, [gl, scene, planetSize, onPositionChange]);
+    return () => {
+      setPlayerSubmerged(0, 0);
+      delete window.__game;
+    };
+  }, [gl, scene, planetSize, terrainSeed, waterGen, onPositionChange]);
 
   useFrame(() => {
     frameCount.current++;

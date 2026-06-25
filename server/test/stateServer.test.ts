@@ -154,6 +154,68 @@ describe('state server', () => {
     ws.close();
   });
 
+  it('broadcasts player respawn events and includes them in late-join snapshots', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'respawn-1',
+      commandType: 'player_respawned',
+      worldId: '0,0',
+      payload: { position: [1.5, 2, -3], up: [0, 1, 0] }
+    }));
+
+    const accepted = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'respawn-1');
+    expect(accepted).toMatchObject({ worldId: '0,0', seq: 1 });
+    const broadcast = await waitForMessage(bob.messages, 'world_event', message => message.seq === 1);
+    expect(broadcast).toMatchObject({
+      worldId: '0,0',
+      seq: 1,
+      event: {
+        seq: 1,
+        type: 'player_respawned',
+        playerId: 'alice',
+        payload: { position: [1.5, 2, -3], up: [0, 1, 0] }
+      }
+    });
+
+    const charlie = await connectAndAuth(started.wsUrl, 'charlie-token');
+    charlie.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(charlie.messages, 'room_joined');
+    const snapshot = await waitForType(charlie.messages, 'world_snapshot');
+    expect(snapshot).toMatchObject({
+      worldId: '0,0',
+      seq: 1,
+      snapshot: {
+        world: {
+          events: [
+            {
+              seq: 1,
+              type: 'player_respawned',
+              playerId: 'alice',
+              payload: { position: [1.5, 2, -3], up: [0, 1, 0] }
+            }
+          ]
+        }
+      }
+    });
+
+    charlie.ws.close();
+    bob.ws.close();
+    alice.ws.close();
+  });
+
   it('rejects command actor spoofing and inactive shard targets', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const started = await startTestServer();

@@ -82,6 +82,8 @@ type PendingReliableCommand = {
   deferredStartIndex: number;
 };
 
+export const MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS = 33;
+
 let connection: MultiplayerConnection | null = null;
 let poseTimer: PoseTimer | null = null;
 let reconnectTimer: ReconnectTimer | null = null;
@@ -647,7 +649,7 @@ function clearReconnectTimer(): void {
 function startPoseForwarding(): void {
   stopPoseForwarding();
   lastSentPoseSeq = 0;
-  poseTimer = setInterval(publishLocalPose, 100);
+  poseTimer = setInterval(publishLocalPose, MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS);
   publishLocalPose();
 }
 

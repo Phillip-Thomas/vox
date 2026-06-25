@@ -122,10 +122,10 @@ const tmpColor = new THREE.Color();
 // it gives a believable underwater wash even on POTATO/LOW where there's no
 // post-processing composer (the depth-based extinction pass is layered on top for
 // ULTRA/HIGH). Applied over the day/night base fog so time-of-day still reads.
-const UW_FOG_SHALLOW = new THREE.Color('#1d6f78'); // near-surface teal
-const UW_FOG_DEEP = new THREE.Color('#062330');    // deep blue-green murk
-const UW_FOG_DENSITY = 0.085;                      // dense underwater haze
-const UW_DEPTH_RANGE = 26;                          // world units to reach full-deep tint
+const UW_FOG_SHALLOW = new THREE.Color('#18828c'); // near-surface crystalline teal
+const UW_FOG_DEEP = new THREE.Color('#05283a');    // deep blue-green murk
+const UW_FOG_DENSITY = 0.064;                      // clear underwater haze
+const UW_DEPTH_RANGE = 30;                          // world units to reach full-deep tint
 const _uwColor = new THREE.Color();
 
 /**

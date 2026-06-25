@@ -1,5 +1,5 @@
 import { createPlayerPose, type PlayerPose } from './playerPose.ts';
-import { setPlayerPose } from './systems/playerPoseSystem.ts';
+import { getPlayerPose, setPlayerPose } from './systems/playerPoseSystem.ts';
 import type { JsonObject } from './multiplayerClient.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { markTreeHarvested } from './systems/treeHarvest.ts';
@@ -81,6 +81,8 @@ export function toPosePayload(pose: PlayerPose): JsonObject {
 
 export function applyRemotePoseUpdate(update: RemotePoseUpdate, localPlayerId: string | null): PlayerPose | null {
   if (update.playerId === localPlayerId) return null;
+  const current = getPlayerPose(update.playerId);
+  if (current && current.worldId === update.worldId && update.seq <= current.seq) return null;
   const pose = createPlayerPose({
     ...(update.pose as Partial<PlayerPose>),
     playerId: update.playerId,
@@ -273,6 +275,8 @@ export function applyReplicatedWorldEvent(
       return applyReplicatedDoorToggled(parsed.payload, options.worldId);
     case 'campfire_placed':
       return applyReplicatedCampfirePlaced(parsed.payload, parsed.playerId);
+    case 'player_respawned':
+      return applyReplicatedPlayerRespawned(parsed.payload, parsed.playerId, options.worldId, parsed.seq, parsed.timeMs);
     default:
       return false;
   }
@@ -432,6 +436,38 @@ export function applyReplicatedCampfirePlaced(payload: JsonObject, playerId: str
   const up = readVec3(payload.up);
   if (!pos || !up) return false;
   restoreCampfires([{ pos, up, ownerId: playerId, placedBy: playerId }]);
+  return true;
+}
+
+export function applyReplicatedPlayerRespawned(
+  payload: JsonObject,
+  playerId: string,
+  worldId = '',
+  eventSeq = 0,
+  timeMs?: number
+): boolean {
+  const position = readVec3(payload.position);
+  if (!position) return false;
+  const current = getPlayerPose(playerId);
+  const up = readVec3(payload.up) ?? current?.up ?? [0, 1, 0];
+  setPlayerPose({
+    playerId,
+    worldId: worldId || current?.worldId || '',
+    seq: Math.max(eventSeq, (current?.seq ?? 0) + 1),
+    timeMs: timeMs ?? Date.now(),
+    position,
+    velocity: [0, 0, 0],
+    forward: current?.forward ?? [0, 0, -1],
+    up,
+    pitch: current?.pitch ?? 0,
+    action: 'idle',
+    teleport: true,
+    submergence: 0,
+    miningProgress: 0,
+    jetpackActive: false,
+    torchActive: current?.torchActive ?? false,
+    shipPhase: 'surface'
+  });
   return true;
 }
 
