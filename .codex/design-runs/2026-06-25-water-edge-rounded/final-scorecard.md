@@ -19,11 +19,11 @@ Category floor: 4.6 / 5
 
 Decision: approved for this edge-band stabilization pass.
 
-Accepted limitation: the fix keeps the existing instanced-quad water architecture. It prevents broad near-edge cattycorner regressions and preserves exact-edge treatment, but it does not create a new continuous curved water mesh.
+Accepted limitation: the fix still uses instanced geometry rather than a single welded ocean mesh. It prevents broad near-edge cattycorner regressions and adds exact-edge rounded caps, but shader/material boundaries can still show subtle lines under some lighting.
 
 Gate evidence:
 
-- `npm run test -- waterFacePlacement waterVoxels`: passed, 29 tests.
+- `npm run test -- waterFacePlacement waterVoxels`: passed, 30 tests.
 - `npm run typecheck`: passed.
 - `npm run build`: passed with the existing Vite large-bundle warning.
-- Playwright screenshots: passed for reported edge-band regression and prior cross-over vantages on desktop and mobile.
+- Playwright screenshots: passed for the `-48,59` visible-seams vantage plus prior edge-band and cross-over vantages.

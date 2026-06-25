@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { createPlayerPose } from '../game/playerPose.ts';
 import { getPlayerLook, getPlayerWorldPosition, setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
-import { createPlayerAvatarTransform } from './PlayerAvatar.tsx';
+import { createPlayerAvatarPresentation, createPlayerAvatarTransform } from './PlayerAvatar.tsx';
 
 describe('PlayerAvatar transform', () => {
   it('derives a render transform from pose without writing local player singletons', () => {
@@ -24,5 +24,42 @@ describe('PlayerAvatar transform', () => {
     expect(getPlayerWorldPosition().toArray()).toEqual([9, 8, 7]);
     expect(getPlayerLook().forward.toArray()).toEqual([1, 0, 0]);
     expect(getPlayerLook().pitch).toBe(0.25);
+  });
+
+  it('presents remote swim, jetpack, mining, and build states as distinct visuals', () => {
+    const swim = createPlayerAvatarPresentation(createPlayerPose({
+      playerId: 'remote-swim',
+      worldId: '0,0',
+      action: 'swim',
+      submergence: 1
+    }));
+    expect(swim.bodyColor).toBe('#38bdf8');
+    expect(swim.bodyRotation[0]).toBeCloseTo(Math.PI / 2);
+
+    const jetpack = createPlayerAvatarPresentation(createPlayerPose({
+      playerId: 'remote-jetpack',
+      worldId: '0,0',
+      action: 'jetpack',
+      jetpackActive: true
+    }));
+    expect(jetpack.showJetpackFlame).toBe(true);
+
+    const mine = createPlayerAvatarPresentation(createPlayerPose({
+      playerId: 'remote-mine',
+      worldId: '0,0',
+      action: 'mine',
+      miningProgress: 0.7
+    }));
+    expect(mine.bodyColor).toBe('#fbbf24');
+    expect(mine.showMiningTool).toBe(true);
+    expect(mine.miningToolOpacity).toBeCloseTo(0.7);
+
+    const build = createPlayerAvatarPresentation(createPlayerPose({
+      playerId: 'remote-build',
+      worldId: '0,0',
+      action: 'build'
+    }));
+    expect(build.bodyColor).toBe('#86efac');
+    expect(build.showBuildPreview).toBe(true);
   });
 });

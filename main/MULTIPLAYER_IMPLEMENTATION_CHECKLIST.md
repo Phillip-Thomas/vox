@@ -389,10 +389,10 @@ code, tests, and manual evidence for that item exist.
 - [x] Concurrent pickup of same forage/stone is first-wins.
 - [x] Door toggle updates collision for both players.
 - [x] Player affected by remote collider change reconciles cleanly.
-- [ ] Mining into water updates water/swim/oxygen behavior for both players.
-- [ ] Remote player swimming is visible as swimming.
-- [ ] Remote player jetpack is visible as jetpack.
-- [ ] Remote player mining/building is visually legible.
+- [x] Mining into water updates water/swim/oxygen behavior for both players.
+- [x] Remote player swimming is visible as swimming.
+- [x] Remote player jetpack is visible as jetpack.
+- [x] Remote player mining/building is visually legible.
 - [x] Craft/campfire command is atomic under reject/rollback.
 - [ ] R-key reset/respawn is visible to the other player.
 - [ ] Warp behavior matches the chosen party-travel rule.
@@ -477,6 +477,14 @@ terrain diffs now emit collision-change notifications only after authoritative t
 structure placement/removal and door toggles emit affected collision cells, and the local player
 controller wakes/reconciles nearby collider changes while avoiding cube-edge transition locks.
 `https://paravox-game.web.app/` and `https://paravoxia.com/` both served the deployed asset.
+
+Evidence: 2026-06-25 remote water/avatar presentation batch deployed Hosting asset
+`/assets/index-ddS8sQMt.js`. Full `main` `npm run verify` passed with 458 tests. Replicated
+`water_flooded` events are now covered against the real world generator queried by swim/oxygen
+state, proving received flood cells become `isWaterVoxel` on the joining/remote client.
+Remote avatars now present swim posture, jetpack flame, mining tool/progress, and build preview
+states from pose data. `https://paravox-game.web.app/` and `https://paravoxia.com/` both served
+the deployed asset.
 
 ## Phase 2 - Persistent Shards
 

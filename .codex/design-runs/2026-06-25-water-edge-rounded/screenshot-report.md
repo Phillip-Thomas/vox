@@ -13,6 +13,15 @@ Regression vantage:
 - Mobile screenshot: `.codex/design-runs/2026-06-25-water-edge-rounded/evidence/water-edgeband-mobile.png`
 - Result: the broad near-edge water band is no longer cattycorner; non-edge cells remain aligned to the dominant cube face.
 
+Visible-seams vantage:
+
+- Route: `/?agent=1&world=-48%2C59&dayphase=0.0218&profile=HIGH`
+- Camera position: `[51.242, 51.191, 0.64]`
+- Camera quaternion: `[-0.1564, 0.062, -0.3813, 0.909]`
+- Desktop screenshot: `.codex/design-runs/2026-06-25-water-edge-rounded/evidence/water-visible-seams-fixedcap-desktop.png`
+- Mobile screenshot: `.codex/design-runs/2026-06-25-water-edge-rounded/evidence/water-visible-seams-fixedcap-mobile.png`
+- Result: the rounded cap is visible after fixing triangle winding, so the edge is not left as a larger empty cut.
+
 Cross-over check vantage:
 
 - Route: `/?agent=1&world=-91%2C-4&dayphase=0.2458&profile=HIGH`
@@ -34,7 +43,7 @@ State coverage:
 - Loading: scoped out; this is steady-state rendered game geometry.
 - Empty: scoped out; target world intentionally contains water geometry.
 - Error: scoped out; no UI error flow changed.
-- Success: captured in desktop and mobile screenshots for both vantages.
+- Success: captured in desktop and mobile screenshots for the active seam vantage and prior regression vantages.
 - Stress data: captured through the live water mesh count at the target world.
 
-Quality review: the broad near-edge diagonal/cattycorner water band is gone from the reported view. The earlier cube-edge view still avoids the original crossed-X overlap. Remaining water is still voxel/faceted by design; a true rounded edge should be implemented as dedicated edge-cap geometry, not by rotating the existing planes.
+Quality review: the broad near-edge diagonal/cattycorner water band is gone from the reported view. The earlier cube-edge view still avoids the original crossed-X overlap. The `-48,59` seam view now uses dedicated edge-cap geometry rather than a turned water plane.

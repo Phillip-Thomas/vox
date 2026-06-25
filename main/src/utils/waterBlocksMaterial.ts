@@ -223,8 +223,18 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           // vertical lift along up + horizontal pinch toward crests (-tangential
           // gradient) for Gerstner choppiness. Pure function of world pos -> welds.
           vec3 dispWorld = wsUp * (wsH * uWaveAmp) - wsGt * (uChoppy * uWaveAmp);
-          // back into object space (instanceMatrix/modelMatrix are rigid -> transpose = inverse-rotation)
-          transformed += transpose(mat3(wsMW)) * dispWorld;
+          // Back into object space. Most water instances are rigid, but exact-edge
+          // seam fixes intentionally scale one tangent axis; using transpose here
+          // would amplify/invert those waves relative to neighbouring full quads.
+          mat3 wsLinear = mat3(wsMW);
+          vec3 wsC0 = wsLinear[0];
+          vec3 wsC1 = wsLinear[1];
+          vec3 wsC2 = wsLinear[2];
+          transformed += vec3(
+            dot(dispWorld, wsC0) / max(dot(wsC0, wsC0), 1e-6),
+            dot(dispWorld, wsC1) / max(dot(wsC1, wsC1), 1e-6),
+            dot(dispWorld, wsC2) / max(dot(wsC2, wsC2), 1e-6)
+          );
         }`
       )
       .replace(

@@ -31,6 +31,36 @@ import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts'
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { getPieceAt, resetStructures, restorePieces } from './systems/structureSystem.ts';
 import { getWorldCollisionChangeSnapshot, resetWorldCollisionChangesForTests } from './worldCollisionReconciliation.ts';
+import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator.ts';
+import { createTerrainConfig } from '../utils/terrainConfig.ts';
+
+const WATER_TEST_RADIUS = 25;
+const WATER_NEIGHBORS: ReadonlyArray<readonly [number, number, number]> = [
+  [1, 0, 0], [-1, 0, 0],
+  [0, 1, 0], [0, -1, 0],
+  [0, 0, 1], [0, 0, -1]
+];
+
+function makeWaterTestGenerator(seed = 13579): ProceduralWorldGenerator {
+  return new ProceduralWorldGenerator(
+    { planetRadius: WATER_TEST_RADIUS, coreRadiusPercent: 0.15 },
+    createTerrainConfig(seed, WATER_TEST_RADIUS)
+  );
+}
+
+function findDryBelowSeaCellAdjacentToWater(gen: ProceduralWorldGenerator): [number, number, number] {
+  const sea = gen.getSeaLevelRadius();
+  for (const water of gen.getExposedWaterVoxels()) {
+    for (const [dx, dy, dz] of WATER_NEIGHBORS) {
+      const x = water.x + dx;
+      const y = water.y + dy;
+      const z = water.z + dz;
+      const radius = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+      if (radius <= sea && !gen.isWaterVoxel(x, y, z)) return [x, y, z];
+    }
+  }
+  throw new Error('Could not find a dry below-sea water-adjacent cell');
+}
 
 beforeEach(() => {
   resetPlayerPoses();
@@ -255,6 +285,25 @@ describe('multiplayer replication', () => {
 
     expect(applyReplicatedWaterFlooded({ cells: [[2, 1, 0]] }, water, '0,0')).toBe(true);
     expect(applied).toEqual([[[0, 1, 0], [1, 1, 0]], [[2, 1, 0]]]);
+  });
+
+  it('applies replicated water floods to the generator queried by swim and oxygen state', () => {
+    const gen = makeWaterTestGenerator();
+    const target = findDryBelowSeaCellAdjacentToWater(gen);
+    const water = {
+      applyWaterFlood: (cells: ReadonlyArray<[number, number, number]>) =>
+        gen.applyDynamicWaterCells(cells.map(([x, y, z]) => ({ x, y, z })))
+    };
+
+    expect(gen.isWaterVoxel(target[0], target[1], target[2])).toBe(false);
+    const beforeVersion = gen.getWaterEditVersion();
+
+    setActiveReplicatedWaterWorld('0,0', water);
+    expect(applyReplicatedWaterFlooded({ cells: [target] }, water, '0,0')).toBe(true);
+
+    expect(gen.isWaterVoxel(target[0], target[1], target[2])).toBe(true);
+    expect(gen.getDynamicWaterCells()).toContainEqual({ x: target[0], y: target[1], z: target[2] });
+    expect(gen.getWaterEditVersion()).toBeGreaterThan(beforeVersion);
   });
 
   it('applies replicated shared resource, structure, and campfire events', () => {
