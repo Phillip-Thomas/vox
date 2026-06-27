@@ -36,6 +36,8 @@ const timestamp = Date.now();
 const forgedTreeCommandId = `smoke-forged-tree-${timestamp}`;
 const forgedVoxelCommandId = `smoke-forged-voxel-${timestamp}`;
 const structureCommandId = `smoke-structure-${timestamp}`;
+const removeStructureCommandId = `smoke-remove-structure-${timestamp}`;
+const refundStructureCommandId = `smoke-refund-structure-${timestamp}`;
 const unaffordableStructureCommandId = `smoke-no-wood-structure-${timestamp}`;
 const invalidForageCommandId = `smoke-invalid-forage-${timestamp}`;
 const outOfBoundsResourceCommandId = `smoke-oob-resource-${timestamp}`;
@@ -65,11 +67,25 @@ const replicatedCommands = [
     commandType: 'structure_placed',
     worldId: bobJoined.worldId,
     payload: { cell: [23, 0, 0], face: 0, type: 'foundation', material: 'wood', state: { forged: true } }
+  }),
+  await sendAndExpectWorldEvent(bobSocket, aliceSocket, {
+    commandId: removeStructureCommandId,
+    commandType: 'structure_removed',
+    worldId: bobJoined.worldId,
+    payload: { cell: [23, 0, 0], face: 0, refund: [{ id: 'void_glass', qty: 999 }] }
+  }),
+  await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
+    commandId: refundStructureCommandId,
+    commandType: 'structure_placed',
+    worldId: bobJoined.worldId,
+    payload: { cell: [23, 0, 0], face: 0, type: 'wall', material: 'wood' }
   })
 ];
 const forgedTree = replicatedCommands[0]!;
 const forgedVoxel = replicatedCommands[1]!;
 const structure = replicatedCommands[2]!;
+const removedStructure = replicatedCommands[3]!;
+const refundStructure = replicatedCommands[4]!;
 const treePayload = readEventPayload(forgedTree.accepted.events[0]);
 if (treePayload.id !== 'wood' || treePayload.qty === 999) {
   throw new Error(`Forged tree yield was not canonicalized: ${JSON.stringify(treePayload)}`);
@@ -89,6 +105,21 @@ if (
   || readPayload(structurePayload.state).forged === true
 ) {
   throw new Error(`Structure placement was not canonicalized: ${JSON.stringify(structurePayload)}`);
+}
+const removedStructurePayload = readEventPayload(removedStructure.accepted.events[0]);
+const removedStructureCell = Array.isArray(removedStructurePayload.cell)
+  ? removedStructurePayload.cell.join(',')
+  : '';
+if (
+  removedStructureCell !== '23,0,0'
+  || removedStructurePayload.face !== 0
+  || readPayload(removedStructurePayload.refund).id === 'void_glass'
+) {
+  throw new Error(`Structure removal was not canonicalized: ${JSON.stringify(removedStructurePayload)}`);
+}
+const refundStructurePayload = readEventPayload(refundStructure.accepted.events[0]);
+if (refundStructurePayload.type !== 'wall' || refundStructurePayload.material !== 'wood') {
+  throw new Error(`Owner refund did not fund the follow-up wall placement: ${JSON.stringify(refundStructurePayload)}`);
 }
 
 aliceSocket.send({
@@ -158,6 +189,12 @@ if (!snapshotEvents.some(event => event.seq === forgedVoxel.accepted.seq && even
 if (!snapshotEvents.some(event => event.seq === structure.accepted.seq && event.type === 'structure_placed')) {
   throw new Error(`Late-join snapshot did not include replicated command ${structureCommandId}`);
 }
+if (!snapshotEvents.some(event => event.seq === removedStructure.accepted.seq && event.type === 'structure_removed')) {
+  throw new Error(`Late-join snapshot did not include replicated command ${removeStructureCommandId}`);
+}
+if (!snapshotEvents.some(event => event.seq === refundStructure.accepted.seq && event.type === 'structure_placed')) {
+  throw new Error(`Late-join snapshot did not include replicated command ${refundStructureCommandId}`);
+}
 
 aliceSocket.close();
 bobSocket.close();
@@ -183,6 +220,16 @@ console.log(JSON.stringify({
     commandId: structureCommandId,
     seq: structure.accepted.seq,
     payload: structurePayload
+  },
+  removedStructure: {
+    commandId: removeStructureCommandId,
+    seq: removedStructure.accepted.seq,
+    payload: removedStructurePayload
+  },
+  refundFundedStructure: {
+    commandId: refundStructureCommandId,
+    seq: refundStructure.accepted.seq,
+    payload: refundStructurePayload
   },
   rejectedCommands: [
     { commandId: invalidForageCommandId, code: rejected.code },
@@ -303,7 +350,9 @@ async function waitForMessage<T extends ServerMessage['type']>(
       .filter((message): message is Extract<ServerMessage, { type: T }> => message.type === type)
       .find(predicate);
     if (found) return found;
-    if (Date.now() - started > 10000) throw new Error(`Timed out waiting for ${type}`);
+    if (Date.now() - started > 10000) {
+      throw new Error(`Timed out waiting for ${type}. Recent messages: ${JSON.stringify(messages.slice(-8))}`);
+    }
     await new Promise(resolve => setTimeout(resolve, 25));
   }
 }

@@ -20,6 +20,7 @@ import {
   isServerAuthoritativeCommand,
   resolveServerCanonicalCommandPayload,
   resolveServerAuthoritativeCommand,
+  structureRefundFor,
   type AuthoritativeStructureClaim
 } from './economyAuthority.js';
 import {
@@ -60,10 +61,28 @@ interface SocketState {
   session: PlayerSession | null;
 }
 
+interface ActiveStructure {
+  ownerPlayerId: string;
+  type: string;
+  material: string;
+  claimIds: string[];
+}
+
 const COMMAND_RATE_WINDOW_MS = 1000;
 const MAX_COMMANDS_PER_WINDOW = 40;
 const MAX_COMMANDS_PER_TYPE_PER_WINDOW = 20;
 const PAYLOAD_ACTOR_FIELDS = ['actorId', 'playerId'];
+const STRUCTURE_FACE_DIRS: Array<[number, number, number]> = [
+  [1, 0, 0],
+  [-1, 0, 0],
+  [0, 1, 0],
+  [0, -1, 0],
+  [0, 0, 1],
+  [0, 0, -1]
+];
+const POSE_POSITION_BOUND = 10000;
+const POSE_VELOCITY_BOUND = 1500;
+const POSE_UNIT_VECTOR_BOUND = 1.25;
 
 export function createStateServer({
   config,
@@ -371,13 +390,6 @@ async function handleCommand(
     return;
   }
   const commandPayload = authoritativeResolution?.commandPayload ?? canonicalResolution?.commandPayload ?? message.payload;
-  if (!authoritativeResolution) {
-    const mutationValidationError = sharedMutationValidationError(message.commandType, commandPayload);
-    if (mutationValidationError) {
-      reject('validation_failed', mutationValidationError);
-      return;
-    }
-  }
   const shard = rooms.getOrCreateShard(state.room, message.worldId);
   const fingerprint = fingerprintCommand(state.player!, message, commandPayload);
   const cached = shard.commandCache.get(message.commandId);
@@ -388,6 +400,22 @@ async function handleCommand(
       reject('replay', 'Command id was already used for a different command.');
     }
     return;
+  }
+  let inMemoryStructureRemoval: ActiveStructure | null = null;
+  if (!authoritativeResolution) {
+    const mutationValidationError = sharedMutationValidationError(message.commandType, commandPayload);
+    if (mutationValidationError) {
+      reject('validation_failed', mutationValidationError);
+      return;
+    }
+    if (!persistence.configured && message.commandType === 'structure_removed') {
+      const structureValidation = resolveInMemoryStructureRemoval(state.room, message.worldId, commandPayload);
+      if ('error' in structureValidation) {
+        reject(structureValidation.error.code, structureValidation.error.reason);
+        return;
+      }
+      inMemoryStructureRemoval = structureValidation.structure;
+    }
   }
   const rateLimitReason = consumeCommandRateLimit(state.session, message.commandType);
   if (rateLimitReason) {
@@ -501,9 +529,16 @@ async function handleCommand(
     return;
   }
   if (!persistence.configured) {
-    applyPlayerInventoryDelta(state.room, state.player!.playerId, {
-      credit: inventoryCreditsForAcceptedCommand(message.commandType, commandPayload)
-    });
+    if (inMemoryStructureRemoval) {
+      clearInMemoryStructureClaims(shard, inMemoryStructureRemoval);
+      applyPlayerInventoryDelta(state.room, inMemoryStructureRemoval.ownerPlayerId, {
+        credit: structureRefundFor(inMemoryStructureRemoval.type, inMemoryStructureRemoval.material)
+      });
+    } else {
+      applyPlayerInventoryDelta(state.room, state.player!.playerId, {
+        credit: inventoryCreditsForAcceptedCommand(message.commandType, commandPayload)
+      });
+    }
   }
   rooms.appendKnownShardEvent(state.room, message.worldId, event);
   const accepted = acceptedCommandResponse(message, [event]);
@@ -769,6 +804,89 @@ function applyInMemoryStructureClaims(
   }
 }
 
+function resolveInMemoryStructureRemoval(
+  room: RoomState,
+  worldId: string,
+  payload: Record<string, unknown>
+): { structure: ActiveStructure } | { error: { code: 'validation_failed' | 'conflict'; reason: string } } {
+  const cell = readIntCoord(payload.cell);
+  const face = readInt(payload.face);
+  if (!cell || face === null) {
+    return { error: { code: 'validation_failed', reason: 'Structure removal requires a valid cell and face.' } };
+  }
+  const shard = room.shards.get(worldId);
+  if (!shard) return { error: { code: 'validation_failed', reason: 'Structure removal world is not active.' } };
+  const active = activeStructuresFromEvents(shard.events);
+  const structure = active.get(structureSlotId(cell, face));
+  return structure
+    ? { structure }
+    : { error: { code: 'conflict', reason: 'Structure removal target is not present.' } };
+}
+
+function activeStructuresFromEvents(events: ShardEvent[]): Map<string, ActiveStructure> {
+  const active = new Map<string, ActiveStructure>();
+  const partners = new Map<string, string>();
+  for (const event of events) {
+    const payload = event.payload;
+    const cell = readIntCoord(payload.cell);
+    const face = readInt(payload.face);
+    if (!cell || face === null) continue;
+    const id = structureSlotId(cell, face);
+    if (event.type === 'structure_placed') {
+      const type = typeof payload.type === 'string' ? payload.type : null;
+      const material = typeof payload.material === 'string' ? payload.material : null;
+      if (!type || !material) continue;
+      if (type === 'door') {
+        const doorway = active.get(id);
+        const doorId = doorLeafId(cell, face);
+        if (doorway?.type === 'doorway' && !doorway.claimIds.includes(doorId)) {
+          doorway.claimIds.push(doorId);
+        }
+        continue;
+      }
+      const structure: ActiveStructure = {
+        ownerPlayerId: event.playerId,
+        type,
+        material,
+        claimIds: [id]
+      };
+      active.set(id, structure);
+      const up = readInt(payload.up);
+      if (type === 'doorway' && up !== null && STRUCTURE_FACE_DIRS[up]) {
+        const dir = STRUCTURE_FACE_DIRS[up];
+        const upper: [number, number, number] = [cell[0] + dir[0], cell[1] + dir[1], cell[2] + dir[2]];
+        const upperId = structureSlotId(upper, face);
+        structure.claimIds.push(upperId);
+        active.set(upperId, structure);
+        partners.set(id, upperId);
+        partners.set(upperId, id);
+      }
+      continue;
+    }
+    if (event.type === 'structure_removed') {
+      const structure = active.get(id);
+      const slotIds = structure?.claimIds.filter(claimId => claimId.startsWith('slot:')) ?? [id];
+      for (const slotId of slotIds) {
+        active.delete(slotId);
+        const partnerId = partners.get(slotId);
+        if (partnerId) active.delete(partnerId);
+        partners.delete(slotId);
+        if (partnerId) partners.delete(partnerId);
+      }
+    }
+  }
+  return active;
+}
+
+function clearInMemoryStructureClaims(
+  shard: { mutationClaims: Map<string, string> },
+  structure: ActiveStructure
+): void {
+  for (const claimId of structure.claimIds) {
+    shard.mutationClaims.delete(structureClaimKey(claimId));
+  }
+}
+
 function hasAcceptedDoorway(events: ShardEvent[], requiredStructureId: string): boolean {
   return events.some(event => {
     if (event.type !== 'structure_placed') return false;
@@ -786,6 +904,14 @@ function hasAcceptedDoorway(events: ShardEvent[], requiredStructureId: string): 
 
 function structureClaimKey(structureId: string): string {
   return `structure:${structureId}`;
+}
+
+function structureSlotId(cell: [number, number, number], face: number): string {
+  return `slot:${cell.join(',')}:${face}`;
+}
+
+function doorLeafId(cell: [number, number, number], face: number): string {
+  return `door:${cell.join(',')}:${face}`;
 }
 
 async function handleRequestWorldEvents(
@@ -839,11 +965,23 @@ function handlePose(
   socketsBySessionId: Map<string, WebSocket>,
   message: Extract<ClientMessage, { type: 'pose_update' }>
 ): void {
-  if (!state.room) {
+  if (!state.room || !state.session) {
     send(ws, { type: 'error', code: 'not_in_room', message: 'Join a room before sending pose updates.' });
     return;
   }
+  if (canonicalWorldId(message.worldId) !== message.worldId || !state.room.shards.has(message.worldId)) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'Pose world is not active in this room.' });
+    return;
+  }
+  const poseError = validatePosePayload(message.pose);
+  if (poseError) {
+    send(ws, { type: 'error', code: 'invalid_pose', message: poseError });
+    return;
+  }
   const shard = rooms.getOrCreateShard(state.room, message.worldId);
+  const currentPose = readObject(shard.poses.get(state.player!.playerId));
+  const currentSeq = readInt(currentPose?.seq) ?? -1;
+  if (message.seq <= currentSeq) return;
   shard.poses.set(state.player!.playerId, message.pose);
   broadcastRoom(state, socketsBySessionId, {
     type: 'pose_update',
@@ -852,6 +990,42 @@ function handlePose(
     seq: message.seq,
     pose: message.pose
   });
+}
+
+function validatePosePayload(pose: JsonObject): string | null {
+  if (!boundedVector(pose.position, POSE_POSITION_BOUND)) return 'Pose position is outside plausible bounds.';
+  if (!boundedVector(pose.velocity, POSE_VELOCITY_BOUND)) return 'Pose velocity is outside plausible bounds.';
+  if (!boundedVector(pose.forward, POSE_UNIT_VECTOR_BOUND)) return 'Pose forward vector is invalid.';
+  if (!boundedVector(pose.up, POSE_UNIT_VECTOR_BOUND)) return 'Pose up vector is invalid.';
+  if (typeof pose.pitch !== 'number' || !Number.isFinite(pose.pitch) || Math.abs(pose.pitch) > Math.PI) {
+    return 'Pose pitch is invalid.';
+  }
+  if (typeof pose.action !== 'string' || !isKnownPoseAction(pose.action)) return 'Pose action is invalid.';
+  if (typeof pose.submergence !== 'number' || !Number.isFinite(pose.submergence) || pose.submergence < 0 || pose.submergence > 1) {
+    return 'Pose submergence is invalid.';
+  }
+  if (typeof pose.miningProgress !== 'number' || !Number.isFinite(pose.miningProgress) || pose.miningProgress < 0 || pose.miningProgress > 1) {
+    return 'Pose mining progress is invalid.';
+  }
+  return null;
+}
+
+function boundedVector(value: unknown, bound: number): boolean {
+  if (!Array.isArray(value) || value.length !== 3) return false;
+  return value.every(component => typeof component === 'number' && Number.isFinite(component) && Math.abs(component) <= bound);
+}
+
+function isKnownPoseAction(value: string): boolean {
+  return value === 'idle'
+    || value === 'walk'
+    || value === 'swim'
+    || value === 'jetpack'
+    || value === 'climb'
+    || value === 'sprint'
+    || value === 'mine'
+    || value === 'build'
+    || value === 'drink'
+    || value === 'warp';
 }
 
 function attachSession(

@@ -12,9 +12,17 @@ export type SharedMutationClaim =
     structureType: string;
     material: string;
     state: JsonObject;
+  }
+  | {
+    kind: 'structure_removed';
+    key: string;
+    structureId: string;
+    alternateStructureId: string;
+    cell: [number, number, number];
+    face: number;
   };
 
-const CLAIMED_COMMAND_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed']);
+const CLAIMED_COMMAND_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed', 'structure_removed']);
 const RESOURCE_SOURCES = new Set(['tree', 'loose_stone', 'forage']);
 
 export function isClaimedSharedMutationType(commandType: string): boolean {
@@ -59,6 +67,20 @@ export function sharedMutationClaimForCommand(commandType: string, payload: Json
         structureType,
         material,
         state
+      };
+    }
+    case 'structure_removed': {
+      const cell = readIntCoord(payload.cell);
+      const face = readInt(payload.face);
+      if (!cell || face === null) return null;
+      const structureId = `slot:${coordKey(cell)}:${face}`;
+      return {
+        kind: 'structure_removed',
+        key: `structure_removed:${structureId}`,
+        structureId,
+        alternateStructureId: `door:${coordKey(cell)}:${face}`,
+        cell,
+        face
       };
     }
     default:

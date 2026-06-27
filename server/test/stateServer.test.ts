@@ -154,6 +154,59 @@ describe('state server', () => {
     ws.close();
   });
 
+  it('delivers bursty reliable events and replays missed suffixes on resume', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    for (let i = 0; i < 6; i++) {
+      alice.ws.send(JSON.stringify({
+        type: 'command',
+        commandId: `burst-mine-${i}`,
+        commandType: 'voxel_mined',
+        worldId: '0,0',
+        payload: { coord: [i, 1, 2], blockId: 'grass' }
+      }));
+    }
+
+    for (let seq = 1; seq <= 6; seq++) {
+      await waitForMessage(alice.messages, 'command_accepted', message => message.seq === seq);
+      const relayed = await waitForMessage(bob.messages, 'world_event', message => message.seq === seq);
+      expect(relayed.event).toMatchObject({
+        seq,
+        type: 'voxel_mined',
+        payload: { coord: [seq - 1, 1, 2] }
+      });
+    }
+
+    const resuming = await connectAndAuth(started.wsUrl, 'charlie-token');
+    resuming.ws.send(JSON.stringify({
+      type: 'join_room',
+      inviteCode: created.inviteCode,
+      resume: { worldId: '0,0', lastAppliedSeq: 2 }
+    }));
+    await waitForType(resuming.messages, 'room_joined');
+    for (let seq = 3; seq <= 6; seq++) {
+      const replayed = await waitForMessage(resuming.messages, 'world_event', message => message.seq === seq);
+      expect(replayed.event).toMatchObject({ seq, type: 'voxel_mined' });
+    }
+    await wait(50);
+    expect(resuming.messages.some(message => message.type === 'world_snapshot')).toBe(false);
+
+    resuming.ws.close();
+    bob.ws.close();
+    alice.ws.close();
+  });
+
   it('broadcasts room roster updates as players join and disconnect', async () => {
     const started = await startTestServer();
     const alice = await connectAndAuth(started.wsUrl, 'alice-token');
@@ -255,6 +308,61 @@ describe('state server', () => {
     charlie.ws.close();
     bob.ws.close();
     alice.ws.close();
+  });
+
+  it('validates pose updates before broadcasting or creating shards', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '1,0',
+      seq: 1,
+      pose: validPose({ worldId: '1,0', seq: 1 })
+    }));
+    const invalidWorld = await waitForMessage(alice.messages, 'error', message => message.code === 'invalid_world');
+    expect(invalidWorld.message).toContain('Pose world');
+    expect(started.server.rooms.getRoom(created.roomId)?.shards.has('1,0')).toBe(false);
+
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '0,0',
+      seq: 2,
+      pose: validPose({ position: [10001, 0, 0], seq: 2 })
+    }));
+    await waitForMessage(alice.messages, 'error', message => message.code === 'invalid_pose');
+
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '0,0',
+      seq: 3,
+      pose: validPose({ position: [1, 2, 3], seq: 3 })
+    }));
+    const relayed = await waitForMessage(bob.messages, 'pose_update', message => message.playerId === 'alice' && message.seq === 3);
+    expect(relayed.pose).toMatchObject({ position: [1, 2, 3], action: 'idle' });
+
+    const startIndex = bob.messages.length;
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '0,0',
+      seq: 2,
+      pose: validPose({ position: [9, 9, 9], seq: 2 })
+    }));
+    await wait(50);
+    expect(bob.messages.slice(startIndex).some(message => message.type === 'pose_update')).toBe(false);
+
+    alice.ws.close();
+    bob.ws.close();
   });
 
   it('broadcasts predicted door toggles immediately and rolls them back on reject', async () => {
@@ -507,6 +615,173 @@ describe('state server', () => {
       payload: { cell: [3, 0, 0], face: 4, type: 'foundation', material: 'wood', up: 2 }
     }));
     await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'structure-other-face');
+
+    alice.ws.close();
+    bob.ws.close();
+  });
+
+  it('validates structure removal targets and refunds the structure owner', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    const room = started.server.rooms.getRoom(created.roomId);
+    if (!room) throw new Error('room should exist');
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 4]
+    ]));
+    room.playerInventories.set('bob', new Map([
+      ['faulty_maw', 1]
+    ]));
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-missing',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0, type: 'foundation', material: 'wood' }
+    }));
+    await expectRejected(bob.messages, 'remove-missing', 'conflict');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'place-owned-foundation',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0, type: 'foundation', material: 'wood' }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'place-owned-foundation');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBeUndefined();
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-owned-foundation',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0, type: 'foundation', material: 'wood', refund: [{ id: 'void_glass', qty: 999 }] }
+    }));
+    const removed = await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'remove-owned-foundation');
+    expect(removed.events[0]).toMatchObject({
+      type: 'structure_removed',
+      payload: { cell: [12, 0, 0], face: 0 }
+    });
+    expect((removed.events[0] as { payload: Record<string, unknown> }).payload.refund).toBeUndefined();
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(2);
+    expect(room.playerInventories.get('bob')?.get('wood')).toBeUndefined();
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-duplicate',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0 }
+    }));
+    await expectRejected(alice.messages, 'remove-duplicate', 'conflict');
+
+    const bobRemovalEvent = await waitForMessage(bob.messages, 'world_event', message => message.seq === removed.seq);
+    expect(bobRemovalEvent.event).toMatchObject({ type: 'structure_removed', payload: { cell: [12, 0, 0], face: 0 } });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'replace-removed-slot',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0, type: 'wall', material: 'wood' }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'replace-removed-slot');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBeUndefined();
+
+    const retryStartIndex = bob.messages.length;
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-owned-foundation',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0 }
+    }));
+    const replayedRemoval = await waitForMessage(
+      bob.messages,
+      'command_accepted',
+      message => message.commandId === 'remove-owned-foundation',
+      retryStartIndex
+    );
+    expect(replayedRemoval.seq).toBe(removed.seq);
+
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 4]
+    ]));
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'rebuilt-slot-still-occupied',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [12, 0, 0], face: 0, type: 'foundation', material: 'wood' }
+    }));
+    await expectRejected(alice.messages, 'rebuilt-slot-still-occupied', 'conflict');
+
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 8]
+    ]));
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'place-removable-doorway',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [13, 0, 0], face: 0, type: 'doorway', material: 'wood', up: 2 }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'place-removable-doorway');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'fit-removable-door',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [13, 0, 0], face: 0, type: 'door', material: 'wood' }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'fit-removable-door');
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-doorway-upper',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [13, 1, 0], face: 0 }
+    }));
+    await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'remove-doorway-upper');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(5);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'replace-doorway-after-removal',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [13, 0, 0], face: 0, type: 'doorway', material: 'wood', up: 2 }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'replace-doorway-after-removal');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'refit-door-after-removal',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [13, 0, 0], face: 0, type: 'door', material: 'wood' }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'refit-door-after-removal');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(1);
 
     alice.ws.close();
     bob.ws.close();
@@ -1052,6 +1327,26 @@ async function expectRejected(messages: ServerMessage[], commandId: string, code
 
 function wait(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function validPose(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    playerId: 'alice',
+    worldId: '0,0',
+    seq: 1,
+    timeMs: Date.now(),
+    position: [0, 1, 0],
+    velocity: [0, 0, 0],
+    forward: [0, 0, -1],
+    up: [0, 1, 0],
+    pitch: 0,
+    action: 'idle',
+    submergence: 0,
+    miningProgress: 0,
+    jetpackActive: false,
+    torchActive: false,
+    ...overrides
+  };
 }
 
 class FakePersistence extends MultiplayerPersistence {

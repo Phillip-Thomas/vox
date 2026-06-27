@@ -360,6 +360,8 @@ export function resolveServerCanonicalCommandPayload(
       return resolveResourceTakenPayload(payload, context.worldId);
     case 'voxel_mined':
       return resolveVoxelMinedPayload(payload, context.worldId);
+    case 'structure_removed':
+      return resolveStructureRemovedPayload(payload);
     default:
       return null;
   }
@@ -378,6 +380,12 @@ export function inventoryCreditsForAcceptedCommand(commandType: string, payload:
 
 export function starterInventory(): ItemStack[] {
   return [{ id: 'faulty_maw', qty: 1 }];
+}
+
+export function structureRefundFor(type: string, material: string): ItemStack[] {
+  return buildCost(type, material)
+    .map(stack => ({ ...stack, qty: Math.floor(stack.qty / 2) }))
+    .filter(stack => stack.qty > 0);
 }
 
 function resolveRecipeCraft(payload: JsonObject): AuthoritativeCommandResolution | AuthoritativeCommandError {
@@ -795,6 +803,18 @@ function resolveVoxelMinedPayload(
       }
     }
   };
+}
+
+function resolveStructureRemovedPayload(payload: JsonObject): CanonicalCommandPayloadResolution {
+  const cell = readIntCoord(payload.cell);
+  const face = readInt(payload.face);
+  if (!cell || face === null || face < 0 || face > VOLUME_FACE) {
+    return { code: 'validation_failed', reason: 'Structure removal requires a valid cell and face.' };
+  }
+  if (!isStructureCoordPlausible(cell)) {
+    return { code: 'validation_failed', reason: 'Structure removal target is outside plausible build bounds.' };
+  }
+  return { commandPayload: { cell, face } };
 }
 
 function canonicalRecipePayload(recipeDef: Recipe): JsonObject {

@@ -313,7 +313,7 @@ code, tests, and manual evidence for that item exist.
 
 ### 1.6 Multiplayer System Coverage
 
-- [ ] Mining is server-validated and replicated.
+- [x] Mining is server-validated and replicated.
 - [x] Mining terrain removal is replicated from accepted room events.
 - [x] Mining drop identity/quantity is server-resolved.
 - [x] Mining water flood is deterministic and replicated/derived from accepted room events.
@@ -321,7 +321,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Replicated voxel removals replay through terrain diffs so visible terrain/collision rebuild.
 - [x] Structure placement is server-validated and replicated.
 - [x] Structure placement is replicated from accepted room events.
-- [ ] Structure removal/refund routes to the correct actor.
+- [x] Structure removal/refund routes to the correct actor.
 - [x] Structure removal is replicated from accepted room events without local viewer refunds.
 - [x] Door toggle rebuilds collision and triggers reconciliation when needed.
 - [x] Door toggle open/closed state is replicated from accepted room events.
@@ -355,9 +355,9 @@ code, tests, and manual evidence for that item exist.
 - [x] Reject replayed command ids with a different envelope while allowing idempotent retries.
 - [x] Enforce command rate limits.
 - [x] Validate inventory affordability server-side.
-- [ ] Validate structure placement ownership/permissions server-side.
+- [x] Validate structure placement ownership/permissions server-side.
 - [x] Validate mine/collect target plausibility server-side.
-- [ ] Validate pose plausibility bounds, with cube-edge transition exceptions.
+- [x] Validate pose plausibility bounds, with cube-edge transition tolerance.
 - [x] Never trust client-generated resource yields.
 - [x] Never trust client-generated world identity.
 - [x] Log suspicious rejects for later tuning.
@@ -384,6 +384,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Late join can receive current mutation state from Neon-backed event history.
 - [x] Dropped reliable-lane event is recovered by cursor replay.
 - [x] Reconnect resumes from since-seq delta.
+- [x] Bursty reliable command streams arrive ordered and replay missed suffixes on resume.
 - [x] Disconnect does not destroy the shard.
 - [x] Concurrent mining of same voxel is first-wins.
 - [x] Concurrent pickup of same forage/stone is first-wins.
@@ -394,6 +395,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Remote player jetpack is visible as jetpack.
 - [x] Remote player mining/building is visually legible.
 - [x] Craft/campfire command is atomic under reject/rollback.
+- [x] Structure removal refunds the owner, clears linked doorway/door claims, and permits slot reuse.
 - [x] R-key reset/respawn is visible to the other player.
 - [ ] Warp behavior matches the chosen party-travel rule.
 - [x] Cloud Run restart does not lose persisted Neon-backed worlds.
@@ -516,6 +518,19 @@ and client tests passed before full verification. Full verification passed with 
 files / 473 tests plus production build and `server` 4 test files / 30 tests plus build. Desktop
 and mobile screenshots are recorded under
 `.codex/design-runs/2026-06-25-coop-ux-closeout/screenshots/`.
+
+Evidence: 2026-06-27 server authority/reliability hardening batch passed server
+`npm run verify` with 4 test files / 36 tests plus build, then deployed Cloud Run revision
+`paravoxia-state-server-00020-5p5`. Structure removal now canonicalizes cell/face, rejects
+missing targets, refunds the structure owner instead of the actor, clears reusable in-memory
+placement claims, clears linked doorway halves plus fitted-door claims, and answers idempotent
+retries from cache after a slot is rebuilt. Pose updates now reject inactive worlds and
+implausible payloads before broadcast, ignore stale pose sequence numbers, and avoid creating
+arbitrary shards. Reliable-lane regression coverage now sends six bursty world commands, confirms
+ordered peer delivery, and resumes a third player from a missed suffix without a full snapshot.
+Live room smoke on `paravoxia-state-server-00020-5p5` verified canonical resource/mining yields,
+cross-player `structure_removed`, owner refund funding a follow-up wall placement, validation
+rejects, and late-join Neon snapshot replay through seq `5`.
 
 ## Phase 2 - Persistent Shards
 

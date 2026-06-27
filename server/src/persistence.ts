@@ -670,9 +670,19 @@ export class MultiplayerPersistence {
         ),
         inventory_credit as (
           insert into player_inventory (player_id, item_id, qty, updated_at)
-          select $4, item_id, qty, now()
-          from jsonb_to_recordset($${inventoryParam}::jsonb) as stack(item_id text, qty integer)
-          where exists (select 1 from inserted_command)
+          select player_id, item_id, qty, now()
+          from (
+            select $4::text as player_id, item_id, qty
+            from jsonb_to_recordset($${inventoryParam}::jsonb) as stack(item_id text, qty integer)
+            where exists (select 1 from inserted_command)
+            union all
+            select player_id, item_id, qty
+            from claim
+            where player_id is not null
+              and item_id is not null
+              and qty > 0
+              and exists (select 1 from inserted_command)
+          ) as inventory_rows
           on conflict (player_id, item_id) do update
           set qty = player_inventory.qty + excluded.qty,
               updated_at = now()
@@ -775,7 +785,7 @@ export class MultiplayerPersistence {
             select $1::uuid, $2, $8, $9, $10, true, $11, $12
             where not exists (select 1 from existing_command)
             on conflict do nothing
-            returning 1
+            returning null::text as player_id, null::text as item_id, 0::integer as qty
           `,
           params: [
             claim.coord[0],
@@ -795,7 +805,7 @@ export class MultiplayerPersistence {
             select $1::uuid, $2, $8, $9::integer[], $4
             where not exists (select 1 from existing_command)
             on conflict do nothing
-            returning 1
+            returning null::text as player_id, null::text as item_id, 0::integer as qty
           `,
           params: [claim.collectibleType, claim.coord]
         };
@@ -809,7 +819,7 @@ export class MultiplayerPersistence {
             select $1::uuid, $2, $8, $4, $4, $9::integer[], $10, $11, $12, $13::jsonb
             where not exists (select 1 from existing_command)
             on conflict do nothing
-            returning 1
+            returning null::text as player_id, null::text as item_id, 0::integer as qty
           `,
           params: [
             claim.structureId,
@@ -819,6 +829,90 @@ export class MultiplayerPersistence {
             claim.material,
             JSON.stringify(claim.state)
           ]
+        };
+      case 'structure_removed':
+        return {
+          sql: `
+            delete from world_structures
+            using (
+              select ids.structure_id,
+                     ids.refund,
+                     target.owner_player_id,
+                     target.type,
+                     target.material
+              from (
+                select structure_id, owner_player_id, cell, face, type, material, state
+                from world_structures
+                where room_id = $1::uuid
+                  and world_id = $2
+                  and structure_id in ($8, $9)
+                  and not exists (select 1 from existing_command)
+                order by case when structure_id = $8 then 0 else 1 end
+                limit 1
+              ) as target
+              cross join lateral (
+                values
+                  (target.structure_id, true),
+                  (
+                    case when target.type = 'doorway'
+                      then 'door:' || array_to_string(target.cell, ',') || ':' || target.face::text
+                      else null
+                    end,
+                    false
+                  ),
+                  (
+                    case when jsonb_typeof(target.state->'partner') = 'array'
+                      then 'slot:'
+                           || (target.state->'partner'->>0)
+                           || ','
+                           || (target.state->'partner'->>1)
+                           || ','
+                           || (target.state->'partner'->>2)
+                           || ':'
+                           || target.face::text
+                      else null
+                    end,
+                    false
+                  ),
+                  (
+                    case when target.type = 'doorway'
+                           and jsonb_typeof(target.state->'partner') = 'array'
+                      then 'door:'
+                           || (target.state->'partner'->>0)
+                           || ','
+                           || (target.state->'partner'->>1)
+                           || ','
+                           || (target.state->'partner'->>2)
+                           || ':'
+                           || target.face::text
+                      else null
+                    end,
+                    false
+                  )
+              ) as ids(structure_id, refund)
+              where ids.structure_id is not null
+            ) as target_ids
+            where world_structures.room_id = $1::uuid
+              and world_structures.world_id = $2
+              and world_structures.structure_id = target_ids.structure_id
+            returning
+                   case when target_ids.refund then target_ids.owner_player_id else null end as player_id,
+                   case when target_ids.refund and target_ids.material = 'wood' then 'wood' else null end as item_id,
+                   case when target_ids.refund then case target_ids.type
+                     when 'foundation' then 2
+                     when 'wall' then 1
+                     when 'ceiling' then 1
+                     when 'doorway' then 1
+                     when 'window' then 1
+                     when 'gable' then 0
+                     when 'stairs' then 2
+                     when 'sloped_roof' then 1
+                     when 'ladder' then 0
+                     when 'door' then 1
+                     else 0
+                   end else 0 end::integer as qty
+          `,
+          params: [claim.structureId, claim.alternateStructureId]
         };
     }
   }
