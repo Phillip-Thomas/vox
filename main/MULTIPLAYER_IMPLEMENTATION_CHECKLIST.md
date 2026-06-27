@@ -571,6 +571,39 @@ rejects, late-join snapshot replay, party warp, and post-warp old-world command 
 Command acks and join snapshots now reconcile inventory, vitals/oxygen, Maw charge, waterskin
 fill, and progression.
 
+## Current Session Checkpoint
+
+Last updated: 2026-06-27 after `e0d27ec` (`Record authenticated co-op smoke evidence`).
+Working tree was clean on `master...origin/master`.
+
+Deployed state:
+
+- Cloud Run state server: `paravoxia-state-server-00022-gpl`, 100% traffic.
+- Firebase Hosting asset: `/assets/index-Hd-8Tm3Q.js` on `paravoxia.com` and
+  `paravox-game.web.app`.
+- Neon is configured in Cloud Run; `/readyz` returned `{"ok":true,"databaseConfigured":true}`.
+- WebSocket `/play` returned protocol `hello`.
+- Authenticated live smoke passed with four Firebase anonymous users via `npm run smoke:room`.
+
+Implementation checkpoint:
+
+- `8012910` closed co-op player-state authority: command acks and join snapshots reconcile
+  inventory, vitals/oxygen, Maw charge, waterskin fill, and progression from server-owned state.
+- `e0d27ec` recorded the authenticated smoke evidence after Firebase MCP provided the web SDK
+  config for project `paravox-game`.
+- Co-op gameplay truth is now routed through the command dispatch adapter, and gameplay
+  `localStorage` save/restore is suppressed while multiplayer is connected.
+- Party warp is room-authoritative and party-locked; commands/poses to inactive worlds are
+  rejected after handoff.
+
+Resume here:
+
+- Next likely Phase 1 work is the remaining launch-quality polish: remote avatar legibility,
+  documented security-minimum closeout, 2-8 player smoke coverage, and basic monitoring/logging.
+- Server-owned passive vitals decay remains deferred to Phase 2 unless Phase 1 policy changes.
+- Keep using Firebase MCP for web config checks and `npm run smoke:room` for authenticated
+  Cloud Run/Neon/live-room verification.
+
 ## Phase 2 - Persistent Shards
 
 - [ ] Harden scheduled persistence and crash recovery.
