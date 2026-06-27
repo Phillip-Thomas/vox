@@ -29,6 +29,7 @@ import {
   parseClientMessage,
   type ClientMessage,
   type JsonObject,
+  type PartyWarpHandoff,
   type PlayerIdentity,
   type ServerMessage
 } from './protocol.js';
@@ -45,7 +46,7 @@ import {
   type ShardEvent,
   roomRoster
 } from './rooms.js';
-import { canonicalWorldId } from './worldAuthority.js';
+import { canonicalWorldId, parseWorldId } from './worldAuthority.js';
 
 export interface StateServerOptions {
   config: ServerConfig;
@@ -331,8 +332,12 @@ async function handleJoinRoom(
   }
   attachSession(ws, state, room, rooms, socketsBySessionId);
   if (message.resume) {
-    state.session?.appliedSeqByWorld.set(message.resume.worldId, message.resume.lastAppliedSeq);
-    await sendRoomResume(ws, state, rooms, persistence, message.resume.worldId, message.resume.lastAppliedSeq);
+    if (message.resume.worldId === room.activeWorldId) {
+      state.session?.appliedSeqByWorld.set(message.resume.worldId, message.resume.lastAppliedSeq);
+      await sendRoomResume(ws, state, rooms, persistence, message.resume.worldId, message.resume.lastAppliedSeq);
+    } else {
+      await sendRoomJoined(ws, state, rooms, persistence, room.activeWorldId);
+    }
     broadcastRoomRoster(room, socketsBySessionId);
     return;
   }
@@ -372,6 +377,13 @@ async function handleCommand(
     reject(envelopeError.code, envelopeError.reason);
     return;
   }
+  const partyWarpResolution = message.commandType === 'party_warp_requested'
+    ? resolvePartyWarpPayload(message.payload, message.worldId)
+    : null;
+  if (partyWarpResolution && 'code' in partyWarpResolution) {
+    reject(partyWarpResolution.code, partyWarpResolution.reason);
+    return;
+  }
   const canonicalResolution = resolveServerCanonicalCommandPayload(message.commandType, message.payload, {
     worldId: message.worldId
   });
@@ -389,7 +401,10 @@ async function handleCommand(
     reject(authoritativeResolution.code, authoritativeResolution.reason);
     return;
   }
-  const commandPayload = authoritativeResolution?.commandPayload ?? canonicalResolution?.commandPayload ?? message.payload;
+  const commandPayload = partyWarpResolution?.commandPayload
+    ?? authoritativeResolution?.commandPayload
+    ?? canonicalResolution?.commandPayload
+    ?? message.payload;
   const shard = rooms.getOrCreateShard(state.room, message.worldId);
   const fingerprint = fingerprintCommand(state.player!, message, commandPayload);
   const cached = shard.commandCache.get(message.commandId);
@@ -399,6 +414,10 @@ async function handleCommand(
     } else {
       reject('replay', 'Command id was already used for a different command.');
     }
+    return;
+  }
+  if (message.worldId !== state.room.activeWorldId) {
+    reject('invalid_world', 'Command world is not the current party world.');
     return;
   }
   let inMemoryStructureRemoval: ActiveStructure | null = null;
@@ -420,6 +439,20 @@ async function handleCommand(
   const rateLimitReason = consumeCommandRateLimit(state.session, message.commandType);
   if (rateLimitReason) {
     reject('rate_limited', rateLimitReason);
+    return;
+  }
+  if (partyWarpResolution) {
+    await handlePartyWarpCommand({
+      ws,
+      state,
+      rooms,
+      socketsBySessionId,
+      persistence,
+      message,
+      sourceShard: shard,
+      fingerprint,
+      payload: partyWarpResolution.commandPayload
+    });
     return;
   }
   if (authoritativeResolution) {
@@ -546,6 +579,104 @@ async function handleCommand(
   shard.predictedRollbacks.delete(message.commandId);
   send(ws, accepted);
   broadcastWorldEvents(state, socketsBySessionId, message.worldId, [event]);
+}
+
+async function handlePartyWarpCommand(input: {
+  ws: WebSocket;
+  state: SocketState;
+  rooms: InMemoryRoomStore;
+  socketsBySessionId: Map<string, WebSocket>;
+  persistence: MultiplayerPersistence;
+  message: Extract<ClientMessage, { type: 'command' }>;
+  sourceShard: { commandCache: Map<string, { fingerprint: CommandFingerprint; response: unknown }>; poses: Map<string, JsonObject> };
+  fingerprint: CommandFingerprint;
+  payload: JsonObject;
+}): Promise<void> {
+  const { ws, state, rooms, socketsBySessionId, persistence, message, sourceShard, fingerprint, payload } = input;
+  if (!state.room || !state.session || !state.player) return;
+  const destinationWorldId = readString(payload.destinationWorldId);
+  const destination = readObject(payload.destination);
+  if (!destinationWorldId || !destination) {
+    rejectCommand(ws, state, message, 'validation_failed', 'Party warp requires a destination world.', socketsBySessionId);
+    return;
+  }
+
+  const requestedAtMs = Date.now();
+  const handoff = createPartyWarpHandoff(
+    state.room,
+    sourceShard.poses,
+    state.player.playerId,
+    message.worldId,
+    destinationWorldId,
+    destination,
+    requestedAtMs
+  );
+  const eventPayload: JsonObject = {
+    fromWorldId: message.worldId,
+    destinationWorldId,
+    destination,
+    handoff
+  };
+
+  let event: ShardEvent;
+  try {
+    rooms.getOrCreateShard(state.room, destinationWorldId);
+    event = persistence.configured
+      ? await persistence.appendCommandEvent({
+        room: state.room,
+        worldId: destinationWorldId,
+        actor: state.player,
+        commandId: message.commandId,
+        commandType: 'party_warped',
+        payload: eventPayload
+      })
+      : rooms.appendShardEvent(
+        state.room,
+        destinationWorldId,
+        state.player.playerId,
+        'party_warped',
+        eventPayload,
+        message.commandId
+      );
+    rooms.setActiveWorld(state.room, destinationWorldId);
+    await persistence.activateWorldShard(state.room, destinationWorldId);
+    if (persistence.configured) {
+      rooms.appendKnownShardEvent(state.room, destinationWorldId, event);
+      await hydrateShardEvents(rooms, persistence, state.room, destinationWorldId);
+    }
+  } catch (error) {
+    if (error instanceof CommandReplayMismatchError) {
+      rejectCommand(ws, state, message, 'replay', 'Command id was already used for a different command.', socketsBySessionId);
+    } else {
+      rejectCommand(
+        ws,
+        state,
+        message,
+        'persistence_failed',
+        error instanceof Error ? error.message : 'Could not persist party warp.',
+        socketsBySessionId
+      );
+    }
+    return;
+  }
+
+  const accepted: ServerMessage = {
+    type: 'command_accepted',
+    commandId: message.commandId,
+    worldId: destinationWorldId,
+    seq: event.seq,
+    events: [event]
+  };
+  sourceShard.commandCache.set(message.commandId, { fingerprint, response: accepted });
+  send(ws, accepted);
+  broadcastRoom(state, socketsBySessionId, {
+    type: 'party_warp',
+    roomId: state.room.roomId,
+    worldId: destinationWorldId,
+    seq: event.seq,
+    handoff
+  });
+  broadcastWorldSnapshot(state.room, socketsBySessionId, destinationWorldId);
 }
 
 function handlePredictedWorldEvent(
@@ -686,6 +817,62 @@ function broadcastWorldEvents(
   }
 }
 
+function resolvePartyWarpPayload(
+  payload: JsonObject,
+  fromWorldId: string
+): { commandPayload: JsonObject } | { code: 'validation_failed'; reason: string } {
+  const rawDestinationWorldId = readString(payload.destinationWorldId);
+  if (!rawDestinationWorldId) {
+    return { code: 'validation_failed', reason: 'Party warp requires destinationWorldId.' };
+  }
+  const destinationWorldId = canonicalWorldId(rawDestinationWorldId);
+  const destination = destinationWorldId ? parseWorldId(destinationWorldId) : null;
+  if (!destinationWorldId || !destination) {
+    return { code: 'validation_failed', reason: 'Party warp destination must be a canonical coordinate key.' };
+  }
+  if (destinationWorldId === fromWorldId) {
+    return { code: 'validation_failed', reason: 'Party warp destination must differ from the current world.' };
+  }
+  return {
+    commandPayload: {
+      destinationWorldId,
+      destination: { x: destination.x, y: destination.y }
+    }
+  };
+}
+
+function createPartyWarpHandoff(
+  room: RoomState,
+  sourcePoses: Map<string, JsonObject>,
+  actorPlayerId: string,
+  fromWorldId: string,
+  worldId: string,
+  destination: JsonObject,
+  requestedAtMs: number
+): PartyWarpHandoff {
+  const players = [...room.members.values()]
+    .sort((a, b) => a.playerId.localeCompare(b.playerId))
+    .map((player, index) => {
+      const pose = readObject(sourcePoses.get(player.playerId));
+      return {
+        playerId: player.playerId,
+        spawnSlot: index,
+        ...(pose ? { pose } : {})
+      };
+    });
+  return {
+    fromWorldId,
+    worldId,
+    destination: {
+      x: readInt(destination.x) ?? 0,
+      y: readInt(destination.y) ?? 0
+    },
+    actorPlayerId,
+    players,
+    requestedAtMs
+  };
+}
+
 function sameCommandFingerprint(a: CommandFingerprint, b: CommandFingerprint): boolean {
   return a.actorPlayerId === b.actorPlayerId
     && a.worldId === b.worldId
@@ -710,6 +897,10 @@ function readObject(value: unknown): JsonObject | null {
 
 function readInt(value: unknown): number | null {
   return typeof value === 'number' && Number.isInteger(value) ? value : null;
+}
+
+function readString(value: unknown): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null;
 }
 
 function readIntCoord(value: unknown): [number, number, number] | null {
@@ -926,7 +1117,15 @@ async function handleRequestWorldEvents(
     send(ws, { type: 'error', code: 'not_in_room', message: 'Join a room before requesting world events.' });
     return;
   }
-  const shard = rooms.getOrCreateShard(state.room, worldId);
+  if (canonicalWorldId(worldId) !== worldId) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'Requested world must be a canonical coordinate key.' });
+    return;
+  }
+  const shard = state.room.shards.get(worldId);
+  if (!shard) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'Requested world is not part of this room.' });
+    return;
+  }
   const events = persistence.configured
     ? await persistence.listWorldEvents(state.room.roomId, worldId, sinceSeq)
     : shard.events.filter(event => event.seq > sinceSeq);
@@ -971,6 +1170,10 @@ function handlePose(
   }
   if (canonicalWorldId(message.worldId) !== message.worldId || !state.room.shards.has(message.worldId)) {
     send(ws, { type: 'error', code: 'invalid_world', message: 'Pose world is not active in this room.' });
+    return;
+  }
+  if (message.worldId !== state.room.activeWorldId) {
+    send(ws, { type: 'error', code: 'invalid_world', message: 'Pose world is not the current party world.' });
     return;
   }
   const poseError = validatePosePayload(message.pose);
@@ -1143,6 +1346,16 @@ function broadcastRoomRoster(room: RoomState, socketsBySessionId: Map<string, We
   });
 }
 
+function broadcastWorldSnapshot(room: RoomState, socketsBySessionId: Map<string, WebSocket>, worldId: string): void {
+  broadcastToRoom(room, socketsBySessionId, {
+    type: 'world_snapshot',
+    roomId: room.roomId,
+    worldId,
+    seq: room.shards.get(worldId)?.seq ?? 0,
+    snapshot: createWorldSnapshot(room, worldId)
+  });
+}
+
 function broadcastToRoom(room: RoomState, socketsBySessionId: Map<string, WebSocket>, message: ServerMessage): void {
   for (const session of room.sessions.values()) {
     const socket = socketsBySessionId.get(session.sessionId);
@@ -1151,7 +1364,7 @@ function broadcastToRoom(room: RoomState, socketsBySessionId: Map<string, WebSoc
 }
 
 function firstWorldId(room: RoomState): string {
-  return room.shards.keys().next().value as string;
+  return room.activeWorldId || room.shards.keys().next().value as string;
 }
 
 function send(ws: WebSocket, message: ServerMessage): void {

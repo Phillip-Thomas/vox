@@ -365,6 +365,124 @@ describe('state server', () => {
     bob.ws.close();
   });
 
+  it('routes party warp through the server and locks commands to the active world', async () => {
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '0,0',
+      seq: 1,
+      pose: validPose({ position: [2, 3, 4], seq: 1 })
+    }));
+    await waitForMessage(bob.messages, 'pose_update', message => message.playerId === 'alice' && message.seq === 1);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'warp-party-1',
+      commandType: 'party_warp_requested',
+      worldId: '0,0',
+      payload: { destinationWorldId: '2,-1', forged: true }
+    }));
+    const accepted = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'warp-party-1');
+    expect(accepted).toMatchObject({
+      commandId: 'warp-party-1',
+      worldId: '2,-1',
+      seq: 1,
+      events: [{ type: 'party_warped', payload: { fromWorldId: '0,0', destinationWorldId: '2,-1' } }]
+    });
+    const aliceWarp = await waitForMessage(alice.messages, 'party_warp', message => message.worldId === '2,-1');
+    const bobWarp = await waitForMessage(bob.messages, 'party_warp', message => message.worldId === '2,-1');
+    expect(aliceWarp.handoff).toMatchObject({
+      fromWorldId: '0,0',
+      worldId: '2,-1',
+      destination: { x: 2, y: -1 },
+      actorPlayerId: 'alice',
+      players: [
+        { playerId: 'alice', spawnSlot: 0, pose: { position: [2, 3, 4] } },
+        { playerId: 'bob', spawnSlot: 1 }
+      ]
+    });
+    expect(bobWarp.handoff).toEqual(aliceWarp.handoff);
+    expect(started.server.rooms.getRoom(created.roomId)?.activeWorldId).toBe('2,-1');
+
+    const aliceSnapshot = await waitForMessage(alice.messages, 'world_snapshot', message => message.worldId === '2,-1');
+    const bobSnapshot = await waitForMessage(bob.messages, 'world_snapshot', message => message.worldId === '2,-1');
+    expect(aliceSnapshot.seq).toBe(1);
+    expect(bobSnapshot.seq).toBe(1);
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'old-world-command',
+      commandType: 'voxel_mined',
+      worldId: '0,0',
+      payload: { coord: [3, 1, 0], blockId: 'grass' }
+    }));
+    await expectRejected(bob.messages, 'old-world-command', 'invalid_world');
+
+    const poseStart = bob.messages.length;
+    bob.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: '0,0',
+      seq: 2,
+      pose: validPose({ playerId: 'bob', worldId: '0,0', seq: 2 })
+    }));
+    await waitForMessage(bob.messages, 'error', message => message.code === 'invalid_world', poseStart);
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'new-world-command',
+      commandType: 'voxel_mined',
+      worldId: '2,-1',
+      payload: { coord: [4, 1, 0], blockId: 'grass' }
+    }));
+    await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'new-world-command');
+
+    const charlie = await connectAndAuth(started.wsUrl, 'charlie-token');
+    charlie.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    const joined = await waitForType(charlie.messages, 'room_joined');
+    const snapshot = await waitForType(charlie.messages, 'world_snapshot');
+    expect(joined.worldId).toBe('2,-1');
+    expect(snapshot).toMatchObject({
+      worldId: '2,-1',
+      seq: 2,
+      snapshot: {
+        world: {
+          events: [
+            { seq: 1, type: 'party_warped', payload: { destinationWorldId: '2,-1' } },
+            { seq: 2, type: 'voxel_mined', payload: { coord: [4, 1, 0] } }
+          ]
+        }
+      }
+    });
+
+    const resuming = await connectAndAuth(started.wsUrl, 'dana-token');
+    resuming.ws.send(JSON.stringify({
+      type: 'join_room',
+      inviteCode: created.inviteCode,
+      resume: { worldId: '0,0', lastAppliedSeq: 0 }
+    }));
+    const resumedJoin = await waitForType(resuming.messages, 'room_joined');
+    const resumedSnapshot = await waitForType(resuming.messages, 'world_snapshot');
+    expect(resumedJoin.worldId).toBe('2,-1');
+    expect(resumedSnapshot.worldId).toBe('2,-1');
+
+    resuming.ws.close();
+    charlie.ws.close();
+    bob.ws.close();
+    alice.ws.close();
+  });
+
   it('broadcasts predicted door toggles immediately and rolls them back on reject', async () => {
     const started = await startTestServer();
     const alice = await connectAndAuth(started.wsUrl, 'alice-token');
@@ -1367,6 +1485,7 @@ class FakePersistence extends MultiplayerPersistence {
       inviteCode: room.inviteCode,
       ownerPlayerId: room.ownerPlayerId,
       createdAtMs: room.createdAtMs,
+      activeWorldId: room.activeWorldId,
       members: [...room.members.values()],
       worldIds: [...room.shards.keys()]
     });
@@ -1378,6 +1497,11 @@ class FakePersistence extends MultiplayerPersistence {
 
   override async loadRoomByInvite(inviteCode: string): Promise<LoadedRoomState | null> {
     return this.roomsByInvite.get(inviteCode) ?? null;
+  }
+
+  override async activateWorldShard(room: RoomState, worldId: string): Promise<void> {
+    room.activeWorldId = worldId;
+    await this.persistRoom(room);
   }
 
   override async appendCommandEvent(input: {

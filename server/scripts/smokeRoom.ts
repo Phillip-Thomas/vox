@@ -13,6 +13,7 @@ const worldId = process.env.PARAVOXIA_SMOKE_WORLD_ID ?? '0,0';
 const alice = await signInAnonymously(firebaseApiKey);
 const bob = await signInAnonymously(firebaseApiKey);
 const charlie = await signInAnonymously(firebaseApiKey);
+const dana = await signInAnonymously(firebaseApiKey);
 
 const aliceSocket = await connectPlayer(serverUrl, alice.idToken);
 aliceSocket.send({ type: 'create_room', startWorldId: worldId });
@@ -42,6 +43,9 @@ const unaffordableStructureCommandId = `smoke-no-wood-structure-${timestamp}`;
 const invalidForageCommandId = `smoke-invalid-forage-${timestamp}`;
 const outOfBoundsResourceCommandId = `smoke-oob-resource-${timestamp}`;
 const forgedDepositCommandId = `smoke-forged-deposit-${timestamp}`;
+const partyWarpCommandId = `smoke-party-warp-${timestamp}`;
+const oldWorldAfterWarpCommandId = `smoke-old-world-after-warp-${timestamp}`;
+const partyWarpDestinationWorldId = '2,-1';
 const replicatedCommands = [
   await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
     commandId: forgedTreeCommandId,
@@ -196,16 +200,69 @@ if (!snapshotEvents.some(event => event.seq === refundStructure.accepted.seq && 
   throw new Error(`Late-join snapshot did not include replicated command ${refundStructureCommandId}`);
 }
 
+aliceSocket.send({
+  type: 'command',
+  commandId: partyWarpCommandId,
+  commandType: 'party_warp_requested',
+  worldId: bobJoined.worldId,
+  payload: { destinationWorldId: partyWarpDestinationWorldId, forged: true }
+});
+const partyWarpAccepted = await aliceSocket.waitForCommandAccepted(partyWarpCommandId);
+if (partyWarpAccepted.worldId !== partyWarpDestinationWorldId || partyWarpAccepted.seq !== 1) {
+  throw new Error(`Party warp accepted with unexpected cursor: ${JSON.stringify(partyWarpAccepted)}`);
+}
+const aliceWarp = await aliceSocket.waitFor('party_warp');
+const bobWarp = await bobSocket.waitFor('party_warp');
+if (
+  aliceWarp.worldId !== partyWarpDestinationWorldId
+  || bobWarp.worldId !== partyWarpDestinationWorldId
+  || aliceWarp.handoff.worldId !== partyWarpDestinationWorldId
+  || bobWarp.handoff.actorPlayerId !== alice.localId
+) {
+  throw new Error(`Party warp handoff mismatch: ${JSON.stringify({ aliceWarp, bobWarp })}`);
+}
+const aliceWarpSnapshot = await aliceSocket.waitForSnapshotWorld(partyWarpDestinationWorldId);
+const bobWarpSnapshot = await bobSocket.waitForSnapshotWorld(partyWarpDestinationWorldId);
+if (aliceWarpSnapshot.seq !== partyWarpAccepted.seq || bobWarpSnapshot.seq !== partyWarpAccepted.seq) {
+  throw new Error(`Party warp snapshot cursor mismatch: ${JSON.stringify({ aliceWarpSnapshot, bobWarpSnapshot })}`);
+}
+
+bobSocket.send({
+  type: 'command',
+  commandId: oldWorldAfterWarpCommandId,
+  commandType: 'voxel_mined',
+  worldId: bobJoined.worldId,
+  payload: { coord: [5, 1, 0], blockId: 'grass' }
+});
+const oldWorldRejected = await bobSocket.waitForCommandRejected(oldWorldAfterWarpCommandId);
+if (oldWorldRejected.code !== 'invalid_world') {
+  throw new Error(`Old-world command rejected with unexpected code after warp: ${oldWorldRejected.code}`);
+}
+
+const danaSocket = await connectPlayer(serverUrl, dana.idToken);
+danaSocket.send({ type: 'join_room', inviteCode: created.inviteCode });
+const danaJoined = await danaSocket.waitFor('room_joined');
+const danaSnapshot = await danaSocket.waitFor('world_snapshot');
+const danaEvents = readSnapshotEvents(danaSnapshot.snapshot);
+if (danaJoined.worldId !== partyWarpDestinationWorldId || danaSnapshot.worldId !== partyWarpDestinationWorldId) {
+  throw new Error(`Post-warp late join did not land on active world: ${JSON.stringify({ danaJoined, danaSnapshot })}`);
+}
+if (!danaEvents.some(event => event.seq === partyWarpAccepted.seq && event.type === 'party_warped')) {
+  throw new Error(`Post-warp late join snapshot did not include party warp event ${partyWarpCommandId}`);
+}
+
 aliceSocket.close();
 bobSocket.close();
 charlieSocket.close();
+danaSocket.close();
 
 console.log(JSON.stringify({
   ok: true,
   roomId: created.roomId,
   inviteCode: created.inviteCode,
   worldId: bobJoined.worldId,
-  players: [alice.localId, bob.localId, charlie.localId],
+  activeWorldId: partyWarpDestinationWorldId,
+  players: [alice.localId, bob.localId, charlie.localId, dana.localId],
   canonicalResource: {
     commandId: forgedTreeCommandId,
     seq: forgedTree.accepted.seq,
@@ -242,6 +299,18 @@ console.log(JSON.stringify({
     player: charlie.localId,
     seq: charlieSnapshot.seq,
     eventCount: snapshotEvents.length
+  },
+  partyWarp: {
+    commandId: partyWarpCommandId,
+    seq: partyWarpAccepted.seq,
+    handoff: aliceWarp.handoff,
+    rejectedOldWorldCommand: { commandId: oldWorldAfterWarpCommandId, code: oldWorldRejected.code },
+    postWarpLateJoin: {
+      player: dana.localId,
+      worldId: danaJoined.worldId,
+      seq: danaSnapshot.seq,
+      eventCount: danaEvents.length
+    }
   }
 }, null, 2));
 
@@ -285,6 +354,9 @@ async function connectPlayer(baseUrl: string, idToken: string): Promise<SmokeSoc
     waitForWorldEventSeq(seq) {
       return waitForMessage(messages, 'world_event', message => message.seq === seq);
     },
+    waitForSnapshotWorld(worldId) {
+      return waitForMessage(messages, 'world_snapshot', message => message.worldId === worldId);
+    },
     close() {
       ws.close(1000, 'smoke_complete');
     }
@@ -301,6 +373,7 @@ interface SmokeSocket {
   waitForCommandAccepted(commandId: string): Promise<Extract<ServerMessage, { type: 'command_accepted' }>>;
   waitForCommandRejected(commandId: string): Promise<Extract<ServerMessage, { type: 'command_rejected' }>>;
   waitForWorldEventSeq(seq: number): Promise<Extract<ServerMessage, { type: 'world_event' }>>;
+  waitForSnapshotWorld(worldId: string): Promise<Extract<ServerMessage, { type: 'world_snapshot' }>>;
   close(): void;
 }
 

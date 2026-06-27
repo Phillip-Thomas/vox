@@ -144,22 +144,38 @@ export class MultiplayerPersistence {
         select world_id
         from world_shards
         where room_id = $1::uuid
-        order by created_at asc
+        order by updated_at desc, created_at desc
       `,
       [room.room_id]
     );
+    const worldIds = shards.map(shard => shard.world_id);
 
     return {
       roomId: room.room_id,
       inviteCode: room.invite_code,
       ownerPlayerId: room.owner_player_id,
       createdAtMs: toNumber(room.created_at_ms),
+      activeWorldId: worldIds[0],
       members: members.map(member => ({
         playerId: member.player_id,
         ...(member.display_name ? { displayName: member.display_name } : {})
       })),
-      worldIds: shards.map(shard => shard.world_id)
+      worldIds
     };
+  }
+
+  async activateWorldShard(room: RoomState, worldId: string): Promise<void> {
+    if (!this.configured) return;
+    await this.ensureWorldShard(room.roomId, worldId);
+    await this.database.query(
+      `
+        update world_shards
+        set updated_at = now()
+        where room_id = $1::uuid
+          and world_id = $2
+      `,
+      [room.roomId, metadataForWorldId(worldId).worldId]
+    );
   }
 
   async loadPlayerState(playerId: string): Promise<ServerPlayerState> {

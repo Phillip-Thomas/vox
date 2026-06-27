@@ -30,7 +30,8 @@ code, tests, and manual evidence for that item exist.
 - [x] Decide where server source lives: `server/`, `main/server/`, or package workspace.
 - [x] Decide whether Phase 1 persistence is Neon-backed from day one or in-memory with immediate
       save-on-disconnect.
-- [ ] Decide whether a player can split from the party into another world in Phase 1.
+- [x] Decide whether a player can split from the party into another world in Phase 1.
+      Decision: Phase 1 is party-locked; split-world survival is deferred.
 - [x] Decide progression ownership: per-player, shared-world, or hybrid.
 - [ ] Decide resource ownership: per-player inventory only vs shared storage.
 - [ ] Decide structure permissions: personal, party-owned, or world-owned.
@@ -342,9 +343,10 @@ code, tests, and manual evidence for that item exist.
 - [x] Jetpack fuel replicates enough for authority and remote presentation.
 - [x] World clock is server-owned in co-op.
 - [x] Respawn/reset is command-routed and replicated.
-- [ ] Warp request is command-routed.
-- [ ] Shard handoff payload includes ship/player pose and spawn slot.
-- [ ] Players can split worlds only if Phase 1 shard survival is implemented.
+- [x] Warp request is command-routed.
+- [x] Shard handoff payload includes ship/player pose and spawn slot.
+- [x] Players can split worlds only if Phase 1 shard survival is implemented.
+      Decision: split worlds are rejected for Phase 1 by locking commands/poses to the active party world.
 
 ### 1.7 Security And Abuse Minimums
 
@@ -397,7 +399,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Craft/campfire command is atomic under reject/rollback.
 - [x] Structure removal refunds the owner, clears linked doorway/door claims, and permits slot reuse.
 - [x] R-key reset/respawn is visible to the other player.
-- [ ] Warp behavior matches the chosen party-travel rule.
+- [x] Warp behavior matches the chosen party-travel rule.
 - [x] Cloud Run restart does not lose persisted Neon-backed worlds.
 - [x] Two private rooms on the same `worldId` do not share mutation events.
 - [x] Static Firebase Hosting deploy still serves the game.
@@ -531,6 +533,20 @@ ordered peer delivery, and resumes a third player from a missed suffix without a
 Live room smoke on `paravoxia-state-server-00020-5p5` verified canonical resource/mining yields,
 cross-player `structure_removed`, owner refund funding a follow-up wall placement, validation
 rejects, and late-join Neon snapshot replay through seq `5`.
+
+Evidence: 2026-06-27 party-locked warp batch passed server `npm run verify` with 4 test files /
+38 tests plus build and full `main` `npm run verify` with 69 test files / 473 tests plus
+production build, then deployed Cloud Run revision `paravoxia-state-server-00021-hkc` and
+Hosting asset `/assets/index-BQUJjpsc.js`. `party_warp_requested` is now a server-routed command
+that canonicalizes the destination, appends a `party_warped` audit event on the destination
+shard, activates that shard for the room, broadcasts a `party_warp` handoff, and sends the
+destination snapshot to connected players. The handoff includes the source/destination worlds,
+actor, deterministic spawn slots, and each player latest pose payload when available. Commands
+and poses to old shards are rejected after warp, while event replay can still read known old
+shards. Client star-map and ship-target travel now request the server party warp in co-op and
+fall back to local warp offline. Live room smoke verified canonical resource/mining, cross-player
+structure removal, party warp to active world `2,-1`, old-world command rejection, and post-warp
+late join landing on the active shard.
 
 ## Phase 2 - Persistent Shards
 

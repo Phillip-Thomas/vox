@@ -46,7 +46,12 @@ import {
 import { findHospitableStart } from './game/data/planetArchetypes.ts';
 import { createOfflineCommandContext } from './game/gameplayCommands.ts';
 import { ensureAnonymousPlayerSession } from './game/multiplayerAuth.ts';
-import { getMultiplayerSessionSnapshot, subscribeMultiplayerSession } from './game/multiplayerSession.ts';
+import {
+  getMultiplayerSessionSnapshot,
+  requestMultiplayerPartyWarp,
+  setMultiplayerPartyWarpHandler,
+  subscribeMultiplayerSession
+} from './game/multiplayerSession.ts';
 import { getLocalActorId, subscribeLocalActorId } from './game/playerActors.ts';
 import { worldIdentityFromCurrentWorld } from './game/worldIdentity.ts';
 import { getCurrentDayPhase, setDayPhaseOffset } from './game/worldClock.ts';
@@ -72,6 +77,8 @@ import {
   debugStartInDescent,
   debugStartInSpace,
   exitShip,
+  getSpaceFlightSnapshot,
+  getWarp,
   notifyLanded,
   setArrivalHandler,
   useSpaceFlight
@@ -421,6 +428,9 @@ const App: React.FC = () => {
       if (session.status !== 'connected' || !session.worldId || session.worldId === currentWorldIdentity.worldId) return;
       const coordinate = parseWorldIdCoordinate(session.worldId);
       if (!coordinate) return;
+      const warp = getWarp();
+      const flightSnapshot = getSpaceFlightSnapshot();
+      if (warp.active && flightSnapshot.destination && coordinateKey(flightSnapshot.destination) === session.worldId) return;
       const world = createCurrentWorld(coordinate);
       setPreviousWorld(currentWorld);
       setCurrentWorld(world);
@@ -431,6 +441,18 @@ const App: React.FC = () => {
     alignToCoopWorld();
     return subscribeMultiplayerSession(alignToCoopWorld);
   }, [currentWorld, currentWorldIdentity.worldId]);
+
+  useEffect(() => {
+    setMultiplayerPartyWarpHandler(handoff => {
+      const coordinate = handoff.destination;
+      if (coordinateKey(coordinate) === currentWorldIdentity.worldId) return;
+      const world = createCurrentWorld(coordinate);
+      scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
+      scheduleGrassInstancePrewarm(planetSize, world.seed);
+      beginTravel(coordinate);
+    });
+    return () => setMultiplayerPartyWarpHandler(null);
+  }, [currentWorldIdentity.worldId]);
 
   // Register the warp-midpoint arrival handler: the actual world swap fires while
   // the screen is fully white, so the EfficientScene remount + regen are hidden.
@@ -470,7 +492,7 @@ const App: React.FC = () => {
         const world = createCurrentWorld(coordinate);
         scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
         scheduleGrassInstancePrewarm(planetSize, world.seed);
-        beginTravel(coordinate);
+        if (!requestMultiplayerPartyWarp(coordinate)) beginTravel(coordinate);
       }
     };
     win.__paravoxiaWarpProbe = probe;
@@ -509,7 +531,7 @@ const App: React.FC = () => {
     scheduleGrassInstancePrewarm(planetSize, world.seed);
     // Route through the warp: beginTravel plays the warp-in and the registered
     // arrival handler performs the real world swap at the white-out midpoint.
-    beginTravel(world.coordinate);
+    if (!requestMultiplayerPartyWarp(world.coordinate)) beginTravel(world.coordinate);
   };
 
   const jumpToCoordinate = (coordinate: WorldCoordinate) => {
@@ -532,7 +554,7 @@ const App: React.FC = () => {
 
   const returnToPreviousWorld = () => {
     if (!previousWorld) return;
-    beginTravel(previousWorld.coordinate);
+    if (!requestMultiplayerPartyWarp(previousWorld.coordinate)) beginTravel(previousWorld.coordinate);
   };
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;

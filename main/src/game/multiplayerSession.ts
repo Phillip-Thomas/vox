@@ -2,6 +2,7 @@ import {
   createMultiplayerConnection,
   type JsonObject,
   type MultiplayerConnection,
+  type MultiplayerPartyWarpHandoff,
   type MultiplayerRoomPlayer,
   type MultiplayerServerMessage,
   type MultiplayerSocketStatus
@@ -31,6 +32,7 @@ import {
 } from './systems/playerPoseSystem.ts';
 import { clearServerWorldClock, setServerWorldClock } from './worldClock.ts';
 import { applyRejectedCommandRollback } from './multiplayerReconciliation.ts';
+import { coordinateKey, normalizeCoordinate, type WorldCoordinate } from '../utils/worldCoordinates.ts';
 
 export type MultiplayerSessionStatus =
   | 'offline'
@@ -71,6 +73,7 @@ type Listener = () => void;
 type PoseTimer = ReturnType<typeof setInterval>;
 type ReconnectTimer = ReturnType<typeof setTimeout>;
 type WorldEventMessage = Extract<MultiplayerServerMessage, { type: 'world_event' }>;
+type PartyWarpHandler = (handoff: MultiplayerPartyWarpHandoff) => void;
 type CoopSessionAction =
   | { type: 'create'; startWorldId: string }
   | { type: 'join'; inviteCode: string }
@@ -97,8 +100,10 @@ let lastSentPoseSeq = 0;
 const pendingWorldEventsByWorld = new Map<string, Map<number, WorldEventMessage>>();
 const requestedWorldEventBackfill = new Map<string, number>();
 const pendingReliableCommands = new Map<string, PendingReliableCommand>();
+const pendingPartyWarpCommandIds = new Set<string>();
 const AUTHORITATIVE_GATE_EVENT_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed']);
 const PREDICTED_WORLD_EVENT_TYPES = new Set(['door_toggled']);
+let partyWarpHandler: PartyWarpHandler | null = null;
 let snapshot: MultiplayerSessionSnapshot = {
   status: 'offline',
   enabled: isCoopAuthEnabled(),
@@ -181,6 +186,27 @@ export function sendMultiplayerWorldCommand(input: {
     commandType: input.commandType,
     worldId: input.worldId,
     payload: input.payload
+  });
+  return true;
+}
+
+export function setMultiplayerPartyWarpHandler(handler: PartyWarpHandler | null): void {
+  partyWarpHandler = handler;
+}
+
+export function requestMultiplayerPartyWarp(destination: WorldCoordinate): boolean {
+  if (!connection || snapshot.status !== 'connected' || !snapshot.worldId) return false;
+  const normalized = normalizeCoordinate(destination);
+  const destinationWorldId = coordinateKey(normalized);
+  if (destinationWorldId === snapshot.worldId) return false;
+  const commandId = `party-warp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  pendingPartyWarpCommandIds.add(commandId);
+  connection.send({
+    type: 'command',
+    commandId,
+    commandType: 'party_warp_requested',
+    worldId: snapshot.worldId,
+    payload: { destinationWorldId }
   });
   return true;
 }
@@ -455,6 +481,9 @@ function handleServerMessage(
       subscribeWorldFromCursor(message.worldId, message.seq);
       acknowledgeWorldEvents(message.worldId, message.seq);
       return;
+    case 'party_warp':
+      handlePartyWarp(message);
+      return;
     case 'world_event':
       handleWorldEvent(message);
       return;
@@ -467,6 +496,7 @@ function handleServerMessage(
       return;
     case 'command_accepted':
       handleCommandAccepted(message);
+      if (isPartyWarpAccepted(message)) return;
       if (message.seq > snapshot.seq + 1) {
         requestWorldEventBackfill(message.worldId, snapshot.seq);
         return;
@@ -597,6 +627,7 @@ function clearWorldEventBackfillState(): void {
 
 function clearPendingReliableCommands(): void {
   pendingReliableCommands.clear();
+  pendingPartyWarpCommandIds.clear();
 }
 
 function handleCommandAccepted(message: Extract<MultiplayerServerMessage, { type: 'command_accepted' }>): void {
@@ -607,6 +638,10 @@ function handleCommandAccepted(message: Extract<MultiplayerServerMessage, { type
 }
 
 function handleCommandRejected(message: Extract<MultiplayerServerMessage, { type: 'command_rejected' }>): void {
+  if (pendingPartyWarpCommandIds.delete(message.commandId)) {
+    setSnapshot({ ...snapshot, error: friendlyServerError(message.code, message.reason) });
+    return;
+  }
   const pending = pendingReliableCommands.get(message.commandId);
   if (!pending) return;
   pendingReliableCommands.delete(message.commandId);
@@ -615,6 +650,26 @@ function handleCommandRejected(message: Extract<MultiplayerServerMessage, { type
     rejectCode: message.code as CommandRejectCode
   });
   if (message.code === 'conflict') requestWorldEventBackfill(pending.worldId, snapshot.seq);
+}
+
+function handlePartyWarp(message: Extract<MultiplayerServerMessage, { type: 'party_warp' }>): void {
+  if (message.roomId !== snapshot.roomId) return;
+  clearBufferedWorldEvents(message.worldId, message.seq);
+  partyWarpHandler?.(message.handoff);
+  setSnapshot({
+    ...snapshot,
+    worldId: message.worldId,
+    seq: message.seq,
+    error: null
+  });
+}
+
+function isPartyWarpAccepted(message: Extract<MultiplayerServerMessage, { type: 'command_accepted' }>): boolean {
+  if (!pendingPartyWarpCommandIds.delete(message.commandId)) return false;
+  return message.events.some(event => {
+    const object = toJsonObject(event);
+    return object?.type === 'party_warped';
+  });
 }
 
 function handlePredictionRollback(message: Extract<MultiplayerServerMessage, { type: 'prediction_rollback' }>): void {

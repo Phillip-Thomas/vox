@@ -9,6 +9,21 @@ export interface MultiplayerRoomPlayer {
   owner?: boolean;
 }
 
+export interface MultiplayerPartyWarpPlayerHandoff {
+  playerId: string;
+  spawnSlot: number;
+  pose?: JsonObject;
+}
+
+export interface MultiplayerPartyWarpHandoff {
+  fromWorldId: string;
+  worldId: string;
+  destination: { x: number; y: number };
+  actorPlayerId: string;
+  players: MultiplayerPartyWarpPlayerHandoff[];
+  requestedAtMs: number;
+}
+
 export type MultiplayerClientMessage =
   | { type: 'auth'; protocolVersion: number; token: string }
   | { type: 'create_room'; startWorldId?: string }
@@ -35,6 +50,7 @@ export type MultiplayerServerMessage =
   | { type: 'room_roster'; roomId: string; players: MultiplayerRoomPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
+  | { type: 'party_warp'; roomId: string; worldId: string; seq: number; handoff: MultiplayerPartyWarpHandoff }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
   | { type: 'predicted_world_event'; roomId: string; worldId: string; commandId: string; event: unknown }
   | { type: 'command_accepted'; commandId: string; worldId: string; seq: number; events: unknown[]; deltas?: unknown }
@@ -186,6 +202,11 @@ export function isMultiplayerServerMessage(value: unknown): value is Multiplayer
         && Number.isInteger(value.index)
         && Number.isInteger(value.total)
         && isObject(value.chunk);
+    case 'party_warp':
+      return typeof value.roomId === 'string'
+        && typeof value.worldId === 'string'
+        && Number.isInteger(value.seq)
+        && isPartyWarpHandoff(value.handoff);
     case 'world_event':
       return typeof value.roomId === 'string'
         && typeof value.worldId === 'string'
@@ -245,6 +266,26 @@ function isRoomRosterPlayer(value: unknown): value is MultiplayerRoomPlayer {
     && optionalString(value.displayName)
     && typeof value.connected === 'boolean'
     && (value.owner === undefined || typeof value.owner === 'boolean');
+}
+
+function isPartyWarpHandoff(value: unknown): value is MultiplayerPartyWarpHandoff {
+  return isObject(value)
+    && typeof value.fromWorldId === 'string'
+    && typeof value.worldId === 'string'
+    && isObject(value.destination)
+    && typeof value.destination.x === 'number'
+    && typeof value.destination.y === 'number'
+    && typeof value.actorPlayerId === 'string'
+    && Array.isArray(value.players)
+    && value.players.every(isPartyWarpPlayerHandoff)
+    && typeof value.requestedAtMs === 'number';
+}
+
+function isPartyWarpPlayerHandoff(value: unknown): value is MultiplayerPartyWarpPlayerHandoff {
+  return isObject(value)
+    && typeof value.playerId === 'string'
+    && Number.isInteger(value.spawnSlot)
+    && (value.pose === undefined || isObject(value.pose));
 }
 
 function optionalString(value: unknown): boolean {

@@ -61,6 +61,7 @@ export interface RoomState {
   inviteCode: string;
   ownerPlayerId: string;
   createdAtMs: number;
+  activeWorldId: string;
   sessions: Map<string, PlayerSession>;
   members: Map<string, PlayerIdentity>;
   playerInventories: Map<string, Map<string, number>>;
@@ -87,6 +88,7 @@ export interface LoadedRoomState {
   inviteCode: string;
   ownerPlayerId: string;
   createdAtMs: number;
+  activeWorldId?: string;
   members: PlayerIdentity[];
   worldIds: string[];
 }
@@ -104,6 +106,7 @@ export class InMemoryRoomStore {
       inviteCode,
       ownerPlayerId: owner.playerId,
       createdAtMs: now,
+      activeWorldId: startWorldId,
       sessions: new Map(),
       members: new Map([[owner.playerId, owner]]),
       playerInventories: new Map([[owner.playerId, createStarterInventory()]]),
@@ -143,6 +146,7 @@ export class InMemoryRoomStore {
       inviteCode: loaded.inviteCode,
       ownerPlayerId: loaded.ownerPlayerId,
       createdAtMs: loaded.createdAtMs,
+      activeWorldId: loaded.activeWorldId ?? loaded.worldIds[0] ?? '0,0',
       sessions: new Map(),
       members: new Map(loaded.members.map(member => [member.playerId, member])),
       playerInventories: new Map(loaded.members.map(member => [member.playerId, createStarterInventory()])),
@@ -189,6 +193,12 @@ export class InMemoryRoomStore {
       shard = createShard(worldId);
       room.shards.set(worldId, shard);
     }
+    return shard;
+  }
+
+  setActiveWorld(room: RoomState, worldId: string): ShardState {
+    const shard = this.getOrCreateShard(room, worldId);
+    room.activeWorldId = worldId;
     return shard;
   }
 
@@ -262,7 +272,7 @@ export class InMemoryRoomStore {
       ownerPlayerId: room.ownerPlayerId,
       memberCount: room.members.size,
       sessionCount: room.sessions.size,
-      worldIds: [...room.shards.keys()]
+      worldIds: [room.activeWorldId, ...[...room.shards.keys()].filter(worldId => worldId !== room.activeWorldId)]
     };
   }
 

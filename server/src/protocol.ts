@@ -87,6 +87,21 @@ export interface ClientPingMessage {
   clientTimeMs?: number;
 }
 
+export interface PartyWarpPlayerHandoff {
+  playerId: string;
+  spawnSlot: number;
+  pose?: JsonObject;
+}
+
+export interface PartyWarpHandoff {
+  fromWorldId: string;
+  worldId: string;
+  destination: { x: number; y: number };
+  actorPlayerId: string;
+  players: PartyWarpPlayerHandoff[];
+  requestedAtMs: number;
+}
+
 export type ClientMessage =
   | ClientAuthMessage
   | ClientCreateRoomMessage
@@ -108,6 +123,7 @@ export type ServerMessage =
   | { type: 'room_roster'; roomId: string; players: RoomRosterPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
+  | { type: 'party_warp'; roomId: string; worldId: string; seq: number; handoff: PartyWarpHandoff }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
   | { type: 'predicted_world_event'; roomId: string; worldId: string; commandId: string; event: unknown }
   | { type: 'command_accepted'; commandId: string; worldId: string; seq: number; events: unknown[]; deltas?: unknown }

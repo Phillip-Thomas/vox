@@ -46,6 +46,23 @@ describe('multiplayer server message validation', () => {
         { playerId: 'bob', connected: false }
       ]
     })).toBe(true);
+    expect(isMultiplayerServerMessage({
+      type: 'party_warp',
+      roomId: 'room',
+      worldId: '2,-1',
+      seq: 1,
+      handoff: {
+        fromWorldId: '0,0',
+        worldId: '2,-1',
+        destination: { x: 2, y: -1 },
+        actorPlayerId: 'alice',
+        players: [
+          { playerId: 'alice', spawnSlot: 0, pose: { position: [1, 2, 3] } },
+          { playerId: 'bob', spawnSlot: 1 }
+        ],
+        requestedAtMs: 123
+      }
+    })).toBe(true);
   });
 
   it('rejects malformed protocol messages', () => {
@@ -53,6 +70,7 @@ describe('multiplayer server message validation', () => {
     expect(isMultiplayerServerMessage({ type: 'world_snapshot', roomId: 'r', worldId: '0,0', seq: 1 })).toBe(false);
     expect(isMultiplayerServerMessage({ type: 'pose_update', playerId: 'remote', worldId: '0,0', seq: 1, pose: [] })).toBe(false);
     expect(isMultiplayerServerMessage({ type: 'room_roster', roomId: 'r', players: [{ playerId: 'bob', connected: 'yes' }] })).toBe(false);
+    expect(isMultiplayerServerMessage({ type: 'party_warp', roomId: 'r', worldId: '1,0', seq: 1, handoff: { players: [] } })).toBe(false);
   });
 });
 

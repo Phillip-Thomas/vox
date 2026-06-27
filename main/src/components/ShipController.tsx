@@ -14,6 +14,7 @@ import {
   useSpaceFlight
 } from '../state/spaceFlight.ts';
 import { playSfx, setShipThrustSfx } from '../audio/sfxEngine.ts';
+import { requestMultiplayerPartyWarp } from '../game/multiplayerSession.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
@@ -550,7 +551,7 @@ export default function ShipController({
           engageState.charge = 0;
           engage.armed = false;
           engageState.waitingForFreshForward = false;
-          beginTravel(liveSnap.target);
+          if (!requestMultiplayerPartyWarp(liveSnap.target)) beginTravel(liveSnap.target);
         }
       } else if (engageState.charge !== 0) {
         engageState.charge = 0;
