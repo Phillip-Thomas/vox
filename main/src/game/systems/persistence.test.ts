@@ -4,7 +4,10 @@ import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
   restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
   saveVoxelEdits, restoreVoxelEditsForWorld,
-  savePlayerPose, loadPlayerPose
+  savePlayerPose, loadPlayerPose,
+  getLocalPersistenceMode,
+  isLocalPersistenceEnabled,
+  setLocalPersistenceMode
 } from './persistence.ts';
 import { voxelSystem, type TerrainVoxel } from '../../utils/efficientVoxelSystem.ts';
 import { setPlayerWorldPosition, setPlayerLook } from '../../state/playerFrame.ts';
@@ -42,6 +45,7 @@ const legacyWorldKey = () => `${PREFIX}.world.${WORLD.seed}`;
 
 beforeEach(() => {
   (globalThis as unknown as { localStorage: MemStorage }).localStorage = new MemStorage();
+  setLocalPersistenceMode('offline');
   resetInventory(); resetMaw(); resetProgression();
   resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetVitals();
   resetForagePickup(); resetWaterskin();
@@ -279,5 +283,32 @@ describe('no save present', () => {
     expect(loadGlobal()).toBeNull();
     restoreStructuresForWorld(SEED);
     expect(getPieces()).toHaveLength(0);
+  });
+});
+
+describe('multiplayer local persistence guard', () => {
+  it('suppresses localStorage reads and writes while multiplayer owns truth', () => {
+    setLocalPersistenceMode('multiplayer');
+    expect(getLocalPersistenceMode()).toBe('multiplayer');
+    expect(isLocalPersistenceEnabled()).toBe(false);
+
+    addItem('wood', 7);
+    saveGlobal({ x: 5, y: -2 });
+    placePiece([1, 2, 3], 3, 'foundation', 'wood');
+    saveWorld(WORLD);
+    setPlayerWorldPosition(new THREE.Vector3(12, -3, 40));
+    savePlayerPose(WORLD);
+
+    expect(globalThis.localStorage.length).toBe(0);
+
+    globalThis.localStorage.setItem(`${PREFIX}.global`, JSON.stringify({
+      inventory: { wood: 99 },
+      mawCharge: 0,
+      era: 'primitive',
+      milestones: [],
+      lastWorld: { x: 1, y: 1 }
+    }));
+    expect(loadGlobal()).toBeNull();
+    expect(loadPlayerPose(WORLD)).toBeNull();
   });
 });

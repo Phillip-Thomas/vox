@@ -58,7 +58,15 @@ import { getCurrentDayPhase, setDayPhaseOffset } from './game/worldClock.ts';
 import { toggleBuildMode, isBuildEnabled, selectPieceByIndex, setBuildEnabled, cycleBuildRotation, subscribeBuildState } from './game/systems/buildState.ts';
 import { setFreeBuild, subscribeStructures } from './game/systems/structureSystem.ts';
 import { setInstantHarvest } from './game/systems/harvestingSystem.ts';
-import { loadGlobal, restoreGlobal, saveGlobal, saveWorld, saveVoxelEdits, savePlayerPose } from './game/systems/persistence.ts';
+import {
+  loadGlobal,
+  restoreGlobal,
+  saveGlobal,
+  saveWorld,
+  saveVoxelEdits,
+  savePlayerPose,
+  setLocalPersistenceMode
+} from './game/systems/persistence.ts';
 import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { subscribeInventory } from './game/systems/inventorySystem.ts';
 import { subscribeCampfires } from './game/systems/campfires.ts';
@@ -421,6 +429,15 @@ const App: React.FC = () => {
     () => createOfflineCommandContext(currentWorldIdentity, { actorId: localActorId }),
     [currentWorldIdentity.worldId, currentWorldIdentity.generationSchemaVersion, localActorId]
   );
+
+  useEffect(() => {
+    const syncLocalPersistenceMode = () => {
+      const session = getMultiplayerSessionSnapshot();
+      setLocalPersistenceMode(session.roomId || session.status === 'connected' ? 'multiplayer' : 'offline');
+    };
+    syncLocalPersistenceMode();
+    return subscribeMultiplayerSession(syncLocalPersistenceMode);
+  }, []);
 
   useEffect(() => {
     const alignToCoopWorld = () => {

@@ -89,7 +89,7 @@ import { setLookedAt, type LookedAt } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
 import type { CommandContext } from '../game/commands.ts';
 import type { PlayerActionMode } from '../game/playerPose.ts';
-import { sendMultiplayerCommandEvents, sendMultiplayerPredictedEvents } from '../game/multiplayerSession.ts';
+import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import {
   shouldDisplacePlayerForWorldCollisionChange,
   shouldReconcilePlayerForWorldCollisionChange,
@@ -507,9 +507,8 @@ export default function EfficientPlayer({
     if (!body) return;
 
     const top = getSurfaceState('top');
-    const result = respawnCommand(commandContext, { position: resetSpawnPosition, up: top.up });
+    const result = dispatchGameplayCommand(() => respawnCommand(commandContext, { position: resetSpawnPosition, up: top.up }));
     if (!result.ok) return;
-    sendMultiplayerCommandEvents(result);
     body.setTranslation(vectorToRapier(resetSpawnPosition), true);
     body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     body.setAngvel({ x: 0, y: 0, z: 0 }, true);
@@ -641,15 +640,14 @@ export default function EfficientPlayer({
     toolTier: number,
     usesCharge: boolean
   ) => {
-    const result = mineVoxelCommand(commandContext, {
+    const result = dispatchGameplayCommand(() => mineVoxelCommand(commandContext, {
       coord,
       terrain: voxelSystem,
       water: waterGen,
       toolTier,
       usesCharge
-    });
+    }));
     if (result.ok) {
-      sendMultiplayerCommandEvents(result);
       playSfx('mine');
     } else {
       playSfx('blocked');
@@ -724,11 +722,11 @@ export default function EfficientPlayer({
 
     if (ms.elapsed >= ms.duration) {
       if (target.kind === 'tree') {
-        const result = harvestTreeCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z });
-        if (result.ok) { sendMultiplayerCommandEvents(result); playSfx('mine'); }
+        const result = dispatchGameplayCommand(() => harvestTreeCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z }));
+        if (result.ok) { playSfx('mine'); }
       } else if (target.kind === 'stone') {
-        const result = collectStoneCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z });
-        if (result.ok) { sendMultiplayerCommandEvents(result); playSfx('mine'); }
+        const result = dispatchGameplayCommand(() => collectStoneCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z }));
+        if (result.ok) { playSfx('mine'); }
       } else {
         commitMine(coord, getEquippedToolTier(), ms.usesCharge);
       }
@@ -784,8 +782,8 @@ export default function EfficientPlayer({
     // Deconstruct the panel under the crosshair.
     if (decon) {
       if (deconHit) {
-        const result = removeStructureCommand(commandContext, { cell: [deconHit.cell.x, deconHit.cell.y, deconHit.cell.z], face: deconHit.face });
-        if (result.ok) { sendMultiplayerCommandEvents(result); playSfx('mine'); }
+        const result = dispatchGameplayCommand(() => removeStructureCommand(commandContext, { cell: [deconHit.cell.x, deconHit.cell.y, deconHit.cell.z], face: deconHit.face }));
+        if (result.ok) { playSfx('mine'); }
         else playSfx('blocked');
       } else playSfx('blocked');
     }
@@ -829,12 +827,11 @@ export default function EfficientPlayer({
       let placed = false;
       let result: ReturnType<typeof placeStructureCommand> | ReturnType<typeof placeDoorwayCommand> | ReturnType<typeof fitDoorCommand> | ReturnType<typeof placeVolumeCommand> | null = null;
       if (ok) {
-        if (piece === 'doorway') result = placeDoorwayCommand(commandContext, { cell: target.cell, face: target.face, up: upIdx, material });
-        else if (piece === 'door') result = fitDoorCommand(commandContext, { cell: target.cell, face: target.face, material }); // fit a leaf into the doorway
-        else if (family === 'volume') result = placeVolumeCommand(commandContext, { cell: target.cell, up: upIdx, orient, type: piece, material });
-        else result = placeStructureCommand(commandContext, { cell: target.cell, face: target.face, type: piece, material, up: upIdx });
+        if (piece === 'doorway') result = dispatchGameplayCommand(() => placeDoorwayCommand(commandContext, { cell: target.cell, face: target.face, up: upIdx, material }));
+        else if (piece === 'door') result = dispatchGameplayCommand(() => fitDoorCommand(commandContext, { cell: target.cell, face: target.face, material })); // fit a leaf into the doorway
+        else if (family === 'volume') result = dispatchGameplayCommand(() => placeVolumeCommand(commandContext, { cell: target.cell, up: upIdx, orient, type: piece, material }));
+        else result = dispatchGameplayCommand(() => placeStructureCommand(commandContext, { cell: target.cell, face: target.face, type: piece, material, up: upIdx }));
         placed = result.ok;
-        if (result.ok) sendMultiplayerCommandEvents(result);
       }
       playSfx(placed ? 'mine' : 'blocked');
     }
@@ -855,17 +852,16 @@ export default function EfficientPlayer({
     if (vit.hunger < 100) {
       for (const id of EDIBLE_ITEM_IDS) { // richest-first
         if (getItemCount(id) > 0) {
-          const result = consumeItemCommand(commandContext, { itemId: id });
+          const result = dispatchGameplayCommand(() => consumeItemCommand(commandContext, { itemId: id }));
           if (!result.ok) continue;
-          sendMultiplayerCommandEvents(result);
           playSfx('mine');
           return;
         }
       }
     }
     if (vit.thirst < 100 && getWaterskinFill() > 0) {
-      const result = drinkFromWaterskinCommand(commandContext);
-      if (result.ok) { sendMultiplayerCommandEvents(result); playSfx('mine'); }
+      const result = dispatchGameplayCommand(() => drinkFromWaterskinCommand(commandContext));
+      if (result.ok) { playSfx('mine'); }
       return;
     }
     playSfx('blocked');
@@ -882,10 +878,11 @@ export default function EfficientPlayer({
       const p = (h.object.userData as { piece?: StructurePiece }).piece;
       if (!p) continue;
       if (isOpenable(p)) {
-        const result = toggleDoorCommand(commandContext, { piece: p });
+        const result = dispatchGameplayCommand(
+          () => toggleDoorCommand(commandContext, { piece: p }),
+          { multiplayer: { predict: true } }
+        );
         if (result.ok) {
-          sendMultiplayerPredictedEvents(result);
-          sendMultiplayerCommandEvents(result);
           playSfx('mine');
           return true;
         }
@@ -937,8 +934,7 @@ export default function EfficientPlayer({
         id: 'drink',
         verb: 'Drink',
         perform: () => {
-          const result = drinkWaterCommand(commandContext, { amount: 60, fillWaterskinIfOwned: true });
-          if (result.ok) sendMultiplayerCommandEvents(result);
+          dispatchGameplayCommand(() => drinkWaterCommand(commandContext, { amount: 60, fillWaterskinIfOwned: true }));
           playSfx('mine');
         }
       };

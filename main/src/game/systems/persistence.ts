@@ -30,7 +30,22 @@ import type { WorldIdentity } from '../worldIdentity.ts';
 
 const PREFIX = `pvx.v${GENERATION_SCHEMA_VERSION}`;
 const GLOBAL_KEY = `${PREFIX}.global`;
+export type LocalPersistenceMode = 'offline' | 'multiplayer';
 type WorldSaveRef = number | Pick<WorldIdentity, 'worldId' | 'seed'> | CurrentWorld;
+
+let localPersistenceMode: LocalPersistenceMode = 'offline';
+
+export function setLocalPersistenceMode(mode: LocalPersistenceMode): void {
+  localPersistenceMode = mode;
+}
+
+export function getLocalPersistenceMode(): LocalPersistenceMode {
+  return localPersistenceMode;
+}
+
+export function isLocalPersistenceEnabled(): boolean {
+  return localPersistenceMode === 'offline';
+}
 
 function isLegacySeed(ref: WorldSaveRef): ref is number {
   return typeof ref === 'number';
@@ -55,6 +70,7 @@ function scopedWorldKey(ref: WorldSaveRef, suffix = ''): { primary: string; lega
 }
 
 function storage(): Storage | null {
+  if (!isLocalPersistenceEnabled()) return null;
   try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch { return null; }
 }
 function read<T>(key: string): T | null {

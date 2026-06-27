@@ -13,7 +13,7 @@ import {
 } from '../game/systems/foragePickup';
 import type { CommandContext } from '../game/commands.ts';
 import { collectForageCommand } from '../game/gameplayCommands.ts';
-import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
+import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import { restoreForageForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
@@ -174,14 +174,13 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
       for (const node of nearNodes.current) {
         if (isForageCollected(node.x, node.y, node.z)) continue;
         if (node.w.distanceToSquared(playerPosition) <= rSq) {
-          const result = collectForageCommand(commandContext, {
+          const result = dispatchGameplayCommand(() => collectForageCommand(commandContext, {
             x: node.x,
             y: node.y,
             z: node.z,
             kind: isRootNode(node.x, node.y, node.z, terrainSeed) ? 'root' : 'berry'
-          });
+          }));
           if (result.ok) {
-            sendMultiplayerCommandEvents(result);
             playSfx('mine'); // a soft confirmation
           }
         }

@@ -8,7 +8,7 @@ import { getItemCount, subscribeInventory } from '../../game/systems/inventorySy
 import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import type { CommandContext } from '../../game/commands.ts';
 import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gameplayCommands.ts';
-import { sendMultiplayerAuthoritativeCommand, sendMultiplayerCommandEvents } from '../../game/multiplayerSession.ts';
+import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
 
 interface CraftingPanelProps {
   open: boolean;
@@ -125,17 +125,29 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: C
             // player's feet and consume the just-crafted item.
             const feet = getPlayerWorldPosition().addScaledVector(getPlayerUp(), -1.1);
             const up = getPlayerUp();
-            const result = craftAndPlaceCampfireCommand(commandContext, { recipe, craftContext: ctx, position: feet, up });
-            if (result.ok) {
-              sendMultiplayerAuthoritativeCommand(result, 'craft_campfire', {
-                recipeId: recipe.id,
-                pos: [feet.x, feet.y, feet.z],
-                up: [up.x, up.y, up.z]
-              });
-            }
+            dispatchGameplayCommand(
+              () => craftAndPlaceCampfireCommand(commandContext, { recipe, craftContext: ctx, position: feet, up }),
+              {
+                multiplayer: {
+                  commandType: 'craft_campfire',
+                  payload: {
+                    recipeId: recipe.id,
+                    pos: [feet.x, feet.y, feet.z],
+                    up: [up.x, up.y, up.z]
+                  }
+                }
+              }
+            );
           } else {
-            const result = craftRecipeCommand(commandContext, { recipe, craftContext: ctx });
-            if (result.ok) sendMultiplayerCommandEvents(result);
+            dispatchGameplayCommand(
+              () => craftRecipeCommand(commandContext, { recipe, craftContext: ctx }),
+              {
+                multiplayer: {
+                  commandType: 'recipe_crafted',
+                  payload: { recipeId: recipe.id }
+                }
+              }
+            );
           }
         }}
         disabled={!affordable}

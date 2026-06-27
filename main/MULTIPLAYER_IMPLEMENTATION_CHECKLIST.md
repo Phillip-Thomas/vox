@@ -14,7 +14,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Use Firebase Auth for player identity.
 - [x] Use Cloud Run for the authoritative realtime state server.
 - [x] Use Neon Postgres for persistent co-op worlds/player state once persistence is enabled.
-- [ ] Never accept client `localStorage` as multiplayer truth.
+- [x] Never accept client `localStorage` as multiplayer truth.
 - [ ] Never use `seed` as durable world identity.
 - [ ] Never reuse `editVersion` as a network sequence.
 - [ ] Never mount remote players with `EfficientPlayer`.
@@ -294,7 +294,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Add player list UI.
 - [x] Add connection status UI.
 - [x] Add reconnect UI state.
-- [ ] Add command dispatch adapter: offline in-process vs online WebSocket.
+- [x] Add command dispatch adapter: offline in-process vs online WebSocket.
 - [x] Send accepted mining command events over WebSocket in co-op mode.
 - [x] Send accepted wrapped gameplay domain events over WebSocket in co-op mode.
 - [x] Apply authoritative world event snapshot on join.
@@ -304,7 +304,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Apply incremental world events.
 - [x] Apply incremental `voxel_mined` terrain events.
 - [x] Apply incremental shared action events for resource pickups, structures, doors, campfires, and water floods.
-- [ ] Send command intents instead of direct shared-world mutation in co-op mode.
+- [x] Send command intents instead of direct shared-world mutation in co-op mode.
 - [ ] Add client prediction for high-value actions.
 - [x] Add rollback on reject.
 - [x] Send pose updates at target rate.
@@ -548,6 +548,16 @@ fall back to local warp offline. Live room smoke verified canonical resource/min
 structure removal, party warp to active world `2,-1`, old-world command rejection, and post-warp
 late join landing on the active shard.
 
+Evidence: 2026-06-27 command-dispatch/localStorage batch added `commandDispatchAdapter.ts` as
+the one client path from local gameplay command wrappers to online WebSocket command intents.
+Mining, resource pickups, structure placement/removal, door toggles, crafting/campfires,
+consume/drink, and respawn now route through the adapter; door toggles keep prediction hints while
+the reliable packet is still a command intent. Game persistence now exposes an offline/multiplayer
+mode switch; `App` flips it from co-op session state so game `localStorage` saves/restores are
+suppressed while multiplayer owns truth. Audio preferences, auth session cache, and debug pose
+recording remain non-gameplay local storage. Full `main` `npm run verify` passed with 70 test files /
+479 tests plus production build.
+
 ## Phase 2 - Persistent Shards
 
 - [ ] Harden scheduled persistence and crash recovery.
@@ -591,7 +601,7 @@ late join landing on the active shard.
 - [x] Two-player invited co-op works on one shard.
 - [x] Firebase Auth, Cloud Run, and Neon are wired in the standard stack.
 - [ ] Server owns durable world/player state.
-- [ ] Client localStorage is offline-only.
+- [x] Client localStorage is offline-only.
 - [ ] Remote avatars are render-only and legible.
 - [x] Disconnect/reconnect is handled.
 - [x] Late join is handled.

@@ -11,7 +11,7 @@ import {
 } from '../game/systems/stonePickup';
 import type { CommandContext } from '../game/commands.ts';
 import { collectStoneCommand } from '../game/gameplayCommands.ts';
-import { sendMultiplayerCommandEvents } from '../game/multiplayerSession.ts';
+import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import { restoreStonesForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { buildStoneGeometry, createStoneMaterial } from '../utils/looseStone';
@@ -182,9 +182,8 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
       for (const s of nearStones.current) {
         if (isStoneCollected(s.x, s.y, s.z)) continue;
         if (s.w.distanceToSquared(playerPosition) <= rSq) {
-          const result = collectStoneCommand(commandContext, { x: s.x, y: s.y, z: s.z });
+          const result = dispatchGameplayCommand(() => collectStoneCommand(commandContext, { x: s.x, y: s.y, z: s.z }));
           if (result.ok) {
-            sendMultiplayerCommandEvents(result);
             playSfx('mine'); // a short chip as confirmation the stone was gathered
           }
         }
