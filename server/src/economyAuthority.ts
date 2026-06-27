@@ -40,6 +40,7 @@ export interface ServerPlayerState {
   exhausted: boolean;
   mawCharge: number;
   waterskinFill: number;
+  progression: ServerProgressionState;
 }
 
 export interface AuthoritativePlayerStatePatch {
@@ -47,6 +48,12 @@ export interface AuthoritativePlayerStatePatch {
   exhausted?: boolean;
   mawCharge?: number;
   waterskinFill?: number;
+  progression?: ServerProgressionState;
+}
+
+export interface ServerProgressionState {
+  era: string;
+  milestones: string[];
 }
 
 export type AuthoritativeStructureClaim =
@@ -313,7 +320,11 @@ export function defaultServerPlayerState(): ServerPlayerState {
     },
     exhausted: false,
     mawCharge: 0,
-    waterskinFill: 0
+    waterskinFill: 0,
+    progression: {
+      era: 'primitive',
+      milestones: []
+    }
   };
 }
 
@@ -542,7 +553,11 @@ function resolveMawRepaired(playerState: ServerPlayerState): AuthoritativeComman
     events: [{ type: 'maw_repaired', payload: {} }],
     debit: [{ id: 'faulty_maw', qty: 1 }],
     credit: [{ id: 'iron_maw', qty: 1 }],
-    playerStatePatch: { mawCharge: 0, exhausted: playerState.exhausted }
+    playerStatePatch: {
+      mawCharge: 0,
+      exhausted: playerState.exhausted,
+      progression: advanceProgression(playerState.progression, 'emergent', 'maw_repaired')
+    }
   };
 }
 
@@ -1014,6 +1029,27 @@ function drinkVitals(vitals: ServerVitalsState, amount: number): ServerVitalsSta
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+const ERA_RANKS: Record<string, number> = {
+  primitive: 0,
+  emergent: 1,
+  paravox_machina: 2
+};
+
+function advanceProgression(
+  current: ServerProgressionState,
+  targetEra: string,
+  milestone: string
+): ServerProgressionState {
+  const currentRank = ERA_RANKS[current.era] ?? 0;
+  const targetRank = ERA_RANKS[targetEra] ?? currentRank;
+  const milestones = new Set(current.milestones.filter(id => typeof id === 'string' && id.length > 0));
+  milestones.add(milestone);
+  return {
+    era: targetRank > currentRank ? targetEra : current.era,
+    milestones: [...milestones].sort()
+  };
 }
 
 function deterministicRng(seed: string): {

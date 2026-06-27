@@ -1,5 +1,10 @@
 import { createPlayerPose, type PlayerPose } from './playerPose.ts';
 import { getPlayerPose, setPlayerPose } from './systems/playerPoseSystem.ts';
+import { applyInventorySnapshot, type InventorySnapshot } from './systems/inventorySystem.ts';
+import { applyVitalsSnapshot, type VitalsSnapshot } from './systems/survivalVitals.ts';
+import { applyMawSnapshot, type MawSnapshot } from './systems/mawSystem.ts';
+import { applyWaterskinSnapshot, type WaterskinSnapshot } from './systems/consumeSystem.ts';
+import { applyProgressionSnapshot, type ProgressionSnapshot } from './systems/progressionSystem.ts';
 import type { JsonObject } from './multiplayerClient.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { markTreeHarvested } from './systems/treeHarvest.ts';
@@ -69,6 +74,10 @@ export interface WorldSnapshotReplayResult {
   queuedWater: number;
 }
 
+export interface PlayerStateSnapshotApplyOptions {
+  replace?: boolean;
+}
+
 const pendingTerrainDiffsByWorld = new Map<string, Array<[number, number, number]>>();
 const pendingWaterFloodsByWorld = new Map<string, Array<[number, number, number]>>();
 let activeTerrainWorldId: string | null = null;
@@ -107,6 +116,48 @@ export function applyRemotePoseSnapshot(
     }, localPlayerId);
     if (next) applied.push(next);
   }
+  return applied;
+}
+
+export function applyReplicatedPlayerStateSnapshot(
+  snapshot: JsonObject,
+  options: PlayerStateSnapshotApplyOptions = {}
+): boolean {
+  const players = readObject(snapshot.players);
+  if (!players) return false;
+  const replace = options.replace ?? false;
+  let applied = false;
+
+  const inventory = sanitizeInventorySnapshot(players.inventory);
+  if (inventory) {
+    applyInventorySnapshot(inventory, { replace });
+    applied = true;
+  }
+
+  const vitals = sanitizeVitalsSnapshot(players.vitals);
+  if (vitals) {
+    applyVitalsSnapshot(vitals, { replace });
+    applied = true;
+  }
+
+  const maw = sanitizeNumberSnapshot(players.maw);
+  if (maw) {
+    applyMawSnapshot(maw as MawSnapshot, { replace });
+    applied = true;
+  }
+
+  const waterskin = sanitizeNumberSnapshot(players.waterskin);
+  if (waterskin) {
+    applyWaterskinSnapshot(waterskin as WaterskinSnapshot, { replace });
+    applied = true;
+  }
+
+  const progression = sanitizeProgressionSnapshot(players.progression);
+  if (progression) {
+    applyProgressionSnapshot(progression, { replace });
+    applied = true;
+  }
+
   return applied;
 }
 
@@ -490,6 +541,76 @@ function readCoordArray(value: unknown): Array<[number, number, number]> {
   return value
     .map(readCoord)
     .filter((coord): coord is [number, number, number] => coord !== null);
+}
+
+function sanitizeInventorySnapshot(value: unknown): InventorySnapshot | null {
+  const source = readObject(value);
+  if (!source) return null;
+  const snapshot: InventorySnapshot = {};
+  for (const [actorId, countsValue] of Object.entries(source)) {
+    const counts = readObject(countsValue);
+    if (!counts) continue;
+    const actorCounts: Record<string, number> = {};
+    for (const [itemId, qty] of Object.entries(counts)) {
+      if (typeof qty === 'number' && Number.isFinite(qty) && qty > 0) actorCounts[itemId] = qty;
+    }
+    snapshot[actorId] = actorCounts;
+  }
+  return snapshot;
+}
+
+function sanitizeVitalsSnapshot(value: unknown): VitalsSnapshot | null {
+  const source = readObject(value);
+  if (!source) return null;
+  const snapshot: VitalsSnapshot = {};
+  for (const [actorId, stateValue] of Object.entries(source)) {
+    const state = readObject(stateValue);
+    const vitals = readObject(state?.vitals);
+    if (!state || !vitals) continue;
+    snapshot[actorId] = {
+      vitals: {
+        health: readFiniteNumber(vitals.health, 100),
+        hunger: readFiniteNumber(vitals.hunger, 100),
+        thirst: readFiniteNumber(vitals.thirst, 100),
+        warmth: readFiniteNumber(vitals.warmth, 100),
+        stamina: readFiniteNumber(vitals.stamina, 100),
+        oxygen: readFiniteNumber(vitals.oxygen, 100)
+      },
+      exhausted: typeof state.exhausted === 'boolean' ? state.exhausted : false
+    };
+  }
+  return snapshot;
+}
+
+function sanitizeNumberSnapshot(value: unknown): Record<string, number> | null {
+  const source = readObject(value);
+  if (!source) return null;
+  const snapshot: Record<string, number> = {};
+  for (const [actorId, amount] of Object.entries(source)) {
+    if (typeof amount === 'number' && Number.isFinite(amount)) snapshot[actorId] = amount;
+  }
+  return snapshot;
+}
+
+function sanitizeProgressionSnapshot(value: unknown): ProgressionSnapshot | null {
+  const source = readObject(value);
+  if (!source) return null;
+  const snapshot: ProgressionSnapshot = {};
+  for (const [actorId, stateValue] of Object.entries(source)) {
+    const state = readObject(stateValue);
+    if (!state) continue;
+    snapshot[actorId] = {
+      era: typeof state.era === 'string' ? state.era as ProgressionSnapshot[string]['era'] : 'primitive',
+      milestones: Array.isArray(state.milestones)
+        ? state.milestones.filter((milestone): milestone is string => typeof milestone === 'string')
+        : []
+    };
+  }
+  return snapshot;
+}
+
+function readFiniteNumber(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
 function readInt(value: unknown): number | null {

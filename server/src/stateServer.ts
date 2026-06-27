@@ -38,6 +38,7 @@ import {
   applyPlayerInventoryDelta,
   applyPlayerStatePatch,
   canDebitPlayerInventory,
+  createPlayersStateSnapshot,
   createWorldSnapshot,
   ensurePlayerState,
   type CommandFingerprint,
@@ -521,7 +522,8 @@ async function handleCommand(
     }
 
     rooms.appendKnownShardEvents(state.room, message.worldId, events);
-    const accepted = acceptedCommandResponse(message, events);
+    const deltas = await hydrateCommandPlayerDeltas(state.room, persistence, state.player!.playerId);
+    const accepted = acceptedCommandResponse(message, events, deltas);
     shard.commandCache.set(message.commandId, { fingerprint, response: accepted });
     shard.predictedRollbacks.delete(message.commandId);
     send(ws, accepted);
@@ -574,7 +576,8 @@ async function handleCommand(
     }
   }
   rooms.appendKnownShardEvent(state.room, message.worldId, event);
-  const accepted = acceptedCommandResponse(message, [event]);
+  const deltas = await hydrateCommandPlayerDeltas(state.room, persistence, state.player!.playerId);
+  const accepted = acceptedCommandResponse(message, [event], deltas);
   shard.commandCache.set(message.commandId, { fingerprint, response: accepted });
   shard.predictedRollbacks.delete(message.commandId);
   send(ws, accepted);
@@ -676,7 +679,7 @@ async function handlePartyWarpCommand(input: {
     seq: event.seq,
     handoff
   });
-  broadcastWorldSnapshot(state.room, socketsBySessionId, destinationWorldId);
+  await broadcastWorldSnapshot(state.room, socketsBySessionId, persistence, destinationWorldId);
 }
 
 function handlePredictedWorldEvent(
@@ -789,14 +792,16 @@ function fingerprintCommand(
 
 function acceptedCommandResponse(
   message: Extract<ClientMessage, { type: 'command' }>,
-  events: ShardEvent[]
+  events: ShardEvent[],
+  deltas?: JsonObject
 ): ServerMessage {
   return {
     type: 'command_accepted',
     commandId: message.commandId,
     worldId: message.worldId,
     seq: events.at(-1)?.seq ?? 0,
-    events
+    events,
+    ...(deltas ? { deltas } : {})
   };
 }
 
@@ -1266,6 +1271,7 @@ async function sendRoomJoined(
 ): Promise<void> {
   if (!state.room || !state.session) return;
   await hydrateShardEvents(rooms, persistence, state.room, worldId);
+  await hydrateRoomPlayerAuthorityState(state.room, persistence);
   send(ws, {
     type: 'room_joined',
     roomId: state.room.roomId,
@@ -1333,6 +1339,37 @@ async function hydrateShardEvents(
   rooms.replaceShardEvents(room, worldId, events);
 }
 
+async function hydrateRoomPlayerAuthorityState(
+  room: RoomState,
+  persistence: MultiplayerPersistence
+): Promise<void> {
+  if (!persistence.configured) return;
+  await Promise.all([...room.members.keys()].map(playerId => hydratePlayerAuthorityState(room, persistence, playerId)));
+}
+
+async function hydratePlayerAuthorityState(
+  room: RoomState,
+  persistence: MultiplayerPersistence,
+  playerId: string
+): Promise<void> {
+  if (!persistence.configured) return;
+  const [inventory, playerState] = await Promise.all([
+    persistence.loadPlayerInventory(playerId),
+    persistence.loadPlayerState(playerId)
+  ]);
+  room.playerInventories.set(playerId, inventory);
+  room.playerStates.set(playerId, playerState);
+}
+
+async function hydrateCommandPlayerDeltas(
+  room: RoomState,
+  persistence: MultiplayerPersistence,
+  playerId: string
+): Promise<JsonObject> {
+  await hydratePlayerAuthorityState(room, persistence, playerId);
+  return createPlayersStateSnapshot(room, [playerId]);
+}
+
 function broadcastRoom(state: SocketState, socketsBySessionId: Map<string, WebSocket>, message: ServerMessage): void {
   if (!state.room) return;
   broadcastToRoom(state.room, socketsBySessionId, message);
@@ -1346,7 +1383,13 @@ function broadcastRoomRoster(room: RoomState, socketsBySessionId: Map<string, We
   });
 }
 
-function broadcastWorldSnapshot(room: RoomState, socketsBySessionId: Map<string, WebSocket>, worldId: string): void {
+async function broadcastWorldSnapshot(
+  room: RoomState,
+  socketsBySessionId: Map<string, WebSocket>,
+  persistence: MultiplayerPersistence,
+  worldId: string
+): Promise<void> {
+  await hydrateRoomPlayerAuthorityState(room, persistence);
   broadcastToRoom(room, socketsBySessionId, {
     type: 'world_snapshot',
     roomId: room.roomId,

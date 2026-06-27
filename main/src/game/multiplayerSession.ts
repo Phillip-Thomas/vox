@@ -20,6 +20,7 @@ import {
 import { getLocalActorId, resetLocalActorId, setLocalActorId } from './playerActors.ts';
 import {
   applyReplicatedWorldSnapshotEvents,
+  applyReplicatedPlayerStateSnapshot,
   applyReplicatedWorldEvent,
   applyRemotePoseSnapshot,
   applyRemotePoseUpdate,
@@ -472,6 +473,7 @@ function handleServerMessage(
       return;
     case 'world_snapshot':
       applyServerWorldClock(message.snapshot, message.worldId);
+      applyReplicatedPlayerStateSnapshot(message.snapshot, { replace: false });
       applyRemotePoseSnapshot(message.snapshot, message.worldId, snapshot.playerId);
       applyReplicatedWorldSnapshotEvents(message.snapshot, message.worldId, {
         localPlayerId: snapshot.playerId
@@ -631,6 +633,8 @@ function clearPendingReliableCommands(): void {
 }
 
 function handleCommandAccepted(message: Extract<MultiplayerServerMessage, { type: 'command_accepted' }>): void {
+  const deltas = toJsonObject(message.deltas);
+  if (deltas) applyReplicatedPlayerStateSnapshot(deltas, { replace: false });
   const pending = pendingReliableCommands.get(message.commandId);
   if (!pending) return;
   pendingReliableCommands.delete(message.commandId);

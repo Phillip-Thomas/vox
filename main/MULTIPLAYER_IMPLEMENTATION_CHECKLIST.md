@@ -299,6 +299,8 @@ code, tests, and manual evidence for that item exist.
 - [x] Send accepted wrapped gameplay domain events over WebSocket in co-op mode.
 - [x] Apply authoritative world event snapshot on join.
 - [x] Apply authoritative player pose snapshot on join.
+- [x] Apply authoritative player inventory/vitals/Maw/waterskin/progression snapshot on join.
+- [x] Apply authoritative player inventory/vitals/Maw/waterskin/progression deltas on command ack.
 - [x] Replay snapshot `voxel_mined` terrain events after terrain population for late joiners.
 - [x] Replay snapshot shared action events for resources, structures, doors, campfires, and water floods.
 - [x] Apply incremental world events.
@@ -332,13 +334,13 @@ code, tests, and manual evidence for that item exist.
 - [x] Forage/stone/tree collection visibility is replicated from accepted room events.
 - [x] Campfire placement is atomic and replicated.
 - [x] Campfire placement visibility is replicated from accepted room events.
-- [ ] Inventory changes are server-owned.
+- [x] Inventory changes are server-owned.
 - [x] Crafting is transactional.
 - [x] Consume/drink/waterskin commands are explicit and server-owned.
 - [x] Maw refuel/repair/charge-spend is server-owned.
-- [ ] Progression behavior matches the chosen progression ownership model.
+- [x] Progression behavior matches the chosen progression ownership model.
 - [ ] Vitals are server-owned or server-verifiable according to Phase 1 policy.
-- [ ] Oxygen/drown state supports each player independently.
+- [x] Oxygen/drown state supports each player independently.
 - [x] Swim/submersion state replicates enough for remote presentation.
 - [x] Jetpack fuel replicates enough for authority and remote presentation.
 - [x] World clock is server-owned in co-op.
@@ -558,6 +560,13 @@ suppressed while multiplayer owns truth. Audio preferences, auth session cache, 
 recording remain non-gameplay local storage. Full `main` `npm run verify` passed with 70 test files /
 479 tests plus production build.
 
+Evidence: 2026-06-27 player-state authority closure deployed Cloud Run revision
+`paravoxia-state-server-00022-gpl` and Hosting asset `/assets/index-Hd-8Tm3Q.js`. Server
+`npm run verify` passed with 38 tests; `main` `npm run verify` passed with 480 tests. Live
+checks verified `readyz` with Neon configured, WebSocket `/play` protocol `hello`, and the same
+Hosting asset on `paravoxia.com` plus `paravox-game.web.app`. Command acks and join snapshots now
+reconcile inventory, vitals/oxygen, Maw charge, waterskin fill, and progression.
+
 ## Phase 2 - Persistent Shards
 
 - [ ] Harden scheduled persistence and crash recovery.
@@ -600,7 +609,7 @@ recording remain non-gameplay local storage. Full `main` `npm run verify` passed
 
 - [x] Two-player invited co-op works on one shard.
 - [x] Firebase Auth, Cloud Run, and Neon are wired in the standard stack.
-- [ ] Server owns durable world/player state.
+- [x] Server owns durable world/player state.
 - [x] Client localStorage is offline-only.
 - [ ] Remote avatars are render-only and legible.
 - [x] Disconnect/reconnect is handled.

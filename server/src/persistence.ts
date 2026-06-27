@@ -40,6 +40,12 @@ interface PlayerStateRow {
   vitals: Record<string, unknown> | null;
   maw: Record<string, unknown> | null;
   waterskin: Record<string, unknown> | null;
+  progression: Record<string, unknown> | null;
+}
+
+interface PlayerInventoryRow {
+  item_id: string;
+  qty: string | number;
 }
 
 interface WorldShardRow {
@@ -182,7 +188,7 @@ export class MultiplayerPersistence {
     if (!this.configured) return defaultServerPlayerState();
     const rows = await this.database.query<PlayerStateRow>(
       `
-        select vitals, maw, waterskin
+        select vitals, maw, waterskin, progression
         from player_state
         where player_id = $1
         limit 1
@@ -190,6 +196,27 @@ export class MultiplayerPersistence {
       [playerId]
     );
     return rowToPlayerState(rows[0]);
+  }
+
+  async loadPlayerInventory(playerId: string): Promise<Map<string, number>> {
+    const inventory = new Map(starterInventory().map(stack => [stack.id, stack.qty]));
+    if (!this.configured) return inventory;
+    const rows = await this.database.query<PlayerInventoryRow>(
+      `
+        select item_id, qty
+        from player_inventory
+        where player_id = $1
+          and qty > 0
+        order by item_id asc
+      `,
+      [playerId]
+    );
+    inventory.clear();
+    for (const row of rows) {
+      const qty = toNumber(row.qty);
+      if (Number.isFinite(qty) && qty > 0) inventory.set(row.item_id, qty);
+    }
+    return inventory;
   }
 
   async appendCommandEvent(input: {
@@ -296,7 +323,7 @@ export class MultiplayerPersistence {
         ),
         structure_claims as (
           select mode, structure_id, required_structure_id, cell, face, type, material, state
-          from jsonb_to_recordset($22::jsonb) as claim(
+          from jsonb_to_recordset($24::jsonb) as claim(
             mode text,
             structure_id text,
             required_structure_id text,
@@ -390,11 +417,12 @@ export class MultiplayerPersistence {
           returning item_id
         ),
         player_state_update as (
-          insert into player_state (player_id, vitals, maw, waterskin, updated_at)
+          insert into player_state (player_id, vitals, maw, waterskin, progression, updated_at)
           select $4,
                  coalesce($15::jsonb, $19::jsonb),
                  coalesce($16::jsonb, $20::jsonb),
                  coalesce($17::jsonb, $21::jsonb),
+                 coalesce($22::jsonb, $23::jsonb),
                  now()
           where $18::boolean
             and exists (select 1 from inserted_command)
@@ -410,6 +438,10 @@ export class MultiplayerPersistence {
               waterskin = case
                 when $17::jsonb is null then player_state.waterskin
                 else excluded.waterskin
+              end,
+              progression = case
+                when $22::jsonb is null then player_state.progression
+                else excluded.progression
               end,
               updated_at = now()
           returning player_id
@@ -488,6 +520,8 @@ export class MultiplayerPersistence {
         JSON.stringify({ ...defaultState.vitals, exhausted: defaultState.exhausted }),
         JSON.stringify({ charge: defaultState.mawCharge }),
         JSON.stringify({ fill: defaultState.waterskinFill }),
+        statePatch.progression,
+        JSON.stringify(defaultState.progression),
         JSON.stringify(structureClaims)
       ]
     );
@@ -1081,15 +1115,16 @@ export class MultiplayerPersistence {
       }
       await this.database.query(
         `
-          insert into player_state (player_id, vitals, maw, waterskin, updated_at)
-          values ($1, $2::jsonb, $3::jsonb, $4::jsonb, now())
+          insert into player_state (player_id, vitals, maw, waterskin, progression, updated_at)
+          values ($1, $2::jsonb, $3::jsonb, $4::jsonb, $5::jsonb, now())
           on conflict (player_id) do nothing
         `,
         [
           player.playerId,
           JSON.stringify({ ...defaultState.vitals, exhausted: defaultState.exhausted }),
           JSON.stringify({ charge: defaultState.mawCharge }),
-          JSON.stringify({ fill: defaultState.waterskinFill })
+          JSON.stringify({ fill: defaultState.waterskinFill }),
+          JSON.stringify(defaultState.progression)
         ]
       );
     }
@@ -1184,9 +1219,10 @@ function toPlayerStatePatchSql(patch: AuthoritativePlayerStatePatch | undefined)
   vitals: string | null;
   maw: string | null;
   waterskin: string | null;
+  progression: string | null;
   hasPatch: boolean;
 } {
-  if (!patch) return { vitals: null, maw: null, waterskin: null, hasPatch: false };
+  if (!patch) return { vitals: null, maw: null, waterskin: null, progression: null, hasPatch: false };
   const vitals = patch.vitals
     ? JSON.stringify({ ...patch.vitals, exhausted: patch.exhausted ?? false })
     : null;
@@ -1196,11 +1232,15 @@ function toPlayerStatePatchSql(patch: AuthoritativePlayerStatePatch | undefined)
   const waterskin = patch.waterskinFill !== undefined
     ? JSON.stringify({ fill: patch.waterskinFill })
     : null;
+  const progression = patch.progression
+    ? JSON.stringify(patch.progression)
+    : null;
   return {
     vitals,
     maw,
     waterskin,
-    hasPatch: vitals !== null || maw !== null || waterskin !== null
+    progression,
+    hasPatch: vitals !== null || maw !== null || waterskin !== null || progression !== null
   };
 }
 
@@ -1210,6 +1250,7 @@ function rowToPlayerState(row: PlayerStateRow | undefined): ServerPlayerState {
   const vitals = row.vitals ?? {};
   const maw = row.maw ?? {};
   const waterskin = row.waterskin ?? {};
+  const progression = row.progression ?? {};
   return {
     vitals: {
       health: readFiniteNumber(vitals.health, defaults.vitals.health),
@@ -1221,7 +1262,13 @@ function rowToPlayerState(row: PlayerStateRow | undefined): ServerPlayerState {
     },
     exhausted: typeof vitals.exhausted === 'boolean' ? vitals.exhausted : defaults.exhausted,
     mawCharge: readFiniteNumber(maw.charge, defaults.mawCharge),
-    waterskinFill: readFiniteNumber(waterskin.fill, defaults.waterskinFill)
+    waterskinFill: readFiniteNumber(waterskin.fill, defaults.waterskinFill),
+    progression: {
+      era: typeof progression.era === 'string' ? progression.era : defaults.progression.era,
+      milestones: Array.isArray(progression.milestones)
+        ? progression.milestones.filter((milestone): milestone is string => typeof milestone === 'string')
+        : [...defaults.progression.milestones]
+    }
   };
 }
 

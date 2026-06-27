@@ -1205,6 +1205,27 @@ describe('state server', () => {
     expect(ate.events[0]).toMatchObject({ type: 'item_consumed', payload: { itemId: 'berry', food: 12, water: 6 } });
     expect(room.playerInventories.get('alice')?.has('berry')).toBe(false);
     expect(room.playerStates.get('alice')).toMatchObject({ vitals: { hunger: 62, thirst: 46 } });
+    expect(ate.deltas).toMatchObject({
+      players: {
+        inventory: {
+          alice: {
+            faulty_maw: 1,
+            waterskin: 1,
+            biofuel: 1
+          }
+        },
+        vitals: {
+          alice: {
+            vitals: {
+              hunger: 62,
+              thirst: 46,
+              oxygen: 100
+            },
+            exhausted: false
+          }
+        }
+      }
+    });
 
     alice.ws.send(JSON.stringify({
       type: 'command',
@@ -1265,8 +1286,53 @@ describe('state server', () => {
       ['iron_maw', 1]
     ]));
     expect(room.playerStates.get('alice')?.mawCharge).toBe(0);
+    expect(room.playerStates.get('alice')?.progression).toEqual({
+      era: 'emergent',
+      milestones: ['maw_repaired']
+    });
+    expect(repaired.deltas).toMatchObject({
+      players: {
+        inventory: {
+          alice: {
+            waterskin: 1,
+            iron_maw: 1
+          }
+        },
+        maw: { alice: 0 },
+        progression: {
+          alice: {
+            era: 'emergent',
+            milestones: ['maw_repaired']
+          }
+        }
+      }
+    });
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    const lateSnapshot = await waitForType(bob.messages, 'world_snapshot');
+    expect(lateSnapshot.snapshot).toMatchObject({
+      players: {
+        inventory: {
+          alice: {
+            waterskin: 1,
+            iron_maw: 1
+          }
+        },
+        waterskin: { alice: 15 },
+        maw: { alice: 0 },
+        progression: {
+          alice: {
+            era: 'emergent',
+            milestones: ['maw_repaired']
+          }
+        }
+      }
+    });
 
     alice.ws.close();
+    bob.ws.close();
   });
 
   it('hydrates persistent world events by room and world cursor', async () => {

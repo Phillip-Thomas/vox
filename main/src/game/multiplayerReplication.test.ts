@@ -3,6 +3,7 @@ import { createPlayerPose } from './playerPose.ts';
 import {
   applyPendingReplicatedTerrainDiff,
   applyPendingReplicatedWaterFlood,
+  applyReplicatedPlayerStateSnapshot,
   applyReplicatedWaterFlooded,
   applyReplicatedWorldEvent,
   applyReplicatedWorldSnapshotEvents,
@@ -30,6 +31,11 @@ import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
 import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts';
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { getPieceAt, resetStructures, restorePieces } from './systems/structureSystem.ts';
+import { getItemCount, resetAllInventories } from './systems/inventorySystem.ts';
+import { getVitals, resetAllVitals } from './systems/survivalVitals.ts';
+import { getMawCharge, resetAllMawState } from './systems/mawSystem.ts';
+import { getWaterskinFill, resetAllWaterskins } from './systems/consumeSystem.ts';
+import { getCurrentEra, hasMilestone, resetProgression } from './systems/progressionSystem.ts';
 import { getWorldCollisionChangeSnapshot, resetWorldCollisionChangesForTests } from './worldCollisionReconciliation.ts';
 import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator.ts';
 import { createTerrainConfig } from '../utils/terrainConfig.ts';
@@ -73,6 +79,11 @@ beforeEach(() => {
   resetForagePickup();
   resetCampfires();
   resetStructures();
+  resetAllInventories();
+  resetAllVitals();
+  resetAllMawState();
+  resetAllWaterskins();
+  resetProgression();
   resetWorldCollisionChangesForTests();
 });
 
@@ -149,6 +160,48 @@ describe('multiplayer replication', () => {
       action: 'swim',
       submergence: 1
     });
+  });
+
+  it('applies authoritative player state snapshots into actor-keyed stores', () => {
+    const snapshot = {
+      players: {
+        inventory: {
+          alice: { iron_maw: 1, waterskin: 1 },
+          bob: { biofuel: 2 }
+        },
+        vitals: {
+          alice: {
+            vitals: {
+              health: 88,
+              hunger: 62,
+              thirst: 46,
+              warmth: 100,
+              stamina: 73,
+              oxygen: 91
+            },
+            exhausted: true
+          }
+        },
+        maw: { alice: 0, bob: 50 },
+        waterskin: { alice: 15 },
+        progression: {
+          alice: {
+            era: 'emergent',
+            milestones: ['maw_repaired']
+          }
+        }
+      }
+    };
+
+    expect(applyReplicatedPlayerStateSnapshot(snapshot)).toBe(true);
+
+    expect(getItemCount('iron_maw', 'alice')).toBe(1);
+    expect(getItemCount('biofuel', 'bob')).toBe(2);
+    expect(getVitals('alice')).toMatchObject({ hunger: 62, thirst: 46, oxygen: 91 });
+    expect(getMawCharge('bob')).toBe(50);
+    expect(getWaterskinFill('alice')).toBe(15);
+    expect(getCurrentEra('alice')).toBe('emergent');
+    expect(hasMilestone('maw_repaired', 'alice')).toBe(true);
   });
 
   it('validates replicated world events before applying them', () => {

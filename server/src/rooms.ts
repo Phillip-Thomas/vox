@@ -349,6 +349,12 @@ export function applyPlayerStatePatch(
   if (patch.exhausted !== undefined) state.exhausted = patch.exhausted;
   if (patch.mawCharge !== undefined) state.mawCharge = patch.mawCharge;
   if (patch.waterskinFill !== undefined) state.waterskinFill = patch.waterskinFill;
+  if (patch.progression) {
+    state.progression = {
+      era: patch.progression.era,
+      milestones: [...patch.progression.milestones]
+    };
+  }
 }
 
 export function createShard(worldId: string): ShardState {
@@ -368,18 +374,61 @@ function createStarterInventory(): Map<string, number> {
   return new Map(starterInventory().map(stack => [stack.id, stack.qty]));
 }
 
+function inventoryToJson(inventory: Map<string, number>): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [itemId, qty] of inventory) {
+    if (Number.isFinite(qty) && qty > 0) out[itemId] = qty;
+  }
+  return out;
+}
+
 export function createWorldSnapshot(room: RoomState, worldId: string): JsonObject {
   const shard = room.shards.get(worldId) ?? createShard(worldId);
+  const playerState = createPlayersStateSnapshot(room).players as JsonObject;
   return {
     roomId: room.roomId,
     worldId,
     seq: shard.seq,
     worldTimeMs: currentShardWorldTimeMs(room, shard),
     players: {
-      poses: Object.fromEntries(shard.poses)
+      poses: Object.fromEntries(shard.poses),
+      ...playerState
     },
     world: {
       events: shard.events
+    }
+  };
+}
+
+export function createPlayersStateSnapshot(room: RoomState, playerIds = [...room.members.keys()]): JsonObject {
+  const inventory: Record<string, Record<string, number>> = {};
+  const vitals: Record<string, JsonObject> = {};
+  const maw: Record<string, number> = {};
+  const waterskin: Record<string, number> = {};
+  const progression: Record<string, JsonObject> = {};
+
+  for (const playerId of playerIds) {
+    const state = ensurePlayerState(room, playerId);
+    inventory[playerId] = inventoryToJson(ensurePlayerInventory(room, playerId));
+    vitals[playerId] = {
+      vitals: { ...state.vitals },
+      exhausted: state.exhausted
+    };
+    maw[playerId] = state.mawCharge;
+    waterskin[playerId] = state.waterskinFill;
+    progression[playerId] = {
+      era: state.progression.era,
+      milestones: [...state.progression.milestones]
+    };
+  }
+
+  return {
+    players: {
+      inventory,
+      vitals,
+      maw,
+      waterskin,
+      progression
     }
   };
 }
