@@ -564,8 +564,12 @@ Evidence: 2026-06-27 player-state authority closure deployed Cloud Run revision
 `paravoxia-state-server-00022-gpl` and Hosting asset `/assets/index-Hd-8Tm3Q.js`. Server
 `npm run verify` passed with 38 tests; `main` `npm run verify` passed with 480 tests. Live
 checks verified `readyz` with Neon configured, WebSocket `/play` protocol `hello`, and the same
-Hosting asset on `paravoxia.com` plus `paravox-game.web.app`. Command acks and join snapshots now
-reconcile inventory, vitals/oxygen, Maw charge, waterskin fill, and progression.
+Hosting asset on `paravoxia.com` plus `paravox-game.web.app`. Firebase MCP provided the web app
+SDK config for authenticated live room smoke; `npm run smoke:room` passed with four anonymous
+Firebase players, canonical resource/mining yields, structure place/remove/refund, validation
+rejects, late-join snapshot replay, party warp, and post-warp old-world command rejection.
+Command acks and join snapshots now reconcile inventory, vitals/oxygen, Maw charge, waterskin
+fill, and progression.
 
 ## Phase 2 - Persistent Shards
 
