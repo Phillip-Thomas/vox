@@ -32,6 +32,35 @@ const DIRT_LIFE_OFFSET_V_SALT = 214;
 const DIRT_LIFE_SCALE_SALT = 215;
 const DIRT_LIFE_VEER_SALT = 216;
 
+export type SurfacePhenomenonId =
+  | 'pollen'
+  | 'frost'
+  | 'lavaHeat'
+  | 'ash'
+  | 'crystalGlints'
+  | 'metallicFlecks'
+  | 'fungalSpores';
+
+export interface SurfacePhenomenonConfig {
+  id: SurfacePhenomenonId;
+  materials: MaterialType[];
+  colorA: THREE.Color;
+  colorB: THREE.Color;
+  coverageBase: number;
+  coverageGain: number;
+  particlesPerVoxel: number;
+  surfaceOffset: number;
+  baseLift: number;
+  width: number;
+  height: number;
+  depth: number;
+  alpha: number;
+  sparkle: number;
+  rise: number;
+  turbulence: number;
+  salt: number;
+}
+
 const _world = new THREE.Vector3();
 const _up = new THREE.Vector3();
 const _tangent = new THREE.Vector3();
@@ -49,6 +78,10 @@ const _local = new THREE.Matrix4();
 export interface SurfaceEffectBuildResult {
   count: number;
   voxelCount: number;
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, v));
 }
 
 export function sandDustWispsPerVoxel(density: number): number {
@@ -79,6 +112,26 @@ export function isDirtLifeVoxel(voxel: { material: string; supportsSurfaceResour
   return voxel.material === MaterialType.DIRT && voxel.supportsSurfaceResources !== false;
 }
 
+export function surfacePhenomenonParticlesPerVoxel(density: number, config: Pick<SurfacePhenomenonConfig, 'particlesPerVoxel'>): number {
+  if (density <= 0 || config.particlesPerVoxel <= 0) return 0;
+  return Math.max(1, Math.round(density * config.particlesPerVoxel));
+}
+
+export function surfacePhenomenonCoverage(
+  density: number,
+  config: Pick<SurfacePhenomenonConfig, 'coverageBase' | 'coverageGain'>
+): number {
+  if (density <= 0) return 0;
+  return clamp(config.coverageBase + density * config.coverageGain, 0, 1);
+}
+
+export function isSurfacePhenomenonVoxel(
+  voxel: { material: string; supportsSurfaceResources?: boolean },
+  config: Pick<SurfacePhenomenonConfig, 'materials'>
+): boolean {
+  return voxel.supportsSurfaceResources !== false && config.materials.includes(voxel.material as MaterialType);
+}
+
 export function countSandDustVoxels(density: number, terrainSeed: number): number {
   if (density <= 0) return 0;
   const coverage = sandDustCoverage(density);
@@ -102,6 +155,24 @@ export function countDirtLifeVoxels(density: number, terrainSeed: number): numbe
     if (!isDirtLifeVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
     if (seededVoxelUnit(x, y, z, DIRT_LIFE_COVERAGE_SALT, terrainSeed) > coverage) continue;
+    n += perVoxel;
+  }
+  return n;
+}
+
+export function countSurfacePhenomenonVoxels(
+  config: SurfacePhenomenonConfig,
+  density: number,
+  terrainSeed: number
+): number {
+  if (density <= 0) return 0;
+  const coverage = surfacePhenomenonCoverage(density, config);
+  const perVoxel = surfacePhenomenonParticlesPerVoxel(density, config);
+  let n = 0;
+  for (const voxel of voxelSystem.getAllVoxels().values()) {
+    if (!isSurfacePhenomenonVoxel(voxel, config)) continue;
+    const [x, y, z] = voxel.position;
+    if (seededVoxelUnit(x, y, z, config.salt, terrainSeed) > coverage) continue;
     n += perVoxel;
   }
   return n;
@@ -199,6 +270,43 @@ export function createDirtLifeGeometry(): THREE.BufferGeometry {
   geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geo.setAttribute('aDirtKind', new THREE.Float32BufferAttribute(kinds, 1));
+  geo.setIndex(indices);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+export function createSurfacePhenomenonGeometry(): THREE.BufferGeometry {
+  const positions: number[] = [];
+  const uvs: number[] = [];
+  const indices: number[] = [];
+
+  const addCard = (axis: 'x' | 'z', skew: number) => {
+    const base = positions.length / 3;
+    if (axis === 'x') {
+      positions.push(
+        -0.5, 0.0, -0.02,
+         0.5, 0.0,  0.02,
+        -0.5 + skew, 1.0,  0.02,
+         0.5 + skew, 1.0, -0.02
+      );
+    } else {
+      positions.push(
+        -0.02, 0.0, -0.5,
+         0.02, 0.0,  0.5,
+         0.02, 1.0, -0.5 + skew,
+        -0.02, 1.0,  0.5 + skew
+      );
+    }
+    uvs.push(0, 0, 1, 0, 0, 1, 1, 1);
+    indices.push(base, base + 1, base + 2, base + 1, base + 3, base + 2);
+  };
+
+  addCard('x', 0.08);
+  addCard('z', -0.06);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geo.setIndex(indices);
   geo.computeVertexNormals();
   return geo;
@@ -446,6 +554,120 @@ export function createDirtLifeMaterial(): THREE.MeshBasicMaterial {
   return material;
 }
 
+export function createSurfacePhenomenonMaterial(config: SurfacePhenomenonConfig): THREE.MeshBasicMaterial {
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 1,
+    depthWrite: false,
+    depthTest: true,
+    side: THREE.DoubleSide,
+    blending: THREE.NormalBlending,
+    toneMapped: true
+  });
+
+  material.userData.effectId = config.id;
+
+  material.onBeforeCompile = shader => {
+    shader.uniforms.uTime = { value: 0 };
+    shader.uniforms.uEffectVisibility = { value: 1 };
+    shader.uniforms.uEffectAlpha = { value: config.alpha };
+    shader.uniforms.uEffectSparkle = { value: config.sparkle };
+    shader.uniforms.uEffectRise = { value: config.rise };
+    shader.uniforms.uEffectTurbulence = { value: config.turbulence };
+    shader.uniforms.uColorA = { value: config.colorA.clone() };
+    shader.uniforms.uColorB = { value: config.colorB.clone() };
+    shader.uniforms.uWindStrength = { value: 1 };
+    shader.uniforms.uWindGustStrength = { value: 1 };
+    shader.uniforms.uWindGustScale = { value: 0.04 };
+    shader.uniforms.uWindGustSpeed = { value: 0.45 };
+    shader.uniforms.uWindTurbulence = { value: 0.5 };
+    shader.uniforms.uWindDir = { value: new THREE.Vector2(1, 0) };
+    shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
+    material.userData.shader = shader;
+
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        uniform float uTime;
+        uniform float uEffectVisibility;
+        uniform float uEffectRise;
+        uniform float uEffectTurbulence;
+        uniform float uWindStrength;
+        uniform float uWindGustStrength;
+        uniform float uWindGustScale;
+        uniform float uWindGustSpeed;
+        uniform float uWindTurbulence;
+        uniform vec2 uWindDir;
+        uniform vec2 uWindOffset;
+        varying vec2 vEffectUv;
+        varying float vEffectSeed;
+        varying float vEffectGust;
+        ${DUST_NOISE_GLSL}`
+      )
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        vEffectUv = uv;
+        vec3 instWorld = instanceMatrix[3].xyz;
+        float seed = sdHash21(instWorld.xz + instWorld.y + uWindOffset + vec2(3.17, 29.41));
+        vEffectSeed = seed;
+        vec2 windDir = normalize(uWindDir + vec2(0.0001, 0.0));
+        vec2 windSide = vec2(-windDir.y, windDir.x);
+        vec2 windUv = vec2(
+          dot(instWorld.xz + uWindOffset, windDir),
+          dot(instWorld.xz + uWindOffset, windSide)
+        );
+        vec2 gustUv = windUv * max(uWindGustScale, 0.001)
+          + vec2(uTime * uWindGustSpeed, sin(uTime * uWindGustSpeed * 0.37) * 0.22);
+        float gust = smoothstep(0.22, 0.9, sdNoise(gustUv + seed * 8.0));
+        vEffectGust = gust;
+        float h = clamp(uv.y, 0.0, 1.0);
+        float swirl = sin(uTime * (1.8 + uWindTurbulence * 1.4) + seed * 6.28318 + position.x * 5.0);
+        float flutter = sin(uTime * (3.2 + uWindGustSpeed) + seed * 13.0 + position.z * 4.0);
+        transformed.x += (swirl * 0.05 + gust * 0.12) * h * uWindStrength * uEffectVisibility;
+        transformed.y += (uEffectRise * (0.025 + gust * 0.095) + flutter * 0.018) * h * h * uWindGustStrength * uEffectVisibility;
+        transformed.z += (flutter * 0.065 + swirl * 0.025) * h * uEffectTurbulence * uWindTurbulence * uEffectVisibility;`
+      );
+
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        uniform float uTime;
+        uniform float uEffectVisibility;
+        uniform float uEffectAlpha;
+        uniform float uEffectSparkle;
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        varying vec2 vEffectUv;
+        varying float vEffectSeed;
+        varying float vEffectGust;
+        ${DUST_NOISE_GLSL}`
+      )
+      .replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>
+        float shimmer = sdNoise(vec2(vEffectUv.x * 5.0 + uTime * 0.18 + vEffectSeed * 7.0, vEffectUv.y * 6.0));
+        float pulse = 0.5 + 0.5 * sin(uTime * (1.6 + uEffectSparkle * 5.0) + vEffectSeed * 6.28318);
+        diffuseColor.rgb = mix(uColorA, uColorB, clamp(vEffectGust * 0.65 + shimmer * 0.25 + pulse * uEffectSparkle * 0.35, 0.0, 1.0));`
+      )
+      .replace(
+        '#include <alphamap_fragment>',
+        `#include <alphamap_fragment>
+        float xEdge = smoothstep(0.0, 0.12, vEffectUv.x) * (1.0 - smoothstep(0.88, 1.0, vEffectUv.x));
+        float yEdge = smoothstep(0.0, 0.12, vEffectUv.y) * (1.0 - smoothstep(0.86, 1.0, vEffectUv.y));
+        float particle = smoothstep(0.18, 0.98, sdNoise(vec2(vEffectUv.x * 7.0 + vEffectSeed * 9.0, vEffectUv.y * 4.0 - uTime * 0.11)));
+        float sparkle = mix(0.62, 1.35, uEffectSparkle * (0.45 + 0.55 * sin(uTime * 4.0 + vEffectSeed * 6.28318)));
+        diffuseColor.a *= uEffectVisibility * uEffectAlpha * xEdge * yEdge * (0.42 + particle * 0.72) * sparkle;`
+      );
+  };
+
+  material.customProgramCacheKey = () => 'surface-phenomenon-v1';
+  return material;
+}
+
 function computeSandDustMatrix(
   x: number,
   y: number,
@@ -529,6 +751,53 @@ function computeDirtLifeMatrix(
     DIRT_LIFE_LENGTH * (0.72 + r2 * 0.72),
     DIRT_LIFE_HEIGHT * (0.82 + r4 * 0.42),
     DIRT_LIFE_DEPTH * (0.72 + r1 * 0.66)
+  );
+  _translate.makeTranslation(_world.x + _offset.x, _world.y + _offset.y, _world.z + _offset.z);
+
+  target.copy(_translate);
+  target.multiply(_basis);
+  target.multiply(_local.copy(_yaw).multiply(_scale));
+  return target;
+}
+
+function computeSurfacePhenomenonMatrix(
+  config: SurfacePhenomenonConfig,
+  x: number,
+  y: number,
+  z: number,
+  particleIndex: number,
+  target: THREE.Matrix4,
+  terrainSeed: number,
+  windProfile: WindProfile
+): THREE.Matrix4 {
+  voxelCoordToWorld(x, y, z, _world);
+  _up.copy(FACE_NORMALS[dominantFaceForPosition(_world)]);
+  deterministicTangentForUp(_up, _tangent);
+  _bitangent.crossVectors(_up, _tangent).normalize();
+
+  const dir = windProfile.direction;
+  _wind.copy(_tangent).multiplyScalar(dir.x).addScaledVector(_bitangent, dir.y).normalize();
+  if (_wind.lengthSq() < 1e-5) _wind.copy(_tangent);
+  _side.crossVectors(_up, _wind).normalize();
+  if (_side.lengthSq() < 1e-5) _side.copy(_bitangent);
+
+  const salt = config.salt + particleIndex * 41;
+  const r0 = seededVoxelUnit(x, y, z, salt + 1, terrainSeed);
+  const r1 = seededVoxelUnit(x, y, z, salt + 2, terrainSeed);
+  const r2 = seededVoxelUnit(x, y, z, salt + 3, terrainSeed);
+  const r3 = seededVoxelUnit(x, y, z, salt + 4, terrainSeed);
+  const r4 = seededVoxelUnit(x, y, z, salt + 5, terrainSeed);
+
+  _offset.copy(_up).multiplyScalar(config.surfaceOffset + config.baseLift + r4 * config.height * 0.16);
+  _offset.addScaledVector(_wind, (r0 - 0.5) * config.width * 0.92);
+  _offset.addScaledVector(_side, (r1 - 0.5) * config.depth * 0.92);
+
+  _basis.makeBasis(_wind, _up, _side);
+  _yaw.makeRotationY((r3 - 0.5) * (1.2 + windProfile.veer * 0.55));
+  _scale.makeScale(
+    config.width * (0.62 + r2 * 0.76),
+    config.height * (0.72 + r4 * 0.68),
+    config.depth * (0.6 + r1 * 0.72)
   );
   _translate.makeTranslation(_world.x + _offset.x, _world.y + _offset.y, _world.z + _offset.z);
 
@@ -624,6 +893,50 @@ export function buildDirtLifeInstances(
   return { count: slot, voxelCount };
 }
 
+export function buildSurfacePhenomenonInstances(
+  config: SurfacePhenomenonConfig,
+  mesh: THREE.InstancedMesh,
+  density: number,
+  maxDistance: number,
+  playerWorld: THREE.Vector3 | null,
+  terrainSeed: number,
+  windProfile: WindProfile
+): SurfaceEffectBuildResult {
+  const capacity = mesh.instanceMatrix.count;
+  const maxDistSq = maxDistance * maxDistance;
+  const perVoxel = surfacePhenomenonParticlesPerVoxel(density, config);
+  const coverage = surfacePhenomenonCoverage(density, config);
+  let slot = 0;
+  let voxelCount = 0;
+
+  if (density <= 0 || perVoxel <= 0) {
+    mesh.count = 0;
+    mesh.instanceMatrix.needsUpdate = true;
+    return { count: 0, voxelCount: 0 };
+  }
+
+  for (const voxel of voxelSystem.getAllVoxels().values()) {
+    if (slot >= capacity) break;
+    if (!isSurfacePhenomenonVoxel(voxel, config)) continue;
+    const [x, y, z] = voxel.position;
+    if (seededVoxelUnit(x, y, z, config.salt, terrainSeed) > coverage) continue;
+
+    voxelCoordToWorld(x, y, z, _world);
+    if (maxDistance > 0 && playerWorld && _world.distanceToSquared(playerWorld) > maxDistSq) continue;
+
+    voxelCount++;
+    for (let i = 0; i < perVoxel && slot < capacity; i++) {
+      computeSurfacePhenomenonMatrix(config, x, y, z, i, _scratch, terrainSeed, windProfile);
+      mesh.setMatrixAt(slot, _scratch);
+      slot++;
+    }
+  }
+
+  mesh.count = slot;
+  mesh.instanceMatrix.needsUpdate = true;
+  return { count: slot, voxelCount };
+}
+
 export function applySandDustWindProfileToMaterial(profile: WindProfile, material: THREE.Material): void {
   const u = (material.userData.shader as
     | { uniforms?: Record<string, { value: unknown }> }
@@ -639,6 +952,20 @@ export function applySandDustWindProfileToMaterial(profile: WindProfile, materia
 }
 
 export function applyDirtLifeWindProfileToMaterial(profile: WindProfile, material: THREE.Material): void {
+  const u = (material.userData.shader as
+    | { uniforms?: Record<string, { value: unknown }> }
+    | undefined)?.uniforms;
+  if (!u) return;
+  if (u.uWindStrength) (u.uWindStrength.value as number) = profile.strength;
+  if (u.uWindGustStrength) (u.uWindGustStrength.value as number) = profile.gustStrength;
+  if (u.uWindGustScale) (u.uWindGustScale.value as number) = profile.gustScale;
+  if (u.uWindGustSpeed) (u.uWindGustSpeed.value as number) = profile.gustSpeed;
+  if (u.uWindTurbulence) (u.uWindTurbulence.value as number) = profile.turbulence;
+  if (u.uWindDir) (u.uWindDir.value as THREE.Vector2).copy(profile.direction);
+  if (u.uWindOffset) (u.uWindOffset.value as THREE.Vector2).copy(profile.offset);
+}
+
+export function applySurfacePhenomenonWindProfileToMaterial(profile: WindProfile, material: THREE.Material): void {
   const u = (material.userData.shader as
     | { uniforms?: Record<string, { value: unknown }> }
     | undefined)?.uniforms;
@@ -684,6 +1011,44 @@ export function updateDirtLifeMaterial(
   if (u.uDirtVisibility) {
     (u.uDirtVisibility.value as number) = quality.animatedShaders
       ? Math.min(1.18, Math.max(0, reality.detail * 0.35 + reality.organic * 0.85))
+      : 0;
+  }
+}
+
+function visibilityForPhenomenon(id: SurfacePhenomenonId, reality: VoxelRealityEffects): number {
+  if (id === 'pollen' || id === 'fungalSpores') {
+    return reality.organic * 0.8 + reality.atmosphere * 0.35;
+  }
+  if (id === 'frost' || id === 'crystalGlints') {
+    return reality.crystalline * 0.88 + reality.detail * 0.18;
+  }
+  if (id === 'lavaHeat') {
+    return reality.thermal;
+  }
+  if (id === 'ash') {
+    return reality.thermal * 0.55 + reality.atmosphere * 0.65;
+  }
+  if (id === 'metallicFlecks') {
+    return reality.metal * 0.9 + reality.detail * 0.16;
+  }
+  return reality.detail;
+}
+
+export function updateSurfacePhenomenonMaterial(
+  material: THREE.Material,
+  time: number,
+  quality: GraphicsQuality,
+  reality: VoxelRealityEffects
+): void {
+  const u = (material.userData.shader as
+    | { uniforms?: Record<string, { value: unknown }> }
+    | undefined)?.uniforms;
+  if (!u) return;
+  const id = material.userData.effectId as SurfacePhenomenonId | undefined;
+  if (u.uTime && quality.animatedShaders) (u.uTime.value as number) = time;
+  if (u.uEffectVisibility) {
+    (u.uEffectVisibility.value as number) = quality.animatedShaders && id
+      ? Math.min(1.35, Math.max(0, visibilityForPhenomenon(id, reality)))
       : 0;
   }
 }

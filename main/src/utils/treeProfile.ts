@@ -3,6 +3,7 @@ import { seededUnit } from './worldCoordinates';
 import { buildBiomeProfile } from './biomeProfile';
 import { DEFAULT_TREE_PARAMS, type TreeGenParams } from './treeGen';
 import { buildWindProfile, type WindProfile } from './windProfile';
+import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
 
 // --- Per-planet tree profile -------------------------------------------------
 //
@@ -108,9 +109,6 @@ export interface TreeProfile {
 
 // Salts — one constant per parameter so colours/shape never alias each other.
 const SALT_SILHOUETTE = 1;
-const SALT_LEAF_HUE = 3;
-const SALT_LEAF_SAT = 4;
-const SALT_FLOWER_HUE = 5;
 const SALT_BLOOM = 6;
 const SALT_TRUNK = 7;
 const SALT_LEAN = 8;
@@ -129,15 +127,18 @@ const SALT_TRUNK_FLARE = 21;
 const SALT_TRUNK_ROUGHNESS = 22;
 const SALT_THIN_BRANCHES = 23;
 
-// Bright flower accents — always pop against any canopy.
-const FLOWER_HUES = [0.95, 0.0, 0.12, 0.83, 0.92, 0.58]; // coral,red,gold,violet,pink,sky
-
 // ACES safety clamps (also asserted in treeProfile.test.ts).
 export const LEAF_LIGHT = 0.4; // fixed authored leaf lightness
 export const FLOWER_LIGHT_CAP = 0.58;
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
+}
+
+function roleColor(role: PaletteRoleColor): THREE.Color {
+  return new THREE.Color()
+    .setHSL(role.h, role.s, role.l)
+    .convertSRGBToLinear();
 }
 
 /**
@@ -160,36 +161,18 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
   // two same-biome worlds still differ. Saturation/lightness and the flower
   // accent below stay the tree's OWN, so blossoms remain the independent pop.
   const biome = buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s);
   const wind = buildWindProfile(s, biome);
-  const hueJitter = (seededUnit(s, SALT_LEAF_HUE) - 0.5) * 0.06; // +/-0.03
-  const leafHue = (biome.leafHue + hueJitter + 1) % 1;
-  const leafSat = clamp(0.45 + seededUnit(s, SALT_LEAF_SAT) * 0.22, 0, 0.7);
-  const leafColor = new THREE.Color()
-    .setHSL(leafHue, leafSat, LEAF_LIGHT)
-    .convertSRGBToLinear();
+  const leafColor = roleColor(art.palette.canopyBase);
 
   // 3 — derived sun-kissed crust (brighter, slightly hue-shifted).
-  const leafTipColor = new THREE.Color()
-    .setHSL(
-      (leafHue + 0.03) % 1,
-      clamp(leafSat - 0.05, 0, 1),
-      0.55
-    )
-    .convertSRGBToLinear();
+  const leafTipColor = roleColor(art.palette.canopyTip);
 
   // 4 — derived backlit subsurface glow (warmest, lightest).
-  const leafSSSColor = new THREE.Color()
-    .setHSL((leafHue + 0.02) % 1, clamp(leafSat + 0.08, 0, 1), 0.62)
-    .convertSRGBToLinear();
+  const leafSSSColor = roleColor(art.palette.canopySSS);
 
   // 5 — flower colour (MANDATORY, independent so blossoms always read).
-  const fi = Math.min(
-    FLOWER_HUES.length - 1,
-    Math.floor(seededUnit(s, SALT_FLOWER_HUE) * FLOWER_HUES.length)
-  );
-  const flowerColor = new THREE.Color()
-    .setHSL(FLOWER_HUES[fi], 0.7, FLOWER_LIGHT_CAP)
-    .convertSRGBToLinear();
+  const flowerColor = roleColor(art.palette.flowerAccent);
 
   // 6 — bloom amount. pow(roll,2) -> most planets lightly flower, a few bloom hard.
   const bloomRoll = Math.pow(seededUnit(s, SALT_BLOOM), 2);

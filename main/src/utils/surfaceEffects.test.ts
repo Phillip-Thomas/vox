@@ -4,21 +4,49 @@ import { MaterialType } from '../types/materials.ts';
 import { voxelSystem } from './efficientVoxelSystem.ts';
 import { buildWindProfile } from './windProfile.ts';
 import {
+  buildSurfacePhenomenonInstances,
   buildDirtLifeInstances,
+  countSurfacePhenomenonVoxels,
   countSandDustVoxels,
   countDirtLifeVoxels,
   createDirtLifeGeometry,
+  createSurfacePhenomenonGeometry,
   createSandDustGeometry,
   dirtLifeClustersPerVoxel,
   dirtLifeCoverage,
   isDirtLifeVoxel,
   isSandDustVoxel,
+  isSurfacePhenomenonVoxel,
   sandDustCoverage,
-  sandDustWispsPerVoxel
+  sandDustWispsPerVoxel,
+  surfacePhenomenonCoverage,
+  surfacePhenomenonParticlesPerVoxel,
+  type SurfacePhenomenonConfig
 } from './surfaceEffects.ts';
 
 const sand = new THREE.Color(0xc2b280);
 const dirt = new THREE.Color(0x8b4513);
+const ice = new THREE.Color(0xcfe6f5);
+
+const frostConfig: SurfacePhenomenonConfig = {
+  id: 'frost',
+  materials: [MaterialType.ICE],
+  colorA: new THREE.Color(0xffffff),
+  colorB: new THREE.Color(0xbfe8ff),
+  coverageBase: 1,
+  coverageGain: 0,
+  particlesPerVoxel: 2,
+  surfaceOffset: 1.03,
+  baseLift: 0.05,
+  width: 0.3,
+  height: 0.6,
+  depth: 0.24,
+  alpha: 0.3,
+  sparkle: 0.5,
+  rise: 0.45,
+  turbulence: 0.4,
+  salt: 900
+};
 
 afterEach(() => {
   voxelSystem.reset();
@@ -55,6 +83,20 @@ describe('surface effects', () => {
     expect(isDirtLifeVoxel({ material: MaterialType.DIRT, supportsSurfaceResources: false })).toBe(false);
   });
 
+  it('scales generic surface phenomena into coverage and particles per voxel', () => {
+    expect(surfacePhenomenonParticlesPerVoxel(0, frostConfig)).toBe(0);
+    expect(surfacePhenomenonParticlesPerVoxel(0.2, frostConfig)).toBe(1);
+    expect(surfacePhenomenonParticlesPerVoxel(1, frostConfig)).toBe(2);
+    expect(surfacePhenomenonCoverage(0, frostConfig)).toBe(0);
+    expect(surfacePhenomenonCoverage(1, frostConfig)).toBe(1);
+  });
+
+  it('keeps generic surface phenomena on eligible exposed materials only', () => {
+    expect(isSurfacePhenomenonVoxel({ material: MaterialType.ICE }, frostConfig)).toBe(true);
+    expect(isSurfacePhenomenonVoxel({ material: MaterialType.SAND }, frostConfig)).toBe(false);
+    expect(isSurfacePhenomenonVoxel({ material: MaterialType.ICE, supportsSurfaceResources: false }, frostConfig)).toBe(false);
+  });
+
   it('counts deterministic dust instances for eligible sand voxels', () => {
     voxelSystem.addVoxel(0, 25, 0, MaterialType.SAND, sand);
     voxelSystem.addVoxel(1, 25, 0, MaterialType.SAND, sand);
@@ -77,6 +119,17 @@ describe('surface effects', () => {
     expect(countDirtLifeVoxels(2, 12345)).toBe(10);
   });
 
+  it('counts deterministic generic surface phenomena for eligible materials', () => {
+    voxelSystem.addVoxel(0, 25, 0, MaterialType.ICE, ice);
+    voxelSystem.addVoxel(1, 25, 0, MaterialType.ICE, ice);
+    voxelSystem.addVoxel(2, 25, 0, MaterialType.SAND, sand);
+    voxelSystem.addVoxel(3, 25, 0, MaterialType.ICE, ice, undefined, {
+      supportsSurfaceResources: false
+    });
+
+    expect(countSurfacePhenomenonVoxels(frostConfig, 1, 12345)).toBe(4);
+  });
+
   it('builds a double-ribbon dust geometry with uv coordinates', () => {
     const geometry = createSandDustGeometry();
     expect(geometry.attributes.position.count).toBe(8);
@@ -94,6 +147,14 @@ describe('surface effects', () => {
     geometry.dispose();
   });
 
+  it('builds shared surface phenomenon crossed-card geometry', () => {
+    const geometry = createSurfacePhenomenonGeometry();
+    expect(geometry.attributes.position.count).toBe(8);
+    expect(geometry.attributes.uv.count).toBe(8);
+    expect(geometry.index?.count).toBe(12);
+    geometry.dispose();
+  });
+
   it('builds deterministic dirt micro-life instances above eligible dirt voxels', () => {
     voxelSystem.addVoxel(0, 25, 0, MaterialType.DIRT, dirt);
     voxelSystem.addVoxel(1, 25, 0, MaterialType.DIRT, dirt);
@@ -105,6 +166,22 @@ describe('surface effects', () => {
     expect(result.voxelCount).toBe(2);
     expect(result.count).toBe(10);
     expect(mesh.count).toBe(10);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('builds deterministic generic surface phenomenon instances above eligible voxels', () => {
+    voxelSystem.addVoxel(0, 25, 0, MaterialType.ICE, ice);
+    voxelSystem.addVoxel(1, 25, 0, MaterialType.ICE, ice);
+    const geometry = createSurfacePhenomenonGeometry();
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 16);
+    const result = buildSurfacePhenomenonInstances(frostConfig, mesh, 1, 0, null, 12345, buildWindProfile(12345));
+
+    expect(result.voxelCount).toBe(2);
+    expect(result.count).toBe(4);
+    expect(mesh.count).toBe(4);
 
     geometry.dispose();
     material.dispose();

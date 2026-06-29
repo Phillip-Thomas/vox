@@ -31,7 +31,11 @@
     "typecheck": "tsc --noEmit -p tsconfig.json --pretty false && tsc --noEmit -p tsconfig.node.json --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "npm run typecheck && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run test && npm run build",
+    "atlas:smoke": "node tools/procedural-atlas.mjs --mode=smoke",
+    "atlas:showcase": "node tools/procedural-atlas.mjs --mode=showcase",
+    "atlas:baseline": "node tools/procedural-atlas.mjs --mode=baseline",
+    "atlas:perf": "node tools/procedural-atlas.mjs --mode=perf"
   },
   "browserslist": {
     "production": [

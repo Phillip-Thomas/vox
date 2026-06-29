@@ -587,7 +587,7 @@ const App: React.FC = () => {
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
   // ?voxelStage=bare|color|material|alive|paradox previews plot-gated rendering.
-  const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, flyDebug, descentDebug, debugUiEnabled } = useMemo(() => {
+  const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, atlasCapture, flyDebug, descentDebug, debugUiEnabled } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
@@ -605,6 +605,8 @@ const App: React.FC = () => {
       overviewEnabled: params.get('overview') === '1',
       // ?agent=1 -> verification harness: scriptable camera + window.__game bridge.
       agentEnabled: params.get('agent') === '1',
+      // ?atlas=1 -> clean procedural capture: no player HUD overlays.
+      atlasCapture: params.get('atlas') === '1',
       // ?fly=1 -> jump straight into deep-space flight for runtime checks.
       flyDebug: params.get('fly') === '1',
       // ?descent=x,y -> load directly into the high-altitude descent over (x,y).
@@ -843,7 +845,7 @@ const App: React.FC = () => {
       <LandingMenu startWorldId={currentWorldIdentity.worldId} />
 
       {/* --- Minimal, diegetic in-game HUD --- */}
-      {appPhase === 'playing' && (
+      {appPhase === 'playing' && !atlasCapture && (
         <>
           <Crosshair />
           <TargetReticle />

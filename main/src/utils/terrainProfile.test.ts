@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { coordinateToSeed } from './worldCoordinates';
 import { buildTerrainProfile } from './terrainProfile';
-import { buildBiomeProfile } from './biomeProfile';
+import { buildPlanetArtDirection } from './planetArtDirection';
 
 const _hsl = { h: 0, s: 0, l: 0 };
 function hueOf(c: THREE.Color): number {
@@ -27,14 +27,14 @@ describe('buildTerrainProfile', () => {
     }
   });
 
-  it('coheres the terrain tint hue with the shared biome hue', () => {
+  it('coheres the terrain tint with the shared art-direction terrain role', () => {
     for (let i = 0; i < 200; i++) {
       const seed = coordinateToSeed(i, i * 17 + 3);
-      const biomeHue = buildBiomeProfile(seed).hue;
+      const role = buildPlanetArtDirection(seed).palette.terrainSecondary;
       const tintHue = hueOf(buildTerrainProfile(seed).tintColor);
-      let d = Math.abs(biomeHue - tintHue);
+      let d = Math.abs(role.h - tintHue);
       d = Math.min(d, 1 - d); // circular
-      expect(d).toBeLessThan(0.08);
+      expect(d).toBeLessThan(0.01);
     }
   });
 

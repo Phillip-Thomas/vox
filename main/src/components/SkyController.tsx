@@ -3,10 +3,10 @@ import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
-import { buildBiomeProfile } from '../utils/biomeProfile.ts';
 import { localSunElevation, daylightFromElevation, goldenFromElevation } from '../utils/dayNight.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
+import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
 import {
   STATIC_DAY_PHASE,
   getWorldClockSource,
@@ -268,18 +268,12 @@ interface SkyControllerProps {
   worldId?: string;
 }
 
-// Subtle per-biome fog: a low-saturation atmosphere tint + small density variation,
-// so planets differ without the fog ever becoming heavy. Derived once per seed.
+// Subtle per-planet fog from the shared art direction contract. SpaceSky owns the
+// visible atmosphere; fog only nudges depth/color so the whole world grades as one.
 const FOG_BIOME_MIX = 0.16; // how far the time-of-day fog lerps toward the biome tint
 function biomeFog(terrainSeed: number): { tint: THREE.Color; densityMul: number } {
-  const b = buildBiomeProfile(terrainSeed);
-  // Alien worlds tint toward their vegetation hue; otherwise a gentle warm(arid)/
-  // cool(cold) shift by temperature. Low saturation keeps it subtle.
-  const hue = b.alien ? b.hue : (0.06 + b.temperature * 0.12);
-  const tint = new THREE.Color().setHSL(hue, 0.16 + b.aridity * 0.12, 0.62);
-  // Lush worlds a touch hazier, arid/sparse crisper (0.8 .. ~1.3).
-  const densityMul = 0.8 + b.lushness * 0.5;
-  return { tint, densityMul };
+  const atmosphere = buildPlanetAtmosphereProfile(terrainSeed);
+  return { tint: atmosphere.fogTint, densityMul: atmosphere.fogDensityMul };
 }
 
 export default function SkyController({ terrainSeed = 0, worldId }: SkyControllerProps) {

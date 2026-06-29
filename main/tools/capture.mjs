@@ -18,7 +18,8 @@
 // Output: captures/<label>_<view>.png  +  captures/<label>.metrics.json
 
 import { chromium } from 'playwright-core';
-import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -26,7 +27,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const OUT = resolve(ROOT, 'captures');
 const VANTAGES_FILE = resolve(ROOT, 'src/components/debug/vantages.json');
-const EXE = 'C:/Users/Phillip/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const WINDOWS_FALLBACK_EXE = 'C:/Users/Phillip/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
 const BASE = process.env.GAME_URL || 'http://localhost:5173/';
 
 function arg(name, def) {
@@ -40,7 +41,29 @@ const label = arg('label', 'shot');
 const profile = arg('profile', 'HIGH');
 const painterly = arg('painterly', false);
 const stored = arg('stored', false);
+const headed = arg('headed', false);
+const headlessArg = arg('headless', undefined);
+const headless = headlessArg === undefined ? !headed : String(headlessArg) !== 'false';
 const extra = String(arg('extra', '')).split(',').filter(Boolean);
+
+function commandPath(command) {
+  try {
+    return execFileSync('bash', ['-lc', `command -v ${command}`], { encoding: 'utf8' }).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveChromiumExecutable() {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+  if (existsSync('/snap/bin/chromium')) return '/snap/bin/chromium';
+  const chromiumPath = commandPath('chromium') ?? commandPath('chromium-browser') ?? commandPath('google-chrome');
+  if (chromiumPath) return chromiumPath;
+  if (existsSync(WINDOWS_FALLBACK_EXE)) return WINDOWS_FALLBACK_EXE;
+  return undefined;
+}
+
+const executablePath = resolveChromiumExecutable();
 
 // Build the batch list: each item = { world, day, views: [names] }.
 let batches;
@@ -65,9 +88,11 @@ if (stored) {
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch({
-  executablePath: EXE,
-  headless: false, // REAL GPU
-  args: ['--ignore-gpu-blocklist', '--enable-gpu', '--use-angle=d3d11']
+  executablePath,
+  headless,
+  args: headless
+    ? ['--ignore-gpu-blocklist', '--enable-gpu']
+    : ['--ignore-gpu-blocklist', '--enable-gpu', '--use-angle=d3d11']
 });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 page.on('pageerror', e => console.log('PAGEERR', e.message.slice(0, 200)));
@@ -98,6 +123,16 @@ for (const batch of batches) {
   }
 }
 
-writeFileSync(resolve(OUT, `${label}.metrics.json`), JSON.stringify({ label, profile, painterly: !!painterly, results }, null, 2));
+writeFileSync(resolve(OUT, `${label}.metrics.json`), JSON.stringify({
+  label,
+  profile,
+  painterly: !!painterly,
+  browser: {
+    executablePath: executablePath ?? 'playwright-default',
+    headless,
+    mode: headless ? 'headless' : 'headed'
+  },
+  results
+}, null, 2));
 console.log('metrics ->', `captures/${label}.metrics.json`);
 await browser.close();

@@ -17,6 +17,8 @@ import {
 const grass = new THREE.Color(0x7cb342);
 const dirt = new THREE.Color(0x8b4513);
 const sand = new THREE.Color(0xc2b280);
+const VERDANT_SEED = 3215739679;
+const ARID_SEED = 787428812;
 
 afterEach(() => {
   voxelSystem.reset();
@@ -60,7 +62,7 @@ describe('floraField', () => {
   });
 
   it('places deterministic flora and builds matching instances for the selected kind', () => {
-    const seed = 12345;
+    const seed = VERDANT_SEED;
     const profile = fullCoverageProfile(seed);
     voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, grass);
     voxelSystem.addVoxel(1, 25, 0, MaterialType.DIRT, dirt);
@@ -89,5 +91,11 @@ describe('floraField', () => {
 
     geometry.dispose();
     material.dispose();
+  });
+
+  it('uses planet ecology to reject out-of-biome placement', () => {
+    const profile = fullCoverageProfile(ARID_SEED);
+    expect(shouldPlaceFloraVoxel({ material: MaterialType.GRASS }, 0, 25, 0, 10, ARID_SEED, profile)).toBe(false);
+    expect(shouldPlaceFloraVoxel({ material: MaterialType.SAND }, 0, 25, 0, 10, ARID_SEED, profile)).toBe(true);
   });
 });

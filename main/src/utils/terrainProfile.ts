@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
+import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
 
 // --- Per-planet terrain tint (derived from the BIOME) ------------------------
 //
@@ -29,21 +30,24 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
+function roleColor(role: PaletteRoleColor): THREE.Color {
+  return new THREE.Color()
+    .setHSL(role.h, role.s, role.l)
+    .convertSRGBToLinear();
+}
+
 /**
  * Build the deterministic per-planet terrain tint. Same seed -> identical.
  */
 export function buildTerrainProfile(terrainSeed: number): TerrainProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
-  const { hue, saturation, aridity, temperature, alien } = biome;
+  const art = buildPlanetArtDirection(s);
+  const { aridity, alien } = biome;
 
-  // Tint hue tracks the biome vegetation hue (small temperature nudge: cold ->
-  // cooler, hot -> warmer). Moderate saturation gives the blend a clear direction;
-  // overall subtlety is governed by tintStrength below.
-  const tHue = (hue + (temperature - 0.5) * 0.04 + 1) % 1;
-  const tintColor = new THREE.Color()
-    .setHSL(tHue, clamp(0.4 + saturation * 0.25, 0.3, 0.7), 0.5)
-    .convertSRGBToLinear();
+  // Tint follows the planet-level terrain role. Overall subtlety is governed by
+  // tintStrength below so organic ground remains a whisper, not a repaint.
+  const tintColor = roleColor(art.palette.terrainSecondary);
 
   // Whisper by default. Arid worlds read a touch dustier (more tint); alien worlds
   // carry their exotic hue into the ground a little harder so soil isn't plain

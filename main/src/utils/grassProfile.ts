@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { seededUnit } from './worldCoordinates';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
+import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
 
 // --- Per-planet grass profile (derived from the BIOME) -----------------------
 //
@@ -54,37 +55,34 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
+function roleColor(role: PaletteRoleColor): THREE.Color {
+  return new THREE.Color()
+    .setHSL(role.h, role.s, role.l)
+    .convertSRGBToLinear();
+}
+
 /**
  * Build the deterministic per-planet grass profile. Same seed -> identical.
  */
 export function buildGrassProfile(terrainSeed: number): GrassProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s);
   const wind = buildWindProfile(s, biome);
-  const { grassHue, saturation, lushness, aridity, temperature } = biome;
+  const { lushness, aridity } = biome;
 
   // --- Colours ---------------------------------------------------------------
   // Lush worlds are a touch brighter/deeper; arid worlds desaturate. Temperature
   // nudges hue a hair (cold -> cooler/bluer, hot -> warmer/yellower). Grass reads
   // the warm/yellow side of the biome's split-complementary veg pair (the canopy
   // takes the cool side), so grass + leaves complement rather than match.
-  const tHue = (grassHue + (temperature - 0.5) * 0.04 + 1) % 1;
-  const sat = clamp(saturation - aridity * 0.15, 0.1, 0.9);
-  const baseColor = new THREE.Color()
-    .setHSL(tHue, clamp(sat + 0.08, 0, 1), 0.24 + lushness * 0.08)
-    .convertSRGBToLinear();
-  const tipColor = new THREE.Color()
-    .setHSL((tHue + 0.02) % 1, clamp(sat - 0.04, 0, 1), 0.48 + lushness * 0.08)
-    .convertSRGBToLinear();
-  const sssColor = new THREE.Color()
-    .setHSL((tHue + 0.015) % 1, clamp(sat + 0.14, 0, 1), 0.6)
-    .convertSRGBToLinear();
+  const baseColor = roleColor(art.palette.vegetationBase);
+  const tipColor = roleColor(art.palette.vegetationTip);
+  const sssColor = roleColor(art.palette.vegetationSSS);
   // Dry patches: a SUN-BLEACHED version of THIS planet's hue (paler, desaturated,
   // nudged warm) — not a fixed gold. A fixed gold turned alien (teal/violet)
   // biomes olive when they dried; this keeps each planet's identity even arid.
-  const dryColor = new THREE.Color()
-    .setHSL((tHue + 0.04) % 1, clamp(sat * 0.45, 0.08, 0.4), 0.52)
-    .convertSRGBToLinear();
+  const dryColor = roleColor(art.palette.dryGrass);
 
   const dryness = clamp(aridity * 0.85, 0, 0.85);
 

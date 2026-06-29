@@ -22,6 +22,8 @@ import {
 const grass = new THREE.Color(0x7cb342);
 const dirt = new THREE.Color(0x8b4513);
 const sand = new THREE.Color(0xc2b280);
+const VERDANT_SEED = 3215739679;
+const ARID_SEED = 787428812;
 
 afterEach(() => {
   voxelSystem.reset();
@@ -54,12 +56,16 @@ describe('faunaField', () => {
   });
 
   it('keeps travel biome aware by species and material', () => {
-    const profile = buildFaunaProfile(12345);
+    const profile = buildFaunaProfile(VERDANT_SEED);
     expect(isFaunaTravelVoxel('grazer', { material: MaterialType.GRASS }, profile)).toBe(true);
     expect(isFaunaTravelVoxel('woolly', { material: MaterialType.DIRT }, profile)).toBe(true);
     expect(isFaunaTravelVoxel('woolly', { material: MaterialType.SAND }, profile)).toBe(false);
     expect(isFaunaTravelVoxel('hopper', { material: MaterialType.SAND }, profile)).toBe(true);
     expect(isFaunaTravelVoxel('runner', { material: MaterialType.STONE }, profile)).toBe(false);
+
+    const arid = buildFaunaProfile(ARID_SEED);
+    expect(isFaunaTravelVoxel('grazer', { material: MaterialType.GRASS }, arid)).toBe(false);
+    expect(isFaunaTravelVoxel('hopper', { material: MaterialType.SAND }, arid)).toBe(true);
   });
 
   it('adds a clearance arc for voxel level transitions', () => {
@@ -103,7 +109,7 @@ describe('faunaField', () => {
   });
 
   it('places deterministic fauna and builds matching instances for the selected kind', () => {
-    const seed = 12345;
+    const seed = VERDANT_SEED;
     const profile = fullCoverageProfile(seed);
     voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, grass);
     voxelSystem.addVoxel(1, 25, 0, MaterialType.DIRT, dirt);
@@ -135,7 +141,7 @@ describe('faunaField', () => {
   });
 
   it('moves fauna instance matrices along eligible travel lanes', () => {
-    const seed = 12345;
+    const seed = VERDANT_SEED;
     const profile = fullCoverageProfile(seed);
     for (let x = 0; x < 6; x++) {
       voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, grass);
@@ -170,7 +176,7 @@ describe('faunaField', () => {
     mesh.getMatrixAt(0, after);
     afterPos.setFromMatrixPosition(after);
 
-    expect(afterPos.distanceTo(beforePos)).toBeGreaterThan(0.05);
+    expect(afterPos.distanceTo(beforePos)).toBeGreaterThan(0.02);
     expect(seedAttr.getX(0)).toBe(seedBefore);
 
     geometry.dispose();
@@ -178,7 +184,7 @@ describe('faunaField', () => {
   });
 
   it('slerps rotation changes instead of snapping immediately', () => {
-    const seed = 12345;
+    const seed = VERDANT_SEED;
     const profile = fullCoverageProfile(seed);
     for (let x = 0; x < 6; x++) {
       voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, grass);

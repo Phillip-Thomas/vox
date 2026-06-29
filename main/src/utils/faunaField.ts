@@ -10,6 +10,8 @@ import { seededVoxelUnit } from './seededHash';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
 import { seededUnit } from './worldCoordinates';
+import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
+import { isMaterialEligibleForEcology } from './planetEcology';
 
 export const FAUNA_KINDS = ['grazer', 'woolly', 'runner', 'hopper', 'dragonfly'] as const;
 export type FaunaKind = typeof FAUNA_KINDS[number];
@@ -18,6 +20,8 @@ export interface FaunaProfile {
   terrainSeed: number;
   biome: BiomeProfile;
   wind: WindProfile;
+  artDirection: PlanetArtDirection;
+  ecology: PlanetEcology;
   densityMul: number;
   coverage: number;
   coatBase: THREE.Color;
@@ -102,40 +106,49 @@ function hsl(h: number, s: number, l: number): THREE.Color {
   return new THREE.Color().setHSL((h + 1) % 1, clamp(s, 0, 1), clamp(l, 0, 1)).convertSRGBToLinear();
 }
 
+function roleColor(role: PaletteRoleColor): THREE.Color {
+  return new THREE.Color()
+    .setHSL(role.h, role.s, role.l)
+    .convertSRGBToLinear();
+}
+
 export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s);
   const wind = buildWindProfile(s, biome);
   const { aridity, hue, lushness, saturation, temperature } = biome;
   const hueJitter = (seededUnit(s, 451) - 0.5) * 0.09;
   const coatHue = (hue + hueJitter + 0.035 + aridity * 0.035 + 1) % 1;
   const sat = clamp(saturation * 0.5 + lushness * 0.12 - aridity * 0.08, 0.18, 0.68);
 
-  const coatBase = hsl(coatHue, sat, 0.42 + lushness * 0.05);
-  const coatWarm = hsl(coatHue + 0.06, clamp(sat + 0.05, 0, 0.72), 0.5 + temperature * 0.05);
-  const coatCool = hsl(coatHue - 0.08, clamp(sat + 0.03, 0, 0.72), 0.34 + lushness * 0.04);
+  const coatBase = roleColor(art.palette.faunaCoat);
+  const coatWarm = hsl(art.palette.faunaCoat.h + 0.06, clamp(art.palette.faunaCoat.s + 0.05, 0, 0.72), 0.5 + temperature * 0.05);
+  const coatCool = hsl(art.palette.faunaCoat.h - 0.08, clamp(art.palette.faunaCoat.s + 0.03, 0, 0.72), 0.34 + lushness * 0.04);
   const woolColor = hsl(coatHue + 0.035, clamp(sat * 0.28, 0.08, 0.36), 0.78 - aridity * 0.12);
   const darkColor = hsl(coatHue - 0.04, clamp(sat * 0.55, 0.12, 0.46), 0.16 + lushness * 0.03);
   const accentColor = biome.alien
-    ? hsl(biome.leafHue + 0.18, 0.62, 0.54)
+    ? roleColor(art.palette.faunaAccent)
     : lin(0x2f2118);
-  const wingColor = hsl(biome.leafHue + 0.42, 0.34 + lushness * 0.16, 0.72);
+  const wingColor = roleColor(art.palette.wingGlass);
 
   const densityMul = clamp(0.18 + lushness * 0.68 + (1 - aridity) * 0.2, 0.12, 1.08);
   const coverage = clamp(0.08 + lushness * 0.28 + (1 - aridity) * 0.08, 0.05, 0.44);
 
   const weights: Record<FaunaKind, number> = {
-    grazer: clamp(0.14 + lushness * 0.82 + (1 - aridity) * 0.28 - temperature * 0.08, 0.03, 1.38),
-    woolly: clamp(0.1 + lushness * 0.48 + (1 - temperature) * 0.32 - aridity * 0.24, 0.025, 1.12),
-    runner: clamp(0.16 + aridity * 0.38 + temperature * 0.34 + (1 - lushness) * 0.1, 0.05, 1.25),
-    hopper: clamp(0.14 + aridity * 0.72 + (1 - lushness) * 0.32, 0.04, 1.4),
-    dragonfly: clamp(0.1 + lushness * 0.72 + (1 - aridity) * 0.3 + temperature * 0.12, 0.025, 1.25)
+    grazer: clamp((0.14 + lushness * 0.82 + (1 - aridity) * 0.28 - temperature * 0.08) * art.ecology.faunaWeights.grazer, 0.001, 2.2),
+    woolly: clamp((0.1 + lushness * 0.48 + (1 - temperature) * 0.32 - aridity * 0.24) * art.ecology.faunaWeights.woolly, 0.001, 2.2),
+    runner: clamp((0.16 + aridity * 0.38 + temperature * 0.34 + (1 - lushness) * 0.1) * art.ecology.faunaWeights.runner, 0.001, 2.2),
+    hopper: clamp((0.14 + aridity * 0.72 + (1 - lushness) * 0.32) * art.ecology.faunaWeights.hopper, 0.001, 2.2),
+    dragonfly: clamp((0.1 + lushness * 0.72 + (1 - aridity) * 0.3 + temperature * 0.12) * art.ecology.faunaWeights.dragonfly, 0.001, 2.2)
   };
 
   return {
     terrainSeed: s,
     biome,
     wind,
+    artDirection: art,
+    ecology: art.ecology,
     densityMul,
     coverage,
     coatBase,
@@ -160,12 +173,20 @@ export function isFaunaEligibleVoxel(voxel: { material: string; supportsSurfaceR
   );
 }
 
+export function isFaunaEligibleVoxelForProfile(
+  voxel: { material: string; supportsSurfaceResources?: boolean },
+  profile: FaunaProfile
+): boolean {
+  if (voxel.supportsSurfaceResources === false) return false;
+  return isMaterialEligibleForEcology(profile.ecology, 'fauna', voxel.material as MaterialType);
+}
+
 export function isFaunaTravelVoxel(
   kind: FaunaKind,
   voxel: { material: string; supportsSurfaceResources?: boolean },
   profile: FaunaProfile
 ): boolean {
-  if (!isFaunaEligibleVoxel(voxel)) return false;
+  if (!isFaunaEligibleVoxelForProfile(voxel, profile)) return false;
   if (voxel.material === MaterialType.GRASS) return kind !== 'hopper' || profile.biome.lushness < 0.76;
   if (voxel.material === MaterialType.DIRT) return true;
   if (voxel.material === MaterialType.SAND) {
@@ -174,6 +195,8 @@ export function isFaunaTravelVoxel(
     if (kind === 'dragonfly') return profile.biome.aridity > 0.58;
     return false;
   }
+  if (voxel.material === MaterialType.STONE) return kind === 'runner' || kind === 'hopper';
+  if (voxel.material === MaterialType.BASALT) return kind === 'runner' || kind === 'hopper';
   return false;
 }
 
@@ -181,6 +204,8 @@ function materialDensityMul(material: string, profile: FaunaProfile): number {
   if (material === MaterialType.GRASS) return 1;
   if (material === MaterialType.DIRT) return 0.52 + profile.biome.lushness * 0.24;
   if (material === MaterialType.SAND) return 0.14 + profile.biome.aridity * 0.54;
+  if (material === MaterialType.STONE) return 0.08 * profile.ecology.richness;
+  if (material === MaterialType.BASALT) return 0.1 * profile.ecology.richness;
   return 0;
 }
 
@@ -193,6 +218,9 @@ function materialKindMul(material: string, kind: FaunaKind): number {
   }
   if (material === MaterialType.GRASS) {
     return kind === 'grazer' ? 1.18 : kind === 'woolly' ? 1.08 : kind === 'dragonfly' ? 0.88 : kind === 'runner' ? 0.62 : 0.48;
+  }
+  if (material === MaterialType.STONE || material === MaterialType.BASALT) {
+    return kind === 'runner' ? 0.86 : kind === 'hopper' ? 0.64 : kind === 'dragonfly' ? 0.22 : 0.04;
   }
   return 0;
 }
@@ -231,7 +259,7 @@ export function shouldPlaceFaunaVoxel(
   terrainSeed: number,
   profile: FaunaProfile
 ): boolean {
-  if (density <= 0 || !isFaunaEligibleVoxel(voxel)) return false;
+  if (density <= 0 || !isFaunaEligibleVoxelForProfile(voxel, profile)) return false;
   if (seededVoxelUnit(x, y, z, FAUNA_COVERAGE_SALT, terrainSeed) > profile.coverage) return false;
   return seededVoxelUnit(x, y, z, FAUNA_DENSITY_SALT, terrainSeed) <= placementChance(density, voxel.material, profile);
 }

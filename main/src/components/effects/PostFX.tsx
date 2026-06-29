@@ -30,7 +30,6 @@ import {
 import { N8AO } from '@react-three/postprocessing';
 import { KernelSize, ToneMappingMode } from 'postprocessing';
 import { getGraphicsQuality } from '../../config/graphicsSettings.ts';
-import { buildBiomeProfile } from '../../utils/biomeProfile.ts';
 import { getSunDirection } from '../SkyController.tsx';
 import { PainterlyEffect } from './PainterlyEffect.ts';
 import { ColorGradeEffect, getColorGrade } from './ColorGradeEffect.ts';
@@ -38,6 +37,7 @@ import { OutlineEffect } from './OutlineEffect.ts';
 import { UnderwaterEffect, getUnderwater } from './UnderwaterEffect.ts';
 import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
+import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
@@ -53,19 +53,6 @@ const _sunPoint = new THREE.Vector3();
 interface PostFXProps {
   /** Planet seed — drives the per-biome color grade. */
   terrainSeed?: number;
-}
-
-/** Per-biome static grade params (tint + saturation feel). */
-function biomeGrade(terrainSeed: number) {
-  const b = buildBiomeProfile(terrainSeed);
-  const accent = new THREE.Color().setHSL(b.alien ? b.hue : (0.08 + b.temperature * 0.1), 0.5, 0.6);
-  const tint = new THREE.Color(1, 1, 1).lerp(accent, 0.14); // near-white nudged toward biome hue
-  return {
-    tint,
-    tintAmount: 0.08 + (b.alien ? 0.04 : 0.0),
-    saturation: 1.01 + b.saturation * 0.08 - b.aridity * 0.06, // vivid biomes pop, arid desats
-    contrast: 1.0
-  };
 }
 
 /**
@@ -96,7 +83,7 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
   const underwaterPostFX = quality.underwaterPostFX;
   const underwaterGodrays = quality.underwaterGodrays;
 
-  const grade = useMemo(() => biomeGrade(terrainSeed), [terrainSeed]);
+  const grade = useMemo(() => buildPlanetPostGradeProfile(terrainSeed), [terrainSeed]);
   // Edge-triggered submerge/emerge wipe + previous submerged state for it.
   const prevSubmerged = useRef(false);
   const wipe = useRef(0);
@@ -114,7 +101,7 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
         grade.tint,
         grade.tintAmount,
         grade.saturation,
-        golden * 0.8 - (1 - daylight) * 0.35,
+        grade.warmthBias + golden * 0.8 - (1 - daylight) * 0.35,
         grade.contrast + (1 - daylight) * 0.05
       );
     }

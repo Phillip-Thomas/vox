@@ -9,7 +9,8 @@ import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from
 import { seededVoxelUnit } from './seededHash';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
-import { seededUnit } from './worldCoordinates';
+import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
+import { isMaterialEligibleForEcology } from './planetEcology';
 
 export const FLORA_KINDS = ['cactus', 'fan', 'flower', 'seedhead', 'shrub'] as const;
 export type FloraKind = typeof FLORA_KINDS[number];
@@ -18,6 +19,8 @@ export interface FloraProfile {
   terrainSeed: number;
   biome: BiomeProfile;
   wind: WindProfile;
+  artDirection: PlanetArtDirection;
+  ecology: PlanetEcology;
   densityMul: number;
   coverage: number;
   greenBase: THREE.Color;
@@ -64,49 +67,42 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
-function lin(hex: number): THREE.Color {
-  return new THREE.Color(hex).convertSRGBToLinear();
+function roleColor(role: PaletteRoleColor): THREE.Color {
+  return new THREE.Color()
+    .setHSL(role.h, role.s, role.l)
+    .convertSRGBToLinear();
 }
 
 export function buildFloraProfile(terrainSeed: number): FloraProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s);
   const wind = buildWindProfile(s, biome);
-  const { aridity, grassHue, leafHue, lushness, saturation, temperature } = biome;
-  const hueJitter = (seededUnit(s, 141) - 0.5) * 0.07;
-  const greenHue = (leafHue + hueJitter + 1) % 1;
-  const sat = clamp(saturation + lushness * 0.12 - aridity * 0.18, 0.18, 0.82);
+  const { aridity, lushness, temperature } = biome;
 
-  const greenBase = new THREE.Color()
-    .setHSL(greenHue, sat, 0.28 + lushness * 0.07)
-    .convertSRGBToLinear();
-  const greenTip = new THREE.Color()
-    .setHSL((greenHue + 0.025) % 1, clamp(sat + 0.08, 0, 0.92), 0.46 + lushness * 0.08)
-    .convertSRGBToLinear();
-  const dryColor = new THREE.Color()
-    .setHSL((grassHue + 0.06) % 1, clamp(sat * 0.42, 0.08, 0.42), 0.52)
-    .convertSRGBToLinear();
-  const bloomHue = (0.91 + seededUnit(s, 142) * 0.27 + temperature * 0.06) % 1;
-  const bloomColor = new THREE.Color()
-    .setHSL(bloomHue, 0.64 + seededUnit(s, 143) * 0.22, 0.52 + lushness * 0.08)
-    .convertSRGBToLinear();
-  const barkColor = lin(0x6b3f24);
+  const greenBase = roleColor(art.palette.canopyBase);
+  const greenTip = roleColor(art.palette.canopyTip);
+  const dryColor = roleColor(art.palette.dryGrass);
+  const bloomColor = roleColor(art.palette.flowerAccent);
+  const barkColor = roleColor(art.palette.bark);
 
   const densityMul = clamp(0.32 + lushness * 1.05 + (1 - aridity) * 0.28, 0.28, 1.65);
   const coverage = clamp(0.24 + lushness * 0.62 + aridity * 0.14, 0.18, 0.96);
 
   const weights: Record<FloraKind, number> = {
-    cactus: clamp(0.08 + aridity * 1.35 + Math.max(0, temperature - 0.52) * 0.55 - lushness * 0.62, 0.02, 1.5),
-    fan: clamp(0.08 + lushness * 0.9 + temperature * 0.28 - aridity * 0.32, 0.04, 1.25),
-    flower: clamp(0.1 + lushness * 1.15 + (1 - aridity) * 0.32, 0.05, 1.55),
-    seedhead: clamp(0.12 + aridity * 0.8 + (1 - lushness) * 0.38, 0.08, 1.12),
-    shrub: clamp(0.08 + lushness * 0.7 + (1 - aridity) * 0.38, 0.05, 1.18)
+    cactus: clamp((0.08 + aridity * 1.35 + Math.max(0, temperature - 0.52) * 0.55 - lushness * 0.62) * art.ecology.floraWeights.cactus, 0.001, 2.4),
+    fan: clamp((0.08 + lushness * 0.9 + temperature * 0.28 - aridity * 0.32) * art.ecology.floraWeights.fan, 0.001, 2.4),
+    flower: clamp((0.1 + lushness * 1.15 + (1 - aridity) * 0.32) * art.ecology.floraWeights.flower, 0.001, 2.4),
+    seedhead: clamp((0.12 + aridity * 0.8 + (1 - lushness) * 0.38) * art.ecology.floraWeights.seedhead, 0.001, 2.4),
+    shrub: clamp((0.08 + lushness * 0.7 + (1 - aridity) * 0.38) * art.ecology.floraWeights.shrub, 0.001, 2.4)
   };
 
   return {
     terrainSeed: s,
     biome,
     wind,
+    artDirection: art,
+    ecology: art.ecology,
     densityMul,
     coverage,
     greenBase,
@@ -129,10 +125,21 @@ export function isFloraEligibleVoxel(voxel: { material: string; supportsSurfaceR
   );
 }
 
+export function isFloraEligibleVoxelForProfile(
+  voxel: { material: string; supportsSurfaceResources?: boolean },
+  profile: FloraProfile
+): boolean {
+  if (voxel.supportsSurfaceResources === false) return false;
+  return isMaterialEligibleForEcology(profile.ecology, 'flora', voxel.material as MaterialType);
+}
+
 function materialDensityMul(material: string, profile: FloraProfile): number {
   if (material === MaterialType.GRASS) return 1.0;
   if (material === MaterialType.DIRT) return 0.68 + profile.biome.lushness * 0.22;
   if (material === MaterialType.SAND) return 0.34 + profile.biome.aridity * 0.46;
+  if (material === MaterialType.CRYSTAL) return 0.22 * profile.ecology.richness;
+  if (material === MaterialType.BASALT) return 0.12 * profile.ecology.richness;
+  if (material === MaterialType.STONE) return 0.1 * profile.ecology.richness;
   return 0;
 }
 
@@ -145,6 +152,12 @@ function materialKindMul(material: string, kind: FloraKind): number {
   }
   if (material === MaterialType.GRASS) {
     return kind === 'cactus' ? 0.06 : kind === 'seedhead' ? 0.34 : kind === 'fan' ? 0.86 : kind === 'flower' ? 1.15 : 0.82;
+  }
+  if (material === MaterialType.CRYSTAL) {
+    return kind === 'fan' ? 0.75 : kind === 'flower' ? 0.55 : kind === 'shrub' ? 0.36 : kind === 'seedhead' ? 0.28 : 0.05;
+  }
+  if (material === MaterialType.BASALT || material === MaterialType.STONE) {
+    return kind === 'seedhead' ? 0.55 : kind === 'shrub' ? 0.38 : kind === 'cactus' ? 0.28 : 0.12;
   }
   return 0;
 }
@@ -183,7 +196,7 @@ export function shouldPlaceFloraVoxel(
   terrainSeed: number,
   profile: FloraProfile
 ): boolean {
-  if (density <= 0 || !isFloraEligibleVoxel(voxel)) return false;
+  if (density <= 0 || !isFloraEligibleVoxelForProfile(voxel, profile)) return false;
   if (seededVoxelUnit(x, y, z, FLORA_COVERAGE_SALT, terrainSeed) > profile.coverage) return false;
   return seededVoxelUnit(x, y, z, FLORA_DENSITY_SALT, terrainSeed) <= placementChance(density, voxel.material, profile);
 }
