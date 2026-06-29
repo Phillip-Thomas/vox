@@ -18,6 +18,11 @@ Completed:
 - Material/hazard/mineral/effect-specific atlas vantages.
 - Settled per-vantage metric sampling and aggregated worst-view case metrics.
 - Profile-specific atlas performance budgets.
+- Lit fauna shader cohesion and locomotion continuity pass with one shared current `fauna-field-v4` program.
+- Lit flora shader cohesion pass with one shared current `flora-field-v2` program.
+- Voxel material soft rim/atmosphere cohesion pass with current `voxel-pbr-v6`.
+- Fauna-specific atlas vantages and review framing.
+- Shader-cohesion audit note with current program families and open passes.
 
 Current validated atlas:
 
@@ -68,9 +73,65 @@ Latest perf matrix:
 - Worst p95 anomaly LOW `21.2ms`, within calibrated budget.
 - Dense tree-led ULTRA reference reached `8,834,849` estimated triangles while holding `60fps`.
 
+Latest fauna/shader showcase:
+
+`main/captures/procedural-atlas/2026-06-29T04-44-57-353Z-batch4-fauna-shader-cohesion-accepted/`
+
+- `9` cases.
+- `36` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Direct fauna vantages captured grazer, hopper, woolly, dragonfly, and fungal fauna.
+- Worst p95 `17.2ms`.
+
+Latest fauna/shader perf:
+
+`main/captures/procedural-atlas/2026-06-29T04-48-03-549Z-batch4-fauna-shader-cohesion-perf/`
+
+- `20` cases.
+- `60` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Worst p95 `17.4ms`.
+- Dense ULTRA reference stayed at `60fps`.
+
+Latest fauna roaming-continuity showcase:
+
+`main/captures/procedural-atlas/2026-06-29T13-18-53-044Z-batch5-fauna-roaming-continuity/`
+
+- `9` cases.
+- `36` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Worst p95 `17.3ms`.
+- Shared fauna program key is now `fauna-field-v4`.
+- Unit regression verifies visible rebuilds preserve live agent identity, route progress, stride phase, and matrix position.
+
+Latest flora/voxel shader showcase:
+
+`main/captures/procedural-atlas/2026-06-29T13-35-03-216Z-batch6-flora-voxel-cohesion/`
+
+- `9` cases.
+- `36` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Worst p95 `17.4ms`.
+- Program keys: `flora-field-v2`, `voxel-pbr-v6`, `fauna-field-v4`.
+
+Latest flora/voxel shader perf:
+
+`main/captures/procedural-atlas/2026-06-29T13-37-32-285Z-batch6-flora-voxel-cohesion-perf/`
+
+- `20` cases.
+- `60` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Worst p95 `17.4ms`.
+- Dense ULTRA reference stayed at `60fps`.
+
 Next high-leverage batch:
 
-1. Run and review reality-stage strips now that spawned phenomena respond to reality uniforms.
-2. Re-run the full baseline matrix with the new `material` vantage included.
-3. Add shader complexity audit notes for the major custom material paths.
+1. Continue shader cohesion audit into water, surface effects, sky, and post FX.
+2. Run and review reality-stage strips now that spawned phenomena, lit fauna, lit flora, and voxel materials respond to reality uniforms.
+3. Re-run the full baseline matrix with the new `material` and fauna/flora vantages included.
 4. Review atlas screenshots adversarially against the tree-led visual standard.

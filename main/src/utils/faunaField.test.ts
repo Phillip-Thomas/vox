@@ -9,6 +9,8 @@ import {
   chooseFaunaKindForVoxel,
   countFaunaVoxels,
   createFaunaGeometry,
+  createFaunaMaterial,
+  faunaKindId,
   faunaLevelTransitionLift,
   faunaScaleForKind,
   isFaunaEligibleVoxel,
@@ -45,6 +47,17 @@ describe('faunaField', () => {
     expect(a.coverage).toBe(b.coverage);
     expect(a.wind.direction.x).toBe(b.wind.direction.x);
     expect(FAUNA_KINDS.every(kind => a.weights[kind] > 0)).toBe(true);
+  });
+
+  it('keeps fauna coats readable against verdant vegetation', () => {
+    const profile = buildFaunaProfile(VERDANT_SEED);
+    const coat = { h: 0, s: 0, l: 0 };
+    const grassHue = profile.artDirection.palette.vegetationBase.h;
+    const canopyHue = profile.artDirection.palette.canopyBase.h;
+    profile.coatBase.getHSL(coat);
+    const distToGrass = Math.abs(((coat.h - grassHue + 0.5) % 1) - 0.5);
+    const distToCanopy = Math.abs(((coat.h - canopyHue + 0.5) % 1) - 0.5);
+    expect(Math.min(distToGrass, distToCanopy)).toBeGreaterThan(0.12);
   });
 
   it('only decorates eligible surface materials', () => {
@@ -106,6 +119,22 @@ describe('faunaField', () => {
       }
       geometry.dispose();
     }
+  });
+
+  it('uses one lit fauna material program with species driven by uniforms', () => {
+    const profile = buildFaunaProfile(12345);
+    const keys = new Set<string>();
+    for (const kind of FAUNA_KINDS) {
+      const material = createFaunaMaterial(kind, profile);
+      expect(material).toBeInstanceOf(THREE.MeshStandardMaterial);
+      expect(material.vertexColors).toBe(true);
+      expect(material.roughness).toBeGreaterThan(0.7);
+      expect(material.customProgramCacheKey()).toBe('fauna-field-v4');
+      keys.add(material.customProgramCacheKey());
+      expect(faunaKindId(kind)).toBeGreaterThanOrEqual(0);
+      material.dispose();
+    }
+    expect(keys.size).toBe(1);
   });
 
   it('places deterministic fauna and builds matching instances for the selected kind', () => {
@@ -178,6 +207,50 @@ describe('faunaField', () => {
 
     expect(afterPos.distanceTo(beforePos)).toBeGreaterThan(0.02);
     expect(seedAttr.getX(0)).toBe(seedBefore);
+    expect((geometry.attributes.aFaunaStride as THREE.InstancedBufferAttribute).getX(0)).toBeCloseTo(result.agents[0].stridePhase);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('preserves live agent progress and gait phase when rebuilding visible fauna', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (let x = 0; x < 8; x++) {
+      voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, grass);
+    }
+
+    const selectedKind = FAUNA_KINDS.find(kind => countFaunaVoxels(kind, 10, seed, profile) > 0) ?? 'grazer';
+    const geometry = createFaunaGeometry(selectedKind, profile);
+    prepareFaunaInstanceAttributes(geometry, 12);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 12);
+    const initial = buildFaunaInstances(selectedKind, mesh, 10, 0, null, seed, profile);
+    expect(initial.agents.length).toBeGreaterThan(0);
+
+    updateFaunaAgents(mesh, initial.agents, 4, 0.9, seed, profile);
+    const preserved = initial.agents[0];
+    const progressBefore = preserved.progress;
+    const strideBefore = preserved.stridePhase;
+    const matrixBefore = new THREE.Matrix4();
+    const matrixAfter = new THREE.Matrix4();
+    const posBefore = new THREE.Vector3();
+    const posAfter = new THREE.Vector3();
+    mesh.getMatrixAt(0, matrixBefore);
+    posBefore.setFromMatrixPosition(matrixBefore);
+
+    const rebuilt = buildFaunaInstances(selectedKind, mesh, 10, 0, null, seed, profile, {
+      existingAgents: initial.agents,
+      time: 4.9
+    });
+    mesh.getMatrixAt(0, matrixAfter);
+    posAfter.setFromMatrixPosition(matrixAfter);
+
+    expect(rebuilt.agents[0]).toBe(preserved);
+    expect(rebuilt.agents[0].progress).toBeCloseTo(progressBefore);
+    expect(rebuilt.agents[0].stridePhase).toBeCloseTo(strideBefore);
+    expect((geometry.attributes.aFaunaStride as THREE.InstancedBufferAttribute).getX(0)).toBeCloseTo(strideBefore);
+    expect(posAfter.distanceTo(posBefore)).toBeLessThan(0.01);
 
     geometry.dispose();
     material.dispose();

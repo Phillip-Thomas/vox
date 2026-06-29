@@ -39,6 +39,124 @@ Atlas run: `main/captures/procedural-atlas/2026-06-29T03-31-01-037Z-baseline-fin
 
 Human/adversarial visual review remains required for final approval.
 
+## Batch 4 Fauna Shader Cohesion
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Atlas run: `main/captures/procedural-atlas/2026-06-29T04-44-57-353Z-batch4-fauna-shader-cohesion-accepted/`
+
+- Cases: `9`
+- Screenshots: `36`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profile: `HIGH`
+- Stage: `alive`
+- New fauna vantages: `fauna`, `grazer`, `woolly`, `hopper`, `dragonfly`.
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.2ms`
+- Fauna counts: verdant `141`, arid `51`, frozen `10`, volcanic `61`, oceanic `23`, crystal `7`, metallic `4`, fungal `58`, anomaly `15`.
+
+Key screenshot paths:
+
+- `verdant/-1_-1/alive/HIGH/grazer.png`
+- `arid/1_0/alive/HIGH/hopper.png`
+- `frozen/-1_0/alive/HIGH/woolly.png`
+- `oceanic/0_0/alive/HIGH/dragonfly.png`
+- `fungal/1_1/alive/HIGH/fauna.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Direct fauna closeup vantages resolve actual fauna instances: `pass`
+- Shared fauna shader program remains bounded: `pass`
+
+Perf run: `main/captures/procedural-atlas/2026-06-29T04-48-03-549Z-batch4-fauna-shader-cohesion-perf/`
+
+- Cases: `20`
+- Screenshots: `60`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.4ms`
+- Dense ULTRA reference remains stable at `60fps`.
+
+Human/adversarial visual review remains required for final approval.
+
+## Batch 5 Fauna Roaming Continuity
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Atlas run: `main/captures/procedural-atlas/2026-06-29T13-18-53-044Z-batch5-fauna-roaming-continuity/`
+
+- Cases: `9`
+- Screenshots: `36`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profile: `HIGH`
+- Stage: `alive`
+- Fauna program key: `fauna-field-v4`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.3ms`
+
+Key screenshot paths:
+
+- `verdant/-1_-1/alive/HIGH/fauna.png`
+- `verdant/-1_-1/alive/HIGH/grazer.png`
+- `arid/1_0/alive/HIGH/hopper.png`
+- `frozen/-1_0/alive/HIGH/woolly.png`
+- `oceanic/0_0/alive/HIGH/dragonfly.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Shared fauna shader program remains bounded: `pass`
+- Rebuild continuity covered by unit regression: `pass`
+
+Human/adversarial visual review remains required for final approval.
+
+## Batch 6 Flora And Voxel Shader Cohesion
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Showcase atlas run: `main/captures/procedural-atlas/2026-06-29T13-35-03-216Z-batch6-flora-voxel-cohesion/`
+
+- Cases: `9`
+- Screenshots: `36`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profile: `HIGH`
+- Stage: `alive`
+- Program keys: `flora-field-v2`, `voxel-pbr-v6`, `fauna-field-v4`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.4ms`
+
+Key screenshot paths:
+
+- `verdant/-1_-1/alive/HIGH/pollen.png`
+- `verdant/-1_-1/alive/HIGH/material.png`
+- `arid/1_0/alive/HIGH/material.png`
+- `crystal/-2_1/alive/HIGH/material.png`
+- `fungal/1_1/alive/HIGH/material.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Shared flora/voxel shader programs remain bounded: `pass`
+- Flora/voxel material contracts covered by unit tests: `pass`
+
+Perf atlas run: `main/captures/procedural-atlas/2026-06-29T13-37-32-285Z-batch6-flora-voxel-cohesion-perf/`
+
+- Cases: `20`
+- Screenshots: `60`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.4ms`
+- Dense ULTRA reference stays at `60fps`.
+
+Human/adversarial visual review remains required for final approval.
+
 ## Batch 2 Smoke Matrix
 
 Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`

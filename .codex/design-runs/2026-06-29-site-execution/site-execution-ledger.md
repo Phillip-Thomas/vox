@@ -173,3 +173,166 @@ Remaining defects/deferred work:
 - Full baseline should be re-run now that material vantages are part of baseline/full modes.
 - Shader complexity audit notes are still pending, even though program counts stayed bounded in the perf run.
 - Human/adversarial visual review is still needed before final approval.
+
+## Batch 4: Fauna Shader Cohesion And Animal Quality
+
+Status: `refined gate complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `4`
+
+### Changes
+
+- Moved fauna from unlit `MeshBasicMaterial` to lit `MeshStandardMaterial`, so animals now participate in scene lights, fog, tone mapping, and post grade like trees and grass.
+- Added fauna sun/moon uniforms, rim light, backlit SSS, wing translucency, roughness shaping, and subtle dither.
+- Added species ids through uniforms rather than new program variants, keeping fauna on one shared shader key: `fauna-field-v3`.
+- Added per-kind shader patterning for grazers, woollies, runners, hoppers, and dragonflies.
+- Added palette separation so fauna coats avoid collapsing into grass/canopy hues on verdant worlds.
+- Added fauna-specific atlas vantages: `fauna`, `grazer`, `woolly`, `runner`, `hopper`, and `dragonfly`.
+- Added species-specific fauna camera framing for review shots.
+- Added regression tests for the lit shared fauna material program and readable verdant fauna coats.
+- Added `shader-cohesion-audit.md` with the current shader vocabulary, program families, and remaining shader passes.
+
+### Checks
+
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run atlas:showcase -- --headless=true --label=batch4-fauna-shader-cohesion-accepted`
+- `npm run atlas:perf -- --headless=true --label=batch4-fauna-shader-cohesion-perf`
+
+### Showcase Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T04-44-57-353Z-batch4-fauna-shader-cohesion-accepted/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T04-44-57-353Z-batch4-fauna-shader-cohesion-accepted/defects.md`
+- Cases: `9`
+- Screenshots: `36`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.2ms`
+- Fauna counts in showcase: verdant `141`, arid `51`, frozen `10`, volcanic `61`, oceanic `23`, crystal `7`, metallic `4`, fungal `58`, anomaly `15`.
+
+### Perf Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T04-48-03-549Z-batch4-fauna-shader-cohesion-perf/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T04-48-03-549Z-batch4-fauna-shader-cohesion-perf/defects.md`
+- Cases: `20`
+- Screenshots: `60`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: verdant POTATO `17.4ms`, within calibrated budget.
+- Dense ULTRA reference remains stable: verdant `8,834,849` estimated triangles at `60fps`.
+
+### Gate Status
+
+Refined fauna/shader gate: `pass`
+
+Remaining defects/deferred work:
+
+- Fauna silhouettes are improved materially, but individual species geometry can still be pushed further in later art passes.
+- Voxel, water, flora, surface effects, sky, and post FX still need the same shader-audit treatment.
+- Reality-stage strips still need visual review against story progression.
+
+## Batch 5: Fauna Roaming Continuity
+
+Status: `refined gate complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `5`
+
+### Changes
+
+- Changed fauna rebuilds from fresh respawns into live-agent reconciliation.
+- Preserved live agent identity, route progress, orientation, stride phase, and current world position across distance-bucket rebuilds.
+- Added stable home voxel identity for deterministic placement while allowing mutable current/target voxels for ongoing roaming.
+- Added per-instance `aFaunaStride` and moved ground gait to movement-driven stride phase instead of a short global-time loop.
+- Kept idle breathing, wind motion, tail motion, and dragonfly wings time/wind-driven for ambient life.
+- Upgraded the shared fauna shader key to `fauna-field-v4`.
+- Added a regression test that rebuilds visible fauna with existing agents and verifies no position/progress/gait rewind.
+
+### Checks
+
+- `npm test -- faunaField`
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run atlas:showcase -- --headless=true --label=batch5-fauna-roaming-continuity`
+
+### Showcase Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T13-18-53-044Z-batch5-fauna-roaming-continuity/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T13-18-53-044Z-batch5-fauna-roaming-continuity/defects.md`
+- Cases: `9`
+- Screenshots: `36`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.3ms`
+- Program key observed in atlas: `fauna-field-v4`
+
+### Gate Status
+
+Refined fauna locomotion gate: `pass`
+
+Remaining defects/deferred work:
+
+- The atlas verifies static frames and runtime shader health; it does not yet record a video clip proving subjective long-duration roam feel.
+- Individual species geometry can still be pushed further in later art passes.
+- Voxel, water, flora, surface effects, sky, and post FX still need the same shader-audit treatment.
+
+## Batch 6: Flora And Voxel Shader Cohesion
+
+Status: `refined gate complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `6`
+
+### Changes
+
+- Moved flora from unlit `MeshBasicMaterial` to lit `MeshStandardMaterial`.
+- Added flora species ids, rim/backlight, bloom glow, wind-aware tonal variation, and roughness shaping while keeping one shared shader key: `flora-field-v2`.
+- Passed sun/moon directions into `FloraField` so flora participates in the same day/night lighting vocabulary as trees/fauna.
+- Added voxel sun/moon uniforms and a subtle material-aware rim/atmosphere term to `voxel-pbr-v6`.
+- Kept voxel shader behavior under existing quality-profile and reality-stage gates.
+- Added unit tests for the flora material contract and voxel material contract.
+
+### Checks
+
+- `npm test -- floraField voxelMaterial`
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- `npm run atlas:showcase -- --headless=true --label=batch6-flora-voxel-cohesion`
+- `npm run atlas:perf -- --headless=true --label=batch6-flora-voxel-cohesion-perf`
+
+### Showcase Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T13-35-03-216Z-batch6-flora-voxel-cohesion/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T13-35-03-216Z-batch6-flora-voxel-cohesion/defects.md`
+- Cases: `9`
+- Screenshots: `36`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.4ms`
+- Program keys observed: `flora-field-v2`, `voxel-pbr-v6`, `fauna-field-v4`
+- Flora counts in showcase: verdant `1292`, arid `757`, frozen `278`, volcanic `515`, oceanic `719`, crystal `40`, metallic `50`, fungal `843`, anomaly `157`.
+
+### Perf Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T13-37-32-285Z-batch6-flora-voxel-cohesion-perf/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T13-37-32-285Z-batch6-flora-voxel-cohesion-perf/defects.md`
+- Cases: `20`
+- Screenshots: `60`
+- Console errors: `0`
+- Machine defects: `0`
+- Worst p95: `17.4ms`
+- Dense ULTRA reference stayed stable at `60fps` with `8,834,849` estimated triangles.
+
+### Gate Status
+
+Refined flora/voxel shader gate: `pass`
+
+Remaining defects/deferred work:
+
+- Flora geometry can still get a later silhouette/volume pass; this batch focused on shader cohesion.
+- Water, surface effects, sky, and post FX still need the same current-state audit treatment.
+- Reality-stage strips still need visual review against story progression.

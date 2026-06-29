@@ -5,6 +5,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
+import { getMoonDirection, getSunDirection } from './SkyController';
 import {
   FAUNA_KINDS,
   applyFaunaWindProfileToMaterial,
@@ -69,12 +70,13 @@ function FaunaLayer({
   profile: FaunaProfile;
 }) {
   const geometry = useMemo(() => (density > 0 ? createFaunaGeometry(kind, profile) : null), [density, kind, profile]);
-  const material = useMemo(() => (density > 0 ? createFaunaMaterial() : null), [density]);
+  const material = useMemo(() => (density > 0 ? createFaunaMaterial(kind, profile) : null), [density, kind, profile]);
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const agentsRef = useRef<FaunaAgent[]>([]);
   const windAppliedRef = useRef(false);
   const signatureRef = useRef('');
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
+  const latestTimeRef = useRef(0);
   const [capacity, setCapacity] = useState(0);
 
   const neededCapacity = () => measureWarpMetric(
@@ -90,10 +92,11 @@ function FaunaLayer({
     });
   };
 
-  const rebuild = () => {
+  const rebuild = (time = latestTimeRef.current) => {
     const mesh = meshRef.current;
     if (!mesh || density <= 0) return;
     const quality = getGraphicsQuality();
+    const existingAgents = agentsRef.current;
     const result = measureWarpMetric(
       `fauna:${kind}_rebuild`,
       () => buildFaunaInstances(
@@ -103,7 +106,8 @@ function FaunaLayer({
         quality.faunaMaxDistance,
         playerPosition ?? null,
         terrainSeed,
-        profile
+        profile,
+        { existingAgents, time }
       ),
       result => ({ count: result.count, voxelCount: result.voxelCount, capacity: mesh.instanceMatrix.count })
     );
@@ -137,12 +141,13 @@ function FaunaLayer({
   useFrame(({ clock }, delta) => {
     const mesh = meshRef.current;
     if (!material || density <= 0) return;
+    latestTimeRef.current = clock.elapsedTime;
 
     if (!windAppliedRef.current && material.userData.shader) {
       applyFaunaWindProfileToMaterial(profile.wind, material);
       windAppliedRef.current = true;
     }
-    updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());
+    updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
     if (mesh && agentsRef.current.length > 0) {
       updateFaunaAgents(mesh, agentsRef.current, clock.elapsedTime, delta, terrainSeed, profile);
     }
@@ -154,12 +159,12 @@ function FaunaLayer({
         growCapacity(needed);
       } else if (mesh) {
         signatureRef.current = sig;
-        rebuild();
+        rebuild(clock.elapsedTime);
         if (playerPosition) lastBucketPos.current.copy(playerPosition);
       }
     } else if (mesh && playerPosition && lastBucketPos.current.distanceToSquared(playerPosition) > 144) {
       lastBucketPos.current.copy(playerPosition);
-      rebuild();
+      rebuild(clock.elapsedTime);
     }
   });
 

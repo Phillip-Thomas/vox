@@ -9,10 +9,15 @@ import {
   chooseFloraKindForVoxel,
   countFloraVoxels,
   createFloraGeometry,
+  createFloraMaterial,
+  floraKindId,
   isFloraEligibleVoxel,
   shouldPlaceFloraVoxel,
+  updateFloraMaterial,
   type FloraProfile
 } from './floraField.ts';
+import { QUALITY_PROFILES } from '../config/graphicsSettings.ts';
+import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem.ts';
 
 const grass = new THREE.Color(0x7cb342);
 const dirt = new THREE.Color(0x8b4513);
@@ -59,6 +64,51 @@ describe('floraField', () => {
       expect(geometry.attributes.aFloraFlex.count).toBe(geometry.attributes.position.count);
       geometry.dispose();
     }
+  });
+
+  it('uses one lit flora material program with species driven by uniforms', () => {
+    const profile = buildFloraProfile(12345);
+    const keys = new Set<string>();
+    for (const kind of FLORA_KINDS) {
+      const material = createFloraMaterial(kind, profile);
+      expect(material).toBeInstanceOf(THREE.MeshStandardMaterial);
+      expect(material.vertexColors).toBe(true);
+      expect(material.roughness).toBeGreaterThan(0.7);
+      expect(material.customProgramCacheKey()).toBe('flora-field-v2');
+      expect(floraKindId(kind)).toBeGreaterThanOrEqual(0);
+      keys.add(material.customProgramCacheKey());
+      material.dispose();
+    }
+    expect(keys.size).toBe(1);
+  });
+
+  it('updates flora reality and sun/moon uniforms when the shader is live', () => {
+    const material = createFloraMaterial('flower', buildFloraProfile(12345));
+    const uniforms = {
+      uTime: { value: 0 },
+      uFloraVisibility: { value: 1 },
+      uFloraMotion: { value: 1 },
+      uFloraChroma: { value: 1 },
+      uSunDir: { value: new THREE.Vector3() },
+      uMoonDir: { value: new THREE.Vector3() }
+    };
+    material.userData.shader = { uniforms };
+
+    updateFloraMaterial(
+      material,
+      8,
+      QUALITY_PROFILES.HIGH,
+      VOXEL_REALITY_PRESETS.material,
+      new THREE.Vector3(0, 2, 0),
+      new THREE.Vector3(0, -3, 0)
+    );
+
+    expect(uniforms.uTime.value).toBe(8);
+    expect(uniforms.uFloraMotion.value).toBeGreaterThan(0);
+    expect(uniforms.uFloraVisibility.value).toBeGreaterThan(0);
+    expect(uniforms.uSunDir.value.length()).toBeCloseTo(1);
+    expect(uniforms.uMoonDir.value.length()).toBeCloseTo(1);
+    material.dispose();
   });
 
   it('places deterministic flora and builds matching instances for the selected kind', () => {

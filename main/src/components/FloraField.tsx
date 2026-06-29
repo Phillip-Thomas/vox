@@ -5,6 +5,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
+import { getMoonDirection, getSunDirection } from './SkyController';
 import {
   FLORA_KINDS,
   applyFloraWindProfileToMaterial,
@@ -66,7 +67,7 @@ function FloraLayer({
   profile: FloraProfile;
 }) {
   const geometry = useMemo(() => (density > 0 ? createFloraGeometry(kind, profile) : null), [density, kind, profile]);
-  const material = useMemo(() => (density > 0 ? createFloraMaterial() : null), [density]);
+  const material = useMemo(() => (density > 0 ? createFloraMaterial(kind, profile) : null), [density, kind, profile]);
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const windAppliedRef = useRef(false);
   const signatureRef = useRef('');
@@ -137,7 +138,7 @@ function FloraLayer({
       applyFloraWindProfileToMaterial(profile.wind, material);
       windAppliedRef.current = true;
     }
-    updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());
+    updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {

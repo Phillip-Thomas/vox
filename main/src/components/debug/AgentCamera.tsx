@@ -156,6 +156,12 @@ const VANTAGES = [
   'coast',
   'horizon',
   'tree',
+  'fauna',
+  'grazer',
+  'woolly',
+  'runner',
+  'hopper',
+  'dragonfly',
   'surfaceEffects',
   'material',
   'hazard',
@@ -192,6 +198,16 @@ function instancedByKey(scene: THREE.Scene, re: RegExp): THREE.InstancedMesh | n
     if (materialList(mesh.material).some(material => re.test(materialKey(material)))) {
       found = mesh;
     }
+  });
+  return found;
+}
+
+function instancedByName(scene: THREE.Scene, re: RegExp): THREE.InstancedMesh | null {
+  let found: THREE.InstancedMesh | null = null;
+  scene.traverse(o => {
+    if (found || !(o as THREE.InstancedMesh).isInstancedMesh) return;
+    const mesh = o as THREE.InstancedMesh;
+    if (mesh.count > 0 && re.test(mesh.name)) found = mesh;
   });
   return found;
 }
@@ -531,6 +547,29 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
           return name;
         }
         return overhead(name + ':no-trees(overhead)');
+      }
+      if (name === 'fauna' || name === 'grazer' || name === 'woolly' || name === 'runner' || name === 'hopper' || name === 'dragonfly') {
+        const mesh =
+          name === 'fauna'
+            ? instancedByName(scene, /^fauna-(grazer|woolly|dragonfly|runner|hopper)$/)
+            : instancedByName(scene, new RegExp(`^fauna-${name}$`));
+        const frame =
+          name === 'grazer' || name === 'fauna'
+            ? { back: 4.4, lift: 1.45, lookLift: 0.46 }
+            : name === 'woolly'
+              ? { back: 3.15, lift: 1.05, lookLift: 0.34 }
+              : name === 'dragonfly'
+                ? { back: 2.05, lift: 0.7, lookLift: 0.14 }
+                : { back: 3.25, lift: 0.98, lookLift: 0.3 };
+        const framed = frameInstance(
+          mesh,
+          name,
+          frame.back,
+          frame.lift,
+          frame.lookLift
+        );
+        if (framed) return framed;
+        return overhead(`${name}:no-fauna(overhead)`);
       }
       if (name === 'coast') {
         const water = instancedByKey(scene, /water-blocks/);

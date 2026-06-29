@@ -414,6 +414,21 @@ export function createFloraGeometry(kind: FloraKind, profile = buildFloraProfile
   }
 }
 
+export function floraKindId(kind: FloraKind): number {
+  switch (kind) {
+    case 'cactus':
+      return 0;
+    case 'fan':
+      return 1;
+    case 'flower':
+      return 2;
+    case 'seedhead':
+      return 3;
+    case 'shrub':
+      return 4;
+  }
+}
+
 const FLORA_NOISE = /* glsl */ `
   float flHash21(vec2 p) {
     p = fract(p * vec2(123.34, 456.21));
@@ -432,15 +447,20 @@ const FLORA_NOISE = /* glsl */ `
   }
 `;
 
-export function createFloraMaterial(): THREE.MeshBasicMaterial {
-  const material = new THREE.MeshBasicMaterial({
+export function createFloraMaterial(
+  kind: FloraKind = 'flower',
+  profile = buildFloraProfile(0)
+): THREE.MeshStandardMaterial {
+  const material = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     vertexColors: true,
     side: THREE.DoubleSide,
     transparent: true,
     alphaTest: 0.025,
     depthWrite: true,
-    depthTest: true
+    depthTest: true,
+    roughness: 0.78,
+    metalness: 0.0
   });
 
   material.onBeforeCompile = shader => {
@@ -448,6 +468,11 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
     shader.uniforms.uFloraVisibility = { value: 1 };
     shader.uniforms.uFloraMotion = { value: 1 };
     shader.uniforms.uFloraChroma = { value: 1 };
+    shader.uniforms.uFloraKind = { value: floraKindId(kind) };
+    shader.uniforms.uFloraBloomColor = { value: profile.bloomColor.clone() };
+    shader.uniforms.uFloraRimColor = { value: profile.greenTip.clone().lerp(profile.bloomColor, kind === 'flower' ? 0.34 : 0.12) };
+    shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
+    shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     shader.uniforms.uWindStrength = { value: 1 };
     shader.uniforms.uWindGustStrength = { value: 1 };
     shader.uniforms.uWindGustScale = { value: 0.04 };
@@ -473,6 +498,10 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
         uniform vec2 uWindOffset;
         varying float vFloraFlex;
         varying float vFloraGust;
+        varying float vFloraSeed;
+        varying vec3 vFloraLocalPos;
+        varying vec3 vFloraWorldPos;
+        varying vec3 vFloraWorldNormal;
         ${FLORA_NOISE}`
       )
       .replace(
@@ -487,6 +516,7 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
           dot(instWorld.xz + uWindOffset, windSide)
         );
         float seed = flHash21(instWorld.xz + instWorld.y + uWindOffset);
+        vFloraSeed = seed;
         vec2 gustUv = windUv * max(uWindGustScale, 0.001)
           + vec2(uTime * uWindGustSpeed, sin(uTime * uWindGustSpeed * 0.43) * 0.18);
         float gust = smoothstep(0.2, 0.9, flNoise(gustUv + seed * 6.0));
@@ -499,7 +529,10 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
           * flex * (0.04 + uWindTurbulence * 0.08) * uFloraMotion;
         transformed.x += (windDir.x * drive + windSide.x * cross) * 0.14 * uWindStrength;
         transformed.z += (windDir.y * drive + windSide.y * cross) * 0.14 * uWindStrength;
-        transformed.y += gust * flex * 0.012 * uWindGustStrength * uFloraMotion;`
+        transformed.y += gust * flex * 0.012 * uWindGustStrength * uFloraMotion;
+        vFloraLocalPos = transformed;
+        vFloraWorldPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+        vFloraWorldNormal = normalize((modelMatrix * instanceMatrix * vec4(objectNormal, 0.0)).xyz);`
       );
 
     shader.fragmentShader = shader.fragmentShader
@@ -508,15 +541,71 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
         `#include <common>
         uniform float uFloraVisibility;
         uniform float uFloraChroma;
+        uniform float uFloraKind;
+        uniform vec3 uFloraBloomColor;
+        uniform vec3 uFloraRimColor;
+        uniform vec3 uSunDir;
+        uniform vec3 uMoonDir;
         varying float vFloraFlex;
-        varying float vFloraGust;`
+        varying float vFloraGust;
+        varying float vFloraSeed;
+        varying vec3 vFloraLocalPos;
+        varying vec3 vFloraWorldPos;
+        varying vec3 vFloraWorldNormal;
+        vec3 vFloraGlowTerm;
+        ${FLORA_NOISE}`
       )
       .replace(
         '#include <color_fragment>',
         `#include <color_fragment>
         float luma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
         diffuseColor.rgb = mix(vec3(luma) * 0.82, diffuseColor.rgb, clamp(uFloraChroma, 0.0, 1.0));
-        diffuseColor.rgb *= 0.88 + vFloraFlex * 0.18 + vFloraGust * 0.08;`
+        vec3 fp = vFloraLocalPos;
+        float heightShade = smoothstep(0.0, 0.95, fp.y);
+        float petalOrTip = smoothstep(0.48, 0.96, vFloraFlex);
+        float speckle = smoothstep(0.76, 0.98, flNoise(fp.xz * 12.0 + vec2(vFloraSeed * 9.0, uFloraKind * 2.4)));
+        float rib = smoothstep(0.82, 1.0, abs(sin((fp.x + fp.z * 0.7 + vFloraSeed) * 16.0)));
+        float kindCactus = 1.0 - smoothstep(0.35, 0.65, abs(uFloraKind - 0.0));
+        float kindFan = 1.0 - smoothstep(0.35, 0.65, abs(uFloraKind - 1.0));
+        float kindFlower = 1.0 - smoothstep(0.35, 0.65, abs(uFloraKind - 2.0));
+        float kindSeed = 1.0 - smoothstep(0.35, 0.65, abs(uFloraKind - 3.0));
+        float kindShrub = 1.0 - smoothstep(0.35, 0.65, abs(uFloraKind - 4.0));
+        diffuseColor.rgb *= 0.82 + heightShade * 0.14 + vFloraFlex * 0.11 + vFloraGust * 0.08;
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.82 + rib * 0.24), kindFan * petalOrTip * 0.3);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.76 + speckle * 0.36), kindCactus * 0.26);
+        diffuseColor.rgb = mix(diffuseColor.rgb, mix(diffuseColor.rgb, uFloraBloomColor, petalOrTip * (0.18 + speckle * 0.22)), kindFlower * 0.42);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.9 + rib * 0.22), kindSeed * 0.28);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.9 + speckle * 0.18), kindShrub * 0.18);
+        diffuseColor.rgb += uFloraRimColor * petalOrTip * vFloraGust * 0.035;`
+      )
+      .replace(
+        '#include <normal_fragment_begin>',
+        `#include <normal_fragment_begin>
+        vFloraGlowTerm = vec3(0.0);
+        {
+          vec3 V = normalize(cameraPosition - vFloraWorldPos);
+          vec3 Nw = normalize(vFloraWorldNormal);
+          float daylight = smoothstep(-0.1, 0.25, uSunDir.y);
+          float night = smoothstep(-0.05, 0.2, uMoonDir.y) * (1.0 - daylight);
+          float rim = pow(clamp(1.0 - max(dot(Nw, V), 0.0), 0.0, 1.0), 2.2);
+          float wrap = clamp((dot(Nw, uSunDir) + 0.48) / 1.48, 0.0, 1.0);
+          float backlit = pow(clamp(dot(V, -uSunDir), 0.0, 1.0), 2.8);
+          float moonBack = pow(clamp(dot(V, -uMoonDir), 0.0, 1.0), 2.9);
+          diffuseColor.rgb = mix(diffuseColor.rgb * 0.86, diffuseColor.rgb, 0.55 + wrap * 0.45);
+          vFloraGlowTerm += uFloraRimColor * rim * (0.075 + 0.13 * daylight) * (0.35 + vFloraFlex * 0.65);
+          vFloraGlowTerm += uFloraBloomColor * backlit * daylight * (0.045 + vFloraFlex * 0.08);
+          vFloraGlowTerm += uFloraRimColor * moonBack * night * 0.035;
+        }`
+      )
+      .replace(
+        '#include <roughnessmap_fragment>',
+        `#include <roughnessmap_fragment>
+        roughnessFactor = clamp(mix(roughnessFactor, 0.58, vFloraFlex * 0.22), 0.0, 1.0);`
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        totalEmissiveRadiance += vFloraGlowTerm;`
       )
       .replace(
         '#include <alphamap_fragment>',
@@ -525,7 +614,7 @@ export function createFloraMaterial(): THREE.MeshBasicMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'flora-field-v1';
+  material.customProgramCacheKey = () => 'flora-field-v2';
   return material;
 }
 
@@ -635,7 +724,9 @@ export function updateFloraMaterial(
   material: THREE.Material,
   time: number,
   quality: GraphicsQuality,
-  reality: VoxelRealityEffects
+  reality: VoxelRealityEffects,
+  sunDir?: THREE.Vector3,
+  moonDir?: THREE.Vector3
 ): void {
   const u = (material.userData.shader as
     | { uniforms?: Record<string, { value: unknown }> }
@@ -652,6 +743,12 @@ export function updateFloraMaterial(
   }
   if (u.uFloraChroma) {
     (u.uFloraChroma.value as number) = Math.min(1, Math.max(0, reality.chroma));
+  }
+  if (sunDir && u.uSunDir) {
+    (u.uSunDir.value as THREE.Vector3).copy(sunDir).normalize();
+  }
+  if (moonDir && u.uMoonDir) {
+    (u.uMoonDir.value as THREE.Vector3).copy(moonDir).normalize();
   }
 }
 

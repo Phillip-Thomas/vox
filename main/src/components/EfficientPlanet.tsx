@@ -30,6 +30,7 @@ import {
   COLLISION_STREAM_RANGE,
   voxelCoordToWorld
 } from '../utils/cubeGravityConstants';
+import { getMoonDirection, getSunDirection } from './SkyController';
 
 export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
@@ -147,7 +148,7 @@ export default function EfficientPlanet({
       applyVoxelWindProfileToMaterial(windProfile, voxelMaterial);
       terrainTintAppliedRef.current = true;
     }
-    updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());
+    updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
   });
 
   useEffect(() => {

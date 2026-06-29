@@ -40,8 +40,17 @@ export interface FaunaBuildResult {
   agents: FaunaAgent[];
 }
 
+export interface FaunaBuildOptions {
+  existingAgents?: FaunaAgent[];
+  time?: number;
+}
+
 export interface FaunaAgent {
   kind: FaunaKind;
+  terrainSeed: number;
+  homeX: number;
+  homeY: number;
+  homeZ: number;
   x: number;
   y: number;
   z: number;
@@ -58,6 +67,7 @@ export interface FaunaAgent {
   offsetU: number;
   offsetV: number;
   phase: number;
+  stridePhase: number;
   stepSalt: number;
   stepCount: number;
   orientation: THREE.Quaternion;
@@ -89,6 +99,7 @@ const _moveForward = new THREE.Vector3();
 const _moveSide = new THREE.Vector3();
 const _moveUp = new THREE.Vector3();
 const _routeUp = new THREE.Vector3();
+const _agentCullPos = new THREE.Vector3();
 const _desiredQuat = new THREE.Quaternion();
 const _tiltQuat = new THREE.Quaternion();
 const _finalQuat = new THREE.Quaternion();
@@ -112,6 +123,20 @@ function roleColor(role: PaletteRoleColor): THREE.Color {
     .convertSRGBToLinear();
 }
 
+function hueDistance(a: number, b: number): number {
+  const d = Math.abs(((a - b + 0.5) % 1) - 0.5);
+  return Math.min(d, 1 - d);
+}
+
+function separationFromVegetation(hue: number, art: PlanetArtDirection): number {
+  return Math.min(
+    hueDistance(hue, art.palette.vegetationBase.h),
+    hueDistance(hue, art.palette.vegetationTip.h),
+    hueDistance(hue, art.palette.canopyBase.h),
+    hueDistance(hue, art.palette.canopyTip.h)
+  );
+}
+
 export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
@@ -122,9 +147,28 @@ export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
   const coatHue = (hue + hueJitter + 0.035 + aridity * 0.035 + 1) % 1;
   const sat = clamp(saturation * 0.5 + lushness * 0.12 - aridity * 0.08, 0.18, 0.68);
 
-  const coatBase = roleColor(art.palette.faunaCoat);
-  const coatWarm = hsl(art.palette.faunaCoat.h + 0.06, clamp(art.palette.faunaCoat.s + 0.05, 0, 0.72), 0.5 + temperature * 0.05);
-  const coatCool = hsl(art.palette.faunaCoat.h - 0.08, clamp(art.palette.faunaCoat.s + 0.03, 0, 0.72), 0.34 + lushness * 0.04);
+  let readableCoatHue = art.palette.faunaCoat.h;
+  const nearVegetation = separationFromVegetation(readableCoatHue, art) < 0.12;
+  if (nearVegetation) {
+    const candidates = [
+      readableCoatHue,
+      (readableCoatHue - 0.22 + 1) % 1,
+      (readableCoatHue + 0.24) % 1,
+      (readableCoatHue + 0.34) % 1
+    ];
+    readableCoatHue = candidates.reduce((best, candidate) =>
+      separationFromVegetation(candidate, art) > separationFromVegetation(best, art) ? candidate : best
+    );
+  }
+  if (hueDistance(readableCoatHue, art.palette.terrainPrimary.h) < 0.06) {
+    readableCoatHue = (readableCoatHue + 0.12 + seededUnit(s, 452) * 0.08) % 1;
+  }
+  const readableCoatSat = clamp(art.palette.faunaCoat.s * (biome.alien ? 0.9 : 0.58) + 0.08, 0.12, biome.alien ? 0.62 : 0.46);
+  const readableCoatLight = clamp(art.palette.faunaCoat.l + 0.04 + lushness * 0.04 - aridity * 0.03, 0.34, 0.58);
+
+  const coatBase = hsl(readableCoatHue, readableCoatSat, readableCoatLight);
+  const coatWarm = hsl(readableCoatHue + 0.055, clamp(readableCoatSat + 0.08, 0, 0.72), readableCoatLight + 0.08 + temperature * 0.03);
+  const coatCool = hsl(readableCoatHue - 0.08, clamp(readableCoatSat + 0.03, 0, 0.68), readableCoatLight - 0.12 + lushness * 0.035);
   const woolColor = hsl(coatHue + 0.035, clamp(sat * 0.28, 0.08, 0.36), 0.78 - aridity * 0.12);
   const darkColor = hsl(coatHue - 0.04, clamp(sat * 0.55, 0.12, 0.46), 0.16 + lushness * 0.03);
   const accentColor = biome.alien
@@ -581,15 +625,40 @@ export function createFaunaGeometry(kind: FaunaKind, profile = buildFaunaProfile
   return createGrazerGeometry(profile);
 }
 
+export function faunaKindId(kind: FaunaKind): number {
+  switch (kind) {
+    case 'grazer':
+      return 0;
+    case 'woolly':
+      return 1;
+    case 'runner':
+      return 2;
+    case 'hopper':
+      return 3;
+    case 'dragonfly':
+      return 4;
+  }
+}
+
 export function prepareFaunaInstanceAttributes(
   geometry: THREE.BufferGeometry,
   capacity: number
 ): THREE.InstancedBufferAttribute {
-  const existing = geometry.getAttribute('aFaunaSeed') as THREE.InstancedBufferAttribute | undefined;
+  const attr = ensureFaunaScalarAttribute(geometry, 'aFaunaSeed', capacity);
+  ensureFaunaScalarAttribute(geometry, 'aFaunaStride', capacity);
+  return attr;
+}
+
+function ensureFaunaScalarAttribute(
+  geometry: THREE.BufferGeometry,
+  name: string,
+  capacity: number
+): THREE.InstancedBufferAttribute {
+  const existing = geometry.getAttribute(name) as THREE.InstancedBufferAttribute | undefined;
   if (existing && existing.count >= capacity) return existing;
   const attr = new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1, capacity)), 1);
   attr.setUsage(THREE.DynamicDrawUsage);
-  geometry.setAttribute('aFaunaSeed', attr);
+  geometry.setAttribute(name, attr);
   return attr;
 }
 
@@ -611,15 +680,20 @@ const FAUNA_NOISE = /* glsl */ `
   }
 `;
 
-export function createFaunaMaterial(): THREE.MeshBasicMaterial {
-  const material = new THREE.MeshBasicMaterial({
+export function createFaunaMaterial(
+  kind: FaunaKind = 'grazer',
+  profile = buildFaunaProfile(0)
+): THREE.MeshStandardMaterial {
+  const material = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     vertexColors: true,
     side: THREE.DoubleSide,
     transparent: true,
     alphaTest: 0.025,
     depthWrite: true,
-    depthTest: true
+    depthTest: true,
+    roughness: 0.82,
+    metalness: 0.0
   });
 
   material.onBeforeCompile = shader => {
@@ -627,6 +701,12 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
     shader.uniforms.uFaunaVisibility = { value: 1 };
     shader.uniforms.uFaunaMotion = { value: 1 };
     shader.uniforms.uFaunaChroma = { value: 1 };
+    shader.uniforms.uFaunaKind = { value: faunaKindId(kind) };
+    shader.uniforms.uFaunaSSSColor = { value: profile.coatWarm.clone().lerp(profile.wingColor, kind === 'dragonfly' ? 0.55 : 0.12) };
+    shader.uniforms.uFaunaRimColor = { value: profile.accentColor.clone().lerp(profile.wingColor, kind === 'dragonfly' ? 0.55 : 0.18) };
+    shader.uniforms.uFaunaWingColor = { value: profile.wingColor.clone() };
+    shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
+    shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     shader.uniforms.uWindStrength = { value: 1 };
     shader.uniforms.uWindGustStrength = { value: 1 };
     shader.uniforms.uWindGustScale = { value: 0.04 };
@@ -643,6 +723,7 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
         attribute float aFaunaPart;
         attribute float aFaunaFlex;
         attribute float aFaunaSeed;
+        attribute float aFaunaStride;
         uniform float uTime;
         uniform float uFaunaMotion;
         uniform float uWindStrength;
@@ -656,6 +737,10 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
         varying float vFaunaFlex;
         varying float vFaunaGust;
         varying float vFaunaShade;
+        varying float vFaunaSeed;
+        varying vec3 vFaunaLocalPos;
+        varying vec3 vFaunaWorldPos;
+        varying vec3 vFaunaWorldNormal;
         ${FAUNA_NOISE}`
       )
       .replace(
@@ -671,16 +756,19 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
           dot(instWorld.xz + uWindOffset, windSide)
         );
         float seed = fract(aFaunaSeed);
+        vFaunaSeed = seed;
         vec2 gustUv = windUv * max(uWindGustScale, 0.001)
           + vec2(uTime * uWindGustSpeed, sin(uTime * uWindGustSpeed * 0.37) * 0.18);
         float gust = smoothstep(0.18, 0.9, fnNoise(gustUv + seed * 8.0));
         vFaunaGust = gust;
         float phase = seed * 6.2831853;
-        float stepWave = sin(uTime * (3.3 + seed * 1.1) + phase);
-        float trotWave = sin(uTime * (5.2 + seed * 1.3) + phase);
+        float stridePhase = aFaunaStride * 6.2831853 + phase * 0.23;
+        float stepWave = sin(stridePhase);
+        float trotWave = sin(stridePhase * (1.0 + seed * 0.035));
+        float breathWave = sin(uTime * (0.74 + seed * 0.18) + phase);
         float side = sign(position.z + 0.001);
         float motion = uFaunaMotion;
-        float bodyBob = abs(stepWave) * 0.018 * motion;
+        float bodyBob = (abs(stepWave) * 0.016 + breathWave * 0.006) * motion;
         if (aFaunaPart < 0.5) {
           transformed.y += bodyBob;
         } else if (aFaunaPart < 1.5) {
@@ -710,7 +798,10 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
         float windDrive = (windWave * (0.2 + gust * uWindGustStrength) + uWindTurbulence * 0.05) * windFlex * motion;
         transformed.x += windDir.x * windDrive * 0.045 * uWindStrength;
         transformed.z += windDir.y * windDrive * 0.045 * uWindStrength;
-        vFaunaShade = clamp(position.y * 0.72 + 0.35, 0.38, 1.2);`
+        vFaunaShade = clamp(position.y * 0.72 + 0.35, 0.38, 1.2);
+        vFaunaLocalPos = transformed;
+        vFaunaWorldPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+        vFaunaWorldNormal = normalize((modelMatrix * instanceMatrix * vec4(objectNormal, 0.0)).xyz);`
       );
 
     shader.fragmentShader = shader.fragmentShader
@@ -719,30 +810,105 @@ export function createFaunaMaterial(): THREE.MeshBasicMaterial {
         `#include <common>
         uniform float uFaunaVisibility;
         uniform float uFaunaChroma;
+        uniform float uFaunaKind;
+        uniform vec3 uFaunaSSSColor;
+        uniform vec3 uFaunaRimColor;
+        uniform vec3 uFaunaWingColor;
+        uniform vec3 uSunDir;
+        uniform vec3 uMoonDir;
         varying float vFaunaPart;
         varying float vFaunaFlex;
         varying float vFaunaGust;
-        varying float vFaunaShade;`
+        varying float vFaunaShade;
+        varying float vFaunaSeed;
+        varying vec3 vFaunaLocalPos;
+        varying vec3 vFaunaWorldPos;
+        varying vec3 vFaunaWorldNormal;
+        vec3 vFaunaGlowTerm;
+        ${FAUNA_NOISE}`
       )
       .replace(
         '#include <color_fragment>',
         `#include <color_fragment>
         float luma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
         diffuseColor.rgb = mix(vec3(luma) * 0.84, diffuseColor.rgb, clamp(uFaunaChroma, 0.0, 1.0));
-        diffuseColor.rgb *= 0.78 + vFaunaShade * 0.22 + vFaunaGust * 0.06 + vFaunaFlex * 0.04;
+        vec3 p = vFaunaLocalPos;
+        float bodyPart = 1.0 - smoothstep(1.35, 1.65, vFaunaPart);
+        float headPart = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaPart - 1.0));
+        float legPart = smoothstep(1.5, 2.2, vFaunaPart) * (1.0 - smoothstep(3.35, 3.6, vFaunaPart));
+        float accentPart = smoothstep(3.45, 4.2, vFaunaPart) * (1.0 - smoothstep(4.45, 4.7, vFaunaPart));
         float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
-        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb + vec3(0.08, 0.13, 0.14), wingPart * (0.45 + vFaunaFlex * 0.25));
-        diffuseColor.rgb += vec3(0.025, 0.02, 0.012) * smoothstep(3.5, 4.5, vFaunaPart) * (1.0 - wingPart);`
+
+        float dorsal = smoothstep(-0.08, 0.2, p.y) * (1.0 - smoothstep(0.10, 0.34, abs(p.z)));
+        float underside = smoothstep(0.30, 0.02, p.y);
+        float spots = smoothstep(0.68, 0.96, fnNoise(p.xz * 9.0 + vec2(vFaunaSeed * 11.0, uFaunaKind * 3.7)));
+        float bands = smoothstep(0.88, 1.0, abs(sin((p.x + vFaunaSeed) * 18.0)));
+        float wool = fnNoise(p.xz * 15.0 + vec2(p.y * 2.0 + vFaunaSeed * 4.0, uFaunaKind));
+        float kindGrazer = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 0.0));
+        float kindWoolly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 1.0));
+        float kindRunner = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 2.0));
+        float kindHopper = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 3.0));
+        float kindDragonfly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 4.0));
+
+        diffuseColor.rgb *= 0.76 + vFaunaShade * 0.24 + vFaunaGust * 0.055 + vFaunaFlex * 0.035;
+        diffuseColor.rgb *= 1.0 - underside * bodyPart * 0.18;
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.68, 0.72, 0.76), dorsal * bodyPart * kindGrazer * 0.34);
+        diffuseColor.rgb *= 0.9 + wool * bodyPart * kindWoolly * 0.22;
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.72 + bands * 0.42), bodyPart * kindRunner * 0.26);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.78 + spots * 0.38), bodyPart * kindHopper * 0.32);
+        diffuseColor.rgb = mix(diffuseColor.rgb, mix(diffuseColor.rgb, uFaunaRimColor, bands * 0.26), bodyPart * kindDragonfly);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.62, legPart * 0.38);
+        diffuseColor.rgb += uFaunaRimColor * accentPart * 0.045;
+        diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFaunaWingColor, uFaunaWingColor + vec3(0.16, 0.2, 0.22), vFaunaFlex), wingPart * (0.62 + vFaunaGust * 0.16));
+        diffuseColor.rgb += vec3(0.025, 0.02, 0.012) * accentPart * (1.0 - wingPart);
+        diffuseColor.rgb += vec3((fnNoise(gl_FragCoord.xy * 0.55 + vec2(vFaunaSeed)) - 0.5) * (1.0 / 255.0));`
+      )
+      .replace(
+        '#include <normal_fragment_begin>',
+        `#include <normal_fragment_begin>
+        vFaunaGlowTerm = vec3(0.0);
+        {
+          vec3 V = normalize(cameraPosition - vFaunaWorldPos);
+          vec3 Nw = normalize(vFaunaWorldNormal);
+          float daylight = smoothstep(-0.1, 0.25, uSunDir.y);
+          float night = smoothstep(-0.05, 0.2, uMoonDir.y) * (1.0 - daylight);
+          float rim = pow(clamp(1.0 - max(dot(Nw, V), 0.0), 0.0, 1.0), 2.25);
+          float wrap = clamp((dot(Nw, uSunDir) + 0.42) / 1.42, 0.0, 1.0);
+          float backlit = pow(clamp(dot(V, -uSunDir), 0.0, 1.0), 2.6);
+          float moonBack = pow(clamp(dot(V, -uMoonDir), 0.0, 1.0), 2.8);
+          float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
+          float bodyMass = 1.0 - wingPart;
+          diffuseColor.rgb = mix(diffuseColor.rgb * 0.82, diffuseColor.rgb, 0.48 + wrap * 0.52);
+          vFaunaGlowTerm += uFaunaRimColor * rim * (0.08 + 0.16 * daylight) * bodyMass;
+          vFaunaGlowTerm += uFaunaSSSColor * backlit * wrap * daylight * (0.12 + vFaunaFlex * 0.16) * bodyMass;
+          vFaunaGlowTerm += uFaunaSSSColor * moonBack * night * 0.045 * bodyMass;
+          vFaunaGlowTerm += uFaunaWingColor * rim * wingPart * (0.16 + vFaunaFlex * 0.2);
+        }`
+      )
+      .replace(
+        '#include <roughnessmap_fragment>',
+        `#include <roughnessmap_fragment>
+        {
+          float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
+          float legPart = smoothstep(1.5, 2.2, vFaunaPart) * (1.0 - smoothstep(3.35, 3.6, vFaunaPart));
+          roughnessFactor = mix(roughnessFactor, 0.34, wingPart * 0.55);
+          roughnessFactor = clamp(roughnessFactor + legPart * 0.08, 0.0, 1.0);
+        }`
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        totalEmissiveRadiance += vFaunaGlowTerm;`
       )
       .replace(
         '#include <alphamap_fragment>',
         `#include <alphamap_fragment>
         diffuseColor.a *= clamp(uFaunaVisibility, 0.0, 1.0);
-        diffuseColor.a *= mix(1.0, 0.5 + vFaunaFlex * 0.18, smoothstep(4.5, 5.5, vFaunaPart));`
+        diffuseColor.a *= mix(1.0, 0.34 + vFaunaFlex * 0.22 + vFaunaGust * 0.08, smoothstep(4.5, 5.5, vFaunaPart));`
       );
   };
 
-  material.customProgramCacheKey = () => 'fauna-field-v2';
+  material.customProgramCacheKey = () => 'fauna-field-v4';
   return material;
 }
 
@@ -774,6 +940,14 @@ function faunaSpeedForKind(kind: FaunaKind, profile: FaunaProfile, jitter: numbe
   return Math.max(0.18, base + climate + (jitter - 0.5) * 0.16);
 }
 
+function faunaStrideRateForKind(kind: FaunaKind): number {
+  if (kind === 'runner') return 1.45;
+  if (kind === 'hopper') return 0.82;
+  if (kind === 'dragonfly') return 2.2;
+  if (kind === 'woolly') return 0.92;
+  return 1.06;
+}
+
 export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, progress: number): number {
   const amount = Math.abs(levelDelta);
   if (amount < 0.001) return 0;
@@ -784,6 +958,14 @@ export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, pr
         kind === 'runner' ? 0.68 :
           0.78;
   return (base + Math.min(2, amount) * VOXEL_SCALE * 0.18) * Math.sin(Math.PI * t);
+}
+
+function faunaAgentKey(kind: FaunaKind, x: number, y: number, z: number): string {
+  return `${kind}:${x}:${y}:${z}`;
+}
+
+function faunaHomeKey(agent: FaunaAgent): string {
+  return faunaAgentKey(agent.kind, agent.homeX, agent.homeY, agent.homeZ);
 }
 
 function computeFaunaAnchor(
@@ -899,6 +1081,10 @@ function createFaunaAgent(
   const directionIndex = Math.floor(seededVoxelUnit(x, y, z, FAUNA_YAW_SALT, terrainSeed) * 4);
   const agent: FaunaAgent = {
     kind,
+    terrainSeed,
+    homeX: x,
+    homeY: y,
+    homeZ: z,
     x,
     y,
     z,
@@ -915,6 +1101,7 @@ function createFaunaAgent(
     offsetU,
     offsetV,
     phase: seededVoxelUnit(x, y, z, FAUNA_PICK_SALT + 47, terrainSeed) * Math.PI * 2,
+    stridePhase: seededVoxelUnit(x, y, z, FAUNA_PICK_SALT + 61, terrainSeed),
     stepSalt: FAUNA_PICK_SALT + Math.floor(seededVoxelUnit(x, y, z, FAUNA_SCALE_SALT + 53, terrainSeed) * 4096),
     stepCount: 0,
     orientation: new THREE.Quaternion()
@@ -928,6 +1115,39 @@ function createFaunaAgent(
 function agentLevelDelta(agent: FaunaAgent): number {
   const [ux, uy, uz] = surfaceUpCoordStep(agent.x, agent.y, agent.z);
   return (agent.toX - agent.x) * ux + (agent.toY - agent.y) * uy + (agent.toZ - agent.z) * uz;
+}
+
+function computeFaunaAgentCullPosition(agent: FaunaAgent, target: THREE.Vector3): THREE.Vector3 {
+  const t = clamp(agent.progress, 0, 1);
+  const eased = t * t * (3 - 2 * t);
+  return target.copy(agent.from).lerp(agent.to, eased);
+}
+
+function isFaunaAgentVisibleInRange(
+  agent: FaunaAgent,
+  maxDistance: number,
+  playerWorld: THREE.Vector3 | null
+): boolean {
+  if (maxDistance <= 0 || !playerWorld) return true;
+  const padded = maxDistance + VOXEL_SCALE * 3;
+  return computeFaunaAgentCullPosition(agent, _agentCullPos).distanceToSquared(playerWorld) <= padded * padded;
+}
+
+function isFaunaAgentStillValid(
+  kind: FaunaKind,
+  agent: FaunaAgent,
+  density: number,
+  terrainSeed: number,
+  profile: FaunaProfile
+): boolean {
+  if (agent.kind !== kind || agent.terrainSeed !== terrainSeed) return false;
+  const homeVoxel = voxelSystem.getVoxel(agent.homeX, agent.homeY, agent.homeZ);
+  const currentVoxel = voxelSystem.getVoxel(agent.x, agent.y, agent.z);
+  const targetVoxel = voxelSystem.getVoxel(agent.toX, agent.toY, agent.toZ);
+  if (!homeVoxel || !currentVoxel || !targetVoxel) return false;
+  if (!shouldPlaceFaunaVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, density, terrainSeed, profile)) return false;
+  if (chooseFaunaKindForVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, terrainSeed, profile) !== kind) return false;
+  return isFaunaTravelVoxel(kind, currentVoxel, profile) && isFaunaTravelVoxel(kind, targetVoxel, profile);
 }
 
 function computeFaunaAgentMatrix(
@@ -982,25 +1202,34 @@ export function updateFaunaAgents(
 ): FaunaBuildResult {
   const dt = clamp(deltaTime, 0, 0.12);
   const count = Math.min(agents.length, mesh.instanceMatrix.count);
+  const strideAttr = mesh.geometry.getAttribute('aFaunaStride') as THREE.InstancedBufferAttribute | undefined;
   for (let i = 0; i < count; i++) {
     const agent = agents[i];
     const turnRate = agent.kind === 'dragonfly' ? 4.8 : agent.kind === 'woolly' ? 3.4 : 4.2;
     const rotationAlpha = 1 - Math.exp(-turnRate * dt);
-    const distance = Math.max(0.001, agent.from.distanceTo(agent.to));
-    agent.progress += dt * agent.speed / distance;
-    while (agent.progress >= 1) {
-      agent.progress -= 1;
-      setFaunaRoute(agent, terrainSeed, profile);
-      if (agent.from.distanceToSquared(agent.to) < 0.0001) {
-        agent.progress = 0;
-        break;
+    const distance = agent.from.distanceTo(agent.to);
+    if (distance > 0.001) {
+      agent.stridePhase = (agent.stridePhase + dt * agent.speed * faunaStrideRateForKind(agent.kind)) % 1;
+      agent.progress += dt * agent.speed / distance;
+      while (agent.progress >= 1) {
+        agent.progress -= 1;
+        setFaunaRoute(agent, terrainSeed, profile);
+        if (agent.from.distanceToSquared(agent.to) < 0.0001) {
+          agent.progress = 0;
+          break;
+        }
       }
+    } else {
+      agent.progress = 0;
+      setFaunaRoute(agent, terrainSeed, profile);
     }
+    if (strideAttr) strideAttr.setX(i, agent.stridePhase);
     computeFaunaAgentMatrix(agent, time, rotationAlpha, _scratch);
     mesh.setMatrixAt(i, _scratch);
   }
   mesh.count = count;
   mesh.instanceMatrix.needsUpdate = true;
+  if (strideAttr) strideAttr.needsUpdate = true;
   return { count, voxelCount: count, agents };
 }
 
@@ -1011,13 +1240,16 @@ export function buildFaunaInstances(
   maxDistance: number,
   playerWorld: THREE.Vector3 | null,
   terrainSeed: number,
-  profile = buildFaunaProfile(terrainSeed)
+  profile = buildFaunaProfile(terrainSeed),
+  options: FaunaBuildOptions = {}
 ): FaunaBuildResult {
   const capacity = mesh.instanceMatrix.count;
   const maxDistSq = maxDistance * maxDistance;
   const seedAttr = prepareFaunaInstanceAttributes(mesh.geometry, capacity);
+  const strideAttr = mesh.geometry.getAttribute('aFaunaStride') as THREE.InstancedBufferAttribute;
   const agents: FaunaAgent[] = [];
-  let voxelCount = 0;
+  const includedHomes = new Set<string>();
+  const time = options.time ?? 0;
 
   if (density <= 0) {
     mesh.count = 0;
@@ -1025,9 +1257,27 @@ export function buildFaunaInstances(
     return { count: 0, voxelCount: 0, agents };
   }
 
+  const addAgent = (agent: FaunaAgent, preserveOrientation: boolean) => {
+    if (agents.length >= capacity) return;
+    computeFaunaAgentMatrix(agent, time, preserveOrientation ? 0 : 1, _scratch);
+    mesh.setMatrixAt(agents.length, _scratch);
+    seedAttr.setX(agents.length, agent.phase / TAU);
+    strideAttr.setX(agents.length, agent.stridePhase);
+    includedHomes.add(faunaHomeKey(agent));
+    agents.push(agent);
+  };
+
+  for (const agent of options.existingAgents ?? []) {
+    if (agents.length >= capacity) break;
+    if (!isFaunaAgentStillValid(kind, agent, density, terrainSeed, profile)) continue;
+    if (!isFaunaAgentVisibleInRange(agent, maxDistance, playerWorld)) continue;
+    addAgent(agent, true);
+  }
+
   for (const voxel of voxelSystem.getAllVoxels().values()) {
     if (agents.length >= capacity) break;
     const [x, y, z] = voxel.position;
+    if (includedHomes.has(faunaAgentKey(kind, x, y, z))) continue;
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
     if (!isFaunaTravelVoxel(kind, voxel, profile)) continue;
@@ -1035,18 +1285,15 @@ export function buildFaunaInstances(
     voxelCoordToWorld(x, y, z, _world);
     if (maxDistance > 0 && playerWorld && _world.distanceToSquared(playerWorld) > maxDistSq) continue;
 
-    voxelCount++;
     const agent = createFaunaAgent(kind, x, y, z, terrainSeed, profile);
-    computeFaunaAgentMatrix(agent, 0, 1, _scratch);
-    mesh.setMatrixAt(agents.length, _scratch);
-    seedAttr.setX(agents.length, agent.phase / TAU);
-    agents.push(agent);
+    addAgent(agent, false);
   }
 
   mesh.count = agents.length;
   mesh.instanceMatrix.needsUpdate = true;
   seedAttr.needsUpdate = true;
-  return { count: agents.length, voxelCount, agents };
+  strideAttr.needsUpdate = true;
+  return { count: agents.length, voxelCount: agents.length, agents };
 }
 
 export function applyFaunaWindProfileToMaterial(profile: WindProfile, material: THREE.Material): void {
@@ -1067,7 +1314,9 @@ export function updateFaunaMaterial(
   material: THREE.Material,
   time: number,
   quality: GraphicsQuality,
-  reality: VoxelRealityEffects
+  reality: VoxelRealityEffects,
+  sunDir?: THREE.Vector3,
+  moonDir?: THREE.Vector3
 ): void {
   const u = (material.userData.shader as
     | { uniforms?: Record<string, { value: unknown }> }
@@ -1084,6 +1333,12 @@ export function updateFaunaMaterial(
   }
   if (u.uFaunaChroma) {
     (u.uFaunaChroma.value as number) = Math.min(1, Math.max(0, reality.chroma));
+  }
+  if (sunDir && u.uSunDir) {
+    (u.uSunDir.value as THREE.Vector3).copy(sunDir).normalize();
+  }
+  if (moonDir && u.uMoonDir) {
+    (u.uMoonDir.value as THREE.Vector3).copy(moonDir).normalize();
   }
 }
 

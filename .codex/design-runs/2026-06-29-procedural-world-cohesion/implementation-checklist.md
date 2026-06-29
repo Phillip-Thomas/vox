@@ -192,6 +192,7 @@ Exit gate:
   - [ ] anomaly: paradox growths, unusual colors, constrained weirdness.
 - [x] Refactor flora weights to use ecology rules.
 - [x] Refactor fauna weights/travel rules to use ecology rules.
+- [x] Preserve live fauna roaming state across distance-bucket rebuilds.
 - [x] Refactor surface effect registry:
   - [x] sand dust,
   - [x] dirt loose soil/micro-life,
@@ -229,7 +230,7 @@ Exit gate:
   - [ ] grass width/height/bend,
   - [ ] tree silhouette/branch density/leaf mode,
   - [ ] flora scale/kind frequency,
-  - [ ] fauna scale/material/shape emphasis,
+  - [x] fauna scale/material/shape emphasis,
   - [ ] rock facets,
   - [ ] surface effect dimensions,
   - [ ] voxel detail frequencies.
@@ -243,7 +244,7 @@ Exit gate:
   - [ ] surface effects stay thin/atmospheric.
 - [ ] Add tests for scale ranges:
   - [ ] tree min/max height,
-  - [ ] fauna tiers,
+  - [x] fauna tiers,
   - [ ] flora tiers,
   - [ ] surface effect offsets,
   - [ ] no underground/float by transform sampling.
@@ -256,7 +257,7 @@ Exit gate:
 
 ## Phase 6: Shader And Material Performance Scrutiny
 
-- [ ] Inventory shader programs and custom keys.
+- [x] Inventory shader programs and custom keys.
 - [ ] For each shader path, document:
   - [ ] quality gate,
   - [ ] reality-stage gate,
@@ -265,15 +266,15 @@ Exit gate:
   - [ ] procedural noise cost,
   - [ ] branch strategy,
   - [ ] distance fade,
-  - [ ] animation toggle.
+  - [x] animation toggle for fauna movement-driven stride.
 - [x] Add performance thresholds to atlas report.
 - [ ] Add shader complexity audit notes for:
-  - [ ] voxel material,
+  - [x] voxel material,
   - [ ] water,
   - [ ] tree materials,
   - [ ] grass material,
-  - [ ] flora material,
-  - [ ] fauna material,
+  - [x] flora material,
+  - [x] fauna material,
   - [ ] surface effects,
   - [ ] sky,
   - [ ] post FX.
@@ -285,11 +286,12 @@ Exit gate:
   - [x] POTATO: no expensive layers, no broken visuals.
 - [ ] Optimize high-cost offenders:
   - [ ] reduce branchy shader paths,
-  - [ ] share program keys,
+  - [x] share program keys,
   - [ ] increase culling,
   - [ ] lower instance density,
   - [ ] fade high-frequency detail with distance,
   - [ ] prefer instancing over many meshes.
+- [x] Add fauna no-reset regression for rebuilds preserving progress and gait phase.
 
 Exit gate:
 
@@ -345,7 +347,7 @@ Iteration targets:
 - [ ] final atlas score >= 4.85.
 - [x] no category below 4.45.
 - [x] no critical/high defects.
-- [ ] no unaccepted medium palette/ecology/scale/perf defects.
+- [x] no unaccepted medium palette/ecology/scale/perf defects.
 
 ## Phase 9: Documentation And Maintainability
 
@@ -354,6 +356,7 @@ Iteration targets:
 - [ ] Document ecology rules.
 - [x] Document performance budgets.
 - [x] Document harness command usage.
+- [x] Document shader program inventory.
 - [ ] Add inline comments only for non-obvious math.
 - [ ] Keep all profile modules pure and deterministic.
 - [ ] Avoid hidden runtime mutable art state.

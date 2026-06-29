@@ -517,6 +517,8 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uWindGustScale = { value: 0.04 };
     shader.uniforms.uWindGustSpeed = { value: 0.42 };
     shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
+    shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
+    shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     // Per-planet biome tint for ORGANIC ground (dirt/grass/sand). Defaults to a
     // no-op (strength 0) so terrain is unchanged until a profile is applied.
     shader.uniforms.uTerrainTint = { value: new THREE.Color(1, 1, 1) };
@@ -576,12 +578,15 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         uniform float uWindGustScale;
         uniform float uWindGustSpeed;
         uniform vec2 uWindOffset;
+        uniform vec3 uSunDir;
+        uniform vec3 uMoonDir;
         uniform vec3 uTerrainTint;
         uniform float uTerrainTintStrength;
         varying float vMatId;
         varying float vAO;
         varying vec3 vWorldPos;
         varying vec3 vWorldNormal;
+        vec3 vVoxelGlowTerm;
         ${palette}
         ${materialIds}
         ${NOISE_GLSL}
@@ -676,6 +681,31 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           // World -> view space (normalMatrix is for model-view; use viewMatrix).
           vec3 vn = normalize((viewMatrix * vec4(perturbedWorld, 0.0)).xyz);
           normal = vn;
+        }
+        vVoxelGlowTerm = vec3(0.0);
+        {
+          int gmid = int(vMatId + 0.5);
+          vec3 V = normalize(cameraPosition - vWorldPos);
+          vec3 Nw = normalize(vWorldNormal);
+          float daylight = smoothstep(-0.1, 0.25, uSunDir.y);
+          float night = smoothstep(-0.05, 0.2, uMoonDir.y) * (1.0 - daylight);
+          float rim = pow(clamp(1.0 - max(dot(Nw, V), 0.0), 0.0, 1.0), 2.35);
+          float wrap = clamp((dot(Nw, uSunDir) + 0.38) / 1.38, 0.0, 1.0);
+          float backlit = pow(clamp(dot(V, -uSunDir), 0.0, 1.0), 3.1);
+          float organicMat = float(gmid == MAT_DIRT || gmid == MAT_GRASS || gmid == MAT_WOOD);
+          float thermalMat = float(gmid == MAT_LAVA || gmid == MAT_BASALT);
+          float crystalMat = float(gmid == MAT_ICE || gmid == MAT_CRYSTAL);
+          float metalMat = float(gmid == MAT_COPPER || gmid == MAT_GOLD || gmid == MAT_SILVER);
+          float softening = max(uRealityAtmosphere * 0.28, uRealityDetail * 0.08);
+          diffuseColor.rgb = mix(diffuseColor.rgb * 0.9, diffuseColor.rgb, 0.58 + wrap * 0.42 + softening);
+          vec3 organicRim = mix(MOSS_LIGHT, DIRT_LIGHT, float(gmid == MAT_DIRT) * 0.65);
+          vec3 crystalRim = mix(ICE_GLOW, CRYSTAL_HI, float(gmid == MAT_CRYSTAL));
+          vec3 thermalRim = mix(BASALT_WARM, LAVA_ORANGE, float(gmid == MAT_LAVA));
+          vec3 metalRim = ORE_VEIN;
+          vec3 rimCol = organicRim * organicMat + crystalRim * crystalMat + thermalRim * thermalMat + metalRim * metalMat;
+          float rimMask = clamp(organicMat * uRealityOrganic + thermalMat * uRealityThermal + crystalMat * uRealityCrystalline + metalMat * uRealityMetal, 0.0, 1.0);
+          vVoxelGlowTerm += rimCol * rim * rimMask * (0.018 + 0.035 * daylight + 0.015 * night);
+          vVoxelGlowTerm += rimCol * backlit * daylight * rimMask * 0.018;
         }`
       )
       .replace(
@@ -746,6 +776,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
             float glint = vmTriSpeckle(vWorldPos, ew, 4.6, 0.91) * vmDetailFade();
             e += ORE_VEIN * glint * 0.035 * uRealityMetal;
           }
+          e += vVoxelGlowTerm;
           totalEmissiveRadiance += e;
         }`
       )
@@ -757,9 +788,9 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
   };
 
   // Single shared material on one mesh: a stable key avoids per-object recompiles
-  // and reserves room for future variants (e.g. painterly). Bumped to v5 when
-  // narrative reality-stage uniforms and planet-wind block effects were added.
-  material.customProgramCacheKey = () => 'voxel-pbr-v5';
+  // and reserves room for future variants (e.g. painterly). Bumped to v6 when
+  // shared sun/moon rim atmosphere was added for tree/fauna cohesion.
+  material.customProgramCacheKey = () => 'voxel-pbr-v6';
 
   return material;
 }
@@ -803,7 +834,9 @@ export function updateVoxelMaterial(
   material: THREE.MeshStandardMaterial,
   time: number,
   quality: GraphicsQuality,
-  reality: VoxelRealityEffects = getVoxelRealityEffects()
+  reality: VoxelRealityEffects = getVoxelRealityEffects(),
+  sunDir?: THREE.Vector3,
+  moonDir?: THREE.Vector3
 ) {
   const shader = material.userData.shader as { uniforms?: Record<string, { value: unknown }> } | undefined;
   if (!shader?.uniforms) return;
@@ -829,4 +862,6 @@ export function updateVoxelMaterial(
   if (u.uRealityThermal) (u.uRealityThermal.value as number) = thermal;
   if (u.uRealityCrystalline) (u.uRealityCrystalline.value as number) = crystalline;
   if (u.uRealityMetal) (u.uRealityMetal.value as number) = metal;
+  if (sunDir && u.uSunDir) (u.uSunDir.value as THREE.Vector3).copy(sunDir).normalize();
+  if (moonDir && u.uMoonDir) (u.uMoonDir.value as THREE.Vector3).copy(moonDir).normalize();
 }

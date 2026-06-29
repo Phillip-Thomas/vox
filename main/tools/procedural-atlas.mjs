@@ -158,14 +158,14 @@ function casesForMode(mode, fixtures) {
   }
   if (mode === 'showcase') {
     return [
-      { archetype: 'verdant', ...fixtures.verdant[0], quality: 'HIGH', stage: 'alive', views: ['tree', 'pollen', 'dirtLife', 'material'] },
-      { archetype: 'arid', ...fixtures.arid[0], quality: 'HIGH', stage: 'alive', views: ['sandDust', 'material', 'horizon'] },
-      { archetype: 'frozen', ...fixtures.frozen[0], quality: 'HIGH', stage: 'alive', views: ['frost', 'material', 'horizon'] },
+      { archetype: 'verdant', ...fixtures.verdant[0], quality: 'HIGH', stage: 'alive', views: ['tree', 'fauna', 'grazer', 'pollen', 'dirtLife', 'material'] },
+      { archetype: 'arid', ...fixtures.arid[0], quality: 'HIGH', stage: 'alive', views: ['fauna', 'hopper', 'sandDust', 'material', 'horizon'] },
+      { archetype: 'frozen', ...fixtures.frozen[0], quality: 'HIGH', stage: 'alive', views: ['woolly', 'frost', 'material', 'horizon'] },
       { archetype: 'volcanic', ...fixtures.volcanic[0], quality: 'HIGH', stage: 'alive', views: ['hazard', 'lavaHeat', 'ash', 'material'] },
-      { archetype: 'oceanic', ...fixtures.oceanic[0], quality: 'HIGH', stage: 'alive', views: ['coast', 'pollen', 'material'] },
+      { archetype: 'oceanic', ...fixtures.oceanic[0], quality: 'HIGH', stage: 'alive', views: ['coast', 'dragonfly', 'pollen', 'material'] },
       { archetype: 'crystal', ...fixtures.crystal[0], quality: 'HIGH', stage: 'alive', views: ['mineral', 'crystalGlints', 'material'] },
       { archetype: 'metallic', ...fixtures.metallic[0], quality: 'HIGH', stage: 'alive', views: ['mineral', 'metallicFlecks', 'material'] },
-      { archetype: 'fungal', ...fixtures.fungal[0], quality: 'HIGH', stage: 'alive', views: ['fungalSpores', 'tree', 'material'] },
+      { archetype: 'fungal', ...fixtures.fungal[0], quality: 'HIGH', stage: 'alive', views: ['fauna', 'fungalSpores', 'tree', 'material'] },
       { archetype: 'anomaly', ...fixtures.anomaly[0], quality: 'HIGH', stage: 'alive', views: ['surfaceEffects', 'material', 'horizon'] }
     ];
   }
