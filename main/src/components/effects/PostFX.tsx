@@ -1,8 +1,8 @@
 // Phase 5 — postprocessing composer (bloom + optional painterly).
 //
 // Mounted ONLY when the active quality profile sets `postProcess: true`
-// (ULTRA / HIGH). When it is not mounted the renderer keeps its ACES tone
-// mapping path untouched, so MEDIUM / LOW / POTATO look exactly as before.
+// (ULTRA / HIGH). When it is not mounted the renderer keeps the direct ACES
+// tone mapping path, so MEDIUM / LOW / POTATO avoid composer cost.
 //
 // ── Tone-mapping handling (post on vs off parity) ───────────────────────────
 // The app normally sets `gl.toneMapping = ACESFilmicToneMapping` in the
@@ -59,12 +59,12 @@ interface PostFXProps {
 function biomeGrade(terrainSeed: number) {
   const b = buildBiomeProfile(terrainSeed);
   const accent = new THREE.Color().setHSL(b.alien ? b.hue : (0.08 + b.temperature * 0.1), 0.5, 0.6);
-  const tint = new THREE.Color(1, 1, 1).lerp(accent, 0.18); // near-white nudged toward biome hue
+  const tint = new THREE.Color(1, 1, 1).lerp(accent, 0.14); // near-white nudged toward biome hue
   return {
     tint,
-    tintAmount: 0.10 + (b.alien ? 0.06 : 0.0),
-    saturation: 1.04 + b.saturation * 0.1 - b.aridity * 0.08, // vivid biomes pop, arid desats
-    contrast: 1.03
+    tintAmount: 0.08 + (b.alien ? 0.04 : 0.0),
+    saturation: 1.01 + b.saturation * 0.08 - b.aridity * 0.06, // vivid biomes pop, arid desats
+    contrast: 1.0
   };
 }
 
@@ -153,7 +153,7 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
     <EffectComposer
       // Selective bloom needs HDR precision so very-bright emissive surfaces
       // (lava, ores) read above the luminance threshold.
-      multisampling={0}
+      multisampling={4}
       frameBufferType={THREE.HalfFloatType}
     >
       {/* Contact AO (N8AO): computes its own normals from depth (no extra normal
@@ -162,9 +162,9 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
           to protect FPS on the instanced world; gated ULTRA/HIGH. */}
       {contactAO ? (
         <N8AO
-          aoRadius={3.5}
-          intensity={1.6}
-          distanceFalloff={1.0}
+          aoRadius={3.0}
+          intensity={1.15}
+          distanceFalloff={1.25}
           halfRes
           quality="medium"
         />
@@ -173,9 +173,9 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       {/* Selective bloom: only pixels brighter than the threshold bloom, so
           the emissive lava/ores glow while normal terrain stays crisp. */}
       <Bloom
-        intensity={0.6}
-        luminanceThreshold={0.85}
-        luminanceSmoothing={0.2}
+        intensity={0.42}
+        luminanceThreshold={0.9}
+        luminanceSmoothing={0.28}
         mipmapBlur
         kernelSize={KernelSize.MEDIUM}
       />

@@ -16,9 +16,11 @@ const fragmentShader = /* glsl */ `
   uniform float uWarm;      // -1 cool .. +1 warm (golden hour positive, night negative)
   uniform float uSat;       // saturation multiplier (~0.9..1.2)
   uniform float uContrast;  // contrast around mid grey (~0.95..1.15)
+  uniform float uLift;      // subtle shadow lift before final tone mapping
+  uniform float uShoulder;  // highlight compression before final ACES
 
   void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-    vec3 c = inputColor.rgb;
+    vec3 c = max(inputColor.rgb, vec3(0.0));
 
     // saturation around luma
     float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
@@ -34,7 +36,18 @@ const fragmentShader = /* glsl */ `
     c.r *= 1.0 + uWarm * 0.05;
     c.b *= 1.0 - uWarm * 0.05;
 
-    outputColor = vec4(clamp(c, 0.0, 1.0), inputColor.a);
+    // Gentle lift only in the toe so night/shadow detail stays cinematic rather
+    // than crushed. Preserve HDR above 1.0 for the final ACES pass.
+    float afterLuma = dot(c, vec3(0.2126, 0.7152, 0.0722));
+    c += vec3(uLift) * (1.0 - smoothstep(0.05, 0.72, afterLuma));
+
+    // Soft pre-ACES shoulder catches harsh shader highlights without flattening
+    // normal midtones. This is not tone mapping; the final ACES pass remains last.
+    vec3 excess = max(c - vec3(1.0), vec3(0.0));
+    vec3 shoulder = c - excess * (1.0 - 1.0 / (1.0 + excess * 0.65));
+    c = mix(c, shoulder, uShoulder);
+
+    outputColor = vec4(max(c, vec3(0.0)), inputColor.a);
   }
 `;
 
@@ -44,6 +57,8 @@ export interface ColorGradeOptions {
   warm?: number;
   saturation?: number;
   contrast?: number;
+  lift?: number;
+  shoulder?: number;
 }
 
 export class ColorGradeEffect extends Effect {
@@ -52,7 +67,9 @@ export class ColorGradeEffect extends Effect {
     tintAmount = 0.12,
     warm = 0,
     saturation = 1.05,
-    contrast = 1.03
+    contrast = 1.03,
+    lift = 0.012,
+    shoulder = 0.32
   }: ColorGradeOptions = {}) {
     super('ColorGradeEffect', fragmentShader, {
       uniforms: new Map<string, Uniform>([
@@ -60,7 +77,9 @@ export class ColorGradeEffect extends Effect {
         ['uTintAmt', new Uniform(tintAmount)],
         ['uWarm', new Uniform(warm)],
         ['uSat', new Uniform(saturation)],
-        ['uContrast', new Uniform(contrast)]
+        ['uContrast', new Uniform(contrast)],
+        ['uLift', new Uniform(lift)],
+        ['uShoulder', new Uniform(shoulder)]
       ])
     });
     activeColorGrade = this;

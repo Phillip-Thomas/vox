@@ -1,0 +1,4 @@
+- Keep narrative rendering progression separate from device quality. `GraphicsQuality` should remain about performance; reality stage should remain story/game state.
+- Reuse the deterministic wind profile for all atmosphere-like effects so grass, trees, blocks, audio, and later weather can cohere.
+- For shader passes, browser console smoke is mandatory; TypeScript/build cannot catch GLSL errors.
+- In this environment, CDP screenshots are more reliable than Playwright's high-level screenshot API when snap Chromium stalls on capture.

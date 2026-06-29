@@ -1,0 +1,1569 @@
+{
+  "captures": [
+    {
+      "name": "desktop-tree-silhouettes",
+      "url": "http://127.0.0.1:5173/tree-test.html?mode=silhouettes",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-06-28-tree-canopy-height/screenshots/desktop-tree-silhouettes.png",
+      "summary": [
+        {
+          "key": "round",
+          "silhouette": "round",
+          "kind": "temperate",
+          "seed": 1388295046,
+          "trunkHeight": 5.921871552551039,
+          "crownRadius": 2.184,
+          "canopyDensity": 1.5170854831463658,
+          "leafScale": 0.92172787129879,
+          "wind": {
+            "strength": 1.1938170857998172,
+            "gustStrength": 1.1087143118028882,
+            "gustScale": 0.07350491830520331,
+            "gustSpeed": 0.5772975222518388,
+            "turbulence": 0.3484538854726265,
+            "veer": 0.7611805588851015
+          },
+          "species": {
+            "branchJointAngle": 0.6763084893394261,
+            "whorlCount": 3,
+            "gnarl": 0.1786678576283157,
+            "gravitropism": 0.13765184922143817,
+            "apicalDominance": 0.6479403677117079,
+            "apicalDominanceDecay": 0.2404813579330221,
+            "branchStiffness": 0.8658945553097874,
+            "foliageSpacing": 0.9126115106791258,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.371514927893877,
+            "trunkFlare": 0.10795370355248451,
+            "trunkRoughness": 0.09435804022010416,
+            "thinFineBranches": 1
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 444,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 6860,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "conical",
+          "silhouette": "conical",
+          "kind": "verdant",
+          "seed": 3533727490,
+          "trunkHeight": 10.345184719390016,
+          "crownRadius": 2.4367078223843186,
+          "canopyDensity": 1.6972952882642858,
+          "leafScale": 1.027195133343339,
+          "wind": {
+            "strength": 1.1023350115647441,
+            "gustStrength": 1.039117126598331,
+            "gustScale": 0.05389168586209416,
+            "gustSpeed": 0.6884679952110675,
+            "turbulence": 0.5784565775181608,
+            "veer": 1.0793021357633217
+          },
+          "species": {
+            "branchJointAngle": 0.401155977952294,
+            "whorlCount": 2,
+            "gnarl": 0.15425369045697152,
+            "gravitropism": 0.22,
+            "apicalDominance": 0.7501758269313723,
+            "apicalDominanceDecay": 0.24086089975200592,
+            "branchStiffness": 0.6482519158907235,
+            "foliageSpacing": 0.9078953041136265,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.2429529682546854,
+            "trunkFlare": 0.34432270400226117,
+            "trunkRoughness": 0.10631802568444983,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3624,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 10920,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 424,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "umbrella",
+          "silhouette": "umbrella",
+          "kind": "temperate",
+          "seed": 694766103,
+          "trunkHeight": 7.058719096699987,
+          "crownRadius": 3.140771962402579,
+          "canopyDensity": 1.786334671988152,
+          "leafScale": 0.9979828108102082,
+          "wind": {
+            "strength": 1.2234814821525506,
+            "gustStrength": 1.1736168852633337,
+            "gustScale": 0.055316327661275866,
+            "gustSpeed": 0.8090418446243681,
+            "turbulence": 0.5470904813932029,
+            "veer": 1.0398011022325462
+          },
+          "species": {
+            "branchJointAngle": 0.6959866980090738,
+            "whorlCount": 3,
+            "gnarl": 0.11494917940814048,
+            "gravitropism": 0.1554563594982028,
+            "apicalDominance": 0.4195137074450031,
+            "apicalDominanceDecay": 0.15262401677202433,
+            "branchStiffness": 0.7296284654177726,
+            "foliageSpacing": 0.707581739872694,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.30058989867568014,
+            "trunkFlare": 0.20055852003395558,
+            "trunkRoughness": 0.15712009091628715,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1572,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 10152,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 48,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "weeping",
+          "silhouette": "weeping",
+          "kind": "temperate",
+          "seed": 3141457088,
+          "trunkHeight": 10.0176955406929,
+          "crownRadius": 3.174474084889298,
+          "canopyDensity": 1.9106735270237551,
+          "leafScale": 0.9378148014843464,
+          "wind": {
+            "strength": 1.183945308582103,
+            "gustStrength": 1.1426826596608244,
+            "gustScale": 0.07555805269442498,
+            "gustSpeed": 0.6816909298021061,
+            "turbulence": 0.8429889382918343,
+            "veer": 1.3756991586405436
+          },
+          "species": {
+            "branchJointAngle": 0.6980544324498623,
+            "whorlCount": 3,
+            "gnarl": 0.24086018077097834,
+            "gravitropism": 0.06995296031236649,
+            "apicalDominance": 0.4025559373944998,
+            "apicalDominanceDecay": 0.10045324727892876,
+            "branchStiffness": 0.4990052287466824,
+            "foliageSpacing": 0.7001177649945021,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.785451444387436,
+            "trunkFlare": 0.09323889985680581,
+            "trunkRoughness": 0.15630036303075032,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 6228,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 12528,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 256,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "wispy",
+          "silhouette": "wispy",
+          "kind": "verdant",
+          "seed": 1707363997,
+          "trunkHeight": 7.787281296906354,
+          "crownRadius": 2.4143972109929464,
+          "canopyDensity": 1.7047458408284002,
+          "leafScale": 0.8591546235233545,
+          "wind": {
+            "strength": 1.2246052476033529,
+            "gustStrength": 1.097947321786808,
+            "gustScale": 0.02370836642757058,
+            "gustSpeed": 0.8133054764944518,
+            "turbulence": 0.6029044459484507,
+            "veer": 1.19093818886198
+          },
+          "species": {
+            "branchJointAngle": 0.5870807285094634,
+            "whorlCount": 2,
+            "gnarl": 0.21473836705088614,
+            "gravitropism": 0.14128509251400828,
+            "apicalDominance": 0.4695390120847151,
+            "apicalDominanceDecay": 0.2297435997147113,
+            "branchStiffness": 0.8197795863077044,
+            "foliageSpacing": 0.9419060770422221,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.28061992637813093,
+            "trunkFlare": 0.23885519109666348,
+            "trunkRoughness": 0.12286497234134004,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2784,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8160,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 216,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "frond",
+          "silhouette": "frond",
+          "kind": "verdant",
+          "seed": 1321037475,
+          "trunkHeight": 7,
+          "crownRadius": 2.1963636363636363,
+          "canopyDensity": 1.9894358327728696,
+          "leafScale": 0.8462206254154443,
+          "wind": {
+            "strength": 0.9575271389792692,
+            "gustStrength": 0.7836902641503272,
+            "gustScale": 0.04891154157742858,
+            "gustSpeed": 0.4781974938679025,
+            "turbulence": 0.6364270938227656,
+            "veer": 1.3188498457684084
+          },
+          "species": {
+            "branchJointAngle": 0.5494684875942767,
+            "whorlCount": 2,
+            "gnarl": 0.08889704700559378,
+            "gravitropism": 0.09407948587089777,
+            "apicalDominance": 0.4216105904942379,
+            "apicalDominanceDecay": 0.19264933531638234,
+            "branchStiffness": 0.6428376900963485,
+            "foliageSpacing": 0.9040968680381776,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.61170130610466,
+            "trunkFlare": 0.30799461536109446,
+            "trunkRoughness": 0.0983143248106353,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 252,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 6048,
+              "instances": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "desktop-tree-variety-grid",
+      "url": "http://127.0.0.1:5173/tree-test.html?count=24&cols=6",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-06-28-tree-canopy-height/screenshots/desktop-tree-variety-grid.png",
+      "summary": [
+        {
+          "key": "v0",
+          "silhouette": "umbrella",
+          "kind": "temperate",
+          "seed": 1702444532,
+          "trunkHeight": 9.622183684159808,
+          "crownRadius": 3.6189746290814475,
+          "canopyDensity": 1.804516574263107,
+          "leafScale": 0.9425570623576641,
+          "wind": {
+            "strength": 1.2862592975676583,
+            "gustStrength": 1.0938467269418517,
+            "gustScale": 0.03774202024564147,
+            "gustSpeed": 0.37522308888391254,
+            "turbulence": 0.5613294035120067,
+            "veer": 1.015225263569881
+          },
+          "species": {
+            "branchJointAngle": 0.764881732845679,
+            "whorlCount": 3,
+            "gnarl": 0.10092951969243585,
+            "gravitropism": 0.10157766083255411,
+            "apicalDominance": 0.45607859595213085,
+            "apicalDominanceDecay": 0.1682874862337485,
+            "branchStiffness": 0.5879621639288962,
+            "foliageSpacing": 0.9611338318139315,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.39589532680809497,
+            "trunkFlare": 0.16618785567581654,
+            "trunkRoughness": 0.12172074624570087,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3492,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 9720,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 16,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v1",
+          "silhouette": "umbrella",
+          "kind": "temperate",
+          "seed": 3021928913,
+          "trunkHeight": 8.394614269944997,
+          "crownRadius": 3.3899771347206484,
+          "canopyDensity": 1.6093084941036069,
+          "leafScale": 0.9505224274843931,
+          "wind": {
+            "strength": 1.404437095617271,
+            "gustStrength": 1.231152977607492,
+            "gustScale": 0.05668038924224675,
+            "gustSpeed": 0.4550531319464991,
+            "turbulence": 0.6182110112489553,
+            "veer": 1.1543945408026732
+          },
+          "species": {
+            "branchJointAngle": 0.6324147811904549,
+            "whorlCount": 3,
+            "gnarl": 0.09415345119312404,
+            "gravitropism": 0.08278540574014187,
+            "apicalDominance": 0.22926343868486587,
+            "apicalDominanceDecay": 0.1419132766034454,
+            "branchStiffness": 0.7399921231158079,
+            "foliageSpacing": 0.9008045723289252,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.4596498155593872,
+            "trunkFlare": 0.31731081135571004,
+            "trunkRoughness": 0.09372436748119072,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3528,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8460,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 352,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v2",
+          "silhouette": "umbrella",
+          "kind": "alien",
+          "seed": 4106132465,
+          "trunkHeight": 6.481092559606941,
+          "crownRadius": 3.03301835748304,
+          "canopyDensity": 1.7655834915931337,
+          "leafScale": 0.9079796848446131,
+          "wind": {
+            "strength": 1.516534266636186,
+            "gustStrength": 1.2610826152233778,
+            "gustScale": 0.024352666053920984,
+            "gustSpeed": 0.7478161982672636,
+            "turbulence": 0.7934738926953732,
+            "veer": 1.2221529097399355
+          },
+          "species": {
+            "branchJointAngle": 0.778490208457224,
+            "whorlCount": 2,
+            "gnarl": 0.19970793614629656,
+            "gravitropism": 0.13143205463886262,
+            "apicalDominance": 0.4562374186003581,
+            "apicalDominanceDecay": 0.1697302702302113,
+            "branchStiffness": 0.5912504058983177,
+            "foliageSpacing": 0.89758834913373,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.29625486068427564,
+            "trunkFlare": 0.2575663509964943,
+            "trunkRoughness": 0.14142082253936678,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1188,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8464,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 360,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v3",
+          "silhouette": "wispy",
+          "kind": "alien",
+          "seed": 4161485969,
+          "trunkHeight": 9.906160855874756,
+          "crownRadius": 2.705646837643876,
+          "canopyDensity": 1.8396838914719411,
+          "leafScale": 0.9309828913211822,
+          "wind": {
+            "strength": 1.2978574743850153,
+            "gustStrength": 1.2683050152366544,
+            "gustScale": 0.060648577775806185,
+            "gustSpeed": 0.6568877689909322,
+            "turbulence": 0.8607484332235064,
+            "veer": 1.319408472570849
+          },
+          "species": {
+            "branchJointAngle": 0.6442841434292494,
+            "whorlCount": 2,
+            "gnarl": 0.1937265555979684,
+            "gravitropism": 0.10723241191357374,
+            "apicalDominance": 0.5981505737267435,
+            "apicalDominanceDecay": 0.18270637963432818,
+            "branchStiffness": 0.8978221300523728,
+            "foliageSpacing": 1.0504589961469173,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.22977117367088795,
+            "trunkFlare": 0.1988463443517685,
+            "trunkRoughness": 0.06697244566632435,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 4032,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8640,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 456,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v4",
+          "silhouette": "weeping",
+          "kind": "alien",
+          "seed": 1637104049,
+          "trunkHeight": 6.757486193835264,
+          "crownRadius": 2.651655058720492,
+          "canopyDensity": 1.599231956806034,
+          "leafScale": 0.9124642423540353,
+          "wind": {
+            "strength": 1.1124807147926372,
+            "gustStrength": 1.1071545819183504,
+            "gustScale": 0.03584836314059794,
+            "gustSpeed": 0.7934178408254478,
+            "turbulence": 0.6317284402638371,
+            "veer": 1.1524587771600538
+          },
+          "species": {
+            "branchJointAngle": 0.7049125729966909,
+            "whorlCount": 3,
+            "gnarl": 0.16248396219220013,
+            "gravitropism": 0.10922226358205081,
+            "apicalDominance": 0.4103153187967837,
+            "apicalDominanceDecay": 0.27168020670767873,
+            "branchStiffness": 0.5397295107785612,
+            "foliageSpacing": 0.84346599817276,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.8876598767191172,
+            "trunkFlare": 0.23579928122460841,
+            "trunkRoughness": 0.10566877598175779,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2028,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8232,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 192,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v5",
+          "silhouette": "conical",
+          "kind": "arid",
+          "seed": 4155232036,
+          "trunkHeight": 8.96250721711967,
+          "crownRadius": 2.269278146654855,
+          "canopyDensity": 1.9494219140033238,
+          "leafScale": 0.7441071376949548,
+          "wind": {
+            "strength": 1.4971891268190571,
+            "gustStrength": 1.256093803744377,
+            "gustScale": 0.05518131582252681,
+            "gustSpeed": 0.7314781836647131,
+            "turbulence": 0.8199163006114918,
+            "veer": 1.3752994172165276
+          },
+          "species": {
+            "branchJointAngle": 0.43162761270068584,
+            "whorlCount": 2,
+            "gnarl": 0.20701024173758925,
+            "gravitropism": 0.16383476996794344,
+            "apicalDominance": 0.7528351037530229,
+            "apicalDominanceDecay": 0.2079206081246957,
+            "branchStiffness": 0.7409082803223282,
+            "foliageSpacing": 0.6806572921574117,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.333293147534132,
+            "trunkFlare": 0.3030163452029228,
+            "trunkRoughness": 0.1348915929836221,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2604,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 13776,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 208,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v6",
+          "silhouette": "conical",
+          "kind": "alien",
+          "seed": 2468683450,
+          "trunkHeight": 9.78577182995072,
+          "crownRadius": 2.368968007044942,
+          "canopyDensity": 1.4186781658907421,
+          "leafScale": 0.7849967240542173,
+          "wind": {
+            "strength": 1.330972801298356,
+            "gustStrength": 1.2577155522323926,
+            "gustScale": 0.05793676206842065,
+            "gustSpeed": 0.47585740052372877,
+            "turbulence": 0.5493185103592664,
+            "veer": 1.2241204491384585
+          },
+          "species": {
+            "branchJointAngle": 0.4153105211304501,
+            "whorlCount": 2,
+            "gnarl": 0.08953649660106748,
+            "gravitropism": 0.19775785479694605,
+            "apicalDominance": 0.7476407853513957,
+            "apicalDominanceDecay": 0.11598087966442108,
+            "branchStiffness": 0.7312167833559216,
+            "foliageSpacing": 0.7933895741403103,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.2847202555090189,
+            "trunkFlare": 0.19669765673577785,
+            "trunkRoughness": 0.04796199798816815,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3456,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 9728,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 600,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v7",
+          "silhouette": "round",
+          "kind": "alien",
+          "seed": 3356038170,
+          "trunkHeight": 8.834849598000895,
+          "crownRadius": 2.5583902356524866,
+          "canopyDensity": 1.8610061196028256,
+          "leafScale": 0.7760727948695421,
+          "wind": {
+            "strength": 1.3421717696925974,
+            "gustStrength": 1.174518177758049,
+            "gustScale": 0.058934924295172095,
+            "gustSpeed": 0.4158539947403802,
+            "turbulence": 0.5570173069301615,
+            "veer": 0.9881467850039689
+          },
+          "species": {
+            "branchJointAngle": 0.6440963419433683,
+            "whorlCount": 3,
+            "gnarl": 0.22618665758520365,
+            "gravitropism": 0.1284127937629819,
+            "apicalDominance": 0.44215022277552635,
+            "apicalDominanceDecay": 0.12467065258417279,
+            "branchStiffness": 0.6872022962104529,
+            "foliageSpacing": 0.8532925426959992,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.23143609367311,
+            "trunkFlare": 0.16003261715173722,
+            "trunkRoughness": 0.11823205136461183,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2856,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 10388,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 320,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v8",
+          "silhouette": "umbrella",
+          "kind": "temperate",
+          "seed": 3829122864,
+          "trunkHeight": 8.69070614308949,
+          "crownRadius": 3.4452117277836027,
+          "canopyDensity": 1.3912768163369038,
+          "leafScale": 0.9309440556913614,
+          "wind": {
+            "strength": 1.3658271925026035,
+            "gustStrength": 1.275202165457462,
+            "gustScale": 0.04260380428470671,
+            "gustSpeed": 0.3976557402904567,
+            "turbulence": 0.40818915180548676,
+            "veer": 0.7894214308508374
+          },
+          "species": {
+            "branchJointAngle": 0.7208944572508335,
+            "whorlCount": 2,
+            "gnarl": 0.13954646270722149,
+            "gravitropism": 0.0946939947269857,
+            "apicalDominance": 0.44625419080723083,
+            "apicalDominanceDecay": 0.21495102821849288,
+            "branchStiffness": 0.7737409582640976,
+            "foliageSpacing": 0.892239017188549,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.19178549960255623,
+            "trunkFlare": 0.18675197303295138,
+            "trunkRoughness": 0.15604122078279034,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2988,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 7520,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 144,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v9",
+          "silhouette": "conical",
+          "kind": "verdant",
+          "seed": 1696378358,
+          "trunkHeight": 10.281179342984197,
+          "crownRadius": 2.428957353168632,
+          "canopyDensity": 1.700278666149825,
+          "leafScale": 0.7939632715284825,
+          "wind": {
+            "strength": 1.1931361788805175,
+            "gustStrength": 1.1139358749250627,
+            "gustScale": 0.024156835209578273,
+            "gustSpeed": 0.8091260897131818,
+            "turbulence": 0.49176825866837925,
+            "veer": 0.9184498064455426
+          },
+          "species": {
+            "branchJointAngle": 0.4438994259014726,
+            "whorlCount": 2,
+            "gnarl": 0.14796576797496527,
+            "gravitropism": 0.20929283393546938,
+            "apicalDominance": 0.7630331800505519,
+            "apicalDominanceDecay": 0.27449555267579856,
+            "branchStiffness": 0.6303322688397021,
+            "foliageSpacing": 0.9863006487488748,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.22904190771281718,
+            "trunkFlare": 0.3772275470942259,
+            "trunkRoughness": 0.11586851777508855,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 4284,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 10296,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 64,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v10",
+          "silhouette": "round",
+          "kind": "alien",
+          "seed": 804409475,
+          "trunkHeight": 7.400802381372233,
+          "crownRadius": 2.361273927330438,
+          "canopyDensity": 1.663870552147273,
+          "leafScale": 0.836163808554411,
+          "wind": {
+            "strength": 1.403000466110588,
+            "gustStrength": 1.2715871049664893,
+            "gustScale": 0.04389498136937618,
+            "gustSpeed": 0.6755431084782748,
+            "turbulence": 0.6559630844915362,
+            "veer": 1.2414273038921306
+          },
+          "species": {
+            "branchJointAngle": 0.6047675739554689,
+            "whorlCount": 3,
+            "gnarl": 0.11694767708424478,
+            "gravitropism": 0.0950860202871263,
+            "apicalDominance": 0.44312788258306685,
+            "apicalDominanceDecay": 0.1811508827097714,
+            "branchStiffness": 0.8906521558761598,
+            "foliageSpacing": 0.9642518442869187,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.43380381613969804,
+            "trunkFlare": 0.27539911434054376,
+            "trunkRoughness": 0.15858904970809817,
+            "thinFineBranches": 1
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 972,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8036,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v11",
+          "silhouette": "wispy",
+          "kind": "sparse",
+          "seed": 2452927908,
+          "trunkHeight": 8.32986470923825,
+          "crownRadius": 2.4889777673062032,
+          "canopyDensity": 1.8575581853743643,
+          "leafScale": 1.0181403342634439,
+          "wind": {
+            "strength": 1.3185644331721942,
+            "gustStrength": 1.2621448429336755,
+            "gustScale": 0.02732383538223803,
+            "gustSpeed": 0.5616040261301022,
+            "turbulence": 0.42118244315400677,
+            "veer": 1.0982283360058513
+          },
+          "species": {
+            "branchJointAngle": 0.5312772721471265,
+            "whorlCount": 3,
+            "gnarl": 0.07680878276471048,
+            "gravitropism": 0.12089654034003616,
+            "apicalDominance": 0.4267410223232582,
+            "apicalDominanceDecay": 0.18596309987828136,
+            "branchStiffness": 0.8001914858911187,
+            "foliageSpacing": 0.8073765345662832,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.39717764638364317,
+            "trunkFlare": 0.39259567201137546,
+            "trunkRoughness": 0.1410927136009559,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3036,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 10032,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 352,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v12",
+          "silhouette": "wispy",
+          "kind": "alien",
+          "seed": 3367622561,
+          "trunkHeight": 7,
+          "crownRadius": 2.3061818181818183,
+          "canopyDensity": 1.5833666441729293,
+          "leafScale": 0.9612964973598719,
+          "wind": {
+            "strength": 1.2056382196658206,
+            "gustStrength": 1.1516273989352812,
+            "gustScale": 0.043027509847655895,
+            "gustSpeed": 0.7153131422077355,
+            "turbulence": 0.6832496821852613,
+            "veer": 1.0844265223684477
+          },
+          "species": {
+            "branchJointAngle": 0.5909671658230945,
+            "whorlCount": 2,
+            "gnarl": 0.25238423014990985,
+            "gravitropism": 0.12116785204038025,
+            "apicalDominance": 0.42387465510517364,
+            "apicalDominanceDecay": 0.1297906116815284,
+            "branchStiffness": 0.8291041044611485,
+            "foliageSpacing": 0.9517492536455393,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.47051645211875437,
+            "trunkFlare": 0.34816598497331147,
+            "trunkRoughness": 0.15824394723400473,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1656,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 7236,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 296,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v13",
+          "silhouette": "wispy",
+          "kind": "alien",
+          "seed": 3392710078,
+          "trunkHeight": 7.847108166850602,
+          "crownRadius": 2.422620686207101,
+          "canopyDensity": 1.4874898552079685,
+          "leafScale": 0.994733662083745,
+          "wind": {
+            "strength": 1.215143436873214,
+            "gustStrength": 1.1955385704931323,
+            "gustScale": 0.04678928053565323,
+            "gustSpeed": 0.6479678522236393,
+            "turbulence": 0.48612307782980463,
+            "veer": 0.8399155945576186
+          },
+          "species": {
+            "branchJointAngle": 0.5009597122808918,
+            "whorlCount": 3,
+            "gnarl": 0.08961789117660374,
+            "gravitropism": 0.1131650085374713,
+            "apicalDominance": 0.393513689879328,
+            "apicalDominanceDecay": 0.2938875831756741,
+            "branchStiffness": 0.8614381711091846,
+            "foliageSpacing": 1.0318602166324853,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.3958043025434017,
+            "trunkFlare": 0.26962589152157307,
+            "trunkRoughness": 0.039540447539184245,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3180,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 6552,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 16,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v14",
+          "silhouette": "round",
+          "kind": "alien",
+          "seed": 2657299475,
+          "trunkHeight": 8.125699517576628,
+          "crownRadius": 2.4609143336887147,
+          "canopyDensity": 1.4282725101453253,
+          "leafScale": 0.7903590892255306,
+          "wind": {
+            "strength": 1.3029336384000114,
+            "gustStrength": 1.1930381375547285,
+            "gustScale": 0.03657603047788143,
+            "gustSpeed": 0.48837421459011165,
+            "turbulence": 0.7877820653018042,
+            "veer": 1.367581777807538
+          },
+          "species": {
+            "branchJointAngle": 0.7080799590377137,
+            "whorlCount": 2,
+            "gnarl": 0.06490419805049896,
+            "gravitropism": 0.11424884237349034,
+            "apicalDominance": 0.561106048640795,
+            "apicalDominanceDecay": 0.29885122639592737,
+            "branchStiffness": 0.8209254723135382,
+            "foliageSpacing": 0.7326490606367588,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.4871888591349125,
+            "trunkFlare": 0.08235889486968517,
+            "trunkRoughness": 0.10803085879655555,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1932,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8436,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v15",
+          "silhouette": "conical",
+          "kind": "temperate",
+          "seed": 1589240495,
+          "trunkHeight": 8.076869939630999,
+          "crownRadius": 2.162035523598954,
+          "canopyDensity": 1.9403060302953237,
+          "leafScale": 0.8194350955635309,
+          "wind": {
+            "strength": 1.368790264616889,
+            "gustStrength": 1.2985302006716566,
+            "gustScale": 0.05933955270983279,
+            "gustSpeed": 0.7731563052661148,
+            "turbulence": 0.6627068801883564,
+            "veer": 1.0283056165336957
+          },
+          "species": {
+            "branchJointAngle": 0.39042304973118,
+            "whorlCount": 2,
+            "gnarl": 0.08627134166192263,
+            "gravitropism": 0.19697475895285607,
+            "apicalDominance": 0.8654713985603303,
+            "apicalDominanceDecay": 0.15169714899733663,
+            "branchStiffness": 0.625709106111899,
+            "foliageSpacing": 0.9239792516082526,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.4730850352346897,
+            "trunkFlare": 0.12577903918921948,
+            "trunkRoughness": 0.04390257954131812,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 2016,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 11152,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 208,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v16",
+          "silhouette": "umbrella",
+          "kind": "alien",
+          "seed": 4152182267,
+          "trunkHeight": 6.832087278271444,
+          "crownRadius": 3.098494826819364,
+          "canopyDensity": 1.486496786272619,
+          "leafScale": 0.898581110611558,
+          "wind": {
+            "strength": 1.491266542578399,
+            "gustStrength": 1.2482918036456965,
+            "gustScale": 0.03008429316431284,
+            "gustSpeed": 0.7459351741179898,
+            "turbulence": 0.8468920862763898,
+            "veer": 1.260749086888558
+          },
+          "species": {
+            "branchJointAngle": 0.714370743939653,
+            "whorlCount": 3,
+            "gnarl": 0.17220141083002088,
+            "gravitropism": 0.13238978043198585,
+            "apicalDominance": 0.4563470373116434,
+            "apicalDominanceDecay": 0.25283068635500966,
+            "branchStiffness": 0.7072671769466252,
+            "foliageSpacing": 0.7326123458147049,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.4351269743591547,
+            "trunkFlare": 0.32678306579589844,
+            "trunkRoughness": 0.06767364403698593,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1200,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8268,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 24,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v17",
+          "silhouette": "round",
+          "kind": "arid",
+          "seed": 2495908951,
+          "trunkHeight": 6.3641925219803195,
+          "crownRadius": 2.218787190294022,
+          "canopyDensity": 1.8254918085644023,
+          "leafScale": 0.884165344312787,
+          "wind": {
+            "strength": 1.2645744781922672,
+            "gustStrength": 1.1852294694783732,
+            "gustScale": 0.03662701486982405,
+            "gustSpeed": 0.7656133350133922,
+            "turbulence": 0.6401902577369505,
+            "veer": 1.1631208784058489
+          },
+          "species": {
+            "branchJointAngle": 0.7085936804162338,
+            "whorlCount": 2,
+            "gnarl": 0.20978719083126635,
+            "gravitropism": 0.08811307126656175,
+            "apicalDominance": 0.5279927700152621,
+            "apicalDominanceDecay": 0.21964688847307118,
+            "branchStiffness": 0.86114412734285,
+            "foliageSpacing": 0.9791830296069384,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.3725825623422861,
+            "trunkFlare": 0.23235058598220348,
+            "trunkRoughness": 0.1295965971541591,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 996,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8256,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-blossom-v5",
+              "vertices": 368,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v18",
+          "silhouette": "umbrella",
+          "kind": "alien",
+          "seed": 2611197415,
+          "trunkHeight": 9.59895078768836,
+          "crownRadius": 3.6146406378487743,
+          "canopyDensity": 1.7366555395070464,
+          "leafScale": 0.8746769093722104,
+          "wind": {
+            "strength": 1.397358877280574,
+            "gustStrength": 1.2322546956582163,
+            "gustScale": 0.06176440843753517,
+            "gustSpeed": 0.8363955880403191,
+            "turbulence": 0.538951855598445,
+            "veer": 0.889627317825688
+          },
+          "species": {
+            "branchJointAngle": 0.6238970448682084,
+            "whorlCount": 2,
+            "gnarl": 0.10540249094832688,
+            "gravitropism": 0.09285981684923172,
+            "apicalDominance": 0.21338502183090896,
+            "apicalDominanceDecay": 0.2066140861483291,
+            "branchStiffness": 0.5879710958339275,
+            "foliageSpacing": 0.9369366673380137,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.2786743174493313,
+            "trunkFlare": 0.22990410536527633,
+            "trunkRoughness": 0.07252394485985861,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 5652,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 9360,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v19",
+          "silhouette": "round",
+          "kind": "arid",
+          "seed": 3891928922,
+          "trunkHeight": 8.423941254197718,
+          "crownRadius": 2.5019090160315414,
+          "canopyDensity": 1.5424664335907439,
+          "leafScale": 0.8994518283754587,
+          "wind": {
+            "strength": 1.4566723020232089,
+            "gustStrength": 1.3315652753045275,
+            "gustScale": 0.029415801184251904,
+            "gustSpeed": 0.4476761428808286,
+            "turbulence": 0.4783771487615721,
+            "veer": 0.9176490371392372
+          },
+          "species": {
+            "branchJointAngle": 0.6900708743836731,
+            "whorlCount": 2,
+            "gnarl": 0.13196201882325112,
+            "gravitropism": 0.1377922629378736,
+            "apicalDominance": 0.6186822247039527,
+            "apicalDominanceDecay": 0.08685244908556342,
+            "branchStiffness": 0.6410348369460553,
+            "foliageSpacing": 0.9123452360183001,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.2742648636549711,
+            "trunkFlare": 0.15757750004529952,
+            "trunkRoughness": 0.09593558255815879,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 1728,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8160,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v20",
+          "silhouette": "umbrella",
+          "kind": "arid",
+          "seed": 836930848,
+          "trunkHeight": 7.0185455502905585,
+          "crownRadius": 3.13327776992693,
+          "canopyDensity": 1.9244569823145867,
+          "leafScale": 0.7591884502768517,
+          "wind": {
+            "strength": 1.2112524309125012,
+            "gustStrength": 1.191064845746633,
+            "gustScale": 0.03548213058710098,
+            "gustSpeed": 0.6300830107599542,
+            "turbulence": 0.67448083103458,
+            "veer": 1.109746186869695
+          },
+          "species": {
+            "branchJointAngle": 0.8238094823248684,
+            "whorlCount": 2,
+            "gnarl": 0.07959310275968164,
+            "gravitropism": 0.09368322947993875,
+            "apicalDominance": 0.21013325903564695,
+            "apicalDominanceDecay": 0.08347088805865496,
+            "branchStiffness": 0.6430491102114321,
+            "foliageSpacing": 0.939809865579009,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.25733765088021754,
+            "trunkFlare": 0.09684925198554993,
+            "trunkRoughness": 0.12121870476054028,
+            "thinFineBranches": 1
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 996,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 9180,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v21",
+          "silhouette": "weeping",
+          "kind": "temperate",
+          "seed": 273124202,
+          "trunkHeight": 9.449044360824393,
+          "crownRadius": 3.083283113863112,
+          "canopyDensity": 1.5454289983026683,
+          "leafScale": 0.9167144337296486,
+          "wind": {
+            "strength": 1.1124695906006088,
+            "gustStrength": 1.1144669217493484,
+            "gustScale": 0.06876634005457163,
+            "gustSpeed": 0.35813324147756165,
+            "turbulence": 0.42131847430859487,
+            "veer": 0.8197340972241556
+          },
+          "species": {
+            "branchJointAngle": 0.6910153022361919,
+            "whorlCount": 2,
+            "gnarl": 0.2788340068468824,
+            "gravitropism": 0.10272046564146878,
+            "apicalDominance": 0.6073649519355968,
+            "apicalDominanceDecay": 0.204844223074615,
+            "branchStiffness": 0.34315349607728424,
+            "foliageSpacing": 0.9112561120837928,
+            "foliageThreshold": 0,
+            "foliageDroop": 1,
+            "trunkFlare": 0.26861649319529535,
+            "trunkRoughness": 0.09768829198321327,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 3876,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 8464,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v22",
+          "silhouette": "frond",
+          "kind": "alien",
+          "seed": 517329892,
+          "trunkHeight": 7.042044240820268,
+          "crownRadius": 2.2018676097073806,
+          "canopyDensity": 1.8277541873394512,
+          "leafScale": 1.0285943984240293,
+          "wind": {
+            "strength": 1.2528912790039737,
+            "gustStrength": 1.1770896021877728,
+            "gustScale": 0.0592112696710974,
+            "gustSpeed": 0.7677540449927335,
+            "turbulence": 0.7124564417431642,
+            "veer": 1.2249700812639182
+          },
+          "species": {
+            "branchJointAngle": 0.5476762354699894,
+            "whorlCount": 3,
+            "gnarl": 0.06283250384498387,
+            "gravitropism": 0.1097653361223638,
+            "apicalDominance": 0.5136807635705918,
+            "apicalDominanceDecay": 0.2843877216242254,
+            "branchStiffness": 0.850545479664579,
+            "foliageSpacing": 0.7486686388403178,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.5833528035879135,
+            "trunkFlare": 0.37180825099349024,
+            "trunkRoughness": 0.10881423062644899,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 264,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 6608,
+              "instances": 1
+            }
+          ]
+        },
+        {
+          "key": "v23",
+          "silhouette": "conical",
+          "kind": "alien",
+          "seed": 3399365625,
+          "trunkHeight": 6.776859200619195,
+          "crownRadius": 2.00461604138407,
+          "canopyDensity": 1.7582745166146196,
+          "leafScale": 0.9441896449774503,
+          "wind": {
+            "strength": 1.4706982741836117,
+            "gustStrength": 1.261699224078834,
+            "gustScale": 0.04088880736753345,
+            "gustSpeed": 0.6247403225214014,
+            "turbulence": 0.8145065914596347,
+            "veer": 1.3605343710049853
+          },
+          "species": {
+            "branchJointAngle": 0.4529313155123964,
+            "whorlCount": 2,
+            "gnarl": 0.11480172322131693,
+            "gravitropism": 0.2095455441251397,
+            "apicalDominance": 0.7967705851653591,
+            "apicalDominanceDecay": 0.21112882079090922,
+            "branchStiffness": 0.6612958284467458,
+            "foliageSpacing": 0.9078806871920825,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.4946564158797264,
+            "trunkFlare": 0.2048728397488594,
+            "trunkRoughness": 0.07390929621644318,
+            "thinFineBranches": 0
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 888,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 9240,
+              "instances": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mobile-round-close",
+      "url": "http://127.0.0.1:5173/tree-test.html?only=round",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-06-28-tree-canopy-height/screenshots/mobile-round-close.png",
+      "summary": [
+        {
+          "key": "round",
+          "silhouette": "round",
+          "kind": "temperate",
+          "seed": 1388295046,
+          "trunkHeight": 5.921871552551039,
+          "crownRadius": 2.184,
+          "canopyDensity": 1.5170854831463658,
+          "leafScale": 0.92172787129879,
+          "wind": {
+            "strength": 1.1938170857998172,
+            "gustStrength": 1.1087143118028882,
+            "gustScale": 0.07350491830520331,
+            "gustSpeed": 0.5772975222518388,
+            "turbulence": 0.3484538854726265,
+            "veer": 0.7611805588851015
+          },
+          "species": {
+            "branchJointAngle": 0.6763084893394261,
+            "whorlCount": 3,
+            "gnarl": 0.1786678576283157,
+            "gravitropism": 0.13765184922143817,
+            "apicalDominance": 0.6479403677117079,
+            "apicalDominanceDecay": 0.2404813579330221,
+            "branchStiffness": 0.8658945553097874,
+            "foliageSpacing": 0.9126115106791258,
+            "foliageThreshold": 0,
+            "foliageDroop": 0.371514927893877,
+            "trunkFlare": 0.10795370355248451,
+            "trunkRoughness": 0.09435804022010416,
+            "thinFineBranches": 1
+          },
+          "meshes": [
+            {
+              "materialKey": "tree-bark-v5",
+              "vertices": 444,
+              "instances": 1
+            },
+            {
+              "materialKey": "tree-leaf-v6",
+              "vertices": 6860,
+              "instances": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "game": {
+    "url": "http://127.0.0.1:5173/?agent=1&world=0,45&dayphase=0.4734&profile=HIGH",
+    "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-06-28-tree-canopy-height/screenshots/desktop-inworld-under-canopy.png",
+    "metrics": {
+      "fps": 0,
+      "p50": 0,
+      "p95": 0,
+      "drawCalls": 0,
+      "triangles": 0
+    }
+  },
+  "consoleIssues": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00168200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00168200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00168200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "type": "warning",
+      "text": "[.WebGL-0x4c00168200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "type": "warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead"
+    }
+  ]
+}

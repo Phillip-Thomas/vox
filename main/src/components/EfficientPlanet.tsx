@@ -2,9 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
-import { createVoxelMaterial, updateVoxelMaterial, applyTerrainProfileToMaterial } from '../utils/voxelMaterial';
+import {
+  createVoxelMaterial,
+  updateVoxelMaterial,
+  applyTerrainProfileToMaterial,
+  applyVoxelWindProfileToMaterial
+} from '../utils/voxelMaterial';
 import { buildTerrainProfile } from '../utils/terrainProfile';
+import { buildWindProfile } from '../utils/windProfile';
 import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { getWorldTerrainData } from '../utils/worldGenCache';
 import { restoreVoxelEditsForWorld, saveVoxelEdits } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
@@ -128,17 +135,19 @@ export default function EfficientPlanet({
   // and re-applied when the planet seed changes (the material is a singleton, so
   // we drive uniforms rather than rebuild it).
   const terrainProfile = useMemo(() => buildTerrainProfile(terrainSeed), [terrainSeed]);
+  const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);
   const terrainTintAppliedRef = useRef(false);
   useEffect(() => {
     terrainTintAppliedRef.current = false;
-  }, [terrainProfile]);
+  }, [terrainProfile, windProfile]);
 
   useFrame(({ clock }) => {
     if (!terrainTintAppliedRef.current && voxelMaterial.userData.shader) {
       applyTerrainProfileToMaterial(terrainProfile, voxelMaterial);
+      applyVoxelWindProfileToMaterial(windProfile, voxelMaterial);
       terrainTintAppliedRef.current = true;
     }
-    updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality());
+    updateVoxelMaterial(voxelMaterial, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());
   });
 
   useEffect(() => {

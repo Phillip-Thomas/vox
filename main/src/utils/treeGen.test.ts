@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { generateTree, DEFAULT_TREE_PARAMS, selectLeafCandidates, GrowNode } from './treeGen';
 
-function node(order: number, dist: number, parent: number): GrowNode {
-  return { pos: new THREE.Vector3(), order, dist, parent };
+function node(order: number, dist: number, parent: number, y = dist): GrowNode {
+  return { pos: new THREE.Vector3(0, y, 0), order, dist, parent };
 }
 
 function posArray(geo: THREE.BufferGeometry): Float32Array {
@@ -40,12 +40,46 @@ describe('selectLeafCandidates', () => {
     }
   });
 
-  it('round keeps the default tip/twiggy rule (unchanged approved look)', () => {
+  it('round keeps the default branch-owned tip/twiggy rule', () => {
     const tree: GrowNode[] = [
       node(0, 0, -1), node(0, 1, 0), node(1, 2, 1), node(2, 3, 2) // tip at order 2
     ];
     const c = selectLeafCandidates(tree, 'round');
     expect(c).toContain(3); // the tip
+  });
+
+  it('round and umbrella do not clothe order-0 stems in shallow trees', () => {
+    const tree: GrowNode[] = [
+      node(0, 0, -1),
+      node(0, 1, 0),
+      node(0, 2, 1),
+      node(1, 3, 2),
+      node(1, 4, 3)
+    ];
+    for (const sil of ['round', 'umbrella'] as const) {
+      const c = selectLeafCandidates(tree, sil);
+      expect(c).not.toContain(1);
+      expect(c).not.toContain(2);
+      expect(c).toContain(3);
+      expect(c).toContain(4);
+    }
+  });
+
+  it('conical excludes mid-leader foliage bands but keeps branch foliage', () => {
+    const tree: GrowNode[] = [
+      node(0, 0, -1, 0),
+      node(0, 1, 0, 1),
+      node(0, 2, 1, 2),
+      node(0, 3, 2, 3), // high apex fallback only
+      node(1, 3, 2, 2.15),
+      node(1, 4, 4, 2.45)
+    ];
+    const c = selectLeafCandidates(tree, 'conical');
+    expect(c).not.toContain(1);
+    expect(c).not.toContain(2);
+    expect(c).toContain(3);
+    expect(c).toContain(4);
+    expect(c).toContain(5);
   });
 });
 
@@ -57,6 +91,33 @@ describe('treeGen', () => {
     }
   });
 
+  it('frond bark geometry stays trunk-only while leaves carry the palm crown', () => {
+    const { trunkGeometry, leafGeometry } = generateTree(777, {
+      ...DEFAULT_TREE_PARAMS,
+      silhouette: 'frond'
+    });
+    expect(trunkGeometry.attributes.position.count).toBeLessThan(360);
+    expect(leafGeometry.attributes.position.count).toBeGreaterThan(
+      trunkGeometry.attributes.position.count
+    );
+  });
+
+  it('shares stem rings across vertical trunk chunks', () => {
+    const { trunkGeometry } = generateTree(777, {
+      ...DEFAULT_TREE_PARAMS,
+      silhouette: 'frond'
+    });
+    const index = trunkGeometry.getIndex();
+    expect(index).not.toBeNull();
+    const counts = new Map<number, number>();
+    for (const vertex of index!.array) {
+      counts.set(vertex, (counts.get(vertex) ?? 0) + 1);
+    }
+    // A per-segment tube emitter references each ring from only one segment.
+    // Shared interior rings are used by both neighbouring trunk chunks.
+    expect(Math.max(...counts.values())).toBeGreaterThan(3);
+  });
+
   it('produces non-empty trunk and leaf geometry', () => {
     const { trunkGeometry, leafGeometry } = generateTree(12345);
     expect(trunkGeometry.attributes.position.count).toBeGreaterThan(0);
@@ -66,10 +127,48 @@ describe('treeGen', () => {
   });
 
   it('carries the wind attributes', () => {
-    const { trunkGeometry, leafGeometry } = generateTree(777);
+    const { trunkGeometry, leafGeometry, blossomGeometry, impostorGeometry } = generateTree(777, {
+      ...DEFAULT_TREE_PARAMS,
+      bloomAmount: 1
+    });
     expect(trunkGeometry.getAttribute('aStiff')).toBeTruthy();
     expect(leafGeometry.getAttribute('aStiff')).toBeTruthy();
     expect(leafGeometry.getAttribute('aPhase')).toBeTruthy();
+    expect(leafGeometry.getAttribute('aTuftShade')).toBeTruthy();
+    expect(blossomGeometry.getAttribute('aTuftShade')).toBeTruthy();
+    expect(impostorGeometry.getAttribute('aTuftShade')).toBeTruthy();
+  });
+
+  it('species controls alter deterministic growth without breaking budgets', () => {
+    const upright = generateTree(2026, {
+      ...DEFAULT_TREE_PARAMS,
+      branchJointAngle: 0.38,
+      whorlCount: 1,
+      gnarl: 0.04,
+      apicalDominance: 0.9,
+      branchStiffness: 0.92,
+      foliageDroop: 0.05,
+      trunkFlare: 0.04,
+      trunkRoughness: 0
+    });
+    const spreading = generateTree(2026, {
+      ...DEFAULT_TREE_PARAMS,
+      branchJointAngle: 0.9,
+      whorlCount: 3,
+      gnarl: 0.28,
+      apicalDominance: 0.25,
+      branchStiffness: 0.28,
+      foliageDroop: 0.9,
+      trunkFlare: 0.45,
+      trunkRoughness: 0.16
+    });
+    expect(spreading.trunkGeometry.attributes.position.count).not.toBe(
+      upright.trunkGeometry.attributes.position.count
+    );
+    spreading.trunkGeometry.computeBoundingBox();
+    expect(spreading.trunkGeometry.boundingBox!.max.y).toBeLessThan(
+      DEFAULT_TREE_PARAMS.height * 1.35
+    );
   });
 
   it('aStiff spans from near-0 (root) to near-1 (tips) on the trunk', () => {

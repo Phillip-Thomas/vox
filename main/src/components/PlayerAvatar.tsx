@@ -83,12 +83,17 @@ export function createPlayerAvatarRenderTarget(pose: PlayerPose): {
 
 export interface PlayerAvatarPresentation {
   bodyColor: string;
+  accentColor: string;
+  beaconColor: string;
+  beaconShape: 'crew' | 'wave' | 'thrust' | 'strike' | 'build';
   bodyPosition: [number, number, number];
   bodyRotation: [number, number, number];
   headPosition: [number, number, number];
+  showSuitBackpack: boolean;
   showJetpackFlame: boolean;
   showMiningTool: boolean;
   showBuildPreview: boolean;
+  showTorchGlow: boolean;
   miningToolOpacity: number;
 }
 
@@ -97,26 +102,118 @@ export function createPlayerAvatarPresentation(
   color = DEFAULT_AVATAR_COLOR
 ): PlayerAvatarPresentation {
   const swimming = pose.action === 'swim' || pose.submergence > 0.5;
+  const mining = pose.action === 'mine';
+  const building = pose.action === 'build';
+  const jetpacking = pose.action === 'jetpack' || pose.jetpackActive;
+  const accentColor = swimming
+    ? '#38bdf8'
+    : mining
+      ? '#fbbf24'
+      : building
+        ? '#86efac'
+        : jetpacking
+          ? '#c4b5fd'
+          : color;
   return {
     bodyColor: swimming
       ? '#38bdf8'
-      : pose.action === 'mine'
+      : mining
         ? '#fbbf24'
-        : pose.action === 'build'
+        : building
           ? '#86efac'
-          : pose.action === 'jetpack' || pose.jetpackActive
+          : jetpacking
             ? '#c4b5fd'
             : color,
+    accentColor,
+    beaconColor: accentColor,
+    beaconShape: swimming
+      ? 'wave'
+      : mining
+        ? 'strike'
+        : building
+          ? 'build'
+          : jetpacking
+            ? 'thrust'
+            : 'crew',
     bodyPosition: swimming ? [0, 0.82, 0.04] : [0, 0.62, 0],
     bodyRotation: swimming ? [Math.PI / 2, 0, 0] : [0, 0, 0],
     headPosition: swimming ? [0, 0.86, 0.58] : [0, 1.27, 0],
-    showJetpackFlame: pose.jetpackActive || pose.action === 'jetpack',
-    showMiningTool: pose.action === 'mine',
-    showBuildPreview: pose.action === 'build',
-    miningToolOpacity: pose.action === 'mine'
+    showSuitBackpack: !swimming,
+    showJetpackFlame: jetpacking,
+    showMiningTool: mining,
+    showBuildPreview: building,
+    showTorchGlow: pose.torchActive,
+    miningToolOpacity: mining
       ? Math.max(0.35, Math.min(1, pose.miningProgress || 0.35))
       : 0
   };
+}
+
+export function measurePlayerAvatarLabelWidth(label?: string): number {
+  return Math.max(0.52, Math.min(1.25, (label?.length ?? 0) * 0.075 + 0.18));
+}
+
+function AvatarBeaconShape({
+  shape,
+  color
+}: {
+  shape: PlayerAvatarPresentation['beaconShape'];
+  color: string;
+}) {
+  if (shape === 'wave') {
+    return (
+      <group userData={{ avatarPart: 'action-beacon-wave' }}>
+        <mesh position={[-0.06, 0, 0]} rotation={[0, 0, 0.45]}>
+          <boxGeometry args={[0.18, 0.028, 0.018]} />
+          <meshBasicMaterial color={color} transparent opacity={0.95} />
+        </mesh>
+        <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.45]}>
+          <boxGeometry args={[0.18, 0.028, 0.018]} />
+          <meshBasicMaterial color={color} transparent opacity={0.82} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (shape === 'thrust') {
+    return (
+      <mesh rotation={[0, 0, Math.PI]} userData={{ avatarPart: 'action-beacon-thrust' }}>
+        <coneGeometry args={[0.075, 0.17, 3]} />
+        <meshBasicMaterial color={color} transparent opacity={0.9} />
+      </mesh>
+    );
+  }
+
+  if (shape === 'strike') {
+    return (
+      <group rotation={[0, 0, -0.6]} userData={{ avatarPart: 'action-beacon-strike' }}>
+        <mesh>
+          <boxGeometry args={[0.22, 0.035, 0.018]} />
+          <meshBasicMaterial color={color} transparent opacity={0.96} />
+        </mesh>
+        <mesh position={[0.08, 0.055, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <boxGeometry args={[0.14, 0.03, 0.018]} />
+          <meshBasicMaterial color={color} transparent opacity={0.86} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (shape === 'build') {
+    return (
+      <mesh userData={{ avatarPart: 'action-beacon-build' }}>
+        <boxGeometry args={[0.15, 0.15, 0.024]} />
+        <meshBasicMaterial color={color} transparent opacity={0.9} wireframe />
+      </mesh>
+    );
+  }
+
+  return (
+    <mesh userData={{ avatarPart: 'action-beacon-crew' }}>
+      <sphereGeometry args={[0.055, 12, 8]} />
+      <meshBasicMaterial color={color} transparent opacity={0.92} />
+    </mesh>
+  );
 }
 
 export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label }: PlayerAvatarProps) {
@@ -128,7 +225,7 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label
   const targetRef = useRef(target);
   targetRef.current = target;
   const presentation = useMemo(() => createPlayerAvatarPresentation(pose, color), [color, pose]);
-  const labelWidth = useMemo(() => Math.max(0.52, Math.min(1.25, (label?.length ?? 0) * 0.075 + 0.18)), [label]);
+  const labelWidth = useMemo(() => measurePlayerAvatarLabelWidth(label), [label]);
 
   useLayoutEffect(() => {
     if (!groupRef.current) return;
@@ -154,13 +251,33 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label
       ref={groupRef}
       userData={{ playerId: pose.playerId, worldId: pose.worldId, action: pose.action }}
     >
+      <group userData={{ avatarPart: 'footing-marker' }}>
+        <mesh position={[0, 0.035, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.45, 0.012, 6, 36]} />
+          <meshBasicMaterial color={presentation.accentColor} transparent opacity={0.42} depthWrite={false} />
+        </mesh>
+        <mesh position={[0, 0.05, 0.51]} rotation={[Math.PI / 2, 0, Math.PI / 3]}>
+          <coneGeometry args={[0.09, 0.22, 3]} />
+          <meshBasicMaterial color={presentation.accentColor} transparent opacity={0.72} depthWrite={false} />
+        </mesh>
+      </group>
       <mesh position={presentation.bodyPosition} rotation={presentation.bodyRotation} castShadow receiveShadow>
         <capsuleGeometry args={[0.28, 0.82, 5, 10]} />
         <meshStandardMaterial color={presentation.bodyColor} roughness={0.72} metalness={0.05} />
       </mesh>
+      {presentation.showSuitBackpack && (
+        <mesh position={[0, 0.66, -0.29]} castShadow userData={{ avatarPart: 'suit-backpack' }}>
+          <boxGeometry args={[0.32, 0.48, 0.16]} />
+          <meshStandardMaterial color="#0f172a" roughness={0.74} metalness={0.08} emissive={presentation.accentColor} emissiveIntensity={0.08} />
+        </mesh>
+      )}
       <mesh position={presentation.headPosition} castShadow receiveShadow>
         <sphereGeometry args={[0.24, 16, 12]} />
         <meshStandardMaterial color="#dbeafe" roughness={0.8} metalness={0.02} />
+      </mesh>
+      <mesh position={[presentation.headPosition[0], presentation.headPosition[1], presentation.headPosition[2] + 0.215]} userData={{ avatarPart: 'visor' }}>
+        <boxGeometry args={[0.26, 0.09, 0.018]} />
+        <meshStandardMaterial color="#06111f" roughness={0.35} metalness={0.18} emissive={presentation.accentColor} emissiveIntensity={0.16} />
       </mesh>
       {presentation.showMiningTool && (
         <group position={[0.38, 0.88, 0.32]} rotation={[0.55, 0, -0.7]} userData={{ actionAccessory: 'mine' }}>
@@ -187,9 +304,21 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label
         </group>
       )}
       {presentation.showJetpackFlame && (
-        <mesh position={[0, 0.28, -0.34]} rotation={[Math.PI, 0, 0]}>
-          <coneGeometry args={[0.14, 0.42, 12]} />
-          <meshBasicMaterial color="#60a5fa" transparent opacity={0.82} />
+        <group userData={{ actionAccessory: 'jetpack' }}>
+          <mesh position={[-0.11, 0.26, -0.42]} rotation={[Math.PI, 0, 0]}>
+            <coneGeometry args={[0.08, 0.42, 12]} />
+            <meshBasicMaterial color="#60a5fa" transparent opacity={0.82} />
+          </mesh>
+          <mesh position={[0.11, 0.26, -0.42]} rotation={[Math.PI, 0, 0]}>
+            <coneGeometry args={[0.08, 0.42, 12]} />
+            <meshBasicMaterial color="#c4b5fd" transparent opacity={0.68} />
+          </mesh>
+        </group>
+      )}
+      {presentation.showTorchGlow && (
+        <mesh position={[-0.33, 0.82, 0.34]} userData={{ actionAccessory: 'torch' }}>
+          <sphereGeometry args={[0.085, 12, 8]} />
+          <meshBasicMaterial color="#fbbf24" transparent opacity={0.9} />
         </mesh>
       )}
       {label && (
@@ -210,6 +339,17 @@ export default function PlayerAvatar({ pose, color = DEFAULT_AVATAR_COLOR, label
           </Text>
         </Billboard>
       )}
+      <Billboard position={[0, label ? 1.98 : 1.72, 0]}>
+        <mesh position={[0, 0, -0.016]}>
+          <planeGeometry args={[0.42, 0.24]} />
+          <meshBasicMaterial color="#05080f" transparent opacity={0.5} depthWrite={false} />
+        </mesh>
+        <mesh position={[0, 0, -0.009]}>
+          <ringGeometry args={[0.102, 0.126, 24]} />
+          <meshBasicMaterial color={presentation.beaconColor} transparent opacity={0.38} depthWrite={false} />
+        </mesh>
+        <AvatarBeaconShape shape={presentation.beaconShape} color={presentation.beaconColor} />
+      </Billboard>
     </group>
   );
 }

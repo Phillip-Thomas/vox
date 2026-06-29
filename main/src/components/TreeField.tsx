@@ -220,7 +220,7 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       // the same way; mirrors the per-blade tilt grass uses.
       const tilt = seededVoxelUnit(x, y, z, 17, terrainSeed) * 0.14; // 0 .. ~8deg
       _tilt.makeRotationX(tilt);
-      const s = 0.8 + seededVoxelUnit(x, y, z, 23, terrainSeed) * 0.5; // 0.8 .. 1.3
+      const s = 0.92 + seededVoxelUnit(x, y, z, 23, terrainSeed) * 0.48; // 0.92 .. 1.4
       _scaleM.makeScale(s, s, s);
 
       _translate.makeTranslation(

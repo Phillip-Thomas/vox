@@ -16,10 +16,8 @@ import VantageToast from './components/hud/VantageToast.tsx';
 import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
 import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
-import JetpackMeter from './components/hud/JetpackMeter.tsx';
-import OxygenMeter from './components/hud/OxygenMeter.tsx';
-import MawChargeMeter from './components/hud/MawChargeMeter.tsx';
 import VitalsMeter from './components/hud/VitalsMeter.tsx';
+import { getInventoryTopOffset } from './components/hud/VitalsMeter.model.ts';
 import InteractionPrompt from './components/hud/InteractionPrompt.tsx';
 import BuildIndicator from './components/hud/BuildIndicator.tsx';
 import TargetReticle from './components/hud/TargetReticle.tsx';
@@ -27,6 +25,7 @@ import MiningProgress from './components/hud/MiningProgress.tsx';
 import CockpitReadout from './components/hud/CockpitReadout.tsx';
 import MultiplayerStatusBadge from './components/hud/MultiplayerStatusBadge.tsx';
 import OrbitalMinimap from './components/hud/OrbitalMinimap.tsx';
+import HudCornerActions from './components/hud/HudCornerActions.tsx';
 import {
   DEFAULT_PROFILE,
   getGraphicsQuality,
@@ -36,6 +35,10 @@ import {
   QUALITY_PROFILES,
   setQualityProfile
 } from './config/graphicsSettings.ts';
+import {
+  parseVoxelRealityStage,
+  setVoxelRealityStage
+} from './game/systems/realityRenderSystem.ts';
 import type { CurrentWorld, WorldCoordinate } from './utils/worldCoordinates.ts';
 import {
   coordinateKey,
@@ -422,8 +425,15 @@ const App: React.FC = () => {
     setPaused(false);
     toggleBuildMode();
   };
+  const pauseAndOpenStarMap = () => {
+    craftingOpenRef.current = false;
+    setCraftingOpen(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+    setPaused(true);
+  };
   const currentWorldKey = coordinateKey(currentWorld.coordinate);
   const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
+  const inventoryTopOffset = useMemo(() => getInventoryTopOffset(isTouch), [isTouch]);
   const currentWorldIdentity = useMemo(() => worldIdentityFromCurrentWorld(currentWorld), [currentWorld.worldId, currentWorld.seed]);
   const commandContext = useMemo(
     () => createOfflineCommandContext(currentWorldIdentity, { actorId: localActorId }),
@@ -576,11 +586,14 @@ const App: React.FC = () => {
 
   // ?bench=1 enables the perf probe; ?profile=ULTRA|HIGH|... selects quality;
   // ?painterly=1 force-enables the painterly look for testing.
+  // ?voxelStage=bare|color|material|alive|paradox previews plot-gated rendering.
   const { benchEnabled, profile, postProcess, overviewEnabled, agentEnabled, flyDebug, descentDebug, debugUiEnabled } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
     const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
     if (valid !== getQualityProfile()) setQualityProfile(valid);
+    const voxelStage = parseVoxelRealityStage(params.get('voxelStage') ?? params.get('realityStage'));
+    if (voxelStage) setVoxelRealityStage(voxelStage);
     if (params.get('painterly') === '1') overrideGraphicsQuality({ painterly: true });
     if (params.get('ao') === '0') overrideGraphicsQuality({ contactAO: false });
     if (params.get('outline') === '0') overrideGraphicsQuality({ outline: false });
@@ -776,7 +789,7 @@ const App: React.FC = () => {
         dpr={[1, 1.5]}
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.0;
+          gl.toneMappingExposure = 0.94;
           // Stash the canvas so the DOM "Play Now" button can request pointer
           // lock directly inside the click gesture (see LandingMenu).
           setGameCanvas(gl.domElement);
@@ -835,15 +848,12 @@ const App: React.FC = () => {
           <Crosshair />
           <TargetReticle />
           {flight.controlMode === 'fps' && <MiningProgress />}
-          {flight.controlMode === 'fps' && <JetpackMeter />}
-          {flight.controlMode === 'fps' && <OxygenMeter />}
-          {flight.controlMode === 'fps' && <MawChargeMeter />}
           {flight.controlMode === 'fps' && <VitalsMeter />}
           {flight.controlMode === 'fps' && <BuildIndicator />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
-          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel />}
+          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel topOffset={inventoryTopOffset} />}
           <OrbitalMinimap
             coordinateLabel={currentWorldKey}
             worldId={currentWorldIdentity.worldId}
@@ -853,60 +863,13 @@ const App: React.FC = () => {
           <MultiplayerStatusBadge />
           {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
-          {/* Open build mode/editor HUD. Desktop also has B; this is the
-              touch/always-available entry point. On foot only. */}
-          {flight.controlMode === 'fps' && (
-            <button
-              onClick={toggleBuildHud}
-              aria-label={buildModeOpen ? 'Close build editor' : 'Open build editor'}
-              title={buildModeOpen ? 'Close build editor' : 'Open build editor'}
-              style={{
-                position: 'absolute', top: 14, right: 118, width: 44, height: 44,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 18, color: buildModeOpen ? '#bfffd6' : '#cfe8ff',
-                background: buildModeOpen ? 'rgba(21,128,61,0.58)' : 'rgba(8,13,24,0.55)',
-                border: `1px solid ${buildModeOpen ? 'rgba(125,255,160,0.58)' : 'rgba(125,211,252,0.28)'}`,
-                borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
-                backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
-              }}
-            >▧</button>
-          )}
-
-          {/* Open the Fabricator (crafting). Desktop also has the C key; this is
-              the touch/always-available entry point. On foot only. */}
-          {flight.controlMode === 'fps' && (
-            <button
-              onClick={openCrafting}
-              aria-label="Open fabricator (craft)"
-              style={{
-                position: 'absolute', top: 14, right: 66, width: 44, height: 44,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 18, color: '#cfe8ff',
-                background: 'rgba(8,13,24,0.55)', border: '1px solid rgba(125,211,252,0.28)',
-                borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
-                backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
-              }}
-            >⚒</button>
-          )}
-
-          {/* Pause + star map. On desktop Esc also opens it (via pointer-lock
-              loss); this button is the touch/always-available entry point. */}
-          <button
-            onClick={() => {
-              craftingOpenRef.current = false; setCraftingOpen(false);
-              if (document.pointerLockElement) document.exitPointerLock();
-              setPaused(true);
-            }}
-            aria-label="Pause and open star map"
-            style={{
-              position: 'absolute', top: 14, right: 14, width: 44, height: 44,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 18, color: '#cfe8ff',
-              background: 'rgba(8,13,24,0.55)', border: '1px solid rgba(125,211,252,0.28)',
-              borderRadius: 12, cursor: 'pointer', padding: 0, zIndex: 20,
-              backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)'
-            }}
-          >☰</button>
+          <HudCornerActions
+            controlMode={flight.controlMode}
+            buildModeOpen={buildModeOpen}
+            onToggleBuild={toggleBuildHud}
+            onOpenCrafting={openCrafting}
+            onPause={pauseAndOpenStarMap}
+          />
         </>
       )}
 

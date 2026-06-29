@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { seededUnit } from './worldCoordinates';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
+import { buildWindProfile, type WindProfile } from './windProfile';
 
 // --- Per-planet grass profile (derived from the BIOME) -----------------------
 //
@@ -39,6 +40,8 @@ export interface GrassProfile {
   windDir: THREE.Vector2;
   /** Per-planet wind strength multiplier. */
   windStrength: number;
+  /** Shared per-planet atmosphere profile for visual/audio/gameplay consumers. */
+  wind: WindProfile;
   /** Rounded-normal amount (cross-section curvature for lush shading). */
   roundness: number;
 }
@@ -46,8 +49,6 @@ export interface GrassProfile {
 // Salts disjoint from biomeProfile / treeProfile.
 const SALT_HEIGHT = 34;
 const SALT_WIDTH = 35;
-const SALT_WIND_DIR = 37;
-const SALT_WIND_STR = 38;
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
@@ -59,6 +60,7 @@ function clamp(v: number, lo: number, hi: number): number {
 export function buildGrassProfile(terrainSeed: number): GrassProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
+  const wind = buildWindProfile(s, biome);
   const { grassHue, saturation, lushness, aridity, temperature } = biome;
 
   // --- Colours ---------------------------------------------------------------
@@ -87,8 +89,10 @@ export function buildGrassProfile(terrainSeed: number): GrassProfile {
   const dryness = clamp(aridity * 0.85, 0, 0.85);
 
   // --- Density (the headline per-planet knob) --------------------------------
-  // 0.35x (sparse) .. ~1.85x (jungle) of the global quality density.
-  const densityMul = 0.35 + lushness * 1.5;
+  // 0.45x (sparse) .. ~1.8x (jungle) of the global quality density. The renderer's
+  // per-density unit is now finer, so this raises perceived coverage without
+  // returning to broad leaves.
+  const densityMul = 0.45 + lushness * 1.35;
   // Bare-ground patches: lush worlds fully covered, arid/sparse worlds thin out.
   const coverage = clamp(0.5 + lushness * 0.5 - aridity * 0.3, 0.35, 1.0);
 
@@ -96,11 +100,7 @@ export function buildGrassProfile(terrainSeed: number): GrassProfile {
   // Wide, readable height range: short turf (~0.6) .. tall grass (~1.9). Lushness
   // adds height; a per-seed draw keeps even similar biomes individual.
   const heightMul = clamp(0.6 + lushness * 0.7 + seededUnit(s, SALT_HEIGHT) * 0.6, 0.6, 1.9);
-  const widthMul = 0.8 + seededUnit(s, SALT_WIDTH) * 0.55;
-
-  const windAng = seededUnit(s, SALT_WIND_DIR) * Math.PI * 2;
-  const windDir = new THREE.Vector2(Math.cos(windAng), Math.sin(windAng));
-  const windStrength = 0.7 + seededUnit(s, SALT_WIND_STR) * 0.7;
+  const widthMul = 0.58 + seededUnit(s, SALT_WIDTH) * 0.32;
 
   return {
     terrainSeed: s,
@@ -114,8 +114,9 @@ export function buildGrassProfile(terrainSeed: number): GrassProfile {
     coverage,
     heightMul,
     widthMul,
-    windDir,
-    windStrength,
+    windDir: wind.direction.clone(),
+    windStrength: wind.strength,
+    wind,
     roundness: 0.85
   };
 }

@@ -48,10 +48,10 @@ describe('data integrity', () => {
     }
   });
 
-  it('new archetype materials have authored shader detail', () => {
-    expect(hasVoxelShaderDetail(MaterialType.BASALT)).toBe(true);
-    expect(hasVoxelShaderDetail(MaterialType.ICE)).toBe(true);
-    expect(hasVoxelShaderDetail(MaterialType.CRYSTAL)).toBe(true);
+  it('every render material has authored voxel shader detail', () => {
+    for (const material of MATERIAL_ORDER) {
+      expect(hasVoxelShaderDetail(material), `${material} missing voxel detail`).toBe(true);
+    }
   });
 
   it('resource affinities reference real biomes/archetypes', () => {

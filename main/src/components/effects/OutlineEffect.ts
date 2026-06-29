@@ -41,7 +41,7 @@ export interface OutlineEffectOptions {
 }
 
 export class OutlineEffect extends Effect {
-  constructor({ thickness = 1.2, strength = 0.55, threshold = 0.03 }: OutlineEffectOptions = {}) {
+  constructor({ thickness = 0.95, strength = 0.34, threshold = 0.045 }: OutlineEffectOptions = {}) {
     super('OutlineEffect', fragmentShader, {
       attributes: EffectAttribute.DEPTH,
       uniforms: new Map<string, Uniform>([

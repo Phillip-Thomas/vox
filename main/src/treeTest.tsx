@@ -36,13 +36,19 @@
 // Docs trail: see TODO.md ("Dev harnesses") and memory `tree-test-harness`.
 // =============================================================================
 
-import { StrictMode, useMemo, useRef } from 'react';
+import { StrictMode, useEffect, useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { generateTree, type TreeSilhouette } from './utils/treeGen.ts';
-import { buildTreeProfile, paramsFromProfile, type TreeProfile } from './utils/treeProfile.ts';
+import {
+  buildTreeProfile,
+  paramsFromProfile,
+  SILHOUETTES,
+  type LeafMode,
+  type TreeProfile
+} from './utils/treeProfile.ts';
 import { buildBiomeProfile } from './utils/biomeProfile.ts';
 import { coordinateToSeed } from './utils/worldCoordinates.ts';
 import {
@@ -96,6 +102,51 @@ interface BuiltTree {
   seed: number;
 }
 
+declare global {
+  interface Window {
+    __treeTest?: {
+      summary: () => Array<{
+        key: string;
+        silhouette: TreeSilhouette;
+        kind: string;
+        seed: number;
+        trunkHeight: number;
+        crownRadius: number;
+        canopyDensity: number;
+        leafScale: number;
+        wind: {
+          strength: number;
+          gustStrength: number;
+          gustScale: number;
+          gustSpeed: number;
+          turbulence: number;
+          veer: number;
+        };
+        species: {
+          branchJointAngle: number;
+          whorlCount: number;
+          gnarl: number;
+          gravitropism: number;
+          apicalDominance: number;
+          apicalDominanceDecay: number;
+          branchStiffness: number;
+          foliageSpacing: number;
+          foliageThreshold: number;
+          foliageDroop: number;
+          trunkFlare: number;
+          trunkRoughness: number;
+          thinFineBranches: number;
+        };
+        meshes: Array<{
+          materialKey: string;
+          vertices: number;
+          instances: number;
+        }>;
+      }>;
+    };
+  }
+}
+
 /**
  * Build one tree as three InstancedMeshes (count 1, identity) with ITS OWN
  * material set, so each tree can carry its own per-seed colours. The profile
@@ -104,7 +155,11 @@ interface BuiltTree {
  */
 function buildTree(key: string, seed: number, force: TreeSilhouette | undefined): BuiltTree {
   const profile = buildTreeProfile(seed);
-  if (force) profile.silhouette = force;
+  if (force) {
+    profile.silhouette = force;
+    profile.shapeId = SILHOUETTES.indexOf(force);
+    profile.leafMode = (force === 'conical' ? 1 : force === 'frond' ? 2 : 0) as LeafMode;
+  }
   const arch = generateTree(seed, paramsFromProfile(profile));
 
   const mats: TreeMats = {
@@ -144,8 +199,8 @@ function Scene() {
 
   // Layout + tree construction per mode.
   const trees = useMemo<BuiltTree[]>(() => {
-    const sx = 9;
-    const sz = 11;
+    const sx = MODE === 'silhouettes' ? 8 : 8.4;
+    const sz = 10.2;
     if (ONLY) {
       const spec = SPECIES.find(s => s.name === ONLY) ?? SPECIES[0];
       const t = buildTree(spec.name, coordinateToSeed(spec.coord[0], spec.coord[1]), spec.force);
@@ -174,6 +229,67 @@ function Scene() {
     }
     return list;
   }, []);
+
+  useEffect(() => {
+    window.__treeTest = {
+      summary: () =>
+        trees.map(t => {
+          const params = paramsFromProfile(t.profile);
+          const meshes: Array<{ materialKey: string; vertices: number; instances: number }> = [];
+          t.group.traverse(object => {
+            if (!(object as THREE.InstancedMesh).isInstancedMesh) return;
+            const mesh = object as THREE.InstancedMesh;
+            const material = mesh.material as THREE.Material & {
+              customProgramCacheKey?: () => string;
+            };
+            let materialKey = '';
+            try { materialKey = material.customProgramCacheKey?.() ?? ''; } catch { /* ignore */ }
+            meshes.push({
+              materialKey,
+              vertices: mesh.geometry.attributes.position.count,
+              instances: mesh.count
+            });
+          });
+          return {
+            key: t.key,
+            silhouette: t.silhouette,
+            kind: t.kind,
+            seed: t.seed,
+            trunkHeight: t.profile.trunkHeight,
+            crownRadius: params.crownRadius,
+            canopyDensity: t.profile.canopyDensity,
+            leafScale: t.profile.leafScale,
+            wind: {
+              strength: t.profile.wind.strength,
+              gustStrength: t.profile.wind.gustStrength,
+              gustScale: t.profile.wind.gustScale,
+              gustSpeed: t.profile.wind.gustSpeed,
+              turbulence: t.profile.wind.turbulence,
+              veer: t.profile.wind.veer
+            },
+            species: {
+              branchJointAngle: t.profile.branchJointAngle,
+              whorlCount: t.profile.whorlCount,
+              gnarl: t.profile.gnarl,
+              gravitropism: t.profile.gravitropism,
+              apicalDominance: t.profile.apicalDominance,
+              apicalDominanceDecay: t.profile.apicalDominanceDecay,
+              branchStiffness: t.profile.branchStiffness,
+              foliageSpacing: t.profile.foliageSpacing,
+              foliageThreshold: t.profile.foliageThreshold,
+              foliageDroop: t.profile.foliageDroop,
+              trunkFlare: t.profile.trunkFlare,
+              trunkRoughness: t.profile.trunkRoughness,
+              thinFineBranches: t.profile.thinFineBranches
+            },
+            meshes
+          };
+        })
+    };
+    return () => {
+      delete window.__treeTest;
+    };
+  }, [trees]);
 
   // Apply per-tree colours once shaders compile, then drive wind/SSS every frame
   // for every tree (1:1 with the game's updateTreeMaterials).
@@ -214,7 +330,7 @@ function Scene() {
           </Html>
         </group>
       ))}
-      <OrbitControls target={[0, ONLY ? 4 : 3.5, 0]} />
+      <OrbitControls target={[0, ONLY ? 5.8 : 5.2, 0]} />
     </>
   );
 }
@@ -223,10 +339,10 @@ function Scene() {
 // pulled-back high angle for the variety grid (so the whole grid is in frame).
 const ROWS = Math.ceil(COUNT / COLS);
 const CAMERA: { position: [number, number, number]; fov: number; near: number; far: number } = ONLY
-  ? { position: [0, 4.5, 14], fov: 38, near: 0.1, far: 1000 }
+  ? { position: [0, 6.1, 14.5], fov: 36, near: 0.1, far: 1000 }
   : MODE === 'silhouettes'
-    ? { position: [0, 6, 38], fov: 42, near: 0.1, far: 1000 }
-    : { position: [0, Math.max(12, ROWS * 4.5), Math.max(40, COLS * 8 + ROWS * 4)], fov: 46, near: 0.1, far: 1000 };
+    ? { position: [0, 7.8, 46], fov: 42, near: 0.1, far: 1000 }
+    : { position: [0, Math.max(15, ROWS * 5.6), Math.max(42, COLS * 7 + ROWS * 3.6)], fov: 46, near: 0.1, far: 1000 };
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

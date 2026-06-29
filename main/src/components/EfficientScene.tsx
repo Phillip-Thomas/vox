@@ -4,7 +4,10 @@ import * as THREE from 'three';
 import EfficientPlanet, { PlanetStats } from './EfficientPlanet';
 import EfficientPlayer, { PlayerDebugState } from './EfficientPlayer';
 import GrassField from './GrassField';
+import FloraField from './FloraField';
+import FaunaField from './FaunaField';
 import TreeField from './TreeField';
+import SurfaceEffectField from './SurfaceEffectField';
 import LooseStoneField from './LooseStoneField';
 import ForageField from './ForageField';
 import { PlayerTorch, Campfires } from './Lights';
@@ -179,7 +182,10 @@ export default function EfficientScene({
       />
       <PlayerAvatarPoseHarness worldId={commandContext.world.worldId} />
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <FloraField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <FaunaField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <TreeField planetSize={planetSize} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
+      <SurfaceEffectField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
       <ForageField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
       <PlayerTorch playerPosition={playerPosition} />

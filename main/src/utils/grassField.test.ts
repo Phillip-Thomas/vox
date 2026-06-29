@@ -33,6 +33,18 @@ describe('grass blade geometry', () => {
     expect(minY).toBeCloseTo(0, 5);
     expect(maxY).toBeGreaterThan(0.5);
   });
+
+  it('uses a hairlike strand width instead of broad cartoon leaves', () => {
+    const geo = createBladeGeometry();
+    const pos = geo.attributes.position as THREE.BufferAttribute;
+    let minX = Infinity;
+    let maxX = -Infinity;
+    for (let i = 0; i < pos.count; i++) {
+      minX = Math.min(minX, pos.getX(i));
+      maxX = Math.max(maxX, pos.getX(i));
+    }
+    expect(maxX - minX).toBeLessThanOrEqual(0.08);
+  });
 });
 
 describe('computeBladeMatrix', () => {
@@ -83,6 +95,11 @@ describe('bladesPerVoxel', () => {
     expect(bladesPerVoxel(0)).toBe(0);
     expect(bladesPerVoxel(1)).toBe(BLADES_PER_CLUMP);
     expect(bladesPerVoxel(4)).toBe(4 * BLADES_PER_CLUMP);
+  });
+
+  it('protects the denser hairlike strand budget', () => {
+    expect(BLADES_PER_CLUMP).toBeGreaterThanOrEqual(20);
+    expect(bladesPerVoxel(4)).toBeGreaterThanOrEqual(96);
   });
 });
 

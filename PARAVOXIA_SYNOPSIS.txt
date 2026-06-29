@@ -197,3 +197,23 @@ player need to travel to nearby planet in same system
 
 must fix ship
 
+
+
+
+
+levels of paravoxia dimension shifting
+
+
+black and white and big voxel
+color and big voxel
+color and big voxel and mesh
+vibrant mesh
+vibrant mesh and small voxel
+various voxel planet shapes
+
+
+
+
+
+repairing gun allows terrain generation ( a regulated technique unlike building/crafting)
+

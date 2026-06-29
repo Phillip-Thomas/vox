@@ -36,6 +36,31 @@ const FLOWER_COLOR = new THREE.Color(0xff7aa8).convertSRGBToLinear();
 // Shared wind helper GLSL (vertex stage, all leafy materials). instWorld keys the
 // phase so neighbouring trees sway out of step; uTime drives the gust.
 const TREE_WIND_GLSL = /* glsl */ `
+  uniform vec2 uWindDir;
+  uniform vec2 uWindOffset;
+  uniform float uWindStrength;
+  uniform float uWindGustStrength;
+  uniform float uWindGustScale;
+  uniform float uWindGustSpeed;
+  uniform float uWindTurbulence;
+  uniform float uWindVeer;
+
+  float twHash21(vec2 p) {
+    p = fract(p * vec2(123.34, 345.45));
+    p += dot(p, p + 34.345);
+    return fract(p.x * p.y);
+  }
+  float twNoise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float a = twHash21(i);
+    float b = twHash21(i + vec2(1.0, 0.0));
+    float c = twHash21(i + vec2(0.0, 1.0));
+    float d = twHash21(i + vec2(1.0, 1.0));
+    return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+  }
+
   // Returns an object-space bend offset for a vertex.
   // p          : object-space transformed position (its xz drives the sway plane)
   // stiff      : 0 at root .. 1 at tips (more flex higher up)
@@ -44,28 +69,61 @@ const TREE_WIND_GLSL = /* glsl */ `
   // extra      : per-vertex high-freq term (leaf flutter), vec3(0) for bark
   vec3 twWindOffset(vec3 p, float stiff, vec3 instWorld, float t, vec3 extra) {
     float phase = dot(instWorld, vec3(0.13, 0.11, 0.17));
-    float gust = sin(t * 0.5 + dot(instWorld.xz, vec2(0.025))) * 0.5 + 0.5;
-    float sway = sin(t * 1.1 + phase) + 0.4 * sin(t * 2.3 + phase * 1.7);
-    float amp = stiff * stiff * (0.10 + 0.18 * gust);
+    vec2 wdir = normalize(uWindDir + vec2(0.0001, 0.0));
+    vec2 crossDir = vec2(-wdir.y, wdir.x);
+    vec2 gustAuv = instWorld.xz * uWindGustScale + wdir * (t * uWindGustSpeed) + uWindOffset;
+    vec2 gustBuv = instWorld.zx * (uWindGustScale * 1.73) - crossDir * (t * uWindGustSpeed * 0.63) + uWindOffset.yx;
+    float gustA = twNoise(gustAuv);
+    float gustB = twNoise(gustBuv + gustA);
+    float gust = smoothstep(0.22, 0.88, gustA) * (0.52 + 0.48 * gustB);
+    float veer = (gustA - 0.5) * uWindVeer + (gustB - 0.5) * uWindTurbulence * 1.1;
+    float ca = cos(veer);
+    float sa = sin(veer);
+    vec2 localDir = normalize(vec2(wdir.x * ca - wdir.y * sa, wdir.x * sa + wdir.y * ca));
+    vec2 localCross = vec2(-localDir.y, localDir.x);
+    float sway = sin(t * (1.0 + uWindGustSpeed) + phase) + 0.38 * sin(t * (2.2 + uWindGustSpeed) + phase * 1.7);
+    float flutter = sin(t * (5.0 + uWindGustSpeed * 2.0) + phase * 2.1 + gustB * 6.28318) * 0.16;
+    float drive = sway * (0.42 + uWindGustStrength * gust) + flutter;
+    float cross = cos(t * (0.9 + uWindGustSpeed) + phase * 0.8 + gustA * 5.0)
+      * (0.08 + uWindTurbulence * 0.14)
+      * (0.45 + gust);
+    float amp = stiff * stiff * uWindStrength * (0.055 + 0.15 * (0.35 + uWindGustStrength * gust));
     vec3 off;
-    off.x = sway * amp;
-    off.z = cos(t * 0.9 + phase * 0.8) * amp * 0.7;
-    off.y = 0.0;
-    off += extra * stiff;
+    off.x = (localDir.x * drive + localCross.x * cross) * amp;
+    off.z = (localDir.y * drive + localCross.y * cross) * amp;
+    off.y = sin(t * 0.7 + phase + gustA * 3.14159) * amp * 0.08 * uWindTurbulence;
+    off += extra * stiff * (0.7 + gust * 0.55);
     return off;
-  }
-  // small value-noise hash for edge-nibble + dither (anti-banding).
-  float twHash21(vec2 p) {
-    p = fract(p * vec2(123.34, 345.45));
-    p += dot(p, p + 34.345);
-    return fract(p.x * p.y);
   }
 `;
 
 export interface TreeMaterialUniforms {
   uTime: { value: number };
   uWind: { value: number };
+  uWindDir: { value: THREE.Vector2 };
+  uWindStrength: { value: number };
+  uWindGustStrength: { value: number };
+  uWindGustScale: { value: number };
+  uWindGustSpeed: { value: number };
+  uWindTurbulence: { value: number };
+  uWindVeer: { value: number };
+  uWindOffset: { value: THREE.Vector2 };
   uSunDir: { value: THREE.Vector3 };
+}
+
+function installTreeWindUniforms(
+  shader: THREE.WebGLProgramParametersWithUniforms,
+  windEnabled = 1
+): void {
+  shader.uniforms.uWind = { value: windEnabled };
+  shader.uniforms.uWindDir = { value: new THREE.Vector2(1, 0) };
+  shader.uniforms.uWindStrength = { value: 1 };
+  shader.uniforms.uWindGustStrength = { value: 1 };
+  shader.uniforms.uWindGustScale = { value: 0.04 };
+  shader.uniforms.uWindGustSpeed = { value: 0.5 };
+  shader.uniforms.uWindTurbulence = { value: 0.5 };
+  shader.uniforms.uWindVeer = { value: 0.8 };
+  shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
 }
 
 /**
@@ -86,7 +144,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
-    shader.uniforms.uWind = { value: 1 };
+    installTreeWindUniforms(shader, 1);
     shader.uniforms.uBarkColor = { value: BARK_COLOR.clone() };
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
     material.userData.shader = shader;
@@ -156,7 +214,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-bark-v4';
+  material.customProgramCacheKey = () => 'tree-bark-v5';
   return material;
 }
 
@@ -173,12 +231,16 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
       attribute float aCanopyY;
       attribute float aFlower;
       attribute float aLeafRand;
+      attribute float aTuftShade;
       varying vec2 vLeafUv;
       varying float vTint;
       varying float vCanopyY;
       varying float vFlower;
       varying float vLeafRand;
+      varying float vTuftShade;
       varying vec3 vWorldPos;
+      varying vec3 vTreeBase;
+      varying vec3 vTreeUp;
       ${TREE_WIND_GLSL}`
     )
     .replace(
@@ -188,11 +250,16 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
       vCanopyY = aCanopyY;
       vFlower = aFlower;
       vLeafRand = aLeafRand;
+      vTuftShade = aTuftShade;
       #ifdef USE_INSTANCING
         vec3 twInstWorld = instanceMatrix[3].xyz;
+        mat4 twTreeMatrix = modelMatrix * instanceMatrix;
       #else
         vec3 twInstWorld = vec3(0.0);
+        mat4 twTreeMatrix = modelMatrix;
       #endif
+      vTreeBase = (twTreeMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+      vTreeUp = normalize((twTreeMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
       vTint = fract(sin(dot(twInstWorld, vec3(12.99, 78.23, 37.71))) * 43758.5453);
       float twT = uTime * uWind;
       vec3 flutter = vec3(
@@ -205,7 +272,7 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
     .replace(
       '#include <project_vertex>',
       `#include <project_vertex>
-      vWorldPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;`
+      vWorldPos = (twTreeMatrix * vec4(transformed, 1.0)).xyz;`
     );
 }
 
@@ -228,7 +295,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
-    shader.uniforms.uWind = { value: 1 };
+    installTreeWindUniforms(shader, 1);
     shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
     shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
@@ -238,6 +305,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uBloom = { value: 0 };
     shader.uniforms.uShapeId = { value: 0 };
     shader.uniforms.uLeafMode = { value: 0 };
+    shader.uniforms.uCanopyCenterY = { value: 3.9 };
     material.userData.shader = shader;
 
     leafVertexCommon(shader);
@@ -255,12 +323,16 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
         uniform float uBloom;
         uniform float uLeafMode;
         uniform float uShapeId;
+        uniform float uCanopyCenterY;
         varying vec2 vLeafUv;
         varying float vTint;
         varying float vCanopyY;
         varying float vFlower;
         varying float vLeafRand;
+        varying float vTuftShade;
         varying vec3 vWorldPos;
+        varying vec3 vTreeBase;
+        varying vec3 vTreeUp;
         vec3 vLeafSSSTerm;
         float twFHash21(vec2 p) {
           p = fract(p * vec2(123.34, 345.45));
@@ -300,19 +372,35 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           float serr = (abs(fract((p.y + abs(p.x) * 2.0) * 7.0) - 0.5)) * 0.05;
           return d - serr;
         }
+        // Rounded lumpy cluster mask inspired by Fluffy Tree's canopy tufts.
+        // It expands broad leaf cards into soft masses while the SDF veins/rim
+        // below keep leaf detail inside the tuft.
+        float twLeafTuft(vec2 p, float seed) {
+          float ang = atan(p.y, p.x);
+          float r = length(vec2(p.x * mix(0.92, 1.08, seed), p.y * 0.9));
+          float lobes = 0.82
+            + 0.08 * sin(ang * 5.0 + seed * 6.28318)
+            + 0.05 * sin(ang * 9.0 - seed * 4.2);
+          lobes *= mix(0.92, 1.08, smoothstep(-0.6, 0.85, p.y));
+          return r - lobes;
+        }
         // LANCEOLATE / needle blade — slim spear, fattest in the middle.
         float twLeafLance(vec2 p) {
           float y = p.y * 0.5 + 0.5;
           float w = 0.22 * sin(3.14159 * clamp(y, 0.0, 1.0)) + 0.03;
           return max(abs(p.x) - w, abs(p.y) - 0.99);
         }
-        // FROND leaflet — narrow blade with pinnate (feathered) notches.
+        // FROND leaflet — broad palm blade with pinnate feathering.
         float twLeafFrond(vec2 p) {
           float y = p.y * 0.5 + 0.5;
-          float w = 0.30 * (1.0 - smoothstep(0.55, 1.0, y)) * smoothstep(0.0, 0.12, y) + 0.02;
-          float d = max(abs(p.x) - w, abs(p.y) - 0.99);
-          float notch = (abs(fract(y * 9.0) - 0.5)) * 0.035;
-          return d + notch * step(0.06, abs(p.x));   // feathered edge
+          float mid = sin(3.14159 * clamp(y, 0.0, 1.0));
+          float w = (0.48 * pow(max(mid, 0.0), 0.72) + 0.035)
+            * smoothstep(0.0, 0.08, y)
+            * (1.0 - 0.18 * smoothstep(0.72, 1.0, y));
+          float feather = 0.026 * (0.5 - abs(fract(y * 15.0 + abs(p.x) * 2.2) - 0.5));
+          float edge = smoothstep(w * 0.36, w, abs(p.x));
+          float d = max(abs(p.x) - w + feather * edge, abs(p.y) - 0.99);
+          return d;
         }`
       )
       .replace(
@@ -328,9 +416,10 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           d = twLeafLance(lp);             // needle / lanceolate blade
         } else {
           // broad: palmate maple for round/umbrella, ovate for weeping/wispy.
-          d = (uShapeId < 0.5 || (uShapeId > 1.5 && uShapeId < 2.5))
+          float botanicalD = (uShapeId < 0.5 || (uShapeId > 1.5 && uShapeId < 2.5))
               ? twLeafMaple(lp)
               : twLeafOvate(lp);
+          d = min(botanicalD, twLeafTuft(lp, vTuftShade) + 0.045);
         }
         // per-leaf size jitter so the crown edge isn't a uniform stamp.
         d -= (vLeafRand - 0.5) * 0.05;
@@ -362,6 +451,16 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
         leaf.b *= 1.0 - tintWarm * 0.5;
         leaf *= 0.92 + 0.16 * vLeafRand;
 
+        // Per-tuft coherent variation: all cards emitted from the same branch
+        // cluster share this value, so the canopy reads as grouped foliage rather
+        // than unrelated stamps.
+        float tuftTone = 0.84 + 0.22 * vTuftShade;
+        float tuftWarm = (vTuftShade - 0.5) * 0.18;
+        leaf.r *= 1.0 + tuftWarm;
+        leaf.g *= 0.98 + 0.05 * vTuftShade;
+        leaf.b *= 1.0 - tuftWarm * 0.45;
+        leaf *= tuftTone;
+
         // Flower pop: flowering clusters tint toward the bloom colour near crust.
         float bloomMask = vFlower * uBloom * smoothstep(0.45, 0.9, vCanopyY);
         leaf = mix(leaf, uFlowerColor, bloomMask * 0.8);
@@ -373,6 +472,24 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <normal_fragment_begin>',
         `#include <normal_fragment_begin>
+        // Bias card normals toward local tree-up so alpha planes keep a full,
+        // soft Fluffy Tree style silhouette instead of going dark edge-on.
+        vec3 twViewTreeUp = normalize(mat3(viewMatrix) * normalize(vTreeUp));
+        normal = normalize(mix(normal, twViewTreeUp, 0.38));
+
+        // Center-to-surface canopy lighting: each cluster participates in a
+        // broad volume gradient, so the crown reads like a lush tufted mass.
+        vec3 twCrownCenter = vTreeBase + normalize(vTreeUp) * uCanopyCenterY;
+        vec3 twFromCenter = normalize(vWorldPos - twCrownCenter);
+        float twSunVolume = dot(twFromCenter, normalize(uSunDir));
+        float twLit = smoothstep(-0.35, 0.82, twSunVolume);
+        float twHighlight = smoothstep(0.52, 1.0, twSunVolume) * smoothstep(0.28, 1.0, vCanopyY);
+        float twDay = smoothstep(-0.08, 0.24, uSunDir.y);
+        vec3 twShadow = mix(uLeafBase * 0.32, vec3(0.006, 0.018, 0.032), 0.32);
+        vec3 twVolume = mix(twShadow, diffuseColor.rgb, twLit);
+        twVolume = mix(twVolume, uLeafTip + uLeafSSS * 0.18, twHighlight * 0.42 * twDay);
+        diffuseColor.rgb = mix(diffuseColor.rgb, twVolume, 0.72);
+
         // Ground the canopy undersides now that the normal exists (volumetric AO).
         diffuseColor.rgb *= mix(0.80, 1.0, clamp(normal.y * 0.5 + 0.5, 0.0, 1.0));
         vLeafSSSTerm = vec3(0.0);
@@ -406,7 +523,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-leaf-v3';
+  material.customProgramCacheKey = () => 'tree-leaf-v6';
   return material;
 }
 
@@ -426,7 +543,7 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
-    shader.uniforms.uWind = { value: 1 };
+    installTreeWindUniforms(shader, 1);
     shader.uniforms.uFlowerColor = { value: FLOWER_COLOR.clone() };
     material.userData.shader = shader;
 
@@ -471,7 +588,7 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-blossom-v3';
+  material.customProgramCacheKey = () => 'tree-blossom-v5';
   return material;
 }
 
@@ -491,7 +608,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
-    shader.uniforms.uWind = { value: 0 };
+    installTreeWindUniforms(shader, 0);
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
     shader.uniforms.uLeafTip = { value: LEAF_TIP.clone() };
     material.userData.shader = shader;
@@ -533,7 +650,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-impostor-v3';
+  material.customProgramCacheKey = () => 'tree-impostor-v5';
   return material;
 }
 
@@ -543,6 +660,22 @@ const _moon = new THREE.Vector3();
 type ShaderHolder = {
   userData: { shader?: { uniforms?: Record<string, { value: unknown }> } };
 };
+
+function canopyCenterYFor(profile: TreeProfile): number {
+  const frac =
+    profile.silhouette === 'conical'
+      ? 0.56
+      : profile.silhouette === 'umbrella'
+        ? 0.82
+        : profile.silhouette === 'weeping'
+          ? 0.68
+          : profile.silhouette === 'frond'
+            ? 0.9
+            : profile.silhouette === 'wispy'
+              ? 0.72
+              : 0.7;
+  return profile.trunkHeight * frac;
+}
 
 /**
  * Push per-planet COLOURS from the profile into all four tree materials ONCE
@@ -559,8 +692,21 @@ export function applyTreeProfileToMaterials(
     const u = mat?.userData.shader?.uniforms;
     if (u && u[key]) u[key].value = value;
   };
+  const setWind = (mat: ShaderHolder | null) => {
+    const u = mat?.userData.shader?.uniforms;
+    if (!u) return;
+    if (u.uWindDir) (u.uWindDir.value as THREE.Vector2).copy(profile.wind.direction);
+    if (u.uWindStrength) (u.uWindStrength.value as number) = profile.wind.strength;
+    if (u.uWindGustStrength) (u.uWindGustStrength.value as number) = profile.wind.gustStrength;
+    if (u.uWindGustScale) (u.uWindGustScale.value as number) = profile.wind.gustScale;
+    if (u.uWindGustSpeed) (u.uWindGustSpeed.value as number) = profile.wind.gustSpeed;
+    if (u.uWindTurbulence) (u.uWindTurbulence.value as number) = profile.wind.turbulence;
+    if (u.uWindVeer) (u.uWindVeer.value as number) = profile.wind.veer;
+    if (u.uWindOffset) (u.uWindOffset.value as THREE.Vector2).copy(profile.wind.offset);
+  };
 
   set(bark, 'uLeafBase', profile.leafColor);
+  setWind(bark);
 
   set(leaf, 'uLeafBase', profile.leafColor);
   set(leaf, 'uLeafTip', profile.leafTipColor);
@@ -569,11 +715,15 @@ export function applyTreeProfileToMaterials(
   set(leaf, 'uBloom', profile.bloomAmount);
   set(leaf, 'uShapeId', profile.shapeId);
   set(leaf, 'uLeafMode', profile.leafMode);
+  set(leaf, 'uCanopyCenterY', canopyCenterYFor(profile));
+  setWind(leaf);
 
   set(blossom, 'uFlowerColor', profile.flowerColor);
+  setWind(blossom);
 
   set(impostor, 'uLeafBase', profile.leafColor);
   set(impostor, 'uLeafTip', profile.leafTipColor);
+  setWind(impostor);
 }
 
 /** Push uTime / wind gating / sun+moon direction into all tree materials. */

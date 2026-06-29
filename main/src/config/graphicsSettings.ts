@@ -20,10 +20,22 @@ export interface GraphicsQuality {
   grassDensity: number;
   /** Max world-space distance grass is drawn from the camera. (Phase 3) */
   grassMaxDistance: number;
+  /** Probability multiplier for mid-story procedural flora (flowers, fans, shrubs, cacti). */
+  floraDensity: number;
+  /** Max world-space distance flora is drawn from the camera. */
+  floraMaxDistance: number;
+  /** Probability multiplier for sparse procedural fauna (critters and insects). */
+  faunaDensity: number;
+  /** Max world-space distance fauna is drawn from the camera. */
+  faunaMaxDistance: number;
   /** Probability (0..1) a grass voxel sprouts a tree (0 disables trees). */
   treeDensity: number;
   /** Max world-space distance trees are drawn from the camera (0 = no cull). */
   treeMaxDistance: number;
+  /** Density multiplier for spawned material phenomena on voxels (dust, frost, ash). */
+  voxelEffectDensity: number;
+  /** Max world-space distance spawned voxel effects are drawn from the camera. */
+  voxelEffectMaxDistance: number;
   /** Water reflection technique. (Phase 4) */
   waterReflections: WaterReflections;
   /** Animate the water surface. (Phase 4) */
@@ -60,8 +72,14 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     skyClouds: true,
     grassDensity: 6,
     grassMaxDistance: 80,
+    floraDensity: 0.6,
+    floraMaxDistance: 85,
+    faunaDensity: 0.12,
+    faunaMaxDistance: 95,
     treeDensity: 0.04,
     treeMaxDistance: 160,
+    voxelEffectDensity: 1.25,
+    voxelEffectMaxDistance: 95,
     waterReflections: 'screenspace',
     waterAnimated: true,
     postProcess: true,
@@ -81,8 +99,14 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     skyClouds: true,
     grassDensity: 4,
     grassMaxDistance: 60,
+    floraDensity: 0.32,
+    floraMaxDistance: 65,
+    faunaDensity: 0.075,
+    faunaMaxDistance: 75,
     treeDensity: 0.03,
     treeMaxDistance: 120,
+    voxelEffectDensity: 0.9,
+    voxelEffectMaxDistance: 70,
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: true,
@@ -102,8 +126,14 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     skyClouds: false,
     grassDensity: 2,
     grassMaxDistance: 40,
+    floraDensity: 0.16,
+    floraMaxDistance: 44,
+    faunaDensity: 0.035,
+    faunaMaxDistance: 50,
     treeDensity: 0.02,
     treeMaxDistance: 80,
+    voxelEffectDensity: 0.42,
+    voxelEffectMaxDistance: 45,
     waterReflections: 'fresnel',
     waterAnimated: true,
     postProcess: false,
@@ -123,8 +153,14 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     skyClouds: false,
     grassDensity: 1,
     grassMaxDistance: 24,
+    floraDensity: 0.05,
+    floraMaxDistance: 28,
+    faunaDensity: 0.012,
+    faunaMaxDistance: 32,
     treeDensity: 0.015,
     treeMaxDistance: 50,
+    voxelEffectDensity: 0.16,
+    voxelEffectMaxDistance: 28,
     waterReflections: 'fresnel',
     waterAnimated: false,
     postProcess: false,
@@ -144,8 +180,14 @@ export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
     skyClouds: false,
     grassDensity: 0,
     grassMaxDistance: 0,
+    floraDensity: 0,
+    floraMaxDistance: 0,
+    faunaDensity: 0,
+    faunaMaxDistance: 0,
     treeDensity: 0,
     treeMaxDistance: 0,
+    voxelEffectDensity: 0,
+    voxelEffectMaxDistance: 0,
     waterReflections: 'none',
     waterAnimated: false,
     postProcess: false,

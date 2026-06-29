@@ -11,11 +11,12 @@ import { createWorldArrivalPose } from './worldArrival';
 import { measureWarpMetric } from './warpMetrics';
 import type { TerrainVoxel } from './efficientVoxelSystem';
 
-// A grass blade is a thin vertical plane standing on the voxel's outer surface.
-// Local space: width along X, height along +Y (root at y=0, tip at y=BLADE_HEIGHT),
-// flat in Z. The vertex shader tapers and bends it; CPU only places/orients it.
-const BLADE_WIDTH = 0.18;
-const BLADE_HEIGHT = 0.9;
+// A grass blade is a very thin vertical plane standing on the voxel's outer
+// surface. Local space: width along X, height along +Y (root at y=0, tip at
+// y=BLADE_HEIGHT), flat in Z. The vertex shader tapers and bends it; CPU only
+// places/orients it.
+const BLADE_WIDTH = 0.068;
+const BLADE_HEIGHT = 0.62;
 // More height segments gives the per-vertex curve/bend a smoother silhouette.
 const BLADE_HEIGHT_SEGMENTS = 5;
 
@@ -25,10 +26,10 @@ const BLADE_HEIGHT_SEGMENTS = 5;
 // base never floats above the cube face after scale variation.
 const SURFACE_OFFSET = 0.97;
 
-// Each density unit places a small CLUMP of blades (a tuft) instead of one blade,
-// with positional + height + yaw variance, so the field reads as natural tufts
-// rather than a uniform lawn. Total blades per voxel = density * BLADES_PER_CLUMP.
-export const BLADES_PER_CLUMP = 3;
+// Each density unit places a micro-cluster of fine strands, not one broad leaf.
+// Total blades per voxel = density * BLADES_PER_CLUMP * biome density multiplier.
+export const BLADES_PER_CLUMP = 24;
+const BLADES_PER_MICRO_CLUSTER = 2;
 
 /**
  * Total blade instances a single grass voxel needs at the given density.
@@ -56,14 +57,13 @@ export function createBladeGeometry(): THREE.BufferGeometry {
   const uv = geo.attributes.uv as THREE.BufferAttribute;
   for (let i = 0; i < pos.count; i++) {
     const v = uv.getY(i); // 0 at root, 1 at tip
-    // Quadratic taper toward the tip so the blade comes to a point.
-    const taper = 1.0 - v * v * 0.85;
+    // Strong quadratic taper toward the tip so the strand reads hairlike instead
+    // of as a broad triangular leaf.
+    const taper = Math.max(0.035, 1.0 - v * v * 0.96);
     pos.setX(i, pos.getX(i) * taper);
-    // Bake a gentle forward curve/lean into Z (root planted, tip leans). This
-    // reads as a natural blade arc; per-instance yaw rotates it to a random
-    // heading so the field isn't all leaning the same way. The wind shader adds
-    // motion on top of this resting pose.
-    pos.setZ(i, pos.getZ(i) + v * v * (BLADE_HEIGHT * 0.18));
+    // Bake a subtle forward curve/lean into Z (root planted, tip leans). Keeping
+    // the resting arc smaller helps dense strands read as fine nap, not seaweed.
+    pos.setZ(i, pos.getZ(i) + v * v * (BLADE_HEIGHT * 0.1));
   }
   pos.needsUpdate = true;
   geo.computeVertexNormals();
@@ -115,37 +115,38 @@ export function computeBladeMatrix(
   const r1 = seededVoxelUnit(x, y, z, bladeIndex + 101, worldSeed);
   const r2 = seededVoxelUnit(x, y, z, bladeIndex + 202, worldSeed);
   const r3 = seededVoxelUnit(x, y, z, bladeIndex + 303, worldSeed);
-  // Per-clump seed so the few blades of one tuft share a rough location/heading
-  // (bladeIndex / BLADES_PER_CLUMP), giving "tufts not lawn".
-  const clump = Math.floor(bladeIndex / BLADES_PER_CLUMP);
-  const c0 = seededVoxelUnit(x, y, z, clump * 7 + 11, worldSeed); // clump position u
-  const c1 = seededVoxelUnit(x, y, z, clump * 7 + 23, worldSeed); // clump position v
-  const c2 = seededVoxelUnit(x, y, z, clump * 7 + 37, worldSeed); // clump base heading
+  const r4 = seededVoxelUnit(x, y, z, bladeIndex + 404, worldSeed);
+  const r5 = seededVoxelUnit(x, y, z, bladeIndex + 505, worldSeed);
+  // Micro-cluster seed: pairs of fine blades share a root neighborhood, which
+  // packs the voxel face with many small roots instead of a few big tufts.
+  const cluster = Math.floor(bladeIndex / BLADES_PER_MICRO_CLUSTER);
+  const c0 = seededVoxelUnit(x, y, z, cluster * 13 + 11, worldSeed); // root position u
+  const c1 = seededVoxelUnit(x, y, z, cluster * 13 + 23, worldSeed); // root position v
+  const c2 = seededVoxelUnit(x, y, z, cluster * 13 + 37, worldSeed); // root base heading
 
   // Orientation basis: columns are (tangent, up, bitangent) so local +Y -> up.
   _basis.makeBasis(_tangent, _up, _bitangent);
 
-  // Heading: clump base + small per-blade spread, so a tuft fans out slightly.
-  const yaw = c2 * Math.PI * 2.0 + (r0 - 0.5) * 1.2;
+  // Heading: mostly independent strand yaw with a tiny shared root bias. This
+  // removes the visible fan shape that made a grass block read as 3-6 big blades.
+  const yaw = c2 * Math.PI * 2.0 + (r0 - 0.5) * 2.4;
   _yaw.makeRotationY(yaw);
-  // Small tilt away from vertical (lean), more varied per blade.
-  _tilt.makeRotationX((r1 - 0.5) * 0.55); // +/- ~0.27 rad
+  // Small tilt away from vertical. Dense hair needs less lean than broad leaves.
+  _tilt.makeRotationX((r1 - 0.5) * 0.36); // +/- ~0.18 rad
 
   // Per-blade scale: independent height vs width so blades vary in stature and
   // slimness rather than just overall size.
-  const heightScale = (0.7 + r2 * 0.85) * heightMul; // (0.70..1.55) * planet height
-  const widthScale = (0.8 + r3 * 0.5) * widthMul; // (0.80..1.30) * planet width
+  const heightScale = (0.45 + r2 * 0.75) * heightMul; // (0.45..1.20) * planet height
+  const widthScale = (0.55 + r3 * 0.35) * widthMul; // (0.55..0.90) * planet width
   _scale.makeScale(widthScale, heightScale, widthScale);
 
-  // Clump center jitter (wide) + tight per-blade jitter around it, all in the
-  // tangent plane; then push out to the surface along up. The cell spans ±1
-  // (VOXEL_SCALE=2); spread clumps the FULL cell + a little into neighbours
-  // (±~1.05) so there are no bare cell borders — those borders are what read as a
-  // regular GRID from above. Wider per-blade scatter further breaks the lattice.
-  const cu = (c0 - 0.5) * 2.1; // clump center, full cell + slight neighbour overlap
-  const cv = (c1 - 0.5) * 2.1;
-  const bu = (r2 - 0.5) * 0.34; // blade scatter within the tuft
-  const bv = (r3 - 0.5) * 0.34;
+  // Root jitter in the tangent plane, then push out to the surface along up. The
+  // root centers cover the full voxel face with slight neighbour overlap, while
+  // the per-blade scatter stays tight so dense strands read as surface hair.
+  const cu = (c0 - 0.5) * 1.9;
+  const cv = (c1 - 0.5) * 1.9;
+  const bu = (r4 - 0.5) * 0.18;
+  const bv = (r5 - 0.5) * 0.18;
   _offset.copy(_up).multiplyScalar(SURFACE_OFFSET);
   _offset.addScaledVector(_tangent, cu + bu);
   _offset.addScaledVector(_bitangent, cv + bv);
@@ -388,8 +389,8 @@ export function scheduleGrassInstancePrewarm(planetSize: number, terrainSeed: nu
 
 /**
  * Fill `mesh` with blade instances for every grass voxel currently exposed.
- * Each voxel gets `bladesPerVoxel(density)` blades (density tufts of
- * BLADES_PER_CLUMP each). Returns the instance count actually written.
+ * Each voxel gets `bladesPerVoxel(density)` blades (density micro-clusters of
+ * BLADES_PER_CLUMP fine strands each). Returns the instance count actually written.
  * Far-from-player culling: blades whose voxel center is beyond `maxDistance`
  * from `playerWorld` are skipped (when maxDistance > 0 and playerWorld given).
  */
@@ -512,6 +513,12 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
     shader.uniforms.uWindDir = { value: new THREE.Vector2(1, 0) };
     shader.uniforms.uWindStrength = { value: 1 };
+    shader.uniforms.uWindGustStrength = { value: 1 };
+    shader.uniforms.uWindGustScale = { value: 0.04 };
+    shader.uniforms.uWindGustSpeed = { value: 0.5 };
+    shader.uniforms.uWindTurbulence = { value: 0.5 };
+    shader.uniforms.uWindVeer = { value: 0.8 };
+    shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
     shader.uniforms.uRound = { value: 0.85 };
     material.userData.shader = shader;
 
@@ -522,8 +529,14 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
         uniform float uTime;
         uniform float uWind;
         uniform float uWindStrength;
+        uniform float uWindGustStrength;
+        uniform float uWindGustScale;
+        uniform float uWindGustSpeed;
+        uniform float uWindTurbulence;
+        uniform float uWindVeer;
         uniform float uRound;
         uniform vec2 uWindDir;
+        uniform vec2 uWindOffset;
         varying float vHeight;
         varying float vTint;      // per-blade hue/brightness variation [0,1]
         varying vec3 vGrassWPos;  // world position (dryness patches + view dir)
@@ -550,23 +563,33 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
 
         // Tip moves most, root planted: pow(uv.y, 2) weighting on all motion.
         float h2 = uv.y * uv.y;
-        float bendAmount = h2 * 0.35 * uWind * uWindStrength;
+        float bendAmount = h2 * 0.28 * uWind * uWindStrength;
 
-        // Layered wind: a slow low-frequency gust that drifts across the field
-        // (uses world position, not just phase, so gusts travel) plus a faster
-        // per-blade flutter. Stays bounded so it never looks seasick.
-        float gust = sin(uTime * 0.6 + dot(instWorld.xz, vec2(0.03)) ) * 0.6 + 0.4; // 0..1-ish
-        float sway = sin(uTime * 1.6 + phase) + 0.4 * sin(uTime * 3.4 + phase * 1.7);
-        float flutter = sin(uTime * 7.0 + phase * 2.3) * 0.18; // high-freq shimmer
-
-        // Bend along the PLANET wind direction (object XZ, perpendicular to the
-        // blade's +Y) so the whole field leans/gusts as one coherent wind, plus a
-        // small perpendicular cross-breeze. Root (uv.y~=0) stays planted (h2).
+        // Planet wind: broad moving gust cells plus local direction veer. This
+        // makes wind pass over patches from varied directions instead of every
+        // blade following one global metronome.
         vec2 wdir = normalize(uWindDir + vec2(1e-4, 0.0));
-        float drive = sway * (0.6 + 0.7 * gust) + flutter;
-        float cross = cos(uTime * 1.3 + phase * 0.8) * 0.25;
-        transformed.x += (wdir.x * drive - wdir.y * cross) * bendAmount;
-        transformed.z += (wdir.y * drive + wdir.x * cross) * bendAmount;
+        vec2 crossDir = vec2(-wdir.y, wdir.x);
+        vec2 gustAuv = instWorld.xz * uWindGustScale + wdir * (uTime * uWindGustSpeed) + uWindOffset;
+        vec2 gustBuv = instWorld.zx * (uWindGustScale * 1.73) - crossDir * (uTime * uWindGustSpeed * 0.63) + uWindOffset.yx;
+        float gustA = gfNoise(gustAuv);
+        float gustB = gfNoise(gustBuv + gustA);
+        float gust = smoothstep(0.24, 0.88, gustA) * (0.55 + 0.45 * gustB);
+        float veer = (gustA - 0.5) * uWindVeer + (gustB - 0.5) * uWindTurbulence * 1.25;
+        float ca = cos(veer);
+        float sa = sin(veer);
+        vec2 localDir = normalize(vec2(wdir.x * ca - wdir.y * sa, wdir.x * sa + wdir.y * ca));
+        vec2 localCross = vec2(-localDir.y, localDir.x);
+
+        float sway = sin(uTime * 1.6 + phase) + 0.4 * sin(uTime * 3.4 + phase * 1.7);
+        float flutter = sin(uTime * (6.0 + uWindGustSpeed * 2.0) + phase * 2.3 + gustB * 6.28318) * 0.12;
+
+        float drive = sway * (0.45 + uWindGustStrength * gust) + flutter;
+        float cross = cos(uTime * (1.1 + uWindGustSpeed) + phase * 0.8 + gustA * 5.0)
+          * (0.08 + uWindTurbulence * 0.16)
+          * (0.45 + gust);
+        transformed.x += (localDir.x * drive + localCross.x * cross) * bendAmount;
+        transformed.z += (localDir.y * drive + localCross.y * cross) * bendAmount;
 
         vGrassWPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
         vGrassWNrm = normalize((modelMatrix * instanceMatrix * vec4(objectNormal, 0.0)).xyz);`
@@ -635,7 +658,7 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'grass-pbr-v3';
+  material.customProgramCacheKey = () => 'grass-pbr-v5';
   return material;
 }
 
@@ -660,6 +683,12 @@ export function applyGrassProfileToMaterial(
   if (u.uSSSColor) u.uSSSColor.value = profile.sssColor;
   if (u.uDryness) (u.uDryness.value as number) = profile.dryness;
   if (u.uWindStrength) (u.uWindStrength.value as number) = profile.windStrength;
+  if (u.uWindGustStrength) (u.uWindGustStrength.value as number) = profile.wind.gustStrength;
+  if (u.uWindGustScale) (u.uWindGustScale.value as number) = profile.wind.gustScale;
+  if (u.uWindGustSpeed) (u.uWindGustSpeed.value as number) = profile.wind.gustSpeed;
+  if (u.uWindTurbulence) (u.uWindTurbulence.value as number) = profile.wind.turbulence;
+  if (u.uWindVeer) (u.uWindVeer.value as number) = profile.wind.veer;
+  if (u.uWindOffset) (u.uWindOffset.value as THREE.Vector2).copy(profile.wind.offset);
   if (u.uRound) (u.uRound.value as number) = profile.roundness;
   if (u.uWindDir) (u.uWindDir.value as THREE.Vector2).copy(profile.windDir);
 }

@@ -17,7 +17,7 @@ code, tests, and manual evidence for that item exist.
 - [x] Never accept client `localStorage` as multiplayer truth.
 - [ ] Never use `seed` as durable world identity.
 - [ ] Never reuse `editVersion` as a network sequence.
-- [ ] Never mount remote players with `EfficientPlayer`.
+- [x] Never mount remote players with `EfficientPlayer`.
 - [ ] Every new gameplay system gets a state-ownership classification and network story before
       co-op launch.
 
@@ -571,10 +571,18 @@ rejects, late-join snapshot replay, party warp, and post-warp old-world command 
 Command acks and join snapshots now reconcile inventory, vitals/oxygen, Maw charge, waterskin
 fill, and progression.
 
+Evidence: 2026-06-27 remote avatar legibility pass kept `PlayerAvatar` render-only while adding
+shape-based EVA readability cues: footing/facing marker, suit backpack/visor, action beacon
+shapes for swim/jetpack/mine/build, dual jetpack plumes, torch glow support, and bounded
+nameplates. `?avatarDemo=1` is an explicit debug-only screenshot harness, and `?agent=1` camera
+captures verify desktop/mobile presentation under
+`.codex/design-runs/2026-06-27-remote-avatar-legibility/screenshots/`. Full `main`
+`npm run verify` passed with 70 test files / 485 tests plus production build.
+
 ## Current Session Checkpoint
 
-Last updated: 2026-06-27 after `e0d27ec` (`Record authenticated co-op smoke evidence`).
-Working tree was clean on `master...origin/master`.
+Last updated: 2026-06-27 after local remote-avatar legibility pass.
+Working tree contains the local avatar legibility changes and design-run evidence.
 
 Deployed state:
 
@@ -595,6 +603,8 @@ Implementation checkpoint:
   `localStorage` save/restore is suppressed while multiplayer is connected.
 - Party warp is room-authoritative and party-locked; commands/poses to inactive worlds are
   rejected after handoff.
+- Remote avatars now have non-color in-world state cues and an agent-camera screenshot harness
+  for launch-quality legibility review.
 
 Resume here:
 
@@ -648,7 +658,7 @@ Resume here:
 - [x] Firebase Auth, Cloud Run, and Neon are wired in the standard stack.
 - [x] Server owns durable world/player state.
 - [x] Client localStorage is offline-only.
-- [ ] Remote avatars are render-only and legible.
+- [x] Remote avatars are render-only and legible.
 - [x] Disconnect/reconnect is handled.
 - [x] Late join is handled.
 - [ ] The documented security minimums are implemented.

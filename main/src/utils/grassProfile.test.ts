@@ -29,6 +29,11 @@ describe('buildGrassProfile', () => {
     expect(a.windDir.x).toBe(b.windDir.x);
     expect(a.windDir.y).toBe(b.windDir.y);
     expect(a.windStrength).toBe(b.windStrength);
+    expect(a.wind.gustStrength).toBe(b.wind.gustStrength);
+    expect(a.wind.gustScale).toBe(b.wind.gustScale);
+    expect(a.wind.gustSpeed).toBe(b.wind.gustSpeed);
+    expect(a.wind.turbulence).toBe(b.wind.turbulence);
+    expect(a.wind.veer).toBe(b.wind.veer);
   });
 
   it('produces distinct grass biomes across a spread of seeds', () => {
@@ -65,11 +70,14 @@ describe('buildGrassProfile', () => {
       expect(p.heightMul).toBeGreaterThanOrEqual(0.6);
       expect(p.heightMul).toBeLessThanOrEqual(1.9);
       expect(p.widthMul).toBeGreaterThan(0.5);
+      expect(p.widthMul).toBeLessThanOrEqual(0.91);
       expect(p.densityMul).toBeGreaterThan(0.3);
       expect(p.coverage).toBeGreaterThanOrEqual(0.35);
       expect(p.coverage).toBeLessThanOrEqual(1);
       // wind direction is a unit vector
       expect(p.windDir.length()).toBeCloseTo(1, 5);
+      expect(p.wind.direction.length()).toBeCloseTo(1, 5);
+      expect(p.windStrength).toBe(p.wind.strength);
     }
   });
 

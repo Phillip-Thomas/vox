@@ -7,7 +7,8 @@ import {
   REMOTE_AVATAR_VELOCITY_LEAD_SECONDS,
   createPlayerAvatarPresentation,
   createPlayerAvatarRenderTarget,
-  createPlayerAvatarTransform
+  createPlayerAvatarTransform,
+  measurePlayerAvatarLabelWidth
 } from './PlayerAvatar.tsx';
 
 describe('PlayerAvatar transform', () => {
@@ -40,7 +41,9 @@ describe('PlayerAvatar transform', () => {
       submergence: 1
     }));
     expect(swim.bodyColor).toBe('#38bdf8');
+    expect(swim.beaconShape).toBe('wave');
     expect(swim.bodyRotation[0]).toBeCloseTo(Math.PI / 2);
+    expect(swim.showSuitBackpack).toBe(false);
 
     const jetpack = createPlayerAvatarPresentation(createPlayerPose({
       playerId: 'remote-jetpack',
@@ -49,6 +52,7 @@ describe('PlayerAvatar transform', () => {
       jetpackActive: true
     }));
     expect(jetpack.showJetpackFlame).toBe(true);
+    expect(jetpack.beaconShape).toBe('thrust');
 
     const mine = createPlayerAvatarPresentation(createPlayerPose({
       playerId: 'remote-mine',
@@ -57,6 +61,7 @@ describe('PlayerAvatar transform', () => {
       miningProgress: 0.7
     }));
     expect(mine.bodyColor).toBe('#fbbf24');
+    expect(mine.beaconShape).toBe('strike');
     expect(mine.showMiningTool).toBe(true);
     expect(mine.miningToolOpacity).toBeCloseTo(0.7);
 
@@ -66,7 +71,22 @@ describe('PlayerAvatar transform', () => {
       action: 'build'
     }));
     expect(build.bodyColor).toBe('#86efac');
+    expect(build.beaconShape).toBe('build');
     expect(build.showBuildPreview).toBe(true);
+  });
+
+  it('keeps neutral and torch presentation readable without changing gameplay state', () => {
+    const idle = createPlayerAvatarPresentation(createPlayerPose({
+      playerId: 'remote-idle',
+      worldId: '0,0',
+      action: 'idle',
+      torchActive: true
+    }));
+
+    expect(idle.beaconShape).toBe('crew');
+    expect(idle.showSuitBackpack).toBe(true);
+    expect(idle.showTorchGlow).toBe(true);
+    expect(idle.accentColor).toBe('#7dd3fc');
   });
 
   it('leads remote movement targets by velocity and clamps extreme speeds', () => {
@@ -98,5 +118,11 @@ describe('PlayerAvatar transform', () => {
       teleport: true
     }));
     expect(target.position).toEqual([1, 2, 3]);
+  });
+
+  it('bounds the remote avatar nameplate width for long roster names', () => {
+    expect(measurePlayerAvatarLabelWidth()).toBe(0.52);
+    expect(measurePlayerAvatarLabelWidth('Alice')).toBeGreaterThan(0.52);
+    expect(measurePlayerAvatarLabelWidth('Long Display Name That Should Not Own The Screen')).toBe(1.25);
   });
 });
