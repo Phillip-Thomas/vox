@@ -38,6 +38,7 @@ import { UnderwaterEffect, getUnderwater } from './UnderwaterEffect.ts';
 import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts';
+import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
@@ -97,12 +98,23 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       const sunY = getSunDirection().y;
       const daylight = THREE.MathUtils.smoothstep(sunY, -0.12, 0.18);
       const golden = daylight * (1 - THREE.MathUtils.smoothstep(sunY, 0.05, 0.32));
+      const reality = getVoxelRealityEffects();
+      const chroma = THREE.MathUtils.clamp(reality.chroma, 0, 1);
+      const resolved = THREE.MathUtils.clamp(Math.max(reality.detail, reality.atmosphere), 0, 1.25);
+      const tintAmount = grade.tintAmount * THREE.MathUtils.lerp(0.28, 1.1, Math.max(chroma, resolved * 0.7));
+      const saturation = THREE.MathUtils.lerp(0.08, grade.saturation, chroma) * THREE.MathUtils.lerp(0.96, 1.04, resolved);
+      const warmth = (grade.warmthBias + golden * 0.8 - (1 - daylight) * 0.35) * THREE.MathUtils.lerp(0.45, 1.05, chroma);
+      const contrast = THREE.MathUtils.lerp(0.92, grade.contrast + (1 - daylight) * 0.05, THREE.MathUtils.clamp(0.38 + resolved * 0.62, 0, 1.08));
+      const lift = THREE.MathUtils.lerp(0.024, 0.008, THREE.MathUtils.clamp(resolved, 0, 1));
+      const shoulder = THREE.MathUtils.lerp(0.46, 0.28, THREE.MathUtils.clamp(resolved, 0, 1));
       eff.setGrade(
         grade.tint,
-        grade.tintAmount,
-        grade.saturation,
-        grade.warmthBias + golden * 0.8 - (1 - daylight) * 0.35,
-        grade.contrast + (1 - daylight) * 0.05
+        tintAmount,
+        saturation,
+        warmth,
+        contrast,
+        lift,
+        shoulder
       );
     }
 

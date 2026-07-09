@@ -32,7 +32,7 @@
 import { StrictMode, useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Html, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { MATERIAL_ORDER, MATERIALS, MaterialType, materialId } from './types/materials.ts';
@@ -62,6 +62,8 @@ import {
 } from './config/graphicsSettings.ts';
 import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { voxelCoordToWorld } from './utils/cubeGravityConstants.ts';
+import { buildPlanetArtDirection } from './utils/planetArtDirection.ts';
+import { isMaterialEligibleForEcology, surfaceEffectWeight } from './utils/planetEcology.ts';
 
 const QS = new URLSearchParams(typeof location !== 'undefined' ? location.search : '');
 const ONLY = QS.get('only') as MaterialType | null;
@@ -291,6 +293,38 @@ function EffectPatchCubes({
   return <primitive object={mesh} />;
 }
 
+// The requested effect must actually exist on the harness planet: the seed's
+// archetype gates which materials get surface effects (e.g. volcanic planets
+// have no dirt micro-life). Scan deterministically from the requested seed to
+// the nearest seed whose art direction supports the requested material, so
+// ?effects=sand / ?effects=dirt ALWAYS shows the effect being inspected.
+function findEffectHarnessSeed(materialType: MaterialType.SAND | MaterialType.DIRT, baseSeed: number): number {
+  const weightKey = materialType === MaterialType.SAND ? 'sandDust' : 'looseSoilLife';
+  for (let i = 0; i < 64; i++) {
+    const candidate = baseSeed + i * 7919;
+    const art = buildPlanetArtDirection(candidate);
+    if (
+      isMaterialEligibleForEcology(art, 'surfaceEffects', materialType) &&
+      surfaceEffectWeight(art, weightKey) > 0.25
+    ) {
+      return candidate;
+    }
+  }
+  return baseSeed;
+}
+
+// Expose the scene so headless probes can audit which effect layers rendered.
+function DebugSceneHook() {
+  const scene = useThree(state => state.scene);
+  useEffect(() => {
+    (window as unknown as { __voxelTestScene?: THREE.Scene }).__voxelTestScene = scene;
+    return () => {
+      delete (window as unknown as { __voxelTestScene?: THREE.Scene }).__voxelTestScene;
+    };
+  }, [scene]);
+  return null;
+}
+
 function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND | MaterialType.DIRT }) {
   const coords = useMemo<Array<[number, number, number]>>(() => {
     const list: Array<[number, number, number]> = [];
@@ -301,9 +335,20 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
     }
     return list;
   }, []);
+  const effectSeed = useMemo(() => findEffectHarnessSeed(materialType, SEED), [materialType]);
   const player = useMemo(() => new THREE.Vector3(0, 52, 14), []);
-  const effectLabel = materialType === MaterialType.SAND ? 'sand dust' : 'loose dirt micro-life';
-  const fieldLabel = materialType === MaterialType.SAND ? 'Sand dust field' : 'Loose soil + tiny crawlers';
+  const effectLabel = materialType === MaterialType.SAND ? 'sand flow' : 'loose dirt micro-life';
+  const fieldLabel = materialType === MaterialType.SAND ? 'Blowing sand field' : 'Loose soil + worms';
+
+  useEffect(() => {
+    // Inspection harness: force enough density/distance that the effect under
+    // review is unmistakable regardless of the device profile defaults.
+    const quality = getGraphicsQuality();
+    overrideGraphicsQuality({
+      voxelEffectDensity: Math.max(quality.voxelEffectDensity, 1.1),
+      voxelEffectMaxDistance: Math.max(quality.voxelEffectMaxDistance, 140)
+    });
+  }, []);
 
   useEffect(() => {
     voxelSystem.reset();
@@ -315,7 +360,7 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
     });
     window.__voxelTest = {
       summary: () => ({
-        seed: SEED,
+        seed: effectSeed,
         profile: PROFILE,
         stages: STAGES,
         materials: [materialType],
@@ -326,7 +371,7 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
       delete window.__voxelTest;
       voxelSystem.reset();
     };
-  }, [coords, materialType]);
+  }, [coords, materialType, effectSeed]);
 
   return (
     <>
@@ -336,11 +381,12 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
       <hemisphereLight args={['#e2f4ff', '#6c513b', 0.92]} />
       <directionalLight position={[8, 18, 9]} intensity={1.8} color="#fff0ce" />
       <directionalLight position={[-9, 10, -8]} intensity={0.42} color="#9bbdff" />
+      <DebugSceneHook />
       <EffectPatchCubes coords={coords} materialType={materialType} />
-      <SurfaceEffectField terrainSeed={SEED} playerPosition={player} />
+      <SurfaceEffectField terrainSeed={effectSeed} playerPosition={player} />
       <Html position={[0, 55.5, -12]} center>
         <div style={headerStyle}>
-          Spawned voxel effects · {effectLabel} · seed {SEED} · {PROFILE}
+          Spawned voxel effects · {effectLabel} · seed {effectSeed} · {PROFILE}
         </div>
       </Html>
       <Html position={[-11.5, 51, -8]} center>

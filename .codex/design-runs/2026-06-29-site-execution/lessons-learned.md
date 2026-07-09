@@ -17,3 +17,9 @@
 - Ground gait reads better when driven by accumulated locomotion stride, while breathing, tails, wings, and wind can remain ambient time-driven overlays.
 - Flora should share the lit material lane with trees and fauna. Even small flowers/cacti read as more integrated once they receive scene lighting, rim/backlight, and day/night uniforms.
 - Voxel cohesion is best improved through restrained shared atmosphere and rim terms, not by adding more material-specific programs. `voxel-pbr-v6` kept the single-family program while aligning block faces with the softer tree/fauna/flora grade.
+- Reality stage should be a shared render contract, not a collection of ad hoc toggles. Water, sky, fog, post grade, and surface effects now read the same chroma/detail/atmosphere values, so stage progression can be tuned globally.
+- Atlas effect-vantage checks must understand story-stage semantics. Bare/color stages intentionally have no spawned surface phenomena, so the harness should not report intended absence as a missing effect.
+- Single-view p95 spikes in headless capture are noisy. Case-level p95 should use a robust view percentile so repeated slow views still fail, but one screenshot/warmup hiccup does not mask otherwise stable shader performance.
+- Grass and trees need explicit reality uniforms too; relying on terrain/biome color alone leaves organic layers outside the story-stage contract.
+- MEDIUM quality should be budgeted against submitted geometry, not only estimated scene layer counts. A tiny over-budget final atlas case was fixed by trimming MEDIUM grass density/radius and tree radius centrally while leaving HIGH/ULTRA intact.
+- Flora needs its own role hierarchy inside the shared palette. Reusing canopy roles makes it cohesive but redundant; a better lane derives from vegetation, bloom, mineral, dry-grass, bark, and terrain anchors with explicit canopy hue separation and restrained saturation for large plant surfaces.

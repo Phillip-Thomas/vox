@@ -4,6 +4,7 @@ import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from
 import { voxelSystem } from './efficientVoxelSystem';
 import { MaterialType } from '../types/materials';
 import { getGraphicsQuality, type GraphicsQuality } from '../config/graphicsSettings';
+import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { seededVoxelUnit } from './seededHash';
 import { buildGrassProfile, type GrassProfile } from './grassProfile';
 import { getWorldTerrainData } from './worldGenCache';
@@ -505,6 +506,8 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
     shader.uniforms.uWind = { value: 1 };
+    shader.uniforms.uGrassVisibility = { value: 1 };
+    shader.uniforms.uGrassChroma = { value: 1 };
     shader.uniforms.uBaseColor = { value: GRASS_BASE.clone() };
     shader.uniforms.uTipColor = { value: GRASS_TIP.clone() };
     shader.uniforms.uDryColor = { value: GRASS_DRY.clone() };
@@ -603,6 +606,8 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
         uniform vec3 uTipColor;
         uniform vec3 uDryColor;
         uniform vec3 uSSSColor;
+        uniform float uGrassVisibility;
+        uniform float uGrassChroma;
         uniform float uDryness;
         uniform vec3 uSunDir;
         varying float vHeight;
@@ -614,6 +619,7 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
+        if (uGrassVisibility < 0.01) discard;
         // Base (root) -> tip vertical gradient (uniforms already in linear space).
         // sqrt bias keeps most of the blade bright/lush, only the base darkened.
         float g = clamp(vHeight, 0.0, 1.0);
@@ -635,6 +641,9 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
 
         // Base ambient occlusion: blades pack near the ground -> less light there.
         grad *= mix(0.55, 1.0, smoothstep(0.0, 0.45, vHeight));
+        float grassLuma = dot(grad, vec3(0.2126, 0.7152, 0.0722));
+        grad = mix(vec3(grassLuma) * 0.82, grad, clamp(uGrassChroma, 0.0, 1.0));
+        grad *= clamp(uGrassVisibility, 0.0, 1.0);
 
         diffuseColor.rgb *= grad;`
       )
@@ -648,12 +657,13 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
           vec3 V = normalize(cameraPosition - vGrassWPos);
           vec3 N = normalize(vGrassWNrm);
           float daylight = smoothstep(-0.1, 0.25, uSunDir.y);
+          float grassVisible = clamp(uGrassVisibility, 0.0, 1.0);
           float tipw = vHeight * vHeight; // tips translucent, base opaque
           float backlit = pow(clamp(dot(V, -uSunDir), 0.0, 1.0), 3.0);
           float trans = clamp((abs(dot(N, uSunDir)) + 0.4) / 1.4, 0.0, 1.0);
-          totalEmissiveRadiance += uSSSColor * backlit * trans * daylight * tipw * 0.5;
+          totalEmissiveRadiance += uSSSColor * backlit * trans * daylight * tipw * 0.5 * grassVisible;
           float sheen = pow(clamp(dot(N, normalize(uSunDir + V)), 0.0, 1.0), 8.0);
-          totalEmissiveRadiance += uSSSColor * sheen * daylight * tipw * 0.15;
+          totalEmissiveRadiance += uSSSColor * sheen * daylight * tipw * 0.15 * grassVisible;
         }`
       );
   };
@@ -698,6 +708,7 @@ export function updateGrassMaterial(
   material: THREE.MeshStandardMaterial,
   time: number,
   quality: GraphicsQuality,
+  reality: VoxelRealityEffects,
   sunDir?: THREE.Vector3
 ) {
   const shader = material.userData.shader as
@@ -705,9 +716,15 @@ export function updateGrassMaterial(
     | undefined;
   if (!shader?.uniforms) return;
   const u = shader.uniforms;
+  const visibility = Math.min(1.16, Math.max(0, reality.organic * 0.9 + reality.detail * 0.2));
+  const motion = quality.animatedShaders
+    ? Math.min(1.35, Math.max(0, reality.atmosphere * 0.55 + reality.organic * 0.62))
+    : 0;
   // Freeze time when animation is off so wind costs nothing and blades stand still.
   if (u.uTime && quality.animatedShaders) (u.uTime.value as number) = time;
-  if (u.uWind) (u.uWind.value as number) = quality.animatedShaders ? 1 : 0;
+  if (u.uWind) (u.uWind.value as number) = motion;
+  if (u.uGrassVisibility) (u.uGrassVisibility.value as number) = visibility;
+  if (u.uGrassChroma) (u.uGrassChroma.value as number) = Math.min(1, Math.max(0, reality.chroma));
   if (sunDir && u.uSunDir) {
     _gsun.copy(sunDir).normalize();
     (u.uSunDir.value as THREE.Vector3).copy(_gsun);

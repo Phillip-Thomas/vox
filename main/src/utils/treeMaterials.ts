@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { GraphicsQuality } from '../config/graphicsSettings';
+import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import type { TreeProfile } from './treeProfile';
 
 // --- Tree materials — bark + leaves + blossoms + impostor ---------------------
@@ -126,6 +127,11 @@ function installTreeWindUniforms(
   shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
 }
 
+function installTreeRealityUniforms(shader: THREE.WebGLProgramParametersWithUniforms): void {
+  shader.uniforms.uTreeVisibility = { value: 1 };
+  shader.uniforms.uTreeChroma = { value: 1 };
+}
+
 /**
  * Bark / branch material. Brown, high roughness, hierarchical wind sway in the
  * vertex shader. Trunk top harmonizes faintly toward the planet leaf colour so
@@ -145,6 +151,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
     installTreeWindUniforms(shader, 1);
+    installTreeRealityUniforms(shader);
     shader.uniforms.uBarkColor = { value: BARK_COLOR.clone() };
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
     material.userData.shader = shader;
@@ -179,6 +186,8 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <common>',
         `#include <common>
+        uniform float uTreeVisibility;
+        uniform float uTreeChroma;
         uniform vec3 uBarkColor;
         uniform vec3 uLeafBase;
         varying float vBarkV;
@@ -189,6 +198,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
+        if (uTreeVisibility < 0.01) discard;
         // --- procedural bark: vertical ridges running AROUND the trunk + fibrous
         //     height grain + dark crevices, so the stem reads as textured wood
         //     instead of a smooth tube. vBarkU = around (0..1), vBarkV = height. --
@@ -203,6 +213,9 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         bark *= 1.0 - 0.45 * crevice;        // darken the crevices
         // young twigs harmonize faintly toward the canopy colour.
         bark = mix(bark, mix(bark, uLeafBase, 0.35), smoothstep(0.6, 1.0, vBarkStiff));
+        float treeLuma = dot(bark, vec3(0.2126, 0.7152, 0.0722));
+        bark = mix(vec3(treeLuma) * 0.84, bark, clamp(uTreeChroma, 0.0, 1.0));
+        bark *= clamp(uTreeVisibility, 0.0, 1.0);
         diffuseColor.rgb *= bark;`
       )
       .replace(
@@ -296,6 +309,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
     installTreeWindUniforms(shader, 1);
+    installTreeRealityUniforms(shader);
     shader.uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
     shader.uniforms.uMoonDir = { value: new THREE.Vector3(0, -1, 0) };
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
@@ -314,6 +328,8 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <common>',
         `#include <common>
+        uniform float uTreeVisibility;
+        uniform float uTreeChroma;
         uniform vec3 uSunDir;
         uniform vec3 uMoonDir;
         uniform vec3 uLeafBase;
@@ -406,6 +422,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
+        if (uTreeVisibility < 0.01) discard;
         // ===== LEAF-SHAPED alpha cut (no more squares). Evaluate the leaf
         // outline SDF in card space and discard everything outside it. =====
         vec2 lp = vLeafUv * 2.0 - 1.0;     // origin centre, +y = tip
@@ -467,6 +484,9 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
 
         // dither to kill banding on the smooth gradient.
         leaf += (twFHash21(gl_FragCoord.xy) - 0.5) * (1.0 / 255.0);
+        float treeLuma = dot(leaf, vec3(0.2126, 0.7152, 0.0722));
+        leaf = mix(vec3(treeLuma) * 0.84, leaf, clamp(uTreeChroma, 0.0, 1.0));
+        leaf *= clamp(uTreeVisibility, 0.0, 1.0);
         diffuseColor.rgb *= leaf;`
       )
       .replace(
@@ -514,6 +534,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           float interior = 1.0 - vCanopyY;            // deep interior glows
           float sunWrap  = pow(clamp(dot(normal, uSunDir) * 0.5 + 0.5, 0.0, 1.0), 1.5);
           vLeafSSSTerm += uLeafSSS * interior * sunWrap * daylight * 0.22;
+          vLeafSSSTerm *= clamp(uTreeVisibility, 0.0, 1.0);
         }`
       )
       .replace(
@@ -544,6 +565,7 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
     installTreeWindUniforms(shader, 1);
+    installTreeRealityUniforms(shader);
     shader.uniforms.uFlowerColor = { value: FLOWER_COLOR.clone() };
     material.userData.shader = shader;
 
@@ -553,6 +575,8 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <common>',
         `#include <common>
+        uniform float uTreeVisibility;
+        uniform float uTreeChroma;
         uniform vec3 uFlowerColor;
         varying vec2 vLeafUv;
         varying float vTint;
@@ -563,6 +587,7 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
+        if (uTreeVisibility < 0.01) discard;
         // 5-petal flower alpha from polar UV, fwidth-cut for a crisp edge.
         vec2 fp = vLeafUv * 2.0 - 1.0;
         float ang = atan(fp.y, fp.x);
@@ -578,13 +603,16 @@ export function createBlossomMaterial(): THREE.MeshStandardMaterial {
         vec3 col = mix(uFlowerColor, uFlowerColor * 1.6, centre);
         col = mix(col, vec3(1.0, 0.92, 0.55), stamen * 0.7);  // warm pollen centre
         col *= 0.92 + vTint * 0.16;
+        float treeLuma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+        col = mix(vec3(treeLuma) * 0.84, col, clamp(uTreeChroma, 0.0, 1.0));
+        col *= clamp(uTreeVisibility, 0.0, 1.0);
         diffuseColor.rgb *= col;`
       )
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
         // faint self-pop so blossoms read against the canopy.
-        totalEmissiveRadiance += uFlowerColor * 0.12;`
+        totalEmissiveRadiance += uFlowerColor * 0.12 * clamp(uTreeVisibility, 0.0, 1.0);`
       );
   };
 
@@ -609,6 +637,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
     installTreeWindUniforms(shader, 0);
+    installTreeRealityUniforms(shader);
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
     shader.uniforms.uLeafTip = { value: LEAF_TIP.clone() };
     material.userData.shader = shader;
@@ -619,6 +648,8 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <common>',
         `#include <common>
+        uniform float uTreeVisibility;
+        uniform float uTreeChroma;
         uniform vec3 uLeafBase;
         uniform vec3 uLeafTip;
         varying vec2 vLeafUv;
@@ -635,6 +666,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <map_fragment>',
         `#include <map_fragment>
+        if (uTreeVisibility < 0.01) discard;
         // soft blobby crown silhouette with a nibbled edge, fwidth-cut.
         vec2 lp = vLeafUv * 2.0 - 1.0;
         float r = length(vec2(lp.x, lp.y * 1.1));
@@ -646,6 +678,9 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
         float g = sqrt(clamp(vCanopyY, 0.0, 1.0));
         vec3 leaf = mix(uLeafBase, uLeafTip, g) * (0.7 + 0.3 * g);
         leaf *= 0.9 + vTint * 0.2;
+        float treeLuma = dot(leaf, vec3(0.2126, 0.7152, 0.0722));
+        leaf = mix(vec3(treeLuma) * 0.84, leaf, clamp(uTreeChroma, 0.0, 1.0));
+        leaf *= clamp(uTreeVisibility, 0.0, 1.0);
         diffuseColor.rgb *= leaf;`
       );
   };
@@ -731,27 +766,42 @@ export function updateTreeMaterials(
   bark: THREE.MeshStandardMaterial,
   leaf: THREE.MeshStandardMaterial,
   blossom: THREE.MeshStandardMaterial | null,
-  _impostor: THREE.MeshStandardMaterial | null,
+  impostor: THREE.MeshStandardMaterial | null,
   time: number,
   sunDir: THREE.Vector3,
   moonDir: THREE.Vector3,
-  quality: GraphicsQuality
+  quality: GraphicsQuality,
+  reality: VoxelRealityEffects
 ) {
-  const animated = quality.animatedShaders;
+  const visibility = Math.min(1.16, Math.max(0, reality.organic * 0.88 + reality.detail * 0.22));
+  const motion = quality.animatedShaders
+    ? Math.min(1.32, Math.max(0, reality.organic * 0.58 + reality.atmosphere * 0.58))
+    : 0;
   _sun.copy(sunDir).normalize();
   _moon.copy(moonDir).normalize();
 
   const pushTimeWind = (mat: ShaderHolder | null) => {
     const u = mat?.userData.shader?.uniforms;
     if (!u) return;
-    if (u.uTime && animated) (u.uTime.value as number) = time;
-    if (u.uWind) (u.uWind.value as number) = animated ? 1 : 0;
+    if (u.uTime && quality.animatedShaders) (u.uTime.value as number) = time;
+    if (u.uWind) (u.uWind.value as number) = motion;
+  };
+
+  const pushReality = (mat: ShaderHolder | null) => {
+    const u = mat?.userData.shader?.uniforms;
+    if (!u) return;
+    if (u.uTreeVisibility) (u.uTreeVisibility.value as number) = visibility;
+    if (u.uTreeChroma) (u.uTreeChroma.value as number) = Math.min(1, Math.max(0, reality.chroma));
   };
 
   pushTimeWind(bark as unknown as ShaderHolder);
   pushTimeWind(leaf as unknown as ShaderHolder);
   pushTimeWind(blossom as unknown as ShaderHolder | null);
   // impostor wind stays frozen (created with uWind 0).
+  pushReality(bark as unknown as ShaderHolder);
+  pushReality(leaf as unknown as ShaderHolder);
+  pushReality(blossom as unknown as ShaderHolder | null);
+  pushReality(impostor as unknown as ShaderHolder | null);
 
   const leafU = (leaf as unknown as ShaderHolder).userData.shader?.uniforms;
   if (leafU) {

@@ -229,11 +229,9 @@ function surfaceEffectMesh(scene: THREE.Scene, ids: string[] = []): THREE.Instan
   return instancedByMaterial(scene, (material, key) => {
     const effectId = String(material.userData?.effectId ?? '');
     if (wanted.size > 0) {
-      if (wanted.has('sandDust') && /sand-dust/.test(key)) return true;
-      if (wanted.has('dirtLife') && /dirt-life/.test(key)) return true;
       return effectId !== '' && wanted.has(effectId);
     }
-    return /sand-dust|dirt-life|surface-phenomenon/.test(key);
+    return /surface-sheet|surface-mote|surface-critter/.test(key);
   });
 }
 
@@ -306,7 +304,7 @@ function sceneLayerReport(scene: THREE.Scene, gl: THREE.WebGLRenderer): Pick<Age
     else if (/flora-field/.test(key)) layerCounts.flora += count;
     else if (/fauna-field/.test(key)) layerCounts.fauna += count;
     else if (/water-blocks/.test(key)) layerCounts.water += count;
-    else if (/sand-dust|dirt-life|surface-phenomenon/.test(key)) layerCounts.surfaceEffects += count;
+    else if (/surface-sheet|surface-mote|surface-critter/.test(key)) layerCounts.surfaceEffects += count;
     else if (/loose-stone/.test(key)) layerCounts.stones += count;
   });
 
@@ -506,14 +504,14 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
 
     const effectViewIds = (name: string): string[] | null => {
       if (name === 'surfaceEffects' || name === 'material') return [];
-      if (name === 'hazard') return ['lavaHeat', 'ash', 'sandDust'];
+      if (name === 'hazard') return ['lavaCrust', 'lavaEmbers', 'ashDrift', 'sandFlow'];
       if (name === 'mineral') return ['crystalGlints', 'metallicFlecks'];
-      if (name === 'sandDust') return ['sandDust'];
-      if (name === 'dirtLife') return ['dirtLife'];
+      if (name === 'sandDust') return ['sandFlow'];
+      if (name === 'dirtLife') return ['soilLife', 'wormLife'];
       if (name === 'pollen') return ['pollen'];
       if (name === 'frost') return ['frost'];
-      if (name === 'lavaHeat') return ['lavaHeat'];
-      if (name === 'ash') return ['ash'];
+      if (name === 'lavaHeat') return ['lavaCrust', 'lavaEmbers'];
+      if (name === 'ash') return ['ashDrift'];
       if (name === 'crystalGlints') return ['crystalGlints'];
       if (name === 'metallicFlecks') return ['metallicFlecks'];
       if (name === 'fungalSpores') return ['fungalSpores'];

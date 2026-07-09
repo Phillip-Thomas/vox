@@ -101,3 +101,54 @@ Category notes:
 - Screenshot evidence: `4.78` - material and flora-adjacent views cover all showcase archetypes; later visual review can still push flora geometry volume.
 
 Final approval remains pending. Final target is `>= 4.85 / 5`.
+
+## Batch 7 Refined Reality-Stage Shader Score
+
+Weighted score: `4.84 / 5`
+Gate: refined `4.60`
+Result: `pass`
+
+Category notes:
+
+- Product/world truth: `4.86` - water, fog, sky, surface phenomena, and post grade now respond to the same story-stage reality contract as voxels/flora/fauna.
+- Visual cohesion: `4.84` - unresolved stages reduce chroma/detail/atmosphere consistently, while material/alive/paradox restore water, sky, fog, grade, and spawned phenomena in a shared direction.
+- Ecology validity: `4.82` - bare/color intentionally suppress spawned surface-effect allocation; material/alive/paradox restore biome/material-eligible phenomena without breaking ecology gates.
+- Performance evidence: `4.86` - reality and perf atlases are clean with zero console errors, zero machine defects, and no shader-program explosion.
+- Maintainability: `4.84` - reality variation remains uniform-driven; atlas expectation logic now reflects stage semantics instead of treating intended absence as a defect.
+- Screenshot evidence: `4.82` - `135` reality screenshots and `60` perf screenshots cover the pass; human/adversarial visual review still needs to judge story-stage emotional clarity.
+
+Final approval remains pending. Final target is `>= 4.85 / 5`.
+
+## Batch 8 Final Machine Score
+
+Weighted score: `4.86 / 5`
+Gate: final `4.85`
+Result: `machine pass`
+
+Category notes:
+
+- Product/world truth: `4.88` - grass and trees now share the same reality-stage render contract as voxels, flora, fauna, water, sky, fog, and post grade.
+- Visual cohesion: `4.86` - unresolved stages suppress/dim organic vegetation consistently, while alive/paradox preserve the tree-led lushness standard without introducing new shader variants.
+- Ecology validity: `4.86` - final baseline still shows rich organic layers where expected, with sparse/mineral worlds allowed to remain sparse.
+- Performance evidence: `4.88` - final baseline is clean: `36` cases, `216` screenshots, `0` console errors, `0` machine defects, max p95 `17.5ms`, max single-view p95 `17.8ms`.
+- Maintainability: `4.86` - grass/tree variation remains uniform-driven under stable program keys, and the MEDIUM profile budget is encoded centrally in `graphicsSettings`.
+- Screenshot evidence: `4.84` - final baseline covers all archetypes in HIGH/MEDIUM alive-stage views; subjective story-stage approval remains a human/taste gate.
+
+Final machine approval passes. Human taste approval remains pending before calling the visual system fully approved.
+
+## Batch 9 Flora Color Harmony Follow-Up Score
+
+Weighted score: `4.87 / 5`
+Gate: human-feedback patch `4.75`
+Result: `pass`
+
+Category notes:
+
+- Product/world truth: `4.88` - flora now has a distinct understory/accent palette role instead of duplicating tree canopy colors.
+- Visual cohesion: `4.87` - colors remain derived from planet palette anchors while adding hue separation, value contrast, and restrained accent budgeting.
+- Ecology validity: `4.86` - placement and species weights are unchanged; the patch only changes authored color roles and species color blends.
+- Performance evidence: `4.88` - final showcase is clean: `9` cases, `36` screenshots, `0` console errors, `0` machine defects, min FPS `60`, worst p95 `17.3ms`.
+- Maintainability: `4.88` - palette logic remains deterministic and covered by a flora/tree hue-separation regression across representative atlas seeds.
+- Screenshot evidence: `4.84` - final screenshots cover all showcase archetypes; human taste should still judge whether the bolder arid/fungal flora accents are preferred.
+
+Human-feedback patch passes. Final visual approval still depends on taste review of the latest screenshots.

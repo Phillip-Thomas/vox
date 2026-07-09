@@ -17,6 +17,7 @@ import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { getWorldGen } from '../utils/worldGenCache.ts';
 import { getSunDirection, getMoonDirection } from './SkyController.tsx';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import {
   applyPendingReplicatedWaterFlood,
   clearActiveReplicatedWaterWorld,
@@ -291,7 +292,14 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
         applyWaterProfileToMaterial(profile, waterMat);
         profileAppliedRef.current = true;
       }
-      updateWaterBlocksMaterial(waterMat, state.clock.elapsedTime, getSunDirection(), getMoonDirection(), getGraphicsQuality());
+      updateWaterBlocksMaterial(
+        waterMat,
+        state.clock.elapsedTime,
+        getSunDirection(),
+        getMoonDirection(),
+        getGraphicsQuality(),
+        getVoxelRealityEffects()
+      );
     }
     const mesh = meshRef.current;
     const capMesh = capMeshRef.current;

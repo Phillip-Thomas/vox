@@ -18,12 +18,16 @@ import {
 } from './floraField.ts';
 import { QUALITY_PROFILES } from '../config/graphicsSettings.ts';
 import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem.ts';
+import { atlasRepresentativeSeeds } from './proceduralAtlasSeeds.ts';
+import { buildPlanetArtDirection } from './planetArtDirection.ts';
+import { buildTreeProfile } from './treeProfile.ts';
 
 const grass = new THREE.Color(0x7cb342);
 const dirt = new THREE.Color(0x8b4513);
 const sand = new THREE.Color(0xc2b280);
 const VERDANT_SEED = 3215739679;
 const ARID_SEED = 787428812;
+const _hsl = { h: 0, s: 0, l: 0 };
 
 afterEach(() => {
   voxelSystem.reset();
@@ -37,6 +41,16 @@ function fullCoverageProfile(seed: number): FloraProfile {
   };
 }
 
+function hueOf(c: THREE.Color): number {
+  c.clone().convertLinearToSRGB().getHSL(_hsl);
+  return _hsl.h;
+}
+
+function circularHueDistance(a: number, b: number): number {
+  const d = Math.abs(a - b);
+  return Math.min(d, 1 - d);
+}
+
 describe('floraField', () => {
   it('builds deterministic biome and wind aware flora profiles', () => {
     const a = buildFloraProfile(12345);
@@ -45,6 +59,27 @@ describe('floraField', () => {
     expect(a.coverage).toBe(b.coverage);
     expect(a.wind.direction.x).toBe(b.wind.direction.x);
     expect(FLORA_KINDS.every(kind => a.weights[kind] > 0)).toBe(true);
+  });
+
+  it('keeps flora foliage distinct from tree canopy while staying palette-derived', () => {
+    for (const { seed } of atlasRepresentativeSeeds(3)) {
+      const flora = buildFloraProfile(seed);
+      const tree = buildTreeProfile(seed);
+      const { palette } = buildPlanetArtDirection(seed);
+      const baseHue = hueOf(flora.greenBase);
+      const tipHue = hueOf(flora.greenTip);
+      const anchorDistance = Math.min(
+        circularHueDistance(baseHue, palette.vegetationBase.h),
+        circularHueDistance(baseHue, palette.flowerAccent.h),
+        circularHueDistance(baseHue, palette.mineralAccent.h),
+        circularHueDistance(baseHue, palette.dryGrass.h)
+      );
+
+      expect(circularHueDistance(baseHue, hueOf(tree.leafColor))).toBeGreaterThanOrEqual(0.08);
+      expect(circularHueDistance(tipHue, hueOf(tree.leafTipColor))).toBeGreaterThanOrEqual(0.06);
+      expect(anchorDistance).toBeLessThan(0.26);
+      expect(flora.bloomColor.getHex()).not.toBe(tree.flowerColor.getHex());
+    }
   });
 
   it('only decorates eligible surface materials', () => {

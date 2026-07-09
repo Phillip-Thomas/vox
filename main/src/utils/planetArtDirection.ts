@@ -104,6 +104,7 @@ export interface PlanetMaterialPhenomena {
   crystalGlints: number;
   metallicFlecks: number;
   fungalSpores: number;
+  grassLife: number;
 }
 
 export interface PlanetQualityHints {
@@ -363,14 +364,14 @@ function ecologyFor(archetype: ArchetypeId, richness: number): PlanetEcology {
     },
     floraWeights: { cactus: 0.2, fan: 0.7, flower: 0.8, seedhead: 0.5, shrub: 0.7 },
     faunaWeights: { grazer: 0.7, woolly: 0.5, runner: 0.45, hopper: 0.4, dragonfly: 0.55 },
-    surfaceEffectWeights: { sandDust: 0.3, looseSoilLife: 0.35, pollen: 0.45, frost: 0, lavaHeat: 0, ash: 0, crystalGlints: 0, metallicFlecks: 0, fungalSpores: 0 }
+    surfaceEffectWeights: { sandDust: 0.3, looseSoilLife: 0.35, pollen: 0.45, frost: 0, lavaHeat: 0, ash: 0, crystalGlints: 0, metallicFlecks: 0, fungalSpores: 0, grassLife: 0.3 }
   };
 
   if (archetype === 'verdant') {
     base.materialEligibility.surfaceEffects = [MaterialType.GRASS, MaterialType.DIRT, MaterialType.SAND];
     base.floraWeights = { cactus: 0.03, fan: 0.9, flower: 1.2, seedhead: 0.5, shrub: 1.0 };
     base.faunaWeights = { grazer: 1.2, woolly: 0.8, runner: 0.4, hopper: 0.35, dragonfly: 0.9 };
-    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, pollen: 1, looseSoilLife: 0.8 };
+    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, pollen: 1, looseSoilLife: 0.8, grassLife: 0.9 };
   } else if (archetype === 'arid') {
     base.materialEligibility.grass = [];
     base.materialEligibility.trees = [MaterialType.DIRT, MaterialType.SAND];
@@ -401,7 +402,7 @@ function ecologyFor(archetype: ArchetypeId, richness: number): PlanetEcology {
     base.materialEligibility.surfaceEffects = [MaterialType.GRASS, MaterialType.DIRT, MaterialType.SAND];
     base.floraWeights = { cactus: 0.05, fan: 1.0, flower: 0.8, seedhead: 0.45, shrub: 0.8 };
     base.faunaWeights = { grazer: 0.65, woolly: 0.25, runner: 0.22, hopper: 0.18, dragonfly: 1.15 };
-    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, pollen: 0.7, looseSoilLife: 0.55 };
+    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, pollen: 0.7, looseSoilLife: 0.55, grassLife: 0.55 };
   } else if (archetype === 'crystal') {
     base.materialEligibility.grass = [];
     base.materialEligibility.flora = [MaterialType.DIRT, MaterialType.CRYSTAL];
@@ -423,7 +424,7 @@ function ecologyFor(archetype: ArchetypeId, richness: number): PlanetEcology {
     base.materialEligibility.surfaceEffects = [MaterialType.GRASS, MaterialType.DIRT, MaterialType.STONE];
     base.floraWeights = { cactus: 0.02, fan: 1.05, flower: 0.55, seedhead: 0.35, shrub: 1.2 };
     base.faunaWeights = { grazer: 0.42, woolly: 0.38, runner: 0.22, hopper: 0.32, dragonfly: 0.7 };
-    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, fungalSpores: 1.2, looseSoilLife: 0.9 };
+    base.surfaceEffectWeights = { ...base.surfaceEffectWeights, fungalSpores: 1.2, looseSoilLife: 0.9, grassLife: 0.5 };
   } else {
     base.materialEligibility.grass = ALL_SURFACE_ORGANIC;
     base.materialEligibility.trees = DRY_ORGANIC;
@@ -466,7 +467,8 @@ function phenomena(ecology: PlanetEcology): PlanetMaterialPhenomena {
     ash: ecology.surfaceEffectWeights.ash ?? 0,
     crystalGlints: ecology.surfaceEffectWeights.crystalGlints ?? 0,
     metallicFlecks: ecology.surfaceEffectWeights.metallicFlecks ?? 0,
-    fungalSpores: ecology.surfaceEffectWeights.fungalSpores ?? 0
+    fungalSpores: ecology.surfaceEffectWeights.fungalSpores ?? 0,
+    grassLife: ecology.surfaceEffectWeights.grassLife ?? 0
   };
 }
 

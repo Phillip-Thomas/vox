@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import {
@@ -163,7 +164,13 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     }
 
     // Drive wind + sun (gated to freeze when animatedShaders is off).
-    updateGrassMaterial(material, performance.now() / 1000, getGraphicsQuality(), getSunDirection());
+    updateGrassMaterial(
+      material,
+      performance.now() / 1000,
+      getGraphicsQuality(),
+      getVoxelRealityEffects(),
+      getSunDirection()
+    );
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {

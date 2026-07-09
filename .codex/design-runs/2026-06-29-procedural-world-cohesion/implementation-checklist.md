@@ -268,16 +268,16 @@ Exit gate:
   - [ ] distance fade,
   - [x] animation toggle for fauna movement-driven stride.
 - [x] Add performance thresholds to atlas report.
-- [ ] Add shader complexity audit notes for:
+- [x] Add shader complexity audit notes for:
   - [x] voxel material,
-  - [ ] water,
-  - [ ] tree materials,
-  - [ ] grass material,
+  - [x] water,
+  - [x] tree materials,
+  - [x] grass material,
   - [x] flora material,
   - [x] fauna material,
-  - [ ] surface effects,
-  - [ ] sky,
-  - [ ] post FX.
+  - [x] surface effects,
+  - [x] sky,
+  - [x] post FX.
 - [x] Verify quality profiles:
   - [x] ULTRA: showcase, acceptable heavy.
   - [x] HIGH: default visually rich.
@@ -287,8 +287,8 @@ Exit gate:
 - [ ] Optimize high-cost offenders:
   - [ ] reduce branchy shader paths,
   - [x] share program keys,
-  - [ ] increase culling,
-  - [ ] lower instance density,
+  - [x] increase culling,
+  - [x] lower instance density,
   - [ ] fade high-frequency detail with distance,
   - [ ] prefer instancing over many meshes.
 - [x] Add fauna no-reset regression for rebuilds preserving progress and gait phase.
@@ -301,50 +301,50 @@ Exit gate:
 
 ## Phase 7: Reality Stage Progression
 
-- [ ] Define visual promise for each stage:
-  - [ ] `bare`: monochrome/low-detail cube construct.
-  - [ ] `color`: color awakens but material is flat.
-  - [ ] `material`: material properties and surface detail emerge.
-  - [ ] `alive`: organic/spawned world layer fully present.
-  - [ ] `paradox`: heightened, impossible, but still art-directed.
-- [ ] Audit all systems for stage response:
-  - [ ] voxel material,
-  - [ ] grass,
-  - [ ] trees,
-  - [ ] flora,
-  - [ ] fauna,
-  - [ ] surface effects,
-  - [ ] water,
-  - [ ] sky/post.
-- [ ] Add stage gates where missing.
-- [ ] Atlas reality mode captures stage strips.
+- [x] Define visual promise for each stage:
+  - [x] `bare`: monochrome/low-detail cube construct.
+  - [x] `color`: color awakens but material is flat.
+  - [x] `material`: material properties and surface detail emerge.
+  - [x] `alive`: organic/spawned world layer fully present.
+  - [x] `paradox`: heightened, impossible, but still art-directed.
+- [x] Audit all systems for stage response:
+  - [x] voxel material,
+  - [x] grass,
+  - [x] trees,
+  - [x] flora,
+  - [x] fauna,
+  - [x] surface effects,
+  - [x] water,
+  - [x] sky/post.
+- [x] Add stage gates where missing.
+- [x] Atlas reality mode captures stage strips.
 - [ ] Visual review checks stage continuity.
 
 Exit gate:
 
 - [ ] Reality progression reads as intentional in screenshots.
-- [ ] Device quality and story stage remain separate.
+- [x] Device quality and story stage remain separate.
 
 ## Phase 8: Deep Iterative Visual Refinement
 
 For each atlas batch:
 
-- [ ] Capture baseline matrix.
+- [x] Capture baseline matrix.
 - [x] Generate machine report.
 - [ ] Review screenshots with adversarial rubric.
 - [x] Score each category.
-- [ ] Select highest-leverage defect.
-- [ ] Patch foundation before local polish when systemic.
+- [x] Select highest-leverage defect.
+- [x] Patch foundation before local polish when systemic.
 - [x] Re-run same matrix.
 - [x] Compare visual and perf changes.
-- [ ] Classify late defects if improvement < 0.05.
+- [x] Classify late defects if improvement < 0.05.
 - [x] Update scorecard, screenshot report, run summary, and lessons.
 
 Iteration targets:
 
 - [x] first-pass atlas score >= 4.30.
 - [x] refined atlas score >= 4.60.
-- [ ] final atlas score >= 4.85.
+- [x] final atlas score >= 4.85.
 - [x] no category below 4.45.
 - [x] no critical/high defects.
 - [x] no unaccepted medium palette/ecology/scale/perf defects.
@@ -364,9 +364,9 @@ Iteration targets:
 
 Final gate:
 
-- [ ] `npm run verify` passes.
-- [ ] `atlas:baseline` passes.
+- [x] `npm run verify` passes.
+- [x] `atlas:baseline` passes.
 - [x] `atlas:perf` passes or accepted exceptions documented.
-- [ ] Desktop and mobile or relevant viewport screenshots reviewed.
+- [x] Desktop and mobile or relevant viewport screenshots reviewed.
 - [ ] Human taste approval captured.
-- [ ] Final scorecard approves the system.
+- [x] Final scorecard approves the system.

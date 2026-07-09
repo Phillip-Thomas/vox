@@ -59,6 +59,7 @@ import {
   updateTreeMaterials
 } from './utils/treeMaterials.ts';
 import { getGraphicsQuality } from './config/graphicsSettings.ts';
+import { VOXEL_REALITY_PRESETS } from './game/systems/realityRenderSystem.ts';
 
 interface SpeciesSpec {
   name: string;
@@ -300,7 +301,17 @@ function Scene() {
         applyTreeProfileToMaterials(t.profile, t.mats.bark, t.mats.leaf, t.mats.blossom, null);
         appliedRef.current.add(t.key);
       }
-      updateTreeMaterials(t.mats.bark, t.mats.leaf, t.mats.blossom, null, state.clock.elapsedTime, sun, moon, quality);
+      updateTreeMaterials(
+        t.mats.bark,
+        t.mats.leaf,
+        t.mats.blossom,
+        null,
+        state.clock.elapsedTime,
+        sun,
+        moon,
+        quality,
+        VOXEL_REALITY_PRESETS.alive
+      );
     }
   });
 

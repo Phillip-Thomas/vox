@@ -2,31 +2,46 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
+import {
+  getVoxelRealityEffects,
+  getVoxelRealitySnapshot,
+  subscribeVoxelReality
+} from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { buildWindProfile } from '../utils/windProfile';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import {
-  applySurfacePhenomenonWindProfileToMaterial,
-  applyDirtLifeWindProfileToMaterial,
-  applySandDustWindProfileToMaterial,
-  buildSurfacePhenomenonInstances,
-  buildDirtLifeInstances,
-  buildSandDustInstances,
-  countDirtLifeVoxels,
-  countSandDustVoxels,
-  createDirtLifeGeometry,
-  createDirtLifeMaterial,
-  createSurfacePhenomenonGeometry,
-  createSurfacePhenomenonMaterial,
-  createSandDustGeometry,
-  createSandDustMaterial,
-  countSurfacePhenomenonVoxels,
-  updateDirtLifeMaterial,
-  updateSurfacePhenomenonMaterial,
-  updateSandDustMaterial
+  applySurfaceEffectWindProfileToMaterial,
+  buildSurfaceMoteInstances,
+  buildSurfaceSheetInstances,
+  countSurfaceMoteVoxels,
+  countSurfaceSheetVoxels,
+  createSurfaceMoteGeometry,
+  createSurfaceMoteMaterial,
+  createSurfaceSheetGeometry,
+  createSurfaceSheetMaterial,
+  surfaceEffectRealityDensityScale,
+  surfaceSheetIntensity,
+  updateSurfaceEffectMaterial
 } from '../utils/surfaceEffects';
-import type { SurfaceEffectBuildResult, SurfacePhenomenonConfig, SurfacePhenomenonId } from '../utils/surfaceEffects';
+import type {
+  SurfaceEffectBuildResult,
+  SurfaceEffectId,
+  SurfaceMoteConfig,
+  SurfaceSheetConfig
+} from '../utils/surfaceEffects';
+import {
+  buildCritterAgents,
+  countCritterVoxels,
+  createCritterGeometry,
+  createCritterMaterial,
+  critterMaxDistance,
+  prepareCritterSeedAttribute,
+  updateCritterAgents,
+  updateCritterMaterial,
+  writeCritterSeeds
+} from '../utils/surfaceCritters';
+import type { CritterAgent, CritterConfig } from '../utils/surfaceCritters';
 import type { WindProfile } from '../utils/windProfile';
 import { buildPlanetArtDirection, type PlanetArtDirection } from '../utils/planetArtDirection';
 import { isMaterialEligibleForEcology, surfaceEffectWeight } from '../utils/planetEcology';
@@ -39,6 +54,26 @@ interface SurfaceEffectFieldProps {
 }
 
 const HEADROOM = 64;
+
+// Ecology weight keys kept from the original phenomena registry so per-planet
+// archetype tuning (arid boosts sandDust, frozen boosts frost, ...) carries over.
+const WEIGHT_KEY: Partial<Record<SurfaceEffectId, string>> = {
+  sandFlow: 'sandDust',
+  soilLife: 'looseSoilLife',
+  ashDrift: 'ash',
+  lavaCrust: 'lavaHeat',
+  lavaEmbers: 'lavaHeat',
+  wormLife: 'looseSoilLife',
+  grassLife: 'grassLife'
+};
+
+function effectWeight(art: PlanetArtDirection, id: SurfaceEffectId): number {
+  return surfaceEffectWeight(art, WEIGHT_KEY[id] ?? id);
+}
+
+function eligibleMaterials(art: PlanetArtDirection, materials: MaterialType[]): MaterialType[] {
+  return materials.filter(material => isMaterialEligibleForEcology(art, 'surfaceEffects', material));
+}
 
 interface SurfaceEffectSpec {
   id: string;
@@ -55,6 +90,8 @@ interface SurfaceEffectSpec {
     windProfile: WindProfile
   ) => SurfaceEffectBuildResult;
   applyWind: (profile: WindProfile, material: THREE.Material) => void;
+  /** Re-applied when the layer density changes (sheets scale pattern strength). */
+  applyDensity?: (material: THREE.Material, density: number) => void;
   update: (
     material: THREE.Material,
     time: number,
@@ -63,189 +100,281 @@ interface SurfaceEffectSpec {
   ) => void;
 }
 
-function eligibleMaterials(art: PlanetArtDirection, materials: MaterialType[]): MaterialType[] {
-  return materials.filter(material => isMaterialEligibleForEcology(art, 'surfaceEffects', material));
+function scaled(color: THREE.Color, s: number): THREE.Color {
+  return color.clone().multiplyScalar(s);
 }
 
-function phenomenonConfig(
+function sheetConfig(
   art: PlanetArtDirection,
-  id: SurfacePhenomenonId,
+  id: SurfaceEffectId,
   materials: MaterialType[],
-  patch: Omit<SurfacePhenomenonConfig, 'id' | 'materials' | 'colorA' | 'colorB'> & {
-    colorA: THREE.Color;
-    colorB: THREE.Color;
-  }
-): SurfacePhenomenonConfig | null {
+  patch: Omit<SurfaceSheetConfig, 'id' | 'materials'>
+): SurfaceSheetConfig | null {
   const filtered = eligibleMaterials(art, materials);
-  if (filtered.length === 0 || surfaceEffectWeight(art, id) <= 0.04) return null;
+  if (filtered.length === 0 || effectWeight(art, id) <= 0.04) return null;
   return { id, materials: filtered, ...patch };
 }
 
-function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
+function moteConfig(
+  art: PlanetArtDirection,
+  id: SurfaceEffectId,
+  materials: MaterialType[],
+  patch: Omit<SurfaceMoteConfig, 'id' | 'materials'>
+): SurfaceMoteConfig | null {
+  const filtered = eligibleMaterials(art, materials);
+  if (filtered.length === 0 || effectWeight(art, id) <= 0.04) return null;
+  return { id, materials: filtered, ...patch };
+}
+
+function critterConfig(
+  art: PlanetArtDirection,
+  id: SurfaceEffectId,
+  materials: MaterialType[],
+  patch: Omit<CritterConfig, 'effectId' | 'materials'>
+): CritterConfig | null {
+  const filtered = eligibleMaterials(art, materials);
+  if (filtered.length === 0 || effectWeight(art, id) <= 0.04) return null;
+  return { effectId: id, materials: filtered, ...patch };
+}
+
+// -----------------------------------------------------------------------------
+// Per-planet effect registry: grounded sheets + airborne motes.
+// -----------------------------------------------------------------------------
+
+function buildSheetConfigs(art: PlanetArtDirection): SurfaceSheetConfig[] {
   const p = art.palette;
-  const specs: SurfaceEffectSpec[] = [];
+  const sand = paletteRoleToLinearColor(p.sandLight);
+  const soil = paletteRoleToLinearColor(p.soilDark);
+  const rock = paletteRoleToLinearColor(p.rockBase);
 
-  const sandScale = surfaceEffectWeight(art, 'sandDust');
-  if (sandScale > 0.04 && eligibleMaterials(art, [MaterialType.SAND]).length > 0) {
-    specs.push({
-      id: 'sand_dust',
-      densityScale: sandScale,
-      createGeometry: createSandDustGeometry,
-      createMaterial: createSandDustMaterial,
-      count: countSandDustVoxels,
-      build: buildSandDustInstances,
-      applyWind: applySandDustWindProfileToMaterial,
-      update: updateSandDustMaterial
-    });
-  }
-
-  const dirtScale = surfaceEffectWeight(art, 'looseSoilLife');
-  if (dirtScale > 0.04 && eligibleMaterials(art, [MaterialType.DIRT]).length > 0) {
-    specs.push({
-      id: 'dirt_life',
-      densityScale: dirtScale,
-      createGeometry: createDirtLifeGeometry,
-      createMaterial: createDirtLifeMaterial,
-      count: countDirtLifeVoxels,
-      build: buildDirtLifeInstances,
-      applyWind: applyDirtLifeWindProfileToMaterial,
-      update: updateDirtLifeMaterial
-    });
-  }
-
-  const configs = [
-    phenomenonConfig(art, 'pollen', [MaterialType.GRASS], {
-      colorA: paletteRoleToLinearColor(p.vegetationSSS),
-      colorB: paletteRoleToLinearColor(p.flowerAccent),
-      coverageBase: 0.2,
-      coverageGain: 0.58,
-      particlesPerVoxel: 1.7,
-      surfaceOffset: 1.04,
-      baseLift: 0.08,
-      width: 0.48,
-      height: 0.58,
-      depth: 0.42,
-      alpha: 0.22,
-      sparkle: 0.2,
-      rise: 0.8,
-      turbulence: 0.72,
-      salt: 331
+  return [
+    // Sand saltation: streams of grains blowing downwind across the whole field.
+    sheetConfig(art, 'sandFlow', [MaterialType.SAND], {
+      kind: 'flow',
+      colorA: scaled(sand, 0.72),
+      colorB: scaled(sand, 1.35),
+      colorC: scaled(sand, 1.3),
+      intensity: 0.6,
+      patchScale: 0.07,
+      flowSpeed: 1.25,
+      grainScale: 2.4,
+      sparkle: 0,
+      emissive: 0,
+      feather: 0,
+      salt: 181
     }),
-    phenomenonConfig(art, 'frost', [MaterialType.ICE], {
+    // Living topsoil: moisture patches, crumbly casts, creeping wet trails.
+    sheetConfig(art, 'soilLife', [MaterialType.DIRT], {
+      kind: 'soil',
+      colorA: scaled(soil, 0.85),
+      colorB: scaled(soil, 1.55),
+      colorC: scaled(soil, 0.5),
+      intensity: 0.52,
+      patchScale: 0.06,
+      flowSpeed: 0.045,
+      grainScale: 5.5,
+      sparkle: 0,
+      emissive: 0,
+      feather: 0,
+      salt: 211
+    }),
+    // Frost: wind-combed feathers + embedded ice sparkle.
+    sheetConfig(art, 'frost', [MaterialType.ICE], {
+      kind: 'glint',
       colorA: paletteRoleToLinearColor(p.waterFoam),
       colorB: paletteRoleToLinearColor(p.skyHigh),
-      coverageBase: 0.26,
-      coverageGain: 0.62,
-      particlesPerVoxel: 1.6,
-      surfaceOffset: 1.035,
-      baseLift: 0.05,
-      width: 0.36,
-      height: 0.78,
-      depth: 0.24,
-      alpha: 0.28,
-      sparkle: 0.45,
-      rise: 0.55,
-      turbulence: 0.42,
+      colorC: paletteRoleToLinearColor(p.waterFoam),
+      intensity: 0.5,
+      patchScale: 0.09,
+      flowSpeed: 0,
+      grainScale: 7,
+      sparkle: 0.55,
+      emissive: 0.25,
+      feather: 0.9,
       salt: 371
     }),
-    phenomenonConfig(art, 'lavaHeat', [MaterialType.LAVA], {
-      colorA: paletteRoleToLinearColor(p.hazardAccent),
-      colorB: paletteRoleToLinearColor(p.sunGlow),
-      coverageBase: 0.3,
-      coverageGain: 0.7,
-      particlesPerVoxel: 1.8,
-      surfaceOffset: 1.045,
-      baseLift: 0.06,
-      width: 0.56,
-      height: 0.92,
-      depth: 0.42,
-      alpha: 0.32,
-      sparkle: 0.65,
-      rise: 1.2,
-      turbulence: 0.86,
-      salt: 411
-    }),
-    phenomenonConfig(art, 'ash', [MaterialType.BASALT, MaterialType.STONE], {
-      colorA: paletteRoleToLinearColor(p.rockBase),
-      colorB: paletteRoleToLinearColor(p.soilDark),
-      coverageBase: 0.18,
-      coverageGain: 0.56,
-      particlesPerVoxel: 1.4,
-      surfaceOffset: 1.035,
-      baseLift: 0.05,
-      width: 0.62,
-      height: 0.66,
-      depth: 0.44,
-      alpha: 0.18,
-      sparkle: 0.08,
-      rise: 0.72,
-      turbulence: 0.84,
-      salt: 451
-    }),
-    phenomenonConfig(art, 'crystalGlints', [MaterialType.CRYSTAL], {
+    // Crystal facets firing as you move.
+    sheetConfig(art, 'crystalGlints', [MaterialType.CRYSTAL], {
+      kind: 'glint',
       colorA: paletteRoleToLinearColor(p.mineralAccent),
       colorB: paletteRoleToLinearColor(p.wingGlass),
-      coverageBase: 0.22,
-      coverageGain: 0.5,
-      particlesPerVoxel: 1.1,
-      surfaceOffset: 1.04,
-      baseLift: 0.08,
-      width: 0.24,
-      height: 0.32,
-      depth: 0.2,
-      alpha: 0.34,
+      colorC: paletteRoleToLinearColor(p.mineralAccent),
+      intensity: 0.45,
+      patchScale: 0.1,
+      flowSpeed: 0,
+      grainScale: 8,
       sparkle: 0.95,
-      rise: 0.26,
-      turbulence: 0.28,
+      emissive: 0.7,
+      feather: 0,
       salt: 491
     }),
-    phenomenonConfig(art, 'metallicFlecks', [MaterialType.STONE, MaterialType.COPPER, MaterialType.GOLD, MaterialType.SILVER], {
+    // Metal flecks embedded in ore-bearing rock.
+    sheetConfig(art, 'metallicFlecks', [MaterialType.STONE, MaterialType.COPPER, MaterialType.GOLD, MaterialType.SILVER], {
+      kind: 'glint',
       colorA: paletteRoleToLinearColor(p.mineralAccent),
       colorB: paletteRoleToLinearColor(p.waterFoam),
-      coverageBase: 0.16,
-      coverageGain: 0.45,
-      particlesPerVoxel: 1.0,
-      surfaceOffset: 1.04,
-      baseLift: 0.06,
-      width: 0.22,
-      height: 0.28,
-      depth: 0.18,
-      alpha: 0.3,
-      sparkle: 0.82,
-      rise: 0.18,
-      turbulence: 0.22,
+      colorC: paletteRoleToLinearColor(p.mineralAccent),
+      intensity: 0.38,
+      patchScale: 0.1,
+      flowSpeed: 0,
+      grainScale: 9,
+      sparkle: 0.85,
+      emissive: 0.35,
+      feather: 0,
       salt: 531
     }),
-    phenomenonConfig(art, 'fungalSpores', [MaterialType.GRASS, MaterialType.DIRT], {
+    // Ash films drifting slowly over volcanic rock.
+    sheetConfig(art, 'ashDrift', [MaterialType.BASALT, MaterialType.STONE], {
+      kind: 'flow',
+      colorA: scaled(rock, 0.72),
+      colorB: scaled(rock, 1.28),
+      colorC: scaled(rock, 1.1),
+      intensity: 0.4,
+      patchScale: 0.08,
+      flowSpeed: 0.65,
+      grainScale: 2,
+      sparkle: 0,
+      emissive: 0,
+      feather: 0,
+      salt: 451
+    }),
+    // Lava crust: hot cells pulsing through the cooling skin.
+    sheetConfig(art, 'lavaCrust', [MaterialType.LAVA], {
+      kind: 'glint',
+      colorA: scaled(paletteRoleToLinearColor(p.hazardAccent), 0.6),
+      colorB: paletteRoleToLinearColor(p.sunGlow),
+      colorC: paletteRoleToLinearColor(p.hazardAccent),
+      intensity: 0.62,
+      patchScale: 0.1,
+      flowSpeed: 0,
+      grainScale: 3.2,
+      sparkle: 0.4,
+      emissive: 1.7,
+      feather: 0,
+      salt: 411
+    })
+  ].filter((config): config is SurfaceSheetConfig => config !== null);
+}
+
+function buildMoteConfigs(art: PlanetArtDirection): SurfaceMoteConfig[] {
+  const p = art.palette;
+  return [
+    moteConfig(art, 'pollen', [MaterialType.GRASS], {
+      colorA: paletteRoleToLinearColor(p.vegetationSSS),
+      colorB: paletteRoleToLinearColor(p.flowerAccent),
+      coverageBase: 0.14,
+      coverageGain: 0.3,
+      motesPerVoxel: 1.2,
+      size: 0.045,
+      baseLift: 0.25,
+      liftRange: 0.8,
+      driftSpeed: 0.5,
+      rise: 0,
+      alpha: 0.5,
+      emissive: 0.15,
+      salt: 331
+    }),
+    moteConfig(art, 'fungalSpores', [MaterialType.GRASS, MaterialType.DIRT], {
       colorA: paletteRoleToLinearColor(p.canopySSS),
       colorB: paletteRoleToLinearColor(p.flowerAccent),
-      coverageBase: 0.28,
-      coverageGain: 0.66,
-      particlesPerVoxel: 2.0,
-      surfaceOffset: 1.05,
-      baseLift: 0.1,
-      width: 0.5,
-      height: 0.72,
-      depth: 0.46,
-      alpha: 0.24,
-      sparkle: 0.38,
-      rise: 0.95,
-      turbulence: 0.76,
+      coverageBase: 0.18,
+      coverageGain: 0.36,
+      motesPerVoxel: 1.5,
+      size: 0.035,
+      baseLift: 0.15,
+      liftRange: 0.9,
+      driftSpeed: 0.28,
+      rise: 0.12,
+      alpha: 0.45,
+      emissive: 0.35,
       salt: 571
+    }),
+    moteConfig(art, 'lavaEmbers', [MaterialType.LAVA], {
+      colorA: paletteRoleToLinearColor(p.sunGlow),
+      colorB: paletteRoleToLinearColor(p.hazardAccent),
+      coverageBase: 0.26,
+      coverageGain: 0.45,
+      motesPerVoxel: 1.2,
+      size: 0.04,
+      baseLift: 0.1,
+      liftRange: 1.4,
+      driftSpeed: 0.35,
+      rise: 0.75,
+      alpha: 0.8,
+      emissive: 2.2,
+      salt: 611
     })
-  ].filter((config): config is SurfacePhenomenonConfig => config !== null);
+  ].filter((config): config is SurfaceMoteConfig => config !== null);
+}
 
-  for (const config of configs) {
+// Earthworm pink-brown, tinted by the planet's soil so it belongs to the
+// palette without inheriting an alien fauna-coat hue.
+const WORM_FLESH = new THREE.Color(0xb4776b).convertSRGBToLinear();
+
+function buildCritterConfigs(art: PlanetArtDirection): CritterConfig[] {
+  const p = art.palette;
+  const soil = paletteRoleToLinearColor(p.soilDark);
+  const wormBody = soil.clone().lerp(WORM_FLESH, 0.62);
+  return [
+    critterConfig(art, 'wormLife', [MaterialType.DIRT], {
+      kind: 'worm',
+      coverageBase: 0.08,
+      coverageGain: 0.14,
+      speed: 0.085,
+      leash: 3,
+      bodyColor: wormBody,
+      accentColor: scaled(wormBody, 1.4),
+      darkColor: scaled(soil, 0.7),
+      salt: 71
+    }),
+    critterConfig(art, 'grassLife', [MaterialType.GRASS], {
+      kind: 'caterpillar',
+      coverageBase: 0.06,
+      coverageGain: 0.12,
+      speed: 0.16,
+      leash: 4,
+      bodyColor: paletteRoleToLinearColor(p.vegetationTip),
+      accentColor: paletteRoleToLinearColor(p.flowerAccent),
+      darkColor: scaled(soil, 0.6),
+      salt: 73
+    })
+  ].filter((config): config is CritterConfig => config !== null);
+}
+
+function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
+  const specs: SurfaceEffectSpec[] = [];
+
+  for (const config of buildSheetConfigs(art)) {
     specs.push({
       id: config.id,
-      densityScale: surfaceEffectWeight(art, config.id),
-      createGeometry: createSurfacePhenomenonGeometry,
-      createMaterial: () => createSurfacePhenomenonMaterial(config),
-      count: (density, seed) => countSurfacePhenomenonVoxels(config, density, seed),
+      densityScale: effectWeight(art, config.id),
+      createGeometry: createSurfaceSheetGeometry,
+      createMaterial: () => createSurfaceSheetMaterial(config),
+      count: (density, seed) => countSurfaceSheetVoxels(config, density, seed),
+      build: (mesh, density, maxDistance, playerWorld, seed) =>
+        buildSurfaceSheetInstances(config, mesh, density, maxDistance, playerWorld, seed),
+      applyWind: applySurfaceEffectWindProfileToMaterial,
+      applyDensity: (material, density) => {
+        const u = (material.userData.shader as
+          | { uniforms?: Record<string, { value: unknown }> }
+          | undefined)?.uniforms;
+        if (u?.uIntensity) (u.uIntensity.value as number) = surfaceSheetIntensity(density, config);
+      },
+      update: updateSurfaceEffectMaterial
+    });
+  }
+
+  for (const config of buildMoteConfigs(art)) {
+    specs.push({
+      id: config.id,
+      densityScale: effectWeight(art, config.id),
+      createGeometry: createSurfaceMoteGeometry,
+      createMaterial: () => createSurfaceMoteMaterial(config),
+      count: (density, seed) => countSurfaceMoteVoxels(config, density, seed),
       build: (mesh, density, maxDistance, playerWorld, seed, windProfile) =>
-        buildSurfacePhenomenonInstances(config, mesh, density, maxDistance, playerWorld, seed, windProfile),
-      applyWind: applySurfacePhenomenonWindProfileToMaterial,
-      update: updateSurfacePhenomenonMaterial
+        buildSurfaceMoteInstances(config, mesh, density, maxDistance, playerWorld, seed, windProfile),
+      applyWind: applySurfaceEffectWindProfileToMaterial,
+      update: updateSurfaceEffectMaterial
     });
   }
 
@@ -253,17 +382,23 @@ function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
 }
 
 /**
- * Material-driven spawned surface phenomena. This is intentionally separate from
- * `voxelMaterial`: shader detail changes the block skin, while this field places
- * actual animated geometry above eligible blocks.
+ * Grounded material-driven surface detail. Deliberately separate from
+ * `voxelMaterial` (the block skin): sheets lie flush ON exposed faces and
+ * sample world-space fields so activity flows continuously across adjacent
+ * same-material voxels; motes are sparse airborne specks; critters crawl
+ * voxel-to-voxel (see surfaceCritters.ts).
  */
 export default function SurfaceEffectField({ terrainSeed, playerPosition }: SurfaceEffectFieldProps) {
-  const density = getGraphicsQuality().voxelEffectDensity;
+  const [realitySnapshot, setRealitySnapshot] = useState(() => getVoxelRealitySnapshot());
+  useEffect(() => subscribeVoxelReality(setRealitySnapshot), []);
+
+  const density = getGraphicsQuality().voxelEffectDensity * surfaceEffectRealityDensityScale(realitySnapshot.effects);
   const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);
   const art = useMemo(() => buildPlanetArtDirection(terrainSeed), [terrainSeed]);
   const specs = useMemo(() => buildSurfaceEffectSpecs(art), [art]);
+  const critters = useMemo(() => buildCritterConfigs(art), [art]);
 
-  if (density <= 0 || specs.length === 0) return null;
+  if (density <= 0 || (specs.length === 0 && critters.length === 0)) return null;
 
   return (
     <>
@@ -275,6 +410,15 @@ export default function SurfaceEffectField({ terrainSeed, playerPosition }: Surf
           terrainSeed={terrainSeed}
           playerPosition={playerPosition}
           windProfile={windProfile}
+        />
+      ))}
+      {critters.map(config => (
+        <SurfaceCritterLayer
+          key={config.effectId}
+          config={config}
+          density={density * effectWeight(art, config.effectId)}
+          terrainSeed={terrainSeed}
+          playerPosition={playerPosition}
         />
       ))}
     </>
@@ -363,6 +507,7 @@ function SurfaceEffectLayer({
 
     if (!profileAppliedRef.current && material.userData.shader) {
       spec.applyWind(windProfile, material);
+      spec.applyDensity?.(material, density);
       profileAppliedRef.current = true;
     }
     spec.update(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());
@@ -381,6 +526,123 @@ function SurfaceEffectLayer({
       lastBucketPos.current.copy(playerPosition);
       rebuild();
     }
+  });
+
+  if (density <= 0 || !geometry || !material || capacity <= 0) return null;
+
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[geometry, material, capacity]}
+      frustumCulled={false}
+      castShadow={false}
+      receiveShadow={false}
+    />
+  );
+}
+
+function SurfaceCritterLayer({
+  config,
+  density,
+  terrainSeed,
+  playerPosition
+}: {
+  config: CritterConfig;
+  density: number;
+  terrainSeed: number;
+  playerPosition?: THREE.Vector3;
+}) {
+  const geometry = useMemo(() => (density > 0 ? createCritterGeometry(config) : null), [density, config]);
+  const material = useMemo(() => (density > 0 ? createCritterMaterial(config) : null), [density, config]);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const agentsRef = useRef<CritterAgent[]>([]);
+  const signatureRef = useRef('');
+  const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
+  const [capacity, setCapacity] = useState(0);
+
+  const rebuildAgents = () => {
+    const mesh = meshRef.current;
+    if (!mesh || !geometry || density <= 0) return;
+    const quality = getGraphicsQuality();
+    const agents = measureWarpMetric(
+      `surface_effects:${config.effectId}_agents`,
+      () => buildCritterAgents(
+        config,
+        density,
+        critterMaxDistance(quality),
+        playerPosition ?? null,
+        terrainSeed,
+        mesh.instanceMatrix.count
+      ),
+      result => ({ count: result.length, capacity: mesh.instanceMatrix.count })
+    );
+    agentsRef.current = agents;
+    prepareCritterSeedAttribute(geometry, mesh.instanceMatrix.count);
+    writeCritterSeeds(geometry, agents);
+    mesh.count = agents.length;
+  };
+
+  const neededCapacity = () => Math.min(
+    measureWarpMetric(
+      `surface_effects:${config.effectId}_count_capacity`,
+      () => countCritterVoxels(config, density, terrainSeed),
+      n => ({ needed: n })
+    ),
+    160
+  );
+
+  const growCapacity = (needed: number) => {
+    setCapacity(prev => (needed <= prev ? prev : Math.ceil(needed * 1.25) + 16));
+  };
+
+  useEffect(() => {
+    if (density <= 0) return;
+    growCapacity(neededCapacity());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [density, terrainSeed]);
+
+  useEffect(() => {
+    if (capacity <= 0) return;
+    rebuildAgents();
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [capacity]);
+
+  useEffect(() => {
+    return () => {
+      geometry?.dispose();
+      material?.dispose();
+    };
+  }, [geometry, material]);
+
+  useFrame(({ clock }, delta) => {
+    if (!material || density <= 0) return;
+
+    const quality = getGraphicsQuality();
+    const reality = getVoxelRealityEffects();
+    updateCritterMaterial(material, clock.elapsedTime, quality, reality);
+
+    const mesh = meshRef.current;
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    if (sig !== signatureRef.current) {
+      // Voxels can populate after mount (world load, test harness): grow the
+      // capacity here so the layer appears once the mesh exists.
+      const needed = neededCapacity();
+      if (needed > capacity) {
+        growCapacity(needed);
+      } else if (mesh) {
+        signatureRef.current = sig;
+        rebuildAgents();
+        if (playerPosition) lastBucketPos.current.copy(playerPosition);
+      }
+    } else if (mesh && playerPosition && lastBucketPos.current.distanceToSquared(playerPosition) > 64) {
+      lastBucketPos.current.copy(playerPosition);
+      rebuildAgents();
+    }
+
+    // Freeze (and effectively hide via uVisibility=0) when animation is off.
+    if (!mesh || !quality.animatedShaders) return;
+    updateCritterAgents(mesh, agentsRef.current, delta, terrainSeed, config);
   });
 
   if (density <= 0 || !geometry || !material || capacity <= 0) return null;

@@ -11,8 +11,12 @@ import {
   buildGrassInstances,
   computeBladeMatrix,
   countGrassVoxels,
-  createBladeGeometry
+  createBladeGeometry,
+  createGrassMaterial,
+  updateGrassMaterial
 } from './grassField';
+import { QUALITY_PROFILES } from '../config/graphicsSettings';
+import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem';
 
 const green = new THREE.Color(0x7cb342);
 
@@ -100,6 +104,47 @@ describe('bladesPerVoxel', () => {
   it('protects the denser hairlike strand budget', () => {
     expect(BLADES_PER_CLUMP).toBeGreaterThanOrEqual(20);
     expect(bladesPerVoxel(4)).toBeGreaterThanOrEqual(96);
+  });
+});
+
+describe('grass material reality uniforms', () => {
+  it('uses voxel reality to hide unresolved grass and gate wind', () => {
+    const material = createGrassMaterial();
+    const uniforms = {
+      uTime: { value: 0 },
+      uWind: { value: 1 },
+      uGrassVisibility: { value: 1 },
+      uGrassChroma: { value: 1 },
+      uSunDir: { value: new THREE.Vector3() }
+    };
+    material.userData.shader = { uniforms };
+
+    updateGrassMaterial(
+      material,
+      5,
+      QUALITY_PROFILES.HIGH,
+      VOXEL_REALITY_PRESETS.bare,
+      new THREE.Vector3(0, 2, 0)
+    );
+
+    expect(uniforms.uGrassVisibility.value).toBe(0);
+    expect(uniforms.uGrassChroma.value).toBe(0);
+    expect(uniforms.uWind.value).toBe(0);
+    expect(uniforms.uSunDir.value.length()).toBeCloseTo(1);
+
+    updateGrassMaterial(
+      material,
+      8,
+      QUALITY_PROFILES.HIGH,
+      VOXEL_REALITY_PRESETS.material,
+      new THREE.Vector3(0, 2, 0)
+    );
+
+    expect(uniforms.uTime.value).toBe(8);
+    expect(uniforms.uGrassVisibility.value).toBeGreaterThan(0);
+    expect(uniforms.uGrassChroma.value).toBe(1);
+    expect(uniforms.uWind.value).toBeGreaterThan(0);
+    material.dispose();
   });
 });
 

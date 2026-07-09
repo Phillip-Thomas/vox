@@ -21,8 +21,13 @@ Completed:
 - Lit fauna shader cohesion and locomotion continuity pass with one shared current `fauna-field-v4` program.
 - Lit flora shader cohesion pass with one shared current `flora-field-v2` program.
 - Voxel material soft rim/atmosphere cohesion pass with current `voxel-pbr-v6`.
+- Reality-stage shader cohesion pass for water, surface effects, sky, scene fog, and post grade.
+- Review follow-up patch: water reality wave amplitude now stays under the documented voxel-cell crest bound, and atlas metrics now retain a worst-view p95 guard alongside percentile case aggregation.
+- Grass/tree reality audit: grass and tree material families now share reality-stage visibility/chroma/motion gates without shader-program sprawl.
+- Final baseline matrix after MEDIUM organic-budget trim.
 - Fauna-specific atlas vantages and review framing.
 - Shader-cohesion audit note with current program families and open passes.
+- Human flora-color follow-up: flora foliage now uses a separate palette-derived understory/accent lane instead of duplicating tree canopy roles.
 
 Current validated atlas:
 
@@ -129,9 +134,60 @@ Latest flora/voxel shader perf:
 - Worst p95 `17.4ms`.
 - Dense ULTRA reference stayed at `60fps`.
 
+Latest reality-stage shader cohesion:
+
+`main/captures/procedural-atlas/2026-06-29T18-59-59-295Z-batch7-reality-shader-cohesion-final/`
+
+- `45` cases.
+- `135` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Stages covered: `bare`, `color`, `material`, `alive`, `paradox`.
+- Stage p95 averages: bare `17.43ms`, color `17.26ms`, material `17.39ms`, alive `17.42ms`, paradox `17.16ms`.
+- Bare/color suppress spawned surface-effect allocation; material/alive/paradox restore staged surface phenomena.
+- Current water program key is `water-blocks-iq-v4`.
+- Follow-up verification: `npm test -- --run src/utils/waterBlocksMaterial.test.ts`, `node --check tools/procedural-atlas.mjs`, `git diff --check`, and `npm run verify` passed after the water-bound and atlas slow-view guard patch.
+
+Latest Batch 7 perf matrix:
+
+`main/captures/procedural-atlas/2026-06-29T19-09-48-014Z-batch7-reality-shader-cohesion-perf/`
+
+- `20` cases.
+- `60` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Profiles covered: `ULTRA`, `HIGH`, `MEDIUM`, `LOW`, `POTATO`.
+
+Latest Batch 8 final baseline:
+
+`main/captures/procedural-atlas/2026-06-30T12-09-50-900Z-batch8-grass-tree-reality-final-clean/`
+
+- `36` cases.
+- `216` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Max p95 `17.5ms`.
+- Max single-view p95 `17.8ms`.
+- Max draw calls `148`.
+- Max program count `43`.
+- Highest MEDIUM triangle case: `004-verdant--2_-1-alive-MEDIUM` at `1,496,178` triangles under the `1,500,000` budget.
+- Program keys remain bounded: `grass-pbr-v5`, `tree-bark-v5`, `tree-leaf-v6`, `tree-blossom-v5`, `tree-impostor-v5`.
+
+Latest Batch 9 flora color harmony follow-up:
+
+`main/captures/procedural-atlas/2026-06-30T21-21-10-994Z-batch9-flora-color-harmony-final/`
+
+- `9` cases.
+- `36` screenshots.
+- `0` console errors.
+- `0` machine defects.
+- Min FPS `60`.
+- Worst p95 `17.3ms`.
+- Total flora instances across showcase cases: `4,651`.
+- Regression added for flora foliage hue separation from tree canopy while remaining close to planet palette anchors.
+
 Next high-leverage batch:
 
-1. Continue shader cohesion audit into water, surface effects, sky, and post FX.
-2. Run and review reality-stage strips now that spawned phenomena, lit fauna, lit flora, and voxel materials respond to reality uniforms.
-3. Re-run the full baseline matrix with the new `material` and fauna/flora vantages included.
-4. Review atlas screenshots adversarially against the tree-led visual standard.
+1. Human/adversarial review of the final baseline, Batch 9 flora color screenshots, and Batch 7 reality-stage screenshots against the tree-led visual standard and story-stage promise.
+2. Capture human taste approval or list the specific subjective fixes required.
+3. Patch only visual-stage clarity issues found by that review; no known machine defect remains.

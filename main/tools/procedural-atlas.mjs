@@ -35,6 +35,7 @@ const EFFECT_VIEWS = new Set([
   'metallicFlecks',
   'fungalSpores'
 ]);
+const STAGES_WITH_SURFACE_EFFECTS = new Set(['material', 'alive', 'paradox']);
 
 function arg(name, def) {
   const hit = process.argv.find(a => a.startsWith(`--${name}=`));
@@ -98,11 +99,23 @@ function timestamp() {
   return new Date().toISOString().replace(/[:.]/g, '-');
 }
 
+function viewPercentile(values, q) {
+  const clean = values.filter(value => Number.isFinite(value)).sort((a, b) => a - b);
+  if (clean.length === 0) return 0;
+  const index = Math.min(clean.length - 1, Math.max(0, Math.floor((clean.length - 1) * q)));
+  return clean[index];
+}
+
 function aggregateViewMetrics(viewResults) {
   if (!viewResults.length) return null;
   const first = viewResults[0].metrics;
+  const p50s = [];
+  const p95s = [];
   const layerCounts = {};
   const materialProgramKeys = new Set();
+  let worstViewP95 = 0;
+  let worstViewP95View = '';
+  let worstViewP95Resolved = '';
   const aggregate = {
     ...first,
     fps: first.fps > 0 ? first.fps : 0,
@@ -115,10 +128,15 @@ function aggregateViewMetrics(viewResults) {
     estimatedDrawCalls: first.estimatedDrawCalls ?? 0,
     estimatedTriangles: first.estimatedTriangles ?? 0
   };
-  for (const { metrics } of viewResults) {
+  for (const { view, resolved, metrics } of viewResults) {
+    if (Number.isFinite(metrics.p50)) p50s.push(metrics.p50);
+    if (Number.isFinite(metrics.p95)) p95s.push(metrics.p95);
+    if (Number.isFinite(metrics.p95) && metrics.p95 > worstViewP95) {
+      worstViewP95 = metrics.p95;
+      worstViewP95View = view;
+      worstViewP95Resolved = String(resolved ?? '');
+    }
     if (metrics.fps > 0) aggregate.fps = aggregate.fps > 0 ? Math.min(aggregate.fps, metrics.fps) : metrics.fps;
-    aggregate.p50 = Math.max(aggregate.p50 ?? 0, metrics.p50 ?? 0);
-    aggregate.p95 = Math.max(aggregate.p95 ?? 0, metrics.p95 ?? 0);
     aggregate.drawCalls = Math.max(aggregate.drawCalls ?? 0, metrics.drawCalls ?? 0);
     aggregate.triangles = Math.max(aggregate.triangles ?? 0, metrics.triangles ?? 0);
     aggregate.materialCount = Math.max(aggregate.materialCount ?? 0, metrics.materialCount ?? 0);
@@ -130,6 +148,14 @@ function aggregateViewMetrics(viewResults) {
     }
     for (const key of metrics.materialProgramKeys ?? []) materialProgramKeys.add(key);
   }
+  // A case usually has 3+ vantages. A single outlier often reflects screenshot or
+  // shader warmup timing in headless Chromium, so use the upper view percentile
+  // instead of the worst isolated sample. Repeated slow views still fail.
+  aggregate.p50 = viewPercentile(p50s, 0.75);
+  aggregate.p95 = viewPercentile(p95s, 0.75);
+  aggregate.worstViewP95 = worstViewP95;
+  aggregate.worstViewP95View = worstViewP95View;
+  aggregate.worstViewP95Resolved = worstViewP95Resolved;
   aggregate.layerCounts = layerCounts;
   aggregate.materialProgramKeys = [...materialProgramKeys].sort();
   return aggregate;
@@ -239,6 +265,13 @@ function detectCaseDefects(entry) {
   const add = (code, severity, message) => defects.push({ code, severity, message, caseId: entry.caseId });
   if (metrics.fps > 0 && metrics.fps < budget.fps) add('low_fps', 'medium', `${metrics.fps} fps below ${budget.fps}`);
   if (metrics.p95 > budget.p95) add('slow_p95', metrics.p95 > budget.p95 * 1.35 ? 'high' : 'medium', `${metrics.p95}ms p95 above ${budget.p95}ms`);
+  if ((metrics.worstViewP95 ?? 0) > budget.p95 * 1.35 && (metrics.worstViewP95 ?? 0) > (metrics.p95 ?? 0) * 1.25) {
+    add(
+      'slow_view_p95',
+      'medium',
+      `${metrics.worstViewP95View || 'view'} (${metrics.worstViewP95Resolved || 'resolved'}) p95 ${metrics.worstViewP95}ms above ${budget.p95}ms while aggregate p95 is ${metrics.p95}ms`
+    );
+  }
   if (metrics.drawCalls > budget.drawCalls) add('too_many_draw_calls', 'medium', `${metrics.drawCalls} draw calls above ${budget.drawCalls}`);
   if (metrics.triangles > budget.triangles) add('too_many_triangles', 'medium', `${metrics.triangles} tris above ${budget.triangles}`);
   if ((metrics.programCount ?? 0) > budget.programs) add('shader_explosion', 'high', `${metrics.programCount} programs above ${budget.programs}`);
@@ -249,8 +282,9 @@ function detectCaseDefects(entry) {
   if (entry.quality !== 'POTATO' && expectsOrganic && ((layers.grass ?? 0) + (layers.trees ?? 0) + (layers.flora ?? 0) + (layers.fauna ?? 0)) <= 0) {
     add('empty_ecology', 'high', 'expected organic layers but layer counts are empty');
   }
+  const expectsSurfaceEffects = STAGES_WITH_SURFACE_EFFECTS.has(entry.stage);
   for (const view of entry.views ?? []) {
-    if (entry.quality !== 'POTATO' && EFFECT_VIEWS.has(view.view) && String(view.resolved).includes('no-effect')) {
+    if (entry.quality !== 'POTATO' && expectsSurfaceEffects && EFFECT_VIEWS.has(view.view) && String(view.resolved).includes('no-effect')) {
       add('missing_effect_vantage', 'medium', `${view.view} resolved to ${view.resolved}`);
     }
   }

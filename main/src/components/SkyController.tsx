@@ -7,6 +7,7 @@ import { localSunElevation, daylightFromElevation, goldenFromElevation } from '.
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
 import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import {
   STATIC_DAY_PHASE,
   getWorldClockSource,
@@ -276,6 +277,16 @@ function biomeFog(terrainSeed: number): { tint: THREE.Color; densityMul: number 
   return { tint: atmosphere.fogTint, densityMul: atmosphere.fogDensityMul };
 }
 
+function realityFogScale() {
+  const reality = getVoxelRealityEffects();
+  const chroma = THREE.MathUtils.clamp(reality.chroma, 0, 1);
+  const atmosphere = THREE.MathUtils.clamp(reality.atmosphere, 0, 1.35);
+  return {
+    chroma,
+    densityMul: THREE.MathUtils.lerp(0.48, 1.12, THREE.MathUtils.clamp(atmosphere, 0, 1))
+  };
+}
+
 export default function SkyController({ terrainSeed = 0, worldId }: SkyControllerProps) {
   const scene = useThree(state => state.scene);
   const { phase } = useSpaceFlight();
@@ -320,8 +331,9 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     const staticDayPhase = forcedDayPhase ?? STATIC_DAY_PHASE;
     setCurrentDayPhase(staticDayPhase);
     const r = applyDayPhase(staticDayPhase, sunLight, moonLight, ambient, fog);
-    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
-    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
+    const realityFog = realityFogScale();
+    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * realityFog.chroma * (0.45 + 0.55 * r.daylight));
+    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
     applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
@@ -363,8 +375,9 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     });
     setCurrentDayPhase(dayPhase);
     const r = applyDayPhase(dayPhase, sunLight, moonLight, ambient, fog);
-    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * (0.45 + 0.55 * r.daylight));
-    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul;
+    const realityFog = realityFogScale();
+    fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * realityFog.chroma * (0.45 + 0.55 * r.daylight));
+    fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
     applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());

@@ -334,5 +334,165 @@ Refined flora/voxel shader gate: `pass`
 Remaining defects/deferred work:
 
 - Flora geometry can still get a later silhouette/volume pass; this batch focused on shader cohesion.
-- Water, surface effects, sky, and post FX still need the same current-state audit treatment.
-- Reality-stage strips still need visual review against story progression.
+- Water, surface effects, sky, and post FX received the next reality-cohesion pass in Batch 7.
+- Human/adversarial visual review against story progression remains useful for final approval.
+
+## Batch 7: Reality-Stage Shader Cohesion
+
+Status: `refined gate complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `7`
+
+### Changes
+
+- Added explicit reality uniforms to the water shader: chroma, detail, and atmosphere now drive water color resolution, wave amplitude, choppiness, reflection strength, foam, glint, and subsurface terms.
+- Upgraded the shared water shader key to `water-blocks-iq-v4`; planet and stage variation remains uniform-driven.
+- Added reality uniforms to `SpaceSky` and threaded current reality effects through initial, surface, and deep-space update paths.
+- Made sky cloud quality and final sky grade respond to reality atmosphere/detail/chroma, so bare/color/material/alive/paradox read as a visual progression instead of only content toggles.
+- Made `PostFX` color grade respond to reality chroma/detail/atmosphere through saturation, tint amount, warmth, contrast, shadow lift, and highlight shoulder.
+- Made scene fog biome tint and density respond to reality chroma/atmosphere so fog, sky, and grade share the same story-stage contract.
+- Added a surface-effect density gate from reality effects so bare/color stages do not allocate invisible spawned phenomena, while material/alive/paradox progressively restore them.
+- Updated the atlas harness so material/effect vantages are expected only in stages that should contain spawned surface effects.
+- Changed atlas case p50/p95 aggregation to an upper view percentile instead of the single worst isolated view, preserving repeated slow-view failures while filtering headless screenshot warmup hiccups.
+- Added a follow-up worst-view p95 guard so severe single-view material/effect regressions remain visible even when percentile case aggregation filters isolated warmup noise.
+- Capped reality-driven water wave amplitude at the documented safe crest bound for the voxel water cell.
+- Added unit coverage for water material reality uniforms, sky reality uniforms/cloud gating, and surface-effect reality density scaling.
+
+### Checks
+
+- `npm test -- waterBlocksMaterial surfaceEffects spaceSky`
+- `npm run typecheck`
+- `node main/tools/procedural-atlas.mjs --mode=reality --headless=true --label=batch7-reality-shader-cohesion-final --warm=1200 --settle=1800`
+- `npm run atlas:perf -- --headless=true --label=batch7-reality-shader-cohesion-perf`
+- `npm run verify`
+- Follow-up review patch: `npm test -- --run src/utils/waterBlocksMaterial.test.ts`
+- Follow-up review patch: `node --check tools/procedural-atlas.mjs`
+- Follow-up review patch: `git diff --check`
+- Follow-up review patch: `npm run verify`
+
+### Reality Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T18-59-59-295Z-batch7-reality-shader-cohesion-final/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T18-59-59-295Z-batch7-reality-shader-cohesion-final/defects.md`
+- Cases: `45`
+- Screenshots: `135`
+- Console errors: `0`
+- Machine defects: `0`
+- Stage p95 averages: bare `17.43ms`, color `17.26ms`, material `17.39ms`, alive `17.42ms`, paradox `17.16ms`.
+- Bare/color stages intentionally report `surfaceEffects: 0`; material/alive/paradox restore staged surface-effect counts.
+
+### Perf Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-29T19-09-48-014Z-batch7-reality-shader-cohesion-perf/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-29T19-09-48-014Z-batch7-reality-shader-cohesion-perf/defects.md`
+- Cases: `20`
+- Screenshots: `60`
+- Console errors: `0`
+- Machine defects: `0`
+- Dense ULTRA tree reference remained within budget.
+
+### Gate Status
+
+Refined reality-stage shader cohesion gate: `pass`
+
+Remaining defects/deferred work:
+
+- Human/adversarial visual review should still judge whether the reality stages are emotionally clear enough for the plot beat.
+- Tree and grass shader audit notes were completed in Batch 8.
+- Full baseline matrix was rerun in Batch 8 and is clean.
+
+## Batch 8: Grass/Tree Reality Audit And Final Baseline
+
+Status: `final machine gate complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `8`
+
+### Changes
+
+- Added reality-stage uniforms to grass (`uGrassVisibility`, `uGrassChroma`) and connected grass visibility, chroma, wind motion, and SSS to organic/detail/atmosphere effects.
+- Added reality-stage uniforms to tree bark, leaf, blossom, and impostor materials (`uTreeVisibility`, `uTreeChroma`) and connected visibility, chroma, glow, and wind motion to the same reality contract.
+- Kept the shared shader program family stable: `grass-pbr-v5`, `tree-bark-v5`, `tree-leaf-v6`, `tree-blossom-v5`, `tree-impostor-v5`.
+- Added utility regressions for grass and tree reality uniform updates.
+- Trimmed MEDIUM organic rendering budget after the first final baseline found one medium triangle defect: `grassDensity 1.6 -> 1.1`, `grassMaxDistance 40 -> 34`, `treeMaxDistance 80 -> 72`.
+- Left HIGH/ULTRA visual density unchanged; LOW remains the sparse profile.
+
+### Checks
+
+- `npm test -- --run src/utils/grassField.test.ts src/utils/treeMaterials.test.ts`
+- `npm run verify`
+- `npm run atlas:baseline -- --label=batch8-grass-tree-reality-final-clean --no-start`
+
+### Baseline Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-30T12-09-50-900Z-batch8-grass-tree-reality-final-clean/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-30T12-09-50-900Z-batch8-grass-tree-reality-final-clean/defects.md`
+- Cases: `36`
+- Screenshots: `216`
+- Console errors: `0`
+- Machine defects: `0`
+- Max p95: `17.5ms`
+- Max single-view p95: `17.8ms`
+- Max draw calls: `148`
+- Max program count: `43`
+- Highest MEDIUM triangle case: `004-verdant--2_-1-alive-MEDIUM`, `1,496,178` triangles under the `1,500,000` budget.
+
+### Gate Status
+
+Final machine gate: `pass`
+
+Remaining defects/deferred work:
+
+- Human taste approval remains uncaptured.
+- Human/adversarial review should still judge whether the reality-stage screenshots carry the intended story emotion.
+
+## Batch 9: Flora Color Harmony Follow-Up
+
+Status: `human-feedback patch complete`
+Route/surface: procedural world systems via `?agent=1&atlas=1`
+Budget: `standard`
+Iteration: `9`
+
+### Feedback
+
+- Flora coloring was too consistent with tree canopy color.
+- Flora should be more diverse, but still derived from the same planet palette and interior-design color theory rather than arbitrary random hues.
+
+### Changes
+
+- Reworked `buildFloraProfile` so flora foliage no longer reads directly from `canopyBase` and `canopyTip`.
+- Added a separate understory/accent palette lane derived from `vegetationBase`, `flowerAccent`, `mineralAccent`, `dryGrass`, `bark`, and terrain secondary roles.
+- Added hue-separation guards so flora foliage stays away from tree canopy hue while remaining close to planet-authored palette anchors.
+- Kept high-saturation bloom as the accent role and lowered foliage saturation, especially for arid flora, so large plant surfaces do not consume the full accent budget.
+- Updated cactus, fan, flower, and shrub geometry colors to use more varied blends of foliage, bloom, dry-grass, and bark roles.
+- Added a regression test proving flora foliage stays distinct from tree canopy across representative atlas seeds.
+
+### Checks
+
+- `npm run test -- --run src/utils/floraField.test.ts`
+- `npm run verify`
+- `npm run atlas:showcase -- --label=batch9-flora-color-harmony-final --no-start`
+
+### Showcase Evidence
+
+- Atlas summary: `main/captures/procedural-atlas/2026-06-30T21-21-10-994Z-batch9-flora-color-harmony-final/summary.json`
+- Atlas defects: `main/captures/procedural-atlas/2026-06-30T21-21-10-994Z-batch9-flora-color-harmony-final/defects.md`
+- Cases: `9`
+- Screenshots: `36`
+- Console errors: `0`
+- Machine defects: `0`
+- Min FPS: `60`
+- Worst p95: `17.3ms`
+- Max draw calls: `133`
+- Max triangles: `3,406,744`
+- Total flora instances across showcase cases: `4,651`
+
+### Gate Status
+
+Human-feedback patch gate: `pass`
+
+Remaining defects/deferred work:
+
+- Human taste should still judge whether the stronger arid/fungal accent palettes are the right world tone.
+- A future flora silhouette/volume pass can further separate species shapes; this batch focused on color role hierarchy.

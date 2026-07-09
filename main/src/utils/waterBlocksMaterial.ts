@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { GraphicsQuality } from '../config/graphicsSettings';
+import { getVoxelRealityEffects, type VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import type { WaterProfile } from './waterProfile';
 
 // --- Water material v2 — stylized spherical Gerstner ocean -------------------
@@ -39,6 +40,7 @@ const SHALLOW_WATER = new THREE.Color(0x3fa6b0).convertSRGBToLinear();
 const FOAM_COLOR = new THREE.Color(0xeef7ff).convertSRGBToLinear();
 const SSS_COLOR = new THREE.Color(0x33b88f).convertSRGBToLinear();
 const NIGHT_FLOOR = new THREE.Color(0x05222f).convertSRGBToLinear();
+const MAX_WAVE_AMP = 0.42;
 
 // Shared GLSL (injected into BOTH stages). Three already declares highp at the
 // top of both shaders, so we must NOT add a precision statement here (a precision
@@ -161,6 +163,9 @@ export interface WaterBlocksUniforms {
   uFoamColor: { value: THREE.Color };
   uSSSColor: { value: THREE.Color };
   uNightFloor: { value: THREE.Color };
+  uRealityChroma: { value: number };
+  uRealityDetail: { value: number };
+  uRealityAtmosphere: { value: number };
 }
 
 export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
@@ -188,13 +193,16 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
     // (never rising above the cell top), keep FACE_OFFSET + uWaveAmp*1.05 <= 1.0.
     // With FACE_OFFSET=0.55, 0.42 caps crests at ~0.99 (< 1.0). Raising this makes
     // bigger waves but they'll breach the grid unless FACE_OFFSET is also lowered.
-    shader.uniforms.uWaveAmp = { value: 0.42 };
+    shader.uniforms.uWaveAmp = { value: MAX_WAVE_AMP };
     shader.uniforms.uChoppy = { value: 0.6 }; // horizontal pinch; doesn't affect altitude
     shader.uniforms.uDeepColor = { value: DEEP_WATER.clone() };
     shader.uniforms.uShallowColor = { value: SHALLOW_WATER.clone() };
     shader.uniforms.uFoamColor = { value: FOAM_COLOR.clone() };
     shader.uniforms.uSSSColor = { value: SSS_COLOR.clone() };
     shader.uniforms.uNightFloor = { value: NIGHT_FLOOR.clone() };
+    shader.uniforms.uRealityChroma = { value: 1 };
+    shader.uniforms.uRealityDetail = { value: 1 };
+    shader.uniforms.uRealityAtmosphere = { value: 1 };
     material.userData.shader = shader;
 
     // ---------------- VERTEX: world-space Gerstner displacement ----------------
@@ -268,6 +276,9 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
         uniform vec3 uFoamColor;
         uniform vec3 uSSSColor;
         uniform vec3 uNightFloor;
+        uniform float uRealityChroma;
+        uniform float uRealityDetail;
+        uniform float uRealityAtmosphere;
         varying vec3 vWorldPos;
         varying vec3 vWorldNormal;
         vec3 vWaterEmissive;
@@ -282,12 +293,15 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           vec3 P = vWorldPos;
           vec3 up = normalize(P + 1e-5);
           vec3 fnrm = normalize(vWorldNormal);
+          float waterChroma = clamp(uRealityChroma, 0.0, 1.0);
+          float waterDetail = clamp(uRealityDetail, 0.0, 1.5);
+          float waterAtmosphere = clamp(uRealityAtmosphere, 0.0, 1.5);
           float topness = clamp(dot(fnrm, up), 0.0, 1.0);
           float surf = smoothstep(0.30, 0.80, topness);
 
           // Distance LOD: fade fine ripple detail (anti-alias + perf) far out.
           float dist = length(cameraPosition - P);
-          float lod = 1.0 - smoothstep(35.0, 90.0, dist);
+          float lod = (1.0 - smoothstep(35.0, 90.0, dist)) * clamp(0.18 + waterDetail * 0.82, 0.0, 1.18);
 
           // Swell height + analytic gradient (matched to the vertex amplitude).
           float h; vec3 grad;
@@ -323,7 +337,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           float steep = length(gtSwell) * uWaveAmp;
           // Foam mostly on tops, but keep a small floor so coastal side faces
           // aren't bone-dry (they were fully gated out before).
-          float foam = smoothstep(0.28, 0.62, steep) * (0.25 + 0.75 * surf);
+          float foam = smoothstep(0.28, 0.62, steep) * (0.25 + 0.75 * surf) * clamp(waterDetail, 0.0, 1.18);
           foam *= 0.6 + 0.4 * wsHash21(floor(P.xz * 3.0) + floor(P.yz));
           vec3 foamCol = uFoamColor * todTint;
           refracted = mix(refracted, foamCol, clamp(foam, 0.0, 1.0));
@@ -339,7 +353,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           float wrap = clamp((dot(N, uSunDir) + 0.3) / 1.3, 0.0, 1.0);
           float thick = clamp(h * 0.5 + 0.5, 0.0, 1.0);
           float sss = backlit * wrap * thick * smoothstep(-0.05, 0.25, dot(uSunDir, up));
-          vec3 sssTerm = uSSSColor * sss * 1.1;
+          vec3 sssTerm = uSSSColor * sss * 1.1 * clamp(0.25 + waterAtmosphere * 0.75, 0.0, 1.25);
 
           // --- Sun glitter: anisotropic streak + ripple sparkle, band-limited ---
           vec3 H = normalize(uSunDir + V);
@@ -371,12 +385,17 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
           vec3 body = mix(refracted * todTint, reflClamped, fres * uReflections);
 
           // Clamp the additive sun glint the same way: a bounded, tasteful sparkle.
-          vec3 glintClamped = min(glintTerm * uReflections, vec3(1.5));
+          vec3 glintClamped = min(glintTerm * uReflections * clamp(0.25 + waterDetail * 0.75, 0.0, 1.25), vec3(1.5));
 
           vec3 col = body
                    + glintClamped
                    + (sssTerm + moonGlintTerm + moonReflect) * uReflections
                    + uNightFloor;
+
+          float waterLuma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+          vec3 unresolved = vec3(waterLuma) * mix(0.74, 1.0, clamp(waterDetail, 0.0, 1.0));
+          col = mix(unresolved, col, waterChroma);
+
           vWaterEmissive = col;
           diffuseColor.rgb = vec3(0.0);    // kill Three's lit path (no double count)
 
@@ -393,7 +412,7 @@ export function createWaterBlocksMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'water-blocks-iq-v3';
+  material.customProgramCacheKey = () => 'water-blocks-iq-v4';
   return material;
 }
 
@@ -425,7 +444,8 @@ export function updateWaterBlocksMaterial(
   time: number,
   sunDir: THREE.Vector3,
   moonDir: THREE.Vector3,
-  quality: GraphicsQuality
+  quality: GraphicsQuality,
+  reality: VoxelRealityEffects = getVoxelRealityEffects()
 ) {
   const shader = material.userData.shader as
     | { uniforms?: Partial<WaterBlocksUniforms> }
@@ -434,7 +454,21 @@ export function updateWaterBlocksMaterial(
   const u = shader.uniforms;
   if (u.uTime && quality.waterAnimated) u.uTime.value = time;
   if (u.uAnimated) u.uAnimated.value = quality.waterAnimated ? 1 : 0;
-  if (u.uReflections) u.uReflections.value = quality.waterReflections === 'none' ? 0 : 1;
+  const detail = Math.min(1.5, Math.max(0, reality.detail));
+  const atmosphere = Math.min(1.5, Math.max(0, reality.atmosphere));
+  if (u.uReflections) {
+    u.uReflections.value = quality.waterReflections === 'none'
+      ? 0
+      : Math.min(1.22, Math.max(0, 0.18 + atmosphere * 0.82));
+  }
+  if (u.uWaveAmp) u.uWaveAmp.value = Math.min(
+    MAX_WAVE_AMP,
+    MAX_WAVE_AMP * Math.min(1.12, Math.max(0.16, 0.16 + detail * 0.9))
+  );
+  if (u.uChoppy) u.uChoppy.value = 0.6 * Math.min(1.18, Math.max(0.12, 0.12 + detail * 0.9));
+  if (u.uRealityChroma) u.uRealityChroma.value = Math.min(1, Math.max(0, reality.chroma));
+  if (u.uRealityDetail) u.uRealityDetail.value = detail;
+  if (u.uRealityAtmosphere) u.uRealityAtmosphere.value = atmosphere;
   if (u.uSunDir) u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
   if (u.uMoonDir) u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
 }

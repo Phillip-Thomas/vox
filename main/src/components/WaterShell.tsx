@@ -5,7 +5,8 @@ import { getGraphicsQuality } from '../config/graphicsSettings';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { buildWaterVoxels } from '../utils/waterVoxels';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial } from '../utils/waterBlocksMaterial';
-import { getSunDirection } from './SkyController';
+import { getSunDirection, getMoonDirection } from './SkyController';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 
 interface WaterShellProps {
   size: number;
@@ -42,7 +43,14 @@ export default function WaterShell({ size, terrainSeed }: WaterShellProps) {
   }, [material]);
 
   useFrame(({ clock }) => {
-    updateWaterBlocksMaterial(material, clock.elapsedTime, getSunDirection(), getGraphicsQuality());
+    updateWaterBlocksMaterial(
+      material,
+      clock.elapsedTime,
+      getSunDirection(),
+      getMoonDirection(),
+      getGraphicsQuality(),
+      getVoxelRealityEffects()
+    );
   });
 
   if (waterVoxels.length === 0) return null;

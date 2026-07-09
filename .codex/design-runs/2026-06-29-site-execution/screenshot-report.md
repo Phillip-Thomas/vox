@@ -157,6 +157,119 @@ Perf atlas run: `main/captures/procedural-atlas/2026-06-29T13-37-32-285Z-batch6-
 
 Human/adversarial visual review remains required for final approval.
 
+## Batch 7 Reality-Stage Shader Cohesion
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Reality atlas run: `main/captures/procedural-atlas/2026-06-29T18-59-59-295Z-batch7-reality-shader-cohesion-final/`
+
+- Cases: `45`
+- Screenshots: `135`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profile: `HIGH`
+- Stages: `bare`, `color`, `material`, `alive`, `paradox`
+- Console errors: `0`
+- Machine defects: `0`
+- Stage p95 averages: bare `17.43ms`, color `17.26ms`, material `17.39ms`, alive `17.42ms`, paradox `17.16ms`
+
+Key screenshot paths:
+
+- `verdant/-1_-1/bare/HIGH/overhead.png`
+- `verdant/-1_-1/color/HIGH/horizon.png`
+- `verdant/-1_-1/material/HIGH/material.png`
+- `oceanic/0_0/material/HIGH/material.png`
+- `volcanic/0_-2/alive/HIGH/material.png`
+- `fungal/1_1/paradox/HIGH/horizon.png`
+- `anomaly/0_-1/paradox/HIGH/material.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Bare/color suppress spawned surface-effect allocation: `pass`
+- Material/alive/paradox restore material phenomena: `pass`
+- Water, sky, fog, surface effects, and post grade respond to reality uniforms/effects: `pass`
+
+Perf atlas run: `main/captures/procedural-atlas/2026-06-29T19-09-48-014Z-batch7-reality-shader-cohesion-perf/`
+
+- Cases: `20`
+- Screenshots: `60`
+- Profiles: `ULTRA`, `HIGH`, `MEDIUM`, `LOW`, `POTATO`
+- Console errors: `0`
+- Machine defects: `0`
+
+Human/adversarial visual review remains required for final approval, especially whether each reality stage reads clearly enough for the plot progression.
+
+## Batch 8 Grass/Tree Reality Audit And Final Baseline
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Final baseline atlas run: `main/captures/procedural-atlas/2026-06-30T12-09-50-900Z-batch8-grass-tree-reality-final-clean/`
+
+- Cases: `36`
+- Screenshots: `216`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profiles: `HIGH`, `MEDIUM`
+- Stage: `alive`
+- Console errors: `0`
+- Machine defects: `0`
+- Max p95: `17.5ms`
+- Max single-view p95: `17.8ms`
+- Max draw calls: `148`
+- Max program count: `43`
+- Highest MEDIUM triangle case: `004-verdant--2_-1-alive-MEDIUM`, `1,496,178` triangles under the `1,500,000` budget.
+
+Key screenshot paths:
+
+- `verdant/-1_-1/alive/HIGH/overhead.png`
+- `verdant/-2_-1/alive/MEDIUM/overhead.png`
+- `fungal/1_1/alive/HIGH/tree.png`
+- `fungal/1_-2/alive/MEDIUM/underCanopy.png`
+- `anomaly/-2_0/alive/MEDIUM/material.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Shared grass/tree shader programs remain bounded: `pass`
+- MEDIUM dense organic cases remain under triangle budget after profile trim: `pass`
+
+Human/adversarial visual review remains required for taste and story-stage emotional clarity.
+
+## Batch 9 Flora Color Harmony Follow-Up
+
+Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`
+Showcase atlas run: `main/captures/procedural-atlas/2026-06-30T21-21-10-994Z-batch9-flora-color-harmony-final/`
+
+- Cases: `9`
+- Screenshots: `36`
+- Archetypes: verdant, arid, frozen, volcanic, oceanic, crystal, metallic, fungal, anomaly.
+- Profile: `HIGH`
+- Stage: `alive`
+- Console errors: `0`
+- Machine defects: `0`
+- Min FPS: `60`
+- Worst p95: `17.3ms`
+- Total flora instances across showcase cases: `4,651`
+
+Key screenshot paths:
+
+- `verdant/-1_-1/alive/HIGH/material.png`
+- `verdant/-1_-1/alive/HIGH/tree.png`
+- `arid/1_0/alive/HIGH/material.png`
+- `fungal/1_1/alive/HIGH/material.png`
+- `crystal/-2_1/alive/HIGH/material.png`
+
+Machine review:
+
+- Blank frame: `pass`
+- Console errors: `pass`
+- Machine defects: `pass`
+- Flora palette derives from planet roles instead of tree canopy roles: `pass`
+- Flora/tree hue separation covered by unit regression: `pass`
+
+Human taste review remains useful for deciding whether the stronger accent-world flora should be toned down further or kept as the bolder planet identity.
+
 ## Batch 2 Smoke Matrix
 
 Canonical preview URL: `http://127.0.0.1:5173/?agent=1&atlas=1`

@@ -14,6 +14,7 @@ import { useSpaceFlight } from '../state/spaceFlight.ts';
 import { localDaylight, localGolden } from '../utils/dayNight.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 
 // In deep space the dome must follow the camera (it's a skybox) AND sit beyond
 // ALL scene content — the voxel planet at the origin (up to a few hundred units
@@ -47,7 +48,7 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
     const sun = getSunDirection();
     const up = getPlayerUp();
     const cloudQuality = getGraphicsQuality().skyClouds ? 1.0 : 0.0;
-    updateSpaceSky(material, 0, localDaylight(sun, up), localGolden(sun, up), sun, getMoonDirection(), up, cloudQuality);
+    updateSpaceSky(material, 0, localDaylight(sun, up), localGolden(sun, up), sun, getMoonDirection(), up, cloudQuality, getVoxelRealityEffects());
   }, [material]);
 
   // In deep space the cosmos is ALWAYS fully visible. Force the dome to full
@@ -58,7 +59,7 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
     const mat = matRef.current ?? material;
     if (!inSpace) return;
     // daylight=0 -> uDay=0 -> early-out -> pure cosmos; golden + clouds off in the void.
-    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0);
+    updateSpaceSky(mat, 0, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0, getVoxelRealityEffects());
   }, [inSpace, material]);
 
   useFrame(state => {
@@ -87,7 +88,7 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
     // keep advancing time for twinkle/drift; otherwise the seed already applied.
     if (inSpace) {
       if (!animated) return;
-      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0);
+      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0, getVoxelRealityEffects());
       return;
     }
 
@@ -105,7 +106,8 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
       sun,
       getMoonDirection(),
       up,
-      cloudQuality
+      cloudQuality,
+      getVoxelRealityEffects()
     );
   });
 

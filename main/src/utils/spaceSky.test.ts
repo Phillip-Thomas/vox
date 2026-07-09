@@ -7,6 +7,7 @@ import {
   dayFactorFromDaylight,
   updateSpaceSky
 } from './spaceSky';
+import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem';
 
 describe('dayFactorFromDaylight', () => {
   it('is 0 in full dark and 1 in full daylight', () => {
@@ -49,6 +50,9 @@ describe('createSpaceSkyMaterial', () => {
     expect(mat.uniforms.uGolden.value).toBe(0);
     expect(mat.uniforms.uSunDir.value).toBeInstanceOf(THREE.Vector3);
     expect(mat.uniforms.uMoonDir.value).toBeInstanceOf(THREE.Vector3);
+    expect(mat.uniforms.uRealityChroma.value).toBe(1);
+    expect(mat.uniforms.uRealityDetail.value).toBe(1);
+    expect(mat.uniforms.uRealityAtmosphere.value).toBe(1);
   });
 });
 
@@ -83,5 +87,39 @@ describe('updateSpaceSky', () => {
     updateSpaceSky(mat, 0, 0.5, 0, sun, moon);
     expect(sun.y).toBe(10); // caller's vector untouched
     expect(moon.y).toBe(-10);
+  });
+
+  it('applies reality effects to chroma, detail, atmosphere, and cloud quality', () => {
+    const mat = createSpaceSkyMaterial();
+    updateSpaceSky(
+      mat,
+      0,
+      1,
+      0,
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, -1, 0),
+      new THREE.Vector3(0, 1, 0),
+      1,
+      VOXEL_REALITY_PRESETS.bare
+    );
+    expect(mat.uniforms.uRealityChroma.value).toBe(0);
+    expect(mat.uniforms.uRealityDetail.value).toBe(0);
+    expect(mat.uniforms.uRealityAtmosphere.value).toBe(0);
+    expect(mat.uniforms.uCloudQuality.value).toBe(0);
+
+    updateSpaceSky(
+      mat,
+      0,
+      1,
+      0,
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, -1, 0),
+      new THREE.Vector3(0, 1, 0),
+      1,
+      VOXEL_REALITY_PRESETS.material
+    );
+    expect(mat.uniforms.uRealityChroma.value).toBe(1);
+    expect(mat.uniforms.uRealityDetail.value).toBeCloseTo(0.58, 6);
+    expect(mat.uniforms.uCloudQuality.value).toBeCloseTo(0.28, 6);
   });
 });

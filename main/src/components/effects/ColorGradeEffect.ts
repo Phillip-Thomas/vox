@@ -85,12 +85,14 @@ export class ColorGradeEffect extends Effect {
     activeColorGrade = this;
   }
 
-  setGrade(tint: Color, tintAmount: number, saturation: number, warm: number, contrast: number) {
+  setGrade(tint: Color, tintAmount: number, saturation: number, warm: number, contrast: number, lift?: number, shoulder?: number) {
     (this.uniforms.get('uTint')!.value as Color).copy(tint);
     this.uniforms.get('uTintAmt')!.value = tintAmount;
     this.uniforms.get('uSat')!.value = saturation;
     this.uniforms.get('uWarm')!.value = warm;
     this.uniforms.get('uContrast')!.value = contrast;
+    if (lift != null) this.uniforms.get('uLift')!.value = lift;
+    if (shoulder != null) this.uniforms.get('uShoulder')!.value = shoulder;
   }
 }
 

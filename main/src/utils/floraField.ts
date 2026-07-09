@@ -7,9 +7,10 @@ import { voxelSystem } from './efficientVoxelSystem';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from './surfaceControls';
 import { seededVoxelUnit } from './seededHash';
+import { seededUnit } from './worldCoordinates';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
-import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
+import { buildPlanetArtDirection, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
 
 export const FLORA_KINDS = ['cactus', 'fan', 'flower', 'seedhead', 'shrub'] as const;
@@ -45,6 +46,8 @@ const FLORA_OFFSET_V_SALT = 275;
 const FLORA_YAW_SALT = 276;
 const FLORA_SCALE_SALT = 277;
 const FLORA_TILT_SALT = 278;
+const FLORA_HARMONY_SALT = 279;
+const FLORA_ACCENT_SALT = 280;
 
 const _world = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -67,9 +70,28 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
-function roleColor(role: PaletteRoleColor): THREE.Color {
+function mixHue(a: number, b: number, t: number): number {
+  let d = b - a;
+  if (d > 0.5) d -= 1;
+  if (d < -0.5) d += 1;
+  return (a + d * clamp(t, 0, 1) + 1) % 1;
+}
+
+function circularHueDistance(a: number, b: number): number {
+  const d = Math.abs(a - b);
+  return Math.min(d, 1 - d);
+}
+
+function hueSeparatedFrom(candidate: number, avoid: number, minDistance: number, fallbackSide: number): number {
+  if (circularHueDistance(candidate, avoid) >= minDistance) return candidate;
+  let delta = ((candidate - avoid + 1.5) % 1) - 0.5;
+  if (Math.abs(delta) < 0.001) delta = fallbackSide >= 0 ? minDistance : -minDistance;
+  return (avoid + Math.sign(delta) * minDistance + 1) % 1;
+}
+
+function hslColor(h: number, s: number, l: number): THREE.Color {
   return new THREE.Color()
-    .setHSL(role.h, role.s, role.l)
+    .setHSL((h + 1) % 1, clamp(s, 0, 1), clamp(l, 0, 1))
     .convertSRGBToLinear();
 }
 
@@ -80,11 +102,58 @@ export function buildFloraProfile(terrainSeed: number): FloraProfile {
   const wind = buildWindProfile(s, biome);
   const { aridity, lushness, temperature } = biome;
 
-  const greenBase = roleColor(art.palette.canopyBase);
-  const greenTip = roleColor(art.palette.canopyTip);
-  const dryColor = roleColor(art.palette.dryGrass);
-  const bloomColor = roleColor(art.palette.flowerAccent);
-  const barkColor = roleColor(art.palette.bark);
+  // Flora sits below the canopy as the accent/upholstery layer: related to the
+  // planet's vegetation lane, but pulled through flower and mineral accents so
+  // it does not duplicate the tree canopy role.
+  const harmonyRoll = seededUnit(s, FLORA_HARMONY_SALT);
+  const accentRoll = seededUnit(s, FLORA_ACCENT_SALT);
+  const accentHue = mixHue(art.palette.flowerAccent.h, art.palette.mineralAccent.h, 0.18 + accentRoll * 0.32);
+  const accentBias =
+    art.paletteFamily === 'alien-iridescent' || art.paletteFamily === 'fungal-bioglow' ? 0.34 :
+      art.paletteFamily === 'earth-and-jewel' || art.paletteFamily === 'triadic-muted' ? 0.26 :
+        0.18;
+  const baseHue = hueSeparatedFrom(
+    mixHue(art.palette.vegetationBase.h, accentHue, accentBias),
+    art.palette.canopyBase.h,
+    0.095,
+    harmonyRoll - 0.5
+  );
+  const tipHue = hueSeparatedFrom(
+    mixHue(baseHue, art.palette.flowerAccent.h, 0.1 + lushness * 0.08 + accentRoll * 0.04),
+    art.palette.canopyTip.h,
+    0.075,
+    0.5 - harmonyRoll
+  );
+  const foliageSat = clamp(
+    art.palette.vegetationBase.s * 0.72 + art.palette.flowerAccent.s * 0.1 + art.palette.mineralAccent.s * 0.06 - aridity * 0.05,
+    0.18,
+    art.budgets.saturationBudget * 0.88
+  );
+  const greenBase = hslColor(
+    baseHue,
+    foliageSat,
+    clamp(0.29 + lushness * 0.055 + (1 - aridity) * 0.02, 0.26, 0.39)
+  );
+  const greenTip = hslColor(
+    tipHue,
+    clamp(foliageSat + 0.05 - aridity * 0.035, 0.18, art.budgets.saturationBudget * 0.94),
+    clamp(0.46 + lushness * 0.08 - aridity * 0.035, 0.42, 0.58)
+  );
+  const dryColor = hslColor(
+    mixHue(art.palette.dryGrass.h, baseHue, 0.14),
+    clamp(art.palette.dryGrass.s + foliageSat * 0.1, 0.1, 0.48),
+    clamp(art.palette.dryGrass.l - aridity * 0.055 + lushness * 0.025, 0.42, 0.56)
+  );
+  const bloomColor = hslColor(
+    mixHue(art.palette.flowerAccent.h, art.palette.mineralAccent.h, 0.08 + accentRoll * 0.16),
+    clamp(art.palette.flowerAccent.s * 0.92 + art.palette.mineralAccent.s * 0.08, 0.44, 0.88),
+    clamp(art.palette.flowerAccent.l + (accentRoll - 0.5) * 0.035, 0.5, 0.62)
+  );
+  const barkColor = hslColor(
+    mixHue(art.palette.bark.h, art.palette.terrainSecondary.h, 0.16),
+    clamp(art.palette.bark.s * 0.86 + art.palette.terrainSecondary.s * 0.1, 0.16, 0.44),
+    clamp(art.palette.bark.l + art.palette.terrainSecondary.l * 0.08, 0.24, 0.36)
+  );
 
   const densityMul = clamp(0.32 + lushness * 1.05 + (1 - aridity) * 0.28, 0.28, 1.65);
   const coverage = clamp(0.24 + lushness * 0.62 + aridity * 0.14, 0.18, 0.96);
@@ -301,13 +370,9 @@ function merge(parts: THREE.BufferGeometry[]): THREE.BufferGeometry {
 }
 
 function createCactusGeometry(profile: FloraProfile): THREE.BufferGeometry {
-  const green = new THREE.Color()
-    .setHSL(
-      0.34 + profile.biome.temperature * 0.035,
-      clamp(0.44 + profile.biome.lushness * 0.16 - profile.biome.aridity * 0.08, 0.32, 0.68),
-      0.34 + profile.biome.lushness * 0.08
-    )
-    .convertSRGBToLinear();
+  const green = profile.greenBase.clone()
+    .lerp(profile.greenTip, 0.16 + profile.biome.lushness * 0.08)
+    .lerp(profile.dryColor, 0.08 + profile.biome.aridity * 0.34);
   const bloom = profile.bloomColor;
   return merge([
     cylinderBetween(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1.15, 0), 0.115, green, 0.45),
@@ -329,7 +394,9 @@ function createFanGeometry(profile: FloraProfile): THREE.BufferGeometry {
     const len = 0.38 + (i % 3) * 0.065;
     const width = 0.055 + (i % 4) * 0.01;
     const lift = 0.12 + (i % 5) * 0.028;
-    const color = profile.greenBase.clone().lerp(profile.greenTip, 0.32 + t * 0.28);
+    const color = profile.greenBase.clone()
+      .lerp(profile.greenTip, 0.32 + t * 0.28)
+      .lerp(profile.bloomColor, i % 3 === 0 ? 0.06 : 0.025);
     const leaf = leafBlade(len, width, lift, angle, color, 1);
     leaf.translate(0, 0.07, 0);
     parts.push(leaf);
@@ -343,7 +410,8 @@ function createFlowerGeometry(profile: FloraProfile): THREE.BufferGeometry {
     cylinderBetween(new THREE.Vector3(0, 0, 0), top, 0.018, profile.greenBase, 1, 6)
   ];
   for (let i = 0; i < 4; i++) {
-    const leaf = leafBlade(0.24 + i * 0.018, 0.038, 0.07 + i * 0.012, i * Math.PI * 0.5 + 0.24, profile.greenTip, 0.75);
+    const leafColor = profile.greenTip.clone().lerp(profile.bloomColor, 0.04 + i * 0.012);
+    const leaf = leafBlade(0.24 + i * 0.018, 0.038, 0.07 + i * 0.012, i * Math.PI * 0.5 + 0.24, leafColor, 0.75);
     leaf.translate(0, 0.16 + i * 0.075, 0);
     parts.push(leaf);
   }
@@ -390,7 +458,9 @@ function createShrubGeometry(profile: FloraProfile): THREE.BufferGeometry {
     [-0.02, 0.25, 0.18, 0.16]
   ];
   centers.forEach(([x, y, z, r], index) => {
-    const color = profile.greenBase.clone().lerp(profile.greenTip, 0.25 + index * 0.09);
+    const color = profile.greenBase.clone()
+      .lerp(profile.greenTip, 0.25 + index * 0.09)
+      .lerp(profile.dryColor, index % 2 === 0 ? 0.07 : 0.02);
     parts.push(ellipsoid(new THREE.Vector3(x, y, z), new THREE.Vector3(r, r * 0.72, r), color, 0.82, 0));
   });
   return merge(parts);

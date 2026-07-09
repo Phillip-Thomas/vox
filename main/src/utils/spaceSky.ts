@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 
 // --- Unified "Cosmos-Through-Glass" sky dome --------------------------------
 //
@@ -54,6 +55,9 @@ export interface SpaceSkyUniforms {
   uAtmoLow: { value: THREE.Color };   // luminous horizon / low-sky
   uAtmoHigh: { value: THREE.Color };  // deeper upper-sky
   uSunGlow: { value: THREE.Color };   // sun bloom / aureole tint
+  uRealityChroma: { value: number };
+  uRealityDetail: { value: number };
+  uRealityAtmosphere: { value: number };
 }
 
 const VERT = /* glsl */ `
@@ -77,6 +81,9 @@ const FRAG = /* glsl */ `
   uniform vec3 uAtmoLow;   // luminous horizon / low-sky (per planet)
   uniform vec3 uAtmoHigh;  // deeper upper-sky (per planet)
   uniform vec3 uSunGlow;   // sun bloom tint (per planet)
+  uniform float uRealityChroma;
+  uniform float uRealityDetail;
+  uniform float uRealityAtmosphere;
   varying vec3 vDir;
 
   // --- Day atmosphere tunables ----------------------------------------------
@@ -373,6 +380,17 @@ const FRAG = /* glsl */ `
   // 1/255 hash dither (kills banding in the smooth day gradient under ACES).
   float dither(vec3 dir) { return (hash31(dir * 937.0) - 0.5) / 255.0; }
 
+  vec3 realityGrade(vec3 col) {
+    float chroma = clamp(uRealityChroma, 0.0, 1.0);
+    float detail = clamp(uRealityDetail, 0.0, 1.5);
+    float atmo = clamp(uRealityAtmosphere, 0.0, 1.5);
+    float resolved = clamp(0.24 + max(detail, atmo) * 0.76, 0.0, 1.16);
+    float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    vec3 unresolved = vec3(luma) * mix(0.70, 1.0, clamp(max(detail, atmo), 0.0, 1.0));
+    vec3 graded = mix(unresolved, col, chroma);
+    return mix(vec3(luma) * 0.62 + vec3(0.006, 0.008, 0.012), graded, resolved);
+  }
+
   void main() {
     vec3 dir  = normalize(vDir);
     vec3 sdir = rotate(dir, uTime * 0.01); // slow celestial drift (stars/nebula)
@@ -413,6 +431,7 @@ const FRAG = /* glsl */ `
       vec3 nightCol = mix(cosmos, cb.rgb, cb.a);
       nightCol += moonCol;
       nightCol += dither(dir);
+      nightCol = realityGrade(nightCol);
       gl_FragColor = vec4(nightCol, 1.0);
       return;
     }
@@ -445,6 +464,7 @@ const FRAG = /* glsl */ `
     color += moonCol * mix(1.0, MOON_DAY_DIM, uDay);
 
     color += dither(dir);
+    color = realityGrade(color);
     gl_FragColor = vec4(color, 1.0);
   }
 `;
@@ -462,7 +482,10 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
       // Default nebular-blue atmosphere (overridden per-planet via setSpaceSkyAtmosphere).
       uAtmoLow: { value: new THREE.Color(0.85, 0.78, 0.98) },
       uAtmoHigh: { value: new THREE.Color(0.20, 0.30, 0.62) },
-      uSunGlow: { value: new THREE.Color(1.0, 0.82, 0.95) }
+      uSunGlow: { value: new THREE.Color(1.0, 0.82, 0.95) },
+      uRealityChroma: { value: 1 },
+      uRealityDetail: { value: 1 },
+      uRealityAtmosphere: { value: 1 }
     },
     vertexShader: VERT,
     fragmentShader: FRAG,
@@ -495,14 +518,21 @@ export function updateSpaceSky(
   sunDir: THREE.Vector3,
   moonDir: THREE.Vector3,
   up: THREE.Vector3 = _defaultUp,
-  cloudQuality = 1.0
+  cloudQuality = 1.0,
+  reality?: Pick<VoxelRealityEffects, 'chroma' | 'detail' | 'atmosphere'>
 ): number {
   const u = material.uniforms as unknown as SpaceSkyUniforms;
   const day = dayFactorFromDaylight(daylight);
+  const chroma = Math.min(1, Math.max(0, reality?.chroma ?? 1));
+  const detail = Math.min(1.5, Math.max(0, reality?.detail ?? 1));
+  const atmosphere = Math.min(1.5, Math.max(0, reality?.atmosphere ?? 1));
   u.uTime.value = time;
   u.uDay.value = day;
   u.uGolden.value = golden;
-  u.uCloudQuality.value = cloudQuality;
+  u.uCloudQuality.value = cloudQuality * Math.min(1, atmosphere);
+  u.uRealityChroma.value = chroma;
+  u.uRealityDetail.value = detail;
+  u.uRealityAtmosphere.value = atmosphere;
   u.uSunDir.value.copy(_sunScratch.copy(sunDir).normalize());
   u.uMoonDir.value.copy(_moonScratch.copy(moonDir).normalize());
   u.uUp.value.copy(_upScratch.copy(up).normalize());

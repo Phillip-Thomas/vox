@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { measureWarpMetric } from '../utils/warpMetrics';
@@ -354,7 +355,8 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       performance.now() / 1000,
       getSunDirection(),
       getMoonDirection(),
-      getGraphicsQuality()
+      getGraphicsQuality(),
+      getVoxelRealityEffects()
     );
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getTreeHarvestVersion()}`;
