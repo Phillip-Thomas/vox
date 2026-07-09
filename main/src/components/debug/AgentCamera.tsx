@@ -551,14 +551,16 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
           name === 'fauna'
             ? instancedByName(scene, /^fauna-(grazer|woolly|dragonfly|runner|hopper)$/)
             : instancedByName(scene, new RegExp(`^fauna-${name}$`));
+        // Framing distances follow the sized-up herd (grazers are now
+        // horse-tall ~3.4 wu, woollies ~2 wu) so the whole animal stays in shot.
         const frame =
           name === 'grazer' || name === 'fauna'
-            ? { back: 4.4, lift: 1.45, lookLift: 0.46 }
+            ? { back: 8.6, lift: 3.0, lookLift: 1.5 }
             : name === 'woolly'
-              ? { back: 3.15, lift: 1.05, lookLift: 0.34 }
+              ? { back: 5.4, lift: 1.9, lookLift: 0.9 }
               : name === 'dragonfly'
                 ? { back: 2.05, lift: 0.7, lookLift: 0.14 }
-                : { back: 3.25, lift: 0.98, lookLift: 0.3 };
+                : { back: 4.4, lift: 1.4, lookLift: 0.55 };
         const framed = frameInstance(
           mesh,
           name,

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
+import { getWorldGen } from '../utils/worldGenCache';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { getMoonDirection, getSunDirection } from './SkyController';
 import {
@@ -25,6 +26,8 @@ import {
 interface FaunaFieldProps {
   terrainSeed: number;
   playerPosition?: THREE.Vector3;
+  /** When provided, ground fauna avoid terrain submerged below the waterline. */
+  planetSize?: number;
 }
 
 const HEADROOM = 12;
@@ -34,9 +37,13 @@ const HEADROOM = 12;
  * per voxel/seed, share the planet biome and wind profile, and self-gate through
  * graphics quality and voxel-reality uniforms.
  */
-export default function FaunaField({ terrainSeed, playerPosition }: FaunaFieldProps) {
+export default function FaunaField({ terrainSeed, playerPosition, planetSize }: FaunaFieldProps) {
   const density = getGraphicsQuality().faunaDensity;
-  const profile = useMemo(() => buildFaunaProfile(terrainSeed), [terrainSeed]);
+  const water = useMemo(
+    () => (planetSize ? getWorldGen(planetSize, terrainSeed).generator : undefined),
+    [planetSize, terrainSeed]
+  );
+  const profile = useMemo(() => buildFaunaProfile(terrainSeed, water), [terrainSeed, water]);
 
   if (density <= 0) return null;
 
@@ -77,6 +84,9 @@ function FaunaLayer({
   const signatureRef = useRef('');
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
   const latestTimeRef = useRef(0);
+  // Player velocity (finite differences) feeds the startle/flee reaction.
+  const prevPlayerPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
+  const playerVelocity = useRef(new THREE.Vector3());
   const [capacity, setCapacity] = useState(0);
 
   const neededCapacity = () => measureWarpMetric(
@@ -148,8 +158,28 @@ function FaunaLayer({
       windAppliedRef.current = true;
     }
     updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
+    if (playerPosition) {
+      if (Number.isFinite(prevPlayerPos.current.x) && delta > 1e-4) {
+        playerVelocity.current
+          .copy(playerPosition)
+          .sub(prevPlayerPos.current)
+          .divideScalar(delta);
+        // Teleports/respawns produce absurd speeds; treat them as stationary.
+        if (playerVelocity.current.lengthSq() > 900) playerVelocity.current.set(0, 0, 0);
+      }
+      prevPlayerPos.current.copy(playerPosition);
+    }
     if (mesh && agentsRef.current.length > 0) {
-      updateFaunaAgents(mesh, agentsRef.current, clock.elapsedTime, delta, terrainSeed, profile);
+      updateFaunaAgents(
+        mesh,
+        agentsRef.current,
+        clock.elapsedTime,
+        delta,
+        terrainSeed,
+        profile,
+        playerPosition ?? null,
+        playerPosition ? playerVelocity.current : null
+      );
     }
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;

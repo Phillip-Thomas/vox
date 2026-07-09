@@ -188,7 +188,7 @@ export default function EfficientScene({
       <PlayerAvatarPoseHarness worldId={commandContext.world.worldId} />
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <FloraField terrainSeed={terrainSeed} playerPosition={playerPosition} />
-      <FaunaField terrainSeed={terrainSeed} playerPosition={playerPosition} />
+      <FaunaField terrainSeed={terrainSeed} playerPosition={playerPosition} planetSize={planetSize} />
       <TreeField planetSize={planetSize} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
       <SurfaceEffectField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />

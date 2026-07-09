@@ -16,6 +16,11 @@ import { isMaterialEligibleForEcology } from './planetEcology';
 export const FAUNA_KINDS = ['grazer', 'woolly', 'runner', 'hopper', 'dragonfly'] as const;
 export type FaunaKind = typeof FAUNA_KINDS[number];
 
+/** Live water classification (proceduralWorldGenerator implements this). */
+export interface FaunaWaterClassifier {
+  isWaterVoxel(x: number, y: number, z: number): boolean;
+}
+
 export interface FaunaProfile {
   terrainSeed: number;
   biome: BiomeProfile;
@@ -24,6 +29,10 @@ export interface FaunaProfile {
   ecology: PlanetEcology;
   densityMul: number;
   coverage: number;
+  /** Per-planet body-size multiplier from the art direction's faunaScaleBias. */
+  scaleMul: number;
+  /** Optional live water classifier — ground fauna avoid submerged terrain. */
+  water?: FaunaWaterClassifier;
   coatBase: THREE.Color;
   coatWarm: THREE.Color;
   coatCool: THREE.Color;
@@ -71,9 +80,18 @@ export interface FaunaAgent {
   stepSalt: number;
   stepCount: number;
   orientation: THREE.Quaternion;
+  /** Clock time until which the animal stands grazing (herd kinds only). */
+  grazeUntil: number;
+  /** Clock time until which the animal is bolting away from the player. */
+  fleeUntil: number;
+  /** Smoothed 0..1 graze posture driven into the vertex shader (head down). */
+  pose: number;
 }
 
-const FAUNA_SURFACE_OFFSET = 1.08;
+// Feet are authored to touch local y=0, so the anchor sits just above the face
+// plane (0.99) and stays flush at ANY body scale. The old 1.08 offset hovered
+// large animals ~0.2 wu off the ground.
+const FAUNA_SURFACE_OFFSET = 1.0;
 const FAUNA_COVERAGE_SALT = 411;
 const FAUNA_DENSITY_SALT = 412;
 const FAUNA_PICK_SALT = 413;
@@ -137,7 +155,7 @@ function separationFromVegetation(hue: number, art: PlanetArtDirection): number 
   );
 }
 
-export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
+export function buildFaunaProfile(terrainSeed: number, water?: FaunaWaterClassifier): FaunaProfile {
   const s = terrainSeed | 0;
   const biome = buildBiomeProfile(s);
   const art = buildPlanetArtDirection(s);
@@ -178,6 +196,9 @@ export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
 
   const densityMul = clamp(0.18 + lushness * 0.68 + (1 - aridity) * 0.2, 0.12, 1.08);
   const coverage = clamp(0.08 + lushness * 0.28 + (1 - aridity) * 0.08, 0.05, 0.44);
+  // Planet-level body size from the art direction (verdant/frozen planets grow
+  // bigger herds; sparse archetypes trend leaner). ±~15% around the base sizes.
+  const scaleMul = clamp(0.88 + art.shape.faunaScaleBias * 0.3, 0.8, 1.2);
 
   const weights: Record<FaunaKind, number> = {
     grazer: clamp((0.14 + lushness * 0.82 + (1 - aridity) * 0.28 - temperature * 0.08) * art.ecology.faunaWeights.grazer, 0.001, 2.2),
@@ -195,6 +216,8 @@ export function buildFaunaProfile(terrainSeed: number): FaunaProfile {
     ecology: art.ecology,
     densityMul,
     coverage,
+    scaleMul,
+    water,
     coatBase,
     coatWarm,
     coatCool,
@@ -242,6 +265,23 @@ export function isFaunaTravelVoxel(
   if (voxel.material === MaterialType.STONE) return kind === 'runner' || kind === 'hopper';
   if (voxel.material === MaterialType.BASALT) return kind === 'runner' || kind === 'hopper';
   return false;
+}
+
+/**
+ * True when the voxel's walking surface is above the waterline (the cell over
+ * its outward face is not flooded). Ground fauna never spawn on or step onto
+ * submerged terrain; dragonflies hover, so they may cross water.
+ */
+export function isFaunaSurfaceDry(
+  x: number,
+  y: number,
+  z: number,
+  profile: Pick<FaunaProfile, 'water'>
+): boolean {
+  if (!profile.water) return true;
+  voxelCoordToWorld(x, y, z, _world);
+  const up = FACE_NORMALS[dominantFaceForPosition(_world)];
+  return !profile.water.isWaterVoxel(x + Math.round(up.x), y + Math.round(up.y), z + Math.round(up.z));
 }
 
 function materialDensityMul(material: string, profile: FaunaProfile): number {
@@ -304,6 +344,7 @@ export function shouldPlaceFaunaVoxel(
   profile: FaunaProfile
 ): boolean {
   if (density <= 0 || !isFaunaEligibleVoxelForProfile(voxel, profile)) return false;
+  if (!isFaunaSurfaceDry(x, y, z, profile)) return false;
   if (seededVoxelUnit(x, y, z, FAUNA_COVERAGE_SALT, terrainSeed) > profile.coverage) return false;
   return seededVoxelUnit(x, y, z, FAUNA_DENSITY_SALT, terrainSeed) <= placementChance(density, voxel.material, profile);
 }
@@ -468,90 +509,150 @@ function legPair(
   ];
 }
 
+/**
+ * Horse/elk-silhouette grazer: torso carried HIGH on long slim legs (legs are
+ * ~45% of standing height), a long angled neck with a mane ridge, a head with a
+ * distinct muzzle, and a dropped tail fall. Feet touch local y=0 so the anchor
+ * grounds the animal at any body scale. Local head-top ~1.45.
+ */
 function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
   const parts: THREE.BufferGeometry[] = [
-    ellipsoid(new THREE.Vector3(0, 0.56, 0), new THREE.Vector3(0.48, 0.25, 0.2), profile.coatBase, 0, 0.18, 1),
-    ellipsoid(new THREE.Vector3(0.18, 0.6, 0), new THREE.Vector3(0.25, 0.23, 0.18), profile.coatWarm, 0, 0.16, 0),
-    cylinderBetween(new THREE.Vector3(0.34, 0.66, 0), new THREE.Vector3(0.56, 0.85, 0), 0.105, profile.coatBase, 1, 0.55, 6),
-    ellipsoid(new THREE.Vector3(0.68, 0.9, 0), new THREE.Vector3(0.18, 0.13, 0.12), profile.coatBase, 1, 0.45, 1),
-    ellipsoid(new THREE.Vector3(0.82, 0.86, 0), new THREE.Vector3(0.11, 0.07, 0.075), profile.coatWarm, 1, 0.45, 0),
-    cone(new THREE.Vector3(0.6, 1.08, 0.08), 0.045, 0.18, profile.coatCool, 4, 1, 5),
-    cone(new THREE.Vector3(0.6, 1.08, -0.08), 0.045, 0.18, profile.coatCool, 4, 1, 5),
-    ellipsoid(new THREE.Vector3(0.8, 0.94, 0.103), new THREE.Vector3(0.024, 0.03, 0.018), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.8, 0.94, -0.103), new THREE.Vector3(0.024, 0.03, 0.018), profile.darkColor, 1, 0.2, 0),
-    cylinderBetween(new THREE.Vector3(-0.42, 0.64, 0), new THREE.Vector3(-0.68, 0.78, 0.02), 0.038, profile.accentColor, 4, 1, 5),
-    ellipsoid(new THREE.Vector3(-0.76, 0.82, 0.03), new THREE.Vector3(0.09, 0.055, 0.055), profile.accentColor, 4, 1, 0)
+    // Torso: barrel + chest + hindquarters, slimmer than tall.
+    ellipsoid(new THREE.Vector3(-0.02, 0.74, 0), new THREE.Vector3(0.5, 0.23, 0.185), profile.coatBase, 0, 0.18, 1),
+    ellipsoid(new THREE.Vector3(0.28, 0.77, 0), new THREE.Vector3(0.24, 0.215, 0.17), profile.coatWarm, 0, 0.16, 1),
+    ellipsoid(new THREE.Vector3(-0.34, 0.76, 0), new THREE.Vector3(0.22, 0.21, 0.175), profile.coatBase, 0, 0.16, 0),
+    // Neck: long and angled, thicker at the base.
+    cylinderBetween(new THREE.Vector3(0.42, 0.84, 0), new THREE.Vector3(0.68, 1.16, 0), 0.095, profile.coatBase, 1, 0.55, 7),
+    // Head + muzzle.
+    ellipsoid(new THREE.Vector3(0.76, 1.22, 0), new THREE.Vector3(0.145, 0.105, 0.09), profile.coatBase, 1, 0.45, 1),
+    ellipsoid(new THREE.Vector3(0.91, 1.15, 0), new THREE.Vector3(0.1, 0.06, 0.06), profile.coatWarm, 1, 0.45, 0),
+    // Ears.
+    cone(new THREE.Vector3(0.7, 1.36, 0.055), 0.034, 0.13, profile.coatCool, 4, 1, 5),
+    cone(new THREE.Vector3(0.7, 1.36, -0.055), 0.034, 0.13, profile.coatCool, 4, 1, 5),
+    // Eyes.
+    ellipsoid(new THREE.Vector3(0.83, 1.24, 0.082), new THREE.Vector3(0.022, 0.028, 0.015), profile.darkColor, 1, 0.2, 0),
+    ellipsoid(new THREE.Vector3(0.83, 1.24, -0.082), new THREE.Vector3(0.022, 0.028, 0.015), profile.darkColor, 1, 0.2, 0),
+    // Tail: short dock + hanging hair fall.
+    cylinderBetween(new THREE.Vector3(-0.54, 0.8, 0), new THREE.Vector3(-0.63, 0.64, 0.015), 0.032, profile.darkColor, 4, 1, 5),
+    ellipsoid(new THREE.Vector3(-0.65, 0.49, 0.02), new THREE.Vector3(0.055, 0.17, 0.045), profile.darkColor, 4, 1, 0)
   ];
-  [-0.12, 0.12].forEach(z => {
-    parts.push(...legPair(0.26, z, 0.4, 0.06, 0.04, 0.04, profile.darkColor, 2));
-    parts.push(...legPair(-0.27, z, 0.4, 0.06, -0.04, 0.043, profile.darkColor, 3));
-  });
-  for (let i = 0; i < 4; i++) {
+  // Mane ridge along the top of the neck.
+  for (let i = 0; i < 5; i++) {
+    const t = i / 4;
     parts.push(ellipsoid(
-      new THREE.Vector3(0.35 + i * 0.07, 0.83 + i * 0.035, 0),
-      new THREE.Vector3(0.06, 0.045, 0.05),
-      profile.accentColor,
+      new THREE.Vector3(0.38 + t * 0.3, 0.92 + t * 0.35, 0),
+      new THREE.Vector3(0.055, 0.078, 0.028),
+      profile.darkColor,
       4,
-      1,
+      0.8,
       0
     ));
   }
+  // Long slim legs; hooves (foot blobs) reach local y~0.
+  [-0.125, 0.125].forEach(z => {
+    parts.push(...legPair(0.32, z, 0.6, 0.028, 0.03, 0.037, profile.coatCool, 2));
+    parts.push(...legPair(-0.35, z, 0.6, 0.028, -0.035, 0.04, profile.coatCool, 3));
+  });
   return merge(parts);
 }
 
+/**
+ * Sheep/yak woolly: a fat fleece mass built from overlapping clump shells with
+ * a low skirt that hides the leg tops, a wool cap over the brow, a dark bare
+ * face, and small curled horns.
+ */
 function createWoollyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
   const parts: THREE.BufferGeometry[] = [
-    ellipsoid(new THREE.Vector3(0, 0.48, 0), new THREE.Vector3(0.39, 0.28, 0.23), profile.woolColor, 0, 0.28, 1)
+    ellipsoid(new THREE.Vector3(0, 0.5, 0), new THREE.Vector3(0.4, 0.29, 0.24), profile.woolColor, 0, 0.28, 1)
   ];
   const clumps: Array<[number, number, number, number]> = [
-    [-0.2, 0.54, 0.15, 0.16],
-    [0.03, 0.62, 0.17, 0.17],
-    [0.22, 0.53, 0.12, 0.15],
-    [-0.24, 0.48, -0.13, 0.15],
-    [0.02, 0.58, -0.18, 0.16],
-    [0.23, 0.48, -0.1, 0.14],
-    [-0.08, 0.72, 0, 0.15]
+    // Back and shoulders.
+    [-0.2, 0.58, 0.15, 0.17],
+    [0.03, 0.66, 0.17, 0.18],
+    [0.22, 0.57, 0.12, 0.16],
+    [-0.24, 0.52, -0.13, 0.16],
+    [0.02, 0.62, -0.18, 0.17],
+    [0.23, 0.52, -0.1, 0.15],
+    [-0.08, 0.76, 0, 0.16],
+    [0.1, 0.74, 0.06, 0.14],
+    [-0.16, 0.72, -0.08, 0.14],
+    // Low fleece skirt hanging over the leg tops.
+    [0.16, 0.34, 0.16, 0.13],
+    [-0.14, 0.33, 0.17, 0.13],
+    [0.15, 0.34, -0.17, 0.13],
+    [-0.16, 0.33, -0.16, 0.13],
+    [-0.32, 0.4, 0, 0.14],
+    [0.32, 0.4, 0.02, 0.13]
   ];
   clumps.forEach(([x, y, z, r], index) => {
     parts.push(ellipsoid(
       new THREE.Vector3(x, y, z),
       new THREE.Vector3(r * 1.05, r * 0.78, r),
-      profile.woolColor.clone().lerp(profile.coatWarm, index * 0.025),
+      profile.woolColor.clone().lerp(profile.coatWarm, index * 0.02),
       0,
       0.46,
       0
     ));
   });
   parts.push(
-    cylinderBetween(new THREE.Vector3(0.29, 0.56, 0), new THREE.Vector3(0.43, 0.58, 0), 0.08, profile.darkColor, 1, 0.35, 6),
-    ellipsoid(new THREE.Vector3(0.54, 0.59, 0), new THREE.Vector3(0.15, 0.11, 0.1), profile.darkColor, 1, 0.42, 0),
-    ellipsoid(new THREE.Vector3(0.62, 0.56, 0), new THREE.Vector3(0.07, 0.055, 0.06), profile.darkColor, 1, 0.35, 0),
-    cone(new THREE.Vector3(0.46, 0.72, 0.08), 0.04, 0.12, profile.darkColor, 4, 0.9, 5),
-    cone(new THREE.Vector3(0.46, 0.72, -0.08), 0.04, 0.12, profile.darkColor, 4, 0.9, 5),
-    ellipsoid(new THREE.Vector3(-0.4, 0.58, 0), new THREE.Vector3(0.07, 0.055, 0.055), profile.woolColor, 4, 0.8, 0)
+    // Dark bare face with a wool cap over the brow.
+    cylinderBetween(new THREE.Vector3(0.29, 0.58, 0), new THREE.Vector3(0.43, 0.6, 0), 0.08, profile.darkColor, 1, 0.35, 6),
+    ellipsoid(new THREE.Vector3(0.54, 0.61, 0), new THREE.Vector3(0.15, 0.11, 0.1), profile.darkColor, 1, 0.42, 0),
+    ellipsoid(new THREE.Vector3(0.62, 0.58, 0), new THREE.Vector3(0.07, 0.055, 0.06), profile.darkColor, 1, 0.35, 0),
+    ellipsoid(new THREE.Vector3(0.47, 0.72, 0), new THREE.Vector3(0.12, 0.085, 0.1), profile.woolColor, 1, 0.4, 0),
+    // Eyes.
+    ellipsoid(new THREE.Vector3(0.57, 0.66, 0.078), new THREE.Vector3(0.02, 0.023, 0.013), profile.accentColor, 1, 0.2, 0),
+    ellipsoid(new THREE.Vector3(0.57, 0.66, -0.078), new THREE.Vector3(0.02, 0.023, 0.013), profile.accentColor, 1, 0.2, 0),
+    // Drooped ears.
+    cone(new THREE.Vector3(0.45, 0.68, 0.13), 0.038, 0.11, profile.darkColor, 4, 0.9, 5),
+    cone(new THREE.Vector3(0.45, 0.68, -0.13), 0.038, 0.11, profile.darkColor, 4, 0.9, 5),
+    // Small curled horns: two angled segments per side.
+    cylinderBetween(new THREE.Vector3(0.44, 0.76, 0.08), new THREE.Vector3(0.5, 0.82, 0.15), 0.025, profile.coatCool, 4, 0.6, 5),
+    cylinderBetween(new THREE.Vector3(0.5, 0.82, 0.15), new THREE.Vector3(0.55, 0.78, 0.2), 0.019, profile.coatCool, 4, 0.6, 5),
+    cylinderBetween(new THREE.Vector3(0.44, 0.76, -0.08), new THREE.Vector3(0.5, 0.82, -0.15), 0.025, profile.coatCool, 4, 0.6, 5),
+    cylinderBetween(new THREE.Vector3(0.5, 0.82, -0.15), new THREE.Vector3(0.55, 0.78, -0.2), 0.019, profile.coatCool, 4, 0.6, 5),
+    // Wool stub tail.
+    ellipsoid(new THREE.Vector3(-0.42, 0.6, 0), new THREE.Vector3(0.075, 0.06, 0.06), profile.woolColor, 4, 0.8, 0)
   );
   [-0.11, 0.11].forEach(z => {
-    parts.push(...legPair(0.21, z, 0.32, 0.03, 0.02, 0.036, profile.darkColor, 2));
-    parts.push(...legPair(-0.22, z, 0.32, 0.03, -0.02, 0.036, profile.darkColor, 3));
+    parts.push(...legPair(0.21, z, 0.36, 0.024, 0.02, 0.036, profile.darkColor, 2));
+    parts.push(...legPair(-0.22, z, 0.36, 0.024, -0.02, 0.036, profile.darkColor, 3));
   });
   return merge(parts);
 }
 
+/**
+ * Fox-silhouette runner: deep chest tapering to a slim waist, a long bushy
+ * tail carried low with a pale tip, tall alert ears, and a pointed muzzle
+ * ending in a dark nose. Feet touch local y=0.
+ */
 function createRunnerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
   const parts: THREE.BufferGeometry[] = [
-    ellipsoid(new THREE.Vector3(0, 0.43, 0), new THREE.Vector3(0.37, 0.18, 0.15), profile.coatWarm, 0, 0.2, 1),
-    ellipsoid(new THREE.Vector3(0.43, 0.57, 0), new THREE.Vector3(0.16, 0.12, 0.1), profile.coatWarm, 1, 0.45, 1),
-    ellipsoid(new THREE.Vector3(0.56, 0.53, 0), new THREE.Vector3(0.09, 0.055, 0.06), profile.coatCool, 1, 0.42, 0),
-    cone(new THREE.Vector3(0.38, 0.76, 0.07), 0.04, 0.18, profile.coatCool, 4, 1, 5),
-    cone(new THREE.Vector3(0.38, 0.76, -0.07), 0.04, 0.18, profile.coatCool, 4, 1, 5),
-    ellipsoid(new THREE.Vector3(0.54, 0.59, 0.086), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.54, 0.59, -0.086), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
-    cylinderBetween(new THREE.Vector3(-0.32, 0.48, 0), new THREE.Vector3(-0.66, 0.61, 0.03), 0.05, profile.accentColor, 4, 1, 6),
-    ellipsoid(new THREE.Vector3(-0.78, 0.65, 0.04), new THREE.Vector3(0.13, 0.065, 0.055), profile.accentColor, 4, 1, 0)
+    // Chest-forward torso, tapering rear.
+    ellipsoid(new THREE.Vector3(0.04, 0.46, 0), new THREE.Vector3(0.3, 0.17, 0.14), profile.coatWarm, 0, 0.2, 1),
+    ellipsoid(new THREE.Vector3(0.2, 0.44, 0), new THREE.Vector3(0.17, 0.19, 0.15), profile.coatWarm, 0, 0.18, 0),
+    ellipsoid(new THREE.Vector3(-0.22, 0.48, 0), new THREE.Vector3(0.18, 0.145, 0.12), profile.coatBase, 0, 0.18, 0),
+    // Pale chest tuft.
+    ellipsoid(new THREE.Vector3(0.3, 0.36, 0), new THREE.Vector3(0.1, 0.11, 0.1), profile.woolColor, 0, 0.2, 0),
+    // Head, pointed muzzle, dark nose.
+    ellipsoid(new THREE.Vector3(0.45, 0.6, 0), new THREE.Vector3(0.14, 0.11, 0.095), profile.coatWarm, 1, 0.45, 1),
+    ellipsoid(new THREE.Vector3(0.6, 0.55, 0), new THREE.Vector3(0.1, 0.05, 0.048), profile.coatCool, 1, 0.42, 0),
+    ellipsoid(new THREE.Vector3(0.69, 0.54, 0), new THREE.Vector3(0.026, 0.024, 0.024), profile.darkColor, 1, 0.35, 0),
+    // Tall alert ears.
+    cone(new THREE.Vector3(0.4, 0.79, 0.065), 0.046, 0.2, profile.coatCool, 4, 1, 5),
+    cone(new THREE.Vector3(0.4, 0.79, -0.065), 0.046, 0.2, profile.coatCool, 4, 1, 5),
+    // Eyes.
+    ellipsoid(new THREE.Vector3(0.55, 0.63, 0.082), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
+    ellipsoid(new THREE.Vector3(0.55, 0.63, -0.082), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
+    // Bushy tail: dock low, brush swelling behind, pale tip curling up.
+    cylinderBetween(new THREE.Vector3(-0.34, 0.46, 0), new THREE.Vector3(-0.52, 0.4, 0.02), 0.042, profile.coatBase, 4, 1, 6),
+    ellipsoid(new THREE.Vector3(-0.6, 0.4, 0.03), new THREE.Vector3(0.1, 0.082, 0.078), profile.coatWarm, 4, 1, 0),
+    ellipsoid(new THREE.Vector3(-0.73, 0.44, 0.04), new THREE.Vector3(0.105, 0.085, 0.08), profile.coatBase, 4, 1, 0),
+    ellipsoid(new THREE.Vector3(-0.84, 0.5, 0.045), new THREE.Vector3(0.062, 0.055, 0.05), profile.woolColor, 4, 1, 0)
   ];
   [-0.09, 0.09].forEach(z => {
-    parts.push(...legPair(0.2, z, 0.31, 0.03, 0.06, 0.033, profile.darkColor, 2));
-    parts.push(...legPair(-0.2, z, 0.31, 0.03, -0.07, 0.034, profile.darkColor, 3));
+    parts.push(...legPair(0.2, z, 0.36, 0.022, 0.06, 0.031, profile.darkColor, 2));
+    parts.push(...legPair(-0.2, z, 0.36, 0.022, -0.07, 0.033, profile.darkColor, 3));
   });
   return merge(parts);
 }
@@ -568,8 +669,9 @@ function createHopperGeometry(profile: FaunaProfile): THREE.BufferGeometry {
     ellipsoid(new THREE.Vector3(-0.28, 0.36, 0), new THREE.Vector3(0.06, 0.04, 0.04), profile.coatWarm, 4, 0.75, 0)
   ];
   [-0.075, 0.075].forEach(z => {
-    parts.push(...legPair(0.12, z, 0.25, 0.04, 0.06, 0.026, profile.darkColor, 2));
-    parts.push(...legPair(-0.18, z, 0.24, 0.03, -0.14, 0.036, profile.darkColor, 3));
+    parts.push(...legPair(0.12, z, 0.25, 0.02, 0.06, 0.026, profile.darkColor, 2));
+    // Oversized haunches sell the hop silhouette.
+    parts.push(...legPair(-0.18, z, 0.26, 0.022, -0.15, 0.043, profile.darkColor, 3));
   });
   return merge(parts);
 }
@@ -646,6 +748,7 @@ export function prepareFaunaInstanceAttributes(
 ): THREE.InstancedBufferAttribute {
   const attr = ensureFaunaScalarAttribute(geometry, 'aFaunaSeed', capacity);
   ensureFaunaScalarAttribute(geometry, 'aFaunaStride', capacity);
+  ensureFaunaScalarAttribute(geometry, 'aFaunaPose', capacity);
   return attr;
 }
 
@@ -724,7 +827,9 @@ export function createFaunaMaterial(
         attribute float aFaunaFlex;
         attribute float aFaunaSeed;
         attribute float aFaunaStride;
+        attribute float aFaunaPose;
         uniform float uTime;
+        uniform float uFaunaKind;
         uniform float uFaunaMotion;
         uniform float uWindStrength;
         uniform float uWindGustStrength;
@@ -769,23 +874,37 @@ export function createFaunaMaterial(
         float side = sign(position.z + 0.001);
         float motion = uFaunaMotion;
         float bodyBob = (abs(stepWave) * 0.016 + breathWave * 0.006) * motion;
+        // Legs pivot from the hip: swing amplitude grows toward the foot so the
+        // hip stays planted in the body and the FOOT strides — instead of the
+        // whole leg translating and skating over the ground.
+        float legSwing = smoothstep(0.62, 0.04, position.y);
+        // Hoppers bounce instead of trotting: the whole body arcs with the
+        // stride cycle while the legs tuck (front) and extend (hind).
+        float hopKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 3.0));
+        float hop = pow(max(0.0, stepWave), 1.6) * hopKind * motion;
         if (aFaunaPart < 0.5) {
-          transformed.y += bodyBob;
+          transformed.y += bodyBob + hop * 0.14;
+          // Fore-aft walk rock: shoulders and hips counter-dip with the stride.
+          transformed.y += stepWave * position.x * 0.02 * (1.0 - hopKind) * motion;
         } else if (aFaunaPart < 1.5) {
-          transformed.y += (sin(uTime * (2.1 + seed) + phase) * 0.022 + bodyBob) * motion;
+          transformed.y += (sin(uTime * (2.1 + seed) + phase) * 0.02 + bodyBob) * motion + hop * 0.14;
+          // Stride-coupled head nod (horses nod as they walk).
+          transformed.y += stepWave * 0.02 * (1.0 - hopKind) * motion;
           transformed.x += cos(uTime * 1.4 + phase) * 0.012 * motion;
         } else if (aFaunaPart < 2.5) {
-          float gait = trotWave * side;
-          transformed.x += gait * 0.045 * motion;
-          transformed.y += max(0.0, gait) * 0.055 * motion;
+          float gait = trotWave * side * (1.0 - hopKind);
+          transformed.x += gait * 0.2 * legSwing * motion;
+          transformed.y += max(0.0, gait) * 0.11 * legSwing * motion + hop * 0.1;
+          transformed.x -= hop * legSwing * 0.08;
         } else if (aFaunaPart < 3.5) {
-          float gait = -trotWave * side;
-          transformed.x += gait * 0.05 * motion;
-          transformed.y += max(0.0, gait) * 0.06 * motion;
+          float gait = -trotWave * side * (1.0 - hopKind);
+          transformed.x += gait * 0.22 * legSwing * motion;
+          transformed.y += max(0.0, gait) * 0.12 * legSwing * motion + hop * 0.1;
+          transformed.x += hop * legSwing * 0.1;
         } else if (aFaunaPart < 4.5) {
           float tail = sin(uTime * (4.1 + uWindGustSpeed + seed) + phase + position.x * 3.0);
           transformed.z += tail * (0.045 + aFaunaFlex * 0.07) * motion;
-          transformed.y += gust * aFaunaFlex * 0.018 * uWindGustStrength * motion;
+          transformed.y += gust * aFaunaFlex * 0.018 * uWindGustStrength * motion + hop * 0.12;
         } else {
           float wing = sin(uTime * (34.0 + seed * 12.0) + phase + side * 0.8);
           float wing2 = cos(uTime * (27.0 + seed * 9.0) + phase + position.x * 2.2);
@@ -798,6 +917,22 @@ export function createFaunaMaterial(
         float windDrive = (windWave * (0.2 + gust * uWindGustStrength) + uWindTurbulence * 0.05) * windFlex * motion;
         transformed.x += windDir.x * windDrive * 0.045 * uWindStrength;
         transformed.z += windDir.y * windDrive * 0.045 * uWindStrength;
+        // Grazing pose: fold the head/neck (and its riders — ears, mane, horns)
+        // down toward the ground around the neck root, with a gentle nibble bob.
+        float graze = clamp(aFaunaPose, 0.0, 1.0);
+        bool grazeBone = (aFaunaPart >= 0.5 && aFaunaPart < 1.5)
+          || (aFaunaPart >= 3.5 && aFaunaPart < 4.5 && position.x > 0.3);
+        if (graze > 0.003 && grazeBone) {
+          float woollyKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 1.0));
+          vec2 pivot = mix(vec2(0.42, 0.8), vec2(0.3, 0.56), woollyKind);
+          float ang = graze * (1.05 - woollyKind * 0.42);
+          float ca = cos(ang);
+          float sa = sin(ang);
+          vec2 rel = vec2(transformed.x - pivot.x, transformed.y - pivot.y);
+          transformed.x = pivot.x + rel.x * ca + rel.y * sa;
+          transformed.y = pivot.y - rel.x * sa + rel.y * ca;
+          transformed.y -= graze * (0.5 + 0.5 * sin(uTime * 2.4 + phase)) * 0.028 * motion;
+        }
         vFaunaShade = clamp(position.y * 0.72 + 0.35, 0.38, 1.2);
         vFaunaLocalPos = transformed;
         vFaunaWorldPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
@@ -840,7 +975,8 @@ export function createFaunaMaterial(
         float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
 
         float dorsal = smoothstep(-0.08, 0.2, p.y) * (1.0 - smoothstep(0.10, 0.34, abs(p.z)));
-        float underside = smoothstep(0.30, 0.02, p.y);
+        // Belly band scaled for the raised horse-height torso (body ~0.5-1.0).
+        float underside = smoothstep(0.7, 0.25, p.y);
         float spots = smoothstep(0.68, 0.96, fnNoise(p.xz * 9.0 + vec2(vFaunaSeed * 11.0, uFaunaKind * 3.7)));
         float bands = smoothstep(0.88, 1.0, abs(sin((p.x + vFaunaSeed) * 18.0)));
         float wool = fnNoise(p.xz * 15.0 + vec2(p.y * 2.0 + vFaunaSeed * 4.0, uFaunaKind));
@@ -908,21 +1044,33 @@ export function createFaunaMaterial(
       );
   };
 
-  material.customProgramCacheKey = () => 'fauna-field-v4';
+  material.customProgramCacheKey = () => 'fauna-field-v6';
   return material;
 }
 
-export function faunaScaleForKind(kind: FaunaKind, scaleSeed: number): [number, number, number] {
-  const baseScale =
-    kind === 'grazer' ? 1.34 + scaleSeed * 0.56 :
-      kind === 'woolly' ? 1.08 + scaleSeed * 0.44 :
-        kind === 'runner' ? 0.78 + scaleSeed * 0.28 :
+/**
+ * World-scale hierarchy anchored to the player (PLAYER_STANDING_HEIGHT = 3.6
+ * world units ≈ 1.8m, so 1 wu ≈ 0.5m). Local geometry heights (head top):
+ * grazer ~1.45, woolly ~0.9, runner ~0.85, hopper ~0.78. Targets:
+ *  - grazer  (horse/elk)  ~3.0–3.5 wu tall — eye-level with the player.
+ *  - woolly  (sheep/yak)  ~1.7–2.1 wu.
+ *  - runner  (fox/hound)  ~1.15–1.45 wu.
+ *  - hopper  (hare)       ~0.7–0.95 wu.
+ *  - dragonfly            unchanged giant-insect scale.
+ * `planetMul` is the per-planet faunaScaleBias multiplier from the art direction.
+ */
+export function faunaScaleForKind(kind: FaunaKind, scaleSeed: number, planetMul = 1): [number, number, number] {
+  const baseScale = (
+    kind === 'grazer' ? 1.95 + scaleSeed * 0.32 :
+      kind === 'woolly' ? 1.85 + scaleSeed * 0.4 :
+        kind === 'runner' ? 1.35 + scaleSeed * 0.35 :
           kind === 'dragonfly' ? 0.52 + scaleSeed * 0.18 :
-            0.64 + scaleSeed * 0.22;
+            0.87 + scaleSeed * 0.26
+  ) * planetMul;
   const yScale = baseScale * (
     kind === 'dragonfly' ? 0.94 :
       kind === 'hopper' ? 1.08 :
-        kind === 'grazer' ? 1.08 :
+        kind === 'grazer' ? 1.06 :
           kind === 'woolly' ? 1.04 :
           1
   );
@@ -931,21 +1079,23 @@ export function faunaScaleForKind(kind: FaunaKind, scaleSeed: number): [number, 
 
 function faunaSpeedForKind(kind: FaunaKind, profile: FaunaProfile, jitter: number): number {
   const climate = profile.biome.aridity * 0.16 + profile.biome.temperature * 0.1 - profile.biome.lushness * 0.06;
+  // Bigger bodies cover more ground per stride; keep the ambient, unhurried feel.
   const base =
-    kind === 'grazer' ? 0.42 :
-      kind === 'woolly' ? 0.32 :
-        kind === 'runner' ? 0.76 :
-          kind === 'dragonfly' ? 1.05 :
-            0.62;
+    kind === 'grazer' ? 0.6 :
+      kind === 'woolly' ? 0.42 :
+        kind === 'runner' ? 0.95 :
+          kind === 'dragonfly' ? 1.2 :
+            0.68;
   return Math.max(0.18, base + climate + (jitter - 0.5) * 0.16);
 }
 
+// Stride cycles per unit of travel — large animals take slower, longer steps.
 function faunaStrideRateForKind(kind: FaunaKind): number {
-  if (kind === 'runner') return 1.45;
-  if (kind === 'hopper') return 0.82;
+  if (kind === 'runner') return 1.1;
+  if (kind === 'hopper') return 0.85;
   if (kind === 'dragonfly') return 2.2;
-  if (kind === 'woolly') return 0.92;
-  return 1.06;
+  if (kind === 'woolly') return 0.72;
+  return 0.56;
 }
 
 export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, progress: number): number {
@@ -954,9 +1104,10 @@ export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, pr
   const t = clamp(progress, 0, 1);
   const base =
     kind === 'dragonfly' ? 0.38 :
-      kind === 'hopper' ? 0.58 :
-        kind === 'runner' ? 0.68 :
-          0.78;
+      kind === 'hopper' ? 0.62 :
+        kind === 'runner' ? 0.8 :
+          kind === 'woolly' ? 0.95 :
+            1.12;
   return (base + Math.min(2, amount) * VOXEL_SCALE * 0.18) * Math.sin(Math.PI * t);
 }
 
@@ -1031,19 +1182,127 @@ function findFaunaTravelCandidate(
     const ny = y + sy + uy * climb;
     const nz = z + sz + uz * climb;
     const voxel = voxelSystem.getVoxel(nx, ny, nz);
-    if (voxel && isFaunaTravelVoxel(kind, voxel, profile)) return [nx, ny, nz];
+    if (!voxel || !isFaunaTravelVoxel(kind, voxel, profile)) continue;
+    // Ground fauna never wade: submerged coast/lakebed voxels are off-limits.
+    if (kind !== 'dragonfly' && !isFaunaSurfaceDry(nx, ny, nz, profile)) continue;
+    return [nx, ny, nz];
   }
   return null;
 }
 
-function chooseFaunaNextVoxel(agent: FaunaAgent, terrainSeed: number, profile: FaunaProfile): [number, number, number] {
-  const turnRoll = seededVoxelUnit(agent.x, agent.y, agent.z, agent.stepSalt + agent.stepCount, terrainSeed);
-  const turnFirst = turnRoll < 0.18 ? 1 : turnRoll < 0.36 ? -1 : 0;
-  const order = turnFirst === 0
-    ? [agent.directionIndex, agent.directionIndex + 1, agent.directionIndex - 1, agent.directionIndex + 2]
-    : [agent.directionIndex + turnFirst, agent.directionIndex, agent.directionIndex - turnFirst, agent.directionIndex + 2];
+// --- Herd behavior -----------------------------------------------------------
+// Grazers and woollies drift into loose groups: when a route is chosen and the
+// nearest same-kind animal is beyond the comfort band, most picks head toward
+// it; when crowding, they separate. Inside the band they wander as before, so
+// herds stay loose and organic instead of stacking into a clump.
+const HERD_ATTRACT_DISTANCE = 9;
+const HERD_SEPARATE_DISTANCE = 3.2;
+const HERD_MAX_RANGE = 36;
+const HERD_BIAS_CHANCE = 0.75;
+const _herdDelta = new THREE.Vector3();
+const _fleeDir = new THREE.Vector3();
 
-  for (const candidateDir of order) {
+// Grazing: on arriving at a voxel a herd animal may stop and put its head down.
+// Seeing a nearby herd-mate grazing makes joining in much more likely, so herds
+// drift into shared grazing pauses instead of milling constantly.
+const GRAZE_CHANCE = 0.22;
+const GRAZE_MATE_BONUS = 0.35;
+const GRAZE_MIN_SECONDS = 2.6;
+const GRAZE_VAR_SECONDS = 3.4;
+const GRAZE_COOLDOWN_SECONDS = 6;
+
+// Fleeing: a player rushing an animal (or looming right over it) startles it
+// into a short burst directly away. Walking up slowly does not.
+const FLEE_RADIUS = 8;
+const FLEE_PANIC_RADIUS = 2.6;
+const FLEE_APPROACH_SPEED = 3.2; // player speed toward the animal, wu/s
+const FLEE_DURATION_SECONDS = 2.6;
+const FLEE_SPEED_MUL = 2.6;
+
+function isHerdKind(kind: FaunaKind): boolean {
+  return kind === 'grazer' || kind === 'woolly';
+}
+
+/** Surface-step index (0..3) best aligned with a world-space direction. */
+function stepIndexTowardDelta(x: number, y: number, z: number, delta: THREE.Vector3): number {
+  const steps = surfaceNeighborSteps(x, y, z);
+  let best = -Infinity;
+  let bestIndex = 0;
+  for (let i = 0; i < steps.length; i++) {
+    const [sx, sy, sz] = steps[i];
+    const score = delta.x * sx + delta.y * sy + delta.z * sz;
+    if (score > best) {
+      best = score;
+      bestIndex = i;
+    }
+  }
+  return bestIndex;
+}
+
+/**
+ * Surface-step index steering the agent toward (or away from) its nearest
+ * herd-mate, or null when solitary/comfortable/out of range. Pure w.r.t. the
+ * agents passed in; exported for tests.
+ */
+export function chooseHerdDirectionIndex(agent: FaunaAgent, herdmates: readonly FaunaAgent[]): number | null {
+  if (!isHerdKind(agent.kind)) return null;
+  let nearest: FaunaAgent | null = null;
+  let bestDsq = Infinity;
+  for (const other of herdmates) {
+    if (other === agent || other.kind !== agent.kind) continue;
+    const dsq = agent.to.distanceToSquared(other.to);
+    if (dsq < bestDsq) {
+      bestDsq = dsq;
+      nearest = other;
+    }
+  }
+  if (!nearest) return null;
+  const dist = Math.sqrt(bestDsq);
+  if (dist > HERD_MAX_RANGE) return null;
+  let sign = 0;
+  if (dist > HERD_ATTRACT_DISTANCE) sign = 1;
+  else if (dist < HERD_SEPARATE_DISTANCE) sign = -1;
+  else return null;
+
+  voxelCoordToWorld(agent.x, agent.y, agent.z, _world);
+  _herdDelta.copy(nearest.to).sub(_world).multiplyScalar(sign);
+  return stepIndexTowardDelta(agent.x, agent.y, agent.z, _herdDelta);
+}
+
+function chooseFaunaNextVoxel(
+  agent: FaunaAgent,
+  terrainSeed: number,
+  profile: FaunaProfile,
+  herdmates?: readonly FaunaAgent[],
+  fleeFrom?: THREE.Vector3 | null
+): [number, number, number] {
+  const herdDir = !fleeFrom && herdmates ? chooseHerdDirectionIndex(agent, herdmates) : null;
+  if (fleeFrom) {
+    // Bolt directly away from the threat; the candidate scan below still finds
+    // the nearest viable lane if the straight-away step is blocked.
+    voxelCoordToWorld(agent.x, agent.y, agent.z, _world);
+    _fleeDir.copy(_world).sub(fleeFrom);
+    agent.directionIndex = mod4(stepIndexTowardDelta(agent.x, agent.y, agent.z, _fleeDir));
+  } else if (herdDir !== null &&
+    seededVoxelUnit(agent.x, agent.y, agent.z, agent.stepSalt + agent.stepCount + 7, terrainSeed) < HERD_BIAS_CHANCE) {
+    agent.directionIndex = mod4(herdDir);
+  } else {
+    const turnRoll = seededVoxelUnit(agent.x, agent.y, agent.z, agent.stepSalt + agent.stepCount, terrainSeed);
+    const turnFirst = turnRoll < 0.18 ? 1 : turnRoll < 0.36 ? -1 : 0;
+    if (turnFirst !== 0) {
+      const order = [agent.directionIndex + turnFirst, agent.directionIndex, agent.directionIndex - turnFirst, agent.directionIndex + 2];
+      for (const candidateDir of order) {
+        const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile);
+        if (!candidate) continue;
+        agent.directionIndex = mod4(candidateDir);
+        return candidate;
+      }
+      agent.directionIndex = mod4(agent.directionIndex + 2);
+      return [agent.x, agent.y, agent.z];
+    }
+  }
+
+  for (const candidateDir of [agent.directionIndex, agent.directionIndex + 1, agent.directionIndex - 1, agent.directionIndex + 2]) {
     const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile);
     if (!candidate) continue;
     agent.directionIndex = mod4(candidateDir);
@@ -1054,13 +1313,19 @@ function chooseFaunaNextVoxel(agent: FaunaAgent, terrainSeed: number, profile: F
   return [agent.x, agent.y, agent.z];
 }
 
-function setFaunaRoute(agent: FaunaAgent, terrainSeed: number, profile: FaunaProfile): void {
+function setFaunaRoute(
+  agent: FaunaAgent,
+  terrainSeed: number,
+  profile: FaunaProfile,
+  herdmates?: readonly FaunaAgent[],
+  fleeFrom?: THREE.Vector3 | null
+): void {
   agent.stepCount += 1;
   agent.x = agent.toX;
   agent.y = agent.toY;
   agent.z = agent.toZ;
   agent.from.copy(agent.to);
-  const [nx, ny, nz] = chooseFaunaNextVoxel(agent, terrainSeed, profile);
+  const [nx, ny, nz] = chooseFaunaNextVoxel(agent, terrainSeed, profile, herdmates, fleeFrom);
   agent.toX = nx;
   agent.toY = ny;
   agent.toZ = nz;
@@ -1104,7 +1369,10 @@ function createFaunaAgent(
     stridePhase: seededVoxelUnit(x, y, z, FAUNA_PICK_SALT + 61, terrainSeed),
     stepSalt: FAUNA_PICK_SALT + Math.floor(seededVoxelUnit(x, y, z, FAUNA_SCALE_SALT + 53, terrainSeed) * 4096),
     stepCount: 0,
-    orientation: new THREE.Quaternion()
+    orientation: new THREE.Quaternion(),
+    grazeUntil: 0,
+    fleeUntil: 0,
+    pose: 0
   };
   computeFaunaAnchor(x, y, z, kind, offsetU, offsetV, scaleSeed, agent.from);
   agent.to.copy(agent.from);
@@ -1147,6 +1415,10 @@ function isFaunaAgentStillValid(
   if (!homeVoxel || !currentVoxel || !targetVoxel) return false;
   if (!shouldPlaceFaunaVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, density, terrainSeed, profile)) return false;
   if (chooseFaunaKindForVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, terrainSeed, profile) !== kind) return false;
+  if (kind !== 'dragonfly' && (
+    !isFaunaSurfaceDry(agent.x, agent.y, agent.z, profile) ||
+    !isFaunaSurfaceDry(agent.toX, agent.toY, agent.toZ, profile)
+  )) return false;
   return isFaunaTravelVoxel(kind, currentVoxel, profile) && isFaunaTravelVoxel(kind, targetVoxel, profile);
 }
 
@@ -1154,7 +1426,8 @@ function computeFaunaAgentMatrix(
   agent: FaunaAgent,
   time: number,
   rotationAlpha: number,
-  target: THREE.Matrix4
+  target: THREE.Matrix4,
+  planetScaleMul = 1
 ): THREE.Matrix4 {
   const t = clamp(agent.progress, 0, 1);
   const eased = t * t * (3 - 2 * t);
@@ -1184,12 +1457,61 @@ function computeFaunaAgentMatrix(
   _basis.makeBasis(_moveForward, _moveUp, _moveSide);
   _desiredQuat.setFromRotationMatrix(_basis);
   agent.orientation.slerp(_desiredQuat, clamp(rotationAlpha, 0, 1));
-  const [sx, sy, sz] = faunaScaleForKind(agent.kind, agent.scaleSeed);
+  const [sx, sy, sz] = faunaScaleForKind(agent.kind, agent.scaleSeed, planetScaleMul);
   _tiltQuat.setFromAxisAngle(_a.set(1, 0, 0), (agent.tiltSeed - 0.5) * (agent.kind === 'dragonfly' ? 0.18 : 0.08));
   _finalQuat.copy(agent.orientation).multiply(_tiltQuat);
   _scaleVec.set(sx, sy, sz);
   target.compose(_movePos, _finalQuat, _scaleVec);
   return target;
+}
+
+/** Arrival hook: a herd animal may stop to graze (much likelier beside a grazing mate). */
+function maybeStartGrazing(
+  agent: FaunaAgent,
+  time: number,
+  agents: readonly FaunaAgent[],
+  terrainSeed: number
+): boolean {
+  if (!isHerdKind(agent.kind)) return false;
+  if (time < agent.grazeUntil + GRAZE_COOLDOWN_SECONDS) return false;
+  let mateGrazing = false;
+  for (const other of agents) {
+    if (other === agent || other.kind !== agent.kind) continue;
+    if (time < other.grazeUntil &&
+      agent.to.distanceToSquared(other.to) < HERD_ATTRACT_DISTANCE * HERD_ATTRACT_DISTANCE) {
+      mateGrazing = true;
+      break;
+    }
+  }
+  const chance = GRAZE_CHANCE + (mateGrazing ? GRAZE_MATE_BONUS : 0);
+  const roll = seededVoxelUnit(agent.x, agent.y, agent.z, agent.stepSalt + agent.stepCount + 13, terrainSeed);
+  if (roll > chance) return false;
+  const durRoll = seededVoxelUnit(agent.x, agent.y, agent.z, agent.stepSalt + agent.stepCount + 17, terrainSeed);
+  agent.grazeUntil = time + GRAZE_MIN_SECONDS + durRoll * GRAZE_VAR_SECONDS;
+  return true;
+}
+
+/** Startle check: fast approach inside FLEE_RADIUS, or looming at point blank. */
+function maybeStartFleeing(
+  agent: FaunaAgent,
+  time: number,
+  playerWorld: THREE.Vector3,
+  playerVelocity: THREE.Vector3 | null
+): void {
+  if (agent.kind === 'dragonfly' || time < agent.fleeUntil) return;
+  computeFaunaAgentCullPosition(agent, _agentCullPos);
+  const dsq = _agentCullPos.distanceToSquared(playerWorld);
+  if (dsq >= FLEE_RADIUS * FLEE_RADIUS) return;
+  const dist = Math.sqrt(Math.max(dsq, 1e-8));
+  let threat = dist < FLEE_PANIC_RADIUS;
+  if (!threat && playerVelocity) {
+    _fleeDir.copy(_agentCullPos).sub(playerWorld).multiplyScalar(1 / dist);
+    threat = playerVelocity.dot(_fleeDir) > FLEE_APPROACH_SPEED;
+  }
+  if (threat) {
+    agent.fleeUntil = time + FLEE_DURATION_SECONDS;
+    agent.grazeUntil = 0;
+  }
 }
 
 export function updateFaunaAgents(
@@ -1198,22 +1520,38 @@ export function updateFaunaAgents(
   time: number,
   deltaTime: number,
   terrainSeed: number,
-  profile = buildFaunaProfile(terrainSeed)
+  profile = buildFaunaProfile(terrainSeed),
+  playerWorld: THREE.Vector3 | null = null,
+  playerVelocity: THREE.Vector3 | null = null
 ): FaunaBuildResult {
   const dt = clamp(deltaTime, 0, 0.12);
   const count = Math.min(agents.length, mesh.instanceMatrix.count);
   const strideAttr = mesh.geometry.getAttribute('aFaunaStride') as THREE.InstancedBufferAttribute | undefined;
+  const poseAttr = mesh.geometry.getAttribute('aFaunaPose') as THREE.InstancedBufferAttribute | undefined;
   for (let i = 0; i < count; i++) {
     const agent = agents[i];
+    if (playerWorld) maybeStartFleeing(agent, time, playerWorld, playerVelocity);
+    const fleeing = time < agent.fleeUntil;
+    const grazing = !fleeing && time < agent.grazeUntil;
+    const fleeFrom = fleeing ? playerWorld : null;
+    const speedMul = fleeing ? FLEE_SPEED_MUL : 1;
+    agent.pose += ((grazing ? 1 : 0) - agent.pose) * (1 - Math.exp(-5 * dt));
+
     const turnRate = agent.kind === 'dragonfly' ? 4.8 : agent.kind === 'woolly' ? 3.4 : 4.2;
-    const rotationAlpha = 1 - Math.exp(-turnRate * dt);
+    const rotationAlpha = 1 - Math.exp(-(fleeing ? turnRate * 1.6 : turnRate) * dt);
     const distance = agent.from.distanceTo(agent.to);
-    if (distance > 0.001) {
-      agent.stridePhase = (agent.stridePhase + dt * agent.speed * faunaStrideRateForKind(agent.kind)) % 1;
-      agent.progress += dt * agent.speed / distance;
+    if (grazing) {
+      // Hold position, head down; the route resumes when the pause ends.
+    } else if (distance > 0.001) {
+      agent.stridePhase = (agent.stridePhase + dt * agent.speed * speedMul * faunaStrideRateForKind(agent.kind)) % 1;
+      agent.progress += dt * agent.speed * speedMul / distance;
       while (agent.progress >= 1) {
         agent.progress -= 1;
-        setFaunaRoute(agent, terrainSeed, profile);
+        if (!fleeing && maybeStartGrazing(agent, time, agents, terrainSeed)) {
+          agent.progress = 1;
+          break;
+        }
+        setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom);
         if (agent.from.distanceToSquared(agent.to) < 0.0001) {
           agent.progress = 0;
           break;
@@ -1221,15 +1559,17 @@ export function updateFaunaAgents(
       }
     } else {
       agent.progress = 0;
-      setFaunaRoute(agent, terrainSeed, profile);
+      setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom);
     }
     if (strideAttr) strideAttr.setX(i, agent.stridePhase);
-    computeFaunaAgentMatrix(agent, time, rotationAlpha, _scratch);
+    if (poseAttr) poseAttr.setX(i, agent.pose);
+    computeFaunaAgentMatrix(agent, time, rotationAlpha, _scratch, profile.scaleMul);
     mesh.setMatrixAt(i, _scratch);
   }
   mesh.count = count;
   mesh.instanceMatrix.needsUpdate = true;
   if (strideAttr) strideAttr.needsUpdate = true;
+  if (poseAttr) poseAttr.needsUpdate = true;
   return { count, voxelCount: count, agents };
 }
 
@@ -1247,6 +1587,7 @@ export function buildFaunaInstances(
   const maxDistSq = maxDistance * maxDistance;
   const seedAttr = prepareFaunaInstanceAttributes(mesh.geometry, capacity);
   const strideAttr = mesh.geometry.getAttribute('aFaunaStride') as THREE.InstancedBufferAttribute;
+  const poseAttr = mesh.geometry.getAttribute('aFaunaPose') as THREE.InstancedBufferAttribute;
   const agents: FaunaAgent[] = [];
   const includedHomes = new Set<string>();
   const time = options.time ?? 0;
@@ -1259,10 +1600,11 @@ export function buildFaunaInstances(
 
   const addAgent = (agent: FaunaAgent, preserveOrientation: boolean) => {
     if (agents.length >= capacity) return;
-    computeFaunaAgentMatrix(agent, time, preserveOrientation ? 0 : 1, _scratch);
+    computeFaunaAgentMatrix(agent, time, preserveOrientation ? 0 : 1, _scratch, profile.scaleMul);
     mesh.setMatrixAt(agents.length, _scratch);
     seedAttr.setX(agents.length, agent.phase / TAU);
     strideAttr.setX(agents.length, agent.stridePhase);
+    poseAttr.setX(agents.length, agent.pose);
     includedHomes.add(faunaHomeKey(agent));
     agents.push(agent);
   };
@@ -1293,6 +1635,7 @@ export function buildFaunaInstances(
   mesh.instanceMatrix.needsUpdate = true;
   seedAttr.needsUpdate = true;
   strideAttr.needsUpdate = true;
+  poseAttr.needsUpdate = true;
   return { count: agents.length, voxelCount: agents.length, agents };
 }
 

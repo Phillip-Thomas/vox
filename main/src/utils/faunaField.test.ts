@@ -7,6 +7,7 @@ import {
   buildFaunaInstances,
   buildFaunaProfile,
   chooseFaunaKindForVoxel,
+  chooseHerdDirectionIndex,
   countFaunaVoxels,
   createFaunaGeometry,
   createFaunaMaterial,
@@ -14,10 +15,12 @@ import {
   faunaLevelTransitionLift,
   faunaScaleForKind,
   isFaunaEligibleVoxel,
+  isFaunaSurfaceDry,
   isFaunaTravelVoxel,
   prepareFaunaInstanceAttributes,
   shouldPlaceFaunaVoxel,
   updateFaunaAgents,
+  type FaunaAgent,
   type FaunaProfile
 } from './faunaField.ts';
 
@@ -89,20 +92,205 @@ describe('faunaField', () => {
     expect(faunaLevelTransitionLift('dragonfly', 1, 0.5)).toBeGreaterThan(0.5);
   });
 
-  it('keeps small fauna small while sizing up grazers and woollies', () => {
-    const [grazerX, grazerY] = faunaScaleForKind('grazer', 0);
-    const [woollyX, woollyY] = faunaScaleForKind('woolly', 0);
-    const [runnerX] = faunaScaleForKind('runner', 1);
-    const [hopperX] = faunaScaleForKind('hopper', 1);
-    const [dragonflyX] = faunaScaleForKind('dragonfly', 1);
+  it('sizes the herd hierarchy against the player (grazers horse-tall, never player-dwarfed)', () => {
+    // Local geometry head-top heights (see faunaScaleForKind doc comment).
+    const GRAZER_LOCAL_HEIGHT = 1.45;
+    const PLAYER_STANDING_HEIGHT = 3.6; // world units, from cubeGravityConstants
 
-    expect(grazerX).toBeGreaterThan(1.3);
+    for (const seed of [0, 0.5, 1]) {
+      const [, grazerY] = faunaScaleForKind('grazer', seed);
+      const height = grazerY * GRAZER_LOCAL_HEIGHT;
+      // A grazer stands roughly eye-level with the player: clearly taller than
+      // half the player, never towering over them.
+      expect(height).toBeGreaterThan(PLAYER_STANDING_HEIGHT * 0.78);
+      expect(height).toBeLessThan(PLAYER_STANDING_HEIGHT * 1.05);
+    }
+
+    const [grazerX, grazerY] = faunaScaleForKind('grazer', 0.5);
+    const [woollyX, woollyY] = faunaScaleForKind('woolly', 0.5);
+    const [runnerX] = faunaScaleForKind('runner', 0.5);
+    const [hopperX] = faunaScaleForKind('hopper', 0.5);
+    const [dragonflyX] = faunaScaleForKind('dragonfly', 0.5);
+
     expect(grazerY).toBeGreaterThan(grazerX);
-    expect(woollyX).toBeGreaterThan(1);
     expect(woollyY).toBeGreaterThan(woollyX);
-    expect(runnerX).toBeLessThan(1.1);
-    expect(hopperX).toBeLessThan(0.9);
-    expect(dragonflyX).toBeLessThan(0.75);
+    expect(grazerX).toBeGreaterThan(woollyX);
+    expect(woollyX).toBeGreaterThan(runnerX);
+    expect(runnerX).toBeGreaterThan(hopperX);
+    expect(hopperX).toBeGreaterThan(dragonflyX);
+
+    // Planet-level size bias multiplies the whole animal uniformly.
+    const [biasedX, biasedY] = faunaScaleForKind('grazer', 0.5, 1.15);
+    expect(biasedX).toBeCloseTo(grazerX * 1.15);
+    expect(biasedY).toBeCloseTo(grazerY * 1.15);
+  });
+
+  it('herds grazers toward the nearest same-kind neighbor and separates crowds', () => {
+    const makeAgent = (kind: FaunaAgent['kind'], x: number, toWorld: THREE.Vector3): FaunaAgent => ({
+      kind,
+      terrainSeed: 1,
+      homeX: x, homeY: 25, homeZ: 0,
+      x, y: 25, z: 0,
+      toX: x, toY: 25, toZ: 0,
+      from: toWorld.clone(),
+      to: toWorld.clone(),
+      progress: 0,
+      directionIndex: 0,
+      speed: 0.5,
+      scaleSeed: 0.5,
+      tiltSeed: 0.5,
+      offsetU: 0,
+      offsetV: 0,
+      phase: 0,
+      stridePhase: 0,
+      stepSalt: 1,
+      stepCount: 0,
+      orientation: new THREE.Quaternion(),
+      grazeUntil: 0,
+      fleeUntil: 0,
+      pose: 0
+    });
+
+    // Agent at voxel (0,25,0) — top cube face, steps: [+x, +z, -x, -z].
+    const self = makeAgent('grazer', 0, new THREE.Vector3(0, 51, 0));
+
+    // Far mate (20 wu, beyond the comfort band): steer toward it (+x = index 0).
+    const far = makeAgent('grazer', 10, new THREE.Vector3(20, 51, 0));
+    expect(chooseHerdDirectionIndex(self, [self, far])).toBe(0);
+
+    // Crowding mate (2 wu): separate (-x = index 2).
+    const close = makeAgent('grazer', 1, new THREE.Vector3(2, 51, 0));
+    expect(chooseHerdDirectionIndex(self, [self, close])).toBe(2);
+
+    // Comfortable spacing (6 wu): wander freely.
+    const comfy = makeAgent('grazer', 3, new THREE.Vector3(0, 51, 6));
+    expect(chooseHerdDirectionIndex(self, [self, comfy])).toBeNull();
+
+    // Out of herd range (60 wu): ignore.
+    const distant = makeAgent('grazer', 30, new THREE.Vector3(60, 51, 0));
+    expect(chooseHerdDirectionIndex(self, [self, distant])).toBeNull();
+
+    // Non-herd kinds and solitary animals never bias.
+    const runner = makeAgent('runner', 0, new THREE.Vector3(0, 51, 0));
+    expect(chooseHerdDirectionIndex(runner, [runner, makeAgent('runner', 10, new THREE.Vector3(20, 51, 0))])).toBeNull();
+    expect(chooseHerdDirectionIndex(self, [self])).toBeNull();
+
+    // Nearest mate wins over farther ones.
+    expect(chooseHerdDirectionIndex(self, [self, far, makeAgent('grazer', -8, new THREE.Vector3(-16, 51, 0))])).toBe(2);
+  });
+
+  it('keeps ground fauna off submerged terrain (no wading foxes)', () => {
+    const seed = VERDANT_SEED;
+    // Water classifier floods everything with x >= 2 (the cell above those voxels).
+    const water = { isWaterVoxel: (x: number) => x >= 2 };
+    const profile: FaunaProfile = { ...fullCoverageProfile(seed), water };
+
+    // Dry voxels are unaffected; submerged ones are rejected for placement.
+    expect(isFaunaSurfaceDry(0, 25, 0, profile)).toBe(true);
+    expect(isFaunaSurfaceDry(3, 25, 0, profile)).toBe(false);
+    expect(isFaunaSurfaceDry(3, 25, 0, { water: undefined })).toBe(true);
+
+    voxelSystem.addVoxel(3, 25, 0, MaterialType.GRASS, grass);
+    const flooded = voxelSystem.getVoxel(3, 25, 0)!;
+    expect(shouldPlaceFaunaVoxel(flooded, 3, 25, 0, 10, seed, profile)).toBe(false);
+
+    // Travel: a runner walking a strip toward water must stop at the shoreline.
+    for (let x = -2; x <= 6; x++) voxelSystem.addVoxel(x, 25, 0, MaterialType.DIRT, dirt);
+    const geometry = createFaunaGeometry('runner', profile);
+    prepareFaunaInstanceAttributes(geometry, 8);
+    const mesh = new THREE.InstancedMesh(geometry, createFaunaMaterial('runner', profile), 8);
+    const dryProfile: FaunaProfile = {
+      ...profile,
+      coverage: 1,
+      weights: { grazer: 0.001, woolly: 0.001, runner: 50, hopper: 0.001, dragonfly: 0.001 }
+    };
+    const built = buildFaunaInstances('runner', mesh, 10, 0, null, seed, dryProfile);
+    expect(built.agents.length).toBeGreaterThan(0);
+    // All spawned agents sit on dry voxels, and stay dry while traveling.
+    for (let step = 0; step < 300; step++) {
+      updateFaunaAgents(mesh, built.agents, step * 0.1, 0.1, seed, dryProfile);
+      for (const agent of built.agents) {
+        expect(agent.x).toBeLessThan(2);
+        expect(agent.toX).toBeLessThan(2);
+      }
+    }
+    geometry.dispose();
+  });
+
+  it('startles fauna into fleeing a fast-approaching player and routes them away', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (let x = -6; x <= 6; x++) {
+      for (let z = -6; z <= 6; z++) voxelSystem.addVoxel(x, 25, z, MaterialType.GRASS, grass);
+    }
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 64);
+    const mesh = new THREE.InstancedMesh(geometry, createFaunaMaterial('grazer', profile), 64);
+    const built = buildFaunaInstances('grazer', mesh, 10, 0, null, seed, profile);
+    expect(built.agents.length).toBeGreaterThan(0);
+    const agent = built.agents[0];
+
+    // A player sprinting AT the animal from 5 wu away startles it...
+    agent.progress = 0; // evaluated position = agent.from, exactly
+    const player = agent.from.clone();
+    player.x += 5;
+    const sprintTowardAgent = new THREE.Vector3(-6, 0, 0);
+    updateFaunaAgents(mesh, built.agents, 10, 0.05, seed, profile, player, sprintTowardAgent);
+    expect(agent.fleeUntil).toBeGreaterThan(10);
+    expect(agent.grazeUntil).toBe(0);
+
+    // ...and while fleeing, chosen routes never head back toward the player.
+    const before = agent.from.distanceTo(player);
+    for (let step = 0; step < 40; step++) {
+      updateFaunaAgents(mesh, built.agents, 10 + step * 0.05, 0.05, seed, profile, player, null);
+    }
+    expect(agent.to.distanceTo(player)).toBeGreaterThanOrEqual(before - 0.6);
+
+    // A stationary player at the same distance does NOT startle.
+    const calm = built.agents[1] ?? agent;
+    calm.fleeUntil = 0;
+    calm.progress = 0;
+    const calmWatcher = calm.from.clone();
+    calmWatcher.x += 5;
+    updateFaunaAgents(mesh, built.agents, 60, 0.05, seed, profile, calmWatcher, new THREE.Vector3(0, 0, 0));
+    expect(calm.fleeUntil).toBe(0);
+    geometry.dispose();
+  });
+
+  it('holds position and raises the graze pose while grazing', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (let x = -4; x <= 4; x++) {
+      for (let z = -4; z <= 4; z++) voxelSystem.addVoxel(x, 25, z, MaterialType.GRASS, grass);
+    }
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 64);
+    const mesh = new THREE.InstancedMesh(geometry, createFaunaMaterial('grazer', profile), 64);
+    const built = buildFaunaInstances('grazer', mesh, 10, 0, null, seed, profile);
+    expect(built.agents.length).toBeGreaterThan(0);
+    const agent = built.agents[0];
+
+    // Force a graze window and verify the animal stands still, head lowering.
+    agent.grazeUntil = 100;
+    const fromBefore = agent.from.clone();
+    const toBefore = agent.to.clone();
+    const progressBefore = agent.progress;
+    for (let step = 0; step < 30; step++) {
+      updateFaunaAgents(mesh, built.agents, 50 + step * 0.05, 0.05, seed, profile);
+    }
+    expect(agent.from.equals(fromBefore)).toBe(true);
+    expect(agent.to.equals(toBefore)).toBe(true);
+    expect(agent.progress).toBe(progressBefore);
+    expect(agent.pose).toBeGreaterThan(0.9);
+    const poseAttr = geometry.getAttribute('aFaunaPose') as THREE.InstancedBufferAttribute;
+    expect(poseAttr.getX(0)).toBeGreaterThan(0.9);
+
+    // After the pause ends the animal resumes and the pose relaxes.
+    for (let step = 0; step < 40; step++) {
+      updateFaunaAgents(mesh, built.agents, 101 + step * 0.05, 0.05, seed, profile);
+    }
+    expect(agent.pose).toBeLessThan(0.25);
+    geometry.dispose();
   });
 
   it('creates every fauna archetype with vertex color, part, and flex attributes', () => {
@@ -129,7 +317,7 @@ describe('faunaField', () => {
       expect(material).toBeInstanceOf(THREE.MeshStandardMaterial);
       expect(material.vertexColors).toBe(true);
       expect(material.roughness).toBeGreaterThan(0.7);
-      expect(material.customProgramCacheKey()).toBe('fauna-field-v4');
+      expect(material.customProgramCacheKey()).toBe('fauna-field-v6');
       keys.add(material.customProgramCacheKey());
       expect(faunaKindId(kind)).toBeGreaterThanOrEqual(0);
       material.dispose();
