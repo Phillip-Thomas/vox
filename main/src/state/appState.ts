@@ -31,6 +31,11 @@ const READY_FRAMES = 8;
  * matching the existing ?fly/?descent/?world/?agent/?overview entry points in
  * App.tsx. Computed once from the URL at module load.
  */
+// ?story values that stay on the MENU phase (the prologue terminal runs over it).
+// Mirrors the prologue beats in story/storyState.ts — kept literal here so this
+// low-level store doesn't import game systems at module load.
+const MENU_STORY_PARAMS = ['1', 'crawl', 'voyage', 'deflect', 'crash'];
+
 function computeDeepLink(): boolean {
   if (typeof window === 'undefined') return false;
   const p = new URLSearchParams(window.location.search);
@@ -41,9 +46,9 @@ function computeDeepLink(): boolean {
     p.has('descent') ||
     p.get('agent') === '1' ||
     p.get('overview') === '1' ||
-    // ?story=ch1|a1|... jumps straight into a story chapter; ?story=1 keeps the
-    // menu (the prologue overlay runs over it — see story/storyState.ts).
-    (story !== null && story !== '1')
+    // On-planet story jumps skip the menu; prologue jumps keep it (the terminal
+    // overlay runs over the menu phase — see story/storyState.ts).
+    (story !== null && !MENU_STORY_PARAMS.includes(story))
   );
 }
 

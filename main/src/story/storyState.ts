@@ -123,44 +123,82 @@ export function canContinueStory(): boolean {
   return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.complete);
 }
 
-// --- deep links ---------------------------------------------------------------
+// --- deep links / debug jumps ---------------------------------------------------
+//
+// EVERY beat is a jump target (`?story=<beat>`), which gives a "before" and an
+// "after" for every key point: jumping to a transition beat (a1-ramp,
+// a2-awakening, a3-dawn) plays that awakening immediately; jumping to the beat
+// after it starts in the settled post-awakening state. Legacy short aliases kept.
 
-export type StoryJump = 'ch1' | 'a1' | 'ch2' | 'a2' | 'ch3' | 'a3';
+/** Canonical beat order — drives milestone/item seeding and the debug panel. */
+export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
+  'crawl', 'voyage', 'deflect', 'crash',
+  'ch1-raster', 'ch1-anomaly', 'a1-ramp',
+  'ch2-color', 'ch2-approach', 'a2-awakening',
+  'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
+  'done'
+];
 
-const STORY_JUMPS: Record<StoryJump, StoryEntryPoint> = {
-  ch1: { chapter: 'ch1', beat: 'ch1-raster' },
-  a1: { chapter: 'ch1', beat: 'ch1-anomaly' },
-  ch2: { chapter: 'ch2', beat: 'ch2-color' },
-  a2: { chapter: 'ch2', beat: 'ch2-approach' },
-  ch3: { chapter: 'ch3', beat: 'ch3-gather' },
-  a3: { chapter: 'ch3', beat: 'ch3-await-rest' }
+const JUMP_ALIASES: Record<string, StoryBeat> = {
+  ch1: 'ch1-raster',
+  a1: 'ch1-anomaly',
+  ch2: 'ch2-color',
+  a2: 'ch2-approach',
+  ch3: 'ch3-gather',
+  a3: 'ch3-await-rest'
 };
 
-/** `?story=1` = full run from the menu; `?story=ch1|a1|ch2|a2|ch3|a3` = dev jump. */
-export function parseStoryParam(): 'full' | StoryJump | null {
+export function chapterForBeat(beat: StoryBeat): StoryChapter {
+  return beat === 'crawl' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
+    : beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
+    : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
+    : beat === 'done' ? 'complete'
+    : 'ch3';
+}
+
+function beatIndex(beat: StoryBeat): number {
+  return STORY_BEAT_ORDER.indexOf(beat);
+}
+
+/** `?story=1` = full run from the menu; `?story=<beat|alias>` = dev jump. */
+export function parseStoryParam(): 'full' | StoryBeat | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = new URLSearchParams(window.location.search).get('story');
     if (!raw) return null;
     if (raw === '1') return 'full';
-    return raw in STORY_JUMPS ? (raw as StoryJump) : null;
+    if (raw in JUMP_ALIASES) return JUMP_ALIASES[raw];
+    return (STORY_BEAT_ORDER as readonly string[]).includes(raw) ? (raw as StoryBeat) : null;
   } catch {
     return null;
   }
 }
 
-/** Milestones a jump point presumes reached (marked so resume/HUD logic agrees). */
-function seedJumpMilestones(jump: StoryJump): void {
+/**
+ * Everything a beat presumes has already happened: milestones (so resume/HUD
+ * logic agrees) and inventory (so the ledger and the campfire chain are live).
+ */
+function seedForBeat(beat: StoryBeat): void {
   const m = STORY_MILESTONES;
-  const before: Record<StoryJump, string[]> = {
-    ch1: [m.started, m.prologueSeen],
-    a1: [m.started, m.prologueSeen, m.ch1Quota],
-    ch2: [m.started, m.prologueSeen, m.ch1Quota, m.a1],
-    a2: [m.started, m.prologueSeen, m.ch1Quota, m.a1],
-    ch3: [m.started, m.prologueSeen, m.ch1Quota, m.a1, m.a2],
-    a3: [m.started, m.prologueSeen, m.ch1Quota, m.a1, m.a2]
-  };
-  for (const id of before[jump]) markMilestone(id);
+  const at = beatIndex(beat);
+  markMilestone(m.started);
+  if (at >= beatIndex('ch1-raster')) markMilestone(m.prologueSeen);
+  if (at >= beatIndex('ch1-anomaly')) {
+    markMilestone(m.ch1Quota);
+    addItem('biofiber', 6);
+    addItem('stone', 4);
+  }
+  if (at >= beatIndex('ch2-color')) markMilestone(m.a1);
+  if (at >= beatIndex('ch3-gather')) {
+    markMilestone(m.a2);
+    addItem('flint', 2);
+    addItem('biofuel', 1);
+    addItem('wood', 3);
+  }
+  if (at >= beatIndex('done')) {
+    markMilestone(m.a3);
+    markMilestone(m.complete);
+  }
 }
 
 // --- lifecycle ----------------------------------------------------------------
@@ -177,21 +215,16 @@ export function initStoryFromSave(): void {
     beginStory();
     return;
   }
-  seedJumpMilestones(param);
-  const entry = STORY_JUMPS[param];
-  // Jumps past the quota carry its yield (the HUD ledger stays consistent).
-  if (param !== 'ch1') {
-    addItem('biofiber', 6);
-    addItem('stone', 4);
+  seedForBeat(param);
+  const chapter = chapterForBeat(param);
+  if (chapter === 'complete') {
+    // "After A3": the finished world — sandbox at the earned stage.
+    setVoxelRealityStage('material');
+    setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
+    return;
   }
-  // Ch3 jumps need the campfire chain testable without replaying Ch1's harvest.
-  if (param === 'ch3' || param === 'a3' || param === 'a2') {
-    addItem('flint', 2);
-    addItem('biofuel', 1);
-    addItem('wood', 3);
-  }
-  setVoxelRealityStage(stageForStoryPoint(entry));
-  setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
+  setVoxelRealityStage(stageForStoryPoint({ chapter, beat: param }));
+  setSnapshot({ active: true, chapter, beat: param });
 }
 
 /**
@@ -213,13 +246,7 @@ export function beginStory(): void {
 
 /** Director-only: move to the next beat (and chapter, when the beat crosses). */
 export function advanceToBeat(beat: StoryBeat): void {
-  const chapter: StoryChapter =
-    beat === 'crawl' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
-    : beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
-    : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
-    : beat === 'done' ? 'complete'
-    : 'ch3';
-  setSnapshot({ chapter, beat });
+  setSnapshot({ chapter: chapterForBeat(beat), beat });
 }
 
 /** The slice's end: hand the world back to the sandbox at the earned stage. */

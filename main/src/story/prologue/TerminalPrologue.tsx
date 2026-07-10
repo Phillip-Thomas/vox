@@ -3,7 +3,7 @@ import { enterPlaying, getGameCanvas, useAppState } from '../../state/appState.t
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { hasMilestone, markMilestone } from '../../game/systems/progressionSystem.ts';
 import { setVoxelRealityStage } from '../../game/systems/realityRenderSystem.ts';
-import { advanceToBeat, STORY_MILESTONES } from '../storyState.ts';
+import { advanceToBeat, getStoryStateSnapshot, STORY_MILESTONES } from '../storyState.ts';
 import { theme } from '../../ui/theme.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
 import RegulationCrawl from './RegulationCrawl.tsx';
@@ -29,7 +29,14 @@ type ProloguePhase = 'crawl' | 'voyage' | 'deflect' | 'corruption' | 'acknowledg
 const TerminalPrologue: React.FC = () => {
   const { sceneReady } = useAppState();
   const isTouch = isTouchDevice();
-  const [phase, setPhase] = useState<ProloguePhase>('crawl');
+  // Debug jumps (?story=voyage|deflect|crash) start the terminal mid-prologue.
+  const [phase, setPhase] = useState<ProloguePhase>(() => {
+    const beat = getStoryStateSnapshot().beat;
+    if (beat === 'voyage') return 'voyage';
+    if (beat === 'deflect') return 'deflect';
+    if (beat === 'crash') return 'corruption';
+    return 'crawl';
+  });
   const [skipVisible, setSkipVisible] = useState(() => hasMilestone(STORY_MILESTONES.prologueSeen));
 
   // The skip affordance appears for everyone once the crawl has played once.

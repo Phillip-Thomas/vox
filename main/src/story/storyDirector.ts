@@ -33,6 +33,7 @@ import {
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
+import { setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import { clearViolations, pushViolation, setWorkOrder, showCaption } from './storyText.ts';
 import {
@@ -145,6 +146,9 @@ function echoLines(): string[] {
 function onBeatEntered(beat: StoryBeat | null): void {
   d.beat = beat;
   d.beatClock = 0;
+  // Cutscene state never survives a beat change (envelopes re-assert per frame).
+  setCinematicLookWeight(0);
+  getFeedRuntime().cinematic = 0;
   switch (beat) {
     case 'ch1-raster':
       resetFeedRuntime();
@@ -178,6 +182,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       ]);
       break;
     case 'ch2-approach':
+      getFeedRuntime().desat = 0; // post-A1 (direct debug jumps skip ch2-color)
       setWorkOrder([
         'RETURN TO THE SURVEY AREA',
         'THE OBJECT AHEAD IS NOT AN OBJECT',
@@ -185,6 +190,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       ]);
       break;
     case 'a2-awakening':
+      getFeedRuntime().desat = 0; // post-A1 (direct debug jumps land here too)
       d.a2NextViolationAt = 0;
       d.a2ViolationIndex = 0;
       d.a2HudDead = false;
@@ -202,6 +208,9 @@ function onBeatEntered(beat: StoryBeat | null): void {
       ensureRestInteraction();
       break;
     case 'ch3-dusk':
+      // The first sun event: the story takes the camera for a few seconds.
+      playSfx('storyAwaken');
+      setStoryMoveScale(0);
       fireCaptionOnce('dusk', CH3_CAPTIONS.duskStart);
       ensureRestInteraction();
       break;
@@ -284,11 +293,14 @@ subscribeInventory(() => {
   }
 });
 
-// The first campfire brings the first dusk (fire before dark — earned warmth).
+// The first campfire brings the first dusk (fire before dark — earned warmth),
+// and the story acknowledges the act immediately.
 subscribeCampfires(() => {
   const s = getStoryStateSnapshot();
-  if (!s.active || s.beat !== 'ch3-gather') return;
-  if (getCampfires().length > 0) advanceToBeat('ch3-dusk');
+  if (!s.active || s.chapter !== 'ch3') return;
+  if (getCampfires().length === 0) return;
+  fireCaptionOnce('fire-built', CH3_CAPTIONS.fireBuilt);
+  if (s.beat === 'ch3-gather') advanceToBeat('ch3-dusk');
 });
 
 // --- external triggers (story world props call these) ----------------------------
@@ -424,6 +436,18 @@ function fireCaptionOnce(key: string, text: string): void {
   showCaption(text);
 }
 
+/** Trapezoid envelope: 0→1 over [inStart..inEnd], 1, then 1→0 over [outStart..outEnd]. */
+function envelope(t: number, inStart: number, inEnd: number, outStart: number, outEnd: number): number {
+  if (t <= inStart) return 0;
+  if (t < inEnd) return (t - inStart) / (inEnd - inStart);
+  if (t <= outStart) return 1;
+  if (t < outEnd) return 1 - (t - outStart) / (outEnd - outStart);
+  return 0;
+}
+
+/** Seconds the dusk cutscene holds the frame (camera pull + letterbox + freeze). */
+const DUSK_CUTSCENE_SECONDS = 8;
+
 // Chapter 3's sun: the director owns the forced phase through the scripted first
 // dusk and the night, releasing it to the live world clock only at completion —
 // so the cycle works identically on every graphics tier (non-animated profiles
@@ -433,11 +457,21 @@ function tickCh3Sun(dt: number): void {
   if (s.beat === 'ch3-dusk') {
     const k = smoothstep(Math.min(1, d.beatClock / DUSK.lerpSeconds));
     d.dayPhase = 0.25 + (DUSK.targetPhase - 0.25) * k;
+    // The cutscene: bars in, camera pulled to the setting sun, feet held — then
+    // everything hands back while the light keeps leaving.
+    const t = d.beatClock;
+    getFeedRuntime().cinematic = envelope(t, 0, 1.2, 6, DUSK_CUTSCENE_SECONDS);
+    setCinematicLookWeight(envelope(t, 0.2, 1.6, 5, 7));
+    if (t >= 6) setStoryMoveScale(Math.min(1, (t - 6) / 1.5));
     if (d.beatClock >= DUSK.lerpSeconds) advanceToBeat('ch3-await-rest');
   } else if (s.beat === 'ch3-await-rest') {
     d.dayPhase += dt / DAY_LENGTH_SECONDS; // the cycle rolls naturally into night
     if (!d.captionsFired.has('night') && d.dayPhase >= DUSK.nightStart) {
       fireCaptionOnce('night', CH3_CAPTIONS.night);
+    }
+    // A beat later, the explicit nudge — rest is the ONLY forward action left.
+    if (!d.captionsFired.has('rest-hint') && d.dayPhase >= DUSK.nightStart + 0.015) {
+      fireCaptionOnce('rest-hint', CH3_CAPTIONS.restPrompt);
     }
   }
   setStoryForcedDayPhase(d.dayPhase);
@@ -468,9 +502,12 @@ function tickA3(dt: number): void {
     setStoryForcedDayPhase(d.dayPhase);
     return;
   }
-  // Dawn advances in real time through fade-up and the ramp.
+  // Dawn advances in real time through fade-up and the ramp — framed like the
+  // dusk (letterbox + a gentle pull toward the rising sun as the eyes open).
   d.dayPhase = (d.dayPhase + dt / DAY_LENGTH_SECONDS) % 1;
   setStoryForcedDayPhase(d.dayPhase);
+  r.cinematic = envelope(t, wakeAt, wakeAt + 1.5, rampEnd, rampEnd + 3);
+  setCinematicLookWeight(envelope(t, wakeAt + 0.5, wakeAt + 2, wakeAt + 5, wakeAt + 7));
   if (t < rampStart) {
     r.sleepFade = 1 - smoothstep((t - wakeAt) / T.fadeUpSeconds);
     return;
@@ -564,6 +601,12 @@ export function storyDirectorTick(
         }
       });
       if (d.beatClock >= 12) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
+      // Belt-and-braces: a resume that arrives with a fire already standing
+      // fires no campfire event — the dusk must still come.
+      if (d.beatClock >= 2 && getCampfires().length > 0) {
+        fireCaptionOnce('fire-built', CH3_CAPTIONS.fireBuilt);
+        advanceToBeat('ch3-dusk');
+      }
       // Fallback: if no fire gets built, the light leaves anyway (cold teaches).
       if (d.beatClock >= 180) advanceToBeat('ch3-dusk');
       break;

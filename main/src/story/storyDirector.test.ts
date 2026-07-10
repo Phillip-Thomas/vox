@@ -6,6 +6,7 @@ import { placeCampfire, resetCampfires } from '../game/systems/campfires.ts';
 import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/mawSystem.ts';
 import { setMiningProgress } from '../game/systems/miningProgress.ts';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
+import { getCinematicLookWeight } from './cinematicLook.ts';
 import { DUSK } from './storyScript.ts';
 import {
   advanceToBeat,
@@ -126,6 +127,15 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryForcedDayPhase()).toBeCloseTo(0.25, 5); // regulation noon holds
     placeCampfire(new THREE.Vector3(0, 25, 0), new THREE.Vector3(0, 1, 0));
     expect(getStoryStateSnapshot().beat).toBe('ch3-dusk');
+    // the dusk CUTSCENE: bars + camera pull + held feet, then control returns
+    tickSeconds(2);
+    expect(getFeedRuntime().cinematic).toBeGreaterThan(0.5);
+    expect(getCinematicLookWeight()).toBeGreaterThan(0.5);
+    expect(getStoryInputPolicy().moveSpeedScale).toBe(0);
+    tickSeconds(8); // t = 10 — cutscene over, sun still sliding
+    expect(getFeedRuntime().cinematic).toBe(0);
+    expect(getCinematicLookWeight()).toBe(0);
+    expect(getStoryInputPolicy().moveSpeedScale).toBe(1);
     // the first dusk: the sun slides to the target phase, then rolls on its own
     tickSeconds(DUSK.lerpSeconds + 1);
     expect(getStoryStateSnapshot().beat).toBe('ch3-await-rest');

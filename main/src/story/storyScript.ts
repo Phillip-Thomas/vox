@@ -254,15 +254,16 @@ export const A2_CAPTIONS: readonly { atSeconds: number; text: string }[] = [
 
 export const CH3_CAPTIONS = {
   gather: 'cold is coming. i don’t know how i know that.',
+  fireBuilt: 'i made warmth. when the dark comes, i can rest beside it.',
   duskStart: 'the light is leaving. it has never done that.',
   night: 'the fire helps. i made the fire. i made something.',
-  restPrompt: 'rest.'
+  restPrompt: 'rest, by the fire. [F]'
 } as const;
 
 export const DUSK = {
   /** Scripted first dusk: noon -> this phase, over lerpSeconds. */
-  targetPhase: 0.45,
-  lerpSeconds: 90,
+  targetPhase: 0.5,
+  lerpSeconds: 45,
   /** Rest is offered inside this night band (phase 0.5 sunset .. 1.0 sunrise). */
   nightStart: 0.55,
   nightEnd: 0.95

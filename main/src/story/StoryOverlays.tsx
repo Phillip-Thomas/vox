@@ -6,6 +6,7 @@ import FeedOverlay from './feed/FeedOverlay.tsx';
 import RegulationFeedHud from './feed/RegulationFeedHud.tsx';
 import StoryCaptions from './StoryCaptions.tsx';
 import SleepFade from './transitions/SleepFade.tsx';
+import CinematicFrame from './transitions/CinematicFrame.tsx';
 
 /**
  * Single App-level mount for every story DOM overlay (siblings of the <Canvas>).
@@ -26,6 +27,7 @@ const StoryOverlays: React.FC = () => {
       {feedLive && <RegulationFeedHud />}
       {phase === 'playing' && <StoryCaptions />}
       {phase === 'playing' && story.chapter === 'ch3' && <SleepFade />}
+      {phase === 'playing' && story.chapter === 'ch3' && <CinematicFrame />}
     </>
   );
 };

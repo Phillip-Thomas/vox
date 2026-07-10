@@ -105,6 +105,7 @@ import {
 import LandingMenu from './components/ui/LandingMenu.tsx';
 import StoryOverlays from './story/StoryOverlays.tsx';
 import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
+import StoryDebugPanel, { storyDebugEnabled } from './story/StoryDebugPanel.tsx';
 import {
   deactivateStory,
   getStoryStateSnapshot,
@@ -879,6 +880,8 @@ const App: React.FC = () => {
 
       {/* --- Story overlays (prologue terminal / regulation feed / captions) --- */}
       <StoryOverlays />
+      {/* Dev: beat teleporter (any ?story= session or ?debug=1). */}
+      {storyDebugEnabled() && <StoryDebugPanel />}
 
       {/* --- Minimal, diegetic in-game HUD (the story feed replaces it in Ch1-2) --- */}
       {appPhase === 'playing' && !atlasCapture && !storyHudTakeover(story) && (

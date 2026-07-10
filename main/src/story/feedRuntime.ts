@@ -44,6 +44,8 @@ export interface FeedRuntime {
   scanRoll: number;
   /** A3 sleep fade: 0 = clear, 1 = full black (SleepFade overlay opacity). */
   sleepFade: number;
+  /** Cinematic frame (0..1): letterbox bars + warm wash for the sun events. */
+  cinematic: number;
   redaction: FeedRedaction;
   /** Survey marker — the feed's target designator (the ch1 anomaly objective). */
   marker: FeedMarker;
@@ -57,6 +59,7 @@ const runtime: FeedRuntime = {
   garble: 0,
   scanRoll: 0,
   sleepFade: 0,
+  cinematic: 0,
   redaction: { visible: false, x: 0, y: 0, w: 0, h: 0, label: '', stress: 0 },
   marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' }
 };
@@ -73,6 +76,7 @@ export function resetFeedRuntime(): void {
   runtime.garble = 0;
   runtime.scanRoll = 0;
   runtime.sleepFade = 0;
+  runtime.cinematic = 0;
   runtime.redaction.visible = false;
   runtime.redaction.stress = 0;
   runtime.redaction.label = '';
