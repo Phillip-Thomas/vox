@@ -5,6 +5,7 @@ import { ownsChargeTool } from '../../game/systems/loadoutSystem.ts';
 import { getJetpackFuel } from '../EfficientPlayer.tsx';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { theme } from '../../ui/theme.ts';
+import { storyStatVisible } from '../../story/storyState.ts';
 import { hudGlassPanelStyle } from './hudChrome.ts';
 import {
   formatJetpackFuelFraction,
@@ -18,6 +19,8 @@ import {
 const VitalsMeter: React.FC = () => {
   const fills = useRef<Array<HTMLDivElement | null>>([]);
   const values = useRef<Array<HTMLSpanElement | null>>([]);
+  const rows = useRef<Array<HTMLDivElement | null>>([]);
+  const jetRow = useRef<HTMLDivElement | null>(null);
   const jetpackFill = useRef<HTMLDivElement | null>(null);
   const jetpackValue = useRef<HTMLSpanElement | null>(null);
   const mawRow = useRef<HTMLDivElement | null>(null);
@@ -32,11 +35,20 @@ const VitalsMeter: React.FC = () => {
     const tick = () => {
       const v = getVitals();
       for (let i = 0; i < VITAL_BARS.length; i++) {
+        // Self-discovery: each row exists only once its sensation has been
+        // FELT (story saves; pure sandbox shows everything).
+        const known = storyStatVisible(VITAL_BARS[i].key);
+        const row = rows.current[i];
+        if (row) row.style.display = known ? 'grid' : 'none';
+        if (!known) continue;
         const value = v[VITAL_BARS[i].key];
         const el = fills.current[i];
         if (el) el.style.width = formatVitalsWidth(value);
         const valueEl = values.current[i];
         if (valueEl) valueEl.textContent = formatVitalsValue(value);
+      }
+      if (jetRow.current) {
+        jetRow.current.style.display = storyStatVisible('jet') ? 'grid' : 'none';
       }
       const jetpackPct = getJetpackFuel() * 100;
       if (jetpackFill.current) {
@@ -46,7 +58,7 @@ const VitalsMeter: React.FC = () => {
           : 'linear-gradient(90deg, #fca5a5, rgba(255,255,255,0.72))';
       }
       if (jetpackValue.current) jetpackValue.current.textContent = formatJetpackFuelFraction(getJetpackFuel());
-      const mawActive = ownsChargeTool();
+      const mawActive = ownsChargeTool() && storyStatVisible('maw');
       const mawPct = getMawChargeFraction() * 100;
       if (mawRow.current) mawRow.current.style.display = mawActive ? 'grid' : 'none';
       if (mawFill.current) {
@@ -93,7 +105,11 @@ const VitalsMeter: React.FC = () => {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {VITAL_BARS.map((b, i) => (
-          <div key={b.key} style={{ display: 'grid', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}>
+          <div
+            key={b.key}
+            ref={el => { rows.current[i] = el; }}
+            style={{ display: storyStatVisible(b.key) ? 'grid' : 'none', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}
+          >
             <span style={{ color: theme.color.textDim, fontSize: 9, fontWeight: 800 }}>{b.label}</span>
             <div style={{
               height: 8,
@@ -125,8 +141,9 @@ const VitalsMeter: React.FC = () => {
           </div>
         ))}
         <div
+          ref={jetRow}
           data-testid="jetpack-hud-row"
-          style={{ display: 'grid', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}
+          style={{ display: storyStatVisible('jet') ? 'grid' : 'none', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}
         >
           <span style={{ color: theme.color.textDim, fontSize: 9, fontWeight: 800 }}>JET</span>
           <div style={{
@@ -160,7 +177,7 @@ const VitalsMeter: React.FC = () => {
         <div
           ref={mawRow}
           data-testid="maw-hud-row"
-          style={{ display: ownsChargeTool() ? 'grid' : 'none', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}
+          style={{ display: ownsChargeTool() && storyStatVisible('maw') ? 'grid' : 'none', gridTemplateColumns: '52px 1fr 34px', gap: 7, alignItems: 'center' }}
         >
           <span style={{ color: theme.color.textDim, fontSize: 9, fontWeight: 800 }}>MAW</span>
           <div style={{

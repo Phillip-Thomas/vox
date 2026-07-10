@@ -61,9 +61,17 @@ export const STORY_MILESTONES = {
   a1: 'story:a1',
   a2: 'story:a2',
   a3: 'story:a3',
-  /** Survival senses arrive ONE BY ONE in ch3 — HUD chrome follows the story. */
+  /** Survival senses arrive ONE BY ONE — each HUD element appears when the
+   *  story first names its sensation (the self-discovery arc). */
   senseInventory: 'story:sense:inventory',
-  senseVitals: 'story:sense:vitals',
+  senseHealth: 'story:sense:health',
+  senseTemp: 'story:sense:temp',
+  senseWater: 'story:sense:water',
+  senseFood: 'story:sense:food',
+  senseStamina: 'story:sense:stamina',
+  senseOxygen: 'story:sense:oxygen',
+  senseJet: 'story:sense:jet',
+  senseMaw: 'story:sense:maw',
   complete: 'story:complete'
 } as const;
 
@@ -225,10 +233,11 @@ function seedForBeat(beat: StoryBeat): void {
   if (at >= beatIndex('ch1-lift')) markMilestone(m.ch1Iso);
   if (at >= beatIndex('ch2-color')) markMilestone(m.a1);
   if (at >= beatIndex('ch3-gather')) markMilestone(m.a2); // campfire mats all earned upstream
+  if (at >= beatIndex('ch3-gather')) markMilestone(m.senseHealth); // embodiment reports a body
   if (at >= beatIndex('ch3-dusk')) {
-    // The senses are introduced during the gather act — later jumps have them.
+    // Introduced during the gather act — later jumps arrive with them.
     markMilestone(m.senseInventory);
-    markMilestone(m.senseVitals);
+    markMilestone(m.senseTemp);
   }
   if (at >= beatIndex('done')) {
     markMilestone(m.a3);
@@ -292,9 +301,11 @@ export function advanceToBeat(beat: StoryBeat): void {
 export function completeStory(): void {
   markMilestone(STORY_MILESTONES.a3);
   markMilestone(STORY_MILESTONES.complete);
-  // The senses are part of the earned world — never strand the HUD gates.
+  // The ch3 senses are part of the earned world — never strand the HUD gates.
+  // (Thirst/hunger and the rest stay UNDISCOVERED: they arrive live, post-dawn.)
   markMilestone(STORY_MILESTONES.senseInventory);
-  markMilestone(STORY_MILESTONES.senseVitals);
+  markMilestone(STORY_MILESTONES.senseHealth);
+  markMilestone(STORY_MILESTONES.senseTemp);
   setVoxelRealityStage('material');
   setStoryForcedDayPhase(null); // the day cycle is the player's now
   setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
@@ -341,7 +352,28 @@ export function storyLifeDormant(): boolean {
 
 export function storyHudHideVitals(): boolean {
   if (!hasMilestone(STORY_MILESTONES.started)) return false;
-  return !hasMilestone(STORY_MILESTONES.senseVitals);
+  return !hasMilestone(STORY_MILESTONES.senseHealth);
+}
+
+/** Which suit-HUD stat rows have been DISCOVERED (pure sandbox: everything). */
+export type SuitStat =
+  | 'health' | 'hunger' | 'thirst' | 'warmth' | 'stamina' | 'oxygen'
+  | 'jet' | 'maw';
+
+const STAT_SENSE: Record<SuitStat, string> = {
+  health: STORY_MILESTONES.senseHealth,
+  hunger: STORY_MILESTONES.senseFood,
+  thirst: STORY_MILESTONES.senseWater,
+  warmth: STORY_MILESTONES.senseTemp,
+  stamina: STORY_MILESTONES.senseStamina,
+  oxygen: STORY_MILESTONES.senseOxygen,
+  jet: STORY_MILESTONES.senseJet,
+  maw: STORY_MILESTONES.senseMaw
+};
+
+export function storyStatVisible(stat: SuitStat): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return true;
+  return hasMilestone(STAT_SENSE[stat]);
 }
 
 export function storyHudHideInventory(): boolean {

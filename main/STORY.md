@@ -93,6 +93,14 @@ fire at night → **A3** dawn material ramp → story completes, sandbox continu
 Pre-A2 chapters render NOTHING smooth: cube pebbles, voxel pod/debris, no ship,
 no berries — the anomaly stone is the deliberate first continuous form.
 
+**THE HIDDEN PILLAR (read PARAVOXIA_PROGRESSION.md § "The third reading"):**
+the narrator is the ROUTE INTELLIGENCE — the AI that ran the terminal, the
+ledger, the paddle, and the feed — embodied by the crash into the worker's
+senses, inside a universe it may itself have provisioned. All copy must
+survive both readings (corporate dystopia / the AI's biography); plant, never
+tell. The voyage's late-transit lowercase intrusions, "ROUTE INTELLIGENCE:
+ATTACHED (ADVISORY)", and "ADVISORY CAPACITY EXCEE" are the planted seeds.
+
 **Consciousness staging:** the external-camera eras are PRE-conscious — the
 captions there are impersonal ("the frame did not follow you", "how is that
 word known?"). The 2D→3D lift is the birth of sentience: "the seeing is being

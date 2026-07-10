@@ -87,7 +87,7 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   'ch1-anomaly': 50,
   'ch2-color': 20,
   'ch2-approach': 45,
-  'ch3-gather': 12,
+  'ch3-gather': 34,
   'ch3-await-rest': 70
 };
 
@@ -426,8 +426,9 @@ export function autopilotTick(dt: number): void {
     }
     case 'ch3-gather': {
       // The craft is UI-driven in real play — the screening skips straight to
-      // the placed fire (which triggers the dusk).
-      if (beatClock > 4 && getCampfires().length === 0) {
+      // the placed fire (which triggers the dusk). It waits for the CHILL:
+      // the fire is a response to the falling TEMP, never before it.
+      if (beatClock > 18 && getCampfires().length === 0) {
         grantMissingCampfireMaterials();
         placeCampfire(getPlayerWorldPosition().clone(), getPlayerUp().clone());
       }

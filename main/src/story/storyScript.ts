@@ -36,6 +36,9 @@ export const CRAWL_LINES: readonly string[] = [
   'CLAUSE 4. THERE IS NO CLAUSE 4.',
   '',
   'Your hauler departs immediately.',
+  'A route intelligence attends every transit.',
+  'It has no questions either.',
+  '',
   'Productivity is its own reward.',
   'There is no other reward.'
 ];
@@ -53,6 +56,7 @@ export const MANIFEST_LINES: readonly string[] = [
   '',
   'BERTH: POD 4 · SLOT 19 · RECUMBENT',
   'PERSONAL MASS ALLOWANCE: 0.0 KG',
+  'ROUTE INTELLIGENCE: ATTACHED (ADVISORY)',
   '',
   'CARGO MANIFEST (PARTIAL):',
   '  EXTRACTION UNITS ......... 640',
@@ -66,6 +70,18 @@ export const MANIFEST_LINES: readonly string[] = [
   'HATCH SEAL IN 5',
   'THE AUTHORITY THANKS YOU IN ADVANCE.'
 ];
+
+/**
+ * As the planet nears, the terminal notices two things it shouldn't: a survey
+ * anomaly in the system's own voice, then — once, in lowercase, in parentheses
+ * — the route intelligence's first thought. Progress-gated; never repeated.
+ */
+export const VOYAGE_STRANGE = {
+  surveyAt: 0.55,
+  survey: 'NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS SURVEYED.',
+  thoughtAt: 0.8,
+  thought: '(strange. the approach feels like remembering.)'
+} as const;
 
 export type LedgerStat = 'rations' | 'hull' | 'compliance' | 'transit';
 
@@ -240,6 +256,7 @@ export const CRASH_LINES: readonly string[] = [
   'NAV ADVISORY: DESTINATION SEED RESOLVES OUTSIDE INDEX',
   'RECALCULATING. THE DESTINATION DOES NOT',
   'HULL EVENT. HULL EVENT. HULL EV',
+  'ROUTE INTELLIGENCE: ADVISORY CAPACITY EXCEE',
   'WORKER: REMAIN PRODUCTIVE DURING',
   ''
 ];
@@ -399,7 +416,7 @@ export const CH3_CAPTIONS = {
   gather: 'cold is coming. i don’t know how i know that.',
   fireBuilt: 'i made warmth. when the dark comes, i can rest beside it.',
   duskStart: 'the light is leaving. it has never done that.',
-  night: 'the fire helps. i made the fire. i made something.',
+  night: 'ah — it helps. what is it? how did i know to make it?',
   restPrompt: 'rest, by the fire. [F]'
 } as const;
 

@@ -104,6 +104,7 @@ import { getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, si
 import { BLOCKS } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
 import { isMapViewOpen } from '../game/mapView.ts';
+import { tickSenseDiscovery } from '../story/senseDiscovery.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
 
 const _zeroVelocity = new THREE.Vector3();
@@ -1379,6 +1380,7 @@ export default function EfficientPlayer({
       && flightSnap.phase === 'surface' && flightSnap.controlMode === 'fps';
     const vitalsDelta = clampVitalsDelta(delta); // clamp so a tab-away/stall can't binge-decay
     tickVitals(vitalsDelta, decayActive);
+    tickSenseDiscovery(getJetpackFuelFraction(commandContext.actorId)); // story self-discovery (no-op outside story saves)
     // Breath: drain while the eye is submerged (in normal surface play), refill
     // otherwise; drowning bleeds HP at empty (non-lethal — see tickOxygen).
     tickOxygen(vitalsDelta, decayActive && submergence.current > 0.5);

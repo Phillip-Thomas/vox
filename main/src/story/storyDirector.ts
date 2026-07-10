@@ -5,9 +5,10 @@ import {
   setVoxelRealityStage,
   VOXEL_REALITY_PRESETS
 } from '../game/systems/realityRenderSystem.ts';
-import { getMilestones, markMilestone } from '../game/systems/progressionSystem.ts';
+import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
+import { getVitals, setVitals } from '../game/systems/survivalVitals.ts';
 import { addMawCharge, getMawCharge, MAX_MAW_CHARGE, setMawCharge } from '../game/systems/mawSystem.ts';
 import { getMiningProgress } from '../game/systems/miningProgress.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
@@ -146,6 +147,22 @@ const d: DirectorRuntime = {
 /** Seconds since the current beat began (survey dwells, resolver gates). */
 export function getStoryBeatClock(): number {
   return d.beatClock;
+}
+
+/**
+ * The ch3 chill (story-scoped temperature model — the sandbox holds warmth
+ * full until a real model lands): warmth drains in the open, recovers fast
+ * beside a fire, and never becomes lethal (floor well above zero). The fire is
+ * built BECAUSE of this — the stat appears already falling.
+ */
+function tickStoryChill(dt: number, drainPerSecond: number): void {
+  if (!hasMilestone(STORY_MILESTONES.senseTemp)) return;
+  const v = getVitals();
+  if (nearCampfire(getPlayerWorldPosition())) {
+    if (v.warmth < 100) setVitals({ warmth: Math.min(100, v.warmth + dt * 6) });
+  } else {
+    setVitals({ warmth: Math.max(22, v.warmth - dt * drainPerSecond) });
+  }
 }
 
 const _fixedRel = new THREE.Vector3();
@@ -349,6 +366,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setStoryForcedDayPhase(0.25); // noon holds until the scripted first dusk
       setWorkOrder([]);
       clearViolations();
+      markMilestone(STORY_MILESTONES.senseHealth); // the suit reports A BODY — one row
       ensureRestInteraction();
       // (Timber/flint were EARNED as hull debris back in the raster act.)
       break;
@@ -720,6 +738,7 @@ function tickCh3Sun(dt: number): void {
     // Strings swell while the story holds the camera, then settle to dusk.
     setScoreIntensity(0.35 + envelope(t, 0, 2.5, 5.5, DUSK_CUTSCENE_SECONDS) * 0.65);
     if (t >= 6) setStoryMoveScale(Math.min(1, (t - 6) / 1.5));
+    tickStoryChill(dt, 0.85);
     if (d.beatClock >= DUSK.lerpSeconds) advanceToBeat('ch3-await-rest');
   } else if (s.beat === 'ch3-await-rest') {
     d.dayPhase += dt / DAY_LENGTH_SECONDS; // the cycle rolls naturally into night
@@ -729,10 +748,11 @@ function tickCh3Sun(dt: number): void {
       fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
       markMilestone(STORY_MILESTONES.senseInventory);
     }
-    if (d.beatClock >= 9 && !d.captionsFired.has('sense-thirst')) {
-      fireCaptionOnce('sense-thirst', 'what is this sensation. why am i… thirsty?');
-      markMilestone(STORY_MILESTONES.senseVitals);
+    if (d.beatClock >= 8 && !d.captionsFired.has('sense-temp')) {
+      fireCaptionOnce('sense-temp', 'warmth. i have it. it is leaving.');
+      markMilestone(STORY_MILESTONES.senseTemp);
     }
+    tickStoryChill(dt, 1.15); // night bites harder; the fire answers
     if (!d.captionsFired.has('night') && d.dayPhase >= DUSK.nightStart) {
       fireCaptionOnce('night', CH3_CAPTIONS.night);
     }
@@ -782,6 +802,11 @@ function tickA3(dt: number): void {
   r.sleepFade = 0;
   const k = smoothstep(Math.min(1, (t - rampStart) / T.materialRampSeconds));
   setScoreIntensity(0.3 + k * 0.7); // the dawn build rides the material ramp
+  {
+    // The sun gives the warmth back (the chill was the night's, not the world's).
+    const v = getVitals();
+    if (v.warmth < 100) setVitals({ warmth: Math.min(100, v.warmth + dt * 4) });
+  }
   const target = VOXEL_REALITY_PRESETS.material;
   overrideVoxelRealityEffects({
     detail: target.detail * k,
@@ -958,18 +983,19 @@ export function storyDirectorTick(
           fireCaptionOnce(`a2-${i}`, caption.text);
         }
       });
-      if (d.beatClock >= 12) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
-      if (d.beatClock >= 16 && !d.captionsFired.has('sense-hold')) {
+      if (d.beatClock >= 8 && !d.captionsFired.has('sense-hold')) {
         fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
         markMilestone(STORY_MILESTONES.senseInventory); // the inventory appears
       }
-      if (d.beatClock >= 24 && !d.captionsFired.has('sense-thirst')) {
-        fireCaptionOnce('sense-thirst', 'what is this sensation. why am i… thirsty?');
-        markMilestone(STORY_MILESTONES.senseVitals); // the vitals appear
+      if (d.beatClock >= 12) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
+      if (d.beatClock >= 15 && !d.captionsFired.has('sense-temp')) {
+        fireCaptionOnce('sense-temp', 'warmth. i have it. it is leaving.');
+        markMilestone(STORY_MILESTONES.senseTemp); // TEMP appears — already draining
       }
-      if (d.beatClock >= 34) {
+      if (d.beatClock >= 30) {
         fireCaptionOnce('sense-chart', 'the view from above is still in here. [M]');
       }
+      tickStoryChill(dt, 0.55); // the chill that motivates the fire
       // Belt-and-braces: a resume that arrives with a fire already standing
       // fires no campfire event — the dusk must still come.
       if (d.beatClock >= 2 && getCampfires().length > 0) {

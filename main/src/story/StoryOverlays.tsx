@@ -16,7 +16,12 @@ import CinematicFrame from './transitions/CinematicFrame.tsx';
 const StoryOverlays: React.FC = () => {
   const story = useStoryState();
   const { phase } = useAppState();
-  if (!story.active) return null;
+  // The earned world keeps the caption channel: post-A3 sense discoveries
+  // ("so that is thirst.") still speak, even though the story is dormant.
+  if (!story.active) {
+    if (story.chapter === 'complete' && phase === 'playing') return <StoryCaptions />;
+    return null;
+  }
 
   const feedLive = phase === 'playing' && storyHudTakeover(story);
 

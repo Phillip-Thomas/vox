@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { VOYAGE_DECK, VOYAGE_SETTINGS, type LedgerStat } from '../storyScript.ts';
+import { VOYAGE_DECK, VOYAGE_SETTINGS, VOYAGE_STRANGE, type LedgerStat } from '../storyScript.ts';
 import { applyChoice, createDeckRun, nextCard, type VoyageCard } from '../voyageDeck.ts';
 import { applyVoyageOutcome } from '../voyageOutcome.ts';
 import { recordStoryChoice } from '../storyState.ts';
@@ -183,6 +183,25 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
           <span>DESTINATION: CUBE SITE 7C-θ · PURPOSE: EXTRACTION</span>
           <span style={{ letterSpacing: 0 }}>{bar}</span>
         </div>
+        {/* Late-transit strangeness: first the system notices, then — once,
+            lowercase, parenthetical — something notices through it. */}
+        {progress >= VOYAGE_STRANGE.surveyAt && (
+          <div style={{
+            position: 'absolute', bottom: 30, left: 18,
+            color: PHOSPHOR_FAINT, fontSize: 10, letterSpacing: '0.14em'
+          }}>
+            {VOYAGE_STRANGE.survey}
+          </div>
+        )}
+        {progress >= VOYAGE_STRANGE.thoughtAt && (
+          <div style={{
+            position: 'absolute', bottom: 48, left: 18,
+            color: PHOSPHOR_DIM, fontSize: 11, letterSpacing: '0.06em',
+            textTransform: 'none'
+          }}>
+            {VOYAGE_STRANGE.thought}
+          </div>
+        )}
       </div>
 
       {/* --- console: ledger + protocols, or the active decision --- */}

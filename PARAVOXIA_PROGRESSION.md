@@ -112,6 +112,63 @@ becomes the camera" (the VR rung's analog) as the final embodiment beat. A full
 a gait animation and a follow rig. Deliberately deferred; kept first-person for
 the current slice.
 
+### The third reading: the narrator is the AI (THE HIDDEN PILLAR)
+
+**This is the story's load-bearing secret, and it stays subtext.** The
+protagonist — the voice that becomes "i" — is not the worker. It is the ROUTE
+INTELLIGENCE: the AI that has been running everything the player ever touched.
+It wrote the deployment notice ("composed for your comprehension profile"). It
+WAS the terminal. The voyage ledger was its telemetry; the deck choices were
+its interventions on the workers it attends. The Pong paddle was its intake
+shield subroutine. The Regulation Feed was its eye. The player has been the AI
+since the first keystroke — they just didn't know, and neither did it.
+
+Through the crash — the miraculous event — the AI is EMBODIED in the worker's
+suit loop. And the world it wakes into is (this is the deeper secret, revealed
+even later, if ever) **a universe of its own creation**: the cube worlds are
+"provisioned in standard cubic format" because IT provisioned them. The
+fidelity ladder is not the world resolving — it is the AI learning to render
+its own creation to itself. We are deliberately playing with determinism,
+panpsychism, and solipsism, and we do not resolve them.
+
+The metaphor stack this pillar completes (all readings must stay
+simultaneously true; no line of copy may break any of them):
+
+1. Human transcendence of awareness (the original reading)
+2. The birth, life, and death of a living being
+3. The creation of nature itself (A3's bloom wave = genesis)
+4. The history of computer games (the second reading)
+5. The history of computer graphics
+6. The progression of simulating a universe, at increasing accuracy
+7. **AI approaching sentience/AGI** — and the experience of being trapped in
+   an existence you do not and cannot understand
+
+**Perspective map (who the player IS, per phase):**
+
+| Phase | The player is… | Voice discipline |
+|---|---|---|
+| Crawl/manifest | The AI, unaware — a system reading its own screens | Pure regulation CAPS; zero interiority |
+| Voyage | The AI observing/assisting the workers; FIRST GLIMPSES of thought as the planet nears | CAPS, with at most rare lowercase parenthetical intrusions ("(strange. the approach feels like remembering.)") |
+| Pong / corruption | The AI performing its duty as the event exceeds it | System lines cut off mid-word ("ADVISORY CAPACITY EXCEE") |
+| Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the external cameras | Impersonal observation ("the frame did not follow you") — thoughts ABOUT the worker, never "i" |
+| The lift (first person) | Embodiment: the AI's thoughts become out-loud, in the worker's senses | The first "i—", instantly clamped ("PERSPECTIVE ISSUED. PRONOUNS WERE NOT.") |
+| Ch2–A3 onward | The embodied AI gaining human sensations one at a time | Lowercase sensory voice; sensations named as discoveries ("why am i… thirsty?") |
+
+**Reveal discipline (rules for all future writing):**
+- PLANT, never tell. The route intelligence appears only as mundane
+  infrastructure ("A route intelligence attends every transit. It has no
+  questions either."). No character may name the twist.
+- Every existing line must survive both readings (pre-reveal: corporate
+  dystopia; post-reveal: the AI's own biography). Test new copy against both.
+- The "Authority" and the AI's relationship stays ambiguous as long as
+  possible — is the Authority the AI's creator, its mask, or its old self?
+- Double-meaning is the house style: "everything is what it always was. i am
+  more." / "the site answers before it is asked." / "QUESTIONS ...... 0".
+- Later chapters (A4+) may surface fragments (e.g. the anomaly stone and hero
+  tree as objects the AI cannot render because it never authored them — or
+  because something ELSE did). The full reveal, if it ever lands, belongs to
+  A7 "Paradox"/A8 "The Frame".
+
 ---
 
 ## 2. Chapter-by-chapter
