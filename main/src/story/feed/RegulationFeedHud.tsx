@@ -5,11 +5,14 @@ import { getInteraction, subscribeInteraction } from '../../game/systems/interac
 import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
 import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
 import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
+import { collectedPodCount, SUPPLY_POD_COUNT } from '../supplyPods.ts';
+import { NAV_WAYPOINT_COUNT, reachedNavWaypointCount } from '../navWaypoints.ts';
 import { getFeedRuntime } from '../feedRuntime.ts';
 import { getMiningProgress } from '../../game/systems/miningProgress.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyText.ts';
 import { useStoryState } from '../storyState.ts';
-import { CH1_QUOTA } from '../storyScript.ts';
+import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from '../storyScript.ts';
+import { fixedTutorialProgress } from '../storyDirector.ts';
 
 // --- Regulation Feed HUD ----------------------------------------------------------
 //
@@ -124,8 +127,13 @@ const RegulationFeedHud: React.FC = () => {
   }, []);
 
   const quotaVisible = story.beat === 'ch1-raster' || story.beat === 'ch1-anomaly';
+  const fixedVisible = story.beat === 'ch1-fixed';
+  const podsVisible = story.beat === 'ch1-depth';
+  const navVisible = story.beat === 'ch1-nav';
+  const isoVisible = story.beat === 'ch1-iso';
   const fiber = Math.min(getItemCount('biofiber'), CH1_QUOTA.biofiber);
   const stone = Math.min(getItemCount('stone'), CH1_QUOTA.stone);
+  const fixedProgress = fixedVisible ? fixedTutorialProgress() : null;
 
   return (
     <div
@@ -181,6 +189,67 @@ const RegulationFeedHud: React.FC = () => {
               {line}
             </div>
           ))}
+        </div>
+      )}
+
+      {/* fixed-screen calibration ledger */}
+      {fixedProgress && (
+        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>CALIBRATION</div>
+          <div>
+            FIBER {fixedProgress.fiber}/{CH1_FIXED_TUTORIAL.biofiber} · SCREENS {fixedProgress.screens}/{CH1_FIXED_TUTORIAL.screens}
+          </div>
+          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
+            HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED
+          </div>
+        </div>
+      )}
+
+      {/* supply-pod recovery ledger */}
+      {podsVisible && (
+        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>RECOVERY</div>
+          <div>SUPPLY PODS {collectedPodCount()}/{SUPPLY_POD_COUNT}</div>
+          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
+            LATERAL CLEARANCE ±3 ROWS · [W]/[S]
+          </div>
+        </div>
+      )}
+
+      {/* nav-view grid: the world as a chart (top-down era only) */}
+      {navVisible && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundImage:
+              'repeating-linear-gradient(0deg, rgba(228,236,231,0.07) 0 1px, transparent 1px 64px),'
+              + ' repeating-linear-gradient(90deg, rgba(228,236,231,0.07) 0 1px, transparent 1px 64px)',
+            pointerEvents: 'none'
+          }}
+        />
+      )}
+      {navVisible && (
+        <div style={{ position: 'fixed', top: 26, left: '50%', transform: 'translateX(-50%)', fontSize: 10, color: FEED_INK_DIM, letterSpacing: '0.3em' }}>
+          — NAV VIEW · GRID 64 —
+        </div>
+      )}
+
+      {/* triangulation ledger */}
+      {navVisible && (
+        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>TRIANGULATION</div>
+          <div>FIXES {reachedNavWaypointCount()}/{NAV_WAYPOINT_COUNT}</div>
+          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>NAV VIEW · FOLLOW THE MARKER</div>
+        </div>
+      )}
+
+      {/* elevation ledger */}
+      {isoVisible && (
+        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+          <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>ELEVATION</div>
+          <div>REACH THE SIGNAL SOURCE</div>
+          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>ASCEND [SPACE] · THE STAIRS FACE THE STRIP</div>
         </div>
       )}
 

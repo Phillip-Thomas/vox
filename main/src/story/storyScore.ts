@@ -80,8 +80,19 @@ const MOODS: Partial<Record<StoryBeat, ScoreMood>> = {
   crash:    { chord: [0, 1], pattern: [0, null, 1, null, 0, null, 1, null], tempo: 88, wave: 'sawtooth', pad: 0.08, sub: 0.15, ost: 0.05, riser: 0.2, baseline: 0.7, octave: 12 },
   // Falling: a semitone of dread widening under the raster sky.
   descent:  { chord: [0, 1, 7], pattern: [0, null, null, 1, null, null, 0, null], tempo: 84, wave: 'sawtooth', pad: 0.1, sub: 0.16, ost: 0.045, riser: 0.22, baseline: 0.5, octave: 12 },
+  // The bolted-frame era: one voice, blinking in a dark room. Density is a
+  // privilege the ladder has not yet issued.
+  'ch1-fixed': { chord: [0, 7], melody: { scale: [0, 3, 5, 7, 10, 12], density: 0.2 }, pattern: [0, null, null, null, null, null, 7, null], tempo: 92, wave: 'square', pad: 0.04, sub: 0.1, ost: 0.06, riser: 0.04, baseline: 0.3, octave: 24 },
+  // The unbolt: eight seconds of held breath, then the pulse learns to walk.
+  'ch1-track': { chord: [0, 5, 12], pattern: [0, null, null, null, 5, null, null, null], tempo: 72, wave: 'square', pad: 0.09, sub: 0.11, ost: 0.04, riser: 0.18, baseline: 0.55, octave: 24 },
   // The chip era: work becomes a groove (the one mood allowed to be fun).
   'ch1-raster': { chord: [0, 3, 7, 10], progression: [[0, 3, 7], [8, 12, 15], [3, 7, 10], [10, 14, 17]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.5 }, pattern: [0, 7, 3, 10, 7, 12, 3, 7], tempo: 112, wave: 'square', pad: 0.06, sub: 0.12, ost: 0.075, riser: 0.08, baseline: 0.4, octave: 24 },
+  // Belt-scroll: the raster groove grows a second voice — a third axis exists.
+  'ch1-depth': { chord: [0, 3, 7, 10], progression: [[0, 3, 7, 10], [5, 8, 12], [3, 7, 10], [8, 12, 15]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.55 }, pattern: [0, 10, 3, 7, 0, 12, 7, 10], tempo: 108, wave: 'square', pad: 0.07, sub: 0.12, ost: 0.08, riser: 0.08, baseline: 0.42, octave: 24 },
+  // Nav view: staccato chart-reading — pellet energy, politely surveilled.
+  'ch1-nav': { chord: [0, 5, 7], progression: [[0, 5, 7], [3, 7, 10], [5, 10, 12], [0, 7, 12]], melody: { scale: [0, 2, 5, 7, 9, 12], density: 0.45 }, pattern: [0, 0, null, 7, null, 5, 0, null], tempo: 120, wave: 'square', pad: 0.05, sub: 0.11, ost: 0.085, riser: 0.07, baseline: 0.4, octave: 24 },
+  // Isometric: the pad widens — height exists, and the music looks up at it.
+  'ch1-iso': { chord: [0, 3, 7, 14], progression: [[0, 3, 7, 14], [8, 12, 15], [5, 8, 12, 19], [3, 7, 10]], melody: { scale: [0, 2, 3, 5, 7, 10, 12, 14], density: 0.4 }, pattern: [0, null, 7, null, 14, null, 7, null], tempo: 96, wave: 'square', pad: 0.1, sub: 0.12, ost: 0.06, riser: 0.12, baseline: 0.5, octave: 12 },
   // The lift: the groove decomposes into held wonder.
   'ch1-lift': { chord: [0, 3, 7, 12], pattern: [0, null, null, null, 7, null, null, null], tempo: 84, wave: 'sawtooth', pad: 0.13, sub: 0.13, ost: 0.03, riser: 0.24, baseline: 0.6, octave: 12 },
   // The CCTV era: tension pads, sparse heartbeat, a semitone that will not resolve.

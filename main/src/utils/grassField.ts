@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { installLifeRevealUniforms, LIFE_REVEAL_GLSL, writeLifeRevealUniforms } from '../game/lifeReveal.ts';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from './surfaceControls';
 import { voxelSystem } from './efficientVoxelSystem';
@@ -523,6 +524,7 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uWindVeer = { value: 0.8 };
     shader.uniforms.uWindOffset = { value: new THREE.Vector2(0, 0) };
     shader.uniforms.uRound = { value: 0.85 };
+    installLifeRevealUniforms(shader.uniforms);
     material.userData.shader = shader;
 
     shader.vertexShader = shader.vertexShader
@@ -544,6 +546,7 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
         varying float vTint;      // per-blade hue/brightness variation [0,1]
         varying vec3 vGrassWPos;  // world position (dryness patches + view dir)
         varying vec3 vGrassWNrm;  // world-space rounded normal (SSS + sheen)
+        ${LIFE_REVEAL_GLSL}
         ${GRASS_NOISE}`
       )
       // ROUNDED BLADE NORMAL: a flat plane has one dull flat normal. Tilt the
@@ -593,6 +596,9 @@ export function createGrassMaterial(): THREE.MeshStandardMaterial {
           * (0.45 + gust);
         transformed.x += (localDir.x * drive + localCross.x * cross) * bendAmount;
         transformed.z += (localDir.y * drive + localCross.y * cross) * bendAmount;
+
+        // A3 bloom wave: the blade grows up from its root as the front passes.
+        transformed *= lifeRevealGrow(instWorld);
 
         vGrassWPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
         vGrassWNrm = normalize((modelMatrix * instanceMatrix * vec4(objectNormal, 0.0)).xyz);`
@@ -729,4 +735,5 @@ export function updateGrassMaterial(
     _gsun.copy(sunDir).normalize();
     (u.uSunDir.value as THREE.Vector3).copy(_gsun);
   }
+  writeLifeRevealUniforms(u);
 }

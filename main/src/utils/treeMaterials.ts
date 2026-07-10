@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { installLifeRevealUniforms, LIFE_REVEAL_GLSL, writeLifeRevealUniforms } from '../game/lifeReveal.ts';
 import type { GraphicsQuality } from '../config/graphicsSettings';
 import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import type { TreeProfile } from './treeProfile';
@@ -130,6 +131,7 @@ function installTreeWindUniforms(
 function installTreeRealityUniforms(shader: THREE.WebGLProgramParametersWithUniforms): void {
   shader.uniforms.uTreeVisibility = { value: 1 };
   shader.uniforms.uTreeChroma = { value: 1 };
+  installLifeRevealUniforms(shader.uniforms);
 }
 
 /**
@@ -166,6 +168,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         varying float vBarkV;
         varying float vBarkU;
         varying float vBarkStiff;
+        ${LIFE_REVEAL_GLSL}
         ${TREE_WIND_GLSL}`
       )
       .replace(
@@ -179,7 +182,9 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
         #else
           vec3 twInstWorld = vec3(0.0);
         #endif
-        transformed += twWindOffset(transformed, aStiff, twInstWorld, uTime * uWind, vec3(0.0));`
+        transformed += twWindOffset(transformed, aStiff, twInstWorld, uTime * uWind, vec3(0.0));
+        // A3 bloom wave: the tree rises from its base as the front passes.
+        transformed *= lifeRevealGrow(twInstWorld);`
       );
 
     shader.fragmentShader = shader.fragmentShader
@@ -254,6 +259,7 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
       varying vec3 vWorldPos;
       varying vec3 vTreeBase;
       varying vec3 vTreeUp;
+      ${LIFE_REVEAL_GLSL}
       ${TREE_WIND_GLSL}`
     )
     .replace(
@@ -280,7 +286,9 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
         sin(twT * 5.0 + aPhase * 1.3) * 0.03,
         cos(twT * 6.5 + aPhase * 0.7) * 0.05
       );
-      transformed += twWindOffset(transformed, aStiff, twInstWorld, twT, flutter);`
+      transformed += twWindOffset(transformed, aStiff, twInstWorld, twT, flutter);
+      // A3 bloom wave: canopy scales with its tree as the front passes.
+      transformed *= lifeRevealGrow(twInstWorld);`
     )
     .replace(
       '#include <project_vertex>',
@@ -802,6 +810,10 @@ export function updateTreeMaterials(
   pushReality(leaf as unknown as ShaderHolder);
   pushReality(blossom as unknown as ShaderHolder | null);
   pushReality(impostor as unknown as ShaderHolder | null);
+
+  for (const mat of [bark, leaf, blossom, impostor]) {
+    writeLifeRevealUniforms((mat as unknown as ShaderHolder | null)?.userData.shader?.uniforms);
+  }
 
   const leafU = (leaf as unknown as ShaderHolder).userData.shader?.uniforms;
   if (leafU) {

@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
+  SIDE_RIG,
+  applyActiveRigTransform,
   applyLiftCameraTransform,
+  applyRigCameraTransform,
   applySideCameraTransform,
+  computeRigFrame,
+  rigMoveBasis,
+  setLensRig,
   sideHarvestProbePoints,
+  sideHarvestProbePointsOffRow,
+  type LensRig,
   type SideLens
 } from './sideLens.ts';
 import { applyGravityCameraTransform } from '../utils/gravityCamera.ts';
@@ -95,6 +103,120 @@ describe('sideLens', () => {
     const sideEye = reference.position.clone();
     applyLiftCameraTransform(camera, lens, up, forward.clone(), pitch, eyeHeight, 0.5);
     expect(camera.position.distanceTo(sideEye)).toBeGreaterThan(1);
+  });
+
+  it('REGRESSION PIN: the side rig reproduces the classic side transform exactly', () => {
+    const lens = makeLens();
+    const rigCam = new THREE.PerspectiveCamera(50);
+    const sideCam = new THREE.PerspectiveCamera(50);
+    for (const cam of [rigCam, sideCam]) {
+      const parent = new THREE.Group();
+      parent.position.set(3, 52, -1);
+      parent.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), 0.4);
+      parent.add(cam);
+      parent.updateMatrixWorld(true);
+    }
+    applySideCameraTransform(sideCam, lens);
+    applyRigCameraTransform(rigCam, lens, SIDE_RIG);
+    expect(rigCam.getWorldPosition(new THREE.Vector3())
+      .distanceTo(sideCam.getWorldPosition(new THREE.Vector3()))).toBeLessThan(1e-6);
+    expect(Math.abs(rigCam.quaternion.dot(sideCam.quaternion))).toBeCloseTo(1, 6);
+  });
+
+  it('top-down rig hangs above the anchor looking down, travel axis screen-right', () => {
+    const lens = makeLens();
+    const rig: LensRig = { ...SIDE_RIG, elevation: Math.PI / 2, distance: 26 };
+    const eye = new THREE.Vector3();
+    const target = new THREE.Vector3();
+    const up = new THREE.Vector3();
+    const anchor = new THREE.Vector3(5, 50, 2);
+    computeRigFrame(lens, rig, anchor, eye, target, up);
+    // straight up off the anchor (plus the lift)
+    expect(eye.x).toBeCloseTo(anchor.x, 5);
+    expect(eye.z).toBeCloseTo(anchor.z, 5);
+    expect(eye.y).toBeGreaterThan(anchor.y + 25);
+    // screen-up sweeps to -depthAxis so left/right reads the same as the side era
+    expect(up.dot(lens.depthAxis)).toBeLessThan(-0.99);
+  });
+
+  it('fixed-screen quantization bolts the anchor to cell centers and pins height', () => {
+    const lens = makeLens();
+    const rig: LensRig = { ...SIDE_RIG, followQuant: 20 };
+    const eye = new THREE.Vector3();
+    const target = new THREE.Vector3();
+    const up = new THREE.Vector3();
+    // Anywhere within [0,20) along travel → same anchor (cell center 10);
+    // vertical wobble must not move the frame.
+    computeRigFrame(lens, rig, new THREE.Vector3(3, 51.5, 0), eye, target, up);
+    const eyeA = eye.clone();
+    computeRigFrame(lens, rig, new THREE.Vector3(19, 50.2, 0), eye, target, up);
+    expect(eye.distanceTo(eyeA)).toBeLessThan(1e-6);
+    expect(eyeA.x).toBeCloseTo(10, 5);
+    // Crossing the edge flips a full screen
+    computeRigFrame(lens, rig, new THREE.Vector3(21, 50, 0), eye, target, up);
+    expect(eye.x).toBeCloseTo(30, 5);
+  });
+
+  it('rigMoveBasis: side is (-depth, +travel); nav and iso stay orthonormal + screen-consistent', () => {
+    const lens = makeLens();
+    const fwd = new THREE.Vector3();
+    const right = new THREE.Vector3();
+    rigMoveBasis(lens, SIDE_RIG, fwd, right);
+    expect(fwd.dot(lens.depthAxis)).toBeLessThan(-0.99);
+    expect(right.dot(lens.travelAxis)).toBeGreaterThan(0.99);
+    // nav (top-down): W pushes toward screen-up (-depth), D stays screen-right (+travel)
+    rigMoveBasis(lens, { ...SIDE_RIG, elevation: Math.PI / 2 }, fwd, right);
+    expect(fwd.dot(lens.depthAxis)).toBeLessThan(-0.99);
+    expect(right.dot(lens.travelAxis)).toBeGreaterThan(0.99);
+    // iso (45/45): diagonal basis, still orthonormal and tangent to the surface
+    rigMoveBasis(lens, { ...SIDE_RIG, elevation: Math.PI / 4, azimuth: Math.PI / 4 }, fwd, right);
+    expect(fwd.length()).toBeCloseTo(1, 6);
+    expect(right.length()).toBeCloseTo(1, 6);
+    expect(Math.abs(fwd.dot(right))).toBeLessThan(1e-6);
+    expect(Math.abs(fwd.dot(lens.up))).toBeLessThan(1e-6);
+    expect(fwd.dot(lens.depthAxis)).toBeLessThan(0); // still leads away from the camera
+    expect(fwd.dot(lens.travelAxis)).toBeLessThan(0); // az>0 swings the camera toward +travel
+  });
+
+  it('active rig transform settles onto the retargeted rig after the transition', () => {
+    const lens = makeLens();
+    const rig: LensRig = { ...SIDE_RIG, elevation: Math.PI / 4, azimuth: Math.PI / 4, distance: 22 };
+    const parentFor = (cam: THREE.PerspectiveCamera) => {
+      const parent = new THREE.Group();
+      parent.position.copy(lens.origin);
+      parent.add(cam);
+      parent.updateMatrixWorld(true);
+    };
+    const cam = new THREE.PerspectiveCamera(50);
+    const reference = new THREE.PerspectiveCamera(50);
+    parentFor(cam);
+    parentFor(reference);
+    setLensRig({ ...SIDE_RIG }, 0);
+    applyActiveRigTransform(cam, lens, 0.016); // settle at side
+    setLensRig(rig, 1.0);
+    applyActiveRigTransform(cam, lens, 0.5); // mid-flight: neither endpoint
+    applyRigCameraTransform(reference, lens, rig);
+    expect(cam.position.distanceTo(reference.position)).toBeGreaterThan(0.5);
+    applyActiveRigTransform(cam, lens, 0.6); // past the end: settled
+    expect(cam.position.distanceTo(reference.position)).toBeLessThan(1e-6);
+    expect(Math.abs(cam.quaternion.dot(reference.quaternion))).toBeCloseTo(1, 6);
+    setLensRig({ ...SIDE_RIG }, 0); // leave global state clean for other tests
+  });
+
+  it('movie probes never touch the walked row at or below ground level', () => {
+    const lens = makeLens();
+    const position = new THREE.Vector3(10, 52, 0);
+    const out = Array.from({ length: 6 }, () => new THREE.Vector3());
+    sideHarvestProbePointsOffRow(position, lens, 1, out);
+    for (const p of out) {
+      const rel = p.clone().sub(position);
+      const depthOff = Math.abs(rel.dot(lens.depthAxis));
+      const upOff = rel.dot(lens.up);
+      // Same-row candidates must be above ground; ground candidates must be
+      // a full row off the walked plane — the movie cannot pothole its path.
+      if (depthOff < 0.5) expect(upOff).toBeGreaterThan(-1);
+      else expect(depthOff).toBeGreaterThanOrEqual(1.5);
+    }
   });
 
   it('harvest probes lead with the facing side and include underfoot', () => {

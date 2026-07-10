@@ -12,6 +12,8 @@ import { getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { REDACTION_BANDS } from './storyScript.ts';
+import { currentNavWaypointIndex, currentNavWaypointPosition, NAV_WAYPOINT_COUNT } from './navWaypoints.ts';
+import { getSupplyPodPositions, isPodCollected } from './supplyPods.ts';
 
 /**
  * In-Canvas tick for the story director. Lives INSIDE the R3F frame loop (and
@@ -29,6 +31,8 @@ const APPROACH_DISTANCE = 26;
 const _center = new THREE.Vector3();
 const _toTree = new THREE.Vector3();
 const _camDir = new THREE.Vector3();
+const _camPos = new THREE.Vector3();
+const _camQuat = new THREE.Quaternion();
 
 function redactionLabelFor(distance: number): string {
   let label = REDACTION_BANDS[0].label;
@@ -36,6 +40,38 @@ function redactionLabelFor(distance: number): string {
     if (distance <= band.withinDistance) label = band.label;
   }
   return label;
+}
+
+function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; label: string } | null {
+  if (beat === 'ch1-anomaly' && anomalyStoneHandle.position) {
+    return { position: anomalyStoneHandle.position, label: 'UNCHARTED MASS' };
+  }
+  if (beat === 'ch1-iso' && anomalyStoneHandle.position) {
+    return { position: anomalyStoneHandle.position, label: 'SIGNAL SOURCE' };
+  }
+  if (beat === 'ch1-nav') {
+    const wp = currentNavWaypointPosition();
+    if (wp) {
+      return { position: wp, label: `TRIANGULATION ${currentNavWaypointIndex() + 1}/${NAV_WAYPOINT_COUNT}` };
+    }
+    return null;
+  }
+  if (beat === 'ch1-depth') {
+    const positions = getSupplyPodPositions();
+    let nearest: THREE.Vector3 | null = null;
+    let nearestDist = Infinity;
+    const player = getPlayerWorldPosition();
+    positions.forEach((pos, i) => {
+      if (isPodCollected(i)) return;
+      const dist = player.distanceTo(pos);
+      if (dist < nearestDist) {
+        nearestDist = dist;
+        nearest = pos;
+      }
+    });
+    return nearest ? { position: nearest, label: 'SUPPLY POD' } : null;
+  }
+  return null;
 }
 
 const StoryDirectorDriver: React.FC = () => {
@@ -64,43 +100,63 @@ const StoryDirectorDriver: React.FC = () => {
 
     const r = getFeedRuntime();
 
-    // --- survey marker: the ch1 objective (the anomaly stone) ------------------
-    // The feed designates the "uncharted mass" the work order demands: a bracket
-    // when the stone is in frame, an edge chevron pointing at it when it isn't.
-    if (playing && story.beat === 'ch1-anomaly' && anomalyStoneHandle.position) {
+    // --- survey marker: the current objective, per era --------------------------
+    // The feed designates whatever the work order demands: the next supply pod,
+    // the active triangulation fix, the signal source, the uncharted mass — a
+    // bracket when in frame, an edge chevron pointing at it when it isn't.
+    const markerTarget = playing ? surveyMarkerTarget(story.beat) : null;
+    if (markerTarget) {
       const playerPos = getPlayerWorldPosition();
-      const range = Math.max(0, playerPos.distanceTo(anomalyStoneHandle.position) - 1.5);
-      camera.getWorldDirection(_camDir);
-      _toTree.copy(anomalyStoneHandle.position).sub(camera.position);
-      const depth = _toTree.dot(_camDir);
-      const ndc = _center.copy(anomalyStoneHandle.position).project(camera);
+      const range = Math.max(0, playerPos.distanceTo(markerTarget.position) - 1.5);
+      // Direction to the goal in CAMERA space — meaningful in front, beside,
+      // or behind (a raw NDC projection flips behind the camera, which used to
+      // aim the chevron at nothing).
+      camera.getWorldPosition(_camPos);
+      camera.getWorldQuaternion(_camQuat);
+      _camQuat.invert();
+      _toTree.copy(markerTarget.position).sub(_camPos).applyQuaternion(_camQuat);
+      const depth = -_toTree.z; // camera looks down -Z
       const halfW = size.width / 2;
       const halfH = size.height / 2;
-      let x = ndc.x * halfW + halfW;
-      let y = -ndc.y * halfH + halfH;
-      if (depth < 0) {
-        // Behind the camera: the projection flips — mirror it so the chevron
-        // points the way you'd turn.
-        x = size.width - x;
-        y = size.height;
-      }
       const margin = 70;
-      const offscreen = depth < 0 || x < margin || x > size.width - margin || y < margin || y > size.height - margin;
       const m = r.marker;
       m.visible = true;
-      m.offscreen = offscreen;
-      m.label = `UNCHARTED MASS · ${Math.round(range)}m`;
-      if (offscreen) {
-        const dx = x - halfW;
-        const dy = y - halfH;
-        m.angle = Math.atan2(dy, dx);
-        const scale = Math.min((halfW - margin) / Math.max(1, Math.abs(dx)), (halfH - margin) / Math.max(1, Math.abs(dy)));
-        m.x = halfW + dx * scale;
-        m.y = halfH + dy * scale;
-      } else {
-        m.x = x;
-        m.y = y;
-        m.angle = 0;
+      m.label = `${markerTarget.label} · ${Math.round(range)}m`;
+
+      let onscreen = false;
+      if (depth > 0.5) {
+        const ndc = _center.copy(markerTarget.position).project(camera);
+        const x = ndc.x * halfW + halfW;
+        const y = -ndc.y * halfH + halfH;
+        onscreen = x >= margin && x <= size.width - margin && y >= margin && y <= size.height - margin;
+        if (onscreen) {
+          m.offscreen = false;
+          m.x = x;
+          m.y = y;
+          m.angle = 0;
+        }
+      }
+      if (!onscreen) {
+        // Edge chevron: screen-space direction straight from camera space
+        // (screen y grows DOWN, camera y grows up).
+        let sx = _toTree.x;
+        let sy = -_toTree.y;
+        const len = Math.hypot(sx, sy);
+        if (len < 1e-4) {
+          sx = 0;
+          sy = 1; // dead astern with no lateral hint: point down
+        } else {
+          sx /= len;
+          sy /= len;
+        }
+        const scale = Math.min(
+          (halfW - margin) / Math.max(1e-4, Math.abs(sx)),
+          (halfH - margin) / Math.max(1e-4, Math.abs(sy))
+        );
+        m.offscreen = true;
+        m.x = halfW + sx * scale;
+        m.y = halfH + sy * scale;
+        m.angle = Math.atan2(sy, sx);
       }
     } else if (r.marker.visible) {
       r.marker.visible = false;

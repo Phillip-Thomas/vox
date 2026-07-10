@@ -57,14 +57,18 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // quota-gated only
   });
 
-  it('meeting the quota + salvage triggers the 2D→3D lift and records the milestone', () => {
+  it('meeting the quota + salvage opens the belt-scroll era and records the milestone', () => {
     seedDebrisCollected(); // hull debris recovered
     addItem('biofiber', CH1_QUOTA.biofiber);
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // fiber alone is not enough
     addItem('stone', CH1_QUOTA.stone);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-lift');
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
-    // The lift is a real ~7s cutscene: letterbox up mid-way, feet held…
+  });
+
+  it('the 2D→3D lift plays as a real ~7s cutscene and hands over to the feed', () => {
+    advanceToBeat('ch1-lift');
+    // Letterbox up mid-way, feet held…
     tickSeconds(2);
     expect(getFeedRuntime().cinematic).toBeGreaterThan(0.5);
     expect(getStoryInputPolicy().moveSpeedScale).toBe(0);
@@ -83,7 +87,7 @@ describe('storyDirector — chapter 1 and A1', () => {
     advanceToBeat('ch1-raster');
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
     tickSeconds(0.1);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-lift'); // → cutscene → anomaly
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth'); // the belt-scroll era opens
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
 

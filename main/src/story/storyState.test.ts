@@ -17,6 +17,19 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     expect(last).toBe(4); // ends at 'done'
   });
 
+  it('the monochrome ladder climbs the history of perspectives in order', () => {
+    const at = (beat: StoryBeat) => STORY_BEAT_ORDER.indexOf(beat);
+    const ladder: StoryBeat[] = [
+      'descent', 'ch1-fixed', 'ch1-track', 'ch1-raster',
+      'ch1-depth', 'ch1-nav', 'ch1-iso', 'ch1-lift', 'ch1-anomaly'
+    ];
+    for (let i = 1; i < ladder.length; i++) {
+      expect(at(ladder[i - 1])).toBeGreaterThanOrEqual(0);
+      expect(at(ladder[i - 1])).toBeLessThan(at(ladder[i]));
+      expect(chapterForBeat(ladder[i])).toBe('ch1');
+    }
+  });
+
   it('every awakening has a before and an after jump target', () => {
     const at = (beat: StoryBeat) => STORY_BEAT_ORDER.indexOf(beat);
     // A1: before = ch1-anomaly, plays = a1-ramp, after = ch2-color

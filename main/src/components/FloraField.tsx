@@ -3,6 +3,8 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
+import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
+import { storyLifeDormant } from '../story/storyState.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { getMoonDirection, getSunDirection } from './SkyController';
@@ -139,7 +141,12 @@ function FloraLayer({
       windAppliedRef.current = true;
     }
     // Early-story stages hide flora in the shader — skip draw + uniform work.
-    const hidden = lifeFieldsHidden() && windAppliedRef.current;
+    // Story world: flora belongs to a LATER awakening (A4 "Breath") — dormant
+    // from story start until that awakening grants it. Milestone-driven, NOT
+    // stage-driven: the A3 ramp's effect overrides must never flash a glimpse.
+    // Non-story sandbox saves and other worlds are untouched.
+    const dormant = storyLifeDormant() && isStoryWorldSeed(terrainSeed);
+    const hidden = (lifeFieldsHidden() || dormant) && windAppliedRef.current;
     if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
     if (!hidden) {
       updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());

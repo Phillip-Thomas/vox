@@ -217,6 +217,21 @@ export function saveVoxelEdits(world: WorldSaveRef): void {
   write(scopedWorldKey(world, '.voxels').primary, data);
 }
 
+/** Drop this world's persisted terrain diff (both the worldId-scoped key and the
+ *  legacy seed key). Story dev flows use this so `?story=` sessions never inherit
+ *  a strip-mined 2D era from earlier debug runs. */
+export function clearVoxelEditsForWorld(world: WorldSaveRef): void {
+  const store = storage();
+  if (!store) return;
+  const key = scopedWorldKey(world, '.voxels');
+  try {
+    store.removeItem(key.primary);
+    if (key.legacy) store.removeItem(key.legacy);
+  } catch {
+    // Storage unavailable/blocked: nothing persisted, nothing to clear.
+  }
+}
+
 /** Replay this world's terrain diff. Call AFTER populateInitialTerrain (so coords are
  *  solid) and BEFORE the collision flush. Refuses a stale save (gen fingerprint
  *  mismatch). Must run synchronously while the live world matches `seed`. */

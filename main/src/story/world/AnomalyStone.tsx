@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useStoryState } from '../storyState.ts';
 import { registerStoryInteraction } from '../storyInteractions.ts';
-import { beginA1 } from '../storyDirector.ts';
+import { beginA1, getStoryBeatClock } from '../storyDirector.ts';
 import { getAnomalyStonePose } from './storyWorld.ts';
 
 // --- The anomaly stone ---------------------------------------------------------
@@ -14,6 +14,8 @@ import { getAnomalyStonePose } from './storyWorld.ts';
 // awakening. It stays in the world afterwards — the first question, kept.
 
 const TOUCH_DISTANCE = 4.5;
+/** The CCTV era must be SEEN before the stone will answer. */
+const SURVEY_DWELL_SECONDS = 9;
 
 /** Module handle for the driver's survey-marker projection (heroTreeHandle pattern). */
 export const anomalyStoneHandle: { position: THREE.Vector3 | null } = { position: null };
@@ -57,10 +59,13 @@ const AnomalyStone: React.FC<AnomalyStoneProps> = ({ planetSize, terrainSeed }) 
     };
   }, [pose]);
 
-  // [F] Touch — only while the work order points here.
+  // [F] Touch — only while the work order points here, and only after the
+  // pan-tilt survey has been lived in for a beat (the first-person era is a
+  // rung of the ladder, not a doorway).
   useEffect(() => {
     if (story.beat !== 'ch1-anomaly') return;
     return registerStoryInteraction((_camera, position) => {
+      if (getStoryBeatClock() < SURVEY_DWELL_SECONDS) return null;
       if (position.distanceTo(pose.position) > TOUCH_DISTANCE) return null;
       return { id: 'story-anomaly', verb: 'Touch', perform: beginA1 };
     });

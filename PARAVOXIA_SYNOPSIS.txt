@@ -217,3 +217,35 @@ various voxel planet shapes
 
 repairing gun allows terrain generation ( a regulated technique unlike building/crafting)
 
+
+
+
+
+
+story improvements...
+
+
+The external camera modes prior to first person are prior to character being concious... conciousness is first developed when we go into the first person perspective mode... this is a major moment, and is the first signs of sentience from the character
+
+we should have a "map" popup that basically shows the top down perspective of the current face we are on in a larger popout... will basically be a higher detail minimap but actually rendering the topdown perspective. thenw e can use topdown as a way to teach user how to use the map
+
+"The world has a depth... wait, what is depth?" lets add the wait, what is depth" as a way to play with the idea that the character is experiencing new dimensions, and we can not know what experiencing a new dimension is like, and it is ironically nfunny that he knew the word 
+
+The current DONE state should not already show flora or fauna, only the trees and grass for now...
+
+We shouldnt show the inventory and character stats yet... I am thinking we should introduce these one by one..."What is this sensation? Why am I thirsty"...."I have the sensation to eat that animal (fauna are introduced simultaneously)"... lets slowly introduce the player to survival
+
+The directional signal arrows to help navigate do not actually point at the goal location so ti gets very confusing
+
+
+
+
+We should control a world for the first 2D section to ensure we dont encoutner challenges like th 2D scroll ending up in water. while in 2D the row the character walks on should never have water, and we should never harvest on the same row , we should only harvest on the row adjacent closer to the camera
+
+
+
+
+Water effects
+
+the early stages can be viewed as AI intelligence, and the progression can also be viewed as AI approaging centience or AGI. this will be another metaphorical pillar of our story, and will parallel the human transcendence of aware, the birth, life, and death of a living being, the creation of nature itself, the progression of computer games, the progression of graphics, the progression of simulating a universe, and the increasing accuracy of doing so. the experience of being trapped in an existence you do not and cannot understand.
+

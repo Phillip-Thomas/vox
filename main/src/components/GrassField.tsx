@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
+import { isLifeRevealActive } from '../game/lifeReveal.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import {
@@ -167,7 +168,10 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     // draw + per-frame uniform work entirely. Kept renderable until the shader
     // has compiled so the reveal (A3+) pays no compile hitch. Rebuild
     // maintenance below still runs so the buffer is current when it returns.
-    const hidden = lifeFieldsHidden() && profileAppliedRef.current;
+    // During the A3 bloom wave the fields must DRAW (the shader holds every
+    // instance at zero scale until the front reaches it) — culling here would
+    // turn the reveal into a pop.
+    const hidden = lifeFieldsHidden() && !isLifeRevealActive() && profileAppliedRef.current;
     if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
     if (!hidden) {
       // Drive wind + sun (gated to freeze when animatedShaders is off).

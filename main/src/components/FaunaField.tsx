@@ -3,6 +3,8 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
+import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
+import { storyLifeDormant } from '../story/storyState.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { getWorldGen } from '../utils/worldGenCache';
 import { measureWarpMetric } from '../utils/warpMetrics';
@@ -159,7 +161,12 @@ function FaunaLayer({
     }
     // Early-story stages hide fauna in the shader — skip the draw, the per-frame
     // uniforms AND the herd simulation (the biggest CPU line in these fields).
-    const hidden = lifeFieldsHidden() && windAppliedRef.current;
+    // Story world: fauna belongs to a LATER awakening (A4 "Breath") — dormant
+    // from story start until that awakening grants it. Milestone-driven, NOT
+    // stage-driven: the A3 ramp's effect overrides must never flash a glimpse.
+    // Non-story sandbox saves and other worlds are untouched.
+    const dormant = storyLifeDormant() && isStoryWorldSeed(terrainSeed);
+    const hidden = (lifeFieldsHidden() || dormant) && windAppliedRef.current;
     if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
     if (!hidden) {
       updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());

@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
+import { isLifeRevealActive } from '../game/lifeReveal.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { measureWarpMetric } from '../utils/warpMetrics';
@@ -350,7 +351,10 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
     // Early-story reality stages hide trees in the shader anyway — skip draws
     // and per-frame uniforms entirely (rebuild maintenance below still runs).
     // Visible until shaders compile so the A3 reveal pays no compile hitch.
-    const hidden = lifeFieldsHidden() && profileAppliedRef.current;
+    // During the A3 bloom wave the fields must DRAW (the shader holds every
+    // instance at zero scale until the front reaches it) — culling here would
+    // turn the reveal into a pop.
+    const hidden = lifeFieldsHidden() && !isLifeRevealActive() && profileAppliedRef.current;
     for (const ref of [trunkRef, leafRef, blossomRef, impostorRef]) {
       const mesh = ref.current;
       if (mesh && mesh.visible === hidden) mesh.visible = !hidden;

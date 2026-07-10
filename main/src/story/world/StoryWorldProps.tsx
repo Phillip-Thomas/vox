@@ -8,6 +8,9 @@ import HeroAppleTree from './HeroAppleTree.tsx';
 import SideWorkerAvatar from './SideWorkerAvatar.tsx';
 import DescentPod from './DescentPod.tsx';
 import DebrisField from './DebrisField.tsx';
+import SupplyPods from './SupplyPods.tsx';
+import NavBeacons from './NavBeacons.tsx';
+import SignalMesa from './SignalMesa.tsx';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
@@ -51,6 +54,16 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
       {story.chapter === 'ch1' && (
         <DebrisField planetSize={planetSize} terrainSeed={terrainSeed} />
       )}
+      {/* Supply pods off the work line — the belt-scroll era's recovery run. */}
+      {story.chapter === 'ch1' && (
+        <SupplyPods planetSize={planetSize} terrainSeed={terrainSeed} />
+      )}
+      {/* Triangulation pylons — the top-down era's ordered route. */}
+      {story.chapter === 'ch1' && (
+        <NavBeacons planetSize={planetSize} terrainSeed={terrainSeed} />
+      )}
+      {/* The signal mesa persists — the stone keeps its height forever. */}
+      <SignalMesa planetSize={planetSize} terrainSeed={terrainSeed} />
       <AnomalyStone planetSize={planetSize} terrainSeed={terrainSeed} />
       {story.chapter !== 'ch1' && <HeroAppleTree planetSize={planetSize} terrainSeed={terrainSeed} />}
     </>

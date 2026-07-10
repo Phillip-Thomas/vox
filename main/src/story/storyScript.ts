@@ -251,17 +251,56 @@ export const CH1_QUOTA = {
   stone: 4
 } as const;
 
+/** The fixed-screen tutorial: first fiber, and feel the frame refuse to follow. */
+export const CH1_FIXED_TUTORIAL = {
+  biofiber: 3,
+  screens: 2
+} as const;
+
 /** Standing work order shown on the feed HUD, per beat. */
-export const CH1_WORK_ORDERS: Record<'raster' | 'anomaly', readonly string[]> = {
+export const CH1_WORK_ORDERS: Record<
+  'fixed' | 'track' | 'raster' | 'depth' | 'nav' | 'iso' | 'anomaly',
+  readonly string[]
+> = {
+  fixed: [
+    'VISUAL CORTEX LINK: RASTER MODE (1-BIT) · FRAME BOLTED',
+    'DIRECTIVE 1: SURVIVE. (AMENDED: SEE DIRECTIVE 2)',
+    'DIRECTIVE 2: CALIBRATE EXTRACTOR. HARVEST BIOFIBER.',
+    'TRAVERSE [A]/[D] · EXTRACT: HOLD [E]',
+    'THE FRAME DOES NOT FOLLOW YOU. STAY WHERE YOU CAN BE SEEN.'
+  ],
+  track: [
+    'OPTICAL TRACKING MODULE: ENABLED',
+    'THE FRAME WILL FOLLOW YOU NOW.',
+    'THIS IS NOT A PRIVILEGE. IT IS SURVEILLANCE.'
+  ],
   raster: [
     'VISUAL CORTEX LINK: RASTER MODE (1-BIT) · PAN-TILT OFFLINE',
-    'DIRECTIVE 1: SURVIVE. (AMENDED: SEE DIRECTIVE 2)',
-    'DIRECTIVE 2: RESUME QUOTA. RECOVER HULL DEBRIS.',
+    'DIRECTIVE 2 (CONT.): RESUME QUOTA. RECOVER HULL DEBRIS.',
     'TRAVERSE [A]/[D] · ASCEND [SPACE] · EXTRACT: HOLD [E]',
     'DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.'
   ],
-  anomaly: [
+  depth: [
     'QUOTA MET. PRODUCTIVITY NOMINAL.',
+    'LATERAL CLEARANCE: GRANTED (±3 ROWS)',
+    'SUPPLY PODS DETECTED OFF THE WORK LINE. RECOVER THEM.',
+    'ADVANCE [W] · RETREAT [S] · DO NOT BECOME AMBITIOUS.'
+  ],
+  nav: [
+    'UNREGISTERED SIGNAL AT SURVEY EDGE.',
+    'NAV VIEW ENGAGED. YOU ARE THE SMALL MARK.',
+    'REACH THE TRIANGULATION POINTS. ALL OF THEM.',
+    'THE MAP IS NOT THE TERRITORY. THE MAP IS BETTER.',
+    'THIS VIEW WILL BE RETAINED AS: SURVEY CHART [M].'
+  ],
+  iso: [
+    'ELEVATION DATA: RESTORED.',
+    'THE SIGNAL SOURCE IS ABOVE GRADE.',
+    'HEIGHT EXISTS. THIS IS A KNOWN DEFECT.',
+    'ASCEND [SPACE]. REACH THE SOURCE.'
+  ],
+  anomaly: [
+    'PERSPECTIVE ISSUED. PRONOUNS WERE NOT.',
     'PAN-TILT SURVEY RESTORED. DO NOT ENJOY IT.',
     'RETURN DEVIATION: UNCHARTED MASS AT SURVEY EDGE',
     'PROCEED TO THE SURVEY MARKER. CLASSIFY.',
@@ -379,7 +418,11 @@ export const A3_TIMELINE = {
   /** Wake just before sunrise so the material ramp rides the dawn light. */
   wakePhase: 0.98,
   fadeUpSeconds: 2.0,
-  materialRampSeconds: 12
+  materialRampSeconds: 12,
+  /** The bloom wave: grass/trees GROW radially outward from the rest spot. */
+  bloomWaveDelaySeconds: 4, // after the ramp starts — the grain captions land first
+  bloomWaveSeconds: 16,
+  bloomWaveRadius: 150
 } as const;
 
 export const A3_CAPTIONS: readonly { atSeconds: number; text: string }[] = [

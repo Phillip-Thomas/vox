@@ -100,8 +100,10 @@ import {
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
-import { getSideFacing, getSideLens, setSideFacing, sideHarvestProbePoints } from '../story/sideLens.ts';
+import { getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
+import { BLOCKS } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
+import { isMapViewOpen } from '../game/mapView.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
 
 const _zeroVelocity = new THREE.Vector3();
@@ -188,7 +190,8 @@ const SMOOTH_GRAVITY = typeof window === 'undefined'
 // 125k-instance InstancedMesh raycast every frame).
 const _lookOrigin = new THREE.Vector3();
 const _lookDir = new THREE.Vector3();
-const _sideBasisForward = new THREE.Vector3(); // raster-era movement basis scratch
+const _sideBasisForward = new THREE.Vector3(); // external-lens movement basis scratch
+const _sideBasisRight = new THREE.Vector3();
 const _wO = new THREE.Vector3(); // water look-ray scratch (lookingAtWater only —
 const _wD = new THREE.Vector3(); // distinct from _lookOrigin/_lookDir used by updateLookedAt)
 // Scratch for the per-step submersion test (eye position) + swim look direction.
@@ -283,6 +286,11 @@ export default function EfficientPlayer({
   // Raster side-scroller: reusable probe points for the adjacency harvest scan.
   const sideProbePoints = useMemo(
     () => Array.from({ length: 5 }, () => new THREE.Vector3()),
+    []
+  );
+  // Movie extraction probes (off-row set: the screening never digs its path).
+  const sideMovieProbePoints = useMemo(
+    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
     []
   );
   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
@@ -623,8 +631,15 @@ export default function EfficientPlayer({
     const body = ref.current;
     if (!lens || !body) return null;
     const position = vectorFromRapier(body.translation());
-    sideHarvestProbePoints(position, lens, getSideFacing(), sideProbePoints);
-    for (const point of sideProbePoints) {
+    // The MOVIE mines from the rows OFF the work line (never the walked row at
+    // ground level, never underfoot) — it cannot pothole its own path. Human
+    // play keeps the full Terraria probe set.
+    const screening = isAutopilotDriving();
+    const probes = screening
+      ? sideHarvestProbePointsOffRow(position, lens, getSideFacing(), sideMovieProbePoints)
+      : sideHarvestProbePoints(position, lens, getSideFacing(), sideProbePoints);
+    for (let p = 0; p < probes.length; p++) {
+      const point = probes[p];
       const vx = Math.round(point.x / VOXEL_SCALE);
       const vy = Math.round(point.y / VOXEL_SCALE);
       const vz = Math.round(point.z / VOXEL_SCALE);
@@ -634,12 +649,17 @@ export default function EfficientPlayer({
       // stone) — the next probe usually has grass/dirt, so extraction keeps
       // flowing instead of chirping "blocked" at a wall.
       if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) continue;
+      // Movie extraction only chews blocks that FEED the quota (grass/wood →
+      // biofiber). Dirt drops nothing — mining it just digs pits the pilot
+      // then falls into, which is exactly the trap this filter removes.
+      if (screening && !(BLOCKS[voxel.blockId]?.drops.includes('biofiber'))) continue;
       return { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
     }
     return null;
   }, []);
 
   const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {
+    if (isMapViewOpen()) return null; // the chart is for reading, not extracting
     if (getStoryInputPolicy().lookMode === 'side') return pickSideTarget();
     if (!camera) return null;
     raycaster.far = BLOCK_REACH;
@@ -1165,16 +1185,17 @@ export default function EfficientPlayer({
     // OR the story autopilot's movie mode (no lock needed to screen the arc).
     const active = controlsActive.current || isTouchActive() || isAutopilotDriving();
 
-    // Raster side-scroller: movement is A/D along the lens travel axis (screen
-    // left/right), W/S ignored, basis camera-independent. The camera sits at
-    // +depth looking at the player, so basis.forward = -depth makes
-    // basis.right = +travel = screen-right.
+    // External-lens eras: movement is screen-relative under the rig basis
+    // (side rig: A/D along travel, W/S dead; depthBand opens W/S — a shallow
+    // belt-scroll band, or fully free for the nav/iso eras).
     const sideLens = getStoryInputPolicy().lookMode === 'side' ? getSideLens() : null;
+    const lensRig = sideLens ? getLensRig() : null;
+    const depthOpen = !!lensRig && lensRig.depthBand > 0;
 
     const movementInput = active
       ? {
-          forward: sideLens ? false : controls.forward,
-          backward: sideLens ? false : controls.backward,
+          forward: sideLens && !depthOpen ? false : controls.forward,
+          backward: sideLens && !depthOpen ? false : controls.backward,
           left: controls.left,
           right: controls.right
         }
@@ -1184,8 +1205,9 @@ export default function EfficientPlayer({
       else if (controls.left && !controls.right) setSideFacing(-1);
     }
 
+    if (sideLens && lensRig) rigMoveBasis(sideLens, lensRig, _sideBasisForward, _sideBasisRight);
     const basis = sideLens
-      ? makeTangentBasis(activeUp, _sideBasisForward.copy(sideLens.depthAxis).negate())
+      ? makeTangentBasis(activeUp, _sideBasisForward)
       : cameraRef.current
         ? planarCameraBasis(cameraRef.current, activeUp, lastPlanarForward.current)
         : makeTangentBasis(activeUp, lastPlanarForward.current);
@@ -1317,13 +1339,24 @@ export default function EfficientPlayer({
       }
     }
 
-    // Raster side-scroller plane lock: cancel all depth-axis velocity (walk,
-    // jump knockback, collisions) and spring any positional drift back onto the
-    // plane through the lens origin.
-    if (sideLens) {
-      nextVelocity.addScaledVector(sideLens.depthAxis, -nextVelocity.dot(sideLens.depthAxis));
+    // External-lens depth constraint. Locked (band 0): cancel all depth-axis
+    // velocity (walk, jump knockback, collisions) and spring any drift back
+    // onto the plane through the lens origin. Banded (belt-scroll era): free
+    // inside ±band, sprung back at the edges. Infinite (nav/iso): unconstrained.
+    if (sideLens && lensRig && Number.isFinite(lensRig.depthBand)) {
       const depthDrift = _sideBasisForward.copy(position).sub(sideLens.origin).dot(sideLens.depthAxis);
-      nextVelocity.addScaledVector(sideLens.depthAxis, -depthDrift * 4);
+      if (lensRig.depthBand <= 0) {
+        nextVelocity.addScaledVector(sideLens.depthAxis, -nextVelocity.dot(sideLens.depthAxis));
+        nextVelocity.addScaledVector(sideLens.depthAxis, -depthDrift * 4);
+      } else {
+        const overshoot = Math.abs(depthDrift) - lensRig.depthBand;
+        if (overshoot > 0) {
+          const outward = Math.sign(depthDrift);
+          const outSpeed = nextVelocity.dot(sideLens.depthAxis) * outward;
+          if (outSpeed > 0) nextVelocity.addScaledVector(sideLens.depthAxis, -outSpeed * outward);
+          nextVelocity.addScaledVector(sideLens.depthAxis, -overshoot * outward * 4);
+        }
+      }
     }
 
     body.setLinvel(vectorToRapier(nextVelocity), true);

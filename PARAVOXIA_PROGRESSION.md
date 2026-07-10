@@ -78,8 +78,13 @@ their hands before they can articulate it:
 | Prologue crawl + manifest + voyage ledger | The Oregon Trail ('71) — text & prompts | Green-phosphor terminal, processing screens, branching event deck |
 | The voyage backdrop | Maze War ('74) — the first 3D: vertices & edges | Wireframe hauler + vector starfield + the destination CUBE WORLD growing with progress |
 | The nav anomaly / crash | Pong ('72) — one paddle vs. the inevitable | Oscilloscope debris-deflection minigame, ORDERED by the anomaly card, unwinnable by design |
-| Ch1 arrival (descent + quota + salvage) | Side-scrollers ('85) | Crash-landing cutscene in the raster lens; the REAL voxel world side-on, chunky low-dpr pixels, voxel worker sprite |
-| The 2D→3D lift | The dimensional break ('92) | The camera physically travels from the side vantage into the worker's eyes — the geometry of perception changes |
+| Ch1 arrival (descent → ch1-fixed) | Fixed-screen era — Pitfall/Space Invaders ('78–'80) | Crash-landing cutscene in the raster lens; then the frame is BOLTED — leaving the screen hard-flips to the next; tutorial verbs: move, hold-to-extract |
+| ch1-track (the unbolt) | The scrolling window — Defender ('81) | ~7s mini-awakening: "OPTICAL TRACKING ENABLED" — the quantized camera anchor lerps to continuous follow |
+| ch1-raster (quota + salvage) | Side-scrollers — Super Mario Bros. ('85) | The REAL voxel world side-on, chunky low-dpr pixels, voxel worker sprite; walk-over hull salvage |
+| ch1-depth (supply pods) | Belt-scroll "2.5D" — Double Dragon ('87) | LATERAL CLEARANCE opens W/S across a shallow depth band; the third axis EXISTS before it is ever seen |
+| ch1-nav (triangulation) | Top-down — Pac-Man ('80, diegetically reordered) | The rig lerps to straight-down NAV VIEW (map grid overlay); an ordered route of three fixes |
+| ch1-iso (the signal mesa) | Isometric — Zaxxon ('82) | The rig settles at 45°/45°, dpr ratchets up one notch; HEIGHT revealed; climb the stepped mesa to the stone |
+| The 2D→3D lift | The dimensional break ('92) | The camera physically travels from the ISO vantage into the worker's eyes — the geometry of perception changes |
 | Ch1 anomaly → Ch2 | Fake-3D shooters ('92) | First-person CCTV feed: compass-snapped pan, tilt band, dither/scanlines |
 | A2 depth awakening | True 3D ('96) | Free look, full FOV, device resolution — the mouse becomes a neck |
 | A3+ (material → alive) | The modern era | Texture, time, life, post-fx |
@@ -89,7 +94,23 @@ their hands before they can articulate it:
 Design rule that falls out of this: each era's LIMITATION is diegetic (the suit's
 "visual cortex link" recovering from the crash), and each era must contain real
 gameplay in its own idiom — prompts you answer, a paddle you steer, a plane you
-jump along, a pan-tilt head you aim — never a passive filter.
+jump along, a route you read off a map, a rise you climb, a pan-tilt head you
+aim — never a passive filter. Each rung is also a tutorial verb, and rungs get
+LONGER as fidelity rises: the closer to perfect fidelity, the more must be
+accomplished.
+
+Implementation note: side / fixed-screen / belt / top-down / iso are ONE
+external camera (`LensRig` in `sideLens.ts` — elevation, azimuth, distance,
+follow quantization, depth band); every era transition is a single rig lerp, so
+each style dissolves into the next.
+
+**Endgame POV candidate (color-era pass, not yet built):** after A2, the
+chronology has one more arc — third-person follow (Mario 64 / GTA III) through
+ch3, with A3's dawn pulling the camera INTO the eyes for good: "the player
+becomes the camera" (the VR rung's analog) as the final embodiment beat. A full
+3D `PlayerAvatar` body already exists (multiplayer remote rendering) — it needs
+a gait animation and a follow rig. Deliberately deferred; kept first-person for
+the current slice.
 
 ---
 

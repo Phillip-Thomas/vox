@@ -7,6 +7,10 @@ import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.t
 import { addItem } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
+import { seedSupplyPodsCollected } from './supplyPods.ts';
+import { clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
+import { createWorldIdentity } from '../game/worldIdentity.ts';
+import { STORY_COORDINATE } from './world/storyWorld.ts';
 
 // --- Story mode state ---------------------------------------------------------
 //
@@ -25,9 +29,13 @@ export type StoryChapter = 'none' | 'prologue' | 'ch1' | 'ch2' | 'ch3' | 'comple
 export type StoryBeat =
   // prologue (terminal overlay, app phase stays 'menu')
   | 'crawl' | 'manifest' | 'voyage' | 'deflect' | 'crash'
-  // chapter 1 — crash-landing descent, raster side-scroller (quota + salvage),
-  // the 2D→3D lift, then the pan-tilt CCTV feed
-  | 'descent' | 'ch1-raster' | 'ch1-lift' | 'ch1-anomaly' | 'a1-ramp'
+  // chapter 1 — the monochrome ladder: crash-landing descent, then the history
+  // of game perspectives one era at a time — fixed-screen, the tracking unlock,
+  // the scrolling side-scroller (quota + salvage), the belt-scroll depth band,
+  // top-down nav, isometric height, the 2D→3D lift, the pan-tilt CCTV feed
+  | 'descent' | 'ch1-fixed' | 'ch1-track' | 'ch1-raster'
+  | 'ch1-depth' | 'ch1-nav' | 'ch1-iso'
+  | 'ch1-lift' | 'ch1-anomaly' | 'a1-ramp'
   // chapter 2 — color, and the tree
   | 'ch2-color' | 'ch2-approach' | 'a2-awakening'
   // chapter 3 — grain
@@ -45,10 +53,17 @@ export interface StorySnapshot {
 export const STORY_MILESTONES = {
   started: 'story:started',
   prologueSeen: 'story:prologue-seen',
+  ch1Track: 'story:ch1:track',
   ch1Quota: 'story:ch1:quota',
+  ch1Depth: 'story:ch1:depth',
+  ch1Nav: 'story:ch1:nav',
+  ch1Iso: 'story:ch1:iso',
   a1: 'story:a1',
   a2: 'story:a2',
   a3: 'story:a3',
+  /** Survival senses arrive ONE BY ONE in ch3 — HUD chrome follows the story. */
+  senseInventory: 'story:sense:inventory',
+  senseVitals: 'story:sense:vitals',
   complete: 'story:complete'
 } as const;
 
@@ -107,8 +122,12 @@ export function storyEntryPoint(): StoryEntryPoint {
   if (hasMilestone(STORY_MILESTONES.a3)) return { chapter: 'complete', beat: 'done' };
   if (hasMilestone(STORY_MILESTONES.a2)) return { chapter: 'ch3', beat: 'ch3-gather' };
   if (hasMilestone(STORY_MILESTONES.a1)) return { chapter: 'ch2', beat: 'ch2-color' };
-  if (hasMilestone(STORY_MILESTONES.ch1Quota)) return { chapter: 'ch1', beat: 'ch1-anomaly' };
-  if (hasMilestone(STORY_MILESTONES.prologueSeen)) return { chapter: 'ch1', beat: 'ch1-raster' };
+  if (hasMilestone(STORY_MILESTONES.ch1Iso)) return { chapter: 'ch1', beat: 'ch1-anomaly' };
+  if (hasMilestone(STORY_MILESTONES.ch1Nav)) return { chapter: 'ch1', beat: 'ch1-iso' };
+  if (hasMilestone(STORY_MILESTONES.ch1Depth)) return { chapter: 'ch1', beat: 'ch1-nav' };
+  if (hasMilestone(STORY_MILESTONES.ch1Quota)) return { chapter: 'ch1', beat: 'ch1-depth' };
+  if (hasMilestone(STORY_MILESTONES.ch1Track)) return { chapter: 'ch1', beat: 'ch1-raster' };
+  if (hasMilestone(STORY_MILESTONES.prologueSeen)) return { chapter: 'ch1', beat: 'ch1-fixed' };
   return { chapter: 'prologue', beat: 'crawl' };
 }
 
@@ -139,7 +158,9 @@ export function canContinueStory(): boolean {
 /** Canonical beat order — drives milestone/item seeding and the debug panel. */
 export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
   'crawl', 'manifest', 'voyage', 'deflect', 'crash',
-  'descent', 'ch1-raster', 'ch1-lift', 'ch1-anomaly', 'a1-ramp',
+  'descent', 'ch1-fixed', 'ch1-track', 'ch1-raster',
+  'ch1-depth', 'ch1-nav', 'ch1-iso',
+  'ch1-lift', 'ch1-anomaly', 'a1-ramp',
   'ch2-color', 'ch2-approach', 'a2-awakening',
   'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
   'done'
@@ -189,16 +210,25 @@ function seedForBeat(beat: StoryBeat): void {
   const at = beatIndex(beat);
   markMilestone(m.started);
   if (at >= beatIndex('descent')) markMilestone(m.prologueSeen);
-  if (at >= beatIndex('ch1-lift')) {
+  if (at >= beatIndex('ch1-raster')) markMilestone(m.ch1Track);
+  if (at >= beatIndex('ch1-depth')) {
     markMilestone(m.ch1Quota);
     addItem('biofiber', 6);
     addItem('stone', 4);
     seedDebrisCollected(); // wood/flint arrive as the recovered hull debris
   }
+  if (at >= beatIndex('ch1-nav')) {
+    markMilestone(m.ch1Depth);
+    seedSupplyPodsCollected(); // biofuel/flint/wood arrive as the recovered pods
+  }
+  if (at >= beatIndex('ch1-iso')) markMilestone(m.ch1Nav);
+  if (at >= beatIndex('ch1-lift')) markMilestone(m.ch1Iso);
   if (at >= beatIndex('ch2-color')) markMilestone(m.a1);
-  if (at >= beatIndex('ch3-gather')) {
-    markMilestone(m.a2);
-    addItem('biofuel', 1); // timber/flint already came from the debris seeding
+  if (at >= beatIndex('ch3-gather')) markMilestone(m.a2); // campfire mats all earned upstream
+  if (at >= beatIndex('ch3-dusk')) {
+    // The senses are introduced during the gather act — later jumps have them.
+    markMilestone(m.senseInventory);
+    markMilestone(m.senseVitals);
   }
   if (at >= beatIndex('done')) {
     markMilestone(m.a3);
@@ -216,6 +246,10 @@ function seedForBeat(beat: StoryBeat): void {
 export function initStoryFromSave(): void {
   const param = parseStoryParam();
   if (!param) return;
+  // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain — debug
+  // sessions used to accumulate each other's strip-mining. The menu path
+  // (beginStory, no param) keeps the player's real world edits.
+  clearVoxelEditsForWorld(createWorldIdentity(STORY_COORDINATE));
   if (param === 'full') {
     beginStory();
     return;
@@ -258,6 +292,9 @@ export function advanceToBeat(beat: StoryBeat): void {
 export function completeStory(): void {
   markMilestone(STORY_MILESTONES.a3);
   markMilestone(STORY_MILESTONES.complete);
+  // The senses are part of the earned world — never strand the HUD gates.
+  markMilestone(STORY_MILESTONES.senseInventory);
+  markMilestone(STORY_MILESTONES.senseVitals);
   setVoxelRealityStage('material');
   setStoryForcedDayPhase(null); // the day cycle is the player's now
   setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
@@ -286,4 +323,28 @@ export function storyHudTakeover(s: StorySnapshot = snapshot): boolean {
 /** Ship/star-map affordances stay hidden while any story chapter is live. */
 export function storyHudMask(s: StorySnapshot = snapshot): boolean {
   return s.active;
+}
+
+// Survival chrome is INTRODUCED, not assumed: each sense appears when the story
+// names it (ch3's "why am i… thirsty?"), then stays. Pure sandbox saves (story
+// never started) see everything — the gates only exist inside a story save.
+
+/**
+ * Flora/fauna dormancy in the story world: life beyond trees and grass belongs
+ * to a LATER awakening (A4 "Breath"). Milestone-driven so no cutscene's effect
+ * ramps can flash a glimpse; lifts the moment the future awakening marks it.
+ */
+export function storyLifeDormant(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone('story:a4');
+}
+
+export function storyHudHideVitals(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone(STORY_MILESTONES.senseVitals);
+}
+
+export function storyHudHideInventory(): boolean {
+  if (!hasMilestone(STORY_MILESTONES.started)) return false;
+  return !hasMilestone(STORY_MILESTONES.senseInventory);
 }

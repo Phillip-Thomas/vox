@@ -13,11 +13,13 @@ import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 import { getPlayerSubmergence } from '../state/playerSubmersion';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
-import { applyLiftCameraTransform, applySideCameraTransform, getSideLens } from '../story/sideLens.ts';
+import { applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
+import { isMapViewOpen, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
 import { getCinematicLookTarget, getCinematicLookWeight } from '../story/cinematicLook.ts';
 import { getSunDirection } from './SkyController.tsx';
 
 const _sideForward = new THREE.Vector3();
+const _sideRight = new THREE.Vector3();
 const _sunTangent = new THREE.Vector3();
 const _pullDir = new THREE.Vector3();
 
@@ -92,6 +94,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       // pitch) on the SAME forward/pitch state, so A2's release is seamless.
       const storyPolicy = getStoryInputPolicy();
       if (storyPolicy.lookMode === 'side') return; // raster era: no mouse look at all
+      if (isMapViewOpen()) return; // the chart doesn't yaw; look resumes on close
       if (storyPolicy.lookMode === 'feed') {
         feedAccumulateLook(
           feedLook.current,
@@ -175,9 +178,9 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     const sideLens = storyPolicy.lookMode === 'side' ? getSideLens() : null;
     if (sideLens) {
       if (storyPolicy.sideBlend <= 0.001) {
-        _sideForward.copy(sideLens.depthAxis).negate();
+        rigMoveBasis(sideLens, getLensRig(), _sideForward, _sideRight);
         setPlayerLook(_sideForward, 0); // fields/persistence see the into-screen facing
-        applySideCameraTransform(cameraRef.current, sideLens);
+        applyActiveRigTransform(cameraRef.current, sideLens, dt);
       } else {
         setPlayerLook(surfaceForward.current, pitch.current);
         applyLiftCameraTransform(
@@ -195,6 +198,15 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     }
 
     setPlayerLook(surfaceForward.current, pitch.current); // publish look for persistence
+
+    // The survey chart ([M]): straight-down overhead in place of the eyes.
+    // Look state is preserved untouched — closing lands exactly where you were.
+    if (isMapViewOpen() && storyPolicy.lookMode === 'free') {
+      applyOverheadCameraTransform(cameraRef.current, surfaceUp.current, surfaceForward.current, MAP_VIEW_HEIGHT);
+      hasDisplayQuat.current = false;
+      return;
+    }
+
     applyGravityCameraTransform(
       cameraRef.current,
       surfaceUp.current,

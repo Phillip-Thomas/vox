@@ -76,6 +76,8 @@ const CH3_RECIPES = new Set(['biofuel', 'stone_hatchet', 'stone_pickaxe', 'torch
 export const FEED_DPR = 0.85;
 /** Raster (side-scroller) era: honest chunky pixels. */
 export const RASTER_DPR = 0.4;
+/** Isometric era: one fidelity ratchet up from raster, still visibly quantized. */
+export const ISO_DPR = 0.55;
 
 function feedPolicy(): StoryInputPolicy {
   return {
@@ -138,12 +140,24 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     case 'deflect':
     case 'crash':
       return { ...rasterPolicy(), moveSpeedScale: 0 };
-    // The crash-landing cutscene and the 2D→3D lift: side lens held, feet held.
+    // The crash-landing cutscene and the TRACKING unbolt: side lens held, feet held.
     case 'descent':
-    case 'ch1-lift':
+    case 'ch1-track':
       return { ...rasterPolicy(), moveSpeedScale: 0 };
+    // The 2D→3D lift launches from the iso era's fidelity.
+    case 'ch1-lift':
+      return { ...rasterPolicy(), moveSpeedScale: 0, targetDpr: ISO_DPR };
+    // The monochrome ladder: all external-lens eras share the raster policy —
+    // camera rigs and depth freedom come from the lens rig, not the policy.
+    case 'ch1-fixed':
     case 'ch1-raster':
+    case 'ch1-depth':
       return rasterPolicy();
+    // Nav/iso read as orthographic: long lens (rig dollies out), narrow fov.
+    case 'ch1-nav':
+      return { ...rasterPolicy(), targetFov: 36 };
+    case 'ch1-iso':
+      return { ...rasterPolicy(), targetDpr: ISO_DPR, targetFov: 38 };
     case 'ch1-anomaly':
     case 'ch2-color':
     case 'ch2-approach':

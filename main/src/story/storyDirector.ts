@@ -33,9 +33,14 @@ import {
   FEED_FOV,
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
-import { getSideFacing, getSideLens } from './sideLens.ts';
+import { getSideFacing, getSideLens, setLensRig, SIDE_RIG, type LensRig } from './sideLens.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
+import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
 import { debrisSalvageComplete } from './debrisSalvage.ts';
+import { supplyPodsComplete } from './supplyPods.ts';
+import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
+import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
@@ -49,6 +54,7 @@ import {
   A3_TIMELINE,
   CH1_ECHO_LINES,
   CH1_FLASH_SCHEDULE,
+  CH1_FIXED_TUTORIAL,
   CH1_QUOTA,
   CH1_WORK_ORDERS,
   CH3_CAPTIONS,
@@ -96,6 +102,8 @@ interface DirectorRuntime {
   dayPhase: number;
   /** A3 one-shot: the dark-of-sleep world mutations fired. */
   a3Woke: boolean;
+  /** A3 bloom-wave origin (captured at the ramp; zero until then). */
+  bloomCenter: THREE.Vector3;
   /** The R3F clock at the latest tick (for releasing the world clock cleanly). */
   elapsedSeconds: number;
   restUnregister: (() => void) | null;
@@ -103,6 +111,8 @@ interface DirectorRuntime {
   mawRechargeAccum: number;
   /** descent one-shot: the impact flash/sfx fired. */
   descentImpacted: boolean;
+  /** ch1-fixed tutorial: distinct fixed-screen cells the worker has stood in. */
+  fixedCells: Set<number>;
   /** ch1-lift one-shot: the mid-lift dpr snap + glitch mask fired. */
   liftSnapped: boolean;
   /** Scratch target for the lift's look-ahead pull. */
@@ -123,13 +133,30 @@ const d: DirectorRuntime = {
   captionsFired: new Set(),
   dayPhase: 0.25,
   a3Woke: false,
+  bloomCenter: new THREE.Vector3(),
   elapsedSeconds: 0,
   restUnregister: null,
   mawRechargeAccum: 0,
   descentImpacted: false,
+  fixedCells: new Set(),
   liftSnapped: false,
   liftLookTarget: new THREE.Vector3()
 };
+
+/** Seconds since the current beat began (survey dwells, resolver gates). */
+export function getStoryBeatClock(): number {
+  return d.beatClock;
+}
+
+const _fixedRel = new THREE.Vector3();
+
+/** ch1-fixed tutorial progress (HUD ledger line). */
+export function fixedTutorialProgress(): { fiber: number; screens: number } {
+  return {
+    fiber: Math.min(getItemCount('biofiber'), CH1_FIXED_TUTORIAL.biofiber),
+    screens: Math.min(d.fixedCells.size, CH1_FIXED_TUTORIAL.screens)
+  };
+}
 
 function quotaCollected(): { fiber: number; stone: number; total: number; met: boolean } {
   const fiber = Math.min(getItemCount('biofiber'), CH1_QUOTA.biofiber);
@@ -162,9 +189,51 @@ function echoLines(): string[] {
 
 // --- beat entry ----------------------------------------------------------------
 
+/** Width (world units) of one fixed-screen cell — the era where the frame is bolted. */
+const FIXED_SCREEN_CELL = 24;
+
+/** Belt-scroll clearance in voxel ROWS — must cover the supply pods (±3 rows). */
+const DEPTH_BAND_ROWS = 3.5;
+
+const ISO_RIG: LensRig = {
+  elevation: 0.6, // ~34° — the classic axonometric silhouette, not a high oblique
+  azimuth: Math.PI / 4,
+  distance: 26,
+  lift: 2.4,
+  focusLift: 1.2,
+  followQuant: 0,
+  depthBand: Infinity
+};
+
+/**
+ * The monochrome ladder's camera, one era per rung. Every transition is a single
+ * camera move (the rig blend), so each style dissolves into the next: bolted
+ * screen → tracking → profile → belt depth → top-down → isometric → (lift).
+ */
+const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = {
+  'descent': { rig: { ...SIDE_RIG }, seconds: 0 },
+  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL }, seconds: 0 },
+  'ch1-track': { rig: { ...SIDE_RIG }, seconds: 6.5 }, // the unbolt IS the cutscene
+  'ch1-raster': { rig: { ...SIDE_RIG }, seconds: 0 },
+  'ch1-depth': { rig: { ...SIDE_RIG, depthBand: DEPTH_BAND_ROWS * VOXEL_SCALE, distance: 18 }, seconds: 2.5 },
+  'ch1-nav': {
+    rig: { elevation: Math.PI / 2, azimuth: 0, distance: 34, lift: 0, focusLift: 0, followQuant: 0, depthBand: Infinity },
+    seconds: 5
+  },
+  'ch1-iso': { rig: { ...ISO_RIG }, seconds: 5 },
+  'ch1-lift': { rig: { ...ISO_RIG }, seconds: 0 } // direct jumps start at the iso vantage
+};
+
 function onBeatEntered(beat: StoryBeat | null): void {
   d.beat = beat;
   d.beatClock = 0;
+  const era = beat ? ERA_RIGS[beat] : null;
+  if (era) setLensRig(era.rig, era.seconds);
+  // Cutscene-scoped world state never survives a beat change.
+  if (beat !== 'a3-dawn') {
+    clearLifeReveal();
+    d.bloomCenter.set(0, 0, 0);
+  }
   // Cutscene state never survives a beat change (envelopes re-assert per frame).
   setCinematicLookWeight(0);
   setCinematicLookTarget(null);
@@ -178,7 +247,9 @@ function onBeatEntered(beat: StoryBeat | null): void {
       d.descentImpacted = false;
       setStoryForcedDayPhase(0.25);
       break;
-    case 'ch1-raster':
+    case 'ch1-fixed':
+      // First playable frame after the crash — the era where the frame itself
+      // is bolted down. All the arrival initialization happens here.
       resetFeedRuntime();
       getFeedRuntime().descent = 1.1; // the wreck is a fact of the world now
       d.ch1Clock = 0;
@@ -189,7 +260,44 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // minus recalibrations/forgettings; commendations topped it up). It
       // degrades to the broken/refuel loop when the survival act begins (ch3).
       setMawCharge(getArrivalCellCharge());
+      d.fixedCells.clear();
+      setWorkOrder([...CH1_WORK_ORDERS.fixed, ...echoLines()]);
+      break;
+    case 'ch1-track':
+      // The mini-awakening: the frame unbolts and learns to follow the worker.
+      playSfx('storyAwaken');
+      scoreHit('bloom');
+      setWorkOrder([...CH1_WORK_ORDERS.track]);
+      break;
+    case 'ch1-raster':
+      // Direct jumps land here too — re-run the arrival init (idempotent).
+      resetFeedRuntime();
+      getFeedRuntime().descent = 1.1;
+      d.ch1Clock = 0;
+      d.flashesFired = CH1_FLASH_SCHEDULE.map(() => false);
+      setStoryForcedDayPhase(0.25);
+      setMawCharge(getArrivalCellCharge());
       setWorkOrder([...CH1_WORK_ORDERS.raster, ...echoLines()]);
+      break;
+    case 'ch1-depth':
+      getFeedRuntime().descent = 1.1; // direct-jump safe
+      setStoryForcedDayPhase(0.25);
+      d.glitchDecay = 0.55; // each era hand-off announces itself
+      setWorkOrder([...CH1_WORK_ORDERS.depth]);
+      break;
+    case 'ch1-nav':
+      getFeedRuntime().descent = 1.1;
+      setStoryForcedDayPhase(0.25);
+      d.glitchDecay = 0.55;
+      resetNavWaypoints();
+      setWorkOrder([...CH1_WORK_ORDERS.nav]);
+      break;
+    case 'ch1-iso':
+      getFeedRuntime().descent = 1.1;
+      setStoryForcedDayPhase(0.25);
+      d.glitchDecay = 0.7; // dpr ratchets 0.4→0.55 under this pulse (policy snap)
+      playSfx('storyGlitch');
+      setWorkOrder([...CH1_WORK_ORDERS.iso]);
       break;
     case 'ch1-anomaly':
       // The raster→pan-tilt upgrade announces itself with a glitch pulse.
@@ -314,6 +422,7 @@ function syncBeat(): void {
   // fades the score out (the sandbox owns its own music).
   if (!s.active) {
     setScoreBeat(null);
+    if (s.chapter !== 'complete') clearLifeReveal(); // quit mid-cutscene: no stuck wave
     if (d.restUnregister) {
       d.restUnregister();
       d.restUnregister = null;
@@ -324,13 +433,13 @@ subscribeStory(syncBeat);
 // Deep links activate the story BEFORE this module loads — catch up immediately.
 syncBeat();
 
-// Quota completion (in the raster side-scroller) triggers the 2D→3D lift.
+// Quota completion (in the raster side-scroller) opens the belt-scroll era.
 subscribeInventory(() => {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch1-raster') return;
   if (quotaCollected().met) {
     markMilestone(STORY_MILESTONES.ch1Quota);
-    advanceToBeat('ch1-lift');
+    advanceToBeat('ch1-depth');
   }
 });
 
@@ -505,6 +614,20 @@ function tickDescent(dt: number): void {
   r.scanRoll = Math.max(0, r.scanRoll - dt * 0.7);
   if (t >= DESCENT_SECONDS) {
     r.descent = 1.1;
+    advanceToBeat('ch1-fixed');
+  }
+}
+
+// The TRACKING unbolt (~7s): the bolted frame learns to follow the worker — the
+// rig blend (quantized anchor → continuous follow) IS the whole cutscene.
+const TRACK_SECONDS = 7;
+
+function tickTrackUnlock(): void {
+  const t = d.beatClock;
+  const r = getFeedRuntime();
+  r.cinematic = envelope(t, 0, 0.8, TRACK_SECONDS - 1.4, TRACK_SECONDS);
+  if (t >= TRACK_SECONDS) {
+    markMilestone(STORY_MILESTONES.ch1Track);
     advanceToBeat('ch1-raster');
   }
 }
@@ -536,6 +659,10 @@ function tickCh1Lift(): void {
   // The traverse itself: profile → eyes over the middle 4.5 seconds.
   const liftBlend = smoothstep(Math.min(1, Math.max(0, (t - 1.2) / 4.5)));
   setStorySideBlend(liftBlend);
+  // Consciousness arrives WITH the perspective: impersonal all the way in,
+  // then the first pronoun in the story — one flicker before the feed clamps.
+  if (t >= 2.4) fireCaptionOnce('lift-inward', 'the seeing is being moved inside.');
+  if (t >= 5.4) fireCaptionOnce('lift-i', 'i—');
   setScoreIntensity(0.35 + liftBlend * 0.65); // the score rises with the camera
 
   // Mid-lift, one glitch pulse masks the single resolution snap (never lerp
@@ -596,6 +723,16 @@ function tickCh3Sun(dt: number): void {
     if (d.beatClock >= DUSK.lerpSeconds) advanceToBeat('ch3-await-rest');
   } else if (s.beat === 'ch3-await-rest') {
     d.dayPhase += dt / DAY_LENGTH_SECONDS; // the cycle rolls naturally into night
+    // The senses cannot be missed: a fast fire skips the gather dwell, so the
+    // introductions re-offer here, by the fire, waiting for dark.
+    if (d.beatClock >= 3 && !d.captionsFired.has('sense-hold')) {
+      fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
+      markMilestone(STORY_MILESTONES.senseInventory);
+    }
+    if (d.beatClock >= 9 && !d.captionsFired.has('sense-thirst')) {
+      fireCaptionOnce('sense-thirst', 'what is this sensation. why am i… thirsty?');
+      markMilestone(STORY_MILESTONES.senseVitals);
+    }
     if (!d.captionsFired.has('night') && d.dayPhase >= DUSK.nightStart) {
       fireCaptionOnce('night', CH3_CAPTIONS.night);
     }
@@ -654,14 +791,41 @@ function tickA3(dt: number): void {
     crystalline: target.crystalline * k,
     metal: target.metal * k
   });
+
+  // THE BLOOM WAVE: the living world GROWS, radially, from where the player
+  // slept. The reveal is armed at radius 0 the moment the ramp begins (so the
+  // fields un-cull into invisibility — never a pop), holds while the grain
+  // captions land, then the front races outward: blades rise around the feet
+  // first, slow enough to watch, then the wave accelerates to the horizon.
+  const waveStart = rampStart + T.bloomWaveDelaySeconds;
+  const waveEnd = waveStart + T.bloomWaveSeconds;
+  if (d.bloomCenter.lengthSq() < 1e-6) {
+    const fire = getCampfires()[0];
+    if (fire) d.bloomCenter.set(fire.pos[0], fire.pos[1], fire.pos[2]);
+    else d.bloomCenter.copy(getPlayerWorldPosition());
+  }
+  if (t < waveStart) {
+    setLifeReveal(d.bloomCenter, 0, 1);
+  } else {
+    if (!d.captionsFired.has('a3-bloom-hit')) {
+      d.captionsFired.add('a3-bloom-hit');
+      scoreHit('bloom'); // the first blade rises on a bloom
+    }
+    const wk = smoothstep(Math.min(1, (t - waveStart) / T.bloomWaveSeconds));
+    const radius = T.bloomWaveRadius * Math.pow(wk, 1.6); // linger near, race far
+    setLifeReveal(d.bloomCenter, radius, 5 + radius * 0.18);
+  }
+
   A3_CAPTIONS.forEach((caption, i) => {
     if (t >= wakeAt + caption.atSeconds) fireCaptionOnce(`a3-${i}`, caption.text);
   });
-  if (t >= rampEnd + 4 && d.captionsFired.has(`a3-${A3_CAPTIONS.length - 1}`)) {
+  if (t >= Math.max(rampEnd + 4, waveEnd + 1.5) && d.captionsFired.has(`a3-${A3_CAPTIONS.length - 1}`)) {
     // Land EXACTLY on the material preset, release the sun to the live clock,
-    // and hand the world to the sandbox.
+    // and hand the world to the sandbox. The reveal clears the same tick the
+    // stage lands — the wave has already covered the visible range.
     setVoxelRealityStage('material');
     clearVoxelRealityOverrides();
+    clearLifeReveal();
     setDayPhaseOffset(d.dayPhase - d.elapsedSeconds / DAY_LENGTH_SECONDS);
     scoreHit('bloom'); // texture arrives; the score resolves major and departs
     completeStory(); // marks a3 + complete, clears the forced phase
@@ -709,12 +873,68 @@ export function storyDirectorTick(
     case 'descent':
       tickDescent(dt);
       break;
+    case 'ch1-fixed': {
+      tickCh1Flashes(dt);
+      // The first tutorial: extract fiber (hold-to-mine) and cross a screen
+      // edge — feeling the bolted frame hard-flip is the whole point.
+      const lens = getSideLens();
+      if (lens) {
+        const along = _fixedRel.copy(getPlayerWorldPosition()).sub(lens.origin).dot(lens.travelAxis);
+        const cell = Math.floor(along / FIXED_SCREEN_CELL);
+        if (!d.fixedCells.has(cell)) {
+          d.fixedCells.add(cell);
+          if (d.fixedCells.size === CH1_FIXED_TUTORIAL.screens) {
+            fireCaptionOnce('fixed-flip', 'The frame did not follow you. It was never going to.');
+          }
+        }
+      }
+      if (
+        getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
+        && d.fixedCells.size >= CH1_FIXED_TUTORIAL.screens
+      ) {
+        advanceToBeat('ch1-track');
+      }
+      break;
+    }
+    case 'ch1-track':
+      tickTrackUnlock();
+      break;
     case 'ch1-raster':
       tickCh1Flashes(dt);
       // Belt-and-braces: a resume that ARRIVES with the quota already met fires
       // no inventory event, so the watcher alone could strand the beat.
       if (quotaCollected().met) {
         markMilestone(STORY_MILESTONES.ch1Quota);
+        advanceToBeat('ch1-depth');
+      }
+      break;
+    case 'ch1-depth':
+      tickCh1Flashes(dt);
+      if (d.beatClock >= 3.5) {
+        fireCaptionOnce('depth-word', 'the world has a depth. wait — what is "depth"? how is that word known?');
+      }
+      // All pods recovered (or a resume that arrives with them recovered).
+      if (d.beatClock >= 1 && supplyPodsComplete()) {
+        markMilestone(STORY_MILESTONES.ch1Depth);
+        advanceToBeat('ch1-nav');
+      }
+      break;
+    case 'ch1-nav':
+      tickCh1Flashes(dt);
+      // The ordered route complete (beacons mark fixes on proximity).
+      if (d.beatClock >= 1 && navWaypointsComplete()) {
+        markMilestone(STORY_MILESTONES.ch1Nav);
+        advanceToBeat('ch1-iso');
+      }
+      break;
+    case 'ch1-iso':
+      tickCh1Flashes(dt);
+      // Height, earned: standing at the stone means standing ON the mesa
+      // (from the ground the 3D distance can never close this far). The dwell
+      // floor guarantees the 45° reveal is SEEN even if the player arrives tall.
+      if (d.beatClock >= 9 && anomalyStoneHandle.position
+        && getPlayerWorldPosition().distanceTo(anomalyStoneHandle.position) <= 2.6) {
+        markMilestone(STORY_MILESTONES.ch1Iso);
         advanceToBeat('ch1-lift');
       }
       break;
@@ -739,6 +959,17 @@ export function storyDirectorTick(
         }
       });
       if (d.beatClock >= 12) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
+      if (d.beatClock >= 16 && !d.captionsFired.has('sense-hold')) {
+        fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
+        markMilestone(STORY_MILESTONES.senseInventory); // the inventory appears
+      }
+      if (d.beatClock >= 24 && !d.captionsFired.has('sense-thirst')) {
+        fireCaptionOnce('sense-thirst', 'what is this sensation. why am i… thirsty?');
+        markMilestone(STORY_MILESTONES.senseVitals); // the vitals appear
+      }
+      if (d.beatClock >= 34) {
+        fireCaptionOnce('sense-chart', 'the view from above is still in here. [M]');
+      }
       // Belt-and-braces: a resume that arrives with a fire already standing
       // fires no campfire event — the dusk must still come.
       if (d.beatClock >= 2 && getCampfires().length > 0) {

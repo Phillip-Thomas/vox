@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Stats, Sky, Environment, KeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -74,7 +74,11 @@ import { voxelSystem } from './utils/efficientVoxelSystem.ts';
 import { subscribeInventory } from './game/systems/inventorySystem.ts';
 import { subscribeCampfires } from './game/systems/campfires.ts';
 import { subscribeMaw } from './game/systems/mawSystem.ts';
-import { subscribeProgression } from './game/systems/progressionSystem.ts';
+import { getMilestones, hasMilestone, subscribeProgression } from './game/systems/progressionSystem.ts';
+import { setMapViewOpen, toggleMapView } from './game/mapView.ts';
+import MapOverlay from './components/hud/MapOverlay.tsx';
+
+const milestoneCount = () => getMilestones().length;
 import { subscribeTreeHarvest } from './game/systems/treeHarvest.ts';
 import { subscribeStonePickup } from './game/systems/stonePickup.ts';
 import { subscribeVitals } from './game/systems/survivalVitals.ts';
@@ -111,6 +115,9 @@ import {
   getStoryStateSnapshot,
   initStoryFromSave,
   storyHudMask,
+  STORY_MILESTONES,
+  storyHudHideInventory,
+  storyHudHideVitals,
   storyHudTakeover,
   useStoryState
 } from './story/storyState.ts';
@@ -307,7 +314,12 @@ const App: React.FC = () => {
       }
     } catch { /* ignore */ }
     // Story mode plays on ONE pinned planet (deterministic props/quota/vantages).
-    if (getStoryStateSnapshot().active) return createCurrentWorld(STORY_COORDINATE);
+    // The completed slice ('done' — story inactive, chapter complete) is the
+    // SAME world at its earned stage, not a fresh random start.
+    const bootStory = getStoryStateSnapshot();
+    if (bootStory.active || bootStory.chapter === 'complete') {
+      return createCurrentWorld(STORY_COORDINATE);
+    }
     // Returning player -> spawn back at your saved base (so reloads don't strand you).
     if (bootSave?.lastWorld) return createCurrentWorld(bootSave.lastWorld);
     // Fresh game -> CRASH-LAND on a HOSPITABLE planet (verdant/oceanic): trees, grass,
@@ -330,6 +342,8 @@ const App: React.FC = () => {
   const flight = useSpaceFlight();
   const { phase: appPhase } = useAppState();
   const story = useStoryState();
+  // Milestone-gated HUD (the ch3 sense introductions) re-renders on progression.
+  useSyncExternalStore(subscribeProgression, milestoneCount, milestoneCount);
   const [paused, setPaused] = useState(false);
   const [craftingOpen, setCraftingOpen] = useState(false);
   const [localActorId, setLocalActorIdState] = useState(() => getLocalActorId());
@@ -395,6 +409,28 @@ const App: React.FC = () => {
     document.addEventListener('pointerlockchange', onLockChange);
     return () => document.removeEventListener('pointerlockchange', onLockChange);
   }, [isTouch]);
+
+  // M toggles the survey chart (the nav era's overhead view, retained as a
+  // tool). Story saves unlock it by completing the nav rung; free-look only,
+  // and only during free-move beats (cutscene beats keep the camera).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code !== 'KeyM') return;
+      if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+      if (getStoryInputPolicy().lookMode !== 'free') return;
+      const s = getStoryStateSnapshot();
+      if (hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch1Nav)) return;
+      if (s.active && s.beat !== 'ch3-gather' && s.beat !== 'ch3-await-rest') return;
+      toggleMapView();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [flight.controlMode]);
+
+  // Any beat change closes the chart (cutscenes own the camera).
+  useEffect(() => {
+    setMapViewOpen(false);
+  }, [story.beat, flight.controlMode]);
 
   // C toggles the Fabricator on foot; Esc closes it (its lock is already released,
   // so the lock-based pause path doesn't fire). Re-bound when pause/mode changes.
@@ -889,12 +925,14 @@ const App: React.FC = () => {
           <Crosshair />
           <TargetReticle />
           {flight.controlMode === 'fps' && <MiningProgress />}
-          {flight.controlMode === 'fps' && <VitalsMeter />}
+          {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
           {flight.controlMode === 'fps' && <BuildIndicator />}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
-          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel topOffset={inventoryTopOffset} />}
+          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && !storyHudHideInventory() && (
+            <InventoryPanel topOffset={inventoryTopOffset} />
+          )}
           {/* Ship / star-map affordances stay hidden while the story is live. */}
           {!storyHudMask(story) && (
             <>
@@ -920,6 +958,9 @@ const App: React.FC = () => {
           />
         </>
       )}
+
+      {/* --- Survey chart chrome ([M] overhead view) --- */}
+      <MapOverlay />
 
       {/* --- Fabricator (crafting) --- */}
       <CraftingPanel open={craftingOpen} onClose={closeCrafting} commandContext={commandContext} />

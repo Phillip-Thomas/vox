@@ -76,9 +76,29 @@ function surfacePoseNear(
   return { position: center.clone().addScaledVector(up, lift), up };
 }
 
-/** The smooth anomaly stone: a short deviation from the quota grounds (~30u walk). */
+/** Height of the signal mesa the anomaly stone sits on (voxel steps, iso era). */
+export const MESA_HEIGHT = 3;
+
+/** The mesa's ground pose — the stepped voxel rise the iso era teaches height on. */
+export function getSignalMesaPose(planetSize: number, terrainSeed: number): StoryPropPose {
+  return surfacePoseNear(planetSize, terrainSeed, 14, -8, 0.5);
+}
+
+/** The smooth anomaly stone: atop the signal mesa — above grade, earned by the climb. */
 export function getAnomalyStonePose(planetSize: number, terrainSeed: number): StoryPropPose {
-  return surfacePoseNear(planetSize, terrainSeed, 14, -8, 1.5);
+  return surfacePoseNear(planetSize, terrainSeed, 14, -8, 0.5 + MESA_HEIGHT + 0.9);
+}
+
+/**
+ * Triangulation waypoints for the top-down era: an ORDERED route from the work
+ * strip toward the signal mesa. Offsets are (along, depth) voxel units in the
+ * side plane's frame, mirroring the supply pods.
+ */
+export function getNavWaypointPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
+  // Raw voxel offsets, same frame as the stone/mesa at (14,-8) — a dogleg off
+  // the strip that ENDS SHORT of the mesa: the climb belongs to the iso era.
+  const offsets: Array<[number, number]> = [[6, 2], [11, -3], [10, -7]];
+  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 0.6));
 }
 
 /**
@@ -108,6 +128,18 @@ export function getStorySidePlane(planetSize: number, terrainSeed: number): {
   const depthAxis = travelAxis.clone().cross(up).normalize();
   const origin = originCenter.clone().addScaledVector(up, 1);
   return { origin, travelAxis, depthAxis, up };
+}
+
+/**
+ * Supply pods for the belt-scroll era: deliberately OFF the work line (depth
+ * offsets inside the ±3.5 clearance band, both directions) so recovering them
+ * demands the first W/S steps. Offsets are (along, depth) in voxel units.
+ */
+export function getSupplyPodPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
+  // Raw voxel offsets (the strip travels ±X toward the stone); z is the depth
+  // axis — ±3 sits inside the ±3.5 clearance band, both directions.
+  const offsets: Array<[number, number]> = [[4, 3], [-6, -3], [10, 2]];
+  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 0.7));
 }
 
 /** The hero apple tree: farther out, opposite direction — a committed walk. */
