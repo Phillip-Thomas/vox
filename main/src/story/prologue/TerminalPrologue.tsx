@@ -8,6 +8,8 @@ import { theme } from '../../ui/theme.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
 import { unlockStoryScore } from '../storyScore.ts';
 import { isMovieMode } from '../autopilot.ts';
+import PrologueVector from './PrologueVector.tsx';
+import { DIVE_SECONDS, setVectorMode, vectorScene } from './prologueVectorState.ts';
 import RegulationCrawl from './RegulationCrawl.tsx';
 import ManifestScreen from './ManifestScreen.tsx';
 import VoyageLedger from './VoyageLedger.tsx';
@@ -42,6 +44,29 @@ const TerminalPrologue: React.FC = () => {
     return 'crawl';
   });
   const [skipVisible, setSkipVisible] = useState(() => hasMilestone(STORY_MILESTONES.prologueSeen));
+  // True while the voyage→deflect dive plays: the ledger unmounts so the
+  // vector layer has the whole screen for the chase.
+  const [diving, setDiving] = useState(false);
+
+  // The vector layer's scene follows the phase — deep-link entries land on the
+  // settled mode; live transitions play their bridges (fly-in, align, dive).
+  useEffect(() => {
+    if (phase === 'crawl') setVectorMode('void');
+    else if (phase === 'manifest') setVectorMode(vectorScene.mode === 'void' ? 'enter' : 'dock');
+    else if (phase === 'voyage') setVectorMode('voyage');
+    else if (phase === 'deflect' || phase === 'corruption' || phase === 'acknowledge') {
+      // 'dive' hands off to 'court' itself (see the voyage onDone below); a
+      // deep link straight to these phases just gets the dim residual stars.
+      if (vectorScene.mode !== 'dive' && vectorScene.mode !== 'court') setVectorMode('court');
+    }
+  }, [phase]);
+
+  // The fly-in settles into the dock hold once it lands.
+  useEffect(() => {
+    if (phase !== 'manifest') return;
+    const timer = setTimeout(() => setVectorMode('dock'), 3200);
+    return () => clearTimeout(timer);
+  }, [phase]);
 
   // The skip affordance appears for everyone once the crawl has played once.
   useEffect(() => {
@@ -93,9 +118,28 @@ const TerminalPrologue: React.FC = () => {
       overflow: 'hidden',
       letterSpacing: '0.1em'
     }}>
+      {/* The persistent phosphor vector scene — every phase plays inside it. */}
+      <PrologueVector />
+
       {phase === 'crawl' && <RegulationCrawl onDone={() => { advanceToBeat('manifest'); setPhase('manifest'); }} />}
       {phase === 'manifest' && <ManifestScreen onDone={() => { advanceToBeat('voyage'); setPhase('voyage'); }} />}
-      {phase === 'voyage' && <VoyageLedger onDone={() => { advanceToBeat('deflect'); setPhase('deflect'); }} />}
+      {phase === 'voyage' && !diving && (
+        <VoyageLedger
+          onDone={() => {
+            setDiving(true);
+            // The DIVE: debris streams off the planet, the ship banks and runs
+            // for it, the camera chases, the picture collapses to a scanline —
+            // and the oscilloscope court re-expands from that same line.
+            setVectorMode('dive');
+            playSfx('terminalCorrupt');
+            setTimeout(() => {
+              setVectorMode('court');
+              advanceToBeat('deflect');
+              setPhase('deflect');
+            }, DIVE_SECONDS * 1000);
+          }}
+        />
+      )}
       {phase === 'deflect' && <DebrisDeflection onDone={() => { advanceToBeat('crash'); setPhase('corruption'); }} />}
       {phase === 'corruption' && <TerminalCorruption onDone={() => setPhase('acknowledge')} />}
       {phase === 'acknowledge' && (

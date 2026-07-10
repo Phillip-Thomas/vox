@@ -7,7 +7,7 @@ import { addItem } from '../../game/systems/inventorySystem.ts';
 import { feed } from '../../game/systems/survivalVitals.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
 import { isMovieMode } from '../autopilot.ts';
-import VoyageWireframe from './VoyageWireframe.tsx';
+import { vectorScene } from './prologueVectorState.ts';
 import { PHOSPHOR, PHOSPHOR_DIM, PHOSPHOR_FAINT, TERMINAL_BG } from './TerminalPrologue.tsx';
 import { theme } from '../../ui/theme.ts';
 
@@ -48,9 +48,8 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const cellDeltaRef = useRef(0);
   const atBridgeRef = useRef(false);
   const doneRef = useRef(false);
-  // Live handles for the wireframe layer (rAF-read, no re-renders).
+  // Live handles for the persistent vector layer (rAF-read, no re-renders).
   const progressRef = useRef(progress);
-  const anomalyRef = useRef(false);
 
   // Legs: progress creeps (pace-scaled); at each boundary the leg's standing
   // costs land and the next deck card interrupts; when the deck runs dry the
@@ -71,6 +70,7 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       const now = startProgress + (target - startProgress) * t;
       setProgress(now);
       progressRef.current = now;
+      vectorScene.progress = now;
       setLedger(l => ({ ...l, transit: Math.round(11 * now * 4) / 4 }));
       if (t >= 1) {
         const rationOption = VOYAGE_SETTINGS.rations.options.find(o => o.id === rationsRef.current)!;
@@ -87,7 +87,7 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
         } else if (!atBridgeRef.current) {
           // The deck is dry: the anomaly finds the hauler.
           atBridgeRef.current = true;
-          anomalyRef.current = true;
+          vectorScene.anomaly = true;
           playSfx('terminalAlarm');
           setCard(VOYAGE_DECK.cards[VOYAGE_DECK.bridge]);
         }
@@ -169,7 +169,6 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
       {/* --- viewport: the commute, unobstructed --- */}
       <div style={{ position: 'relative', flex: '1 1 55%', minHeight: 0, overflow: 'hidden' }}>
-        <VoyageWireframe progressRef={progressRef} anomalyRef={anomalyRef} />
         <div style={{
           position: 'absolute', top: 14, left: 18,
           color: PHOSPHOR_DIM, fontSize: 11, letterSpacing: '0.18em'

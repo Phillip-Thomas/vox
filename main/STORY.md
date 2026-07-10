@@ -46,14 +46,23 @@ hands off to the sandbox at reality stage `material`.
   `ladder-strip.mjs`.
 
 The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through the
-decades"): regulation crawl → **MANIFEST** (berthing/processing: the notice
-becomes YOUR ticket) → Oregon-Trail voyage: a **BRANCHING DECK** (3 spine cards
-+ 2 pool draws + choice-unlocked follow-ups, capped at 6) over a **Maze-War
-wireframe** (vector hauler + starfield + the destination cube world growing
-with progress); choices carry real consequences (items / vitals / harvester
+decades"): regulation crawl (stars drifting behind the text) → as the last words fade the
+**HAULER FLIES INTO FRAME** — the real ship's own silhouette (hull stations,
+delta wings, wingtip fins, tail fin from `utils/shipDesign.ts`) on ONE
+persistent phosphor vector layer (`prologue/PrologueVector.tsx`) that every
+terminal phase plays inside — **MANIFEST** (berthing: the ship holds at a dock
+gantry while your designation is issued) → Oregon-Trail voyage: the ship
+ALIGNS into formation; a **BRANCHING DECK** (3 spine cards + 2 pool draws +
+choice-unlocked follow-ups, capped at 6) while the destination cube world
+grows and the ship RESOLVES more edges with transit (detail layers — the
+fidelity ladder in miniature); choices carry real consequences (items / vitals / harvester
 cell) and echo in Ch1's paperwork; the final ledger becomes the crash (hull →
 debris count, rations → arrival hunger, compliance → tone) → the **nav-anomaly
-bridge card ORDERS you to the intake shield** → debris-deflection Pong
+bridge card ORDERS you to the intake shield** → **THE DIVE** (~3.6s): debris
+streams off the planet, the ship banks and runs for it, the camera chases as
+the cube swallows the frame, and the picture collapses to a CRT scanline —
+which the oscilloscope court RE-EXPANDS from (no frame ever swaps) →
+debris-deflection Pong
 (unwinnable as the anomaly multiplies) → terminal corruption → `[F] BRACE` →
 **DESCENT**: the crash landing played IN the raster lens (pod streaks down the
 2D frame, white-flash impact, smoking wreck persists as a landmark) → **THE

@@ -22,6 +22,8 @@ interface Debris {
 }
 
 const PADDLE_X = 70;
+/** The court expands out of the dive's collapsed scanline over this long. */
+const INTRO_SECONDS = 0.9;
 const PADDLE_HALF = 52;
 const KEY_SPEED = 420; // px/s for W/S control
 
@@ -31,7 +33,7 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     const startedAt = performance.now();
@@ -92,6 +94,18 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       ctx.fillStyle = 'rgba(2,6,4,0.32)';
       ctx.fillRect(0, 0, w, h);
 
+      // INTRO: the oscilloscope re-expands from the scanline the dive collapsed
+      // into — the CRT switching subsystems, never a frame swap.
+      const intro = Math.min(1, t / INTRO_SECONDS);
+      const introK = intro * intro * (3 - 2 * intro);
+      const squashed = introK < 1;
+      if (squashed) {
+        ctx.save();
+        ctx.translate(0, h / 2);
+        ctx.scale(1, Math.max(0.015, introK));
+        ctx.translate(0, -h / 2);
+      }
+
       // Paddle control (mouse wins while it moves; W/S otherwise). Movie mode
       // plays a competent-but-human paddle: track the nearest incoming debris
       // with capped speed — it holds its own until the anomaly, then loses.
@@ -114,8 +128,10 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       paddleY = Math.min(0.94, Math.max(0.06, paddleY));
       const py = paddleY * h;
 
-      // Spawning: gentle stream, then the anomaly multiplies it.
-      const rate = anomaly ? 6 + (t - DEFLECTION.fairSeconds) * 1.6 : 0.9 + t * 0.06;
+      // Spawning: gentle stream, then the anomaly multiplies it. (Holds while
+      // the court is still expanding out of the scanline.)
+      const rate = t < INTRO_SECONDS * 0.8 ? 0
+        : anomaly ? 6 + (t - DEFLECTION.fairSeconds) * 1.6 : 0.9 + t * 0.06;
       spawnAccum += rate * dt;
       while (spawnAccum >= 1) {
         spawnAccum -= 1;
@@ -179,6 +195,15 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
         }
         const line = DEFLECTION.anomalyLines[Math.min(DEFLECTION.anomalyLines.length - 1, Math.floor((t - DEFLECTION.fairSeconds) / 3))];
         ctx.fillText(line, w * 0.06, h * 0.92);
+      }
+
+      if (squashed) {
+        ctx.restore();
+        // The scanline residue fades as the court takes over.
+        ctx.globalAlpha = (1 - introK) * 0.9;
+        ctx.fillStyle = PHOSPHOR;
+        ctx.fillRect(0, h / 2 - 1, w, 2);
+        ctx.globalAlpha = 1;
       }
 
       // Endings: hull breached during the anomaly (the intended loss), a slow
