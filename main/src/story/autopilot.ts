@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { getStoryStateSnapshot, type StoryBeat } from './storyState.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getPlayerWorldPosition, getPlayerUp } from '../state/playerFrame.ts';
+import { requestPlayerNudge } from './playerNudge.ts';
 import { addItem, getItemCount } from '../game/systems/inventorySystem.ts';
 import { getCampfires, placeCampfire } from '../game/systems/campfires.ts';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
@@ -88,6 +89,18 @@ let beatClock = 0;
 let interactPulseAt = 0;
 const _target = new THREE.Vector3();
 
+// Stuck watchdog: when the pilot is pushing but not moving, jump-and-reverse
+// until it breaks free (single-voxel lips + pond edges are the usual culprits;
+// the water mantle in EfficientPlayer does the heavy lifting, this supplies
+// the intent).
+const _lastPos = new THREE.Vector3(Infinity, Infinity, Infinity);
+let stillTime = 0;
+let unstickUntil = -1;
+let unstickFlips = 0;
+/** True on ticks where walkToward set a live goal (enables the nudge escalation). */
+let walkTargetLive = false;
+const _nudge = new THREE.Vector3();
+
 function clearControls(): void {
   controls.forward = false;
   controls.backward = false;
@@ -104,6 +117,7 @@ function walkToward(target: THREE.Vector3, stop: number): number {
   const distance = player.distanceTo(target);
   setCinematicLookTarget(_target.copy(target));
   setCinematicLookWeight(1);
+  walkTargetLive = true;
   controls.forward = distance > stop;
   // Hop periodically so single-block ledges never wall the walk.
   controls.jump = controls.forward && beatClock % 2.4 < 0.18;
@@ -135,6 +149,10 @@ export function autopilotTick(dt: number): void {
     clockBeat = beat;
     beatClock = 0;
     interactPulseAt = -10;
+    stillTime = 0;
+    unstickUntil = -1;
+    unstickFlips = 0;
+    _lastPos.set(Infinity, Infinity, Infinity);
     clearControls();
     setCinematicLookTarget(null);
   }
@@ -143,6 +161,7 @@ export function autopilotTick(dt: number): void {
     return;
   }
   beatClock += dt;
+  walkTargetLive = false; // walkToward re-asserts it below when a goal is live
   const timeout = BEAT_TIMEOUT[beat] ?? Infinity;
 
   switch (beat) {
@@ -186,7 +205,7 @@ export function autopilotTick(dt: number): void {
     }
     case 'ch1-anomaly': {
       if (anomalyStoneHandle.position) {
-        const distance = walkToward(anomalyStoneHandle.position, 3.2);
+        const distance = walkToward(anomalyStoneHandle.position, 2.6);
         if (distance <= 4.2) pulseInteract();
       }
       if (beatClock > timeout) beginA1();
@@ -203,8 +222,8 @@ export function autopilotTick(dt: number): void {
     }
     case 'ch2-approach': {
       if (heroTreeHandle.position) {
-        const distance = walkToward(heroTreeHandle.position, 4.2);
-        if (distance <= 5.4) pulseInteract();
+        const distance = walkToward(heroTreeHandle.position, 3.6);
+        if (distance <= 5.2) pulseInteract();
       }
       if (beatClock > timeout) beginA2();
       break;
@@ -223,8 +242,8 @@ export function autopilotTick(dt: number): void {
       if (fire) {
         const firePos = _target.set(fire.pos[0], fire.pos[1], fire.pos[2]);
         const distance = getPlayerWorldPosition().distanceTo(firePos);
-        if (distance > 3) {
-          walkToward(firePos, 3);
+        if (distance > 2.4) {
+          walkToward(firePos, 2.4);
         } else {
           controls.forward = false;
           setCinematicLookWeight(0);
@@ -239,5 +258,46 @@ export function autopilotTick(dt: number): void {
     }
     default:
       break;
+  }
+
+  // --- stuck watchdog (runs over whatever the beat handler decided) -----------
+  const pushing = controls.forward || controls.backward || controls.left || controls.right;
+  const pos = getPlayerWorldPosition();
+  if (Number.isFinite(_lastPos.x)) {
+    if (pushing && pos.distanceTo(_lastPos) < 0.06) stillTime += dt;
+    else stillTime = 0;
+  }
+  _lastPos.copy(pos);
+  if (pushing && stillTime > 2.2 && beatClock > unstickUntil) {
+    unstickFlips++;
+    stillTime = 0;
+    // ESCALATION: three failed break-outs against the same geometry means the
+    // straight line is unwalkable (a 2-block rise, a corner pocket). The
+    // screening must go on: teleport-nudge toward the goal (movie-only; the
+    // physics side is gated on isAutopilotDriving).
+    if (unstickFlips >= 3 && walkTargetLive) {
+      _nudge.copy(_target).sub(pos);
+      const up = getPlayerUp();
+      _nudge.addScaledVector(up, -_nudge.dot(up)); // horizontal component only
+      if (_nudge.lengthSq() > 0.01) _nudge.normalize().multiplyScalar(2.4);
+      _nudge.addScaledVector(up, 2.3); // over the lip, gravity settles the rest
+      requestPlayerNudge(_nudge);
+      unstickFlips = 0;
+      unstickUntil = beatClock; // no reverse dance after a nudge — just walk
+    } else {
+      unstickUntil = beatClock + 1.6;
+    }
+  }
+  if (beatClock < unstickUntil) {
+    // Break-out routine: mash jump; on alternating attempts, briefly reverse.
+    controls.jump = true;
+    if (unstickFlips % 2 === 0 && beatClock < unstickUntil - 0.8) {
+      const f = controls.forward;
+      controls.forward = controls.backward;
+      controls.backward = f;
+      const l = controls.left;
+      controls.left = controls.right;
+      controls.right = l;
+    }
   }
 }

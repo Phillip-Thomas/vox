@@ -390,7 +390,16 @@ function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
  */
 export default function SurfaceEffectField({ terrainSeed, playerPosition }: SurfaceEffectFieldProps) {
   const [realitySnapshot, setRealitySnapshot] = useState(() => getVoxelRealitySnapshot());
-  useEffect(() => subscribeVoxelReality(setRealitySnapshot), []);
+  // QUANTIZED subscription: the story's awakening ramps override reality every
+  // frame; rebuilding the instanced layers 60×/s melts exactly the cutscenes
+  // that stare into the sun. Only re-render when the stage flips or the derived
+  // density scale moves a whole 5% step (~20 discrete rebuilds per ramp).
+  useEffect(() => subscribeVoxelReality(next => {
+    setRealitySnapshot(prev => {
+      const step = (s: typeof prev) => Math.round(surfaceEffectRealityDensityScale(s.effects) * 20);
+      return prev.stage !== next.stage || step(prev) !== step(next) ? next : prev;
+    });
+  }), []);
 
   const density = getGraphicsQuality().voxelEffectDensity * surfaceEffectRealityDensityScale(realitySnapshot.effects);
   const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);

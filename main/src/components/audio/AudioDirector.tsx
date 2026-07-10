@@ -11,6 +11,13 @@ import { useAudioSettings } from '../../audio/audioSettings.ts';
 import { getMusicEngine } from '../../audio/musicEngine.ts';
 import { getSfxEngine } from '../../audio/sfxEngine.ts';
 import { setStoryScoreOutput } from '../../story/storyScore.ts';
+import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
+import { getStoryStateSnapshot } from '../../story/storyState.ts';
+import {
+  getMusicPrimitives,
+  setMusicPrimitiveTargets,
+  tickMusicPrimitives
+} from '../../audio/musicPrimitives.ts';
 import {
   resolvePlanetMusicMood,
   resolveMusicMix,
@@ -33,13 +40,15 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
     () => resolvePlanetMusicMood(buildPlanetProfile(terrainSeed)),
     [terrainSeed]
   );
-  // Any live story chapter ducks the streamed layers to the quiet transit bed —
-  // the procedural story SCORE (story/storyScore.ts) carries the music instead.
+  // The LO-FI story eras (prologue/ch1) duck the streamed layers to the quiet
+  // transit bed — recorded music doesn't exist yet at that fidelity. From ch2 on
+  // the normal scene returns and the ERA primitive fades the recorded layers in
+  // under the procedural score: the awakening ladder applies to music too.
   const scene = resolveMusicScene(
     app.phase,
     flight.phase,
     flight.controlMode,
-    story.active
+    story.active && (story.chapter === 'prologue' || story.chapter === 'ch1')
   );
   const sceneRef = useRef<MusicScene>(scene);
   const planetMoodRef = useRef<PlanetMusicMood>(planetMood);
@@ -75,7 +84,11 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
 
   useEffect(() => {
     let raf = 0;
+    let lastAt = performance.now();
     const tick = () => {
+      const now = performance.now();
+      const dt = Math.min(0.1, (now - lastAt) / 1000);
+      lastAt = now;
       const warp = getWarp();
       const warpIntensity = warp.active
         ? Math.sin(Math.min(warp.progress, 1) * Math.PI) * warp.intensity
@@ -106,11 +119,26 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
       const daylight = sceneRef.current === 'deepSpace'
         ? 0.5
         : localDaylight(getSunDirection(), getPlayerUp());
+
+      // Global primitives — the world's standing truths. (The story director
+      // writes tension/energy while a story is live; here we own the rest, plus
+      // the ambient tension/energy when no story is running.)
+      const reality = getVoxelRealityEffects();
+      const inSpace = sceneRef.current === 'deepSpace';
+      setMusicPrimitiveTargets({
+        era: Math.min(1, reality.chroma * 0.35 + reality.detail * 0.3 + reality.organic * 0.35),
+        warmth: daylight * 0.85 + 0.1,
+        wonder: Math.min(1, (1 - daylight) * 0.55 + (inSpace ? 0.5 : 0) + getPlayerSubmergence() * 0.35 + 0.15),
+        ...(getStoryStateSnapshot().active ? {} : { tension: warpIntensity * 0.5, energy: warpIntensity })
+      });
+      tickMusicPrimitives(dt);
+
       const mix = resolveMusicMix(
         sceneRef.current,
         warp.kind === 'travel' ? warpIntensity : warpIntensity * 0.28,
         planetMoodRef.current,
-        daylight
+        daylight,
+        getMusicPrimitives()
       );
       const engine = getMusicEngine();
       engine.setLayerTargets(mix.layers, mix.fadeSeconds);

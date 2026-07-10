@@ -62,6 +62,10 @@ function emit(): void {
 
 function setSnapshot(patch: Partial<StorySnapshot>): void {
   snapshot = { ...snapshot, ...patch };
+  // Dev affordance (mirrors window.__game): lets capture harnesses watch beats.
+  if (typeof window !== 'undefined') {
+    (window as unknown as { __storyBeat?: string | null }).__storyBeat = snapshot.beat;
+  }
   emit();
 }
 

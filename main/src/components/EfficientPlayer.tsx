@@ -102,6 +102,9 @@ import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
 import { getSideFacing, getSideLens, setSideFacing, sideHarvestProbePoints } from '../story/sideLens.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
+import { consumePlayerNudge } from '../story/playerNudge.ts';
+
+const _zeroVelocity = new THREE.Vector3();
 
 // Movie-mode merge: the story autopilot's virtual gamepad overlays the keyboard.
 function withAutopilot<T extends Record<string, boolean | undefined>>(controls: T): T {
@@ -1072,6 +1075,16 @@ export default function EfficientPlayer({
 
     const position = vectorFromRapier(body.translation());
 
+    // Movie-mode last-resort unstick: the autopilot may request a small
+    // teleport toward its goal after repeated failed break-outs. Consumed only
+    // while the autopilot is driving — unreachable in real play.
+    const nudge = consumePlayerNudge();
+    if (nudge && isAutopilotDriving()) {
+      position.add(nudge);
+      body.setTranslation(vectorToRapier(position), true);
+      body.setLinvel(vectorToRapier(_zeroVelocity), true);
+    }
+
     transitionCooldown.current = Math.max(0, transitionCooldown.current - FIXED_PHYSICS_STEP);
 
     // Active surface frame. Either the continuous smooth-gravity FIELD prototype
@@ -1285,10 +1298,22 @@ export default function EfficientPlayer({
       }
     }
 
-    if (grounded && moving && !submerged && !onLadder && !transitionLocked && canStepUp(position, activeUp, moveDirection)) {
-      const upSpeed = nextVelocity.dot(activeUp);
-      if (upSpeed < STEP_ASSIST_UP_SPEED) {
-        nextVelocity.addScaledVector(activeUp, STEP_ASSIST_UP_SPEED - upSpeed);
+    if (moving && !onLadder && !transitionLocked && canStepUp(position, activeUp, moveDirection)) {
+      if (grounded && !submerged) {
+        const upSpeed = nextVelocity.dot(activeUp);
+        if (upSpeed < STEP_ASSIST_UP_SPEED) {
+          nextVelocity.addScaledVector(activeUp, STEP_ASSIST_UP_SPEED - upSpeed);
+        }
+      } else if (submergence.current > 0.05) {
+        // WATER MANTLE: swimming/wading against a one-block lip with a walkable
+        // top — haul the capsule over it. Stronger than the dry assist because
+        // buoyant drag opposes it; applied after the swim blend so it wins.
+        // This is what makes leaving water onto land actually possible.
+        const mantleSpeed = STEP_ASSIST_UP_SPEED * 1.4;
+        const upSpeed = nextVelocity.dot(activeUp);
+        if (upSpeed < mantleSpeed) {
+          nextVelocity.addScaledVector(activeUp, mantleSpeed - upSpeed);
+        }
       }
     }
 

@@ -162,60 +162,81 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     return `[${'█'.repeat(filled)}${'·'.repeat(BAR_CELLS - filled)}]`;
   }, [progress]);
 
+  // Classic Oregon Trail split: the GRAPHICS PANE on top (the wireframe commute,
+  // unobstructed), the TEXT CONSOLE below. Event cards take over the console —
+  // the vectors stay visible through every decision.
   return (
-    <div style={{ position: 'absolute', inset: 0 }}>
-      {/* The commute itself: earliest-3D vectors behind the paperwork. */}
-      <VoyageWireframe progressRef={progressRef} anomalyRef={anomalyRef} />
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
+      {/* --- viewport: the commute, unobstructed --- */}
+      <div style={{ position: 'relative', flex: '1 1 55%', minHeight: 0, overflow: 'hidden' }}>
+        <VoyageWireframe progressRef={progressRef} anomalyRef={anomalyRef} />
+        <div style={{
+          position: 'absolute', top: 14, left: 18,
+          color: PHOSPHOR_DIM, fontSize: 11, letterSpacing: '0.18em'
+        }}>
+          HAULER 7C-θ/EX · EXTERIOR COMPOSITE (VECTOR)
+        </div>
+        <div style={{
+          position: 'absolute', bottom: 10, left: 18, right: 18,
+          display: 'flex', justifyContent: 'space-between',
+          color: PHOSPHOR_FAINT, fontSize: 10, letterSpacing: '0.14em'
+        }}>
+          <span>DESTINATION: CUBE SITE 7C-θ · PURPOSE: EXTRACTION</span>
+          <span style={{ letterSpacing: 0 }}>{bar}</span>
+        </div>
+      </div>
 
+      {/* --- console: ledger + protocols, or the active decision --- */}
       <div style={{
-        position: 'absolute', inset: 0,
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', gap: 8,
-        fontSize: 13, lineHeight: 2
+        flex: '0 0 45%',
+        borderTop: `1px solid ${PHOSPHOR_DIM}`,
+        background: 'rgba(2,6,4,0.92)',
+        padding: '18px clamp(18px, 6vw, 72px)',
+        overflowY: 'auto',
+        fontSize: 13,
+        lineHeight: 2
       }}>
-        <div style={{ color: PHOSPHOR_DIM, fontSize: 11, marginBottom: 10 }}>
-          HAULER 7C-θ/EX · TRANSIT LEDGER · POD 4, BERTH 19 (YOU)
-        </div>
-
-        <div style={{ width: 'min(84vw, 560px)', background: 'rgba(2,6,4,0.55)', padding: '4px 10px' }}>
-          <Row k="RATION UNITS" v={`${ledger.rations}%`} warn={ledger.rations < 82} />
-          <Row k="HULL" v={`${ledger.hull}%`} warn={ledger.hull < 82} />
-          <Row k="COMPLIANCE INDEX" v={`${ledger.compliance}%`} warn={ledger.compliance < 78} />
-          <Row k="DAYS IN TRANSIT" v={`${ledger.transit.toFixed(2)}`} />
-        </div>
-
-        <div style={{ marginTop: 12, fontSize: 12, letterSpacing: 0 }}>{bar}</div>
-        <div style={{ color: PHOSPHOR_FAINT, fontSize: 10 }}>DESTINATION: CUBE SITE 7C-θ · PURPOSE: EXTRACTION</div>
-
-        <div style={{ marginTop: 14, width: 'min(84vw, 560px)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <SettingRow
-            label={VOYAGE_SETTINGS.pace.label}
-            options={VOYAGE_SETTINGS.pace.options.map(o => ({ id: o.id, label: o.label }))}
-            selected={pace}
-            onSelect={id => { playSfx('terminalKey'); setPace(id as 'standard' | 'overclocked'); }}
-          />
-          <SettingRow
-            label={VOYAGE_SETTINGS.rations.label}
-            options={VOYAGE_SETTINGS.rations.options.map(o => ({ id: o.id, label: o.label }))}
-            selected={rations}
-            onSelect={id => { playSfx('terminalKey'); setRations(id as 'full' | 'half'); }}
-          />
-        </div>
+        {!card && (
+          <div style={{ display: 'flex', gap: 'clamp(20px, 5vw, 64px)', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 260px' }}>
+              <div style={{ color: PHOSPHOR_DIM, fontSize: 10, letterSpacing: '0.2em', marginBottom: 6 }}>
+                TRANSIT LEDGER · POD 4, BERTH 19 (YOU)
+              </div>
+              <Row k="RATION UNITS" v={`${ledger.rations}%`} warn={ledger.rations < 82} />
+              <Row k="HULL" v={`${ledger.hull}%`} warn={ledger.hull < 82} />
+              <Row k="COMPLIANCE INDEX" v={`${ledger.compliance}%`} warn={ledger.compliance < 78} />
+              <Row k="DAYS IN TRANSIT" v={`${ledger.transit.toFixed(2)}`} />
+            </div>
+            <div style={{ flex: '1 1 260px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ color: PHOSPHOR_DIM, fontSize: 10, letterSpacing: '0.2em' }}>
+                STANDING PROTOCOLS
+              </div>
+              <SettingRow
+                label={VOYAGE_SETTINGS.pace.label}
+                options={VOYAGE_SETTINGS.pace.options.map(o => ({ id: o.id, label: o.label }))}
+                selected={pace}
+                onSelect={id => { playSfx('terminalKey'); setPace(id as 'standard' | 'overclocked'); }}
+              />
+              <SettingRow
+                label={VOYAGE_SETTINGS.rations.label}
+                options={VOYAGE_SETTINGS.rations.options.map(o => ({ id: o.id, label: o.label }))}
+                selected={rations}
+                onSelect={id => { playSfx('terminalKey'); setRations(id as 'full' | 'half'); }}
+              />
+              <div style={{ color: PHOSPHOR_FAINT, fontSize: 10, marginTop: 'auto' }}>
+                PROTOCOLS APPLY PER LEG. THE LEDGER REMEMBERS.
+              </div>
+            </div>
+          </div>
+        )}
 
         {card && (
-          <div style={{
-            position: 'absolute', left: '50%', top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'min(88vw, 520px)',
-            background: TERMINAL_BG,
-            border: `1px solid ${atBridgeRef.current ? PHOSPHOR : PHOSPHOR_DIM}`,
-            boxShadow: `0 0 44px rgba(125,252,165,${atBridgeRef.current ? 0.3 : 0.14})`,
-            padding: '22px 26px',
-            animation: 'pvCardIn 240ms ease both'
-          }}>
-            <div style={{ fontSize: 11, color: atBridgeRef.current ? PHOSPHOR : PHOSPHOR_DIM, marginBottom: 10 }}>{card.title}</div>
-            <div style={{ fontSize: 13, lineHeight: 1.9, marginBottom: 18 }}>{card.body}</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ maxWidth: 640, margin: '0 auto', animation: 'pvCardIn 240ms ease both' }}>
+            <div style={{ fontSize: 11, color: atBridgeRef.current ? PHOSPHOR : PHOSPHOR_DIM, marginBottom: 8, letterSpacing: '0.2em' }}>
+              {card.title}
+            </div>
+            <div style={{ fontSize: 13, lineHeight: 1.9, marginBottom: 14 }}>{card.body}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
               {card.options.map((option, i) => (
                 <button
                   key={option.id}
@@ -228,7 +249,7 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
                     color: PHOSPHOR,
                     background: 'transparent',
                     border: `1px solid ${PHOSPHOR_FAINT}`,
-                    padding: '10px 14px',
+                    padding: '9px 14px',
                     cursor: 'pointer'
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(125,252,165,0.10)'; }}
@@ -240,14 +261,14 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
             </div>
           </div>
         )}
-
-        <style>{`
-          @keyframes pvCardIn {
-            from { opacity: 0; transform: translate(-50%, -49%); }
-            to   { opacity: 1; transform: translate(-50%, -50%); }
-          }
-        `}</style>
       </div>
+
+      <style>{`
+        @keyframes pvCardIn {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };

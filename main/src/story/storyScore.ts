@@ -1,4 +1,9 @@
 import type { StoryBeat } from './storyState.ts';
+import {
+  getMusicPrimitives,
+  setMusicChord,
+  setMusicPrimitiveTargets
+} from '../audio/musicPrimitives.ts';
 
 // --- The story score -------------------------------------------------------------------
 //
@@ -20,8 +25,16 @@ type Wave = 'square' | 'sawtooth' | 'triangle' | 'sine';
 interface ScoreMood {
   /** Semitones above the root (A1 = 55 Hz) for the pad chord (max 4 tones). */
   chord: number[];
-  /** Ostinato pattern in semitones (null = rest), stepped in 8th notes. */
+  /**
+   * Harmonic motion: chords cycled every 2 bars (pad/sub retune, ostinato
+   * transposes to each chord's root). Omitted = static `chord` (cutscenes,
+   * where the intensity rail IS the movement).
+   */
+  progression?: number[][];
+  /** Ostinato pattern in semitones RELATIVE TO THE CURRENT CHORD ROOT. */
   pattern: Array<number | null>;
+  /** Generative lead: scale (semis from root) + phrase probability per 4 bars. */
+  melody?: { scale: number[]; density: number };
   tempo: number;
   wave: Wave;
   pad: number;      // pad gain
@@ -34,34 +47,56 @@ interface ScoreMood {
 
 const ROOT_HZ = 55; // A1
 
+/**
+ * The CELESTIAL IDLE BED: when no story beat leads, the instrument never fully
+ * leaves — it holds a soft consonant space pad (drifting through open fifths
+ * and add9 colors, sparse distant lead) UNDER the streamed music, scaled by the
+ * wonder/warmth primitives. Whatever combination of factors the world produces,
+ * something harmonic is always breathing.
+ */
+const IDLE_MOOD: ScoreMood = {
+  chord: [0, 7, 12],
+  progression: [[0, 7, 12], [5, 12, 19], [7, 14, 19], [0, 7, 16]],
+  pattern: [null, null, null, null, null, null, null, null],
+  melody: { scale: [0, 7, 12, 14, 19, 24], density: 0.14 },
+  tempo: 46,
+  wave: 'triangle',
+  pad: 0.07,
+  sub: 0.05,
+  ost: 0,
+  riser: 0,
+  baseline: 0.3,
+  octave: 12
+};
+
 const MOODS: Partial<Record<StoryBeat, ScoreMood>> = {
   // The terminal era: patient machine pulses. Nothing hurries. Nothing hopes.
   crawl:    { chord: [0, 7], pattern: [0, null, null, null, 7, null, null, null], tempo: 52, wave: 'square', pad: 0.05, sub: 0.10, ost: 0.045, riser: 0.05, baseline: 0.25, octave: 24 },
   manifest: { chord: [0, 7], pattern: [0, null, 0, null, 7, null, 0, null], tempo: 60, wave: 'square', pad: 0.05, sub: 0.10, ost: 0.05, riser: 0.05, baseline: 0.3, octave: 24 },
   // The commute: a worried minor drift under the wireframes.
-  voyage:   { chord: [0, 3, 7], pattern: [0, 7, 3, 7, 0, 7, 10, 7], tempo: 66, wave: 'square', pad: 0.07, sub: 0.11, ost: 0.055, riser: 0.09, baseline: 0.35, octave: 24 },
+  voyage:   { chord: [0, 3, 7], progression: [[0, 3, 7], [8, 12, 15]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.35 }, pattern: [0, 7, 3, 7, 0, 7, 10, 7], tempo: 66, wave: 'square', pad: 0.07, sub: 0.11, ost: 0.055, riser: 0.09, baseline: 0.35, octave: 24 },
   // Pong: the pulse doubles; the era's whole orchestra is one oscillator afraid.
   deflect:  { chord: [0, 5], pattern: [0, 0, null, 0, 5, 0, null, 12], tempo: 126, wave: 'square', pad: 0.05, sub: 0.13, ost: 0.07, riser: 0.16, baseline: 0.55, octave: 24 },
   crash:    { chord: [0, 1], pattern: [0, null, 1, null, 0, null, 1, null], tempo: 88, wave: 'sawtooth', pad: 0.08, sub: 0.15, ost: 0.05, riser: 0.2, baseline: 0.7, octave: 12 },
   // Falling: a semitone of dread widening under the raster sky.
   descent:  { chord: [0, 1, 7], pattern: [0, null, null, 1, null, null, 0, null], tempo: 84, wave: 'sawtooth', pad: 0.1, sub: 0.16, ost: 0.045, riser: 0.22, baseline: 0.5, octave: 12 },
   // The chip era: work becomes a groove (the one mood allowed to be fun).
-  'ch1-raster': { chord: [0, 3, 7, 10], pattern: [0, 7, 3, 10, 7, 12, 3, 7], tempo: 112, wave: 'square', pad: 0.06, sub: 0.12, ost: 0.075, riser: 0.08, baseline: 0.4, octave: 24 },
+  'ch1-raster': { chord: [0, 3, 7, 10], progression: [[0, 3, 7], [8, 12, 15], [3, 7, 10], [10, 14, 17]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.5 }, pattern: [0, 7, 3, 10, 7, 12, 3, 7], tempo: 112, wave: 'square', pad: 0.06, sub: 0.12, ost: 0.075, riser: 0.08, baseline: 0.4, octave: 24 },
   // The lift: the groove decomposes into held wonder.
   'ch1-lift': { chord: [0, 3, 7, 12], pattern: [0, null, null, null, 7, null, null, null], tempo: 84, wave: 'sawtooth', pad: 0.13, sub: 0.13, ost: 0.03, riser: 0.24, baseline: 0.6, octave: 12 },
   // The CCTV era: tension pads, sparse heartbeat, a semitone that will not resolve.
-  'ch1-anomaly': { chord: [0, 1, 7], pattern: [0, null, null, null, 1, null, null, null], tempo: 58, wave: 'sawtooth', pad: 0.11, sub: 0.13, ost: 0.035, riser: 0.14, baseline: 0.4, octave: 12 },
+  'ch1-anomaly': { chord: [0, 1, 7], progression: [[0, 3, 7], [1, 5, 8]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.3 }, pattern: [0, null, null, null, 1, null, null, null], tempo: 58, wave: 'sawtooth', pad: 0.11, sub: 0.13, ost: 0.035, riser: 0.14, baseline: 0.4, octave: 12 },
   'a1-ramp': { chord: [0, 3, 7], pattern: [0, 3, 7, 12, 0, 3, 7, 12], tempo: 96, wave: 'sawtooth', pad: 0.12, sub: 0.14, ost: 0.05, riser: 0.3, baseline: 0.85, octave: 12 },
-  'ch2-color': { chord: [0, 3, 8], pattern: [0, null, 3, null, 8, null, 3, null], tempo: 64, wave: 'sawtooth', pad: 0.11, sub: 0.12, ost: 0.04, riser: 0.14, baseline: 0.4, octave: 12 },
-  'ch2-approach': { chord: [0, 1, 8], pattern: [0, null, 0, null, 1, null, 0, null], tempo: 72, wave: 'sawtooth', pad: 0.12, sub: 0.14, ost: 0.045, riser: 0.22, baseline: 0.55, octave: 12 },
+  'ch2-color': { chord: [0, 3, 8], progression: [[0, 3, 8], [5, 8, 12], [0, 3, 7], [1, 5, 8]], melody: { scale: [0, 2, 3, 5, 7, 8, 10, 12], density: 0.35 }, pattern: [0, null, 3, null, 8, null, 3, null], tempo: 64, wave: 'sawtooth', pad: 0.11, sub: 0.12, ost: 0.04, riser: 0.14, baseline: 0.4, octave: 12 },
+  'ch2-approach': { chord: [0, 1, 8], progression: [[0, 1, 8], [0, 3, 8]], melody: { scale: [0, 1, 3, 5, 7, 8], density: 0.25 }, pattern: [0, null, 0, null, 1, null, 0, null], tempo: 72, wave: 'sawtooth', pad: 0.12, sub: 0.14, ost: 0.045, riser: 0.22, baseline: 0.55, octave: 12 },
   // A2: the flood is a cluster; the liberation build lives on the intensity rail.
   'a2-awakening': { chord: [0, 1, 6, 7], pattern: [0, 1, 0, 1, 0, 1, 0, 1], tempo: 132, wave: 'sawtooth', pad: 0.13, sub: 0.16, ost: 0.05, riser: 0.34, baseline: 0.8, octave: 12 },
   // Chapter 3: warmth earned — minor lifts toward its relative major.
-  'ch3-gather': { chord: [0, 7, 12, 15], pattern: [0, null, 7, null, 12, null, 7, null], tempo: 76, wave: 'triangle', pad: 0.12, sub: 0.11, ost: 0.05, riser: 0.1, baseline: 0.35, octave: 12 },
-  'ch3-dusk': { chord: [0, 7, 12, 16], pattern: [0, null, null, null, 12, null, null, null], tempo: 66, wave: 'sawtooth', pad: 0.16, sub: 0.12, ost: 0.03, riser: 0.26, baseline: 0.7, octave: 12 },
-  'ch3-await-rest': { chord: [0, 7, 15], pattern: [0, null, null, null, null, null, 7, null], tempo: 54, wave: 'triangle', pad: 0.1, sub: 0.1, ost: 0.03, riser: 0.08, baseline: 0.3, octave: 12 },
+  'ch3-gather': { chord: [0, 7, 12, 15], progression: [[0, 7, 12, 15], [3, 7, 12], [10, 14, 17], [7, 10, 14]], melody: { scale: [0, 2, 3, 5, 7, 9, 10, 12], density: 0.6 }, pattern: [0, null, 7, null, 12, null, 7, null], tempo: 76, wave: 'triangle', pad: 0.12, sub: 0.11, ost: 0.05, riser: 0.1, baseline: 0.35, octave: 12 },
+  'ch3-dusk': { chord: [0, 7, 12, 16], progression: [[0, 7, 12, 16], [5, 12, 17, 21]], melody: { scale: [0, 2, 3, 5, 7, 9, 10, 12], density: 0.4 }, pattern: [0, null, null, null, 12, null, null, null], tempo: 66, wave: 'sawtooth', pad: 0.16, sub: 0.12, ost: 0.03, riser: 0.26, baseline: 0.7, octave: 12 },
+  'ch3-await-rest': { chord: [0, 7, 15], progression: [[0, 7, 15], [5, 12, 17]], melody: { scale: [0, 3, 7, 10, 12], density: 0.25 }, pattern: [0, null, null, null, null, null, 7, null], tempo: 54, wave: 'triangle', pad: 0.1, sub: 0.1, ost: 0.03, riser: 0.08, baseline: 0.3, octave: 12 },
   // Dawn: the largest build in the slice, resolving major as texture arrives.
-  'a3-dawn': { chord: [0, 4, 7, 11], pattern: [0, 4, 7, 11, 12, 11, 7, 4], tempo: 88, wave: 'sawtooth', pad: 0.17, sub: 0.13, ost: 0.05, riser: 0.32, baseline: 0.75, octave: 12 }
+  'a3-dawn': { chord: [0, 4, 7, 11], progression: [[0, 4, 7, 11], [5, 9, 12, 16], [7, 11, 14], [0, 4, 7, 12]], melody: { scale: [0, 2, 4, 5, 7, 9, 11, 12], density: 0.7 }, pattern: [0, 4, 7, 11, 12, 11, 7, 4], tempo: 88, wave: 'sawtooth', pad: 0.17, sub: 0.13, ost: 0.05, riser: 0.32, baseline: 0.75, octave: 12 }
 };
 
 // --- engine state ---------------------------------------------------------------------
@@ -80,13 +115,28 @@ let riserFilter: BiquadFilterNode | null = null;
 interface PadVoice { oscA: OscillatorNode; oscB: OscillatorNode; gain: GainNode }
 let padVoices: PadVoice[] = [];
 
-let mood: ScoreMood | null = null;
-let intensity = 0;
+let melodyGain: GainNode | null = null;
+let melodyFilter: BiquadFilterNode | null = null;
+let melodyDelay: DelayNode | null = null;
+
+// The idle bed leads from the very first unlock — the instrument is never off.
+let mood: ScoreMood | null = IDLE_MOOD;
+/** True when the celestial idle bed leads (no story beat) — extra quiet. */
+let idle = true;
+let intensity = IDLE_MOOD.baseline;
 let volume = 0.78;
 let muted = false;
 let schedulerTimer: number | null = null;
 let nextNoteAt = 0;
 let patternStep = 0;
+let currentChord: number[] = [0];
+let chordIndex = 0;
+/** Melody phrase state: scale-degree index of the last note (random walk). */
+let melodyDegree = 4;
+
+const STEPS_PER_BAR = 8; // 8th notes, 4/4
+const STEPS_PER_CHORD = STEPS_PER_BAR * 2;
+const STEPS_PER_PHRASE_SLOT = STEPS_PER_BAR * 4;
 
 const hzForSemis = (semis: number, octaveShift = 0) => ROOT_HZ * Math.pow(2, (semis + octaveShift) / 12);
 
@@ -154,6 +204,28 @@ function ensureContext(): AudioContext | null {
   const buffer = ctx.createBuffer(1, ctx.sampleRate * noiseSeconds, ctx.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  // MELODY lead bus: triangle phrases → gentle lowpass → dotted-8th feedback
+  // delay (the cinematic space that keeps sparse phrases alive).
+  melodyFilter = ctx.createBiquadFilter();
+  melodyFilter.type = 'lowpass';
+  melodyFilter.frequency.value = 2200;
+  melodyGain = ctx.createGain();
+  melodyGain.gain.value = 0.9;
+  const delay = ctx.createDelay(1.5);
+  melodyDelay = delay;
+  delay.delayTime.value = 0.42;
+  const feedback = ctx.createGain();
+  feedback.gain.value = 0.32;
+  const delayMix = ctx.createGain();
+  delayMix.gain.value = 0.45;
+  melodyFilter.connect(melodyGain);
+  melodyGain.connect(master);
+  melodyGain.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(delayMix);
+  delayMix.connect(master);
+
   const noise = ctx.createBufferSource();
   noise.buffer = buffer;
   noise.loop = true;
@@ -182,38 +254,95 @@ function startScheduler(): void {
     const stepSeconds = 60 / mood.tempo / 2; // 8th notes
     while (nextNoteAt < ctx.currentTime + 0.18) {
       if (nextNoteAt < ctx.currentTime) nextNoteAt = ctx.currentTime;
+
+      // Harmonic motion: the progression turns every two bars; pad/sub glide
+      // to the new chord and the ostinato transposes with its root.
+      if (mood.progression && patternStep % STEPS_PER_CHORD === 0) {
+        chordIndex = Math.floor(patternStep / STEPS_PER_CHORD) % mood.progression.length;
+        currentChord = mood.progression[chordIndex];
+        retuneVoices();
+      }
+      const chordRoot = currentChord[0] ?? 0;
+
       const semis = mood.pattern[patternStep % mood.pattern.length];
-      if (semis != null && ostFilter) {
+      // Humanize: soft velocity drift + the occasional dropped note when calm.
+      const dropped = intensity < 0.45 && Math.random() < 0.08;
+      if (semis != null && !dropped && ostFilter) {
         const osc = ctx.createOscillator();
         osc.type = mood.wave;
-        osc.frequency.value = hzForSemis(semis, mood.octave);
+        osc.frequency.value = hzForSemis(chordRoot + semis, mood.octave);
+        const velocity = 0.78 + Math.random() * 0.22;
         const env = ctx.createGain();
         env.gain.setValueAtTime(0, nextNoteAt);
-        env.gain.linearRampToValueAtTime(1, nextNoteAt + 0.008);
+        env.gain.linearRampToValueAtTime(velocity, nextNoteAt + 0.008);
         env.gain.exponentialRampToValueAtTime(0.001, nextNoteAt + stepSeconds * 1.7);
         osc.connect(env);
         env.connect(ostFilter);
         osc.start(nextNoteAt);
         osc.stop(nextNoteAt + stepSeconds * 2);
       }
+
+      // The lead: every four bars, maybe a phrase — a stepwise random walk over
+      // the mood's scale, so the harmony always has a singer above it.
+      if (mood.melody && patternStep % STEPS_PER_PHRASE_SLOT === 0 && Math.random() < mood.melody.density) {
+        schedulePhrase(nextNoteAt, stepSeconds);
+      }
+
       patternStep++;
       nextNoteAt += stepSeconds;
     }
   }, 60);
 }
 
+/** A 5–8 note phrase: mostly stepwise, breathing rhythm, through the delay bus. */
+function schedulePhrase(startAt: number, stepSeconds: number): void {
+  if (!ctx || !mood?.melody || !melodyFilter) return;
+  const scale = mood.melody.scale;
+  const chordRoot = currentChord[0] ?? 0;
+  const noteCount = 5 + Math.floor(Math.random() * 4);
+  let at = startAt;
+  for (let i = 0; i < noteCount; i++) {
+    // Random walk: mostly ±1 degree, occasional leap, gravity toward mid-scale.
+    const drift = Math.random() < 0.2 ? (Math.random() < 0.5 ? -2 : 2) : (Math.random() < 0.5 ? -1 : 1);
+    melodyDegree = Math.max(0, Math.min(scale.length - 1, melodyDegree + drift + (melodyDegree > scale.length - 2 ? -1 : 0)));
+    const durSteps = [2, 2, 3, 4][Math.floor(Math.random() * 4)];
+    const dur = durSteps * stepSeconds;
+    const osc = ctx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = hzForSemis(chordRoot + scale[melodyDegree], 36);
+    const gain = (0.05 + 0.05 * intensity) * (0.8 + Math.random() * 0.2);
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(0.0001, at);
+    env.gain.exponentialRampToValueAtTime(gain, at + 0.06);
+    env.gain.setValueAtTime(gain, at + dur * 0.6);
+    env.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    osc.connect(env);
+    env.connect(melodyFilter);
+    osc.start(at);
+    osc.stop(at + dur + 0.1);
+    at += dur;
+    // Breathe: occasional rest between notes.
+    if (Math.random() < 0.25) at += stepSeconds;
+  }
+}
+
 /** Smooth the mood/intensity-dependent parameters toward their targets. */
 function applyRails(): void {
   if (!ctx || !master) return;
   const now = ctx.currentTime;
+  const prim = getMusicPrimitives();
   const on = mood != null && !muted;
-  master.gain.setTargetAtTime(on ? volume * 0.9 : 0, now, 0.4);
+  // The idle bed sits UNDER the streamed music, lifted by the wonder axis.
+  const idleScale = idle ? 0.32 * (0.5 + 0.7 * prim.wonder) : 1;
+  master.gain.setTargetAtTime(on ? volume * 0.9 * idleScale : 0, now, idle ? 1.2 : 0.4);
   if (!mood) return;
+  if (idle) intensity = 0.2 + 0.5 * prim.wonder; // the sky sets the idle breath
   const boost = 0.55 + 0.45 * intensity;
   padGain?.gain.setTargetAtTime(mood.pad * boost, now, 0.8);
   subGain?.gain.setTargetAtTime(mood.sub * boost, now, 0.8);
   ostGain?.gain.setTargetAtTime(mood.ost * (0.35 + 0.65 * intensity), now, 0.4);
-  padFilter?.frequency.setTargetAtTime(320 + intensity * 2400, now, 0.7);
+  // Warmth opens the pad; tension (via intensity) opens everything else.
+  padFilter?.frequency.setTargetAtTime(320 + intensity * 2100 + prim.warmth * 500, now, 0.7);
   ostFilter?.frequency.setTargetAtTime(700 + intensity * 2600, now, 0.5);
   riserGain?.gain.setTargetAtTime(mood.riser * intensity * intensity, now, 0.35);
   riserFilter?.frequency.setTargetAtTime(220 + intensity * 1900, now, 0.4);
@@ -223,7 +352,7 @@ function retuneVoices(): void {
   if (!ctx || !mood) return;
   const now = ctx.currentTime;
   padVoices.forEach((voice, i) => {
-    const semis = mood!.chord[i];
+    const semis = currentChord[i];
     const active = semis != null;
     voice.gain.gain.setTargetAtTime(active ? 0.5 : 0, now, 1.2);
     if (active) {
@@ -232,7 +361,11 @@ function retuneVoices(): void {
       voice.oscB.frequency.setTargetAtTime(hz, now, 0.9);
     }
   });
-  subOsc?.frequency.setTargetAtTime(hzForSemis(mood.chord[0] ?? 0, 0), now, 1.0);
+  subOsc?.frequency.setTargetAtTime(hzForSemis(currentChord[0] ?? 0, 0), now, 1.0);
+  // The lead's echo keeps time with the mood (dotted 8th).
+  melodyDelay?.delayTime.setTargetAtTime((60 / mood.tempo) * 0.75, now, 0.5);
+  // Publish the harmonic center — every other voice in the game reads this.
+  setMusicChord(currentChord[0] ?? 0, currentChord);
 }
 
 // --- public API -------------------------------------------------------------------------
@@ -247,17 +380,29 @@ export function setStoryScoreOutput(nextVolume: number, nextMuted: boolean): voi
   muted = nextMuted;
 }
 
-/** Beat entry hook: retunes the whole instrument to the beat's mood. */
+/**
+ * Beat entry hook: retunes the whole instrument to the beat's mood. `null`
+ * (sandbox / story over) hands the instrument to the CELESTIAL IDLE BED —
+ * the score never leaves, it recedes.
+ */
 export function setScoreBeat(beat: StoryBeat | null): void {
   const next = beat ? MOODS[beat] ?? null : null;
-  mood = next;
-  intensity = next ? next.baseline : 0;
-  if (next && ctx) retuneVoices();
+  idle = next == null;
+  mood = next ?? IDLE_MOOD;
+  intensity = mood.baseline;
+  patternStep = 0;
+  chordIndex = 0;
+  currentChord = mood.progression?.[0] ?? mood.chord;
+  melodyDegree = 4;
+  if (ctx) retuneVoices();
+  // Publish the drama rails while a story beat leads.
+  if (!idle) setMusicPrimitiveTargets({ tension: mood.baseline, energy: Math.min(1, mood.tempo / 130) });
 }
 
 /** Timeline hook: the director drives this with its OWN ramp values. */
 export function setScoreIntensity(value: number): void {
   intensity = Math.min(1, Math.max(0, value));
+  if (!idle) setMusicPrimitiveTargets({ tension: intensity, energy: intensity * 0.85 });
 }
 
 /**

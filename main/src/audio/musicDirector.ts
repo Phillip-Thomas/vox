@@ -115,7 +115,8 @@ export function resolveMusicMix(
   scene: MusicScene,
   warpIntensity: number,
   mood: PlanetMusicMood = NEUTRAL_PLANET_MOOD,
-  daylight = 1
+  daylight = 1,
+  primitives?: { era: number; warmth: number; wonder: number; tension: number }
 ): MusicMix {
   const intensity = clamp01(warpIntensity);
   const day = clamp01(daylight);
@@ -125,6 +126,22 @@ export function resolveMusicMix(
 
   for (const [id, gain] of Object.entries(base.layers) as Array<[MusicLayerId, number]>) {
     layers[id] = gain * duck;
+  }
+
+  // Global primitives modulate the streamed layers GENTLY (multipliers centered
+  // near 1 so the hand-tuned scene mixes stay recognizable):
+  //   era     — the music fidelity ladder: recorded layers fade in as reality
+  //             resolves (lo-fi story eras keep them nearly silent)
+  //   wonder  — the celestial axis lifts the shimmer wash
+  //   warmth  — daylight/safety leans the surface bed up
+  //   tension — drama pulls the ambient beds down to make room for the score
+  if (primitives) {
+    const era = clamp01(primitives.era);
+    const room = 1 - clamp01(primitives.tension) * 0.45;
+    if (layers.surface != null) layers.surface *= era * (0.55 + 0.45 * clamp01(primitives.warmth)) * room;
+    if (layers.shimmer != null) layers.shimmer *= (0.25 + 0.75 * era) * (0.6 + 0.7 * clamp01(primitives.wonder)) * room;
+    if (layers.deepSpace != null) layers.deepSpace *= (0.5 + 0.5 * clamp01(primitives.wonder)) * room;
+    if (layers.menu != null) layers.menu *= 0.6 + 0.4 * era;
   }
 
   layers.warp = Math.max(base.layers.warp ?? 0, intensity * 0.34);
