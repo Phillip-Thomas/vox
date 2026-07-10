@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { storyDirectorTick } from './storyDirector.ts';
 import { advanceToBeat, getStoryStateSnapshot } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
+import { autopilotTick, isMovieMode } from './autopilot.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getFeedRuntime } from './feedRuntime.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
@@ -58,6 +59,7 @@ const StoryDirectorDriver: React.FC = () => {
     const camera = state.camera as THREE.PerspectiveCamera;
     const dt = Math.min(rawDt, 0.1);
     storyDirectorTick(dt, playing && camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
+    if (isMovieMode()) autopilotTick(dt);
 
     const r = getFeedRuntime();
 

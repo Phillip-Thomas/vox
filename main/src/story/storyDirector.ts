@@ -33,7 +33,7 @@ import {
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
-import { setCinematicLookWeight } from './cinematicLook.ts';
+import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import { clearViolations, pushViolation, setWorkOrder, showCaption } from './storyText.ts';
 import {
@@ -148,6 +148,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
   d.beatClock = 0;
   // Cutscene state never survives a beat change (envelopes re-assert per frame).
   setCinematicLookWeight(0);
+  setCinematicLookTarget(null);
   getFeedRuntime().cinematic = 0;
   switch (beat) {
     case 'ch1-raster':

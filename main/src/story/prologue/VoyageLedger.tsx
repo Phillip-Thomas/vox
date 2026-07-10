@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { PROLOGUE_EVENTS, VOYAGE_SETTINGS, type LedgerStat, type PrologueEventCard } from '../storyScript.ts';
 import { recordStoryChoice } from '../storyState.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { isMovieMode } from '../autopilot.ts';
 import { PHOSPHOR, PHOSPHOR_DIM, PHOSPHOR_FAINT, TERMINAL_BG } from './TerminalPrologue.tsx';
 import { theme } from '../../ui/theme.ts';
 
@@ -77,6 +78,18 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card, eventIndex]);
+
+  // Movie screenings answer each card after a readable pause (the card index
+  // varies which option gets picked, so echo lines differ run to run).
+  useEffect(() => {
+    if (!card || !isMovieMode()) return;
+    const timer = setTimeout(() => {
+      const option = card.options[eventIndex % card.options.length];
+      choose(option.id);
+    }, 4500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card]);
 
   const choose = (optionId: string) => {
     if (!card) return;

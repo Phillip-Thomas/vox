@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CRAWL_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { isMovieMode } from '../autopilot.ts';
 import { PHOSPHOR, PHOSPHOR_DIM } from './TerminalPrologue.tsx';
 
 // --- The regulation crawl ------------------------------------------------------
@@ -24,7 +25,8 @@ const RegulationCrawl: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(finish, CRAWL_SECONDS * 1000);
+    // Movie screenings keep the crawl short — long enough to read the register.
+    const timer = setTimeout(finish, (isMovieMode() ? 14 : CRAWL_SECONDS) * 1000);
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'Enter' || e.code === 'Space') finish();
     };

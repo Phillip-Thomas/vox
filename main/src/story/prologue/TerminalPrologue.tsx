@@ -6,6 +6,7 @@ import { setVoxelRealityStage } from '../../game/systems/realityRenderSystem.ts'
 import { advanceToBeat, getStoryStateSnapshot, STORY_MILESTONES } from '../storyState.ts';
 import { theme } from '../../ui/theme.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { isMovieMode } from '../autopilot.ts';
 import RegulationCrawl from './RegulationCrawl.tsx';
 import VoyageLedger from './VoyageLedger.tsx';
 import DebrisDeflection from './DebrisDeflection.tsx';
@@ -54,6 +55,13 @@ const TerminalPrologue: React.FC = () => {
     advanceToBeat('ch1-raster');
     enterPlaying();
   }, [isTouch]);
+
+  // Movie screenings acknowledge the directive themselves once the world is warm.
+  useEffect(() => {
+    if (!isMovieMode() || phase !== 'acknowledge' || !sceneReady) return;
+    const timer = setTimeout(handoff, 2500);
+    return () => clearTimeout(timer);
+  }, [phase, sceneReady, handoff]);
 
   // Shell keyboard: Tab skips ahead to the acknowledge screen; F acknowledges.
   useEffect(() => {

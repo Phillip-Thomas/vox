@@ -14,11 +14,12 @@ import { getPlayerSubmergence } from '../state/playerSubmersion';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
 import { applySideCameraTransform, getSideLens } from '../story/sideLens.ts';
-import { getCinematicLookWeight } from '../story/cinematicLook.ts';
+import { getCinematicLookTarget, getCinematicLookWeight } from '../story/cinematicLook.ts';
 import { getSunDirection } from './SkyController.tsx';
 
 const _sideForward = new THREE.Vector3();
 const _sunTangent = new THREE.Vector3();
+const _pullDir = new THREE.Vector3();
 
 // Underwater camera sway — a lazy roll about the view axis + a gentle nod, scaled
 // by submergence, so the camera reads as floating in a fluid (invisible in a
@@ -154,19 +155,26 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       return;
     }
 
-    // Cinematic sun events: while the pull weight is up, steer the look toward
-    // the live sun (azimuth into surfaceForward, elevation into pitch). Additive
-    // over mouse input — control dissolves back to the player as weight decays.
+    // Cinematic look pull: while the weight is up, steer toward the target — a
+    // world position (autopilot aiming) or, with none set, the live sun (the
+    // staged dusk/dawn). Additive over mouse input — control dissolves back to
+    // the player as the weight decays.
     const pull = getCinematicLookWeight();
     if (pull > 0.001) {
-      const sun = getSunDirection();
-      _sunTangent.copy(sun).addScaledVector(surfaceUp.current, -sun.dot(surfaceUp.current));
+      const lookTarget = getCinematicLookTarget();
+      if (lookTarget) {
+        cameraRef.current.getWorldPosition(_pullDir).multiplyScalar(-1).add(lookTarget);
+        _pullDir.normalize();
+      } else {
+        _pullDir.copy(getSunDirection());
+      }
+      _sunTangent.copy(_pullDir).addScaledVector(surfaceUp.current, -_pullDir.dot(surfaceUp.current));
       if (_sunTangent.lengthSq() > 1e-6) {
         _sunTangent.normalize();
         const k = Math.min(1, pull * 3 * dt);
         surfaceForward.current.lerp(_sunTangent, k).normalize();
-        const sunPitch = clampCameraPitch(Math.asin(THREE.MathUtils.clamp(sun.dot(surfaceUp.current), -1, 1)));
-        pitch.current += (sunPitch - pitch.current) * k;
+        const targetPitch = clampCameraPitch(Math.asin(THREE.MathUtils.clamp(_pullDir.dot(surfaceUp.current), -1, 1)));
+        pitch.current += (targetPitch - pitch.current) * k;
       }
     }
 

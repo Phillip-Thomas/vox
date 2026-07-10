@@ -10,8 +10,21 @@ hands off to the sandbox at reality stage `material`.
 
 - **Menu → "◈ Story"** (next to Play; label becomes "Continue Story" mid-run).
 - Dev deep links: `?story=1` (full run from the terminal prologue) and
-  `?story=ch1|a1|ch2|a2|ch3|a3` (jump to a checkpoint; ch3-family jumps seed
-  campfire materials). `?voxelStage=` still works independently for lookdev.
+  `?story=<beat>` for EVERY beat (`crawl|voyage|deflect|crash|ch1-raster|
+  ch1-anomaly|a1-ramp|ch2-color|ch2-approach|a2-awakening|ch3-gather|ch3-dusk|
+  ch3-await-rest|a3-dawn|done`) — before/plays/after coverage of every
+  awakening, with milestone/item/campfire/stage seeding per beat. Legacy short
+  aliases (`ch1|a1|ch2|a2|ch3|a3`) still work. `?voxelStage=` stays independent.
+- **Story debug panel** (any `?story=` session or `?debug=1`): a "⛿ STORY" chip
+  on the left edge — beat teleporter (navigates by URL+reload so state is always
+  fresh), plus "▶ movie run", "sandbox menu", and "wipe save".
+- **Movie mode** (`&movie=1`, or the panel's ▶ button): a story autopilot
+  (`story/autopilot.ts`) screens the whole arc unattended — auto-answers the
+  voyage cards, plays a competent-but-doomed Pong paddle, paces the raster strip
+  holding EXTRACT, walks to the stone/tree/fire via the cinematic look-pull and
+  pulses [F], skips UI-driven crafting by placing the fire directly, and every
+  beat has a TIMEOUT that force-advances — nothing can stall the screening.
+  Watch it like a film; critique the cut.
 
 The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through the
 decades"): regulation crawl → Oregon-Trail voyage (pace/ration prompts + 5

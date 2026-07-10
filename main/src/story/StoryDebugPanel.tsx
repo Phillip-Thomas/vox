@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { theme } from '../ui/theme.ts';
 import { chapterForBeat, STORY_BEAT_ORDER, useStoryState, type StoryBeat } from './storyState.ts';
+import { setLocalPersistenceMode } from '../game/systems/persistence.ts';
 
 // --- Story debug panel -----------------------------------------------------------
 //
@@ -36,16 +37,22 @@ export function storyDebugEnabled(): boolean {
   return p.has('story') || p.get('debug') === '1';
 }
 
-function jumpTo(beat: StoryBeat | 'menu' | 'reset'): void {
+function jumpTo(beat: StoryBeat | 'menu' | 'reset' | 'movie'): void {
   const params = new URLSearchParams(window.location.search);
-  if (beat === 'reset') {
+  if (beat === 'reset' || beat === 'movie') {
     // Wipe the game save (story milestones live in it) and restart the run.
+    // CRITICAL: suppress local persistence FIRST — the app's beforeunload
+    // autosave otherwise resurrects the save during this very navigation.
+    setLocalPersistenceMode('multiplayer');
     for (const key of Object.keys(localStorage)) {
       if (key.startsWith('pvx.')) localStorage.removeItem(key);
     }
     params.set('story', '1');
+    if (beat === 'movie') params.set('movie', '1');
+    else params.delete('movie');
   } else if (beat === 'menu') {
     params.delete('story');
+    params.delete('movie');
   } else {
     params.set('story', beat);
   }
@@ -116,7 +123,8 @@ const StoryDebugPanel: React.FC = () => {
               ))}
             </React.Fragment>
           ))}
-          <button style={{ ...chip, marginTop: 6 }} onClick={() => jumpTo('menu')}>◦ sandbox menu</button>
+          <button style={{ ...chip, marginTop: 6, color: theme.color.good }} onClick={() => jumpTo('movie')}>▶ movie run (autopilot)</button>
+          <button style={chip} onClick={() => jumpTo('menu')}>◦ sandbox menu</button>
           <button style={{ ...chip, color: theme.color.danger }} onClick={() => jumpTo('reset')}>⟲ wipe save, fresh run</button>
         </>
       )}

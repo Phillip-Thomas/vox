@@ -101,6 +101,23 @@ import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
 import { getSideFacing, getSideLens, setSideFacing, sideHarvestProbePoints } from '../story/sideLens.ts';
+import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
+
+// Movie-mode merge: the story autopilot's virtual gamepad overlays the keyboard.
+function withAutopilot<T extends Record<string, boolean | undefined>>(controls: T): T {
+  if (!isAutopilotDriving()) return controls;
+  const a = getAutopilotControls();
+  return {
+    ...controls,
+    forward: controls.forward || a.forward,
+    backward: controls.backward || a.backward,
+    left: controls.left || a.left,
+    right: controls.right || a.right,
+    jump: controls.jump || a.jump,
+    delete: controls.delete || a.delete,
+    interact: controls.interact || a.interact
+  };
+}
 import { clampVitalsDelta } from '../game/tickDiscipline.ts';
 import {
   consumeJetpackFuel,
@@ -981,7 +998,7 @@ export default function EfficientPlayer({
   // trees + loose stones are picked up with a cheap raycast of their (few, near)
   // instances. Whichever is closest wins, so the label matches what you'd harvest.
   const updateLookedAt = useCallback((camera: THREE.Camera | null) => {
-    if (!camera || !(controlsActive.current || isTouchActive())) {
+    if (!camera || !(controlsActive.current || isTouchActive() || isAutopilotDriving())) {
       setLookedAt(null);
       return;
     }
@@ -1041,7 +1058,7 @@ export default function EfficientPlayer({
     const body = ref.current;
     if (!body) return;
 
-    const controls = get();
+    const controls = withAutopilot(get());
     if (controls.reset && !isBuildEnabled()) { // R rotates the build piece while building
       setJetpackSfx(false);
       resetPlayer();
@@ -1126,8 +1143,9 @@ export default function EfficientPlayer({
     const grounded = checkGrounded(position, activeUp);
     lastGrounded.current = grounded;
 
-    // Input is enabled by pointer lock (desktop) OR active touch controls (mobile).
-    const active = controlsActive.current || isTouchActive();
+    // Input is enabled by pointer lock (desktop), active touch controls (mobile),
+    // OR the story autopilot's movie mode (no lock needed to screen the arc).
+    const active = controlsActive.current || isTouchActive() || isAutopilotDriving();
 
     // Raster side-scroller: movement is A/D along the lens travel axis (screen
     // left/right), W/S ignored, basis camera-independent. The camera sits at
@@ -1308,8 +1326,8 @@ export default function EfficientPlayer({
       onGroundedChange?.(lastGrounded.current);
     }
 
-    const controls = get();
-    const deleteActive = controlsActive.current || isTouchActive();
+    const controls = withAutopilot(get());
+    const deleteActive = controlsActive.current || isTouchActive() || isAutopilotDriving();
     const harvestHeld = deleteActive && controls.delete;
     if (isBuildEnabled()) {
       // Build mode: the harvest key PLACES (edge), not mines. Mining is suppressed.

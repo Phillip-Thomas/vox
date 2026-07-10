@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { DEFLECTION } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { isMovieMode } from '../autopilot.ts';
 import { PHOSPHOR, TERMINAL_BG } from './TerminalPrologue.tsx';
 
 // --- Manual debris deflection (the Pong rung, 1972) ----------------------------------
@@ -91,8 +92,20 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       ctx.fillStyle = 'rgba(2,6,4,0.32)';
       ctx.fillRect(0, 0, w, h);
 
-      // Paddle control (mouse wins while it moves; W/S otherwise).
-      if (keyDir !== 0) {
+      // Paddle control (mouse wins while it moves; W/S otherwise). Movie mode
+      // plays a competent-but-human paddle: track the nearest incoming debris
+      // with capped speed — it holds its own until the anomaly, then loses.
+      if (isMovieMode()) {
+        let nearest: Debris | null = null;
+        for (const b of debris) {
+          if (b.vx < 0 && (!nearest || b.x < nearest.x)) nearest = b;
+        }
+        if (nearest) {
+          const want = nearest.y / h;
+          const maxStep = (KEY_SPEED * 0.85 * dt) / h;
+          paddleY += Math.max(-maxStep, Math.min(maxStep, want - paddleY));
+        }
+      } else if (keyDir !== 0) {
         paddleY += (keyDir * KEY_SPEED * dt) / h;
         mouseY = null;
       } else if (mouseY != null) {
