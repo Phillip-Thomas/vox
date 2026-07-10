@@ -105,10 +105,18 @@ ATTACHED (ADVISORY)", and "ADVISORY CAPACITY EXCEE" are the planted seeds.
 captions there are impersonal ("the frame did not follow you", "how is that
 word known?"). The 2D→3D lift is the birth of sentience: "the seeing is being
 moved inside." → "i—", the story's first pronoun (the feed answers:
-"PERSPECTIVE ISSUED. PRONOUNS WERE NOT."). Survival senses are INTRODUCED one
-by one in ch3 ("things can be held", "why am i… thirsty?") — the inventory and
-vitals HUD appear WITH their captions (`storyHudHideVitals/Inventory`,
-milestone-gated; pure sandbox saves unaffected). The post-A3 `done` world is
+"PERSPECTIVE ISSUED. PRONOUNS WERE NOT."). Survival senses are a SELF-DISCOVERY
+ARC — each suit-HUD stat appears the first time its sensation is felt
+(`storyStatVisible` + `story:sense:*` milestones; pure sandbox shows all):
+ch3 opens with HEALTH only; "things can be held" brings the inventory; then
+the CHILL — a story-scoped temperature model (`tickStoryChill`: warmth drains
+in the open, recovers by fire, never lethal) makes TEMP appear ALREADY FALLING
+("warmth. i have it. it is leaving.") so the campfire is a response to cold,
+never to thirst; by the fire at night: "ah — it helps. what is it? how did i
+know to make it?" (the pillar, planted). Post-dawn, `senseDiscovery.ts`
+discovers the rest live: thirst ("so that is thirst. how strange, to need.")
+and hunger with captions (StoryCaptions stays mounted in the completed world),
+stamina/oxygen/jet silently on first use, the MAW readout on first refuel. The post-A3 `done` world is
 the pinned story world at `material`: trees + grass only — flora and fauna
 stay dormant for a later awakening (A4 "Breath"), via the milestone-driven
 `storyLifeDormant()` (never stage-driven — cutscene effect ramps can't flash a

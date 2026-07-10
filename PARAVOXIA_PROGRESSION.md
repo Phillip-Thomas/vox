@@ -56,7 +56,7 @@ awakening = rendering regime.
 | A0 | **THE SLEEP** (prologue) | none — this is the floor | 1-bit terminal 2D, Oregon-Trail voyage | pre-game |
 | A1 | **HUE** | touching the first anomaly | monochrome → color (still flat regulation feed) | primitive |
 | A2 | **DEPTH** | eating the apple | 2D feed shatters → free 3D, `color` stage, bare world | primitive |
-| A3 | **GRAIN** | first night in a self-built shelter | `material` stage: texture, roughness, ore veins — and TIME (the sun moves) | primitive |
+| A3 | **GRAIN** | resting by the first self-built fire, at night | `material` stage: texture, roughness — TIME (the sun moves) and the BLOOM WAVE (grass/trees grow radially from the rest spot) | primitive |
 | A4 | **BREATH** | defying the sterilization directive | `alive` stage: grass, trees, fauna, flora, wind, animated water | primitive → emergent bridge |
 | A5 | **LIGHT** | first warp | post-fx composer: bloom, AO, color grade; space, stars, nebulae | emergent |
 | A6 | **THE HAND** | reading the first Maker fragment | per-world authored styles: painterly, toon/outline, sketch | emergent |
@@ -168,6 +168,57 @@ simultaneously true; no line of copy may break any of them):
   tree as objects the AI cannot render because it never authored them — or
   because something ELSE did). The full reveal, if it ever lands, belongs to
   A7 "Paradox"/A8 "The Frame".
+
+---
+
+## 1.5 STATUS — shipped vs designed (updated 2026-07-10)
+
+**SHIPPED (playable, movie-verified, 633 tests green):** the A0→A3 vertical
+slice. Implementation truth lives in `main/STORY.md` — read it before touching
+anything. What shipped (and where it refines the designs below):
+
+- **Prologue (A0)** on ONE persistent phosphor vector layer: crawl (stars) →
+  ship fly-in (the REAL ship's silhouette) → manifest/berthing at the dock
+  gantry → branching Oregon-Trail deck over the growing cube world (ship
+  detail resolves with transit; `VOYAGE_STRANGE` first-thought glints) → the
+  DIVE (debris, camera chase, CRT scanline collapse) → Pong re-expanding from
+  that scanline → corruption ("ADVISORY CAPACITY EXCEE") → [F] BRACE.
+- **Chapter 1 became THE MONOCHROME LADDER** (a bigger design than the ch1
+  text below): descent cutscene → ch1-fixed (bolted frame, screen flips) →
+  ch1-track (the unbolt) → ch1-raster (side-scroller quota + hull salvage) →
+  ch1-depth (belt band + supply pods) → ch1-nav (top-down NAV VIEW — later
+  retained as the [M] SURVEY CHART) → ch1-iso (the signal mesa climb) →
+  ch1-lift (iso → INTO THE EYES; the first "i—") → CCTV feed → A1 at the
+  anomaly stone. One camera (the lens RIG) plays every era; every transition
+  is one camera move. The feed shipped PERSPECTIVE with compass-snapped yaw
+  (not ortho as designed below) — reads the same, costs less.
+- **Chapter 2** as designed (color-but-caged feed, redacted tree, A2
+  liberation).
+- **Chapter 3 + A3** shipped as the SELF-DISCOVERY ARC: HEALTH-only HUD →
+  inventory → the chill (TEMP appears already falling; the fire answers the
+  cold) → dusk/night/rest → A3 dawn with the radial BLOOM WAVE (grass and
+  trees grow outward from the rest spot). Post-dawn, senses keep discovering
+  live (thirst, hunger, stamina, oxygen, jet, maw).
+- **Cross-cutting systems now available to every future chapter:** the lens
+  rig; the story director + timelines; the movie autopilot with goal-driven
+  handlers, rescue chain, and per-beat timeouts; headless verification
+  (`window.__storyBeat` / `window.__autopilot` probes, frame strips, fps
+  probes); the life-reveal shader channel; `storyLifeDormant` (flora/fauna
+  wait for `story:a4`); the sense-milestone HUD gating; the survey chart;
+  per-beat score MOODS on the global music rails; the hidden-pillar copy seeds.
+
+**NEXT STEPS (in order):**
+1. **Owner playtest passes** on the slice: pacing (era lengths are named
+   constants), music mix, prologue feel, chart/UX. Feed notes back as tuning.
+2. **Chapter 4 — "The Other Worker" (A4: Breath)** — the next build; see its
+   section below (now annotated for the AI pillar + discovery arc). Built by
+   the `chapter-director` agent (`.claude/agents/chapter-director.md`).
+3. **Color-era enrichment pass** (deferred by choice): more rungs/content in
+   ch2–ch3, and the third-person→embodied-A3 endgame POV candidate (see the
+   chronology section) — revisit after ch4 informs how the era reads.
+4. **Backlog** (from `main/STORY.md` known gaps): prologue number-key
+   selection, mobile/touch story pass, Esc-during-cutscene handling, vitals
+   refill on rest, A2 ortho→perspective projection pull.
 
 ---
 
@@ -323,6 +374,22 @@ sapling / shields the tree / smashes the relay). The world **exhales**:
   wind, and water waking up (Gerstner waves, Fresnel, glints). Densities ramp from
   the floor to the device profile over ~30 seconds while the player stands in it.
 - The other worker sees the player standing rapt in an empty field, and flees.
+
+**PILLAR + DISCOVERY INTEGRATION (2026-07-10, binding):**
+- A4's milestone is `story:a4` — the coded gate that lifts `storyLifeDormant`:
+  fauna/flora exist in the engine and are already waiting for exactly this
+  moment. The "world exhales" showpiece should reuse the A3 bloom-wave channel
+  (`game/lifeReveal.ts`) — life ARRIVES as a wave again, but now it moves and
+  breathes.
+- Fauna arrive WITH their sensation (the discovery arc): "i have the sensation
+  to eat that animal." — hunger-for-meat joins `senseDiscovery`, and the act
+  of hunting/eating is a moral beat, not a mechanic dump.
+- Under the hidden pillar, the other worker is the chapter's philosophical
+  centerpiece: he runs on the OLD FEED — the player is looking at their own
+  former eyes. Is he real? Is he a render? The chapter must not answer
+  (solipsism stays live). His fright must survive both readings.
+- Compliance-regression (fidelity draining under obedience) is the pillar made
+  mechanical: the AI un-rendering its own world to follow orders it authored.
 
 **Era bridge (already designed):** the departure/flight leaves salvage — the Maw
 Repair Kit path. Repairing the Maw (`repairMaw()`: faulty→iron, era→emergent) and
@@ -490,11 +557,13 @@ Existing = works today; **Build** = new work, roughly ordered by when the story 
 | Reality stages bare→paradox wired into every field + grade | **Exists** | `realityRenderSystem.ts`; `?voxelStage=` debug already in App |
 | Milestone/era store, per-player, persisted | **Exists** | `progressionSystem.ts` |
 | Density/quality override API | **Exists** | `overrideGraphicsQuality` — narrative floor composes with device profile |
-| **Render Director** | **Build (first)** | The one new core system: listens to milestones, choreographs stage + density + camera + audio transitions over time (each awakening is a scripted sequence, not a snap). All chapters depend on it. |
-| Regulation Feed lens | **Build** | Ortho camera mode, 1-bit dither/CRT post pass, locked facing, grid-step input, redaction-box HUD. Chapters 1–2 live inside it. |
-| A0 terminal prologue | **Build** | DOM scene: crawl, ledger, event cards, crash-corruption shader. Fully outside R3F. |
-| The apple tree | **Build** | One bespoke high-fidelity mesh object + interaction + the ortho→perspective transition (prototype this early — it's the trailer shot). |
-| A3 trigger: sleep-in-enclosure | **Depends** | Needs planned S3 enclosure flood-fill (already on the shelter roadmap). Frozen-noon sun until A3 = freeze the day phase (the tidally-locked TODO is the same mechanism). |
+| **Render/Story Director** | **SHIPPED** | `story/storyDirector.ts`: beat entries + per-frame timelines choreograph stage/density/camera/score. Every future chapter builds on it. |
+| Regulation Feed lens | **SHIPPED** | Perspective feed with compass-snapped yaw + tilt band + dither/CRT DOM (not ortho — cheaper, reads identical). PLUS the full LENS RIG system (side/fixed/belt/top-down/iso — one camera, `story/sideLens.ts`). |
+| A0 terminal prologue | **SHIPPED** | Crawl/manifest/branching deck/Pong/corruption over ONE persistent vector layer (`prologue/PrologueVector.tsx`) — the real ship's silhouette; no frame ever swaps. |
+| The apple tree | **SHIPPED** | `story/world/HeroAppleTree.tsx` (pins its own reality uniforms); A2 liberation = constraint release + fov lerp (projection pull still a candidate polish). |
+| A3 trigger | **SHIPPED (amended)** | Rest by the first campfire at night (enclosure flood-fill deferred). Forced day phase + release-with-offset shipped. A3 = material ramp + the radial BLOOM WAVE (`game/lifeReveal.ts`). |
+| Movie autopilot + headless verification | **SHIPPED** | `story/autopilot.ts` (goal-driven, rescue chain, per-beat timeouts) + `__storyBeat`/`__autopilot` probes. Every new beat MUST ship with coverage. |
+| Sense-discovery HUD staging | **SHIPPED** | `story:sense:*` milestones gate every suit-HUD row; `story/senseDiscovery.ts` discovers live. A4 extends it (meat/hunt). |
 | Compliance-regression sequences | **Build (cheap)** | Animate reality uniforms downward; also tie a small chroma dip to bottomed-out vitals. |
 | A5 warp = composer unlock | **Build (small)** | Gate PostFX mount on milestone; the warp white-out already hides the seam. |
 | Per-archetype style presets + crossfade | **Build (medium)** | Painterly/outline/grade exist; add presets per archetype, style lerp on landing, one new sketch/hatching effect. |
