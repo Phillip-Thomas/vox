@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
+import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { getWorldGen } from '../utils/worldGenCache';
 import { measureWarpMetric } from '../utils/warpMetrics';
@@ -157,29 +157,35 @@ function FaunaLayer({
       applyFaunaWindProfileToMaterial(profile.wind, material);
       windAppliedRef.current = true;
     }
-    updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
-    if (playerPosition) {
-      if (Number.isFinite(prevPlayerPos.current.x) && delta > 1e-4) {
-        playerVelocity.current
-          .copy(playerPosition)
-          .sub(prevPlayerPos.current)
-          .divideScalar(delta);
-        // Teleports/respawns produce absurd speeds; treat them as stationary.
-        if (playerVelocity.current.lengthSq() > 900) playerVelocity.current.set(0, 0, 0);
+    // Early-story stages hide fauna in the shader — skip the draw, the per-frame
+    // uniforms AND the herd simulation (the biggest CPU line in these fields).
+    const hidden = lifeFieldsHidden() && windAppliedRef.current;
+    if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
+    if (!hidden) {
+      updateFaunaMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
+      if (playerPosition) {
+        if (Number.isFinite(prevPlayerPos.current.x) && delta > 1e-4) {
+          playerVelocity.current
+            .copy(playerPosition)
+            .sub(prevPlayerPos.current)
+            .divideScalar(delta);
+          // Teleports/respawns produce absurd speeds; treat them as stationary.
+          if (playerVelocity.current.lengthSq() > 900) playerVelocity.current.set(0, 0, 0);
+        }
+        prevPlayerPos.current.copy(playerPosition);
       }
-      prevPlayerPos.current.copy(playerPosition);
-    }
-    if (mesh && agentsRef.current.length > 0) {
-      updateFaunaAgents(
-        mesh,
-        agentsRef.current,
-        clock.elapsedTime,
-        delta,
-        terrainSeed,
-        profile,
-        playerPosition ?? null,
-        playerPosition ? playerVelocity.current : null
-      );
+      if (mesh && agentsRef.current.length > 0) {
+        updateFaunaAgents(
+          mesh,
+          agentsRef.current,
+          clock.elapsedTime,
+          delta,
+          terrainSeed,
+          profile,
+          playerPosition ?? null,
+          playerPosition ? playerVelocity.current : null
+        );
+      }
     }
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;

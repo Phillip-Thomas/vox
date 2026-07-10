@@ -13,7 +13,7 @@ import { seededUnit } from './worldCoordinates';
 import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
 
-export const FAUNA_KINDS = ['grazer', 'woolly', 'runner', 'hopper', 'dragonfly'] as const;
+export const FAUNA_KINDS = ['grazer', 'woolly', 'runner', 'hopper', 'dragonfly', 'fish'] as const;
 export type FaunaKind = typeof FAUNA_KINDS[number];
 
 /** Live water classification (proceduralWorldGenerator implements this). */
@@ -205,7 +205,8 @@ export function buildFaunaProfile(terrainSeed: number, water?: FaunaWaterClassif
     woolly: clamp((0.1 + lushness * 0.48 + (1 - temperature) * 0.32 - aridity * 0.24) * art.ecology.faunaWeights.woolly, 0.001, 2.2),
     runner: clamp((0.16 + aridity * 0.38 + temperature * 0.34 + (1 - lushness) * 0.1) * art.ecology.faunaWeights.runner, 0.001, 2.2),
     hopper: clamp((0.14 + aridity * 0.72 + (1 - lushness) * 0.32) * art.ecology.faunaWeights.hopper, 0.001, 2.2),
-    dragonfly: clamp((0.1 + lushness * 0.72 + (1 - aridity) * 0.3 + temperature * 0.12) * art.ecology.faunaWeights.dragonfly, 0.001, 2.2)
+    dragonfly: clamp((0.1 + lushness * 0.72 + (1 - aridity) * 0.3 + temperature * 0.12) * art.ecology.faunaWeights.dragonfly, 0.001, 2.2),
+    fish: clamp((0.2 + (1 - aridity) * 0.5 + lushness * 0.3) * (art.ecology.faunaWeights.fish ?? 0.6), 0.001, 2.2)
   };
 
   return {
@@ -254,6 +255,9 @@ export function isFaunaTravelVoxel(
   profile: FaunaProfile
 ): boolean {
   if (!isFaunaEligibleVoxelForProfile(voxel, profile)) return false;
+  // Fish glide over any eligible seabed material (wetness is enforced by the
+  // habitat check, not here).
+  if (kind === 'fish') return true;
   if (voxel.material === MaterialType.GRASS) return kind !== 'hopper' || profile.biome.lushness < 0.76;
   if (voxel.material === MaterialType.DIRT) return true;
   if (voxel.material === MaterialType.SAND) {
@@ -284,6 +288,23 @@ export function isFaunaSurfaceDry(
   return !profile.water.isWaterVoxel(x + Math.round(up.x), y + Math.round(up.y), z + Math.round(up.z));
 }
 
+/**
+ * Kind-aware habitat: ground fauna need a dry walking surface, FISH need a
+ * flooded one (they anchor to the submerged seabed and swim in the water column
+ * above it), and dragonflies take either — they hover.
+ */
+export function isFaunaHabitatVoxel(
+  kind: FaunaKind,
+  x: number,
+  y: number,
+  z: number,
+  profile: Pick<FaunaProfile, 'water'>
+): boolean {
+  if (kind === 'dragonfly') return true;
+  const dry = isFaunaSurfaceDry(x, y, z, profile);
+  return kind === 'fish' ? !dry : dry;
+}
+
 function materialDensityMul(material: string, profile: FaunaProfile): number {
   if (material === MaterialType.GRASS) return 1;
   if (material === MaterialType.DIRT) return 0.52 + profile.biome.lushness * 0.24;
@@ -294,6 +315,11 @@ function materialDensityMul(material: string, profile: FaunaProfile): number {
 }
 
 function materialKindMul(material: string, kind: FaunaKind): number {
+  // Fish care about the seabed only loosely: sandy shallows read best, but any
+  // submerged eligible material hosts them.
+  if (kind === 'fish') {
+    return material === MaterialType.SAND ? 1.2 : material === MaterialType.DIRT ? 1 : 0.8;
+  }
   if (material === MaterialType.SAND) {
     return kind === 'hopper' ? 1.52 : kind === 'runner' ? 0.92 : kind === 'dragonfly' ? 0.08 : kind === 'grazer' ? 0.12 : 0.04;
   }
@@ -321,9 +347,17 @@ export function chooseFaunaKindForVoxel(
   terrainSeed: number,
   profile: FaunaProfile
 ): FaunaKind {
+  // Fish own flooded voxels; walkers own dry ones; dragonflies patrol both
+  // (slightly favoring the shore).
+  const wet = !isFaunaSurfaceDry(x, y, z, profile);
+  const habitatMul = (kind: FaunaKind): number => {
+    if (kind === 'fish') return wet ? 6 : 0;
+    if (kind === 'dragonfly') return wet ? 0.7 : 1;
+    return wet ? 0 : 1;
+  };
   const weighted = FAUNA_KINDS.map(kind => ({
     kind,
-    weight: Math.max(0.001, profile.weights[kind] * materialKindMul(voxel.material, kind))
+    weight: Math.max(0.001, profile.weights[kind] * materialKindMul(voxel.material, kind) * habitatMul(kind))
   }));
   const total = weighted.reduce((sum, entry) => sum + entry.weight, 0);
   let pick = seededVoxelUnit(x, y, z, FAUNA_PICK_SALT, terrainSeed) * total;
@@ -344,9 +378,13 @@ export function shouldPlaceFaunaVoxel(
   profile: FaunaProfile
 ): boolean {
   if (density <= 0 || !isFaunaEligibleVoxelForProfile(voxel, profile)) return false;
-  if (!isFaunaSurfaceDry(x, y, z, profile)) return false;
   if (seededVoxelUnit(x, y, z, FAUNA_COVERAGE_SALT, terrainSeed) > profile.coverage) return false;
-  return seededVoxelUnit(x, y, z, FAUNA_DENSITY_SALT, terrainSeed) <= placementChance(density, voxel.material, profile);
+  // Flooded voxels host fish shoals a bit more densely than the open ground
+  // hosts walkers. Habitat (dry-vs-wet per kind) is enforced by the callers
+  // via isFaunaHabitatVoxel once the kind is chosen.
+  const wetBoost = !isFaunaSurfaceDry(x, y, z, profile) ? 1.5 : 1;
+  return seededVoxelUnit(x, y, z, FAUNA_DENSITY_SALT, terrainSeed) <=
+    Math.min(1, placementChance(density, voxel.material, profile) * wetBoost);
 }
 
 export function countFaunaVoxels(
@@ -360,6 +398,7 @@ export function countFaunaVoxels(
   for (const voxel of voxelSystem.getAllVoxels().values()) {
     const [x, y, z] = voxel.position;
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
+    if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) === kind) n++;
   }
   return n;
@@ -711,6 +750,36 @@ function createDragonflyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
   return merge(parts);
 }
 
+/**
+ * Reef fish: laterally-flattened body with a big sweeping tail fin, dorsal
+ * ridge and pectorals (all part 4 so the existing tail-sway animation moves
+ * them), palette-tinted with the planet's water/wing hues. Local +X = nose,
+ * authored around y≈0.34 like the land kinds; the anchor floats it into the
+ * water column above the seabed.
+ */
+function createFishGeometry(profile: FaunaProfile): THREE.BufferGeometry {
+  const bodyColor = profile.wingColor.clone().lerp(profile.coatBase, 0.35);
+  const flankColor = profile.accentColor.clone().lerp(profile.wingColor, 0.5);
+  const finColor = profile.wingColor.clone().lerp(profile.coatCool, 0.25);
+  const parts: THREE.BufferGeometry[] = [
+    // Body: deep and thin (reef-fish profile), head taper, tail peduncle.
+    ellipsoid(new THREE.Vector3(0, 0.34, 0), new THREE.Vector3(0.3, 0.17, 0.075), bodyColor, 0, 0.25, 1),
+    ellipsoid(new THREE.Vector3(0.24, 0.34, 0), new THREE.Vector3(0.15, 0.12, 0.06), bodyColor, 1, 0.35, 0),
+    ellipsoid(new THREE.Vector3(-0.28, 0.34, 0), new THREE.Vector3(0.11, 0.07, 0.04), flankColor, 0, 0.7, 0),
+    // Mouth tip + eyes.
+    ellipsoid(new THREE.Vector3(0.37, 0.32, 0), new THREE.Vector3(0.05, 0.045, 0.035), finColor, 1, 0.3, 0),
+    ellipsoid(new THREE.Vector3(0.3, 0.38, 0.052), new THREE.Vector3(0.022, 0.026, 0.014), profile.darkColor, 1, 0.2, 0),
+    ellipsoid(new THREE.Vector3(0.3, 0.38, -0.052), new THREE.Vector3(0.022, 0.026, 0.014), profile.darkColor, 1, 0.2, 0),
+    // Tail fin: tall, thin, flexes hardest (part 4, high flex).
+    ellipsoid(new THREE.Vector3(-0.46, 0.34, 0), new THREE.Vector3(0.13, 0.18, 0.016), finColor, 4, 1, 0),
+    // Dorsal ridge + pectorals.
+    ellipsoid(new THREE.Vector3(-0.02, 0.52, 0), new THREE.Vector3(0.16, 0.07, 0.014), finColor, 4, 0.7, 0),
+    ellipsoid(new THREE.Vector3(0.1, 0.27, 0.09), new THREE.Vector3(0.085, 0.022, 0.05), finColor, 4, 0.9, 0),
+    ellipsoid(new THREE.Vector3(0.1, 0.27, -0.09), new THREE.Vector3(0.085, 0.022, 0.05), finColor, 4, 0.9, 0)
+  ];
+  return merge(parts);
+}
+
 export function createFaunaGeometry(kind: FaunaKind, profile = buildFaunaProfile(0)): THREE.BufferGeometry {
   switch (kind) {
     case 'grazer':
@@ -723,6 +792,8 @@ export function createFaunaGeometry(kind: FaunaKind, profile = buildFaunaProfile
       return createHopperGeometry(profile);
     case 'dragonfly':
       return createDragonflyGeometry(profile);
+    case 'fish':
+      return createFishGeometry(profile);
   }
   return createGrazerGeometry(profile);
 }
@@ -739,6 +810,8 @@ export function faunaKindId(kind: FaunaKind): number {
       return 3;
     case 'dragonfly':
       return 4;
+    case 'fish':
+      return 5;
   }
 }
 
@@ -912,9 +985,16 @@ export function createFaunaMaterial(
           transformed.z += side * wing2 * aFaunaFlex * 0.03 * motion;
           transformed.x += sin(uTime * 4.3 + phase) * aFaunaFlex * 0.012 * motion;
         }
+        // Fish swim: a lateral undulation wave traveling nose -> tail, growing
+        // in amplitude toward the tail (the part-4 tail sway rides on top).
+        float fishKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 5.0));
+        if (fishKind > 0.5) {
+          float swim = sin(uTime * (4.2 + seed * 1.5) + phase - position.x * 2.4);
+          transformed.z += swim * clamp(0.24 - position.x * 0.3, 0.02, 0.45) * 0.4 * motion;
+        }
         float windFlex = max(0.0, aFaunaFlex - 0.28);
         float windWave = sin(uTime * (1.15 + uWindGustSpeed) + phase + position.y * 2.2);
-        float windDrive = (windWave * (0.2 + gust * uWindGustStrength) + uWindTurbulence * 0.05) * windFlex * motion;
+        float windDrive = (windWave * (0.2 + gust * uWindGustStrength) + uWindTurbulence * 0.05) * windFlex * motion * (1.0 - fishKind);
         transformed.x += windDir.x * windDrive * 0.045 * uWindStrength;
         transformed.z += windDir.y * windDrive * 0.045 * uWindStrength;
         // Grazing pose: fold the head/neck (and its riders — ears, mane, horns)
@@ -985,6 +1065,7 @@ export function createFaunaMaterial(
         float kindRunner = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 2.0));
         float kindHopper = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 3.0));
         float kindDragonfly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 4.0));
+        float kindFish = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 5.0));
 
         diffuseColor.rgb *= 0.76 + vFaunaShade * 0.24 + vFaunaGust * 0.055 + vFaunaFlex * 0.035;
         diffuseColor.rgb *= 1.0 - underside * bodyPart * 0.18;
@@ -993,6 +1074,10 @@ export function createFaunaMaterial(
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.72 + bands * 0.42), bodyPart * kindRunner * 0.26);
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.78 + spots * 0.38), bodyPart * kindHopper * 0.32);
         diffuseColor.rgb = mix(diffuseColor.rgb, mix(diffuseColor.rgb, uFaunaRimColor, bands * 0.26), bodyPart * kindDragonfly);
+        // Fish: pale countershaded belly + an iridescent flank band shimmer.
+        float belly = smoothstep(0.36, 0.16, p.y);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 1.4 + vec3(0.07), belly * bodyPart * kindFish * 0.6);
+        diffuseColor.rgb = mix(diffuseColor.rgb, uFaunaWingColor, bands * bodyPart * kindFish * 0.3);
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.62, legPart * 0.38);
         diffuseColor.rgb += uFaunaRimColor * accentPart * 0.045;
         diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFaunaWingColor, uFaunaWingColor + vec3(0.16, 0.2, 0.22), vFaunaFlex), wingPart * (0.62 + vFaunaGust * 0.16));
@@ -1044,7 +1129,7 @@ export function createFaunaMaterial(
       );
   };
 
-  material.customProgramCacheKey = () => 'fauna-field-v6';
+  material.customProgramCacheKey = () => 'fauna-field-v7';
   return material;
 }
 
@@ -1065,7 +1150,8 @@ export function faunaScaleForKind(kind: FaunaKind, scaleSeed: number, planetMul 
       kind === 'woolly' ? 1.85 + scaleSeed * 0.4 :
         kind === 'runner' ? 1.35 + scaleSeed * 0.35 :
           kind === 'dragonfly' ? 0.52 + scaleSeed * 0.18 :
-            0.87 + scaleSeed * 0.26
+            kind === 'fish' ? 0.55 + scaleSeed * 0.4 :
+              0.87 + scaleSeed * 0.26
   ) * planetMul;
   const yScale = baseScale * (
     kind === 'dragonfly' ? 0.94 :
@@ -1085,7 +1171,8 @@ function faunaSpeedForKind(kind: FaunaKind, profile: FaunaProfile, jitter: numbe
       kind === 'woolly' ? 0.42 :
         kind === 'runner' ? 0.95 :
           kind === 'dragonfly' ? 1.2 :
-            0.68;
+            kind === 'fish' ? 0.55 :
+              0.68;
   return Math.max(0.18, base + climate + (jitter - 0.5) * 0.16);
 }
 
@@ -1094,6 +1181,7 @@ function faunaStrideRateForKind(kind: FaunaKind): number {
   if (kind === 'runner') return 1.1;
   if (kind === 'hopper') return 0.85;
   if (kind === 'dragonfly') return 2.2;
+  if (kind === 'fish') return 1.4;
   if (kind === 'woolly') return 0.72;
   return 0.56;
 }
@@ -1104,10 +1192,11 @@ export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, pr
   const t = clamp(progress, 0, 1);
   const base =
     kind === 'dragonfly' ? 0.38 :
-      kind === 'hopper' ? 0.62 :
-        kind === 'runner' ? 0.8 :
-          kind === 'woolly' ? 0.95 :
-            1.12;
+      kind === 'fish' ? 0.42 :
+        kind === 'hopper' ? 0.62 :
+          kind === 'runner' ? 0.8 :
+            kind === 'woolly' ? 0.95 :
+              1.12;
   return (base + Math.min(2, amount) * VOXEL_SCALE * 0.18) * Math.sin(Math.PI * t);
 }
 
@@ -1134,8 +1223,13 @@ function computeFaunaAnchor(
   deterministicTangentForUp(_up, _tangent);
   _bitangent.crossVectors(_up, _tangent).normalize();
 
-  const hoverOffset = kind === 'dragonfly' ? 1.72 + scaleSeed * 0.42 : FAUNA_SURFACE_OFFSET;
-  const scatter = kind === 'dragonfly' ? 1.2 : 0.74;
+  // Fish swim in the first water cell above the seabed (the wet-habitat check
+  // guarantees that cell is flooded); dragonflies hover higher over ground.
+  const hoverOffset =
+    kind === 'dragonfly' ? 1.72 + scaleSeed * 0.42 :
+      kind === 'fish' ? 1.3 + scaleSeed * 0.5 :
+        FAUNA_SURFACE_OFFSET;
+  const scatter = kind === 'dragonfly' ? 1.2 : kind === 'fish' ? 1.1 : 0.74;
   target.copy(_world);
   target.addScaledVector(_up, hoverOffset);
   target.addScaledVector(_tangent, offsetU * scatter);
@@ -1183,8 +1277,8 @@ function findFaunaTravelCandidate(
     const nz = z + sz + uz * climb;
     const voxel = voxelSystem.getVoxel(nx, ny, nz);
     if (!voxel || !isFaunaTravelVoxel(kind, voxel, profile)) continue;
-    // Ground fauna never wade: submerged coast/lakebed voxels are off-limits.
-    if (kind !== 'dragonfly' && !isFaunaSurfaceDry(nx, ny, nz, profile)) continue;
+    // Ground fauna never wade; fish never beach; dragonflies cross freely.
+    if (!isFaunaHabitatVoxel(kind, nx, ny, nz, profile)) continue;
     return [nx, ny, nz];
   }
   return null;
@@ -1219,7 +1313,13 @@ const FLEE_APPROACH_SPEED = 3.2; // player speed toward the animal, wu/s
 const FLEE_DURATION_SECONDS = 2.6;
 const FLEE_SPEED_MUL = 2.6;
 
+// Herding doubles as SCHOOLING for fish: same attract/separate steering.
 function isHerdKind(kind: FaunaKind): boolean {
+  return kind === 'grazer' || kind === 'woolly' || kind === 'fish';
+}
+
+// Only land herbivores stop to put their head down; fish school but never graze.
+function isGrazeKind(kind: FaunaKind): boolean {
   return kind === 'grazer' || kind === 'woolly';
 }
 
@@ -1415,10 +1515,8 @@ function isFaunaAgentStillValid(
   if (!homeVoxel || !currentVoxel || !targetVoxel) return false;
   if (!shouldPlaceFaunaVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, density, terrainSeed, profile)) return false;
   if (chooseFaunaKindForVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, terrainSeed, profile) !== kind) return false;
-  if (kind !== 'dragonfly' && (
-    !isFaunaSurfaceDry(agent.x, agent.y, agent.z, profile) ||
-    !isFaunaSurfaceDry(agent.toX, agent.toY, agent.toZ, profile)
-  )) return false;
+  if (!isFaunaHabitatVoxel(kind, agent.x, agent.y, agent.z, profile) ||
+    !isFaunaHabitatVoxel(kind, agent.toX, agent.toY, agent.toZ, profile)) return false;
   return isFaunaTravelVoxel(kind, currentVoxel, profile) && isFaunaTravelVoxel(kind, targetVoxel, profile);
 }
 
@@ -1452,6 +1550,10 @@ function computeFaunaAgentMatrix(
   if (agent.kind === 'dragonfly') {
     _movePos.addScaledVector(_moveUp, Math.sin(time * 1.7 + agent.phase) * 0.16);
     _movePos.addScaledVector(_moveSide, Math.sin(time * 0.83 + agent.phase * 0.7) * 0.1);
+  } else if (agent.kind === 'fish') {
+    // Buoyant drift: a slow rise-and-fall plus gentle lateral wander.
+    _movePos.addScaledVector(_moveUp, Math.sin(time * 0.9 + agent.phase) * 0.14);
+    _movePos.addScaledVector(_moveSide, Math.sin(time * 0.6 + agent.phase * 0.7) * 0.09);
   }
 
   _basis.makeBasis(_moveForward, _moveUp, _moveSide);
@@ -1472,7 +1574,7 @@ function maybeStartGrazing(
   agents: readonly FaunaAgent[],
   terrainSeed: number
 ): boolean {
-  if (!isHerdKind(agent.kind)) return false;
+  if (!isGrazeKind(agent.kind)) return false;
   if (time < agent.grazeUntil + GRAZE_COOLDOWN_SECONDS) return false;
   let mateGrazing = false;
   for (const other of agents) {
@@ -1621,6 +1723,7 @@ export function buildFaunaInstances(
     const [x, y, z] = voxel.position;
     if (includedHomes.has(faunaAgentKey(kind, x, y, z))) continue;
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
+    if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
     if (!isFaunaTravelVoxel(kind, voxel, profile)) continue;
 

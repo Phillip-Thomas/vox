@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
+import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import {
@@ -163,14 +163,22 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
       profileAppliedRef.current = true;
     }
 
-    // Drive wind + sun (gated to freeze when animatedShaders is off).
-    updateGrassMaterial(
-      material,
-      performance.now() / 1000,
-      getGraphicsQuality(),
-      getVoxelRealityEffects(),
-      getSunDirection()
-    );
+    // Early-story reality stages hide grass in the shader anyway — skip the
+    // draw + per-frame uniform work entirely. Kept renderable until the shader
+    // has compiled so the reveal (A3+) pays no compile hitch. Rebuild
+    // maintenance below still runs so the buffer is current when it returns.
+    const hidden = lifeFieldsHidden() && profileAppliedRef.current;
+    if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
+    if (!hidden) {
+      // Drive wind + sun (gated to freeze when animatedShaders is off).
+      updateGrassMaterial(
+        material,
+        performance.now() / 1000,
+        getGraphicsQuality(),
+        getVoxelRealityEffects(),
+        getSunDirection()
+      );
+    }
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {

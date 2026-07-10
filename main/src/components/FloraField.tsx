@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
+import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { getMoonDirection, getSunDirection } from './SkyController';
@@ -138,7 +138,12 @@ function FloraLayer({
       applyFloraWindProfileToMaterial(profile.wind, material);
       windAppliedRef.current = true;
     }
-    updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
+    // Early-story stages hide flora in the shader — skip draw + uniform work.
+    const hidden = lifeFieldsHidden() && windAppliedRef.current;
+    if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
+    if (!hidden) {
+      updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
+    }
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {

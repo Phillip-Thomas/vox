@@ -92,5 +92,13 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
 - Side-scroller terrain: the locked plane can meet >1-block walls on rough
   seeds; step-assist + jump handle most of it, but the travel strip deserves a
   flatness assertion after a feel playtest.
+- Ch3 timber comes from wreck salvage (granted on ch3-gather entry with a
+  caption) because trees are still hidden at the `color` stage — revisit if a
+  future pass wants the wood gathered rather than given.
+- Perf: life fields (grass/tree/flora/fauna) now fully cull (draw + sim) while
+  the reality stage hides them (`lifeFieldsHidden`); the feed overlay's
+  backdrop-filter leaves the compositor at identity; A2 snaps dpr once during
+  the HUD-death chaos instead of lerping framebuffer sizes through the
+  liberation.
 - The raster quota→CCTV upgrade is a hard cut with a glitch pulse; a short
   camera swing from side view into first person would be a worthy polish beat.

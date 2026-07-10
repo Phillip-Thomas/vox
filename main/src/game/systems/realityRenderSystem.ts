@@ -162,3 +162,15 @@ export function subscribeVoxelReality(fn: Listener): () => void {
   listeners.add(fn);
   return () => listeners.delete(fn);
 }
+
+/**
+ * True when every life-field shader (grass/tree/flora/fauna) would fully hide
+ * its output anyway (their visibility uniforms are organic·~0.9 + detail·~0.2).
+ * Fields use this to SKIP drawing and simulating entirely at `bare`/`color` —
+ * the early-story chapters — instead of paying full vertex/CPU cost for
+ * invisible instances. Uses the LARGEST per-field coefficients so nothing that
+ * would render even faintly is ever culled.
+ */
+export function lifeFieldsHidden(effects: VoxelRealityEffects = getVoxelRealityEffects()): boolean {
+  return effects.organic * 0.92 + effects.detail * 0.22 < 0.01;
+}

@@ -6,7 +6,7 @@ import {
   VOXEL_REALITY_PRESETS
 } from '../game/systems/realityRenderSystem.ts';
 import { getMilestones, markMilestone } from '../game/systems/progressionSystem.ts';
-import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
+import { addItem, getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
 import { addMawCharge, getMawCharge, MAX_MAW_CHARGE, setMawCharge } from '../game/systems/mawSystem.ts';
 import { getMiningProgress } from '../game/systems/miningProgress.ts';
@@ -28,7 +28,6 @@ import {
   setStoryMoveScale,
   setStoryTargetDpr,
   setStoryTargetFov,
-  FEED_DPR,
   FEED_FOV,
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
@@ -207,6 +206,13 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setWorkOrder([]);
       clearViolations();
       ensureRestInteraction();
+      // Trees are still unresolved at this stage (they arrive with A3), so the
+      // campfire chain's timber comes from the wreck — granted diegetically.
+      if (getItemCount('wood') < 3) {
+        addItem('wood', 3 - getItemCount('wood'));
+        addItem('flint', Math.max(0, 2 - getItemCount('flint')));
+        showCaption('the wreck gave up crate timber and a flint striker.', 6500);
+      }
       break;
     case 'ch3-dusk':
       // The first sun event: the story takes the camera for a few seconds.
@@ -400,6 +406,10 @@ function tickA2(): void {
       d.a2HudDead = true;
       setWorkOrder([]);
       clearViolations();
+      // Snap to device resolution NOW, in one step, while the glitch chaos
+      // masks it — a lerped dpr would reallocate framebuffers repeatedly right
+      // through the liberation (the exact hitches a cutscene can't afford).
+      setStoryTargetDpr(null);
     }
     return;
   }
@@ -411,7 +421,6 @@ function tickA2(): void {
     const k = smoothstep((t - deathEnd) / T.liberationSeconds);
     setStoryFeedBlend(k);
     setStoryTargetFov(FEED_FOV + (SANDBOX_FOV - FEED_FOV) * k);
-    setStoryTargetDpr(FEED_DPR + (1 - FEED_DPR) * k); // render crunch dissolves too
     r.treatment = 1 - k;
     r.garble = 0;
     r.glitch = 0;

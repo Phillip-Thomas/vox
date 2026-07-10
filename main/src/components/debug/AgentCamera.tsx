@@ -162,6 +162,7 @@ const VANTAGES = [
   'runner',
   'hopper',
   'dragonfly',
+  'fish',
   'surfaceEffects',
   'material',
   'hazard',
@@ -546,10 +547,10 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
         }
         return overhead(name + ':no-trees(overhead)');
       }
-      if (name === 'fauna' || name === 'grazer' || name === 'woolly' || name === 'runner' || name === 'hopper' || name === 'dragonfly') {
+      if (name === 'fauna' || name === 'grazer' || name === 'woolly' || name === 'runner' || name === 'hopper' || name === 'dragonfly' || name === 'fish') {
         const mesh =
           name === 'fauna'
-            ? instancedByName(scene, /^fauna-(grazer|woolly|dragonfly|runner|hopper)$/)
+            ? instancedByName(scene, /^fauna-(grazer|woolly|dragonfly|runner|hopper|fish)$/)
             : instancedByName(scene, new RegExp(`^fauna-${name}$`));
         // Framing distances follow the sized-up herd (grazers are now
         // horse-tall ~3.4 wu, woollies ~2 wu) so the whole animal stays in shot.
@@ -560,7 +561,9 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
               ? { back: 5.4, lift: 1.9, lookLift: 0.9 }
               : name === 'dragonfly'
                 ? { back: 2.05, lift: 0.7, lookLift: 0.14 }
-                : { back: 4.4, lift: 1.4, lookLift: 0.55 };
+                : name === 'fish'
+                  ? { back: 2.6, lift: 0.9, lookLift: 0.2 }
+                  : { back: 4.4, lift: 1.4, lookLift: 0.55 };
         const framed = frameInstance(
           mesh,
           name,

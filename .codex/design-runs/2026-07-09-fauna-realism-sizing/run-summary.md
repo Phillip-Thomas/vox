@@ -93,6 +93,35 @@ invariant over 300 steps, startle-vs-calm player, graze hold + pose rise/decay);
 live captures show a head-down grazer beside a walking herd-mate and a coast with
 every animal above the waterline.
 
+## Pass 4 (same day): fish in the water biomes
+
+New `fish` FaunaKind riding the existing agent machinery end-to-end:
+
+- **Habitat inversion.** `isFaunaHabitatVoxel(kind, ...)` generalizes the wet/dry
+  rule: ground kinds need a dry surface, fish need a FLOODED one (they anchor to
+  the submerged seabed voxel and hover 1.3–1.8 wu up — always inside the first
+  water cell, which the wet check guarantees is flooded), dragonflies take either.
+  Enforced at spawn, travel, and agent revalidation; kind selection is wetness-
+  aware (fish own flooded voxels, walkers zeroed there, dragonflies patrol both)
+  with a 1.5× placement boost underwater so shoals read denser than land herds.
+- **Schooling + darting for free.** `isHerdKind` now includes fish (attract/
+  separate steering = schooling); grazing stays gated to grazer/woolly via a new
+  `isGrazeKind`. The flee reaction applies to fish unmodified — swim at them and
+  they dart.
+- **Look.** Laterally-flattened reef-fish body with tall tail fin, dorsal ridge
+  and pectorals on the part-4 sway channel; vertex-shader swim undulation (a
+  lateral wave traveling nose→tail, wind flex zeroed for fish); fragment adds a
+  pale countershaded belly + iridescent flank band (fauna-field-v7). Colors from
+  the planet's water/wing palette roles. Buoyant rise-and-fall bob on the CPU
+  matrix like the dragonfly hover. Sizes 0.55–0.95 wu, varied.
+- Ecology `fish` weights added per archetype (oceanic 1.35 down to metallic 0.2);
+  AgentCamera gains a `fish` vantage.
+
+Verified: 614 tests green (fish-only-wet spawn + 300-step never-beach invariant,
+habitat matrix incl. dragonfly-both, schooling steer, anchor floats above the
+seabed); live oceanic capture shows fish swimming among the godrays/bubbles of
+the underwater post pipeline. 36 instances on the oceanic fixture at HIGH.
+
 ## Open threads
 
 - Gait is still translation-based shear, not true joint rotation; fine at current
@@ -101,3 +130,6 @@ every animal above the waterline.
   hysteresis would read even better.
 - Runner is common on arid fixtures; reviewed on the verdant world — worth one
   arid screenshot pass when convenient.
+- Fish stay in the first water cell above the seabed; deep-water mid-column
+  swimming (multiple water cells up) would need a water-column agent, not a
+  seabed-anchored one — worth it if deep diving becomes a gameplay focus.

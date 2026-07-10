@@ -15,6 +15,7 @@ import {
   faunaLevelTransitionLift,
   faunaScaleForKind,
   isFaunaEligibleVoxel,
+  isFaunaHabitatVoxel,
   isFaunaSurfaceDry,
   isFaunaTravelVoxel,
   prepareFaunaInstanceAttributes,
@@ -185,14 +186,15 @@ describe('faunaField', () => {
     const water = { isWaterVoxel: (x: number) => x >= 2 };
     const profile: FaunaProfile = { ...fullCoverageProfile(seed), water };
 
-    // Dry voxels are unaffected; submerged ones are rejected for placement.
+    // Dry voxels are unaffected; submerged ones are ground-fauna-hostile but
+    // fish habitat (dragonflies take either).
     expect(isFaunaSurfaceDry(0, 25, 0, profile)).toBe(true);
     expect(isFaunaSurfaceDry(3, 25, 0, profile)).toBe(false);
     expect(isFaunaSurfaceDry(3, 25, 0, { water: undefined })).toBe(true);
-
-    voxelSystem.addVoxel(3, 25, 0, MaterialType.GRASS, grass);
-    const flooded = voxelSystem.getVoxel(3, 25, 0)!;
-    expect(shouldPlaceFaunaVoxel(flooded, 3, 25, 0, 10, seed, profile)).toBe(false);
+    expect(isFaunaHabitatVoxel('runner', 3, 25, 0, profile)).toBe(false);
+    expect(isFaunaHabitatVoxel('fish', 3, 25, 0, profile)).toBe(true);
+    expect(isFaunaHabitatVoxel('fish', 0, 25, 0, profile)).toBe(false);
+    expect(isFaunaHabitatVoxel('dragonfly', 3, 25, 0, profile)).toBe(true);
 
     // Travel: a runner walking a strip toward water must stop at the shoreline.
     for (let x = -2; x <= 6; x++) voxelSystem.addVoxel(x, 25, 0, MaterialType.DIRT, dirt);
@@ -202,7 +204,7 @@ describe('faunaField', () => {
     const dryProfile: FaunaProfile = {
       ...profile,
       coverage: 1,
-      weights: { grazer: 0.001, woolly: 0.001, runner: 50, hopper: 0.001, dragonfly: 0.001 }
+      weights: { grazer: 0.001, woolly: 0.001, runner: 50, hopper: 0.001, dragonfly: 0.001, fish: 0.001 }
     };
     const built = buildFaunaInstances('runner', mesh, 10, 0, null, seed, dryProfile);
     expect(built.agents.length).toBeGreaterThan(0);
@@ -215,6 +217,74 @@ describe('faunaField', () => {
       }
     }
     geometry.dispose();
+  });
+
+  it('spawns fish only over submerged terrain and keeps them in the water while swimming', () => {
+    const seed = VERDANT_SEED;
+    // Everything with x >= 2 is flooded (cell above those voxels is water).
+    const water = { isWaterVoxel: (x: number) => x >= 2 };
+    const profile: FaunaProfile = {
+      ...fullCoverageProfile(seed),
+      water,
+      weights: { grazer: 0.001, woolly: 0.001, runner: 0.001, hopper: 0.001, dragonfly: 0.001, fish: 50 }
+    };
+    // A shoreline strip: dry land x in [-4..1], flooded lakebed x in [2..8].
+    for (let x = -4; x <= 8; x++) voxelSystem.addVoxel(x, 25, 0, MaterialType.SAND, sand);
+
+    expect(countFaunaVoxels('fish', 10, seed, profile)).toBeGreaterThan(0);
+
+    const geometry = createFaunaGeometry('fish', profile);
+    prepareFaunaInstanceAttributes(geometry, 16);
+    const mesh = new THREE.InstancedMesh(geometry, createFaunaMaterial('fish', profile), 16);
+    const built = buildFaunaInstances('fish', mesh, 10, 0, null, seed, profile);
+    expect(built.agents.length).toBeGreaterThan(0);
+
+    for (const agent of built.agents) {
+      expect(agent.homeX).toBeGreaterThanOrEqual(2);
+      // Fish anchor floats in the water column above the seabed, not on it.
+      const seabedTop = 25 * 2 + 1; // voxel center y=50, face at 50.99
+      expect(agent.from.y).toBeGreaterThan(seabedTop + 0.2);
+    }
+
+    // Swimming: agents never route onto dry land voxels.
+    for (let step = 0; step < 300; step++) {
+      updateFaunaAgents(mesh, built.agents, step * 0.1, 0.1, seed, profile);
+      for (const agent of built.agents) {
+        expect(agent.x).toBeGreaterThanOrEqual(2);
+        expect(agent.toX).toBeGreaterThanOrEqual(2);
+      }
+    }
+    geometry.dispose();
+  });
+
+  it('lets fish school through the herd steering', () => {
+    const makeFish = (x: number, toWorld: THREE.Vector3): FaunaAgent => ({
+      kind: 'fish',
+      terrainSeed: 1,
+      homeX: x, homeY: 25, homeZ: 0,
+      x, y: 25, z: 0,
+      toX: x, toY: 25, toZ: 0,
+      from: toWorld.clone(),
+      to: toWorld.clone(),
+      progress: 0,
+      directionIndex: 0,
+      speed: 0.5,
+      scaleSeed: 0.5,
+      tiltSeed: 0.5,
+      offsetU: 0,
+      offsetV: 0,
+      phase: 0,
+      stridePhase: 0,
+      stepSalt: 1,
+      stepCount: 0,
+      orientation: new THREE.Quaternion(),
+      grazeUntil: 0,
+      fleeUntil: 0,
+      pose: 0
+    });
+    const self = makeFish(0, new THREE.Vector3(0, 51, 0));
+    const mate = makeFish(10, new THREE.Vector3(20, 51, 0));
+    expect(chooseHerdDirectionIndex(self, [self, mate])).toBe(0); // school toward +x
   });
 
   it('startles fauna into fleeing a fast-approaching player and routes them away', () => {
@@ -317,7 +387,7 @@ describe('faunaField', () => {
       expect(material).toBeInstanceOf(THREE.MeshStandardMaterial);
       expect(material.vertexColors).toBe(true);
       expect(material.roughness).toBeGreaterThan(0.7);
-      expect(material.customProgramCacheKey()).toBe('fauna-field-v6');
+      expect(material.customProgramCacheKey()).toBe('fauna-field-v7');
       keys.add(material.customProgramCacheKey());
       expect(faunaKindId(kind)).toBeGreaterThanOrEqual(0);
       material.dispose();

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
-import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem';
+import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { measureWarpMetric } from '../utils/warpMetrics';
@@ -347,17 +347,27 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       }
     }
 
-    updateTreeMaterials(
-      barkMaterial,
-      leafMaterial,
-      blossomMaterial,
-      impostorMaterial,
-      performance.now() / 1000,
-      getSunDirection(),
-      getMoonDirection(),
-      getGraphicsQuality(),
-      getVoxelRealityEffects()
-    );
+    // Early-story reality stages hide trees in the shader anyway — skip draws
+    // and per-frame uniforms entirely (rebuild maintenance below still runs).
+    // Visible until shaders compile so the A3 reveal pays no compile hitch.
+    const hidden = lifeFieldsHidden() && profileAppliedRef.current;
+    for (const ref of [trunkRef, leafRef, blossomRef, impostorRef]) {
+      const mesh = ref.current;
+      if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
+    }
+    if (!hidden) {
+      updateTreeMaterials(
+        barkMaterial,
+        leafMaterial,
+        blossomMaterial,
+        impostorMaterial,
+        performance.now() / 1000,
+        getSunDirection(),
+        getMoonDirection(),
+        getGraphicsQuality(),
+        getVoxelRealityEffects()
+      );
+    }
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getTreeHarvestVersion()}`;
     if (sig !== signatureRef.current) {

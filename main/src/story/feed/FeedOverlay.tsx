@@ -79,19 +79,37 @@ const FeedOverlay: React.FC = () => {
       const glitch = glitchRef.current;
       if (!filter || !dither || !scan || !vignette || !glitch) return;
 
-      // Backdrop filter strings are only rebuilt when the value actually moves.
+      // Backdrop filter strings are only rebuilt when the value actually moves —
+      // and the layer UNMOUNTS from compositing (display:none) whenever it is at
+      // identity: a live backdrop-filter forces a full-screen readback every
+      // frame even at grayscale(0), which is pure dead weight post-A1.
       const desat = Math.round(r.desat * 100) / 100;
       if (desat !== lastDesat) {
         lastDesat = desat;
-        const contrast = 1 + 0.26 * r.treatment * desat;
-        const bright = 1 + 0.05 * r.treatment;
-        filter.style.backdropFilter = `grayscale(${desat}) contrast(${contrast}) brightness(${bright})`;
-        (filter.style as unknown as Record<string, string>).webkitBackdropFilter = filter.style.backdropFilter;
+        if (desat < 0.01) {
+          filter.style.display = 'none';
+        } else {
+          filter.style.display = 'block';
+          const contrast = 1 + 0.26 * r.treatment * desat;
+          const bright = 1 + 0.05 * r.treatment;
+          filter.style.backdropFilter = `grayscale(${desat}) contrast(${contrast}) brightness(${bright})`;
+          (filter.style as unknown as Record<string, string>).webkitBackdropFilter = filter.style.backdropFilter;
+        }
       }
-      dither.style.opacity = String(0.5 * r.treatment);
-      scan.style.opacity = String(0.5 * r.treatment);
-      scan.style.transform = r.scanRoll > 0.001 ? `translateY(${r.scanRoll * 46}px)` : 'translateY(0)';
-      vignette.style.opacity = String(0.9 * r.treatment);
+      // Treatment layers leave the compositor entirely once dissolved (A2+).
+      const treatmentGone = r.treatment < 0.01;
+      const treatmentDisplay = treatmentGone ? 'none' : 'block';
+      if (dither.style.display !== treatmentDisplay) {
+        dither.style.display = treatmentDisplay;
+        scan.style.display = treatmentDisplay;
+        vignette.style.display = treatmentDisplay;
+      }
+      if (!treatmentGone) {
+        dither.style.opacity = String(0.5 * r.treatment);
+        scan.style.opacity = String(0.5 * r.treatment);
+        scan.style.transform = r.scanRoll > 0.001 ? `translateY(${r.scanRoll * 46}px)` : 'translateY(0)';
+        vignette.style.opacity = String(0.9 * r.treatment);
+      }
 
       // Glitch canvas: paint only while glitching; one clear when it ends.
       const ctx = glitch.getContext('2d');
