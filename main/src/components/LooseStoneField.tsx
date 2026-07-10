@@ -16,6 +16,8 @@ import { restoreStonesForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { buildStoneGeometry, createStoneMaterial } from '../utils/looseStone';
 import { playSfx } from '../audio/sfxEngine.ts';
+import { useStoryState } from '../story/storyState.ts';
+import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 
 // Loose stones are a GAMEPLAY necessity (the bootstrap for stone), so unlike trees
 // they do NOT depend on the graphics tree/grass density — a fixed scatter that
@@ -87,7 +89,15 @@ function countStones(terrainSeed: number, playerPosition?: THREE.Vector3): numbe
 export default function LooseStoneField({ commandContext, terrainSeed, persistenceWorld, playerPosition }: LooseStoneFieldProps) {
   // Irregular boulder (~0.55 base radius; voxels are VOXEL_SCALE=2 wide) + a
   // procedural stone material, so rocks read as natural stone, not flat gems.
-  const geometry = useMemo(() => buildStoneGeometry(), []);
+  // Story early chapters render stones as VOXEL pebbles instead (nothing smooth
+  // exists before the A2 depth awakening); the smooth rock returns with ch3.
+  const story = useStoryState();
+  const voxelProps = story.active && getStoryInputPolicy().voxelPropsOnly;
+  const rockGeometry = useMemo(() => buildStoneGeometry(), []);
+  const cubeGeometry = useMemo(() => new THREE.BoxGeometry(0.9, 0.62, 0.9), []);
+  const geometry = voxelProps ? cubeGeometry : rockGeometry;
+  const voxelPropsRef = useRef(voxelProps);
+  voxelPropsRef.current = voxelProps;
   const material = useMemo(() => createStoneMaterial(), []);
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const [capacity, setCapacity] = useState(0);
@@ -124,7 +134,9 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
       // instance, flipping triangle winding so you'd see the rock's inside faces.
       _bitangent.crossVectors(_tangent, _up).normalize();
       _basis.makeBasis(_tangent, _up, _bitangent);
-      _yaw.makeRotationY(seededVoxelUnit(x, y, z, 13, terrainSeed) * Math.PI * 2);
+      // Voxel pebbles stay grid-aligned (no yaw) — the era permits no rotation.
+      if (voxelPropsRef.current) _yaw.identity();
+      else _yaw.makeRotationY(seededVoxelUnit(x, y, z, 13, terrainSeed) * Math.PI * 2);
       const s = 0.7 + seededVoxelUnit(x, y, z, 29, terrainSeed) * 0.6; // 0.7 .. 1.3
       _scaleM.makeScale(s, s * 0.7, s); // squashed pebble
       _translate.makeTranslation(
@@ -166,14 +178,15 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
     restoreStonesForWorld(persistenceWorld ?? terrainSeed);
   }, [persistenceWorld, terrainSeed]);
 
-  // Dispose GPU resources on unmount only (geometry/material are stable useMemos,
+  // Dispose GPU resources on unmount only (geometries/material are stable useMemos,
   // so this cleanup must NOT fire on a mere terrainSeed change). Clear the handle.
   useEffect(() => () => {
-    geometry.dispose();
+    rockGeometry.dispose();
+    cubeGeometry.dispose();
     material.dispose();
     looseStoneHandle.mesh = null;
     looseStoneHandle.slotVoxel.length = 0;
-  }, [geometry, material]);
+  }, [rockGeometry, cubeGeometry, material]);
 
   useFrame(() => {
     // Proximity pickup: collect any near stone the player is standing close to.
@@ -190,9 +203,10 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
       }
     }
 
-    // Rebuild when the world/edits/pickups change, or the player moved enough to
-    // re-bucket which stones are within render/scan range.
-    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getStonePickupVersion()}`;
+    // Rebuild when the world/edits/pickups change, the prop flavor flips (the
+    // args change recreates the mesh with count 0), or the player moved enough
+    // to re-bucket which stones are within render/scan range.
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getStonePickupVersion()}:${voxelPropsRef.current ? 'cube' : 'rock'}`;
     if (sig !== signatureRef.current) {
       const needed = neededCapacity();
       if (needed > capacity) growCapacity(needed);

@@ -4,6 +4,9 @@ import { hudIconButtonStyle, hudTopRightClusterStyle } from './hudChrome.ts';
 interface HudCornerActionsProps {
   controlMode: 'fps' | 'flight';
   buildModeOpen: boolean;
+  /** Story chapters hide the gated affordances (sandbox: always true). */
+  allowBuild?: boolean;
+  allowCraft?: boolean;
   onToggleBuild: () => void;
   onOpenCrafting: () => void;
   onPause: () => void;
@@ -12,6 +15,8 @@ interface HudCornerActionsProps {
 const HudCornerActions: React.FC<HudCornerActionsProps> = ({
   controlMode,
   buildModeOpen,
+  allowBuild = true,
+  allowCraft = true,
   onToggleBuild,
   onOpenCrafting,
   onPause
@@ -20,7 +25,7 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
 
   return (
     <div aria-label="HUD quick actions" style={hudTopRightClusterStyle()}>
-      {showFootActions && (
+      {showFootActions && allowBuild && (
         <button
           type="button"
           onClick={onToggleBuild}
@@ -31,7 +36,7 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
           B
         </button>
       )}
-      {showFootActions && (
+      {showFootActions && allowCraft && (
         <button
           type="button"
           onClick={onOpenCrafting}

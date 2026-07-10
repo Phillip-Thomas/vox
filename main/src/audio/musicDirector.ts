@@ -11,7 +11,9 @@ export type MusicScene =
   | 'launch'
   | 'deepSpace'
   | 'approach'
-  | 'descent';
+  | 'descent'
+  // story prologue: the terminal — near-silence with a deep transit drone
+  | 'storyTerminal';
 
 export interface MusicMix {
   layers: Partial<Record<MusicLayerId, number>>;
@@ -85,8 +87,10 @@ export function resolvePlanetMusicMood(profile: PlanetProfile): PlanetMusicMood 
 export function resolveMusicScene(
   appPhase: AppPhase,
   flightPhase: FlightPhase,
-  controlMode: ControlMode
+  controlMode: ControlMode,
+  storyTerminal = false
 ): MusicScene {
+  if (storyTerminal) return 'storyTerminal';
   if (appPhase === 'menu') return 'menu';
   if (flightPhase === 'deep_space') return 'deepSpace';
   if (flightPhase === 'approach') return 'approach';
@@ -174,6 +178,13 @@ function baseMixForScene(scene: MusicScene, mood: PlanetMusicMood, daylight: num
         layers: { menu: 0.44, shimmer: 0.12 },
         procedural: EMPTY_PROCEDURAL,
         fadeSeconds: 2.8
+      };
+    case 'storyTerminal':
+      // The hauler: nothing to hear but the hull. A distant transit drone, no melody.
+      return {
+        layers: { deepSpace: 0.1 },
+        procedural: { ...EMPTY_PROCEDURAL, pulse: 0.03, rumble: 0.05 },
+        fadeSeconds: 2.2
       };
     case 'surface':
       return {

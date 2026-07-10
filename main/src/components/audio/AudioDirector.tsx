@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, type FC } from 'react';
 import { useAppState } from '../../state/appState.ts';
+import { useStoryState } from '../../story/storyState.ts';
 import { getWarp, useSpaceFlight } from '../../state/spaceFlight.ts';
 import { getPlayerUp } from '../../state/playerFrame.ts';
 import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
@@ -25,12 +26,18 @@ interface AudioDirectorProps {
 const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   const app = useAppState();
   const flight = useSpaceFlight();
+  const story = useStoryState();
   const audio = useAudioSettings();
   const planetMood = useMemo<PlanetMusicMood>(
     () => resolvePlanetMusicMood(buildPlanetProfile(terrainSeed)),
     [terrainSeed]
   );
-  const scene = resolveMusicScene(app.phase, flight.phase, flight.controlMode);
+  const scene = resolveMusicScene(
+    app.phase,
+    flight.phase,
+    flight.controlMode,
+    story.active && story.chapter === 'prologue'
+  );
   const sceneRef = useRef<MusicScene>(scene);
   const planetMoodRef = useRef<PlanetMusicMood>(planetMood);
   const warpActiveRef = useRef(false);

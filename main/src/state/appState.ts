@@ -34,12 +34,16 @@ const READY_FRAMES = 8;
 function computeDeepLink(): boolean {
   if (typeof window === 'undefined') return false;
   const p = new URLSearchParams(window.location.search);
+  const story = p.get('story');
   return (
     p.has('world') ||
     p.get('fly') === '1' ||
     p.has('descent') ||
     p.get('agent') === '1' ||
-    p.get('overview') === '1'
+    p.get('overview') === '1' ||
+    // ?story=ch1|a1|... jumps straight into a story chapter; ?story=1 keeps the
+    // menu (the prologue overlay runs over it — see story/storyState.ts).
+    (story !== null && story !== '1')
   );
 }
 

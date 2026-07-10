@@ -1,0 +1,50 @@
+import { describe, expect, it } from 'vitest';
+import { getStorySidePlane, isStoryWorld, STORY_COORDINATE, STORY_SEED } from './storyWorld.ts';
+import { archetypeForSeed } from '../../game/data/planetArchetypes.ts';
+import { coordinateToSeed } from '../../utils/worldCoordinates.ts';
+
+describe('storyWorld', () => {
+  it('pins a verdant planet (trees/grass/biofiber/stone, no hazards)', () => {
+    const seed = coordinateToSeed(STORY_COORDINATE.x, STORY_COORDINATE.y);
+    expect(archetypeForSeed(seed)).toBe('verdant');
+  });
+
+  it('the pin is stable (art direction + saves depend on this exact coordinate)', () => {
+    // If a generation-schema change legitimately moves the scan result, bump the
+    // expectation AND the persistence schema so stale story saves are dropped.
+    expect(STORY_COORDINATE).toEqual(findExpected());
+    function findExpected() {
+      // mirror of the ring scan, kept independent enough to catch accidental edits
+      for (let radius = 1; radius <= 100; radius++) {
+        for (let x = -radius; x <= radius; x++) {
+          const ys = x === -radius || x === radius
+            ? Array.from({ length: radius * 2 + 1 }, (_, i) => i - radius)
+            : [-radius, radius];
+          for (const y of ys) {
+            if (archetypeForSeed(coordinateToSeed(x, y)) === 'verdant') return { x, y };
+          }
+        }
+      }
+      return { x: 0, y: 0 };
+    }
+  });
+
+  it('isStoryWorld matches only the pinned coordinate', () => {
+    expect(isStoryWorld(STORY_COORDINATE)).toBe(true);
+    expect(isStoryWorld({ x: STORY_COORDINATE.x + 1, y: STORY_COORDINATE.y })).toBe(false);
+  });
+
+  it('the raster side plane is strictly world-axis-aligned (true 2D elevation)', () => {
+    const plane = getStorySidePlane(50, STORY_SEED);
+    const t = plane.travelAxis;
+    const d = plane.depthAxis;
+    // travel is exactly ±X or ±Z — one component ±1, the others 0
+    const travelComponents = [Math.abs(t.x), Math.abs(t.y), Math.abs(t.z)].sort();
+    expect(travelComponents).toEqual([0, 0, 1]);
+    expect(t.y).toBe(0);
+    // depth is the perpendicular horizontal axis; up is grid +Y
+    expect(Math.abs(t.dot(d))).toBeLessThan(1e-9);
+    expect(plane.up.toArray()).toEqual([0, 1, 0]);
+    expect(d.y).toBe(0);
+  });
+});

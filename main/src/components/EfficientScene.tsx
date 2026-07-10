@@ -32,6 +32,9 @@ import { measureWarpMetric } from '../utils/warpMetrics';
 import { loadPlayerPose } from '../game/systems/persistence.ts';
 import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
 import type { CommandContext } from '../game/commands.ts';
+import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
+import StoryWorldProps from '../story/world/StoryWorldProps.tsx';
+import { useStoryState } from '../story/storyState.ts';
 
 export const planetSize = 50;
 
@@ -79,6 +82,10 @@ export default function EfficientScene({
   onDebugChange
 }: EfficientSceneProps) {
   const { controlMode } = useSpaceFlight();
+  const story = useStoryState();
+  // Chapters before the A2 depth awakening allow no smooth props at all.
+  const storyPreAwakened = story.active
+    && (story.chapter === 'prologue' || story.chapter === 'ch1' || story.chapter === 'ch2');
   const arrivalPose = useMemo(
     () => measureWarpMetric(
       'scene:arrival_pose',
@@ -179,12 +186,18 @@ export default function EfficientScene({
           onDebugChange={player => updateDebugState({ player })}
         />
       )}
-      <SpaceshipPlaceholder
-        position={landedShipPos ?? arrivalPose.shipPosition}
-        terrainSeed={terrainSeed}
-        activeApproach={arrivalMode === 'approach'}
-        playerPosition={playerPosition}
-      />
+      {/* Pre-A2 story chapters permit NOTHING smooth: the hauler is diegetically
+          "disassembled" and forage berries return with the living world. */}
+      {!storyPreAwakened && (
+        <SpaceshipPlaceholder
+          position={landedShipPos ?? arrivalPose.shipPosition}
+          terrainSeed={terrainSeed}
+          activeApproach={arrivalMode === 'approach'}
+          playerPosition={playerPosition}
+        />
+      )}
+      {/* Story-mode bespoke props (anomaly stone, hero apple tree) — story world only. */}
+      {isStoryWorldSeed(terrainSeed) && <StoryWorldProps planetSize={planetSize} terrainSeed={terrainSeed} />}
       <PlayerAvatarPoseHarness worldId={commandContext.world.worldId} />
       <GrassField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <FloraField terrainSeed={terrainSeed} playerPosition={playerPosition} />
@@ -192,7 +205,9 @@ export default function EfficientScene({
       <TreeField planetSize={planetSize} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
       <SurfaceEffectField terrainSeed={terrainSeed} playerPosition={playerPosition} />
       <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
-      <ForageField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
+      {!storyPreAwakened && (
+        <ForageField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={playerPosition} />
+      )}
       <PlayerTorch playerPosition={playerPosition} />
       <Campfires terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />
       <StructureField terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />

@@ -98,6 +98,9 @@ import {
   WORLD_COLLISION_PLAYER_SOLIDIFY_LIFT
 } from '../game/worldCollisionReconciliation.ts';
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
+import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
+import { resolveStoryInteraction } from '../story/storyInteractions.ts';
+import { getSideFacing, getSideLens, setSideFacing, sideHarvestProbePoints } from '../story/sideLens.ts';
 import { clampVitalsDelta } from '../game/tickDiscipline.ts';
 import {
   consumeJetpackFuel,
@@ -165,6 +168,7 @@ const SMOOTH_GRAVITY = typeof window === 'undefined'
 // 125k-instance InstancedMesh raycast every frame).
 const _lookOrigin = new THREE.Vector3();
 const _lookDir = new THREE.Vector3();
+const _sideBasisForward = new THREE.Vector3(); // raster-era movement basis scratch
 const _wO = new THREE.Vector3(); // water look-ray scratch (lookingAtWater only —
 const _wD = new THREE.Vector3(); // distinct from _lookOrigin/_lookDir used by updateLookedAt)
 // Scratch for the per-step submersion test (eye position) + swim look direction.
@@ -256,6 +260,11 @@ export default function EfficientPlayer({
   const rotationAnimation = useRef<RotationAnimation | null>(null);
   const lastPlanarForward = useRef(new THREE.Vector3(0, 0, -1));
   const controlsActive = useRef(false);
+  // Raster side-scroller: reusable probe points for the adjacency harvest scan.
+  const sideProbePoints = useMemo(
+    () => Array.from({ length: 5 }, () => new THREE.Vector3()),
+    []
+  );
   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
   // time, and when the last chip sound played. Reset when the key is released,
   // the crosshair leaves the voxel, or the block breaks.
@@ -587,7 +596,26 @@ export default function EfficientPlayer({
     | { kind: 'voxel'; coord: { x: number; y: number; z: number }; voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>> }
     | { kind: 'tree'; coord: { x: number; y: number; z: number } }
     | { kind: 'stone'; coord: { x: number; y: number; z: number } };
+  // Raster side-scroller: no camera ray (the camera looks AT the player) —
+  // Terraria-style adjacency: probe cells ahead of the facing side / underfoot.
+  const pickSideTarget = useCallback((): HarvestTarget | null => {
+    const lens = getSideLens();
+    const body = ref.current;
+    if (!lens || !body) return null;
+    const position = vectorFromRapier(body.translation());
+    sideHarvestProbePoints(position, lens, getSideFacing(), sideProbePoints);
+    for (const point of sideProbePoints) {
+      const vx = Math.round(point.x / VOXEL_SCALE);
+      const vy = Math.round(point.y / VOXEL_SCALE);
+      const vz = Math.round(point.z / VOXEL_SCALE);
+      const voxel = voxelSystem.getVoxel(vx, vy, vz);
+      if (voxel) return { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
+    }
+    return null;
+  }, []);
+
   const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {
+    if (getStoryInputPolicy().lookMode === 'side') return pickSideTarget();
     if (!camera) return null;
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
@@ -632,7 +660,7 @@ export default function EfficientPlayer({
     }
 
     return best;
-  }, []);
+  }, [pickSideTarget]);
 
   // Actually break + harvest a voxel once mining has charged to completion.
   const commitMine = useCallback((
@@ -923,13 +951,16 @@ export default function EfficientPlayer({
     return false;
   }, [planetSize, terrainSeed]);
 
-  // Resolve the single best available interaction (priority: door → board → drink →
-  // consume) into { verb, perform }. Drives the HUD prompt + the primary key.
+  // Resolve the single best available interaction (priority: story → door → board →
+  // drink → consume) into { verb, perform }. Drives the HUD prompt + the primary key.
   const resolveInteraction = useCallback((camera: THREE.Camera | null, position: THREE.Vector3): (ActiveInteraction & { perform: () => void }) | null => {
-    const door = lookedAtDoor(camera);
+    const story = resolveStoryInteraction(camera, position);
+    if (story) return story;
+    const allowBase = getStoryInputPolicy().allowBaseInteraction;
+    const door = allowBase('door') ? lookedAtDoor(camera) : null;
     if (door) return { id: 'door', verb: door.open ? 'Close Door' : 'Open Door', perform: () => { tryToggleDoor(camera); } };
-    if (isBoardable()) return { id: 'board', verb: 'Enter Ship', perform: () => { playSfx('boardShip'); enterShip(); } };
-    if (lookingAtWater(camera) || isInWater(position)) {
+    if (allowBase('board') && isBoardable()) return { id: 'board', verb: 'Enter Ship', perform: () => { playSfx('boardShip'); enterShip(); } };
+    if (allowBase('drink') && (lookingAtWater(camera) || isInWater(position))) {
       return {
         id: 'drink',
         verb: 'Drink',
@@ -952,6 +983,14 @@ export default function EfficientPlayer({
   const updateLookedAt = useCallback((camera: THREE.Camera | null) => {
     if (!camera || !(controlsActive.current || isTouchActive())) {
       setLookedAt(null);
+      return;
+    }
+    // Raster side-scroller: the label mirrors the adjacency harvest target.
+    if (getStoryInputPolicy().lookMode === 'side') {
+      const target = pickSideTarget();
+      setLookedAt(target?.kind === 'voxel'
+        ? { kind: 'voxel', material: target.voxel.material as MaterialType, blockId: target.voxel.blockId, deposit: target.voxel.deposit }
+        : null);
       return;
     }
     camera.getWorldPosition(_lookOrigin);
@@ -996,7 +1035,7 @@ export default function EfficientPlayer({
     }
 
     setLookedAt(found);
-  }, []);
+  }, [pickSideTarget]);
 
   useBeforePhysicsStep(() => {
     const body = ref.current;
@@ -1090,18 +1129,30 @@ export default function EfficientPlayer({
     // Input is enabled by pointer lock (desktop) OR active touch controls (mobile).
     const active = controlsActive.current || isTouchActive();
 
+    // Raster side-scroller: movement is A/D along the lens travel axis (screen
+    // left/right), W/S ignored, basis camera-independent. The camera sits at
+    // +depth looking at the player, so basis.forward = -depth makes
+    // basis.right = +travel = screen-right.
+    const sideLens = getStoryInputPolicy().lookMode === 'side' ? getSideLens() : null;
+
     const movementInput = active
       ? {
-          forward: controls.forward,
-          backward: controls.backward,
+          forward: sideLens ? false : controls.forward,
+          backward: sideLens ? false : controls.backward,
           left: controls.left,
           right: controls.right
         }
       : { forward: false, backward: false, left: false, right: false };
+    if (sideLens && active) {
+      if (controls.right && !controls.left) setSideFacing(1);
+      else if (controls.left && !controls.right) setSideFacing(-1);
+    }
 
-    const basis = cameraRef.current
-      ? planarCameraBasis(cameraRef.current, activeUp, lastPlanarForward.current)
-      : makeTangentBasis(activeUp, lastPlanarForward.current);
+    const basis = sideLens
+      ? makeTangentBasis(activeUp, _sideBasisForward.copy(sideLens.depthAxis).negate())
+      : cameraRef.current
+        ? planarCameraBasis(cameraRef.current, activeUp, lastPlanarForward.current)
+        : makeTangentBasis(activeUp, lastPlanarForward.current);
     lastPlanarForward.current.copy(basis.forward);
 
     const moveDirection = movementDirectionFromBasis(movementInput, basis.forward, basis.right);
@@ -1116,14 +1167,21 @@ export default function EfficientPlayer({
     // Sprint (Shift): faster on-foot move while grounded + actually moving + stamina left.
     // The `grounded` gate means an airborne sprint-hold doesn't drain — applyStamina runs
     // every step, so any not-sprinting frame (including airborne) REGENERATES stamina.
+    // Story mode constrains movement per chapter (sandbox: the frozen allow-all policy).
+    const storyPolicy = getStoryInputPolicy();
     const moving = moveDirection.lengthSq() > 0.0001;
-    const sprinting = active && controls.sprint === true && grounded && moving && canSprint();
+    const sprinting = active && controls.sprint === true && storyPolicy.allowSprint && grounded && moving && canSprint();
     applyStamina(FIXED_PHYSICS_STEP, sprinting);
-    let nextVelocity = composeVelocity(gravityVelocity, moveDirection, activeUp, DEFAULT_MOVE_SPEED * (sprinting ? SPRINT_MULTIPLIER : 1));
+    let nextVelocity = composeVelocity(
+      gravityVelocity,
+      moveDirection,
+      activeUp,
+      DEFAULT_MOVE_SPEED * (sprinting ? SPRINT_MULTIPLIER : 1) * storyPolicy.moveSpeedScale
+    );
 
     const jump = updateJumpState(
       jumpState.current,
-      active && controls.jump,
+      active && controls.jump && storyPolicy.allowJump,
       grounded,
       FIXED_PHYSICS_STEP
     );
@@ -1142,7 +1200,7 @@ export default function EfficientPlayer({
     // Hold-jump jetpack: once airborne, holding jump burns limited fuel for a
     // gentle upward thrust (controlled hover/boost), capped so it's not a rocket.
     // Fuel refills while grounded. shouldJump (the ground impulse) takes priority.
-    const jumpHeld = active && controls.jump;
+    const jumpHeld = active && controls.jump && storyPolicy.allowJump;
     let jetpackActive = false;
     if (grounded) {
       refillJetpackFuel(JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP, commandContext.actorId);
@@ -1209,6 +1267,15 @@ export default function EfficientPlayer({
       if (upSpeed < STEP_ASSIST_UP_SPEED) {
         nextVelocity.addScaledVector(activeUp, STEP_ASSIST_UP_SPEED - upSpeed);
       }
+    }
+
+    // Raster side-scroller plane lock: cancel all depth-axis velocity (walk,
+    // jump knockback, collisions) and spring any positional drift back onto the
+    // plane through the lens origin.
+    if (sideLens) {
+      nextVelocity.addScaledVector(sideLens.depthAxis, -nextVelocity.dot(sideLens.depthAxis));
+      const depthDrift = _sideBasisForward.copy(position).sub(sideLens.origin).dot(sideLens.depthAxis);
+      nextVelocity.addScaledVector(sideLens.depthAxis, -depthDrift * 4);
     }
 
     body.setLinvel(vectorToRapier(nextVelocity), true);

@@ -6,7 +6,10 @@
 // generic "[F] <verb>" prompt and F performs whatever is current. Adding an
 // interaction = adding a resolver branch — no new key, no new prompt.
 
-export type InteractionId = 'door' | 'board' | 'drink';
+export type InteractionId =
+  | 'door' | 'board' | 'drink'
+  // story-mode prompts (resolved by story/storyInteractions.ts, highest priority)
+  | 'story-anomaly' | 'story-eat' | 'story-rest';
 
 export interface ActiveInteraction {
   id: InteractionId;

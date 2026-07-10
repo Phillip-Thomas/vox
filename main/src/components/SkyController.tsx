@@ -8,6 +8,7 @@ import { getPlayerUp } from '../state/playerFrame.ts';
 import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
 import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
+import { getStoryForcedDayPhase } from '../story/storyDayPhase.ts';
 import {
   STATIC_DAY_PHASE,
   getWorldClockSource,
@@ -88,7 +89,7 @@ const moonColor = new THREE.Color('#aebfe8'); // cool moonlight
 
 // Debug: ?dayphase=0.75 freezes the day cycle at a phase (0=sunrise, .25=noon,
 // .5=sunset, .75=midnight) so the night sky/moon can be inspected immediately.
-const forcedDayPhase: number | null = (() => {
+const urlForcedDayPhase: number | null = (() => {
   try {
     const v = new URLSearchParams(window.location.search).get('dayphase');
     if (v === null) return null;
@@ -99,9 +100,13 @@ const forcedDayPhase: number | null = (() => {
   }
 })();
 
-/** Forced day phase from ?dayphase=, or null when the cycle runs normally. */
+/**
+ * Forced day phase, or null when the cycle runs normally. ?dayphase= wins; the
+ * story director's value (frozen regulation noon, the scripted first dusk) is a
+ * live per-frame read — null whenever story mode is inactive.
+ */
 export function getForcedDayPhase(): number | null {
-  return forcedDayPhase;
+  return urlForcedDayPhase ?? getStoryForcedDayPhase();
 }
 
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
@@ -328,7 +333,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
       applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
-    const staticDayPhase = forcedDayPhase ?? STATIC_DAY_PHASE;
+    const staticDayPhase = getForcedDayPhase() ?? STATIC_DAY_PHASE;
     setCurrentDayPhase(staticDayPhase);
     const r = applyDayPhase(staticDayPhase, sunLight, moonLight, ambient, fog);
     const realityFog = realityFogScale();
@@ -348,6 +353,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
 
     const animated = getGraphicsQuality().animatedShaders;
     const clockSource = getWorldClockSource(state.clock.elapsedTime, worldId);
+    const forcedDayPhase = getForcedDayPhase();
     const shouldUpdateDayPhase = animated || clockSource.owner === 'server' || forcedDayPhase != null;
 
     // Deep space: always-on space backdrop, atmosphere/fog collapsed, steady key

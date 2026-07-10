@@ -9,7 +9,15 @@ export type SfxEvent =
   | 'shipLand'
   | 'shipCrash'
   | 'splashEnter'
-  | 'splashExit';
+  | 'splashExit'
+  // story mode (all procedural — the terminal/feed fiction is square waves + noise)
+  | 'terminalKey'
+  | 'terminalAdvance'
+  | 'terminalAlarm'
+  | 'terminalCorrupt'
+  | 'storyGlitch'
+  | 'storyAwaken'
+  | 'storySleep';
 
 interface ContinuousLoop {
   source: AudioBufferSourceNode;
@@ -91,6 +99,41 @@ class SfxEngine {
         // Surface: a brighter rising "gasp" as the muffle releases + droplets.
         this.playNoise({ type: 'highpass', from: 320, to: 1300, duration: 0.26, gain: 0.055 });
         this.playTone({ type: 'sine', from: 170, to: 330, duration: 0.18, gain: 0.02 });
+        break;
+      case 'terminalKey':
+        // A single phosphor keystroke: dry square tick.
+        this.playTone({ type: 'square', from: 880, to: 860, duration: 0.03, gain: 0.012 });
+        break;
+      case 'terminalAdvance':
+        // Page feed: two-step chirp, polite and dead.
+        this.playTone({ type: 'square', from: 520, to: 520, duration: 0.05, gain: 0.02 });
+        this.playTone({ type: 'square', from: 700, to: 700, duration: 0.05, gain: 0.018, delay: 0.07 });
+        break;
+      case 'terminalAlarm':
+        // The system raising its voice without raising its voice.
+        this.playTone({ type: 'square', from: 640, to: 640, duration: 0.1, gain: 0.028 });
+        this.playTone({ type: 'square', from: 460, to: 460, duration: 0.12, gain: 0.026, delay: 0.13 });
+        break;
+      case 'terminalCorrupt':
+        // The ledger failing: a falling saw grind + static burst.
+        this.playTone({ type: 'sawtooth', from: 300, to: 40, duration: 0.5, gain: 0.05 });
+        this.playNoise({ type: 'bandpass', from: 2400, to: 300, duration: 0.45, gain: 0.05, q: 0.8 });
+        break;
+      case 'storyGlitch':
+        // A 2-frame chroma flash: bright static blink, gone before it registers.
+        this.playNoise({ type: 'highpass', from: 1800, to: 3200, duration: 0.07, gain: 0.035 });
+        this.playTone({ type: 'square', from: 1200, to: 900, duration: 0.05, gain: 0.012 });
+        break;
+      case 'storyAwaken':
+        // An opening: slow rising fifth over a warm noise swell (A1/A2 arrivals).
+        this.playTone({ type: 'sine', from: 220, to: 330, duration: 1.6, gain: 0.035 });
+        this.playTone({ type: 'sine', from: 330, to: 495, duration: 1.4, gain: 0.022, delay: 0.5 });
+        this.playNoise({ type: 'lowpass', from: 300, to: 1400, duration: 1.8, gain: 0.02 });
+        break;
+      case 'storySleep':
+        // Lying down by the fire: a soft descending third into dark.
+        this.playTone({ type: 'sine', from: 260, to: 195, duration: 1.1, gain: 0.03 });
+        this.playNoise({ type: 'lowpass', from: 500, to: 120, duration: 1.3, gain: 0.016 });
         break;
     }
   }

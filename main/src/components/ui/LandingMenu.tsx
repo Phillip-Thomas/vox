@@ -13,6 +13,7 @@ import CoopPanel from './CoopPanel.tsx';
 import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
 import { unlockMusicAudio } from '../../audio/musicEngine.ts';
 import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
+import { beginStory, canContinueStory, getStoryStateSnapshot, useStoryState } from '../../story/storyState.ts';
 
 /**
  * The landing screen. Renders over the SAME live <Canvas> that becomes the game:
@@ -38,6 +39,7 @@ interface LandingMenuProps {
 
 const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
   const { phase, sceneReady } = useAppState();
+  const story = useStoryState();
   const isTouch = isTouchDevice();
   const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop'>(null);
   const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
@@ -170,6 +172,32 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
             }}
           >
             {sceneReady ? '▶  Play Now' : 'Generating world…'}
+          </button>
+
+          <button
+            onClick={() => {
+              if (leaving || story.active) return;
+              unlockAudio();
+              // The prologue overlay takes the screen immediately; the story-world
+              // swap and generation happen behind its opaque terminal.
+              beginStory();
+              // A finished story re-enters the world as sandbox (earned stage).
+              if (!getStoryStateSnapshot().active) play();
+            }}
+            style={{
+              fontFamily: theme.font.ui,
+              fontSize: 15, fontWeight: 700, letterSpacing: '0.06em',
+              color: theme.color.accent,
+              background: 'transparent',
+              border: `1px solid ${theme.color.accentSoft}`,
+              borderRadius: theme.radius.pill,
+              padding: '13px 30px',
+              cursor: 'pointer',
+              transition: `all ${theme.transition.base}`,
+              outline: 'none'
+            }}
+          >
+            {canContinueStory() ? '◈  Continue Story' : '◈  Story'}
           </button>
 
           {!sceneReady && (

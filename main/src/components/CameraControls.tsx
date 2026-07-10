@@ -11,6 +11,11 @@ import { isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 import { getPlayerSubmergence } from '../state/playerSubmersion';
+import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
+import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
+import { applySideCameraTransform, getSideLens } from '../story/sideLens.ts';
+
+const _sideForward = new THREE.Vector3();
 
 // Underwater camera sway — a lazy roll about the view axis + a gentle nod, scaled
 // by submergence, so the camera reads as floating in a fluid (invisible in a
@@ -40,6 +45,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
   const surfaceForward = useRef(getPlayerLook().forward);
   const pitch = useRef(getPlayerLook().pitch);
   const isLockedRef = useRef(false);
+  const feedLook = useRef(createFeedLookState());
   const nextUp = useRef(new THREE.Vector3());
   const displayQuat = useRef(new THREE.Quaternion());
   const targetQuat = useRef(new THREE.Quaternion());
@@ -78,6 +84,22 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       if (!isLockedRef.current && !isTouchActive()) return;
 
       syncSurfaceFrame();
+      // Story Regulation Feed: quantized CCTV look (compass-snapped yaw, pinned
+      // pitch) on the SAME forward/pitch state, so A2's release is seamless.
+      const storyPolicy = getStoryInputPolicy();
+      if (storyPolicy.lookMode === 'side') return; // raster era: no mouse look at all
+      if (storyPolicy.lookMode === 'feed') {
+        feedAccumulateLook(
+          feedLook.current,
+          event.movementX,
+          event.movementY,
+          surfaceForward.current,
+          surfaceUp.current,
+          pitch,
+          storyPolicy.feedBlend
+        );
+        return;
+      }
       rotateCameraForwardYaw(
         surfaceForward.current,
         surfaceUp.current,
@@ -116,6 +138,19 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     if (!cameraRef.current) return;
     const dt = Math.min(rawDt, 1 / 30);
     syncSurfaceFrame();
+
+    // Story raster era: fixed side-scroller camera; mouse look is ignored and
+    // the look state (surfaceForward/pitch) is left untouched, so the CCTV/free
+    // modes resume exactly where the player last looked.
+    const sideLens = getStoryInputPolicy().lookMode === 'side' ? getSideLens() : null;
+    if (sideLens) {
+      _sideForward.copy(sideLens.depthAxis).negate();
+      setPlayerLook(_sideForward, 0); // fields/persistence see the into-screen facing
+      applySideCameraTransform(cameraRef.current, sideLens);
+      hasDisplayQuat.current = false; // don't slerp across the mode switch
+      return;
+    }
+
     setPlayerLook(surfaceForward.current, pitch.current); // publish look for persistence
     applyGravityCameraTransform(
       cameraRef.current,

@@ -40,6 +40,11 @@ A living parking lot for planned work. Newest ideas at the top of each section.
 
 ## Main thread
 
+- [x] **Story mode vertical slice (A0→A3)** — SHIPPED 2026-07-09: terminal
+  prologue → Regulation Feed → A1 color → apple tree/A2 depth → Ch3 dusk/rest →
+  A3 material dawn. See `main/STORY.md` + `PARAVOXIA_PROGRESSION.md` (full
+  9-awakening design). Next story work: A2 ortho→perspective camera pull,
+  prologue keyboard selection, mobile pass, playtest-driven pacing.
 - [ ] **Crafting / recipes** — turn the inventory + multi-biome resources into the
   travel loop (the original next-step before the gravity/atmosphere detour).
 

@@ -103,6 +103,18 @@ import {
   returnToMenu
 } from './state/appState.ts';
 import LandingMenu from './components/ui/LandingMenu.tsx';
+import StoryOverlays from './story/StoryOverlays.tsx';
+import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
+import {
+  deactivateStory,
+  getStoryStateSnapshot,
+  initStoryFromSave,
+  storyHudMask,
+  storyHudTakeover,
+  useStoryState
+} from './story/storyState.ts';
+import { getStoryInputPolicy } from './story/storyInputPolicy.ts';
+import { isStoryWorld, STORY_COORDINATE } from './story/world/storyWorld.ts';
 import PauseMenu, { type NavApi } from './components/ui/PauseMenu.tsx';
 import CraftingPanel from './components/ui/CraftingPanel.tsx';
 import AudioDirector from './components/audio/AudioDirector.tsx';
@@ -279,6 +291,8 @@ const App: React.FC = () => {
   const [bootSave] = useState(() => {
     const s = loadGlobal();
     if (s) { restoreGlobal(s); if (s.dayPhase != null) setDayPhaseOffset(s.dayPhase); }
+    // AFTER restore (milestones loaded): handle ?story= deep links / resume state.
+    initStoryFromSave();
     return s;
   });
   const [currentWorld, setCurrentWorld] = useState<CurrentWorld>(() => {
@@ -291,6 +305,8 @@ const App: React.FC = () => {
         return createCurrentWorld({ x: normalizeCoordinatePart(Number(sx)), y: normalizeCoordinatePart(Number(sy)) });
       }
     } catch { /* ignore */ }
+    // Story mode plays on ONE pinned planet (deterministic props/quota/vantages).
+    if (getStoryStateSnapshot().active) return createCurrentWorld(STORY_COORDINATE);
     // Returning player -> spawn back at your saved base (so reloads don't strand you).
     if (bootSave?.lastWorld) return createCurrentWorld(bootSave.lastWorld);
     // Fresh game -> CRASH-LAND on a HOSPITABLE planet (verdant/oceanic): trees, grass,
@@ -312,6 +328,7 @@ const App: React.FC = () => {
   const isTouch = useMemo(() => isTouchDevice(), []);
   const flight = useSpaceFlight();
   const { phase: appPhase } = useAppState();
+  const story = useStoryState();
   const [paused, setPaused] = useState(false);
   const [craftingOpen, setCraftingOpen] = useState(false);
   const [localActorId, setLocalActorIdState] = useState(() => getLocalActorId());
@@ -336,6 +353,17 @@ const App: React.FC = () => {
 
   useEffect(() => subscribeLocalActorId(() => setLocalActorIdState(getLocalActorId())), []);
   useEffect(() => subscribeBuildState(() => setBuildHudTick(n => n + 1)), []);
+
+  // Entering story mode from the menu swaps to the pinned story world. The swap
+  // happens behind the (opaque) prologue overlay while the app phase is still
+  // 'menu', so the remount + regeneration are never visible.
+  useEffect(() => {
+    if (!story.active) return;
+    if (isStoryWorld(currentWorld.coordinate)) return;
+    setPreviousWorld(currentWorld);
+    setCurrentWorld(createCurrentWorld(STORY_COORDINATE));
+    setArrivalMode('surface');
+  }, [story.active, currentWorld]);
 
   // Open/close the Fabricator. Opening releases pointer lock so the cursor can
   // click recipes; the lock handler below knows to NOT treat that as a pause.
@@ -373,6 +401,7 @@ const App: React.FC = () => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'KeyC') {
         if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+        if (!getStoryInputPolicy().allowCraft) return; // story chapters gate the Fabricator
         if (craftingOpenRef.current) closeCrafting();
         else if (!paused) openCrafting();
       } else if (e.code === 'Escape' && craftingOpenRef.current) {
@@ -390,6 +419,7 @@ const App: React.FC = () => {
     const onKey = (e: KeyboardEvent) => {
       if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
       if (craftingOpenRef.current || paused) return;
+      if (!getStoryInputPolicy().allowBuild) return; // story chapters gate build mode
       if (e.code === 'KeyB') toggleBuildMode();
       else if (isBuildEnabled() && e.code === 'KeyR') cycleBuildRotation(); // R rotates while building (reset is suppressed in build mode)
       else if (isBuildEnabled() && e.code.startsWith('Digit')) {
@@ -415,6 +445,7 @@ const App: React.FC = () => {
   const quitToMenu = () => {
     setPaused(false);
     if (document.pointerLockElement) document.exitPointerLock();
+    deactivateStory(); // progress is already checkpointed in milestones
     returnToMenu();
   };
 
@@ -810,6 +841,8 @@ const App: React.FC = () => {
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
+        {/* Story director tick — same placement rationale as WarpDriver. */}
+        <StoryDirectorDriver />
         <SceneReadyProbe />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
@@ -844,8 +877,11 @@ const App: React.FC = () => {
       {/* --- Landing screen (over the live cinematic render) --- */}
       <LandingMenu startWorldId={currentWorldIdentity.worldId} />
 
-      {/* --- Minimal, diegetic in-game HUD --- */}
-      {appPhase === 'playing' && !atlasCapture && (
+      {/* --- Story overlays (prologue terminal / regulation feed / captions) --- */}
+      <StoryOverlays />
+
+      {/* --- Minimal, diegetic in-game HUD (the story feed replaces it in Ch1-2) --- */}
+      {appPhase === 'playing' && !atlasCapture && !storyHudTakeover(story) && (
         <>
           <Crosshair />
           <TargetReticle />
@@ -856,18 +892,25 @@ const App: React.FC = () => {
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
           {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && <InventoryPanel topOffset={inventoryTopOffset} />}
-          <OrbitalMinimap
-            coordinateLabel={currentWorldKey}
-            worldId={currentWorldIdentity.worldId}
-            planetSize={planetSize}
-          />
-          <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
-          <MultiplayerStatusBadge />
+          {/* Ship / star-map affordances stay hidden while the story is live. */}
+          {!storyHudMask(story) && (
+            <>
+              <OrbitalMinimap
+                coordinateLabel={currentWorldKey}
+                worldId={currentWorldIdentity.worldId}
+                planetSize={planetSize}
+              />
+              <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
+              <MultiplayerStatusBadge />
+            </>
+          )}
           {isTouch && <TouchControls controlMode={flight.controlMode} />}
 
           <HudCornerActions
             controlMode={flight.controlMode}
             buildModeOpen={buildModeOpen}
+            allowBuild={getStoryInputPolicy().allowBuild}
+            allowCraft={getStoryInputPolicy().allowCraft}
             onToggleBuild={toggleBuildHud}
             onOpenCrafting={openCrafting}
             onPause={pauseAndOpenStarMap}

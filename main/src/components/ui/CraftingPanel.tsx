@@ -9,6 +9,8 @@ import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts'
 import type { CommandContext } from '../../game/commands.ts';
 import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gameplayCommands.ts';
 import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
+import { getStoryInputPolicy } from '../../story/storyInputPolicy.ts';
+import { getStoryStateSnapshot } from '../../story/storyState.ts';
 
 interface CraftingPanelProps {
   open: boolean;
@@ -55,7 +57,9 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
           }}>ESC ✕</button>
         </div>
         <div style={{ fontSize: 11, letterSpacing: '0.18em', color: theme.color.textFaint, textTransform: 'uppercase', marginBottom: 6 }}>
-          Portable assembly · all stations online
+          {getStoryStateSnapshot().active
+            ? 'Field assembly · none of this is regulation'
+            : 'Portable assembly · all stations online'}
         </div>
 
         {stations.map(stationId => (
@@ -67,7 +71,8 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
 };
 
 const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext; commandContext: CommandContext }> = ({ stationId, ctx, commandContext }) => {
-  const recipes = recipesForStation(stationId);
+  // Story chapters whitelist a recipe subset (sandbox: the allow-all policy).
+  const recipes = recipesForStation(stationId).filter(r => getStoryInputPolicy().recipeAllowed(r.id));
   if (recipes.length === 0) return null;
   const station = getStation(stationId);
   return (

@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useRapier } from '@react-three/rapier';
 import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
+import ShipCockpit from './ShipCockpit.tsx';
+import { shipLevelOrientation } from '../utils/shipDesign.ts';
 import { vectorToRapier, shipImpactOutcome } from '../utils/surfaceControls';
 import { isTouchActive } from '../utils/mobileInput';
 import type { WorldArrivalPose } from '../utils/worldArrival';
@@ -85,20 +87,10 @@ export function getCrashFlash(): number {
   return Math.max(0, 1 - (performance.now() - crashFlashAt) / CRASH_FLASH_MS);
 }
 
-/**
- * Build an upright, horizon-facing orientation at a surface position: camera -Z
- * points along a horizon tangent, +Y is local up (away from the planet center).
- * Used for the parked ship and the level-out at touchdown so a landed ship sits
- * naturally on the ground rather than nose-up or nose-into-the-dirt.
- */
-function levelOrientation(pos: THREE.Vector3): THREE.Quaternion {
-  const up = pos.clone().normalize();
-  let ref = new THREE.Vector3(0, 0, 1);
-  if (Math.abs(up.dot(ref)) > 0.9) ref = new THREE.Vector3(1, 0, 0);
-  const forward = new THREE.Vector3().crossVectors(ref, up).normalize();
-  const m = new THREE.Matrix4().lookAt(new THREE.Vector3(), forward, up);
-  return new THREE.Quaternion().setFromRotationMatrix(m);
-}
+// Level-out orientation shared with the parked exterior (shipLevelOrientation):
+// the landing sequence slerps to this so a landed ship sits upright facing the
+// horizon, and SpaceshipPlaceholder renders the parked hull in the same frame.
+const levelOrientation = shipLevelOrientation;
 
 interface ShipControllerProps {
   planetSize: number;
@@ -129,6 +121,7 @@ interface ShipControllerProps {
  */
 export default function ShipController({
   planetSize,
+  terrainSeed,
   arrivalPose,
   boardingPosition,
   onGroundedChange,
@@ -175,6 +168,8 @@ export default function ShipController({
   // Parked peripheral "peek" (yaw/pitch radians) — view-only; ship heading locked.
   const lookOffset = useRef({ yaw: 0, pitch: 0 });
   const lastPublished = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
+  // Live thrust 0..1 for the cockpit instruments (holo ring spin/brightness).
+  const thrustRef = useRef(0);
   const [, get] = useKeyboardControls();
 
   /** Planet surface radius in world units (planetSize = world half-extent). */
@@ -455,6 +450,7 @@ export default function ShipController({
     if (controls.forward) accel += THRUST_ACCEL * boost;
     if (controls.backward) accel -= THRUST_ACCEL;
     setShipThrustSfx(controls.forward ? (controls.jump ? 1 : 0.58) : controls.backward ? 0.34 : 0);
+    thrustRef.current = controls.forward ? (controls.jump ? 1 : 0.58) : controls.backward ? 0.34 : 0;
     if (accel !== 0) {
       velocity.current.addScaledVector(localForward, accel * dt);
     }
@@ -578,86 +574,17 @@ export default function ShipController({
   });
 
   return (
-    <>
-      <PerspectiveCamera
-        ref={cameraRef}
-        makeDefault
-        fov={70}
-        near={1}
-        far={8000}
-      />
-      <Cockpit cameraRef={cameraRef} />
-    </>
-  );
-}
-
-// (Cockpit defined below.)
-
-/**
- * Lightweight first-person cockpit frame, parented to the flight camera.
- *
- * Everything sits at z in [-2.2 .. -3.8] in camera space (well beyond the near
- * plane at z=1, so it never clips) and is pushed toward the frustum EDGES so the
- * centre of the view stays clear. A handful of unlit/standard meshes, no shadows.
- * Re-parented every frame to the camera transform via a group whose matrix we
- * sync, because the camera is a makeDefault camera (not part of the JSX tree we
- * can nest under directly without it being the renderer's camera).
- */
-function Cockpit({ cameraRef }: { cameraRef: React.RefObject<THREE.PerspectiveCamera | null> }) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame(() => {
-    const cam = cameraRef.current;
-    const grp = groupRef.current;
-    if (!cam || !grp) return;
-    // Lock the cockpit group to the camera's world transform so the struts feel
-    // rigidly attached to the viewpoint.
-    grp.position.copy(cam.position);
-    grp.quaternion.copy(cam.quaternion);
-  });
-
-  const darkMetal = useMemo(
-    () => ({ color: '#1a1f29', roughness: 0.55, metalness: 0.7 }),
-    []
-  );
-
-  return (
-    <group ref={groupRef}>
-      {/* Lower dashboard lip across the bottom of the view. */}
-      <mesh position={[0, -1.05, -2.6]} rotation={[0.5, 0, 0]}>
-        <boxGeometry args={[3.4, 0.5, 0.18]} />
-        <meshStandardMaterial {...darkMetal} />
-      </mesh>
-
-      {/* Left + right canopy struts framing the edges. */}
-      <mesh position={[-1.55, 0.35, -2.9]} rotation={[0, 0.32, 0.28]}>
-        <boxGeometry args={[0.14, 2.6, 0.14]} />
-        <meshStandardMaterial {...darkMetal} />
-      </mesh>
-      <mesh position={[1.55, 0.35, -2.9]} rotation={[0, -0.32, -0.28]}>
-        <boxGeometry args={[0.14, 2.6, 0.14]} />
-        <meshStandardMaterial {...darkMetal} />
-      </mesh>
-
-      {/* Top canopy bar. */}
-      <mesh position={[0, 1.35, -3.2]} rotation={[0.2, 0, 0]}>
-        <boxGeometry args={[2.9, 0.14, 0.14]} />
-        <meshStandardMaterial {...darkMetal} />
-      </mesh>
-
-      {/* A couple of glowing instrument accents on the dashboard. */}
-      <mesh position={[-0.85, -0.92, -2.45]} rotation={[0.5, 0, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.05, 16]} />
-        <meshStandardMaterial color="#0b2740" emissive="#39d0ff" emissiveIntensity={1.4} />
-      </mesh>
-      <mesh position={[0.85, -0.92, -2.45]} rotation={[0.5, 0, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.05, 16]} />
-        <meshStandardMaterial color="#2a0b0b" emissive="#ff7a39" emissiveIntensity={1.2} />
-      </mesh>
-      <mesh position={[0, -0.86, -2.4]} rotation={[0.5, 0, 0]}>
-        <boxGeometry args={[0.5, 0.08, 0.04]} />
-        <meshStandardMaterial color="#06180f" emissive="#46ff9b" emissiveIntensity={1.0} />
-      </mesh>
-    </group>
+    // The cockpit is a CHILD of the flight camera: rigidly attached in the scene
+    // graph, so it can never lag the camera write (a separate world-space sync
+    // ran a frame behind at flight speed and flickered).
+    <PerspectiveCamera
+      ref={cameraRef}
+      makeDefault
+      fov={70}
+      near={1}
+      far={8000}
+    >
+      <ShipCockpit thrustRef={thrustRef} terrainSeed={terrainSeed} />
+    </PerspectiveCamera>
   );
 }
