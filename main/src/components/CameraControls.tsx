@@ -13,7 +13,7 @@ import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 import { getPlayerSubmergence } from '../state/playerSubmersion';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
-import { applySideCameraTransform, getSideLens } from '../story/sideLens.ts';
+import { applyLiftCameraTransform, applySideCameraTransform, getSideLens } from '../story/sideLens.ts';
 import { getCinematicLookTarget, getCinematicLookWeight } from '../story/cinematicLook.ts';
 import { getSunDirection } from './SkyController.tsx';
 
@@ -143,22 +143,11 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     const dt = Math.min(rawDt, 1 / 30);
     syncSurfaceFrame();
 
-    // Story raster era: fixed side-scroller camera; mouse look is ignored and
-    // the look state (surfaceForward/pitch) is left untouched, so the CCTV/free
-    // modes resume exactly where the player last looked.
-    const sideLens = getStoryInputPolicy().lookMode === 'side' ? getSideLens() : null;
-    if (sideLens) {
-      _sideForward.copy(sideLens.depthAxis).negate();
-      setPlayerLook(_sideForward, 0); // fields/persistence see the into-screen facing
-      applySideCameraTransform(cameraRef.current, sideLens);
-      hasDisplayQuat.current = false; // don't slerp across the mode switch
-      return;
-    }
-
     // Cinematic look pull: while the weight is up, steer toward the target — a
-    // world position (autopilot aiming) or, with none set, the live sun (the
-    // staged dusk/dawn). Additive over mouse input — control dissolves back to
-    // the player as the weight decays.
+    // world position (autopilot aiming / lift facing) or, with none set, the
+    // live sun (the staged dusk/dawn). Runs BEFORE the side branch so the lift
+    // blend's first-person endpoint inherits the pulled look. Additive over
+    // mouse input — control dissolves back to the player as the weight decays.
     const pull = getCinematicLookWeight();
     if (pull > 0.001) {
       const lookTarget = getCinematicLookTarget();
@@ -176,6 +165,33 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
         const targetPitch = clampCameraPitch(Math.asin(THREE.MathUtils.clamp(_pullDir.dot(surfaceUp.current), -1, 1)));
         pitch.current += (targetPitch - pitch.current) * k;
       }
+    }
+
+    // Story raster era: fixed side-scroller camera (mouse look ignored; look
+    // state untouched so CCTV/free resume where the player last looked). During
+    // the ch1 LIFT, sideBlend carries the camera from the side vantage INTO the
+    // worker's eyes — the literal 2D→3D moment.
+    const storyPolicy = getStoryInputPolicy();
+    const sideLens = storyPolicy.lookMode === 'side' ? getSideLens() : null;
+    if (sideLens) {
+      if (storyPolicy.sideBlend <= 0.001) {
+        _sideForward.copy(sideLens.depthAxis).negate();
+        setPlayerLook(_sideForward, 0); // fields/persistence see the into-screen facing
+        applySideCameraTransform(cameraRef.current, sideLens);
+      } else {
+        setPlayerLook(surfaceForward.current, pitch.current);
+        applyLiftCameraTransform(
+          cameraRef.current,
+          sideLens,
+          surfaceUp.current,
+          surfaceForward.current,
+          pitch.current,
+          PLAYER_EYE_HEIGHT,
+          storyPolicy.sideBlend
+        );
+      }
+      hasDisplayQuat.current = false; // don't slerp across the mode switch
+      return;
     }
 
     setPlayerLook(surfaceForward.current, pitch.current); // publish look for persistence

@@ -15,10 +15,13 @@ import { setLocalPersistenceMode } from '../game/systems/persistence.ts';
 
 const BEAT_LABELS: Record<StoryBeat, string> = {
   crawl: 'crawl (intro)',
+  manifest: 'manifest (berthing)',
   voyage: 'voyage (oregon trail)',
   deflect: 'deflect (pong)',
   crash: 'crash (corruption)',
+  descent: 'descent (crash landing, plays)',
   'ch1-raster': 'ch1 · side-scroller quota',
+  'ch1-lift': '2D→3D LIFT (plays)',
   'ch1-anomaly': 'ch1 · CCTV → stone  [pre-A1]',
   'a1-ramp': 'A1 · color ramp (plays)',
   'ch2-color': 'ch2 · color feed  [post-A1]',

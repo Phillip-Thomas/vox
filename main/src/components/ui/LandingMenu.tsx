@@ -14,6 +14,7 @@ import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
 import { unlockMusicAudio } from '../../audio/musicEngine.ts';
 import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
 import { beginStory, canContinueStory, getStoryStateSnapshot, useStoryState } from '../../story/storyState.ts';
+import { unlockStoryScore } from '../../story/storyScore.ts';
 
 /**
  * The landing screen. Renders over the SAME live <Canvas> that becomes the game:
@@ -31,6 +32,7 @@ const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTA
 function unlockAudio(): void {
   void unlockMusicAudio();
   void unlockSfxAudio();
+  unlockStoryScore();
 }
 
 interface LandingMenuProps {

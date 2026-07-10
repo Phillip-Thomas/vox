@@ -46,6 +46,10 @@ export interface FeedRuntime {
   sleepFade: number;
   /** Cinematic frame (0..1): letterbox bars + warm wash for the sun events. */
   cinematic: number;
+  /** Hard white flash (0..1) — pod impact, A-moment punctuation. Decays fast. */
+  flash: number;
+  /** Descent cutscene progress: -1 idle, 0..1 falling, >1 wreck landed. */
+  descent: number;
   redaction: FeedRedaction;
   /** Survey marker — the feed's target designator (the ch1 anomaly objective). */
   marker: FeedMarker;
@@ -60,6 +64,8 @@ const runtime: FeedRuntime = {
   scanRoll: 0,
   sleepFade: 0,
   cinematic: 0,
+  flash: 0,
+  descent: -1,
   redaction: { visible: false, x: 0, y: 0, w: 0, h: 0, label: '', stress: 0 },
   marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' }
 };
@@ -77,6 +83,8 @@ export function resetFeedRuntime(): void {
   runtime.scanRoll = 0;
   runtime.sleepFade = 0;
   runtime.cinematic = 0;
+  runtime.flash = 0;
+  runtime.descent = -1;
   runtime.redaction.visible = false;
   runtime.redaction.stress = 0;
   runtime.redaction.label = '';

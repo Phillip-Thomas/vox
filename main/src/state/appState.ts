@@ -34,7 +34,7 @@ const READY_FRAMES = 8;
 // ?story values that stay on the MENU phase (the prologue terminal runs over it).
 // Mirrors the prologue beats in story/storyState.ts — kept literal here so this
 // low-level store doesn't import game systems at module load.
-const MENU_STORY_PARAMS = ['1', 'crawl', 'voyage', 'deflect', 'crash'];
+const MENU_STORY_PARAMS = ['1', 'crawl', 'manifest', 'voyage', 'deflect', 'crash'];
 
 function computeDeepLink(): boolean {
   if (typeof window === 'undefined') return false;

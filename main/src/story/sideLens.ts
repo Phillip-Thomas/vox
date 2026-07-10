@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { applyGravityCameraTransform } from '../utils/gravityCamera.ts';
 
 // --- The side-scroller lens ---------------------------------------------------------
 //
@@ -104,6 +105,46 @@ export function applySideCameraTransform(
   }
 
   camera.up.copy(_up);
+  camera.updateMatrixWorld(true);
+}
+
+const _blendPosA = new THREE.Vector3();
+const _blendPosB = new THREE.Vector3();
+const _blendQuatA = new THREE.Quaternion();
+const _blendQuatB = new THREE.Quaternion();
+
+/**
+ * The 2D→3D lift: blend between the side-scroller vantage (blend 0) and the
+ * first-person gravity camera (blend 1). Computes BOTH pure transforms and
+ * interpolates position/orientation — at the endpoints it matches each source
+ * transform exactly (unit-tested), so the handovers on either side are seamless.
+ */
+export function applyLiftCameraTransform(
+  camera: THREE.Camera,
+  lens: SideLens,
+  surfaceUp: THREE.Vector3,
+  surfaceForward: THREE.Vector3,
+  pitch: number,
+  eyeHeight: number,
+  blend: number
+): void {
+  const k = Math.min(1, Math.max(0, blend));
+  if (k <= 0) {
+    applySideCameraTransform(camera, lens);
+    return;
+  }
+  if (k >= 1) {
+    applyGravityCameraTransform(camera, surfaceUp, surfaceForward, pitch, eyeHeight);
+    return;
+  }
+  applySideCameraTransform(camera, lens);
+  _blendPosA.copy(camera.position);
+  _blendQuatA.copy(camera.quaternion);
+  applyGravityCameraTransform(camera, surfaceUp, surfaceForward, pitch, eyeHeight);
+  _blendPosB.copy(camera.position);
+  _blendQuatB.copy(camera.quaternion);
+  camera.position.lerpVectors(_blendPosA, _blendPosB, k);
+  camera.quaternion.slerpQuaternions(_blendQuatA, _blendQuatB, k);
   camera.updateMatrixWorld(true);
 }
 

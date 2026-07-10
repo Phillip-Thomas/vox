@@ -27,7 +27,8 @@ const StoryOverlays: React.FC = () => {
       {feedLive && <RegulationFeedHud />}
       {phase === 'playing' && <StoryCaptions />}
       {phase === 'playing' && story.chapter === 'ch3' && <SleepFade />}
-      {phase === 'playing' && story.chapter === 'ch3' && <CinematicFrame />}
+      {/* Letterbox frame serves every staged moment (lift, dusk, dawn). */}
+      {phase === 'playing' && <CinematicFrame />}
     </>
   );
 };

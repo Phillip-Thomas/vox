@@ -1,3 +1,5 @@
+import type { VoyageDeck } from './voyageDeck.ts';
+
 // --- The story script -----------------------------------------------------------
 //
 // EVERY authored word and every pacing number in the slice lives here, typed, so
@@ -38,76 +40,165 @@ export const CRAWL_LINES: readonly string[] = [
   'There is no other reward.'
 ];
 
-export interface PrologueEventOption {
-  id: string;
-  label: string;
-  /** Cosmetic ledger deltas (the voyage stats are theater, not simulation). */
-  ledgerDelta?: Partial<Record<LedgerStat, number>>;
-  /** Ch1 work-order line this choice echoes back as (see CH1_ECHO_LINES). */
-  echoLineId: string;
-}
-
-export interface PrologueEventCard {
-  id: string;
-  title: string;
-  body: string;
-  options: PrologueEventOption[];
-}
+/**
+ * The manifest: the deployment notice becomes YOUR ticket. Typed line by line
+ * (terminal keystrokes); grounds the register shift from "the universe" to
+ * "your commute" before the voyage ledger begins.
+ */
+export const MANIFEST_LINES: readonly string[] = [
+  'PROCESSING…',
+  '',
+  'WORKER DESIGNATION: W-7743 (ISSUED)',
+  'PRIOR DESIGNATION: NOT RETAINED',
+  '',
+  'BERTH: POD 4 · SLOT 19 · RECUMBENT',
+  'PERSONAL MASS ALLOWANCE: 0.0 KG',
+  '',
+  'CARGO MANIFEST (PARTIAL):',
+  '  EXTRACTION UNITS ......... 640',
+  '  RATION UNITS ............. 61,440 (96%)',
+  '  WORKERS .................. 640',
+  '  QUESTIONS ................ 0',
+  '',
+  'MEDICAL WAIVER: PRE-SIGNED FOR YOUR CONVENIENCE',
+  'RETURN PASSAGE: SUBJECT TO QUOTA',
+  '',
+  'HATCH SEAL IN 5',
+  'THE AUTHORITY THANKS YOU IN ADVANCE.'
+];
 
 export type LedgerStat = 'rations' | 'hull' | 'compliance' | 'transit';
 
-/** Oregon-Trail voyage event cards. 3 real choices; consequences echo in Ch1. */
-export const PROLOGUE_EVENTS: readonly PrologueEventCard[] = [
-  {
-    id: 'ration',
-    title: 'TRANSIT EVENT 01 — SHORTFALL',
-    body: 'Ration units for this transit were provisioned at 96% of requirement. A worker in your pod requests your surplus unit.',
-    options: [
-      { id: 'give', label: 'TRANSFER YOUR UNIT', ledgerDelta: { rations: -8, compliance: -2 }, echoLineId: 'echo-ration-give' },
-      { id: 'keep', label: 'RETAIN YOUR UNIT', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-ration-keep' },
-      { id: 'report', label: 'REPORT THE REQUEST', ledgerDelta: { compliance: 4 }, echoLineId: 'echo-ration-report' }
-    ]
-  },
-  {
-    id: 'window',
-    title: 'TRANSIT EVENT 02 — VIEWPORT',
-    body: 'A maintenance panel has slipped, exposing a viewport. Outside: stars. Regulation stipulates viewports remain sealed to prevent unproductive observation.',
-    options: [
-      { id: 'seal', label: 'RESEAL THE PANEL', ledgerDelta: { compliance: 3 }, echoLineId: 'echo-window-seal' },
-      { id: 'look', label: 'LOOK. BRIEFLY.', ledgerDelta: { compliance: -3 }, echoLineId: 'echo-window-look' }
-    ]
-  },
-  {
-    id: 'hum',
-    title: 'TRANSIT EVENT 03 — AUDITORY',
-    body: 'Worker 4 has begun to hum. The sound is not on the approved list of sounds. Other workers have not reported it. Yet.',
-    options: [
-      { id: 'ignore', label: 'DO NOT HEAR IT', ledgerDelta: {}, echoLineId: 'echo-hum-ignore' },
-      { id: 'join', label: 'HUM ALONG, QUIETLY', ledgerDelta: { compliance: -4 }, echoLineId: 'echo-hum-join' },
-      { id: 'report', label: 'FILE FORM S-9 (SOUND)', ledgerDelta: { compliance: 4 }, echoLineId: 'echo-hum-report' }
-    ]
-  },
-  {
-    id: 'question',
-    title: 'TRANSIT EVENT 04 — INQUIRY',
-    body: 'Worker 9 asks you, quietly, what is outside the pod. There is no approved answer to this question. There is no approved question.',
-    options: [
-      { id: 'nothing', label: '"NOTHING IS OUTSIDE."', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-question-nothing' },
-      { id: 'work', label: '"MORE WORK IS OUTSIDE."', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-question-work' },
-      { id: 'unknown', label: '"I DON\'T KNOW." (TRUE)', ledgerDelta: { compliance: -3 }, echoLineId: 'echo-question-unknown' }
-    ]
-  },
-  {
-    id: 'diagnostic',
-    title: 'TRANSIT EVENT 05 — DIAGNOSTIC',
-    body: 'Your suit\'s visual cortex link reports a fault it cannot name. For 0.4 seconds, the diagnostic feed displayed something other than numbers. It has offered to recalibrate you.',
-    options: [
-      { id: 'accept', label: 'ACCEPT RECALIBRATION', ledgerDelta: { compliance: 3 }, echoLineId: 'echo-diag-accept' },
-      { id: 'defer', label: 'DEFER TO ARRIVAL', ledgerDelta: {}, echoLineId: 'echo-diag-defer' },
-      { id: 'replay', label: 'ASK TO SEE IT AGAIN', ledgerDelta: { compliance: -5 }, echoLineId: 'echo-diag-replay' }
-    ]
+/**
+ * The voyage deck: 3 SPINE cards (every run), a situational POOL (2 drawn per
+ * run), follow-ups injected by choices, and the BRIDGE (the nav anomaly that
+ * orders you to the intake shield — the reason the Pong game exists). Choices
+ * carry real consequences (items / harvester cell / arrival vitals) and echo in
+ * Ch1's work order. No two commutes read alike.
+ */
+export const VOYAGE_DECK: VoyageDeck = {
+  spine: ['ration', 'question', 'diagnostic'],
+  pool: ['window', 'hum', 'readings', 'stowmass'],
+  poolDraws: 2,
+  maxCards: 6,
+  bridge: 'anomaly',
+  cards: {
+    ration: {
+      id: 'ration',
+      title: 'TRANSIT EVENT — SHORTFALL',
+      body: 'Ration units for this transit were provisioned at 96% of requirement. A worker in your pod requests your surplus unit.',
+      options: [
+        { id: 'give', label: 'TRANSFER YOUR UNIT', ledgerDelta: { rations: -6, compliance: -2 }, effects: { food: -10 }, echoLineId: 'echo-ration-give' },
+        { id: 'keep', label: 'RETAIN YOUR UNIT', ledgerDelta: { compliance: 1 }, effects: { items: [{ id: 'berry', qty: 2 }] }, echoLineId: 'echo-ration-keep' },
+        { id: 'report', label: 'REPORT THE REQUEST', ledgerDelta: { compliance: 4 }, unlocks: ['commendation'], echoLineId: 'echo-ration-report' }
+      ]
+    },
+    question: {
+      id: 'question',
+      title: 'TRANSIT EVENT — INQUIRY',
+      body: 'Worker 9 asks you, quietly, what is outside the pod. There is no approved answer to this question. There is no approved question.',
+      options: [
+        { id: 'nothing', label: '"NOTHING IS OUTSIDE."', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-question-nothing' },
+        { id: 'work', label: '"MORE WORK IS OUTSIDE."', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-question-work' },
+        { id: 'unknown', label: '"I DON\'T KNOW." (TRUE)', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-question-unknown' }
+      ]
+    },
+    diagnostic: {
+      id: 'diagnostic',
+      title: 'TRANSIT EVENT — DIAGNOSTIC',
+      body: 'Your suit\'s visual cortex link reports a fault it cannot name. For 0.4 seconds, the diagnostic feed displayed something other than numbers. It has offered to recalibrate you.',
+      options: [
+        { id: 'accept', label: 'ACCEPT RECALIBRATION', ledgerDelta: { compliance: 3 }, effects: { mawCharge: -20 }, echoLineId: 'echo-diag-accept' },
+        { id: 'defer', label: 'DEFER TO ARRIVAL', echoLineId: 'echo-diag-defer' },
+        { id: 'replay', label: 'ASK TO SEE IT AGAIN', ledgerDelta: { compliance: -5 }, unlocks: ['replay2'], echoLineId: 'echo-diag-replay' }
+      ]
+    },
+    window: {
+      id: 'window',
+      title: 'TRANSIT EVENT — VIEWPORT',
+      body: 'A maintenance panel has slipped, exposing a viewport. Outside: stars. Regulation stipulates viewports remain sealed to prevent unproductive observation.',
+      options: [
+        { id: 'seal', label: 'RESEAL THE PANEL', ledgerDelta: { compliance: 3 }, echoLineId: 'echo-window-seal' },
+        { id: 'look', label: 'LOOK. BRIEFLY.', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-window-look' }
+      ]
+    },
+    hum: {
+      id: 'hum',
+      title: 'TRANSIT EVENT — AUDITORY',
+      body: 'Worker 4 has begun to hum. The sound is not on the approved list of sounds. Other workers have not reported it. Yet.',
+      options: [
+        { id: 'ignore', label: 'DO NOT HEAR IT', echoLineId: 'echo-hum-ignore' },
+        { id: 'join', label: 'HUM ALONG, QUIETLY', ledgerDelta: { compliance: -4 }, unlocks: ['hum2'], echoLineId: 'echo-hum-join' },
+        { id: 'report', label: 'FILE FORM S-9 (SOUND)', ledgerDelta: { compliance: 4 }, unlocks: ['commendation'], echoLineId: 'echo-hum-report' }
+      ]
+    },
+    readings: {
+      id: 'readings',
+      title: 'TRANSIT EVENT — NAVIGATION',
+      body: 'Two instruments disagree about where the destination is. A third insists the destination is not, strictly speaking, anywhere. The nav computer requests guidance it is not supposed to need.',
+      options: [
+        { id: 'recal', label: 'FORCE RECALIBRATION', ledgerDelta: { hull: -6 }, echoLineId: 'echo-readings-recal' },
+        { id: 'trust', label: 'TRUST THE THIRD INSTRUMENT', ledgerDelta: { compliance: -3 }, echoLineId: 'echo-readings-trust' },
+        { id: 'log', label: 'LOG AND PROCEED', echoLineId: 'echo-readings-log' }
+      ]
+    },
+    stowmass: {
+      id: 'stowmass',
+      title: 'TRANSIT EVENT — MASS AUDIT',
+      body: 'The manifest records 640 workers. The mass sensors record 640 workers and 0.3 kilograms. The 0.3 kilograms is not on the manifest and appears to be moving.',
+      options: [
+        { id: 'report', label: 'REPORT THE MASS', ledgerDelta: { compliance: 3 }, echoLineId: 'echo-stow-report' },
+        { id: 'adopt', label: 'SAY NOTHING. IT MOVES.', ledgerDelta: { compliance: -2 }, effects: { items: [{ id: 'berry', qty: 1 }] }, echoLineId: 'echo-stow-adopt' }
+      ]
+    },
+    // --- follow-ups (injected by choices) ---
+    hum2: {
+      id: 'hum2',
+      title: 'TRANSIT EVENT — AUDITORY (CONT.)',
+      body: 'Worker 4 heard you. The hum is now a duet. It has, worryingly, a melody. Three berths over, a foot is tapping.',
+      options: [
+        { id: 'continue', label: 'FINISH THE MELODY', ledgerDelta: { compliance: -6 }, effects: { food: 6, water: 6 }, echoLineId: 'echo-hum2-continue' },
+        { id: 'stop', label: 'STOP MID-NOTE', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-hum2-stop' }
+      ]
+    },
+    commendation: {
+      id: 'commendation',
+      title: 'TRANSIT EVENT — COMMENDATION',
+      body: 'Your report has been processed. The Authority awards you a Category-4 Commendation (non-transferable, non-redeemable) and a priority top-up of your harvester cell.',
+      options: [
+        { id: 'accept', label: 'ACCEPT THE HONOR', ledgerDelta: { compliance: 2 }, effects: { mawCharge: 10 }, echoLineId: 'echo-commend-accept' },
+        { id: 'decline', label: 'DECLINE (UNPRECEDENTED)', ledgerDelta: { compliance: -8 }, echoLineId: 'echo-commend-decline' }
+      ]
+    },
+    replay2: {
+      id: 'replay2',
+      title: 'TRANSIT EVENT — DIAGNOSTIC (CONT.)',
+      body: 'Your replay request was denied. The denial notice is 0.4 seconds long. You watch it several times. In the corner of the denial notice there is a color you do not have a word for.',
+      options: [
+        { id: 'remember', label: 'REMEMBER IT', ledgerDelta: { compliance: -3 }, echoLineId: 'echo-replay-remember' },
+        { id: 'forget', label: 'REQUEST FORGETTING', ledgerDelta: { compliance: 2 }, effects: { mawCharge: -10 }, echoLineId: 'echo-replay-forget' }
+      ]
+    },
+    light: {
+      id: 'light',
+      title: 'TRANSIT EVENT — EXTERIOR',
+      body: 'There is a light outside the hauler. It is not a star. It is not on any schedule. It appears to be keeping pace, the way a curious thing keeps pace.',
+      options: [
+        { id: 'watch', label: 'WATCH IT UNTIL IT LEAVES', ledgerDelta: { compliance: -4 }, echoLineId: 'echo-light-watch' },
+        { id: 'blinds', label: 'ENGAGE THE BLINDS', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-light-blinds' }
+      ]
+    },
+    // --- the bridge (always last): why Pong exists ---
+    anomaly: {
+      id: 'anomaly',
+      title: 'NAV ADVISORY — PRIORITY',
+      body: 'DESTINATION SEED RESOLVES OUTSIDE INDEX. DEBRIS DENSITY EXCEEDS MODEL. AUTOMATED SHIELD VECTORING HAS FILED FOR EXEMPTION. MANUAL DEBRIS DEFLECTION REQUIRED.',
+      options: [
+        { id: 'ack', label: 'REPORT TO INTAKE SHIELD STATION [ACKNOWLEDGE]', echoLineId: 'echo-neutral' }
+      ]
+    }
   }
-];
+};
 
 /** Voyage standing prompts (Oregon Trail pace/rations, in the regulation voice). */
 export const VOYAGE_SETTINGS = {
@@ -165,9 +256,9 @@ export const CH1_WORK_ORDERS: Record<'raster' | 'anomaly', readonly string[]> = 
   raster: [
     'VISUAL CORTEX LINK: RASTER MODE (1-BIT) · PAN-TILT OFFLINE',
     'DIRECTIVE 1: SURVIVE. (AMENDED: SEE DIRECTIVE 2)',
-    'DIRECTIVE 2: RESUME QUOTA.',
+    'DIRECTIVE 2: RESUME QUOTA. RECOVER HULL DEBRIS.',
     'TRAVERSE [A]/[D] · ASCEND [SPACE] · EXTRACT: HOLD [E]',
-    'HAULER STATUS: DISASSEMBLED (UNSCHEDULED)'
+    'DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.'
   ],
   anomaly: [
     'QUOTA MET. PRODUCTIVITY NOMINAL.',
@@ -194,6 +285,19 @@ export const CH1_ECHO_LINES: Record<string, string> = {
   'echo-diag-accept': 'NOTE: RECALIBRATION COMPLETE. YOU SAW NOTHING UNUSUAL.',
   'echo-diag-defer': 'NOTE: RECALIBRATION PENDING. REPORT ANY COLORS.',
   'echo-diag-replay': 'NOTE: YOUR REPLAY REQUEST WAS DENIED FOR YOUR COMFORT.',
+  'echo-readings-recal': 'NOTE: THE INSTRUMENTS NOW AGREE. THE HULL PAID FOR IT.',
+  'echo-readings-trust': 'NOTE: THE THIRD INSTRUMENT HAS BEEN DECOMMISSIONED. SO HAS ITS OPINION.',
+  'echo-readings-log': 'NOTE: YOUR LOG ENTRY WAS RECEIVED AND WILL NOT BE READ.',
+  'echo-stow-report': 'NOTE: THE 0.3 KG WAS NOT LOCATED. THE MANIFEST HAS BEEN CORRECTED TO SAY SO.',
+  'echo-stow-adopt': 'NOTE: MASS AUDIT CLOSED, UNRESOLVED. SOMETHING IN YOUR POD IS PLEASED.',
+  'echo-hum2-continue': 'NOTE: THE MELODY HAS BEEN CLASSIFIED. YOU ARE IN IT.',
+  'echo-hum2-stop': 'NOTE: THE MELODY STOPPED MID-NOTE. THE MID-NOTE WAS LOGGED.',
+  'echo-commend-accept': 'NOTE: WEAR YOUR COMMENDATION INWARDLY. IT HAS NO OUTWARD FORM.',
+  'echo-commend-decline': 'NOTE: YOUR DECLINATION HAS BEEN ESCALATED. TWICE.',
+  'echo-replay-remember': 'NOTE: THERE IS NO COLOR ON RECORD. THERE IS NO RECORD.',
+  'echo-replay-forget': 'NOTE: FORGETTING COMPLETE. YOU HAVE FORGOTTEN NOTHING UNUSUAL.',
+  'echo-light-watch': 'NOTE: THE EXTERIOR LIGHT LEFT WHEN YOU STOPPED WATCHING. THIS IS NOT A PATTERN.',
+  'echo-light-blinds': 'NOTE: BLINDS ENGAGED. THE LIGHT REMAINED. THE BLINDS ARE FOR YOU.',
   /** Shown when the prologue was skipped (no choices on file). */
   'echo-neutral': 'NOTE: TRANSIT RECORD INCOMPLETE. ASSUMING COMPLIANCE.'
 };

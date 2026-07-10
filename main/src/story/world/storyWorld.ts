@@ -114,3 +114,26 @@ export function getStorySidePlane(planetSize: number, terrainSeed: number): {
 export function getHeroTreePose(planetSize: number, terrainSeed: number): StoryPropPose {
   return surfacePoseNear(planetSize, terrainSeed, -16, 14, 0.95);
 }
+
+/** Max debris pieces the descent can scatter (voyage hull outcome trims it). */
+export const DEBRIS_MAX = 6;
+
+/**
+ * Hull-debris scatter along the raster travel strip: deterministic poses on
+ * both sides of the spawn so the 2D act has ground to cover. Offsets are in
+ * voxel units along the strip's dominant axis (the side plane is axis-aligned).
+ */
+export function getDebrisPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
+  const plane = getStorySidePlane(planetSize, terrainSeed);
+  const alongX = Math.abs(plane.travelAxis.x) > 0.5;
+  const offsets = [-9, 6, -14, 11, -4, 15]; // interleaved so any count spreads both ways
+  return offsets.slice(0, DEBRIS_MAX).map(offset =>
+    surfacePoseNear(
+      planetSize,
+      terrainSeed,
+      alongX ? offset * Math.sign(plane.travelAxis.x) : 0,
+      alongX ? 0 : offset * Math.sign(plane.travelAxis.z),
+      0.8
+    )
+  );
+}

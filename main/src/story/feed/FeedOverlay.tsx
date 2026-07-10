@@ -65,6 +65,7 @@ const FeedOverlay: React.FC = () => {
   const scanRef = useRef<HTMLDivElement>(null);
   const vignetteRef = useRef<HTMLDivElement>(null);
   const glitchRef = useRef<HTMLCanvasElement>(null);
+  const flashRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -77,7 +78,16 @@ const FeedOverlay: React.FC = () => {
       const scan = scanRef.current;
       const vignette = vignetteRef.current;
       const glitch = glitchRef.current;
-      if (!filter || !dither || !scan || !vignette || !glitch) return;
+      const flash = flashRef.current;
+      if (!filter || !dither || !scan || !vignette || !glitch || !flash) return;
+
+      // Hard white punctuation (pod impact): visible only while decaying.
+      if (r.flash > 0.01) {
+        flash.style.display = 'block';
+        flash.style.opacity = String(Math.min(1, r.flash));
+      } else if (flash.style.display !== 'none') {
+        flash.style.display = 'none';
+      }
 
       // Backdrop filter strings are only rebuilt when the value actually moves —
       // and the layer UNMOUNTS from compositing (display:none) whenever it is at
@@ -173,6 +183,8 @@ const FeedOverlay: React.FC = () => {
       />
       {/* 5 — imperative tear/noise canvas */}
       <canvas ref={glitchRef} style={{ ...layerBase, width: '100%', height: '100%' }} />
+      {/* 6 — hard white flash (impact punctuation) */}
+      <div ref={flashRef} style={{ ...layerBase, background: '#eef3ee', display: 'none' }} />
       <style>{`
         @keyframes pvFeedScanDrift {
           from { background-position-y: 0px; }

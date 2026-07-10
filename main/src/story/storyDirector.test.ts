@@ -7,6 +7,7 @@ import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/
 import { setMiningProgress } from '../game/systems/miningProgress.ts';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
 import { getCinematicLookWeight } from './cinematicLook.ts';
+import { seedDebrisCollected } from './debrisSalvage.ts';
 import { DUSK } from './storyScript.ts';
 import {
   advanceToBeat,
@@ -56,23 +57,33 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // quota-gated only
   });
 
-  it('meeting the quota restores pan-tilt (anomaly beat) and records the milestone', () => {
+  it('meeting the quota + salvage triggers the 2D→3D lift and records the milestone', () => {
+    seedDebrisCollected(); // hull debris recovered
     addItem('biofiber', CH1_QUOTA.biofiber);
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // fiber alone is not enough
     addItem('stone', CH1_QUOTA.stone);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
+    expect(getStoryStateSnapshot().beat).toBe('ch1-lift');
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
+    // The lift is a real ~7s cutscene: letterbox up mid-way, feet held…
+    tickSeconds(2);
+    expect(getFeedRuntime().cinematic).toBeGreaterThan(0.5);
+    expect(getStoryInputPolicy().moveSpeedScale).toBe(0);
+    expect(getStoryInputPolicy().sideBlend).toBeGreaterThan(0);
+    // …then it hands over to the pan-tilt feed.
+    tickSeconds(5.5);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
   });
 
   it('resuming into the raster beat with the quota already met advances on the next tick', () => {
     // Collect while the watcher is not looking (simulates a reload-with-items).
     advanceToBeat('crawl');
+    seedDebrisCollected();
     addItem('biofiber', CH1_QUOTA.biofiber);
     addItem('stone', CH1_QUOTA.stone);
     advanceToBeat('ch1-raster');
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
     tickSeconds(0.1);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
+    expect(getStoryStateSnapshot().beat).toBe('ch1-lift'); // → cutscene → anomaly
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
 

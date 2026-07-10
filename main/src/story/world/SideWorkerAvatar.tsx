@@ -5,6 +5,7 @@ import { getPlayerPose } from '../../game/systems/playerPoseSystem.ts';
 import { getLocalActorId } from '../../game/playerActors.ts';
 import { getStoryInputPolicy } from '../storyInputPolicy.ts';
 import { getSideFacing, getSideLens } from '../sideLens.ts';
+import { getFeedRuntime } from '../feedRuntime.ts';
 
 // --- The raster-era worker sprite ---------------------------------------------------
 //
@@ -27,9 +28,9 @@ const SideWorkerAvatar: React.FC = () => {
   const groupRef = useRef<THREE.Group>(null);
 
   const materials = useMemo(() => ({
-    body: new THREE.MeshStandardMaterial({ color: BODY, roughness: 0.85 }),
-    dim: new THREE.MeshStandardMaterial({ color: SUIT_DIM, roughness: 0.9 }),
-    visor: new THREE.MeshStandardMaterial({ color: VISOR, roughness: 0.4 })
+    body: new THREE.MeshStandardMaterial({ color: BODY, roughness: 0.85, transparent: true }),
+    dim: new THREE.MeshStandardMaterial({ color: SUIT_DIM, roughness: 0.9, transparent: true }),
+    visor: new THREE.MeshStandardMaterial({ color: VISOR, roughness: 0.4, transparent: true })
   }), []);
   const box = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
 
@@ -37,9 +38,18 @@ const SideWorkerAvatar: React.FC = () => {
     const group = groupRef.current;
     if (!group) return;
     const lens = getSideLens();
-    const sideActive = getStoryInputPolicy().lookMode === 'side' && !!lens;
+    const policy = getStoryInputPolicy();
+    // Hidden while the pod is still falling (you ARE the pod), and dissolves
+    // as the lift carries the camera into its head.
+    const descent = getFeedRuntime().descent;
+    const stillFalling = descent >= 0 && descent < 1;
+    const sideActive = policy.lookMode === 'side' && !!lens && policy.sideBlend < 0.55 && !stillFalling;
     group.visible = sideActive;
     if (!sideActive || !lens) return;
+    const dissolve = 1 - Math.min(1, policy.sideBlend / 0.55);
+    materials.body.opacity = dissolve;
+    materials.dim.opacity = dissolve;
+    materials.visor.opacity = dissolve;
 
     const pose = getPlayerPose(getLocalActorId());
     if (!pose) {

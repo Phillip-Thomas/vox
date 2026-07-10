@@ -6,6 +6,7 @@ import {
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { addItem } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
+import { seedDebrisCollected } from './debrisSalvage.ts';
 
 // --- Story mode state ---------------------------------------------------------
 //
@@ -23,9 +24,10 @@ export type StoryChapter = 'none' | 'prologue' | 'ch1' | 'ch2' | 'ch3' | 'comple
 
 export type StoryBeat =
   // prologue (terminal overlay, app phase stays 'menu')
-  | 'crawl' | 'voyage' | 'deflect' | 'crash'
-  // chapter 1 — raster side-scroller (quota) then the pan-tilt CCTV feed
-  | 'ch1-raster' | 'ch1-anomaly' | 'a1-ramp'
+  | 'crawl' | 'manifest' | 'voyage' | 'deflect' | 'crash'
+  // chapter 1 — crash-landing descent, raster side-scroller (quota + salvage),
+  // the 2D→3D lift, then the pan-tilt CCTV feed
+  | 'descent' | 'ch1-raster' | 'ch1-lift' | 'ch1-anomaly' | 'a1-ramp'
   // chapter 2 — color, and the tree
   | 'ch2-color' | 'ch2-approach' | 'a2-awakening'
   // chapter 3 — grain
@@ -132,8 +134,8 @@ export function canContinueStory(): boolean {
 
 /** Canonical beat order — drives milestone/item seeding and the debug panel. */
 export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
-  'crawl', 'voyage', 'deflect', 'crash',
-  'ch1-raster', 'ch1-anomaly', 'a1-ramp',
+  'crawl', 'manifest', 'voyage', 'deflect', 'crash',
+  'descent', 'ch1-raster', 'ch1-lift', 'ch1-anomaly', 'a1-ramp',
   'ch2-color', 'ch2-approach', 'a2-awakening',
   'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
   'done'
@@ -149,8 +151,8 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
 };
 
 export function chapterForBeat(beat: StoryBeat): StoryChapter {
-  return beat === 'crawl' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
-    : beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
+  return beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
+    : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
     : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
     : beat === 'done' ? 'complete'
     : 'ch3';
@@ -182,18 +184,17 @@ function seedForBeat(beat: StoryBeat): void {
   const m = STORY_MILESTONES;
   const at = beatIndex(beat);
   markMilestone(m.started);
-  if (at >= beatIndex('ch1-raster')) markMilestone(m.prologueSeen);
-  if (at >= beatIndex('ch1-anomaly')) {
+  if (at >= beatIndex('descent')) markMilestone(m.prologueSeen);
+  if (at >= beatIndex('ch1-lift')) {
     markMilestone(m.ch1Quota);
     addItem('biofiber', 6);
     addItem('stone', 4);
+    seedDebrisCollected(); // wood/flint arrive as the recovered hull debris
   }
   if (at >= beatIndex('ch2-color')) markMilestone(m.a1);
   if (at >= beatIndex('ch3-gather')) {
     markMilestone(m.a2);
-    addItem('flint', 2);
-    addItem('biofuel', 1);
-    addItem('wood', 3);
+    addItem('biofuel', 1); // timber/flint already came from the debris seeding
   }
   if (at >= beatIndex('done')) {
     markMilestone(m.a3);

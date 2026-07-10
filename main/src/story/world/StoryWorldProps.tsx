@@ -6,6 +6,8 @@ import { getCampfires, placeCampfire } from '../../game/systems/campfires.ts';
 import AnomalyStone from './AnomalyStone.tsx';
 import HeroAppleTree from './HeroAppleTree.tsx';
 import SideWorkerAvatar from './SideWorkerAvatar.tsx';
+import DescentPod from './DescentPod.tsx';
+import DebrisField from './DebrisField.tsx';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
@@ -41,6 +43,14 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
   return (
     <>
       <SideWorkerAvatar />
+      {/* The crashed pod persists through ch1/ch2 as the smoking wreck. */}
+      {(story.chapter === 'ch1' || story.chapter === 'ch2') && (
+        <DescentPod planetSize={planetSize} terrainSeed={terrainSeed} />
+      )}
+      {/* Hull debris scattered by the descent — the raster act's salvage. */}
+      {story.chapter === 'ch1' && (
+        <DebrisField planetSize={planetSize} terrainSeed={terrainSeed} />
+      )}
       <AnomalyStone planetSize={planetSize} terrainSeed={terrainSeed} />
       {story.chapter !== 'ch1' && <HeroAppleTree planetSize={planetSize} terrainSeed={terrainSeed} />}
     </>

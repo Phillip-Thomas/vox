@@ -6,8 +6,10 @@ import { setVoxelRealityStage } from '../../game/systems/realityRenderSystem.ts'
 import { advanceToBeat, getStoryStateSnapshot, STORY_MILESTONES } from '../storyState.ts';
 import { theme } from '../../ui/theme.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { unlockStoryScore } from '../storyScore.ts';
 import { isMovieMode } from '../autopilot.ts';
 import RegulationCrawl from './RegulationCrawl.tsx';
+import ManifestScreen from './ManifestScreen.tsx';
 import VoyageLedger from './VoyageLedger.tsx';
 import DebrisDeflection from './DebrisDeflection.tsx';
 import TerminalCorruption from './TerminalCorruption.tsx';
@@ -25,14 +27,15 @@ export const PHOSPHOR_DIM = 'rgba(125,252,165,0.55)';
 export const PHOSPHOR_FAINT = 'rgba(125,252,165,0.30)';
 export const TERMINAL_BG = '#020604';
 
-type ProloguePhase = 'crawl' | 'voyage' | 'deflect' | 'corruption' | 'acknowledge';
+type ProloguePhase = 'crawl' | 'manifest' | 'voyage' | 'deflect' | 'corruption' | 'acknowledge';
 
 const TerminalPrologue: React.FC = () => {
   const { sceneReady } = useAppState();
   const isTouch = isTouchDevice();
-  // Debug jumps (?story=voyage|deflect|crash) start the terminal mid-prologue.
+  // Debug jumps (?story=manifest|voyage|deflect|crash) start mid-prologue.
   const [phase, setPhase] = useState<ProloguePhase>(() => {
     const beat = getStoryStateSnapshot().beat;
+    if (beat === 'manifest') return 'manifest';
     if (beat === 'voyage') return 'voyage';
     if (beat === 'deflect') return 'deflect';
     if (beat === 'crash') return 'corruption';
@@ -52,7 +55,7 @@ const TerminalPrologue: React.FC = () => {
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
-    advanceToBeat('ch1-raster');
+    advanceToBeat('descent');
     enterPlaying();
   }, [isTouch]);
 
@@ -64,8 +67,10 @@ const TerminalPrologue: React.FC = () => {
   }, [phase, sceneReady, handoff]);
 
   // Shell keyboard: Tab skips ahead to the acknowledge screen; F acknowledges.
+  // Any keypress is also an audio-unlock gesture (deep links skip the menu click).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      unlockStoryScore();
       if (e.code === 'Tab') {
         e.preventDefault();
         if (phase !== 'acknowledge') setPhase('corruption');
@@ -88,9 +93,10 @@ const TerminalPrologue: React.FC = () => {
       overflow: 'hidden',
       letterSpacing: '0.1em'
     }}>
-      {phase === 'crawl' && <RegulationCrawl onDone={() => setPhase('voyage')} />}
-      {phase === 'voyage' && <VoyageLedger onDone={() => setPhase('deflect')} />}
-      {phase === 'deflect' && <DebrisDeflection onDone={() => setPhase('corruption')} />}
+      {phase === 'crawl' && <RegulationCrawl onDone={() => { advanceToBeat('manifest'); setPhase('manifest'); }} />}
+      {phase === 'manifest' && <ManifestScreen onDone={() => { advanceToBeat('voyage'); setPhase('voyage'); }} />}
+      {phase === 'voyage' && <VoyageLedger onDone={() => { advanceToBeat('deflect'); setPhase('deflect'); }} />}
+      {phase === 'deflect' && <DebrisDeflection onDone={() => { advanceToBeat('crash'); setPhase('corruption'); }} />}
       {phase === 'corruption' && <TerminalCorruption onDone={() => setPhase('acknowledge')} />}
       {phase === 'acknowledge' && (
         <div style={{
@@ -99,8 +105,8 @@ const TerminalPrologue: React.FC = () => {
           alignItems: 'center', justifyContent: 'center', gap: 26,
           animation: 'pvTermFlicker 3.2s steps(3, jump-none) infinite'
         }}>
-          <div style={{ fontSize: 12, color: PHOSPHOR_DIM }}>SIGNAL REACQUIRED · SUIT LOOP ONLY</div>
-          <div style={{ fontSize: 20 }}>WORKER: YOU APPEAR TO HAVE SURVIVED.</div>
+          <div style={{ fontSize: 12, color: PHOSPHOR_DIM }}>POD SEPARATION CONFIRMED · SUIT LOOP ONLY</div>
+          <div style={{ fontSize: 20 }}>SURFACE IN 40 SECONDS.</div>
           <div style={{ fontSize: 12, color: PHOSPHOR_DIM }}>THIS WAS NOT SCHEDULED.</div>
           <div style={{ fontSize: 11, color: PHOSPHOR_DIM, marginTop: 6 }}>
             VISUAL CORTEX LINK: RASTER MODE (1-BIT) AVAILABLE · PAN-TILT SURVEY OFFLINE
@@ -115,7 +121,7 @@ const TerminalPrologue: React.FC = () => {
                     border: 'none', padding: '12px 30px', cursor: 'pointer'
                   }}
                 >
-                  [F] ACKNOWLEDGE DIRECTIVE 1
+                  [F] BRACE FOR SURFACE
                 </button>
               : <span style={{ color: PHOSPHOR_FAINT }}>RESOLVING SURFACE INDEX…</span>}
           </div>

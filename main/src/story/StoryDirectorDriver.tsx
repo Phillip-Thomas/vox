@@ -5,6 +5,7 @@ import { storyDirectorTick } from './storyDirector.ts';
 import { advanceToBeat, getStoryStateSnapshot } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { autopilotTick, isMovieMode } from './autopilot.ts';
+import { setScoreIntensity } from './storyScore.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getFeedRuntime } from './feedRuntime.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
@@ -147,11 +148,15 @@ const StoryDirectorDriver: React.FC = () => {
     r.redaction.stress = stress;
     r.redaction.label = redactionLabelFor(distance);
 
-    // The feed strains as the unrenderable thing fills the frame.
+    // The feed strains as the unrenderable thing fills the frame — and the
+    // score's heartbeat climbs with the same proximity.
     r.garble = stress * 0.8;
-    if (story.beat === 'ch2-approach' && stress > 0.25) {
-      r.glitch = Math.max(r.glitch, (stress - 0.25) * 0.6);
-      r.scanRoll = Math.max(r.scanRoll, (stress - 0.25) * 0.3);
+    if (story.beat === 'ch2-approach') {
+      setScoreIntensity(0.45 + stress * 0.55);
+      if (stress > 0.25) {
+        r.glitch = Math.max(r.glitch, (stress - 0.25) * 0.6);
+        r.scanRoll = Math.max(r.scanRoll, (stress - 0.25) * 0.3);
+      }
     }
   });
   return null;

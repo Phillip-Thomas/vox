@@ -10,6 +10,7 @@ import { getSunDirection } from '../SkyController.tsx';
 import { useAudioSettings } from '../../audio/audioSettings.ts';
 import { getMusicEngine } from '../../audio/musicEngine.ts';
 import { getSfxEngine } from '../../audio/sfxEngine.ts';
+import { setStoryScoreOutput } from '../../story/storyScore.ts';
 import {
   resolvePlanetMusicMood,
   resolveMusicMix,
@@ -32,11 +33,13 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
     () => resolvePlanetMusicMood(buildPlanetProfile(terrainSeed)),
     [terrainSeed]
   );
+  // Any live story chapter ducks the streamed layers to the quiet transit bed —
+  // the procedural story SCORE (story/storyScore.ts) carries the music instead.
   const scene = resolveMusicScene(
     app.phase,
     flight.phase,
     flight.controlMode,
-    story.active && story.chapter === 'prologue'
+    story.active
   );
   const sceneRef = useRef<MusicScene>(scene);
   const planetMoodRef = useRef<PlanetMusicMood>(planetMood);
@@ -50,6 +53,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   useEffect(() => {
     getMusicEngine().setOutput(audio.musicVolume, audio.muted);
     getSfxEngine().setOutput(audio.sfxVolume, audio.muted);
+    setStoryScoreOutput(audio.musicVolume, audio.muted);
   }, [audio.musicVolume, audio.sfxVolume, audio.muted]);
 
   useEffect(() => {

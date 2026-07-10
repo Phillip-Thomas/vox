@@ -9,6 +9,13 @@ import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { beginA1, beginA2 } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
+import { getSideLens } from './sideLens.ts';
+import {
+  getDebrisPositions,
+  getDebrisScattered,
+  isDebrisCollected,
+  seedDebrisCollected
+} from './debrisSalvage.ts';
 import { CH1_QUOTA } from './storyScript.ts';
 
 // --- Story autopilot (movie mode) -----------------------------------------------
@@ -143,17 +150,37 @@ export function autopilotTick(dt: number): void {
       // Rhythm: walk a stretch, then STAND and extract — hold-to-mine only
       // charges on a stable target, so a perpetual walk never harvests. Stones
       // collect by proximity during the walks; fiber breaks during the stands.
+      // Uncollected hull debris steers the walks (the salvage sweep).
       const cycle = beatClock % 6;
       const walking = cycle < 2.6;
-      const sweepRight = Math.floor(beatClock / 24) % 2 === 0; // long sweeps out and back
-      controls.right = walking && sweepRight;
-      controls.left = walking && !sweepRight;
+      let goRight = Math.floor(beatClock / 24) % 2 === 0; // long sweeps out and back
+      const lens = getSideLens();
+      if (lens) {
+        const player = getPlayerWorldPosition();
+        let nearest = -1;
+        let nearestDist = Infinity;
+        getDebrisPositions().forEach((pos, i) => {
+          if (i >= getDebrisScattered() || isDebrisCollected(i)) return;
+          const dist = player.distanceTo(pos);
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearest = i;
+          }
+        });
+        if (nearest >= 0) {
+          const toDebris = getDebrisPositions()[nearest].clone().sub(player);
+          goRight = toDebris.dot(lens.travelAxis) >= 0;
+        }
+      }
+      controls.right = walking && goRight;
+      controls.left = walking && !goRight;
       controls.delete = true;
       controls.jump = walking && cycle % 2.2 < 0.16;
       if (beatClock > timeout) {
         // Screening must go on: top up whatever the walk didn't gather.
         if (getItemCount('biofiber') < CH1_QUOTA.biofiber) addItem('biofiber', CH1_QUOTA.biofiber);
         if (getItemCount('stone') < CH1_QUOTA.stone) addItem('stone', CH1_QUOTA.stone);
+        seedDebrisCollected();
       }
       break;
     }

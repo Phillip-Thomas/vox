@@ -27,20 +27,29 @@ hands off to the sandbox at reality stage `material`.
   Watch it like a film; critique the cut.
 
 The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through the
-decades"): regulation crawl → Oregon-Trail voyage (pace/ration prompts + 5
-choice cards; choices echo in Ch1's work order) → **debris-deflection Pong**
-(unwinnable as the nav anomaly hits) → terminal-corruption crash → **Ch1
-raster**: a 2D SIDE-SCROLLER lens on the real voxel world (A/D + Space, chunky
-low-dpr pixels, voxel worker sprite, adjacent-block harvest with hold-E, voxel
-pebbles) — owns the fiber/stone quota → quota met restores the **CCTV feed**
-(pan-tilt: compass-snapped yaw + tilt band) → `[F] Touch` the anomaly stone →
-**A1** 8s chroma ramp → **Ch2** color-but-flat feed, the redacted apple tree
-(`[F] Eat` up close) → **A2** violation flood, HUD death, 12s liberation into
-free 3D at frozen noon (FOV + resolution + treatment all open) → **Ch3** craft
-the campfire chain (whitelisted Fabricator), first scripted dusk, `[F] Rest` at
-the fire at night → **A3** dawn material ramp → story completes, sandbox
-continues. Pre-A2 chapters render NOTHING smooth: cube pebbles, no ship, no
-berries — the anomaly stone is the deliberate first continuous form.
+decades"): regulation crawl → **MANIFEST** (berthing/processing: the notice
+becomes YOUR ticket) → Oregon-Trail voyage: a **BRANCHING DECK** (3 spine cards
++ 2 pool draws + choice-unlocked follow-ups, capped at 6) over a **Maze-War
+wireframe** (vector hauler + starfield + the destination cube world growing
+with progress); choices carry real consequences (items / vitals / harvester
+cell) and echo in Ch1's paperwork; the final ledger becomes the crash (hull →
+debris count, rations → arrival hunger, compliance → tone) → the **nav-anomaly
+bridge card ORDERS you to the intake shield** → debris-deflection Pong
+(unwinnable as the anomaly multiplies) → terminal corruption → `[F] BRACE` →
+**DESCENT**: the crash landing played IN the raster lens (pod streaks down the
+2D frame, white-flash impact, smoking wreck persists as a landmark) → **Ch1
+raster**: side-scroller quota (fiber/stone) + **hull-debris salvage** (walk-over
+pickups granting the campfire chain's wood/flint) → completion triggers the
+**2D→3D LIFT**: a ~7s letterboxed cutscene where the camera physically travels
+from the side vantage INTO the worker's eyes (sprite dissolves, one masked
+resolution snap) → **CCTV feed** (pan-tilt: compass-snapped yaw + tilt band) →
+`[F] Touch` the anomaly stone → **A1** 8s chroma ramp → **Ch2** color-but-flat
+feed, the redacted apple tree (`[F] Eat` up close) → **A2** violation flood,
+HUD death, 12s liberation into free 3D at frozen noon → **Ch3** craft the
+campfire chain (whitelisted Fabricator), first-dusk cutscene, `[F] Rest` at the
+fire at night → **A3** dawn material ramp → story completes, sandbox continues.
+Pre-A2 chapters render NOTHING smooth: cube pebbles, voxel pod/debris, no ship,
+no berries — the anomaly stone is the deliberate first continuous form.
 
 ## Architecture (all story code in `src/story/`)
 
@@ -55,6 +64,7 @@ berries — the anomaly stone is the deliberate first continuous form.
 | Feed runtime | `feedRuntime.ts` | Mutable per-frame store (WarpOverlay pattern) for the DOM overlays |
 | Overlays | `StoryOverlays.tsx` → `prologue/*`, `feed/*`, `StoryCaptions.tsx`, `transitions/SleepFade.tsx` | All DOM, rAF-driven, zero per-frame React |
 | Text | `storyScript.ts` (ALL copy + timings) · `storyText.ts` (channels: workorder/violation/caption/system) | Two voices: REGULATION (caps, euphemism) vs awakening (lowercase, sensory) |
+| Score | `storyScore.ts` | Fully procedural WebAudio film score, one mood per beat (era-appropriate synthesis: terminal squares → chip ostinato → tension saws → Zimmer pads); `setScoreBeat` on beat entry, `setScoreIntensity` driven by the director's OWN ramp values, `scoreHit('braam'\|'bloom'\|'boom')` at the cuts. Streamed music ducks to the quiet transit bed while any story chapter is live; volume/mute ride the normal audio settings |
 | World | `world/storyWorld.ts` (pinned verdant `STORY_COORDINATE`, deterministic prop poses relative to arrival) · `world/AnomalyStone.tsx` · `world/HeroAppleTree.tsx` | Hero tree pins its own reality uniforms (`organic:1`) so it lives while the world is `bare`/`color` |
 
 **Sandbox safety:** every touched sandbox file (App, EfficientPlayer,

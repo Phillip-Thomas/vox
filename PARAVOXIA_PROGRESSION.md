@@ -75,9 +75,11 @@ their hands before they can articulate it:
 
 | Story moment | Gaming era | In-game rendering |
 |---|---|---|
-| Prologue crawl + voyage ledger | The Oregon Trail ('71) — text & prompts | Green-phosphor terminal, ledger stats, event cards |
-| The nav anomaly / crash | Pong ('72) — one paddle vs. the inevitable | Oscilloscope debris-deflection minigame, unwinnable by design |
-| Ch1 arrival (quota) | Side-scrollers ('85) | The REAL voxel world through a side-on locked-plane lens, chunky low-dpr pixels, voxel worker sprite |
+| Prologue crawl + manifest + voyage ledger | The Oregon Trail ('71) — text & prompts | Green-phosphor terminal, processing screens, branching event deck |
+| The voyage backdrop | Maze War ('74) — the first 3D: vertices & edges | Wireframe hauler + vector starfield + the destination CUBE WORLD growing with progress |
+| The nav anomaly / crash | Pong ('72) — one paddle vs. the inevitable | Oscilloscope debris-deflection minigame, ORDERED by the anomaly card, unwinnable by design |
+| Ch1 arrival (descent + quota + salvage) | Side-scrollers ('85) | Crash-landing cutscene in the raster lens; the REAL voxel world side-on, chunky low-dpr pixels, voxel worker sprite |
+| The 2D→3D lift | The dimensional break ('92) | The camera physically travels from the side vantage into the worker's eyes — the geometry of perception changes |
 | Ch1 anomaly → Ch2 | Fake-3D shooters ('92) | First-person CCTV feed: compass-snapped pan, tilt band, dither/scanlines |
 | A2 depth awakening | True 3D ('96) | Free look, full FOV, device resolution — the mouse becomes a neck |
 | A3+ (material → alive) | The modern era | Texture, time, life, post-fx |

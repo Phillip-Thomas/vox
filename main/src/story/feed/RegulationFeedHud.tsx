@@ -3,6 +3,8 @@ import { theme } from '../../ui/theme.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getInteraction, subscribeInteraction } from '../../game/systems/interactionSystem.ts';
 import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
+import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
+import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
 import { getFeedRuntime } from '../feedRuntime.ts';
 import { getMiningProgress } from '../../game/systems/miningProgress.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyText.ts';
@@ -48,6 +50,7 @@ const RegulationFeedHud: React.FC = () => {
   void inventoryTick;
   const interaction = useSyncExternalStore(subscribeInteraction, getInteraction, getInteraction);
   const mawFraction = useSyncExternalStore(subscribeMaw, getMawChargeFraction, getMawChargeFraction);
+  useSyncExternalStore(subscribeProgression, progressionVersion, progressionVersion);
 
   const counterRef = useRef<HTMLDivElement>(null);
   const harvestRef = useRef<HTMLDivElement>(null);
@@ -185,7 +188,9 @@ const RegulationFeedHud: React.FC = () => {
       {quotaVisible && (
         <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>QUOTA</div>
-          <div>FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone}</div>
+          <div>
+            FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone} · DEBRIS {collectedDebrisCount()}/{getDebrisScattered()}
+          </div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
             HARVESTER CELL {Math.round(mawFraction * 100)}% · TRICKLE FEED
           </div>
@@ -282,6 +287,12 @@ let invVersion = 0;
 subscribeInventory(() => { invVersion++; });
 function inventoryVersion(): number {
   return invVersion;
+}
+// Same trick for progression (debris salvage lives in milestones).
+let progVersion = 0;
+subscribeProgression(() => { progVersion++; });
+function progressionVersion(): number {
+  return progVersion;
 }
 
 export default RegulationFeedHud;

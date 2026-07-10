@@ -30,6 +30,8 @@ export interface StoryInputPolicy {
   lookMode: 'free' | 'feed' | 'side';
   /** 0 = fully feed-locked look, 1 = free look. A2 lerps this open. */
   feedBlend: number;
+  /** Side lens only: 0 = side camera, 1 = first person. The ch1-lift lerps it. */
+  sideBlend: number;
   /** Camera FOV target; the driver eases the live camera toward it. */
   targetFov: number;
   /** Render pixel-ratio override (chunky-raster eras); null = device default. */
@@ -60,6 +62,7 @@ export const SANDBOX_POLICY: Readonly<StoryInputPolicy> = Object.freeze({
   allowBaseInteraction: allowAll,
   lookMode: 'free' as const,
   feedBlend: 1,
+  sideBlend: 1,
   targetFov: SANDBOX_FOV,
   targetDpr: null,
   voxelPropsOnly: false,
@@ -85,6 +88,7 @@ function feedPolicy(): StoryInputPolicy {
     allowBaseInteraction: allowNone,
     lookMode: 'feed',
     feedBlend: 0,
+    sideBlend: 1,
     targetFov: FEED_FOV,
     targetDpr: FEED_DPR,
     voxelPropsOnly: true,
@@ -99,6 +103,7 @@ function rasterPolicy(): StoryInputPolicy {
     moveSpeedScale: 0.55,
     allowJump: true,
     lookMode: 'side',
+    sideBlend: 0,
     targetDpr: RASTER_DPR
   };
 }
@@ -114,6 +119,7 @@ function ch3Policy(): StoryInputPolicy {
     allowBaseInteraction: id => id !== 'board',
     lookMode: 'free',
     feedBlend: 1,
+    sideBlend: 1,
     targetFov: SANDBOX_FOV,
     targetDpr: null,
     voxelPropsOnly: false,
@@ -127,9 +133,14 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     // Prologue runs over the menu — the on-foot controller isn't live, but keep
     // everything locked in case of races around the hard cut.
     case 'crawl':
+    case 'manifest':
     case 'voyage':
     case 'deflect':
     case 'crash':
+      return { ...rasterPolicy(), moveSpeedScale: 0 };
+    // The crash-landing cutscene and the 2D→3D lift: side lens held, feet held.
+    case 'descent':
+    case 'ch1-lift':
       return { ...rasterPolicy(), moveSpeedScale: 0 };
     case 'ch1-raster':
       return rasterPolicy();
@@ -184,6 +195,12 @@ export function setStoryMoveScale(scale: number): void {
 export function setStoryFeedBlend(blend: number): void {
   const p = mutable();
   if (p) p.feedBlend = Math.min(1, Math.max(0, blend));
+}
+
+/** The ch1 lift: 0 = side camera, 1 = first person. Consumed by CameraControls. */
+export function setStorySideBlend(blend: number): void {
+  const p = mutable();
+  if (p) p.sideBlend = Math.min(1, Math.max(0, blend));
 }
 
 export function setStoryTargetFov(fov: number): void {

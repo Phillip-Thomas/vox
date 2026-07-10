@@ -626,7 +626,12 @@ export default function EfficientPlayer({
       const vy = Math.round(point.y / VOXEL_SCALE);
       const vz = Math.round(point.z / VOXEL_SCALE);
       const voxel = voxelSystem.getVoxel(vx, vy, vz);
-      if (voxel) return { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
+      if (!voxel) continue;
+      // Skip blocks the current tool can't break (the era's hand can't chew
+      // stone) — the next probe usually has grass/dirt, so extraction keeps
+      // flowing instead of chirping "blocked" at a wall.
+      if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) continue;
+      return { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
     }
     return null;
   }, []);

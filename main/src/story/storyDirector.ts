@@ -1,4 +1,4 @@
-import type * as THREE from 'three';
+import * as THREE from 'three';
 import {
   clearVoxelRealityOverrides,
   overrideVoxelRealityEffects,
@@ -6,7 +6,7 @@ import {
   VOXEL_REALITY_PRESETS
 } from '../game/systems/realityRenderSystem.ts';
 import { getMilestones, markMilestone } from '../game/systems/progressionSystem.ts';
-import { addItem, getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
+import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
 import { addMawCharge, getMawCharge, MAX_MAW_CHARGE, setMawCharge } from '../game/systems/mawSystem.ts';
 import { getMiningProgress } from '../game/systems/miningProgress.ts';
@@ -26,11 +26,16 @@ import {
   setStoryFeedBlend,
   setStoryLookMode,
   setStoryMoveScale,
+  setStorySideBlend,
   setStoryTargetDpr,
   setStoryTargetFov,
+  FEED_DPR,
   FEED_FOV,
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
+import { getSideFacing, getSideLens } from './sideLens.ts';
+import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { debrisSalvageComplete } from './debrisSalvage.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
@@ -48,8 +53,10 @@ import {
   CH1_WORK_ORDERS,
   CH3_CAPTIONS,
   DUSK,
-  PROLOGUE_EVENTS
+  VOYAGE_DECK
 } from './storyScript.ts';
+import { complianceToneLine, getArrivalCellCharge } from './voyageOutcome.ts';
+import { scoreHit, setScoreBeat, setScoreIntensity } from './storyScore.ts';
 
 // --- The story director -------------------------------------------------------------
 //
@@ -94,6 +101,12 @@ interface DirectorRuntime {
   restUnregister: (() => void) | null;
   /** Fractional harvester recharge carried between ticks (flushed whole points). */
   mawRechargeAccum: number;
+  /** descent one-shot: the impact flash/sfx fired. */
+  descentImpacted: boolean;
+  /** ch1-lift one-shot: the mid-lift dpr snap + glitch mask fired. */
+  liftSnapped: boolean;
+  /** Scratch target for the lift's look-ahead pull. */
+  liftLookTarget: THREE.Vector3;
 }
 
 const d: DirectorRuntime = {
@@ -112,7 +125,10 @@ const d: DirectorRuntime = {
   a3Woke: false,
   elapsedSeconds: 0,
   restUnregister: null,
-  mawRechargeAccum: 0
+  mawRechargeAccum: 0,
+  descentImpacted: false,
+  liftSnapped: false,
+  liftLookTarget: new THREE.Vector3()
 };
 
 function quotaCollected(): { fiber: number; stone: number; total: number; met: boolean } {
@@ -122,22 +138,26 @@ function quotaCollected(): { fiber: number; stone: number; total: number; met: b
     fiber,
     stone,
     total: fiber + stone,
-    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone
+    // The raster act completes on quota AND the descent's debris recovered.
+    met: fiber >= CH1_QUOTA.biofiber && stone >= CH1_QUOTA.stone && debrisSalvageComplete()
   };
 }
 
 /** Prologue-choice echo lines the work order appends (the system remembers). */
 function echoLines(): string[] {
   const chosen = getMilestones().filter(m => m.startsWith('story:choice:'));
-  if (chosen.length === 0) return [CH1_ECHO_LINES['echo-neutral']];
   const lines: string[] = [];
   for (const milestone of chosen) {
     const [, , cardId, optionId] = milestone.split(':');
-    const option = PROLOGUE_EVENTS.find(c => c.id === cardId)?.options.find(o => o.id === optionId);
+    const option = VOYAGE_DECK.cards[cardId]?.options.find(o => o.id === optionId);
     const line = option ? CH1_ECHO_LINES[option.echoLineId] : undefined;
-    if (line) lines.push(line);
+    if (line && !lines.includes(line)) lines.push(line);
   }
-  return lines.length ? lines : [CH1_ECHO_LINES['echo-neutral']];
+  if (lines.length === 0) lines.push(CH1_ECHO_LINES['echo-neutral']);
+  const tone = complianceToneLine();
+  if (tone) lines.push(tone);
+  // The paperwork stays readable: newest three echoes only.
+  return lines.slice(-3);
 }
 
 // --- beat entry ----------------------------------------------------------------
@@ -149,22 +169,37 @@ function onBeatEntered(beat: StoryBeat | null): void {
   setCinematicLookWeight(0);
   setCinematicLookTarget(null);
   getFeedRuntime().cinematic = 0;
+  // The score retunes to the beat's mood (null fades it out for the sandbox).
+  setScoreBeat(beat);
   switch (beat) {
+    case 'descent':
+      resetFeedRuntime();
+      getFeedRuntime().descent = 0; // the pod enters the frame
+      d.descentImpacted = false;
+      setStoryForcedDayPhase(0.25);
+      break;
     case 'ch1-raster':
       resetFeedRuntime();
+      getFeedRuntime().descent = 1.1; // the wreck is a fact of the world now
       d.ch1Clock = 0;
       d.flashesFired = CH1_FLASH_SCHEDULE.map(() => false);
       // The construct runs standard illumination until the player earns time (A3).
       setStoryForcedDayPhase(0.25);
-      // The harvester arrives CHARGED — the crash damaged it, but the cell held.
-      // It degrades to the broken/refuel loop when the survival act begins (ch3).
-      setMawCharge(MAX_MAW_CHARGE);
+      // The harvester arrives with whatever the voyage left in the cell (full
+      // minus recalibrations/forgettings; commendations topped it up). It
+      // degrades to the broken/refuel loop when the survival act begins (ch3).
+      setMawCharge(getArrivalCellCharge());
       setWorkOrder([...CH1_WORK_ORDERS.raster, ...echoLines()]);
       break;
     case 'ch1-anomaly':
       // The raster→pan-tilt upgrade announces itself with a glitch pulse.
       d.glitchDecay = 0.7;
       setWorkOrder([...CH1_WORK_ORDERS.anomaly]);
+      break;
+    case 'ch1-lift':
+      d.liftSnapped = false;
+      playSfx('storyAwaken');
+      setWorkOrder(['PAN-TILT SURVEY: CALIBRATING…', 'HOLD POSITION. PERSPECTIVE IS BEING ISSUED.']);
       break;
     case 'a1-ramp':
       // Movement freezes via the beat policy; the timeline below owns the visuals.
@@ -174,6 +209,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // Post-A1 (also the deep-link/resume entry): color is through; feed intact.
       getFeedRuntime().desat = 0;
       getFeedRuntime().treatment = 1;
+      getFeedRuntime().descent = 1.1; // wreck present on direct jumps too
       setStoryForcedDayPhase(0.25);
       setWorkOrder([
         'SENSOR FAULT: CHROMATIC CHANNEL UNSUPPRESSED',
@@ -206,13 +242,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setWorkOrder([]);
       clearViolations();
       ensureRestInteraction();
-      // Trees are still unresolved at this stage (they arrive with A3), so the
-      // campfire chain's timber comes from the wreck — granted diegetically.
-      if (getItemCount('wood') < 3) {
-        addItem('wood', 3 - getItemCount('wood'));
-        addItem('flint', Math.max(0, 2 - getItemCount('flint')));
-        showCaption('the wreck gave up crate timber and a flint striker.', 6500);
-      }
+      // (Timber/flint were EARNED as hull debris back in the raster act.)
       break;
     case 'ch3-dusk':
       // The first sun event: the story takes the camera for a few seconds.
@@ -280,23 +310,27 @@ function syncBeat(): void {
     lastBeat = beat;
     onBeatEntered(beat);
   }
-  // Deactivation (quit to menu / completion) drops the live rest resolver.
-  if (!s.active && d.restUnregister) {
-    d.restUnregister();
-    d.restUnregister = null;
+  // Deactivation (quit to menu / completion) drops the live rest resolver and
+  // fades the score out (the sandbox owns its own music).
+  if (!s.active) {
+    setScoreBeat(null);
+    if (d.restUnregister) {
+      d.restUnregister();
+      d.restUnregister = null;
+    }
   }
 }
 subscribeStory(syncBeat);
 // Deep links activate the story BEFORE this module loads — catch up immediately.
 syncBeat();
 
-// Quota completion (in the raster side-scroller) restores the pan-tilt feed.
+// Quota completion (in the raster side-scroller) triggers the 2D→3D lift.
 subscribeInventory(() => {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch1-raster') return;
   if (quotaCollected().met) {
     markMilestone(STORY_MILESTONES.ch1Quota);
-    advanceToBeat('ch1-anomaly');
+    advanceToBeat('ch1-lift');
   }
 });
 
@@ -359,6 +393,7 @@ function tickA1Ramp(): void {
     r.desat = 0;
     r.glitch = 0;
     markMilestone(STORY_MILESTONES.a1);
+    scoreHit('bloom'); // color arrives as a chord opening
     advanceToBeat('ch2-color');
     return;
   }
@@ -368,6 +403,7 @@ function tickA1Ramp(): void {
   const dropped = d.a1FlickerNoise() < dropoutChance;
   const chroma = dropped ? Math.max(0, base - 0.85) : base;
   overrideVoxelRealityEffects({ chroma });
+  setScoreIntensity(0.4 + base * 0.6); // the riser rides the chroma itself
   const r = getFeedRuntime();
   r.desat = 1 - chroma;
   r.glitch = dropped ? 0.7 : Math.max(0, r.glitch - 0.1);
@@ -417,10 +453,12 @@ function tickA2(): void {
     if (!d.captionsFired.has('a2-awaken-sfx')) {
       d.captionsFired.add('a2-awaken-sfx');
       playSfx('storyAwaken');
+      scoreHit('braam'); // the wall of the feed gives way
     }
     const k = smoothstep((t - deathEnd) / T.liberationSeconds);
     setStoryFeedBlend(k);
     setStoryTargetFov(FEED_FOV + (SANDBOX_FOV - FEED_FOV) * k);
+    setScoreIntensity(0.5 + k * 0.5); // the liberation IS the crescendo
     r.treatment = 1 - k;
     r.garble = 0;
     r.glitch = 0;
@@ -436,7 +474,87 @@ function tickA2(): void {
   setStoryTargetDpr(null);
   r.treatment = 0;
   markMilestone(STORY_MILESTONES.a2);
+  scoreHit('bloom'); // depth resolves into the warm chapter-3 key
   advanceToBeat('ch3-gather');
+}
+
+// The crash landing (~8.5s), watched from the ground in the raster lens: the
+// pod streaks down the 2D frame, impact flashes white, and the smoking wreck
+// becomes the first landmark of the strip the player is about to work.
+const DESCENT_SECONDS = 8.5;
+const DESCENT_IMPACT_AT = 4.5;
+
+function tickDescent(dt: number): void {
+  const t = d.beatClock;
+  const r = getFeedRuntime();
+  r.cinematic = envelope(t, 0, 0.8, DESCENT_SECONDS - 1.5, DESCENT_SECONDS);
+  r.descent = Math.min(1.1, t / DESCENT_IMPACT_AT);
+  // Tension climbs with the fall; the impact is the score's first boom.
+  setScoreIntensity(Math.min(1, 0.4 + (t / DESCENT_IMPACT_AT) * 0.6));
+  if (!d.descentImpacted && t >= DESCENT_IMPACT_AT) {
+    d.descentImpacted = true;
+    r.flash = 1;
+    r.glitch = 1;
+    r.scanRoll = 0.8;
+    playSfx('shipCrash');
+    scoreHit('boom');
+    scoreHit('braam');
+  }
+  r.flash = Math.max(0, r.flash - dt * 1.4);
+  r.glitch = Math.max(0, r.glitch - dt * 0.9);
+  r.scanRoll = Math.max(0, r.scanRoll - dt * 0.7);
+  if (t >= DESCENT_SECONDS) {
+    r.descent = 1.1;
+    advanceToBeat('ch1-raster');
+  }
+}
+
+// The 2D→3D LIFT (~7s): the camera physically travels from the side-scroller
+// vantage INTO the worker's eyes while the world rotates from profile to first
+// person — the single transition where the geometry of perception changes.
+const LIFT_SECONDS = 7;
+
+function tickCh1Lift(): void {
+  const t = d.beatClock;
+  const r = getFeedRuntime();
+  const lens = getSideLens();
+
+  // Letterbox frames the whole traverse; releases as the feed HUD returns.
+  r.cinematic = envelope(t, 0, 1, LIFT_SECONDS - 1.6, LIFT_SECONDS);
+
+  // The first-person endpoint should face down the strip the player just
+  // worked: pull the (dormant) free-look refs toward it while the blend runs.
+  if (lens) {
+    d.liftLookTarget
+      .copy(getPlayerWorldPosition())
+      .addScaledVector(lens.travelAxis, getSideFacing() * 14)
+      .addScaledVector(lens.up, 1.2);
+    setCinematicLookTarget(d.liftLookTarget);
+    setCinematicLookWeight(envelope(t, 0, 0.8, LIFT_SECONDS - 2, LIFT_SECONDS - 0.5));
+  }
+
+  // The traverse itself: profile → eyes over the middle 4.5 seconds.
+  const liftBlend = smoothstep(Math.min(1, Math.max(0, (t - 1.2) / 4.5)));
+  setStorySideBlend(liftBlend);
+  setScoreIntensity(0.35 + liftBlend * 0.65); // the score rises with the camera
+
+  // Mid-lift, one glitch pulse masks the single resolution snap (never lerp
+  // dpr — framebuffer reallocation is a hitch a cutscene can't afford).
+  if (!d.liftSnapped && t >= 1.2 + 4.5 * 0.5) {
+    d.liftSnapped = true;
+    setStoryTargetDpr(FEED_DPR);
+    r.glitch = 0.8;
+    r.scanRoll = 0.5;
+    playSfx('storyGlitch');
+    scoreHit('braam'); // perspective is being issued
+  }
+  r.glitch = Math.max(0, r.glitch - 0.02);
+  r.scanRoll = Math.max(0, r.scanRoll - 0.015);
+
+  if (t >= LIFT_SECONDS) {
+    setStorySideBlend(1);
+    advanceToBeat('ch1-anomaly'); // entry pulses + sets the pan-tilt work order
+  }
 }
 
 /** One-shot captions keyed on beat+index (survive re-entry without repeating). */
@@ -472,6 +590,8 @@ function tickCh3Sun(dt: number): void {
     const t = d.beatClock;
     getFeedRuntime().cinematic = envelope(t, 0, 1.2, 6, DUSK_CUTSCENE_SECONDS);
     setCinematicLookWeight(envelope(t, 0.2, 1.6, 5, 7));
+    // Strings swell while the story holds the camera, then settle to dusk.
+    setScoreIntensity(0.35 + envelope(t, 0, 2.5, 5.5, DUSK_CUTSCENE_SECONDS) * 0.65);
     if (t >= 6) setStoryMoveScale(Math.min(1, (t - 6) / 1.5));
     if (d.beatClock >= DUSK.lerpSeconds) advanceToBeat('ch3-await-rest');
   } else if (s.beat === 'ch3-await-rest') {
@@ -524,6 +644,7 @@ function tickA3(dt: number): void {
   }
   r.sleepFade = 0;
   const k = smoothstep(Math.min(1, (t - rampStart) / T.materialRampSeconds));
+  setScoreIntensity(0.3 + k * 0.7); // the dawn build rides the material ramp
   const target = VOXEL_REALITY_PRESETS.material;
   overrideVoxelRealityEffects({
     detail: target.detail * k,
@@ -542,6 +663,7 @@ function tickA3(dt: number): void {
     setVoxelRealityStage('material');
     clearVoxelRealityOverrides();
     setDayPhaseOffset(d.dayPhase - d.elapsedSeconds / DAY_LENGTH_SECONDS);
+    scoreHit('bloom'); // texture arrives; the score resolves major and departs
     completeStory(); // marks a3 + complete, clears the forced phase
   }
 }
@@ -584,14 +706,20 @@ export function storyDirectorTick(
   }
 
   switch (s.beat) {
+    case 'descent':
+      tickDescent(dt);
+      break;
     case 'ch1-raster':
       tickCh1Flashes(dt);
       // Belt-and-braces: a resume that ARRIVES with the quota already met fires
       // no inventory event, so the watcher alone could strand the beat.
       if (quotaCollected().met) {
         markMilestone(STORY_MILESTONES.ch1Quota);
-        advanceToBeat('ch1-anomaly');
+        advanceToBeat('ch1-lift');
       }
+      break;
+    case 'ch1-lift':
+      tickCh1Lift();
       break;
     case 'ch1-anomaly':
       tickCh1Flashes(dt);
