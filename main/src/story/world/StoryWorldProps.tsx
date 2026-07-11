@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useStoryState } from '../storyState.ts';
 import { clearSideLens, setSideLens } from '../sideLens.ts';
-import { getStorySidePlane } from './storyWorld.ts';
+import { getAuditWorkerPath, getPondPose, getStorySidePlane, storyAnchors } from './storyWorld.ts';
 import { getCampfires, placeCampfire } from '../../game/systems/campfires.ts';
 import AnomalyStone from './AnomalyStone.tsx';
 import HeroAppleTree from './HeroAppleTree.tsx';
@@ -11,6 +11,8 @@ import DebrisField from './DebrisField.tsx';
 import SupplyPods from './SupplyPods.tsx';
 import NavBeacons from './NavBeacons.tsx';
 import SignalMesa from './SignalMesa.tsx';
+import WreckRelay from './WreckRelay.tsx';
+import AuditWorker from './AuditWorker.tsx';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
@@ -34,22 +36,45 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
   // Debug-jump affordance: beats past the campfire craft need a fire standing
   // (rest gates on it). Real runs always arrive here with one already placed.
   useEffect(() => {
-    const needsFire = story.beat === 'ch3-dusk' || story.beat === 'ch3-await-rest' || story.beat === 'a3-dawn';
+    const needsFire = story.beat === 'ch3-dusk' || story.beat === 'ch3-await-rest' || story.beat === 'a3-dawn'
+      || story.beat === 'ch4-vigil';
     if (!needsFire || getCampfires().length > 0) return;
     const plane = getStorySidePlane(planetSize, terrainSeed);
     placeCampfire(plane.origin.clone().addScaledVector(plane.up, 0.2), plane.up.clone());
   }, [story.beat, planetSize, terrainSeed]);
 
+  // Live anchors for the director/autopilot (pond + the auditor's approach) —
+  // computed once per world mount; the director never learns planetSize itself.
+  useEffect(() => {
+    storyAnchors.pond = getPondPose(planetSize, terrainSeed);
+    storyAnchors.auditPath = getAuditWorkerPath(planetSize, terrainSeed);
+    storyAnchors.terrainSeed = terrainSeed;
+    return () => {
+      storyAnchors.pond = null;
+      storyAnchors.auditPath = null;
+      storyAnchors.terrainSeed = null;
+    };
+  }, [planetSize, terrainSeed]);
+
   if (!story.active) return null;
   if (story.chapter === 'prologue') return null;
+
+  const firstDayOrLater = story.chapter === 'ch4'
+    || story.beat === 'ch3-thirst' || story.beat === 'ch3-forage' || story.beat === 'ch3-signal';
 
   return (
     <>
       <SideWorkerAvatar />
-      {/* The crashed pod persists through ch1/ch2 as the smoking wreck. */}
-      {(story.chapter === 'ch1' || story.chapter === 'ch2') && (
+      {/* The crashed pod persists as the smoking wreck — and returns for the
+          first day + chapter 4 (the klaxon needs a wreck to come from). */}
+      {(story.chapter === 'ch1' || story.chapter === 'ch2' || firstDayOrLater) && (
         <DescentPod planetSize={planetSize} terrainSeed={terrainSeed} />
       )}
+      {/* The wreck relay: silent scenery from the first day; the network's
+          voice from the klaxon on. */}
+      {firstDayOrLater && <WreckRelay planetSize={planetSize} terrainSeed={terrainSeed} />}
+      {/* W-7744 — hidden until the arrival timeline writes his pose. */}
+      {story.chapter === 'ch4' && <AuditWorker />}
       {/* Hull debris scattered by the descent — the raster act's salvage. */}
       {story.chapter === 'ch1' && (
         <DebrisField planetSize={planetSize} terrainSeed={terrainSeed} />

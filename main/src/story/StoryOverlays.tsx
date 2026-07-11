@@ -5,6 +5,8 @@ import TerminalPrologue from './prologue/TerminalPrologue.tsx';
 import FeedOverlay from './feed/FeedOverlay.tsx';
 import RegulationFeedHud from './feed/RegulationFeedHud.tsx';
 import StoryCaptions from './StoryCaptions.tsx';
+import AuditBand from './AuditBand.tsx';
+import FreeMarker from './FreeMarker.tsx';
 import SleepFade from './transitions/SleepFade.tsx';
 import CinematicFrame from './transitions/CinematicFrame.tsx';
 
@@ -31,7 +33,11 @@ const StoryOverlays: React.FC = () => {
       {feedLive && <FeedOverlay />}
       {feedLive && <RegulationFeedHud />}
       {phase === 'playing' && <StoryCaptions />}
-      {phase === 'playing' && story.chapter === 'ch3' && <SleepFade />}
+      {/* The post-feed regulation voice + the free-era objective designator
+          (ch3's tail onward; both render nothing until the director speaks). */}
+      {phase === 'playing' && !feedLive && <AuditBand />}
+      {phase === 'playing' && !feedLive && <FreeMarker />}
+      {phase === 'playing' && (story.chapter === 'ch3' || story.chapter === 'ch4') && <SleepFade />}
       {/* Letterbox frame serves every staged moment (lift, dusk, dawn). */}
       {phase === 'playing' && <CinematicFrame />}
     </>

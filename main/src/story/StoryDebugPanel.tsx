@@ -36,7 +36,12 @@ const BEAT_LABELS: Record<StoryBeat, string> = {
   'ch3-dusk': 'ch3 · dusk cutscene (plays)',
   'ch3-await-rest': 'ch3 · night → rest  [pre-A3]',
   'a3-dawn': 'A3 · dawn (plays)',
-  done: 'complete  [post-A3 sandbox]'
+  'ch3-thirst': 'ch3 · the dry morning  [post-A3]',
+  'ch3-forage': 'ch3 · the first meal',
+  'ch3-signal': 'ch3 · the klaxon (sprint)',
+  'ch4-vigil': 'ch4 · scheduled sleep',
+  'ch4-arrival': 'ch4 · THE OTHER WORKER (plays)',
+  done: 'complete  [post-arrival sandbox]'
 };
 
 export function storyDebugEnabled(): boolean {

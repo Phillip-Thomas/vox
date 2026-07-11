@@ -1,13 +1,19 @@
 import * as THREE from 'three';
-import { getStoryStateSnapshot, type StoryBeat } from './storyState.ts';
+import { getStoryStateSnapshot, STORY_MILESTONES, type StoryBeat } from './storyState.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getPlayerWorldPosition, getPlayerUp } from '../state/playerFrame.ts';
 import { requestPlayerNudge } from './playerNudge.ts';
-import { addItem, getItemCount } from '../game/systems/inventorySystem.ts';
+import { addItem, getItemCount, removeItem } from '../game/systems/inventorySystem.ts';
 import { getCampfires, placeCampfire } from '../game/systems/campfires.ts';
+import { drink, feed } from '../game/systems/survivalVitals.ts';
+import { markMilestone } from '../game/systems/progressionSystem.ts';
+import { getItem } from '../game/data/items.ts';
+import { nearestForageNodeWorld } from '../components/ForageField.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
-import { beginA1, beginA2 } from './storyDirector.ts';
+import { wreckRelayHandle } from './world/WreckRelay.tsx';
+import { storyAnchors } from './world/storyWorld.ts';
+import { anomalyMassDesignated, beginA1, beginA2 } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getLensRig, getSideLens, rigMoveBasis } from './sideLens.ts';
@@ -38,6 +44,7 @@ export interface AutopilotControls {
   left: boolean;
   right: boolean;
   jump: boolean;
+  sprint: boolean;   // the klaxon run (ch3-signal)
   delete: boolean;   // hold-to-mine
   interact: boolean; // F pulses
 }
@@ -48,6 +55,7 @@ const controls: AutopilotControls = {
   left: false,
   right: false,
   jump: false,
+  sprint: false,
   delete: false,
   interact: false
 };
@@ -63,7 +71,8 @@ export function isMovieMode(): boolean {
 const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
   'ch1-fixed', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso',
   'ch1-anomaly', 'ch2-color', 'ch2-approach',
-  'ch3-gather', 'ch3-await-rest'
+  'ch3-gather', 'ch3-await-rest',
+  'ch3-thirst', 'ch3-forage', 'ch3-signal', 'ch4-vigil'
 ]);
 
 export function isAutopilotDriving(): boolean {
@@ -84,11 +93,15 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   'ch1-depth': 60,
   'ch1-nav': 75,
   'ch1-iso': 75,
-  'ch1-anomaly': 50,
+  'ch1-anomaly': 62, // calibration sweep (stage 1) + the walk + dwell
   'ch2-color': 20,
   'ch2-approach': 45,
   'ch3-gather': 34,
-  'ch3-await-rest': 70
+  'ch3-await-rest': 70,
+  'ch3-thirst': 75,
+  'ch3-forage': 60,
+  'ch3-signal': 60,
+  'ch4-vigil': 90
 };
 
 let clockBeat: StoryBeat | null = null;
@@ -134,6 +147,7 @@ function clearControls(): void {
   controls.left = false;
   controls.right = false;
   controls.jump = false;
+  controls.sprint = false;
   controls.delete = false;
   controls.interact = false;
 }
@@ -154,12 +168,30 @@ function gaitDistance(target: THREE.Vector3, player: THREE.Vector3): number {
   return _toGoal.length() + Math.max(0, vertical - 1.0);
 }
 
-/** Aim the camera at a world point and hold forward until within `stop` range. */
-function walkToward(target: THREE.Vector3, stop: number): number {
+/** Base gaze lift over a goal: the camera aims at the SUBJECT, not its base. */
+const LOOK_LIFT = 1.4;
+
+const _aim = new THREE.Vector3();
+
+/**
+ * Where the camera should look for a given goal: the goal lifted to body
+ * height, rising further as the walk closes in — so arrivals (and whatever
+ * cutscene fires on them) land FRAMED on the object, never on the ground at
+ * the player's feet.
+ */
+function aimAt(target: THREE.Vector3, distance: number, lookLift = LOOK_LIFT): THREE.Vector3 {
+  const closeness = Math.max(0, 1 - distance / 8);
+  return _aim.copy(target).addScaledVector(getPlayerUp(), lookLift + closeness * 1.1);
+}
+
+/** Aim the camera at a world point and hold forward until within `stop` range.
+ *  `lookLift` raises the gaze onto the goal's subject (trees want their crown). */
+function walkToward(target: THREE.Vector3, stop: number, lookLift = LOOK_LIFT): number {
   const player = getPlayerWorldPosition();
   const distance = gaitDistance(target, player);
-  setCinematicLookTarget(_target.copy(target));
+  setCinematicLookTarget(aimAt(target, distance, lookLift));
   setCinematicLookWeight(1);
+  _target.copy(target); // gait/nudges steer at the BASE; only the gaze lifts
   noteGoal(target);
   walkTargetLive = true;
   controls.forward = distance > stop;
@@ -239,6 +271,31 @@ function sweepGoal(period = 24, reach = 9): THREE.Vector3 | null {
 let debrisTargetIdx = -1;
 const deferredDebris = new Set<number>();
 
+// First-day state: the screening eats once, and forage scans are throttled
+// (nearestForageNodeWorld walks the voxel map — twice a second is plenty).
+let movieAte = false;
+let forageGoal: THREE.Vector3 | null = null;
+let forageGoalAt = -10;
+
+/** The hero tree's crown height as a gaze lift (the redaction censors the
+ *  whole tree; the SHOT should hold the canopy, not the trunk base). */
+function treeCrownLift(): number {
+  return heroTreeHandle.height > 0 ? heroTreeHandle.height * 0.45 : 2.5;
+}
+
+/** Movie-only: consume the richest held forage directly (UI stays untouched —
+ *  the campfire-placement precedent). The director advances on the hunger rise. */
+function movieEatForage(): boolean {
+  for (const id of ['root', 'berry'] as const) {
+    if (getItemCount(id) > 0 && removeItem(id, 1)) {
+      const def = getItem(id);
+      feed(def.foodValue ?? 12, def.waterValue ?? 0);
+      return true;
+    }
+  }
+  return false;
+}
+
 function committedDebrisTarget(): number {
   const scattered = getDebrisScattered();
   const valid = (i: number) =>
@@ -301,11 +358,32 @@ export function autopilotTick(dt: number): void {
     nudgesOnGoal = 0;
     debrisTargetIdx = -1;
     deferredDebris.clear();
+    movieAte = false;
+    forageGoal = null;
+    forageGoalAt = -10;
     clearControls();
     setCinematicLookTarget(null);
   }
   if (!beat || !isAutopilotDriving()) {
     clearControls();
+    // MOVIE FRAMING: the awakening cutscenes drive themselves, but the SHOT
+    // must hold its subject — begin and end on the thing that caused it,
+    // never on the ground the pilot happened to be staring at.
+    if (beat === 'a1-ramp' && anomalyStoneHandle.position) {
+      // Look OVER the stone into the world: the stone anchors the lower
+      // frame while the horizon takes the color — A1 is the WORLD changing.
+      const up = getPlayerUp();
+      _toGoal.copy(anomalyStoneHandle.position).sub(getPlayerWorldPosition());
+      _toGoal.addScaledVector(up, -_toGoal.dot(up));
+      if (_toGoal.lengthSq() < 0.09) _toGoal.set(1, 0, 0);
+      _toGoal.normalize();
+      _target.copy(anomalyStoneHandle.position).addScaledVector(_toGoal, 10).addScaledVector(up, 0.2);
+      setCinematicLookTarget(_target);
+      setCinematicLookWeight(0.85);
+    } else if (beat === 'a2-awakening' && heroTreeHandle.position) {
+      setCinematicLookTarget(_target.copy(heroTreeHandle.position).addScaledVector(getPlayerUp(), treeCrownLift()));
+      setCinematicLookWeight(0.85);
+    }
     return;
   }
   beatClock += dt;
@@ -400,25 +478,41 @@ export function autopilotTick(dt: number): void {
       break;
     }
     case 'ch1-anomaly': {
+      // STAGE 1 — the calibration sweep: the era's verb is LOOKING. The pilot
+      // pans the gaze around the horizon (eye height — never the ground) until
+      // the survey returns the deviation.
+      if (!anomalyMassDesignated()) {
+        const a = beatClock * 0.6;
+        _goalScratch.copy(getPlayerWorldPosition());
+        _goalScratch.x += Math.cos(a) * 14;
+        _goalScratch.z += Math.sin(a) * 14;
+        _goalScratch.addScaledVector(getPlayerUp(), 1.6);
+        setCinematicLookTarget(_goalScratch);
+        setCinematicLookWeight(1);
+        break;
+      }
+      // STAGE 2 — the mass: walk in with the gaze ON the stone (lift 1.1), so
+      // the touch and the A1 ramp play framed on the subject.
       if (anomalyStoneHandle.position) {
-        const distance = walkToward(anomalyStoneHandle.position, 2.6);
+        const distance = walkToward(anomalyStoneHandle.position, 2.6, 1.1);
         if (distance <= 4.2) pulseInteract();
       }
       if (beatClock > timeout) beginA1();
       break;
     }
     case 'ch2-color': {
-      // Post-A1 breath: stand in the color for a moment, then seek the tree
-      // (crossing the approach radius flips the beat).
+      // Post-A1 breath: stand in the color for a moment (the shot holds the
+      // stone the ramp ended on), then seek the tree — gaze on the CROWN, the
+      // one saturated thing in a flat world (crossing the radius flips the beat).
       if (beatClock > 6 && heroTreeHandle.position) {
-        walkToward(heroTreeHandle.position, 4.5);
+        walkToward(heroTreeHandle.position, 4.5, treeCrownLift());
       }
       if (beatClock > timeout && story.beat === 'ch2-color') advanceToBeat('ch2-approach');
       break;
     }
     case 'ch2-approach': {
       if (heroTreeHandle.position) {
-        const distance = walkToward(heroTreeHandle.position, 3.6);
+        const distance = walkToward(heroTreeHandle.position, 3.6, treeCrownLift());
         if (distance <= 5.2) pulseInteract();
       }
       if (beatClock > timeout) beginA2();
@@ -450,6 +544,92 @@ export function autopilotTick(dt: number): void {
       if (beatClock > timeout) {
         // Long dark? Force the rest (the dawn is the point of the screening).
         advanceToBeat('a3-dawn');
+      }
+      break;
+    }
+    case 'ch3-thirst': {
+      // FLOW, not just completion: the pilot waits for the seek cue ("water
+      // finds the low places") before walking — the thirst must be felt and
+      // named before it is answered, exactly as real play paces it.
+      const pond = storyAnchors.pond;
+      if (pond && beatClock > 36) {
+        const distance = walkToward(pond.surface, 1.1);
+        if (distance <= 3.4) pulseInteract();
+      }
+      if (beatClock > timeout) {
+        drink(60); // screening must go on — the director advances on the rise
+      }
+      break;
+    }
+    case 'ch3-forage': {
+      // Walk to the nearest berry bush (walk-over collects) once the sight cue
+      // has landed; eat directly (UI crafting precedent) after the eat window
+      // opens. The director advances ~18s after the meal.
+      if (movieAte) {
+        clearControls();
+        setCinematicLookWeight(0);
+        break;
+      }
+      if (getItemCount('berry') + getItemCount('root') > 0) {
+        // The hunger was named at 12s and the rounds sighted at 18s — eat then.
+        if (beatClock > 20) movieAte = movieEatForage();
+        break;
+      }
+      if (beatClock > 6) {
+        if (beatClock - forageGoalAt > 0.5 && storyAnchors.terrainSeed != null) {
+          forageGoal = nearestForageNodeWorld(getPlayerWorldPosition(), storyAnchors.terrainSeed, 60);
+          forageGoalAt = beatClock;
+        }
+        if (forageGoal) walkToward(forageGoal, 0.8);
+      }
+      if (beatClock > timeout && !movieAte) {
+        addItem('berry', 2); // sparse seed? the screening still eats
+        movieAte = movieEatForage();
+      }
+      break;
+    }
+    case 'ch3-signal': {
+      // The klaxon run: hold for the summons (the network's lines must land),
+      // then SPRINT at the wreck — stamina spends on the way, which is the
+      // scene's whole point. The director resolves at the relay.
+      if (wreckRelayHandle.position && beatClock > 12) {
+        walkToward(wreckRelayHandle.position, 3.0);
+        controls.sprint = controls.forward;
+      }
+      if (beatClock > timeout) {
+        markMilestone(STORY_MILESTONES.ch3Signal);
+        advanceToBeat('ch4-vigil');
+      }
+      break;
+    }
+    case 'ch4-vigil': {
+      // The scheduled sleep: hold by the NEAREST fire, rest when dark is
+      // issued. Stale saves can carry a distant fire from an older session —
+      // if the walk hasn't closed by mid-beat, light a fresh one here (the
+      // screening's campfire-placement precedent) so the rest stays honest.
+      const player = getPlayerWorldPosition();
+      let firePos: THREE.Vector3 | null = null;
+      let fireDist = Infinity;
+      for (const fire of getCampfires()) {
+        const dist = player.distanceTo(_goalScratch.set(fire.pos[0], fire.pos[1], fire.pos[2]));
+        if (dist < fireDist) {
+          fireDist = dist;
+          firePos = _target.set(fire.pos[0], fire.pos[1], fire.pos[2]);
+        }
+      }
+      if (!firePos || (beatClock > 50 && fireDist > 4)) {
+        grantMissingCampfireMaterials();
+        placeCampfire(player.clone(), getPlayerUp().clone());
+      } else if (fireDist > 2.4) {
+        walkToward(firePos, 2.4);
+      } else {
+        controls.forward = false;
+        setCinematicLookWeight(0);
+        pulseInteract(); // resolves once the night band opens
+      }
+      if (beatClock > timeout) {
+        markMilestone(STORY_MILESTONES.ch4Vigil);
+        advanceToBeat('ch4-arrival');
       }
       break;
     }

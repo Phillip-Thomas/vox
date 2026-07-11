@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { getStorySidePlane, isStoryWorld, STORY_COORDINATE, STORY_SEED } from './storyWorld.ts';
+import {
+  getPondPose,
+  getStorySidePlane,
+  getWreckRelayPose,
+  isStoryWorld,
+  STORY_COORDINATE,
+  STORY_SEED
+} from './storyWorld.ts';
 import { archetypeForSeed } from '../../game/data/planetArchetypes.ts';
 import { coordinateToSeed } from '../../utils/worldCoordinates.ts';
 
@@ -32,6 +39,20 @@ describe('storyWorld', () => {
   it('isStoryWorld matches only the pinned coordinate', () => {
     expect(isStoryWorld(STORY_COORDINATE)).toBe(true);
     expect(isStoryWorld({ x: STORY_COORDINATE.x + 1, y: STORY_COORDINATE.y })).toBe(false);
+  });
+
+  it('the pinned world keeps a pond within the first day\'s walk (ch3-thirst depends on it)', () => {
+    const pond = getPondPose(50, STORY_SEED);
+    expect(pond).not.toBeNull();
+    const relay = getWreckRelayPose(50, STORY_SEED);
+    const walk = pond!.surface.distanceTo(relay.position);
+    // Close enough to find by following the seek cue, far enough that the
+    // klaxon sprint has ground to spend stamina on.
+    expect(walk).toBeGreaterThan(10);
+    expect(walk).toBeLessThan(130);
+    // The dive (ch4, later) wants a floor below the surface where possible;
+    // depth ≥ 1 is the hard floor for the drink itself.
+    expect(pond!.depth).toBeGreaterThanOrEqual(1);
   });
 
   it('the raster side plane is strictly world-axis-aligned (true 2D elevation)', () => {

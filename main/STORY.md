@@ -1,10 +1,14 @@
-# Paravoxia — Story Mode (vertical slice: Prologue → Chapter 3)
+# Paravoxia — Story Mode (Prologue → Chapter 4's arrival)
 
 **What this is.** The playable first act of the fidelity-ladder narrative
-(design: `../PARAVOXIA_PROGRESSION.md`, plan: A0→A3). Rendering fidelity IS the
-story: the game opens as a 1-bit terminal, becomes a monochrome CCTV "Regulation
-Feed," gains color at A1, depth/freedom at A2, and texture + time at A3, then
-hands off to the sandbox at reality stage `material`.
+(design: `../PARAVOXIA_PROGRESSION.md`; chapter-4 contract:
+`../PARAVOXIA_CH4_PLAN.md`). Rendering fidelity IS the story: the game opens as
+a 1-bit terminal, becomes a monochrome CCTV "Regulation Feed," gains color at
+A1, depth/freedom at A2, texture + time at A3 — then plays THE FIRST DAY ALIVE
+(thirst → forage → the klaxon → the scheduled sleep) and ends, for now, on
+chapter 4's arrival: the other worker, W-7744. TEMPORARY TERMINAL: the arrival
+completes the story (sandbox at `material`); `ch4-audit` continues from there
+(see the plan doc §2 S6 and the marked hand-off in `storyDirector.ts`).
 
 ## Playing it
 
@@ -13,9 +17,11 @@ hands off to the sandbox at reality stage `material`.
   `?story=<beat>` for EVERY beat (`crawl|manifest|voyage|deflect|crash|descent|
   ch1-fixed|ch1-track|ch1-raster|ch1-depth|ch1-nav|ch1-iso|ch1-lift|
   ch1-anomaly|a1-ramp|ch2-color|ch2-approach|a2-awakening|ch3-gather|ch3-dusk|
-  ch3-await-rest|a3-dawn|done`) — before/plays/after coverage of every
-  awakening, with milestone/item/campfire/stage seeding per beat. Legacy short
-  aliases (`ch1|a1|ch2|a2|ch3|a3`) still work. `?voxelStage=` stays independent.
+  ch3-await-rest|a3-dawn|ch3-thirst|ch3-forage|ch3-signal|ch4-vigil|
+  ch4-arrival|done`) — before/plays/after coverage of every awakening, with
+  milestone/item/campfire/stage seeding per beat. Short aliases
+  (`ch1|a1|ch2|a2|ch3|a3|day|ch4`) work (`day` = the first-day tail, `ch4` =
+  the vigil). `?voxelStage=` stays independent.
 - **Story debug panel** (any `?story=` session or `?debug=1`): a "⛿ STORY" chip
   on the left edge — beat teleporter (navigates by URL+reload so state is always
   fresh), plus "▶ movie run", "sandbox menu", and "wipe save".
@@ -41,9 +47,18 @@ hands off to the sandbox at reality stage `material`.
   strands "close" to elevated goals); the stuck watchdog measures HORIZONTAL
   stillness (jump-bounce reads as stuck) and escalates hop → reverse →
   teleport-nudge toward the goal; an arrived-but-inert goal gets a gentle shove.
-  Headless validation: `window.__storyBeat` + `window.__autopilot` (beat,
-  goal, keys, drift) — scratchpad `beat-probe.mjs` / `pilot-trace.mjs` /
-  `ladder-strip.mjs`.
+  The first-day beats add FLOW guards: the pilot answers each sensation only
+  after its cue has landed (drinks after the seek cue, eats after the sight
+  cue, sprints after the summons) — pacing may differ from a player, flow may
+  not. SHOT DISCIPLINE: every pilot look-at aims at the SUBJECT (goal + lift,
+  rising as the walk closes) so arrivals and the cutscenes they trigger never
+  fire while staring at the ground; the self-driving awakenings get held
+  movie framings (a1-ramp looks over the stone into the greening world,
+  a2-awakening holds the tree's crown); chroma flashes defer past each beat's
+  opening 4s so era hand-offs land clean. Headless validation: `window.__storyBeat` + `window.__autopilot` +
+  `window.__auditWorker` — in-repo `story-probe.mjs` (beat flow + per-beat fps)
+  and `story-strip.mjs` (beat-stamped frame strips), both Linux-pathed
+  (playwright chromium + swiftshader).
 
 The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through the
 decades"): regulation crawl (stars drifting behind the text) → as the last words fade the
@@ -84,12 +99,32 @@ exists now; climb the stepped **signal mesa** to the stone) → the **2D→3D
 LIFT**: a ~7s letterboxed cutscene where the camera physically travels from the
 ISO vantage INTO the worker's eyes (sprite dissolves, one masked resolution
 snap 0.55→0.85) → **CCTV feed** (pan-tilt: compass-snapped yaw + tilt band,
-Wolfenstein's rung) →
-`[F] Touch` the anomaly stone → **A1** 8s chroma ramp → **Ch2** color-but-flat
-feed, the redacted apple tree (`[F] Eat` up close) → **A2** violation flood,
+Wolfenstein's rung), staged ONE GOAL AT A TIME: stage 1 the **calibration
+sweep** (the era's own verb — traverse the view across ≥6 of 8 compass sectors;
+no marker, no [F]) → stage 2 the survey returns the DEVIATION (marker + order
+land, the touch arms `ANOMALY_SURVEY.armSeconds` later) →
+`[F] Touch` the anomaly stone → **A1** 8s chroma ramp (work order cleared — a
+clean frame for the awakening) → **Ch2** color-but-flat feed WITH A FREED NECK
+(the pan-tilt interlock fails with the chroma suppressor: full free look +
+camera-relative diagonals; the feed keeps only its chrome), the redacted apple
+tree (`[F] Eat` up close) → **A2** violation flood,
 HUD death, 12s liberation into free 3D at frozen noon → **Ch3** craft the
 campfire chain (whitelisted Fabricator), first-dusk cutscene, `[F] Rest` at the
-fire at night → **A3** dawn material ramp → story completes, sandbox continues.
+fire at night → **A3** dawn material ramp → **THE FIRST DAY ALIVE** (no cut —
+the story simply doesn't end): **ch3-thirst** (THIRST seeded already-falling,
+named on cue, answered at the pond's `[F] Drink`; waterskin joins the craft
+whitelist) → **ch3-forage** (HUNGER named; berries walked over, eaten `[G]`;
+the "as if it knew i was coming" pillar plant) → **ch3-signal** (the klaxon:
+the regulation voice RETURNS as the AUDIT band — text over the living world,
+never the feed — and the sprint to the wreck names STAMINA mid-run) →
+**ch4-vigil** ("SLEEP IS SCHEDULED AT DARK": dusk-2 via the DUSK grammar, the
+ordered `[F] Rest`) → **ch4-arrival** (~45s: dawn 2, the letterbox returns
+WITH the system's agent — W-7744 walks the work strip past the player to the
+wreck relay, "WORKER W-7743. YOU ARE FOUND.", one 2-frame BARE-BLINK of his
+seeing) → story completes (TEMPORARY — ch4-audit next), sandbox continues.
+AMBIENT MUSINGS: during lulls of the first-day stretch (45–75s of caption
+silence), one-shot-per-save epiphany captions fire from a curated pool
+(`story:musing:*` milestones) — aimlessness rendered as purpose forming.
 Pre-A2 chapters render NOTHING smooth: cube pebbles, voxel pod/debris, no ship,
 no berries — the anomaly stone is the deliberate first continuous form.
 
@@ -113,13 +148,16 @@ the CHILL — a story-scoped temperature model (`tickStoryChill`: warmth drains
 in the open, recovers by fire, never lethal) makes TEMP appear ALREADY FALLING
 ("warmth. i have it. it is leaving.") so the campfire is a response to cold,
 never to thirst; by the fire at night: "ah — it helps. what is it? how did i
-know to make it?" (the pillar, planted). Post-dawn, `senseDiscovery.ts`
-discovers the rest live: thirst ("so that is thirst. how strange, to need.")
-and hunger with captions (StoryCaptions stays mounted in the completed world),
-stamina/oxygen/jet silently on first use, the MAW readout on first refuel. The post-A3 `done` world is
-the pinned story world at `material`: trees + grass only — flora and fauna
-stay dormant for a later awakening (A4 "Breath"), via the milestone-driven
-`storyLifeDormant()` (never stage-driven — cutscene effect ramps can't flash a
+know to make it?" (the pillar, planted). Post-dawn the first-day SCENES own
+the remaining senses (the shipped TEMP pattern, one per scene): ch3-thirst
+seeds thirst already-falling and names it on cue; ch3-forage does hunger;
+ch3-signal names STAMINA during the klaxon sprint. `senseDiscovery.ts` keeps
+the live-threshold checks as fallbacks for the settled world (it skips a sense
+while its scene's beat runs); oxygen/jet stay silent-on-first-use and the MAW
+readout appears on first refuel until their chapter-4 scenes land (plan §2
+S11–S13). The post-arrival `done` world is the pinned story world at
+`material`: trees + grass only — flora and fauna stay dormant for A4 "Breath"
+(`storyLifeDormant()`, milestone-driven — cutscene effect ramps can't flash a
 glimpse).
 
 **The A3 bloom wave** (`game/lifeReveal.ts`): during the dawn's material ramp,
@@ -144,6 +182,8 @@ softness widening with distance) under the score's dawn build. Timing knobs in
 | Lens rig | `sideLens.ts` + `world/SideWorkerAvatar.tsx` | The monochrome ladder's ONE external camera: `LensRig` (elevation/azimuth/distance/followQuant/depthBand) — side profile, bolted fixed-screen, belt band, top-down, iso are all rig values; `setLensRig(rig, seconds)` blends whole frames (eye/target/up) so every era hand-off is one camera move; `rigMoveBasis` gives screen-relative movement at any elevation; plane lock / band clamp in EfficientPlayer; harvest probes; worker sprite |
 | Feed runtime | `feedRuntime.ts` | Mutable per-frame store (WarpOverlay pattern) for the DOM overlays |
 | Overlays | `StoryOverlays.tsx` → `prologue/*`, `feed/*`, `StoryCaptions.tsx`, `transitions/SleepFade.tsx` | All DOM, rAF-driven, zero per-frame React |
+| Post-feed chrome | `AuditBand.tsx` (regulation voice AFTER the feed's death: caps top band on a dark pill, below the letterbox line; `storyText` channel `audit`) · `FreeMarker.tsx` (free-era survey designator: lowercase diamond/chevron off the same `feedRuntime.marker` struct the driver projects) | The system speaks INTO the player's world; it no longer owns the screen |
+| Ch4 world | `world/WreckRelay.tsx` (the network's console at the crash strip; ember lamp breathes from the klaxon on; `wreckRelayHandle`) · `world/AuditWorker.tsx` (W-7744: director-driven voxel body, metronome gait, ember visor; module pose store + `__auditWorker` probe) · `storyWorld.ts` `getPondPose` (deterministic nearest-water scan, cached, test-pinned) + `getAuditWorkerPath` + `storyAnchors` (pond/path/seed handles set by StoryWorldProps) | The director never learns planetSize; components feed it live anchors |
 | Text | `storyScript.ts` (ALL copy + timings) · `storyText.ts` (channels: workorder/violation/caption/system) | Two voices: REGULATION (caps, euphemism) vs awakening (lowercase, sensory) |
 | Score | `storyScore.ts` | Fully procedural WebAudio film score: per-beat moods with CHORD PROGRESSIONS (2-bar cycles, ostinato transposes), a generative melody lead through a tempo-synced delay, humanized velocities; `setScoreBeat`/`setScoreIntensity` (the director's own ramps) + `scoreHit('braam'\|'bloom'\|'boom')`. When no beat leads, the CELESTIAL IDLE BED holds a soft consonant pad under the streamed music (the instrument recedes, never leaves) |
 | Music primitives | `audio/musicPrimitives.ts` | The GLOBAL rails both engines read: era (reality stage → music fidelity: recorded layers fade in as the world resolves), warmth (daylight), wonder (night/space/underwater), tension/energy (the story's drama rails, warp in sandbox), plus the shared harmonic center (root + chord, published by the leading engine). AudioDirector computes world truths per frame and feeds `resolveMusicMix`; prologue/ch1 keep the streamed layers at the transit bed (lo-fi era), ch2+ blends them back in under the score |
@@ -200,3 +240,24 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
   lift froze them there) — the feed era is the first-person LOOK, then touch.
   Direct jumps to ch1-anomaly spawn at the strip and must climb the mesa stairs
   (feed policy has no jump; step-assist handles the 1-block treads).
+- **Chapter 4 is TEMPORARILY terminal at the arrival** — `tickArrival` ends in
+  `completeStory()` behind a marked `// TEMPORARY` comment; `ch4-audit` and the
+  rest of the chapter (compliance, defiance, the A4 exhale, meat/dive/repair/
+  flight) are contracted in `../PARAVOXIA_CH4_PLAN.md` §2 S6–S13.
+- The pinned world's pond↔wreck run is short (~15u), so the klaxon sprint names
+  STAMINA early in the run rather than emptying the bar (`SIGNAL.staminaCueBelow
+  78`); the exhausted line still exists for longer runs.
+- JET still self-discovers silently on any airborne hold-jump (movie hop-holds
+  trigger it) — the S13 `allowJet` policy gate will hold it for the first-flight
+  scene.
+- The arrival's 2-frame bare-blink can't be caught by 4s strip captures (by
+  design — it is the shipped flash machinery inverted); verify by eye in a live
+  run if it's ever suspected broken.
+- Legacy slice-complete saves (`story:complete` without `story:ch4:arrived`)
+  resume at `ch3-thirst` and the menu shows "Continue Story" again — intended.
+- The movie's a1-ramp framing (look over the stone toward the horizon) still
+  reads sky-heavy from the mesa top — composition knobs live in autopilot's
+  a1 framing block; retune after an owner screening.
+- Ch2's freed look means the A2 liberation is carried by FOV + treatment +
+  resolution only (no camera-cage opening) — revisit if the moment reads
+  thinner in a playtest.

@@ -75,6 +75,34 @@ function isForageVoxel(x: number, y: number, z: number, seed: number, density: n
   return seededVoxelUnit(x, y, z, FORAGE_SALT, seed) < density && !isForageCollected(x, y, z);
 }
 
+/**
+ * Nearest uncollected forage node (world position), computed from the same
+ * deterministic predicate the field renders with. Used by the story autopilot
+ * (movie mode) to seek the first meal honestly — throttle calls, it scans.
+ */
+export function nearestForageNodeWorld(
+  from: THREE.Vector3,
+  terrainSeed: number,
+  maxDist = 60
+): THREE.Vector3 | null {
+  const profileDensity = FORAGE_BASE * buildGrassProfile(terrainSeed).densityMul;
+  const density = Number.isFinite(profileDensity) && profileDensity > 0 ? profileDensity : FORAGE_BASE;
+  let best: THREE.Vector3 | null = null;
+  let bestSq = maxDist * maxDist;
+  for (const voxel of voxelSystem.getAllVoxels().values()) {
+    if (!isDecoratableGrassVoxel(voxel)) continue;
+    const [x, y, z] = voxel.position;
+    if (!isForageVoxel(x, y, z, terrainSeed, density)) continue;
+    const world = voxelCoordToWorld(x, y, z);
+    const dSq = world.distanceToSquared(from);
+    if (dSq < bestSq) {
+      bestSq = dSq;
+      best = world;
+    }
+  }
+  return best;
+}
+
 /** Scattered edible plants, collected by proximity (walk near → +berries/root). */
 export default function ForageField({ commandContext, terrainSeed, persistenceWorld, playerPosition }: ForageFieldProps) {
   const geometry = useMemo(() => buildForageGeometry(), []);

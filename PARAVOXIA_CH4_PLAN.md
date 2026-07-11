@@ -3,8 +3,18 @@
 **Commission:** continue down the list of stats. Every remaining suit sense gets a REAL
 discovery scene in the temp/fire mold — a situation that CAUSES the sensation, a task
 that answers it, the stat appearing at the moment of feeling — carried by the post-A3
-stretch and Chapter 4, at the shipped slice's quality bar. Design only; this doc is the
+stretch and Chapter 4, at the shipped slice's quality bar. This doc is the
 implementation contract.
+
+**STATUS (2026-07-10): S1–S5 SHIPPED** (`ch3-thirst` → `ch3-forage` → `ch3-signal` →
+`ch4-vigil` → `ch4-arrival`), movie-verified end to end (3 cold `descent→done` runs:
+466.6s / 463.3s / 463.8s, zero timeout rescues; ≥55fps at every new beat under
+headless swiftshader, 60 steady). **TEMPORARY TERMINAL:** after the arrival timeline
+completes, the story completes via the existing completion path (plus
+`story:ch4:arrived`); the hand-off is marked `// TEMPORARY: ch4-audit continues from
+here` in `storyDirector.ts` `tickArrival`. S6 (`ch4-audit`) is the next build.
+Owner decisions and shipped deltas are recorded in §5 / §6; implementation truth
+lives in `main/STORY.md`.
 
 **Design theses (everything below hangs off these):**
 
@@ -794,20 +804,89 @@ bloom (first hover).
 
 ---
 
-## 5. Open questions for the owner (taste calls only)
+## 5. Owner decisions (2026-07-10 — RESOLVED)
 
-1. **The hunt's verb** (S10): extraction beam on the animal (grim, on-theme — the
-   harvest tool turned on the living, and the copy owns it) vs a new thrown-stone verb
-   (fairer, gamier). Plan assumes the beam.
-2. **The vigil night** (S4): keep the second scripted night ("SLEEP IS SCHEDULED" —
-   dawn-2 arrival, full-light exhale) or compress to same-day arrival? Plan assumes
-   keep.
-3. **`no.`** (S8): approve the bare one-word caption as the defiance line, and the
-   lowercase `[F] refuse.` interaction label.
-4. **Jet gating** (S13): hold-jump hover disabled inside story saves until the repair,
-   so the first flight is real. Approve?
-5. **Raw meat** (S10): eat directly, or require the campfire (cook step)? Plan assumes
-   raw, cooking noted as polish.
-6. **The auditor's return**: the progression doc leaves him open as the emergent era's
-   B-plot (watching someone else's chroma come in). This plan seeds his first glitch
-   ("FILING REPAIR TICKET") but ends him fled. Confirm we keep him alive for ch5+.
+1. **The hunt's verb** (S10): ✅ RESOLVED — **extraction beam** (build when S10 lands).
+2. **The vigil night** (S4): ✅ RESOLVED — **keep**, on condition it reuses the shipped
+   dusk/night machinery (DUSK grammar, forced-phase lerp, rest interaction). Shipped
+   exactly so: `tickVigil` is the ch3 sun grammar with a detuned mood; the rest
+   resolver is the ch3 one, extended to serve both nights.
+3. **`no.`** (S8): ✅ RESOLVED — approved. ADDITIONALLY the owner commissioned an
+   **AMBIENT MUSINGS channel** for the first-day stretch — designed in §5.1. SHIPPED.
+4. **Jet gating** (S13): carried as designed (build with S13). Observed until then:
+   hold-jump hover still silently discovers JET early — seen in movie runs (the
+   pilot's hop-holds burn fuel). The S13 `allowJet` gate closes this.
+5. **Meat** (S10): ✅ RESOLVED — **COOKED ON THE FIRE.** S10's design updates: the
+   campfire becomes the cooking station. Raw `meat` is not edible; a story-scoped
+   hold-`[F]` `cook` interaction at any campfire converts it to `cooked_meat`
+   (`foodValue 44`, eaten via `[G]`). The fire the player earned in ch3 gains its
+   third meaning (warmth → rest → sustenance) — and ch4-comply's ORDER 1 (douse the
+   fire) now also takes the kitchen. Engineering delta: two items instead of one,
+   plus the cook interaction; the moral captions in S10(a) stand unchanged.
+6. **The auditor's return**: still open — the plan seeds his first glitch and keeps
+   him alive for the emergent era's B-plot.
+
+### 5.1 Ambient musings (owner-commissioned, SHIPPED with S1–S5)
+
+Occasional quiet epiphanies during LULLS of the first-day stretch — aimlessness
+rendered as purpose forming; "something to let the player know they aren't lost
+without purpose."
+
+- **Pool**: 10 curated lines in `storyScript.ts` `MUSINGS`, each passing the
+  both-readings test, lowercase, post-embodiment "i". Samples: "walking with nowhere
+  to be is not nothing. it is how somewhere gets chosen." · "i keep waiting for the
+  next order. the waiting is the last order still running." · "nobody is measuring
+  me. i am still counting. old habits, or new ones — i cannot tell whose."
+- **Trigger**: eligible in `ch3-thirst`/`ch3-forage`/`ch3-signal`/`ch4-vigil`, ≥12s
+  into a beat, after **45–75s of caption silence** (seeded gap,
+  `MUSING_GAP_SECONDS`; every director caption/audit line resets the lull). A player
+  being led by scene cues never hears one; a dawdler does. Non-blocking, skippable by
+  simply progressing.
+- **Latch**: **milestones** (`story:musing:<id>`) — one-shot PER SAVE, chosen over
+  session latching so reloads never repeat an epiphany (a repeated epiphany is a
+  slogan). Unit-tested in `storyDirector.test.ts`.
+
+## 6. Shipped deltas from this plan (S1–S5 build, 2026-07-10)
+
+- **S3 geometry**: the pinned world's pond sits ~15u from the wreck relay (the plan
+  hoped for 60–90u), so the klaxon sprint is short. `SIGNAL.staminaCueBelow` moved
+  55 → 78 so the STAMINA naming still fires ON the run; the exhausted line remains
+  for longer runs. The relay-resolve gate additionally waits for the full summons
+  (`t ≥ runCueAt + 1.5`) so the scene can't be skipped by standing at the wreck.
+- **S5 staging**: the auditor approaches DOWN THE WORK STRIP (offset one row so he
+  passes beside the player, never through them) rather than over the mesa ridge —
+  the mesa is a physics prop the terrain-snapped path knows nothing about, and the
+  strip read is thematically stronger (he walks the regulation line). Camera stays
+  pulled on him until after "YOU ARE FOUND" (`freezeUntilSeconds 32`); his visor
+  carries the feed's ember glow so he reads at distance.
+- **New shared chrome shipped early**: the AUDIT band (`story/AuditBand.tsx`, caps
+  top-band on a dark pill below the letterbox line) and the free-era survey marker
+  (`story/FreeMarker.tsx`, lowercase diamond/chevron) — both S3+ beats already use
+  them; ch4-audit inherits them for free.
+- **Resume anchors**: added `story:ch3:drank` / `story:ch3:ate` milestones so a
+  quit between a sense's NAMING and its ANSWER resumes at the unanswered scene
+  (naming alone no longer advances the resume point).
+- **Movie flow guards**: the pilot waits for each scene's cue before answering it
+  (drinks only after the seek cue, eats only after the sight cue, sprints only after
+  the summons) — pacing differs from a player, flow does not.
+
+### 6.1 Owner feedback round (2026-07-10, post-S5): the nav→tree stretch — SHIPPED
+
+- **One goal at a time**: `ch1-anomaly` is now TWO-STAGED — stage 1 is the CCTV
+  era's own task (the **calibration sweep**: traverse the view across ≥6 of 8
+  compass sectors; no marker, no [F]); stage 2 the survey "returns the
+  deviation" (marker + order land first, the touch arms `armSeconds` later).
+  The signal goal and the mass goal never stack. Chroma flashes also defer past
+  every beat's first 4s so era hand-offs land clean.
+- **Shot discipline (movie)**: every pilot look-at aims at the goal's SUBJECT
+  (lifted gaze, rising on approach) — never the base/ground; the tree walks
+  hold the CROWN (the redaction shot now composes itself); the self-driving
+  awakenings get held framings (a1-ramp looks over the stone into the greening
+  world; a2-awakening holds the canopy). The A1 work order clears at ramp
+  entry — a clean frame for the awakening.
+- **Free look for the tree walk**: ch2-color/ch2-approach (and a2-awakening)
+  now run `lookMode 'free'` — the pan-tilt interlock diegetically fails WITH
+  the chroma suppressor ("SENSOR FAULT: PAN-TILT INTERLOCK RELEASED. FULL
+  ROTATION AVAILABLE." / "DO NOT LOOK FREELY."), so diagonals work and the
+  feed keeps only its chrome. A2's liberation is carried by FOV + treatment +
+  resolution (noted for playtest review).

@@ -120,6 +120,7 @@ function withAutopilot<T extends Record<string, boolean | undefined>>(controls: 
     left: controls.left || a.left,
     right: controls.right || a.right,
     jump: controls.jump || a.jump,
+    sprint: controls.sprint || a.sprint,
     delete: controls.delete || a.delete,
     interact: controls.interact || a.interact
   };

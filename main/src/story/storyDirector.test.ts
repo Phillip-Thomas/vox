@@ -1,14 +1,17 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import * as THREE from 'three';
-import { beginA1, beginA2, beginA3, storyDirectorTick } from './storyDirector.ts';
+import { beginA1, beginA2, beginA3, beginVigilSleep, storyDirectorTick } from './storyDirector.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { placeCampfire, resetCampfires } from '../game/systems/campfires.ts';
 import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/mawSystem.ts';
 import { setMiningProgress } from '../game/systems/miningProgress.ts';
+import { drink, feed, getVitals } from '../game/systems/survivalVitals.ts';
+import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
 import { getCinematicLookWeight } from './cinematicLook.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
-import { DUSK } from './storyScript.ts';
+import { ARRIVAL, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
 import {
   advanceToBeat,
   beginStory,
@@ -16,7 +19,7 @@ import {
   getStoryStateSnapshot,
   STORY_MILESTONES
 } from './storyState.ts';
-import { hasMilestone, markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
+import { getMilestones, hasMilestone, markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
 import {
   getVoxelRealityEffects,
   getVoxelRealityStage,
@@ -26,7 +29,7 @@ import {
 import { addItem, removeItem, getItemCount } from '../game/systems/inventorySystem.ts';
 import { getFeedRuntime } from './feedRuntime.ts';
 import { getStoryText } from './storyText.ts';
-import { CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
+import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
 
 function drainInventory(id: 'biofiber' | 'stone') {
   const n = getItemCount(id);
@@ -91,16 +94,26 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
 
-  it('beginA1 only fires from the anomaly beat', () => {
+  it('beginA1 only fires from the anomaly beat, and only once the mass is designated', () => {
     beginA1();
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
     advanceToBeat('ch1-anomaly');
+    // Stage 1 (the calibration sweep): the stone will not answer yet.
+    beginA1();
+    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
+    // The sweep's time fallback designates the mass (no live camera in tests);
+    // the touch arms one stage later, so the order can LAND before the answer.
+    tickSeconds(ANOMALY_SURVEY.fallbackSeconds + 0.5);
+    beginA1();
+    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly'); // designated, not yet armed
+    tickSeconds(ANOMALY_SURVEY.armSeconds + 0.5);
     beginA1();
     expect(getStoryStateSnapshot().beat).toBe('a1-ramp');
   });
 
   it('the A1 ramp climbs chroma and lands exactly on the color stage', () => {
     advanceToBeat('ch1-anomaly');
+    tickSeconds(ANOMALY_SURVEY.fallbackSeconds + ANOMALY_SURVEY.armSeconds + 0.5); // sweep fallback designates + arms
     beginA1();
     tickSeconds(A1_RAMP_SECONDS / 2);
     const mid = getVoxelRealityEffects().chroma;
@@ -136,7 +149,7 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getFeedRuntime().treatment).toBe(0);
   });
 
-  it('chapter 3: campfire brings dusk, night enables rest, A3 completes the slice', () => {
+  it('chapter 3: campfire brings dusk, night enables rest, A3 opens the first day', () => {
     resetCampfires();
     advanceToBeat('ch3-gather');
     expect(getStoryForcedDayPhase()).toBeCloseTo(0.25, 5); // regulation noon holds
@@ -162,13 +175,78 @@ describe('storyDirector — chapter 1 and A1', () => {
     tickSeconds(5); // sleep fade + hold black -> wake just before sunrise
     expect(getStoryForcedDayPhase()!).toBeGreaterThan(0.9);
     tickSeconds(25); // fade up + material ramp + captions + handoff
-    expect(getStoryStateSnapshot().active).toBe(false);
-    expect(getStoryStateSnapshot().chapter).toBe('complete');
+    // The story no longer ends at the dawn: the first day alive begins, uncut.
+    expect(getStoryStateSnapshot().active).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-thirst');
     expect(getVoxelRealityStage()).toBe('material');
     expect(hasMilestone(STORY_MILESTONES.a3)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.complete)).toBe(false);
+    expect(getStoryForcedDayPhase()).not.toBeNull(); // the sun stays the director's
+    expect(getStoryInputPolicy().recipeAllowed('waterskin')).toBe(true);
+  });
+
+  it('ambient musings fire during genuine lulls, one-shot per save', () => {
+    markMilestone(STORY_MILESTONES.a2);
+    markMilestone(STORY_MILESTONES.a3);
+    advanceToBeat('ch3-thirst');
+    // The scene's own cues land first (8/25/29/35/70s); a musing needs 45–75s
+    // of caption silence after them, so a dawdler hears one — a player being
+    // led by cues never does.
+    tickSeconds(40);
+    expect(getMilestones().some(m => m.startsWith('story:musing:'))).toBe(false);
+    tickSeconds(120);
+    const fired = getMilestones().filter(m => m.startsWith('story:musing:'));
+    expect(fired.length).toBeGreaterThanOrEqual(1);
+    expect(fired.length).toBeLessThanOrEqual(2); // spaced, never a feed of epiphanies
+  });
+
+  it('the first day alive: thirst → forage → klaxon → vigil → arrival (temporary terminal)', () => {
+    resetCampfires();
+    placeCampfire(new THREE.Vector3(0, 25, 0), new THREE.Vector3(0, 1, 0));
+    markMilestone(STORY_MILESTONES.a2);
+    markMilestone(STORY_MILESTONES.a3);
+    setVoxelRealityStage('material');
+    advanceToBeat('ch3-thirst');
+    // The scene owns the sensation: THIRST is named on cue, already falling.
+    expect(getVitals().thirst).toBeLessThanOrEqual(FIRST_DAY.thirstSeed);
+    tickSeconds(FIRST_DAY.thirstNameAt + 1);
+    expect(hasMilestone(STORY_MILESTONES.senseWater)).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-thirst'); // the task still open
+    // The drink: a discrete rise advances the day.
+    drink(60);
+    tickSeconds(0.5);
+    expect(hasMilestone(STORY_MILESTONES.ch3Drank)).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-forage');
+    // HUNGER named on cue; the first meal advances after the pillar settles.
+    tickSeconds(FIRST_DAY.hungerCueAt + 1);
+    expect(hasMilestone(STORY_MILESTONES.senseFood)).toBe(true);
+    feed(12, 6);
+    tickSeconds(FIRST_DAY.pillarAfterEat + FIRST_DAY.advanceAfterPillar + 1);
+    expect(hasMilestone(STORY_MILESTONES.ch3Ate)).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-signal');
+    // The klaxon: the summons must fully land, THEN the relay resolves.
+    wreckRelayHandle.position = getPlayerWorldPosition().clone();
+    tickSeconds(SIGNAL.runCueAt);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-signal'); // lines still landing
+    tickSeconds(3);
+    expect(hasMilestone(STORY_MILESTONES.ch3Signal)).toBe(true);
+    expect(getStoryStateSnapshot().beat).toBe('ch4-vigil');
+    // The scheduled dark: dusk lerps, night opens the ordered rest.
+    tickSeconds(VIGIL.duskLerpSeconds + 15);
+    expect(getStoryForcedDayPhase()!).toBeGreaterThanOrEqual(DUSK.nightStart - 0.01);
+    beginVigilSleep();
+    expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
+    expect(hasMilestone(STORY_MILESTONES.ch4Vigil)).toBe(true);
+    // The arrival plays out and TEMPORARILY completes the story (ch4-audit
+    // continues from here — see PARAVOXIA_CH4_PLAN.md §2 S6).
+    tickSeconds(ARRIVAL.endAt + 1);
+    expect(getStoryStateSnapshot().active).toBe(false);
+    expect(getStoryStateSnapshot().chapter).toBe('complete');
+    expect(hasMilestone(STORY_MILESTONES.ch4Arrived)).toBe(true);
     expect(hasMilestone(STORY_MILESTONES.complete)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.senseStamina)).toBe(true); // never strand a HUD gate
     expect(getStoryForcedDayPhase()).toBeNull(); // the sun belongs to the player now
-    expect(getStoryInputPolicy().allowBuild).toBe(true); // sandbox restored
+    wreckRelayHandle.position = null;
   });
 
   it('the harvester arrives charged and trickle-recharges while idle (not while mining)', () => {
@@ -192,6 +270,7 @@ describe('storyDirector — chapter 1 and A1', () => {
   });
 
   it('glitch flashes drop desat for exactly two frames and restore', () => {
+    tickSeconds(4.2); // flashes defer past the beat's opening (hand-offs land clean)
     addItem('biofiber', 3); // afterQuotaCount: 3 flash trigger
     storyDirectorTick(1 / 60, null);
     expect(getFeedRuntime().desat).toBe(0);

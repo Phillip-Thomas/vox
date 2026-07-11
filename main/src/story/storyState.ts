@@ -24,7 +24,7 @@ import { STORY_COORDINATE } from './world/storyWorld.ts';
 // progression milestones (story:*), which already round-trip through the global
 // save — the store itself holds only live session state.
 
-export type StoryChapter = 'none' | 'prologue' | 'ch1' | 'ch2' | 'ch3' | 'complete';
+export type StoryChapter = 'none' | 'prologue' | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'complete';
 
 export type StoryBeat =
   // prologue (terminal overlay, app phase stays 'menu')
@@ -40,6 +40,10 @@ export type StoryBeat =
   | 'ch2-color' | 'ch2-approach' | 'a2-awakening'
   // chapter 3 — grain
   | 'ch3-gather' | 'ch3-dusk' | 'ch3-await-rest' | 'a3-dawn'
+  // chapter 3's tail — the first day alive (each remaining sense gets its scene)
+  | 'ch3-thirst' | 'ch3-forage' | 'ch3-signal'
+  // chapter 4 — the other worker (shipped through the arrival; ch4-audit next)
+  | 'ch4-vigil' | 'ch4-arrival'
   | 'done';
 
 export interface StorySnapshot {
@@ -72,6 +76,18 @@ export const STORY_MILESTONES = {
   senseOxygen: 'story:sense:oxygen',
   senseJet: 'story:sense:jet',
   senseMaw: 'story:sense:maw',
+  /** Ch3's tail + chapter 4 checkpoints (the first day alive → the auditor). */
+  ch3Drank: 'story:ch3:drank',
+  ch3Ate: 'story:ch3:ate',
+  ch3Signal: 'story:ch3:signal',
+  ch4Vigil: 'story:ch4:vigil',
+  ch4Arrived: 'story:ch4:arrived',
+  /**
+   * Legacy slice terminal. Saves that finished the A0→A3 slice carry it; the
+   * story now CONTINUES past it (they resume at ch3-thirst). The live terminal
+   * checkpoint is ch4Arrived until chapter 4's remaining beats ship (see
+   * PARAVOXIA_CH4_PLAN.md §2 S6+).
+   */
   complete: 'story:complete'
 } as const;
 
@@ -127,7 +143,14 @@ export interface StoryEntryPoint {
  * state (e.g. quota progress re-reads the inventory).
  */
 export function storyEntryPoint(): StoryEntryPoint {
-  if (hasMilestone(STORY_MILESTONES.a3)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch4Arrived)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch4Vigil)) return { chapter: 'ch4', beat: 'ch4-arrival' };
+  if (hasMilestone(STORY_MILESTONES.ch3Signal)) return { chapter: 'ch4', beat: 'ch4-vigil' };
+  if (hasMilestone(STORY_MILESTONES.ch3Ate)) return { chapter: 'ch3', beat: 'ch3-signal' };
+  if (hasMilestone(STORY_MILESTONES.ch3Drank)) return { chapter: 'ch3', beat: 'ch3-forage' };
+  // Legacy slice-complete saves land here too (a3 is always marked with it):
+  // the story continues into the first day alive.
+  if (hasMilestone(STORY_MILESTONES.a3)) return { chapter: 'ch3', beat: 'ch3-thirst' };
   if (hasMilestone(STORY_MILESTONES.a2)) return { chapter: 'ch3', beat: 'ch3-gather' };
   if (hasMilestone(STORY_MILESTONES.a1)) return { chapter: 'ch2', beat: 'ch2-color' };
   if (hasMilestone(STORY_MILESTONES.ch1Iso)) return { chapter: 'ch1', beat: 'ch1-anomaly' };
@@ -141,19 +164,25 @@ export function storyEntryPoint(): StoryEntryPoint {
 
 /**
  * Single source of truth for which reality stage a story point renders at:
- * the feed chapters are unresolved (`bare`), A1 brings color, A3 brings material.
- * Post-slice sandbox keeps `material` — later awakenings raise it further.
+ * the feed chapters are unresolved (`bare`), A1 brings color, A3 brings material
+ * (which the first-day tail and chapter 4 keep — A4's `alive` comes later).
  */
 export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
   if (entry.chapter === 'complete') return 'material';
-  if (entry.chapter === 'ch3') return 'color';
+  if (entry.chapter === 'ch4') return 'material';
+  if (entry.chapter === 'ch3') {
+    // Chapter 3 straddles A3: the tail beats (the first day alive) are post-dawn.
+    return beatIndex(entry.beat) >= beatIndex('ch3-thirst') ? 'material' : 'color';
+  }
   if (entry.chapter === 'ch2') return 'color';
   return 'bare';
 }
 
-/** True when a save exists mid-story (drives the menu's "Continue Story" label). */
+/** True when a save exists mid-story (drives the menu's "Continue Story" label).
+ *  Keyed on the LIVE terminal (ch4Arrived), not the legacy slice terminal —
+ *  finished-slice saves see "Continue Story" again and resume at ch3-thirst. */
 export function canContinueStory(): boolean {
-  return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.complete);
+  return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch4Arrived);
 }
 
 // --- deep links / debug jumps ---------------------------------------------------
@@ -171,6 +200,8 @@ export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
   'ch1-lift', 'ch1-anomaly', 'a1-ramp',
   'ch2-color', 'ch2-approach', 'a2-awakening',
   'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
+  'ch3-thirst', 'ch3-forage', 'ch3-signal',
+  'ch4-vigil', 'ch4-arrival',
   'done'
 ];
 
@@ -180,13 +211,16 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
   ch2: 'ch2-color',
   a2: 'ch2-approach',
   ch3: 'ch3-gather',
-  a3: 'ch3-await-rest'
+  a3: 'ch3-await-rest',
+  day: 'ch3-thirst',
+  ch4: 'ch4-vigil'
 };
 
 export function chapterForBeat(beat: StoryBeat): StoryChapter {
   return beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
     : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
     : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
+    : beat.startsWith('ch4') ? 'ch4'
     : beat === 'done' ? 'complete'
     : 'ch3';
 }
@@ -239,8 +273,23 @@ function seedForBeat(beat: StoryBeat): void {
     markMilestone(m.senseInventory);
     markMilestone(m.senseTemp);
   }
+  // The first day alive: each tail beat presumes the previous scene resolved.
+  if (at >= beatIndex('ch3-thirst')) markMilestone(m.a3);
+  if (at >= beatIndex('ch3-forage')) {
+    markMilestone(m.senseWater);
+    markMilestone(m.ch3Drank);
+  }
+  if (at >= beatIndex('ch3-signal')) {
+    markMilestone(m.senseFood);
+    markMilestone(m.ch3Ate);
+  }
+  if (at >= beatIndex('ch4-vigil')) {
+    markMilestone(m.ch3Signal);
+    markMilestone(m.senseStamina);
+  }
+  if (at >= beatIndex('ch4-arrival')) markMilestone(m.ch4Vigil);
   if (at >= beatIndex('done')) {
-    markMilestone(m.a3);
+    markMilestone(m.ch4Arrived);
     markMilestone(m.complete);
   }
 }
@@ -297,15 +346,21 @@ export function advanceToBeat(beat: StoryBeat): void {
   setSnapshot({ chapter: chapterForBeat(beat), beat });
 }
 
-/** The slice's end: hand the world back to the sandbox at the earned stage. */
+/** The shipped arc's end: hand the world back to the sandbox at the earned stage.
+ *  (Now reached AFTER the first day alive + the auditor's arrival — see the
+ *  director's TEMPORARY hand-off note; ch4-audit continues from here.) */
 export function completeStory(): void {
   markMilestone(STORY_MILESTONES.a3);
+  markMilestone(STORY_MILESTONES.ch4Arrived);
   markMilestone(STORY_MILESTONES.complete);
-  // The ch3 senses are part of the earned world — never strand the HUD gates.
-  // (Thirst/hunger and the rest stay UNDISCOVERED: they arrive live, post-dawn.)
+  // The earned senses are part of the earned world — never strand the HUD gates.
+  // (Oxygen/jet/maw stay UNDISCOVERED: they arrive live, or in chapter 4's coda.)
   markMilestone(STORY_MILESTONES.senseInventory);
   markMilestone(STORY_MILESTONES.senseHealth);
   markMilestone(STORY_MILESTONES.senseTemp);
+  markMilestone(STORY_MILESTONES.senseWater);
+  markMilestone(STORY_MILESTONES.senseFood);
+  markMilestone(STORY_MILESTONES.senseStamina);
   setVoxelRealityStage('material');
   setStoryForcedDayPhase(null); // the day cycle is the player's now
   setSnapshot({ active: false, chapter: 'complete', beat: 'done' });

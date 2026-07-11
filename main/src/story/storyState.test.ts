@@ -7,14 +7,14 @@ import {
 
 describe('storyState — beat order (drives debug jumps + seeding)', () => {
   it('orders beats monotonically through the chapters', () => {
-    const chapterRank = { prologue: 0, ch1: 1, ch2: 2, ch3: 3, complete: 4, none: -1 } as const;
+    const chapterRank = { prologue: 0, ch1: 1, ch2: 2, ch3: 3, ch4: 4, complete: 5, none: -1 } as const;
     let last = -1;
     for (const beat of STORY_BEAT_ORDER) {
       const rank = chapterRank[chapterForBeat(beat)];
       expect(rank).toBeGreaterThanOrEqual(last);
       last = rank;
     }
-    expect(last).toBe(4); // ends at 'done'
+    expect(last).toBe(5); // ends at 'done'
   });
 
   it('the monochrome ladder climbs the history of perspectives in order', () => {

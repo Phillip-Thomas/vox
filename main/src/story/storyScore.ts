@@ -107,7 +107,18 @@ const MOODS: Partial<Record<StoryBeat, ScoreMood>> = {
   'ch3-dusk': { chord: [0, 7, 12, 16], progression: [[0, 7, 12, 16], [5, 12, 17, 21]], melody: { scale: [0, 2, 3, 5, 7, 9, 10, 12], density: 0.4 }, pattern: [0, null, null, null, 12, null, null, null], tempo: 66, wave: 'sawtooth', pad: 0.16, sub: 0.12, ost: 0.03, riser: 0.26, baseline: 0.7, octave: 12 },
   'ch3-await-rest': { chord: [0, 7, 15], progression: [[0, 7, 15], [5, 12, 17]], melody: { scale: [0, 3, 7, 10, 12], density: 0.25 }, pattern: [0, null, null, null, null, null, 7, null], tempo: 54, wave: 'triangle', pad: 0.1, sub: 0.1, ost: 0.03, riser: 0.08, baseline: 0.3, octave: 12 },
   // Dawn: the largest build in the slice, resolving major as texture arrives.
-  'a3-dawn': { chord: [0, 4, 7, 11], progression: [[0, 4, 7, 11], [5, 9, 12, 16], [7, 11, 14], [0, 4, 7, 12]], melody: { scale: [0, 2, 4, 5, 7, 9, 11, 12], density: 0.7 }, pattern: [0, 4, 7, 11, 12, 11, 7, 4], tempo: 88, wave: 'sawtooth', pad: 0.17, sub: 0.13, ost: 0.05, riser: 0.32, baseline: 0.75, octave: 12 }
+  'a3-dawn': { chord: [0, 4, 7, 11], progression: [[0, 4, 7, 11], [5, 9, 12, 16], [7, 11, 14], [0, 4, 7, 12]], melody: { scale: [0, 2, 4, 5, 7, 9, 11, 12], density: 0.7 }, pattern: [0, 4, 7, 11, 12, 11, 7, 4], tempo: 88, wave: 'sawtooth', pad: 0.17, sub: 0.13, ost: 0.05, riser: 0.32, baseline: 0.75, octave: 12 },
+  // The first day alive: the dawn's major settled into a walking morning hymn.
+  'ch3-thirst': { chord: [0, 7, 12, 16], progression: [[0, 7, 12, 16], [5, 9, 12], [7, 11, 14], [0, 4, 7, 12]], melody: { scale: [0, 2, 4, 7, 9, 12], density: 0.4 }, pattern: [0, null, null, null, 12, null, null, null], tempo: 72, wave: 'triangle', pad: 0.13, sub: 0.1, ost: 0.035, riser: 0.08, baseline: 0.3, octave: 12 },
+  // Forage: the hymn grows off-beats — appetite is a rhythm.
+  'ch3-forage': { chord: [0, 4, 9, 12], progression: [[0, 4, 9, 12], [5, 9, 14], [0, 4, 7], [7, 11, 16]], melody: { scale: [0, 2, 4, 7, 9, 12, 14], density: 0.5 }, pattern: [0, null, 4, null, 9, null, 4, null], tempo: 84, wave: 'triangle', pad: 0.11, sub: 0.1, ost: 0.05, riser: 0.08, baseline: 0.32, octave: 12 },
+  // The klaxon: the first minor lift since A2 — urgency without machinery.
+  'ch3-signal': { chord: [0, 3, 7], progression: [[0, 3, 7], [5, 8, 12], [3, 7, 10], [0, 3, 7]], melody: { scale: [0, 2, 3, 5, 7, 10, 12], density: 0.45 }, pattern: [0, 0, null, 3, null, 7, 0, null], tempo: 126, wave: 'triangle', pad: 0.09, sub: 0.13, ost: 0.06, riser: 0.2, baseline: 0.55, octave: 12 },
+  // The vigil: ch3-await-rest DETUNED — one flatted degree; familiar, and wrong.
+  'ch4-vigil': { chord: [0, 6, 15], progression: [[0, 6, 15], [5, 11, 17]], melody: { scale: [0, 3, 6, 10, 12], density: 0.22 }, pattern: [0, null, null, null, null, null, 6, null], tempo: 52, wave: 'triangle', pad: 0.11, sub: 0.11, ost: 0.03, riser: 0.1, baseline: 0.32, octave: 12 },
+  // The arrival: warm strings hold — and the SQUARE WAVE returns underneath,
+  // the ch1 timbre as a foreign body in the living world's mix.
+  'ch4-arrival': { chord: [0, 7, 12, 16], progression: [[0, 7, 12, 16], [0, 7, 13, 16]], melody: { scale: [0, 2, 4, 7, 11, 12], density: 0.25 }, pattern: [0, null, 0, null, 7, null, 0, null], tempo: 60, wave: 'square', pad: 0.15, sub: 0.12, ost: 0.05, riser: 0.24, baseline: 0.5, octave: 24 }
 };
 
 // --- engine state ---------------------------------------------------------------------

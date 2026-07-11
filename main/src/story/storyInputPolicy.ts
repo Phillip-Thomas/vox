@@ -72,6 +72,9 @@ export const SANDBOX_POLICY: Readonly<StoryInputPolicy> = Object.freeze({
 /** Chapter-3 crafting whitelist: exactly the campfire chain (plus its lights). */
 const CH3_RECIPES = new Set(['biofuel', 'stone_hatchet', 'stone_pickaxe', 'torch', 'campfire']);
 
+/** The first day alive: the campfire chain plus the waterskin (carry the answer). */
+const CH3_TAIL_RECIPES = new Set([...CH3_RECIPES, 'waterskin']);
+
 /** CCTV render crunch: subtle pixelation between the raster era and free 3D. */
 export const FEED_DPR = 0.85;
 /** Raster (side-scroller) era: honest chunky pixels. */
@@ -159,21 +162,39 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     case 'ch1-iso':
       return { ...rasterPolicy(), targetDpr: ISO_DPR, targetFov: 38 };
     case 'ch1-anomaly':
+      return feedPolicy();
+    // Post-A1: the chroma suppressor AND the pan-tilt interlock fail together —
+    // the feed's chrome remains (dither, tickets, redaction) but the neck is
+    // the player's: full free look, camera-relative (diagonal) movement.
     case 'ch2-color':
     case 'ch2-approach':
-      return feedPolicy();
+      return { ...feedPolicy(), lookMode: 'free', feedBlend: 1 };
     // Scripted sequences start frozen; their timelines unfreeze/lerp the live
-    // object (setStoryMoveScale / setStoryFeedBlend / setStoryTargetFov below).
+    // object (setStoryMoveScale / setStoryTargetFov below).
     case 'a1-ramp':
       return { ...feedPolicy(), moveSpeedScale: 0 };
     case 'a2-awakening':
-      return { ...feedPolicy(), moveSpeedScale: 0 };
+      return { ...feedPolicy(), lookMode: 'free', feedBlend: 1, moveSpeedScale: 0 };
     case 'ch3-gather':
     case 'ch3-dusk':
     case 'ch3-await-rest':
       return ch3Policy();
     case 'a3-dawn':
       return { ...ch3Policy(), moveSpeedScale: 0, allowCraft: false };
+    // The first day alive: free play, waterskin joins the whitelist.
+    case 'ch3-thirst':
+    case 'ch3-forage':
+    case 'ch3-signal':
+    case 'ch4-vigil':
+      return { ...ch3Policy(), recipeAllowed: id => CH3_TAIL_RECIPES.has(id) };
+    // The auditor's arrival: a staged dawn — the timeline releases the feet.
+    case 'ch4-arrival':
+      return {
+        ...ch3Policy(),
+        recipeAllowed: id => CH3_TAIL_RECIPES.has(id),
+        moveSpeedScale: 0,
+        allowCraft: false
+      };
     default:
       return { ...SANDBOX_POLICY };
   }

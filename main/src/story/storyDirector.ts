@@ -8,7 +8,8 @@ import {
 import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
-import { getVitals, setVitals } from '../game/systems/survivalVitals.ts';
+import { getVitals, isStaminaExhausted, setVitals } from '../game/systems/survivalVitals.ts';
+import { getWaterskinFill } from '../game/systems/consumeSystem.ts';
 import { addMawCharge, getMawCharge, MAX_MAW_CHARGE, setMawCharge } from '../game/systems/mawSystem.ts';
 import { getMiningProgress } from '../game/systems/miningProgress.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
@@ -24,7 +25,6 @@ import {
 import { registerStoryInteraction } from './storyInteractions.ts';
 import {
   getStoryInputPolicy,
-  setStoryFeedBlend,
   setStoryLookMode,
   setStoryMoveScale,
   setStorySideBlend,
@@ -42,10 +42,13 @@ import { debrisSalvageComplete } from './debrisSalvage.ts';
 import { supplyPodsComplete } from './supplyPods.ts';
 import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
+import { wreckRelayHandle } from './world/WreckRelay.tsx';
+import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
+import { storyAnchors } from './world/storyWorld.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
-import { clearViolations, pushViolation, setWorkOrder, showCaption } from './storyText.ts';
+import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption } from './storyText.ts';
 import {
   A1_RAMP_SECONDS,
   A2_CAPTIONS,
@@ -53,6 +56,11 @@ import {
   A2_VIOLATION_LINES,
   A3_CAPTIONS,
   A3_TIMELINE,
+  ANOMALY_SURVEY,
+  ARRIVAL,
+  ARRIVAL_CAPTIONS,
+  ARRIVAL_LINES,
+  CH1_ANOMALY_MASS_ORDER,
   CH1_ECHO_LINES,
   CH1_FLASH_SCHEDULE,
   CH1_FIXED_TUTORIAL,
@@ -60,6 +68,14 @@ import {
   CH1_WORK_ORDERS,
   CH3_CAPTIONS,
   DUSK,
+  FIRST_DAY,
+  FIRST_DAY_CAPTIONS,
+  MUSING_GAP_SECONDS,
+  MUSINGS,
+  SIGNAL,
+  SIGNAL_LINES,
+  VIGIL,
+  VIGIL_LINES,
   VOYAGE_DECK
 } from './storyScript.ts';
 import { complianceToneLine, getArrivalCellCharge } from './voyageOutcome.ts';
@@ -118,6 +134,32 @@ interface DirectorRuntime {
   liftSnapped: boolean;
   /** Scratch target for the lift's look-ahead pull. */
   liftLookTarget: THREE.Vector3;
+  // --- the first day alive / chapter 4 ---
+  /** Vitals from the previous tick (a discrete RISE = drank / ate). */
+  prevThirst: number;
+  prevHunger: number;
+  /** Waterskin fill last tick (a rise from 0 = the first fill). */
+  prevWaterskin: number;
+  /** Musing lull tracking: elapsedSeconds of the last caption + current gap. */
+  lastCaptionAt: number;
+  musingGap: number;
+  /** ch3-signal / ch4-vigil: the phase each lerp departs from. */
+  signalPhaseFrom: number;
+  vigilPhaseFrom: number;
+  signalKlaxons: number;
+  /** ch3-forage: beat-clock time of the first meal (-1 = not yet). */
+  forageAteAt: number;
+  /** ch1-anomaly staging: sweep sectors seen; true once the mass is designated. */
+  anomalySectorsSeen: Set<number>;
+  anomalyMassStage: boolean;
+  /** Beat-clock time of the designation (-1 = not yet) — arms the touch. */
+  anomalyDesignatedAt: number;
+  /** ch4-arrival one-shots. */
+  arrivalWoke: boolean;
+  /** 2-frame BARE drop (the auditor's eyes) — inverse of the chroma flash. */
+  bareFramesLeft: number;
+  /** Scratch for the auditor's walk. */
+  workerScratch: THREE.Vector3;
 }
 
 const d: DirectorRuntime = {
@@ -141,7 +183,22 @@ const d: DirectorRuntime = {
   descentImpacted: false,
   fixedCells: new Set(),
   liftSnapped: false,
-  liftLookTarget: new THREE.Vector3()
+  liftLookTarget: new THREE.Vector3(),
+  prevThirst: -1,
+  prevHunger: -1,
+  prevWaterskin: -1,
+  lastCaptionAt: 0,
+  musingGap: MUSING_GAP_SECONDS[0],
+  signalPhaseFrom: 0.25,
+  vigilPhaseFrom: 0.42,
+  signalKlaxons: 0,
+  forageAteAt: -1,
+  anomalySectorsSeen: new Set(),
+  anomalyMassStage: false,
+  anomalyDesignatedAt: -1,
+  arrivalWoke: false,
+  bareFramesLeft: 0,
+  workerScratch: new THREE.Vector3()
 };
 
 /** Seconds since the current beat began (survey dwells, resolver gates). */
@@ -318,7 +375,12 @@ function onBeatEntered(beat: StoryBeat | null): void {
       break;
     case 'ch1-anomaly':
       // The raster→pan-tilt upgrade announces itself with a glitch pulse.
+      // STAGE 1: the calibration sweep — one goal at a time; the mass is not
+      // designated (no marker, no [F]) until the era has been looked through.
       d.glitchDecay = 0.7;
+      d.anomalySectorsSeen.clear();
+      d.anomalyMassStage = false;
+      d.anomalyDesignatedAt = -1;
       setWorkOrder([...CH1_WORK_ORDERS.anomaly]);
       break;
     case 'ch1-lift':
@@ -327,19 +389,26 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setWorkOrder(['PAN-TILT SURVEY: CALIBRATING…', 'HOLD POSITION. PERSPECTIVE IS BEING ISSUED.']);
       break;
     case 'a1-ramp':
-      // Movement freezes via the beat policy; the timeline below owns the visuals.
+      // Movement freezes via the beat policy; the timeline below owns the
+      // visuals — and the system's voice goes with the grayscale (a clean
+      // frame for the awakening; ch2's ticket re-fills it after).
+      setWorkOrder([]);
       playSfx('storyAwaken');
       break;
     case 'ch2-color':
-      // Post-A1 (also the deep-link/resume entry): color is through; feed intact.
+      // Post-A1 (also the deep-link/resume entry): color is through; the feed
+      // chrome stays but the CAGE fails with it — the pan-tilt interlock goes
+      // with the chroma suppressor, and the neck is suddenly the player's
+      // (free look + diagonals; the policy grants it, this line explains it).
       getFeedRuntime().desat = 0;
       getFeedRuntime().treatment = 1;
       getFeedRuntime().descent = 1.1; // wreck present on direct jumps too
       setStoryForcedDayPhase(0.25);
       setWorkOrder([
         'SENSOR FAULT: CHROMATIC CHANNEL UNSUPPRESSED',
+        'SENSOR FAULT: PAN-TILT INTERLOCK RELEASED. FULL ROTATION AVAILABLE.',
         'A REPAIR TICKET HAS BEEN FILED (Q: 44,207)',
-        'RESUME QUOTA. DO NOT LOOK AT THE COLORS.'
+        'RESUME QUOTA. DO NOT LOOK AT THE COLORS. DO NOT LOOK FREELY.'
       ]);
       break;
     case 'ch2-approach':
@@ -389,6 +458,58 @@ function onBeatEntered(beat: StoryBeat | null): void {
         d.restUnregister = null;
       }
       break;
+    case 'ch3-thirst':
+    case 'ch3-forage':
+    case 'ch3-signal':
+    case 'ch4-vigil': {
+      // The first day alive (also the deep-link entries): the feed chrome is
+      // long gone, the wreck is a fact of the world, and the sun stays the
+      // director's until the arrival hands it to the live clock.
+      const r = getFeedRuntime();
+      r.treatment = 0;
+      r.desat = 0;
+      r.redaction.visible = false;
+      r.descent = 1.1;
+      setWorkOrder([]);
+      clearViolations();
+      // Direct jumps land mid-morning; a flowing run keeps the dawn's phase.
+      if (d.dayPhase > 0.2 && d.dayPhase < 0.97) d.dayPhase = FIRST_DAY.morningPhase;
+      // The needs arrive ALREADY FALLING (the TEMP pattern) — seeds clamp down.
+      if (beat === 'ch3-thirst' && getVitals().thirst > FIRST_DAY.thirstSeed) {
+        setVitals({ thirst: FIRST_DAY.thirstSeed });
+      }
+      if (beat === 'ch3-forage') {
+        if (getVitals().hunger > FIRST_DAY.hungerSeed) setVitals({ hunger: FIRST_DAY.hungerSeed });
+        d.forageAteAt = -1;
+      }
+      if (beat === 'ch3-signal') {
+        d.signalPhaseFrom = d.dayPhase;
+        d.signalKlaxons = 0;
+        // The run must have a full budget — the sensation is CAUSED, on cue.
+        setVitals({ stamina: 100 });
+      }
+      if (beat === 'ch4-vigil') {
+        d.vigilPhaseFrom = Math.min(Math.max(d.dayPhase, SIGNAL.phaseTarget), DUSK.targetPhase);
+        d.dayPhase = d.vigilPhaseFrom;
+        ensureRestInteraction();
+      }
+      setStoryForcedDayPhase(d.dayPhase);
+      const v = getVitals();
+      d.prevThirst = v.thirst;
+      d.prevHunger = v.hunger;
+      d.prevWaterskin = getWaterskinFill();
+      d.lastCaptionAt = d.elapsedSeconds;
+      break;
+    }
+    case 'ch4-arrival':
+      d.arrivalWoke = false;
+      if (d.restUnregister) {
+        d.restUnregister();
+        d.restUnregister = null;
+      }
+      hideAuditWorker();
+      getFeedRuntime().descent = 1.1;
+      break;
     default:
       break;
   }
@@ -412,11 +533,16 @@ function ensureRestInteraction(): void {
   if (d.restUnregister) return;
   d.restUnregister = registerStoryInteraction((_camera, position) => {
     const s = getStoryStateSnapshot();
-    if (!s.active || s.beat !== 'ch3-await-rest') return null;
+    if (!s.active) return null;
+    if (s.beat !== 'ch3-await-rest' && s.beat !== 'ch4-vigil') return null;
     const phase = getCurrentDayPhase();
     if (phase < DUSK.nightStart || phase > DUSK.nightEnd) return null;
     if (!nearCampfire(position)) return null;
-    return { id: 'story-rest', verb: 'Rest', perform: beginA3 };
+    return {
+      id: 'story-rest',
+      verb: 'Rest',
+      perform: s.beat === 'ch4-vigil' ? beginVigilSleep : beginA3
+    };
   });
 }
 
@@ -426,6 +552,15 @@ export function beginA3(): void {
   if (!s.active || s.beat !== 'ch3-await-rest') return;
   playSfx('storySleep');
   advanceToBeat('a3-dawn');
+}
+
+/** The scheduled sleep — the vigil's ordered rest brings the auditor's dawn. */
+export function beginVigilSleep(): void {
+  const s = getStoryStateSnapshot();
+  if (!s.active || s.beat !== 'ch4-vigil') return;
+  playSfx('storySleep');
+  markMilestone(STORY_MILESTONES.ch4Vigil);
+  advanceToBeat('ch4-arrival');
 }
 
 let lastBeat: StoryBeat | null = null;
@@ -473,10 +608,24 @@ subscribeCampfires(() => {
 
 // --- external triggers (story world props call these) ----------------------------
 
+/** True once ch1-anomaly's calibration sweep has returned the deviation —
+ *  the marker, the [F] Touch, and beginA1 all gate on it (one goal at a time). */
+export function anomalyMassDesignated(): boolean {
+  return d.anomalyMassStage;
+}
+
+/** True once the designation has LANDED (order read, marker seen) — the
+ *  stone's [F] and beginA1 gate here, one stage after the marker appears. */
+export function anomalyTouchArmed(): boolean {
+  return d.anomalyMassStage
+    && d.beatClock >= d.anomalyDesignatedAt + ANOMALY_SURVEY.armSeconds;
+}
+
 /** The anomaly stone's [F] Touch — begins the A1 chroma awakening. */
 export function beginA1(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch1-anomaly') return;
+  if (!anomalyTouchArmed()) return; // sweep → designation → THEN the answer
   advanceToBeat('a1-ramp');
 }
 
@@ -496,6 +645,9 @@ function smoothstep(t: number): number {
 
 function tickCh1Flashes(dt: number): void {
   d.ch1Clock += dt;
+  // Never inside a beat's opening seconds: era hand-offs land CLEAN — one
+  // thing at a time (the flashes were stacking onto rig lerps and new orders).
+  if (d.beatClock < 4) return;
   const { total } = quotaCollected();
   CH1_FLASH_SCHEDULE.forEach((flash, i) => {
     if (d.flashesFired[i]) return;
@@ -508,6 +660,36 @@ function tickCh1Flashes(dt: number): void {
       playSfx('storyGlitch');
     }
   });
+}
+
+// ch1-anomaly stage 1 → 2: the calibration sweep. The pan-tilt era's verb is
+// LOOKING — the view must traverse the compass before the survey "finds" the
+// mass. Sector visits come straight off the live camera; a time fallback keeps
+// direct jumps and stuck screenings moving.
+const _surveyDir = new THREE.Vector3();
+
+function tickAnomalySurvey(camera: THREE.PerspectiveCamera | null): void {
+  if (d.anomalyMassStage) return;
+  if (camera) {
+    camera.getWorldDirection(_surveyDir);
+    const angle = Math.atan2(_surveyDir.x, _surveyDir.z) + Math.PI; // 0..2π
+    const sector = Math.min(
+      ANOMALY_SURVEY.sectors - 1,
+      Math.floor((angle / (Math.PI * 2)) * ANOMALY_SURVEY.sectors)
+    );
+    d.anomalySectorsSeen.add(sector);
+  }
+  const swept = d.anomalySectorsSeen.size >= ANOMALY_SURVEY.required
+    && d.beatClock >= ANOMALY_SURVEY.minSeconds;
+  if (swept || d.beatClock >= ANOMALY_SURVEY.fallbackSeconds) {
+    // STAGE 2: the deviation is returned — the marker + order land FIRST;
+    // the touch arms armSeconds later (stages never stack).
+    d.anomalyMassStage = true;
+    d.anomalyDesignatedAt = d.beatClock;
+    d.glitchDecay = 0.55;
+    playSfx('storyGlitch');
+    setWorkOrder([...CH1_ANOMALY_MASS_ORDER]);
+  }
 }
 
 function tickA1Ramp(): void {
@@ -583,7 +765,9 @@ function tickA2(): void {
       scoreHit('braam'); // the wall of the feed gives way
     }
     const k = smoothstep((t - deathEnd) / T.liberationSeconds);
-    setStoryFeedBlend(k);
+    // (The look is already free — ch2 runs unlocked since the A1 interlock
+    // fault — so the liberation is carried by the FOV, the treatment, and the
+    // resolution, not by a camera cage opening.)
     setStoryTargetFov(FEED_FOV + (SANDBOX_FOV - FEED_FOV) * k);
     setScoreIntensity(0.5 + k * 0.5); // the liberation IS the crescendo
     r.treatment = 1 - k;
@@ -595,9 +779,8 @@ function tickA2(): void {
     if (sinceUnfreeze >= 0) setStoryMoveScale(Math.min(1, sinceUnfreeze / 1.5));
     return;
   }
-  // Handoff (one shot): free look, feed gone, device resolution, chapter 3 begins.
+  // Handoff (one shot): feed gone, device resolution, chapter 3 begins.
   setStoryLookMode('free');
-  setStoryFeedBlend(1);
   setStoryTargetDpr(null);
   r.treatment = 0;
   markMilestone(STORY_MILESTONES.a2);
@@ -706,7 +889,16 @@ function tickCh1Lift(): void {
 function fireCaptionOnce(key: string, text: string): void {
   if (d.captionsFired.has(key)) return;
   d.captionsFired.add(key);
+  d.lastCaptionAt = d.elapsedSeconds; // musings wait for a genuine lull
   showCaption(text);
+}
+
+/** One-shot AUDIT-band lines (the post-feed regulation voice). */
+function fireAuditOnce(key: string, text: string, header?: string): void {
+  if (d.captionsFired.has(key)) return;
+  d.captionsFired.add(key);
+  d.lastCaptionAt = d.elapsedSeconds;
+  showAuditLine(text, header);
 }
 
 /** Trapezoid envelope: 0→1 over [inStart..inEnd], 1, then 1→0 over [outStart..outEnd]. */
@@ -845,15 +1037,272 @@ function tickA3(dt: number): void {
     if (t >= wakeAt + caption.atSeconds) fireCaptionOnce(`a3-${i}`, caption.text);
   });
   if (t >= Math.max(rampEnd + 4, waveEnd + 1.5) && d.captionsFired.has(`a3-${A3_CAPTIONS.length - 1}`)) {
-    // Land EXACTLY on the material preset, release the sun to the live clock,
-    // and hand the world to the sandbox. The reveal clears the same tick the
-    // stage lands — the wave has already covered the visible range.
+    // Land EXACTLY on the material preset. The story no longer ends here: the
+    // first day alive begins with NO CUT AT ALL — the score resolves and thins,
+    // and only the world remains. (The sun stays the director's through the
+    // tail; the live clock takes over at the arrival's end.)
     setVoxelRealityStage('material');
     clearVoxelRealityOverrides();
     clearLifeReveal();
+    markMilestone(STORY_MILESTONES.a3);
+    scoreHit('bloom'); // texture arrives; the score resolves major and recedes
+    advanceToBeat('ch3-thirst');
+  }
+}
+
+// --- the first day alive (ch3's tail: thirst → forage → the klaxon) -------------------
+
+/** The tail's sun: the director keeps the phase, advancing it in real time. */
+function advanceFirstDayPhase(dt: number): void {
+  d.dayPhase = (d.dayPhase + dt / DAY_LENGTH_SECONDS) % 1;
+  setStoryForcedDayPhase(d.dayPhase);
+}
+
+// Ambient musings (owner-directed): quiet epiphanies during LULLS — one per
+// ~45–75s of caption silence, one-shot PER SAVE (milestone-latched, so a
+// resumed save never repeats itself), never blocking anything.
+const musingNoise = mulberry32(0x9e21);
+
+function tickMusings(): void {
+  if (d.beatClock < 12) return; // each beat's own opening lands first
+  if (d.elapsedSeconds - d.lastCaptionAt < d.musingGap) return;
+  for (const musing of MUSINGS) {
+    const id = `story:musing:${musing.id}`;
+    if (hasMilestone(id)) continue;
+    markMilestone(id);
+    d.lastCaptionAt = d.elapsedSeconds;
+    d.musingGap = MUSING_GAP_SECONDS[0]
+      + (MUSING_GAP_SECONDS[1] - MUSING_GAP_SECONDS[0]) * musingNoise();
+    showCaption(musing.text, 6500);
+    return;
+  }
+}
+
+/** Shared by the tail beats: the waterskin's first fill earns its line. */
+function tickWaterskinFilled(): void {
+  const fill = getWaterskinFill();
+  if (d.prevWaterskin === 0 && fill > 0) {
+    fireCaptionOnce('day-skin-filled', FIRST_DAY_CAPTIONS.waterskinFilled);
+  }
+  d.prevWaterskin = fill;
+}
+
+// S1 — THIRST: the first unsupervised morning files the body's first request.
+function tickThirst(dt: number): void {
+  advanceFirstDayPhase(dt);
+  const t = d.beatClock;
+  if (t >= FIRST_DAY.freedomAt) fireCaptionOnce('day-freedom', FIRST_DAY_CAPTIONS.freedom);
+  if (t >= FIRST_DAY.thirstCueAt) fireCaptionOnce('day-thirst-felt', FIRST_DAY_CAPTIONS.thirstFelt);
+  if (t >= FIRST_DAY.thirstNameAt) {
+    fireCaptionOnce('day-thirst-named', FIRST_DAY_CAPTIONS.thirstNamed);
+    markMilestone(STORY_MILESTONES.senseWater); // the THIRST row lands with its name
+  }
+  if (t >= FIRST_DAY.seekAt) fireCaptionOnce('day-seek', FIRST_DAY_CAPTIONS.seek);
+  if (t >= FIRST_DAY.chartHintAt) fireCaptionOnce('day-chart', FIRST_DAY_CAPTIONS.chartHint);
+  // The drink: a discrete thirst RISE (pond mouthfuls or a filled skin).
+  const v = getVitals();
+  if (t > 1 && d.prevThirst >= 0 && v.thirst - d.prevThirst >= FIRST_DAY.drinkJump) {
+    markMilestone(STORY_MILESTONES.senseWater); // even a drink ahead of the cue names it
+    markMilestone(STORY_MILESTONES.ch3Drank);
+    fireCaptionOnce('day-drank', FIRST_DAY_CAPTIONS.drank);
+    advanceToBeat('ch3-forage');
+  }
+  d.prevThirst = v.thirst;
+  tickWaterskinFilled();
+  tickMusings();
+}
+
+// S2 — HUNGER (stage 1): the drink wakes its sibling; the world sets the table.
+function tickForage(dt: number): void {
+  advanceFirstDayPhase(dt);
+  const t = d.beatClock;
+  if (
+    t >= FIRST_DAY.waterskinNudgeAt
+    && getItemCount('waterskin') === 0
+  ) {
+    fireCaptionOnce('day-skin-nudge', FIRST_DAY_CAPTIONS.waterskinNudge);
+  }
+  if (t >= FIRST_DAY.hungerCueAt) {
+    fireCaptionOnce('day-hunger-named', FIRST_DAY_CAPTIONS.hungerNamed);
+    markMilestone(STORY_MILESTONES.senseFood); // the FOOD row lands with its name
+  }
+  if (t >= FIRST_DAY.forageSightAt) fireCaptionOnce('day-forage-sight', FIRST_DAY_CAPTIONS.forageSight);
+  if (t >= FIRST_DAY.eatHintAt && getItemCount('berry') + getItemCount('root') > 0) {
+    fireCaptionOnce('day-eat-hint', FIRST_DAY_CAPTIONS.eatHint);
+  }
+  // The first meal: a discrete hunger RISE.
+  const v = getVitals();
+  if (t > 1 && d.forageAteAt < 0 && d.prevHunger >= 0 && v.hunger - d.prevHunger >= FIRST_DAY.eatJump) {
+    d.forageAteAt = t;
+    markMilestone(STORY_MILESTONES.senseFood);
+    markMilestone(STORY_MILESTONES.ch3Ate);
+    fireCaptionOnce('day-ate', FIRST_DAY_CAPTIONS.ate);
+  }
+  d.prevHunger = v.hunger;
+  if (d.forageAteAt >= 0) {
+    if (t >= d.forageAteAt + FIRST_DAY.pillarAfterEat) {
+      fireCaptionOnce('day-pillar', FIRST_DAY_CAPTIONS.pillar);
+    }
+    if (t >= d.forageAteAt + FIRST_DAY.pillarAfterEat + FIRST_DAY.advanceAfterPillar) {
+      advanceToBeat('ch3-signal');
+    }
+  }
+  tickWaterskinFilled();
+  tickMusings();
+}
+
+// S3 — STAMINA + the ch4 bridge: the klaxon. Sound travels before meaning; the
+// regulation voice returns as TEXT ON AIR (the AUDIT band), never as the feed.
+function tickSignal(dt: number): void {
+  const t = d.beatClock;
+  // The afternoon turns: golden hour arrives WITH the summons.
+  if (t < SIGNAL.phaseLerpSeconds) {
+    const k = smoothstep(t / SIGNAL.phaseLerpSeconds);
+    d.dayPhase = d.signalPhaseFrom + (SIGNAL.phaseTarget - d.signalPhaseFrom) * k;
+    setStoryForcedDayPhase(d.dayPhase);
+  } else {
+    advanceFirstDayPhase(dt);
+  }
+  // Three klaxon tones from the wreck.
+  if (d.signalKlaxons < SIGNAL.klaxonRepeats && t >= d.signalKlaxons * SIGNAL.klaxonGapSeconds) {
+    d.signalKlaxons++;
+    playSfx('terminalAlarm');
+  }
+  if (t >= SIGNAL.carrierAt) fireAuditOnce('sig-carrier', SIGNAL_LINES.carrier);
+  if (t >= SIGNAL.orderAt) fireAuditOnce('sig-order', SIGNAL_LINES.order);
+  if (t >= SIGNAL.runCueAt) fireCaptionOnce('sig-run', SIGNAL_LINES.runCue);
+  // The sprint names STAMINA once it has visibly spent something.
+  const v = getVitals();
+  if (!hasMilestone(STORY_MILESTONES.senseStamina) && v.stamina <= SIGNAL.staminaCueBelow) {
+    markMilestone(STORY_MILESTONES.senseStamina);
+    fireCaptionOnce('sig-stamina', SIGNAL_LINES.staminaNamed);
+  }
+  if (hasMilestone(STORY_MILESTONES.senseStamina) && isStaminaExhausted()) {
+    fireCaptionOnce('sig-floor', SIGNAL_LINES.exhausted);
+  }
+  setScoreIntensity(Math.min(1, 0.45 + t * 0.02));
+  // Arrived: the network logs the response time; the vigil begins. The gate
+  // waits for the summons itself — a worker already standing at the wreck
+  // still hears the whole order before the scene resolves.
+  if (t >= SIGNAL.runCueAt + 1.5 && wreckRelayHandle.position
+    && getPlayerWorldPosition().distanceTo(wreckRelayHandle.position) <= SIGNAL.relayReach) {
+    fireAuditOnce('sig-logged', SIGNAL_LINES.logged);
+    markMilestone(STORY_MILESTONES.ch3Signal);
+    advanceToBeat('ch4-vigil');
+  }
+}
+
+// S4 — the vigil: ch3's tender rest re-issued as an order. Same verb, inverted.
+function tickVigil(dt: number): void {
+  const t = d.beatClock;
+  if (t < VIGIL.duskLerpSeconds) {
+    const k = smoothstep(t / VIGIL.duskLerpSeconds);
+    d.dayPhase = d.vigilPhaseFrom + (DUSK.targetPhase - d.vigilPhaseFrom) * k;
+    setStoryForcedDayPhase(d.dayPhase);
+  } else {
+    advanceFirstDayPhase(dt); // the cycle rolls into the scheduled dark
+  }
+  if (t >= VIGIL.linesStartAt) fireAuditOnce('vig-dispatched', VIGIL_LINES.dispatched);
+  if (t >= VIGIL.linesStartAt + VIGIL.lineGapSeconds) fireAuditOnce('vig-remain', VIGIL_LINES.remain);
+  if (t >= VIGIL.linesStartAt + VIGIL.lineGapSeconds * 2) fireAuditOnce('vig-scheduled', VIGIL_LINES.scheduled);
+  if (t >= VIGIL.darkAsideAt) fireCaptionOnce('vig-aside', VIGIL_LINES.darkAside);
+  tickStoryChill(dt, 0.9); // the second night bites; the fire still answers
+  if (!d.captionsFired.has('vig-rest') && d.dayPhase >= DUSK.nightStart) {
+    fireCaptionOnce('vig-rest', VIGIL_LINES.restPrompt);
+  }
+  tickMusings();
+}
+
+// S5 — the arrival: dawn 2, and the letterbox returns WITH the system's agent.
+const _arrLook = new THREE.Vector3();
+const _arrSeg = new THREE.Vector3();
+
+/** Place the auditor at normalized progress u along his surface-snapped path. */
+function placeAuditWorker(u: number): void {
+  const path = storyAnchors.auditPath;
+  const worker = getAuditWorkerPose();
+  if (!path || path.length < 2) return;
+  let total = 0;
+  for (let i = 1; i < path.length; i++) total += path[i].position.distanceTo(path[i - 1].position);
+  let remaining = Math.min(1, Math.max(0, u)) * total;
+  worker.stride = remaining; // stride distance drives the metronome gait
+  for (let i = 1; i < path.length; i++) {
+    const a = path[i - 1];
+    const b = path[i];
+    const len = a.position.distanceTo(b.position);
+    if (remaining <= len || i === path.length - 1) {
+      const k = len > 1e-6 ? Math.min(1, remaining / len) : 0;
+      worker.position.copy(a.position).lerp(b.position, k);
+      worker.up.copy(a.up).lerp(b.up, k).normalize();
+      _arrSeg.copy(b.position).sub(a.position);
+      if (_arrSeg.lengthSq() > 1e-6) worker.heading.copy(_arrSeg.normalize());
+      return;
+    }
+    remaining -= len;
+  }
+}
+
+function tickArrival(dt: number): void {
+  const t = d.beatClock;
+  const T = ARRIVAL;
+  const r = getFeedRuntime();
+  if (!d.arrivalWoke) {
+    d.arrivalWoke = true;
+    d.dayPhase = T.wakePhase; // just before sunrise 2 — he comes out of the light
+  }
+  if (t < T.holdBlackSeconds) {
+    r.sleepFade = 1;
+    setStoryForcedDayPhase(d.dayPhase);
+    return;
+  }
+  advanceFirstDayPhase(dt);
+  r.sleepFade = Math.max(0, 1 - (t - T.holdBlackSeconds) / T.fadeUpSeconds);
+  // The first letterbox since A3 — cinema grammar returns with its agent.
+  r.cinematic = envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 1.5, T.endAt - 2, T.endAt);
+
+  // The auditor walks his straight lines, ridge → relay.
+  const worker = getAuditWorkerPose();
+  const u = (t - T.walkStartAt) / T.walkSeconds;
+  if (t >= T.walkStartAt - 1.5) {
+    placeAuditWorker(u);
+    worker.visible = true;
+    worker.walk = u > 0 && u < 1 ? 1 : 0;
+    if (u >= 1) {
+      // Standing at the relay, he faces the anomalous worker. He waits.
+      d.workerScratch.copy(getPlayerWorldPosition()).sub(worker.position);
+      if (d.workerScratch.lengthSq() > 0.5) worker.heading.copy(d.workerScratch.normalize());
+    }
+    // The camera stays on him for the whole approach — the arrival IS the
+    // shot — and releases only after he has spoken.
+    _arrLook.copy(worker.position).addScaledVector(worker.up, 1.4);
+    setCinematicLookTarget(_arrLook);
+    setCinematicLookWeight(
+      envelope(t, T.holdBlackSeconds + 1, T.holdBlackSeconds + 2.5, T.zeroAt, T.zeroAt + 3)
+    );
+  }
+  if (t >= T.freezeUntilSeconds) setStoryMoveScale(Math.min(1, (t - T.freezeUntilSeconds) / 1.5));
+
+  if (t >= T.someoneAt) fireCaptionOnce('arr-someone', ARRIVAL_CAPTIONS.someone);
+  if (t >= T.gaitAt) fireCaptionOnce('arr-gait', ARRIVAL_CAPTIONS.gait);
+  if (t >= T.foundAt) fireAuditOnce('arr-found', ARRIVAL_LINES.found, ARRIVAL_LINES.header);
+  if (t >= T.zeroAt) fireAuditOnce('arr-zero', ARRIVAL_LINES.zero, ARRIVAL_LINES.header);
+  // The bare-blink: two frames of HIS seeing (the ch1 chroma flash, inverted).
+  if (t >= T.blinkAt && !d.captionsFired.has('arr-blink')) {
+    d.captionsFired.add('arr-blink');
+    d.bareFramesLeft = 2;
+    playSfx('storyGlitch');
+  }
+  if (t >= T.borrowedAt) fireCaptionOnce('arr-borrowed', ARRIVAL_CAPTIONS.borrowed);
+  setScoreIntensity(0.35 + envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 6, T.endAt - 6, T.endAt) * 0.45);
+
+  if (t >= T.endAt) {
+    // Hand the sun to the live clock at dawn-2's phase (the A3 grammar).
     setDayPhaseOffset(d.dayPhase - d.elapsedSeconds / DAY_LENGTH_SECONDS);
-    scoreHit('bloom'); // texture arrives; the score resolves major and departs
-    completeStory(); // marks a3 + complete, clears the forced phase
+    hideAuditWorker();
+    // TEMPORARY: ch4-audit continues from here (see PARAVOXIA_CH4_PLAN.md §2 S6).
+    // Until it ships, the story banks the arrival checkpoint and hands back to
+    // the sandbox with the same guarantees the slice's completion gave.
+    completeStory();
   }
 }
 
@@ -968,6 +1417,7 @@ export function storyDirectorTick(
       break;
     case 'ch1-anomaly':
       tickCh1Flashes(dt);
+      tickAnomalySurvey(camera);
       break;
     case 'a1-ramp':
       tickA1Ramp();
@@ -1013,6 +1463,21 @@ export function storyDirectorTick(
     case 'a3-dawn':
       tickA3(dt);
       break;
+    case 'ch3-thirst':
+      tickThirst(dt);
+      break;
+    case 'ch3-forage':
+      tickForage(dt);
+      break;
+    case 'ch3-signal':
+      tickSignal(dt);
+      break;
+    case 'ch4-vigil':
+      tickVigil(dt);
+      break;
+    case 'ch4-arrival':
+      tickArrival(dt);
+      break;
     default:
       break;
   }
@@ -1028,6 +1493,14 @@ export function storyDirectorTick(
       r.desat = 1;
     }
   }
+  // 2-frame BARE drops (the auditor's eyes) — the same grammar, inverted: the
+  // player's first glitch was two frames of color; his presence is two frames
+  // of the old grey. Uniform writes only, no stage change, no rebuild.
+  if (d.bareFramesLeft > 0) {
+    overrideVoxelRealityEffects({ ...VOXEL_REALITY_PRESETS.bare });
+    d.bareFramesLeft -= 1;
+    if (d.bareFramesLeft === 0) clearVoxelRealityOverrides();
+  }
   if (d.glitchDecay > 0 && s.beat !== 'a1-ramp') {
     r.glitch = d.glitchDecay;
     r.scanRoll = d.glitchDecay * 0.4;
@@ -1036,5 +1509,39 @@ export function storyDirectorTick(
       r.glitch = 0;
       r.scanRoll = 0;
     }
+  }
+}
+
+// --- free-era survey marker ------------------------------------------------------------
+
+const _markerFire = new THREE.Vector3();
+
+/**
+ * The post-feed objective designator (rendered by FreeMarker, projected by
+ * StoryDirectorDriver): the current scene's quiet goal — the pond once the seek
+ * cue lands, the wreck during the summons, the fire once the scheduled dark
+ * arrives. Null everywhere else; the free world is not a checklist.
+ */
+export function storyFreeMarkerTarget(): { position: THREE.Vector3; label: string } | null {
+  const s = getStoryStateSnapshot();
+  if (!s.active) return null;
+  switch (s.beat) {
+    case 'ch3-thirst':
+      return d.beatClock >= FIRST_DAY.seekAt && storyAnchors.pond
+        ? { position: storyAnchors.pond.surface, label: 'water' }
+        : null;
+    case 'ch3-signal':
+      return wreckRelayHandle.position
+        ? { position: wreckRelayHandle.position, label: 'the wreck' }
+        : null;
+    case 'ch4-vigil': {
+      if (d.dayPhase < DUSK.nightStart) return null;
+      const fire = getCampfires()[0];
+      if (!fire) return null;
+      _markerFire.set(fire.pos[0], fire.pos[1], fire.pos[2]);
+      return { position: _markerFire, label: 'rest' };
+    }
+    default:
+      return null;
   }
 }

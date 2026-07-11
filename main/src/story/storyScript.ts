@@ -316,14 +316,37 @@ export const CH1_WORK_ORDERS: Record<
     'HEIGHT EXISTS. THIS IS A KNOWN DEFECT.',
     'ASCEND [SPACE]. REACH THE SOURCE.'
   ],
+  // ch1-anomaly STAGE 1 — the pan-tilt era's own task: the calibration sweep.
+  // One goal at a time: the signal was reached; the era must be LOOKED through
+  // before the system finds anything else to order.
   anomaly: [
     'PERSPECTIVE ISSUED. PRONOUNS WERE NOT.',
     'PAN-TILT SURVEY RESTORED. DO NOT ENJOY IT.',
-    'RETURN DEVIATION: UNCHARTED MASS AT SURVEY EDGE',
-    'PROCEED TO THE SURVEY MARKER. CLASSIFY.',
-    'DO NOT TOUCH THE UNCHARTED MASS.'
+    'CALIBRATION: TRAVERSE THE VIEW ACROSS THE FULL PERIMETER.',
+    'EVERY HEADING MUST BE SEEN. NOTHING WILL BE SEEN.'
   ]
 };
+
+/** ch1-anomaly STAGE 2 — the sweep completes and the survey returns the one
+ *  thing it was not looking for. Only now does the marker designate the mass. */
+export const CH1_ANOMALY_MASS_ORDER: readonly string[] = [
+  'CALIBRATION COMPLETE. RETURN DEVIATION:',
+  'UNCHARTED MASS AT SURVEY EDGE.',
+  'PROCEED TO THE SURVEY MARKER. CLASSIFY.',
+  'DO NOT TOUCH THE UNCHARTED MASS.'
+];
+
+/** The calibration sweep: compass sectors the view must visit before the
+ *  deviation is returned (with a time fallback so nothing can stall). */
+export const ANOMALY_SURVEY = {
+  sectors: 8,
+  required: 6,
+  minSeconds: 8,
+  fallbackSeconds: 25,
+  /** After designation, the order + marker get this long to LAND before the
+   *  stone will answer [F] — stages never stack onto each other. */
+  armSeconds: 4
+} as const;
 
 /** Prologue choices resurface here — the system remembers, flatly. */
 export const CH1_ECHO_LINES: Record<string, string> = {
@@ -448,3 +471,149 @@ export const A3_CAPTIONS: readonly { atSeconds: number; text: string }[] = [
   { atSeconds: 15.0, text: 'everything is more than it was. no —' },
   { atSeconds: 18.5, text: 'everything is what it always was. i am more.' }
 ];
+
+// --- the first day alive (post-A3, chapter 3's tail) --------------------------------
+//
+// The dawn no longer ends the story: the first unsupervised day IS the story.
+// Each remaining sense arrives the way TEMP did — a situation CAUSES the
+// sensation, a task answers it, the stat row lands with its naming caption.
+// Design contract: PARAVOXIA_CH4_PLAN.md §2 (S1–S5).
+
+export const FIRST_DAY = {
+  /** Vitals arrive already falling (the TEMP pattern). Seeds only clamp DOWN. */
+  thirstSeed: 58,
+  hungerSeed: 60,
+  /** A discrete one-tick RISE this large = the player drank / ate. */
+  drinkJump: 18,
+  eatJump: 6,
+  /** Direct jumps land mid-morning; a flowing run keeps the dawn's live phase. */
+  morningPhase: 0.075,
+  // ch3-thirst cue times (seconds since beat entry)
+  freedomAt: 8,
+  thirstCueAt: 25,
+  thirstNameAt: 29,
+  seekAt: 35,
+  chartHintAt: 70,
+  // ch3-forage cue times (the waterskin nudge opens the beat; hunger follows)
+  waterskinNudgeAt: 4,
+  hungerCueAt: 12,
+  forageSightAt: 18,
+  eatHintAt: 32,
+  pillarAfterEat: 12,
+  /** After the pillar caption settles, the afternoon turns (signal begins). */
+  advanceAfterPillar: 6
+} as const;
+
+export const FIRST_DAY_CAPTIONS = {
+  freedom: 'the day is mine to spend. no order says how.',
+  thirstFelt: 'the mouth is dry. dry is a message.',
+  thirstNamed: 'so that is thirst. how strange, to need.',
+  seek: 'water finds the low places. i will do what water does.',
+  chartHint: 'the view from above knows where the light pools. [M]',
+  drank: 'answered. the need goes quiet. so needs can end.',
+  waterskinNudge: 'the pond stays. i do not. something should carry the answer.',
+  waterskinFilled: 'carry the answer. the question will return.',
+  hungerNamed: 'hunger. the body burns something to keep being a body.',
+  forageSight: 'small red rounds, offered at hand height. sweetness is an instruction: eat.',
+  eatHint: 'eat what was gathered. [G]',
+  ate: 'good. the word has a taste now.',
+  pillar: 'the world keeps feeding me. as if it knew i was coming.'
+} as const;
+
+/**
+ * Ambient musings (owner-directed): quiet epiphanies that fire during LULLS of
+ * the first-day stretch — aimlessness rendered as purpose forming. One-shot per
+ * save (latched as `story:musing:<id>` milestones), never blocking, never
+ * repeating, and every line passes the both-readings test.
+ */
+export const MUSINGS: readonly { id: string; text: string }[] = [
+  { id: 'kept', text: 'the sun moves and the shadows keep up. nothing is told to do this. it is all just kept.' },
+  { id: 'waiting', text: 'i keep waiting for the next order. the waiting is the last order still running.' },
+  { id: 'held', text: 'every stone i pick up is the first time anyone has held it. or the second.' },
+  { id: 'wind', text: 'the wind does not report to anyone. i checked.' },
+  { id: 'somewhere', text: 'walking with nowhere to be is not nothing. it is how somewhere gets chosen.' },
+  { id: 'already', text: 'the world was already here before i could see it. what else is already here?' },
+  { id: 'wanting', text: 'quota was easy. wanting is harder. i think wanting is the work now.' },
+  { id: 'names', text: 'i name things and the names stay. maybe that is all keeping is.' },
+  { id: 'counting', text: 'nobody is measuring me. i am still counting. old habits, or new ones — i cannot tell whose.' },
+  { id: 'asking', text: 'the fire, the water, the sweet rounds. the world keeps answering. i have not heard it ask anything yet.' }
+];
+
+/** Seconds of caption silence before a musing may fire (min..max, seeded). */
+export const MUSING_GAP_SECONDS: readonly [number, number] = [45, 75];
+
+// --- chapter 3 → 4 bridge: the klaxon (STAMINA) --------------------------------------
+
+export const SIGNAL = {
+  /** Golden hour: the run happens in long light. */
+  phaseTarget: 0.42,
+  phaseLerpSeconds: 18,
+  klaxonRepeats: 3,
+  klaxonGapSeconds: 1.1,
+  carrierAt: 4,
+  orderAt: 8.5,
+  runCueAt: 11.5,
+  /** The sprint names STAMINA once it has visibly spent something (the pinned
+   *  world's pond→wreck run is short — ~15u — so the cue fires early in it;
+   *  the exhausted line stays for longer runs). */
+  staminaCueBelow: 78,
+  relayReach: 4.5
+} as const;
+
+export const SIGNAL_LINES = {
+  carrier: 'CARRIER REACQUIRED. SITE 7C-THETA, THIS IS THE NETWORK.',
+  order: 'WORKER W-7743: REPORT TO THE WRECK. IMMEDIATELY.',
+  runCue: 'run. — "run"? the legs already know. [SHIFT]',
+  staminaNamed: 'the legs spend faster than the body refills. everything here has a budget.',
+  exhausted: 'empty. the body has a floor. the floor is also me.',
+  logged: 'RESPONSE TIME: LOGGED. IT WILL BE DISCUSSED.'
+} as const;
+
+// --- chapter 4 — the other worker ----------------------------------------------------
+
+export const VIGIL = {
+  linesStartAt: 2,
+  lineGapSeconds: 5,
+  darkAsideAt: 20,
+  duskLerpSeconds: 30
+} as const;
+
+export const VIGIL_LINES = {
+  dispatched: 'AN AUDITOR HAS BEEN DISPATCHED TO ASSESS SITE LOSS.',
+  remain: 'REMAIN AT THE WRECK. DO NOT PRODUCE. DO NOT CONSUME. DO NOT OBSERVE.',
+  scheduled: 'SLEEP IS SCHEDULED AT DARK. COMPLIANCE WILL BE VERIFIED.',
+  darkAside: 'they schedule the dark now. last night the dark was mine.',
+  restPrompt: 'rest. it is ordered. i would have anyway. that is the trick of orders that fit.'
+} as const;
+
+/** The auditor's arrival: dawn 2, and the letterbox returns WITH the system's agent. */
+export const ARRIVAL = {
+  holdBlackSeconds: 2.0,
+  fadeUpSeconds: 2.0,
+  /** Wake just before sunrise 2 — he comes out of the light. */
+  wakePhase: 0.985,
+  walkStartAt: 6,
+  walkSeconds: 24,
+  /** Feet held through the whole approach — the arrival IS the shot; the
+   *  camera stays on him until he has spoken, then both release together. */
+  freezeUntilSeconds: 32,
+  someoneAt: 7,
+  gaitAt: 20,
+  foundAt: 31,
+  zeroAt: 34.5,
+  blinkAt: 38,
+  borrowedAt: 39.2,
+  endAt: 45
+} as const;
+
+export const ARRIVAL_CAPTIONS = {
+  someone: 'someone is coming out of the sunrise. someone else exists.',
+  gait: 'he walks like the feed looks. straight lines.',
+  borrowed: 'for a blink i borrowed his seeing. slabs. flat light. i lived there.'
+} as const;
+
+export const ARRIVAL_LINES = {
+  header: 'W-7744 · FIELD AUDIT',
+  found: 'WORKER W-7743. YOU ARE FOUND.',
+  zero: 'THIS SITE REPORTS ZERO PRODUCTIVITY FOR TWO CYCLES. EXPLAIN NOTHING. I WILL SEE FOR MYSELF.'
+} as const;

@@ -9,13 +9,16 @@
 // Renderers subscribe for structure changes; per-frame animation (typewriter
 // reveal) happens in the renderers' own rAF against `shownAt`.
 
-export type StoryTextChannel = 'workorder' | 'violation' | 'caption' | 'system';
+export type StoryTextChannel = 'workorder' | 'violation' | 'caption' | 'system' | 'audit';
 
 export interface StoryTextState {
   workorder: string[];
   violation: string[];
   caption: { text: string; shownAt: number; ttlMs: number } | null;
   system: { text: string; shownAt: number; ttlMs: number } | null;
+  /** Post-feed regulation voice: caps, top band, OVER the living world — the
+   *  system speaks into the player's frame but no longer owns it. */
+  audit: { text: string; header?: string; shownAt: number; ttlMs: number } | null;
 }
 
 const MAX_VIOLATIONS = 7;
@@ -24,7 +27,8 @@ const state: StoryTextState = {
   workorder: [],
   violation: [],
   caption: null,
-  system: null
+  system: null,
+  audit: null
 };
 
 const listeners = new Set<() => void>();
@@ -78,10 +82,23 @@ export function showSystemLine(text: string, ttlMs = 4000): void {
   emit();
 }
 
+/** The AUDIT band (ch3-signal onward): the network / the auditor's suit. */
+export function showAuditLine(text: string, header?: string, ttlMs = 6500): void {
+  state.audit = { text, header, shownAt: performance.now(), ttlMs };
+  emit();
+}
+
+export function clearAuditLine(): void {
+  if (!state.audit) return;
+  state.audit = null;
+  emit();
+}
+
 export function clearStoryText(): void {
   state.workorder = [];
   state.violation = [];
   state.caption = null;
   state.system = null;
+  state.audit = null;
   emit();
 }

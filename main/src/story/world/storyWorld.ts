@@ -6,6 +6,7 @@ import {
 } from '../../utils/worldCoordinates.ts';
 import { findTopFaceSurfaceVoxel } from '../../utils/worldArrival.ts';
 import { voxelCoordToWorld } from '../../utils/cubeGravityConstants.ts';
+import { getWorldGen } from '../../utils/worldGenCache.ts';
 
 // --- The story world ------------------------------------------------------------
 //
@@ -145,6 +146,126 @@ export function getSupplyPodPoses(planetSize: number, terrainSeed: number): Stor
 /** The hero apple tree: farther out, opposite direction — a committed walk. */
 export function getHeroTreePose(planetSize: number, terrainSeed: number): StoryPropPose {
   return surfacePoseNear(planetSize, terrainSeed, -16, 14, 0.95);
+}
+
+// --- the first day alive / chapter 4 -------------------------------------------------
+
+/**
+ * Live world anchors for the director/autopilot (the anomalyStoneHandle
+ * pattern, computed once per mount by StoryWorldProps — the director never
+ * needs planetSize/terrainSeed itself).
+ */
+export const storyAnchors: {
+  pond: PondPose | null;
+  auditPath: StoryPropPose[] | null;
+  /** The live story world's seed (forage probes need it). */
+  terrainSeed: number | null;
+} = { pond: null, auditPath: null, terrainSeed: null };
+
+export interface PondPose {
+  /** A point on the water surface at the pond's near edge (drink/marker goal). */
+  surface: THREE.Vector3;
+  /** The last land column before the water — a dry approach point. */
+  shore: THREE.Vector3;
+  /** The pond floor beneath the deepest found column (ch4-dive's kit rests here). */
+  floor: THREE.Vector3;
+  up: THREE.Vector3;
+  /** Water depth (voxels) at the found column. */
+  depth: number;
+}
+
+const pondCache = new Map<string, PondPose | null>();
+
+/**
+ * Deterministic nearest-water scan on the top face: ring-search outward from the
+ * arrival column for a flooded cell above ground (prefer depth ≥ 2 — the dive
+ * needs a floor below the surface). Cached per size:seed; asserted in
+ * storyWorld.test.ts (the pinned world must keep its pond within reach).
+ */
+export function getPondPose(planetSize: number, terrainSeed: number): PondPose | null {
+  const key = `${planetSize}:${terrainSeed}`;
+  const cached = pondCache.get(key);
+  if (cached !== undefined) return cached;
+
+  const gen = getWorldGen(planetSize, terrainSeed).generator;
+  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+
+  const waterAt = (ox: number, oz: number): { voxel: { x: number; y: number; z: number }; depth: number } | null => {
+    const ground = findTopFaceSurfaceVoxel(planetSize, terrainSeed, {
+      x: arrival.x + ox,
+      z: arrival.z + oz
+    });
+    if (!gen.isWaterVoxel(ground.x, ground.y + 1, ground.z)) return null;
+    let depth = 1;
+    while (depth < 8 && gen.isWaterVoxel(ground.x, ground.y + 1 + depth, ground.z)) depth++;
+    return { voxel: { x: ground.x, y: ground.y, z: ground.z }, depth };
+  };
+
+  let shallow: PondPose | null = null;
+  for (let radius = 3; radius <= 60; radius += 1) {
+    // Ring perimeter, stepped by 2 to keep the scan cheap; determinism holds
+    // because the iteration order is fixed.
+    for (let x = -radius; x <= radius; x += 2) {
+      for (const z of Math.abs(x) === radius ? rangeInclusive(-radius, radius).filter(v => v % 2 === 0) : [-radius, radius]) {
+        const hit = waterAt(x, z);
+        if (!hit) continue;
+        const up = voxelCoordToWorld(hit.voxel.x, hit.voxel.y, hit.voxel.z).normalize();
+        const surfaceVoxelY = hit.voxel.y + hit.depth;
+        const surface = voxelCoordToWorld(hit.voxel.x, surfaceVoxelY, hit.voxel.z).addScaledVector(up, 0.5);
+        const floor = voxelCoordToWorld(hit.voxel.x, hit.voxel.y, hit.voxel.z).addScaledVector(up, 0.6);
+        // Shore: step back toward the arrival, horizontally, out of the water.
+        const back = new THREE.Vector3(Math.sign(-x) || 1, 0, Math.sign(-z) || 0);
+        const shore = surface.clone().addScaledVector(back, 2.2);
+        const pose: PondPose = { surface, shore, floor, up, depth: hit.depth };
+        if (hit.depth >= 2) {
+          pondCache.set(key, pose);
+          return pose;
+        }
+        if (!shallow) shallow = pose;
+      }
+    }
+  }
+  pondCache.set(key, shallow);
+  return shallow;
+}
+
+/**
+ * The wreck relay: the network's re-established voice, planted at the crash
+ * strip's impact site (the DescentPod's landmark) — chapter 4's set-piece anchor.
+ */
+export function getWreckRelayPose(planetSize: number, terrainSeed: number): StoryPropPose {
+  const plane = getStorySidePlane(planetSize, terrainSeed);
+  const alongX = Math.abs(plane.travelAxis.x) > 0.5;
+  // Beside the pod impact point (impact sits at -5 along the travel axis).
+  const along = -5 * (alongX ? Math.sign(plane.travelAxis.x) : Math.sign(plane.travelAxis.z));
+  return surfacePoseNear(
+    planetSize,
+    terrainSeed,
+    alongX ? along : 2,
+    alongX ? 2 : along,
+    1.0 // surface poses are voxel centers; the console's base sits ON the ground
+  );
+}
+
+/**
+ * The auditor's approach: surface-snapped samples from beyond the signal mesa's
+ * ridge down to the wreck relay. The director walks him along this polyline
+ * (arc-length lerp); the samples keep his boots near the terrain.
+ */
+export function getAuditWorkerPath(planetSize: number, terrainSeed: number): StoryPropPose[] {
+  // He comes DOWN THE WORK STRIP — the regulation line the player once walked —
+  // from beyond the horizon toward the wreck. (Deliberately clear of the signal
+  // mesa prop at (14,-8): terrain snapping knows nothing about props.)
+  // Offset one row (z=+3) so he passes BESIDE the worker who stands at the
+  // arrival column — close enough to read, never through them — then stands
+  // between the site and the relay, clear of the pod wreck at (-5, 0) and of
+  // the console at (-5, 2), facing the site.
+  const offsets: Array<[number, number]> = [
+    [34, 3], [28, 3], [22, 3], [16, 3], [10, 3], [4, 3], [-2, 1]
+  ];
+  // Lift 1.05: surface poses are voxel CENTERS (top face sits +1.0 above) —
+  // his boots belong on the ground, not half a voxel inside it.
+  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 1.05));
 }
 
 /** Max debris pieces the descent can scatter (voyage hull outcome trims it). */

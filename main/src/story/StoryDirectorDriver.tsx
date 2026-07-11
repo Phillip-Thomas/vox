@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { storyDirectorTick } from './storyDirector.ts';
+import { anomalyMassDesignated, storyDirectorTick, storyFreeMarkerTarget } from './storyDirector.ts';
 import { advanceToBeat, getStoryStateSnapshot } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { autopilotTick, isMovieMode } from './autopilot.ts';
@@ -43,7 +43,9 @@ function redactionLabelFor(distance: number): string {
 }
 
 function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; label: string } | null {
-  if (beat === 'ch1-anomaly' && anomalyStoneHandle.position) {
+  // One goal at a time: the mass is only designated AFTER the calibration
+  // sweep — until then the CCTV era has exactly one task, looking.
+  if (beat === 'ch1-anomaly' && anomalyStoneHandle.position && anomalyMassDesignated()) {
     return { position: anomalyStoneHandle.position, label: 'UNCHARTED MASS' };
   }
   if (beat === 'ch1-iso' && anomalyStoneHandle.position) {
@@ -71,7 +73,8 @@ function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; lab
     });
     return nearest ? { position: nearest, label: 'SUPPLY POD' } : null;
   }
-  return null;
+  // Post-feed beats (the first day alive / ch4): the director owns the target.
+  return storyFreeMarkerTarget();
 }
 
 const StoryDirectorDriver: React.FC = () => {

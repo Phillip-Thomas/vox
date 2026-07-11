@@ -210,9 +210,12 @@ anything. What shipped (and where it refines the designs below):
 **NEXT STEPS (in order):**
 1. **Owner playtest passes** on the slice: pacing (era lengths are named
    constants), music mix, prologue feel, chart/UX. Feed notes back as tuning.
-2. **Chapter 4 — "The Other Worker" (A4: Breath)** — the next build; see its
-   section below (now annotated for the AI pillar + discovery arc). Built by
-   the `chapter-director` agent (`.claude/agents/chapter-director.md`).
+2. **Chapter 4 — "The Other Worker" (A4: Breath)** — IN PROGRESS. Full
+   contract: `PARAVOXIA_CH4_PLAN.md`; its S1–S5 SHIPPED 2026-07-10 (the first
+   day alive: thirst/forage/klaxon-stamina discovery scenes, ambient musings,
+   the scheduled sleep, and W-7744's arrival — temporarily terminal there).
+   Next: S6 `ch4-audit` onward. Built by the `chapter-director` agent
+   (`.claude/agents/chapter-director.md`).
 3. **Color-era enrichment pass** (deferred by choice): more rungs/content in
    ch2–ch3, and the third-person→embodied-A3 endgame POV candidate (see the
    chronology section) — revisit after ch4 informs how the era reads.

@@ -1,7 +1,7 @@
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { getVitals } from '../game/systems/survivalVitals.ts';
 import { getMawChargeFraction } from '../game/systems/mawSystem.ts';
-import { STORY_MILESTONES } from './storyState.ts';
+import { getStoryStateSnapshot, STORY_MILESTONES } from './storyState.ts';
 import { showCaption } from './storyText.ts';
 
 // --- The self-discovery arc -------------------------------------------------------
@@ -24,8 +24,15 @@ let lastMawCharge = -1;
 export function tickSenseDiscovery(jetFuel: number): void {
   if (!hasMilestone(m.started)) return;
 
+  // The first-day scenes OWN their sensations while their beats run (the
+  // director names them on cue — see storyDirector's tickThirst/Forage/Signal);
+  // these live checks remain as fallbacks for the settled post-story world.
+  const beat = getStoryStateSnapshot().beat;
+  const sceneOwnsNeeds = beat === 'ch3-thirst' || beat === 'ch3-forage';
+  const sceneOwnsStamina = beat === 'ch3-signal';
+
   // Post-awakening bodily needs (the dawn hands the body over for real).
-  if (hasMilestone(m.a3)) {
+  if (hasMilestone(m.a3) && !sceneOwnsNeeds) {
     const v = getVitals();
     if (!hasMilestone(m.senseWater) && v.thirst < 65) {
       markMilestone(m.senseWater);
@@ -40,7 +47,7 @@ export function tickSenseDiscovery(jetFuel: number): void {
   // Quiet discoveries: the readout simply appears with first use.
   if (hasMilestone(m.a2)) {
     const v = getVitals();
-    if (!hasMilestone(m.senseStamina) && v.stamina < 85) markMilestone(m.senseStamina);
+    if (!hasMilestone(m.senseStamina) && !sceneOwnsStamina && v.stamina < 85) markMilestone(m.senseStamina);
     if (!hasMilestone(m.senseOxygen) && v.oxygen < 92) markMilestone(m.senseOxygen);
     if (!hasMilestone(m.senseJet) && jetFuel < 0.99) markMilestone(m.senseJet);
     if (!hasMilestone(m.senseMaw)) {
