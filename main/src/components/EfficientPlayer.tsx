@@ -106,8 +106,19 @@ import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts'
 import { isMapViewOpen } from '../game/mapView.ts';
 import { tickSenseDiscovery } from '../story/senseDiscovery.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
+import { markSpawnSettled, resetSpawnSettle } from '../game/spawnSettle.ts';
 
 const _zeroVelocity = new THREE.Vector3();
+
+// Spawn-settle guard: the world's colliders STREAM in after the scene mounts;
+// until the ground under the spawn is real, the body is pinned at its spawn
+// pose (nobody falls through a world that isn't there yet). The probe is long
+// enough that a legitimate mid-air pose (a jump-saved pose over real ground)
+// settles instantly; only a truly unbuilt world holds.
+const SPAWN_SETTLE_PROBE_LENGTH = 40;
+const SPAWN_SETTLE_MAX_SECONDS = 8;
+const _spawnProbeOrigin = new THREE.Vector3();
+const _spawnProbeDir = new THREE.Vector3();
 
 // Movie-mode merge: the story autopilot's virtual gamepad overlays the keyboard.
 function withAutopilot<T extends Record<string, boolean | undefined>>(controls: T): T {
@@ -327,6 +338,15 @@ export default function EfficientPlayer({
   // branch and is published to playerSubmersion for audio / fog / post / particles.
   const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
   const submergence = useRef(0);
+  const spawnGuard = useRef({ done: false, clock: 0 });
+
+  // World swaps remount the player: the settle flag must never leak between
+  // worlds (the story director + autopilot hold on it).
+  useEffect(() => {
+    resetSpawnSettle();
+    spawnGuard.current.done = false;
+    spawnGuard.current.clock = 0;
+  }, []);
   const defaultSpawnPosition = useMemo(
     () => new THREE.Vector3(0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0),
     [planetSize]
@@ -1096,6 +1116,31 @@ export default function EfficientPlayer({
     }
 
     const position = vectorFromRapier(body.translation());
+
+    // SPAWN SETTLE: hold the body at its spawn until the ground below exists
+    // (colliders stream in asynchronously — heavy first frames used to drop
+    // the capsule THROUGH the still-loading terrain, camera and all). A ship
+    // approach spawns deliberately high above the stream range and skips it.
+    if (!spawnGuard.current.done) {
+      spawnGuard.current.clock += FIXED_PHYSICS_STEP;
+      const highSpawn = initialSpawnPosition.length() > planetSize / 2 + 8;
+      let grounded = highSpawn;
+      if (!grounded) {
+        const up = FACE_NORMALS[dominantFaceForPosition(initialSpawnPosition)];
+        _spawnProbeOrigin.copy(initialSpawnPosition).addScaledVector(up, 0.5);
+        _spawnProbeDir.copy(up).multiplyScalar(-1);
+        const ray = new rapier.Ray(vectorToRapier(_spawnProbeOrigin), vectorToRapier(_spawnProbeDir));
+        grounded = world.castRay(ray, SPAWN_SETTLE_PROBE_LENGTH, true, undefined, undefined, undefined, body) != null;
+      }
+      if (grounded || spawnGuard.current.clock >= SPAWN_SETTLE_MAX_SECONDS) {
+        spawnGuard.current.done = true;
+        markSpawnSettled();
+      } else {
+        body.setTranslation(vectorToRapier(initialSpawnPosition), true);
+        body.setLinvel(vectorToRapier(_zeroVelocity), true);
+        return;
+      }
+    }
 
     // Movie-mode last-resort unstick: the autopilot may request a small
     // teleport toward its goal after repeated failed break-outs. Consumed only

@@ -18,8 +18,9 @@ const SCORCH = '#57635e';
 const LAMP_LIVE = new THREE.Color('#ff5a3c');
 const LAMP_DEAD = new THREE.Color('#20241f');
 
-/** Beats from which the relay is awake (the klaxon and after). */
-const LIVE_BEATS = new Set(['ch3-signal', 'ch4-vigil', 'ch4-arrival']);
+/** Beats from which the relay is awake (the klaxon and after) — including the
+ *  post-arrival 'done' world: the carrier stays up; the audit is in progress. */
+const LIVE_BEATS = new Set(['ch3-signal', 'ch4-vigil', 'ch4-arrival', 'done']);
 
 interface WreckRelayProps {
   planetSize: number;

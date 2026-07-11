@@ -153,7 +153,7 @@ const TerminalPrologue: React.FC = () => {
           <div style={{ fontSize: 20 }}>SURFACE IN 40 SECONDS.</div>
           <div style={{ fontSize: 12, color: PHOSPHOR_DIM }}>THIS WAS NOT SCHEDULED.</div>
           <div style={{ fontSize: 11, color: PHOSPHOR_DIM, marginTop: 6 }}>
-            VISUAL CORTEX LINK: RASTER MODE (1-BIT) AVAILABLE · PAN-TILT SURVEY OFFLINE
+            VISUAL CORTEX LINK: RASTER MODE (1-BIT) EXPECTED ON SURFACE · PAN-TILT SURVEY OFFLINE
           </div>
           <div style={{ marginTop: 18, fontSize: 14, letterSpacing: '0.2em' }}>
             {sceneReady

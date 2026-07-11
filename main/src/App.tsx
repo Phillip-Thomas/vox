@@ -411,16 +411,19 @@ const App: React.FC = () => {
   }, [isTouch]);
 
   // M toggles the survey chart (the nav era's overhead view, retained as a
-  // tool). Story saves unlock it by completing the nav rung; free-look only,
-  // and only during free-move beats (cutscene beats keep the camera).
+  // tool). Story saves unlock it by completing the nav rung; from then on the
+  // gate is POLICY-DRIVEN, not a beat whitelist: any beat with free look and
+  // live feet has the chart (cutscenes freeze the feet, feed eras own the
+  // look — both refuse it by construction).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code !== 'KeyM') return;
       if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
-      if (getStoryInputPolicy().lookMode !== 'free') return;
+      const policy = getStoryInputPolicy();
+      if (policy.lookMode !== 'free') return;
       const s = getStoryStateSnapshot();
       if (hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch1Nav)) return;
-      if (s.active && s.beat !== 'ch3-gather' && s.beat !== 'ch3-await-rest') return;
+      if (s.active && policy.moveSpeedScale <= 0) return;
       toggleMapView();
     };
     window.addEventListener('keydown', onKey);

@@ -19,9 +19,18 @@ const StoryOverlays: React.FC = () => {
   const story = useStoryState();
   const { phase } = useAppState();
   // The earned world keeps the caption channel: post-A3 sense discoveries
-  // ("so that is thirst.") still speak, even though the story is dormant.
+  // ("so that is thirst.") still speak, even though the story is dormant —
+  // and the AUDIT band survives the hand-off (the arrival's last line,
+  // "AUDIT IN PROGRESS. RESUME NOTHING.", finishes its ttl in the done world).
   if (!story.active) {
-    if (story.chapter === 'complete' && phase === 'playing') return <StoryCaptions />;
+    if (story.chapter === 'complete' && phase === 'playing') {
+      return (
+        <>
+          <StoryCaptions />
+          <AuditBand />
+        </>
+      );
+    }
     return null;
   }
 

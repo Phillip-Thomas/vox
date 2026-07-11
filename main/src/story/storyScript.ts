@@ -10,7 +10,12 @@ import type { VoyageDeck } from './voyageDeck.ts';
 //   euphemism. Never cruel, never kind. ALL CAPS, mono.
 //
 //   AWAKENING — the player's interior: lowercase, concrete, sensory, brief.
-//   Never explains. Appears only after color exists.
+//   Never explains. Staged per the perspective map (PARAVOXIA_PROGRESSION.md
+//   §third reading): PRE-LIFT it may only observe the worker impersonally —
+//   and when it does, it speaks in PARENTHESES (the watcher's private,
+//   pre-conscious voice; the VOYAGE_STRANGE grammar). The first "i" is the
+//   lift's "i—"; from embodiment on the voice runs bare lowercase, and
+//   sensations are named one at a time, each with its HUD element.
 
 // --- prologue -------------------------------------------------------------------
 
@@ -116,7 +121,7 @@ export const VOYAGE_DECK: VoyageDeck = {
       options: [
         { id: 'nothing', label: '"NOTHING IS OUTSIDE."', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-question-nothing' },
         { id: 'work', label: '"MORE WORK IS OUTSIDE."', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-question-work' },
-        { id: 'unknown', label: '"I DON\'T KNOW." (TRUE)', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-question-unknown' }
+        { id: 'unknown', label: '"THAT IS NOT KNOWN." (TRUE)', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-question-unknown' }
       ]
     },
     diagnostic: {
@@ -279,20 +284,29 @@ export const CH1_WORK_ORDERS: Record<
   'fixed' | 'track' | 'raster' | 'depth' | 'nav' | 'iso' | 'anomaly',
   readonly string[]
 > = {
+  // The camera-switch fiction: the crash took the suit's own eyes offline, so
+  // the feed serves the SITE'S fixed surveillance cameras — walking off a
+  // screen edge is a coverage hand-off, not a scroll. (Under the pillar: the
+  // route intelligence watching its own site, cutting between its own eyes.)
   fixed: [
-    'VISUAL CORTEX LINK: RASTER MODE (1-BIT) · FRAME BOLTED',
+    'VISUAL CORTEX LINK: DOWN. FEED: SITE CAMERAS (1-BIT)',
     'DIRECTIVE 1: SURVIVE. (AMENDED: SEE DIRECTIVE 2)',
     'DIRECTIVE 2: CALIBRATE EXTRACTOR. HARVEST BIOFIBER.',
     'TRAVERSE [A]/[D] · EXTRACT: HOLD [E]',
-    'THE FRAME DOES NOT FOLLOW YOU. STAY WHERE YOU CAN BE SEEN.'
+    'COVERAGE IS CELLULAR. CAMERAS DO NOT MOVE. WORKERS DO.'
   ],
+  // The first act of attention: the watcher stops cutting away. The system
+  // rationalizes it; the truth peeks through once, lowercase, in parentheses
+  // (the VOYAGE_STRANGE grammar — the route intelligence's own voice).
   track: [
-    'OPTICAL TRACKING MODULE: ENABLED',
-    'THE FRAME WILL FOLLOW YOU NOW.',
-    'THIS IS NOT A PRIVILEGE. IT IS SURVEILLANCE.'
+    'CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU.',
+    'JUSTIFICATION: CONTINUITY OF COVERAGE.',
+    'NO FURTHER JUSTIFICATION IS ON FILE.',
+    'THIS IS NOT ATTENTION. IT IS COVERAGE.',
+    '(simpler to keep watching this one.)'
   ],
   raster: [
-    'VISUAL CORTEX LINK: RASTER MODE (1-BIT) · PAN-TILT OFFLINE',
+    'HELD VIEW UPGRADED: TRAVELING COVERAGE (1-BIT) · PAN-TILT OFFLINE',
     'DIRECTIVE 2 (CONT.): RESUME QUOTA. RECOVER HULL DEBRIS.',
     'TRAVERSE [A]/[D] · ASCEND [SPACE] · EXTRACT: HOLD [E]',
     'DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.'
@@ -307,7 +321,7 @@ export const CH1_WORK_ORDERS: Record<
     'UNREGISTERED SIGNAL AT SURVEY EDGE.',
     'NAV VIEW ENGAGED. YOU ARE THE SMALL MARK.',
     'REACH THE TRIANGULATION POINTS. ALL OF THEM.',
-    'THE MAP IS NOT THE TERRITORY. THE MAP IS BETTER.',
+    'THE MAP OMITS NOTHING OF VALUE. THE TERRITORY DOES.',
     'THIS VIEW WILL BE RETAINED AS: SURVEY CHART [M].'
   ],
   iso: [
@@ -320,12 +334,31 @@ export const CH1_WORK_ORDERS: Record<
   // One goal at a time: the signal was reached; the era must be LOOKED through
   // before the system finds anything else to order.
   anomaly: [
-    'PERSPECTIVE ISSUED. PRONOUNS WERE NOT.',
+    'PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.',
     'PAN-TILT SURVEY RESTORED. DO NOT ENJOY IT.',
     'CALIBRATION: TRAVERSE THE VIEW ACROSS THE FULL PERIMETER.',
     'EVERY HEADING MUST BE SEEN. NOTHING WILL BE SEEN.'
   ]
 };
+
+/**
+ * ch1-fixed: the watcher's observations of the worker. The external-camera
+ * eras are PRE-conscious — thoughts ABOUT the worker, never "i" — and the
+ * watcher is amused by the monotony it is somehow unable to look away from.
+ * (Every line must survive both readings: a numbed worker dissociating on his
+ * own suit feed / the route intelligence intrigued by its own creation.)
+ * Scheduled lines defer to caption lulls; the CUT line fires on the first
+ * screen flip — the moment the watcher switches cameras to keep the worker.
+ */
+export const CH1_FIXED_CAPTIONS: readonly { atSeconds: number; text: string }[] = [
+  { atSeconds: 6, text: '(it walks. it stops. it hums at the ground until the ground gives up a fiber. it walks again.)' },
+  { atSeconds: 26, text: '(the worker repeats. the ground repeats. unclear which one is copying the other.)' },
+  { atSeconds: 42, text: '(no directive requires watching this one so closely. the watching continues anyway.)' }
+];
+
+/** Fired on the first screen flip (the first camera cut). */
+export const CH1_FIXED_CUT_CAPTION =
+  '(lost it. found it. the site has plenty of cameras and exactly one thing worth watching.)';
 
 /** ch1-anomaly STAGE 2 — the sweep completes and the survey returns the one
  *  thing it was not looking for. Only now does the marker designate the mass. */
@@ -356,7 +389,7 @@ export const CH1_ECHO_LINES: Record<string, string> = {
   'echo-window-seal': 'NOTE: PANEL RESEAL LOGGED. THE STARS REMAIN UNOBSERVED.',
   'echo-window-look': 'NOTE: 2.4 SECONDS OF UNPRODUCTIVE OBSERVATION ON RECORD.',
   'echo-hum-ignore': 'NOTE: NO SOUND WAS REPORTED. NO SOUND OCCURRED.',
-  'echo-hum-join': 'NOTE: AN UNAPPROVED SOUND WAS ALMOST ON RECORD. CAUTION.',
+  'echo-hum-join': 'NOTE: AN UNAPPROVED SOUND WAS ALMOST ON RECORD.',
   'echo-hum-report': 'NOTE: FORM S-9 PROCESSED. WORKER 4 NO LONGER HUMS.',
   'echo-question-nothing': 'NOTE: YOUR ANSWER TO WORKER 9 WAS CORRECT. NOTHING IS OUTSIDE.',
   'echo-question-work': 'NOTE: YOUR ANSWER TO WORKER 9 WAS ADEQUATE. IT IS ALSO OUTSIDE.',
@@ -436,8 +469,11 @@ export const A2_CAPTIONS: readonly { atSeconds: number; text: string }[] = [
 // --- chapter 3 — grain -------------------------------------------------------------
 
 export const CH3_CAPTIONS = {
+  /** The first sensation of the embodied arc: HEALTH named as a body. Ties the
+   *  watcher's "(it walks…)" to the walker it now is — both readings intact. */
+  body: 'a body. it is the thing that was walking.',
   gather: 'cold is coming. i don’t know how i know that.',
-  fireBuilt: 'i made warmth. when the dark comes, i can rest beside it.',
+  fireBuilt: 'i made warmth. if a dark comes, i can rest beside it.',
   duskStart: 'the light is leaving. it has never done that.',
   night: 'ah — it helps. what is it? how did i know to make it?',
   restPrompt: 'rest, by the fire. [F]'
@@ -515,7 +551,7 @@ export const FIRST_DAY_CAPTIONS = {
   waterskinFilled: 'carry the answer. the question will return.',
   hungerNamed: 'hunger. the body burns something to keep being a body.',
   forageSight: 'small red rounds, offered at hand height. sweetness is an instruction: eat.',
-  eatHint: 'eat what was gathered. [G]',
+  eatHint: 'the hands gathered. the mouth knows why. [G]',
   ate: 'good. the word has a taste now.',
   pillar: 'the world keeps feeding me. as if it knew i was coming.'
 } as const;
@@ -563,7 +599,7 @@ export const SIGNAL = {
 export const SIGNAL_LINES = {
   carrier: 'CARRIER REACQUIRED. SITE 7C-THETA, THIS IS THE NETWORK.',
   order: 'WORKER W-7743: REPORT TO THE WRECK. IMMEDIATELY.',
-  runCue: 'run. — "run"? the legs already know. [SHIFT]',
+  runCue: 'run. the legs already know the word. [SHIFT]',
   staminaNamed: 'the legs spend faster than the body refills. everything here has a budget.',
   exhausted: 'empty. the body has a floor. the floor is also me.',
   logged: 'RESPONSE TIME: LOGGED. IT WILL BE DISCUSSED.'
@@ -583,7 +619,7 @@ export const VIGIL_LINES = {
   remain: 'REMAIN AT THE WRECK. DO NOT PRODUCE. DO NOT CONSUME. DO NOT OBSERVE.',
   scheduled: 'SLEEP IS SCHEDULED AT DARK. COMPLIANCE WILL BE VERIFIED.',
   darkAside: 'they schedule the dark now. last night the dark was mine.',
-  restPrompt: 'rest. it is ordered. i would have anyway. that is the trick of orders that fit.'
+  restPrompt: 'rest. it is ordered. i would have anyway.'
 } as const;
 
 /** The auditor's arrival: dawn 2, and the letterbox returns WITH the system's agent. */
@@ -603,6 +639,8 @@ export const ARRIVAL = {
   zeroAt: 34.5,
   blinkAt: 38,
   borrowedAt: 39.2,
+  /** His last line before the hand-off: the audit has BEGUN — he stays. */
+  auditAt: 41.5,
   endAt: 45
 } as const;
 
@@ -615,5 +653,7 @@ export const ARRIVAL_CAPTIONS = {
 export const ARRIVAL_LINES = {
   header: 'W-7744 · FIELD AUDIT',
   found: 'WORKER W-7743. YOU ARE FOUND.',
-  zero: 'THIS SITE REPORTS ZERO PRODUCTIVITY FOR TWO CYCLES. EXPLAIN NOTHING. I WILL SEE FOR MYSELF.'
+  zero: 'THIS SITE REPORTS ZERO PRODUCTIVITY FOR TWO CYCLES. EXPLAIN NOTHING. I WILL SEE FOR MYSELF.',
+  /** He does not leave — the beat ends, the audit does not. */
+  audit: 'AUDIT IN PROGRESS. RESUME NOTHING.'
 } as const;

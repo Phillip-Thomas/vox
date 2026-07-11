@@ -34,7 +34,7 @@ import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
 import type { CommandContext } from '../game/commands.ts';
 import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
 import StoryWorldProps from '../story/world/StoryWorldProps.tsx';
-import { useStoryState } from '../story/storyState.ts';
+import { getStoryStateSnapshot, storyAnchoredSpawn, useStoryState } from '../story/storyState.ts';
 
 export const planetSize = 50;
 
@@ -100,15 +100,19 @@ export default function EfficientScene({
   );
   const [initialPlayerPosition] = useState(() => {
     if (arrivalMode === 'approach') return arrivalPose.approachPosition.clone();
-    // Returning to a saved world: spawn where you stood, facing how you faced
-    // (seed the camera look before CameraControls mounts).
-    const saved = loadPlayerPose(commandContext.world);
+    // The monochrome ladder ANCHORS to the arrival site (strip/wreck/pods/mesa
+    // are all placed off it): while those chapters run, a saved pose — off the
+    // work row, in the pond, mid-map — must never override the spawn.
+    const saved = storyAnchoredSpawn(getStoryStateSnapshot())
+      ? null
+      : loadPlayerPose(commandContext.world);
     if (saved) {
       setPlayerLook(new THREE.Vector3(...saved.forward), saved.pitch);
       const pos = new THREE.Vector3(...saved.pos);
       setPlayerWorldPosition(pos); // correct immediately, before the first frame publishes
       return pos;
     }
+    setPlayerWorldPosition(arrivalPose.playerSurfacePosition); // ditto for the arrival
     return arrivalPose.playerSurfacePosition.clone();
   });
   const [playerPosition, setPlayerPosition] = useState(() => initialPlayerPosition.clone());

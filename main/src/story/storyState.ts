@@ -8,7 +8,7 @@ import { addItem } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
 import { seedSupplyPodsCollected } from './supplyPods.ts';
-import { clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
+import { clearPlayerPoseForWorld, clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
 import { createWorldIdentity } from '../game/worldIdentity.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
 
@@ -304,10 +304,13 @@ function seedForBeat(beat: StoryBeat): void {
 export function initStoryFromSave(): void {
   const param = parseStoryParam();
   if (!param) return;
-  // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain — debug
-  // sessions used to accumulate each other's strip-mining. The menu path
-  // (beginStory, no param) keeps the player's real world edits.
-  clearVoxelEditsForWorld(createWorldIdentity(STORY_COORDINATE));
+  // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain AND a
+  // pristine spawn — debug sessions used to accumulate each other's
+  // strip-mining, and a pose saved in a mined pit would resurrect INSIDE the
+  // restored terrain. The menu path (beginStory, no param) keeps both.
+  const storyWorld = createWorldIdentity(STORY_COORDINATE);
+  clearVoxelEditsForWorld(storyWorld);
+  clearPlayerPoseForWorld(storyWorld);
   if (param === 'full') {
     beginStory();
     return;
@@ -391,9 +394,21 @@ export function storyHudMask(s: StorySnapshot = snapshot): boolean {
   return s.active;
 }
 
+/**
+ * The monochrome ladder ANCHORS to the deterministic arrival site (the strip,
+ * the wreck, the pods, the mesa are all placed off it). While those chapters
+ * run, the spawn is the arrival — a saved pose (off-row, in the pond, mid-map)
+ * must never override it. Free chapters (ch2+) resume where the player stood.
+ */
+export function storyAnchoredSpawn(s: StorySnapshot = snapshot): boolean {
+  if (!s.active) return false;
+  return s.chapter === 'prologue' || s.chapter === 'ch1';
+}
+
 // Survival chrome is INTRODUCED, not assumed: each sense appears when the story
-// names it (ch3's "why am i… thirsty?"), then stays. Pure sandbox saves (story
-// never started) see everything — the gates only exist inside a story save.
+// names it (ch3's "so that is thirst. how strange, to need."), then stays. Pure
+// sandbox saves (story never started) see everything — the gates only exist
+// inside a story save.
 
 /**
  * Flora/fauna dormancy in the story world: life beyond trees and grass belongs

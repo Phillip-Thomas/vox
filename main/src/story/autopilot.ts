@@ -13,6 +13,7 @@ import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { storyAnchors } from './world/storyWorld.ts';
+import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { anomalyMassDesignated, beginA1, beginA2 } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
@@ -364,6 +365,12 @@ export function autopilotTick(dt: number): void {
     clearControls();
     setCinematicLookTarget(null);
   }
+  // Never push (or rescue-nudge) an unsettled player: while the world is still
+  // streaming in under the spawn, the pilot waits with everyone else.
+  if (!isSpawnSettled()) {
+    clearControls();
+    return;
+  }
   if (!beat || !isAutopilotDriving()) {
     clearControls();
     // MOVIE FRAMING: the awakening cutscenes drive themselves, but the SHOT
@@ -521,8 +528,9 @@ export function autopilotTick(dt: number): void {
     case 'ch3-gather': {
       // The craft is UI-driven in real play — the screening skips straight to
       // the placed fire (which triggers the dusk). It waits for the CHILL:
-      // the fire is a response to the falling TEMP, never before it.
-      if (beatClock > 18 && getCampfires().length === 0) {
+      // the fire is a response to the falling TEMP (named at 18s — the body/
+      // hold/gather/temp caption ladder precedes it), never before it.
+      if (beatClock > 21 && getCampfires().length === 0) {
         grantMissingCampfireMaterials();
         placeCampfire(getPlayerWorldPosition().clone(), getPlayerUp().clone());
       }

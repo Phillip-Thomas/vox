@@ -39,9 +39,11 @@ export interface StoryInputPolicy {
   /** Early chapters: props render as voxels (cube stones, no smooth meshes). */
   voxelPropsOnly: boolean;
   /**
-   * Harvester idle recharge (charge/sec, jetpack-style). The Maw arrives merely
-   * DRAINED — it only becomes truly broken-until-repaired once the story's
-   * survival act begins (ch3), where this returns to the sandbox 0.
+   * Harvester idle recharge (charge/sec, jetpack-style). The Maw arrives with
+   * whatever the voyage left in the cell (getArrivalCellCharge — full minus
+   * recalibrations/forgettings, commendations topped it up) and trickles back
+   * through the feed eras; the survival act (ch3) is where this returns to the
+   * sandbox 0 and the broken-until-repaired loop begins.
    */
   mawRechargePerSecond: number;
 }

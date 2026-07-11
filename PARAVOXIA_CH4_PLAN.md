@@ -890,3 +890,31 @@ without purpose."
   ROTATION AVAILABLE." / "DO NOT LOOK FREELY."), so diagonals work and the
   feed keeps only its chrome. A2's liberation is carried by FOV + treatment +
   resolution (noted for playtest review).
+
+### 6.2 Owner feedback round (2026-07-11): ch1-fixed/ch1-track re-plotted as CAMERA-SWITCHING — SHIPPED
+
+- **ch1-fixed IS camera-switching**: the quantized-anchor mechanic is untouched,
+  but diegetically the watcher CUTS between fixed site cameras as the worker
+  leaves one coverage cell for the next. Sold with cheap chrome: a `SITE CAM
+  04-A → 04-B` tag on the feed HUD (id derived from the live fixed-screen cell
+  via `feedRuntime.camCell`) plus a small static blip + `storyGlitch` tick on
+  every cell flip (the shipped glitchDecay grammar, 0.4, decays in ~0.25s).
+  Work order rewritten to camera language — closing line "COVERAGE IS
+  CELLULAR. CAMERAS DO NOT MOVE. WORKERS DO."
+- **The 'fixed-flip' caption is DEAD** ("The frame did not follow you…").
+  Replaced by the watcher's OBSERVATIONS OF THE WORKER (`CH1_FIXED_CAPTIONS`,
+  3 scheduled lines deferring to caption lulls + `CH1_FIXED_CUT_CAPTION` on
+  the first flip) — impersonal, amused by the monotony, each funnier as
+  dramatic irony post-reveal. No "i" anywhere.
+- **ch1-track re-plotted as THE FIRST ACT OF ATTENTION**: not a tracking
+  module — the watcher chooses not to cut away. The unbolt rig-lerp visual is
+  untouched; the work order rationalizes ("CAMERA HAND-OFF: SUSPENDED…
+  JUSTIFICATION: CONTINUITY OF COVERAGE. / NO FURTHER JUSTIFICATION IS ON
+  FILE. / THIS IS NOT ATTENTION. IT IS COVERAGE.") and the truth peeks through
+  once in the VOYAGE_STRANGE grammar: **"(simpler to keep watching this
+  one.)"** — a NEW PLANTED SEED (recorded in PARAVOXIA_PROGRESSION.md §third
+  reading). During track the cam tag reads `SITE CAM 04-B · HOLDING`.
+- Zero new save fields; sandbox untouched (`camCell` lives in the feed
+  runtime); mechanics/pacing/tutorial gates unchanged (movie probe: descent →
+  ch1-fixed 12.5s → ch1-track 23.1s → ch1-raster 30.4s, three identical cold
+  runs, no timeout rescues).

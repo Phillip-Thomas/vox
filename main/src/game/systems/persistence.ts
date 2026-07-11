@@ -232,6 +232,21 @@ export function clearVoxelEditsForWorld(world: WorldSaveRef): void {
   }
 }
 
+/** Drop a world's saved player pose. The `?story=` dev flows clear it WITH the
+ *  voxel edits: a pose saved at the bottom of a strip-mined pit would otherwise
+ *  resurrect INSIDE the restored pristine terrain. */
+export function clearPlayerPoseForWorld(world: WorldSaveRef): void {
+  const store = storage();
+  if (!store) return;
+  const key = scopedWorldKey(world, '.player');
+  try {
+    store.removeItem(key.primary);
+    if (key.legacy) store.removeItem(key.legacy);
+  } catch {
+    // Storage unavailable/blocked: nothing persisted, nothing to clear.
+  }
+}
+
 /** Replay this world's terrain diff. Call AFTER populateInitialTerrain (so coords are
  *  solid) and BEFORE the collision flush. Refuses a stale save (gen fingerprint
  *  mismatch). Must run synchronously while the live world matches `seed`. */

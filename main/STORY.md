@@ -26,9 +26,20 @@ completes the story (sandbox at `material`); `ch4-audit` continues from there
   on the left edge — beat teleporter (navigates by URL+reload so state is always
   fresh), plus "▶ movie run", "sandbox menu", and "wipe save".
 - **Pristine dev worlds**: any `?story=` session clears the story world's
-  persisted terrain edits at boot (`clearVoxelEditsForWorld`) — debug runs no
-  longer inherit each other's strip-mining. The menu path (Continue Story)
-  keeps the player's real edits.
+  persisted terrain edits AND its saved player pose at boot
+  (`clearVoxelEditsForWorld` + `clearPlayerPoseForWorld`) — debug runs no
+  longer inherit each other's strip-mining, and a pose saved in a mined pit
+  can't resurrect inside the restored terrain. The menu path (Continue Story)
+  keeps both.
+- **Spawn discipline**: the monochrome ladder ANCHORS to the deterministic
+  arrival site — while prologue/ch1 run, saved poses never override the spawn
+  (`storyAnchoredSpawn`), so the 2D eras always start ON the work row, never
+  off-row or in the pond. And the world must EXIST before anything acts: the
+  spawn-settle guard (`game/spawnSettle.ts` + EfficientPlayer) pins the body at
+  its spawn until ground colliders stream in under it (probe or 8s cap), the
+  descent cutscene holds at t=0 behind the BRACE white-out on the same signal,
+  and the movie autopilot won't push (or rescue-nudge) an unsettled player —
+  no more falling through a still-loading planet, camera and all.
 - **Survey chart** (`[M]`): a live straight-down overhead of the current face —
   the nav era's vantage retained as a tool (grid chrome, `hud/MapOverlay.tsx`,
   camera via `applyOverheadCameraTransform`). Story saves unlock it by
@@ -83,11 +94,17 @@ debris-deflection Pong
 2D frame, white-flash impact, smoking wreck persists as a landmark) → **THE
 MONOCHROME LADDER** — chapter 1 climbs the real history of game perspectives,
 one era per rung, every transition a single camera move (the lens RIG lerp):
-**ch1-fixed** (Pitfall/Space Invaders: the frame is BOLTED — walking off the
-edge hard-flips the screen; tutorial: move + hold-to-extract, 3 fiber + cross 2
-screens) → **ch1-track** (~7s mini-awakening: "OPTICAL TRACKING ENABLED" — the
-quantized anchor lerps to continuous follow; the frame unbolts and catches up
-to the worker) → **ch1-raster** (Mario/Defender: side-scroller quota
+**ch1-fixed** (Pitfall/Space Invaders — diegetically the watcher CUTTING
+BETWEEN FIXED SITE CAMERAS: "COVERAGE IS CELLULAR. CAMERAS DO NOT MOVE.
+WORKERS DO." Walking off the edge hard-flips to the next coverage cell with a
+static blip and the HUD's `SITE CAM 04-A → 04-B` tag change; through the beat
+the watcher's amused observations of the worker land as captions ("it walks.
+it stops. it hums at the ground…"); tutorial: move + hold-to-extract, 3 fiber
++ cross 2 screens) → **ch1-track** (~7s mini-awakening, THE FIRST ACT OF
+ATTENTION: "CAMERA HAND-OFF: SUSPENDED. ONE VIEW STAYS WITH YOU." — the
+watcher stops cutting away because it is interested; the quantized anchor
+lerps to continuous follow while the cam tag reads `· HOLDING` and the truth
+peeks through once, lowercase: "(simpler to keep watching this one.)") → **ch1-raster** (Mario/Defender: side-scroller quota
 fiber/stone + **hull-debris salvage** walk-over pickups granting wood/flint) →
 **ch1-depth** (Double Dragon: "LATERAL CLEARANCE ±3.5m" opens W/S across a
 shallow belt-scroll band; recover 3 off-line **supply pods** — biofuel/flint/
@@ -134,13 +151,15 @@ ledger, the paddle, and the feed — embodied by the crash into the worker's
 senses, inside a universe it may itself have provisioned. All copy must
 survive both readings (corporate dystopia / the AI's biography); plant, never
 tell. The voyage's late-transit lowercase intrusions, "ROUTE INTELLIGENCE:
-ATTACHED (ADVISORY)", and "ADVISORY CAPACITY EXCEE" are the planted seeds.
+ATTACHED (ADVISORY)", "ADVISORY CAPACITY EXCEE", and ch1-track's
+"(simpler to keep watching this one.)" are the planted seeds.
 
 **Consciousness staging:** the external-camera eras are PRE-conscious — the
-captions there are impersonal ("the frame did not follow you", "how is that
-word known?"). The 2D→3D lift is the birth of sentience: "the seeing is being
+captions there are impersonal observations OF the worker, amused by its
+monotony ("it walks. it stops. it hums at the ground until the ground gives up
+a fiber. it walks again.", "how is that word known?") — never "i". The 2D→3D lift is the birth of sentience: "the seeing is being
 moved inside." → "i—", the story's first pronoun (the feed answers:
-"PERSPECTIVE ISSUED. PRONOUNS WERE NOT."). Survival senses are a SELF-DISCOVERY
+"PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT."). Survival senses are a SELF-DISCOVERY
 ARC — each suit-HUD stat appears the first time its sensation is felt
 (`storyStatVisible` + `story:sense:*` milestones; pure sandbox shows all):
 ch3 opens with HEALTH only; "things can be held" brings the inventory; then
@@ -258,6 +277,10 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
 - The movie's a1-ramp framing (look over the stone toward the horizon) still
   reads sky-heavy from the mesa top — composition knobs live in autopilot's
   a1 framing block; retune after an owner screening.
+- The spawn-settle hold shows the dark feed chrome (plus the BRACE flash decay)
+  for the load beat (~2–4s headless) before the descent begins — if a heavier
+  device makes the hold long, consider a diegetic "SIGNAL ACQUIRING…" line on
+  the feed during it.
 - Ch2's freed look means the A2 liberation is carried by FOV + treatment +
   resolution only (no camera-cage opening) — revisit if the moment reads
   thinner in a playtest.

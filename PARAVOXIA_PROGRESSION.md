@@ -78,8 +78,8 @@ their hands before they can articulate it:
 | Prologue crawl + manifest + voyage ledger | The Oregon Trail ('71) — text & prompts | Green-phosphor terminal, processing screens, branching event deck |
 | The voyage backdrop | Maze War ('74) — the first 3D: vertices & edges | Wireframe hauler + vector starfield + the destination CUBE WORLD growing with progress |
 | The nav anomaly / crash | Pong ('72) — one paddle vs. the inevitable | Oscilloscope debris-deflection minigame, ORDERED by the anomaly card, unwinnable by design |
-| Ch1 arrival (descent → ch1-fixed) | Fixed-screen era — Pitfall/Space Invaders ('78–'80) | Crash-landing cutscene in the raster lens; then the frame is BOLTED — leaving the screen hard-flips to the next; tutorial verbs: move, hold-to-extract |
-| ch1-track (the unbolt) | The scrolling window — Defender ('81) | ~7s mini-awakening: "OPTICAL TRACKING ENABLED" — the quantized camera anchor lerps to continuous follow |
+| Ch1 arrival (descent → ch1-fixed) | Fixed-screen era — Pitfall/Space Invaders ('78–'80) | Crash-landing cutscene in the raster lens; then coverage is CELLULAR — the watcher cuts between fixed SITE CAMERAS (cam tag + static blip per hand-off); leaving the screen hard-flips to the next; tutorial verbs: move, hold-to-extract |
+| ch1-track (the unbolt) | The scrolling window — Defender ('81) | ~7s mini-awakening, the FIRST ACT OF ATTENTION: "CAMERA HAND-OFF: SUSPENDED" — the watcher stops cutting away; the quantized anchor lerps to continuous follow |
 | ch1-raster (quota + salvage) | Side-scrollers — Super Mario Bros. ('85) | The REAL voxel world side-on, chunky low-dpr pixels, voxel worker sprite; walk-over hull salvage |
 | ch1-depth (supply pods) | Belt-scroll "2.5D" — Double Dragon ('87) | LATERAL CLEARANCE opens W/S across a shallow depth band; the third axis EXISTS before it is ever seen |
 | ch1-nav (triangulation) | Top-down — Pac-Man ('80, diegetically reordered) | The rig lerps to straight-down NAV VIEW (map grid overlay); an ordered route of three fixes |
@@ -150,8 +150,8 @@ simultaneously true; no line of copy may break any of them):
 | Crawl/manifest | The AI, unaware — a system reading its own screens | Pure regulation CAPS; zero interiority |
 | Voyage | The AI observing/assisting the workers; FIRST GLIMPSES of thought as the planet nears | CAPS, with at most rare lowercase parenthetical intrusions ("(strange. the approach feels like remembering.)") |
 | Pong / corruption | The AI performing its duty as the event exceeds it | System lines cut off mid-word ("ADVISORY CAPACITY EXCEE") |
-| Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the external cameras | Impersonal observation ("the frame did not follow you") — thoughts ABOUT the worker, never "i" |
-| The lift (first person) | Embodiment: the AI's thoughts become out-loud, in the worker's senses | The first "i—", instantly clamped ("PERSPECTIVE ISSUED. PRONOUNS WERE NOT.") |
+| Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the SITE CAMERAS, cutting between them — until it chooses not to cut away (ch1-track, the first act of attention) | Impersonal observation, amused by the monotony ("it walks. it stops. it hums at the ground until the ground gives up a fiber. it walks again.") — thoughts ABOUT the worker, never "i" |
+| The lift (first person) | Embodiment: the AI's thoughts become out-loud, in the worker's senses | The first "i—", instantly clamped ("PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.") |
 | Ch2–A3 onward | The embodied AI gaining human sensations one at a time | Lowercase sensory voice; sensations named as discoveries ("why am i… thirsty?") |
 
 **Reveal discipline (rules for all future writing):**
@@ -162,8 +162,25 @@ simultaneously true; no line of copy may break any of them):
   dystopia; post-reveal: the AI's own biography). Test new copy against both.
 - The "Authority" and the AI's relationship stays ambiguous as long as
   possible — is the Authority the AI's creator, its mask, or its old self?
+- **TIMELESSNESS RULE (owner, 2026-07-11): the satire targets bureaucracy and
+  administration — Kafka, never the culture war.** No line may pattern-match a
+  contemporary political flashpoint; a player must never be able to mislabel
+  the game as commentary on real-world identity discourse. Concretely: the
+  selfhood-issuance device stays, but on-screen copy prefers "the first
+  person" / "a self" / "I" framings — the word "PRONOUNS" (and any similarly
+  loaded vocabulary) is avoided in shipped copy even when grammatically meant.
+  Audit new copy for accidental modern connotations before shipping.
 - Double-meaning is the house style: "everything is what it always was. i am
   more." / "the site answers before it is asked." / "QUESTIONS ...... 0".
+- **Planted seeds on file** (study before adding more): the crawl's "A route
+  intelligence attends every transit. It has no questions either."; the
+  manifest's "ROUTE INTELLIGENCE: ATTACHED (ADVISORY)"; the voyage's lowercase
+  parenthetical intrusions (`VOYAGE_STRANGE`); the corruption's "ADVISORY
+  CAPACITY EXCEE"; **ch1-track's "(simpler to keep watching this one.)"** —
+  the camera hand-off suspends because the watcher is interested, rationalized
+  as "CONTINUITY OF COVERAGE" and denied as "THIS IS NOT ATTENTION. IT IS
+  COVERAGE."; the lift's "i—" and the feed's "PERSPECTIVE ISSUED. THE FIRST
+  PERSON WAS NOT."
 - Later chapters (A4+) may surface fragments (e.g. the anomaly stone and hero
   tree as objects the AI cannot render because it never authored them — or
   because something ELSE did). The full reveal, if it ever lands, belongs to

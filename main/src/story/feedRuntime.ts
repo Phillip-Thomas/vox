@@ -50,6 +50,9 @@ export interface FeedRuntime {
   flash: number;
   /** Descent cutscene progress: -1 idle, 0..1 falling, >1 wreck landed. */
   descent: number;
+  /** ch1-fixed: the fixed-screen cell index the worker stands in — the HUD's
+   *  SITE CAM tag derives its id from this (the camera-switch fiction). */
+  camCell: number;
   redaction: FeedRedaction;
   /** Survey marker — the feed's target designator (the ch1 anomaly objective). */
   marker: FeedMarker;
@@ -66,6 +69,7 @@ const runtime: FeedRuntime = {
   cinematic: 0,
   flash: 0,
   descent: -1,
+  camCell: 0,
   redaction: { visible: false, x: 0, y: 0, w: 0, h: 0, label: '', stress: 0 },
   marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' }
 };
@@ -85,6 +89,7 @@ export function resetFeedRuntime(): void {
   runtime.cinematic = 0;
   runtime.flash = 0;
   runtime.descent = -1;
+  runtime.camCell = 0;
   runtime.redaction.visible = false;
   runtime.redaction.stress = 0;
   runtime.redaction.label = '';

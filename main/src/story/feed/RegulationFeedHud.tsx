@@ -26,6 +26,12 @@ const FEED_INK_DIM = 'rgba(228,236,231,0.55)';
 
 const GARBLE_CHARS = '█▓▒░#%@&';
 
+/** The camera-switch fiction's tag: fixed-screen cells ARE site cameras, so
+ *  the id derives from the cell index (bank 04, lettered around the site). */
+function siteCamLabel(cell: number): string {
+  return `SITE CAM 04-${String.fromCharCode(65 + (((cell % 26) + 26) % 26))}`;
+}
+
 function garbleText(text: string, amount: number): string {
   if (amount <= 0.01) return text;
   let out = '';
@@ -56,6 +62,7 @@ const RegulationFeedHud: React.FC = () => {
   useSyncExternalStore(subscribeProgression, progressionVersion, progressionVersion);
 
   const counterRef = useRef<HTMLDivElement>(null);
+  const camRef = useRef<HTMLDivElement>(null);
   const harvestRef = useRef<HTMLDivElement>(null);
   const redactionRef = useRef<HTMLDivElement>(null);
   const redactionLabelRef = useRef<HTMLDivElement>(null);
@@ -73,6 +80,10 @@ const RegulationFeedHud: React.FC = () => {
         const stamp = `FRM ${String(r.frame).padStart(7, '0')}`;
         counter.textContent = garbleText(stamp, r.garble);
       }
+      // SITE CAM tag (ch1-fixed only): the id follows the cell the worker
+      // stands in — each screen flip reads as a coverage hand-off.
+      const cam = camRef.current;
+      if (cam) cam.textContent = garbleText(siteCamLabel(r.camCell), r.garble);
       // Hold-to-harvest readout (the sandbox crosshair ring is hidden in the feed):
       // a flat ledger percentage — extraction as data entry.
       const harvest = harvestRef.current;
@@ -128,6 +139,7 @@ const RegulationFeedHud: React.FC = () => {
 
   const quotaVisible = story.beat === 'ch1-raster' || story.beat === 'ch1-anomaly';
   const fixedVisible = story.beat === 'ch1-fixed';
+  const trackVisible = story.beat === 'ch1-track';
   const podsVisible = story.beat === 'ch1-depth';
   const navVisible = story.beat === 'ch1-nav';
   const isoVisible = story.beat === 'ch1-iso';
@@ -175,6 +187,10 @@ const RegulationFeedHud: React.FC = () => {
           REC
         </div>
         <div ref={counterRef}>FRM 0000000</div>
+        {/* camera-switch chrome: live cam id while coverage is cellular; the
+            same camera, impossibly HOLDING, while the hand-off is suspended */}
+        {fixedVisible && <div ref={camRef}>{siteCamLabel(getFeedRuntime().camCell)}</div>}
+        {trackVisible && <div>{siteCamLabel(getFeedRuntime().camCell)} · HOLDING</div>}
         <div style={{ color: FEED_INK_DIM }}>SITE 7C-θ · LIVE</div>
       </div>
 

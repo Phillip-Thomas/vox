@@ -36,6 +36,7 @@ import {
 } from './storyInputPolicy.ts';
 import { getSideFacing, getSideLens, setLensRig, SIDE_RIG, type LensRig } from './sideLens.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
 import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
 import { debrisSalvageComplete } from './debrisSalvage.ts';
@@ -62,6 +63,8 @@ import {
   ARRIVAL_LINES,
   CH1_ANOMALY_MASS_ORDER,
   CH1_ECHO_LINES,
+  CH1_FIXED_CAPTIONS,
+  CH1_FIXED_CUT_CAPTION,
   CH1_FLASH_SCHEDULE,
   CH1_FIXED_TUTORIAL,
   CH1_QUOTA,
@@ -130,6 +133,9 @@ interface DirectorRuntime {
   descentImpacted: boolean;
   /** ch1-fixed tutorial: distinct fixed-screen cells the worker has stood in. */
   fixedCells: Set<number>;
+  /** ch1-fixed: the cell currently on camera (null until the lens reports) —
+   *  a change is a camera CUT: static blip + the HUD's SITE CAM tag flips. */
+  fixedCamCell: number | null;
   /** ch1-lift one-shot: the mid-lift dpr snap + glitch mask fired. */
   liftSnapped: boolean;
   /** Scratch target for the lift's look-ahead pull. */
@@ -182,6 +188,7 @@ const d: DirectorRuntime = {
   mawRechargeAccum: 0,
   descentImpacted: false,
   fixedCells: new Set(),
+  fixedCamCell: null,
   liftSnapped: false,
   liftLookTarget: new THREE.Vector3(),
   prevThirst: -1,
@@ -250,10 +257,15 @@ function echoLines(): string[] {
   const lines: string[] = [];
   for (const milestone of chosen) {
     const [, , cardId, optionId] = milestone.split(':');
+    // The bridge card's [ACKNOWLEDGE] is mandatory, not a choice: it must never
+    // stamp the no-record fallback ("TRANSIT RECORD INCOMPLETE…") into a played
+    // run, nor eat one of the three echo slots the real choices own.
+    if (cardId === VOYAGE_DECK.bridge) continue;
     const option = VOYAGE_DECK.cards[cardId]?.options.find(o => o.id === optionId);
     const line = option ? CH1_ECHO_LINES[option.echoLineId] : undefined;
     if (line && !lines.includes(line)) lines.push(line);
   }
+  // Only a genuinely choice-less record (skipped prologue) assumes compliance.
   if (lines.length === 0) lines.push(CH1_ECHO_LINES['echo-neutral']);
   const tone = complianceToneLine();
   if (tone) lines.push(tone);
@@ -335,6 +347,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // degrades to the broken/refuel loop when the survival act begins (ch3).
       setMawCharge(getArrivalCellCharge());
       d.fixedCells.clear();
+      d.fixedCamCell = null; // first tick assigns the opening camera, cut-free
       setWorkOrder([...CH1_WORK_ORDERS.fixed, ...echoLines()]);
       break;
     case 'ch1-track':
@@ -435,7 +448,8 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setStoryForcedDayPhase(0.25); // noon holds until the scripted first dusk
       setWorkOrder([]);
       clearViolations();
-      markMilestone(STORY_MILESTONES.senseHealth); // the suit reports A BODY — one row
+      // (HEALTH — the first row — lands in the tick WITH its naming caption,
+      // the TEMP grammar; deep links seed it via seedForBeat.)
       ensureRestInteraction();
       // (Timber/flint were EARNED as hull debris back in the raster act.)
       break;
@@ -559,6 +573,9 @@ export function beginVigilSleep(): void {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch4-vigil') return;
   playSfx('storySleep');
+  // Rest refills what a night can refill: stamina + warmth only (hunger/thirst
+  // stay down — day-2 pressure is chapter 4's fuel, per the plan §2 S4).
+  setVitals({ stamina: 100, warmth: 100 });
   markMilestone(STORY_MILESTONES.ch4Vigil);
   advanceToBeat('ch4-arrival');
 }
@@ -795,6 +812,18 @@ const DESCENT_SECONDS = 8.5;
 const DESCENT_IMPACT_AT = 4.5;
 
 function tickDescent(dt: number): void {
+  // The crash WAITS for the world: colliders/chunks stream in after mount, and
+  // the pod must never streak down onto a planet that isn't there yet (the
+  // player is pinned at spawn by the same signal — see game/spawnSettle.ts).
+  // The BRACE white-out holds the frame while it loads — the fall then emerges
+  // from its own flash, and nobody watches the world assemble.
+  if (!isSpawnSettled()) {
+    d.beatClock = 0;
+    const held = getFeedRuntime();
+    held.descent = 0;
+    held.flash = 1;
+    return;
+  }
   const t = d.beatClock;
   const r = getFeedRuntime();
   r.cinematic = envelope(t, 0, 0.8, DESCENT_SECONDS - 1.5, DESCENT_SECONDS);
@@ -860,9 +889,11 @@ function tickCh1Lift(): void {
   // The traverse itself: profile → eyes over the middle 4.5 seconds.
   const liftBlend = smoothstep(Math.min(1, Math.max(0, (t - 1.2) / 4.5)));
   setStorySideBlend(liftBlend);
-  // Consciousness arrives WITH the perspective: impersonal all the way in,
-  // then the first pronoun in the story — one flicker before the feed clamps.
-  if (t >= 2.4) fireCaptionOnce('lift-inward', 'the seeing is being moved inside.');
+  // Consciousness arrives WITH the perspective: the watcher's parenthetical
+  // voice all the way in (pre-lift grammar), then the first pronoun in the
+  // story — the story's first BARE lowercase line, one flicker before the
+  // feed clamps.
+  if (t >= 2.4) fireCaptionOnce('lift-inward', '(the seeing is being moved inside.)');
   if (t >= 5.4) fireCaptionOnce('lift-i', 'i—');
   setScoreIntensity(0.35 + liftBlend * 0.65); // the score rises with the camera
 
@@ -936,11 +967,15 @@ function tickCh3Sun(dt: number): void {
     d.dayPhase += dt / DAY_LENGTH_SECONDS; // the cycle rolls naturally into night
     // The senses cannot be missed: a fast fire skips the gather dwell, so the
     // introductions re-offer here, by the fire, waiting for dark.
-    if (d.beatClock >= 3 && !d.captionsFired.has('sense-hold')) {
+    if (d.beatClock >= 2 && !d.captionsFired.has('sense-body')) {
+      fireCaptionOnce('sense-body', CH3_CAPTIONS.body);
+      markMilestone(STORY_MILESTONES.senseHealth); // the whole vitals HUD gates on this
+    }
+    if (d.beatClock >= 6 && !d.captionsFired.has('sense-hold')) {
       fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
       markMilestone(STORY_MILESTONES.senseInventory);
     }
-    if (d.beatClock >= 8 && !d.captionsFired.has('sense-temp')) {
+    if (d.beatClock >= 10 && !d.captionsFired.has('sense-temp')) {
       fireCaptionOnce('sense-temp', 'warmth. i have it. it is leaving.');
       markMilestone(STORY_MILESTONES.senseTemp);
     }
@@ -1293,12 +1328,15 @@ function tickArrival(dt: number): void {
     playSfx('storyGlitch');
   }
   if (t >= T.borrowedAt) fireCaptionOnce('arr-borrowed', ARRIVAL_CAPTIONS.borrowed);
+  // His last word before the hand-off: the audit has BEGUN. He stays.
+  if (t >= T.auditAt) fireAuditOnce('arr-audit', ARRIVAL_LINES.audit, ARRIVAL_LINES.header);
   setScoreIntensity(0.35 + envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 6, T.endAt - 6, T.endAt) * 0.45);
 
   if (t >= T.endAt) {
     // Hand the sun to the live clock at dawn-2's phase (the A3 grammar).
     setDayPhaseOffset(d.dayPhase - d.elapsedSeconds / DAY_LENGTH_SECONDS);
-    hideAuditWorker();
+    // W-7744 does NOT evaporate: "he stays to look." His pose module keeps him
+    // standing at the relay; StoryWorldProps keeps him mounted through 'done'.
     // TEMPORARY: ch4-audit continues from here (see PARAVOXIA_CH4_PLAN.md §2 S6).
     // Until it ships, the story banks the arrival checkpoint and hands back to
     // the sandbox with the same guarantees the slice's completion gave.
@@ -1350,18 +1388,35 @@ export function storyDirectorTick(
     case 'ch1-fixed': {
       tickCh1Flashes(dt);
       // The first tutorial: extract fiber (hold-to-mine) and cross a screen
-      // edge — feeling the bolted frame hard-flip is the whole point.
+      // edge — feeling the coverage hand off between fixed site cameras is the
+      // whole point. Every cell flip is a camera CUT: the HUD's SITE CAM tag
+      // changes and a small static blip marks the switch.
       const lens = getSideLens();
       if (lens) {
         const along = _fixedRel.copy(getPlayerWorldPosition()).sub(lens.origin).dot(lens.travelAxis);
         const cell = Math.floor(along / FIXED_SCREEN_CELL);
+        r.camCell = cell;
+        if (d.fixedCamCell === null) {
+          d.fixedCamCell = cell; // the opening camera — no cut on entry
+        } else if (cell !== d.fixedCamCell) {
+          d.fixedCamCell = cell;
+          d.glitchDecay = Math.max(d.glitchDecay, 0.4); // brief static, decays fast
+          playSfx('storyGlitch');
+        }
         if (!d.fixedCells.has(cell)) {
           d.fixedCells.add(cell);
           if (d.fixedCells.size === CH1_FIXED_TUTORIAL.screens) {
-            fireCaptionOnce('fixed-flip', 'The frame did not follow you. It was never going to.');
+            fireCaptionOnce('fixed-cut', CH1_FIXED_CUT_CAPTION);
           }
         }
       }
+      // The watcher's observations, spread through the beat — each waits for a
+      // genuine caption lull so lines never collide (one voice at a time).
+      CH1_FIXED_CAPTIONS.forEach((caption, i) => {
+        if (d.beatClock >= caption.atSeconds && d.elapsedSeconds - d.lastCaptionAt >= 6) {
+          fireCaptionOnce(`fixed-obs-${i}`, caption.text);
+        }
+      });
       if (
         getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber
         && d.fixedCells.size >= CH1_FIXED_TUTORIAL.screens
@@ -1385,7 +1440,8 @@ export function storyDirectorTick(
     case 'ch1-depth':
       tickCh1Flashes(dt);
       if (d.beatClock >= 3.5) {
-        fireCaptionOnce('depth-word', 'the world has a depth. wait — what is "depth"? how is that word known?');
+        // Pre-lift watcher voice → parenthetical (the perspective-map grammar).
+        fireCaptionOnce('depth-word', '(the world has a depth. wait — what is "depth"? how is that word known?)');
       }
       // All pods recovered (or a resume that arrives with them recovered).
       if (d.beatClock >= 1 && supplyPodsComplete()) {
@@ -1433,12 +1489,18 @@ export function storyDirectorTick(
           fireCaptionOnce(`a2-${i}`, caption.text);
         }
       });
-      if (d.beatClock >= 8 && !d.captionsFired.has('sense-hold')) {
+      // The first sensation of the embodied arc: HEALTH named as A BODY —
+      // timed clear of the A2 handoff captions (0.5s / 4.5s above).
+      if (d.beatClock >= 8 && !d.captionsFired.has('sense-body')) {
+        fireCaptionOnce('sense-body', CH3_CAPTIONS.body);
+        markMilestone(STORY_MILESTONES.senseHealth); // the suit reports a body — one row
+      }
+      if (d.beatClock >= 11.5 && !d.captionsFired.has('sense-hold')) {
         fireCaptionOnce('sense-hold', 'things can be held. kept against later.');
         markMilestone(STORY_MILESTONES.senseInventory); // the inventory appears
       }
-      if (d.beatClock >= 12) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
-      if (d.beatClock >= 15 && !d.captionsFired.has('sense-temp')) {
+      if (d.beatClock >= 15) fireCaptionOnce('ch3-gather', CH3_CAPTIONS.gather);
+      if (d.beatClock >= 18 && !d.captionsFired.has('sense-temp')) {
         fireCaptionOnce('sense-temp', 'warmth. i have it. it is leaving.');
         markMilestone(STORY_MILESTONES.senseTemp); // TEMP appears — already draining
       }
