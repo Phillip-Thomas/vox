@@ -212,6 +212,23 @@ describe('the approach IS the modulation (§8.4, P3 bespoke mechanism)', () => {
     expect(state.approach).toBeNull();
   });
 
+  it('plans even when the destination resolves after the scene flips', () => {
+    const destSeed = 606060;
+    const destKey = derivePlanetKey(destSeed, 'crystal');
+    const state = createBedConductor(222333, { archetype: 'fungal' });
+    runBars(state, 56, (bar) =>
+      sig({
+        energy: 0.6,
+        scene: bar < 16 ? 'surface' : bar < 48 ? 'approach' : 'descent',
+        // The flight snapshot lags: the destination appears 3 bars late.
+        destinationSeed: bar >= 19 && bar < 48 ? destSeed : null,
+        destinationArchetype: bar >= 19 && bar < 48 ? 'crystal' : null
+      })
+    );
+    expect(state.harmony.tonicPc).toBe(destKey.tonicPc);
+    expect(state.harmony.homeMode).toBe(destKey.homeMode);
+  });
+
   it('story authority blocks the modulation entirely', () => {
     const destSeed = 999;
     const state = createBedConductor(13579, { archetype: 'verdant' });

@@ -1554,6 +1554,13 @@ function buildLeafGeometry(
   leaf.setAttribute('aFlower', new THREE.Float32BufferAttribute(lFlower, 1));
   leaf.setAttribute('aLeafRand', new THREE.Float32BufferAttribute(lRand, 1));
   leaf.setAttribute('aTuftShade', new THREE.Float32BufferAttribute(lTuft, 1));
+  const leafCrownCenters = new Float32Array(lStiff.length * 3);
+  for (let i = 0; i < lStiff.length; i++) {
+    leafCrownCenters[i * 3] = crownCenter.x;
+    leafCrownCenters[i * 3 + 1] = crownCenter.y;
+    leafCrownCenters[i * 3 + 2] = crownCenter.z;
+  }
+  leaf.setAttribute('aCrownCenter', new THREE.BufferAttribute(leafCrownCenters, 3));
   leaf.setIndex(lIdx);
   leaf.computeBoundingSphere();
 
@@ -1577,8 +1584,8 @@ function buildLeafGeometry(
 
 // --- Impostor (far LOD) ------------------------------------------------------
 // A 2-quad CROSS billboard spanning the crown — ~8 verts, one draw call for all
-// far trees. Shares aStiff/aPhase/aCanopyY/aFlower attrs so it can reuse the leaf
-// material (stripped variant) without per-attribute branching.
+// far trees. Shares the leaf vertex attributes so it can reuse the stripped leaf
+// shader path without missing attribute bindings.
 function buildImpostorGeometry(
   crownCenter: THREE.Vector3,
   crownRadius: number,
@@ -1660,6 +1667,13 @@ function buildImpostorGeometry(
   geo.setAttribute('aFlower', new THREE.Float32BufferAttribute(flower, 1));
   geo.setAttribute('aLeafRand', new THREE.Float32BufferAttribute(leafRand, 1));
   geo.setAttribute('aTuftShade', new THREE.Float32BufferAttribute(tuftShade, 1));
+  const impostorCrownCenters = new Float32Array(stiff.length * 3);
+  for (let i = 0; i < stiff.length; i++) {
+    impostorCrownCenters[i * 3] = crownCenter.x;
+    impostorCrownCenters[i * 3 + 1] = crownCenter.y;
+    impostorCrownCenters[i * 3 + 2] = crownCenter.z;
+  }
+  geo.setAttribute('aCrownCenter', new THREE.BufferAttribute(impostorCrownCenters, 3));
   geo.setIndex(indices);
   geo.computeBoundingSphere();
   return geo;

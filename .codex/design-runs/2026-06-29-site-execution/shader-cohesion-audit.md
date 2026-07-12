@@ -154,7 +154,7 @@ Changes:
 - Correlated shade tolerance, phototropism, bright-growth priority, pruning floor, maturity, and crown asymmetry instead of sampling unrelated style knobs.
 - Added three deterministic age/phenotype archetypes per planet species on HIGH, two on MEDIUM, one on LOW, and none on POTATO. Instances partition between variants, so diversity does not duplicate visible trees.
 - Rebuilt broadleaf foliage as branch-aligned botanical sprays with negative canopy space; removed the round near-field tuft union that collapsed crowns into blobs.
-- Added planet-authored bark color and arc-length bark grain. Current tree keys are `tree-bark-v6`, `tree-leaf-v7`, `tree-blossom-v5`, and `tree-impostor-v6`.
+- Added planet-authored bark color and arc-length bark grain. Current tree keys are `tree-bark-v6`, `tree-leaf-v8`, `tree-blossom-v5`, and `tree-impostor-v6`.
 - Made far impostors use generated crown bounds plus family-specific SDF silhouettes.
 - Made placement respect ecology material eligibility/richness/canopy/negative-space tokens while retaining the legacy placement hash for harvested-coordinate continuity.
 - Expanded the harvest pick contract to carry a separate instance-id map for each variant trunk/leaf mesh.

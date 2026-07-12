@@ -70,6 +70,13 @@ export const treeFieldHandle: {
   slotVoxel: Array<[number, number, number]>;
 } = { pickTargets: [], trunk: null, leaf: null, slotVoxel: [] };
 
+function clearTreeFieldHandle(): void {
+  treeFieldHandle.pickTargets.length = 0;
+  treeFieldHandle.trunk = null;
+  treeFieldHandle.leaf = null;
+  treeFieldHandle.slotVoxel = [];
+}
+
 // Reused scratch (avoid per-instance allocation).
 const _world = new THREE.Vector3();
 const _up = new THREE.Vector3();
@@ -342,10 +349,14 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
   };
 
   useEffect(() => {
-    if (density <= 0) return;
+    if (density <= 0 || variantCount <= 0) {
+      clearTreeFieldHandle();
+      signatureRef.current = '';
+      return;
+    }
     growCapacity(neededCapacity());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [density]);
+  }, [artDirection, density, terrainSeed, variantCount]);
 
   // Harvested-tree state is keyed by world-relative voxel coord, so it must reset
   // when the world changes (else a felled coord wrongly hides a tree on the new
@@ -353,20 +364,19 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
   useEffect(() => {
     resetTreeHarvest();
     restoreTreesForWorld(persistenceWorld ?? terrainSeed); // load this world's already-felled trees
-    return () => {
-      treeFieldHandle.pickTargets.length = 0;
-      treeFieldHandle.trunk = null;
-      treeFieldHandle.leaf = null;
-      treeFieldHandle.slotVoxel = [];
-    };
+    return clearTreeFieldHandle;
   }, [persistenceWorld, terrainSeed]);
 
   useEffect(() => {
-    if (capacity <= 0) return;
+    if (
+      capacity <= 0 || density <= 0 || variantCount <= 0 ||
+      archetypes.length !== variantCount
+    ) return;
     rebuild();
     signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getTreeHarvestVersion()}`;
+    if (playerPosition) lastBucketPos.current.copy(playerPosition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [capacity]);
+  }, [archetypes, capacity, density, terrainSeed, variantCount]);
 
   // Push per-planet colours into the materials once they exist.
   useEffect(() => {

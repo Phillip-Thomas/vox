@@ -252,6 +252,7 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
       attribute float aFlower;
       attribute float aLeafRand;
       attribute float aTuftShade;
+      attribute vec3 aCrownCenter;
       varying vec2 vLeafUv;
       varying float vTint;
       varying float vCanopyY;
@@ -259,8 +260,8 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
       varying float vLeafRand;
       varying float vTuftShade;
       varying vec3 vWorldPos;
-      varying vec3 vTreeBase;
       varying vec3 vTreeUp;
+      varying vec3 vCrownCenter;
       ${LIFE_REVEAL_GLSL}
       ${TREE_WIND_GLSL}`
     )
@@ -279,8 +280,8 @@ function leafVertexCommon(shader: THREE.WebGLProgramParametersWithUniforms) {
         vec3 twInstWorld = vec3(0.0);
         mat4 twTreeMatrix = modelMatrix;
       #endif
-      vTreeBase = (twTreeMatrix * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
       vTreeUp = normalize((twTreeMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
+      vCrownCenter = (twTreeMatrix * vec4(aCrownCenter, 1.0)).xyz;
       vTint = fract(sin(dot(twInstWorld, vec3(12.99, 78.23, 37.71))) * 43758.5453);
       float twT = uTime * uWind;
       vec3 flutter = vec3(
@@ -329,7 +330,6 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uBloom = { value: 0 };
     shader.uniforms.uShapeId = { value: 0 };
     shader.uniforms.uLeafMode = { value: 0 };
-    shader.uniforms.uCanopyCenterY = { value: 3.9 };
     material.userData.shader = shader;
 
     leafVertexCommon(shader);
@@ -349,7 +349,6 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
         uniform float uBloom;
         uniform float uLeafMode;
         uniform float uShapeId;
-        uniform float uCanopyCenterY;
         varying vec2 vLeafUv;
         varying float vTint;
         varying float vCanopyY;
@@ -357,8 +356,8 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
         varying float vLeafRand;
         varying float vTuftShade;
         varying vec3 vWorldPos;
-        varying vec3 vTreeBase;
         varying vec3 vTreeUp;
+        varying vec3 vCrownCenter;
         vec3 vLeafSSSTerm;
         float twFHash21(vec2 p) {
           p = fract(p * vec2(123.34, 345.45));
@@ -500,8 +499,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
 
         // Center-to-surface canopy lighting: each cluster participates in a
         // broad volume gradient, so the crown reads like a lush tufted mass.
-        vec3 twCrownCenter = vTreeBase + normalize(vTreeUp) * uCanopyCenterY;
-        vec3 twFromCenter = normalize(vWorldPos - twCrownCenter);
+        vec3 twFromCenter = normalize(vWorldPos - vCrownCenter);
         float twSunVolume = dot(twFromCenter, normalize(uSunDir));
         float twLit = smoothstep(-0.35, 0.82, twSunVolume);
         float twHighlight = smoothstep(0.52, 1.0, twSunVolume) * smoothstep(0.28, 1.0, vCanopyY);
@@ -545,7 +543,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-leaf-v7';
+  material.customProgramCacheKey = () => 'tree-leaf-v8';
   return material;
 }
 
@@ -714,22 +712,6 @@ type ShaderHolder = {
   userData: { shader?: { uniforms?: Record<string, { value: unknown }> } };
 };
 
-function canopyCenterYFor(profile: TreeProfile): number {
-  const frac =
-    profile.silhouette === 'conical'
-      ? 0.56
-      : profile.silhouette === 'umbrella'
-        ? 0.82
-        : profile.silhouette === 'weeping'
-          ? 0.68
-          : profile.silhouette === 'frond'
-            ? 0.9
-            : profile.silhouette === 'wispy'
-              ? 0.72
-              : 0.7;
-  return profile.trunkHeight * frac;
-}
-
 /**
  * Push per-planet COLOURS from the profile into all four tree materials ONCE
  * (call after mount). Colours are uniforms, not defines, so shaders stay shared.
@@ -769,7 +751,6 @@ export function applyTreeProfileToMaterials(
   set(leaf, 'uBloom', profile.bloomAmount);
   set(leaf, 'uShapeId', profile.shapeId);
   set(leaf, 'uLeafMode', profile.leafMode);
-  set(leaf, 'uCanopyCenterY', canopyCenterYFor(profile));
   setWind(leaf);
 
   set(blossom, 'uFlowerColor', profile.flowerColor);

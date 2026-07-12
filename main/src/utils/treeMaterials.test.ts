@@ -31,7 +31,7 @@ describe('treeMaterials', () => {
     const impostor = createImpostorMaterial();
 
     expect(bark.customProgramCacheKey()).toBe('tree-bark-v6');
-    expect(leaf.customProgramCacheKey()).toBe('tree-leaf-v7');
+    expect(leaf.customProgramCacheKey()).toBe('tree-leaf-v8');
     expect(blossom.customProgramCacheKey()).toBe('tree-blossom-v5');
     expect(impostor.customProgramCacheKey()).toBe('tree-impostor-v6');
 

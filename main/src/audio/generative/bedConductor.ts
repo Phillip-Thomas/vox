@@ -204,28 +204,6 @@ function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: n
     // Launch: the authored BUILD→BLOOM curve.
     if (s.scene === 'launch') state.pendingForceBuild = true;
 
-    // Entering approach: plan the destination-key modulation (owner ruling #1).
-    if (s.scene === 'approach' && s.destinationSeed != null && !s.storyLeads) {
-      const destKey = derivePlanetKey(
-        s.destinationSeed,
-        (s.destinationArchetype ?? undefined) as ArchetypeId | undefined
-      );
-      const decision = planApproachModulation(
-        { tonicPc: state.harmony.tonicPc, mode: state.harmony.mode },
-        { tonicPc: destKey.tonicPc, mode: destKey.homeMode },
-        {
-          approachBars: APPROACH_EXPECTED_BARS,
-          harmonyBars: harmonyBarsFor(effectiveEnergy),
-          storyLeads: s.storyLeads
-        }
-      );
-      state.approach = {
-        decision,
-        destKey: { tonicPc: destKey.tonicPc, mode: destKey.homeMode },
-        waypointIdx: 0
-      };
-    }
-
     // Leaving approach: arrive. An unfinished walk (early landing) or a
     // planned landing pivot spends the one awe-chord now (§8.4 fallback).
     if (state.prevScene === 'approach' && state.approach) {
@@ -240,6 +218,29 @@ function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: n
     }
 
     state.prevScene = s.scene;
+  }
+
+  // In approach with a destination and no plan yet (the destination may
+  // resolve a beat after the scene flips): plan the modulation (ruling #1).
+  if (s.scene === 'approach' && !state.approach && s.destinationSeed != null && !s.storyLeads) {
+    const destKey = derivePlanetKey(
+      s.destinationSeed,
+      (s.destinationArchetype ?? undefined) as ArchetypeId | undefined
+    );
+    const decision = planApproachModulation(
+      { tonicPc: state.harmony.tonicPc, mode: state.harmony.mode },
+      { tonicPc: destKey.tonicPc, mode: destKey.homeMode },
+      {
+        approachBars: APPROACH_EXPECTED_BARS,
+        harmonyBars: harmonyBarsFor(effectiveEnergy),
+        storyLeads: s.storyLeads
+      }
+    );
+    state.approach = {
+      decision,
+      destKey: { tonicPc: destKey.tonicPc, mode: destKey.homeMode },
+      waypointIdx: 0
+    };
   }
   return landingPivot;
 }

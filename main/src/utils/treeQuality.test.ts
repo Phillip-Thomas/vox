@@ -13,7 +13,10 @@ function expectFiniteGeometry(geometry: THREE.BufferGeometry): void {
   const position = geometry.getAttribute('position') as THREE.BufferAttribute;
   expect(position.count).toBeGreaterThan(0);
   let finite = true;
-  for (const value of position.array) finite = finite && Number.isFinite(value);
+  for (const attribute of Object.values(geometry.attributes)) {
+    expect(attribute.count).toBe(position.count);
+    for (const value of attribute.array) finite = finite && Number.isFinite(value);
+  }
   expect(finite).toBe(true);
   const index = geometry.getIndex();
   expect(index).not.toBeNull();
@@ -26,10 +29,18 @@ function expectFiniteGeometry(geometry: THREE.BufferGeometry): void {
 
 function geometryHash(geometry: THREE.BufferGeometry): number {
   let hash = 2166136261 >>> 0;
-  const position = geometry.getAttribute('position') as THREE.BufferAttribute;
-  for (const value of position.array) {
-    hash ^= Math.round(Number(value) * 100_000);
+  for (const name of Object.keys(geometry.attributes).sort()) {
+    const attribute = geometry.getAttribute(name) as THREE.BufferAttribute;
+    for (const char of name) {
+      hash ^= char.charCodeAt(0);
+      hash = Math.imul(hash, 16777619) >>> 0;
+    }
+    hash ^= attribute.itemSize;
     hash = Math.imul(hash, 16777619) >>> 0;
+    for (const value of attribute.array) {
+      hash ^= Math.round(Number(value) * 100_000);
+      hash = Math.imul(hash, 16777619) >>> 0;
+    }
   }
   for (const value of geometry.getIndex()!.array) {
     hash ^= Number(value);

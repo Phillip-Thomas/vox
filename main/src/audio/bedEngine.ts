@@ -755,8 +755,11 @@ function scheduleTicks(ctx: AudioContext, now: number): void {
   const k = Math.min(1, SCHEDULER_INTERVAL_MS / 1000 / TICK_GLIDE_S);
   tickHzLive += (tickHzTarget - tickHzLive) * k;
   if (nextTickAt < now) nextTickAt = now + 1 / tickHzLive;
+  // No transient nodes while the tick bus is silent (main-thread budget) —
+  // the timeline still advances so the clock never re-syncs to the music.
+  const silent = tickLevelApplied <= 0.001;
   while (nextTickAt < now + LOOKAHEAD_S) {
-    tickHit(ctx, nextTickAt);
+    if (!silent) tickHit(ctx, nextTickAt);
     nextTickAt += 1 / tickHzLive;
   }
 }
