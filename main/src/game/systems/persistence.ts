@@ -26,6 +26,7 @@ import { getWaterskinFill, setWaterskinFill } from './consumeSystem.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
 import type { CurrentWorld, WorldCoordinate } from '../../utils/worldCoordinates.ts';
+import { coordinateKey } from '../../utils/worldCoordinates.ts';
 import type { WorldIdentity } from '../worldIdentity.ts';
 
 const PREFIX = `pvx.v${GENERATION_SCHEMA_VERSION}`;
@@ -96,15 +97,26 @@ export interface GlobalSave {
   era: EraId;
   milestones: string[];
   lastWorld: WorldCoordinate | null;
+  /** Canonical planet identity. Absent legacy saves resume on slot 0. */
+  lastPlanetWorldId?: string;
   dayPhase?: number;       // time-of-day to resume at (0..1); SkyController offset
   vitals?: VitalsState;    // survival meters (health/hunger/thirst/warmth/stamina)
   waterskin?: number;      // carried-water fill level
 }
 
-export function saveGlobal(lastWorld: WorldCoordinate | null, dayPhase?: number): void {
+export function saveGlobal(lastWorld: WorldCoordinate | CurrentWorld | null, dayPhase?: number): void {
+  const coordinate = lastWorld && 'coordinate' in lastWorld
+    ? lastWorld.coordinate
+    : lastWorld;
+  const lastPlanetWorldId = lastWorld && 'worldId' in lastWorld
+    ? lastWorld.worldId
+    : coordinate
+      ? coordinateKey(coordinate)
+      : undefined;
   const data: GlobalSave = {
     inventory: getInventory(), mawCharge: getMawCharge(), era: getCurrentEra(),
-    milestones: getMilestones(), lastWorld, dayPhase, vitals: getVitals(), waterskin: getWaterskinFill()
+    milestones: getMilestones(), lastWorld: coordinate, lastPlanetWorldId, dayPhase,
+    vitals: getVitals(), waterskin: getWaterskinFill()
   };
   write(GLOBAL_KEY, data);
 }

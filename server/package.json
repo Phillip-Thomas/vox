@@ -9,7 +9,7 @@
     "start": "node dist/index.js",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json --pretty false",
-    "test": "vitest run",
+    "test": "vitest run --exclude='dist/**'",
     "verify": "npm run typecheck && npm run test && npm run build",
     "migrate": "tsx scripts/migrate.ts",
     "smoke:room": "tsx scripts/smokeRoom.ts"

@@ -3,27 +3,37 @@ export interface ServerWorldCoordinate {
   y: number;
 }
 
+export type ServerPlanetSlot = 0 | 1 | 2;
+
+export interface ServerWorldAddress extends ServerWorldCoordinate {
+  slot: ServerPlanetSlot;
+}
+
 export type ServerCoord3 = [number, number, number];
 
 export const WORLD_SEED_NAMESPACE = 'paravox:v1';
+export const PLANET_SEED_NAMESPACE = 'paravox:planet:v1';
 export const SERVER_PLANET_RADIUS = 25;
 export const SERVER_CORE_RADIUS = SERVER_PLANET_RADIUS * 0.15;
 const MAX_WORLD_COORDINATE_ABS = 1_000_000;
-const WORLD_ID_PATTERN = /^(-?\d+),(-?\d+)$/;
+const WORLD_ID_PATTERN = /^(-?\d+),(-?\d+)(?::p([12]))?$/;
 
 export function canonicalWorldId(value: string): string | null {
-  const coordinate = parseWorldId(value);
-  return coordinate ? `${coordinate.x},${coordinate.y}` : null;
+  const address = parseWorldId(value);
+  if (!address) return null;
+  const primaryId = `${address.x},${address.y}`;
+  return address.slot === 0 ? primaryId : `${primaryId}:p${address.slot}`;
 }
 
-export function parseWorldId(value: string): ServerWorldCoordinate | null {
+export function parseWorldId(value: string): ServerWorldAddress | null {
   const match = WORLD_ID_PATTERN.exec(value.trim());
   if (!match) return null;
   const x = Number(match[1]);
   const y = Number(match[2]);
   if (!Number.isSafeInteger(x) || !Number.isSafeInteger(y)) return null;
   if (Math.abs(x) > MAX_WORLD_COORDINATE_ABS || Math.abs(y) > MAX_WORLD_COORDINATE_ABS) return null;
-  return { x, y };
+  const slot = match[3] === undefined ? 0 : Number(match[3]) as ServerPlanetSlot;
+  return { x, y, slot };
 }
 
 export function coordinateToSeed(x: number, y: number): number {
@@ -31,9 +41,17 @@ export function coordinateToSeed(x: number, y: number): number {
   return hash === 0 ? 1 : hash;
 }
 
+export function addressToSeed(address: ServerWorldAddress): number {
+  if (address.slot === 0) return coordinateToSeed(address.x, address.y);
+  const hash = fnv1a32(
+    `${PLANET_SEED_NAMESPACE}:${Math.trunc(address.x)}:${Math.trunc(address.y)}:${address.slot}`
+  );
+  return hash === 0 ? 1 : hash;
+}
+
 export function seedForWorldId(worldId: string): number | null {
-  const coordinate = parseWorldId(worldId);
-  return coordinate ? coordinateToSeed(coordinate.x, coordinate.y) : null;
+  const address = parseWorldId(worldId);
+  return address ? addressToSeed(address) : null;
 }
 
 export function isTerrainCoordInBounds(coord: ServerCoord3): boolean {

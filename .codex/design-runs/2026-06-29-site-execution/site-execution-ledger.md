@@ -512,6 +512,7 @@ Iteration: `10`
 - Added palette-authored bark, arc-length grain, generated-bound impostors, and silhouette-specific far masks.
 - Added ecology-aware placement and variant-safe harvesting mappings.
 - Added cross-platform tree capture metrics and a population mode to the standalone tree harness.
+- Added phenotype/instance-correct canopy volume centers and quality-transition rebuild/handle cleanup.
 
 ### Checks
 
@@ -519,14 +520,15 @@ Iteration: `10`
 - `npx tsc --noEmit -p tsconfig.json --pretty false`
 - `node tools/capture-trees.mjs --label=tree-overhaul-final-silhouettes --query=mode=silhouettes`
 - `node tools/capture-trees.mjs --label=tree-overhaul-final-population --query=mode=population`
-- `node tools/procedural-atlas.mjs --mode=smoke --label=tree-overhaul-smoke-final2 --no-start`
-- `node tools/procedural-atlas.mjs --mode=perf --label=tree-overhaul-perf-final2 --no-start --settle=950 --warm=300`
+- `node tools/procedural-atlas.mjs --mode=smoke --label=tree-overhaul-smoke-final3 --no-start`
+- `node tools/procedural-atlas.mjs --mode=perf --label=tree-overhaul-perf-final3 --no-start --settle=950 --warm=300`
 
 ### Gate Status
 
 - Focused tree tests: `51 / 51` pass.
+- Repository suite: `818 / 818` pass; TypeScript typecheck and production build pass.
 - Profiled seed matrix: `144` phenotypes pass finite/index/bounds/taper/budget checks.
 - In-game smoke: `3` cases, `12` screenshots, `0` console errors, `0` defects.
-- Perf: all profiles `60fps`, max worst-view p95 `18.9ms`, tree geometry/draw budgets pass.
+- Perf: geometry/draw budgets pass with `54-60fps`, max worst-view p95 `21.1ms`, and no atlas slow-frame defect; the max was a zero-tree POTATO control.
 - Accepted external exception: current-checkout shader program counts exceed stale per-tier thresholds even in POTATO with trees disabled; no atlas budget was changed.
 - Human taste approval remains open.

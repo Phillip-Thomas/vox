@@ -5,13 +5,17 @@ import { GENERATION_SCHEMA_VERSION } from '../game/schema';
 import { blockToRenderMaterial } from '../game/adapters';
 import { markWarpMetric, measureWarpMetric } from './warpMetrics';
 import { voxelCoordToWorld } from './cubeGravityConstants';
-import { MATERIALS, materialId } from '../types/materials';
+import { MATERIALS, materialId, type MaterialType } from '../types/materials';
 import type {
   InitialTerrainMeshData,
   OriginalTerrainData,
   OriginalTerrainMap,
   TerrainVoxel
 } from './efficientVoxelSystem';
+import {
+  validatePackedWorldPrepPayload,
+  type PackedWorldPrepPayload
+} from './worldPrepProtocol.ts';
 
 /**
  * Memoized world-generation, keyed by (size, terrainSeed).
@@ -37,6 +41,8 @@ import type {
  */
 
 export interface CachedWorldGen {
+  /** Present for worker-prepared worlds so readiness cannot alias a seed collision. */
+  worldId?: string;
   generator: ProceduralWorldGenerator;
   voxels: Array<{ x: number; y: number; z: number }>;
   originalTerrain?: TerrainVoxel[];
@@ -44,7 +50,20 @@ export interface CachedWorldGen {
   initialVoxels?: TerrainVoxel[];
   initialTerrainMeshData?: InitialTerrainMeshData;
   waterVoxels?: Array<{ x: number; y: number; z: number; isTopSurface: boolean }>;
+  allWaterVoxels?: Array<{ x: number; y: number; z: number }>;
   waterFaces?: Array<{ x: number; y: number; z: number; faceDir: number }>;
+  arrivalCandidate?: { x: number; y: number; z: number };
+}
+
+export interface WorldPrepHydrationOptions {
+  /** Maximum main-thread work between cooperative yields. */
+  budgetMs?: number;
+  /** Test hook; production defaults to the next animation frame. */
+  yieldControl?: () => Promise<void>;
+  /** Trusted worker results were hashed before transfer; tests/tools may recheck. */
+  validateHash?: boolean;
+  /** Cooperative cancellation checked between chunks before cache publication. */
+  isCancelled?: () => boolean;
 }
 
 export interface WorldTerrainData {
@@ -181,6 +200,20 @@ export function getWorldGen(size: number, terrainSeed: number): CachedWorldGen {
   return entry;
 }
 
+/**
+ * Non-touching residency check used by the same-system activation gate. Requiring
+ * a world ID prevents a different canonical planet with the same 32-bit seed from
+ * satisfying readiness.
+ */
+export function hasWorldGenCacheEntry(
+  size: number,
+  terrainSeed: number,
+  worldId?: string
+): boolean {
+  const entry = cache.get(cacheKey(size, terrainSeed));
+  return Boolean(entry && (worldId === undefined || entry.worldId === worldId));
+}
+
 export function getWorldWaterVoxels(
   size: number,
   terrainSeed: number
@@ -215,6 +248,25 @@ export function getWorldWaterFaces(
     result => ({ faces: result.length })
   );
   return entry.waterFaces;
+}
+
+export function getWorldAllWaterVoxels(
+  size: number,
+  terrainSeed: number
+): Array<{ x: number; y: number; z: number }> {
+  const entry = getWorldGen(size, terrainSeed);
+  if (entry.allWaterVoxels) return entry.allWaterVoxels;
+  const extent = Math.floor(size / 2) + 6;
+  const water: Array<{ x: number; y: number; z: number }> = [];
+  for (let x = -extent; x <= extent; x++) {
+    for (let y = -extent; y <= extent; y++) {
+      for (let z = -extent; z <= extent; z++) {
+        if (entry.generator.isWaterVoxel(x, y, z)) water.push({ x, y, z });
+      }
+    }
+  }
+  entry.allWaterVoxels = water;
+  return water;
 }
 
 export function getWorldTerrainData(
@@ -297,6 +349,196 @@ export function getWorldTerrainData(
   };
 }
 
+/**
+ * Convert a worker-owned packed payload into the exact legacy cache shape in
+ * cooperative slices, then publish it atomically. No caller can observe a
+ * half-hydrated world and activation performs no generator rescan.
+ */
+export async function hydrateWorldGenCacheFromPackedPayload(
+  payload: PackedWorldPrepPayload,
+  options: WorldPrepHydrationOptions = {}
+): Promise<CachedWorldGen> {
+  if (options.validateHash) validatePackedWorldPrepPayload(payload);
+  if (payload.planetSize <= 0 || payload.seed <= 0) {
+    throw new Error('Cannot hydrate an invalid world-prep payload.');
+  }
+
+  const budgetMs = Math.max(0.25, options.budgetMs ?? 2.5);
+  const yieldControl = options.yieldControl ?? yieldForHydration;
+  let sliceStartedAt = performanceNow();
+  const maybeYield = async () => {
+    if (options.isCancelled?.()) throw new Error('World-prep hydration was cancelled.');
+    if (performanceNow() - sliceStartedAt < budgetMs) return;
+    await yieldControl();
+    if (options.isCancelled?.()) throw new Error('World-prep hydration was cancelled.');
+    sliceStartedAt = performanceNow();
+  };
+
+  const planetRadius = payload.planetSize / 2;
+  const generator = new ProceduralWorldGenerator(
+    { planetRadius, coreRadiusPercent: 0.15 },
+    createTerrainConfig(payload.seed, planetRadius)
+  );
+  const voxelCount = payload.counts.voxels;
+  const voxels = new Array<{ x: number; y: number; z: number }>(voxelCount);
+  const originalTerrain = new Array<TerrainVoxel>(voxelCount);
+  const originalTerrainByCoord = new Map<string, OriginalTerrainData>();
+  const buffers = payload.buffers;
+
+  for (let index = 0; index < voxelCount; index++) {
+    const offset = index * 3;
+    const x = buffers.voxelPositions[offset];
+    const y = buffers.voxelPositions[offset + 1];
+    const z = buffers.voxelPositions[offset + 2];
+    const blockId = requiredPackedLookup(payload.lookups.blocks, buffers.blockIds[index], 'block');
+    const material = requiredPackedLookup(payload.lookups.materials, buffers.materialIds[index], 'material');
+    const resourceCode = buffers.depositResourceIds[index];
+    const deposit = resourceCode === 0
+      ? null
+      : {
+        resourceId: requiredPackedLookup(payload.lookups.resources, resourceCode - 1, 'resource'),
+        richness: buffers.depositRichness[index],
+        scanLevel: buffers.depositScanLevels[index]
+      };
+    const color = MATERIALS[material].color.clone();
+    const voxel: TerrainVoxel = { x, y, z, blockId, deposit, material, color };
+    voxels[index] = { x, y, z };
+    originalTerrain[index] = voxel;
+    originalTerrainByCoord.set(coordKey(x, y, z), {
+      blockId,
+      deposit,
+      material,
+      color: color.clone()
+    });
+    if ((index & 255) === 255) await maybeYield();
+  }
+
+  const exposedCount = payload.counts.exposedVoxels;
+  const initialVoxels = new Array<TerrainVoxel>(exposedCount);
+  const matrices = new Float32Array(exposedCount * 16);
+  const colors = new Float32Array(exposedCount * 3);
+  const instanceData = new Float32Array(exposedCount * 2);
+  const matrix = new THREE.Matrix4();
+  const position = new THREE.Vector3();
+  for (let slot = 0; slot < exposedCount; slot++) {
+    const voxelIndex = buffers.exposedVoxelIndices[slot];
+    const voxel = originalTerrain[voxelIndex];
+    if (!voxel) throw new Error(`Packed exposed voxel index ${voxelIndex} is out of bounds.`);
+    initialVoxels[slot] = voxel;
+    matrix.identity();
+    matrix.setPosition(voxelCoordToWorld(voxel.x, voxel.y, voxel.z, position));
+    matrix.toArray(matrices, slot * 16);
+    voxel.color.toArray(colors, slot * 3);
+    instanceData[slot * 2] = materialId(voxel.material as MaterialType);
+    instanceData[slot * 2 + 1] = computeInitialFaceMask(
+      voxel.x,
+      voxel.y,
+      voxel.z,
+      originalTerrainByCoord
+    );
+    if ((slot & 255) === 255) await maybeYield();
+  }
+
+  const waterVoxels = new Array<{ x: number; y: number; z: number; isTopSurface: boolean }>(
+    payload.counts.waterVoxels
+  );
+  for (let index = 0; index < waterVoxels.length; index++) {
+    const offset = index * 3;
+    waterVoxels[index] = {
+      x: buffers.waterVoxelPositions[offset],
+      y: buffers.waterVoxelPositions[offset + 1],
+      z: buffers.waterVoxelPositions[offset + 2],
+      isTopSurface: buffers.waterVoxelTopFlags[index] !== 0
+    };
+    if ((index & 511) === 511) await maybeYield();
+  }
+  const waterFaces = new Array<{ x: number; y: number; z: number; faceDir: number }>(
+    payload.counts.waterFaces
+  );
+  for (let index = 0; index < waterFaces.length; index++) {
+    const offset = index * 3;
+    waterFaces[index] = {
+      x: buffers.waterFacePositions[offset],
+      y: buffers.waterFacePositions[offset + 1],
+      z: buffers.waterFacePositions[offset + 2],
+      faceDir: buffers.waterFaceDirections[index]
+    };
+    if ((index & 511) === 511) await maybeYield();
+  }
+  const allWaterVoxels = new Array<{ x: number; y: number; z: number }>(
+    payload.counts.waterCells
+  );
+  const allWaterKeys = new Set<string>();
+  for (let index = 0; index < allWaterVoxels.length; index++) {
+    const offset = index * 3;
+    allWaterVoxels[index] = {
+      x: buffers.waterCellPositions[offset],
+      y: buffers.waterCellPositions[offset + 1],
+      z: buffers.waterCellPositions[offset + 2]
+    };
+    const cell = allWaterVoxels[index];
+    allWaterKeys.add(coordKey(cell.x, cell.y, cell.z));
+    if ((index & 511) === 511) await maybeYield();
+  }
+  generator.hydratePreparedWaterCells(allWaterVoxels, allWaterKeys);
+
+  const entry: CachedWorldGen = {
+    worldId: payload.worldId,
+    generator,
+    voxels,
+    originalTerrain,
+    originalTerrainByCoord,
+    initialVoxels,
+    initialTerrainMeshData: { count: exposedCount, matrices, colors, instanceData },
+    waterVoxels,
+    allWaterVoxels,
+    waterFaces,
+    arrivalCandidate: {
+      x: buffers.arrivalCandidate[0],
+      y: buffers.arrivalCandidate[1],
+      z: buffers.arrivalCandidate[2]
+    }
+  };
+
+  if (options.isCancelled?.()) throw new Error('World-prep hydration was cancelled.');
+  const key = cacheKey(payload.planetSize, payload.seed);
+  cache.delete(key);
+  cache.set(key, entry);
+  trimWorldGenCache();
+  return entry;
+}
+
+export function getWorldArrivalCandidate(
+  size: number,
+  terrainSeed: number,
+  preferred = { x: 4, z: -4 }
+): { x: number; y: number; z: number } {
+  const entry = getWorldGen(size, terrainSeed);
+  const defaultPreference = preferred.x === 4 && preferred.z === -4;
+  if (defaultPreference && entry.arrivalCandidate) return { ...entry.arrivalCandidate };
+  const topByColumn = new Map<string, { x: number; y: number; z: number }>();
+  for (const voxel of entry.voxels) {
+    if (voxel.y < 0) continue;
+    const key = `${voxel.x},${voxel.z}`;
+    const current = topByColumn.get(key);
+    if (!current || voxel.y > current.y) topByColumn.set(key, voxel);
+  }
+  let best: { x: number; y: number; z: number } | null = null;
+  let bestDistanceSq = Number.POSITIVE_INFINITY;
+  for (const voxel of topByColumn.values()) {
+    const dx = voxel.x - preferred.x;
+    const dz = voxel.z - preferred.z;
+    const distanceSq = dx * dx + dz * dz;
+    if (distanceSq < bestDistanceSq || (distanceSq === bestDistanceSq && best && voxel.y > best.y)) {
+      best = voxel;
+      bestDistanceSq = distanceSq;
+    }
+  }
+  const candidate = best ? { ...best } : { x: 0, y: Math.floor(size / 2), z: 0 };
+  if (defaultPreference) entry.arrivalCandidate = candidate;
+  return { ...candidate };
+}
+
 export function prewarmWorldGen(
   size: number,
   terrainSeed: number,
@@ -371,4 +613,27 @@ export function scheduleWorldPrewarm(
 export function clearWorldGenCache(): void {
   cache.clear();
   scheduledPrewarms.clear();
+}
+
+function trimWorldGenCache(): void {
+  while (cache.size > MAX_ENTRIES) {
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey === undefined) break;
+    cache.delete(oldestKey);
+  }
+}
+
+function requiredPackedLookup<T>(values: readonly T[], index: number, label: string): T {
+  const value = values[index];
+  if (value === undefined) throw new Error(`Packed ${label} lookup index ${index} is out of bounds.`);
+  return value;
+}
+
+function performanceNow(): number {
+  return typeof performance === 'undefined' ? Date.now() : performance.now();
+}
+
+function yieldForHydration(): Promise<void> {
+  if (typeof window === 'undefined') return Promise.resolve();
+  return new Promise(resolve => window.requestAnimationFrame(() => resolve()));
 }

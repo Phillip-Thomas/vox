@@ -357,6 +357,22 @@ export class ProceduralWorldGenerator {
     return this.getFloodedWater().has(`${x},${y},${z}`);
   }
 
+  /**
+   * Install a worker-prepared flooded set on a fresh generator. This avoids a
+   * duplicate main-thread flood fill while preserving the existing query API
+   * used by fauna, player submergence, and dynamic water edits.
+   */
+  hydratePreparedWaterCells(
+    cells: ReadonlyArray<{ x: number; y: number; z: number }>,
+    preparedKeys?: Set<string>
+  ): void {
+    if (this.dynamicWaterCells.length > 0 || this.waterEditVersion !== 0) {
+      throw new Error('Prepared water can only hydrate a fresh generator.');
+    }
+    this.floodedWater = preparedKeys
+      ?? new Set(cells.map(cell => `${cell.x},${cell.y},${cell.z}`));
+  }
+
   /** Public: is this empty cell open air (empty and not flooded)? */
   isAirVoxel(x: number, y: number, z: number): boolean {
     if (this.shouldVoxelExist(x, y, z)) return false;

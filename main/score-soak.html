@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paravoxia score-soak harness</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #0b0e14; color: #9fb0c4; font: 14px monospace; }
+      #status { padding: 16px; }
+    </style>
+  </head>
+  <body>
+    <!-- P4 verification harness: OfflineAudioContext soaks + owner-audition WAV
+         excerpts of the generative score. Driven headless by score-soak-probe.mjs;
+         see src/audio/soak/. Dev-server only — not part of the game build. -->
+    <div id="status">loading…</div>
+    <script type="module" src="/src/audio/soak/soakPage.ts"></script>
+  </body>
+</html>

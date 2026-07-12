@@ -24,6 +24,7 @@ import { getWaterskinFill, fillWaterskin, resetWaterskin } from './consumeSystem
 import { restoreForageForWorld } from './persistence.ts';
 import { createWorldIdentity } from '../worldIdentity.ts';
 import { GENERATION_SCHEMA_VERSION } from '../schema.ts';
+import { createPlanetIdentity } from '../starSystem.ts';
 
 // localStorage isn't present in the vitest node env — stub a Map-backed one.
 class MemStorage {
@@ -73,6 +74,16 @@ describe('global save round-trip', () => {
     expect(hasMilestone('maw_repaired')).toBe(true);
     expect(getVitals()).toEqual({ health: 70, hunger: 55, thirst: 40, warmth: 88, stamina: 30, oxygen: 100 });
     expect(getWaterskinFill()).toBe(55);
+  });
+
+  it('stores a canonical secondary planet while retaining the legacy coordinate', () => {
+    const planet = createPlanetIdentity({ system: { x: 5, y: -2 }, slot: 1 });
+    saveGlobal(planet);
+
+    expect(loadGlobal()).toMatchObject({
+      lastWorld: { x: 5, y: -2 },
+      lastPlanetWorldId: '5,-2:p1'
+    });
   });
 });
 

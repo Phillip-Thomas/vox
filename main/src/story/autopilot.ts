@@ -96,7 +96,11 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   'ch1-nav': 75,
   'ch1-iso': 75,
   'ch1-anomaly': 62, // calibration sweep (stage 1) + the walk + dwell
-  'ch2-color': 34, // 6s stand + ~70u walk to the tree radius; 20 cut the walk short every run
+  // 6s stand + ~70u walk to the tree radius. 20 cut the walk short every run;
+  // 34 still truncated healthy-but-slow walks (34.3s observed on a green
+  // screening, 2026-07-12) — swiftshader walk speed varies ~±20%. 45 = the
+  // stand + ~1.7x the typical walk, matching ch2-approach's envelope.
+  'ch2-color': 45,
   'ch2-approach': 45,
   'ch3-gather': 34,
   'ch3-await-rest': 70,
@@ -538,6 +542,12 @@ export function autopilotTick(dt: number): void {
         grantMissingCampfireMaterials();
         placeCampfire(getPlayerWorldPosition().clone(), getPlayerUp().clone());
       }
+      // Rescue (the autopilot guarantee: no beat can stall the screening).
+      // Today the fire path is synchronous — place emits, the director's
+      // campfire subscription advances — so this only fires if that chain
+      // ever grows a failure mode. This was the one driven beat whose
+      // BEAT_TIMEOUT entry was never consulted.
+      if (beatClock > timeout) advanceToBeat('ch3-dusk');
       break;
     }
     case 'ch3-await-rest': {

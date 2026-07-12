@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { createBedConductor, planBedBar, type BedBarPlan, type BedConductorState } from './bedConductor.ts';
 import { derivePlanetKey } from './harmonyBrain.ts';
-import { MODE_SCALES, pcMod } from './theory.ts';
+import { MODE_SCALES, pcMod, TRIAD_INTERVALS } from './theory.ts';
 import { neutralBedSignals, type BedSignals } from './worldSignals.ts';
-import { GESTURE_TABU, PHRASE_BARS } from './tuning.ts';
+import { GESTURE_TABU, PARADOX_MEDIANT_RATION, PHRASE_BARS } from './tuning.ts';
 
 const sig = (patch: Partial<BedSignals> = {}): BedSignals => ({ ...neutralBedSignals(), ...patch });
 
@@ -92,6 +92,32 @@ describe('melody statements (C418 restraint + §7.3 tabu)', () => {
     expect(stated).toBeLessThan(400 / PHRASE_BARS / 2); // most phrases the melody is SILENT
   });
 
+  it('statement fingerprints span the chords sounded across the phrase, not just the current chord (§7.3)', () => {
+    const state = createBedConductor(555, { archetype: 'verdant' });
+    const plans = runBars(state, 1200, (bar) => sig({ energy: 0.75, wonder: 0.8, timeSec: bar * 2 }));
+    const statements = plans.filter((p) => p.melodyChain != null);
+    expect(statements.length).toBeGreaterThan(0);
+    let multiChord = 0;
+    for (const p of statements) {
+      const ids = p.melodyChordIds;
+      expect(ids).not.toBeNull();
+      // The context ends on the chord under the statement's first bar…
+      expect(ids![ids!.length - 1]).toBe(p.harmony.chordId);
+      // …collapses consecutive holds…
+      for (let i = 1; i < ids!.length; i++) expect(ids![i]).not.toBe(ids![i - 1]);
+      if (ids!.length > 1) multiChord++;
+      // …and re-derives exactly from the plan stream's per-bar chords.
+      const expected: string[] = [];
+      for (let b = Math.max(0, p.barIndex - PHRASE_BARS); b <= p.barIndex; b++) {
+        const id = plans[b].harmony.chordId;
+        if (expected[expected.length - 1] !== id) expected.push(id);
+      }
+      expect(ids).toEqual(expected);
+    }
+    // The context is real (multi-chord), not degenerate single-chord lists.
+    expect(multiChord).toBeGreaterThan(0);
+  });
+
   it('gesture tabu: a statement chain never repeats within the gesture window', () => {
     const state = createBedConductor(555, { archetype: 'verdant' });
     const plans = runBars(state, 1200, (bar) => sig({ energy: 0.75, wonder: 0.8, timeSec: bar * 2 }));
@@ -166,6 +192,109 @@ describe('arrangement + scene policies through the conductor', () => {
     const therePlan = planBedBar(there, sig({ energy: 0.8, detail: 1, regionUnit: 0.2 }));
     expect(herePlan.percussion.length).toBeGreaterThan(0);
     expect(herePlan.percussion).not.toEqual(therePlan.percussion);
+  });
+});
+
+describe('stage transitions are events (§8.4 stage row, P5)', () => {
+  it('an upward stage flip schedules exactly one bloom, and alive promises a mediant', () => {
+    const state = createBedConductor(9091, { archetype: 'verdant' });
+    const flipAt = PHRASE_BARS + 3; // mid-phrase: the mediant must WAIT for the boundary
+    const plans = runBars(state, PHRASE_BARS * 4, (bar) =>
+      sig({
+        energy: 0.5,
+        era: bar >= flipAt ? 0.9 : 0.6,
+        stage: bar >= flipAt ? 'alive' : 'material'
+      })
+    );
+    const blooms = plans.filter((p) => p.stageBloom);
+    expect(blooms.length).toBe(1);
+    expect(blooms[0].barIndex).toBe(flipAt);
+    // The promised mediant fires ON the next phrase boundary, not before.
+    const boundary = plans.find((p) => p.barIndex >= flipAt && p.phrasePos === 0)!;
+    expect(boundary.stageMediant).toBe(true);
+    expect(boundary.harmony.mediant).toBe(true);
+    expect(boundary.harmony.changed).toBe(true);
+    for (const p of plans) {
+      if (p.barIndex > flipAt && p.barIndex < boundary.barIndex) {
+        expect(p.stageMediant, `bar ${p.barIndex}`).toBe(false);
+      }
+    }
+  });
+
+  it('a color→material rung blooms but promises no mediant', () => {
+    const state = createBedConductor(9092, { archetype: 'verdant' });
+    const plans = runBars(state, PHRASE_BARS * 3, (bar) =>
+      sig({
+        energy: 0.5,
+        era: bar >= 5 ? 0.55 : 0.3,
+        stage: bar >= 5 ? 'material' : 'color'
+      })
+    );
+    expect(plans.filter((p) => p.stageBloom).length).toBe(1);
+    expect(plans.every((p) => !p.stageMediant)).toBe(true);
+  });
+
+  it('a fresh conductor adopts the current stage silently and downward flips never bloom', () => {
+    const fresh = createBedConductor(9093);
+    const first = planBedBar(fresh, sig({ stage: 'alive' }));
+    expect(first.stageBloom).toBe(false);
+    const down = createBedConductor(9094);
+    const plans = runBars(down, 12, (bar) =>
+      sig({ stage: bar >= 4 ? 'material' : 'alive', era: bar >= 4 ? 0.6 : 0.9 })
+    );
+    expect(plans.every((p) => !p.stageBloom && !p.stageMediant)).toBe(true);
+  });
+
+  it('story authority swallows the awakening (the story scored it already)', () => {
+    const state = createBedConductor(9095, { archetype: 'verdant' });
+    const plans = runBars(state, PHRASE_BARS * 3, (bar) =>
+      sig({
+        storyLeads: true,
+        era: bar >= 6 ? 0.9 : 0.6,
+        stage: bar >= 6 ? 'alive' : 'material'
+      })
+    );
+    expect(plans.every((p) => !p.stageBloom && !p.stageMediant)).toBe(true);
+  });
+});
+
+describe('period-authentic era rungs (§8.5, P5)', () => {
+  it('bare is monophonic: a lone chip arp of CHORD TONES, no melody statements', () => {
+    const state = createBedConductor(1201, { archetype: 'verdant' });
+    const plans = runBars(state, PHRASE_BARS * 6, () =>
+      sig({ era: 0.05, stage: 'bare', energy: 0.4, wonder: 0.7 })
+    );
+    let arpNotes = 0;
+    for (const plan of plans) {
+      expect(plan.chipMono).toBe(true);
+      expect(plan.melody).toEqual([]);
+      expect(['REST', 'BED']).toContain(plan.arrangement);
+      const chord = plan.harmony.chord;
+      const chordPcs = new Set(TRIAD_INTERVALS[chord.quality].map((step) => pcMod(chord.rootPc + step)));
+      for (const n of plan.ostinato) {
+        arpNotes++;
+        expect(chordPcs.has(pcMod(n.semis)), `bar ${plan.barIndex}`).toBe(true);
+      }
+    }
+    expect(arpNotes).toBeGreaterThan(0);
+  });
+
+  it('paradox splits the world clock and widens the mediant ration', () => {
+    const state = createBedConductor(1202, { archetype: 'anomaly' });
+    const plans = runBars(state, PHRASE_BARS * 20, (bar) =>
+      sig({ stage: 'paradox', era: 1, energy: 0.85, golden: 1, timeSec: bar * 2 })
+    );
+    expect(plans.every((p) => p.tick.splitHz !== null)).toBe(true);
+    const perPhrase = new Map<number, number>();
+    for (const p of plans) {
+      if (p.harmony.changed && p.harmony.mediant) {
+        const phrase = Math.floor(p.barIndex / PHRASE_BARS);
+        perPhrase.set(phrase, (perPhrase.get(phrase) ?? 0) + 1);
+      }
+    }
+    for (const [phrase, count] of perPhrase) {
+      expect(count, `phrase ${phrase}`).toBeLessThanOrEqual(PARADOX_MEDIANT_RATION);
+    }
   });
 });
 

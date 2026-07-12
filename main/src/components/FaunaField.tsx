@@ -30,6 +30,7 @@ interface FaunaFieldProps {
   playerPosition?: THREE.Vector3;
   /** When provided, ground fauna avoid terrain submerged below the waterline. */
   planetSize?: number;
+  progressiveMount?: boolean;
 }
 
 const HEADROOM = 12;
@@ -39,19 +40,34 @@ const HEADROOM = 12;
  * per voxel/seed, share the planet biome and wind profile, and self-gate through
  * graphics quality and voxel-reality uniforms.
  */
-export default function FaunaField({ terrainSeed, playerPosition, planetSize }: FaunaFieldProps) {
+export default function FaunaField({
+  terrainSeed,
+  playerPosition,
+  planetSize,
+  progressiveMount = false
+}: FaunaFieldProps) {
   const density = getGraphicsQuality().faunaDensity;
   const water = useMemo(
     () => (planetSize ? getWorldGen(planetSize, terrainSeed).generator : undefined),
     [planetSize, terrainSeed]
   );
   const profile = useMemo(() => buildFaunaProfile(terrainSeed, water), [terrainSeed, water]);
+  const [visibleKindCount, setVisibleKindCount] = useState(
+    progressiveMount ? 1 : FAUNA_KINDS.length
+  );
+  useEffect(() => {
+    if (!progressiveMount || visibleKindCount >= FAUNA_KINDS.length) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      setVisibleKindCount(count => Math.min(FAUNA_KINDS.length, count + 1));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [progressiveMount, visibleKindCount]);
 
   if (density <= 0) return null;
 
   return (
     <>
-      {FAUNA_KINDS.map(kind => (
+      {FAUNA_KINDS.slice(0, visibleKindCount).map(kind => (
         <FaunaLayer
           key={kind}
           kind={kind}

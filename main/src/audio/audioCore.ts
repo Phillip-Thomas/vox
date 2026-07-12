@@ -15,7 +15,12 @@ let musicBus: GainNode | null = null;
 let submergeFilter: BiquadFilterNode | null = null;
 let visibilityGain: GainNode | null = null;
 
-let volume = 0.72;
+/** Default music-bus volume (shared by the live chain and the offline mirror). */
+export const DEFAULT_MUSIC_VOLUME = 0.72;
+const COMPRESSOR_THRESHOLD_DB = -20;
+const COMPRESSOR_RATIO = 8;
+
+let volume = DEFAULT_MUSIC_VOLUME;
 let muted = false;
 let submerged = false;
 let ducked = false;
@@ -30,8 +35,8 @@ export function getAudioContext(): AudioContext | null {
   ctx = new Ctor();
 
   const compressor = ctx.createDynamicsCompressor();
-  compressor.threshold.value = -20;
-  compressor.ratio.value = 8;
+  compressor.threshold.value = COMPRESSOR_THRESHOLD_DB;
+  compressor.ratio.value = COMPRESSOR_RATIO;
   compressor.connect(ctx.destination);
 
   visibilityGain = ctx.createGain();
@@ -115,7 +120,26 @@ export function rampParam(
   param.linearRampToValueAtTime(value, now + Math.max(0.01, fadeSeconds));
 }
 
-export function makeNoiseBuffer(context: AudioContext, seconds: number): AudioBuffer {
+/**
+ * The OFFLINE mirror of the live output chain (P4 verification harness):
+ * volume bus → safety compressor → destination, on a caller-provided
+ * (Offline)AudioContext. The submerge/visibility stages are transparent in the
+ * live chain's neutral state and are omitted, so an offline render hears
+ * exactly what a surfaced, visible tab hears. Returns the bus engines connect
+ * to (the offline stand-in for getMusicBus()).
+ */
+export function createOfflineMusicChain(context: BaseAudioContext): GainNode {
+  const compressor = context.createDynamicsCompressor();
+  compressor.threshold.value = COMPRESSOR_THRESHOLD_DB;
+  compressor.ratio.value = COMPRESSOR_RATIO;
+  compressor.connect(context.destination);
+  const bus = context.createGain();
+  bus.gain.value = DEFAULT_MUSIC_VOLUME;
+  bus.connect(compressor);
+  return bus;
+}
+
+export function makeNoiseBuffer(context: BaseAudioContext, seconds: number): AudioBuffer {
   const frameCount = Math.max(1, Math.floor(context.sampleRate * seconds));
   const buffer = context.createBuffer(1, frameCount, context.sampleRate);
   const data = buffer.getChannelData(0);

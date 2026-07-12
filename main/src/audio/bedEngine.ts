@@ -5,13 +5,15 @@ import {
   isScoreMoodLeading,
   registerBedQuantizer,
   scheduleHit,
-  setGenerativeBedLead
+  setGenerativeBedLead,
+  setScorePlanetGenome
 } from './scoreEngine.ts';
 import {
   createBedConductor,
   planBedBar,
   type BedBarPlan,
-  type BedConductorState
+  type BedConductorState,
+  type CreateBedOptions
 } from './generative/bedConductor.ts';
 import { neutralBedSignals, type BedSignals } from './generative/worldSignals.ts';
 import {
@@ -39,12 +41,17 @@ import {
   BED_TICK_LEVEL,
   BED_WASH_LEVEL,
   BED_YIELD_FADE_S,
+  CHIP_HARMONY_LEVEL,
+  CHIP_MONO_DUCK,
+  CHIP_VIBRATO_CENTS,
+  CHIP_VIBRATO_HZ,
   DRIFT_TEXTURE_SPAN,
   HIT_MIN_LEAD_S,
   PAD_DETUNE_CENTS_MAX,
   PAD_DETUNE_CENTS_MIN,
   PAD_OCTAVE_SHIFT,
   PAD_WIDTH_MAX,
+  PARADOX_TICK2_LEVEL,
   PHRASE_BARS,
   REVERB_DECAY,
   REVERB_SECONDS,
@@ -89,6 +96,8 @@ const LEAD_FILTER_HZ = 2200;
 const LEAD_ATTACK_S = 0.05;
 const LEAD_DELAY_MIX = 0.4;
 const LEAD_DELAY_FEEDBACK = 0.3;
+/** Square chip leads carry more harmonic energy than triangles — trim to match. */
+const CHIP_LEAD_TRIM = 0.7;
 const SHIMMER_LFO_HZ = 0.13;
 const SHIMMER_LFO_DEPTH = 0.4; // × base gain
 const WASH_FILTER_MIN_HZ = 280;
@@ -122,12 +131,21 @@ let conductor: BedConductorState | null = null;
 let transport: TransportState | null = null;
 let schedulerTimer: number | null = null;
 let yielding = false;
+/** P4 offline-render hooks (null on the live path — behavior unchanged). */
+let onBarHook: ((plan: BedBarPlan, barTime: number, barDur: number) => void) | null = null;
+let offlineHitSink: ((kind: 'bloom' | 'boom', atTime: number) => void) | null = null;
 let tickHzLive = 1;
 let tickHzTarget = 1;
 let tickLevelApplied = -1;
 let nextTickAt = 0;
+/** The paradox SECOND clock (§8.5): 0 = off; never re-phases with the first. */
+let tick2HzLive = 0;
+let tick2HzTarget = 0;
+let nextTick2At = 0;
 let noteSalt = 0;
 let leadDelay: DelayNode | null = null;
+let leadDelayMixNode: GainNode | null = null;
+let leadDelayFeedbackNode: GainNode | null = null;
 let shimmerLfoDepth: GainNode | null = null;
 
 let bedMaster: GainNode | null = null;
@@ -202,6 +220,9 @@ export function configureBedPlanet(
 ): void {
   if (conductor && conductor.planetSeed === planetSeed) return;
   conductor = createBedConductor(planetSeed, { archetype, paletteBrightness });
+  // The planet's tune haunts the story beats (§10.5): the score engine renders
+  // mood melodies through this genome, filtered by each mood's own scale.
+  setScorePlanetGenome(conductor.genome, planetSeed);
   if (transport) {
     requestTransportTempo(transport, conductor.genome.baseTempo);
     requestTransportMeter(transport, conductor.genome.meter);
@@ -219,14 +240,32 @@ function bedQuantize(quantize: HitQuantize): number | null {
 
 function ensureBed(): void {
   if (built) return;
+  // The invariant: NO pre-gesture AudioContext is ever constructed on the
+  // bed's behalf. peek first, and only fetch the bus once a context exists —
+  // getMusicBus() would otherwise construct a suspended context itself.
   const ctx = peekAudioContext();
+  if (!ctx) return;
   const bus = getMusicBus();
-  if (!ctx || !bus) return;
+  if (!bus) return;
   built = true;
+  buildBedGraph(ctx, bus);
 
+  // Leadership plumbing: the bed is the sandbox floor from now on.
+  setGenerativeBedLead(true);
+  registerBedQuantizer(bedQuantize);
+
+  startScheduler();
+}
+
+/**
+ * Build the full voice graph on any context (the live singleton, or an
+ * OfflineAudioContext in the P4 verification harness). Pure node construction
+ * — no leadership registration, no timers.
+ */
+function buildBedGraph(ctx: BaseAudioContext, out: AudioNode): void {
   bedMaster = ctx.createGain();
   bedMaster.gain.value = 0;
-  bedMaster.connect(bus);
+  bedMaster.connect(out);
 
   bedBus = ctx.createGain();
   bedBus.gain.value = 1;
@@ -323,6 +362,8 @@ function ensureBed(): void {
   feedback.gain.value = LEAD_DELAY_FEEDBACK;
   const delayMix = ctx.createGain();
   delayMix.gain.value = LEAD_DELAY_MIX;
+  leadDelayMixNode = delayMix;
+  leadDelayFeedbackNode = feedback;
   leadGain.connect(delay);
   leadGain.connect(reverbSend);
   delay.connect(feedback);
@@ -424,15 +465,9 @@ function ensureBed(): void {
   tickGain = ctx.createGain();
   tickGain.gain.value = 0;
   tickGain.connect(bedBus);
-
-  // Leadership plumbing: the bed is the sandbox floor from now on.
-  setGenerativeBedLead(true);
-  registerBedQuantizer(bedQuantize);
-
-  startScheduler();
 }
 
-function makeImpulse(ctx: AudioContext): AudioBuffer {
+function makeImpulse(ctx: BaseAudioContext): AudioBuffer {
   const frames = Math.floor(ctx.sampleRate * REVERB_SECONDS);
   const buffer = ctx.createBuffer(2, frames, ctx.sampleRate);
   // Deterministic xorshift noise — reproducible tail, no Math.random.
@@ -465,9 +500,12 @@ function schedulerTick(): void {
   const now = ctx.currentTime;
   const s = signals;
 
-  // Story authority: fade out, freeze the planner, publish nothing.
+  // Story authority: fade out, freeze the planner, publish nothing. Keep the
+  // stage baseline current — awakenings the STORY scored must not re-fire as
+  // deferred bed blooms on resume (§8.4 stage row, frozen contract).
   const storyLeads = isScoreMoodLeading();
   if (storyLeads) {
+    conductor.prevStage = s.stage;
     if (!yielding) {
       yielding = true;
       bedMaster.gain.cancelScheduledValues(now);
@@ -480,6 +518,16 @@ function schedulerTick(): void {
     bedMaster.gain.setTargetAtTime(BED_MASTER_GAIN, now, BED_RESUME_FADE_S / 3);
   }
 
+  advanceBedScheduling(ctx, now, s);
+}
+
+/**
+ * The clock-agnostic scheduling core: plan and schedule every bar whose start
+ * enters the lookahead horizon, then the world-clock ticks. Shared verbatim by
+ * the live 60 ms interval and the offline suspend/resume drive (P4).
+ */
+function advanceBedScheduling(ctx: BaseAudioContext, now: number, s: BedSignals): void {
+  if (!conductor) return;
   if (!transport) {
     transport = createTransport(now + LOOKAHEAD_S, conductor.genome.baseTempo, conductor.genome.meter);
   }
@@ -494,6 +542,7 @@ function schedulerTick(): void {
   while (transport.barStartTime < now + LOOKAHEAD_S) {
     const plan = planBedBar(conductor, s);
     scheduleBar(ctx, plan, transport);
+    onBarHook?.(plan, transport.barStartTime, barDurationSec(transport.bpm, transport.meter));
     advanceTransportBar(transport);
   }
 
@@ -502,7 +551,7 @@ function schedulerTick(): void {
 
 // --- Bar rendering -----------------------------------------------------------------------------------
 
-function scheduleBar(ctx: AudioContext, plan: BedBarPlan, t: TransportState): void {
+function scheduleBar(ctx: BaseAudioContext, plan: BedBarPlan, t: TransportState): void {
   const barTime = t.barStartTime;
   const barDur = barDurationSec(t.bpm, t.meter);
   const slotSec = barDur / SLOTS_PER_BAR;
@@ -550,10 +599,12 @@ function scheduleBar(ctx: AudioContext, plan: BedBarPlan, t: TransportState): vo
   }
   subGain!.gain.setTargetAtTime(BED_SUB_LEVEL * plan.levels.sub * g.sub, barTime, BAR_PARAM_TAU_S);
 
-  // -- Chip drone: the bare-era floor and the paradox fold-back.
+  // -- Chip drone: the bare-era floor and the paradox fold-back. Bare is
+  // MONOPHONIC (§8.5): the drone yields while the lone chip arp speaks.
+  const monoDuck = plan.chipMono && plan.ostinato.length > 0 ? CHIP_MONO_DUCK : 1;
   chipOsc!.frequency.setTargetAtTime(hzOf(plan.publish.root + CHIP_DRONE_OCTAVE), barTime, SUB_GLIDE_TAU_S);
   chipGain!.gain.setTargetAtTime(
-    CHIP_DRONE_LEVEL * g.chip * Math.max(plan.levels.pad, 0.6 * plan.levels.sub),
+    CHIP_DRONE_LEVEL * g.chip * monoDuck * Math.max(plan.levels.pad, 0.6 * plan.levels.sub),
     barTime,
     BAR_PARAM_TAU_S
   );
@@ -580,13 +631,33 @@ function scheduleBar(ctx: AudioContext, plan: BedBarPlan, t: TransportState): vo
     pluck(ctx, at, note.semis, note.velocity, note.durationSlots * slotSec, g.chip > 0.5 ? 'square' : 'triangle');
   }
 
-  // -- Lead statements (rare; the tune's entrances carry the emotion).
+  // -- Lead statements (rare; the tune's entrances carry the emotion). In the
+  // chip eras the lead is a PULSE with NES vibrato and — at `color` — the trio's
+  // second pulse a chord tone below (§8.5). The delay space is era-gated:
+  // bare is bone dry, color gets the single slapback, material+ full feedback.
   leadGain!.gain.setTargetAtTime(BED_LEAD_LEVEL * plan.levels.lead, barTime, BAR_PARAM_TAU_S);
   leadDelay?.delayTime.setTargetAtTime(beatDur * 0.75, barTime, BAR_PARAM_TAU_S);
+  leadDelayMixNode?.gain.setTargetAtTime(LEAD_DELAY_MIX * g.delay, barTime, BAR_PARAM_TAU_S);
+  leadDelayFeedbackNode?.gain.setTargetAtTime(LEAD_DELAY_FEEDBACK * g.padChoir, barTime, BAR_PARAM_TAU_S);
+  const chipLead = g.padChoir < 0.5;
+  const vibratoCents = chipLead ? CHIP_VIBRATO_CENTS * g.vibrato : 0;
   for (const note of plan.melody) {
     const jitter = humanizeOffsetMs(seed, noteSalt++, s.organic) / 1000;
     const at = Math.max(ctx.currentTime, barTime + note.slot * slotSec + jitter);
-    leadNote(ctx, at, note.semis, note.velocity, note.durationSlots * slotSec);
+    const durSec = note.durationSlots * slotSec;
+    const velocity = chipLead ? note.velocity * CHIP_LEAD_TRIM : note.velocity;
+    leadNote(ctx, at, note.semis, velocity, durSec, chipLead, vibratoCents);
+    if (chipLead && g.chipHarmony > 0.01) {
+      leadNote(
+        ctx,
+        at,
+        chordToneBelow(note.semis, plan.publish.tones),
+        velocity * CHIP_HARMONY_LEVEL * g.chipHarmony,
+        durSec,
+        true,
+        vibratoCents
+      );
+    }
   }
 
   // -- Shimmer + wash: the texture family, reweighted by the texture drift clock.
@@ -676,24 +747,39 @@ function scheduleBar(ctx: AudioContext, plan: BedBarPlan, t: TransportState): vo
   );
 
   // -- The world-clock tick: presence/level fade over whole bars, at bar lines.
+  // At paradox the clock may SPLIT (§8.5): a second timeline at the golden
+  // ratio of the first — the game remembering that time has two readings.
   const tickTarget = plan.tick.present ? BED_TICK_LEVEL * (0.3 + 0.7 * plan.tick.level) : 0;
   if (Math.abs(tickTarget - tickLevelApplied) > 0.005 && tickGain) {
     tickGain.gain.setTargetAtTime(tickTarget, barTime, barDur * TICK_BAR_FADE_FRAC);
     tickLevelApplied = tickTarget;
   }
   tickHzTarget = plan.tick.hz;
+  tick2HzTarget = plan.tick.splitHz ?? 0;
 
-  // -- Warp exit / arrival: grid punctuation through the shared hit path
-  // (scheduleHit rides THIS transport's grid while the bed leads).
-  if (plan.warpExitBoom || plan.landingPivot) {
-    scheduleHit(plan.landingPivot ? 'bloom' : 'boom', 'bar');
+  // -- Warp exit / arrival / awakening: grid punctuation through the shared
+  // hit path (scheduleHit rides THIS transport's grid while the bed leads).
+  // Offline renders route the hit into their own chain instead.
+  if (plan.warpExitBoom || plan.landingPivot || plan.stageBloom) {
+    const kind = plan.landingPivot || plan.stageBloom ? 'bloom' : 'boom';
+    if (offlineHitSink) offlineHitSink(kind, barTime);
+    else scheduleHit(kind, 'bar');
   }
+}
+
+/** Nearest chord tone strictly below `semis` (chord pcs exist in every octave). */
+function chordToneBelow(semis: number, tones: readonly number[]): number {
+  const pcs = new Set(tones.map((t) => ((t % 12) + 12) % 12));
+  for (let cand = semis - 1; cand >= semis - 12; cand--) {
+    if (pcs.has(((cand % 12) + 12) % 12)) return cand;
+  }
+  return semis - 12;
 }
 
 // --- Transients (bounded lifetimes, like the shipped score voices) -----------------------------------
 
 function pluck(
-  ctx: AudioContext,
+  ctx: BaseAudioContext,
   at: number,
   semis: number,
   velocity: number,
@@ -714,11 +800,31 @@ function pluck(
   osc.stop(at + Math.max(0.1, holdSec * 2));
 }
 
-function leadNote(ctx: AudioContext, at: number, semis: number, velocity: number, durSec: number): void {
+function leadNote(
+  ctx: BaseAudioContext,
+  at: number,
+  semis: number,
+  velocity: number,
+  durSec: number,
+  chip = false,
+  vibratoCents = 0
+): void {
   if (!leadFilter) return;
   const osc = ctx.createOscillator();
-  osc.type = 'triangle';
+  osc.type = chip ? 'square' : 'triangle';
   osc.frequency.value = hzOf(semis);
+  const stopAt = at + Math.max(0.3, durSec) + 0.1;
+  // NES vibrato (§8.5 — unlocks at `color`): a bounded-lifetime pitch LFO.
+  if (vibratoCents > 0.5) {
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = CHIP_VIBRATO_HZ;
+    const depth = ctx.createGain();
+    depth.gain.value = vibratoCents;
+    lfo.connect(depth);
+    depth.connect(osc.detune);
+    lfo.start(at);
+    lfo.stop(stopAt);
+  }
   const env = ctx.createGain();
   const peak = velocity;
   env.gain.setValueAtTime(0.0001, at);
@@ -728,10 +834,10 @@ function leadNote(ctx: AudioContext, at: number, semis: number, velocity: number
   osc.connect(env);
   env.connect(leadFilter);
   osc.start(at);
-  osc.stop(at + Math.max(0.3, durSec) + 0.1);
+  osc.stop(stopAt);
 }
 
-function percHit(ctx: AudioContext, at: number, salt: number, width: number): void {
+function percHit(ctx: BaseAudioContext, at: number, salt: number, width: number): void {
   if (!percFilter || !percNoise || !percPan || !conductor) return;
   const src = ctx.createBufferSource();
   src.buffer = percNoise;
@@ -749,7 +855,7 @@ function percHit(ctx: AudioContext, at: number, salt: number, width: number): vo
 
 // --- The world-clock tick (its own clock — NEVER the musical grid; §8.1) -------------------------------
 
-function scheduleTicks(ctx: AudioContext, now: number): void {
+function scheduleTicks(ctx: BaseAudioContext, now: number): void {
   if (!tickGain) return;
   // Rate GLIDES (≥ TICK_GLIDE_S): smooth the live rate toward its target.
   const k = Math.min(1, SCHEDULER_INTERVAL_MS / 1000 / TICK_GLIDE_S);
@@ -762,9 +868,22 @@ function scheduleTicks(ctx: AudioContext, now: number): void {
     if (!silent) tickHit(ctx, nextTickAt);
     nextTickAt += 1 / tickHzLive;
   }
+  // The paradox SECOND clock (§8.5): its own timeline at the golden ratio of
+  // the first — the two never re-phase, and it never re-syncs either.
+  if (tick2HzTarget > 0) {
+    if (tick2HzLive <= 0) tick2HzLive = tick2HzTarget;
+    else tick2HzLive += (tick2HzTarget - tick2HzLive) * k;
+    if (nextTick2At < now) nextTick2At = now + 1 / tick2HzLive;
+    while (nextTick2At < now + LOOKAHEAD_S) {
+      if (!silent) tickHit(ctx, nextTick2At, PARADOX_TICK2_LEVEL);
+      nextTick2At += 1 / tick2HzLive;
+    }
+  } else {
+    tick2HzLive = 0;
+  }
 }
 
-function tickHit(ctx: AudioContext, at: number): void {
+function tickHit(ctx: BaseAudioContext, at: number, levelScale = 1): void {
   if (!tickGain) return;
   const metal = clamp01(signals.metal);
   const base = TICK_FREQ_WOOD_HZ + (TICK_FREQ_METAL_HZ - TICK_FREQ_WOOD_HZ) * metal;
@@ -781,6 +900,119 @@ function tickHit(ctx: AudioContext, at: number): void {
     osc.start(at);
     osc.stop(at + TICK_DECAY_S + 0.05);
   };
-  mk(base, 1);
-  if (metal > 0.05) mk(base * TICK_PARTIAL_RATIO, 0.5 * metal);
+  mk(base, levelScale);
+  if (metal > 0.05) mk(base * TICK_PARTIAL_RATIO, 0.5 * metal * levelScale);
+}
+
+// --- Offline render rim (P4 verification harness) ------------------------------------------------
+//
+// The soak/audition harness drives THE SAME graph builder, bar scheduler, and
+// tick voice on an OfflineAudioContext, stepping time through suspend/resume
+// checkpoints instead of the live 60 ms interval. Guarded so it can never run
+// while the live bed exists; the live path is untouched when unused.
+
+export interface OfflineBedHooks {
+  /** Called once per planned bar, right after it is scheduled (soak audits). */
+  onBar?: (plan: BedBarPlan, barTime: number, barDur: number) => void;
+  /** Receives warp-exit booms / landing-pivot blooms instead of the live hit path. */
+  onHit?: (kind: 'bloom' | 'boom', atTime: number) => void;
+}
+
+/**
+ * Begin an offline bed render: fresh conductor, fresh transport, the full
+ * voice graph built on `ctx` into `out`. Returns the conductor so the harness
+ * can snapshot harmony state around each bar (read-only). Throws if the live
+ * bed is running — offline rendering needs a page of its own.
+ */
+export function beginOfflineBedRender(
+  ctx: BaseAudioContext,
+  out: AudioNode,
+  planetSeed: number,
+  opts?: CreateBedOptions & OfflineBedHooks
+): BedConductorState {
+  if (built || schedulerTimer != null) {
+    throw new Error('bedEngine is live — offline rendering requires a fresh page');
+  }
+  built = true;
+  conductor = createBedConductor(planetSeed, opts);
+  transport = null;
+  signals = neutralBedSignals();
+  noteSalt = 0;
+  tickHzLive = 1;
+  tickHzTarget = 1;
+  tickLevelApplied = -1;
+  nextTickAt = 0;
+  tick2HzLive = 0;
+  tick2HzTarget = 0;
+  nextTick2At = 0;
+  yielding = false;
+  onBarHook = opts?.onBar ?? null;
+  offlineHitSink = opts?.onHit ?? null;
+  buildBedGraph(ctx, out);
+  // Skip the live master fade-in: renders start at the composed level.
+  bedMaster!.gain.value = BED_MASTER_GAIN;
+  return conductor;
+}
+
+/** One offline checkpoint: write the world snapshot, then schedule the horizon. */
+export function stepOfflineBedRender(ctx: BaseAudioContext, now: number, next: BedSignals): void {
+  signals = next;
+  advanceBedScheduling(ctx, now, next);
+}
+
+/** Tear down offline module state so a later render (or the live game) starts clean. */
+export function endOfflineBedRender(): void {
+  built = false;
+  conductor = null;
+  transport = null;
+  onBarHook = null;
+  offlineHitSink = null;
+  signals = neutralBedSignals();
+  noteSalt = 0;
+  tickHzLive = 1;
+  tickHzTarget = 1;
+  tickLevelApplied = -1;
+  nextTickAt = 0;
+  tick2HzLive = 0;
+  tick2HzTarget = 0;
+  nextTick2At = 0;
+  yielding = false;
+  bedMaster = null;
+  bedBus = null;
+  breathGain = null;
+  reverbSend = null;
+  reverbWet = null;
+  padVoices = [];
+  padFilter = null;
+  padGain = null;
+  subOsc = null;
+  subGain = null;
+  chipOsc = null;
+  chipGain = null;
+  ostFilter = null;
+  ostGain = null;
+  leadFilter = null;
+  leadGain = null;
+  shimmerA = null;
+  shimmerB = null;
+  shimmerGain = null;
+  shimmerPan = null;
+  washFilter = null;
+  washGain = null;
+  washPan = null;
+  washGustLfo = null;
+  washGustDepth = null;
+  washPanLfo = null;
+  washPanDepth = null;
+  percFilter = null;
+  percGain = null;
+  percPan = null;
+  percNoise = null;
+  riserFilter = null;
+  riserGain = null;
+  tickGain = null;
+  leadDelay = null;
+  leadDelayMixNode = null;
+  leadDelayFeedbackNode = null;
+  shimmerLfoDepth = null;
 }

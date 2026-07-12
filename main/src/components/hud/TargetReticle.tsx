@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSpaceFlight } from '../../state/spaceFlight.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { getEngageState } from '../ShipController.tsx';
+import { useSystemFlight } from '../../state/systemFlight.ts';
 
 /**
  * Centred deep-space targeting reticle. Shown only when an impostor is locked in
@@ -11,13 +12,18 @@ import { getEngageState } from '../ShipController.tsx';
  */
 const TargetReticle: React.FC = () => {
   const { phase, target } = useSpaceFlight();
+  const systemFlight = useSystemFlight();
   const [charge, setCharge] = useState(0);
   const [waitingForFreshForward, setWaitingForFreshForward] = useState(false);
-  const active = phase === 'deep_space' && target !== null;
+  const localTarget = systemFlight.target?.kind === 'system_body'
+    ? systemFlight.target
+    : null;
+  const interstellarTarget = localTarget ? null : target;
+  const active = phase === 'deep_space' && (localTarget !== null || interstellarTarget !== null);
   const touch = isTouchDevice();
 
   useEffect(() => {
-    if (!active) {
+    if (!active || localTarget) {
       setCharge(0);
       setWaitingForFreshForward(false);
       return;
@@ -31,9 +37,36 @@ const TargetReticle: React.FC = () => {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [active]);
+  }, [active, localTarget]);
 
-  if (!active || !target) return null;
+  if (!active) return null;
+  if (localTarget) {
+    return (
+      <div style={{
+        position: 'absolute',
+        top: 'calc(50% + 26px)',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        color: '#8fffd1',
+        fontFamily: 'monospace',
+        background: 'rgba(0,0,0,0.55)',
+        padding: '6px 12px',
+        borderRadius: 6,
+        fontSize: 12,
+        textAlign: 'center',
+        lineHeight: 1.4,
+        border: '1px solid rgba(143,255,209,0.48)',
+        pointerEvents: 'none',
+        minWidth: 180
+      }}>
+        <div style={{ fontWeight: 'bold', letterSpacing: 1 }}>
+          LOCAL LOCK {localTarget.worldId}
+        </div>
+        <div style={{ opacity: 0.8, marginTop: 2 }}>FLIGHT CORRIDOR ACQUIRED</div>
+      </div>
+    );
+  }
+  if (!interstellarTarget) return null;
   const pct = Math.round(Math.min(charge, 1) * 100);
   const prompt = waitingForFreshForward
     ? (touch ? 'center stick, then hold forward' : 'release W, then hold to warp')
@@ -58,7 +91,7 @@ const TargetReticle: React.FC = () => {
       minWidth: 180
     }}>
       <div style={{ fontWeight: 'bold', letterSpacing: 1 }}>
-        {pct >= 100 ? 'ENGAGING' : '▶ LOCK'} {target.x},{target.y}
+        {pct >= 100 ? 'ENGAGING' : '▶ LOCK'} {interstellarTarget.x},{interstellarTarget.y}
       </div>
       <div style={{ opacity: 0.8, marginTop: 2 }}>{prompt}</div>
       <div style={{

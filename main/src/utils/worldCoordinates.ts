@@ -32,6 +32,15 @@ export function coordinatesEqual(a: WorldCoordinate, b: WorldCoordinate): boolea
   return coordinateKey(a) === coordinateKey(b);
 }
 
+/**
+ * Explicit system-level equality for callers that also work with multiple
+ * planets inside one coordinate. Kept separate from planet identity so a
+ * same-system companion is never mistaken for the currently active planet.
+ */
+export function sameSystemCoordinate(a: WorldCoordinate, b: WorldCoordinate): boolean {
+  return coordinatesEqual(a, b);
+}
+
 export function coordinateToSeed(x: number, y: number): number {
   const nx = normalizeCoordinatePart(x);
   const ny = normalizeCoordinatePart(y);

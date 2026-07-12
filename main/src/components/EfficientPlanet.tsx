@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { CuboidCollider, RapierRigidBody, RigidBody } from '@react-three/rapier';
@@ -165,7 +165,11 @@ export default function EfficientPlanet({
   );
 
   const dynamicBufferSize = useMemo(() => {
-    return Math.max(originalTerrain.length, initialVoxels.length, 5000);
+    // Only exposed voxels occupy GPU instances. Reserving the entire solid
+    // interior made every world upload ~3-5x more matrix/color/AO storage than
+    // it could draw. Keep ample edit headroom for newly exposed cells instead.
+    const editHeadroom = Math.min(8192, Math.max(0, originalTerrain.length - initialVoxels.length));
+    return Math.max(5000, initialVoxels.length + editHeadroom);
   }, [initialVoxels.length, originalTerrain.length]);
 
   const isWithinCollisionRange = useCallback((x: number, y: number, z: number) => {
@@ -267,7 +271,7 @@ export default function EfficientPlanet({
     return queued;
   }, [isWithinCollisionRange]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!meshRef.current) return undefined;
 
     const activeMesh = meshRef.current;

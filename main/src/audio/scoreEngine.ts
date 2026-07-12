@@ -11,6 +11,9 @@ import {
 } from './musicPrimitives.ts';
 import { nextGridStep, type HitQuantize } from './generative/transport.ts';
 import { HIT_MIN_LEAD_S, PHRASE_BARS } from './generative/tuning.ts';
+import { planMoodPhrase } from './generative/moodMelody.ts';
+import type { MotifGenome } from './generative/motif.ts';
+import { musicUnit, SALT_MOOD_PHRASE } from './generative/seededMusic.ts';
 
 // --- The score engine --------------------------------------------------------------------
 //
@@ -51,6 +54,13 @@ export interface ScoreMood {
 }
 
 const ROOT_HZ = 55; // A1
+/**
+ * Melody-phrase attack time (s). The sustain hold is clamped to land at or
+ * after the attack completes — a short note at a fast mood tempo must soften
+ * the envelope, never degenerate the attack into a click (mirrors
+ * bedEngine.leadNote).
+ */
+const MELODY_ATTACK_S = 0.06;
 
 /**
  * The CELESTIAL IDLE BED: when no mood leads, the instrument never fully
@@ -94,6 +104,16 @@ let melodyGain: GainNode | null = null;
 let melodyFilter: BiquadFilterNode | null = null;
 let melodyDelay: DelayNode | null = null;
 
+/**
+ * P5 (§10.5, owner-approved): the planet's motif genome, pushed by the
+ * generative bed. While a story mood leads, its `melody.scale` becomes a
+ * FILTER over this genome — the planet's tune haunts the story beats, played
+ * in the mood's mode — replacing the legacy random walk. Null (no planet
+ * known yet) keeps the shipped walk. NO `MOODS` schema change.
+ */
+let planetGenome: MotifGenome | null = null;
+let planetGenomeSeed = 0;
+
 // The idle bed leads from the very first unlock — the instrument is never off.
 let mood: ScoreMood | null = IDLE_MOOD;
 /** True when the celestial idle bed leads (no mood set) — extra quiet. */
@@ -110,7 +130,10 @@ let bedLead = false;
 let bedQuantizer: ((quantize: HitQuantize) => number | null) | null = null;
 /** One-shot hit output at fixed gain, so grid hits sound even while idle yields. */
 let hitBus: GainNode | null = null;
-const HIT_BUS_GAIN = 0.9; // matches the shipped mood-era master level for hits
+/** Fixed hit-output gain — matches the shipped mood-era master level for hits. */
+export const HIT_BUS_GAIN = 0.9;
+/** Score master level while a mood leads (idle scales it down). */
+const SCORE_MASTER_LEVEL = 0.9;
 let intensity = IDLE_MOOD.baseline;
 let schedulerTimer: number | null = null;
 let nextNoteAt = 0;
@@ -133,14 +156,24 @@ function ensureScore(): AudioContext | null {
   if (!ctx || !bus) return null;
   if (built) return ctx;
   built = true;
+  buildScoreGraph(ctx, bus);
+  startScheduler();
+  return ctx;
+}
 
+/**
+ * Build the instrument's voice graph on any context (the live singleton, or
+ * an OfflineAudioContext in the P4 verification harness). Node construction
+ * only — no timers.
+ */
+function buildScoreGraph(ctx: BaseAudioContext, out: AudioNode): void {
   master = ctx.createGain();
   master.gain.value = 0;
-  master.connect(bus);
+  master.connect(out);
 
   hitBus = ctx.createGain();
   hitBus.gain.value = HIT_BUS_GAIN;
-  hitBus.connect(bus);
+  hitBus.connect(out);
 
   // PAD: 4 chord tones × 2 detuned saws → shared lowpass.
   padFilter = ctx.createBiquadFilter();
@@ -226,9 +259,6 @@ function ensureScore(): AudioContext | null {
   riserFilter.connect(riserGain);
   riserGain.connect(master);
   noise.start();
-
-  startScheduler();
-  return ctx;
 }
 
 // --- the lookahead scheduler (ostinato notes + smoothed control rails) ------------------
@@ -238,56 +268,114 @@ function startScheduler(): void {
   schedulerTimer = window.setInterval(() => {
     const ctx = getAudioContext();
     if (!ctx || !mood) return;
-    applyRails(ctx);
-    // The generative bed owns the sandbox: while it leads and no story mood
-    // is set, this engine's idle voice schedules nothing (master is at 0 and
-    // the bed publishes the harmonic center).
-    if (idle && bedLead) return;
-    const stepSeconds = 60 / mood.tempo / 2; // 8th notes
-    while (nextNoteAt < ctx.currentTime + 0.18) {
-      if (nextNoteAt < ctx.currentTime) nextNoteAt = ctx.currentTime;
-
-      // Harmonic motion: the progression turns every two bars; pad/sub glide
-      // to the new chord and the ostinato transposes with its root.
-      if (mood.progression && patternStep % STEPS_PER_CHORD === 0) {
-        chordIndex = Math.floor(patternStep / STEPS_PER_CHORD) % mood.progression.length;
-        currentChord = mood.progression[chordIndex];
-        retuneVoices(ctx);
-      }
-      const chordRoot = currentChord[0] ?? 0;
-
-      const semis = mood.pattern[patternStep % mood.pattern.length];
-      // Humanize: soft velocity drift + the occasional dropped note when calm.
-      const dropped = intensity < 0.45 && Math.random() < 0.08;
-      if (semis != null && !dropped && ostFilter) {
-        const osc = ctx.createOscillator();
-        osc.type = mood.wave;
-        osc.frequency.value = hzForSemis(chordRoot + semis, mood.octave);
-        const velocity = 0.78 + Math.random() * 0.22;
-        const env = ctx.createGain();
-        env.gain.setValueAtTime(0, nextNoteAt);
-        env.gain.linearRampToValueAtTime(velocity, nextNoteAt + 0.008);
-        env.gain.exponentialRampToValueAtTime(0.001, nextNoteAt + stepSeconds * 1.7);
-        osc.connect(env);
-        env.connect(ostFilter);
-        osc.start(nextNoteAt);
-        osc.stop(nextNoteAt + stepSeconds * 2);
-      }
-
-      // The lead: every four bars, maybe a phrase — a stepwise random walk over
-      // the mood's scale, so the harmony always has a singer above it.
-      if (mood.melody && patternStep % STEPS_PER_PHRASE_SLOT === 0 && Math.random() < mood.melody.density) {
-        schedulePhrase(ctx, nextNoteAt, stepSeconds);
-      }
-
-      patternStep++;
-      nextNoteAt += stepSeconds;
-    }
+    stepScoreScheduler(ctx, ctx.currentTime);
   }, 60);
 }
 
+/**
+ * One lookahead pass — the clock-agnostic scheduling core, shared verbatim by
+ * the live 60 ms interval and the offline suspend/resume drive (P4).
+ */
+function stepScoreScheduler(ctx: BaseAudioContext, now: number): void {
+  if (!mood) return;
+  applyRails(ctx, now);
+  // The generative bed owns the sandbox: while it leads and no story mood
+  // is set, this engine's idle voice schedules nothing (master is at 0 and
+  // the bed publishes the harmonic center).
+  if (idle && bedLead) return;
+  const stepSeconds = 60 / mood.tempo / 2; // 8th notes
+  while (nextNoteAt < now + 0.18) {
+    if (nextNoteAt < now) nextNoteAt = now;
+
+    // Harmonic motion: the progression turns every two bars; pad/sub glide
+    // to the new chord and the ostinato transposes with its root.
+    if (mood.progression && patternStep % STEPS_PER_CHORD === 0) {
+      chordIndex = Math.floor(patternStep / STEPS_PER_CHORD) % mood.progression.length;
+      currentChord = mood.progression[chordIndex];
+      retuneVoices(ctx, now);
+    }
+    const chordRoot = currentChord[0] ?? 0;
+
+    const semis = mood.pattern[patternStep % mood.pattern.length];
+    // Humanize: soft velocity drift + the occasional dropped note when calm.
+    const dropped = intensity < 0.45 && Math.random() < 0.08;
+    if (semis != null && !dropped && ostFilter) {
+      const osc = ctx.createOscillator();
+      osc.type = mood.wave;
+      osc.frequency.value = hzForSemis(chordRoot + semis, mood.octave);
+      const velocity = 0.78 + Math.random() * 0.22;
+      const env = ctx.createGain();
+      env.gain.setValueAtTime(0, nextNoteAt);
+      env.gain.linearRampToValueAtTime(velocity, nextNoteAt + 0.008);
+      env.gain.exponentialRampToValueAtTime(0.001, nextNoteAt + stepSeconds * 1.7);
+      osc.connect(env);
+      env.connect(ostFilter);
+      osc.start(nextNoteAt);
+      osc.stop(nextNoteAt + stepSeconds * 2);
+    }
+
+    // The lead: every four bars, maybe a phrase. With a planet genome and a
+    // story mood leading, the mood's scale FILTERS the planet's tune (§10.5,
+    // seeded — reproducible); the legacy random walk survives as the fallback.
+    if (mood.melody && patternStep % STEPS_PER_PHRASE_SLOT === 0) {
+      const phraseSlot = Math.floor(patternStep / STEPS_PER_PHRASE_SLOT);
+      if (planetGenome && !idle) {
+        if (musicUnit(planetGenomeSeed, SALT_MOOD_PHRASE, phraseSlot) < mood.melody.density) {
+          scheduleGenomePhrase(ctx, nextNoteAt, stepSeconds, phraseSlot);
+        }
+      } else if (Math.random() < mood.melody.density) {
+        schedulePhrase(ctx, nextNoteAt, stepSeconds);
+      }
+    }
+
+    patternStep++;
+    nextNoteAt += stepSeconds;
+  }
+}
+
+/**
+ * The planet's tune through the mood's scale (P5, §10.5): a developed motif
+ * figure rendered on the mood-scale lattice, scheduled through the same
+ * melody bus and register as the shipped walk. Fully seeded — the same beat
+ * on the same planet replays note-for-note.
+ */
+function scheduleGenomePhrase(
+  ctx: BaseAudioContext,
+  startAt: number,
+  stepSeconds: number,
+  phraseSlot: number
+): void {
+  if (!planetGenome || !mood?.melody || !melodyFilter) return;
+  const prim = getMusicPrimitives();
+  const chordRoot = currentChord[0] ?? 0;
+  const notes = planMoodPhrase(
+    planetGenome,
+    { scale: mood.melody.scale, chordRoot, wonder: prim.wonder },
+    planetGenomeSeed,
+    phraseSlot
+  );
+  const slotSec = stepSeconds / 2; // figure slots are 16ths; the step grid is 8ths
+  for (const note of notes) {
+    const at = startAt + note.slot * slotSec;
+    const dur = Math.max(slotSec, note.durationSlots * slotSec);
+    const osc = ctx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = hzForSemis(note.semis, 36);
+    const gain = (0.05 + 0.05 * intensity) * note.velocity;
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(0.0001, at);
+    env.gain.exponentialRampToValueAtTime(gain, at + MELODY_ATTACK_S);
+    env.gain.setValueAtTime(gain, at + Math.max(MELODY_ATTACK_S, dur * 0.6));
+    env.gain.exponentialRampToValueAtTime(0.0001, at + Math.max(dur, MELODY_ATTACK_S));
+    osc.connect(env);
+    env.connect(melodyFilter);
+    osc.start(at);
+    osc.stop(at + dur + 0.1);
+  }
+}
+
 /** A 5–8 note phrase: mostly stepwise, breathing rhythm, through the delay bus. */
-function schedulePhrase(ctx: AudioContext, startAt: number, stepSeconds: number): void {
+function schedulePhrase(ctx: BaseAudioContext, startAt: number, stepSeconds: number): void {
   if (!mood?.melody || !melodyFilter) return;
   const scale = mood.melody.scale;
   const chordRoot = currentChord[0] ?? 0;
@@ -305,9 +393,9 @@ function schedulePhrase(ctx: AudioContext, startAt: number, stepSeconds: number)
     const gain = (0.05 + 0.05 * intensity) * (0.8 + Math.random() * 0.2);
     const env = ctx.createGain();
     env.gain.setValueAtTime(0.0001, at);
-    env.gain.exponentialRampToValueAtTime(gain, at + 0.06);
-    env.gain.setValueAtTime(gain, at + dur * 0.6);
-    env.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    env.gain.exponentialRampToValueAtTime(gain, at + MELODY_ATTACK_S);
+    env.gain.setValueAtTime(gain, at + Math.max(MELODY_ATTACK_S, dur * 0.6));
+    env.gain.exponentialRampToValueAtTime(0.0001, at + Math.max(dur, MELODY_ATTACK_S));
     osc.connect(env);
     env.connect(melodyFilter);
     osc.start(at);
@@ -319,16 +407,15 @@ function schedulePhrase(ctx: AudioContext, startAt: number, stepSeconds: number)
 }
 
 /** Smooth the mood/intensity-dependent parameters toward their targets. */
-function applyRails(ctx: AudioContext): void {
+function applyRails(_ctx: BaseAudioContext, now: number): void {
   if (!master) return;
-  const now = ctx.currentTime;
   const prim = getMusicPrimitives();
   // Volume and mute live on the shared music bus (audioCore); the score master
   // carries only the score's own place in the mix.
   const on = mood != null && !(idle && bedLead);
   // The idle bed sits UNDER the streamed music, lifted by the wonder axis.
   const idleScale = idle ? 0.32 * (0.5 + 0.7 * prim.wonder) : 1;
-  master.gain.setTargetAtTime(on ? 0.9 * idleScale : 0, now, idle ? 1.2 : 0.4);
+  master.gain.setTargetAtTime(on ? SCORE_MASTER_LEVEL * idleScale : 0, now, idle ? 1.2 : 0.4);
   if (!mood) return;
   if (idle) intensity = 0.2 + 0.5 * prim.wonder; // the sky sets the idle breath
   const boost = 0.55 + 0.45 * intensity;
@@ -342,9 +429,8 @@ function applyRails(ctx: AudioContext): void {
   riserFilter?.frequency.setTargetAtTime(220 + intensity * 1900, now, 0.4);
 }
 
-function retuneVoices(ctx: AudioContext): void {
+function retuneVoices(_ctx: BaseAudioContext, now: number): void {
   if (!mood) return;
-  const now = ctx.currentTime;
   padVoices.forEach((voice, i) => {
     const semis = currentChord[i];
     const active = semis != null;
@@ -386,6 +472,17 @@ export function isScoreMoodLeading(): boolean {
 }
 
 /**
+ * P5 (§10.5): the generative bed pushes the planet's motif genome here. While
+ * a story mood leads, its `melody.scale` filters this genome instead of
+ * feeding the legacy random walk — the planet's tune haunts the story beats.
+ * Additive; passing null restores the shipped walk.
+ */
+export function setScorePlanetGenome(genome: MotifGenome | null, planetSeed = 0): void {
+  planetGenome = genome;
+  planetGenomeSeed = planetSeed;
+}
+
+/**
  * The generative bed registers its transport's quantizer so grid-synced hits
  * land on the SANDBOX grid while the bed leads (one clock, §8.1).
  */
@@ -406,7 +503,7 @@ export function setScoreMood(next: ScoreMood | null): void {
   currentChord = mood.progression?.[0] ?? mood.chord;
   melodyDegree = 4;
   const ctx = built ? getAudioContext() : null;
-  if (ctx) retuneVoices(ctx);
+  if (ctx) retuneVoices(ctx, ctx.currentTime);
   // Publish the drama rails while a mood leads.
   if (!idle) setMusicPrimitiveTargets({ tension: mood.baseline, energy: Math.min(1, mood.tempo / 130) });
 }
@@ -469,8 +566,22 @@ function renderHit(context: AudioContext, kind: 'braam' | 'bloom' | 'boom', now:
   // Hits ride a fixed-gain bus so grid punctuation (blooms/booms the bed
   // schedules) still sounds while the idle voice yields to the bed.
   if (!hitBus) return;
+  renderHitInto(context, hitBus, kind, now);
+}
+
+/**
+ * Render one hit into an arbitrary destination on an arbitrary context — the
+ * shared hit vocabulary, reusable by the P4 offline harness (bed excerpts
+ * route their warp booms / landing blooms / stage-transition blooms here).
+ */
+export function renderHitInto(
+  context: BaseAudioContext,
+  dest: AudioNode,
+  kind: 'braam' | 'bloom' | 'boom',
+  now: number
+): void {
   const out = context.createGain();
-  out.connect(hitBus);
+  out.connect(dest);
 
   const tone = (semis: number, octave: number, type: Wave, gain: number, attack: number, hold: number, release: number) => {
     const osc = context.createOscillator();
@@ -495,7 +606,7 @@ function renderHit(context: AudioContext, kind: 'braam' | 'bloom' | 'boom', now:
     filter.frequency.exponentialRampToValueAtTime(400, now + 2.8);
     out.disconnect();
     out.connect(filter);
-    filter.connect(hitBus);
+    filter.connect(dest);
     tone(0, 0, 'sawtooth', 0.16, 0.35, 0.5, 2.2);
     tone(0, -12, 'sawtooth', 0.14, 0.35, 0.5, 2.2);
     tone(7, 0, 'sawtooth', 0.09, 0.4, 0.5, 2.0);
@@ -508,4 +619,62 @@ function renderHit(context: AudioContext, kind: 'braam' | 'bloom' | 'boom', now:
     tone(0, -12, 'sine', 0.3, 0.01, 0.05, 1.2);
     tone(1, -12, 'sine', 0.12, 0.01, 0.02, 0.5);
   }
+}
+
+// --- Offline render rim (P4 verification harness) -----------------------------------------------
+//
+// The audition harness plays a STORY MOOD through the shipped instrument on an
+// OfflineAudioContext: same graph builder, same lookahead core, stepped through
+// suspend/resume checkpoints. Guarded so it can never run while the live
+// instrument exists. Set the mood (setScoreBeat/setScoreMood) BEFORE begin.
+
+/** Begin an offline mood render: build the instrument on `ctx` into `out`. */
+export function beginOfflineScoreRender(ctx: BaseAudioContext, out: AudioNode): void {
+  if (built || schedulerTimer != null) {
+    throw new Error('scoreEngine is live — offline rendering requires a fresh page');
+  }
+  built = true;
+  buildScoreGraph(ctx, out);
+  nextNoteAt = 0;
+  patternStep = 0;
+  chordIndex = 0;
+  currentChord = mood?.progression?.[0] ?? mood?.chord ?? [0];
+  retuneVoices(ctx, 0);
+}
+
+/** One offline checkpoint of the shipped lookahead core. */
+export function stepOfflineScoreRender(ctx: BaseAudioContext, now: number): void {
+  stepScoreScheduler(ctx, now);
+}
+
+/** Render a hit through the instrument's own hit bus at an absolute time. */
+export function renderHitOfflineAt(
+  ctx: BaseAudioContext,
+  kind: 'braam' | 'bloom' | 'boom',
+  at: number
+): void {
+  if (hitBus) renderHitInto(ctx, hitBus, kind, at);
+}
+
+/** Tear down offline module state so a later render (or the live game) starts clean. */
+export function endOfflineScoreRender(): void {
+  built = false;
+  master = null;
+  padGain = null;
+  padFilter = null;
+  subGain = null;
+  subOsc = null;
+  ostGain = null;
+  ostFilter = null;
+  riserGain = null;
+  riserFilter = null;
+  padVoices = [];
+  melodyGain = null;
+  melodyFilter = null;
+  melodyDelay = null;
+  hitBus = null;
+  nextNoteAt = 0;
+  patternStep = 0;
+  chordIndex = 0;
+  melodyDegree = 4;
 }

@@ -126,6 +126,38 @@ transition). Mechanical runs go to `story-verifier`. Soak also asserts
 (folded from §10.4, owner-approved): zero phrase-tabu violations; the
 mediant ration (≤ 1/phrase) and mode-drift step size (≤ 1 accidental)
 audited across the render; legality of every logged chord transition.
+LANDED 2026-07-11: pure core — generative/soak.ts (deterministic scenario
+scripts sandboxDay/sandboxNight/eraLadder/fullSoak incl. warp/submergence/
+approach segments; per-bar collector snapshotting the harmony brain; the
+§10.4 audit battery with INDEPENDENT recomputation — legality re-derived
+from raw voicings, statements re-hashed — plus finiteness, no-deadlock, and
+novelty/occupancy stats; runPureSoak = 30 musical minutes in ~10 ms) +
+audio/soak/audioAnalysis.ts (NaN/clip/silence scan + WAV PCM16 encoder).
+Offline rims: bedEngine + scoreEngine gained begin/step/end offline entries
+driving the SAME graph builders and lookahead cores on an OfflineAudioContext
+(suspend/resume checkpoints at the live 60 ms cadence; guarded against the
+live engines; renderHitInto exported for offline hit routing; audioCore
+gained createOfflineMusicChain — the volume+compressor mirror of the live
+output). Runners: `npx vite-node tools/score-soak-cli.ts` (pure 32-min
+battery ×3 reference planets + replay-determinism + seed-divergence),
+`node score-soak-probe.mjs soak 32` (real 32-min OfflineAudioContext render:
+zero NaN/clip, never-silent, all musical audits green, ~57 s wall),
+`node score-soak-probe.mjs excerpts` (six audition WAVs → main/renders/,
+self-describing names: bed day/night on seed5-verdant Ds-dorian-78, contrast
+seed8-frozen F-lydian-66-6/8 vs seed10-volcanic Gs-aeolian-83, story beat
+a3-dawn build w/ braam+bloom, era ladder bare→alive w/ blooms at the rungs),
+`node fps-score-probe.mjs` (60 fps headless-swiftshader WITH the bed leading
+and publishing; runs its own fresh dev server — HMR-stale servers split the
+module registry for probe imports). npm scripts: score:soak:pure /
+score:soak / score:audition / score:fps. THE SOAK ALREADY EARNED ITS KEEP:
+it caught a real harmony freeze (frozen seed 8: Lydian II:maj has one
+common-tone neighbor; a drifted register band priced it out → 94 held bars)
+— fixed by the HELD_RELAX_BARS (2) escape hatch in harmonyBrain: after 2
+failed change attempts the common-tone rule is bypassed for the retry
+(displacement bounds never relax; event flags commonToneRelaxed; audited).
++19 tests (soak audits incl. doctored-log red-tests, full 33-min pure runs
+×3 planets, wav/analysis), full suite green (114 files/860 at landing, incl.
+a concurrent session's multi-planet additions), verify green.
 
 **P5 — Era ladder + story integration polish.** Period-authentic sandbox
 music per fidelity stage (PSG limits early, hybrid full score at 'alive'+);
@@ -133,6 +165,57 @@ awakening moments get bespoke musical mechanisms; existing story moods
 re-auditioned through the richer engine. Story moods generalize by treating
 `melody.scale` as a FILTER over the planet motif genome (§8.5 note) — no
 `MOODS` schema change required (folded from §10.5, owner-approved).
+LANDED 2026-07-11: period-authentic rungs — bare is MONOPHONIC (melody
+suppressed; the ostinato becomes planChipArp, a lone chip arp of CHORD tones
+on the rhythm gene; the pulse drone yields via CHIP_MONO_DUCK while the arp
+speaks); color is the NES trio (square chip lead + CHIP_VIBRATO pitch LFO +
+second pulse a chord tone below at CHIP_HARMONY_LEVEL, fading out by
+material; lead delay era-gated — bare dry, color single slapback via zeroed
+feedback, material+ full); material gains the §8.5 FM-bell shimmer floor
+(SHIMMER_MATERIAL_PORTION); paradox widens the mediant ration
+(PARADOX_MEDIANT_RATION 2, audit-aware) and SPLITS the world-clock tick
+(splitHz = hz × PARADOX_TICK_RATIO 0.618 golden conjugate, second rim
+timeline at PARADOX_TICK2_LEVEL). Stage transitions are EVENTS (§8.4 row):
+bedConductor tracks prevStage; an upward rung schedules a grid bloom
+(plan.stageBloom → scheduleHit/offline sink) and reaching alive+ promises a
+mediant on the next phrase boundary (AdvanceOptions.forceMediant — change
+forced due, mediant pool draw skipped, candidate set restricted to legal
+mediants, displacement law never relaxed; mediantUsedThisPhrase became the
+counter mediantsThisPhrase); story authority swallows the edge (rim keeps
+prevStage current while yielding). Story moods generalized per §10.5:
+audio/generative/moodMelody.ts renders the planet's developed motif
+(seeded MELODY_CHAIN_POOL chains) onto the mood's melody.scale as an
+octave-periodic degree lattice — every pitch chordRoot + a mood scale tone
+by construction; scoreEngine gained additive setScorePlanetGenome (pushed by
+configureBedPlanet) and a fully seeded scheduleGenomePhrase replacing the
+Math.random walk whenever a genome is known (walk survives as fallback);
+era-transition audition excerpt now relies on the native mechanism (manual
+cues removed) and the story-beat excerpt renders with the home-planet
+genome. Soak: SoakBarRecord gained stageBloom/paradox; the mediant audit is
+paradox-aware; red-test proves it. +24 tests (185 in audio/generative);
+full suite 122 files/919 green; tsconfig.node clean; app tsconfig clean
+except a CONCURRENT session's in-progress worldGenCache.ts (not score
+code); build clean; pure 32-min battery, 8-min OfflineAudioContext soak,
+six audition WAVs, and the 60fps probe all PASS.
+VERIFICATION FIX (2026-07-12): a full-run screening stalled silently for 410s
+at ch3-gather with BOTH story clocks frozen (director's 180s fallback never
+fired) — the useFrame loop itself died; no in-page rescue can run then. Root
+causes were environmental, not score code (the movie probe runs with the
+AudioContext locked — no unlock gesture — so its fps numbers measure the
+world render alone; the score's own 60fps proof is fps-score-probe with the
+bed leading). Fixes: full-run-probe.mjs now ALWAYS runs its own fresh dev
+server with HMR fully off (PROBE_NO_HMR=1 in vite.config.ts — a shared
+long-running server lets concurrent sessions push HMR mid-screening), plus a
+240s stall watchdog that fails fast with diagnostics (independent rAF
+heartbeat, reload marker, WebGL context-loss count, console tail,
+screenshot) and an optional PROBE_AUDIO=1 mode that unlocks the score for
+the whole screening; autopilot ch3-gather gained its missing BEAT_TIMEOUT
+rescue (the one driven beat that never consulted its entry); ch2-color's
+timeout recalibrated 34→45 (two consecutive healthy walks measured 34.3s and
+38.9s — the old value truncated natural completions, the same defect its own
+comment recorded at 20). Verified: full screening under the isolated probe =
+PASS, 793.9s, done reached, ZERO rescues (ch1-nav 12.6s, ch3-gather 20.8s);
+123 files/925 tests green; both tsconfigs and the production build clean.
 
 ## 4. Contracts that must not break
 
@@ -250,6 +333,10 @@ Phrygian < Aeolian < Dorian < Mixolydian < Ionian < Lydian
   per phrase (`MEDIANT_RATION 1`), only at phrase boundaries or at a
   scheduled hit/bloom, probability boosted in the golden-hour window (§8.4).
   This is the reserved jaw-drop gesture; rationing is what keeps it one.
+  The ration is ABSOLUTE per phrase, whatever mechanism takes the mediant:
+  the §8.4 landing pivot spends the SAME ration (and is refused when it is
+  already spent), so no phrase can ever carry two awe chords under the base
+  ration. Paradox widens the ration for every mechanism alike (§8.5).
 
 ### 6.4 Voice-leading law (how "never a wrong note" is engineered)
 
@@ -330,6 +417,11 @@ emotion because they are rare).
   `PHRASE_TABU (16)` exact hashes (~8–12 min); a coarser operator-chain-only
   hash has a short tabu (`GESTURE_TABU 4`) against gesture-level ruts.
   The P4 soak asserts zero tabu violations across a 30-min render.
+  `chordIds` is the CAUSAL phrase window (P5 polish): the chords sounded
+  across the just-completed phrase plus the chord under the statement's
+  first bar, in order with consecutive holds collapsed — the rest of the
+  new phrase is undrawn when the fingerprint is taken, and the check-and-
+  record stays atomic at statement time.
 - **Macro-drift** (the hour-scale weather): three independent drift clocks
   with CO-PRIME periods — `DRIFT_MODE_MIN (17 min)`, `DRIFT_REGISTER_MIN
   (23 min)`, `DRIFT_TEXTURE_MIN (11 min)` — phase-seeded per planet. Eno's
@@ -484,7 +576,13 @@ skipped only when it cannot be done cleanly:
   the destination tonic (consuming that phrase's mediant ration), then let
   single-accidental mode drift (§6.2) settle the remaining distance over
   the first surface phrases. Arrival still sounds like arriving — it spends
-  one awe-chord instead of a journey.
+  one awe-chord instead of a journey. **Ration clarification (P5 polish)**:
+  the pivot both consumes AND obeys the §6.3 ration — with the phrase's
+  mediant already spent (or no mediant legal) the key still retargets, just
+  without the awe-chord; a pivot landing on a phrase-boundary bar charges
+  the NEW phrase's ration and survives its reset. Because the guarantee now
+  holds by construction, the soak's mediant audit COUNTS pivot awe-chords
+  against the ration instead of exempting pivot phrases.
 
 ### 8.5 Era instrumentation ladder (music IS the fidelity narrative)
 

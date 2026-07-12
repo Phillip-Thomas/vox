@@ -5,6 +5,7 @@ import {
   coordinatesEqual,
   createCurrentWorld,
   normalizeCoordinate,
+  sameSystemCoordinate,
   seededUnit
 } from './worldCoordinates';
 
@@ -45,6 +46,7 @@ describe('world coordinate identity', () => {
     expect(coordinateKey({ x: 1.9, y: -3.1 })).toBe('1,-3');
     expect(coordinatesEqual({ x: 1.9, y: -3.1 }, { x: 1, y: -3 })).toBe(true);
     expect(coordinatesEqual({ x: 1, y: -3 }, { x: -1, y: 3 })).toBe(false);
+    expect(sameSystemCoordinate({ x: 1.9, y: -3.1 }, { x: 1, y: -3 })).toBe(true);
   });
 
   it('provides deterministic seeded unit values in [0, 1)', () => {

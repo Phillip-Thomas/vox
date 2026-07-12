@@ -24,6 +24,7 @@ import type { FloraProfile } from '../utils/floraField';
 interface FloraFieldProps {
   terrainSeed: number;
   playerPosition?: THREE.Vector3;
+  progressiveMount?: boolean;
 }
 
 const HEADROOM = 24;
@@ -33,15 +34,29 @@ const HEADROOM = 24;
  * cacti. This sits between grass and trees and consumes the same planet biome,
  * wind profile, graphics-quality gates, and reality-stage uniforms.
  */
-export default function FloraField({ terrainSeed, playerPosition }: FloraFieldProps) {
+export default function FloraField({
+  terrainSeed,
+  playerPosition,
+  progressiveMount = false
+}: FloraFieldProps) {
   const density = getGraphicsQuality().floraDensity;
   const profile = useMemo(() => buildFloraProfile(terrainSeed), [terrainSeed]);
+  const [visibleKindCount, setVisibleKindCount] = useState(
+    progressiveMount ? 1 : FLORA_KINDS.length
+  );
+  useEffect(() => {
+    if (!progressiveMount || visibleKindCount >= FLORA_KINDS.length) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      setVisibleKindCount(count => Math.min(FLORA_KINDS.length, count + 1));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [progressiveMount, visibleKindCount]);
 
   if (density <= 0) return null;
 
   return (
     <>
-      {FLORA_KINDS.map(kind => (
+      {FLORA_KINDS.slice(0, visibleKindCount).map(kind => (
         <FloraLayer
           key={kind}
           kind={kind}

@@ -12,6 +12,7 @@ import {
   previewSurfaceValue
 } from '../utils/worldPreview';
 import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
+import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 
 interface GalaxyImpostorsProps {
   currentCoordinate: WorldCoordinate;
@@ -382,7 +383,8 @@ export default function GalaxyImpostors({ currentCoordinate, planetSize }: Galax
     groupRef.current?.position.copy(camera.position);
 
     // --- aim-cone targeting (deep_space only) -------------------------------
-    if (getSpaceFlightSnapshot().phase !== 'deep_space') {
+    const localBodyOwnsAim = getSystemFlightSnapshot().target?.kind === 'system_body';
+    if (getSpaceFlightSnapshot().phase !== 'deep_space' || localBodyOwnsAim) {
       if (targetedCoordRef.current !== null) {
         targetedCoordRef.current = null;
         setTarget(null);

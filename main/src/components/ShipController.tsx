@@ -17,6 +17,26 @@ import {
 } from '../state/spaceFlight.ts';
 import { playSfx, setShipThrustSfx } from '../audio/sfxEngine.ts';
 import { requestMultiplayerPartyWarp } from '../game/multiplayerSession.ts';
+import {
+  acquireSystemPoseWriter,
+  getSystemFlightSnapshot,
+  planetLocalPoseToSystemPose,
+  releaseSystemPoseWriter,
+  resetSystemFlightForInterstellarArrival,
+  setActiveSystemPlanet,
+  setSystemLocationMode,
+  systemPoseToPlanetLocalPose,
+  updateSystemShipPose,
+  updateSystemShipPoseFromPlanetLocal,
+  type SystemPoseWriterLease,
+  type SystemVectorTuple
+} from '../state/systemFlight.ts';
+import type { SystemCoordinate } from '../game/starSystem.ts';
+import { coordinateKey } from '../utils/worldCoordinates.ts';
+import {
+  getSystemTravelAssistTarget,
+  systemApproachSpeedLimit
+} from '../state/systemTravelAssist.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
@@ -92,9 +112,20 @@ export function getCrashFlash(): number {
 // horizon, and SpaceshipPlaceholder renders the parked hull in the same frame.
 const levelOrientation = shipLevelOrientation;
 
+declare global {
+  interface Window {
+    __paravoxiaShipProbe?: {
+      injectLookDelta(yawRadians: number, pitchRadians: number): void;
+    };
+  }
+}
+
 interface ShipControllerProps {
   planetSize: number;
   terrainSeed: number;
+  systemCoordinate: SystemCoordinate;
+  activePlanetWorldId: string;
+  planetSystemPosition?: SystemVectorTuple;
   arrivalPose: WorldArrivalPose;
   /** Boarding spawn (player position when F was pressed on the surface). */
   boardingPosition: THREE.Vector3;
@@ -122,6 +153,9 @@ interface ShipControllerProps {
 export default function ShipController({
   planetSize,
   terrainSeed,
+  systemCoordinate,
+  activePlanetWorldId,
+  planetSystemPosition = [0, 0, 0],
   arrivalPose,
   boardingPosition,
   onGroundedChange,
@@ -170,7 +204,27 @@ export default function ShipController({
   const lastPublished = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
   // Live thrust 0..1 for the cockpit instruments (holo ring spin/brightness).
   const thrustRef = useRef(0);
+  const systemPoseWriter = useRef<SystemPoseWriterLease | null>(null);
+  const localSystemPose = useRef({
+    position: [0, 0, 0] as [number, number, number],
+    velocity: [0, 0, 0] as [number, number, number],
+    quaternion: [0, 0, 0, 1] as [number, number, number, number]
+  });
   const [, get] = useKeyboardControls();
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('systemprobe') !== '1') return undefined;
+    const bridge = {
+      injectLookDelta(yawRadians: number, pitchRadians: number) {
+        if (Number.isFinite(yawRadians)) yawInput.current += yawRadians;
+        if (Number.isFinite(pitchRadians)) pitchInput.current += pitchRadians;
+      }
+    };
+    window.__paravoxiaShipProbe = bridge;
+    return () => {
+      if (window.__paravoxiaShipProbe === bridge) delete window.__paravoxiaShipProbe;
+    };
+  }, []);
 
   /** Planet surface radius in world units (planetSize = world half-extent). */
   const surfaceRadius = planetSize;
@@ -180,6 +234,25 @@ export default function ShipController({
   const spawn = useMemo(() => {
     const phaseAtMount = spawnPhaseRef.current;
     const approach = approachRef.current;
+    const systemFlightAtMount = getSystemFlightSnapshot();
+    const restoringSameSystemFlight =
+      systemFlightAtMount.systemId === coordinateKey(systemCoordinate) &&
+      systemFlightAtMount.activePlanetId === activePlanetWorldId &&
+      systemFlightAtMount.locationMode !== 'surface';
+
+    if (restoringSameSystemFlight) {
+      const localPose = systemPoseToPlanetLocalPose(
+        systemFlightAtMount.pose,
+        planetSystemPosition
+      );
+      return {
+        pos: new THREE.Vector3(...localPose.position),
+        velocity: new THREE.Vector3(...localPose.velocity),
+        quat: new THREE.Quaternion(...localPose.quaternion),
+        restoredFromSystemPose: true
+      };
+    }
+
     let pos: THREE.Vector3;
     if (phaseAtMount === 'descent' || phaseAtMount === 'approach') {
       // Just warped in above a fresh world: start high, looking down.
@@ -209,17 +282,71 @@ export default function ShipController({
       // Parked on the surface: sit level, facing the horizon (upright).
       quat = levelOrientation(pos);
     }
-    return { pos, quat };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [surfaceRadius]);
+    return {
+      pos,
+      velocity: new THREE.Vector3(),
+      quat,
+      restoredFromSystemPose: false
+    };
+  }, [
+    activePlanetWorldId,
+    planetSystemPosition,
+    surfaceRadius,
+    systemCoordinate
+  ]);
 
   // Initialise runtime refs from the chosen spawn (once).
   useEffect(() => {
     position.current.copy(spawn.pos);
-    velocity.current.set(0, 0, 0);
+    velocity.current.copy(spawn.velocity);
     orientation.current.copy(spawn.quat);
     landingSeq.current = null;
   }, [spawn]);
+
+  useEffect(() => {
+    const systemId = coordinateKey(systemCoordinate);
+    const localPose = {
+      position: [position.current.x, position.current.y, position.current.z] as const,
+      velocity: [velocity.current.x, velocity.current.y, velocity.current.z] as const,
+      quaternion: [
+        orientation.current.x,
+        orientation.current.y,
+        orientation.current.z,
+        orientation.current.w
+      ] as const
+    };
+    const systemPose = planetLocalPoseToSystemPose(localPose, planetSystemPosition);
+    const current = getSystemFlightSnapshot();
+    const initialPhase = spawnPhaseRef.current;
+    if (current.systemId !== systemId) {
+      resetSystemFlightForInterstellarArrival({
+        system: systemCoordinate,
+        activePlanetId: activePlanetWorldId,
+        locationMode: initialPhase === 'surface'
+          ? 'surface'
+          : initialPhase === 'deep_space'
+            ? 'local_space'
+            : 'atmosphere',
+        pose: systemPose,
+        renderOrigin: planetSystemPosition
+      });
+    } else if (current.activePlanetId !== activePlanetWorldId) {
+      setActiveSystemPlanet(activePlanetWorldId);
+    }
+
+    const lease = acquireSystemPoseWriter(`ship:${activePlanetWorldId}`);
+    systemPoseWriter.current = lease;
+    if (lease) updateSystemShipPose(lease, systemPose);
+    return () => {
+      if (lease) releaseSystemPoseWriter(lease);
+      if (systemPoseWriter.current === lease) systemPoseWriter.current = null;
+    };
+  }, [
+    activePlanetWorldId,
+    planetSystemPosition,
+    systemCoordinate,
+    spawn
+  ]);
 
   useEffect(() => () => setShipThrustSfx(0), []);
 
@@ -462,6 +589,33 @@ export default function ShipController({
       velocity.current.setLength(MAX_SPEED);
     }
 
+    const assistTarget = getSystemTravelAssistTarget();
+    if (assistTarget && getSpaceFlightSnapshot().phase === 'deep_space') {
+      const systemX = position.current.x + planetSystemPosition[0];
+      const systemY = position.current.y + planetSystemPosition[1];
+      const systemZ = position.current.z + planetSystemPosition[2];
+      const dx = assistTarget.systemPosition[0] - systemX;
+      const dy = assistTarget.systemPosition[1] - systemY;
+      const dz = assistTarget.systemPosition[2] - systemZ;
+      const centerDistance = Math.hypot(dx, dy, dz);
+      if (centerDistance > 1e-6) {
+        const invDistance = 1 / centerDistance;
+        const dirX = dx * invDistance;
+        const dirY = dy * invDistance;
+        const dirZ = dz * invDistance;
+        const inwardSpeed = velocity.current.x * dirX
+          + velocity.current.y * dirY
+          + velocity.current.z * dirZ;
+        const limit = systemApproachSpeedLimit(centerDistance, assistTarget.ready);
+        if (inwardSpeed > limit) {
+          const excess = inwardSpeed - limit;
+          velocity.current.x -= dirX * excess;
+          velocity.current.y -= dirY * excess;
+          velocity.current.z -= dirZ * excess;
+        }
+      }
+    }
+
     // 5) Integrate position.
     position.current.addScaledVector(velocity.current, dt);
 
@@ -558,9 +712,10 @@ export default function ShipController({
     // so you can always fly down to enter and up to leave (no dead-end). The only
     // warp is the interstellar beginTravel above; crossing the atmosphere is
     // seamless continuous flight.
-    if (snap === 'deep_space' && altitude < ATMOS_ENTER) {
+    const ownsActivePlanet = getSystemFlightSnapshot().activePlanetId === activePlanetWorldId;
+    if (ownsActivePlanet && snap === 'deep_space' && altitude < ATMOS_ENTER) {
       beginAtmosphereWarp('enter');  // fly DOWN into atmosphere (mini-warp masks it)
-    } else if (snap === 'descent' && altitude > ATMOS_LEAVE) {
+    } else if (ownsActivePlanet && snap === 'descent' && altitude > ATMOS_LEAVE) {
       beginAtmosphereWarp('leave');  // climb OUT to deep space (mini-warp masks it)
     }
     // surface -> descent happens ONLY via the launch ascension (Space); landing
@@ -571,6 +726,34 @@ export default function ShipController({
       lastPublished.current.copy(position.current);
       onPositionChange?.(position.current.clone());
     }
+  });
+
+  // Canonical system pose publication is deliberately separate from React state.
+  // It runs after local flight integration, including early-return landing/launch
+  // branches, so every rendered ship frame has a matching system-space pose.
+  useFrame(() => {
+    const lease = systemPoseWriter.current;
+    if (!lease) return;
+    const localPose = localSystemPose.current;
+    localPose.position[0] = position.current.x;
+    localPose.position[1] = position.current.y;
+    localPose.position[2] = position.current.z;
+    localPose.velocity[0] = velocity.current.x;
+    localPose.velocity[1] = velocity.current.y;
+    localPose.velocity[2] = velocity.current.z;
+    localPose.quaternion[0] = orientation.current.x;
+    localPose.quaternion[1] = orientation.current.y;
+    localPose.quaternion[2] = orientation.current.z;
+    localPose.quaternion[3] = orientation.current.w;
+    updateSystemShipPoseFromPlanetLocal(lease, localPose, planetSystemPosition);
+    const livePhase = getSpaceFlightSnapshot().phase;
+    setSystemLocationMode(
+      livePhase === 'surface'
+        ? 'surface'
+        : livePhase === 'deep_space'
+          ? 'local_space'
+          : 'atmosphere'
+    );
   });
 
   return (

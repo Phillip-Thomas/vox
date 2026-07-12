@@ -158,19 +158,23 @@ Changes:
 - Made far impostors use generated crown bounds plus family-specific SDF silhouettes.
 - Made placement respect ecology material eligibility/richness/canopy/negative-space tokens while retaining the legacy placement hash for harvested-coordinate continuity.
 - Expanded the harvest pick contract to carry a separate instance-id map for each variant trunk/leaf mesh.
+- Made volumetric canopy lighting use each generated phenotype's full crown center transformed by instance scale/lean, instead of one canonical species-height uniform.
+- Made live graphics-quality swaps rebuild replacement variant meshes and clear pick targets when trees are disabled, preventing zero-matrix forests and phantom harvest targets.
 
 Evidence:
 
 - Silhouette board: `main/captures/tree-overhaul-final-silhouettes.png`
 - Same-species population board: `main/captures/tree-overhaul-final-population.png`
 - Cross-seed variety board: `main/captures/tree-overhaul-final-variety.png`
-- In-game smoke: `main/captures/procedural-atlas/2026-07-12T01-53-01-009Z-tree-overhaul-smoke-final2/summary.json`
-- Perf matrix: `main/captures/procedural-atlas/2026-07-12T01-53-42-642Z-tree-overhaul-perf-final2/summary.json`
+- In-game smoke: `main/captures/procedural-atlas/2026-07-12T02-07-11-018Z-tree-overhaul-smoke-final3/summary.json`
+- Perf matrix: `main/captures/procedural-atlas/2026-07-12T02-08-03-280Z-tree-overhaul-perf-final3/summary.json`
 - Focused result: `6` tree test files / `51` tests passed, including `144` profiled phenotype generations plus full-buffer determinism hashes.
+- Repository result: `110` test files / `818` tests passed; TypeScript typecheck and production build passed.
 - Smoke result: `3` cases / `12` screenshots / `0` console errors / `0` machine defects.
-- Perf geometry result: `20` cases / `60` screenshots / `0` console errors; every tier held `60fps`, max worst-view p95 `18.9ms`, max draw calls `151`.
+- Perf geometry result: `20` cases / `60` screenshots / `0` console errors / `0` atlas slow-frame defects; observed range `54-60fps`, max worst-view p95 `21.1ms`, max draw calls `151`.
 - Triangle peaks: ULTRA `8,506,326 / 9,200,000`; HIGH `3,826,804 / 4,200,000`; MEDIUM `1,116,200 / 1,500,000`; LOW `906,322 / 1,000,000`; POTATO `741,918 / 800,000`.
 
 Accepted exception:
 
 - Perf reports `shader_explosion` against the current checkout's program thresholds. The same overage persists in POTATO where trees are disabled, while tree material program families remain exactly four; this is not attributed to the tree overhaul and no threshold was relaxed.
+- The widest frame-time sample (`21.1ms`) also occurred in anomaly POTATO with zero trees. Tree-bearing HIGH/ULTRA cases stayed at `60fps` with max p95 `17.1ms`; the broader range is recorded as shared-host variance, not hidden.

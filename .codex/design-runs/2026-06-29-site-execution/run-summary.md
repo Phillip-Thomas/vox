@@ -198,12 +198,14 @@ Paravoxia trees now grow through a deterministic, bounded biological graph rathe
 
 Foliage is branch-aligned and botanical at near range, bark follows planet palette roles and branch arc length, and impostors preserve the generated crown aspect/family outline. Forest placement now honors ecology material eligibility and shape-density tokens. Variant meshes keep separate harvest mappings, preserving gameplay targeting.
 
+Volumetric canopy lighting now follows each generated phenotype's actual crown center through per-instance scale and lean. Runtime graphics-quality changes rebuild swapped archetypes and clear disabled-tree pick handles, so visual and harvesting state remain coherent across every quality tier.
+
 Evidence:
 
 - `main/captures/tree-overhaul-final-silhouettes.png`
 - `main/captures/tree-overhaul-final-population.png`
 - `main/captures/tree-overhaul-final-variety.png`
-- `main/captures/procedural-atlas/2026-07-12T01-53-01-009Z-tree-overhaul-smoke-final2/summary.json`
-- `main/captures/procedural-atlas/2026-07-12T01-53-42-642Z-tree-overhaul-perf-final2/summary.json`
+- `main/captures/procedural-atlas/2026-07-12T02-07-11-018Z-tree-overhaul-smoke-final3/summary.json`
+- `main/captures/procedural-atlas/2026-07-12T02-08-03-280Z-tree-overhaul-perf-final3/summary.json`
 
-Machine result: focused `51 / 51` tree tests pass; `144` profiled phenotypes pass structural/budget invariants; smoke is clean; all perf tiers hold `60fps` with max worst-view p95 `18.9ms`. Program-count defects remain in the broader current checkout, including POTATO where trees are disabled, and are recorded as an external accepted exception rather than hidden by threshold changes.
+Machine result: focused `51 / 51` tree tests and the full `818 / 818` repository suite pass; TypeScript typecheck and production build pass. All `144` profiled phenotypes pass all-attribute determinism plus structural/budget invariants, and smoke is clean. The perf matrix has no slow-frame defect, spans `54-60fps`, and peaks at `21.1ms` in a zero-tree POTATO control; HIGH/ULTRA tree cases hold `60fps` with max p95 `17.1ms`. Program-count defects remain in the broader current checkout, including POTATO where trees are disabled, and are recorded as an external accepted exception rather than hidden by threshold changes.

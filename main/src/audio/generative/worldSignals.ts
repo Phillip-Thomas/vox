@@ -18,12 +18,18 @@ import {
   ERA_FADE_WIDTH,
   ERA_MATERIAL,
   NIGHT_REGISTER_SINK,
+  PARADOX_TICK_RATIO,
   REGISTER_SHIFT_MAX,
+  SHIMMER_MATERIAL_PORTION,
   TICK_DESCENT_PRESSURE,
+  TICK_DESCENT_RAMP_BASE,
+  TICK_DESCENT_RAMP_SPAN,
+  TICK_FORCED_LEVEL_FLOOR,
   TICK_GATE,
   TICK_HZ_BASE,
   TICK_HZ_MAX,
   TICK_HZ_MIN,
+  TICK_LEVEL_GAIN,
   TICK_SUBMERGE_FLOOR,
   TICK_WARP_MULT
 } from './tuning.ts';
@@ -109,6 +115,17 @@ export function neutralBedSignals(): BedSignals {
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
 
+// --- Stage ordering (§8.5 rungs — transitions are EVENTS, §8.4 stage row) -------------------------
+
+/** Rung rank of each reality stage (upward transitions fire the stage event). */
+export const STAGE_RANK: Record<VoxelRealityStage, number> = {
+  bare: 0,
+  color: 1,
+  material: 2,
+  alive: 3,
+  paradox: 4
+};
+
 // --- The world-clock tick (§8.1, owner ruling #2) -----------------------------------------------
 
 export interface WorldClockTick {
@@ -118,6 +135,11 @@ export interface WorldClockTick {
   present: boolean;
   /** Loudness/attack intent, 0..1 (tension × clock pressure). */
   level: number;
+  /**
+   * Paradox split (§8.5): a SECOND clock at hz × PARADOX_TICK_RATIO (golden
+   * conjugate — the two never re-phase). Null everywhere below paradox.
+   */
+  splitHz: number | null;
 }
 
 /**
@@ -129,7 +151,8 @@ export function resolveClockPressure(s: BedSignals): number {
   if (s.scene === 'descent') {
     // Radar-altimeter urgency: accelerates toward the ceiling as the ground
     // nears (warp progress carries the approach-to-ground motion we have).
-    pressure *= TICK_DESCENT_PRESSURE * (0.75 + 0.25 * clamp01(s.warpProgress));
+    pressure *=
+      TICK_DESCENT_PRESSURE * (TICK_DESCENT_RAMP_BASE + TICK_DESCENT_RAMP_SPAN * clamp01(s.warpProgress));
   }
   if (s.warpActive) pressure *= TICK_WARP_MULT;
   // Depth dilates time: slow toward the floor as the player submerges.
@@ -142,8 +165,13 @@ export function resolveWorldClockTick(s: BedSignals): WorldClockTick {
   const hz = Math.min(TICK_HZ_MAX, Math.max(TICK_HZ_MIN, TICK_HZ_BASE * pressure));
   const forced = s.scene === 'descent' || s.warpActive;
   const present = forced || s.tension > TICK_GATE;
-  const level = clamp01(Math.max(forced ? 0.4 : 0, s.tension) * clamp01(pressure / TICK_HZ_MAX) * 2);
-  return { hz, present, level };
+  const level = clamp01(
+    Math.max(forced ? TICK_FORCED_LEVEL_FLOOR : 0, s.tension) *
+      clamp01(pressure / TICK_HZ_MAX) *
+      TICK_LEVEL_GAIN
+  );
+  const splitHz = s.stage === 'paradox' ? hz * PARADOX_TICK_RATIO : null;
+  return { hz, present, level, splitHz };
 }
 
 // --- The era instrumentation ladder (§8.5 — voice unlocks fade in; a ramp, not a staircase) -------
@@ -161,7 +189,7 @@ export interface EraGates {
   sidechain: number;
   /** Percussion family (noise Euclid tick from color; full kit toward alive). */
   percussion: number;
-  /** Granular shimmer / bell texture (alive). */
+  /** Bell/granular shimmer texture (FM-bell floor at material, full at alive — §8.5). */
   shimmer: number;
   /** Tuned sub (triangle bass from color, sine sub toward alive). */
   sub: number;
@@ -169,6 +197,10 @@ export interface EraGates {
   riser: number;
   /** Slapback/delay space (color+). */
   delay: number;
+  /** Chip-lead vibrato (§8.5: vibrato unlocks at `color`). */
+  vibrato: number;
+  /** The NES trio's second pulse — a chord tone below the lead (color era only). */
+  chipHarmony: number;
 }
 
 /** Fade that completes exactly AT the threshold, starting ERA_FADE_WIDTH below it. */
@@ -189,10 +221,12 @@ export function resolveEraGates(era: number, stage: VoxelRealityStage): EraGates
     reverb: 0.5 * material + 0.5 * alive,
     sidechain: material,
     percussion: 0.4 * color + 0.6 * alive,
-    shimmer: alive,
+    shimmer: SHIMMER_MATERIAL_PORTION * material + (1 - SHIMMER_MATERIAL_PORTION) * alive,
     sub: color,
     riser: material,
-    delay: color
+    delay: color,
+    vibrato: color,
+    chipHarmony: color * (1 - material)
   };
 }
 

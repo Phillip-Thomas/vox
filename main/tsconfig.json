@@ -19,5 +19,5 @@
     "allowJs": true,
     "esModuleInterop": true
   },
-  "include": ["src/main.tsx", "src/**/*.test.ts", "src/types.d.ts"]
+  "include": ["src/main.tsx", "src/**/*.test.ts", "src/types.d.ts", "src/audio/soak/soakPage.ts"]
 }

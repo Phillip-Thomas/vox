@@ -15,7 +15,7 @@ import { createWaterBlocksMaterial, updateWaterBlocksMaterial, applyWaterProfile
 import { buildWaterProfile } from '../utils/waterProfile.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
-import { getWorldGen } from '../utils/worldGenCache.ts';
+import { getWorldAllWaterVoxels, getWorldGen } from '../utils/worldGenCache.ts';
 import { getSunDirection, getMoonDirection } from './SkyController.tsx';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import {
@@ -58,21 +58,36 @@ const NEIGHBOR_OFFSETS: ReadonlyArray<readonly [number, number, number]> = [
  * static generator faces.
  */
 function computeLiveWaterFaces(
-  waterVoxels: ReadonlyArray<{ x: number; y: number; z: number }>,
+  waterGroups: ReadonlyArray<ReadonlyArray<{ x: number; y: number; z: number }>>,
   isWater: (x: number, y: number, z: number) => boolean
 ): WaterFace[] {
   const faces: WaterFace[] = [];
-  for (const v of waterVoxels) {
-    for (let f = 0; f < 6; f++) {
-      const nx = v.x + NEIGHBOR_OFFSETS[f][0];
-      const ny = v.y + NEIGHBOR_OFFSETS[f][1];
-      const nz = v.z + NEIGHBOR_OFFSETS[f][2];
-      if (isWater(nx, ny, nz)) continue; // neighbour is water (interior) -> no face
-      if (voxelSystem.hasVoxel(nx, ny, nz)) continue; // hidden behind solid terrain
-      faces.push({ x: v.x, y: v.y, z: v.z, faceDir: f }); // air or dug-open -> face
+  for (const waterVoxels of waterGroups) {
+    for (const v of waterVoxels) {
+      for (let f = 0; f < 6; f++) {
+        const nx = v.x + NEIGHBOR_OFFSETS[f][0];
+        const ny = v.y + NEIGHBOR_OFFSETS[f][1];
+        const nz = v.z + NEIGHBOR_OFFSETS[f][2];
+        if (isWater(nx, ny, nz)) continue; // neighbour is water (interior) -> no face
+        if (voxelSystem.hasVoxel(nx, ny, nz)) continue; // hidden behind solid terrain
+        faces.push({ x: v.x, y: v.y, z: v.z, faceDir: f }); // air or dug-open -> face
+      }
     }
   }
   return faces;
+}
+
+function hasWaterAdjacentDeletion(
+  deletedTerrain: ReadonlyArray<string>,
+  isWater: (x: number, y: number, z: number) => boolean
+): boolean {
+  for (const key of deletedTerrain) {
+    const [x, y, z] = key.split(',').map(Number);
+    for (const [dx, dy, dz] of NEIGHBOR_OFFSETS) {
+      if (isWater(x + dx, y + dy, z + dz)) return true;
+    }
+  }
+  return false;
 }
 
 // ?waterdebug=1 → render the water as bright OPAQUE magenta (MeshBasicMaterial,
@@ -134,12 +149,6 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   // Static water CELLS (the flooded set) + a fast key lookup. Faces are derived
   // from these against the LIVE voxel state (so digging exposes side faces).
   const gen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
-  // The generator's isWaterVoxel covers the FULL flooded set (interior + surface),
-  // so faces are suppressed toward interior water, not just the surface layer.
-  const isWater = useMemo(
-    () => (x: number, y: number, z: number) => gen.isWaterVoxel(x, y, z),
-    [gen]
-  );
   const replicatedWater = useMemo<WaterReplicationTarget>(() => ({
     applyWaterFlood: cells => gen.applyDynamicWaterCells(cells.map(([x, y, z]) => ({ x, y, z })))
   }), [gen]);
@@ -154,14 +163,12 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   // ALL water cells (not just the initially-exposed surface), so digging next to
   // even deep water reveals that cell's side face. One cube scan per world.
   const waterVoxels = useMemo(() => {
-    const R = Math.floor(planetSize / 2) + 6;
-    const out: Array<{ x: number; y: number; z: number }> = [];
-    for (let x = -R; x <= R; x++)
-      for (let y = -R; y <= R; y++)
-        for (let z = -R; z <= R; z++)
-          if (gen.isWaterVoxel(x, y, z)) out.push({ x, y, z });
-    return out;
+    return getWorldAllWaterVoxels(planetSize, terrainSeed);
   }, [gen, planetSize]);
+  const preparedWaterFaces = useMemo(
+    () => buildWaterFaces(planetSize, terrainSeed),
+    [planetSize, terrainSeed]
+  );
 
   // Subdivided so the vertex-shader wave displacement actually curves the surface
   // (a 1-segment quad has only 4 corners and can't show ripples).
@@ -189,8 +196,8 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   // digging exposes (each dig reveals at most a few). Generous so common digging
   // never overflows; the fill clamps to capacity regardless.
   const capacity = useMemo(
-    () => Math.max(1, buildWaterFaces(planetSize, terrainSeed).length + 8192),
-    [planetSize, terrainSeed]
+    () => Math.max(1, preparedWaterFaces.length + 8192),
+    [preparedWaterFaces.length]
   );
 
   // Dig-to-fill persistence: re-extend the flood for any already-dug cells (the
@@ -224,7 +231,16 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
       () => {
         // Static flooded set + the runtime dig-to-fill cells, so newly-filled
         // cells emit their own faces (not just suppress their neighbours').
-        const faces = computeLiveWaterFaces(waterVoxels.concat(gen.getDynamicWaterCells()), isWater);
+        const dynamicWater = gen.getDynamicWaterCells();
+        const deletedTerrain = voxelSystem.getDeletedTerrainKeys();
+        const needsLiveFaces = dynamicWater.length > 0
+          || hasWaterAdjacentDeletion(deletedTerrain, (x, y, z) => gen.isWaterVoxel(x, y, z));
+        const faces = !needsLiveFaces
+          ? preparedWaterFaces
+          : computeLiveWaterFaces(
+            [waterVoxels, dynamicWater],
+            (x, y, z) => gen.isWaterVoxel(x, y, z)
+          );
         const m = new THREE.Matrix4();
         const cellCenter = new THREE.Vector3();
         const placement = createWaterFacePlacementScratch();
@@ -272,7 +288,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
       },
       slot => ({ count: slot, capacity })
     );
-  }, [gen, waterVoxels, isWater, capacity, debug]);
+  }, [gen, waterVoxels, preparedWaterFaces, capacity, debug]);
 
   useLayoutEffect(() => {
     if (meshRef.current && capMeshRef.current) syncWater(meshRef.current, capMeshRef.current, true);

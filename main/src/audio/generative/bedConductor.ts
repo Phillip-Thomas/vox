@@ -44,10 +44,13 @@ import {
   resolveEraGates,
   resolveMacroDrift,
   resolveWorldClockTick,
+  STAGE_RANK,
   type BedSignals,
   type EraGates,
   type WorldClockTick
 } from './worldSignals.ts';
+import { TRIAD_INTERVALS } from './theory.ts';
+import type { VoxelRealityStage } from '../../game/systems/realityRenderSystem.ts';
 import type { MusicScene } from '../musicDirector.ts';
 import {
   musicUnit,
@@ -73,6 +76,7 @@ import {
   PAD_BRIGHT_BASE,
   PAD_BRIGHT_PALETTE,
   PAD_BRIGHT_WARMTH,
+  PARADOX_MEDIANT_RATION,
   PERC_K_MAX,
   PERC_K_MIN,
   SIDECHAIN_DEPTH,
@@ -120,11 +124,28 @@ export interface BedConductorState {
   memory: PhraseMemory;
   arrangement: ArrangementState;
   prevScene: MusicScene | null;
+  /**
+   * Stage baseline for the §8.4 stage-transition event (null until the first
+   * plan adopts the current stage silently — a fresh conductor never blooms).
+   * The rim keeps this current while a story mood leads, so awakenings the
+   * STORY scored never re-fire as deferred bed blooms on resume.
+   */
+  prevStage: VoxelRealityStage | null;
   warpWasActive: boolean;
   pendingForceBuild: boolean;
   pendingForceEbb: boolean;
   pendingWarpExitBoom: boolean;
+  /** An upward stage transition fired: schedule a grid bloom this bar (§8.4). */
+  pendingStageBloom: boolean;
+  /** Reaching `alive`+ also promises a mediant on the next phrase boundary. */
+  pendingStageMediant: boolean;
   approach: ApproachRun | null;
+  /**
+   * Chord ids sounded across the CURRENT phrase, in order, consecutive holds
+   * collapsed (§7.3). At each phrase boundary the completed list becomes the
+   * statement fingerprint's harmonic context, then restarts.
+   */
+  phraseChordIds: string[];
 }
 
 export interface BedBarPlan {
@@ -143,6 +164,13 @@ export interface BedBarPlan {
   melody: BedNoteEvent[];
   /** Serialized operator chain of the statement (diagnostics / soak logging). */
   melodyChain: string | null;
+  /**
+   * The statement's §7.3 fingerprint context: chord ids sounded across the
+   * just-completed phrase plus the chord under the statement's first bar
+   * (the rest of the new phrase is undrawn at statement time). Null when no
+   * statement was recorded this bar.
+   */
+  melodyChordIds: string[] | null;
   /** Percussion onset slots, canonical 16 grid. */
   percussion: number[];
   tick: WorldClockTick;
@@ -154,8 +182,16 @@ export interface BedBarPlan {
   bloomEntered: boolean;
   /** Warp exit — the rim schedules a grid boom. */
   warpExitBoom: boolean;
-  /** A landing pivot fired this bar (arrival awe-chord). */
+  /** An approach arrival fired this bar (key retargeted home, §8.4). */
   landingPivot: boolean;
+  /** The arrival actually spent the phrase's awe-chord (mediant ration). */
+  landingPivotMediant: boolean;
+  /** A stage transition landed: the rim schedules a grid bloom (§8.4 stage row). */
+  stageBloom: boolean;
+  /** The `alive` awakening's promised mediant fired on this bar's change. */
+  stageMediant: boolean;
+  /** Bare monophony (§8.5): the pulse drone yields while the chip arp speaks. */
+  chipMono: boolean;
   /** Pad filter brightness 0..1. */
   padBrightness: number;
   /** Texture reweight 0..1 (0 wash-leaning, 1 shimmer-leaning). */
@@ -179,18 +215,45 @@ export function createBedConductor(planetSeed: number, opts?: CreateBedOptions):
     memory: createPhraseMemory(),
     arrangement: createArrangement(),
     prevScene: null,
+    prevStage: null,
     warpWasActive: false,
     pendingForceBuild: false,
     pendingForceEbb: false,
     pendingWarpExitBoom: false,
-    approach: null
+    pendingStageBloom: false,
+    pendingStageMediant: false,
+    approach: null,
+    phraseChordIds: []
   };
 }
 
 // --- Scene and warp edges --------------------------------------------------------------------------
 
-function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: number): boolean {
+interface EdgeEvents {
+  /** An approach ended this bar: the key retargeted home (§8.4 arrival). */
+  landingPivot: boolean;
+  /** The landing pivot actually spent the phrase's awe-chord (mediant ration). */
+  landingPivotMediant: boolean;
+}
+
+function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: number): EdgeEvents {
   let landingPivot = false;
+  let landingPivotMediant = false;
+
+  // Stage transitions are EVENTS (§8.4 stage row): an upward rung schedules a
+  // grid bloom, and reaching `alive`+ promises a mediant on the next phrase
+  // boundary. Under story authority the story's own hits score the awakening
+  // (frozen contract) — the baseline just follows.
+  if (state.prevStage === null) {
+    state.prevStage = s.stage;
+  } else if (s.stage !== state.prevStage) {
+    const rose = STAGE_RANK[s.stage] > STAGE_RANK[state.prevStage];
+    state.prevStage = s.stage;
+    if (rose && !s.storyLeads) {
+      state.pendingStageBloom = true;
+      if (STAGE_RANK[s.stage] >= STAGE_RANK.alive) state.pendingStageMediant = true;
+    }
+  }
 
   // Warp edges: BUILD on entry, EBB + boom on exit (§8.4).
   if (s.warpActive && !state.warpWasActive) state.pendingForceBuild = true;
@@ -211,8 +274,16 @@ function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: n
       const unfinishedWalk =
         run.decision.kind === 'modulate' && run.waypointIdx < run.decision.waypoints.length;
       if (run.decision.kind === 'landingPivot' || unfinishedWalk) {
-        forceLandingPivot(state.harmony, run.destKey.tonicPc, run.destKey.mode);
+        // The pivot obeys the phrase's mediant ration (§6.3/§8.4) — paradox
+        // widens it like every other mediant draw (§8.5).
+        const pivot = forceLandingPivot(
+          state.harmony,
+          run.destKey.tonicPc,
+          run.destKey.mode,
+          s.stage === 'paradox' ? PARADOX_MEDIANT_RATION : undefined
+        );
         landingPivot = true;
+        landingPivotMediant = pivot.pivoted;
       }
       state.approach = null;
     }
@@ -242,7 +313,7 @@ function handleEdges(state: BedConductorState, s: BedSignals, effectiveEnergy: n
       waypointIdx: 0
     };
   }
-  return landingPivot;
+  return { landingPivot, landingPivotMediant };
 }
 
 // --- Voice planning ----------------------------------------------------------------------------------
@@ -283,11 +354,33 @@ function planOstinato(
   return notes;
 }
 
+/**
+ * The bare-era voice (§8.5): the motif exists only as a LONE CHIP ARP OF
+ * CHORD TONES — the rhythm gene's fragment carries the planet's pulse, but
+ * every pitch is a chord tone (root/third/fifth ascending), anchored in the
+ * ostinato register. One PSG voice; the renderer keeps it monophonic.
+ */
+function planChipArp(state: BedConductorState, bar: number): BedNoteEvent[] {
+  const figure = ostinatoCell(state.genome, FRAGMENT_DEFAULT_NOTES);
+  const iv = TRIAD_INTERVALS[state.harmony.chord.quality];
+  const anchor = state.harmony.bandCenter + OST_ANCHOR_OFFSET_SEMIS;
+  const rootPc = state.harmony.chord.rootPc;
+  const base = rootPc + 12 * Math.round((anchor - rootPc) / 12);
+  return figure.notes.map((n, i) => ({
+    slot: n.slot,
+    durationSlots: n.durationSlots,
+    semis: base + iv[i % 3] + 12 * Math.floor(i / 3),
+    velocity:
+      OST_VELOCITY_FLOOR +
+      (1 - OST_VELOCITY_FLOOR) * musicUnit(state.planetSeed, SALT_VELOCITY, bar * 37 + n.slot)
+  }));
+}
+
 function planMelodyStatement(
   state: BedConductorState,
   s: BedSignals,
   phraseIndex: number,
-  event: HarmonyBarEvent
+  chordIds: readonly string[]
 ): { notes: BedNoteEvent[]; chain: string | null } {
   const pool = MELODY_CHAIN_POOL;
   const start = Math.floor(musicUnit(state.planetSeed, SALT_MELODY_CHAIN, phraseIndex) * pool.length);
@@ -306,7 +399,7 @@ function planMelodyStatement(
     if (!figure) continue;
     const chainStr = serializeOpChain(chain);
     const descriptor = {
-      chordIds: [event.chordId],
+      chordIds,
       operatorChain: chainStr,
       rhythmMask: figureRhythmMask(figure),
       registerBand: state.harmony.bandCenter
@@ -354,7 +447,9 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
     registerShift: drift.registerShift
   };
 
-  const landingPivot = handleEdges(state, s, effectiveEnergy);
+  const { landingPivot, landingPivotMediant } = handleEdges(state, s, effectiveEnergy);
+  const stageBloom = state.pendingStageBloom;
+  state.pendingStageBloom = false;
 
   // Phrase boundary: arrangement first (the harmony's forced curve follows it).
   const prePhrasePos = state.harmony.phrasePos;
@@ -380,9 +475,15 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
   const forcedShape: CurveShape | undefined =
     state.arrangement.name === 'BUILD' ? 'RISE' : state.arrangement.name === 'EBB' ? 'FALL' : undefined;
 
+  // The `alive` awakening's promised mediant fires on the next phrase boundary.
+  const stageMediantDue = state.pendingStageMediant && prePhrasePos === 0;
+  if (stageMediantDue) state.pendingStageMediant = false;
+
   const event = advanceHarmonyBar(state.harmony, rails, {
     forcedShape,
-    hitScheduled: bloomEntered
+    hitScheduled: bloomEntered || stageBloom,
+    forceMediant: stageMediantDue,
+    mediantRation: s.stage === 'paradox' ? PARADOX_MEDIANT_RATION : undefined
   });
 
   // Approach walk: one waypoint per chord change while approaching (§8.4).
@@ -402,6 +503,21 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
     }
   }
 
+  // §7.3 phrase chord context. At a boundary the just-completed phrase's list
+  // (plus this bar's chord — the one under a statement's first bar) becomes
+  // the statement fingerprint; the accumulator then restarts for the new
+  // phrase. Consecutive holds collapse: chords SOUNDED, in order.
+  let statementChordIds: string[] | null = null;
+  if (prePhrasePos === 0) {
+    const context = state.phraseChordIds;
+    if (context[context.length - 1] !== event.chordId) context.push(event.chordId);
+    statementChordIds = context;
+    state.phraseChordIds = [];
+  }
+  if (state.phraseChordIds[state.phraseChordIds.length - 1] !== event.chordId) {
+    state.phraseChordIds.push(event.chordId);
+  }
+
   const gates = resolveEraGates(s.era, s.stage);
   const base = arrangementLevels(state.arrangement.name);
   const levels: BedLayerLevels = policy.subOnly
@@ -418,13 +534,21 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
 
   const subTakesMotif = clamp01(s.submergence) >= SUB_MOTIF_SUBMERGENCE;
 
+  // Bare (§8.5): the motif exists only as the lone chip arp of chord tones.
+  const chipMono = s.stage === 'bare';
   const ostinato =
-    levels.ostinato > 0 && !policy.subOnly ? planOstinato(state, effectiveEnergy, event.barIndex) : [];
+    levels.ostinato > 0 && !policy.subOnly
+      ? chipMono
+        ? planChipArp(state, event.barIndex)
+        : planOstinato(state, effectiveEnergy, event.barIndex)
+      : [];
 
   // Melody statements happen at phrase boundaries only, and rarely (C418 law).
+  // Bare is monophonic: no statements — the chip arp IS the tune's only form.
   let melody: BedNoteEvent[] = [];
   let melodyChain: string | null = null;
-  if (prePhrasePos === 0 && levels.lead > 0) {
+  let melodyChordIds: string[] | null = null;
+  if (prePhrasePos === 0 && levels.lead > 0 && !chipMono) {
     const p =
       state.arrangement.name === 'BLOOM'
         ? MELODY_BLOOM_P
@@ -434,9 +558,15 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
             ? MELODY_EBB_P
             : 0;
     if (p > 0 && musicUnit(state.planetSeed, SALT_MELODY_STATE, prePhraseIndex) < p) {
-      const statement = planMelodyStatement(state, s, prePhraseIndex, event);
+      const statement = planMelodyStatement(
+        state,
+        s,
+        prePhraseIndex,
+        statementChordIds ?? [event.chordId]
+      );
       melody = statement.notes;
       melodyChain = statement.chain;
+      melodyChordIds = statement.chain !== null ? statementChordIds : null;
     }
   }
 
@@ -463,6 +593,7 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
     ostinato,
     melody,
     melodyChain,
+    melodyChordIds,
     percussion,
     tick,
     sidechainDepth: SIDECHAIN_DEPTH * effectiveEnergy * gates.sidechain,
@@ -471,6 +602,10 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
     bloomEntered,
     warpExitBoom: state.pendingWarpExitBoom,
     landingPivot,
+    landingPivotMediant,
+    stageBloom,
+    stageMediant: stageMediantDue && event.mediant,
+    chipMono,
     padBrightness: clamp01(
       PAD_BRIGHT_BASE +
         PAD_BRIGHT_WARMTH * rails.warmth +

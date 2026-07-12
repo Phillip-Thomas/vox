@@ -11,7 +11,12 @@ import { GESTURE_TABU, PHRASE_TABU } from './tuning.ts';
 // anti-repetition measured, not vibes.
 
 export interface PhraseDescriptor {
-  /** Chord ids sounded across the phrase, in order (theory.triadId strings). */
+  /**
+   * Chord ids sounded across the phrase, in order (theory.triadId strings),
+   * consecutive holds collapsed. The causal window at statement time: the
+   * just-completed phrase plus the chord under the statement's first bar —
+   * the rest of the new phrase is undrawn when the fingerprint is taken.
+   */
   chordIds: readonly string[];
   /** Serialized operator chain (motif.serializeOpChain). */
   operatorChain: string;

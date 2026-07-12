@@ -44,6 +44,10 @@ export const SALT_DRIFT_MODE_PHASE = fnv1a32('score:drift-mode-phase');
 export const SALT_DRIFT_REGISTER_PHASE = fnv1a32('score:drift-register-phase');
 export const SALT_DRIFT_TEXTURE_PHASE = fnv1a32('score:drift-texture-phase');
 export const SALT_REGION = fnv1a32('score:region');
+// P5 story-mood melody generalization (§10.5): entry, chain pick, velocities.
+export const SALT_MOOD_PHRASE = fnv1a32('score:mood-phrase');
+export const SALT_MOOD_CHAIN = fnv1a32('score:mood-chain');
+export const SALT_MOOD_VEL = fnv1a32('score:mood-velocity');
 
 /** Musical-time salt: mixes a purpose salt with a bar (or phrase) index. */
 export function musicSalt(purposeSalt: number, timeIndex: number): number {

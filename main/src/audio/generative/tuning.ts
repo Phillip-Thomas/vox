@@ -36,6 +36,16 @@ export const VL_TOTAL_MAX = 6;
 export const VL_VOICE_MAX = 4;
 /** Below this tension, at least one common tone must be held. */
 export const VL_COMMON_TONE_TENSION = 0.4;
+/**
+ * After this many consecutive failed chord-change attempts, the common-tone
+ * rule is bypassed for the retry (displacement bounds still hold). Some
+ * corners of the grammar have a single common-tone neighbor (Lydian II:maj),
+ * and a drifted register band can price it out — without this escape the
+ * walk freezes for minutes (found by the P4 soak, frozen seed 8). Same
+ * philosophy as the chord-tabu bypass: never at the cost of a wrong note,
+ * never at the cost of a frozen walk.
+ */
+export const HELD_RELAX_BARS = 2;
 
 // --- Register band (§6.4, §8.3) -----------------------------------------------------------
 
@@ -292,8 +302,22 @@ export const TICK_GLIDE_S = 2;
 export const TICK_WARP_MULT = 2;
 /** Clock pressure in the descent scene (radar-altimeter urgency; warp progress adds on top). */
 export const TICK_DESCENT_PRESSURE = 2.2;
+/**
+ * Descent ramp on TICK_DESCENT_PRESSURE: pressure starts at BASE of the full
+ * descent multiplier and climbs by SPAN as the ground nears (the
+ * radar-altimeter accelerando). BASE + SPAN should sum to 1.
+ */
+export const TICK_DESCENT_RAMP_BASE = 0.75;
+export const TICK_DESCENT_RAMP_SPAN = 0.25;
 /** At full submergence the tick slows to this fraction of its rate (depth dilates time). */
 export const TICK_SUBMERGE_FLOOR = 0.55;
+/**
+ * Forced tick presence (descent/warp) drives level with at least this much
+ * tension-equivalent — the clock is never forced audible yet inaudible.
+ */
+export const TICK_FORCED_LEVEL_FLOOR = 0.4;
+/** Level normalizer gain on tension × (pressure / TICK_HZ_MAX). */
+export const TICK_LEVEL_GAIN = 2;
 
 // --- Era instrumentation ladder (§8.5 — a ramp, not a staircase) --------------------------------
 
@@ -305,6 +329,45 @@ export const ERA_ALIVE = 0.75;
 export const ERA_FADE_WIDTH = 0.12;
 /** Paradox fold-back: chip voices return as texture at this level (owner ruling #5). */
 export const CHIP_FOLDBACK_LEVEL = 0.3;
+
+// --- Period-authentic era rungs (§8.5, P5) --------------------------------------------------------
+
+/**
+ * Bare monophony: while the lone chip arp speaks, the pulse drone yields to
+ * this fraction of its level (one PSG voice at a time — 1-bit soul).
+ */
+export const CHIP_MONO_DUCK = 0;
+/** NES vibrato (unlocks at `color`): rate and depth of the chip-lead pitch LFO. */
+export const CHIP_VIBRATO_HZ = 5.5;
+export const CHIP_VIBRATO_CENTS = 12;
+/** Pulse-harmony voice (the NES trio's second pulse), level × the lead note. */
+export const CHIP_HARMONY_LEVEL = 0.55;
+/** Shimmer floor at `material` (§8.5 FM bells); the rest arrives at `alive` (granular). */
+export const SHIMMER_MATERIAL_PORTION = 0.35;
+/** Paradox widens the mediant freedom: ration per phrase beyond `alive`'s 1 (§8.5). */
+export const PARADOX_MEDIANT_RATION = 2;
+/**
+ * Paradox may split the world-clock into TWO clocks (§8.5): the second runs at
+ * this ratio of the first — the golden-ratio conjugate, so the two clocks
+ * never re-phase (Eno's incommensurable-period principle at tick scale).
+ */
+export const PARADOX_TICK_RATIO = 0.618;
+/** Second-clock loudness, × the first clock's level. */
+export const PARADOX_TICK2_LEVEL = 0.6;
+
+// --- Story-mood melody generalization (§10.5 / §8.5 note, P5) --------------------------------------
+//
+// A mood's `melody.scale` becomes a FILTER over the planet's motif genome —
+// the planet's tune haunts the story beats, played in the mood's mode. No
+// MOODS schema change; the shipped random walk survives only as the fallback
+// when no planet genome is known.
+
+/** Register center of mood-melody phrases, semitones above the current chord root. */
+export const MOOD_MELODY_CENTER_SEMIS = 7;
+/** Seeded operator-chain candidates tried before falling back to the base figure. */
+export const MOOD_CHAIN_CANDIDATES = 4;
+/** Mood-melody velocity floor (seeded velocities span floor..1, like the shipped walk). */
+export const MOOD_VELOCITY_FLOOR = 0.8;
 
 // --- Arrangement state machine (§8.3) ------------------------------------------------------------
 

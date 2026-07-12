@@ -14,7 +14,9 @@ import {
   ERA_ALIVE,
   ERA_COLOR,
   ERA_MATERIAL,
+  PARADOX_TICK_RATIO,
   REGISTER_SHIFT_MAX,
+  SHIMMER_MATERIAL_PORTION,
   TICK_GATE,
   TICK_HZ_BASE,
   TICK_HZ_MAX,
@@ -55,6 +57,20 @@ describe('world-clock tick (§8.1, owner ruling #2)', () => {
     expect(resolveWorldClockTick(sig({ scene: 'descent', tension: 0 })).present).toBe(true);
     expect(resolveWorldClockTick(sig({ warpActive: true, tension: 0 })).present).toBe(true);
   });
+
+  it('a forced tick is never inaudible: the level floor carries it at zero tension', () => {
+    expect(resolveWorldClockTick(sig({ scene: 'descent', tension: 0 })).level).toBeGreaterThan(0);
+    expect(resolveWorldClockTick(sig({ warpActive: true, tension: 0 })).level).toBeGreaterThan(0);
+    // Unforced at zero tension there is nothing to carry.
+    expect(resolveWorldClockTick(sig({ tension: 0 })).level).toBe(0);
+  });
+
+  it('splits into two clocks only at paradox, at the golden ratio (§8.5)', () => {
+    expect(resolveWorldClockTick(sig({})).splitHz).toBeNull();
+    expect(resolveWorldClockTick(sig({ stage: 'bare' })).splitHz).toBeNull();
+    const split = resolveWorldClockTick(sig({ stage: 'paradox', tension: 0.9 }));
+    expect(split.splitHz).toBeCloseTo(split.hz * PARADOX_TICK_RATIO, 10);
+  });
 });
 
 describe('era instrumentation ladder (§8.5 — ramp, not staircase)', () => {
@@ -87,6 +103,21 @@ describe('era instrumentation ladder (§8.5 — ramp, not staircase)', () => {
   it('chip fades out through material and folds back at paradox (owner ruling #5)', () => {
     expect(resolveEraGates(1, 'alive').chip).toBe(0);
     expect(resolveEraGates(1, 'paradox').chip).toBe(CHIP_FOLDBACK_LEVEL);
+  });
+
+  it('the NES trio lives at color: vibrato unlocks, the second pulse fades out by material (§8.5)', () => {
+    const bare = resolveEraGates(0, 'bare');
+    expect(bare.vibrato).toBe(0);
+    expect(bare.chipHarmony).toBe(0);
+    const color = resolveEraGates(ERA_COLOR, 'color');
+    expect(color.vibrato).toBe(1);
+    expect(color.chipHarmony).toBe(1);
+    expect(resolveEraGates(1, 'alive').chipHarmony).toBe(0);
+  });
+
+  it('shimmer gets its FM-bell floor at material and completes at alive (§8.5)', () => {
+    expect(resolveEraGates(ERA_MATERIAL, 'material').shimmer).toBeCloseTo(SHIMMER_MATERIAL_PORTION, 10);
+    expect(resolveEraGates(ERA_ALIVE, 'alive').shimmer).toBe(1);
   });
 
   it('eraFade is monotonic in era', () => {

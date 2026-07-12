@@ -4,6 +4,7 @@ import {
   advanceHarmonyBar,
   createHarmonyBrain,
   derivePlanetKey,
+  forceLandingPivot,
   publishHarmony,
   type HarmonyBarEvent,
   type HarmonyBrainState,
@@ -203,6 +204,147 @@ describe('mediant ration and phrase discipline (§6.3)', () => {
       const e = advanceHarmonyBar(state, varied(i), { forcedShape: 'RISE' });
       expect(e.cadenceBiased).toBe(false);
     }
+  });
+});
+
+describe('stage-transition mediants and the paradox ration (§8.4/§8.5, P5)', () => {
+  it('forceMediant takes a legal chromatic mediant NOW (same quality, third-related root)', () => {
+    let mediants = 0;
+    let attempts = 0;
+    for (const seed of [7, 42, 99, 123, 555, 808, 1234, 4242]) {
+      const state = createHarmonyBrain(seed);
+      for (let i = 0; i < 5; i++) advanceHarmonyBar(state, calm());
+      const before = { rootPc: state.chord.rootPc, quality: state.chord.quality };
+      const e = advanceHarmonyBar(state, calm(), { forceMediant: true });
+      attempts++;
+      // The promise forces the change due immediately.
+      expect(e.changed || e.heldNoLegal, `seed ${seed}`).toBe(true);
+      if (e.mediant) {
+        mediants++;
+        const dist = pcMod(e.chord.rootPc - before.rootPc);
+        expect([3, 4, 8, 9], `seed ${seed}`).toContain(dist);
+        expect(e.chord.quality).toBe(before.quality);
+        expect(e.displacement).toBeLessThanOrEqual(VL_TOTAL_MAX);
+        expect(e.maxVoice).toBeLessThanOrEqual(VL_VOICE_MAX);
+      }
+    }
+    // The awe-move lands for the strong majority of grammar corners.
+    expect(mediants).toBeGreaterThanOrEqual(attempts - 2);
+  });
+
+  it('the paradox ration allows two mediants per phrase, never three', () => {
+    const state = createHarmonyBrain(31337);
+    const perPhrase = new Map<number, number>();
+    for (let i = 0; i < 640; i++) {
+      const e = advanceHarmonyBar(
+        state,
+        { tension: 0.5, energy: 0.9, warmth: 0.5, chroma: 0.5, golden: 1 },
+        { hitScheduled: true, mediantRation: 2 }
+      );
+      if (e.changed && e.mediant) {
+        const phrase = Math.floor(e.barIndex / PHRASE_BARS);
+        perPhrase.set(phrase, (perPhrase.get(phrase) ?? 0) + 1);
+      }
+    }
+    expect([...perPhrase.values()].some((n) => n === 2)).toBe(true);
+    for (const [phrase, count] of perPhrase) {
+      expect(count, `phrase ${phrase}`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it('the default ration still caps at one even under constant scheduled hits', () => {
+    const state = createHarmonyBrain(31337);
+    const perPhrase = new Map<number, number>();
+    for (let i = 0; i < 640; i++) {
+      const e = advanceHarmonyBar(
+        state,
+        { tension: 0.5, energy: 0.9, warmth: 0.5, chroma: 0.5, golden: 1 },
+        { hitScheduled: true }
+      );
+      if (e.changed && e.mediant) {
+        const phrase = Math.floor(e.barIndex / PHRASE_BARS);
+        perPhrase.set(phrase, (perPhrase.get(phrase) ?? 0) + 1);
+      }
+    }
+    for (const [phrase, count] of perPhrase) {
+      expect(count, `phrase ${phrase}`).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
+describe('the landing pivot obeys the mediant ration (§8.4 spends §6.3\'s one awe chord)', () => {
+  const hot = (): HarmonyRails => ({ tension: 0.5, energy: 0.9, warmth: 0.5, chroma: 0.5, golden: 1 });
+
+  it('a mid-phrase pivot consumes the ration: no second mediant can fire in the phrase', () => {
+    let proven = 0;
+    for (const seed of [7, 42, 99, 123, 555, 808, 1234, 4242]) {
+      const state = createHarmonyBrain(seed);
+      const midPos = 3;
+      for (let i = 0; i < midPos; i++) advanceHarmonyBar(state, calm());
+      const dest = derivePlanetKey(seed + 1);
+      const res = forceLandingPivot(state, dest.tonicPc, 'aeolian');
+      if (!res.pivoted) continue;
+      proven++;
+      expect(state.mediantsThisPhrase).toBe(1);
+      // Finish the phrase under maximum mediant pressure — the ration holds.
+      for (let i = 0; i < PHRASE_BARS - midPos; i++) {
+        const e = advanceHarmonyBar(state, hot(), { hitScheduled: true });
+        expect(e.mediant, `seed ${seed} bar ${e.barIndex}`).toBe(false);
+      }
+      expect(state.phrasePos).toBe(0);
+    }
+    expect(proven).toBeGreaterThanOrEqual(4);
+  });
+
+  it('a pivot is refused once the phrase ration is spent — arrival without the awe-chord', () => {
+    let proven = 0;
+    for (const seed of [7, 42, 99, 123, 555, 808, 1234, 4242]) {
+      const build = (): HarmonyBrainState => {
+        const s = createHarmonyBrain(seed);
+        for (let i = 0; i < 3; i++) advanceHarmonyBar(s, calm());
+        advanceHarmonyBar(s, calm(), { forceMediant: true }); // spend the ration mid-phrase
+        return s;
+      };
+      const state = build();
+      if (state.mediantsThisPhrase !== 1 || state.phrasePos === 0) continue;
+      proven++;
+      const dest = derivePlanetKey(seed + 2);
+      const before = triadId(state.chord);
+      const res = forceLandingPivot(state, dest.tonicPc, 'aeolian');
+      expect(res.pivoted, `seed ${seed}`).toBe(false);
+      expect(triadId(state.chord)).toBe(before); // no awe-chord…
+      expect(state.tonicPc).toBe(pcMod(dest.tonicPc)); // …but the key still comes home
+      expect(state.homeMode).toBe('aeolian');
+      // The widened paradox ration (§8.5) admits the same pivot.
+      const wide = build();
+      const wideRes = forceLandingPivot(wide, dest.tonicPc, 'aeolian', 2);
+      if (wideRes.pivoted) expect(wide.mediantsThisPhrase).toBe(2);
+    }
+    expect(proven).toBeGreaterThanOrEqual(4);
+  });
+
+  it('a boundary-bar pivot spends the NEW phrase\'s ration (the reset preserves it)', () => {
+    let proven = 0;
+    for (const seed of [7, 42, 99, 123, 555, 808, 1234, 4242]) {
+      const state = createHarmonyBrain(seed);
+      for (let i = 0; i < PHRASE_BARS; i++) advanceHarmonyBar(state, calm());
+      expect(state.phrasePos).toBe(0);
+      const dest = derivePlanetKey(seed + 3);
+      const res = forceLandingPivot(state, dest.tonicPc, 'aeolian');
+      if (!res.pivoted) continue;
+      proven++;
+      // Advance THROUGH the boundary under maximum mediant pressure: the
+      // reset must preserve the pivot's spend, so nothing more fires.
+      const first = advanceHarmonyBar(state, hot(), { hitScheduled: true });
+      expect(first.mediant, `seed ${seed}`).toBe(false);
+      expect(state.mediantsThisPhrase).toBe(1);
+      for (let i = 0; i < PHRASE_BARS - 1; i++) {
+        const e = advanceHarmonyBar(state, hot(), { hitScheduled: true });
+        expect(e.mediant, `seed ${seed} bar ${e.barIndex}`).toBe(false);
+      }
+      expect(state.phrasePos).toBe(0);
+    }
+    expect(proven).toBeGreaterThanOrEqual(4);
   });
 });
 

@@ -50,6 +50,7 @@ import {
   DEFAULT_MODE_WEIGHTS,
   GOLDEN_MEDIANT_MULT,
   GOLDEN_WINDOW_MIN,
+  HELD_RELAX_BARS,
   HARMONY_BARS_DEFAULT,
   HARMONY_BARS_FAST,
   HARMONY_BARS_REST,
@@ -58,6 +59,7 @@ import {
   IONIAN_WARMTH_GATE,
   MEDIANT_BASE_P,
   MEDIANT_P_MAX,
+  MEDIANT_RATION,
   MODE_DRIFT_DIR_BIAS,
   MODE_DRIFT_MIN_PHRASES,
   MODE_DRIFT_P,
@@ -66,7 +68,8 @@ import {
   REGISTER_BAND_HALF_WIDTH,
   REGISTER_WARMTH_LIFT_SEMIS,
   TENSION_COLOR_GATE,
-  TENSION_PHRYGIAN_GATE
+  TENSION_PHRYGIAN_GATE,
+  VL_COMMON_TONE_TENSION
 } from './tuning.ts';
 
 // --- The harmony brain (§6.1) ----------------------------------------------------------------
@@ -118,8 +121,17 @@ export interface HarmonyBrainState {
   /** Index of the current phrase. */
   phraseIndex: number;
   barsSinceChord: number;
+  /** Consecutive failed change attempts (drives the common-tone escape hatch). */
+  heldBars: number;
   phrasesSinceModeDrift: number;
-  mediantUsedThisPhrase: boolean;
+  /** Mediant moves taken this phrase (rationed; paradox widens the ration — §8.5). */
+  mediantsThisPhrase: number;
+  /**
+   * A landing pivot fired on a phrase-BOUNDARY bar (§8.4): its awe-chord
+   * belongs to the phrase that bar begins, so the boundary reset must
+   * preserve the spend (count starts at 1) instead of wiping it.
+   */
+  pivotSpentOnBoundary: boolean;
   /** Last CHORD_TABU distinct chord ids (most recent last). */
   recentChordIds: string[];
   curve: number[];
@@ -145,6 +157,12 @@ export interface HarmonyBarEvent {
   tabuBypass: boolean;
   /** True when a change was due but no candidate was legal (held instead). */
   heldNoLegal: boolean;
+  /**
+   * True when this change was admitted through the held-escape hatch: the
+   * common-tone rule was bypassed after HELD_RELAX_BARS failed attempts
+   * (displacement bounds still enforced — never a wrong note).
+   */
+  commonToneRelaxed: boolean;
   /** Non-null when the mode drifted at this bar's phrase boundary. */
   modeDrifted: ModeName | null;
   /** Non-null when a new phrase curve was planned at this bar. */
@@ -156,6 +174,15 @@ export interface AdvanceOptions {
   forcedShape?: CurveShape;
   /** A grid-scheduled hit/bloom lands this bar — mediants become permitted. */
   hitScheduled?: boolean;
+  /** Mediant ration override for this bar's phrase (paradox widens it — §8.5). */
+  mediantRation?: number;
+  /**
+   * The §8.4 stage-transition promise: force a chord change THIS bar and, when
+   * any chromatic mediant is legal, take one (the awakening awe-move). Never
+   * at the cost of a wrong note — with no legal mediant the change falls back
+   * to the ordinary pool.
+   */
+  forceMediant?: boolean;
 }
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
@@ -212,8 +239,10 @@ export function createHarmonyBrain(planetSeed: number, opts?: CreateHarmonyOptio
     phrasePos: 0,
     phraseIndex: 0,
     barsSinceChord: 0,
+    heldBars: 0,
     phrasesSinceModeDrift: 0,
-    mediantUsedThisPhrase: false,
+    mediantsThisPhrase: 0,
+    pivotSpentOnBoundary: false,
     recentChordIds: [triadId(tonicTriad)],
     curve: planTensionCurve('PLATEAU', 0),
     curveShape: null
@@ -256,9 +285,12 @@ export function advanceHarmonyBar(
   let modeDrifted: ModeName | null = null;
   let curvePlanned: CurveShape | null = null;
 
-  // Phrase boundary: ration reset, mode drift, curve planning.
+  // Phrase boundary: ration reset, mode drift, curve planning. A landing
+  // pivot that fired ON this boundary bar already spent the NEW phrase's
+  // awe-chord (§8.4) — the reset preserves that spend instead of wiping it.
   if (state.phrasePos === 0) {
-    state.mediantUsedThisPhrase = false;
+    state.mediantsThisPhrase = state.pivotSpentOnBoundary ? 1 : 0;
+    state.pivotSpentOnBoundary = false;
     if (state.barIndex > 0) state.phrasesSinceModeDrift++;
     modeDrifted = tryModeDrift(state, rails);
     const shape =
@@ -284,11 +316,13 @@ export function advanceHarmonyBar(
     cadenceBiased: false,
     tabuBypass: false,
     heldNoLegal: false,
+    commonToneRelaxed: false,
     modeDrifted,
     curvePlanned
   };
 
-  if (state.barsSinceChord >= harmonyBarsFor(rails.energy)) {
+  // A forced mediant (stage-transition event, §8.4) makes the change due NOW.
+  if (state.barsSinceChord >= harmonyBarsFor(rails.energy) || opts?.forceMediant === true) {
     changeChord(state, rails, opts, event);
   } else {
     state.barsSinceChord++;
@@ -338,14 +372,19 @@ function changeChord(
     const id = triadId(triad);
     if (id !== currentId) pool.set(id, { triad, mediant: false });
   }
+  const forceMediant = opts?.forceMediant === true;
+  const mediantRation = opts?.mediantRation ?? MEDIANT_RATION;
   const mediantPermitted =
-    (state.phrasePos === 0 || opts?.hitScheduled === true) && !state.mediantUsedThisPhrase;
+    (state.phrasePos === 0 || opts?.hitScheduled === true || forceMediant) &&
+    state.mediantsThisPhrase < mediantRation;
   if (mediantPermitted) {
     const p = Math.min(
       MEDIANT_P_MAX,
       MEDIANT_BASE_P * (rails.golden > GOLDEN_WINDOW_MIN ? GOLDEN_MEDIANT_MULT : 1)
     );
-    if (musicUnit(seed, SALT_MEDIANT, bar) < p) {
+    // The stage-transition promise skips the probability draw — the mediant
+    // was scheduled, not rolled (§8.4 stage row).
+    if (forceMediant || musicUnit(seed, SALT_MEDIANT, bar) < p) {
       for (const triad of chromaticMediants(state.chord)) {
         const id = triadId(triad);
         if (id !== currentId && !pool.has(id)) pool.set(id, { triad, mediant: true });
@@ -354,25 +393,43 @@ function changeChord(
   }
 
   // 2. Legality filter (voice-leading law) — computed on the optimal voicing.
+  //    The ESCAPE HATCH (P4 soak finding): some corners of the grammar have a
+  //    single common-tone neighbor (Lydian II:maj) and a drifted band can
+  //    price it out; after HELD_RELAX_BARS failed attempts the common-tone
+  //    rule is bypassed for the retry — displacement bounds still hold, so
+  //    the walk moves by a small slide instead of freezing for minutes.
+  const relaxCommonTone = state.heldBars >= HELD_RELAX_BARS;
+  const legalityTension = relaxCommonTone
+    ? Math.max(rails.tension, VL_COMMON_TONE_TENSION)
+    : rails.tension;
   const legal: Array<{ triad: TriadSpec; id: string; mediant: boolean; lead: ReturnType<typeof leadVoices> }> = [];
   for (const { triad, mediant } of pool.values()) {
     const lead = leadVoicesRange(state.voicing, triad, bandLo, bandHi);
-    if (isLegalTransition(lead, rails.tension)) legal.push({ triad, id: triadId(triad), mediant, lead });
+    if (isLegalTransition(lead, legalityTension)) legal.push({ triad, id: triadId(triad), mediant, lead });
   }
   if (legal.length === 0) {
     event.heldNoLegal = true; // hold the chord; retry next bar
+    state.heldBars++;
     return;
   }
 
-  // 3. Phrase-final bias: bars 7–8 lean home unless the curve says RISE (§6.5).
+  // 2b. The forced mediant: when any mediant survived legality, the candidate
+  //     set IS the mediants (the §8.4 stage-transition awe-move). With none
+  //     legal the ordinary pool proceeds — never a wrong note.
   let set = legal;
+  if (forceMediant && mediantPermitted) {
+    const mediants = legal.filter((c) => c.mediant);
+    if (mediants.length > 0) set = mediants;
+  }
+
+  // 3. Phrase-final bias: bars 7–8 lean home unless the curve says RISE (§6.5).
   if (
     state.phrasePos >= CADENCE_START_POS &&
     state.curveShape !== 'RISE' &&
     musicUnit(seed, SALT_CADENCE, bar) < CADENCE_BIAS_P
   ) {
     const cadenceRoots = MODE_CADENCE_ROOTS[state.mode];
-    const cad = legal.filter(
+    const cad = set.filter(
       (c) => !c.mediant && cadenceRoots.includes(pcMod(c.triad.rootPc - state.tonicPc))
     );
     if (cad.length > 0) {
@@ -439,7 +496,8 @@ function changeChord(
   state.voicing = chosen.lead.voicing;
   state.bandCenter = bandCenter;
   state.barsSinceChord = 1;
-  if (chosen.mediant) state.mediantUsedThisPhrase = true;
+  state.heldBars = 0;
+  if (chosen.mediant) state.mediantsThisPhrase++;
   if (state.recentChordIds[state.recentChordIds.length - 1] !== chosen.id) {
     state.recentChordIds.push(chosen.id);
     while (state.recentChordIds.length > CHORD_TABU) state.recentChordIds.shift();
@@ -452,6 +510,7 @@ function changeChord(
   event.maxVoice = chosen.lead.maxVoice;
   event.commonTones = chosen.lead.commonTones;
   event.mediant = chosen.mediant;
+  event.commonToneRelaxed = relaxCommonTone && chosen.lead.commonTones < 1;
 }
 
 // --- Publishing (the ONE harmonic truth) --------------------------------------------------------
@@ -507,28 +566,38 @@ export function retargetHarmonyKey(
  * The LANDING PIVOT (§8.4 fallback): ONE chromatic mediant of the current
  * chord, chosen nearest (Tonnetz) to the destination tonic triad, legality
  * still enforced — then the key retargets home and single-accidental drift
- * settles the rest. Consumes the phrase's mediant ration. When no mediant is
- * legal, the key still retargets (arrival without the awe-chord).
+ * settles the rest. Consumes the phrase's mediant ration AND OBEYS it: the
+ * pivot spends THE phrase's one awe chord, so with the ration already spent
+ * — or no mediant legal — the key still retargets without the awe-chord.
+ * The pivot bar belongs to the phrase ABOUT to be advanced: on a boundary
+ * bar the spend charges the NEW phrase (and survives its ration reset).
  */
 export function forceLandingPivot(
   state: HarmonyBrainState,
   destTonicPc: number,
-  destMode: ModeName
+  destMode: ModeName,
+  mediantRation: number = MEDIANT_RATION
 ): { pivoted: boolean; chordId: string } {
-  const destTriad = modeTonicTriad(pcMod(destTonicPc), destMode);
+  const spentThisPhrase =
+    state.phrasePos === 0 ? (state.pivotSpentOnBoundary ? 1 : 0) : state.mediantsThisPhrase;
   let best: { triad: TriadSpec; lead: ReturnType<typeof leadVoices>; dist: number } | null = null;
-  for (const triad of chromaticMediants(state.chord)) {
-    const lead = leadVoices(state.voicing, triad, state.bandCenter, REGISTER_BAND_HALF_WIDTH);
-    // The pivot is an awe gesture — use the relaxed (high-tension) legality.
-    if (!isLegalTransition(lead, 1)) continue;
-    const dist = tonnetzDistance(triad, destTriad);
-    if (best === null || dist < best.dist) best = { triad, lead, dist };
+  if (spentThisPhrase < mediantRation) {
+    const destTriad = modeTonicTriad(pcMod(destTonicPc), destMode);
+    for (const triad of chromaticMediants(state.chord)) {
+      const lead = leadVoices(state.voicing, triad, state.bandCenter, REGISTER_BAND_HALF_WIDTH);
+      // The pivot is an awe gesture — use the relaxed (high-tension) legality.
+      if (!isLegalTransition(lead, 1)) continue;
+      const dist = tonnetzDistance(triad, destTriad);
+      if (best === null || dist < best.dist) best = { triad, lead, dist };
+    }
   }
   if (best) {
     state.chord = { rootPc: best.triad.rootPc, quality: best.triad.quality, colorIntervals: [] };
     state.voicing = best.lead.voicing;
     state.barsSinceChord = 1;
-    state.mediantUsedThisPhrase = true;
+    state.heldBars = 0;
+    if (state.phrasePos === 0) state.pivotSpentOnBoundary = true;
+    else state.mediantsThisPhrase++;
     const id = triadId(best.triad);
     if (state.recentChordIds[state.recentChordIds.length - 1] !== id) {
       state.recentChordIds.push(id);

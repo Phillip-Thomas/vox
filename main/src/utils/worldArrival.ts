@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getWorldGen } from './worldGenCache';
+import { getWorldArrivalCandidate } from './worldGenCache';
 import {
   PLAYER_CENTER_CLEARANCE,
   voxelCoordToWorld
@@ -30,35 +30,7 @@ export function findTopFaceSurfaceVoxel(
   terrainSeed: number,
   preferred = DEFAULT_SITE
 ): SurfaceVoxel {
-  const planetRadius = size / 2;
-  const { voxels } = getWorldGen(size, terrainSeed);
-  const topByColumn = new Map<string, SurfaceVoxel>();
-
-  for (const voxel of voxels) {
-    if (voxel.y < 0) continue;
-    const key = `${voxel.x},${voxel.z}`;
-    const current = topByColumn.get(key);
-    if (!current || voxel.y > current.y) {
-      topByColumn.set(key, { x: voxel.x, y: voxel.y, z: voxel.z });
-    }
-  }
-
-  let best: SurfaceVoxel | null = null;
-  let bestDistanceSq = Number.POSITIVE_INFINITY;
-  for (const voxel of topByColumn.values()) {
-    const dx = voxel.x - preferred.x;
-    const dz = voxel.z - preferred.z;
-    const distanceSq = dx * dx + dz * dz;
-    if (
-      distanceSq < bestDistanceSq ||
-      (distanceSq === bestDistanceSq && best && voxel.y > best.y)
-    ) {
-      best = voxel;
-      bestDistanceSq = distanceSq;
-    }
-  }
-
-  return best ?? { x: 0, y: Math.floor(planetRadius), z: 0 };
+  return getWorldArrivalCandidate(size, terrainSeed, preferred);
 }
 
 export function createWorldArrivalPose(size: number, terrainSeed: number): WorldArrivalPose {

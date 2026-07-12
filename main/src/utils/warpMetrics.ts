@@ -39,6 +39,14 @@ let enabledCache: boolean | null = null;
 let nextSessionId = 1;
 let activeSession: WarpMetricSession | null = null;
 let lastReport: WarpMetricReport | null = null;
+let systemProbeEnabledCache: boolean | null = null;
+
+interface SystemMeasuredSpan {
+  label: string;
+  startedAt: number;
+  durationMs: number;
+  details?: WarpMetricDetails;
+}
 
 function nowMs(): number {
   return typeof performance === 'undefined' ? Date.now() : performance.now();
@@ -112,29 +120,58 @@ export function measureWarpMetric<T>(
   fn: () => T,
   detailsForResult?: (result: T) => WarpMetricDetails | undefined
 ): T {
-  if (!isWarpMetricsEnabled() || !activeSession) return fn();
+  const recordWarp = isWarpMetricsEnabled() && activeSession !== null;
+  const recordSystemProbe = isSystemProbeMeasurementEnabled();
+  if (!recordWarp && !recordSystemProbe) return fn();
 
   const startedAt = nowMs();
   try {
     const result = fn();
-    activeSession.events.push({
-      label,
-      atMs: Number((startedAt - activeSession.startedAt).toFixed(2)),
-      durationMs: Number((nowMs() - startedAt).toFixed(2)),
-      details: cleanDetails(detailsForResult?.(result))
-    });
-    exposeActiveSession();
+    const durationMs = Number((nowMs() - startedAt).toFixed(2));
+    const details = cleanDetails(detailsForResult?.(result));
+    if (recordWarp && activeSession) {
+      activeSession.events.push({
+        label,
+        atMs: Number((startedAt - activeSession.startedAt).toFixed(2)),
+        durationMs,
+        details
+      });
+      exposeActiveSession();
+    }
+    if (recordSystemProbe) recordSystemMeasuredSpan({ label, startedAt, durationMs, details });
     return result;
   } catch (error) {
-    activeSession.events.push({
-      label,
-      atMs: Number((startedAt - activeSession.startedAt).toFixed(2)),
-      durationMs: Number((nowMs() - startedAt).toFixed(2)),
-      details: { threw: true }
-    });
-    exposeActiveSession();
+    const durationMs = Number((nowMs() - startedAt).toFixed(2));
+    if (recordWarp && activeSession) {
+      activeSession.events.push({
+        label,
+        atMs: Number((startedAt - activeSession.startedAt).toFixed(2)),
+        durationMs,
+        details: { threw: true }
+      });
+      exposeActiveSession();
+    }
+    if (recordSystemProbe) {
+      recordSystemMeasuredSpan({ label, startedAt, durationMs, details: { threw: true } });
+    }
     throw error;
   }
+}
+
+function isSystemProbeMeasurementEnabled(): boolean {
+  if (systemProbeEnabledCache !== null) return systemProbeEnabledCache;
+  if (typeof window === 'undefined') return false;
+  systemProbeEnabledCache = new URLSearchParams(window.location.search).get('systemprobe') === '1';
+  return systemProbeEnabledCache;
+}
+
+function recordSystemMeasuredSpan(span: SystemMeasuredSpan): void {
+  if (typeof window === 'undefined') return;
+  const win = window as unknown as { __paravoxiaSystemMeasuredSpans?: SystemMeasuredSpan[] };
+  const spans = win.__paravoxiaSystemMeasuredSpans ?? [];
+  spans.push(span);
+  if (spans.length > 240) spans.splice(0, spans.length - 240);
+  win.__paravoxiaSystemMeasuredSpans = spans;
 }
 
 export function recordWarpMetricFrame(timestamp = nowMs()): void {
