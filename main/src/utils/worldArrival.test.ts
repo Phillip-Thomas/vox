@@ -9,16 +9,20 @@ describe('world arrival poses', () => {
     expect(findTopFaceSurfaceVoxel(50, 12345)).toEqual(findTopFaceSurfaceVoxel(50, 12345));
   });
 
-  it('creates an approach position above the surface spawn, along the outward normal', () => {
+  it('creates the approach and parked ship along the flat top-face normal', () => {
     const pose = createWorldArrivalPose(50, 12345);
     const surf = pose.playerSurfacePosition;
     const appr = pose.approachPosition;
-    // Higher altitude (farther from the planet centre).
-    expect(appr.length()).toBeGreaterThan(surf.length() + 20);
-    // Displaced straight out along the surface's outward radial (not hardcoded +Y).
-    const radial = surf.clone().normalize();
-    const delta = appr.clone().sub(surf).normalize();
-    expect(delta.dot(radial)).toBeGreaterThan(0.99);
+    const approachDelta = appr.clone().sub(surf);
+    expect(approachDelta.x).toBeCloseTo(0);
+    expect(approachDelta.y).toBeCloseTo(30);
+    expect(approachDelta.z).toBeCloseTo(0);
+
+    const surfaceCenterY = pose.surfaceVoxel.y * 2;
+    expect(pose.playerSurfacePosition.x).toBe(pose.shipPosition.x);
+    expect(pose.playerSurfacePosition.z).toBe(pose.shipPosition.z);
+    expect(pose.playerSurfacePosition.y).toBeGreaterThan(surfaceCenterY);
+    expect(pose.shipPosition.y).toBeGreaterThan(surfaceCenterY);
   });
 
   it('keeps the parked ship below the player surface spawn', () => {

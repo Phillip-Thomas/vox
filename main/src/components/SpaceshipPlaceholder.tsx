@@ -58,9 +58,9 @@ export default function SpaceshipPlaceholder({
   );
   const hullGeometry = useMemo(() => createShipHullGeometry(shipHullColors(accent)), [accent]);
   const canopyGeometry = useMemo(() => createShipCanopyGeometry(), []);
-  // Upright on the LOCAL surface (radial up), nose along the direction the
-  // cockpit faced at touchdown — never a fixed world rotation, which reads
-  // upside down after landing on the bottom face of the cube planet.
+  // Upright on the supporting CUBE FACE normal, nose along the direction the
+  // cockpit faced at touchdown — never radial up (which visibly leans toward
+  // cube edges) or a fixed world rotation (which fails on non-top faces).
   const parkedQuat = useMemo(() => {
     const q = shipParkedOrientation(position);
     // Crashed attitude: settle the hull off level — a pitch dug into the impact

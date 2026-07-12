@@ -19,6 +19,8 @@ import {
   samePlanetAddress,
   samePlanetWorldId,
   sameSystemCoordinate,
+  starProfileForSystem,
+  systemPlanetCount,
   type PlanetDescriptor,
   type Vec3Tuple
 } from './starSystem.ts';
@@ -82,6 +84,23 @@ describe('star-system identity', () => {
     expect(samePlanetAddress(companion, { system: { x: 3, y: -5 }, slot: 1 })).toBe(true);
     expect(samePlanetWorldId(planetWorldId(primary), createPlanetIdentity(primary))).toBe(true);
     expect(samePlanetWorldId(createPlanetIdentity(primary), createPlanetIdentity(companion))).toBe(false);
+  });
+});
+
+describe('remote-scan helpers', () => {
+  it('starProfileForSystem matches the manifest star without building planets', () => {
+    for (const coordinate of [{ x: 0, y: 0 }, { x: -19, y: -17 }, { x: 313, y: -278 }]) {
+      expect(starProfileForSystem(coordinate)).toEqual(buildStarSystemManifest(coordinate).star);
+    }
+  });
+
+  it('systemPlanetCount matches the default manifest population', () => {
+    for (let x = -12; x <= 12; x += 3) {
+      for (let y = -12; y <= 12; y += 3) {
+        expect(systemPlanetCount({ x, y }))
+          .toBe(buildStarSystemManifest({ x, y }).planets.length);
+      }
+    }
   });
 });
 

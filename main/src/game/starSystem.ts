@@ -142,6 +142,33 @@ export function samePlanetWorldId(a: PlanetWorldRef, b: PlanetWorldRef): boolean
   return worldIdOf(a) === worldIdOf(b);
 }
 
+/**
+ * The system's star identity WITHOUT building planet identities — cheap enough
+ * for the remote-marker layer to derive one per visible neighbor system.
+ * Deterministically identical to `buildStarSystemManifest(coordinate).star`.
+ */
+export function starProfileForSystem(coordinate: SystemCoordinate): StarProfile {
+  const system = normalizeCoordinate(coordinate);
+  const systemSeed = nonZeroHash(`${SYSTEM_LAYOUT_SEED_NAMESPACE}:${system.x}:${system.y}`);
+  return {
+    seed: nonZeroHash(`${SYSTEM_LAYOUT_SEED_NAMESPACE}:star:${system.x}:${system.y}`),
+    hue: 0.06 + seededUnit(systemSeed, 701) * 0.1,
+    intensity: 0.9 + seededUnit(systemSeed, 709) * 0.35
+  };
+}
+
+/**
+ * Deterministic DEFAULT planet population of a system (no fixture overrides) —
+ * what a remote scanner may truthfully report before the system is visited.
+ * Matches `buildStarSystemManifest(coordinate).planets.length` for the default
+ * build. Story/fixture overrides apply only when the system materializes.
+ */
+export function systemPlanetCount(coordinate: SystemCoordinate): 1 | 2 | 3 {
+  const system = normalizeCoordinate(coordinate);
+  const systemSeed = nonZeroHash(`${SYSTEM_LAYOUT_SEED_NAMESPACE}:${system.x}:${system.y}`);
+  return planetCountForSystemSeed(systemSeed);
+}
+
 export function buildStarSystemManifest(
   coordinate: SystemCoordinate,
   options: BuildStarSystemOptions = {}
@@ -171,11 +198,7 @@ export function buildStarSystemManifest(
     systemSeed,
     layoutVersion: SYSTEM_LAYOUT_VERSION,
     planetIdentityVersion: PLANET_IDENTITY_VERSION,
-    star: {
-      seed: nonZeroHash(`${SYSTEM_LAYOUT_SEED_NAMESPACE}:star:${system.x}:${system.y}`),
-      hue: 0.06 + seededUnit(systemSeed, 701) * 0.1,
-      intensity: 0.9 + seededUnit(systemSeed, 709) * 0.35
-    },
+    star: starProfileForSystem(system),
     planets
   };
 }

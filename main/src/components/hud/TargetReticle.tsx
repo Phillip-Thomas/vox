@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSpaceFlight } from '../../state/spaceFlight.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { getEngageState } from '../ShipController.tsx';
 import { useSystemFlight } from '../../state/systemFlight.ts';
+import { systemPlanetCount } from '../../game/starSystem.ts';
+import { isStoryWorld } from '../../story/world/storyWorld.ts';
 
 /**
  * Centred deep-space targeting reticle. Shown only when an impostor is locked in
@@ -21,6 +23,12 @@ const TargetReticle: React.FC = () => {
   const interstellarTarget = localTarget ? null : target;
   const active = phase === 'deep_space' && (localTarget !== null || interstellarTarget !== null);
   const touch = isTouchDevice();
+  // Long-range scan of the locked sun: how many worlds orbit it. Deterministic
+  // default population — story worlds are authored single-body.
+  const scannedWorlds = useMemo(() => {
+    if (!interstellarTarget) return null;
+    return isStoryWorld(interstellarTarget) ? 1 : systemPlanetCount(interstellarTarget);
+  }, [interstellarTarget]);
 
   useEffect(() => {
     if (!active || localTarget) {
@@ -93,6 +101,11 @@ const TargetReticle: React.FC = () => {
       <div style={{ fontWeight: 'bold', letterSpacing: 1 }}>
         {pct >= 100 ? 'ENGAGING' : '▶ LOCK'} {interstellarTarget.x},{interstellarTarget.y}
       </div>
+      {scannedWorlds !== null && (
+        <div style={{ opacity: 0.9, marginTop: 2, color: '#ffd9a0', letterSpacing: 1 }}>
+          REMOTE STAR · {scannedWorlds} {scannedWorlds === 1 ? 'WORLD' : 'WORLDS'}
+        </div>
+      )}
       <div style={{ opacity: 0.8, marginTop: 2 }}>{prompt}</div>
       <div style={{
         marginTop: 5,

@@ -3,8 +3,10 @@ import {
   LOCAL_SYSTEM_FLIGHT_CAMERA_FAR,
   MAX_LOCAL_SYSTEM_BODY_SEPARATION,
   REMOTE_SYSTEM_BASE_DISTANCE,
+  REMOTE_SYSTEM_MAX_HALO_DEGREES,
   angularDiameterRadians,
   maxRemoteSystemAngularDiameter,
+  maxRemoteSystemCoreAngularDiameter,
   minLocalPlanetAngularDiameter,
   remoteSystemProxyTriangleBudget
 } from './celestialRenderScale.ts';
@@ -28,9 +30,14 @@ describe('celestial render scale', () => {
     expect(LOCAL_SYSTEM_FLIGHT_CAMERA_FAR).toBeGreaterThan(REMOTE_SYSTEM_BASE_DISTANCE);
   });
 
-  it('keeps the whole remote marker at least three times smaller than a local planet', () => {
-    expect(minLocalPlanetAngularDiameter() / maxRemoteSystemAngularDiameter()).toBeGreaterThan(3);
-    expect(maxRemoteSystemAngularDiameter() * 180 / Math.PI).toBeLessThan(0.5);
+  it('keeps the sun-core silhouette at least three times smaller than a local planet', () => {
+    expect(minLocalPlanetAngularDiameter() / maxRemoteSystemCoreAngularDiameter()).toBeGreaterThan(3);
+    expect(maxRemoteSystemCoreAngularDiameter() * 180 / Math.PI).toBeLessThan(0.5);
+  });
+
+  it('caps the translucent halo envelope at its documented angular budget', () => {
+    expect(maxRemoteSystemAngularDiameter() * 180 / Math.PI)
+      .toBeLessThan(REMOTE_SYSTEM_MAX_HALO_DEGREES);
   });
 
   it('projects finite angular diameters defensively', () => {

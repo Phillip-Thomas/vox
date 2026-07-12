@@ -6,11 +6,6 @@ import {
   coordinateToSeed,
   seededUnit
 } from '../utils/worldCoordinates';
-import {
-  WorldPreviewTraits,
-  deriveWorldPreviewTraits,
-  previewSurfaceValue
-} from '../utils/worldPreview';
 import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
 import {
   getSystemFlightSnapshot,
@@ -20,21 +15,20 @@ import {
   atmosphereSpaceBlend,
   planetLocalCameraRadius
 } from '../game/atmosphereSpace.ts';
-import { NOMINAL_PLANET_FACE_RADIUS } from '../game/starSystem.ts';
+import {
+  NOMINAL_PLANET_FACE_RADIUS,
+  starProfileForSystem
+} from '../game/starSystem.ts';
 import {
   REMOTE_SYSTEM_BASE_DISTANCE,
   REMOTE_SYSTEM_DISTANCE_JITTER,
   REMOTE_SYSTEM_DISTANCE_PER_GRID,
-  REMOTE_SYSTEM_ATMOSPHERE_RINGS,
-  REMOTE_SYSTEM_ATMOSPHERE_SEGMENTS,
-  REMOTE_SYSTEM_CLOUD_DETAIL,
+  REMOTE_SYSTEM_GLOW_SCALE,
+  REMOTE_SYSTEM_LOCK_RING_SEGMENTS,
   REMOTE_SYSTEM_MAX_VISIBLE_MARKERS,
   REMOTE_SYSTEM_RADIUS_JITTER,
   REMOTE_SYSTEM_RADIUS_MAX,
-  REMOTE_SYSTEM_RADIUS_MIN,
-  REMOTE_SYSTEM_RING_SCALE,
-  REMOTE_SYSTEM_RING_SEGMENTS,
-  REMOTE_SYSTEM_SURFACE_DETAIL
+  REMOTE_SYSTEM_RADIUS_MIN
 } from '../game/celestialRenderScale.ts';
 
 interface GalaxyImpostorsProps {
@@ -43,24 +37,51 @@ interface GalaxyImpostorsProps {
   activePlanetSystemPosition: SystemVectorTuple;
 }
 
-interface PlanetImpostor {
+declare global {
+  interface Window {
+    __paravoxiaSunMarkersProbe?: {
+      getState(): {
+        markerCount: number;
+        reveal: number;
+        groupVisible: boolean;
+        ancestorsVisible: boolean;
+        instanceCount: number;
+        uReveal: number;
+        meshInScene: boolean;
+        samplePositions: Array<[number, number, number]>;
+        /** NDC-projected marker centers for the CURRENT camera: [x, y, behind]. */
+        screenPositions: Array<[number, number, boolean]>;
+      };
+      /** Multiply the glint brightness for visibility debugging (1 = normal). */
+      setDebugGain(gain: number): void;
+      /** Swap the glint shader for a solid magenta basic material (debug). */
+      setDebugSolid(on: boolean): void;
+    };
+  }
+}
+
+/**
+ * A neighbor STAR SYSTEM rendered as its sun: an additive glint (hot core +
+ * soft halo) colored by the system's deterministic StarProfile. Deliberately
+ * NOT a planet disc — local companion planets own the "physical body" look;
+ * remote systems read as distant suns you aim at and warp to. What orbits a
+ * sun is the scanner's job to report (the lock reticle shows the world count).
+ */
+interface RemoteSystemMarker {
   coordinate: WorldCoordinate;
   seed: number;
+  /** Camera-relative offset (the layer group is anchored to the camera). */
   position: THREE.Vector3;
-  radius: number;
-  rotation: THREE.Euler;
-  traits: WorldPreviewTraits;
-  hasRings: boolean;
-  ringColor: THREE.Color;
-  ringRotation: THREE.Euler;
-  ringScale: THREE.Vector3;
+  /** Hot-core radius in world units; the glow extends GLOW_SCALE x this. */
+  coreRadius: number;
+  color: THREE.Color;
 }
 
 const GRID_RADIUS = 8;
 const INNER_GRID_RADIUS = 2.85;
 // Remote coordinates are unresolved STAR-SYSTEM markers, not local planets.
-// Their entire silhouette (including rings) stays below 0.5 degrees and their
-// render band sits behind the widest possible local companion pair. Canonical
+// Their entire glow envelope stays below 0.5 degrees and their render band
+// sits behind the widest possible local companion pair. Canonical
 // direct-flight positions are a later sector-streaming concern; this bounded
 // background representation must never pretend to be a nearby physical body.
 const MIN_ELEVATION = 0.08;
@@ -80,23 +101,96 @@ function impostorReveal(spaceBlend: number): number {
   return t * t * (3 - 2 * t);
 }
 
-const COLOR_SCRATCH = new THREE.Color();
-const LIGHT_DIRECTION = new THREE.Vector3(-0.35, 0.78, 0.5).normalize();
-
-/** Aim cone for target lock: dot(camForward, impostorDir) above this (~10deg). */
+/** Aim cone for target lock: dot(camForward, markerDir) above this (~10deg). */
 const AIM_COS = 0.985;
-/** Slightly inflated planet silhouette used for target line-of-sight checks. */
+/** Slightly inflated core silhouette used for target line-of-sight checks. */
 const OCCLUSION_RADIUS_SCALE = 1.08;
 /** The loaded voxel planet is cube-like; its visual corners reach faceRadius*sqrt(3). */
 const LOCAL_PLANET_OCCLUSION_SCALE = Math.sqrt(3);
 /** Targeting reticle ring colour (cheap unlit). */
 const LOCK_COLOR = new THREE.Color('#7dffb0');
-/** Reused scratch quaternion for billboarding the lock ring (no per-frame alloc). */
-const BILLBOARD_SCRATCH = new THREE.Quaternion();
+/** How fast the lock highlight eases in/out. */
+const LOCK_EASE_DAMPING = 8;
 
-function isPlanetOccludedByCloserPlanet(
-  target: PlanetImpostor,
-  planets: PlanetImpostor[],
+const SUN_MARKER_PROGRAM_KEY = 'remote-system-sun-marker-v3';
+
+// One InstancedMesh draws every sun glint — the same instanceMatrix +
+// instanceColor pipeline the companion exact-water shells already prove out
+// in production. Billboarding is done CPU-side (32 matrix composes per frame);
+// the fragment stage composes a white-hot core, a wide soft halo, and faint
+// horizontal/vertical cross-flares — the classic "that is a sun" signature no
+// starfield dot has. Prominence comes from the bright core + flares; the hard
+// silhouette stays inside the angular hierarchy gate (core 3x under any local
+// planet, halo under the smallest).
+const SUN_MARKER_VERTEX_SHADER = /* glsl */`
+  varying vec2 vPlane;
+  varying vec3 vColor;
+
+  void main() {
+    vec4 localPosition = vec4(position, 1.0);
+    #ifdef USE_INSTANCING
+      localPosition = instanceMatrix * localPosition;
+    #endif
+    #ifdef USE_INSTANCING_COLOR
+      vColor = instanceColor;
+    #else
+      vColor = vec3(1.0);
+    #endif
+    vPlane = position.xy;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * localPosition;
+  }
+`;
+
+const SUN_MARKER_FRAGMENT_SHADER = /* glsl */`
+  uniform float uReveal;
+  varying vec2 vPlane;
+  varying vec3 vColor;
+
+  void main() {
+    float r2 = dot(vPlane, vPlane);
+    if (r2 > 1.0) discard;
+    // Soft window so neither halo nor flares hard-clip at the quad rim.
+    float window = 1.0 - smoothstep(0.72, 1.0, r2);
+    // Tight saturated core, generous halo, long thin cross-flares. Total
+    // energy is high on purpose: the glint must also punch through bright
+    // nebula regions, where additive light needs headroom to read at all.
+    float core = exp(-r2 * 42.0) * 3.4;
+    float halo = exp(-r2 * 2.0) * 0.6;
+    float flare = (exp(-abs(vPlane.x) * 26.0) + exp(-abs(vPlane.y) * 26.0))
+      * exp(-r2 * 1.5) * 0.55;
+    // The center whites out like a real sun; the tint owns the halo/flares.
+    vec3 sunColor = mix(vColor, vec3(1.0), clamp(core * 0.4, 0.0, 0.85));
+    vec3 color = sunColor * (core + halo + flare) * window * uReveal;
+    if (max(color.r, max(color.g, color.b)) < 0.004) discard;
+    gl_FragColor = vec4(color, 1.0);
+  }
+`;
+
+function createSunMarkerMaterial(): THREE.ShaderMaterial {
+  const material = new THREE.ShaderMaterial({
+    name: 'remote-system-sun-marker',
+    vertexShader: SUN_MARKER_VERTEX_SHADER,
+    fragmentShader: SUN_MARKER_FRAGMENT_SHADER,
+    uniforms: { uReveal: { value: 0 } },
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: true,
+    side: THREE.DoubleSide,
+    fog: false,
+    toneMapped: false
+  });
+  material.userData = {
+    remoteSystemMarker: true,
+    programStrategy: SUN_MARKER_PROGRAM_KEY
+  };
+  material.customProgramCacheKey = () => SUN_MARKER_PROGRAM_KEY;
+  return material;
+}
+
+function isMarkerOccludedByCloserMarker(
+  target: RemoteSystemMarker,
+  markers: RemoteSystemMarker[],
   targetDistance: number
 ): boolean {
   if (targetDistance < 1e-3) return false;
@@ -105,7 +199,7 @@ function isPlanetOccludedByCloserPlanet(
   const dirY = target.position.y * invTargetDistance;
   const dirZ = target.position.z * invTargetDistance;
 
-  for (const blocker of planets) {
+  for (const blocker of markers) {
     if (blocker === target) continue;
     const projection =
       blocker.position.x * dirX +
@@ -115,7 +209,7 @@ function isPlanetOccludedByCloserPlanet(
 
     const blockerDistanceSq = blocker.position.lengthSq();
     const closestDistanceSq = Math.max(0, blockerDistanceSq - projection * projection);
-    const occlusionRadius = blocker.radius * OCCLUSION_RADIUS_SCALE;
+    const occlusionRadius = blocker.coreRadius * OCCLUSION_RADIUS_SCALE;
     if (closestDistanceSq <= occlusionRadius * occlusionRadius) {
       return true;
     }
@@ -124,8 +218,8 @@ function isPlanetOccludedByCloserPlanet(
   return false;
 }
 
-function isPlanetOccludedByLoadedWorld(
-  target: PlanetImpostor,
+function isMarkerOccludedByLoadedWorld(
+  target: RemoteSystemMarker,
   cameraPosition: THREE.Vector3,
   targetDistance: number,
   planetSize: number
@@ -147,7 +241,7 @@ function isPlanetOccludedByLoadedWorld(
   return closestDistanceSq <= occlusionRadius * occlusionRadius;
 }
 
-function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImpostor[] {
+function buildRemoteSystemMarkers(currentCoordinate: WorldCoordinate): RemoteSystemMarker[] {
   const candidates: Array<{
     dx: number;
     dy: number;
@@ -204,263 +298,185 @@ function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImposto
       );
 
       const nearFactor = THREE.MathUtils.clamp(1 - candidate.gridDistance / GRID_RADIUS, 0, 1);
-      const radius = THREE.MathUtils.lerp(
+      const coreRadius = THREE.MathUtils.lerp(
         REMOTE_SYSTEM_RADIUS_MIN,
         REMOTE_SYSTEM_RADIUS_MAX,
         nearFactor
       ) + seededUnit(candidate.seed, 29) * REMOTE_SYSTEM_RADIUS_JITTER;
-      const ringTilt = 0.35 + seededUnit(candidate.seed, 53) * 0.85;
-      const traits = deriveWorldPreviewTraits(candidate.seed);
+
+      const star = starProfileForSystem(candidate.coordinate);
+      const color = new THREE.Color()
+        .setHSL(star.hue, 0.68, 0.62)
+        .multiplyScalar(star.intensity);
 
       return {
         coordinate: candidate.coordinate,
         seed: candidate.seed,
         position,
-        radius,
-        rotation: new THREE.Euler(
-          seededUnit(candidate.seed, 71) * Math.PI,
-          seededUnit(candidate.seed, 73) * Math.PI * 2,
-          seededUnit(candidate.seed, 79) * Math.PI
-        ),
-        traits,
-        hasRings: seededUnit(candidate.seed, 61) > 0.9 && candidate.gridDistance > 1.5,
-        ringColor: new THREE.Color().setHSL(0.09 + seededUnit(candidate.seed, 67) * 0.08, 0.28, 0.62),
-        ringRotation: new THREE.Euler(
-          Math.cos(azimuth) * ringTilt,
-          azimuth,
-          Math.sin(azimuth) * ringTilt
-        ),
-        ringScale: new THREE.Vector3(
-          radius * REMOTE_SYSTEM_RING_SCALE,
-          radius * REMOTE_SYSTEM_RING_SCALE,
-          radius * REMOTE_SYSTEM_RING_SCALE
-        )
+        coreRadius,
+        color
       };
     });
 }
 
-function createPlanetSurfaceGeometry(planet: PlanetImpostor) {
-  // The marker is <0.5deg including its ring. Detail 2 already oversamples its
-  // framebuffer footprint while avoiding ~4,800 invisible triangles per system.
-  const geometry = new THREE.IcosahedronGeometry(1, REMOTE_SYSTEM_SURFACE_DETAIL);
-  const position = geometry.getAttribute('position');
-  const colors = new Float32Array(position.count * 3);
-  const normal = new THREE.Vector3();
-  const iceColor = new THREE.Color(0xd9e7ed);
+function createSunMarkerMesh(
+  markers: RemoteSystemMarker[],
+  material: THREE.ShaderMaterial
+): THREE.InstancedMesh {
+  const quad = new THREE.PlaneGeometry(2, 2);
+  quad.name = 'remote-system-sun-marker-quad';
+  const mesh = new THREE.InstancedMesh(quad, material, markers.length);
+  mesh.name = 'remote-system-sun-markers';
+  mesh.count = markers.length;
+  mesh.frustumCulled = false;
+  // Billboard matrices are recomposed every frame from the camera orientation.
+  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  markers.forEach((marker, index) => mesh.setColorAt(index, marker.color));
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  mesh.userData = {
+    remoteSystemMarker: true,
+    programStrategy: SUN_MARKER_PROGRAM_KEY
+  };
+  return mesh;
+}
 
-  for (let i = 0; i < position.count; i++) {
-    normal
-      .set(position.getX(i), position.getY(i), position.getZ(i))
-      .normalize();
+const MATRIX_SCRATCH = new THREE.Matrix4();
+const SCALE_SCRATCH = new THREE.Vector3();
 
-    const surfaceValue = previewSurfaceValue(normal, planet.traits);
-    const latitude = Math.abs(normal.y);
-    const shade = 0.68 + Math.max(0, normal.dot(LIGHT_DIRECTION)) * 0.32;
-    if (surfaceValue < planet.traits.oceanCoverage) {
-      COLOR_SCRATCH.copy(planet.traits.oceanColor);
-      COLOR_SCRATCH.offsetHSL(0, 0, (planet.traits.oceanCoverage - surfaceValue) * -0.12);
-    } else if (latitude > planet.traits.iceCoverage) {
-      COLOR_SCRATCH.copy(iceColor);
-    } else if (surfaceValue > 0.78 - planet.traits.relief * 0.12) {
-      COLOR_SCRATCH.copy(planet.traits.rockColor);
-    } else {
-      COLOR_SCRATCH.copy(planet.traits.landColor).lerp(
-        planet.traits.rockColor,
-        Math.max(0, surfaceValue - 0.58) * (0.9 + planet.traits.relief)
-      );
-    }
-    COLOR_SCRATCH.multiplyScalar(shade);
-    colors[i * 3] = COLOR_SCRATCH.r;
-    colors[i * 3 + 1] = COLOR_SCRATCH.g;
-    colors[i * 3 + 2] = COLOR_SCRATCH.b;
+function billboardSunMarkers(
+  mesh: THREE.InstancedMesh,
+  markers: RemoteSystemMarker[],
+  cameraQuaternion: THREE.Quaternion
+): void {
+  for (let index = 0; index < markers.length; index++) {
+    const marker = markers[index];
+    const size = marker.coreRadius * REMOTE_SYSTEM_GLOW_SCALE;
+    MATRIX_SCRATCH.compose(
+      marker.position,
+      cameraQuaternion,
+      SCALE_SCRATCH.setScalar(size)
+    );
+    mesh.setMatrixAt(index, MATRIX_SCRATCH);
   }
-
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  return geometry;
+  mesh.instanceMatrix.needsUpdate = true;
 }
 
-function DistantPlanet({
-  planet,
-  surfaceMaterial,
-  lockRingGeometry,
-  cloudGeometry,
-  atmosphereGeometry,
-  ringGeometry,
-  targetedCoordRef,
-  revealRef
-}: {
-  planet: PlanetImpostor;
-  surfaceMaterial: THREE.Material;
-  lockRingGeometry: THREE.BufferGeometry;
-  cloudGeometry: THREE.BufferGeometry;
-  atmosphereGeometry: THREE.BufferGeometry;
-  ringGeometry: THREE.BufferGeometry;
-  /** Live coordinate of the impostor currently locked (null = none). */
-  targetedCoordRef: React.MutableRefObject<WorldCoordinate | null>;
-  revealRef: React.MutableRefObject<number>;
-}) {
-  const surfaceGeometry = useMemo(() => createPlanetSurfaceGeometry(planet), [planet]);
-  const groupRef = useRef<THREE.Group>(null);
-  const lockRef = useRef<THREE.Mesh>(null);
-  const cloudMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const atmosphereMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const ringMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
-  // Smoothly-eased lock factor (0 = idle, 1 = fully locked) for scale + ring.
-  const lockT = useRef(0);
-
-  useEffect(() => {
-    return () => surfaceGeometry.dispose();
-  }, [surfaceGeometry]);
-
-  useFrame(({ camera }, rawDt) => {
-    const grp = groupRef.current;
-    if (!grp) return;
-    const dt = Math.min(rawDt, 1 / 30);
-    const tc = targetedCoordRef.current;
-    const isTargeted =
-      tc !== null && tc.x === planet.coordinate.x && tc.y === planet.coordinate.y;
-    // Ease toward the target lock state (cheap, no allocation).
-    lockT.current = THREE.MathUtils.damp(lockT.current, isTargeted ? 1 : 0, 8, dt);
-    // Lock feedback belongs to the reticle. Growing the body would falsely read
-    // as closing distance to a camera-anchored remote marker.
-    grp.scale.setScalar(planet.radius);
-    const reveal = revealRef.current;
-    if (cloudMaterialRef.current) cloudMaterialRef.current.opacity = 0.055 * reveal;
-    if (atmosphereMaterialRef.current) atmosphereMaterialRef.current.opacity = 0.06 * reveal;
-    if (ringMaterialRef.current) ringMaterialRef.current.opacity = 0.34 * reveal;
-    const lock = lockRef.current;
-    if (lock) {
-      lock.visible = lockT.current > 0.01;
-      if (lock.visible) {
-        // Pulse the ring opacity while locked.
-        const pulse = 0.55 + 0.45 * Math.sin(performance.now() * 0.006);
-        (lock.material as THREE.MeshBasicMaterial).opacity = lockT.current * pulse * reveal;
-        lock.scale.setScalar(1.6 + 0.25 * lockT.current);
-        // Billboard the ring to face the camera (counter the parent's random tilt).
-        lock.quaternion.copy(camera.quaternion);
-        lock.quaternion.premultiply(grp.getWorldQuaternion(BILLBOARD_SCRATCH).invert());
-      }
-    }
-  });
-
-  return (
-    <group
-      ref={groupRef}
-      position={[planet.position.x, planet.position.y, planet.position.z]}
-      rotation={planet.rotation}
-      scale={planet.radius}
-    >
-      {/* Billboarded lock ring — hidden until this impostor is the aim target. */}
-      <mesh ref={lockRef} geometry={lockRingGeometry} visible={false} frustumCulled={false}>
-        <meshBasicMaterial
-          color={LOCK_COLOR}
-          transparent
-          opacity={0}
-          side={THREE.DoubleSide}
-          depthWrite={false}
-          depthTest
-          fog={false}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh geometry={surfaceGeometry} material={surfaceMaterial} frustumCulled={false} />
-      <mesh geometry={cloudGeometry} scale={1.022} frustumCulled={false}>
-        <meshBasicMaterial
-          ref={cloudMaterialRef}
-          color={planet.traits.cloudColor}
-          transparent
-          opacity={0}
-          depthWrite={false}
-          fog={false}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh geometry={atmosphereGeometry} scale={1.08} frustumCulled={false}>
-        <meshBasicMaterial
-          ref={atmosphereMaterialRef}
-          color={planet.traits.atmosphereColor}
-          transparent
-          opacity={0}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-          side={THREE.BackSide}
-          fog={false}
-          toneMapped={false}
-        />
-      </mesh>
-
-      {planet.hasRings && (
-        <mesh
-          geometry={ringGeometry}
-          position={[0, 0, 0]}
-          rotation={planet.ringRotation}
-          scale={planet.ringScale.clone().multiplyScalar(1 / planet.radius)}
-          frustumCulled={false}
-        >
-          <meshBasicMaterial
-            ref={ringMaterialRef}
-            color={planet.ringColor}
-            transparent
-            opacity={0}
-            side={THREE.DoubleSide}
-            depthWrite={false}
-            fog={false}
-            toneMapped={false}
-          />
-        </mesh>
-      )}
-    </group>
-  );
-}
-
+/**
+ * Neighbor star systems, rendered as SUN GLINTS in a single instanced draw.
+ * The layer group is camera-anchored (a stable background band — canonical
+ * direct-flight positions are a later sector-streaming concern) and fades in
+ * over the top of the atmosphere→space blend. Aim-cone targeting for the
+ * interstellar warp works exactly as before; the lock ring marks the aimed
+ * sun and the DOM reticle reports the system's world count.
+ */
 export default function GalaxyImpostors({
   currentCoordinate,
   planetSize,
   activePlanetSystemPosition
 }: GalaxyImpostorsProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const lockRef = useRef<THREE.Mesh>(null);
   const revealRef = useRef(0);
+  const lockT = useRef(0);
+  const debugGainRef = useRef(1);
+  const probeCameraRef = useRef<THREE.Camera | null>(null);
 
-  const planets = useMemo(
-    () => buildPlanetImpostors(currentCoordinate),
+  const markers = useMemo(
+    () => buildRemoteSystemMarkers(currentCoordinate),
     [currentCoordinate.x, currentCoordinate.y]
   );
-
-  const cloudGeometry = useMemo(
-    () => new THREE.IcosahedronGeometry(1, REMOTE_SYSTEM_CLOUD_DETAIL),
-    []
-  );
-  const atmosphereGeometry = useMemo(() => new THREE.SphereGeometry(
-    1,
-    REMOTE_SYSTEM_ATMOSPHERE_SEGMENTS,
-    REMOTE_SYSTEM_ATMOSPHERE_RINGS
-  ), []);
-  const ringGeometry = useMemo(
-    () => new THREE.RingGeometry(0.74, 1.05, REMOTE_SYSTEM_RING_SEGMENTS),
-    []
+  const markerMaterial = useMemo(() => createSunMarkerMaterial(), []);
+  const markerMesh = useMemo(
+    () => createSunMarkerMesh(markers, markerMaterial),
+    [markers, markerMaterial]
   );
   // Thin reticle ring for the aim-lock highlight (unit-radius, scaled per-frame).
   const lockRingGeometry = useMemo(
-    () => new THREE.RingGeometry(0.92, 1.0, REMOTE_SYSTEM_RING_SEGMENTS),
+    () => new THREE.RingGeometry(0.92, 1.0, REMOTE_SYSTEM_LOCK_RING_SEGMENTS),
     []
   );
-  const surfaceMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-    vertexColors: true,
-    fog: false,
-    toneMapped: false,
-    // Transparent so the whole layer can fade with the atmosphere→space blend;
-    // depth testing keeps local bodies in front while disabled writes avoid a
-    // partly faded marker occluding another remote system.
-    transparent: true,
-    opacity: 0,
-    depthWrite: false
-  }), []);
 
-  // Live coordinate of the impostor currently aimed at (read by each impostor's
-  // own useFrame to drive its highlight). Mutated in place, never re-renders.
+  // Live coordinate of the marker currently aimed at (read per-frame to drive
+  // the lock ring). Mutated in place, never re-renders.
   const targetedCoordRef = useRef<WorldCoordinate | null>(null);
   // Reused scratch for the camera-forward direction (no per-frame allocation).
   const forwardScratch = useRef(new THREE.Vector3());
+
+  useEffect(() => () => {
+    markerMesh.geometry.dispose();
+    markerMesh.dispose();
+  }, [markerMesh]);
+  useEffect(() => () => {
+    markerMaterial.dispose();
+    lockRingGeometry.dispose();
+  }, [markerMaterial, lockRingGeometry]);
+
+  // Headless-probe introspection (mirrors __paravoxiaShipProbe's gating): lets
+  // verification scripts confirm the layer's live render state without
+  // reaching into the R3F store.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('systemprobe') !== '1') return undefined;
+    const projectScratch = new THREE.Vector3();
+    const probe = {
+      getState: () => {
+        const group = groupRef.current;
+        let ancestorsVisible = true;
+        for (let node = group?.parent ?? null; node; node = node.parent) {
+          if (!node.visible) ancestorsVisible = false;
+        }
+        let meshInScene = false;
+        group?.traverse(node => {
+          if (node === markerMesh) meshInScene = true;
+        });
+        const camera = probeCameraRef.current;
+        const screenPositions = markers.map(marker => {
+          if (!camera || !group) return [0, 0, true] as [number, number, boolean];
+          projectScratch.copy(marker.position).add(group.position).project(camera);
+          return [
+            projectScratch.x,
+            projectScratch.y,
+            projectScratch.z > 1 || projectScratch.z < -1
+          ] as [number, number, boolean];
+        });
+        return {
+          markerCount: markers.length,
+          reveal: revealRef.current,
+          groupVisible: group?.visible ?? false,
+          ancestorsVisible,
+          instanceCount: markerMesh.count,
+          uReveal: markerMaterial.uniforms.uReveal.value as number,
+          meshInScene,
+          samplePositions: markers.slice(0, 4).map(marker =>
+            [marker.position.x, marker.position.y, marker.position.z] as [number, number, number]),
+          screenPositions
+        };
+      },
+      setDebugGain: (gain: number) => {
+        debugGainRef.current = Number.isFinite(gain) ? Math.max(0, gain) : 1;
+      },
+      setDebugSolid: (on: boolean) => {
+        if (on) {
+          markerMesh.material = new THREE.MeshBasicMaterial({
+            color: '#ff00ff',
+            side: THREE.DoubleSide,
+            depthTest: false,
+            depthWrite: false,
+            fog: false,
+            toneMapped: false
+          });
+        } else {
+          if (markerMesh.material !== markerMaterial) {
+            (markerMesh.material as THREE.Material).dispose();
+          }
+          markerMesh.material = markerMaterial;
+        }
+      }
+    };
+    window.__paravoxiaSunMarkersProbe = probe;
+    return () => {
+      if (window.__paravoxiaSunMarkersProbe === probe) delete window.__paravoxiaSunMarkersProbe;
+    };
+  }, [markers, markerMesh, markerMaterial]);
 
   useFrame(({ camera }, rawDt) => {
     const group = groupRef.current;
@@ -477,11 +493,12 @@ export default function GalaxyImpostors({
         NOMINAL_PLANET_FACE_RADIUS
       )
     );
+    const dt = Math.min(rawDt, 0.05);
     const reveal = THREE.MathUtils.damp(
       revealRef.current,
       targetReveal,
       IMPOSTOR_REVEAL_DAMPING,
-      Math.min(rawDt, 0.05)
+      dt
     );
     revealRef.current = targetReveal === 0 && reveal < 0.001
       ? 0
@@ -489,85 +506,100 @@ export default function GalaxyImpostors({
         ? 1
         : reveal;
     if (group) group.visible = reveal > 0.002;
-    surfaceMaterial.opacity = reveal;
+    markerMaterial.uniforms.uReveal.value = reveal * debugGainRef.current;
+    probeCameraRef.current = camera;
+    if (reveal > 0.002) billboardSunMarkers(markerMesh, markers, camera.quaternion);
 
     // --- aim-cone targeting (deep_space only, once the layer is revealed) ----
     const localBodyOwnsAim = flight.target?.kind === 'system_body';
-    if (getSpaceFlightSnapshot().phase !== 'deep_space' || localBodyOwnsAim || reveal < 0.97) {
-      if (targetedCoordRef.current !== null) {
-        targetedCoordRef.current = null;
-        setTarget(null);
-      }
-      return;
+    const aimEnabled =
+      getSpaceFlightSnapshot().phase === 'deep_space' && !localBodyOwnsAim && reveal >= 0.97;
+    if (!aimEnabled && targetedCoordRef.current !== null) {
+      targetedCoordRef.current = null;
+      setTarget(null);
     }
 
-    // Camera forward in world space (-Z). Each impostor's `position` is its
-    // offset from the camera-anchored group origin, i.e. its direction*distance
-    // from the camera, so the dot of the normalized offset with forward is the
-    // alignment.
-    const forward = forwardScratch.current.set(0, 0, -1).applyQuaternion(camera.quaternion);
-    let best: PlanetImpostor | null = null;
-    let bestDot = AIM_COS;
-    for (const planet of planets) {
-      const pos = planet.position;
-      const len = pos.length();
-      if (len < 1e-3) continue;
-      const dot = (pos.x * forward.x + pos.y * forward.y + pos.z * forward.z) / len;
-      if (dot > bestDot) {
-        if (isPlanetOccludedByLoadedWorld(planet, camera.position, len, planetSize)) continue;
-        if (isPlanetOccludedByCloserPlanet(planet, planets, len)) continue;
-        bestDot = dot;
-        best = planet;
+    if (aimEnabled) {
+      // Camera forward in world space (-Z). Each marker's `position` is its
+      // offset from the camera-anchored group origin, i.e. its direction*distance
+      // from the camera, so the dot of the normalized offset with forward is the
+      // alignment.
+      const forward = forwardScratch.current.set(0, 0, -1).applyQuaternion(camera.quaternion);
+      let best: RemoteSystemMarker | null = null;
+      let bestDot = AIM_COS;
+      for (const marker of markers) {
+        const pos = marker.position;
+        const len = pos.length();
+        if (len < 1e-3) continue;
+        const dot = (pos.x * forward.x + pos.y * forward.y + pos.z * forward.z) / len;
+        if (dot > bestDot) {
+          if (isMarkerOccludedByLoadedWorld(marker, camera.position, len, planetSize)) continue;
+          if (isMarkerOccludedByCloserMarker(marker, markers, len)) continue;
+          bestDot = dot;
+          best = marker;
+        }
+      }
+
+      const nextCoord = best ? best.coordinate : null;
+      const prev = targetedCoordRef.current;
+      const changed = prev === null
+        ? nextCoord !== null
+        : nextCoord === null || prev.x !== nextCoord.x || prev.y !== nextCoord.y;
+      if (changed) {
+        targetedCoordRef.current = nextCoord;
+        setTarget(nextCoord); // store no-ops on unchanged coord anyway
+        // NOTE: no prewarm here. Prewarming on every aim-target change ran heavy
+        // SYNCHRONOUS world gen (terrain materialize + water flood fill) and froze
+        // the frame whenever you panned across impostors — worse than the one-time
+        // warp load. The actual world swap happens at the warp white-out midpoint
+        // (spaceFlight arrival handler), which already masks that gen.
       }
     }
 
-    const nextCoord = best ? best.coordinate : null;
-    const prev = targetedCoordRef.current;
-    const changed = prev === null
-      ? nextCoord !== null
-      : nextCoord === null || prev.x !== nextCoord.x || prev.y !== nextCoord.y;
-    if (changed) {
-      targetedCoordRef.current = nextCoord;
-      setTarget(nextCoord); // store no-ops on unchanged coord anyway
-      // NOTE: no prewarm here. Prewarming on every aim-target change ran heavy
-      // SYNCHRONOUS world gen (terrain materialize + water flood fill) and froze
-      // the frame whenever you panned across impostors — worse than the one-time
-      // warp load. The actual world swap happens at the warp white-out midpoint
-      // (spaceFlight arrival handler), which already masks that gen.
+    // --- lock-ring highlight around the aimed sun ----------------------------
+    const lock = lockRef.current;
+    if (!lock) return;
+    const targeted = targetedCoordRef.current;
+    const lockedMarker = targeted
+      ? markers.find(marker =>
+        marker.coordinate.x === targeted.x && marker.coordinate.y === targeted.y)
+      : undefined;
+    lockT.current = THREE.MathUtils.damp(
+      lockT.current,
+      lockedMarker ? 1 : 0,
+      LOCK_EASE_DAMPING,
+      dt
+    );
+    lock.visible = lockT.current > 0.01 && lockedMarker !== undefined;
+    if (lock.visible && lockedMarker) {
+      lock.position.copy(lockedMarker.position);
+      // Billboard: the group carries no rotation, so the camera quaternion is
+      // the correct world-facing orientation as-is.
+      lock.quaternion.copy(camera.quaternion);
+      lock.scale.setScalar(
+        lockedMarker.coreRadius * REMOTE_SYSTEM_GLOW_SCALE * (1.6 + 0.25 * lockT.current)
+      );
+      const pulse = 0.55 + 0.45 * Math.sin(performance.now() * 0.006);
+      (lock.material as THREE.MeshBasicMaterial).opacity = lockT.current * pulse * reveal;
     }
   });
 
-  useEffect(() => {
-    return () => {
-      cloudGeometry.dispose();
-      atmosphereGeometry.dispose();
-      ringGeometry.dispose();
-      lockRingGeometry.dispose();
-      surfaceMaterial.dispose();
-    };
-  }, [
-    cloudGeometry,
-    atmosphereGeometry,
-    ringGeometry,
-    lockRingGeometry,
-    surfaceMaterial
-  ]);
-
   return (
-    <group ref={groupRef} visible={false}>
-      {planets.map(planet => (
-        <DistantPlanet
-          key={`${planet.coordinate.x},${planet.coordinate.y}`}
-          planet={planet}
-          surfaceMaterial={surfaceMaterial}
-          lockRingGeometry={lockRingGeometry}
-          cloudGeometry={cloudGeometry}
-          atmosphereGeometry={atmosphereGeometry}
-          ringGeometry={ringGeometry}
-          targetedCoordRef={targetedCoordRef}
-          revealRef={revealRef}
+    <group ref={groupRef} name="remote-system-sun-markers" visible={false}>
+      <primitive object={markerMesh} />
+      {/* Billboarded lock ring — hidden until a sun is the aim target. */}
+      <mesh ref={lockRef} geometry={lockRingGeometry} visible={false} frustumCulled={false}>
+        <meshBasicMaterial
+          color={LOCK_COLOR}
+          transparent
+          opacity={0}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+          depthTest
+          fog={false}
+          toneMapped={false}
         />
-      ))}
+      </mesh>
     </group>
   );
 }

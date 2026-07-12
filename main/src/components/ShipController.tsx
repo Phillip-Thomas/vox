@@ -4,8 +4,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useRapier } from '@react-three/rapier';
 import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
 import ShipCockpit from './ShipCockpit.tsx';
-import { shipLevelOrientation } from '../utils/shipDesign.ts';
-import { vectorToRapier, shipImpactOutcome } from '../utils/surfaceControls';
+import { shipLevelOrientation, shipSurfaceUp } from '../utils/shipDesign.ts';
+import { vectorFromRapier, vectorToRapier, shipImpactOutcome } from '../utils/surfaceControls';
 import { isTouchActive } from '../utils/mobileInput';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
@@ -406,18 +406,18 @@ export default function ShipController({
         if (landingSeq.current || launchSeq.current || !world) return;
         const downDir = position.current.clone().normalize().negate();
         const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
-        const hit = world.castRay(ray, LANDING_APPROACH_DIST, true);
+        const hit = world.castRayAndGetNormal(ray, LANDING_APPROACH_DIST, true);
         if (!hit) return; // no ground within range (too high / over a gap)
-        const up = position.current.clone().normalize();
+        const contactUp = vectorFromRapier(hit.normal).normalize();
         const to = position.current.clone()
           .addScaledVector(downDir, hit.timeOfImpact)
-          .addScaledVector(up, SHIP_GROUND_CLEARANCE);
+          .addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
         const dist = position.current.distanceTo(to);
         landingSeq.current = {
           from: position.current.clone(),
           to,
           fromQuat: orientation.current.clone(),
-          toQuat: levelOrientation(to), // level out as we touch down
+          toQuat: levelOrientation(to, contactUp), // level to the contacted cube face
           t: 0,
           duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION),
           crashed: false
@@ -430,7 +430,7 @@ export default function ShipController({
         const live = getSpaceFlightSnapshot();
         const parked = live.controlMode === 'flight' && live.phase === 'surface';
         if (!parked || landingSeq.current || launchSeq.current) return;
-        const up = position.current.clone().normalize();
+        const up = shipSurfaceUp(position.current);
         playSfx('shipLaunch');
         launchSeq.current = {
           from: position.current.clone(),
@@ -644,19 +644,20 @@ export default function ShipController({
       const speed = velocity.current.length();
       const probe = Math.max(CRASH_CLEARANCE + 1, speed * dt + CRASH_CLEARANCE);
       const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
-      const hit = world.castRay(ray, probe, true);
+      const hit = world.castRayAndGetNormal(ray, probe, true);
       if (hit && hit.timeOfImpact <= speed * dt + CRASH_CLEARANCE) {
-        const inwardSpeed = -velocity.current.dot(radial); // speed toward the planet
+        const contactUp = vectorFromRapier(hit.normal).normalize();
+        const inwardSpeed = -velocity.current.dot(contactUp); // speed into the contacted face
         const rest = position.current.clone()
           .addScaledVector(downDir, hit.timeOfImpact)
-          .addScaledVector(radial, SHIP_GROUND_CLEARANCE);
+          .addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
         if (shipImpactOutcome(inwardSpeed, CRASH_SPEED) === 'crash') {
           // CRASH: forced crash-landing to the touchdown point + impact flash.
           landingSeq.current = {
             from: position.current.clone(),
             to: rest,
             fromQuat: orientation.current.clone(),
-            toQuat: levelOrientation(rest),
+            toQuat: levelOrientation(rest, contactUp),
             t: 0,
             duration: CRASH_LAND_DURATION,
             crashed: true
@@ -669,7 +670,7 @@ export default function ShipController({
           // Soft contact: clamp to the surface and remove the inward velocity
           // component so you skim along instead of sinking through.
           position.current.copy(rest);
-          if (inwardSpeed > 0) velocity.current.addScaledVector(radial, inwardSpeed);
+          if (inwardSpeed > 0) velocity.current.addScaledVector(contactUp, inwardSpeed);
         }
       }
     }

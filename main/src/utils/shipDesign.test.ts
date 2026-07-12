@@ -72,7 +72,7 @@ describe('shipDesign', () => {
       [new THREE.Vector3(0, 0, R), new THREE.Vector3(0, 0, 1)],
       [new THREE.Vector3(0, 0, -R), new THREE.Vector3(0, 0, -1)],
       // Deliberately far off-center on the bottom face. Radial up would lean the
-      // hull by ~38 degrees here; cube-face up must remain exactly -Y.
+      // hull by ~39 degrees here; cube-face up must remain exactly -Y.
       [new THREE.Vector3(30, -40, 12), new THREE.Vector3(0, -1, 0)]
     ];
     for (const [pos, faceUp] of spots) {
