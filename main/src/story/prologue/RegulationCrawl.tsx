@@ -9,7 +9,11 @@ import { PHOSPHOR, PHOSPHOR_DIM } from './TerminalPrologue.tsx';
 // deployment notice. CSS 3D: a perspective stage, the text plane pitched back,
 // translating up over CRAWL_SECONDS. Enter/Space/click fast-forwards.
 
-const CRAWL_SECONDS = 52;
+// crawl-length: 52s carried 27 lines (~1.9s/line). The 2026-07-11 rework grew
+// the notice to 44 lines (provenance, setting, clause 5, VOX, the routing
+// addendum, "MAKE NO MISTAKES.") — 84s preserves the same reading pace. The
+// movie dwells the full length by design; players fast-forward (Enter/click).
+const CRAWL_SECONDS = 84;
 
 const RegulationCrawl: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const doneRef = useRef(false);
@@ -71,7 +75,7 @@ const RegulationCrawl: React.FC<{ onDone: () => void }> = ({ onDone }) => {
           {CRAWL_LINES.map((line, i) => (
             <div key={i} style={{
               color: i < 2 ? PHOSPHOR : undefined,
-              fontWeight: line.startsWith('CLAUSE') ? 700 : 400,
+              fontWeight: line.startsWith('CLAUSE') || line === 'MAKE NO MISTAKES.' ? 700 : 400,
               minHeight: line === '' ? '1.6em' : undefined
             }}>
               {line}

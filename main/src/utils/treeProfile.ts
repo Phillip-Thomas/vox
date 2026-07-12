@@ -66,6 +66,8 @@ export interface TreeProfile {
 
   /** Blossom accent colour (linear). */
   flowerColor: THREE.Color;
+  /** Bark colour authored from the planet palette (linear). */
+  barkColor: THREE.Color;
   /** 0..1 fraction of leaf clusters that bloom (0 = bare planet). */
   bloomAmount: number;
 
@@ -87,6 +89,14 @@ export interface TreeProfile {
   gnarl: number;
   /** Branch tendency to steer upward. */
   gravitropism: number;
+  /** Branch tendency to steer toward locally open sky. */
+  phototropism: number;
+  /** 0..1 ability to maintain growth under partial shade. */
+  shadeTolerance: number;
+  /** Light-driven allocation strength for exposed shoots. */
+  prioritizeBrightGrowth: number;
+  /** Exposure floor used by terminal self-pruning. */
+  dropShadeThreshold: number;
   /** 0..1 central leader priority over lateral growth. */
   apicalDominance: number;
   /** 0..1 how quickly apical dominance fades by branch order. */
@@ -105,6 +115,10 @@ export interface TreeProfile {
   trunkRoughness: number;
   /** Terminal branch geometry pruning passes. */
   thinFineBranches: number;
+  /** 0..1 biological maturity of the canonical planet species. */
+  maturity: number;
+  /** 0..1 prevailing-light/site asymmetry applied to the crown. */
+  crownAsymmetry: number;
 }
 
 // Salts — one constant per parameter so colours/shape never alias each other.
@@ -126,6 +140,14 @@ const SALT_FOLIAGE_DROOP = 20;
 const SALT_TRUNK_FLARE = 21;
 const SALT_TRUNK_ROUGHNESS = 22;
 const SALT_THIN_BRANCHES = 23;
+const SALT_PHOTOTROPISM = 24;
+const SALT_SHADE_TOLERANCE = 25;
+const SALT_BRIGHT_PRIORITY = 26;
+const SALT_MATURITY = 27;
+const SALT_CROWN_ASYMMETRY = 28;
+const SALT_CROWN_ASYMMETRY_ANGLE = 29;
+
+export const TREE_VARIANT_COUNT = 3;
 
 // ACES safety clamps (also asserted in treeProfile.test.ts).
 export const LEAF_LIGHT = 0.4; // fixed authored leaf lightness
@@ -173,6 +195,7 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
 
   // 5 — flower colour (MANDATORY, independent so blossoms always read).
   const flowerColor = roleColor(art.palette.flowerAccent);
+  const barkColor = roleColor(art.palette.bark);
 
   // 6 — bloom amount. pow(roll,2) -> most planets lightly flower, a few bloom hard.
   const bloomRoll = Math.pow(seededUnit(s, SALT_BLOOM), 2);
@@ -212,18 +235,18 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
   // feel like different species.
   const angleBase =
     silhouette === 'conical'
-      ? 0.48
+      ? 0.62
       : silhouette === 'umbrella'
-        ? 0.72
+        ? 0.92
         : silhouette === 'weeping'
-          ? 0.62
+          ? 0.82
           : silhouette === 'wispy'
-            ? 0.58
-            : 0.62;
+            ? 0.68
+            : 0.78;
   const branchJointAngle = clamp(
     angleBase + (seededUnit(s, SALT_BRANCH_ANGLE) - 0.5) * 0.22,
-    0.36,
-    0.92
+    0.42,
+    1.02
   );
   const whorlRoll = seededUnit(s, SALT_WHORLS);
   const whorlCount =
@@ -239,6 +262,37 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
     0.02,
     0.22
   );
+  // Coupled physiology rather than independent random knobs. Shade-tolerant
+  // species keep interior growth, while light-hungry species allocate harder to
+  // exposed shoots and self-prune more aggressively. Biome richness shifts the
+  // whole family without erasing the species signature.
+  const shadeBase =
+    silhouette === 'weeping'
+      ? 0.68
+      : silhouette === 'umbrella'
+        ? 0.6
+        : silhouette === 'conical'
+          ? 0.38
+          : silhouette === 'wispy'
+            ? 0.46
+            : 0.56;
+  const shadeTolerance = clamp(
+    shadeBase + (biome.lushness - biome.aridity) * 0.12 +
+      (seededUnit(s, SALT_SHADE_TOLERANCE) - 0.5) * 0.16,
+    0.2,
+    0.86
+  );
+  const phototropism = clamp(
+    0.12 + (1 - shadeTolerance) * 0.28 + seededUnit(s, SALT_PHOTOTROPISM) * 0.14,
+    0.1,
+    0.5
+  );
+  const prioritizeBrightGrowth = clamp(
+    0.78 + (1 - shadeTolerance) * 1.55 + seededUnit(s, SALT_BRIGHT_PRIORITY) * 0.42,
+    0.8,
+    2.55
+  );
+  const dropShadeThreshold = clamp(0.08 + (1 - shadeTolerance) * 0.26, 0.08, 0.34);
   const apicalDominance = clamp(
     (silhouette === 'conical' ? 0.78 : silhouette === 'umbrella' ? 0.34 : 0.52) +
       (seededUnit(s, SALT_APICAL) - 0.5) * 0.26,
@@ -279,6 +333,17 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
   );
   const trunkRoughness = clamp(0.03 + seededUnit(s, SALT_TRUNK_ROUGHNESS) * 0.13, 0, 0.18);
   const thinFineBranches = seededUnit(s, SALT_THIN_BRANCHES) > 0.78 ? 1 : 0;
+  const maturity = clamp(
+    0.78 + Math.pow(seededUnit(s, SALT_MATURITY), 0.7) * 0.22,
+    0.78,
+    1
+  );
+  const crownAsymmetry = clamp(
+    0.04 + art.windDrama * 0.08 + art.shape.negativeSpace * 0.1 +
+      seededUnit(s, SALT_CROWN_ASYMMETRY) * 0.1,
+    0.04,
+    0.3
+  );
 
   return {
     terrainSeed: s,
@@ -289,6 +354,7 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
     leafTipColor,
     leafSSSColor,
     flowerColor,
+    barkColor,
     bloomAmount,
     trunkHeight,
     leanTwist,
@@ -299,6 +365,10 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
     whorlCount,
     gnarl,
     gravitropism,
+    phototropism,
+    shadeTolerance,
+    prioritizeBrightGrowth,
+    dropShadeThreshold,
     apicalDominance,
     apicalDominanceDecay,
     branchStiffness,
@@ -307,7 +377,9 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
     foliageDroop,
     trunkFlare,
     trunkRoughness,
-    thinFineBranches
+    thinFineBranches,
+    maturity,
+    crownAsymmetry
   };
 }
 
@@ -336,17 +408,31 @@ function silhouettePreset(silhouette: Silhouette): Partial<TreeGenParams> {
  * the profile's fullness knobs. Passes silhouette / shaping flags through so
  * treeGen can reshape the attractor cloud + bend nodes.
  */
-export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
+export function paramsFromProfile(
+  profile: TreeProfile,
+  variantIndex = 0
+): TreeGenParams {
   const preset = silhouettePreset(profile.silhouette);
   const base: TreeGenParams = { ...DEFAULT_TREE_PARAMS, ...preset };
-  const heightScale = clamp(profile.trunkHeight / DEFAULT_TREE_PARAMS.height, 1, 1.98);
+  const variant = ((Math.trunc(variantIndex) % TREE_VARIANT_COUNT) + TREE_VARIANT_COUNT) % TREE_VARIANT_COUNT;
+  const variantRoll = seededUnit(profile.terrainSeed, 701 + variant * 17);
+  // Variant 0 is the canonical mature tree used by bespoke/story call sites.
+  // Variants 1/2 form a young/slender and veteran/spreading phenotype while
+  // keeping one coherent species DNA, palette, and shader family per planet.
+  const heightMul =
+    variant === 1 ? 0.78 + variantRoll * 0.1 : variant === 2 ? 0.94 + variantRoll * 0.12 : 1;
+  const crownMul =
+    variant === 1 ? 0.76 + variantRoll * 0.1 : variant === 2 ? 1.1 + variantRoll * 0.14 : 1;
+  const densityMul = variant === 1 ? 0.82 : variant === 2 ? 1.05 : 1;
+  const variantHeight = profile.trunkHeight * heightMul;
+  const heightScale = clamp(variantHeight / DEFAULT_TREE_PARAMS.height, 0.78, 1.98);
   const crownScale = clamp(1 + (heightScale - 1) * 0.36, 1.04, 1.36);
   const woodScale = clamp(1 + (heightScale - 1) * 0.22, 1, 1.22);
   const leafMassScale = clamp(1 + (crownScale - 1) * 0.78, 1, 1.28);
 
   const attractorCount = Math.max(
     40,
-    Math.round(base.attractorCount * profile.canopyDensity * leafMassScale)
+    Math.round(base.attractorCount * profile.canopyDensity * leafMassScale * densityMul)
   );
   // Some shapes need a denser card budget than the base. These are silhouette
   // multipliers, not separate species systems: every variant still uses the same
@@ -367,7 +453,7 @@ export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
     60,
     Math.round(
       base.maxLeafCards *
-        profile.canopyDensity *
+        profile.canopyDensity * densityMul *
         leafBudgetMul *
         leafMassScale *
         clamp(1.18 - (profile.foliageSpacing - 0.56) * 0.22, 0.92, 1.18)
@@ -381,27 +467,54 @@ export function paramsFromProfile(profile: TreeProfile): TreeGenParams {
 
   return {
     ...base,
-    height: profile.trunkHeight,
-    crownRadius: base.crownRadius * crownScale,
+    height: variantHeight,
+    crownRadius: base.crownRadius * crownScale * crownMul,
     baseRadius: base.baseRadius * woodScale,
     attractorCount: Math.round(attractorCount * wispyMul),
     maxLeafCards,
-    leafSize,
+    leafSize: leafSize * (variant === 1 ? 0.9 : variant === 2 ? 1.04 : 1),
     silhouette: profile.silhouette,
-    leanTwist: profile.leanTwist,
+    leanTwist: profile.leanTwist + (variant === 0 ? 0 : (variantRoll - 0.5) * 0.08),
     bloomAmount: profile.bloomAmount,
     branchJointAngle: profile.branchJointAngle,
     whorlCount: profile.whorlCount,
     gnarl: profile.gnarl,
     gravitropism: profile.gravitropism,
+    phototropism: profile.phototropism,
+    shadeTolerance: profile.shadeTolerance,
+    prioritizeBrightGrowth: profile.prioritizeBrightGrowth,
+    dropShadeThreshold: profile.dropShadeThreshold,
     apicalDominance: profile.apicalDominance,
     apicalDominanceDecay: profile.apicalDominanceDecay,
-    branchStiffness: profile.branchStiffness,
+    branchStiffness: clamp(
+      profile.branchStiffness * (variant === 1 ? 1.08 : variant === 2 ? 0.88 : 1),
+      0.2,
+      1
+    ),
     foliageSpacing: profile.foliageSpacing,
     foliageThreshold: profile.foliageThreshold,
     foliageDroop: profile.foliageDroop,
     trunkFlare: profile.trunkFlare,
     trunkRoughness: profile.trunkRoughness,
-    thinFineBranches: profile.thinFineBranches
+    thinFineBranches: variant === 1 ? Math.max(1, profile.thinFineBranches) : profile.thinFineBranches,
+    maturity: clamp(profile.maturity * (variant === 1 ? 0.76 : variant === 2 ? 1 : 0.92), 0.55, 1),
+    crownAsymmetry: clamp(
+      profile.crownAsymmetry * (variant === 1 ? 0.8 : variant === 2 ? 1.2 : 1),
+      0,
+      0.4
+    ),
+    crownAsymmetryAngle:
+      seededUnit(profile.terrainSeed, SALT_CROWN_ASYMMETRY_ANGLE + variant * 31) * Math.PI * 2
   };
+}
+
+/** Stable geometry seed for a phenotype in the per-planet variant library. */
+export function treeVariantSeed(terrainSeed: number, variantIndex: number): number {
+  const variant = ((Math.trunc(variantIndex) % TREE_VARIANT_COUNT) + TREE_VARIANT_COUNT) % TREE_VARIANT_COUNT;
+  if (variant === 0) return terrainSeed | 0;
+  let h = (terrainSeed ^ Math.imul(variant + 1, 0x9e3779b1)) >>> 0;
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b) >>> 0;
+  h ^= h >>> 13;
+  return h | 0;
 }

@@ -295,14 +295,17 @@ const _overheadUp = new THREE.Vector3();
 
 /**
  * The survey chart ([M] map view): a straight-down overhead of wherever the
- * player stands — the nav era's vantage retained as a tool. Screen-up follows
- * the player's current facing so the chart reads in walking orientation.
- * Standalone (no lens frame needed — works in plain sandbox).
+ * player stands — the nav era's vantage retained as a tool. `screenUp` is the
+ * chart's rolled frame (see mapView.syncChartScreenUp): a face tangent that
+ * parallel-transports across cube edges, so the chart stays axis-aligned to
+ * the face plane AND continuous when the face changes, never rotating with
+ * the player's look direction. Standalone (no lens frame needed — works in
+ * plain sandbox).
  */
 export function applyOverheadCameraTransform(
   camera: THREE.Camera,
   surfaceUp: THREE.Vector3,
-  forwardHint: THREE.Vector3,
+  screenUp: THREE.Vector3,
   height: number
 ): void {
   _up.copy(surfaceUp).normalize();
@@ -315,7 +318,7 @@ export function applyOverheadCameraTransform(
   }
   _worldEye.copy(_parentPos).addScaledVector(_up, height);
   _worldTarget.copy(_parentPos);
-  _overheadFwd.copy(forwardHint).addScaledVector(_up, -forwardHint.dot(_up));
+  _overheadFwd.copy(screenUp).addScaledVector(_up, -screenUp.dot(_up));
   if (_overheadFwd.lengthSq() < 1e-6) _overheadFwd.set(1, 0, 0);
   _overheadUp.copy(_overheadFwd).normalize();
   applyFrame(camera, _worldEye, _worldTarget, _overheadUp);

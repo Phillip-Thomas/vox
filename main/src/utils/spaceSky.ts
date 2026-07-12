@@ -58,6 +58,7 @@ export interface SpaceSkyUniforms {
   uRealityChroma: { value: number };
   uRealityDetail: { value: number };
   uRealityAtmosphere: { value: number };
+  uConstellation: { value: number };  // 0 chaos noise .. 1 patterns resolved (story vigil)
 }
 
 const VERT = /* glsl */ `
@@ -84,6 +85,7 @@ const FRAG = /* glsl */ `
   uniform float uRealityChroma;
   uniform float uRealityDetail;
   uniform float uRealityAtmosphere;
+  uniform float uConstellation; // 0 chaos noise .. 1 patterns resolved (story vigil)
   varying vec3 vDir;
 
   // --- Day atmosphere tunables ----------------------------------------------
@@ -169,6 +171,74 @@ const FRAG = /* glsl */ `
     else if (rnd.z > 0.84) col = vec3(1.0, 0.80, 0.58); // warm
     else col = vec3(1.0, 1.0, 0.97);                    // neutral
     return col * core * bright * tw;
+  }
+
+  // --- Constellations: the noise resolves into pattern ----------------------
+  // Story-only. uConstellation ramps 0→1 during the vigil beat; at 0 (sandbox,
+  // and every non-story frame) this whole function early-outs and the sky is
+  // untouched chaos noise.
+  //
+  // A coarse cube-lattice over the SAME warped star sphere the field uses (fed
+  // wdir, so figures drift WITH the stars). A deterministic ~1-in-7 subset of
+  // coarse cells hosts a FIGURE: 3..5 member "nodes", each drawn as a star that
+  // FADES UP out of the field (so it reads as existing stars kindling, not new
+  // UI), joined by faint thin phosphor/amber SEGMENTS that connect a touch later
+  // as the reveal climbs ("stars wake, then the lines are drawn"). Every element
+  // of a figure is confined to the INTERIOR of its coarse cell, so a single-cell
+  // lookup — floor(dir*CELLS) — is exact and seam-free: no 27-neighbour scan.
+  //
+  // Regional "astrology" hook: a per-cell style scalar (from the cell hash)
+  // shifts figure hue (amber ↔ phosphor) and node warmth, and the member count
+  // varies, so different sky regions already read subtly distinct. Nothing
+  // gameplay-facing yet — it just seeds future region-specific meaning.
+  #define CONST_CELLS       2.3    // coarse lattice density (fewer cells = larger, fewer figures)
+  #define CONST_FIGURE_ODDS 0.15   // fraction of shell cells that host a figure (tunes total ~8-14)
+  #define CONST_NODE_SIZE   1200.0 // node-star tightness (bigger = smaller, sharper points)
+  #define CONST_LINE_WIDTH  0.010  // segment half-width in lattice space (thin)
+  #define CONST_LINE_GAIN   0.16   // segment peak brightness (subtle, additive on the night sky)
+
+  // Distance from unit dir to the chord segment a→b (both unit vectors). Figures
+  // span ~1 coarse cell (~15°), small enough that the chord tracks the arc.
+  float constSegDist(vec3 dir, vec3 a, vec3 b) {
+    vec3 ab = b - a;
+    float t = clamp(dot(dir - a, ab) / max(dot(ab, ab), 1e-5), 0.0, 1.0);
+    return length(dir - (a + t * ab));
+  }
+
+  vec3 constellation(vec3 dir, float reveal) {
+    if (reveal <= 0.001) return vec3(0.0);          // sandbox / non-story: zero ALU past here
+    vec3 pc   = dir * CONST_CELLS;
+    vec3 cell = floor(pc);
+    vec3 h    = hash33(cell);
+    if (h.x > CONST_FIGURE_ODDS) return vec3(0.0);  // most cells host no figure
+
+    // Regional style: warm amber ↔ cool phosphor line + node tint; member count.
+    float style   = h.z;
+    vec3  lineCol = mix(vec3(1.0, 0.72, 0.42), vec3(0.55, 1.0, 0.78), smoothstep(0.35, 0.75, style));
+    vec3  nodeCol = mix(vec3(1.0, 0.92, 0.80), vec3(0.82, 0.96, 1.0), style);
+    int   members = 3 + int(h.y * 2.99);            // 3..5
+
+    // Nodes kindle first (starRamp), lines connect a touch later (lineRamp), so
+    // the read is "points brighten, then pattern is drawn between them".
+    float starRamp = smoothstep(0.0,  0.55, reveal);
+    float lineRamp = smoothstep(0.20, 1.0,  reveal);
+
+    vec3 acc  = vec3(0.0);
+    vec3 prev = vec3(0.0);
+    for (int i = 0; i < 5; i++) {
+      if (i >= members) break;
+      vec3 hn   = hash33(cell + 3.3 + float(i) * 1.7);
+      vec3 node = cell + 0.30 + hn * 0.40;          // interior [0.30,0.70] → seam-free margin
+      vec3 nd   = normalize(node);
+      float d2  = dot(dir - nd, dir - nd);          // ~squared chordal distance on the shell
+      acc += nodeCol * exp(-d2 * CONST_NODE_SIZE) * (0.6 + 0.9 * starRamp) * starRamp;
+      if (i > 0) {
+        float line = smoothstep(CONST_LINE_WIDTH, 0.0, constSegDist(dir, prev, nd));
+        acc += lineCol * line * CONST_LINE_GAIN * lineRamp;
+      }
+      prev = nd;
+    }
+    return acc;
   }
 
   vec3 rotate(vec3 v, float ang) {
@@ -409,6 +479,7 @@ const FRAG = /* glsl */ `
     cosmos += starLayer(wdir + 11.3, 140.0, 0.24, 0.85, 110.0) * 1.1  * dayKnock;   // dimmer: knock down
     cosmos += starLayer(wdir + 27.1, 220.0, 0.15, 0.6,  150.0) * 0.8  * dayKnock;
     cosmos += starLayer(wdir + 53.7, 360.0, 0.10, 0.4,  200.0) * 0.55 * dayKnock;
+    cosmos += constellation(wdir, uConstellation);                                  // story vigil: pattern out of the noise (0 in sandbox)
     vec3 neb = nebulaField(sdir) * 1.1 * dayKnock;                                  // split out for day-only lift
     cosmos += neb;
     cosmos += vec3(0.010, 0.013, 0.030);                                           // deep-space base
@@ -485,7 +556,8 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
       uSunGlow: { value: new THREE.Color(1.0, 0.82, 0.95) },
       uRealityChroma: { value: 1 },
       uRealityDetail: { value: 1 },
-      uRealityAtmosphere: { value: 1 }
+      uRealityAtmosphere: { value: 1 },
+      uConstellation: { value: 0 }
     },
     vertexShader: VERT,
     fragmentShader: FRAG,
@@ -519,13 +591,15 @@ export function updateSpaceSky(
   moonDir: THREE.Vector3,
   up: THREE.Vector3 = _defaultUp,
   cloudQuality = 1.0,
-  reality?: Pick<VoxelRealityEffects, 'chroma' | 'detail' | 'atmosphere'>
+  reality?: Pick<VoxelRealityEffects, 'chroma' | 'detail' | 'atmosphere'>,
+  constellation = 0
 ): number {
   const u = material.uniforms as unknown as SpaceSkyUniforms;
   const day = dayFactorFromDaylight(daylight);
   const chroma = Math.min(1, Math.max(0, reality?.chroma ?? 1));
   const detail = Math.min(1.5, Math.max(0, reality?.detail ?? 1));
   const atmosphere = Math.min(1.5, Math.max(0, reality?.atmosphere ?? 1));
+  u.uConstellation.value = Math.min(1, Math.max(0, constellation));
   u.uTime.value = time;
   u.uDay.value = day;
   u.uGolden.value = golden;

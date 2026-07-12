@@ -11,6 +11,7 @@ import { getFeedRuntime } from './feedRuntime.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
+import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { REDACTION_BANDS } from './storyScript.ts';
 import { currentNavWaypointIndex, currentNavWaypointPosition, NAV_WAYPOINT_COUNT } from './navWaypoints.ts';
 import { getSupplyPodPositions, isPodCollected } from './supplyPods.ts';
@@ -48,8 +49,10 @@ function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; lab
   if (beat === 'ch1-anomaly' && anomalyStoneHandle.position && anomalyMassDesignated()) {
     return { position: anomalyStoneHandle.position, label: 'UNCHARTED MASS' };
   }
-  if (beat === 'ch1-iso' && anomalyStoneHandle.position) {
-    return { position: anomalyStoneHandle.position, label: 'SIGNAL SOURCE' };
+  if (beat === 'ch1-iso' && signalMesaHandle.summit) {
+    // The iso era climbs the mesa; the signal source is its summit (the anomaly
+    // stone now lies across the gravity edge, designated only in ch1-anomaly).
+    return { position: signalMesaHandle.summit, label: 'SIGNAL SOURCE' };
   }
   if (beat === 'ch1-nav') {
     const wp = currentNavWaypointPosition();
@@ -181,20 +184,33 @@ const StoryDirectorDriver: React.FC = () => {
       advanceToBeat('ch2-approach');
     }
 
-    // Project the tree's bounding sphere to a screen rect.
+    // Project the tree's bounding sphere to a screen rect. Size by the EUCLIDEAN
+    // range (not the on-axis depth — that collapses toward 0 as you look away
+    // from the tree, blowing pxRadius up until the box consumes the screen), and
+    // drop the box entirely once the sphere leaves the frustum.
     _center.copy(heroTreeHandle.position).addScaledVector(heroTreeHandle.up, heroTreeHandle.height * 0.55);
     camera.getWorldDirection(_camDir);
     _toTree.copy(_center).sub(camera.position);
-    const depth = _toTree.dot(_camDir);
+    const depth = _toTree.dot(_camDir); // on-axis: > 0 means in front of the camera
+    const range = Math.max(0.5, _toTree.length()); // true distance to the sphere centre
     if (depth <= 0.5) {
       r.redaction.visible = false;
       return;
     }
-    const radius = Math.max(heroTreeHandle.crownRadius * 1.2, heroTreeHandle.height * 0.62);
     const ndc = _center.clone().project(camera);
+    // Meaningfully outside the view (behind is already handled above): stop censoring.
+    if (Math.abs(ndc.x) > 1.6 || Math.abs(ndc.y) > 1.6) {
+      r.redaction.visible = false;
+      return;
+    }
+    const radius = Math.max(heroTreeHandle.crownRadius * 1.2, heroTreeHandle.height * 0.62);
     const halfH = size.height / 2;
     const halfW = size.width / 2;
-    const pxRadius = (radius / depth) * (halfH / Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 0.5;
+    // Angular size from the true range; capped at 45% of viewport height so a
+    // near pass can never balloon the box past the frame (same framing as before
+    // when the tree is actually centred, where range ≈ depth).
+    const rawPxRadius = (radius / range) * (halfH / Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2)) * 0.5;
+    const pxRadius = Math.min(rawPxRadius, size.height * 0.45);
     const cx = ndc.x * halfW + halfW;
     const cy = -ndc.y * halfH + halfH;
 

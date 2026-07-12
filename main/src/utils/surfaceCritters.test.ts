@@ -106,6 +106,53 @@ describe('surface critters', () => {
     geometry.dispose();
   });
 
+  it('carries over live agents across a rebuild so their crawl never restarts', () => {
+    addDirtStrip(6);
+    const geometry = createWormGeometry(wormConfig);
+    prepareCritterSeedAttribute(geometry, 16);
+    const mesh = new THREE.InstancedMesh(geometry, new THREE.MeshBasicMaterial(), 16);
+
+    const agents = buildCritterAgents(wormConfig, 1, 0, null, 12345);
+    expect(agents.length).toBe(6);
+
+    // Let the worms wander so they accumulate in-flight state (progress, steps,
+    // possibly a position away from home) that a naive rebuild would discard.
+    for (let i = 0; i < 60; i++) updateCritterAgents(mesh, agents, 0.1, 12345, wormConfig);
+    const before = agents.map(a => ({ ...a }));
+    expect(before.some(a => a.stepCount > 0)).toBe(true);
+
+    // Rebuild after an edit elsewhere, feeding the live agents back in.
+    const rebuilt = buildCritterAgents(wormConfig, 1, 0, null, 12345, 160, { existingAgents: agents });
+    expect(rebuilt.length).toBe(6);
+    // Every agent is the SAME object with its walk state intact — no reset.
+    for (let i = 0; i < rebuilt.length; i++) {
+      expect(rebuilt[i]).toBe(agents[i]);
+      expect(rebuilt[i].stepCount).toBe(before[i].stepCount);
+      expect(rebuilt[i].progress).toBe(before[i].progress);
+      expect([rebuilt[i].x, rebuilt[i].y, rebuilt[i].z]).toEqual([before[i].x, before[i].y, before[i].z]);
+    }
+
+    geometry.dispose();
+  });
+
+  it('drops only the agent whose home voxel was destroyed on rebuild', () => {
+    addDirtStrip(5);
+    const agents = buildCritterAgents(wormConfig, 1, 0, null, 12345);
+    expect(agents.length).toBe(5);
+
+    // Destroy one worm's home voxel; every other worm must survive untouched.
+    const victim = agents[2];
+    voxelSystem.removeVoxel(victim.homeX, victim.homeY, victim.homeZ);
+
+    const rebuilt = buildCritterAgents(wormConfig, 1, 0, null, 12345, 160, { existingAgents: agents });
+    expect(rebuilt.length).toBe(4);
+    expect(rebuilt).not.toContain(victim);
+    for (const survivor of agents) {
+      if (survivor === victim) continue;
+      expect(rebuilt).toContain(survivor);
+    }
+  });
+
   it('writes one instance matrix per agent', () => {
     addDirtStrip(2);
     const agents = buildCritterAgents(wormConfig, 1, 0, null, 12345);

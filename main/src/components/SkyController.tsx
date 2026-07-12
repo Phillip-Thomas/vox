@@ -5,7 +5,7 @@ import { getGraphicsQuality } from '../config/graphicsSettings.ts';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
 import { localSunElevation, daylightFromElevation, goldenFromElevation } from '../utils/dayNight.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
-import { getPlayerSubmergence, getPlayerDepthBelow } from '../state/playerSubmersion.ts';
+import { getCameraSubmergence, getCameraDepthBelow } from '../state/playerSubmersion.ts';
 import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import { getStoryForcedDayPhase } from '../story/storyDayPhase.ts';
@@ -341,7 +341,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
-    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
+    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inSpace, phase, fogBiome]);
 
@@ -371,7 +371,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     // co-op time must still drive day/night so players on different graphics
     // tiers stay in the same phase.
     if (!shouldUpdateDayPhase) {
-      applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
+      applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
       return;
     }
 
@@ -386,7 +386,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
-    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getPlayerSubmergence(), getPlayerDepthBelow());
+    applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
   });
 
   return (

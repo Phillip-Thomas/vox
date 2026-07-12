@@ -71,6 +71,16 @@ export interface CritterBuildResult {
   voxelCount: number;
 }
 
+export interface CritterBuildOptions {
+  /**
+   * Agents from the previous build. Any that still sit on a valid, in-range
+   * home voxel are carried over verbatim, preserving their in-flight crawl
+   * (position, progress, stepCount, heading) so a voxel edit anywhere in the
+   * field doesn't teleport every critter back to its home and restart its walk.
+   */
+  existingAgents?: CritterAgent[];
+}
+
 const CRITTER_COVERAGE_SALT = 611;
 const CRITTER_OFFSET_U_SALT = 612;
 const CRITTER_OFFSET_V_SALT = 613;
@@ -305,27 +315,67 @@ export function createCritterAgent(
   return agent;
 }
 
+function critterHomeKey(x: number, y: number, z: number): string {
+  return `${x},${y},${z}`;
+}
+
+/**
+ * A previously-built agent can be carried over (keeping its live crawl) only if
+ * its HOME voxel is still an eligible, exposed, coverage-selected voxel of the
+ * same material. If the home is gone or no longer qualifies, the agent is
+ * dropped so a fresh build reflects the edit — but every OTHER agent survives.
+ */
+function isCritterAgentReusable(
+  agent: CritterAgent,
+  density: number,
+  terrainSeed: number,
+  config: CritterConfig
+): boolean {
+  const home = voxelSystem.getVoxel(agent.homeX, agent.homeY, agent.homeZ);
+  if (!home || home.material !== agent.material) return false;
+  if (!isCritterHomeVoxel(home, config)) return false;
+  if (!isVoxelFaceOpen(agent.homeX, agent.homeY, agent.homeZ)) return false;
+  return shouldPlaceCritter(agent.homeX, agent.homeY, agent.homeZ, density, terrainSeed, config);
+}
+
 export function buildCritterAgents(
   config: CritterConfig,
   density: number,
   maxDistance: number,
   playerWorld: THREE.Vector3 | null,
   terrainSeed: number,
-  maxAgents = 160
+  maxAgents = 160,
+  options: CritterBuildOptions = {}
 ): CritterAgent[] {
   const agents: CritterAgent[] = [];
   if (density <= 0) return agents;
   const maxDistSq = maxDistance * maxDistance;
+  const includedHomes = new Set<string>();
+
+  const inRange = (x: number, y: number, z: number): boolean => {
+    if (maxDistance <= 0 || !playerWorld) return true;
+    voxelCoordToWorld(x, y, z, _world);
+    return _world.distanceToSquared(playerWorld) <= maxDistSq;
+  };
+
+  // Carry over live agents first so a voxel edit elsewhere never restarts their
+  // walk; keep them keyed by home so the voxel scan below doesn't double-place.
+  for (const agent of options.existingAgents ?? []) {
+    if (agents.length >= maxAgents) break;
+    if (!isCritterAgentReusable(agent, density, terrainSeed, config)) continue;
+    if (!inRange(agent.homeX, agent.homeY, agent.homeZ)) continue;
+    includedHomes.add(critterHomeKey(agent.homeX, agent.homeY, agent.homeZ));
+    agents.push(agent);
+  }
 
   for (const voxel of voxelSystem.getAllVoxels().values()) {
     if (agents.length >= maxAgents) break;
     if (!isCritterHomeVoxel(voxel, config)) continue;
     const [x, y, z] = voxel.position;
+    if (includedHomes.has(critterHomeKey(x, y, z))) continue;
     if (!isVoxelFaceOpen(x, y, z)) continue;
     if (!shouldPlaceCritter(x, y, z, density, terrainSeed, config)) continue;
-
-    voxelCoordToWorld(x, y, z, _world);
-    if (maxDistance > 0 && playerWorld && _world.distanceToSquared(playerWorld) > maxDistSq) continue;
+    if (!inRange(x, y, z)) continue;
 
     agents.push(createCritterAgent(x, y, z, voxel.material, terrainSeed, config));
   }

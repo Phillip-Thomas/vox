@@ -1,24 +1,27 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import * as THREE from 'three';
-import { beginA1, beginA2, beginA3, beginVigilSleep, storyDirectorTick } from './storyDirector.ts';
+import { beginA1, beginA2, beginA3, beginVigilSleep, storyDirectorTick, vigilRestReady } from './storyDirector.ts';
+import { getConstellationReveal } from './skyMeaning.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { placeCampfire, resetCampfires } from '../game/systems/campfires.ts';
 import { consumeMawCharge, getMawCharge, MAX_MAW_CHARGE } from '../game/systems/mawSystem.ts';
 import { setMiningProgress } from '../game/systems/miningProgress.ts';
-import { drink, feed, getVitals } from '../game/systems/survivalVitals.ts';
+import { drink, feed, getVitals, setVitals } from '../game/systems/survivalVitals.ts';
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
 import { getCinematicLookWeight } from './cinematicLook.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
-import { ARRIVAL, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
+import { ARRIVAL, CH3_CAPTIONS, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
 import {
   advanceToBeat,
   beginStory,
   deactivateStory,
   getStoryStateSnapshot,
+  recordStoryChoice,
   STORY_MILESTONES
 } from './storyState.ts';
+import { getAuditWorkerPose } from './world/AuditWorker.tsx';
 import { getMilestones, hasMilestone, markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
 import {
   getVoxelRealityEffects,
@@ -234,19 +237,41 @@ describe('storyDirector — chapter 1 and A1', () => {
     // The scheduled dark: dusk lerps, night opens the ordered rest.
     tickSeconds(VIGIL.duskLerpSeconds + 15);
     expect(getStoryForcedDayPhase()!).toBeGreaterThanOrEqual(DUSK.nightStart - 0.01);
+    // The ordered rest refills what a night can refill: stamina + warmth only.
+    setVitals({ stamina: 34, warmth: 41 });
     beginVigilSleep();
+    expect(getVitals().stamina).toBe(100);
+    expect(getVitals().warmth).toBe(100);
     expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
     expect(hasMilestone(STORY_MILESTONES.ch4Vigil)).toBe(true);
     // The arrival plays out and TEMPORARILY completes the story (ch4-audit
-    // continues from here — see PARAVOXIA_CH4_PLAN.md §2 S6).
+    // continues from here — see PARAVOXIA_CH4_PLAN.md §2 S6). The auditor is
+    // NOT hidden — he stays standing at the relay into the done world.
     tickSeconds(ARRIVAL.endAt + 1);
     expect(getStoryStateSnapshot().active).toBe(false);
     expect(getStoryStateSnapshot().chapter).toBe('complete');
+    expect(getAuditWorkerPose().visible).toBe(true); // "he stays to look"
     expect(hasMilestone(STORY_MILESTONES.ch4Arrived)).toBe(true);
     expect(hasMilestone(STORY_MILESTONES.complete)).toBe(true);
     expect(hasMilestone(STORY_MILESTONES.senseStamina)).toBe(true); // never strand a HUD gate
     expect(getStoryForcedDayPhase()).toBeNull(); // the sun belongs to the player now
     wreckRelayHandle.position = null;
+  });
+
+  it('the mandatory bridge acknowledge never stamps the no-record echo into a played run', () => {
+    // A played prologue: one real choice on file, plus the bridge card's
+    // forced [ACKNOWLEDGE] (which maps to the echo-neutral fallback line).
+    recordStoryChoice('dispenser', 'hold');
+    recordStoryChoice('anomaly', 'ack');
+    advanceToBeat('ch1-fixed');
+    const order = getStoryText().workorder.join('\n');
+    expect(order).toContain('THE SCHEDULE WAS KEPT');
+    expect(order).not.toContain('TRANSIT RECORD INCOMPLETE');
+  });
+
+  it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {
+    advanceToBeat('ch1-fixed');
+    expect(getStoryText().workorder.join('\n')).toContain('TRANSIT RECORD INCOMPLETE');
   });
 
   it('the harvester arrives charged and trickle-recharges while idle (not while mining)', () => {
@@ -278,5 +303,39 @@ describe('storyDirector — chapter 1 and A1', () => {
     storyDirectorTick(1 / 60, null);
     expect(getFeedRuntime().desat).toBe(1);
     expect(getVoxelRealityEffects().chroma).toBe(0);
+  });
+
+  it('ch3-gather campfire teaching chain fires on the clock with no crafting', () => {
+    resetCampfires();
+    drainInventory('biofiber');
+    drainInventory('stone');
+    advanceToBeat('ch3-gather'); // no fire built → the chain plays out
+    // fire-thought lands ~4s after the gather caption settles…
+    tickSeconds(22.5);
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.fireThought);
+    // …then the gather prompt 4s later.
+    tickSeconds(4);
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.gatherPrompt);
+    expect(getStoryStateSnapshot().beat).toBe('ch3-gather'); // still open, no fire
+  });
+
+  it('the vigil stargaze resolves the sky (null camera → fallback) and still reaches rest', () => {
+    resetCampfires();
+    placeCampfire(new THREE.Vector3(0, 25, 0), new THREE.Vector3(0, 1, 0));
+    markMilestone(STORY_MILESTONES.a2);
+    markMilestone(STORY_MILESTONES.a3);
+    markMilestone(STORY_MILESTONES.ch3Signal);
+    setVoxelRealityStage('material');
+    advanceToBeat('ch4-vigil');
+    // Night falls; with a null camera the look-up gate falls back to its timer,
+    // so the eight-line sequence + the 18s reveal ramp play out unattended.
+    tickSeconds(VIGIL.duskLerpSeconds + 80); // ~110s: sky resolved, rest prompt out
+    expect(hasMilestone('story:ch4:constellations')).toBe(true);
+    expect(getConstellationReveal()).toBeGreaterThan(0.99); // ramp reached full
+    expect(vigilRestReady()).toBe(true); // the ordered rest is finally offered
+    // The ordered rest still advances the beat into the arrival.
+    setVitals({ stamina: 30, warmth: 30 });
+    beginVigilSleep();
+    expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
   });
 });

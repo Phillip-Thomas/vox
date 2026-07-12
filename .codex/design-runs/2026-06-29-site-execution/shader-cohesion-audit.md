@@ -142,3 +142,35 @@ Evidence:
 - Surface effects: reality density/visibility gates are complete; later visual review can tune effect-specific alpha/readability at material vantages.
 - Sky/post: reality-stage cohesion pass is complete; lower-quality-screen harshness should be judged in screenshot review.
 - Grass/tree materials: shader-cost and reality-gate audit is complete for current `grass-pbr-v5`, `tree-bark-v5`, `tree-leaf-v6`, `tree-blossom-v5`, and `tree-impostor-v5`; remaining work is subjective screenshot/taste review, not a known shader-program gap.
+
+## Batch 10 Procedural Tree Biology And Population Overhaul
+
+Status: `tree machine gate complete; human taste approval open`
+
+Changes:
+
+- Replaced depth-first unconditional branching with a bounded active-tip growth queue. Tips now estimate local sky exposure from competing growth endings, steer phototropically, allocate light-driven vigor, and self-prune weak shaded proposals.
+- Changed trunk/branch taper to a living-tip pipe model and branch sag to a clamped cantilever approximation using downstream support, lever arm, radius, and species stiffness.
+- Correlated shade tolerance, phototropism, bright-growth priority, pruning floor, maturity, and crown asymmetry instead of sampling unrelated style knobs.
+- Added three deterministic age/phenotype archetypes per planet species on HIGH, two on MEDIUM, one on LOW, and none on POTATO. Instances partition between variants, so diversity does not duplicate visible trees.
+- Rebuilt broadleaf foliage as branch-aligned botanical sprays with negative canopy space; removed the round near-field tuft union that collapsed crowns into blobs.
+- Added planet-authored bark color and arc-length bark grain. Current tree keys are `tree-bark-v6`, `tree-leaf-v7`, `tree-blossom-v5`, and `tree-impostor-v6`.
+- Made far impostors use generated crown bounds plus family-specific SDF silhouettes.
+- Made placement respect ecology material eligibility/richness/canopy/negative-space tokens while retaining the legacy placement hash for harvested-coordinate continuity.
+- Expanded the harvest pick contract to carry a separate instance-id map for each variant trunk/leaf mesh.
+
+Evidence:
+
+- Silhouette board: `main/captures/tree-overhaul-final-silhouettes.png`
+- Same-species population board: `main/captures/tree-overhaul-final-population.png`
+- Cross-seed variety board: `main/captures/tree-overhaul-final-variety.png`
+- In-game smoke: `main/captures/procedural-atlas/2026-07-12T01-53-01-009Z-tree-overhaul-smoke-final2/summary.json`
+- Perf matrix: `main/captures/procedural-atlas/2026-07-12T01-53-42-642Z-tree-overhaul-perf-final2/summary.json`
+- Focused result: `6` tree test files / `51` tests passed, including `144` profiled phenotype generations plus full-buffer determinism hashes.
+- Smoke result: `3` cases / `12` screenshots / `0` console errors / `0` machine defects.
+- Perf geometry result: `20` cases / `60` screenshots / `0` console errors; every tier held `60fps`, max worst-view p95 `18.9ms`, max draw calls `151`.
+- Triangle peaks: ULTRA `8,506,326 / 9,200,000`; HIGH `3,826,804 / 4,200,000`; MEDIUM `1,116,200 / 1,500,000`; LOW `906,322 / 1,000,000`; POTATO `741,918 / 800,000`.
+
+Accepted exception:
+
+- Perf reports `shader_explosion` against the current checkout's program thresholds. The same overage persists in POTATO where trees are disabled, while tree material program families remain exactly four; this is not attributed to the tree overhaul and no threshold was relaxed.

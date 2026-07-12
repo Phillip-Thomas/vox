@@ -3,12 +3,14 @@ import * as THREE from 'three';
 import { QUALITY_PROFILES } from '../config/graphicsSettings';
 import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem';
 import {
+  applyTreeProfileToMaterials,
   createBarkMaterial,
   createBlossomMaterial,
   createImpostorMaterial,
   createLeafMaterial,
   updateTreeMaterials
 } from './treeMaterials';
+import { buildTreeProfile } from './treeProfile';
 
 function treeUniforms(wind = 1) {
   return {
@@ -28,10 +30,10 @@ describe('treeMaterials', () => {
     const blossom = createBlossomMaterial();
     const impostor = createImpostorMaterial();
 
-    expect(bark.customProgramCacheKey()).toBe('tree-bark-v5');
-    expect(leaf.customProgramCacheKey()).toBe('tree-leaf-v6');
+    expect(bark.customProgramCacheKey()).toBe('tree-bark-v6');
+    expect(leaf.customProgramCacheKey()).toBe('tree-leaf-v7');
     expect(blossom.customProgramCacheKey()).toBe('tree-blossom-v5');
-    expect(impostor.customProgramCacheKey()).toBe('tree-impostor-v5');
+    expect(impostor.customProgramCacheKey()).toBe('tree-impostor-v6');
 
     bark.dispose();
     leaf.dispose();
@@ -99,6 +101,41 @@ describe('treeMaterials', () => {
     bark.dispose();
     leaf.dispose();
     blossom.dispose();
+    impostor.dispose();
+  });
+
+  it('applies planet bark colour and silhouette to shared material uniforms', () => {
+    const profile = buildTreeProfile(20260711);
+    const bark = createBarkMaterial();
+    const leaf = createLeafMaterial();
+    const impostor = createImpostorMaterial();
+    const barkUniforms = {
+      uBarkColor: { value: new THREE.Color() },
+      uLeafBase: { value: new THREE.Color() }
+    };
+    const leafUniforms = {
+      uLeafBase: { value: new THREE.Color() },
+      uShapeId: { value: -1 }
+    };
+    const impostorShape = { value: -1 };
+    bark.userData.shader = { uniforms: barkUniforms };
+    leaf.userData.shader = { uniforms: leafUniforms };
+    impostor.userData.shader = {
+      uniforms: {
+        uLeafBase: { value: new THREE.Color() },
+        uLeafTip: { value: new THREE.Color() },
+        uShapeId: impostorShape
+      }
+    };
+
+    applyTreeProfileToMaterials(profile, bark, leaf, null, impostor);
+
+    expect(barkUniforms.uBarkColor.value.getHex()).toBe(profile.barkColor.getHex());
+    expect(leafUniforms.uLeafBase.value.getHex()).toBe(profile.leafColor.getHex());
+    expect(impostorShape.value).toBe(profile.shapeId);
+
+    bark.dispose();
+    leaf.dispose();
     impostor.dispose();
   });
 });

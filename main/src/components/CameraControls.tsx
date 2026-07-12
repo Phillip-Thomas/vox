@@ -10,11 +10,11 @@ import {
 import { isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
-import { getPlayerSubmergence } from '../state/playerSubmersion';
+import { getCameraSubmergence } from '../state/playerSubmersion';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
 import { applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
-import { isMapViewOpen, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
+import { isMapViewOpen, syncChartScreenUp, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
 import { getCinematicLookTarget, getCinematicLookWeight } from '../story/cinematicLook.ts';
 import { getSunDirection } from './SkyController.tsx';
 
@@ -31,6 +31,15 @@ const _pullDir = new THREE.Vector3();
 const LOCAL_ROLL_AXIS = new THREE.Vector3(0, 0, 1);
 const LOCAL_PITCH_AXIS = new THREE.Vector3(1, 0, 0);
 const _swayQuat = new THREE.Quaternion();
+
+// Chart roll easing: while the map is open, the camera's WORLD frame eases
+// toward the overhead target so a face change sweeps the 90° like the cube
+// rolling under you, instead of hard-cutting to the new orientation.
+const MAP_ROLL_SMOOTH = 7;
+const _mapWorldPos = new THREE.Vector3();
+const _mapWorldQuat = new THREE.Quaternion();
+const _mapParentPos = new THREE.Vector3();
+const _mapParentQuat = new THREE.Quaternion();
 
 interface CameraControlsProps {
   cameraRef: React.RefObject<THREE.PerspectiveCamera | null>;
@@ -56,6 +65,9 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
   const displayQuat = useRef(new THREE.Quaternion());
   const targetQuat = useRef(new THREE.Quaternion());
   const hasDisplayQuat = useRef(false);
+  const mapDisplayPos = useRef(new THREE.Vector3());
+  const mapDisplayQuat = useRef(new THREE.Quaternion());
+  const mapDisplayActive = useRef(false);
 
   const syncSurfaceFrame = () => {
     nextUp.current.copy(getActiveUp?.() ?? activeUp).normalize();
@@ -194,18 +206,48 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
         );
       }
       hasDisplayQuat.current = false; // don't slerp across the mode switch
+      mapDisplayActive.current = false;
       return;
     }
 
     setPlayerLook(surfaceForward.current, pitch.current); // publish look for persistence
 
-    // The survey chart ([M]): straight-down overhead in place of the eyes.
-    // Look state is preserved untouched — closing lands exactly where you were.
+    // The survey chart ([M]): straight-down overhead in place of the eyes,
+    // oriented by the rolled chart frame (axis-aligned per face, continuous
+    // across edges — the look state is ignored and preserved untouched, so
+    // closing lands exactly where you were).
     if (isMapViewOpen() && storyPolicy.lookMode === 'free') {
-      applyOverheadCameraTransform(cameraRef.current, surfaceUp.current, surfaceForward.current, MAP_VIEW_HEIGHT);
+      const camera = cameraRef.current;
+      applyOverheadCameraTransform(camera, surfaceUp.current, syncChartScreenUp(surfaceUp.current), MAP_VIEW_HEIGHT);
+      camera.getWorldPosition(_mapWorldPos);
+      camera.getWorldQuaternion(_mapWorldQuat);
+      if (mapDisplayActive.current) {
+        // Ease the world frame toward the overhead target (the cube-roll
+        // sweep on a face change). Opening the map snaps (else branch).
+        const k = 1 - Math.exp(-MAP_ROLL_SMOOTH * dt);
+        mapDisplayPos.current.lerp(_mapWorldPos, k);
+        mapDisplayQuat.current.slerp(_mapWorldQuat, k);
+        const parent = camera.parent;
+        if (parent) {
+          parent.getWorldQuaternion(_mapParentQuat);
+          parent.getWorldPosition(_mapParentPos);
+          _mapParentQuat.invert();
+          camera.position.copy(mapDisplayPos.current).sub(_mapParentPos).applyQuaternion(_mapParentQuat);
+          camera.quaternion.copy(_mapParentQuat).multiply(mapDisplayQuat.current);
+        } else {
+          camera.position.copy(mapDisplayPos.current);
+          camera.quaternion.copy(mapDisplayQuat.current);
+        }
+        camera.updateMatrixWorld(true);
+      } else {
+        mapDisplayPos.current.copy(_mapWorldPos);
+        mapDisplayQuat.current.copy(_mapWorldQuat);
+        mapDisplayActive.current = true;
+      }
       hasDisplayQuat.current = false;
       return;
     }
+    mapDisplayActive.current = false;
 
     applyGravityCameraTransform(
       cameraRef.current,
@@ -216,7 +258,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     );
 
     // Underwater float-sway, scaled by submergence (0 = no effect on land).
-    const submergence = getPlayerSubmergence();
+    const submergence = getCameraSubmergence();
     if (submergence > 0.01) {
       const t = state.clock.elapsedTime;
       const roll = (Math.sin(t * 0.5) * 0.015 + Math.sin(t * 0.23) * 0.008) * submergence;

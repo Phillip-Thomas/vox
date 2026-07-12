@@ -10,11 +10,12 @@ import { markMilestone } from '../game/systems/progressionSystem.ts';
 import { getItem } from '../game/data/items.ts';
 import { nearestForageNodeWorld } from '../components/ForageField.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
+import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { storyAnchors } from './world/storyWorld.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
-import { anomalyMassDesignated, beginA1, beginA2 } from './storyDirector.ts';
+import { anomalyMassDesignated, beginA1, beginA2, vigilRestReady } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getLensRig, getSideLens, rigMoveBasis } from './sideLens.ts';
@@ -95,14 +96,17 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   'ch1-nav': 75,
   'ch1-iso': 75,
   'ch1-anomaly': 62, // calibration sweep (stage 1) + the walk + dwell
-  'ch2-color': 20,
+  'ch2-color': 34, // 6s stand + ~70u walk to the tree radius; 20 cut the walk short every run
   'ch2-approach': 45,
   'ch3-gather': 34,
   'ch3-await-rest': 70,
   'ch3-thirst': 75,
   'ch3-forage': 60,
   'ch3-signal': 60,
-  'ch4-vigil': 90
+  // Raised for the stargaze: night lands ~42s in, then the 8-line sequence
+  // (~45.5s) + the 18s reveal ramp + the held rest prompt push natural
+  // completion to ~100s. 140 keeps the beat's own resolution well inside.
+  'ch4-vigil': 140
 };
 
 let clockBeat: StoryBeat | null = null;
@@ -476,10 +480,10 @@ export function autopilotTick(dt: number): void {
       break;
     }
     case 'ch1-iso': {
-      // The climb: steer at the stone; hops + the stuck watchdog's upward
-      // nudges haul the capsule up the staircase treads.
-      if (anomalyStoneHandle.position) {
-        walkTowardLens(anomalyStoneHandle.position, 1.6);
+      // The climb: steer at the mesa summit (the iso→lift gate keys on it); hops
+      // + the stuck watchdog's upward nudges haul the capsule up the staircase.
+      if (signalMesaHandle.summit) {
+        walkTowardLens(signalMesaHandle.summit, 1.6);
       }
       if (beatClock > timeout) advanceToBeat('ch1-lift');
       break;
@@ -629,11 +633,28 @@ export function autopilotTick(dt: number): void {
         grantMissingCampfireMaterials();
         placeCampfire(player.clone(), getPlayerUp().clone());
       } else if (fireDist > 2.4) {
-        walkToward(firePos, 2.4);
+        walkToward(firePos, 2.4); // reach the fire first, before the dark falls
+      } else if (!vigilRestReady()) {
+        // Hold a look-up framing through the stargaze + constellation reveal —
+        // the pitch above the horizon both drives the director's look-up gate
+        // and keeps the shot on the resolving sky, never the ground.
+        controls.forward = false;
+        controls.backward = false;
+        controls.left = false;
+        controls.right = false;
+        const up = getPlayerUp();
+        _toGoal.copy(firePos).sub(player);
+        _toGoal.addScaledVector(up, -_toGoal.dot(up)); // horizontal component
+        if (_toGoal.lengthSq() < 0.04) _toGoal.set(1, 0, 0);
+        _toGoal.normalize();
+        setCinematicLookTarget(
+          _goalScratch.copy(player).addScaledVector(_toGoal, 4).addScaledVector(up, 10)
+        );
+        setCinematicLookWeight(1);
       } else {
         controls.forward = false;
         setCinematicLookWeight(0);
-        pulseInteract(); // resolves once the night band opens
+        pulseInteract(); // rests once the sky has finished and the prompt lands
       }
       if (beatClock > timeout) {
         markMilestone(STORY_MILESTONES.ch4Vigil);

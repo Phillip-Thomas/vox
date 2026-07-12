@@ -2,7 +2,8 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getFeedRuntime } from '../feedRuntime.ts';
-import { getStorySidePlane } from './storyWorld.ts';
+import { getPodImpactPose, getStorySidePlane } from './storyWorld.ts';
+import { useHifiWreckConverted } from './hifiWreck.ts';
 
 // --- The descent pod ---------------------------------------------------------------
 //
@@ -28,9 +29,13 @@ const DescentPod: React.FC<DescentPodProps> = ({ planetSize, terrainSeed }) => {
   const trailRef = useRef<THREE.Group>(null);
   const smokeRef = useRef<THREE.Group>(null);
 
+  // At the A3 material awakening the pod converts into the hi-fi ship (HifiWreck):
+  // hide every voxel wreck visual so only the real hull remains at the impact site.
+  const converted = useHifiWreckConverted();
+
   const path = useMemo(() => {
     const plane = getStorySidePlane(planetSize, terrainSeed);
-    const impact = plane.origin.clone().addScaledVector(plane.travelAxis, -5).addScaledVector(plane.up, 0.4);
+    const impact = getPodImpactPose(planetSize, terrainSeed).position.clone().addScaledVector(plane.up, 0.4);
     // Enters the visible frame early (side camera: ~±10u horizontal, ~+7u sky
     // at the focus plane) and streaks the full diagonal before impact.
     const start = impact.clone().addScaledVector(plane.travelAxis, -19).addScaledVector(plane.up, 13);
@@ -95,6 +100,9 @@ const DescentPod: React.FC<DescentPodProps> = ({ planetSize, terrainSeed }) => {
       }
     }
   });
+
+  // Post-awakening: the hi-fi wreck stands in the pod's place; render nothing.
+  if (converted) return null;
 
   return (
     <>

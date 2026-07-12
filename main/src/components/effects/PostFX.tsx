@@ -35,7 +35,7 @@ import { PainterlyEffect } from './PainterlyEffect.ts';
 import { ColorGradeEffect, getColorGrade } from './ColorGradeEffect.ts';
 import { OutlineEffect } from './OutlineEffect.ts';
 import { UnderwaterEffect, getUnderwater } from './UnderwaterEffect.ts';
-import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
+import { getCameraSubmergence } from '../../state/playerSubmersion.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
@@ -122,7 +122,7 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
     if (underwaterPostFX) {
       const uw = getUnderwater();
       if (uw) {
-        const submergence = getPlayerSubmergence();
+        const submergence = getCameraSubmergence();
         const submerged = submergence > 0.5;
         // Edge-trigger the crossing wipe (1 -> 0 over ~0.35s).
         if (submerged !== prevSubmerged.current) { prevSubmerged.current = submerged; wipe.current = 1; }

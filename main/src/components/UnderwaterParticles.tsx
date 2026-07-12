@@ -19,7 +19,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getGraphicsQuality } from '../config/graphicsSettings';
 import { getPlayerUp } from '../state/playerFrame';
-import { getPlayerSubmergence } from '../state/playerSubmersion';
+import { getCameraSubmergence } from '../state/playerSubmersion';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -324,7 +324,7 @@ export default function UnderwaterParticles({
 
   // -- Per-frame update (no allocations) ------------------------------------
   useFrame(({ camera, clock }) => {
-    const submergence = getPlayerSubmergence();
+    const submergence = getCameraSubmergence();
     const quality     = getGraphicsQuality();
     const visible     = submergence > 0.01 && quality.underwaterParticles;
 

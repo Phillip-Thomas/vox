@@ -20,6 +20,14 @@ interface SpaceshipPlaceholderProps {
   activeApproach: boolean;
   /** Live player position (from EfficientScene) for the boarding proximity check. */
   playerPosition?: THREE.Vector3;
+  /**
+   * Whether this is the player's live, boardable ship (default) or a static wreck
+   * (false). A wreck publishes no boardable/ship-position state, so on-foot [F]
+   * never offers to enter it — it's set dressing, not a vehicle.
+   */
+  interactive?: boolean;
+  /** Radians of settle tilt for a crashed attitude (0 = level parked, default). */
+  crashedTilt?: number;
 }
 
 /**
@@ -32,7 +40,9 @@ export default function SpaceshipPlaceholder({
   position,
   terrainSeed,
   activeApproach,
-  playerPosition
+  playerPosition,
+  interactive = true,
+  crashedTilt = 0
 }: SpaceshipPlaceholderProps) {
   const { phase, controlMode } = useSpaceFlight();
   const boardableRef = useRef(false);
@@ -51,7 +61,16 @@ export default function SpaceshipPlaceholder({
   // Upright on the LOCAL surface (radial up), nose along the direction the
   // cockpit faced at touchdown — never a fixed world rotation, which reads
   // upside down after landing on the bottom face of the cube planet.
-  const parkedQuat = useMemo(() => shipParkedOrientation(position), [position]);
+  const parkedQuat = useMemo(() => {
+    const q = shipParkedOrientation(position);
+    // Crashed attitude: settle the hull off level — a pitch dug into the impact
+    // plus a roll skew, in the ship's local frame (post-multiplied so it reads
+    // relative to the surface-normal parked orientation, on any planet face).
+    if (crashedTilt) {
+      q.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(crashedTilt * 0.7, 0, crashedTilt)));
+    }
+    return q;
+  }, [position, crashedTilt]);
 
   useEffect(() => {
     return () => {
@@ -67,10 +86,13 @@ export default function SpaceshipPlaceholder({
   // Proximity check → publish "boardable" for the on-foot interaction resolver, which
   // owns the unified "[F] Enter Ship" prompt + the F key (no one-off listener/prompt here).
   useFrame(({ clock }) => {
-    const close = boardable && !!playerPosition && playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
-    if (close !== boardableRef.current) {
-      boardableRef.current = close;
-      setBoardable(close);
+    // A static wreck never offers boarding — skip the proximity publish entirely.
+    if (interactive) {
+      const close = boardable && !!playerPosition && playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
+      if (close !== boardableRef.current) {
+        boardableRef.current = close;
+        setBoardable(close);
+      }
     }
     // Idle breath on the thrusters + a slow counter-phased beacon blink; both
     // brighten when the approach highlight is active.
@@ -85,12 +107,14 @@ export default function SpaceshipPlaceholder({
   });
 
   useEffect(() => {
+    // The wreck is not a ship the HUD/interaction layer should track or board.
+    if (!interactive) return;
     setShipPosition(position);
     return () => {
       setShipPosition(null);
       setBoardable(false);
     };
-  }, [position]);
+  }, [position, interactive]);
 
   // While flying (controlMode==='flight') the ship IS the avatar / cockpit; hide
   // the parked exterior so it doesn't float in the cockpit view. It reappears

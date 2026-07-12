@@ -15,7 +15,7 @@ import { getInventory, resetInventory, addItem } from './inventorySystem.ts';
 import { getMawCharge, setMawCharge } from './mawSystem.ts';
 import { getCurrentEra, getMilestones, advanceEraTo, markMilestone } from './progressionSystem.ts';
 import { getPieces, restorePieces, type StructurePiece } from './structureSystem.ts';
-import { getCampfires, restoreCampfires, type Campfire } from './campfires.ts';
+import { getCampfires, resetCampfires, restoreCampfires, type Campfire } from './campfires.ts';
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
 import { getCollectedForage, markForageCollected } from './foragePickup.ts';
@@ -159,6 +159,16 @@ export function restoreStructuresForWorld(world: WorldSaveRef): void {
 }
 export function restoreCampfiresForWorld(world: WorldSaveRef): void {
   const w = loadWorld(world); if (w?.campfires) restoreCampfires(w.campfires);
+}
+/** Drop a world's persisted campfires (memory + the saved blob, other fields kept).
+ *  Story entry uses this so a dev-jump's debug pre-place fire — or any stale fire —
+ *  never survives into a run that has not built one yet (the ch3-gather craft). */
+export function clearCampfiresForWorld(world: WorldSaveRef): void {
+  resetCampfires();
+  const w = loadWorld(world);
+  if (!w || !w.campfires || w.campfires.length === 0) return;
+  w.campfires = [];
+  write(scopedWorldKey(world).primary, w);
 }
 export function restoreTreesForWorld(world: WorldSaveRef): void {
   const w = loadWorld(world); if (w?.trees) for (const t of w.trees) markTreeHarvested(t[0], t[1], t[2]);

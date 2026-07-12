@@ -24,6 +24,9 @@ export interface VoyageCardOption {
   effects?: VoyageEffects;
   /** Follow-up card ids injected into the queue when this option is chosen. */
   unlocks?: readonly string[];
+  /** A lowercase parenthetical caption shown shortly after this choice (the
+   *  watcher's private reaction; same idiom as the strange-lines watcher voice). */
+  aside?: string;
 }
 
 export interface VoyageCard {
@@ -31,6 +34,12 @@ export interface VoyageCard {
   title: string;
   body: string;
   options: readonly VoyageCardOption[];
+  /**
+   * Alternate bodies keyed by a prior `cardId:optionId` choice made THIS RUN. If
+   * the player made that choice earlier in the same voyage, the variant replaces
+   * `body` (first matching key wins). Lets a later card acknowledge an earlier one.
+   */
+  bodyVariants?: Record<string, string>;
 }
 
 export interface VoyageDeck {

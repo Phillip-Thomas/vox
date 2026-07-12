@@ -1,4 +1,11 @@
 import { MUSIC_LAYER_ASSETS, type MusicLayerId, type MusicLayerAsset } from './musicCatalog.ts';
+import {
+  getAudioContext,
+  getMusicBus,
+  makeNoiseBuffer,
+  rampParam as rampGain,
+  unlockAudio
+} from './audioCore.ts';
 
 export type TransitionCue =
   | 'menu'
@@ -60,6 +67,17 @@ interface ProceduralRuntime {
   nightGain: GainNode;
 }
 
+// P3 drone-retune constants: fold ranges keep each drone in its shipped
+// register while its PITCH obeys the harmonic center (kill fixed pitches).
+const DRONE_RETUNE_TAU_S = 1.4;
+const FIFTH_RATIO = 1.5;
+const DRONE_SHIP_FOLD_LO_HZ = 48; // hum stays near the shipped 64 Hz weight
+const DRONE_PULSE_FOLD_LO_HZ = 34; // deep transit pulse (was fixed 47 Hz)
+const DRONE_RUMBLE_FOLD_LO_HZ = 27.5; // sub rumble (was fixed 36 Hz)
+const DRONE_LIFE_FOLD_LO_HZ = 138; // life shimmer pair (was 174.61/220)
+const DRONE_GLASS_FOLD_LO_HZ = 550; // glass pair (was E5/B5)
+const DRONE_NIGHT_FOLD_LO_HZ = 70; // night pair (was E2/B2)
+
 const ZERO_PROCEDURAL: ProceduralMusicTargets = {
   pulse: 0,
   ship: 0,
@@ -73,20 +91,16 @@ const ZERO_PROCEDURAL: ProceduralMusicTargets = {
 };
 
 class MusicEngine {
+  // The engine's output into the shared music bus (audioCore owns volume/mute,
+  // the submerge muffle, and the visibility duck for the whole music mix).
   private context: AudioContext | null = null;
   private musicGain: GainNode | null = null;
-  // Master lowpass spliced musicGain -> submergeFilter -> visibilityGain. Open
-  // (20kHz) on land so the music chain is transparent; ramped down underwater.
-  private submergeFilter: BiquadFilterNode | null = null;
-  private visibilityGain: GainNode | null = null;
   private procedural: ProceduralRuntime | null = null;
   private unlocked = false;
-  private outputVolume = 0.72;
-  private muted = false;
-  private visibilityDucked = false;
-  private submerged = false;
   private proceduralTargets = ZERO_PROCEDURAL;
   private readonly layers = new Map<MusicLayerId, RuntimeLayer>();
+  /** Last published chord-root pc (semitones from A) — applied when drones start. */
+  private chordRootPc: number | null = null;
 
   constructor() {
     for (const asset of MUSIC_LAYER_ASSETS) {
@@ -106,10 +120,10 @@ class MusicEngine {
     if (!context) return;
 
     this.unlocked = true;
+    unlockAudio();
     await context.resume();
     this.startProcedural();
-    this.applyOutput(0.05);
-    this.applyVisibility(0.05);
+    if (this.musicGain) rampGain(context, this.musicGain.gain, 1, 0.05);
     this.setProceduralTargets(this.proceduralTargets, 0.05);
     this.loadAll();
   }
@@ -117,24 +131,6 @@ class MusicEngine {
   preload(): void {
     if (!this.context) return;
     this.loadAll();
-  }
-
-  setOutput(musicVolume: number, muted: boolean): void {
-    this.outputVolume = Math.min(1, Math.max(0, musicVolume));
-    this.muted = muted;
-    this.applyOutput(0.22);
-  }
-
-  setVisibilityDucked(ducked: boolean): void {
-    this.visibilityDucked = ducked;
-    this.applyVisibility(ducked ? 0.35 : 0.45);
-  }
-
-  // Muffle the music bus underwater (mirrors the visibility duck). Edge-driven by
-  // AudioDirector so the cutoff snaps on submerge and releases on emerge.
-  setSubmerged(submerged: boolean): void {
-    this.submerged = submerged;
-    this.applySubmerge(submerged ? 0.12 : 0.2);
   }
 
   setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void {
@@ -201,6 +197,46 @@ class MusicEngine {
       220 + water * 260,
       now + Math.max(0.04, fadeSeconds)
     );
+  }
+
+  /**
+   * P3 — the drone-bank kill path (PARAVOXIA_SCORE.md defect #2): every
+   * pitched drone retunes to the published harmonic center instead of its
+   * legacy fixed pitch. The ship hum folds the chord root into its hum
+   * register (§8.4 surfaceShip row); pulse/rumble sit in root sub octaves;
+   * the (currently silent) life/glass/night pairs hold root+fifth so any
+   * future gain can never clash with the key. Glides are slow — retuning
+   * reads as the world breathing, not as an event.
+   */
+  retuneDronesToChordRoot(rootSemisFromA: number): void {
+    const pc = ((Math.round(rootSemisFromA) % 12) + 12) % 12;
+    this.chordRootPc = pc;
+    if (!this.context || !this.procedural) return;
+    const rootHz = 55 * Math.pow(2, pc / 12);
+    const fold = (hz: number, lo: number): number => {
+      let f = hz;
+      while (f >= lo * 2) f /= 2;
+      while (f < lo) f *= 2;
+      return f;
+    };
+    const now = this.context.currentTime;
+    const glide = (param: AudioParam, hz: number): void => {
+      param.cancelScheduledValues(now);
+      param.setTargetAtTime(hz, now, DRONE_RETUNE_TAU_S);
+    };
+    const p = this.procedural;
+    glide(p.shipOsc.frequency, fold(rootHz, DRONE_SHIP_FOLD_LO_HZ));
+    glide(p.pulseOsc.frequency, fold(rootHz, DRONE_PULSE_FOLD_LO_HZ));
+    glide(p.rumbleOsc.frequency, fold(rootHz, DRONE_RUMBLE_FOLD_LO_HZ));
+    const lifeHz = fold(rootHz, DRONE_LIFE_FOLD_LO_HZ);
+    glide(p.lifeA.frequency, lifeHz);
+    glide(p.lifeB.frequency, lifeHz * FIFTH_RATIO);
+    const glassHz = fold(rootHz, DRONE_GLASS_FOLD_LO_HZ);
+    glide(p.glassA.frequency, glassHz);
+    glide(p.glassB.frequency, glassHz * FIFTH_RATIO);
+    const nightHz = fold(rootHz, DRONE_NIGHT_FOLD_LO_HZ);
+    glide(p.nightA.frequency, nightHz);
+    glide(p.nightB.frequency, nightHz * FIFTH_RATIO);
   }
 
   playTransitionCue(cue: TransitionCue): void {
@@ -292,47 +328,18 @@ class MusicEngine {
   }
 
   private ensureContext(): AudioContext | null {
-    if (typeof window === 'undefined') return null;
     if (this.context) return this.context;
+    const context = getAudioContext();
+    const bus = getMusicBus();
+    if (!context || !bus) return null;
 
-    const ContextCtor =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!ContextCtor) return null;
-
-    const context = new ContextCtor();
     const musicGain = context.createGain();
-    const submergeFilter = context.createBiquadFilter();
-    const visibilityGain = context.createGain();
-    musicGain.gain.value = 0;
-    visibilityGain.gain.value = 1;
-    submergeFilter.type = 'lowpass';
-    submergeFilter.frequency.value = 20000; // open on land (acoustically transparent)
-    submergeFilter.Q.value = 0.7;
-    musicGain.connect(submergeFilter);
-    submergeFilter.connect(visibilityGain);
-    visibilityGain.connect(context.destination);
+    musicGain.gain.value = 0; // faded to 1 on unlock
+    musicGain.connect(bus);
 
     this.context = context;
     this.musicGain = musicGain;
-    this.submergeFilter = submergeFilter;
-    this.visibilityGain = visibilityGain;
     return context;
-  }
-
-  private applyOutput(fadeSeconds: number): void {
-    if (!this.context || !this.musicGain) return;
-    rampGain(this.context, this.musicGain.gain, this.muted ? 0 : this.outputVolume, fadeSeconds);
-  }
-
-  private applyVisibility(fadeSeconds: number): void {
-    if (!this.context || !this.visibilityGain) return;
-    rampGain(this.context, this.visibilityGain.gain, this.visibilityDucked ? 0.18 : 1, fadeSeconds);
-  }
-
-  private applySubmerge(fadeSeconds: number): void {
-    if (!this.context || !this.submergeFilter) return;
-    rampGain(this.context, this.submergeFilter.frequency, this.submerged ? 540 : 20000, fadeSeconds);
   }
 
   private loadAll(): void {
@@ -505,6 +512,7 @@ class MusicEngine {
     this.procedural = {
       pulseOsc,
       pulseGain,
+      // (retuned to the harmonic center right below when a chord was published)
       shipOsc,
       shipGain,
       warpNoise,
@@ -530,6 +538,9 @@ class MusicEngine {
       nightB,
       nightGain
     };
+
+    // A chord may have been published before the drones existed: obey it now.
+    if (this.chordRootPc != null) this.retuneDronesToChordRoot(this.chordRootPc);
   }
 
   private playCueOscillator(
@@ -606,27 +617,6 @@ class MusicEngine {
   }
 }
 
-function rampGain(context: AudioContext, param: AudioParam, value: number, fadeSeconds: number): void {
-  const now = context.currentTime;
-  param.cancelScheduledValues(now);
-  param.setValueAtTime(param.value, now);
-  param.linearRampToValueAtTime(value, now + Math.max(0.01, fadeSeconds));
-}
-
-function makeNoiseBuffer(context: AudioContext, seconds: number): AudioBuffer {
-  const frameCount = Math.max(1, Math.floor(context.sampleRate * seconds));
-  const buffer = context.createBuffer(1, frameCount, context.sampleRate);
-  const data = buffer.getChannelData(0);
-  let sample = 0;
-  for (let i = 0; i < frameCount; i++) {
-    // Brown-ish noise sits behind the music as air/sea texture instead of
-    // reading as bright broadband static.
-    sample = sample * 0.985 + (Math.random() * 2 - 1) * 0.015;
-    data[i] = sample * 3.5;
-  }
-  return buffer;
-}
-
 let engine: MusicEngine | null = null;
 
 export function getMusicEngine(): MusicEngine {
@@ -636,8 +626,4 @@ export function getMusicEngine(): MusicEngine {
 
 export function unlockMusicAudio(): Promise<void> {
   return getMusicEngine().unlock();
-}
-
-export function setSubmergedMusic(submerged: boolean): void {
-  getMusicEngine().setSubmerged(submerged);
 }

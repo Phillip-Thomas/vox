@@ -6,6 +6,7 @@ import {
 } from '../../utils/worldCoordinates.ts';
 import { findTopFaceSurfaceVoxel } from '../../utils/worldArrival.ts';
 import { voxelCoordToWorld } from '../../utils/cubeGravityConstants.ts';
+import { FACE_NORMALS } from '../../utils/surfaceControls.ts';
 import { getWorldGen } from '../../utils/worldGenCache.ts';
 
 // --- The story world ------------------------------------------------------------
@@ -77,7 +78,7 @@ function surfacePoseNear(
   return { position: center.clone().addScaledVector(up, lift), up };
 }
 
-/** Height of the signal mesa the anomaly stone sits on (voxel steps, iso era). */
+/** Height of the signal mesa the iso era teaches height on (voxel steps). */
 export const MESA_HEIGHT = 3;
 
 /** The mesa's ground pose — the stepped voxel rise the iso era teaches height on. */
@@ -85,9 +86,54 @@ export function getSignalMesaPose(planetSize: number, terrainSeed: number): Stor
   return surfacePoseNear(planetSize, terrainSeed, 14, -8, 0.5);
 }
 
-/** The smooth anomaly stone: atop the signal mesa — above grade, earned by the climb. */
-export function getAnomalyStonePose(planetSize: number, terrainSeed: number): StoryPropPose {
+/**
+ * The signal mesa's SUMMIT — the top of the iso-era climb. The ch1-iso→ch1-lift
+ * gate and the 'SIGNAL SOURCE' marker key on this. (This is exactly where the
+ * anomaly stone used to sit; the stone has since moved across a gravity edge to
+ * the adjacent face, so the summit is now the mesa's own landmark.)
+ */
+export function getSignalMesaSummit(planetSize: number, terrainSeed: number): StoryPropPose {
   return surfacePoseNear(planetSize, terrainSeed, 14, -8, 0.5 + MESA_HEIGHT + 0.9);
+}
+
+/**
+ * The smooth anomaly stone: on the cube face ADJACENT to the arrival (top) face —
+ * a few voxels DOWN past the top→right (+X) edge, so after the first-person lift
+ * the player must traverse a dynamic-gravity edge to reach it. Oriented to the
+ * +X face normal (cube gravity, not the spherical normal). Deterministic.
+ */
+export function getAnomalyStonePose(planetSize: number, terrainSeed: number): StoryPropPose {
+  return surfacePoseOnAdjacentFace(planetSize, terrainSeed);
+}
+
+/**
+ * A surface pose on the cube face ADJACENT to the arrival (top) face, reached by
+ * crossing exactly one gravity edge. We cross the top→right (+X) edge — the mesa
+ * already leans that way — then step EDGE_DROP voxels down the +X face so the
+ * point is unambiguously on the neighbour (dominant axis = X). The crossing is a
+ * short walk from the mesa summit (~13 voxels) yet forces one face transition.
+ * Deterministic from planetSize/terrainSeed; `up` is the +X face normal.
+ */
+function surfacePoseOnAdjacentFace(planetSize: number, terrainSeed: number): StoryPropPose {
+  const EDGE_DROP = 6; // voxels below the top edge — well clear of the edge hysteresis
+  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  const { voxels } = getWorldGen(planetSize, terrainSeed);
+  const solid = new Set<string>();
+  let radius = 0;
+  for (const v of voxels) {
+    solid.add(`${v.x},${v.y},${v.z}`);
+    radius = Math.max(radius, Math.abs(v.x), Math.abs(v.y), Math.abs(v.z));
+  }
+  const y = radius - EDGE_DROP; // down the +X face, past the top edge
+  const z = arrival.z - 8;      // the mesa's row — keeps the crossing short
+  // Outermost solid voxel along +X in this column = the +X face's flat surface.
+  let surfX = radius;
+  while (surfX > 0 && !solid.has(`${surfX},${y},${z}`)) surfX--;
+  const up = FACE_NORMALS.right.clone(); // +X face normal — NOT the spherical up
+  const center = voxelCoordToWorld(surfX, y, z);
+  // Lift out along the face normal so the stone rests ON the surface (the voxel
+  // centre sits one half-extent inside; the extra clears the squashed icosahedron).
+  return { position: center.clone().addScaledVector(up, 1.6), up };
 }
 
 /**
@@ -104,7 +150,7 @@ export function getNavWaypointPoses(planetSize: number, terrainSeed: number): St
 
 /**
  * The raster era's side plane: anchored at the spawn, travelling along ONE
- * world axis (±X or ±Z, whichever points more toward the anomaly stone). Fully
+ * world axis (±X or ±Z, whichever points more toward the signal mesa). Fully
  * grid-aligned on purpose — the camera looks square at a single cube face, so
  * the view reads as a true 2D elevation, never an isometric corner.
  * depthAxis = travel × up; the side camera hangs at +depth. Deterministic.
@@ -120,15 +166,29 @@ export function getStorySidePlane(planetSize: number, terrainSeed: number): {
   // Voxel-grid-aligned up (the arrival site is on the top face): a side-scroller
   // wants a level horizon and grid-square blocks, not the spherical normal.
   const up = new THREE.Vector3(0, 1, 0);
-  const stone = getAnomalyStonePose(planetSize, terrainSeed);
-  const toStone = stone.position.clone().sub(originCenter);
+  // The mesa summit is the on-face landmark the strip travels toward (the anomaly
+  // stone now sits across a gravity edge, so it can't define the flat side plane).
+  const mesa = getSignalMesaSummit(planetSize, terrainSeed);
+  const toMesa = mesa.position.clone().sub(originCenter);
   // Snap to the dominant world axis: -x/+x (or -z/+z) travel, one cube face on screen.
-  const travelAxis = Math.abs(toStone.x) >= Math.abs(toStone.z)
-    ? new THREE.Vector3(Math.sign(toStone.x) || 1, 0, 0)
-    : new THREE.Vector3(0, 0, Math.sign(toStone.z) || 1);
+  const travelAxis = Math.abs(toMesa.x) >= Math.abs(toMesa.z)
+    ? new THREE.Vector3(Math.sign(toMesa.x) || 1, 0, 0)
+    : new THREE.Vector3(0, 0, Math.sign(toMesa.z) || 1);
   const depthAxis = travelAxis.clone().cross(up).normalize();
   const origin = originCenter.clone().addScaledVector(up, 1);
   return { origin, travelAxis, depthAxis, up };
+}
+
+/**
+ * The crash pod's impact site — the single source of truth shared by the voxel
+ * DescentPod (which lands its smoking wreck here) and the post-awakening hi-fi
+ * ship it converts into (which perches its crashed hull here). Deterministic per
+ * seed; the position is the pod's ground contact point (the descent adds its own
+ * small hull lift on top).
+ */
+export function getPodImpactPose(planetSize: number, terrainSeed: number): StoryPropPose {
+  const plane = getStorySidePlane(planetSize, terrainSeed);
+  return { position: plane.origin.clone().addScaledVector(plane.travelAxis, -5), up: plane.up.clone() };
 }
 
 /**

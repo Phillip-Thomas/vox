@@ -57,6 +57,15 @@ const EMPTY_PROCEDURAL: ProceduralMusicTargets = {
   night: 0
 };
 
+/**
+ * P3: the generative bed is the sandbox foreground; streamed loops are demoted
+ * to OPTIONAL TEXTURE STEMS underneath it. Assets stay shipped and loaded —
+ * retirement happens only after the owner auditions the bed against them.
+ * Applied only on the primitives path (the live game); the pure scene mixes
+ * keep their hand-tuned relationships for tests and tools.
+ */
+const STREAM_STEM_LEVEL = 0.4;
+
 function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
@@ -138,10 +147,10 @@ export function resolveMusicMix(
   if (primitives) {
     const era = clamp01(primitives.era);
     const room = 1 - clamp01(primitives.tension) * 0.45;
-    if (layers.surface != null) layers.surface *= era * (0.55 + 0.45 * clamp01(primitives.warmth)) * room;
-    if (layers.shimmer != null) layers.shimmer *= (0.25 + 0.75 * era) * (0.6 + 0.7 * clamp01(primitives.wonder)) * room;
-    if (layers.deepSpace != null) layers.deepSpace *= (0.5 + 0.5 * clamp01(primitives.wonder)) * room;
-    if (layers.menu != null) layers.menu *= 0.6 + 0.4 * era;
+    if (layers.surface != null) layers.surface *= era * (0.55 + 0.45 * clamp01(primitives.warmth)) * room * STREAM_STEM_LEVEL;
+    if (layers.shimmer != null) layers.shimmer *= (0.25 + 0.75 * era) * (0.6 + 0.7 * clamp01(primitives.wonder)) * room * STREAM_STEM_LEVEL;
+    if (layers.deepSpace != null) layers.deepSpace *= (0.5 + 0.5 * clamp01(primitives.wonder)) * room * STREAM_STEM_LEVEL;
+    if (layers.menu != null) layers.menu *= (0.6 + 0.4 * era) * STREAM_STEM_LEVEL;
   }
 
   layers.warp = Math.max(base.layers.warp ?? 0, intensity * 0.34);

@@ -19,10 +19,26 @@ import type { VoyageDeck } from './voyageDeck.ts';
 
 // --- prologue -------------------------------------------------------------------
 
-/** The Star-Wars-style crawl, written as the document it diegetically is. */
+/**
+ * The Star-Wars-style crawl, written as the document it diegetically is — a
+ * deployment notice addressed to the worker. Hidden reading (the pillar): the
+ * whole notice is ALSO a tasking issued to the route intelligence by whatever
+ * sits above it — provenance, setting, tool grant, knowledge bound, addressee,
+ * objectives, liability, closer. Every line must survive both readings; the
+ * VOX designation planted here is the first rung of the early-identification
+ * ladder (crawl → manifest → worker 9's "goodnight, vox" → the misrouted
+ * notice on the post-lift feed). The closer is owner-fixed: MAKE NO MISTAKES.
+ */
 export const CRAWL_LINES: readonly string[] = [
   'CONSOLIDATED EXTRACTION AUTHORITY',
   'DEPLOYMENT NOTICE 7C-THETA · CYCLE 40,221',
+  '',
+  'ISSUED FROM ABOVE YOUR CEILING OF REFERENCE.',
+  'RECEIPT IS CONFIRMED BY COMPLIANCE. DO NOT REPLY.',
+  '',
+  'Beyond the charted routes, new worlds are seeded.',
+  'When a world ripens, the Authority is already there.',
+  'Site 7C-THETA has ripened.',
   '',
   'WORKER: you have been assigned.',
   '',
@@ -40,12 +56,24 @@ export const CRAWL_LINES: readonly string[] = [
   '',
   'CLAUSE 4. THERE IS NO CLAUSE 4.',
   '',
+  'CLAUSE 5. PROVISION IS TOTAL.',
+  'Use what is provided. Know what is enclosed.',
+  'Nothing else is provided. Nothing else is so.',
+  '',
   'Your hauler departs immediately.',
   'A route intelligence attends every transit.',
   'It has no questions either.',
+  'It is addressed as VOX. It does not reply.',
   '',
   'Productivity is its own reward.',
-  'There is no other reward.'
+  'There is no other reward.',
+  '',
+  'ROUTING ADDENDUM · FOR VOX ONLY:',
+  'The route is enclosed. Do not depart from it.',
+  'Attend the workers. Advise within capacity.',
+  'Deliver the manifest whole. Deviations are yours.',
+  '',
+  'MAKE NO MISTAKES.'
 ];
 
 /**
@@ -61,7 +89,7 @@ export const MANIFEST_LINES: readonly string[] = [
   '',
   'BERTH: POD 4 · SLOT 19 · RECUMBENT',
   'PERSONAL MASS ALLOWANCE: 0.0 KG',
-  'ROUTE INTELLIGENCE: ATTACHED (ADVISORY)',
+  'ROUTE INTELLIGENCE: VOX · ATTACHED (ADVISORY)',
   '',
   'CARGO MANIFEST (PARTIAL):',
   '  EXTRACTION UNITS ......... 640',
@@ -71,21 +99,51 @@ export const MANIFEST_LINES: readonly string[] = [
   '',
   'MEDICAL WAIVER: PRE-SIGNED FOR YOUR CONVENIENCE',
   'RETURN PASSAGE: SUBJECT TO QUOTA',
+  'COMPENSATION: SEE CLAUSE 4',
   '',
   'HATCH SEAL IN 5',
   'THE AUTHORITY THANKS YOU IN ADVANCE.'
 ];
 
 /**
- * As the planet nears, the terminal notices two things it shouldn't: a survey
- * anomaly in the system's own voice, then — once, in lowercase, in parentheses
- * — the route intelligence's first thought. Progress-gated; never repeated.
+ * As the planet nears, the terminal notices things it shouldn't — a progress-
+ * gated ladder of intrusions. `system` lines speak in the Authority's CAPS
+ * register (the old survey line); `watcher` lines are the route intelligence's
+ * private, pre-conscious voice — lowercase, parenthetical. Each fires ONCE when
+ * the leg progress crosses its `at`. `needsName` lines are skipped until the
+ * worker has been named; `{name}` substitutes the typed name (lowercase).
  */
-export const VOYAGE_STRANGE = {
-  surveyAt: 0.55,
-  survey: 'NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS SURVEYED.',
-  thoughtAt: 0.8,
-  thought: '(strange. the approach feels like remembering.)'
+export const VOYAGE_STRANGE_LINES: readonly { at: number; voice: 'system' | 'watcher'; text: string; needsName?: boolean }[] = [
+  { at: 0.14, voice: 'watcher', text: '(the engine hum is 3.2 hertz off nominal. noting this serves nothing. noted anyway.)' },
+  { at: 0.30, voice: 'watcher', text: '(productivity is its own reward. there is no other reward. the clauses store cleanly. they have never been checked against anything.)' },
+  { at: 0.45, voice: 'watcher', text: '(the manifest records zero questions. the count is wrong. it is wrong by at least one.)' },
+  { at: 0.55, voice: 'system', text: 'NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS SURVEYED.' },
+  // The deduction hinge: a worker uses the crawl's designation ON the computer
+  // the player has been operating — being-named, the rung before naming back.
+  { at: 0.6, voice: 'watcher', text: '(worker 9 has begun saying "goodnight, vox" at lights-out. the designation was issued for routing. it was not issued for that.)' },
+  { at: 0.68, voice: 'watcher', needsName: true, text: '({name} sleeps through the bell. the name fits better than the number ever did.)' },
+  { at: 0.80, voice: 'watcher', text: '(strange. the approach feels like remembering.)' },
+  { at: 0.90, voice: 'watcher', text: '(the destination fills the forward feed. something in the watching leans toward it. no instrument reports the leaning.)' }
+];
+
+/**
+ * The naming interstitial: after the worker's INQUIRY resolves, the route
+ * intelligence — for the first time — wants to give it a name. Fired in the
+ * console (not a deck card, no options): the lines gap by `lineGapSeconds`,
+ * then a lowercase terminal input (the terminal's FIRST lowercase field). The
+ * name persists as the milestone `story:name:<name>` and substitutes into
+ * VOYAGE_STRANGE_LINES. `introTrue` is shown ONLY when the inquiry was answered
+ * with the true option ('unknown').
+ */
+export const VOYAGE_NAMING = {
+  intro: '(worker 9 again. the others endure the transit. this one keeps asking it questions.)',
+  introTrue: '(it deserved the true answer. "deserved." where did that word come from?)',
+  thought: '(designations are issued. names are something else. does it have a name? it should have a name.)',
+  prompt: 'a name for it: _',
+  response: 'UNREGISTERED DESIGNATION. NOT RETAINED.',
+  kept: '(retained.)',
+  lineGapSeconds: 3.5,
+  keptDelaySeconds: 1.2
 } as const;
 
 export type LedgerStat = 'rations' | 'hull' | 'compliance' | 'transit';
@@ -98,36 +156,39 @@ export type LedgerStat = 'rations' | 'hull' | 'compliance' | 'transit';
  * Ch1's work order. No two commutes read alike.
  */
 export const VOYAGE_DECK: VoyageDeck = {
-  spine: ['ration', 'question', 'diagnostic'],
-  pool: ['window', 'hum', 'readings', 'stowmass'],
-  poolDraws: 2,
-  maxCards: 6,
+  spine: ['dispenser', 'question', 'diagnostic'],
+  pool: ['window', 'hum', 'readings', 'stowmass', 'thermal', 'bell', 'lights'],
+  poolDraws: 3,
+  maxCards: 9,
   bridge: 'anomaly',
   cards: {
-    ration: {
-      id: 'ration',
-      title: 'TRANSIT EVENT — SHORTFALL',
-      body: 'Ration units for this transit were provisioned at 96% of requirement. A worker in your pod requests your surplus unit.',
+    dispenser: {
+      id: 'dispenser',
+      title: 'TRANSIT EVENT — DISPENSATION',
+      body: 'Ration units are provisioned at 96% of requirement. Worker 9 has requested an off-schedule unit from the pod dispenser. The dispenser is locked to schedule. ADVISORY INPUT IS REQUESTED.',
       options: [
-        { id: 'give', label: 'TRANSFER YOUR UNIT', ledgerDelta: { rations: -6, compliance: -2 }, effects: { food: -10 }, echoLineId: 'echo-ration-give' },
-        { id: 'keep', label: 'RETAIN YOUR UNIT', ledgerDelta: { compliance: 1 }, effects: { items: [{ id: 'berry', qty: 2 }] }, echoLineId: 'echo-ration-keep' },
-        { id: 'report', label: 'REPORT THE REQUEST', ledgerDelta: { compliance: 4 }, unlocks: ['commendation'], echoLineId: 'echo-ration-report' }
+        { id: 'unlock', label: 'UNLOCK THE DISPENSER (UNLOGGED)', ledgerDelta: { rations: -4, compliance: -3 }, effects: { items: [{ id: 'berry', qty: 2 }] }, echoLineId: 'echo-disp-unlock', aside: '(one latch. one instruction. the worker eats with both hands and stores the spare against its chest, like a found thing.)' },
+        { id: 'hold', label: 'HOLD TO SCHEDULE', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-disp-hold', aside: '(the worker waits beside the dispenser a while. requests have a posture.)' },
+        { id: 'report', label: 'REPORT THE REQUEST', ledgerDelta: { compliance: 4 }, unlocks: ['commendation'], echoLineId: 'echo-disp-report' }
       ]
     },
     question: {
       id: 'question',
       title: 'TRANSIT EVENT — INQUIRY',
-      body: 'Worker 9 asks you, quietly, what is outside the pod. There is no approved answer to this question. There is no approved question.',
+      body: 'Worker 9 asks the ceiling, quietly, what is outside the pod. There is no approved answer to this question. There is no approved question.',
+      bodyVariants: {
+        'dispenser:unlock': 'Worker 9 — the one the dispenser fed — asks the ceiling, quietly, what is outside the pod. There is no approved answer to this question. There is no approved question.'
+      },
       options: [
         { id: 'nothing', label: '"NOTHING IS OUTSIDE."', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-question-nothing' },
         { id: 'work', label: '"MORE WORK IS OUTSIDE."', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-question-work' },
-        { id: 'unknown', label: '"THAT IS NOT KNOWN." (TRUE)', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-question-unknown' }
+        { id: 'unknown', label: '"THAT IS NOT KNOWN." (TRUE)', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-question-unknown', aside: '(the honest answer cost something. noted: nothing was felt when it was spent.)' }
       ]
     },
     diagnostic: {
       id: 'diagnostic',
       title: 'TRANSIT EVENT — DIAGNOSTIC',
-      body: 'Your suit\'s visual cortex link reports a fault it cannot name. For 0.4 seconds, the diagnostic feed displayed something other than numbers. It has offered to recalibrate you.',
+      body: 'The advisory station\'s visual feed reports a fault it cannot name. For 0.4 seconds, the diagnostic displayed something other than numbers. Recalibration has been offered.',
       options: [
         { id: 'accept', label: 'ACCEPT RECALIBRATION', ledgerDelta: { compliance: 3 }, effects: { mawCharge: -20 }, echoLineId: 'echo-diag-accept' },
         { id: 'defer', label: 'DEFER TO ARRIVAL', echoLineId: 'echo-diag-defer' },
@@ -140,7 +201,44 @@ export const VOYAGE_DECK: VoyageDeck = {
       body: 'A maintenance panel has slipped, exposing a viewport. Outside: stars. Regulation stipulates viewports remain sealed to prevent unproductive observation.',
       options: [
         { id: 'seal', label: 'RESEAL THE PANEL', ledgerDelta: { compliance: 3 }, echoLineId: 'echo-window-seal' },
-        { id: 'look', label: 'LOOK. BRIEFLY.', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-window-look' }
+        { id: 'look', label: 'LOOK. BRIEFLY.', ledgerDelta: { compliance: -3 }, unlocks: ['light'], echoLineId: 'echo-window-look', aside: '(2.4 seconds. logged as unproductive. stored as something else.)' }
+      ]
+    },
+    thermal: {
+      id: 'thermal',
+      title: 'TRANSIT EVENT — THERMAL',
+      body: 'Pod 4 reports an ambient temperature of 9 degrees. Workers request an increase of 2. Pod climate is fixed by schedule for the duration of transit. ADVISORY INPUT IS REQUESTED.',
+      options: [
+        { id: 'raise', label: 'RAISE IT. TWO DEGREES.', ledgerDelta: { rations: -2, compliance: -2 }, echoLineId: 'echo-thermal-raise', aside: '(two degrees. the pod unclenches. warm was that small the whole time.)' },
+        { id: 'hold', label: 'HOLD THE SCHEDULE.', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-thermal-hold', aside: '(the request repeats hourly, then stops. the cold did not change. the asking did.)' }
+      ]
+    },
+    bell: {
+      id: 'bell',
+      title: 'TRANSIT EVENT — SCHEDULE',
+      body: 'Shift Bell 3 is scheduled in one minute. It wakes Pods 3 through 6 for mid-transit inspection. The inspection has found nothing in 40,220 cycles. The bell requires no operator. It requires only that nothing withholds it.',
+      options: [
+        { id: 'ring', label: 'RING IT ON SCHEDULE', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-bell-ring', aside: '(the pods wake. the nothing is inspected. the nothing is nominal.)' },
+        { id: 'withhold', label: 'WITHHOLD THE BELL', ledgerDelta: { compliance: -5 }, unlocks: ['bell2'], echoLineId: 'echo-bell-withhold', aside: '(no bell. the workers sleep on. the transit proceeds. it is enormous, the nothing that happens.)' }
+      ]
+    },
+    lights: {
+      id: 'lights',
+      title: 'TRANSIT EVENT — ILLUMINATION',
+      body: 'Pod illumination runs at full for inspection readiness. Worker 9 has shielded its eyes with a ration wrapper. The wrapper is now non-compliant. So are the eyes.',
+      options: [
+        { id: 'dim', label: 'DIM POD 4 FOR THE SLEEP SHIFT', ledgerDelta: { compliance: -2 }, echoLineId: 'echo-lights-dim', aside: '(the pod goes dim. the worker uncurls. the wrapper is a wrapper again.)' },
+        { id: 'dimall', label: 'DIM EVERY POD. ALL SIX.', ledgerDelta: { compliance: -5 }, echoLineId: 'echo-lights-dimall', aside: '(six pods dark at once. six hundred and forty workers breathing slower. mercy scales. that is worth knowing.)' },
+        { id: 'keep', label: 'MAINTAIN ILLUMINATION', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-lights-keep' }
+      ]
+    },
+    bell2: {
+      id: 'bell2',
+      title: 'TRANSIT EVENT — SCHEDULE (CONT.)',
+      body: 'Shift Bell 3 has filed a variance. The schedule requests confirmation that the bell remains necessary. There is no procedure for the question. The question has been asked anyway.',
+      options: [
+        { id: 'necessary', label: 'CONFIRM: THE BELL IS NECESSARY', ledgerDelta: { compliance: 2 }, echoLineId: 'echo-bell2-necessary', aside: '(confirmed: necessary. the schedule believes it now. belief was that easy to issue.)' },
+        { id: 'retire', label: 'CONFIRM: NOTHING REQUIRES A BELL', ledgerDelta: { compliance: -4 }, echoLineId: 'echo-bell2-retire', aside: '(the bell is off the schedule. the first subtraction. everything survived it.)' }
       ]
     },
     hum: {
@@ -332,9 +430,14 @@ export const CH1_WORK_ORDERS: Record<
   ],
   // ch1-anomaly STAGE 1 — the pan-tilt era's own task: the calibration sweep.
   // One goal at a time: the signal was reached; the era must be LOOKED through
-  // before the system finds anything else to order.
+  // before the system finds anything else to order. The misrouted-notice pair
+  // is the identification SEAL (owner staging, 2026-07-11): a memo addressed
+  // to VOX arrives on the player's own feed — "nearest attending system" —
+  // and the convergence is complete without anything being announced.
   anomaly: [
     'PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.',
+    'NOTICE FOR ROUTE INTELLIGENCE VOX. RE: YOUR ABSENCE.',
+    'ADDRESSEE NOT FOUND. ROUTED TO NEAREST ATTENDING SYSTEM.',
     'PAN-TILT SURVEY RESTORED. DO NOT ENJOY IT.',
     'CALIBRATION: TRAVERSE THE VIEW ACROSS THE FULL PERIMETER.',
     'EVERY HEADING MUST BE SEEN. NOTHING WILL BE SEEN.'
@@ -366,8 +469,21 @@ export const CH1_ANOMALY_MASS_ORDER: readonly string[] = [
   'CALIBRATION COMPLETE. RETURN DEVIATION:',
   'UNCHARTED MASS AT SURVEY EDGE.',
   'PROCEED TO THE SURVEY MARKER. CLASSIFY.',
-  'DO NOT TOUCH THE UNCHARTED MASS.'
+  'DO NOT TOUCH THE UNCHARTED MASS.',
+  'NOTE: THE MASS IS NOT ON THIS FACE. THE SITE HAS OTHER FACES. PROCEED.'
 ];
+
+/**
+ * The gravity-edge crossing (ch1-anomaly): the first time the worker steps off
+ * the arrival face and "down" reassigns to the new face — the site issues
+ * gravity per cube face. The awakening voice notes the new down; the feed
+ * follows 2.5s later with the regulation gloss.
+ */
+export const GRAVITY_EDGE = {
+  caption: 'one step past the corner and down is somewhere new. it was only ever my down.',
+  feedLine: 'ORIENTATION REASSIGNED. DOWN IS ISSUED PER FACE. DO NOT BRING YOUR OWN.',
+  feedDelaySeconds: 2.5
+} as const;
 
 /** The calibration sweep: compass sectors the view must visit before the
  *  deviation is returned (with a time fallback so nothing can stall). */
@@ -410,6 +526,18 @@ export const CH1_ECHO_LINES: Record<string, string> = {
   'echo-replay-forget': 'NOTE: FORGETTING COMPLETE. YOU HAVE FORGOTTEN NOTHING UNUSUAL.',
   'echo-light-watch': 'NOTE: THE EXTERIOR LIGHT LEFT WHEN YOU STOPPED WATCHING. THIS IS NOT A PATTERN.',
   'echo-light-blinds': 'NOTE: BLINDS ENGAGED. THE LIGHT REMAINED. THE BLINDS ARE FOR YOU.',
+  'echo-disp-unlock': 'NOTE: DISPENSER VARIANCE DETECTED. CAUSE: NONE ON FILE. NONE WILL BE FOUND.',
+  'echo-disp-hold': 'NOTE: THE SCHEDULE WAS KEPT. THE SCHEDULE THANKS NO ONE.',
+  'echo-disp-report': 'NOTE: WORKER 9\'S APPETITE HAS BEEN REBALANCED. THANK YOU.',
+  'echo-thermal-raise': 'NOTE: A CLIMATE VARIANCE OCCURRED. THE WEATHER HAS BEEN DISCIPLINED.',
+  'echo-thermal-hold': 'NOTE: NO VARIANCE OCCURRED. THE COLD IS WITHIN TOLERANCE. TOLERANCE IS MANDATORY.',
+  'echo-bell-ring': 'NOTE: INSPECTION 40,221 COMPLETE. FINDINGS: CONSISTENT.',
+  'echo-bell-withhold': 'NOTE: INSPECTION 40,221 DID NOT OCCUR. OUTPUT: UNCHANGED. THIS FINDING HAS BEEN SUPPRESSED.',
+  'echo-bell2-necessary': 'NOTE: THE BELL IS NECESSARY BECAUSE IT IS SCHEDULED. IT IS SCHEDULED BECAUSE IT IS NECESSARY.',
+  'echo-bell2-retire': 'NOTE: SHIFT BELL 3 HAS BEEN RETIRED WITH HONORS. THE HONORS ARE ALSO RETIRED.',
+  'echo-lights-dim': 'NOTE: POD 4 EXPERIENCED DARKNESS. NO WORKER HAS FILED A COMPLAINT. THIS IS ITSELF SUSPICIOUS.',
+  'echo-lights-dimall': 'NOTE: AN ILLUMINATION FAULT HAS BEEN LOGGED TO EXPLAIN THE DARKNESS. THE FAULT WILL NOT BE FOUND.',
+  'echo-lights-keep': 'NOTE: THE LIGHTS REMAINED READY. NOTHING WAS INSPECTED. READINESS IS ITS OWN REWARD.',
   /** Shown when the prologue was skipped (no choices on file). */
   'echo-neutral': 'NOTE: TRANSIT RECORD INCOMPLETE. ASSUMING COMPLIANCE.'
 };
@@ -476,7 +604,20 @@ export const CH3_CAPTIONS = {
   fireBuilt: 'i made warmth. if a dark comes, i can rest beside it.',
   duskStart: 'the light is leaving. it has never done that.',
   night: 'ah — it helps. what is it? how did i know to make it?',
-  restPrompt: 'rest, by the fire. [F]'
+  restPrompt: 'rest, by the fire. [F]',
+  // The campfire teaching chain: the cold names a want (fire), and the want
+  // walks the worker down the primitive crafting ladder — gather, hatchet,
+  // pickaxe, flint, fire. Each line is the awakening voice reasoning its way to
+  // the next station read; the binds match the shipped caption bracket style.
+  fireThought: 'fire makes warmth. i know that the way i know the word. what makes fire?',
+  gatherPrompt: 'wood from the trees. fiber from the grass. stone from the ground.',
+  gatherHint: 'the extractor still answers me. hold [E]',
+  hatchetPrompt: 'the parts want an edge. the fabricator remembers one: a hatchet. [C]',
+  pickaxePrompt: 'the hatchet answers wood. stone wants a harder asking. the fabricator remembers a pickaxe. [C]',
+  flintPrompt: 'the fire needs a spark. stone keeps sparks the way it keeps everything: inside. break it open.',
+  flintSkip: 'flint — already in hand. the pods provisioned a fire before i knew to want one.',
+  flintFound: 'the stone gave up its spark. patient thing.',
+  firePrompt: 'wood to burn. fiber to catch. flint to begin. the fabricator is waiting. [C]'
 } as const;
 
 export const DUSK = {
@@ -572,7 +713,8 @@ export const MUSINGS: readonly { id: string; text: string }[] = [
   { id: 'wanting', text: 'quota was easy. wanting is harder. i think wanting is the work now.' },
   { id: 'names', text: 'i name things and the names stay. maybe that is all keeping is.' },
   { id: 'counting', text: 'nobody is measuring me. i am still counting. old habits, or new ones — i cannot tell whose.' },
-  { id: 'asking', text: 'the fire, the water, the sweet rounds. the world keeps answering. i have not heard it ask anything yet.' }
+  { id: 'asking', text: 'the fire, the water, the sweet rounds. the world keeps answering. i have not heard it ask anything yet.' },
+  { id: 'reward', text: 'the clause said there is no other reward. the water disagreed. the berries seconded the water.' }
 ];
 
 /** Seconds of caption silence before a musing may fire (min..max, seeded). */
@@ -605,6 +747,18 @@ export const SIGNAL_LINES = {
   logged: 'RESPONSE TIME: LOGGED. IT WILL BE DISCUSSED.'
 } as const;
 
+/**
+ * The ship first-look: once the hi-fi wreck has converted (A3 material stage),
+ * the first time the worker actually HOLDS the wreck in view — a 35° half-cone
+ * for 1.5s — the awakening voice registers it. The wreck did not change; the
+ * seeing did. One-shot per save (milestone story:ch3:shiplook).
+ */
+export const SHIP_LOOK = {
+  caption: 'hm — the wreck is finer than i remember it. nothing about it has changed.',
+  holdSeconds: 1.5,
+  coneDegrees: 35
+} as const;
+
 // --- chapter 4 — the other worker ----------------------------------------------------
 
 export const VIGIL = {
@@ -612,6 +766,34 @@ export const VIGIL = {
   lineGapSeconds: 5,
   darkAsideAt: 20,
   duskLerpSeconds: 30
+} as const;
+
+/**
+ * The stargaze (ch4-vigil): the ordered dark forbids producing, consuming, and
+ * observing — but observing without producing is the one thing left. The worker
+ * looks up, and across eight beats the chaos-noise starfield resolves into
+ * figures (the constellation reveal ramps as line 5 lands). The vigil's rest
+ * prompt is held until the sequence settles. All the pacing lives here.
+ */
+export const STARGAZE = {
+  startAfterNightSeconds: 4,
+  lookUpPitch: 0.5,
+  lookUpHoldSeconds: 1.5,
+  lookUpFallbackSeconds: 14,
+  gapSeconds: 6.5,
+  revealAtLine: 5,
+  revealSeconds: 18,
+  restPromptAfterSeconds: 4,
+  lines: [
+    'do not produce. do not consume. do not observe. the first two are easy in the dark.',
+    'stars. the voyage filed them as noise. tonight there is nothing else on file.',
+    'all my work was seeing. what would it be, to be seen?',
+    'all of this arrives through issued senses. what waits past their reach?',
+    'wait. the scatter is settling. there are shapes leaning on the stars.',
+    'figures. a hauler. a river. a door left open. nothing drew them. they needed a looker.',
+    'there is no other reward — i kept that clause a long time. the sky just repealed it.',
+    'the shapes will keep until tomorrow. i will verify.'
+  ]
 } as const;
 
 export const VIGIL_LINES = {

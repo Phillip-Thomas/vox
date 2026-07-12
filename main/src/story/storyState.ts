@@ -3,12 +3,12 @@ import {
   setVoxelRealityStage,
   type VoxelRealityStage
 } from '../game/systems/realityRenderSystem.ts';
-import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
+import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { addItem } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
 import { seedSupplyPodsCollected } from './supplyPods.ts';
-import { clearPlayerPoseForWorld, clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
+import { clearCampfiresForWorld, clearPlayerPoseForWorld, clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
 import { createWorldIdentity } from '../game/worldIdentity.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
 
@@ -216,6 +216,26 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
   ch4: 'ch4-vigil'
 };
 
+/** True ONLY for a `?story=<beat|alias>` dev jump — not `?story=1`, not the menu
+ *  Story button. Debug-only world affordances (the campfire pre-place) gate here so
+ *  they can never fire in a real run. */
+export function isStoryDeepLink(): boolean {
+  const p = parseStoryParam();
+  return p !== null && p !== 'full';
+}
+
+/**
+ * Before the fire is built (ch3-gather and everything upstream), the story world
+ * must hold NO campfire. A phantom — a dev-jump's debug pre-place, autosaved into
+ * the shared story-world save — would otherwise be restored and skip the player
+ * past the craft (the director reads a standing fire as "built"). The rested
+ * checkpoint (ch3-thirst+) resumes past ch3-dusk, so a real fire is kept.
+ */
+function clearStalePreFireCampfires(beat: StoryBeat): void {
+  if (beatIndex(beat) >= beatIndex('ch3-dusk')) return;
+  clearCampfiresForWorld(createWorldIdentity(STORY_COORDINATE));
+}
+
 export function chapterForBeat(beat: StoryBeat): StoryChapter {
   return beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
     : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
@@ -315,6 +335,10 @@ export function initStoryFromSave(): void {
     beginStory();
     return;
   }
+  // Dev BEAT jumps start pristine (like the voxel/pose clears above): drop any
+  // stale campfire so a jump never inherits an earlier debug session's fire. The
+  // fire-gated beats re-place one via StoryWorldProps' dev pre-place.
+  clearCampfiresForWorld(storyWorld);
   seedForBeat(param);
   const chapter = chapterForBeat(param);
   if (chapter === 'complete') {
@@ -340,6 +364,7 @@ export function beginStory(): void {
     setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
     return;
   }
+  clearStalePreFireCampfires(entry.beat);
   setVoxelRealityStage(stageForStoryPoint(entry));
   setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
 }
@@ -379,6 +404,28 @@ export function deactivateStory(): void {
 /** Persist a prologue event-card choice (echoed by Ch1's work order). */
 export function recordStoryChoice(cardId: string, optionId: string): void {
   markMilestone(`story:choice:${cardId}:${optionId}`);
+}
+
+const WORKER_NAME_PREFIX = 'story:name:';
+
+/**
+ * Persist the name the player gave the fellow worker in the voyage naming
+ * interstitial. Rides the milestone store (no new save field) — the name is
+ * stored (and always read) lowercase.
+ */
+export function recordWorkerName(name: string): void {
+  const clean = name.trim().toLowerCase();
+  if (clean) markMilestone(`${WORKER_NAME_PREFIX}${clean}`);
+}
+
+/**
+ * The name the player gave the fellow worker (lowercase), or null if unnamed.
+ * Scans milestones for `story:name:<name>` — downstream copy (VOYAGE_STRANGE_LINES
+ * `{name}`, and any later chapter that refers to the worker) reads it here.
+ */
+export function getWorkerName(): string | null {
+  const found = getMilestones().find(id => id.startsWith(WORKER_NAME_PREFIX));
+  return found ? found.slice(WORKER_NAME_PREFIX.length) : null;
 }
 
 // --- derived reads ------------------------------------------------------------

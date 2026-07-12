@@ -1,20 +1,24 @@
 import * as THREE from 'three';
+import {
+  estimateTreeLight,
+  growthVigor,
+  pipeModelRadius,
+  cantileverSagAngle
+} from './treeBiology';
 
-// --- Procedural tree archetype generator (space colonization) ----------------
+// --- Procedural tree archetype generator -------------------------------------
 //
 // Pure, deterministic, NO GLSL. Given a seed we:
-//   1. Scatter attractor points in a crown volume (an ellipsoid sitting above
-//      the trunk base) with a seeded hash RNG.
-//   2. Grow a node graph upward from the root: each iteration every attractor
-//      pulls its nearest node, nodes step toward the averaged pull direction,
-//      and attractors inside a kill radius are consumed. Standard Runions/Palubicki
-//      space colonization, iteration-capped.
-//   3. Build TRUNK/BRANCH geometry: tapered tube rings swept along each node->
-//      parent segment, radius tapering with branch order + distance from root.
+//   1. Advance a bounded queue of active growth tips year by year. Tips estimate
+//      light from competing branch endings, steer toward open sky, spend vigor,
+//      fork phyllotactically, and self-prune when chronically shaded.
+//   2. Reinforce productive paths with a living-tip pipe model, then bend lateral
+//      segments under a clamped downstream load / radius^4 approximation.
+//   3. Build TRUNK/BRANCH geometry: shared tapered tube rings swept along each
+//      node->parent segment with arc-length bark coordinates.
 //      Per-vertex attribute `aStiff` (0 at root -> 1 at tips) drives wind.
-//   4. Build LEAF geometry: camera-agnostic quad cards at branch tips / young
-//      nodes, merged into one BufferGeometry. Each card carries `aPhase` (wind
-//      flutter offset) and `aStiff` (~1, also a stiffness ref).
+//   4. Build branch-aligned botanical leaf sprays and a silhouette-preserving
+//      far impostor, both with bounded card/vertex counts.
 //
 // Output: { trunkGeometry, leafGeometry } in LOCAL space — origin at the trunk
 // base, growing along +Y. Profiled trees are canopy-scale (~6-11 world units
@@ -41,17 +45,17 @@ export type TreeSilhouette =
 export interface TreeGenParams {
   /** Approx total tree height in world units. */
   height: number;
-  /** Crown (attractor cloud) ellipsoid radius in world units. */
+  /** Target crown radius / lateral branch reach in world units. */
   crownRadius: number;
   /** Vertical center of the crown above the base (fraction of height). */
   crownCenterFrac: number;
-  /** Number of attractor points scattered in the crown. */
+  /** Growth-complexity budget; maps to a bounded node/card ceiling. */
   attractorCount: number;
   /** Distance a node steps toward attractors each iteration. */
   growStep: number;
-  /** Attractors within killRadius*growStep of a node are consumed. */
+  /** Crowding/shade response multiplier in grow-step units. */
   killRadiusMul: number;
-  /** Attractors only influence nodes within influenceRadiusMul*growStep. */
+  /** Radius in grow-step units within which active tips compete for light. */
   influenceRadiusMul: number;
   /** Hard cap on growth iterations. */
   maxIterations: number;
@@ -77,6 +81,14 @@ export interface TreeGenParams {
   gnarl?: number;
   /** Branch tendency to steer upward. */
   gravitropism?: number;
+  /** Branch tendency to steer toward the locally brightest open direction. */
+  phototropism?: number;
+  /** 0..1 ability to keep productive growth in partial shade. */
+  shadeTolerance?: number;
+  /** Strength of light-driven allocation to exposed shoots. */
+  prioritizeBrightGrowth?: number;
+  /** Minimum exposure for weak terminal shoots before self-pruning. */
+  dropShadeThreshold?: number;
   /** 0..1 central leader priority over lateral growth. */
   apicalDominance?: number;
   /** 0..1 how quickly apical dominance fades by branch order. */
@@ -95,6 +107,12 @@ export interface TreeGenParams {
   trunkRoughness?: number;
   /** Terminal branch geometry pruning passes. */
   thinFineBranches?: number;
+  /** 0..1 biological maturity; controls simulated growth years and crown spread. */
+  maturity?: number;
+  /** 0..1 prevailing-light/site bias that breaks perfectly radial crowns. */
+  crownAsymmetry?: number;
+  /** Direction of prevailing-light/site bias in local XZ radians. */
+  crownAsymmetryAngle?: number;
 }
 
 export const DEFAULT_TREE_PARAMS: TreeGenParams = {
@@ -117,6 +135,10 @@ export const DEFAULT_TREE_PARAMS: TreeGenParams = {
   whorlCount: 3,
   gnarl: 0.18,
   gravitropism: 0.08,
+  phototropism: 0.22,
+  shadeTolerance: 0.56,
+  prioritizeBrightGrowth: 1.35,
+  dropShadeThreshold: 0.2,
   apicalDominance: 0.52,
   apicalDominanceDecay: 0.14,
   branchStiffness: 0.72,
@@ -125,7 +147,10 @@ export const DEFAULT_TREE_PARAMS: TreeGenParams = {
   foliageDroop: 0.25,
   trunkFlare: 0.12,
   trunkRoughness: 0.06,
-  thinFineBranches: 0
+  thinFineBranches: 0,
+  maturity: 0.88,
+  crownAsymmetry: 0.12,
+  crownAsymmetryAngle: 0
 };
 
 // --- Seeded hash RNG ---------------------------------------------------------
@@ -154,6 +179,14 @@ export interface GrowNode {
   parent: number; // index into nodes, -1 for root
   order: number; // branch order (0 trunk, grows with branching depth)
   dist: number; // graph distance from root (in steps)
+  /** Estimated sky exposure when this segment was grown. */
+  light?: number;
+  /** Photosynthetic allocation available to this segment, normalized 0..1. */
+  vigor?: number;
+  /** True for the main continuation of a branch, false for lateral shoots. */
+  apical?: boolean;
+  /** Simulated year in which this segment appeared. */
+  age?: number;
 }
 
 /**
@@ -233,16 +266,14 @@ export function selectLeafCandidates(
   return candidates;
 }
 
-// --- Recursive L-system branching (replaces space colonization) --------------
+// --- Bounded biological growth ------------------------------------------------
 //
-// The old space-colonization crown read flat + non-fractal. This builds a
-// genuinely RECURSIVE skeleton: trunk -> primary -> secondary -> twig, where
-// every level emits `children` sub-branches plus an apical "leader shoot" that
-// continues the dominant line (so the trunk stays believable). order increments
-// per recursion level, so the existing radiusFor() (sqrt subtree weight) tapers
-// trunk->twig automatically, and length *= lenFalloff per level gives the
-// self-similar feel. Children diverge by the GOLDEN ANGLE around the branch
-// axis -> spiral phyllotactic forks. Bounded by levels<=4, children<=3, NODE_CAP.
+// Trees grow as a queue of active tips, one simulated year at a time. Every tip
+// gets an equal proposal opportunity before the next year, avoiding the old
+// depth-first generator's habit of exhausting the node cap on its first branch.
+// Proposals sense a cheap occupancy-derived sky field, steer toward locally open
+// light, spend vigor on extension, and self-prune in deep shade. This preserves
+// FloraSynth's useful behavior without runtime raycasts or unbounded simulation.
 
 // A perpendicular unit vector to d (stable: avoids the degenerate parallel case).
 function twPerp(d: THREE.Vector3): THREE.Vector3 {
@@ -251,242 +282,334 @@ function twPerp(d: THREE.Vector3): THREE.Vector3 {
   return a.cross(d).normalize();
 }
 
-interface LSParams {
-  levels: number;
+interface GrowthPreset {
+  maxOrder: number;
   children: number;
   angle: number;
   twist: number;
   lenFalloff: number;
-  segs: number;
   upLerp: number;
-  gnarl: number;
-  apicalDominance: number;
-  apicalDominanceDecay: number;
-  /** Fraction of the trunk budget the central leader climbs before terminating;
-   *  <1 stops a dominant leader from spiking bare above the crown (weeping). */
+  clearBole: number;
+  branchCadence: number;
   leaderFrac: number;
 }
 
-// Map the existing silhouette/density knobs to L-system tuning. Deterministic
-// and bounded — no new TreeGenParams required (the overhaul derives everything
-// from params already on disk).
-function lsFromParams(p: TreeGenParams): LSParams {
-  const density = Math.min(1, Math.max(0.4, p.attractorCount / 260));
-  const base: LSParams = {
-    levels: 3,
-    children: 3,
+function growthPresetFromParams(p: TreeGenParams): GrowthPreset {
+  const base: GrowthPreset = {
+    maxOrder: 3,
+    children: clamp(Math.round(p.whorlCount ?? 2), 1, 3),
     angle: 0.6,
     twist: 2.39996, // golden angle (radians)
     lenFalloff: 0.72,
-    segs: 5,
     upLerp: 0.03,
-    gnarl: 0.18,
-    apicalDominance: 0.52,
-    apicalDominanceDecay: 0.14,
+    clearBole: 0.3,
+    branchCadence: 2,
     leaderFrac: 1 // full-height central leader (default)
   };
-  const applySpecies = (shape: LSParams): LSParams => {
-    const angle = clamp(p.branchJointAngle ?? shape.angle, 0.32, 1.05);
-    const children = Math.max(
-      shape.children,
-      clamp(Math.round(p.whorlCount ?? shape.children), 2, 4)
-    );
-    const rawApicalDominance = clamp(
-      p.apicalDominance ?? shape.apicalDominance,
-      0,
-      1
-    );
-    // High apical dominance is botanically useful, but conifers were degenerating
-    // into a few side twigs plus a bare leader on some seeds. Cap only the
-    // generator's growth priority; the profile still records the planet species.
-    const apicalDominance =
-      p.silhouette === 'conical'
-        ? Math.min(rawApicalDominance, 0.68)
-        : rawApicalDominance;
+  const applySpecies = (shape: GrowthPreset): GrowthPreset => {
     const gravitropism = clamp(p.gravitropism ?? 0.08, 0.0, 0.28);
     return {
       ...shape,
-      angle,
-      children,
-      upLerp: clamp(shape.upLerp + (gravitropism - 0.08) * 0.75, -0.1, 0.24),
-      gnarl: clamp(p.gnarl ?? shape.gnarl, 0.02, 0.34),
-      apicalDominance,
-      apicalDominanceDecay: clamp(p.apicalDominanceDecay ?? shape.apicalDominanceDecay, 0, 0.5)
+      angle: clamp(p.branchJointAngle ?? shape.angle, 0.3, 1.08),
+      children: clamp(Math.round(p.whorlCount ?? shape.children), 1, 3),
+      upLerp: clamp(shape.upLerp + (gravitropism - 0.08) * 0.72, -0.08, 0.26)
     };
   };
   switch (p.silhouette) {
     case 'conical':
-      // Conifer (spruce/cypress): a tapered, dense, taller-than-wide crown. The
-      // budget taper shortens branches toward the top (wide base -> narrow top);
-      // a LOW leaderFrac stops the central leader early so the upper forks dome
-      // over into a solid leafy top instead of a bare leader spiking out (the same
-      // fix that cured weeping). Inclusive candidates + denser budget + larger
-      // cards keep the cone solid with no trunk showing through.
       return applySpecies({
         ...base,
-        levels: 4,
-        children: 3,
+        maxOrder: 4,
         angle: 0.48,
         upLerp: 0.09,
         lenFalloff: 0.78,
-        segs: 6,
-        leaderFrac: 0.72
+        clearBole: 0.12,
+        branchCadence: 2,
+        leaderFrac: 0.96
       });
     case 'umbrella':
-      // Broad dome (acacia-like). Uses the round tree's proven branching (moderate
-      // angle + climbing upLerp) so foliage domes UP; the WIDER crownRadius (2.6,
-      // from silhouettePreset) is what makes it broad. The old wide angle 0.85 +
-      // negative upLerp fanned sub-branches DOWNWARD -> drooping "upside-down" canopy.
       return applySpecies({
         ...base,
-        levels: 3,
-        children: 3,
+        maxOrder: 3,
         angle: 0.62,
         upLerp: 0.05,
+        clearBole: 0.44,
+        branchCadence: 2,
         leaderFrac: 0.78
       });
     case 'weeping':
-      // Branches CLIMB into a full ROUNDED crown that envelops the apex (so there
-      // is no bare spiking top); the willow "weep" then lives entirely in the
-      // draping leaf cards (radial curtains, see buildLeafGeometry) plus a mild
-      // outer-tip curl (shapeNodes). leaderFrac<1 terminates the central leader
-      // early so the upper forks dome over instead of a thin bare leader spiking
-      // up. The old upLerp:-0.1 sagged bare boughs up/out while foliage bunched
-      // low -> upside-down canopy.
       return applySpecies({
         ...base,
-        levels: 3,
-        children: 3,
+        maxOrder: 3,
         angle: 0.66,
         upLerp: 0.13,
         lenFalloff: 0.82,
+        clearBole: 0.28,
         leaderFrac: 0.6
       });
     case 'wispy':
-      // Airy, taller habit (birch-like): enough children to keep fine twigs clothed
-      // (no bare boughs) but a low canopy density (treeProfile wispyMul) keeps the
-      // crown light and lacy; a leaderFrac cutoff domes the top so no bare leader
-      // spikes up. Taller proportion distinguishes it from the compact round crown.
       return applySpecies({
         ...base,
-        levels: 4,
-        children: 3,
+        maxOrder: 4,
+        children: 2,
         angle: 0.62,
-        upLerp: 0.04,
+        upLerp: 0.08,
         lenFalloff: 0.8,
+        clearBole: 0.22,
+        branchCadence: 3,
         leaderFrac: 0.66
       });
     case 'round':
     default:
       return applySpecies({
         ...base,
-        levels: density > 0.75 ? 4 : 3,
-        children: density > 0.7 ? 3 : 2,
+        maxOrder: p.attractorCount >= 360 ? 4 : 3,
         angle: 0.62,
-        leaderFrac: 0.82
+        clearBole: 0.22,
+        leaderFrac: 0.9
       });
   }
 }
 
-function growLSystem(params: TreeGenParams, rng: () => number): GrowNode[] {
-  const P = lsFromParams(params);
-  const NODE_CAP = 520;
+interface GrowthTip {
+  node: number;
+  dir: THREE.Vector3;
+  order: number;
+  branchAge: number;
+  remaining: number;
+  azimuth: number;
+  apical: boolean;
+}
+
+function crownReachAtHeight(
+  silhouette: TreeSilhouette,
+  height01: number,
+  crownRadius: number
+): number {
+  const h = clamp(height01, 0, 1);
+  switch (silhouette) {
+    case 'conical':
+      return crownRadius * clamp(1.15 - h * 0.92, 0.2, 1.05);
+    case 'umbrella':
+      return crownRadius * clamp((h - 0.24) * 2.0, 0.38, 1.1);
+    case 'weeping':
+      return crownRadius * (0.48 + 0.54 * Math.sin(Math.PI * clamp(h, 0.12, 0.95)));
+    case 'wispy':
+      return crownRadius * (0.42 + 0.48 * Math.sin(Math.PI * h));
+    default:
+      return crownRadius * (0.42 + 0.64 * Math.sin(Math.PI * clamp(h, 0.05, 0.95)));
+  }
+}
+
+function growBiologicalTree(params: TreeGenParams, rng: () => number): GrowNode[] {
+  const preset = growthPresetFromParams(params);
+  const nodeCap = Math.round(clamp(220 + params.attractorCount * 0.55, 280, 520));
+  const silhouette = params.silhouette ?? 'round';
+  const maturity = clamp(params.maturity ?? 0.88, 0.55, 1);
   const up = new THREE.Vector3(0, 1, 0);
+  const openDir = new THREE.Vector3();
+  const asymmetryDir = new THREE.Vector3(
+    Math.cos(params.crownAsymmetryAngle ?? 0),
+    0.12,
+    Math.sin(params.crownAsymmetryAngle ?? 0)
+  ).normalize();
   const nodes: GrowNode[] = [
-    { pos: new THREE.Vector3(), parent: -1, order: 0, dist: 0 }
+    {
+      pos: new THREE.Vector3(),
+      parent: -1,
+      order: 0,
+      dist: 0,
+      light: 1,
+      vigor: 1,
+      apical: true,
+      age: 0
+    }
   ];
-  const tmpAxis = new THREE.Vector3();
+  const step = Math.max(0.3, params.growStep * 1.45);
+  const leaderBudget = params.height * preset.leaderFrac * (0.9 + maturity * 0.1);
+  let active: GrowthTip[] = [{
+    node: 0,
+    dir: up.clone(),
+    order: 0,
+    branchAge: 0,
+    remaining: leaderBudget,
+    azimuth: rng() * Math.PI * 2,
+    apical: true
+  }];
+  const baseYears = Math.ceil(params.height / step);
+  const maxYears = Math.min(
+    Math.max(8, Math.trunc(params.maxIterations)),
+    Math.ceil(baseYears * (0.85 + maturity * 0.15)) + preset.maxOrder * 5 + 5,
+    48
+  );
+  const gnarl = clamp(params.gnarl ?? 0.18, 0.01, 0.36);
+  const phototropism = clamp(params.phototropism ?? 0.22, 0, 0.65);
+  const shadeTolerance = clamp(params.shadeTolerance ?? 0.56, 0, 1);
+  const brightPriority = clamp(params.prioritizeBrightGrowth ?? 1.35, 0, 4);
+  const shadeFloor = clamp(params.dropShadeThreshold ?? 0.2, 0.02, 0.55);
+  const dominance = clamp(params.apicalDominance ?? 0.52, 0, 1);
+  const dominanceDecay = clamp(params.apicalDominanceDecay ?? 0.14, 0, 0.5);
+  const asymmetry = clamp(params.crownAsymmetry ?? 0.12, 0, 0.45);
+  const lightInfluenceRadius = Math.max(
+    step * clamp(params.influenceRadiusMul, 3, 12),
+    params.crownRadius * 0.45
+  );
+  const crowdingStrength = clamp(
+    0.34 + params.killRadiusMul * 0.08 + (1 - shadeTolerance) * 0.2,
+    0.35,
+    1.2
+  );
+  const clearBole = clamp(
+    preset.clearBole + (params.crownCenterFrac - 0.72) * 0.18,
+    0.08,
+    0.56
+  );
 
-  // Internode length: the chain is laid one internode at a time up to an EXACT
-  // length budget, so a branch is never longer than its budget (no oversizing).
-  const STEP = Math.max(0.28, params.growStep * 1.7);
-
-  // Grow ONE branch as a chain of internodes consuming `budget` total length
-  // (this IS the apical line — no separate re-extending leader). Side branches
-  // fork periodically ALONG the chain and recurse with a shrunken budget, so the
-  // structure is genuinely fractal (trunk -> primary -> secondary -> twig) AND
-  // bounded: order increments per fork (taper via radiusFor); NODE_CAP backstops.
-  function grow(
-    parentIdx: number,
-    dir: THREE.Vector3,
-    order: number,
-    divergence: number,
-    budget: number
-  ) {
-    if (order > P.levels || budget < STEP * 0.6 || nodes.length >= NODE_CAP) return;
-    const d = dir.clone().normalize();
-    let prev = parentIdx;
-    let remaining = budget;
-    let internode = 0;
-    // Trunk climbs (strong gravitropism); branches follow their own dir (P.upLerp
-    // may be negative for weeping droop).
-    const grav = order === 0 ? 0.16 : P.upLerp;
-    const forkEvery = order === 0 && P.apicalDominance > 0.72 ? 3 : order === 0 ? 2 : 1;
-    while (remaining >= STEP * 0.6 && nodes.length < NODE_CAP) {
-      // Central-leader cutoff: a dominant straight leader grown to full height
-      // spikes BARE above off-axis climbing branches. For shapes with leaderFrac<1
-      // (weeping) stop the apical line once it has climbed leaderFrac of its budget
-      // and let the upper forks dome the crown over (no bare spike).
-      if (order === 0 && budget - remaining >= P.leaderFrac * budget) break;
-      // per-internode gnarl: spin the bend AXIS randomly around the branch so the
-      // wander isn't biased into one plane (a fixed twPerp made stems one-sided).
-      tmpAxis.copy(twPerp(d)).applyAxisAngle(d, rng() * Math.PI * 2);
-      d.applyAxisAngle(tmpAxis, (rng() - 0.5) * P.gnarl); // per-internode gnarl
-      d.lerp(up, grav).normalize();
-      const seg = Math.min(STEP, remaining);
-      const np = nodes[prev].pos.clone().addScaledVector(d, seg);
-      nodes.push({ pos: np, parent: prev, order, dist: nodes[prev].dist + 1 });
-      prev = nodes.length - 1;
-      remaining -= seg;
-      internode++;
-
-      // Fork side branches along the chain (not just at the tip) for fractal fill.
-      if (order < P.levels && internode % forkEvery === 0 && remaining > STEP) {
-        const kids = order === 0 ? P.children : Math.max(1, P.children - 1);
-        for (let k = 0; k < kids; k++) {
-          divergence += P.twist; // GOLDEN-ANGLE azimuth between siblings
-          const childDir = d.clone();
-          // CRITICAL ORDER: tilt OFF the parent axis FIRST, THEN spin that tilted
-          // vector around the axis. Spinning before tilting rotated d around its
-          // own axis (a no-op), collapsing every child into one plane -> one-sided
-          // trees. Tilt-then-spin fans the children radially around the trunk in a
-          // golden-angle spiral, so the crown grows thick and all-round.
-          childDir.applyAxisAngle(twPerp(d), P.angle * (0.7 + 0.6 * rng())); // tilt off parent
-          childDir.applyAxisAngle(d, divergence); // radial spin around branch axis
-          // Child reaches into the remaining crown, shorter than its parent.
-          const dominance = clamp(
-            P.apicalDominance * Math.pow(1 - P.apicalDominanceDecay, Math.max(0, order)),
-            0,
-            1
-          );
-          const lateralScale = 1.08 - dominance * 0.46;
-          const childBudget =
-            (remaining * 0.55 + STEP) *
-            P.lenFalloff *
-            lateralScale *
-            (0.8 + 0.4 * rng());
-          grow(prev, childDir, order + 1, divergence * 1.3, childBudget);
+  for (let year = 1; year <= maxYears && active.length > 0 && nodes.length < nodeCap; year++) {
+    // FloraSynth shades with photosynthetic branch endings, not every woody
+    // internode. Using active tips prevents a shoot from being "shaded" by its
+    // own trunk while still making sibling crowns compete for open sky.
+    const occupied = active.map(tip => nodes[tip.node].pos);
+    const next: GrowthTip[] = [];
+    const start = year % active.length;
+    for (let offset = 0; offset < active.length && nodes.length < nodeCap; offset++) {
+      const tip = active[(start + offset) % active.length];
+      if (tip.remaining < step * 0.42) continue;
+      const parentNode = nodes[tip.node];
+      const light = estimateTreeLight(
+        parentNode.pos,
+        tip.dir,
+        occupied,
+        openDir,
+        {
+          influenceRadius: lightInfluenceRadius,
+          shadeStrength: crowdingStrength,
+          forwardWeight: 0.52,
+          upwardWeight: silhouette === 'umbrella' ? 0.4 : 0.58,
+          opennessWeight: 1.15,
+          maxOccupiedNodes: nodeCap
         }
+      );
+      const vigor = growthVigor(light, shadeTolerance, brightPriority);
+      const protectedLeader = tip.order === 0 && tip.apical;
+      if (!protectedLeader && light < shadeFloor && vigor < 0.62) continue;
+
+      const dir = tip.dir.clone();
+      const photoWeight = phototropism *
+        (tip.order === 0 ? 0.2 + (1 - light) * 0.34 : 0.1 + (1 - light) * 0.22);
+      dir.lerp(openDir, photoWeight);
+      dir.lerp(up, tip.order === 0 ? 0.18 : preset.upLerp * 0.55);
+      if (tip.order > 0 && asymmetry > 0) {
+        dir.lerp(asymmetryDir, asymmetry * (0.055 + tip.order * 0.025));
       }
+      const bendAxis = twPerp(dir).applyAxisAngle(dir, rng() * Math.PI * 2);
+      dir.applyAxisAngle(bendAxis, (rng() - 0.5) * gnarl).normalize();
+
+      const lateralDominance = clamp(
+        dominance * Math.pow(1 - dominanceDecay, year),
+        0,
+        1
+      );
+      const allocation = protectedLeader ? 1 : 1.04 - lateralDominance * 0.42;
+      const segLength = Math.min(
+        tip.remaining,
+        step * clamp(0.72 + vigor * 0.22, 0.64, 1.16) * allocation
+      );
+      const pos = parentNode.pos.clone().addScaledVector(dir, segLength);
+      const heightCeiling = params.height * (silhouette === 'conical' ? 1.1 : 1.06);
+      let hitHeightCeiling = false;
+      if (pos.y > heightCeiling) {
+        pos.y = heightCeiling;
+        dir.copy(pos).sub(parentNode.pos).normalize();
+        hitHeightCeiling = true;
+      }
+      const height01 = clamp(pos.y / Math.max(params.height, 1e-4), 0, 1.2);
+      const reach = crownReachAtHeight(silhouette, height01, params.crownRadius);
+      const radial = Math.hypot(pos.x, pos.z);
+      if (tip.order > 0 && radial > reach * 1.18) {
+        const inward = new THREE.Vector3(-pos.x, Math.max(0.08, dir.y), -pos.z).normalize();
+        dir.lerp(inward, clamp((radial / Math.max(reach, 0.1) - 1) * 0.55, 0.12, 0.5)).normalize();
+        pos.copy(parentNode.pos).addScaledVector(dir, segLength);
+      }
+
+      const nodeIndex = nodes.length;
+      nodes.push({
+        pos,
+        parent: tip.node,
+        order: tip.order,
+        dist: parentNode.dist + 1,
+        light,
+        vigor: clamp(vigor * 0.62, 0, 1),
+        apical: tip.apical,
+        age: year
+      });
+      const remaining = hitHeightCeiling ? 0 : tip.remaining - segLength;
+      let continuation: GrowthTip | undefined;
+      if (remaining >= step * 0.42) {
+        continuation = {
+          ...tip,
+          node: nodeIndex,
+          dir,
+          branchAge: tip.branchAge + 1,
+          remaining
+        };
+        next.push(continuation);
+      }
+
+      if (tip.order >= preset.maxOrder || nodes.length + next.length >= nodeCap) continue;
+      const canFork = tip.branchAge > 0 && tip.branchAge % preset.branchCadence === 0;
+      if (!canFork || (tip.order === 0 && height01 < clearBole)) continue;
+      const childCount = tip.order === 0 ? preset.children : 1;
+      const reachBudget = crownReachAtHeight(silhouette, height01, params.crownRadius);
+      const whorlAzimuth = tip.azimuth + preset.twist;
+      if (continuation) continuation.azimuth = whorlAzimuth;
+      for (let child = 0; child < childCount && next.length + nodes.length < nodeCap; child++) {
+        const childOrder = tip.order + 1;
+        const branchBudget =
+          (tip.order === 0
+            ? reachBudget * (silhouette === 'umbrella' ? 1.68 : 1.5)
+            : Math.max(step * 1.45, remaining * 0.82 + reachBudget * 0.2)) *
+          Math.pow(preset.lenFalloff, Math.max(0, childOrder - 2)) *
+          (0.78 + rng() * 0.34);
+        if (branchBudget < step * 0.7) continue;
+        const childDir = dir.clone();
+        childDir.applyAxisAngle(twPerp(dir), preset.angle * (0.76 + rng() * 0.42));
+        const childAzimuth = whorlAzimuth + child * (Math.PI * 2 / childCount);
+        childDir.applyAxisAngle(dir, childAzimuth);
+        childDir.lerp(openDir, phototropism * 0.12).normalize();
+        next.push({
+          node: nodeIndex,
+          dir: childDir,
+          order: childOrder,
+          branchAge: 0,
+          remaining: branchBudget,
+          azimuth: childAzimuth + preset.twist * 0.37,
+          apical: false
+        });
+      }
+    }
+    // Keep the highest-energy leaders when a very vigorous crown approaches the
+    // node ceiling. Sorting only at the cap boundary preserves stable year order.
+    const available = nodeCap - nodes.length;
+    if (next.length > available * 2 && available > 0) {
+      next.sort((a, b) => (nodes[b.node].light ?? 0) - (nodes[a.node].light ?? 0));
+      active = next.slice(0, Math.max(1, available * 2));
+    } else {
+      active = next;
     }
   }
 
-  const start = up
-    .clone()
-    .applyAxisAngle(new THREE.Vector3(1, 0, 0), (rng() - 0.5) * 0.1);
-  // Trunk budget = the configured height exactly (it's laid as STEP internodes).
-  grow(0, start, 0, rng() * 6.28318, params.height);
   shapeNodes(nodes, params); // existing lean/twist/weeping droop still applies
   return nodes;
 }
 
-// Public entry: frond palms stay hand-built, everything else is the L-system.
+// Public entry: frond palms stay hand-built, everything else uses biological growth.
 function growSkeleton(params: TreeGenParams, rng: () => number): GrowNode[] {
   const silhouette = params.silhouette ?? 'round';
   if (silhouette === 'frond') {
     return growFrondSkeleton(params, rng);
   }
-  return growLSystem(params, rng);
+  return growBiologicalTree(params, rng);
 }
 
 // --- FROND (palm) skeleton ---------------------------------------------------
@@ -560,38 +683,35 @@ function growFrondSkeleton(params: TreeGenParams, rng: () => number): GrowNode[]
   return nodes;
 }
 
-// --- Post-growth shaping: lean / twist / weeping droop -----------------------
-// Applied AFTER growth so it bends the existing skeleton. leanTwist is clamped
-// upstream (<=0.35) so trunk tube tangents don't kink. Weeping droops tip nodes.
+// --- Post-growth shaping: lean / twist / branch-weight bend -------------------
+// Applied after growth. Lean is a coherent whole-tree transform; gravity then
+// walks root-to-tip and bends every lateral segment from its already-adjusted
+// parent, so joints stay connected. Sag follows supported mass / radius^4 rather
+// than a generic height curve.
 function shapeNodes(nodes: GrowNode[], params: TreeGenParams): void {
   const lean = params.leanTwist ?? 0;
   const silhouette = params.silhouette ?? 'round';
   const weeping = silhouette === 'weeping';
   const stiffness = clamp(params.branchStiffness ?? 0.72, 0.18, 1);
-  const weightSag = params.crownRadius * (1 - stiffness) * 0.44;
-  if (Math.abs(lean) < 1e-4 && !weeping && weightSag < 1e-4) return;
+  if (Math.abs(lean) < 1e-4 && !weeping && stiffness >= 0.999) return;
 
   const maxDist = nodes.reduce((m, n) => Math.max(m, n.dist), 1);
   const base = nodes[0].pos;
-  // lean axis: tilt around +X, spiral sign from lean's sign.
   const spiralSign = lean >= 0 ? 1 : -1;
 
+  // Coherent lean/twist first.
   for (let i = 1; i < nodes.length; i++) {
     const node = nodes[i];
     const frac = node.dist / maxDist;
-
     if (Math.abs(lean) > 1e-4) {
-      // Rotate node.pos around base by lean*frac, plus a gentle spiral in xz.
       const ang = lean * frac;
       const dx = node.pos.x - base.x;
       const dy = node.pos.y - base.y;
       const dz = node.pos.z - base.z;
-      // tilt in the x/y plane
       const cx = Math.cos(ang);
       const sx = Math.sin(ang);
       const nx = dx * cx - dy * sx;
       const ny = dx * sx + dy * cx;
-      // spiral twist around y grows with height
       const spin = spiralSign * lean * frac * 1.5;
       const cs = Math.cos(spin);
       const ss = Math.sin(spin);
@@ -599,23 +719,48 @@ function shapeNodes(nodes: GrowNode[], params: TreeGenParams): void {
       const szx = nx * ss + dz * cs;
       node.pos.set(base.x + sxz, base.y + ny, base.z + szx);
     }
+  }
 
-    if (weeping && node.order >= 1 && frac > 0.55) {
-      // Fountain droop: curl only the OUTER BRANCH tips down (not the trunk,
-      // order 0) and gently — the canopy must stay seated ON the climbing crown,
-      // not be dragged below it. Cumulative along a chain (children droop more),
-      // so boughs arch over willow-style. Most of the weep is in the leaf cards.
-      const droopFrac = (frac - 0.55) / 0.45;
-      node.pos.y -= droopFrac * droopFrac * params.crownRadius * 0.55;
-    }
+  const rest = nodes.map(node => node.pos.clone());
+  const support = computeSubtreeWeight(nodes);
+  const rootSupport = Math.max(0.1, support[0] ?? 0.1);
+  const terminalRadius = params.baseRadius * 0.055;
+  const rootPipe = Math.max(terminalRadius, pipeModelRadius(rootSupport, terminalRadius));
 
-    if (node.order >= 1 && weightSag > 0) {
-      // Florasynth-style branch weight, kept cheap: softer species let lateral
-      // branches grow into a subtle permanent sag. It is applied after lean/twist
-      // so the canopy shape changes, not just the final leaf cards.
-      const branchLoad = Math.pow(frac, 1.35) * clamp(node.order / 3, 0.35, 1);
-      node.pos.y -= branchLoad * weightSag;
+  for (let i = 1; i < nodes.length; i++) {
+    const node = nodes[i];
+    const parentIndex = node.parent;
+    if (parentIndex < 0) continue;
+    const segment = rest[i].clone().sub(rest[parentIndex]);
+    const length = segment.length();
+    if (length <= 1e-6) {
+      node.pos.copy(nodes[parentIndex].pos);
+      continue;
     }
+    segment.multiplyScalar(1 / length);
+    if (node.order >= 1) {
+      const pipe = pipeModelRadius(Math.max(0.05, support[i]), terminalRadius);
+      const radius = Math.max(terminalRadius, params.baseRadius * (pipe / rootPipe));
+      const lever = length * (1 + Math.sqrt(Math.max(0, support[i])) * 0.24);
+      let sag = cantileverSagAngle(
+        support[i] * length,
+        lever,
+        radius,
+        stiffness,
+        {
+          bendScale: 2.4e-8,
+          maxSagRadians: 0.16,
+          minRadius: Math.max(0.035, params.baseRadius * 0.14)
+        }
+      );
+      const frac = node.dist / maxDist;
+      if (weeping) {
+        sag += 0.025 + Math.pow(frac, 1.6) * 0.075;
+      }
+      segment.y -= Math.sin(clamp(sag, 0, 0.24));
+      segment.normalize();
+    }
+    node.pos.copy(nodes[parentIndex].pos).addScaledVector(segment, length);
   }
 }
 
@@ -753,16 +898,21 @@ function pruneFrondRibGeometry(nodes: GrowNode[]): GrowNode[] {
   return out.length > 1 ? out : nodes;
 }
 
-// Count descendants per node so we can taper radius by "how much wood hangs above".
+// Aggregate living photosynthetic tips. Productive twigs thicken every segment
+// that supports them (the pipe model); shaded/pruned structure contributes far
+// less than raw descendant-node count, so taper follows function rather than age.
 function computeSubtreeWeight(nodes: GrowNode[]): number[] {
   const children: number[][] = nodes.map(() => []);
   for (let i = 0; i < nodes.length; i++) {
     const p = nodes[i].parent;
     if (p >= 0) children[p].push(i);
   }
-  const weight = new Array(nodes.length).fill(1);
+  const weight = new Array(nodes.length).fill(0);
   // process in reverse (children created after parents -> higher index)
   for (let i = nodes.length - 1; i >= 0; i--) {
+    if (children[i].length === 0) {
+      weight[i] = clamp(0.35 + (nodes[i].vigor ?? 0.75) * 0.9, 0.35, 1.25);
+    }
     for (const c of children[i]) weight[i] += weight[c];
   }
   return weight;
@@ -798,19 +948,32 @@ function buildTrunkGeometry(
   const tangents = nodes.map(() => new THREE.Vector3(1, 0, 0));
   const bitangents = nodes.map(() => new THREE.Vector3(0, 0, 1));
   const ringStart = new Array(nodes.length).fill(-1);
+  const arcLength = new Array(nodes.length).fill(0);
+  for (let i = 1; i < nodes.length; i++) {
+    const parent = nodes[i].parent;
+    arcLength[i] = arcLength[parent] + nodes[i].pos.distanceTo(nodes[parent].pos);
+  }
+  const maxArcLength = Math.max(1e-4, ...arcLength);
 
   const stableTangentForAxis = (axis: THREE.Vector3, out: THREE.Vector3) => {
     if (Math.abs(axis.y) < 0.95) out.set(0, 1, 0).cross(axis).normalize();
     else out.set(1, 0, 0).cross(axis).normalize();
   };
 
-  // radius for a node: scales with sqrt(subtree weight) so trunk is fat, twigs thin.
+  const terminalRadius = baseRadius * 0.055;
+  const rootPipeRadius = Math.max(
+    terminalRadius,
+    pipeModelRadius(rootWeight, terminalRadius)
+  );
+  // Radius follows supported living foliage. Normalize the pipe-model result so
+  // the authored base radius remains the species-scale contract.
   const radiusFor = (i: number) => {
-    const w = weight[i] / rootWeight;
-    const r = baseRadius * Math.sqrt(Math.max(w, 0.0001));
+    const pipeRadius = pipeModelRadius(Math.max(0.05, weight[i]), terminalRadius);
+    let r = baseRadius * (pipeRadius / rootPipeRadius);
+    if (children[i].length === 0) r *= 0.55;
     const rootFrac = nodes[i].dist / maxDist;
     const flare = 1 + trunkFlare * 2.3 * Math.pow(Math.max(0, 1 - rootFrac * 4.0), 2);
-    return Math.max(r * flare, baseRadius * 0.07);
+    return Math.max(r * flare, baseRadius * 0.025);
   };
 
   // Build one shared ring per skeleton node, then connect parent->child rings.
@@ -871,7 +1034,7 @@ function buildTrunkGeometry(
       const rr = Math.max(baseRadius * 0.035, r + rough);
       positions.push(c.x + nx * rr, c.y + ny * rr, c.z + nz * rr);
       normals.push(nx, ny, nz);
-      uvs.push(s / radialSegments, nodes[i].dist / Math.max(maxDist, 1));
+      uvs.push(s / radialSegments, arcLength[i] / maxArcLength);
       stiff.push(flex);
     }
   }
@@ -979,20 +1142,20 @@ function buildLeafGeometry(
   const leafNormal = new THREE.Vector3();
   const upVec = new THREE.Vector3(0, 1, 0);
 
-  // Cards per cluster: higher density everywhere, but with silhouette-specific
-  // restraint so wispy stays lacy and conical stays tight instead of blobby.
+  // Botanical cards per twig. Quality now comes from branch-aligned placement
+  // and readable negative space, not stacking dozens of overlapping disks.
   const cardsPerCluster =
     silhouette === 'frond'
       ? 9
       : silhouette === 'wispy'
-        ? 8
+        ? 7
         : silhouette === 'conical'
-          ? 9
+          ? 12
           : silhouette === 'umbrella'
-            ? 12
+            ? 11
             : silhouette === 'weeping'
-              ? 12
-              : 11;
+              ? 10
+              : 9;
 
   const corners: [number, number][] = [
     [-1, -1],
@@ -1053,20 +1216,16 @@ function buildLeafGeometry(
     idxArr.push(base, base + 1, base + 2, base, base + 2, base + 3);
   };
 
-  // Golden-angle phyllotaxis spray: each TWIG node fans a Vogel disk of small,
-  // leaf-SHAPED cards (alpha-cut in the shader). r = sqrt(t) packs them denser
-  // at the centre — the reference's phyllotaxis look. More + smaller cards, but
-  // because the alpha cut removes the card corners, filled area (overdraw)
-  // actually drops vs the old square cards.
+  // Golden-angle phyllotaxis stays as the species grammar, but leaves now travel
+  // along the supporting twig instead of filling a flat Vogel disk.
   const GOLDEN = Math.PI * (3 - Math.sqrt(5)); // 2.39996 rad
   const sparseClusterBoost = clamp(1 + Math.max(0, 24 - candidates.length) / 12, 1, 2.4);
   const leavesPerTwig = Math.max(
     6,
     Math.round(
       cardsPerCluster *
-        2.05 *
-        Math.min(2.2, params.attractorCount / 260) *
-        sparseClusterBoost
+        clamp(0.86 + params.attractorCount / 760, 1, 1.5) *
+        Math.min(1.35, sparseClusterBoost)
     )
   );
   // Keep the total leaf count bounded by the existing budget.
@@ -1077,7 +1236,10 @@ function buildLeafGeometry(
   // generic phyllotaxis disk. Budget them against that actual emission count so
   // palms use their intended foliage budget instead of looking half-populated.
   const budgetCardsPerNode = silhouette === 'frond' ? 16 : leavesPerTwig;
-  const maxNodes = Math.max(1, Math.round((maxLeafCards / budgetCardsPerNode) * spacingBoost));
+  const maxNodes = Math.max(
+    1,
+    Math.floor((maxLeafCards / budgetCardsPerNode) * Math.min(1, spacingBoost))
+  );
   // Even coverage under the card budget. Taking the first N candidates in
   // (depth-first) creation order piles foliage onto the earliest-explored
   // branches and leaves the upper crown + apex bare — the bare-spiking-top
@@ -1294,112 +1456,89 @@ function buildLeafGeometry(
           Math.max(0, Math.min(1, 0.62 - 0.6 * vy))
         : 0;
 
+    // Spray axis follows the supporting twig, then opens toward the crown shell.
+    leafAxis.copy(branchDir).lerp(outward, silhouette === 'conical' ? 0.22 : 0.46);
+    if (silhouette === 'umbrella') leafAxis.y += 0.24;
+    if (silhouette === 'wispy') leafAxis.y += 0.12;
+    leafAxis.normalize();
+    helper.set(0, 1, 0);
+    if (Math.abs(leafAxis.y) > 0.92) helper.set(1, 0, 0);
+    side.copy(helper).cross(leafAxis).normalize();
+    v.copy(leafAxis).cross(side).normalize();
+
+    const sprayLength =
+      silhouette === 'umbrella' ? 1.15 : silhouette === 'weeping' ? 0.86 :
+        silhouette === 'wispy' ? 1.06 : silhouette === 'conical' ? 0.78 : 0.96;
+    const sprayWidth =
+      silhouette === 'umbrella' ? 0.74 : silhouette === 'conical' ? 0.34 :
+        silhouette === 'wispy' ? 0.42 : 0.55;
+    const speciesDroop = clamp(params.foliageDroop ?? 0.25, 0, 1);
+
     for (let i = 0; i < leavesPerTwig; i++) {
-      const t = (i + 0.5) / leavesPerTwig; // 0..1 outward through the spray
-      const phi = i * GOLDEN;
-      const sprayMul =
-        silhouette === 'weeping'
-          ? 1.18
-          : silhouette === 'umbrella'
-            ? 1.12
-            : silhouette === 'conical'
-              ? 0.86
-              : silhouette === 'wispy'
-                ? 1.18
-                : 1.1;
-      const r = Math.sqrt(t) * leafSize * sprayMul; // Vogel: denser at centre
-
-      // (u,v) basis perpendicular to outward for the spray disk.
-      helper.set(0, 1, 0);
-      if (Math.abs(outward.y) > 0.95) helper.set(1, 0, 0);
-      u.copy(helper).cross(outward).normalize();
-      v.copy(outward).cross(u).normalize();
-
-      // card centre = node + in-plane offset + push outward along the twig.
-      // Weeping pushes out LESS (strands hang ~vertically); conical also pushes
-      // out less so cards stay near the leader and overlap to hide the trunk.
-      const outPush =
-        silhouette === 'conical'
-          ? leafSize * (0.06 + 0.24 * t)
-          : silhouette === 'weeping'
-            ? leafSize * (0.1 + 0.34 * t)
-            : leafSize * (0.18 + 0.48 * t);
-      center.copy(nodes[attachIdx].pos);
+      const t = (i + 0.5) / leavesPerTwig;
+      const phi = ph + i * GOLDEN;
+      const radial = leafSize * sprayWidth * Math.sqrt(t);
       center
-        .addScaledVector(u, Math.cos(phi) * r)
-        .addScaledVector(v, Math.sin(phi) * r)
-        .addScaledVector(outward, outPush);
+        .copy(nodes[attachIdx].pos)
+        .addScaledVector(leafAxis, leafSize * sprayLength * (t - 0.22))
+        .addScaledVector(side, Math.cos(phi) * radial)
+        .addScaledVector(v, Math.sin(phi) * radial);
 
-      // card normal stays OUTWARD from crown centre (CRITICAL for AO/SSS volume).
-      cardN.copy(center).sub(crownCenter);
-      if (cardN.lengthSq() < 1e-6) cardN.copy(outward);
-      cardN.normalize();
       if (silhouette === 'weeping') {
-        // Willow weep: drape the card DOWNWARD into a hanging strand, AFTER the
-        // normal is fixed so AO/SSS still read from the crown volume (the old
-        // `cardN.y -= 0.5` tilted normals down and inverted the canopy shading —
-        // drop the POSITION, not the normal). weepW already domes the top, so
-        // side/lower twigs cascade while the apex + upper crown stay clothed.
-        center.y -= leafSize * (0.2 + 3.4 * weepW) * (0.35 + 0.95 * t);
-      } else if (silhouette === 'conical') {
-        // Face cards mostly HORIZONTAL (radial from the trunk axis) so foliage
-        // covers the near-vertical leader + branches from any side view. A card
-        // facing UP (the default for high on-axis nodes) reads edge-on and leaves
-        // the stem showing — the conifer's persistent bare-top/shelf artifact.
-        cardN.set(
-          center.x - crownCenter.x,
-          (center.y - crownCenter.y) * 0.2,
-          center.z - crownCenter.z
-        );
-        if (cardN.lengthSq() < 1e-6) cardN.set(1, 0, 0);
-        cardN.normalize();
-      } else if (silhouette === 'umbrella') {
-        // Tilt the leaf normals UP so the wide canopy is lit/domed from above
-        // instead of shading like undersides (the "upside-down canopy").
-        cardN.y += 0.7;
+        center.y -= leafSize * (0.3 + 2.6 * weepW) * (0.24 + t);
+      } else if (speciesDroop > 0) {
+        center.y -= leafSize * speciesDroop * 0.22 * t;
+      }
+
+      // Rotate normals around the twig so the spray has volume from every view,
+      // while retaining an outward bias for coherent canopy lighting.
+      cardN
+        .copy(side)
+        .multiplyScalar(Math.cos(phi + 0.65))
+        .addScaledVector(v, Math.sin(phi + 0.65))
+        .addScaledVector(outward, silhouette === 'conical' ? 0.72 : 0.46)
+        .normalize();
+      if (silhouette === 'umbrella') {
+        cardN.y += 0.42;
         cardN.normalize();
       }
 
-      const speciesDroop = clamp(params.foliageDroop ?? 0.25, 0, 1);
-      if (speciesDroop > 0 && silhouette !== 'weeping') {
-        const droopFactor = speciesDroop * (0.15 + 0.85 * t);
-        center.y -= leafSize * 0.36 * droopFactor;
-        cardN.y -= 0.18 * speciesDroop;
-        cardN.normalize();
-      }
-
-      // build a card basis perpendicular to cardN.
-      helper.set(0, 1, 0);
-      if (Math.abs(cardN.y) > 0.95) helper.set(1, 0, 0);
-      u.copy(helper).cross(cardN).normalize();
-      v.copy(cardN).cross(u).normalize();
-
-      const hs =
-        leafSize *
-        (silhouette === 'conical'
-          ? 0.42 + 0.22 * rng()
-          : silhouette === 'weeping'
-            ? 0.42 + 0.22 * rng()
-            : silhouette === 'wispy'
-              ? 0.32 + 0.18 * rng()
-              : 0.34 + 0.24 * rng());
-      const leafRand = rng();
-      const canopyY = Math.min(1, baseCanopyY + (t - 0.5) * 0.25);
-
-      emitQuad(
-        lPos, lNrm, lUv, lStiff, lPhase, lCanopyY, lFlower, lRand, lTuft, lIdx,
-        center.x, center.y, center.z, u, v, cardN, hs, fl, ph,
-        Math.max(0, Math.min(1, canopyY)), flower, leafRand, tuftShade
+      // The long card axis follows the shoot, projected into the leaf plane;
+      // width stays narrower so alpha-tested cards read as individual leaves.
+      const axialWeight =
+        silhouette === 'conical' ? 1 : silhouette === 'weeping' ? 0.68 : 0.42;
+      helper
+        .copy(leafAxis)
+        .multiplyScalar(axialWeight)
+        .addScaledVector(side, Math.cos(phi) * (1 - axialWeight))
+        .addScaledVector(v, Math.sin(phi) * (1 - axialWeight));
+      helper.addScaledVector(cardN, -helper.dot(cardN));
+      if (helper.lengthSq() < 1e-6) helper.copy(v);
+      helper.normalize().multiplyScalar(silhouette === 'conical' ? 1.42 : 1.16);
+      u.copy(cardN).cross(helper).normalize().multiplyScalar(
+        silhouette === 'conical' ? 0.48 : silhouette === 'wispy' ? 0.68 : 0.82
       );
 
-      // Blossom: a couple of smaller flower cards per flowering twig (outer ones).
-      if (flower > 0 && i < 2) {
+      const hs = leafSize * (
+        silhouette === 'conical' ? 0.34 + 0.1 * rng() :
+          silhouette === 'wispy' ? 0.3 + 0.09 * rng() : 0.36 + 0.12 * rng()
+      );
+      const leafRand = rng();
+      const canopyY = clamp(baseCanopyY + (t - 0.5) * 0.22, 0, 1);
+      emitQuad(
+        lPos, lNrm, lUv, lStiff, lPhase, lCanopyY, lFlower, lRand, lTuft, lIdx,
+        center.x, center.y, center.z, u, helper, cardN, hs, fl, ph + i * 0.21,
+        canopyY, flower, leafRand, tuftShade
+      );
+
+      if (flower > 0 && i >= leavesPerTwig - 2) {
         emitQuad(
           bPos, bNrm, bUv, bStiff, bPhase, null, null, null, bTuft, bIdx,
-          center.x + cardN.x * hs * 0.3,
-          center.y + cardN.y * hs * 0.3,
-          center.z + cardN.z * hs * 0.3,
-          u, v, cardN, hs * 0.6, fl, ph, 0, 0, leafRand, tuftShade
+          center.x + cardN.x * hs * 0.34,
+          center.y + cardN.y * hs * 0.34,
+          center.z + cardN.z * hs * 0.34,
+          u, helper, cardN, hs * 0.54, fl, ph + i * 0.21,
+          0, 0, leafRand, tuftShade
         );
       }
     }
@@ -1443,10 +1582,24 @@ function buildLeafGeometry(
 function buildImpostorGeometry(
   crownCenter: THREE.Vector3,
   crownRadius: number,
-  height: number
+  height: number,
+  leafGeometry: THREE.BufferGeometry
 ): THREE.BufferGeometry {
-  const cy = crownCenter.y;
-  const r = Math.max(crownRadius, 0.6) * 1.15;
+  leafGeometry.computeBoundingBox();
+  const bounds = leafGeometry.boundingBox;
+  const halfWidth = bounds
+    ? Math.max(
+        Math.abs(bounds.min.x - crownCenter.x),
+        Math.abs(bounds.max.x - crownCenter.x),
+        Math.abs(bounds.min.z - crownCenter.z),
+        Math.abs(bounds.max.z - crownCenter.z),
+        0.6
+      ) * 1.06
+    : Math.max(crownRadius, 0.6) * 1.1;
+  const minY = bounds?.min.y ?? crownCenter.y - crownRadius;
+  const maxY = bounds?.max.y ?? crownCenter.y + crownRadius;
+  const cy = (minY + maxY) * 0.5;
+  const halfHeight = Math.max(0.6, (maxY - minY) * 0.53);
   const positions: number[] = [];
   const normals: number[] = [];
   const uvs: number[] = [];
@@ -1481,9 +1634,9 @@ function buildImpostorGeometry(
     for (let k = 0; k < 4; k++) {
       const [sx, sy] = corners[k];
       positions.push(
-        crownCenter.x + ax.x * sx * r,
-        cy + sy * r,
-        crownCenter.z + ax.z * sx * r
+        crownCenter.x + ax.x * sx * halfWidth,
+        cy + sy * halfHeight,
+        crownCenter.z + ax.z * sx * halfWidth
       );
       normals.push(nrm.x, nrm.y, nrm.z);
       uvs.push(cuv[k][0], cuv[k][1]);
@@ -1541,7 +1694,8 @@ export function generateTree(
   const impostorGeometry = buildImpostorGeometry(
     crownCenter,
     crownRadius,
-    params.height
+    params.height,
+    leaf
   );
   return {
     trunkGeometry,

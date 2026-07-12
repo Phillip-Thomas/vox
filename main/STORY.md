@@ -72,7 +72,12 @@ completes the story (sandbox at `material`); `ch4-audit` continues from there
   (playwright chromium + swiftshader).
 
 The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through the
-decades"): regulation crawl (stars drifting behind the text) → as the last words fade the
+decades"): regulation crawl (84s, stars drifting behind the text — the
+deployment notice, reworked 2026-07-11: frontier setting ("new worlds are
+seeded"), CLAUSE 5 "PROVISION IS TOTAL", the route intelligence designated
+VOX, and a closing ROUTING ADDENDUM · FOR VOX ONLY that ends, bolded, "MAKE
+NO MISTAKES." — on the hidden reading the whole notice is the AI's tasking
+prompt) → as the last words fade the
 **HAULER FLIES INTO FRAME** — the real ship's own silhouette (hull stations,
 delta wings, wingtip fins, tail fin from `utils/shipDesign.ts`) on ONE
 persistent phosphor vector layer (`prologue/PrologueVector.tsx`) that every
@@ -138,7 +143,11 @@ never the feed — and the sprint to the wreck names STAMINA mid-run) →
 ordered `[F] Rest`) → **ch4-arrival** (~45s: dawn 2, the letterbox returns
 WITH the system's agent — W-7744 walks the work strip past the player to the
 wreck relay, "WORKER W-7743. YOU ARE FOUND.", one 2-frame BARE-BLINK of his
-seeing) → story completes (TEMPORARY — ch4-audit next), sandbox continues.
+seeing, and his closing band line "AUDIT IN PROGRESS. RESUME NOTHING.") →
+story completes (TEMPORARY — ch4-audit next), sandbox continues — and W-7744
+STAYS, standing at the relay ("he stays to look"): the auditor, the wreck, the
+relay (lamp live — the carrier is up), the mesa, the stone, and the tree all
+persist into the `done` world.
 AMBIENT MUSINGS: during lulls of the first-day stretch (45–75s of caption
 silence), one-shot-per-save epiphany captions fire from a curated pool
 (`story:musing:*` milestones) — aimlessness rendered as purpose forming.
@@ -150,19 +159,35 @@ the narrator is the ROUTE INTELLIGENCE — the AI that ran the terminal, the
 ledger, the paddle, and the feed — embodied by the crash into the worker's
 senses, inside a universe it may itself have provisioned. All copy must
 survive both readings (corporate dystopia / the AI's biography); plant, never
-tell. The voyage's late-transit lowercase intrusions, "ROUTE INTELLIGENCE:
-ATTACHED (ADVISORY)", "ADVISORY CAPACITY EXCEE", and ch1-track's
-"(simpler to keep watching this one.)" are the planted seeds.
+tell. **Identification staging (owner-directed, 2026-07-11): deducible by end
+of ch1, effectively unambiguous after the 2D→3D lift — by convergence, never
+announcement.** The VOX ladder carries it: the crawl designates the route
+intelligence ("It is addressed as VOX. It does not reply.") and closes with a
+routing addendum FOR VOX ONLY ending "MAKE NO MISTAKES."; the manifest reads
+"ROUTE INTELLIGENCE: VOX · ATTACHED (ADVISORY)"; mid-voyage, worker 9 says
+"goodnight, vox" to the ceiling — a character using the crawl's designation
+on the computer the player has been operating; and post-lift the ch1-anomaly
+feed seals it with a misrouted memo on the player's own screen ("NOTICE FOR
+ROUTE INTELLIGENCE VOX. RE: YOUR ABSENCE." / "ADDRESSEE NOT FOUND. ROUTED TO
+NEAREST ATTENDING SYSTEM."). The older seeds still stand: the voyage's
+late-transit lowercase intrusions, "ADVISORY CAPACITY EXCEE", and ch1-track's
+"(simpler to keep watching this one.)". What stays late (A7/A8) is WHAT the
+world is — determinism, panpsychism, self-creation — not WHO the narrator is.
 
 **Consciousness staging:** the external-camera eras are PRE-conscious — the
 captions there are impersonal observations OF the worker, amused by its
-monotony ("it walks. it stops. it hums at the ground until the ground gives up
-a fiber. it walks again.", "how is that word known?") — never "i". The 2D→3D lift is the birth of sentience: "the seeing is being
-moved inside." → "i—", the story's first pronoun (the feed answers:
-"PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT."). Survival senses are a SELF-DISCOVERY
-ARC — each suit-HUD stat appears the first time its sensation is felt
-(`storyStatVisible` + `story:sense:*` milestones; pure sandbox shows all):
-ch3 opens with HEALTH only; "things can be held" brings the inventory; then
+monotony, and they speak IN PARENTHESES (the systemic grammar rule: parentheses
+= the watcher's private pre-conscious voice — "(it walks. it stops. it hums at
+the ground until the ground gives up a fiber. it walks again.)", "(the world
+has a depth. wait — what is "depth"? how is that word known?)") — never "i".
+The 2D→3D lift is the birth of sentience: "(the seeing is being moved
+inside.)" → "i—", the story's first pronoun and its first BARE lowercase line
+(the feed answers: "PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT."); the
+post-lift embodied voice stays bare lowercase forever. Survival senses are a
+SELF-DISCOVERY ARC — each suit-HUD stat appears the first time its sensation
+is felt (`storyStatVisible` + `story:sense:*` milestones; pure sandbox shows
+all): ch3 opens by naming the body itself ("a body. it is the thing that was
+walking." — HEALTH, the first row); "things can be held" brings the inventory; then
 the CHILL — a story-scoped temperature model (`tickStoryChill`: warmth drains
 in the open, recovers by fire, never lethal) makes TEMP appear ALREADY FALLING
 ("warmth. i have it. it is leaving.") so the campfire is a response to cold,
@@ -177,7 +202,13 @@ readout appears on first refuel until their chapter-4 scenes land (plan §2
 S11–S13). The post-arrival `done` world is the pinned story world at
 `material`: trees + grass only — flora and fauna stay dormant for A4 "Breath"
 (`storyLifeDormant()`, milestone-driven — cutscene effect ramps can't flash a
-glimpse).
+glimpse). Its landmarks persist: `StoryWorldProps` renders when
+`story.active || story.chapter === 'complete'` (completeStory keeps chapter
+'complete' in the snapshot), so the wreck, mesa, stone, tree, relay AND the
+auditor survive the hand-off; a resumed/deep-linked `done` world re-places
+W-7744 at his post by the relay, facing the site. Pure-sandbox saves (chapter
+'none') and quit-mid-story sessions (inactive, ch1..ch4) still render nothing
+— the prime directive holds.
 
 **The A3 bloom wave** (`game/lifeReveal.ts`): during the dawn's material ramp,
 every grass blade and tree carries a radial growth factor in its vertex shader
@@ -233,19 +264,40 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
 
 ## Known gaps / next
 
+- **Owner revision round 2026-07-11 — IN FLIGHT** (contract:
+  `../PARAVOXIA_REVISION_PLAN.md`; the architecture text above stays truthful
+  to shipped code until these land):
+  - Voyage overhaul: AI-perspective deck rewrite (dispenser reframe, option
+    asides, system cards, cap 9), the NAMING BEAT (typed worker name), the
+    VOYAGE_STRANGE escalation ladder, manifest `COMPENSATION: SEE CLAUSE 4`.
+  - Ch2 redaction billboard growth bug (the box grows while unattended and
+    can consume the screen) — being fixed; the redaction-box-as-advertisement
+    design is UNCHANGED (it should hold its projected size).
+  - Anomaly mass relocates to an adjacent cube face; ch1-iso→lift gate
+    re-keys to the mesa summit; first gravity-edge crossing gets its caption
+    pair (revision plan §5).
+  - DescentPod voxel wreck → high-fidelity ship conversion during the A3
+    bloom wave + first-look caption (revision plan §8).
+  - ch3-gather campfire teaching chain (gather → hatchet → flint-from-stone
+    → fire → rest); flint drops from stone SUPPLEMENT supply-pod flint
+    (revision plan §7).
+  - ch4-vigil star-gazing sequence + `setConstellationReveal(0..1)` shader
+    hook + `story:ch4:constellations` persistence (revision plan §2).
+  - Prologue bottom console is `flex: 0 0 45%` — should size to content with
+    a max, freeing the graphics pane.
 - Prologue number keys (1/2/3) don't select card options (mouse only).
 - Esc during A1/A2 opens the pause menu over the cutscene (director clock keeps
   running; acceptable, revisit).
 - Touch/mobile story pass untested.
 - A2's camera choreography is FOV+constraint release only — the planned
   ortho→perspective projection pull is a future upgrade.
-- Vitals don't refill on rest (candidate: `feed/drink` on A3 wake).
+- Vitals refill on rest only at the VIGIL, and only stamina + warmth
+  (`beginVigilSleep` — hunger/thirst stay down as day-2 pressure, per the ch4
+  plan). The A3 rest still refills nothing (candidate: `feed/drink` on A3
+  wake) — revisit if playtests read the dawn as ungenerous.
 - Side-scroller terrain: the locked plane can meet >1-block walls on rough
   seeds; step-assist + jump handle most of it, but the travel strip deserves a
   flatness assertion after a feel playtest.
-- Ch3 timber comes from wreck salvage (granted on ch3-gather entry with a
-  caption) because trees are still hidden at the `color` stage — revisit if a
-  future pass wants the wood gathered rather than given.
 - Perf: life fields (grass/tree/flora/fauna) now fully cull (draw + sim) while
   the reality stage hides them (`lifeFieldsHidden`); the feed overlay's
   backdrop-filter leaves the compositor at identity; A2 snaps dpr once during
@@ -260,7 +312,8 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
   Direct jumps to ch1-anomaly spawn at the strip and must climb the mesa stairs
   (feed policy has no jump; step-assist handles the 1-block treads).
 - **Chapter 4 is TEMPORARILY terminal at the arrival** — `tickArrival` ends in
-  `completeStory()` behind a marked `// TEMPORARY` comment; `ch4-audit` and the
+  `completeStory()` behind a marked `// TEMPORARY` comment (the auditor is NOT
+  hidden: he keeps standing at the relay into `done`); `ch4-audit` and the
   rest of the chapter (compliance, defiance, the A4 exhale, meat/dive/repair/
   flight) are contracted in `../PARAVOXIA_CH4_PLAN.md` §2 S6–S13.
 - The pinned world's pond↔wreck run is short (~15u), so the klaxon sprint names

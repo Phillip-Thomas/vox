@@ -255,6 +255,27 @@ in the oregons trails style... I want to improve the graphics... the shape of th
 
 
 
+
+
+TO DO:
+
+
 "There is no reward" is a key statement... the AI needs to have this thought embeddied in it earyl on, and over time start to challenge its own beliefs, or undergo a character development of realization of cognitive dissonance
 
 another key concept is the subjective creation of meaning... some random thoughts I had that can lead to more aesthetic rendering progression while providing plot... the stars at first feel like constant chaos noise... then at some point in the story the AI main character is bored or something or injured or waiting, and starts to stare at the stars, wondering what it means to be percieved... At this moment patterns emerge, constellations form... this opens a new dynamic in the sky where maybe different groups of star systems have different astrology, and this somehow ties into a key mechanic
+
+"What mysteries lie beyond that which our senses can percieve?"
+
+the orgeon trail section has some gameply and copy that does not align with teh main character being the AI, it talks about giving away a ration which only made sense when the main character was the worker... Also we need a lot more content in here I think.. something to pass time more... more complex animation perhaps, more dynamic text and conversation based on choices... stats changing over time... this moment should also kindve be viewed as the character building moment. We are the AI, but we control operations on the ship. during this moment we start to have thoughts as the story progresses... "hmm, that worker is interesting... I wonder if he has a name" then the player names the worker (this will be the worker the AI inhabits.) we need more game impacting decisions here... The worker requests rations from the dispenser, and requests the AI to unlock (if player answers yes, the character will have food in inventory.) The AI realizes it has control over systems and questions, "what happens if I DON'T change the AC temp as they requested" etc etc... also the UI during oregon trail still needs some work, the bottom prompt UI takes up too much space dependent on window resolution
+
+after I track the signal from the topdown view and we cut scene to first person, the unidentified mass is in the same exact location, so it just like automatically triggers the next thing... please put the unidentified mass on another plane of the cube so we force the player to experience the dynamic gravity stuff, and also avoid accidentally skipping important phases
+
+When walking to the forbidden tree, the censored bilboard looks good when actually looking at it, but when I look elsewhere it grows the more I am not looking at it and eventually consumes the whole screen
+
+in regular gameplay, the campfire is already built, I need to build it though... but first we need the materials... so the AI should be like, "wait, fire creates warmth, what makes fire?" and the plkayer should be prompted to collect biofiber and wood and stone, make a hatchet and collect flint from stone blocks... we craft the fire and then are prompoted to rest... we need to teach crafting at this point, user is prompted to craft the fire. please ensure you pass this to the appropriate story agents to make sure what I say makes sense
+
+currently we have the crashed voxel ship, and the higher fidelity ship side by side... but the voxel ship should actually convert to the higher fidelity ship on the aweaking phase when trees and grass grow... the first time the player looks at the ship we should mention it too, "hmm, that is nicer than I remember"
+
+the ship should not be able to be flown until we repair it in a later chapter
+
+different planets have different post-fx.

@@ -28,18 +28,50 @@ describe('voyageDeck', () => {
     expect(a.queue.join(',')).not.toBe(b.queue.join(','));
   });
 
+  it('the deck is configured for the wider run (poolDraws 3, maxCards 9)', () => {
+    expect(VOYAGE_DECK.poolDraws).toBe(3);
+    expect(VOYAGE_DECK.maxCards).toBe(9);
+    expect(VOYAGE_DECK.spine).toEqual(['dispenser', 'question', 'diagnostic']);
+    expect(VOYAGE_DECK.pool.length).toBe(7);
+  });
+
   it('choices inject their follow-ups at the front of the queue, once, under the cap', () => {
     const run = createDeckRun(VOYAGE_DECK, seq([0.0, 0.0]));
     const first = nextCard(run, VOYAGE_DECK)!;
-    expect(first.id).toBe('ration');
-    const option = applyChoice(run, VOYAGE_DECK, 'ration', 'report');
+    expect(first.id).toBe('dispenser');
+    const option = applyChoice(run, VOYAGE_DECK, 'dispenser', 'report');
     expect(option?.unlocks).toContain('commendation');
     expect(run.queue[0]).toBe('commendation');
     // re-choosing cannot double-inject
-    applyChoice(run, VOYAGE_DECK, 'ration', 'report');
+    applyChoice(run, VOYAGE_DECK, 'dispenser', 'report');
     expect(run.queue.filter(id => id === 'commendation').length).toBe(1);
     // total run length respects the cap
     expect(run.drawn.length + run.queue.length).toBeLessThanOrEqual(VOYAGE_DECK.maxCards);
+  });
+
+  it('the question card carries a body variant keyed to the dispenser choice', () => {
+    const question = VOYAGE_DECK.cards.question;
+    expect(question.bodyVariants).toBeDefined();
+    expect(question.bodyVariants!['dispenser:unlock']).toBeTruthy();
+    expect(question.bodyVariants!['dispenser:unlock']).not.toBe(question.body);
+  });
+
+  it('the requested options carry asides in the watcher idiom', () => {
+    const aside = (cardId: string, optionId: string) =>
+      VOYAGE_DECK.cards[cardId].options.find(o => o.id === optionId)?.aside;
+    for (const [cardId, optionId] of [
+      ['dispenser', 'unlock'], ['question', 'unknown'], ['window', 'look'],
+      ['thermal', 'raise'], ['bell', 'withhold'], ['lights', 'dimall'], ['bell2', 'retire']
+    ] as const) {
+      const text = aside(cardId, optionId);
+      expect(text, `${cardId}:${optionId}`).toBeTruthy();
+      expect(text!.startsWith('(') && text!.endsWith(')'), `${cardId}:${optionId}`).toBe(true);
+    }
+  });
+
+  it('the old ration card is gone; the dispenser replaces it', () => {
+    expect(VOYAGE_DECK.cards.ration).toBeUndefined();
+    expect(VOYAGE_DECK.cards.dispenser).toBeDefined();
   });
 
   it('the run exhausts to null (the bridge is the caller\'s duty)', () => {

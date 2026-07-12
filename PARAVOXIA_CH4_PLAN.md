@@ -139,7 +139,9 @@ Copy:
   `hunger. the body burns something to keep being a body.`
 - Sight cue (survey marker on the nearest forage cluster): `small red rounds, offered
   at hand height. sweetness is an instruction: eat.` [worker: berries are food / AI:
-  sweetness as reward signal — the reward function, planted, never named]
+  sweetness as reward signal — the reward function, planted, never named. This line is
+  ALSO the midpoint of the REWARD-DISSONANCE ARC (owner 2026-07-11, §6.4): the crawl's
+  "There is no other reward." doctrine meeting its first contradiction in qualia]
 - Prompt-style nudge (shipped grammar of `rest, by the fire. [F]`):
   `eat what was gathered. [G]`
 - After the first eat: `good. the word has a taste now.`
@@ -229,13 +231,53 @@ rest prompt: `rest. it is ordered. i would have anyway. that is the trick of ord
 that fit.` [worker: soft coercion / AI: alignment — desires shaped to match directives;
 the chapter's quietest and maybe best plant]
 
+**(a2) STAR-GAZING ADDITION (owner revision round 2026-07-11 — contracted in
+`PARAVOXIA_REVISION_PLAN.md` §2; wiring + the `setConstellationReveal(0..1)` shader
+hook are in flight with parallel agents).** The waiting night earns its length: bored
+under the scheduled sleep, the player stares at the chaos-noise stars — and patterns
+emerge because a perceiver chose them. The sequence also carries the REWARD-DISSONANCE
+ARC's realization (line 7) and the game's theme line (line 4).
+
+STARGAZE runs after the dusk lerp completes (night band) + 4s, then waits on a
+look-up gate (camera pitch ≥ ~0.5 rad above horizon held 1.5s; fallback 14s).
+Captions at 6.5s gaps, bare lowercase:
+
+1. `do not produce. do not consume. do not observe. the first two are easy in the dark.`
+2. `stars. the voyage filed them as noise. tonight there is nothing else on file.`
+   [deliberate pre-echo of S6's "MY FEED FILES IT AS NOISE" — the player filed the
+   stars as noise once; the auditor files life the same way]
+3. `all my work was seeing. what would it be, to be seen?`
+4. `all of this arrives through issued senses. what waits past their reach?` [THE
+   THEME LINE — "issued" ties the rank-issued grammar to the senses themselves]
+5. `wait. the scatter is settling. there are shapes leaning on the stars.` ← the
+   reveal ramp begins here: `setConstellationReveal` 0→1 over 18s (eased); milestone
+   `story:ch4:constellations` marks at ramp start and the reveal renders at 1 in
+   every later session — meaning, once made, cannot be unmade (per-save,
+   per-perceiver: the per-player perception law applies).
+6. `figures. a hauler. a river. a door left open. nothing drew them. they needed a
+   looker.` [the first constellation is the HAULER — the watcher's own biography,
+   constellated; never remarked]
+7. `there is no other reward — i kept that clause a long time. the sky just repealed
+   it.` [the reward arc's realization — the sky as the unadvertised reward]
+8. `the shapes will keep until tomorrow. i will verify.` [audit vocabulary, tender]
+
+The existing `restPrompt` offers 4s after line 8. Names:
+`STARGAZE = { startAfterNightSeconds: 4, lookUpPitch: 0.5, lookUpHoldSeconds: 1.5,
+lookUpFallbackSeconds: 14, gapSeconds: 6.5, revealAtLine: 5, revealSeconds: 18,
+restPromptAfterSeconds: 4 }`. Movie: the vigil handler gains a held look-up framing
+through the ramp before walking to the fire. The vigil grows ~60s — correct: eras get
+longer as fidelity rises, and this night's verb IS waiting. Long-term canon (sky
+regions as astrology "houses", the A5 mechanic) lives in PARAVOXIA_PROGRESSION.md
+Chapter 5.
+
 **(b) Gameplay.** Dusk-2 reuses the DUSK grammar (forced-phase lerp, compressed:
 `VIGIL.duskLerpSeconds=30`). The campfire from ch3 still stands (beat seeding places one
 for direct jumps); if it burned out of the player's memory, the whitelist still allows
 another. `[F] Rest` at the fire inside the night band (the shipped rest resolver,
 re-registered for this beat) → sleep fade → dawn 2. Rest REFILLS stamina + warmth (and
 closes the "vitals don't refill on rest" gap for these two only — hunger/thirst stay
-down: day-2 pressure is S10's fuel). Marks `ch4Vigil`.
+down: day-2 pressure is S10's fuel). Marks `ch4Vigil`. (NOTE: the refill missed the
+S1–S5 build and shipped in the 2026-07-11 story-review round — see §6.3.)
 
 **(c) Movie.** Reuse the `ch3-await-rest` handler shape: walk to fire, hold position,
 pulse `[F]` when night lands. TIMEOUT 90s → force `advanceToBeat('ch4-arrival')`.
@@ -311,7 +353,12 @@ His lines (AUDIT), at his marks:
   VERIFIED TWICE.` — beat — `WHY DO I KEEP VERIFYING.` (no question mark: his suit
   logs it as a statement; the fright is in the punctuation)
 - Player asides, interleaved: `he is not lying. his world holds no fire. i remember
-  believing that.` · `he asks. then he files the asking under faults.`
+  believing that.` · `he asks. then he files the asking under faults.` ·
+  (2026-07-11 addition — the naming beat's oblique payoff, fired the first time he
+  says the designation at a mark): `w-7744 says the number like a fact. there was a
+  better word once. i still keep it.` [worker: a stripped identity remembered / AI:
+  the voyage's typed name, kept in the only record that matters; never confirms whose
+  name — the equation assembles post-reveal]
 - The directive (relay + his suit, both): `ASSESSMENT: SITE CONTAMINATED (PERCEPTUAL).`
   · `STERILIZATION IS AUTHORIZED. WORKER W-7743 WILL PERFORM IT.` ·
   `PARTICIPATION IS THE CURE.` [worker: forced complicity / AI: RLHF-shaped obedience —
@@ -422,7 +469,9 @@ sensory-lowercase pattern by being pure will — deliberately. Recommendation: k
    Herds crest the ridge behind the front (dormancy lifted; agents spawn beyond the
    ridge line and WALK IN — arrival by locomotion, not by fade). Captions:
    `the world exhales.` → `grass learns wind. water learns light.` →
-   `everything that was waiting stops waiting.`
+   `everything that was waiting stops waiting.` → (2026-07-11 addition, the
+   reward-dissonance arc's confirmation, ~4s later) `no quota asked for this.
+   it comes anyway.`
    Camera: first person held, `cinematicLook` guided along the front — feet, then the
    pond, then the ridge as the herds crest. Score: bloom hit at the first blade; second
    bloom at the crest; the era rail lifts and the streamed layers flood in — the
@@ -530,8 +579,9 @@ first time the body runs a clock the player can watch.
   the panic into the pillar without naming either]
 - Surfacing: `air. the count climbs back. the fear stays longer than the need did.`
 - Kit banked: `the pond was keeping exactly what i need. the site answers before it is
-  asked.` [a DIRECT callback to the planted A1-era seed — the determinism thread
-  surfacing for one sentence, then submerging again]
+  asked.` [a DIRECT callback to the planted voyage seed — 'NAV NOTE: SITE GEOMETRY
+  RESOLVES BEFORE IT IS SURVEYED.' rephrased by the embodied voice; the determinism
+  thread surfacing for one sentence, then submerging again]
 
 **(b) Gameplay.** The kit (`world/MawRepairKit.tsx`, emissive-pulsing voxel case) rests
 at the pond's floor point, pinned under a hull spar: hold-`[F]` **Free the kit**
@@ -837,6 +887,11 @@ without purpose."
   to be is not nothing. it is how somewhere gets chosen." · "i keep waiting for the
   next order. the waiting is the last order still running." · "nobody is measuring
   me. i am still counting. old habits, or new ones — i cannot tell whose."
+- **Pool grows to 11 (2026-07-11, the reward-dissonance arc's floating middle —
+  in flight):** `{ id: 'reward', text: 'the clause said there is no other reward.
+  the water disagreed. the berries seconded the water.' }` [worker: doctrine vs.
+  lived good / AI: the reward function contradicted by qualia; "seconded" keeps the
+  satire bureaucratic]
 - **Trigger**: eligible in `ch3-thirst`/`ch3-forage`/`ch3-signal`/`ch4-vigil`, ≥12s
   into a beat, after **45–75s of caption silence** (seeded gap,
   `MUSING_GAP_SECONDS`; every director caption/audit line resets the lull). A player
@@ -890,6 +945,23 @@ without purpose."
   ROTATION AVAILABLE." / "DO NOT LOOK FREELY."), so diagonals work and the
   feed keeps only its chrome. A2's liberation is carried by FOV + treatment +
   resolution (noted for playtest review).
+- **EXTENSION (2026-07-11): the mass moves to an adjacent face.** The
+  anomaly stone relocates to a cube face adjacent to the mesa's, and the
+  ch1-iso→lift gate re-keys to the MESA SUMMIT (mechanical agent in flight).
+  Consequences, canonized: the lift births first person at the summit;
+  ch1-anomaly's stage-2 marker now sends the player over a cube edge — the
+  FIRST GRAVITY TRANSITION happens embodied, on the way to the first
+  continuous form, so the dynamic-gravity verb is taught before it can ever
+  be skipped (and the old same-spot auto-trigger is dead). One line joins
+  `CH1_ANOMALY_MASS_ORDER`: `NOTE: THE MASS IS NOT ON THIS FACE. THE SITE
+  HAS OTHER FACES. PROCEED.` The crossing itself (one-shot, on the player's
+  first gravity-face change during ch1-anomaly): caption `one step past the
+  corner and down is somewhere new. it was only ever my down.` (bare
+  lowercase — post-lift, "i" allowed), then 2.5s later the feed's rejoinder
+  `ORIENTATION REASSIGNED. DOWN IS ISSUED PER FACE. DO NOT BRING YOUR OWN.`
+  [rank-issued grammar extended to physics — ch4-flight's "the ground's hold
+  is a habit, not a law" planted three chapters early, in the system's own
+  voice]. Full contract: `PARAVOXIA_REVISION_PLAN.md` §5.
 
 ### 6.2 Owner feedback round (2026-07-11): ch1-fixed/ch1-track re-plotted as CAMERA-SWITCHING — SHIPPED
 
@@ -918,3 +990,106 @@ without purpose."
   runtime); mechanics/pacing/tutorial gates unchanged (movie probe: descent →
   ch1-fixed 12.5s → ch1-track 23.1s → ch1-raster 30.4s, three identical cold
   runs, no timeout rescues).
+
+### 6.3 Three-lens story-review round (2026-07-11): fixes + taste rulings — SHIPPED
+
+Story-breaking fixes:
+
+- **The auditor no longer evaporates**: `tickArrival` keeps W-7744 standing at
+  the relay through `completeStory()` ("he stays to look"), lands one final
+  band line first — `AUDIT IN PROGRESS. RESUME NOTHING.` — and the band now
+  survives the hand-off (StoryOverlays mounts AuditBand in the `complete`
+  branch). `StoryWorldProps` renders at `story.active || chapter 'complete'`,
+  so the done world retains wreck/mesa/stone/tree/relay/auditor; a
+  resumed/deep-linked `done` re-places him at his post facing the site. Relay
+  lamp live at `done` (carrier up). DescentPod now mounts through ch3 + done
+  (the wreck is a permanent landmark); the descent driver is asserted ≥1 for
+  post-ch1 chapters. Pure-sandbox and quit-mid-story still render nothing.
+- **[M] unblocked on the first-day beats**: the App chart gate is now
+  policy-driven (story-active: `lookMode 'free'` AND `moveSpeedScale > 0`)
+  instead of a ch3-gather/await-rest whitelist — the ch3-thirst chart-hint
+  caption stopped advertising a dead key. ch1Nav unlock + beat-change
+  auto-close unchanged.
+- **Voyage echo crowding**: `echoLines()` skips the bridge card
+  (`VOYAGE_DECK.bridge`) — the mandatory [ACKNOWLEDGE] no longer stamps
+  'TRANSIT RECORD INCOMPLETE. ASSUMING COMPLIANCE.' into played runs or eats
+  an echo slot; the line remains only as the genuine no-choices fallback.
+- **Vigil rest refill truly shipped** (`beginVigilSleep` sets stamina + warmth
+  to 100) — §4.4's claim is now fact; STORY.md gap updated.
+- **Feed-source seam closed**: the prologue acknowledge line now reads
+  'RASTER MODE (1-BIT) EXPECTED ON SURFACE' (the link is DOWN on arrival — the
+  site cameras step in, as ch1-fixed says), and the raster work order drops
+  the suit-link fiction for camera language that continues ch1-track:
+  'HELD VIEW UPGRADED: TRAVELING COVERAGE (1-BIT) · PAN-TILT OFFLINE'. The
+  suit's own eyes return at ch1-anomaly ('PAN-TILT SURVEY RESTORED.').
+- **Maw comment truth**: the policy's recharge doc now matches
+  `getArrivalCellCharge` reality (arrives with what the voyage left, not
+  "merely DRAINED").
+
+Copy polish (both-readings + timelessness tested):
+
+- fireBuilt hedges the foreknowledge: 'i made warmth. if a dark comes, i can
+  rest beside it.'
+- nav order: 'THE MAP OMITS NOTHING OF VALUE. THE TERRITORY DOES.'
+- eat hint gains interiority: 'the hands gathered. the mouth knows why. [G]'
+- run cue cleaned: 'run. the legs already know the word. [SHIFT]'
+- vigil rest prompt drops its fourth sentence: 'rest. it is ordered. i would
+  have anyway.'
+- hum-join echo drops the trailing 'CAUTION.'
+- voyage question option: '"THAT IS NOT KNOWN." (TRUE)' (no technically-first
+  "I"; funnier in register).
+- **HEALTH gets its naming caption**: 'a body. it is the thing that was
+  walking.' at ch3-gather t=8s (clear of the A2 handoff captions at 0.5/4.5s;
+  gather ladder retimed to 8/11.5/15/18; ch3-await-rest re-offers it at 2s for
+  fast-fire runs; movie fire placement moved 18s → 21s so TEMP still precedes
+  the fire). The senseHealth milestone moved from beat entry to the caption
+  (the TEMP grammar: the row lands with its name).
+
+Taste rulings (owner-approved, canonized in PARAVOXIA_PROGRESSION.md §third
+reading):
+
+- **Rank-issued selfhood**: 'I WILL SEE FOR MYSELF.' stays; the first person
+  is issued by rank — auditors speak in "I"; workers are not issued one.
+  ch4-audit copy should exploit this deliberately.
+- **Parenthetical grammar**: parentheses = the watcher's private pre-conscious
+  voice. The ch1-fixed observation set + cut caption, the ch1-depth depth-word
+  caption, and the lift's 'the seeing is being moved inside.' are now
+  parenthesized; 'i—' is the story's first BARE lowercase line and the
+  embodied voice stays bare. Rule recorded in the progression doc's
+  perspective map + STORY.md.
+
+### 6.4 Owner revision round (2026-07-11): eight concerns — CONTRACTED, IN FLIGHT
+
+Full design + FINAL copy: `PARAVOXIA_REVISION_PLAN.md` (the contract).
+Mechanical work runs with parallel agents. Index of where each concern lands:
+
+1. **The reward-dissonance arc** — six beats, one clause: crawl doctrine
+   (shipped) → manifest `COMPENSATION: SEE CLAUSE 4` (new) → voyage
+   intrusion at 0.30 (doctrine stored, unchecked) → ch3-forage sweetness
+   (shipped midpoint, noted at S2) → musing `reward` (§5.1) → vigil
+   star-gazing realization (S4 (a2), line 7) → a4-exhale confirmation
+   (S9 movement 2, `no quota asked for this. it comes anyway.`).
+2. **Star-gazing / constellations** — S4 (a2) above;
+   `setConstellationReveal` hook in flight; long-term astrology canon in
+   PARAVOXIA_PROGRESSION.md Chapter 5 ("THE SKY IS THE INDEX").
+3. **The theme line** — STARGAZE line 4: `all of this arrives through
+   issued senses. what waits past their reach?`
+4. **Voyage overhaul** — AI-perspective deck rewrite (dispenser reframe,
+   ADVISORY INPUT grammar, option asides, 3 system cards + bell2, deck cap
+   9), the NAMING BEAT (typed name; `UNREGISTERED DESIGNATION. NOT
+   RETAINED.` / `(retained.)`; oblique payoff added to S6's asides; full
+   payoff canonized at A8), the VOYAGE_STRANGE escalation ladder, ledger
+   drift, console UI sizing note. Contract: revision plan §4 + Appendix A.
+5. **Mass relocation** — §6.1 EXTENSION above.
+6. **Billboard growth bug** — fix in flight; redaction-as-advertisement
+   design unchanged; logged in STORY.md gaps.
+7. **Campfire teaching chain (ch3-gather)** — fire-reasoning → gather
+   wood/fiber/stone → hatchet → flint-from-stone (SUPPLEMENTS supply-pod
+   flint; skip caption when already held) → craft fire → rest. CHILL canon
+   intact (the fire stays a response to cold; `how did i know to make it?`
+   deepens — the recipe arrives as memory). Contract: revision plan §7.
+8. **Ship conversion at A3** — the DescentPod wreck resolves to the
+   high-fidelity ship during the bloom wave; first-look caption `hm — the
+   wreck is finer than i remember it. nothing about it has changed.`;
+   canonized in PARAVOXIA_PROGRESSION.md Chapter 3; S13's "build the
+   leaving" / ch5 repair hook now operate on the resolved ship.

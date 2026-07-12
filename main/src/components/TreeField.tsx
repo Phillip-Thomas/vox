@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { getGraphicsQuality } from '../config/graphicsSettings';
+import { getGraphicsQuality, getQualityProfile } from '../config/graphicsSettings';
 import { getVoxelRealityEffects, lifeFieldsHidden } from '../game/systems/realityRenderSystem';
 import { isLifeRevealActive } from '../game/lifeReveal.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { deterministicTangentForUp, dominantFaceForPosition, FACE_NORMALS } from '../utils/surfaceControls';
-import { generateTree } from '../utils/treeGen';
-import { buildTreeProfile, paramsFromProfile } from '../utils/treeProfile';
-import { seededVoxelUnit } from '../utils/seededHash';
-import { isDecoratableGrassVoxel } from '../utils/grassField';
+import { generateTree, type TreeArchetype } from '../utils/treeGen';
+import {
+  buildTreeProfile,
+  paramsFromProfile,
+  treeVariantSeed,
+  TREE_VARIANT_COUNT
+} from '../utils/treeProfile';
 import { getTreeHarvestVersion, isTreeHarvested, resetTreeHarvest } from '../game/systems/treeHarvest';
 import { restoreTreesForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
@@ -24,6 +27,14 @@ import {
   updateTreeMaterials
 } from '../utils/treeMaterials';
 import { getSunDirection, getMoonDirection } from './SkyController';
+import { buildPlanetArtDirection, type PlanetArtDirection } from '../utils/planetArtDirection';
+import {
+  resolveTreeVariantCount,
+  shouldPlaceTreeAtVoxel,
+  treeVariantIndexForVoxel,
+  writeTreeInstanceVariation,
+  type TreeInstanceVariation
+} from '../utils/treePopulation';
 
 // Extra instance slots so small grass-count fluctuations don't force a realloc.
 const HEADROOM = 32;
@@ -42,15 +53,22 @@ interface TreeFieldProps {
 }
 
 /**
- * Module handle for tree harvesting: the NEAR trunk/leaf instanced meshes plus a
- * slot→voxel map (instanceId from a raycast → the tree's grass-voxel coord). The
- * player's harvest raycast reads this (mirrors EfficientPlanet's `efficientPlanetMesh`).
+ * Module handle for tree harvesting: each NEAR variant trunk/leaf mesh carries
+ * its own slot-to-voxel map, because instance ids restart at zero per mesh.
  */
+export interface TreePickTarget {
+  mesh: THREE.InstancedMesh;
+  slotVoxel: Array<[number, number, number]>;
+}
+
 export const treeFieldHandle: {
+  /** All near trunk/leaf meshes, each with its own instanceId mapping. */
+  pickTargets: TreePickTarget[];
+  /** Legacy first-variant aliases retained for debug tooling. */
   trunk: THREE.InstancedMesh | null;
   leaf: THREE.InstancedMesh | null;
   slotVoxel: Array<[number, number, number]>;
-} = { trunk: null, leaf: null, slotVoxel: [] };
+} = { pickTargets: [], trunk: null, leaf: null, slotVoxel: [] };
 
 // Reused scratch (avoid per-instance allocation).
 const _world = new THREE.Vector3();
@@ -64,27 +82,40 @@ const _scaleM = new THREE.Matrix4();
 const _translate = new THREE.Matrix4();
 const _scratch = new THREE.Matrix4();
 const _m = new THREE.Matrix4();
+const _instanceVariation: TreeInstanceVariation = {
+  scaleX: 1,
+  scaleY: 1,
+  scaleZ: 1,
+  leanRadians: 0,
+  leanAzimuth: 0
+};
 
-/** Count grass voxels whose hash selects them for a tree (cheap signature). */
-function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
+/** Count ecology-eligible voxels whose hash selects them for a tree. */
+function countTreeVoxels(
+  treeDensity: number,
+  terrainSeed: number,
+  artDirection: PlanetArtDirection
+): number {
   if (treeDensity <= 0) return 0;
   let n = 0;
   for (const voxel of voxelSystem.getAllVoxels().values()) {
-    if (!isDecoratableGrassVoxel(voxel)) continue;
     const [x, y, z] = voxel.position;
-    if (seededVoxelUnit(x, y, z, 7, terrainSeed) < treeDensity && !isTreeHarvested(x, y, z)) n++;
+    if (
+      shouldPlaceTreeAtVoxel(voxel, x, y, z, treeDensity, terrainSeed, artDirection) &&
+      !isTreeHarvested(x, y, z)
+    ) n++;
   }
   return n;
 }
 
 /**
- * Procedural trees. ONE per-planet species (profile from terrainSeed) generated
- * at load, INSTANCED across a deterministic ~treeDensity subset of grass voxels —
- * mirroring grass (procedural + instanced + local-up + profile-gated).
+ * Procedural trees. One per-planet species DNA (profile from terrainSeed) yields
+ * a small quality-gated phenotype library, instanced across a deterministic,
+ * ecology-eligible subset of surface voxels.
  *
- * Up to FOUR InstancedMeshes share the SAME per-instance matrices:
- *   trunk + leaf + blossom (only if the planet blooms) for NEAR trees, and a
- *   2-quad cross-billboard impostor for FAR trees (LOD). Orientation maps local
+ * Each phenotype owns trunk + leaf + optional blossom meshes for NEAR trees and
+ * a 2-quad silhouette impostor for FAR trees. All share one material family and
+ * each world tree belongs to exactly one variant. Orientation maps local
  *   +Y -> normalize(worldPos) (the planet's outward normal) so trees stand
  *   correctly on all 6 cube faces; wind animates in object space.
  *
@@ -95,31 +126,43 @@ function countTreeVoxels(treeDensity: number, terrainSeed: number): number {
  */
 export default function TreeField({ planetSize, terrainSeed, persistenceWorld, playerPosition }: TreeFieldProps) {
   const density = getGraphicsQuality().treeDensity;
+  const variantCount = resolveTreeVariantCount(getQualityProfile(), TREE_VARIANT_COUNT);
 
   // Per-planet species: profile from terrainSeed ONLY.
   const profile = useMemo(
     () => measureWarpMetric('tree:profile', () => buildTreeProfile(terrainSeed)),
     [terrainSeed]
   );
+  const artDirection = useMemo(
+    () => buildPlanetArtDirection(terrainSeed),
+    [terrainSeed]
+  );
   const hasBlossom = profile.bloomAmount > 0;
 
-  // Geometry built ONCE per world (terrainSeed + density). FIXES the old
-  // hardcoded generateTree(1337).
-  const archetype = useMemo(
+  // A small cached phenotype library shares one species/material family. Trees
+  // partition between variants, so visible triangle count stays comparable to a
+  // single archetype while silhouettes stop repeating exactly across a forest.
+  const archetypes = useMemo<TreeArchetype[]>(
     () => measureWarpMetric(
-      'tree:archetype_generate',
-      () => (density > 0 ? generateTree(terrainSeed, paramsFromProfile(profile)) : null),
-      result => result
-        ? {
-            trunkVerts: result.trunkGeometry.attributes.position.count,
-            leafVerts: result.leafGeometry.attributes.position.count,
-            blossomVerts: result.blossomGeometry?.attributes.position.count ?? 0,
-            impostorVerts: result.impostorGeometry.attributes.position.count
-          }
-        : { skipped: true }
+      'tree:archetype_library_generate',
+      () => density > 0
+        ? Array.from({ length: variantCount }, (_, variant) =>
+            generateTree(
+              treeVariantSeed(terrainSeed, variant),
+              paramsFromProfile(profile, variant)
+            )
+          )
+        : [],
+      result => ({
+        variants: result.length,
+        trunkVerts: result.reduce((sum, tree) => sum + tree.trunkGeometry.attributes.position.count, 0),
+        leafVerts: result.reduce((sum, tree) => sum + tree.leafGeometry.attributes.position.count, 0),
+        blossomVerts: result.reduce((sum, tree) => sum + tree.blossomGeometry.attributes.position.count, 0),
+        impostorVerts: result.reduce((sum, tree) => sum + tree.impostorGeometry.attributes.position.count, 0)
+      })
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [terrainSeed, density]
+    [terrainSeed, density, variantCount]
   );
 
   const barkMaterial = useMemo(() => (density > 0 ? createBarkMaterial() : null), [density]);
@@ -133,10 +176,11 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
     [density]
   );
 
-  const trunkRef = useRef<THREE.InstancedMesh>(null);
-  const leafRef = useRef<THREE.InstancedMesh>(null);
-  const blossomRef = useRef<THREE.InstancedMesh>(null);
-  const impostorRef = useRef<THREE.InstancedMesh>(null);
+  const trunkRefs = useRef<Array<THREE.InstancedMesh | null>>([]);
+  const leafRefs = useRef<Array<THREE.InstancedMesh | null>>([]);
+  const blossomRefs = useRef<Array<THREE.InstancedMesh | null>>([]);
+  const impostorRefs = useRef<Array<THREE.InstancedMesh | null>>([]);
+  const slotVoxelsByVariant = useRef<Array<Array<[number, number, number]>>>([]);
 
   const [capacity, setCapacity] = useState(0);
   const signatureRef = useRef<string>('');
@@ -148,7 +192,7 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
 
   const neededCapacity = () => measureWarpMetric(
     'tree:count_capacity',
-    () => countTreeVoxels(density, terrainSeed),
+    () => countTreeVoxels(density, terrainSeed, artDirection),
     needed => ({ needed })
   );
 
@@ -161,11 +205,20 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
 
   // Fill all meshes. NEAR trees -> trunk+leaf+blossom slots; FAR -> impostor slot.
   const rebuild = () => {
-    const trunk = trunkRef.current;
-    const leaf = leafRef.current;
-    const impostor = impostorRef.current;
-    if (!trunk || !leaf || !impostor || density <= 0) return;
-    const blossom = blossomRef.current; // may be null when planet doesn't bloom
+    const trunks = trunkRefs.current.slice(0, variantCount);
+    const leaves = leafRefs.current.slice(0, variantCount);
+    const blossoms = blossomRefs.current.slice(0, variantCount);
+    const impostors = impostorRefs.current.slice(0, variantCount);
+    if (
+      density <= 0 || variantCount <= 0 ||
+      trunks.length !== variantCount || leaves.length !== variantCount ||
+      impostors.length !== variantCount || (hasBlossom && blossoms.length !== variantCount) ||
+      trunks.some(mesh => !mesh) || leaves.some(mesh => !mesh) ||
+      impostors.some(mesh => !mesh) || (hasBlossom && blossoms.some(mesh => !mesh))
+    ) return;
+    const nearSlots = new Array(variantCount).fill(0);
+    const farSlots = new Array(variantCount).fill(0);
+    slotVoxelsByVariant.current = Array.from({ length: variantCount }, () => []);
 
     measureWarpMetric(
       'tree:rebuild_instances',
@@ -180,16 +233,13 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
     const nearFloor = Math.min(maxDist, planetSize * 1.5);
     const impostorDist = Math.max(maxDist * IMPOSTOR_FRAC, nearFloor);
     const impostorDistSq = impostorDist * impostorDist;
-    const cap = trunk.instanceMatrix.count;
-
-    let nearSlot = 0;
-    let farSlot = 0;
+    const cap = trunks[0]!.instanceMatrix.count;
     for (const voxel of voxelSystem.getAllVoxels().values()) {
-      if (nearSlot >= cap && farSlot >= cap) break;
-      if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
-      if (seededVoxelUnit(x, y, z, 7, terrainSeed) >= density) continue;
+      if (!shouldPlaceTreeAtVoxel(voxel, x, y, z, density, terrainSeed, artDirection)) continue;
       if (isTreeHarvested(x, y, z)) continue; // felled — don't re-place it
+      const variant = treeVariantIndexForVoxel(x, y, z, terrainSeed, variantCount);
+      if (variant < 0) continue;
 
       voxelCoordToWorld(x, y, z, _world);
 
@@ -198,8 +248,8 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       // cull beyond max distance entirely.
       if (maxDist > 0 && distSq >= 0 && distSq > maxDistSq) continue;
       const near = maxDist <= 0 || distSq < 0 || distSq <= impostorDistSq;
-      if (near && nearSlot >= cap) continue;
-      if (!near && farSlot >= cap) continue;
+      const slot = near ? nearSlots[variant] : farSlots[variant];
+      if (slot >= cap) continue;
 
       // Local up = the CUBE FACE NORMAL of the face this voxel sits on (dominant
       // axis), matching how the PLAYER stands (FACE_NORMALS[dominantFace]) and the
@@ -213,17 +263,14 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       // Orientation basis: local +Y -> up (same approach as grass).
       _basis.makeBasis(_tangent, _up, _bitangent);
 
-      const yaw = seededVoxelUnit(x, y, z, 11, terrainSeed) * Math.PI * 2;
-      _yaw.makeRotationY(yaw);
-      // Per-instance lean: a SLIGHT tilt away from vertical whose MAGNITUDE varies
-      // per tree (0..~8deg) and whose DIRECTION is randomized by the yaw above
-      // (the tilt tips toward local +X, then yaw spins that around up). This is
-      // what makes a forest look naturally varied instead of every trunk tipped
-      // the same way; mirrors the per-blade tilt grass uses.
-      const tilt = seededVoxelUnit(x, y, z, 17, terrainSeed) * 0.14; // 0 .. ~8deg
-      _tilt.makeRotationX(tilt);
-      const s = 0.92 + seededVoxelUnit(x, y, z, 23, terrainSeed) * 0.48; // 0.92 .. 1.4
-      _scaleM.makeScale(s, s, s);
+      writeTreeInstanceVariation(x, y, z, terrainSeed, _instanceVariation);
+      _yaw.makeRotationY(_instanceVariation.leanAzimuth + variant * 2.39996);
+      _tilt.makeRotationX(_instanceVariation.leanRadians);
+      _scaleM.makeScale(
+        _instanceVariation.scaleX,
+        _instanceVariation.scaleY,
+        _instanceVariation.scaleZ
+      );
 
       _translate.makeTranslation(
         _world.x + _up.x * SURFACE_OFFSET,
@@ -244,37 +291,51 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       // and contaminate every alien-hued / flowering planet — so we don't set it.
 
       if (near) {
-        trunk.setMatrixAt(nearSlot, _m);
-        leaf.setMatrixAt(nearSlot, _m);
-        if (blossom) {
-          blossom.setMatrixAt(nearSlot, _m);
+        trunks[variant]!.setMatrixAt(slot, _m);
+        leaves[variant]!.setMatrixAt(slot, _m);
+        if (hasBlossom) {
+          blossoms[variant]!.setMatrixAt(slot, _m);
         }
-        // Record which tree-voxel this near slot draws, so a raycast hit on the
-        // trunk/leaf mesh (instanceId === slot) maps back to the harvestable tree.
-        treeFieldHandle.slotVoxel[nearSlot] = [x, y, z];
-        nearSlot++;
+        slotVoxelsByVariant.current[variant][slot] = [x, y, z];
+        nearSlots[variant]++;
       } else {
-        impostor.setMatrixAt(farSlot, _m);
-        farSlot++;
+        impostors[variant]!.setMatrixAt(slot, _m);
+        farSlots[variant]++;
       }
     }
 
-    trunk.count = nearSlot;
-    leaf.count = nearSlot;
-    impostor.count = farSlot;
-    trunk.instanceMatrix.needsUpdate = true;
-    leaf.instanceMatrix.needsUpdate = true;
-    impostor.instanceMatrix.needsUpdate = true;
-    if (blossom) {
-      blossom.count = nearSlot;
-      blossom.instanceMatrix.needsUpdate = true;
+    treeFieldHandle.pickTargets.length = 0;
+    for (let variant = 0; variant < variantCount; variant++) {
+      const trunk = trunks[variant]!;
+      const leaf = leaves[variant]!;
+      const blossom = blossoms[variant];
+      const impostor = impostors[variant]!;
+      trunk.count = nearSlots[variant];
+      leaf.count = nearSlots[variant];
+      impostor.count = farSlots[variant];
+      trunk.instanceMatrix.needsUpdate = true;
+      leaf.instanceMatrix.needsUpdate = true;
+      impostor.instanceMatrix.needsUpdate = true;
+      if (blossom) {
+        blossom.count = nearSlots[variant];
+        blossom.instanceMatrix.needsUpdate = true;
+      }
+      const slots = slotVoxelsByVariant.current[variant];
+      slots.length = nearSlots[variant];
+      treeFieldHandle.pickTargets.push(
+        { mesh: trunk, slotVoxel: slots },
+        { mesh: leaf, slotVoxel: slots }
+      );
     }
-    // Publish the near meshes + trim the slot map so the harvest raycast only sees
-    // currently-drawn trees.
-    treeFieldHandle.trunk = trunk;
-    treeFieldHandle.leaf = leaf;
-    treeFieldHandle.slotVoxel.length = nearSlot;
-        return { near: nearSlot, far: farSlot, capacity: cap };
+    treeFieldHandle.trunk = trunks[0] ?? null;
+    treeFieldHandle.leaf = leaves[0] ?? null;
+    treeFieldHandle.slotVoxel = slotVoxelsByVariant.current[0] ?? [];
+        return {
+          near: nearSlots.reduce((sum, count) => sum + count, 0),
+          far: farSlots.reduce((sum, count) => sum + count, 0),
+          variants: variantCount,
+          capacity: cap
+        };
       },
       result => result
     );
@@ -293,9 +354,10 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
     resetTreeHarvest();
     restoreTreesForWorld(persistenceWorld ?? terrainSeed); // load this world's already-felled trees
     return () => {
+      treeFieldHandle.pickTargets.length = 0;
       treeFieldHandle.trunk = null;
       treeFieldHandle.leaf = null;
-      treeFieldHandle.slotVoxel.length = 0;
+      treeFieldHandle.slotVoxel = [];
     };
   }, [persistenceWorld, terrainSeed]);
 
@@ -313,17 +375,23 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
 
   useEffect(() => {
     return () => {
-      archetype?.trunkGeometry.dispose();
-      archetype?.leafGeometry.dispose();
-      archetype?.blossomGeometry.dispose();
-      archetype?.impostorGeometry.dispose();
+      for (const archetype of archetypes) {
+        archetype.trunkGeometry.dispose();
+        archetype.leafGeometry.dispose();
+        archetype.blossomGeometry.dispose();
+        archetype.impostorGeometry.dispose();
+      }
+    };
+  }, [archetypes]);
+
+  useEffect(() => {
+    return () => {
       barkMaterial?.dispose();
       leafMaterial?.dispose();
       blossomMaterial?.dispose();
       impostorMaterial?.dispose();
     };
   }, [
-    archetype,
     barkMaterial,
     leafMaterial,
     blossomMaterial,
@@ -355,8 +423,12 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
     // instance at zero scale until the front reaches it) — culling here would
     // turn the reveal into a pop.
     const hidden = lifeFieldsHidden() && !isLifeRevealActive() && profileAppliedRef.current;
-    for (const ref of [trunkRef, leafRef, blossomRef, impostorRef]) {
-      const mesh = ref.current;
+    for (const mesh of [
+      ...trunkRefs.current,
+      ...leafRefs.current,
+      ...blossomRefs.current,
+      ...impostorRefs.current
+    ]) {
       if (mesh && mesh.visible === hidden) mesh.visible = !hidden;
     }
     if (!hidden) {
@@ -393,7 +465,7 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
 
   if (
     density <= 0 ||
-    !archetype ||
+    archetypes.length === 0 ||
     !barkMaterial ||
     !leafMaterial ||
     !impostorMaterial ||
@@ -404,36 +476,46 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
 
   return (
     <>
-      <instancedMesh
-        ref={trunkRef}
-        args={[archetype.trunkGeometry, barkMaterial, capacity]}
-        frustumCulled={false}
-        castShadow={false}
-        receiveShadow={false}
-      />
-      <instancedMesh
-        ref={leafRef}
-        args={[archetype.leafGeometry, leafMaterial, capacity]}
-        frustumCulled={false}
-        castShadow={false}
-        receiveShadow={false}
-      />
-      {hasBlossom && blossomMaterial && (
+      {archetypes.map((archetype, variant) => (
         <instancedMesh
-          ref={blossomRef}
+          key={`tree-trunk-${variant}`}
+          ref={mesh => { trunkRefs.current[variant] = mesh; }}
+          args={[archetype.trunkGeometry, barkMaterial, capacity]}
+          frustumCulled={false}
+          castShadow={false}
+          receiveShadow={false}
+        />
+      ))}
+      {archetypes.map((archetype, variant) => (
+        <instancedMesh
+          key={`tree-leaf-${variant}`}
+          ref={mesh => { leafRefs.current[variant] = mesh; }}
+          args={[archetype.leafGeometry, leafMaterial, capacity]}
+          frustumCulled={false}
+          castShadow={false}
+          receiveShadow={false}
+        />
+      ))}
+      {hasBlossom && blossomMaterial && archetypes.map((archetype, variant) => (
+        <instancedMesh
+          key={`tree-blossom-${variant}`}
+          ref={mesh => { blossomRefs.current[variant] = mesh; }}
           args={[archetype.blossomGeometry, blossomMaterial, capacity]}
           frustumCulled={false}
           castShadow={false}
           receiveShadow={false}
         />
-      )}
-      <instancedMesh
-        ref={impostorRef}
-        args={[archetype.impostorGeometry, impostorMaterial, capacity]}
-        frustumCulled={false}
-        castShadow={false}
-        receiveShadow={false}
-      />
+      ))}
+      {archetypes.map((archetype, variant) => (
+        <instancedMesh
+          key={`tree-impostor-${variant}`}
+          ref={mesh => { impostorRefs.current[variant] = mesh; }}
+          args={[archetype.impostorGeometry, impostorMaterial, capacity]}
+          frustumCulled={false}
+          castShadow={false}
+          receiveShadow={false}
+        />
+      ))}
     </>
   );
 }

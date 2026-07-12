@@ -2,7 +2,7 @@ import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getPlayerUp } from '../state/playerFrame';
-import { getPlayerSubmergence } from '../state/playerSubmersion';
+import { getCameraSubmergence } from '../state/playerSubmersion';
 import { getSunDirection } from './SkyController';
 
 // --- Surface seen from below (Snell's window + total-internal-reflection) ------
@@ -99,7 +99,7 @@ export default function UnderwaterDome() {
   useFrame(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
-    const submergence = getPlayerSubmergence();
+    const submergence = getCameraSubmergence();
     mesh.visible = submergence > 0.01;
     if (!mesh.visible) return;
     // Follow the eye so the dome is "infinitely far" in every direction.

@@ -174,7 +174,9 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
-        vBarkV = transformed.y;
+        // Arc-length UV from the generator keeps grain flowing along bent and
+        // horizontal limbs instead of slicing them with world-height bands.
+        vBarkV = uv.y * 8.0;
         vBarkU = uv.x;
         vBarkStiff = aStiff;
         #ifdef USE_INSTANCING
@@ -232,7 +234,7 @@ export function createBarkMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-bark-v5';
+  material.customProgramCacheKey = () => 'tree-bark-v6';
   return material;
 }
 
@@ -396,18 +398,6 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           float serr = (abs(fract((p.y + abs(p.x) * 2.0) * 7.0) - 0.5)) * 0.05;
           return d - serr;
         }
-        // Rounded lumpy cluster mask inspired by Fluffy Tree's canopy tufts.
-        // It expands broad leaf cards into soft masses while the SDF veins/rim
-        // below keep leaf detail inside the tuft.
-        float twLeafTuft(vec2 p, float seed) {
-          float ang = atan(p.y, p.x);
-          float r = length(vec2(p.x * mix(0.92, 1.08, seed), p.y * 0.9));
-          float lobes = 0.82
-            + 0.08 * sin(ang * 5.0 + seed * 6.28318)
-            + 0.05 * sin(ang * 9.0 - seed * 4.2);
-          lobes *= mix(0.92, 1.08, smoothstep(-0.6, 0.85, p.y));
-          return r - lobes;
-        }
         // LANCEOLATE / needle blade — slim spear, fattest in the middle.
         float twLeafLance(vec2 p) {
           float y = p.y * 0.5 + 0.5;
@@ -444,7 +434,10 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
           float botanicalD = (uShapeId < 0.5 || (uShapeId > 1.5 && uShapeId < 2.5))
               ? twLeafMaple(lp)
               : twLeafOvate(lp);
-          d = min(botanicalD, twLeafTuft(lp, vTuftShade) + 0.045);
+          // Near foliage stays botanical. The old union with a round tuft SDF
+          // inflated every card into a disk and collapsed whole crowns into one
+          // foam-like blob, erasing branch rhythm and negative canopy space.
+          d = botanicalD;
         }
         // per-leaf size jitter so the crown edge isn't a uniform stamp.
         d -= (vLeafRand - 0.5) * 0.05;
@@ -552,7 +545,7 @@ export function createLeafMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-leaf-v6';
+  material.customProgramCacheKey = () => 'tree-leaf-v7';
   return material;
 }
 
@@ -648,6 +641,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
     installTreeRealityUniforms(shader);
     shader.uniforms.uLeafBase = { value: LEAF_BASE.clone() };
     shader.uniforms.uLeafTip = { value: LEAF_TIP.clone() };
+    shader.uniforms.uShapeId = { value: 0 };
     material.userData.shader = shader;
 
     leafVertexCommon(shader);
@@ -660,6 +654,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
         uniform float uTreeChroma;
         uniform vec3 uLeafBase;
         uniform vec3 uLeafTip;
+        uniform float uShapeId;
         varying vec2 vLeafUv;
         varying float vTint;
         varying float vCanopyY;
@@ -675,11 +670,26 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
         '#include <map_fragment>',
         `#include <map_fragment>
         if (uTreeVisibility < 0.01) discard;
-        // soft blobby crown silhouette with a nibbled edge, fwidth-cut.
+        // Species-preserving far silhouette. Geometry supplies the generated
+        // crown aspect ratio; this SDF retains the family outline at distance.
         vec2 lp = vLeafUv * 2.0 - 1.0;
-        float r = length(vec2(lp.x, lp.y * 1.1));
         float nibble = (twIHash21(floor(vLeafUv * 6.0)) - 0.5) * 0.22;
-        float id = r - (0.9 + nibble);          // <0 inside the crown blob
+        float id;
+        if (uShapeId > 0.5 && uShapeId < 1.5) {
+          float h = lp.y * 0.5 + 0.5;
+          float width = mix(0.96, 0.14, smoothstep(0.0, 1.0, h));
+          id = max(abs(lp.x) - width - nibble * 0.35, abs(lp.y) - 0.98);
+        } else if (uShapeId > 1.5 && uShapeId < 2.5) {
+          id = max(length(vec2(lp.x, (lp.y + 0.12) * 1.45)) - (0.92 + nibble), -lp.y - 0.58);
+        } else if (uShapeId > 4.5) {
+          id = max(length(vec2(lp.x, (lp.y + 0.14) * 1.62)) - (0.94 + nibble), -lp.y - 0.5);
+        } else if (uShapeId > 3.5) {
+          id = length(vec2(lp.x * 1.28, lp.y * 0.88)) - (0.9 + nibble);
+        } else if (uShapeId > 2.5) {
+          id = length(vec2(lp.x * 0.94, lp.y * 0.78)) - (0.9 + nibble);
+        } else {
+          id = length(vec2(lp.x, lp.y * 1.06)) - (0.9 + nibble);
+        }
         float iaa = max(fwidth(id), 1e-3);
         float a = 1.0 - smoothstep(-iaa, iaa, id);
         diffuseColor.a *= a;
@@ -693,7 +703,7 @@ export function createImpostorMaterial(): THREE.MeshStandardMaterial {
       );
   };
 
-  material.customProgramCacheKey = () => 'tree-impostor-v5';
+  material.customProgramCacheKey = () => 'tree-impostor-v6';
   return material;
 }
 
@@ -748,6 +758,7 @@ export function applyTreeProfileToMaterials(
     if (u.uWindOffset) (u.uWindOffset.value as THREE.Vector2).copy(profile.wind.offset);
   };
 
+  set(bark, 'uBarkColor', profile.barkColor);
   set(bark, 'uLeafBase', profile.leafColor);
   setWind(bark);
 
@@ -766,6 +777,7 @@ export function applyTreeProfileToMaterials(
 
   set(impostor, 'uLeafBase', profile.leafColor);
   set(impostor, 'uLeafTip', profile.leafTipColor);
+  set(impostor, 'uShapeId', profile.shapeId);
   setWind(impostor);
 }
 

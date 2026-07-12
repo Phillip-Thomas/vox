@@ -8,6 +8,8 @@ import {
   SILHOUETTES,
   LEAF_LIGHT,
   FLOWER_LIGHT_CAP,
+  TREE_VARIANT_COUNT,
+  treeVariantSeed,
   type LeafMode,
   type Silhouette
 } from './treeProfile';
@@ -30,6 +32,7 @@ describe('buildTreeProfile', () => {
     expect(a.leafTipColor.getHex()).toBe(b.leafTipColor.getHex());
     expect(a.leafSSSColor.getHex()).toBe(b.leafSSSColor.getHex());
     expect(a.flowerColor.getHex()).toBe(b.flowerColor.getHex());
+    expect(a.barkColor.getHex()).toBe(b.barkColor.getHex());
     expect(a.bloomAmount).toBe(b.bloomAmount);
     expect(a.trunkHeight).toBe(b.trunkHeight);
     expect(a.leanTwist).toBe(b.leanTwist);
@@ -43,6 +46,10 @@ describe('buildTreeProfile', () => {
     expect(a.whorlCount).toBe(b.whorlCount);
     expect(a.gnarl).toBe(b.gnarl);
     expect(a.gravitropism).toBe(b.gravitropism);
+    expect(a.phototropism).toBe(b.phototropism);
+    expect(a.shadeTolerance).toBe(b.shadeTolerance);
+    expect(a.prioritizeBrightGrowth).toBe(b.prioritizeBrightGrowth);
+    expect(a.dropShadeThreshold).toBe(b.dropShadeThreshold);
     expect(a.apicalDominance).toBe(b.apicalDominance);
     expect(a.apicalDominanceDecay).toBe(b.apicalDominanceDecay);
     expect(a.branchStiffness).toBe(b.branchStiffness);
@@ -52,6 +59,8 @@ describe('buildTreeProfile', () => {
     expect(a.trunkFlare).toBe(b.trunkFlare);
     expect(a.trunkRoughness).toBe(b.trunkRoughness);
     expect(a.thinFineBranches).toBe(b.thinFineBranches);
+    expect(a.maturity).toBe(b.maturity);
+    expect(a.crownAsymmetry).toBe(b.crownAsymmetry);
   });
 
   it('keeps every planet above the old sparse canopy baseline', () => {
@@ -64,14 +73,22 @@ describe('buildTreeProfile', () => {
       expect(p.leafScale).toBeGreaterThanOrEqual(0.72);
       expect(p.leafScale).toBeLessThanOrEqual(1.04);
       expect(p.wind.direction.length()).toBeCloseTo(1, 5);
-      expect(p.branchJointAngle).toBeGreaterThanOrEqual(0.36);
-      expect(p.branchJointAngle).toBeLessThanOrEqual(0.92);
+      expect(p.branchJointAngle).toBeGreaterThanOrEqual(0.42);
+      expect(p.branchJointAngle).toBeLessThanOrEqual(1.02);
       expect(p.whorlCount).toBeGreaterThanOrEqual(2);
       expect(p.whorlCount).toBeLessThanOrEqual(3);
       expect(p.gnarl).toBeGreaterThanOrEqual(0.04);
       expect(p.gnarl).toBeLessThanOrEqual(0.3);
       expect(p.gravitropism).toBeGreaterThanOrEqual(0.02);
       expect(p.gravitropism).toBeLessThanOrEqual(0.22);
+      expect(p.phototropism).toBeGreaterThanOrEqual(0.1);
+      expect(p.phototropism).toBeLessThanOrEqual(0.5);
+      expect(p.shadeTolerance).toBeGreaterThanOrEqual(0.2);
+      expect(p.shadeTolerance).toBeLessThanOrEqual(0.86);
+      expect(p.prioritizeBrightGrowth).toBeGreaterThanOrEqual(0.8);
+      expect(p.prioritizeBrightGrowth).toBeLessThanOrEqual(2.55);
+      expect(p.dropShadeThreshold).toBeGreaterThanOrEqual(0.08);
+      expect(p.dropShadeThreshold).toBeLessThanOrEqual(0.34);
       expect(p.apicalDominance).toBeGreaterThanOrEqual(0.2);
       expect(p.apicalDominance).toBeLessThanOrEqual(0.95);
       expect(p.apicalDominanceDecay).toBeGreaterThanOrEqual(0.04);
@@ -90,6 +107,10 @@ describe('buildTreeProfile', () => {
       expect(p.trunkRoughness).toBeLessThanOrEqual(0.18);
       expect(p.thinFineBranches).toBeGreaterThanOrEqual(0);
       expect(p.thinFineBranches).toBeLessThanOrEqual(1);
+      expect(p.maturity).toBeGreaterThanOrEqual(0.78);
+      expect(p.maturity).toBeLessThanOrEqual(1);
+      expect(p.crownAsymmetry).toBeGreaterThanOrEqual(0.04);
+      expect(p.crownAsymmetry).toBeLessThanOrEqual(0.3);
     }
   });
 
@@ -193,6 +214,34 @@ describe('buildTreeProfile', () => {
     expect(a.thinFineBranches).toBe(p.thinFineBranches);
     expect(a.attractorCount).toBeGreaterThan(0);
     expect(a.maxLeafCards).toBeGreaterThan(0);
+  });
+
+  it('derives coherent physiology and three distinct bounded phenotypes', () => {
+    for (let i = 0; i < 80; i++) {
+      const seed = coordinateToSeed(i * 5 - 91, i * 23 + 7);
+      const profile = buildTreeProfile(seed);
+      expect(profile.dropShadeThreshold).toBeCloseTo(
+        Math.min(0.34, Math.max(0.08, 0.08 + (1 - profile.shadeTolerance) * 0.26)),
+        8
+      );
+
+      const params = Array.from(
+        { length: TREE_VARIANT_COUNT },
+        (_, variant) => paramsFromProfile(profile, variant)
+      );
+      expect(new Set(params.map(entry => entry.height.toFixed(6))).size).toBeGreaterThan(1);
+      expect(new Set(params.map(entry => entry.crownRadius.toFixed(6))).size).toBe(
+        TREE_VARIANT_COUNT
+      );
+      expect(params[1].height).toBeLessThan(params[0].height);
+      expect(params[2].crownRadius).toBeGreaterThan(params[0].crownRadius);
+      const seeds = Array.from(
+        { length: TREE_VARIANT_COUNT },
+        (_, variant) => treeVariantSeed(seed, variant)
+      );
+      expect(new Set(seeds).size).toBe(TREE_VARIANT_COUNT);
+      expect(treeVariantSeed(seed, 0)).toBe(seed | 0);
+    }
   });
 
   it('gives every silhouette a fuller bounded leaf-card budget', () => {

@@ -191,3 +191,19 @@ Next high-leverage batch:
 1. Human/adversarial review of the final baseline, Batch 9 flora color screenshots, and Batch 7 reality-stage screenshots against the tree-led visual standard and story-stage promise.
 2. Capture human taste approval or list the specific subjective fixes required.
 3. Patch only visual-stage clarity issues found by that review; no known machine defect remains.
+
+## 2026-07-11 Tree Biology And Population Upgrade
+
+Paravoxia trees now grow through a deterministic, bounded biological graph rather than unconditional depth-first recursion. Active tips compete for open sky, convert exposure to vigor, self-prune in shade, reinforce supporting wood through a pipe model, and bend under clamped downstream load. Six silhouette families retain distinct crown envelopes while each planet now caches young, canonical, and veteran phenotypes.
+
+Foliage is branch-aligned and botanical at near range, bark follows planet palette roles and branch arc length, and impostors preserve the generated crown aspect/family outline. Forest placement now honors ecology material eligibility and shape-density tokens. Variant meshes keep separate harvest mappings, preserving gameplay targeting.
+
+Evidence:
+
+- `main/captures/tree-overhaul-final-silhouettes.png`
+- `main/captures/tree-overhaul-final-population.png`
+- `main/captures/tree-overhaul-final-variety.png`
+- `main/captures/procedural-atlas/2026-07-12T01-53-01-009Z-tree-overhaul-smoke-final2/summary.json`
+- `main/captures/procedural-atlas/2026-07-12T01-53-42-642Z-tree-overhaul-perf-final2/summary.json`
+
+Machine result: focused `51 / 51` tree tests pass; `144` profiled phenotypes pass structural/budget invariants; smoke is clean; all perf tiers hold `60fps` with max worst-view p95 `18.9ms`. Program-count defects remain in the broader current checkout, including POTATO where trees are disabled, and are recorded as an external accepted exception rather than hidden by threshold changes.

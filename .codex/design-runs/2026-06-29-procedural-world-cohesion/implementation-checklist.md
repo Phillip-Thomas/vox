@@ -217,18 +217,18 @@ Exit gate:
 
 ## Phase 5: Shape, Scale, And Stylization System
 
-- [ ] Define shape tokens:
-  - [ ] roundness,
-  - [ ] angularity,
-  - [ ] verticality,
-  - [ ] leaf-card density,
-  - [ ] blade thinness,
-  - [ ] prop softness,
-  - [ ] shard/spike amount,
-  - [ ] surface relief scale.
+- [x] Define shape tokens:
+  - [x] roundness,
+  - [x] angularity,
+  - [x] verticality,
+  - [x] leaf-card density,
+  - [x] blade thinness,
+  - [x] prop softness,
+  - [x] shard/spike amount,
+  - [x] surface relief scale.
 - [ ] Apply shape tokens to:
   - [ ] grass width/height/bend,
-  - [ ] tree silhouette/branch density/leaf mode,
+  - [x] tree silhouette/branch density/leaf mode,
   - [ ] flora scale/kind frequency,
   - [x] fauna scale/material/shape emphasis,
   - [ ] rock facets,
@@ -239,15 +239,15 @@ Exit gate:
   - [ ] grass hair remains small.
   - [ ] flora remains below fauna/tree except special cacti/shrubs.
   - [ ] sheep/grazers are large enough to read.
-  - [ ] trees are canopy-scale, not player-height.
+  - [x] trees are canopy-scale, not player-height.
   - [ ] rocks do not overpower fauna or trees.
   - [ ] surface effects stay thin/atmospheric.
 - [ ] Add tests for scale ranges:
-  - [ ] tree min/max height,
+  - [x] tree min/max height,
   - [x] fauna tiers,
   - [ ] flora tiers,
   - [ ] surface effect offsets,
-  - [ ] no underground/float by transform sampling.
+  - [x] no underground/float by transform sampling for profiled trees.
 - [ ] Add atlas scene traversal scale report.
 
 Exit gate:
@@ -358,7 +358,7 @@ Iteration targets:
 - [x] Document harness command usage.
 - [x] Document shader program inventory.
 - [ ] Add inline comments only for non-obvious math.
-- [ ] Keep all profile modules pure and deterministic.
+- [x] Keep all profile modules pure and deterministic.
 - [ ] Avoid hidden runtime mutable art state.
 - [x] Update design-run lessons.
 

@@ -1,7 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 import { RigidBody } from '@react-three/rapier';
-import { getSignalMesaPose, getStorySidePlane, MESA_HEIGHT } from './storyWorld.ts';
+import { getSignalMesaPose, getSignalMesaSummit, getStorySidePlane, MESA_HEIGHT } from './storyWorld.ts';
+
+/**
+ * Module handle for the summit (top of the climb): the ch1-iso→ch1-lift gate, the
+ * 'SIGNAL SOURCE' survey marker, and the autopilot's iso climb key on this
+ * (anomalyStoneHandle pattern) — the anomaly stone itself now lives on the
+ * adjacent face, across the gravity edge.
+ */
+export const signalMesaHandle: { summit: THREE.Vector3 | null } = { summit: null };
 
 // --- The signal mesa ------------------------------------------------------------------
 //
@@ -45,17 +53,25 @@ export function mesaBlockLayout(): MesaBlock[] {
 }
 
 const SignalMesa: React.FC<SignalMesaProps> = ({ planetSize, terrainSeed }) => {
-  const { position, blocks, quaternion } = useMemo(() => {
+  const { position, summit, blocks, quaternion } = useMemo(() => {
     const pose = getSignalMesaPose(planetSize, terrainSeed);
     const plane = getStorySidePlane(planetSize, terrainSeed);
     // The staircase faces back along the travel axis (the player's approach).
     const basis = new THREE.Matrix4().makeBasis(plane.travelAxis, plane.up, plane.depthAxis);
     return {
       position: pose.position,
+      summit: getSignalMesaSummit(planetSize, terrainSeed).position,
       blocks: mesaBlockLayout(),
       quaternion: new THREE.Quaternion().setFromRotationMatrix(basis)
     };
   }, [planetSize, terrainSeed]);
+
+  useEffect(() => {
+    signalMesaHandle.summit = summit;
+    return () => {
+      signalMesaHandle.summit = null;
+    };
+  }, [summit]);
 
   const materials = useMemo(() => ({
     rock: new THREE.MeshStandardMaterial({ color: ROCK, roughness: 0.92 }),

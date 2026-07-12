@@ -21,6 +21,7 @@
 //                        ?count=36 ?cols=6 to resize.
 //   ?mode=silhouettes    the 6 named silhouettes in a row (geometry regression),
 //                        now colour-correct.
+//   ?mode=population     three age/phenotype variants of one planet species.
 //   ?only=weeping        a single forced silhouette, close-up, for tuning one.
 //
 // HOW TO USE:
@@ -46,6 +47,7 @@ import {
   buildTreeProfile,
   paramsFromProfile,
   SILHOUETTES,
+  treeVariantSeed,
   type LeafMode,
   type TreeProfile
 } from './utils/treeProfile.ts';
@@ -101,6 +103,7 @@ interface BuiltTree {
   profile: TreeProfile;
   mats: TreeMats;
   seed: number;
+  variant: number;
 }
 
 declare global {
@@ -111,6 +114,7 @@ declare global {
         silhouette: TreeSilhouette;
         kind: string;
         seed: number;
+        variant: number;
         trunkHeight: number;
         crownRadius: number;
         canopyDensity: number;
@@ -154,14 +158,19 @@ declare global {
  * colours are pushed into the materials lazily in useFrame (once the shaders
  * have compiled and the colour uniforms exist).
  */
-function buildTree(key: string, seed: number, force: TreeSilhouette | undefined): BuiltTree {
+function buildTree(
+  key: string,
+  seed: number,
+  force: TreeSilhouette | undefined,
+  variant = 0
+): BuiltTree {
   const profile = buildTreeProfile(seed);
   if (force) {
     profile.silhouette = force;
     profile.shapeId = SILHOUETTES.indexOf(force);
     profile.leafMode = (force === 'conical' ? 1 : force === 'frond' ? 2 : 0) as LeafMode;
   }
-  const arch = generateTree(seed, paramsFromProfile(profile));
+  const arch = generateTree(treeVariantSeed(seed, variant), paramsFromProfile(profile, variant));
 
   const mats: TreeMats = {
     bark: createBarkMaterial(),
@@ -182,7 +191,16 @@ function buildTree(key: string, seed: number, force: TreeSilhouette | undefined)
   add(arch.leafGeometry, mats.leaf);
   add(arch.blossomGeometry, mats.blossom);
 
-  return { key, group, silhouette: profile.silhouette, kind: buildBiomeProfile(seed).kind, profile, mats, seed };
+  return {
+    key,
+    group,
+    silhouette: profile.silhouette,
+    kind: buildBiomeProfile(seed).kind,
+    profile,
+    mats,
+    seed,
+    variant
+  };
 }
 
 // Decorrelated lattice of real world coords -> a wide spread of biomes (hue +
@@ -215,6 +233,17 @@ function Scene() {
         return t;
       });
     }
+    if (MODE === 'population') {
+      const speciesSeed = coordinateToSeed(0, 45);
+      return Array.from({ length: 9 }, (_, i) => {
+        const variant = i % 3;
+        const t = buildTree(`population-v${variant}-${i}`, speciesSeed, undefined, variant);
+        const col = i % 3;
+        const row = Math.floor(i / 3);
+        t.group.position.set((col - 1) * sx, 0, -(row - 1) * sz);
+        return t;
+      });
+    }
     // Default: variety grid.
     const rows = Math.ceil(COUNT / COLS);
     const list: BuiltTree[] = [];
@@ -235,7 +264,7 @@ function Scene() {
     window.__treeTest = {
       summary: () =>
         trees.map(t => {
-          const params = paramsFromProfile(t.profile);
+          const params = paramsFromProfile(t.profile, t.variant);
           const meshes: Array<{ materialKey: string; vertices: number; instances: number }> = [];
           t.group.traverse(object => {
             if (!(object as THREE.InstancedMesh).isInstancedMesh) return;
@@ -256,6 +285,7 @@ function Scene() {
             silhouette: t.silhouette,
             kind: t.kind,
             seed: t.seed,
+            variant: t.variant,
             trunkHeight: t.profile.trunkHeight,
             crownRadius: params.crownRadius,
             canopyDensity: t.profile.canopyDensity,
@@ -315,7 +345,7 @@ function Scene() {
     }
   });
 
-  const labelScale = ONLY ? 18 : MODE === 'silhouettes' ? 18 : 26;
+  const labelScale = ONLY ? 18 : MODE === 'silhouettes' ? 18 : MODE === 'population' ? 20 : 26;
 
   return (
     <>
@@ -334,7 +364,7 @@ function Scene() {
             style={{ pointerEvents: 'none' }}
           >
             <div style={{ color: '#0e1116', fontFamily: 'monospace', fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', textAlign: 'center' }}>
-              {t.silhouette}
+              {t.silhouette}{MODE === 'population' ? ` v${t.variant}` : ''}
               <br />
               <span style={{ fontWeight: 400, opacity: 0.8 }}>{t.kind}</span>
             </div>
@@ -353,6 +383,8 @@ const CAMERA: { position: [number, number, number]; fov: number; near: number; f
   ? { position: [0, 6.1, 14.5], fov: 36, near: 0.1, far: 1000 }
   : MODE === 'silhouettes'
     ? { position: [0, 7.8, 46], fov: 42, near: 0.1, far: 1000 }
+    : MODE === 'population'
+      ? { position: [0, 13.5, 35], fov: 44, near: 0.1, far: 1000 }
     : { position: [0, Math.max(15, ROWS * 5.6), Math.max(42, COLS * 7 + ROWS * 3.6)], fov: 46, near: 0.1, far: 1000 };
 
 createRoot(document.getElementById('root')!).render(

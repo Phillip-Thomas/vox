@@ -581,7 +581,8 @@ function SurfaceCritterLayer({
         critterMaxDistance(quality),
         playerPosition ?? null,
         terrainSeed,
-        mesh.instanceMatrix.count
+        mesh.instanceMatrix.count,
+        { existingAgents: agentsRef.current }
       ),
       result => ({ count: result.length, capacity: mesh.instanceMatrix.count })
     );

@@ -86,6 +86,11 @@ export default function EfficientScene({
   // Chapters before the A2 depth awakening allow no smooth props at all.
   const storyPreAwakened = story.active
     && (story.chapter === 'prologue' || story.chapter === 'ch1' || story.chapter === 'ch2');
+  // In a story world the player's ship is the CRASH WRECK (voxel DescentPod →
+  // hi-fi HifiWreck at the impact site, mounted by StoryWorldProps). The sandbox
+  // parked ship must never appear alongside it — suppress it for the whole story
+  // (active chapters AND the completed 'done' world). Non-story seeds: unchanged.
+  const storyWorldShip = isStoryWorldSeed(terrainSeed) && (story.active || story.chapter === 'complete');
   const arrivalPose = useMemo(
     () => measureWarpMetric(
       'scene:arrival_pose',
@@ -191,8 +196,10 @@ export default function EfficientScene({
         />
       )}
       {/* Pre-A2 story chapters permit NOTHING smooth: the hauler is diegetically
-          "disassembled" and forage berries return with the living world. */}
-      {!storyPreAwakened && (
+          "disassembled" and forage berries return with the living world. In a
+          story world the ship is the crash wreck (StoryWorldProps mounts it), so
+          the sandbox parked ship is suppressed for the whole story. */}
+      {!storyPreAwakened && !storyWorldShip && (
         <SpaceshipPlaceholder
           position={landedShipPos ?? arrivalPose.shipPosition}
           terrainSeed={terrainSeed}

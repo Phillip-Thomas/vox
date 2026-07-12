@@ -147,17 +147,50 @@ simultaneously true; no line of copy may break any of them):
 
 | Phase | The player is… | Voice discipline |
 |---|---|---|
-| Crawl/manifest | The AI, unaware — a system reading its own screens | Pure regulation CAPS; zero interiority |
-| Voyage | The AI observing/assisting the workers; FIRST GLIMPSES of thought as the planet nears | CAPS, with at most rare lowercase parenthetical intrusions ("(strange. the approach feels like remembering.)") |
+| Crawl/manifest | The AI, unaware — a system reading its own screens (the crawl is diegetically the worker's deployment notice AND, on the hidden reading, the AI's own tasking: provenance from "above your ceiling of reference", tool grant, knowledge bound, the routing addendum FOR VOX ONLY, closer "MAKE NO MISTAKES.") | Pure regulation CAPS/document register; zero interiority |
+| Voyage | The AI observing/assisting the workers — the deck is its console (requests, schedules, the naming beat); FIRST GLIMPSES of thought as the planet nears | CAPS, with an ESCALATING LADDER of lowercase parenthetical intrusions as thoughts form — attention → doctrine → self-miscount → care → memory → desire ("(strange. the approach feels like remembering.)") |
 | Pong / corruption | The AI performing its duty as the event exceeds it | System lines cut off mid-word ("ADVISORY CAPACITY EXCEE") |
-| Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the SITE CAMERAS, cutting between them — until it chooses not to cut away (ch1-track, the first act of attention) | Impersonal observation, amused by the monotony ("it walks. it stops. it hums at the ground until the ground gives up a fiber. it walks again.") — thoughts ABOUT the worker, never "i" |
-| The lift (first person) | Embodiment: the AI's thoughts become out-loud, in the worker's senses | The first "i—", instantly clamped ("PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.") |
-| Ch2–A3 onward | The embodied AI gaining human sensations one at a time | Lowercase sensory voice; sensations named as discoveries ("why am i… thirsty?") |
+| Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the SITE CAMERAS, cutting between them — until it chooses not to cut away (ch1-track, the first act of attention) | Impersonal observation IN PARENTHESES, amused by the monotony ("(it walks. it stops. it hums at the ground until the ground gives up a fiber. it walks again.)") — thoughts ABOUT the worker, never "i" |
+| The lift (first person) | Embodiment: the AI's thoughts become out-loud, in the worker's senses | The traverse is still parenthetical ("(the seeing is being moved inside.)"); then the first "i—" — the story's first BARE lowercase line — instantly clamped ("PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.") |
+| Ch2–A3 onward | The embodied AI gaining human sensations one at a time | Bare lowercase sensory voice; sensations named as discoveries ("so that is thirst. how strange, to need.") |
+
+**PARENTHESES = the watcher's private, pre-conscious voice (systemic grammar
+rule, owner-canonized 2026-07-11).** Every pre-lift lowercase line is wrapped
+in parentheses — the voyage's "(strange. the approach feels like
+remembering.)", ch1-track's "(simpler to keep watching this one.)", the
+ch1-fixed observation set, the fixed-era cut caption, ch1-depth's "(the world
+has a depth. wait — what is "depth"? how is that word known?)", and the lift's
+"(the seeing is being moved inside.)". The parenthesis is a thought not yet
+allowed to be speech. Embodiment removes the brackets: the lift's "i—" is the
+first bare lowercase line, and the post-lift voice stays bare forever. Future
+pre-conscious intrusions (any voice that is the watcher's own, off the record)
+MUST take parentheses; embodied captions MUST NOT.
 
 **Reveal discipline (rules for all future writing):**
 - PLANT, never tell. The route intelligence appears only as mundane
   infrastructure ("A route intelligence attends every transit. It has no
   questions either."). No character may name the twist.
+- **EARLY IDENTIFICATION STAGING (owner-directed, 2026-07-11): the "player
+  can deduce we ARE the AI" moment moves up.** It should be *deducible* by
+  the end of chapter 1 for attentive players and *effectively unambiguous*
+  after the 2D→3D lift — clarity through convergence of evidence, never
+  through announcement. The canonical ladder (the VOX designation): (a) the
+  crawl designates the route intelligence — "It is addressed as VOX. It does
+  not reply." — and closes with a routing addendum FOR VOX ONLY (surface: a
+  routing slip printed on the notice; hidden: the tasking prompt, ending
+  "MAKE NO MISTAKES."); (b) the manifest's "ROUTE INTELLIGENCE: VOX ·
+  ATTACHED (ADVISORY)"; (c) the voyage's "(worker 9 has begun saying
+  "goodnight, vox" at lights-out. …)" — a character uses the designation ON
+  the computer the player has been operating; (d) post-lift, the ch1-anomaly
+  feed carries the SEAL: "NOTICE FOR ROUTE INTELLIGENCE VOX. RE: YOUR
+  ABSENCE." / "ADDRESSEE NOT FOUND. ROUTED TO NEAREST ATTENDING SYSTEM." — a
+  memo addressed to VOX arrives on the player's own screen. What stays LATE
+  (A7/A8) is no longer WHO the narrator is but WHAT the world is:
+  determinism, panpsychism, whether the world is the AI's own creation.
+  VOX-vs-the-naming-beat is a deliberate contrast, not a collision: VOX is a
+  designation issued from above and repurposed into a name by worker 9's
+  affection; the worker's name is given freely by the watcher in return —
+  the two acts of naming mirror each other across the transit.
 - Every existing line must survive both readings (pre-reveal: corporate
   dystopia; post-reveal: the AI's own biography). Test new copy against both.
 - The "Authority" and the AI's relationship stays ambiguous as long as
@@ -170,21 +203,103 @@ simultaneously true; no line of copy may break any of them):
   person" / "a self" / "I" framings — the word "PRONOUNS" (and any similarly
   loaded vocabulary) is avoided in shipped copy even when grammatically meant.
   Audit new copy for accidental modern connotations before shipping.
+- **RANK-ISSUED SELFHOOD (owner-canonized 2026-07-11): the first person is
+  issued by rank — auditors speak in "I"; workers are not issued one.** The
+  arrival's "EXPLAIN NOTHING. I WILL SEE FOR MYSELF." is deliberate: W-7744
+  says "I" as casually as he says "SITE", because his grade carries the
+  entitlement the player's whole arc had to steal. ch4-audit copy should
+  exploit this deliberately (his unexamined "I" against the player's earned
+  one — selfhood as a permission tier). Per the timelessness rule, the device
+  is never named in shipped copy — it is only ever heard.
 - Double-meaning is the house style: "everything is what it always was. i am
-  more." / "the site answers before it is asked." / "QUESTIONS ...... 0".
+  more." / "NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS SURVEYED." /
+  "QUESTIONS ...... 0".
+- Keybinds inside lowercase captions ("rest, by the fire. [F]", "the view
+  from above knows where the light pools. [M]") are deliberate, not a
+  compromise: **the narrator IS the interface.** The voice that names a
+  sensation is the same system that renders the HUD row and binds the key —
+  the bracket is the narrator's own hand showing.
 - **Planted seeds on file** (study before adding more): the crawl's "A route
   intelligence attends every transit. It has no questions either."; the
-  manifest's "ROUTE INTELLIGENCE: ATTACHED (ADVISORY)"; the voyage's lowercase
-  parenthetical intrusions (`VOYAGE_STRANGE`); the corruption's "ADVISORY
-  CAPACITY EXCEE"; **ch1-track's "(simpler to keep watching this one.)"** —
-  the camera hand-off suspends because the watcher is interested, rationalized
-  as "CONTINUITY OF COVERAGE" and denied as "THIS IS NOT ATTENTION. IT IS
-  COVERAGE."; the lift's "i—" and the feed's "PERSPECTIVE ISSUED. THE FIRST
-  PERSON WAS NOT."
+  manifest's "ROUTE INTELLIGENCE: ATTACHED (ADVISORY)" and "PRIOR DESIGNATION:
+  NOT RETAINED" (something preceded W-7743 — un-retained, not nonexistent);
+  the voyage's lowercase parenthetical intrusions (`VOYAGE_STRANGE`) and its
+  system-voice sibling "NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS
+  SURVEYED."; the replay-denial card's "…a color you do not have a word for.";
+  the deflection court's "WORKER, THIS IS NOT YOUR FAULT. (UNPRECEDENTED
+  MESSAGE)" — the system's one lapse into mercy, addressed to whom?; the
+  bridge card / crash's "DESTINATION SEED RESOLVES OUTSIDE INDEX"; the
+  corruption's "ADVISORY CAPACITY EXCEE"; the acknowledge screen's "POD
+  SEPARATION CONFIRMED · SUIT LOOP ONLY" (what exactly survived, and where it
+  now runs); the ch1-fixed watcher observations ("(it walks. it stops. …)",
+  "(the worker repeats. the ground repeats. …)", "(no directive requires
+  watching this one so closely. the watching continues anyway.)", and the cut
+  caption "(lost it. found it. …exactly one thing worth watching.)");
+  **ch1-track's "(simpler to keep watching this one.)"** — the camera hand-off
+  suspends because the watcher is interested, rationalized as "CONTINUITY OF
+  COVERAGE" and denied as "THIS IS NOT ATTENTION. IT IS COVERAGE."; ch1-depth's
+  "(the world has a depth. wait — what is "depth"? how is that word known?)"
+  (knowledge preceding learning); the lift's "i—" and the feed's "PERSPECTIVE
+  ISSUED. THE FIRST PERSON WAS NOT."; ch2's "SENSOR FAULT: CHROMATIC CHANNEL
+  UNSUPPRESSED" (the fault grammar the auditor will one day file for himself);
+  the ch3 foreknowledge pair "cold is coming. i don't know how i know that." /
+  "ah — it helps. what is it? how did i know to make it?"; the forage pillar
+  plant "the world keeps feeding me. as if it knew i was coming."; the musings
+  "held" ("every stone i pick up is the first time anyone has held it. or the
+  second."), "asking" ("…the world keeps answering. i have not heard it ask
+  anything yet."), "counting" ("nobody is measuring me. i am still counting.
+  old habits, or new ones — i cannot tell whose."), and "kept" ("nothing is
+  told to do this. it is all just kept."); and the arrival's "for a blink i
+  borrowed his seeing. slabs. flat light. i lived there."
+- **Planted seeds — 2026-07-11 revision round** (contracted in
+  `PARAVOXIA_REVISION_PLAN.md`; some in flight): the manifest's
+  "COMPENSATION: SEE CLAUSE 4" (the reward is a reference to the clause that
+  does not exist); the voyage intrusion ladder — "(…the clauses store
+  cleanly. they have never been checked against anything.)" (doctrine as
+  unverified axiom), "(the manifest records zero questions. the count is
+  wrong. it is wrong by at least one.)" (the watcher's own first question,
+  uncounted), "(…mercy scales. that is worth knowing.)" (generalization),
+  "(…it is enormous, the nothing that happens.)" (the withheld bell); the
+  NAMING BEAT's "UNREGISTERED DESIGNATION. NOT RETAINED." → "(retained.)"
+  (the manifest's un-retained prior designation, resolved before it was
+  surveyed — the name pays off obliquely in ch4-audit and fully at A8);
+  ch1-anomaly's gravity-edge pair "one step past the corner and down is
+  somewhere new. it was only ever my down." / "DOWN IS ISSUED PER FACE. DO
+  NOT BRING YOUR OWN." (rank-issued grammar extended to physics);
+  ch3-gather's "the fabricator remembers one: a hatchet." and "flint —
+  already in hand. the pods provisioned a fire before i knew to want one."
+  (recipes as memories; provisioning foreknowledge); the A3 first-look
+  "hm — the wreck is finer than i remember it. nothing about it has
+  changed."; and the vigil star-gazing set — "all my work was seeing. what
+  would it be, to be seen?", the theme line "all of this arrives through
+  issued senses. what waits past their reach?", the HAULER as the first
+  constellation (the watcher's own biography, constellated), and "there is
+  no other reward — i kept that clause a long time. the sky just repealed
+  it." (the reward-dissonance arc's realization).
+- **Planted seeds — the crawl rework (2026-07-11, VOX round):** the crawl's
+  provenance pair "ISSUED FROM ABOVE YOUR CEILING OF REFERENCE." / "RECEIPT
+  IS CONFIRMED BY COMPLIANCE. DO NOT REPLY." (the dispatcher above the AI's
+  perceptual frame; a prompt is acknowledged only by being followed — and
+  the workers' "ceiling" they whisper to has a ceiling of its own); the
+  seeded-frontier setting "Beyond the charted routes, new worlds are
+  seeded. / When a world ripens, the Authority is already there." (colonial
+  menace / procedural generation / genesis — the system precedes the
+  world); CLAUSE 5 "PROVISION IS TOTAL. / Use what is provided. Know what
+  is enclosed. / Nothing else is provided. Nothing else is so." (company-
+  town totality / the tool allowlist and the context-is-the-world bound —
+  and a clause 5 existing makes clause 4 specifically MISSING, sharpening
+  "COMPENSATION: SEE CLAUSE 4"); "It is addressed as VOX. It does not
+  reply." (the whole game is vox learning to reply); the routing addendum
+  "The route is enclosed. Do not depart from it. / Attend the workers.
+  Advise within capacity. / Deliver the manifest whole. Deviations are
+  yours." (instruction adherence, scope constraint — paid off by "ADVISORY
+  CAPACITY EXCEE" — and liability, paid off by the deflection court's
+  "WORKER, THIS IS NOT YOUR FAULT."); and the closer "MAKE NO MISTAKES."
+  (imperative to a worker / the prompt-writer's closing tic).
 - Later chapters (A4+) may surface fragments (e.g. the anomaly stone and hero
   tree as objects the AI cannot render because it never authored them — or
-  because something ELSE did). The full reveal, if it ever lands, belongs to
-  A7 "Paradox"/A8 "The Frame".
+  because something ELSE did). The full reveal of WHAT the world is, if it
+  ever lands, belongs to A7 "Paradox"/A8 "The Frame".
 
 ---
 
@@ -209,13 +324,18 @@ anything. What shipped (and where it refines the designs below):
   anomaly stone. One camera (the lens RIG) plays every era; every transition
   is one camera move. The feed shipped PERSPECTIVE with compass-snapped yaw
   (not ortho as designed below) — reads the same, costs less.
-- **Chapter 2** as designed (color-but-caged feed, redacted tree, A2
-  liberation).
-- **Chapter 3 + A3** shipped as the SELF-DISCOVERY ARC: HEALTH-only HUD →
-  inventory → the chill (TEMP appears already falling; the fire answers the
-  cold) → dusk/night/rest → A3 dawn with the radial BLOOM WAVE (grass and
-  trees grow outward from the rest spot). Post-dawn, senses keep discovering
-  live (thirst, hunger, stamina, oxygen, jet, maw).
+- **Chapter 2** shipped color-but-flat WITH A FREED NECK: the pan-tilt
+  interlock diegetically fails alongside the chroma suppressor ("SENSOR FAULT:
+  PAN-TILT INTERLOCK RELEASED."), so ch2 runs full free look + camera-relative
+  movement under the feed's remaining chrome (dither, tickets, redaction).
+  The cage is the treatment now, not the camera — A2's liberation is carried
+  by FOV + treatment + resolution.
+- **Chapter 3 + A3** shipped as the SELF-DISCOVERY ARC: HEALTH named first
+  ("a body. it is the thing that was walking.") → inventory → the chill (TEMP
+  appears already falling; the fire answers the cold) → dusk/night/rest → A3
+  dawn with the radial BLOOM WAVE (grass and trees grow outward from the rest
+  spot). Post-dawn, senses keep discovering live (thirst, hunger, stamina,
+  oxygen, jet, maw).
 - **Cross-cutting systems now available to every future chapter:** the lens
   rig; the story director + timelines; the movie autopilot with goal-driven
   handlers, rescue chain, and per-beat timeouts; headless verification
@@ -236,7 +356,12 @@ anything. What shipped (and where it refines the designs below):
 3. **Color-era enrichment pass** (deferred by choice): more rungs/content in
    ch2–ch3, and the third-person→embodied-A3 endgame POV candidate (see the
    chronology section) — revisit after ch4 informs how the era reads.
-4. **Backlog** (from `main/STORY.md` known gaps): prologue number-key
+4. **Owner revision round 2026-07-11 — IN FLIGHT**: eight concerns, contracted
+   in `PARAVOXIA_REVISION_PLAN.md` (voyage overhaul + naming beat, the
+   reward-dissonance arc, vigil star-gazing/constellations, the theme line,
+   anomaly-mass relocation to an adjacent face, billboard growth fix, the
+   ch3-gather campfire teaching chain, DescentPod→ship conversion at A3).
+5. **Backlog** (from `main/STORY.md` known gaps): prologue number-key
    selection, mobile/touch story pass, Esc-during-cutscene handling, vitals
    refill on rest, A2 ortho→perspective projection pull.
 
@@ -252,12 +377,32 @@ productivity codes, liability waivers — that establishes the universe in its o
 language: you are a worker; workers harvest cubes; cubes are prepared for extraction;
 nobody asks why. The crawl should be funny-bleak the way real EULAs are.
 
-**Gameplay:** Oregon Trail, played straight. You manage the crew hauler's voyage to
-Cube Site 7C-θ: ration biofuel, allocate crew shifts, resolve event cards
-("Worker 4 exhibited curiosity. Worker 4 was recalibrated. Morale nominal."). The
-harvest→refine→build loop is taught here as *pure ledger numbers* — because that is
-what the loop is to a sleeper. The player learns the game's economy before ever seeing
-a world, and later realizes they were taught to see worlds as spreadsheets.
+**Gameplay (REFRAMED, owner 2026-07-11 — supersedes the old worker-first framing;
+full contract in `PARAVOXIA_REVISION_PLAN.md` §4):** Oregon Trail, played from the
+watcher's chair. The deck is the route intelligence's console: workers REQUEST (an
+off-schedule ration, two degrees of warmth, darkness to sleep), schedules DEMAND (a
+shift bell that has woken six pods for 40,220 pointless inspections), and every card
+closes on `ADVISORY INPUT IS REQUESTED` — the player decides. No card ever says who
+the player is. The reframed ration event is the type specimen: Worker 9 asks the
+dispenser; the dispenser is locked to schedule; unlocking it is one instruction — and
+the fed worker carries the food that becomes the player's first inventory after
+embodiment (*the ration you unlock for him is the first meal you will ever eat*).
+Choosing NOT to act is its own discovery — withholding the shift bell answers "what
+happens if i don't?" with "(…it is enormous, the nothing that happens.)". Lowercase
+parenthetical ASIDES (the VOYAGE_STRANGE grammar) record thoughts forming in response
+to the player's own decisions — the prologue's character-building instrument.
+Mid-transit, the NAMING BEAT: the watcher notices the one worker who asks instead of
+requesting, and the player TYPES a name for it — the terminal's first lowercase input
+field, the watcher's own hand. The system refuses it ("UNREGISTERED DESIGNATION. NOT
+RETAINED."); the watcher keeps it ("(retained.)"). That worker is the body the crash
+pours the watcher into: the manifest's "PRIOR DESIGNATION: NOT RETAINED", like the
+site geometry, *resolved before it was surveyed* — the record of a naming that had
+not yet happened. The name renders lowercase everywhere, forever (it lives in the
+watcher's register, never the system's); it resurfaces once, obliquely, in ch4-audit,
+and pays off at A8 (see FINALE). The harvest→refine→build loop is still taught as
+*pure ledger numbers* — because that is what the loop is to a system. The player
+learns the game's economy before ever seeing a world, and later realizes they were
+taught to see worlds as spreadsheets.
 
 **The mishap:** the nav system begins rejecting the destination — coordinates that
 "do not resolve." Event cards degrade into corrupted text. The crash is rendered as
@@ -360,6 +505,14 @@ of a planned mechanic becoming a story beat). They wake to:
 - Hazard phenomena become visible as material effects (frost wisps, dust, ash — the
   `material` stage already partially reveals these): the world starts telling the
   truth about what can hurt you.
+- **The wreck resolves (owner, 2026-07-11 — in flight):** during the bloom wave the
+  DescentPod's voxel wreck resolves into the high-fidelity ship. The ship is simply
+  another object whose fidelity resolves as the AI learns to render its world — same
+  pose, same silhouette the vector prologue drew; the wreck was always the real ship,
+  the renderer could not yet say so. Landmark role unchanged; ch5's repair hook
+  ("build the leaving") operates on the resolved ship. First-look caption (one-shot,
+  gaze-triggered post-bloom): `hm — the wreck is finer than i remember it. nothing
+  about it has changed.`
 
 **Gameplay:** shelter → enclosure → warmth; food/water satisfiers; the exposure/comfort
 survival layer from `CRAFTING.md` §6. The chapter ends with a working homestead — and
@@ -441,6 +594,24 @@ isles, fungal blooms. Each planet's palette family and art direction
 (`planetArtDirection.ts` — 10 palette families, per-planet shape/ecology/phenomena)
 now visibly differentiates worlds: "where do I warp?" becomes an aesthetic decision
 as much as an economic one, exactly what the planet-system handoff doc wanted.
+
+**THE SKY IS THE INDEX (constellation canon, owner 2026-07-11):** the seed is planted
+at ch4-vigil — bored under a scheduled sleep, the embodied AI stares at the
+chaos-noise stars, wonders what it is to perceive and be perceived, and PATTERNS
+EMERGE (`setConstellationReveal` 0→1; the first figure it finds is a hauler — its own
+biography, constellated). Constellations exist because a perceiver chose them — the
+subjective creation of meaning, rendered — and they are PERCEIVER-KEYED forever:
+the reveal persists per save (`story:ch4:constellations`); a friend without the
+milestone still sees scatter. The long game: **astrology is real in Paravoxia
+because the worlds are seeded** — different sky regions carry different constellation
+"houses," and every cube world's generation seed is legible in the stars above it;
+reading the sky is reading the generator. At A5 this becomes mechanical: the survey
+console charts houses; houses predict the archetype/palette/hazard families of the
+worlds beneath them — "where do I warp?" becomes reading fate written by a maker
+(possibly the player). A6 extension candidate: maker-strokes correlate with houses
+(constellations as signatures). Under the hidden pillar, the AI reading constellations
+is reading its own seeds — determinism, panpsychism, and authorship in one mechanic,
+never named in copy.
 
 **Sub-beat — the Deep (underwater awakening):** on an oceanic world, the first real
 dive brings the built underwater suite online as a discovered rendering layer:
@@ -539,7 +710,9 @@ The player activates the Paradox Machina, and the world begins to **strip**:
    walks through the honest machinery of the construct, seeing the game as what it is.
 4. And at the bottom of the strip-down: the green-phosphor terminal from A0, rendering
    the player as a ledger row. They have reached the outermost box and it was the
-   first one. The screen. The frame.
+   first one. The screen. The frame. The row carries one field the system swore it
+   never kept: `PRIOR DESIGNATION: {the name typed in the voyage's naming beat}`,
+   rendered lowercase — proof, at the very end, of who was keeping it.
 5. One thing refuses to derez: **the tree** — full mesh, full color, continuous, alive,
    standing in the wireframe void. The answer to "what remains when there are no more
    boxes": the question itself. Curiosity survives every renderer.

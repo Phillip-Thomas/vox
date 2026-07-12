@@ -56,7 +56,7 @@ export function seededUnit(seed: number, salt: number): number {
   return (hash >>> 0) / 4294967296;
 }
 
-function fnv1a32(input: string): number {
+export function fnv1a32(input: string): number {
   let hash = 2166136261;
   for (let i = 0; i < input.length; i++) {
     hash ^= input.charCodeAt(i);

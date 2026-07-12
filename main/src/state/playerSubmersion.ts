@@ -15,6 +15,14 @@ let localSubmergence = 0; // 0 = eye fully in air, 1 = eye fully underwater (smo
 let localDepthBelow = 0;  // metres the eye is below the sea surface (>= 0)
 const playerSubmersions = new Map<ActorId, PlayerSubmersionState>();
 
+// The RENDER camera's submersion — distinct from the character's eye whenever an
+// external lens holds the camera away from the body (side/nav/iso rigs, the
+// survey chart). Rendering + audio effects (fog, post, dome, particles, muffle)
+// key on this; swim physics, oxygen, and the breath HUD stay on the character
+// channel above.
+let cameraSubmergence = 0;
+let cameraDepthBelow = 0;
+
 function finite(n: number): number {
   return Number.isFinite(n) ? n : 0;
 }
@@ -54,12 +62,31 @@ export function resetPlayerSubmersion(actorId?: ActorId): void {
     if (actorId === getLocalActorId()) {
       localSubmergence = 0;
       localDepthBelow = 0;
+      cameraSubmergence = 0;
+      cameraDepthBelow = 0;
     }
     return;
   }
   playerSubmersions.clear();
   localSubmergence = 0;
   localDepthBelow = 0;
+  cameraSubmergence = 0;
+  cameraDepthBelow = 0;
+}
+
+export function setCameraSubmersion(submergence: number, depthBelow: number): void {
+  cameraSubmergence = Math.max(0, Math.min(1, finite(submergence)));
+  cameraDepthBelow = Math.max(0, finite(depthBelow));
+}
+
+/** Smoothed 0..1: how far the RENDER CAMERA is below the water surface. */
+export function getCameraSubmergence(): number {
+  return cameraSubmergence;
+}
+
+/** Metres the render camera is below the sea surface (>= 0). */
+export function getCameraDepthBelow(): number {
+  return cameraDepthBelow;
 }
 
 /** Smoothed 0..1: how far the camera EYE is below the water surface. */

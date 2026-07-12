@@ -41,7 +41,7 @@ import {
 import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
 import { getPlayerLook, getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
-import { setPlayerSubmerged } from '../state/playerSubmersion';
+import { setPlayerSubmerged, setCameraSubmersion } from '../state/playerSubmersion';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -103,7 +103,7 @@ import { resolveStoryInteraction } from '../story/storyInteractions.ts';
 import { getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
 import { BLOCKS } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
-import { isMapViewOpen } from '../game/mapView.ts';
+import { isMapViewOpen, syncChartScreenUp, resetChartFrame } from '../game/mapView.ts';
 import { tickSenseDiscovery } from '../story/senseDiscovery.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
 import { markSpawnSettled, resetSpawnSettle } from '../game/spawnSettle.ts';
@@ -209,6 +209,7 @@ const _wO = new THREE.Vector3(); // water look-ray scratch (lookingAtWater only 
 const _wD = new THREE.Vector3(); // distinct from _lookOrigin/_lookDir used by updateLookedAt)
 // Scratch for the per-step submersion test (eye position) + swim look direction.
 const _eye = new THREE.Vector3();
+const _camEye = new THREE.Vector3(); // render-camera submersion test (external lenses)
 const _swimLook = new THREE.Vector3();
 const _poseForward = new THREE.Vector3();
 // Asymmetric submersion smoothing rates (per second): crossing the waterline is a
@@ -338,6 +339,7 @@ export default function EfficientPlayer({
   // branch and is published to playerSubmersion for audio / fog / post / particles.
   const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
   const submergence = useRef(0);
+  const cameraSubmergence = useRef(0); // render-camera channel — diverges from the eye under external lenses
   const spawnGuard = useRef({ done: false, clock: 0 });
 
   // World swaps remount the player: the settle flag must never leak between
@@ -392,7 +394,10 @@ export default function EfficientPlayer({
   useEffect(() => () => setJetpackSfx(false), []);
   // Reset submersion when the on-foot controller unmounts (board ship / leave
   // world) so the underwater audio muffle + fog can't get stuck on.
-  useEffect(() => () => setPlayerSubmerged(0, 0), []);
+  useEffect(() => () => {
+    setPlayerSubmerged(0, 0);
+    setCameraSubmersion(0, 0);
+  }, []);
 
   const updateVisualTransition = useCallback(() => {
     const animation = rotationAnimation.current;
@@ -576,6 +581,7 @@ export default function EfficientPlayer({
     rotationAnimation.current = null;
     visualCameraUp.current.copy(top.up);
     lastPlanarForward.current.set(0, 0, -1);
+    resetChartFrame();
     transitionCooldown.current = 0;
     setSurface(top);
   }, [commandContext, resetSpawnPosition, setSurface]);
@@ -702,14 +708,15 @@ export default function EfficientPlayer({
     }
 
     // Trees (nearest trunk/leaf instance mapping to a live tree-voxel).
-    const treeMeshes = [treeFieldHandle.trunk, treeFieldHandle.leaf].filter(Boolean) as THREE.InstancedMesh[];
-    if (treeMeshes.length > 0) {
-      for (const h of raycaster.intersectObjects(treeMeshes, false)) {
-        if (h.instanceId === undefined) continue;
-        const v = treeFieldHandle.slotVoxel[h.instanceId];
-        if (v && !isTreeHarvested(v[0], v[1], v[2])) {
-          if (h.distance < bestDist) { best = { kind: 'tree', coord: { x: v[0], y: v[1], z: v[2] } }; bestDist = h.distance; }
-          break;
+    if (treeFieldHandle.pickTargets.length > 0) {
+      for (const target of treeFieldHandle.pickTargets) {
+        for (const h of raycaster.intersectObject(target.mesh, false)) {
+          if (h.instanceId === undefined) continue;
+          const v = target.slotVoxel[h.instanceId];
+          if (v && !isTreeHarvested(v[0], v[1], v[2])) {
+            if (h.distance < bestDist) { best = { kind: 'tree', coord: { x: v[0], y: v[1], z: v[2] } }; bestDist = h.distance; }
+            break;
+          }
         }
       }
     }
@@ -1081,13 +1088,14 @@ export default function EfficientPlayer({
 
     raycaster.far = BLOCK_REACH;
     raycaster.setFromCamera(mouse, camera);
-    const treeMeshes = [treeFieldHandle.trunk, treeFieldHandle.leaf].filter(Boolean) as THREE.InstancedMesh[];
-    for (const h of (treeMeshes.length ? raycaster.intersectObjects(treeMeshes, false) : [])) {
-      if (h.instanceId === undefined) continue;
-      const v = treeFieldHandle.slotVoxel[h.instanceId];
-      if (v && !isTreeHarvested(v[0], v[1], v[2])) {
-        if (h.distance < foundDist) { found = { kind: 'tree' }; foundDist = h.distance; }
-        break;
+    for (const target of treeFieldHandle.pickTargets) {
+      for (const h of raycaster.intersectObject(target.mesh, false)) {
+        if (h.instanceId === undefined) continue;
+        const v = target.slotVoxel[h.instanceId];
+        if (v && !isTreeHarvested(v[0], v[1], v[2])) {
+          if (h.distance < foundDist) { found = { kind: 'tree' }; foundDist = h.distance; }
+          break;
+        }
       }
     }
     if (looseStoneHandle.mesh) {
@@ -1222,6 +1230,24 @@ export default function EfficientPlayer({
     const eyeDomVoxel = Math.max(Math.abs(eyeWorld.x), Math.abs(eyeWorld.y), Math.abs(eyeWorld.z)) / VOXEL_SCALE;
     const depthBelow = Math.max(0, (waterGen.getSeaLevelRadius() - eyeDomVoxel) * VOXEL_SCALE);
     setPlayerSubmerged(submergence.current, depthBelow);
+
+    // Same test at the RENDER camera, which external lenses (side/nav/iso rigs,
+    // the survey chart) hold far from the eye — fog/post/dome/particles/muffle
+    // key on this channel so a submerged character doesn't drown a dry camera.
+    if (cameraRef.current) {
+      cameraRef.current.getWorldPosition(_camEye);
+    } else {
+      _camEye.copy(eyeWorld);
+    }
+    const camWet = waterGen.isWaterVoxel(
+      Math.round(_camEye.x / VOXEL_SCALE),
+      Math.round(_camEye.y / VOXEL_SCALE),
+      Math.round(_camEye.z / VOXEL_SCALE)
+    );
+    const camSubRate = camWet ? SUBMERGE_IN_RATE : SUBMERGE_OUT_RATE;
+    cameraSubmergence.current += ((camWet ? 1 : 0) - cameraSubmergence.current) * Math.min(1, camSubRate * FIXED_PHYSICS_STEP);
+    const camDomVoxel = Math.max(Math.abs(_camEye.x), Math.abs(_camEye.y), Math.abs(_camEye.z)) / VOXEL_SCALE;
+    setCameraSubmersion(cameraSubmergence.current, Math.max(0, (waterGen.getSeaLevelRadius() - camDomVoxel) * VOXEL_SCALE));
     const swimFactor = Math.min(1, submergence.current / 0.5);
     const submerged = submergence.current > 0.5;
 
@@ -1253,11 +1279,18 @@ export default function EfficientPlayer({
     }
 
     if (sideLens && lensRig) rigMoveBasis(sideLens, lensRig, _sideBasisForward, _sideBasisRight);
+    // Chart mode: the overhead camera looks straight down, so its projected
+    // forward is degenerate — move in the chart's ROLLED frame instead
+    // (W = screen-up). Because that frame transports across edges, a held key
+    // keeps its world direction through a face change (no edge ping-pong).
+    const chartOverhead = !sideLens && isMapViewOpen() && getStoryInputPolicy().lookMode === 'free';
     const basis = sideLens
       ? makeTangentBasis(activeUp, _sideBasisForward)
-      : cameraRef.current
-        ? planarCameraBasis(cameraRef.current, activeUp, lastPlanarForward.current)
-        : makeTangentBasis(activeUp, lastPlanarForward.current);
+      : chartOverhead
+        ? makeTangentBasis(activeUp, syncChartScreenUp(activeUp))
+        : cameraRef.current
+          ? planarCameraBasis(cameraRef.current, activeUp, lastPlanarForward.current)
+          : makeTangentBasis(activeUp, lastPlanarForward.current);
     lastPlanarForward.current.copy(basis.forward);
 
     const moveDirection = movementDirectionFromBasis(movementInput, basis.forward, basis.right);

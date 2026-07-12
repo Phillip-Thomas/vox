@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useStoryState } from '../storyState.ts';
+import { isStoryDeepLink, useStoryState } from '../storyState.ts';
 import { clearSideLens, setSideLens } from '../sideLens.ts';
 import { getAuditWorkerPath, getPondPose, getStorySidePlane, storyAnchors } from './storyWorld.ts';
 import { getCampfires, placeCampfire } from '../../game/systems/campfires.ts';
@@ -8,6 +8,7 @@ import AnomalyStone from './AnomalyStone.tsx';
 import HeroAppleTree from './HeroAppleTree.tsx';
 import SideWorkerAvatar from './SideWorkerAvatar.tsx';
 import DescentPod from './DescentPod.tsx';
+import HifiWreck from './HifiWreck.tsx';
 import DebrisField from './DebrisField.tsx';
 import SupplyPods from './SupplyPods.tsx';
 import NavBeacons from './NavBeacons.tsx';
@@ -41,9 +42,14 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
     return clearSideLens;
   }, [planetSize, terrainSeed]);
 
-  // Debug-jump affordance: beats past the campfire craft need a fire standing
-  // (rest gates on it). Real runs always arrive here with one already placed.
+  // Debug-jump affordance (DEV DEEP-LINKS ONLY): beats past the campfire craft
+  // need a fire standing (rest gates on it). A `?story=<beat>` jump lands there
+  // without the player having built one, so pre-place it. A real run (menu/resume)
+  // NEVER takes this path — it arrives with the player's own fire — and gating on
+  // isStoryDeepLink keeps this debug fire from ever entering (and persisting into)
+  // a normal save.
   useEffect(() => {
+    if (!isStoryDeepLink()) return;
     const needsFire = story.beat === 'ch3-dusk' || story.beat === 'ch3-await-rest' || story.beat === 'a3-dawn'
       || story.beat === 'ch4-vigil';
     if (!needsFire || getCampfires().length > 0) return;
@@ -108,8 +114,12 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
     <>
       <SideWorkerAvatar />
       {/* The crashed pod persists as the smoking wreck — a permanent landmark
-          from the descent onward (chapter 1 through the done world). */}
+          from the descent onward. At the A3 material awakening it CONVERTS: the
+          voxel pod self-hides and the hi-fi hull (HifiWreck) settles into the
+          same impact site. Both mounted always; each self-gates on the a3
+          milestone, so a resume past the awakening loads straight into the ship. */}
       <DescentPod planetSize={planetSize} terrainSeed={terrainSeed} />
+      <HifiWreck planetSize={planetSize} terrainSeed={terrainSeed} />
       {/* The wreck relay: silent scenery from the first day; the network's
           voice from the klaxon on — and it stays up at done (carrier is up). */}
       {firstDayOrLater && <WreckRelay planetSize={planetSize} terrainSeed={terrainSeed} />}

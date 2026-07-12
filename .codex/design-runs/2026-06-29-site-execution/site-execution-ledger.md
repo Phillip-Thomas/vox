@@ -496,3 +496,37 @@ Remaining defects/deferred work:
 
 - Human taste should still judge whether the stronger arid/fungal accent palettes are the right world tone.
 - A future flora silhouette/volume pass can further separate species shapes; this batch focused on color role hierarchy.
+
+## Batch 10: Procedural Tree Biology And Population Overhaul
+
+Status: `tree machine gate complete`
+Route/surface: tree harness plus procedural world via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `10`
+
+### Changes
+
+- Added bounded occupancy-light, energy, self-pruning, pipe-taper, and cantilever-sag tree biology.
+- Added correlated species physiology and three cached age/phenotype archetypes, quality-gated to `3/3/2/1/0` for `ULTRA/HIGH/MEDIUM/LOW/POTATO`.
+- Replaced near-field canopy blobs with branch-aligned botanical sprays and strict leaf-card ceilings.
+- Added palette-authored bark, arc-length grain, generated-bound impostors, and silhouette-specific far masks.
+- Added ecology-aware placement and variant-safe harvesting mappings.
+- Added cross-platform tree capture metrics and a population mode to the standalone tree harness.
+
+### Checks
+
+- `npm run test -- --run src/utils/treeBiology.test.ts src/utils/treeGen.test.ts src/utils/treeProfile.test.ts src/utils/treeMaterials.test.ts src/utils/treePopulation.test.ts src/utils/treeQuality.test.ts`
+- `npx tsc --noEmit -p tsconfig.json --pretty false`
+- `node tools/capture-trees.mjs --label=tree-overhaul-final-silhouettes --query=mode=silhouettes`
+- `node tools/capture-trees.mjs --label=tree-overhaul-final-population --query=mode=population`
+- `node tools/procedural-atlas.mjs --mode=smoke --label=tree-overhaul-smoke-final2 --no-start`
+- `node tools/procedural-atlas.mjs --mode=perf --label=tree-overhaul-perf-final2 --no-start --settle=950 --warm=300`
+
+### Gate Status
+
+- Focused tree tests: `51 / 51` pass.
+- Profiled seed matrix: `144` phenotypes pass finite/index/bounds/taper/budget checks.
+- In-game smoke: `3` cases, `12` screenshots, `0` console errors, `0` defects.
+- Perf: all profiles `60fps`, max worst-view p95 `18.9ms`, tree geometry/draw budgets pass.
+- Accepted external exception: current-checkout shader program counts exceed stale per-tier thresholds even in POTATO with trees disabled; no atlas budget was changed.
+- Human taste approval remains open.

@@ -6,7 +6,8 @@ import {
   VOXEL_REALITY_PRESETS
 } from '../game/systems/realityRenderSystem.ts';
 import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
-import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem.ts';
+import { getItemCount, hasItems, subscribeInventory } from '../game/systems/inventorySystem.ts';
+import { getRecipe } from '../game/data/recipes.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
 import { getVitals, isStaminaExhausted, setVitals } from '../game/systems/survivalVitals.ts';
 import { getWaterskinFill } from '../game/systems/consumeSystem.ts';
@@ -35,21 +36,24 @@ import {
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
 import { getSideFacing, getSideLens, setLensRig, SIDE_RIG, type LensRig } from './sideLens.ts';
-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
+import { setConstellationReveal } from './skyMeaning.ts';
+import { hifiWreckHandle } from './world/hifiWreck.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
 import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
 import { debrisSalvageComplete } from './debrisSalvage.ts';
 import { supplyPodsComplete } from './supplyPods.ts';
 import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
-import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
+import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
 import { storyAnchors } from './world/storyWorld.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
-import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption } from './storyText.ts';
+import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption, showSystemLine } from './storyText.ts';
 import {
   A1_RAMP_SECONDS,
   A2_CAPTIONS,
@@ -73,10 +77,13 @@ import {
   DUSK,
   FIRST_DAY,
   FIRST_DAY_CAPTIONS,
+  GRAVITY_EDGE,
   MUSING_GAP_SECONDS,
   MUSINGS,
+  SHIP_LOOK,
   SIGNAL,
   SIGNAL_LINES,
+  STARGAZE,
   VIGIL,
   VIGIL_LINES,
   VOYAGE_DECK
@@ -160,6 +167,22 @@ interface DirectorRuntime {
   anomalyMassStage: boolean;
   /** Beat-clock time of the designation (-1 = not yet) — arms the touch. */
   anomalyDesignatedAt: number;
+  /** ch1-anomaly gravity-edge crossing: beat-clock of the cross (-1 = not yet),
+   *  arms the feed gloss GRAVITY_EDGE.feedDelaySeconds later. */
+  gravityEdgeAt: number;
+  /** ch3-gather campfire teaching chain latches (the flint-skip branch). */
+  gatherSkipDecided: boolean;
+  gatherSkipFlint: boolean;
+  /** Flint held when the flint prompt fired (flintFound waits for a NEW flint). */
+  gatherFlintAtPrompt: number;
+  /** Ship first-look: cone-hold accumulator + the signal-line fallback stamp. */
+  shipLookHeld: number;
+  shipLookFallbackAt: number;
+  /** ch4-vigil stargaze staging. */
+  vigilNightAt: number;
+  vigilLookHeld: number;
+  stargazeStart: number;
+  constellationRampStart: number;
   /** ch4-arrival one-shots. */
   arrivalWoke: boolean;
   /** 2-frame BARE drop (the auditor's eyes) — inverse of the chroma flash. */
@@ -203,6 +226,16 @@ const d: DirectorRuntime = {
   anomalySectorsSeen: new Set(),
   anomalyMassStage: false,
   anomalyDesignatedAt: -1,
+  gravityEdgeAt: -1,
+  gatherSkipDecided: false,
+  gatherSkipFlint: false,
+  gatherFlintAtPrompt: -1,
+  shipLookHeld: 0,
+  shipLookFallbackAt: -1,
+  vigilNightAt: -1,
+  vigilLookHeld: 0,
+  stargazeStart: -1,
+  constellationRampStart: -1,
   arrivalWoke: false,
   bareFramesLeft: 0,
   workerScratch: new THREE.Vector3()
@@ -326,6 +359,12 @@ function onBeatEntered(beat: StoryBeat | null): void {
   getFeedRuntime().cinematic = 0;
   // The score retunes to the beat's mood (null fades it out for the sandbox).
   setScoreBeat(beat);
+  // Constellation reveal persistence: the resolved sky belongs to a STORY save
+  // that has earned it (milestone) and never to the sandbox — a sandbox session
+  // after a story session must not inherit reveal=1. onBeatEntered only runs on
+  // real beat transitions, so a cold load with no active story leaves the ?sky
+  // dev flag untouched (this line never runs there).
+  setConstellationReveal(beat != null && hasMilestone('story:ch4:constellations') ? 1 : 0);
   switch (beat) {
     case 'descent':
       resetFeedRuntime();
@@ -394,6 +433,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
       d.anomalySectorsSeen.clear();
       d.anomalyMassStage = false;
       d.anomalyDesignatedAt = -1;
+      d.gravityEdgeAt = -1;
       setWorkOrder([...CH1_WORK_ORDERS.anomaly]);
       break;
     case 'ch1-lift':
@@ -448,6 +488,10 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setStoryForcedDayPhase(0.25); // noon holds until the scripted first dusk
       setWorkOrder([]);
       clearViolations();
+      // The campfire teaching chain restarts clean on (re-)entry.
+      d.gatherSkipDecided = false;
+      d.gatherSkipFlint = false;
+      d.gatherFlintAtPrompt = -1;
       // (HEALTH — the first row — lands in the tick WITH its naming caption,
       // the TEMP grammar; deep links seed it via seedForBeat.)
       ensureRestInteraction();
@@ -505,6 +549,12 @@ function onBeatEntered(beat: StoryBeat | null): void {
       if (beat === 'ch4-vigil') {
         d.vigilPhaseFrom = Math.min(Math.max(d.dayPhase, SIGNAL.phaseTarget), DUSK.targetPhase);
         d.dayPhase = d.vigilPhaseFrom;
+        // The stargaze sequence starts fresh each entry (the reveal ramp too,
+        // unless a resumed save already earned the milestone — handled above).
+        d.vigilNightAt = -1;
+        d.vigilLookHeld = 0;
+        d.stargazeStart = -1;
+        d.constellationRampStart = -1;
         ensureRestInteraction();
       }
       setStoryForcedDayPhase(d.dayPhase);
@@ -941,6 +991,87 @@ function envelope(t: number, inStart: number, inEnd: number, outStart: number, o
   return 0;
 }
 
+// The campfire teaching chain (ch3-gather): each station read comes straight off
+// recipe satisfiability — never a hardcoded count — so the copy tracks the real
+// economy. The chain guides gather → hatchet → pickaxe → flint → fire, with a
+// flint-skip branch when the pods already provisioned enough flint.
+function tickGatherTeaching(): void {
+  const t = d.beatClock;
+  if (t >= 22) fireCaptionOnce('gather-thought', CH3_CAPTIONS.fireThought);
+  if (t >= 26) fireCaptionOnce('gather-prompt', CH3_CAPTIONS.gatherPrompt);
+  // The extractor nudge fires only if, 20s after the gather prompt, nothing has
+  // been pulled from the world yet (no wood / fiber / stone in hand).
+  if (
+    t >= 46
+    && getItemCount('wood') + getItemCount('biofiber') + getItemCount('stone') === 0
+  ) {
+    fireCaptionOnce('gather-hint', CH3_CAPTIONS.gatherHint);
+  }
+  const hatchet = getRecipe('stone_hatchet');
+  const pickaxe = getRecipe('stone_pickaxe');
+  const campfire = getRecipe('campfire');
+  const campfireFlintNeed = campfire.inputs.find(s => s.id === 'flint')?.qty ?? 0;
+  if (hasItems(hatchet.inputs)) fireCaptionOnce('gather-hatchet', CH3_CAPTIONS.hatchetPrompt);
+  const hatchetDone = getItemCount('stone_hatchet') > 0;
+  if (hatchetDone && !d.gatherSkipDecided) {
+    // Latch the branch the instant the hatchet lands: enough flint already in
+    // hand skips the pickaxe + flint detour entirely.
+    d.gatherSkipDecided = true;
+    d.gatherSkipFlint = getItemCount('flint') >= campfireFlintNeed;
+  }
+  if (hatchetDone) {
+    if (d.gatherSkipFlint) {
+      fireCaptionOnce('gather-flint-skip', CH3_CAPTIONS.flintSkip);
+    } else {
+      if (hasItems(pickaxe.inputs)) fireCaptionOnce('gather-pickaxe', CH3_CAPTIONS.pickaxePrompt);
+      if (getItemCount('stone_pickaxe') > 0) {
+        const wasFired = d.captionsFired.has('gather-flint');
+        fireCaptionOnce('gather-flint', CH3_CAPTIONS.flintPrompt);
+        if (!wasFired) d.gatherFlintAtPrompt = getItemCount('flint');
+        if (d.gatherFlintAtPrompt >= 0 && getItemCount('flint') > d.gatherFlintAtPrompt) {
+          fireCaptionOnce('gather-flint-found', CH3_CAPTIONS.flintFound);
+        }
+      }
+    }
+  }
+  if (hasItems(campfire.inputs)) fireCaptionOnce('gather-fire', CH3_CAPTIONS.firePrompt);
+}
+
+// The ship first-look: once the wreck has converted (A3 material stage), the
+// first time the camera HOLDS it inside a 35° half-cone for holdSeconds, the
+// awakening voice registers that the seeing — not the wreck — has changed. A
+// signal-line fallback fires it even if the cone never caught (or the camera is
+// null, as in tests). One-shot per save.
+const _shipLookDir = new THREE.Vector3();
+const _shipLookTo = new THREE.Vector3();
+const _shipCamPos = new THREE.Vector3();
+
+function tickShipLook(dt: number, camera: THREE.PerspectiveCamera | null): void {
+  if (hasMilestone('story:ch3:shiplook')) return;
+  if (!hasMilestone(STORY_MILESTONES.a3)) return; // eligible from the material stage on
+  if (d.shipLookFallbackAt >= 0 && d.elapsedSeconds >= d.shipLookFallbackAt + 3) {
+    fireCaptionOnce('ship-look', SHIP_LOOK.caption);
+    markMilestone('story:ch3:shiplook');
+    return;
+  }
+  if (!camera || !hifiWreckHandle.converted || !hifiWreckHandle.position) return; // tests: null camera
+  camera.getWorldDirection(_shipLookDir);
+  _shipLookTo.copy(hifiWreckHandle.position).sub(camera.getWorldPosition(_shipCamPos));
+  if (_shipLookTo.lengthSq() < 1e-6) return;
+  _shipLookTo.normalize();
+  const withinCone = _shipLookDir.dot(_shipLookTo)
+    >= Math.cos((SHIP_LOOK.coneDegrees * Math.PI) / 180);
+  if (withinCone) {
+    d.shipLookHeld += dt;
+    if (d.shipLookHeld >= SHIP_LOOK.holdSeconds) {
+      fireCaptionOnce('ship-look', SHIP_LOOK.caption);
+      markMilestone('story:ch3:shiplook');
+    }
+  } else {
+    d.shipLookHeld = 0;
+  }
+}
+
 /** Seconds the dusk cutscene holds the frame (camera pull + letterbox + freeze). */
 const DUSK_CUTSCENE_SECONDS = 8;
 
@@ -1222,13 +1353,16 @@ function tickSignal(dt: number): void {
   if (t >= SIGNAL.runCueAt + 1.5 && wreckRelayHandle.position
     && getPlayerWorldPosition().distanceTo(wreckRelayHandle.position) <= SIGNAL.relayReach) {
     fireAuditOnce('sig-logged', SIGNAL_LINES.logged);
+    // Arm the ship first-look fallback: if the cone never caught the wreck, the
+    // relay-arrival line is the last cue that can honestly trigger it.
+    if (d.shipLookFallbackAt < 0) d.shipLookFallbackAt = d.elapsedSeconds;
     markMilestone(STORY_MILESTONES.ch3Signal);
     advanceToBeat('ch4-vigil');
   }
 }
 
 // S4 — the vigil: ch3's tender rest re-issued as an order. Same verb, inverted.
-function tickVigil(dt: number): void {
+function tickVigil(dt: number, camera: THREE.PerspectiveCamera | null): void {
   const t = d.beatClock;
   if (t < VIGIL.duskLerpSeconds) {
     const k = smoothstep(t / VIGIL.duskLerpSeconds);
@@ -1242,10 +1376,67 @@ function tickVigil(dt: number): void {
   if (t >= VIGIL.linesStartAt + VIGIL.lineGapSeconds * 2) fireAuditOnce('vig-scheduled', VIGIL_LINES.scheduled);
   if (t >= VIGIL.darkAsideAt) fireCaptionOnce('vig-aside', VIGIL_LINES.darkAside);
   tickStoryChill(dt, 0.9); // the second night bites; the fire still answers
-  if (!d.captionsFired.has('vig-rest') && d.dayPhase >= DUSK.nightStart) {
+  tickStargaze(dt, camera); // the ordered dark's one permitted act; owns vig-rest now
+  tickMusings();
+}
+
+// The stargaze: the vigil forbids producing, consuming, and observing — but
+// observing without producing is the one thing still allowed. Once the night
+// lands and settles, a held look-up (or a fallback timer) starts the eight-line
+// sequence; line 5 marks the constellation milestone and ramps the reveal 0→1;
+// the vigil's rest prompt is held until the sky has finished speaking.
+const _vigilDir = new THREE.Vector3();
+
+function tickStargaze(dt: number, camera: THREE.PerspectiveCamera | null): void {
+  const t = d.beatClock;
+  if (d.stargazeStart < 0) {
+    if (d.dayPhase >= DUSK.nightStart && d.vigilNightAt < 0) d.vigilNightAt = t;
+    if (d.vigilNightAt >= 0) {
+      const sinceNight = t - d.vigilNightAt;
+      if (sinceNight >= STARGAZE.startAfterNightSeconds) {
+        let lookingUp = false;
+        if (camera) {
+          camera.getWorldDirection(_vigilDir);
+          const pitch = Math.asin(THREE.MathUtils.clamp(_vigilDir.dot(getPlayerUp()), -1, 1));
+          lookingUp = pitch >= STARGAZE.lookUpPitch;
+        }
+        d.vigilLookHeld = lookingUp ? d.vigilLookHeld + dt : 0;
+        const gestured = d.vigilLookHeld >= STARGAZE.lookUpHoldSeconds;
+        const fellBack = sinceNight >= STARGAZE.lookUpFallbackSeconds; // null camera / no look-up
+        if (gestured || fellBack) d.stargazeStart = t;
+      }
+    }
+    return;
+  }
+  const since = t - d.stargazeStart;
+  STARGAZE.lines.forEach((line, i) => {
+    if (since < i * STARGAZE.gapSeconds) return;
+    const fresh = !d.captionsFired.has(`vig-star-${i}`);
+    fireCaptionOnce(`vig-star-${i}`, line);
+    if (fresh && i === STARGAZE.revealAtLine - 1) {
+      markMilestone('story:ch4:constellations');
+      d.constellationRampStart = t;
+    }
+  });
+  // The chaos-noise starfield resolves as an eased 0→1 ramp from line 5.
+  if (d.constellationRampStart >= 0) {
+    setConstellationReveal(smoothstep((t - d.constellationRampStart) / STARGAZE.revealSeconds));
+  }
+  // The ordered rest is offered only after the sky has finished speaking.
+  const lastLineAt = d.stargazeStart + (STARGAZE.lines.length - 1) * STARGAZE.gapSeconds;
+  if (t >= lastLineAt + STARGAZE.restPromptAfterSeconds && d.dayPhase >= DUSK.nightStart) {
     fireCaptionOnce('vig-rest', VIGIL_LINES.restPrompt);
   }
-  tickMusings();
+}
+
+/**
+ * True once the vigil's stargaze has settled and the ordered rest prompt has
+ * fired — the movie pilot holds its look-up framing through the reveal until
+ * then, so the constellations are never cut short by an early rest.
+ */
+export function vigilRestReady(): boolean {
+  const s = getStoryStateSnapshot();
+  return s.active && s.beat === 'ch4-vigil' && d.captionsFired.has('vig-rest');
 }
 
 // S5 — the arrival: dawn 2, and the letterbox returns WITH the system's agent.
@@ -1459,11 +1650,13 @@ export function storyDirectorTick(
       break;
     case 'ch1-iso':
       tickCh1Flashes(dt);
-      // Height, earned: standing at the stone means standing ON the mesa
+      // Height, earned: reaching the mesa SUMMIT means standing ON the mesa
       // (from the ground the 3D distance can never close this far). The dwell
       // floor guarantees the 45° reveal is SEEN even if the player arrives tall.
-      if (d.beatClock >= 9 && anomalyStoneHandle.position
-        && getPlayerWorldPosition().distanceTo(anomalyStoneHandle.position) <= 2.6) {
+      // (The anomaly stone has moved across the edge — the climb keys on the
+      // mesa itself now, and the lift into first person comes BEFORE the crossing.)
+      if (d.beatClock >= 9 && signalMesaHandle.summit
+        && getPlayerWorldPosition().distanceTo(signalMesaHandle.summit) <= 2.6) {
         markMilestone(STORY_MILESTONES.ch1Iso);
         advanceToBeat('ch1-lift');
       }
@@ -1474,6 +1667,19 @@ export function storyDirectorTick(
     case 'ch1-anomaly':
       tickCh1Flashes(dt);
       tickAnomalySurvey(camera);
+      // The gravity-edge crossing: stepping off the arrival face ('top') hands
+      // "down" to the new face. The awakening voice registers the new down; the
+      // feed follows with its regulation gloss feedDelaySeconds later.
+      if (!d.captionsFired.has('anomaly-cross')
+        && dominantFaceForPosition(getPlayerWorldPosition()) !== 'top') {
+        fireCaptionOnce('anomaly-cross', GRAVITY_EDGE.caption);
+        d.gravityEdgeAt = d.beatClock;
+      }
+      if (d.gravityEdgeAt >= 0 && !d.captionsFired.has('anomaly-cross-feed')
+        && d.beatClock >= d.gravityEdgeAt + GRAVITY_EDGE.feedDelaySeconds) {
+        d.captionsFired.add('anomaly-cross-feed');
+        showSystemLine(GRAVITY_EDGE.feedLine);
+      }
       break;
     case 'a1-ramp':
       tickA1Ramp();
@@ -1507,6 +1713,9 @@ export function storyDirectorTick(
       if (d.beatClock >= 30) {
         fireCaptionOnce('sense-chart', 'the view from above is still in here. [M]');
       }
+      // The campfire teaching chain: the cold names a want, and the want walks
+      // the worker down the primitive crafting ladder toward the fire.
+      tickGatherTeaching();
       tickStoryChill(dt, 0.55); // the chill that motivates the fire
       // Belt-and-braces: a resume that arrives with a fire already standing
       // fires no campfire event — the dusk must still come.
@@ -1527,15 +1736,19 @@ export function storyDirectorTick(
       break;
     case 'ch3-thirst':
       tickThirst(dt);
+      tickShipLook(dt, camera);
       break;
     case 'ch3-forage':
       tickForage(dt);
+      tickShipLook(dt, camera);
       break;
     case 'ch3-signal':
       tickSignal(dt);
+      tickShipLook(dt, camera);
       break;
     case 'ch4-vigil':
-      tickVigil(dt);
+      tickVigil(dt, camera);
+      tickShipLook(dt, camera); // resolves the ship-look fallback armed at the relay
       break;
     case 'ch4-arrival':
       tickArrival(dt);
