@@ -1116,13 +1116,22 @@ const App: React.FC = () => {
           <Sky sunPosition={SUN_POSITION} />
         </Environment>
 
-        <SkyController terrainSeed={currentWorld.seed} worldId={currentWorldIdentity.worldId} />
-        <GalaxyImpostors currentCoordinate={currentWorld.coordinate} planetSize={planetSize} />
+        <SkyController
+          terrainSeed={currentWorld.seed}
+          worldId={currentWorldIdentity.worldId}
+          activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
+        />
+        <GalaxyImpostors
+          currentCoordinate={currentWorld.coordinate}
+          planetSize={planetSize}
+          activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
+        />
         {systemBodiesEnabled && (
           <SystemCompanionBodies
             currentCoordinate={currentWorld.coordinate}
             planetSize={planetSize}
             activePlanetSlot={currentPlanetAddress.slot}
+            activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
             forceSingleBody={isStoryWorld(currentWorld.coordinate)}
             bodyCountOverride={currentSystemManifest.planets.length as 1 | 2 | 3}
           />

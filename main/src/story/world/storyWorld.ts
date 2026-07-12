@@ -74,7 +74,11 @@ function surfacePoseNear(
     z: arrival.z + voxelOffsetZ
   });
   const center = voxelCoordToWorld(voxel.x, voxel.y, voxel.z);
-  const up = center.lengthSq() > 1e-6 ? center.clone().normalize() : new THREE.Vector3(0, 1, 0);
+  // This helper samples the TOP cube face explicitly. Its normal is therefore
+  // grid +Y everywhere on that face — never the spherical/radial direction to
+  // the planet centre. Radial up increasingly tilts props (most visibly the
+  // arriving auditor) as their X/Z offset approaches a cube edge.
+  const up = FACE_NORMALS.top.clone();
   return { position: center.clone().addScaledVector(up, lift), up };
 }
 

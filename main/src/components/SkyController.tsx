@@ -10,6 +10,15 @@ import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import { getStoryForcedDayPhase } from '../story/storyDayPhase.ts';
 import {
+  atmosphereSpaceBlend,
+  planetLocalCameraRadius
+} from '../game/atmosphereSpace.ts';
+import { NOMINAL_PLANET_FACE_RADIUS } from '../game/starSystem.ts';
+import {
+  getSystemFlightSnapshot,
+  type SystemVectorTuple
+} from '../state/systemFlight.ts';
+import {
   STATIC_DAY_PHASE,
   getWorldClockSource,
   resolveWorldDayPhase,
@@ -55,7 +64,12 @@ const FLIGHT_FOG_DENSITY = 0.0022;
 
 /** Fog density for a given flight phase (in-atmosphere flight thins it out). */
 function fogDensityForPhase(phase: string): number {
-  return phase === 'descent' || phase === 'launch' ? FLIGHT_FOG_DENSITY : SURFACE_FOG_DENSITY;
+  // deep_space reaches this only inside the atmosphere⇄space transition band
+  // (an inbound dive before the enter-warp); it shares the flight basis so the
+  // blended density is continuous across the phase flip.
+  return phase === 'descent' || phase === 'launch' || phase === 'deep_space'
+    ? FLIGHT_FOG_DENSITY
+    : SURFACE_FOG_DENSITY;
 }
 
 // ---------------------------------------------------------------------------
@@ -197,6 +211,30 @@ function applySpaceMode(
   fog.density = SPACE_FOG_DENSITY;
 }
 
+/**
+ * Continuous atmosphere→space grade: after the surface lighting/fog for this
+ * frame is computed, lerp it toward the applySpaceMode endpoints on the
+ * altitude blend (atmosphereSpace.ts). The world's grade then thins into the
+ * space grade across the atmosphere-exit band instead of flipping at the warp
+ * midpoint; at blend 1 this equals applySpaceMode exactly.
+ */
+function applyAtmosphereSpaceGrade(
+  sunLight: THREE.DirectionalLight,
+  moonLight: THREE.DirectionalLight,
+  ambient: THREE.AmbientLight,
+  fog: THREE.FogExp2,
+  blend: number
+) {
+  if (blend <= 0) return;
+  sunLight.intensity = THREE.MathUtils.lerp(sunLight.intensity, SPACE_SUN_INTENSITY, blend);
+  sunLight.color.lerp(SPACE_SUN_COLOR, blend);
+  moonLight.intensity = THREE.MathUtils.lerp(moonLight.intensity, 0, blend);
+  ambient.intensity = THREE.MathUtils.lerp(ambient.intensity, SPACE_AMBIENT_INTENSITY, blend);
+  ambient.color.lerp(SPACE_AMBIENT_COLOR, blend);
+  fog.color.lerp(SPACE_FOG_COLOR, blend);
+  fog.density = THREE.MathUtils.lerp(fog.density, SPACE_FOG_DENSITY, blend);
+}
+
 
 
 /**
@@ -272,6 +310,8 @@ interface SkyControllerProps {
   terrainSeed?: number;
   /** Current world identity metadata for the server-ownable clock seam. */
   worldId?: string;
+  /** Canonical center of the active planet, used across render-origin rebases. */
+  activePlanetSystemPosition: SystemVectorTuple;
 }
 
 // Subtle per-planet fog from the shared art direction contract. SpaceSky owns the
@@ -292,8 +332,13 @@ function realityFogScale() {
   };
 }
 
-export default function SkyController({ terrainSeed = 0, worldId }: SkyControllerProps) {
+export default function SkyController({
+  terrainSeed = 0,
+  worldId,
+  activePlanetSystemPosition
+}: SkyControllerProps) {
   const scene = useThree(state => state.scene);
+  const camera = useThree(state => state.camera);
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
 
@@ -329,21 +374,39 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     const moonLight = moonLightRef.current;
     const ambient = ambientRef.current;
     if (!sunLight || !moonLight || !ambient) return;
-    if (inSpace) {
+    const cameraRadius = planetLocalCameraRadius(
+      camera.position,
+      getSystemFlightSnapshot().renderOrigin,
+      activePlanetSystemPosition
+    );
+    if (
+      inSpace &&
+      atmosphereSpaceBlend(cameraRadius, NOMINAL_PLANET_FACE_RADIUS) >= 1
+    ) {
       applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
     }
+    // In space but still inside the transition band (a slow climb's leave-flip,
+    // or an inbound dive): fall through so the day grade is computed and then
+    // lerped toward the space endpoints by the blend below.
     const staticDayPhase = getForcedDayPhase() ?? STATIC_DAY_PHASE;
     setCurrentDayPhase(staticDayPhase);
     const r = applyDayPhase(staticDayPhase, sunLight, moonLight, ambient, fog);
     const realityFog = realityFogScale();
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * realityFog.chroma * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
+    applyAtmosphereSpaceGrade(
+      sunLight,
+      moonLight,
+      ambient,
+      fog,
+      atmosphereSpaceBlend(cameraRadius, NOMINAL_PLANET_FACE_RADIUS)
+    );
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
     applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inSpace, phase, fogBiome]);
+  }, [activePlanetSystemPosition, camera, fog, fogBiome, inSpace, phase]);
 
   useFrame(state => {
     const sunLight = sunLightRef.current;
@@ -354,14 +417,32 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     const animated = getGraphicsQuality().animatedShaders;
     const clockSource = getWorldClockSource(state.clock.elapsedTime, worldId);
     const forcedDayPhase = getForcedDayPhase();
-    const shouldUpdateDayPhase = animated || clockSource.owner === 'server' || forcedDayPhase != null;
+    // Grade blending must track the transition band LIVE in both directions —
+    // in deep_space the whole inbound dive (blend 1→0) happens before the
+    // enter-warp even starts, so the phase flag alone can't gate it. The band
+    // is transient, so forcing the day-phase recompute inside it is cheap even
+    // on static tiers.
+    const spaceBlend = atmosphereSpaceBlend(
+      planetLocalCameraRadius(
+        camera.position,
+        getSystemFlightSnapshot().renderOrigin,
+        activePlanetSystemPosition
+      ),
+      NOMINAL_PLANET_FACE_RADIUS
+    );
+    const needsGradeBlend = inSpace ? spaceBlend < 1 : spaceBlend > 0;
+    const shouldUpdateDayPhase = animated
+      || clockSource.owner === 'server'
+      || forcedDayPhase != null
+      || needsGradeBlend;
 
-    // Deep space: always-on space backdrop, atmosphere/fog collapsed, steady key
-    // light — held regardless of the day cycle AND regardless of animatedShaders.
-    // The boundary effect above already applied it; the (static) values don't
-    // change per frame, so non-animated profiles need no per-frame work, and
-    // animated profiles only need a cheap re-assert to win over any stale state.
-    if (inSpace) {
+    // Settled deep space: always-on space backdrop, atmosphere/fog collapsed,
+    // steady key light — held regardless of the day cycle AND regardless of
+    // animatedShaders. The boundary effect above already applied it; the
+    // (static) values don't change per frame, so non-animated profiles need no
+    // per-frame work, and animated profiles only need a cheap re-assert to win
+    // over any stale state.
+    if (inSpace && !needsGradeBlend) {
       if (!animated) return;
       applySpaceMode(sunLight, moonLight, ambient, fog);
       return;
@@ -384,6 +465,7 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
     const realityFog = realityFogScale();
     fog.color.lerp(fogBiome.tint, FOG_BIOME_MIX * realityFog.chroma * (0.45 + 0.55 * r.daylight));
     fog.density = fogDensityForPhase(phase) * fogBiome.densityMul * realityFog.densityMul;
+    applyAtmosphereSpaceGrade(sunLight, moonLight, ambient, fog, spaceBlend);
     baseFogColor.current.copy(fog.color);
     baseFogDensity.current = fog.density;
     applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
@@ -391,7 +473,10 @@ export default function SkyController({ terrainSeed = 0, worldId }: SkyControlle
 
   return (
     <>
-      <SpaceSky terrainSeed={terrainSeed} />
+      <SpaceSky
+        terrainSeed={terrainSeed}
+        activePlanetSystemPosition={activePlanetSystemPosition}
+      />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />
       <directionalLight ref={moonLightRef} castShadow={false} intensity={0} />
       <ambientLight ref={ambientRef} intensity={0.5} />

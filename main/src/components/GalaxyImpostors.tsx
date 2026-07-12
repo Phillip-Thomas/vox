@@ -12,11 +12,35 @@ import {
   previewSurfaceValue
 } from '../utils/worldPreview';
 import { getSpaceFlightSnapshot, setTarget } from '../state/spaceFlight.ts';
-import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
+import {
+  getSystemFlightSnapshot,
+  type SystemVectorTuple
+} from '../state/systemFlight.ts';
+import {
+  atmosphereSpaceBlend,
+  planetLocalCameraRadius
+} from '../game/atmosphereSpace.ts';
+import { NOMINAL_PLANET_FACE_RADIUS } from '../game/starSystem.ts';
+import {
+  REMOTE_SYSTEM_BASE_DISTANCE,
+  REMOTE_SYSTEM_DISTANCE_JITTER,
+  REMOTE_SYSTEM_DISTANCE_PER_GRID,
+  REMOTE_SYSTEM_ATMOSPHERE_RINGS,
+  REMOTE_SYSTEM_ATMOSPHERE_SEGMENTS,
+  REMOTE_SYSTEM_CLOUD_DETAIL,
+  REMOTE_SYSTEM_MAX_VISIBLE_MARKERS,
+  REMOTE_SYSTEM_RADIUS_JITTER,
+  REMOTE_SYSTEM_RADIUS_MAX,
+  REMOTE_SYSTEM_RADIUS_MIN,
+  REMOTE_SYSTEM_RING_SCALE,
+  REMOTE_SYSTEM_RING_SEGMENTS,
+  REMOTE_SYSTEM_SURFACE_DETAIL
+} from '../game/celestialRenderScale.ts';
 
 interface GalaxyImpostorsProps {
   currentCoordinate: WorldCoordinate;
   planetSize: number;
+  activePlanetSystemPosition: SystemVectorTuple;
 }
 
 interface PlanetImpostor {
@@ -34,12 +58,27 @@ interface PlanetImpostor {
 
 const GRID_RADIUS = 8;
 const INNER_GRID_RADIUS = 2.85;
-const MAX_VISIBLE_WORLDS = 32;
-const BASE_DISTANCE = 2400;
-const DISTANCE_PER_GRID = 280;
-const DISTANCE_JITTER = 180;
+// Remote coordinates are unresolved STAR-SYSTEM markers, not local planets.
+// Their entire silhouette (including rings) stays below 0.5 degrees and their
+// render band sits behind the widest possible local companion pair. Canonical
+// direct-flight positions are a later sector-streaming concern; this bounded
+// background representation must never pretend to be a nearby physical body.
 const MIN_ELEVATION = 0.08;
 const MAX_ELEVATION = 0.44;
+
+// Target opacity starts late in the atmospheric thinning, then frame-rate-
+// independent damping turns even a max-speed crossing into a soft reveal.
+const IMPOSTOR_REVEAL_START_BLEND = 0.78;
+const IMPOSTOR_REVEAL_DAMPING = 8;
+
+function impostorReveal(spaceBlend: number): number {
+  const t = THREE.MathUtils.clamp(
+    (spaceBlend - IMPOSTOR_REVEAL_START_BLEND) / (1 - IMPOSTOR_REVEAL_START_BLEND),
+    0,
+    1
+  );
+  return t * t * (3 - 2 * t);
+}
 
 const COLOR_SCRATCH = new THREE.Color();
 const LIGHT_DIRECTION = new THREE.Vector3(-0.35, 0.78, 0.5).normalize();
@@ -146,7 +185,7 @@ function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImposto
   const optional = candidates
     .filter(candidate => !candidate.required)
     .sort((a, b) => b.priority - a.priority || a.gridDistance - b.gridDistance)
-    .slice(0, Math.max(0, MAX_VISIBLE_WORLDS - required.length));
+    .slice(0, Math.max(0, REMOTE_SYSTEM_MAX_VISIBLE_MARKERS - required.length));
 
   return [...required, ...optional]
     .sort((a, b) => a.gridDistance - b.gridDistance || a.seed - b.seed)
@@ -154,9 +193,9 @@ function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImposto
       const angleJitter = (seededUnit(candidate.seed, 11) - 0.5) * 0.16;
       const azimuth = Math.atan2(candidate.dy, candidate.dx) + angleJitter;
       const elevation = MIN_ELEVATION + seededUnit(candidate.seed, 17) * (MAX_ELEVATION - MIN_ELEVATION);
-      const distance = BASE_DISTANCE +
-        candidate.gridDistance * DISTANCE_PER_GRID +
-        seededUnit(candidate.seed, 23) * DISTANCE_JITTER;
+      const distance = REMOTE_SYSTEM_BASE_DISTANCE +
+        candidate.gridDistance * REMOTE_SYSTEM_DISTANCE_PER_GRID +
+        seededUnit(candidate.seed, 23) * REMOTE_SYSTEM_DISTANCE_JITTER;
       const horizontal = Math.cos(elevation) * distance;
       const position = new THREE.Vector3(
         Math.cos(azimuth) * horizontal,
@@ -165,7 +204,11 @@ function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImposto
       );
 
       const nearFactor = THREE.MathUtils.clamp(1 - candidate.gridDistance / GRID_RADIUS, 0, 1);
-      const radius = THREE.MathUtils.lerp(12, 42, nearFactor) + seededUnit(candidate.seed, 29) * 7;
+      const radius = THREE.MathUtils.lerp(
+        REMOTE_SYSTEM_RADIUS_MIN,
+        REMOTE_SYSTEM_RADIUS_MAX,
+        nearFactor
+      ) + seededUnit(candidate.seed, 29) * REMOTE_SYSTEM_RADIUS_JITTER;
       const ringTilt = 0.35 + seededUnit(candidate.seed, 53) * 0.85;
       const traits = deriveWorldPreviewTraits(candidate.seed);
 
@@ -187,13 +230,19 @@ function buildPlanetImpostors(currentCoordinate: WorldCoordinate): PlanetImposto
           azimuth,
           Math.sin(azimuth) * ringTilt
         ),
-        ringScale: new THREE.Vector3(radius * 2.2, radius * 2.2, radius * 2.2)
+        ringScale: new THREE.Vector3(
+          radius * REMOTE_SYSTEM_RING_SCALE,
+          radius * REMOTE_SYSTEM_RING_SCALE,
+          radius * REMOTE_SYSTEM_RING_SCALE
+        )
       };
     });
 }
 
 function createPlanetSurfaceGeometry(planet: PlanetImpostor) {
-  const geometry = new THREE.IcosahedronGeometry(1, 4);
+  // The marker is <0.5deg including its ring. Detail 2 already oversamples its
+  // framebuffer footprint while avoiding ~4,800 invisible triangles per system.
+  const geometry = new THREE.IcosahedronGeometry(1, REMOTE_SYSTEM_SURFACE_DETAIL);
   const position = geometry.getAttribute('position');
   const colors = new Float32Array(position.count * 3);
   const normal = new THREE.Vector3();
@@ -237,7 +286,8 @@ function DistantPlanet({
   cloudGeometry,
   atmosphereGeometry,
   ringGeometry,
-  targetedCoordRef
+  targetedCoordRef,
+  revealRef
 }: {
   planet: PlanetImpostor;
   surfaceMaterial: THREE.Material;
@@ -247,10 +297,14 @@ function DistantPlanet({
   ringGeometry: THREE.BufferGeometry;
   /** Live coordinate of the impostor currently locked (null = none). */
   targetedCoordRef: React.MutableRefObject<WorldCoordinate | null>;
+  revealRef: React.MutableRefObject<number>;
 }) {
   const surfaceGeometry = useMemo(() => createPlanetSurfaceGeometry(planet), [planet]);
   const groupRef = useRef<THREE.Group>(null);
   const lockRef = useRef<THREE.Mesh>(null);
+  const cloudMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const atmosphereMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
+  const ringMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
   // Smoothly-eased lock factor (0 = idle, 1 = fully locked) for scale + ring.
   const lockT = useRef(0);
 
@@ -267,19 +321,21 @@ function DistantPlanet({
       tc !== null && tc.x === planet.coordinate.x && tc.y === planet.coordinate.y;
     // Ease toward the target lock state (cheap, no allocation).
     lockT.current = THREE.MathUtils.damp(lockT.current, isTargeted ? 1 : 0, 8, dt);
-    // Grow the planet slightly when locked: reads as "locking on / closing in".
-    const scale = planet.radius * (1 + 0.18 * lockT.current);
-    grp.scale.setScalar(scale);
+    // Lock feedback belongs to the reticle. Growing the body would falsely read
+    // as closing distance to a camera-anchored remote marker.
+    grp.scale.setScalar(planet.radius);
+    const reveal = revealRef.current;
+    if (cloudMaterialRef.current) cloudMaterialRef.current.opacity = 0.055 * reveal;
+    if (atmosphereMaterialRef.current) atmosphereMaterialRef.current.opacity = 0.06 * reveal;
+    if (ringMaterialRef.current) ringMaterialRef.current.opacity = 0.34 * reveal;
     const lock = lockRef.current;
     if (lock) {
       lock.visible = lockT.current > 0.01;
       if (lock.visible) {
         // Pulse the ring opacity while locked.
         const pulse = 0.55 + 0.45 * Math.sin(performance.now() * 0.006);
-        (lock.material as THREE.MeshBasicMaterial).opacity = lockT.current * pulse;
-        // Ring sized in local (pre-scale) units relative to the planet sphere.
-        const ringScale = (1.6 + 0.25 * lockT.current) / scale * planet.radius;
-        lock.scale.setScalar(ringScale);
+        (lock.material as THREE.MeshBasicMaterial).opacity = lockT.current * pulse * reveal;
+        lock.scale.setScalar(1.6 + 0.25 * lockT.current);
         // Billboard the ring to face the camera (counter the parent's random tilt).
         lock.quaternion.copy(camera.quaternion);
         lock.quaternion.premultiply(grp.getWorldQuaternion(BILLBOARD_SCRATCH).invert());
@@ -310,9 +366,10 @@ function DistantPlanet({
       <mesh geometry={surfaceGeometry} material={surfaceMaterial} frustumCulled={false} />
       <mesh geometry={cloudGeometry} scale={1.022} frustumCulled={false}>
         <meshBasicMaterial
+          ref={cloudMaterialRef}
           color={planet.traits.cloudColor}
           transparent
-          opacity={0.055}
+          opacity={0}
           depthWrite={false}
           fog={false}
           toneMapped={false}
@@ -320,9 +377,10 @@ function DistantPlanet({
       </mesh>
       <mesh geometry={atmosphereGeometry} scale={1.08} frustumCulled={false}>
         <meshBasicMaterial
+          ref={atmosphereMaterialRef}
           color={planet.traits.atmosphereColor}
           transparent
-          opacity={0.06}
+          opacity={0}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.BackSide}
@@ -340,9 +398,10 @@ function DistantPlanet({
           frustumCulled={false}
         >
           <meshBasicMaterial
+            ref={ringMaterialRef}
             color={planet.ringColor}
             transparent
-            opacity={0.34}
+            opacity={0}
             side={THREE.DoubleSide}
             depthWrite={false}
             fog={false}
@@ -354,23 +413,47 @@ function DistantPlanet({
   );
 }
 
-export default function GalaxyImpostors({ currentCoordinate, planetSize }: GalaxyImpostorsProps) {
+export default function GalaxyImpostors({
+  currentCoordinate,
+  planetSize,
+  activePlanetSystemPosition
+}: GalaxyImpostorsProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const revealRef = useRef(0);
 
   const planets = useMemo(
     () => buildPlanetImpostors(currentCoordinate),
     [currentCoordinate.x, currentCoordinate.y]
   );
 
-  const cloudGeometry = useMemo(() => new THREE.IcosahedronGeometry(1, 2), []);
-  const atmosphereGeometry = useMemo(() => new THREE.SphereGeometry(1, 24, 12), []);
-  const ringGeometry = useMemo(() => new THREE.RingGeometry(0.74, 1.05, 72), []);
+  const cloudGeometry = useMemo(
+    () => new THREE.IcosahedronGeometry(1, REMOTE_SYSTEM_CLOUD_DETAIL),
+    []
+  );
+  const atmosphereGeometry = useMemo(() => new THREE.SphereGeometry(
+    1,
+    REMOTE_SYSTEM_ATMOSPHERE_SEGMENTS,
+    REMOTE_SYSTEM_ATMOSPHERE_RINGS
+  ), []);
+  const ringGeometry = useMemo(
+    () => new THREE.RingGeometry(0.74, 1.05, REMOTE_SYSTEM_RING_SEGMENTS),
+    []
+  );
   // Thin reticle ring for the aim-lock highlight (unit-radius, scaled per-frame).
-  const lockRingGeometry = useMemo(() => new THREE.RingGeometry(0.92, 1.0, 64), []);
+  const lockRingGeometry = useMemo(
+    () => new THREE.RingGeometry(0.92, 1.0, REMOTE_SYSTEM_RING_SEGMENTS),
+    []
+  );
   const surfaceMaterial = useMemo(() => new THREE.MeshBasicMaterial({
     vertexColors: true,
     fog: false,
-    toneMapped: false
+    toneMapped: false,
+    // Transparent so the whole layer can fade with the atmosphere→space blend;
+    // depth testing keeps local bodies in front while disabled writes avoid a
+    // partly faded marker occluding another remote system.
+    transparent: true,
+    opacity: 0,
+    depthWrite: false
   }), []);
 
   // Live coordinate of the impostor currently aimed at (read by each impostor's
@@ -379,12 +462,38 @@ export default function GalaxyImpostors({ currentCoordinate, planetSize }: Galax
   // Reused scratch for the camera-forward direction (no per-frame allocation).
   const forwardScratch = useRef(new THREE.Vector3());
 
-  useFrame(({ camera }) => {
-    groupRef.current?.position.copy(camera.position);
+  useFrame(({ camera }, rawDt) => {
+    const group = groupRef.current;
+    group?.position.copy(camera.position);
 
-    // --- aim-cone targeting (deep_space only) -------------------------------
-    const localBodyOwnsAim = getSystemFlightSnapshot().target?.kind === 'system_body';
-    if (getSpaceFlightSnapshot().phase !== 'deep_space' || localBodyOwnsAim) {
+    const flight = getSystemFlightSnapshot();
+    const targetReveal = impostorReveal(
+      atmosphereSpaceBlend(
+        planetLocalCameraRadius(
+          camera.position,
+          flight.renderOrigin,
+          activePlanetSystemPosition
+        ),
+        NOMINAL_PLANET_FACE_RADIUS
+      )
+    );
+    const reveal = THREE.MathUtils.damp(
+      revealRef.current,
+      targetReveal,
+      IMPOSTOR_REVEAL_DAMPING,
+      Math.min(rawDt, 0.05)
+    );
+    revealRef.current = targetReveal === 0 && reveal < 0.001
+      ? 0
+      : targetReveal === 1 && reveal > 0.999
+        ? 1
+        : reveal;
+    if (group) group.visible = reveal > 0.002;
+    surfaceMaterial.opacity = reveal;
+
+    // --- aim-cone targeting (deep_space only, once the layer is revealed) ----
+    const localBodyOwnsAim = flight.target?.kind === 'system_body';
+    if (getSpaceFlightSnapshot().phase !== 'deep_space' || localBodyOwnsAim || reveal < 0.97) {
       if (targetedCoordRef.current !== null) {
         targetedCoordRef.current = null;
         setTarget(null);
@@ -445,7 +554,7 @@ export default function GalaxyImpostors({ currentCoordinate, planetSize }: Galax
   ]);
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} visible={false}>
       {planets.map(planet => (
         <DistantPlanet
           key={`${planet.coordinate.x},${planet.coordinate.y}`}
@@ -456,6 +565,7 @@ export default function GalaxyImpostors({ currentCoordinate, planetSize }: Galax
           atmosphereGeometry={atmosphereGeometry}
           ringGeometry={ringGeometry}
           targetedCoordRef={targetedCoordRef}
+          revealRef={revealRef}
         />
       ))}
     </group>

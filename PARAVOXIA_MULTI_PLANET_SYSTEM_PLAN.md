@@ -1,6 +1,6 @@
 # Paravoxia Multi-Planet Star System Plan
 
-Status: **PLAYABLE SINGLE-PLAYER SYSTEM TRAVEL IMPLEMENTED - VISUAL HANDOFF POLISHED, RELEASE PERFORMANCE GATE OPEN**
+Status: **PLAYABLE SINGLE-PLAYER SYSTEM TRAVEL IMPLEMENTED - LAUNCH CONTINUITY AND CELESTIAL SCALE POLISHED, RELEASE PERFORMANCE GATE OPEN**
 
 Owner request: some galaxy coordinates should contain multiple planets. A player
 must be able to launch from one, fly through real continuous system space, see the
@@ -53,6 +53,16 @@ system population (with `?systemBodies=0|1|2|3` overrides for comparison):
   painted after the new terrain mesh reports populated;
 - offline persistence records the last canonical planet while retaining the
   legacy `lastWorld` fallback.
+- atmosphere entry/exit now uses one canonical altitude frame and a continuous
+  100-to-150-unit visual blend. The sky is camera-centered and depthless at every
+  altitude, companions remain on their true bearing with invariant angular size,
+  and `enter`/`leave` use a translucent exposure wash instead of interstellar
+  radial streaks. Only actual `travel` communicates forward hyperspace motion;
+- remote coordinates now read as unresolved star-system markers behind the full
+  local-system envelope. Their entire silhouette including rings is under 0.5
+  degrees, more than 3x smaller than the most distant local companion, and their
+  screen-appropriate proxy tier is bounded to 22,608 triangles instead of the old
+  roughly 196k worst-case tier. Target lock animates the reticle, never body scale.
 
 Current evidence on HIGH at `1440x900`, system `-19,-17`:
 
@@ -70,7 +80,12 @@ Current evidence on HIGH at `1440x900`, system `-19,-17`:
   the destination already active and the veil held for renderer readiness;
 - no browser, React-depth, black-frame, loading-screen, interstellar-warp, or
   party-warp error was observed in the route probe;
-- final `npm run verify` passes with 983/983 client tests and 43/43 source server
+- a deterministic atmosphere-exit capture held the same local companion at
+  25.327-to-25.422 projected-bound pixels from atmosphere through the `leave`
+  midpoint into settled space (0.095 px total range, below the 2 px gate), with
+  only physical parallax, no phase snap, no outward streaks, and nonblank
+  `1440x900` frames at blend 0.352, 0.938, and 1.0;
+- final verification passes with 1,001/1,001 client tests and 43/43 source server
   tests, both TypeScript builds, and the production Vite bundle;
 
 This is not yet the release gate. Batching removed the former 59 ms exact-shell
@@ -900,9 +915,22 @@ Gate:
 - [ ] Generate and align the source macro before demotion; transfer image ownership
       to it before unmounting source terrain or colliders.
 - [ ] Execute every body change through the atomic activation epoch/lease.
-- [ ] Blend nearest-atmosphere sky/fog/grade/audio continuously.
-- [ ] Replace the current origin-centered/camera-centered `SpaceSky` geometry jump
+- [~] Blend nearest-atmosphere sky/fog/grade/audio continuously. Sky (dome
+      daylight→cosmos), fog, and light grade now blend on the shared altitude
+      signal (`src/game/atmosphereSpace.ts`, alt 100→150) on every tier; static
+      tiers temporarily recompute only while inside that band. Audio remains open.
+- [x] Replace the current origin-centered/camera-centered `SpaceSky` geometry jump
       with a unified camera-centered environment or a measured dual-dome handoff.
+      Done as a unified camera-centered environment: the dome is a true skybox at
+      every altitude (camera-centered, depthless — `depthWrite`/`depthTest` off,
+      drawn first at renderOrder -1000), so there is NO sky geometry motion at
+      all; only the shader's day factor fades on the shared altitude signal.
+      Companion bodies ride the same signal (`companionCelestialPlacement`):
+      true view ray + exactly invariant angular silhouette at every blend value,
+      only depth slides. Remote-system markers live in a dedicated background
+      band (`celestialRenderScale.ts`, ~10,500-14,760u, camera far 20,000) with a
+      provable angular hierarchy below the smallest local companion, and fade in
+      over the top of the blend band with frame-rate-independent damping.
 - [x] Add cruise assist/deceleration without teleportation.
 - [ ] Land on target and return A -> B -> A with edits preserved.
 
@@ -1041,7 +1069,7 @@ fungal, volcanic, and sparse systems.
 | Packed output is regenerated during hydration | critical | direct hydration contracts and feature-span probe |
 | Stale async target takes ownership | critical | activation epoch/lease on worker, network, and runtime results |
 | Proxy shape visibly morphs | high | actual cuboid terrain macro, projected-pixel handoff gate |
-| Surface sky dome hides siblings | high | dedicated P1 depth/occultation spike and screenshots |
+| Surface sky dome hides siblings | high | camera-centered depthless background, canonical companion placement, maximum-pair depth test, launch screenshots |
 | GPU upload or shader compile hitch | high | paced upload, committed-target precompile, macro retained until ready |
 | Server accepts wrong-body commands | high | explicit body authority and cross-planet rejection tests |
 | Primary saves/seed change | high | slot-0 fixture lock over large coordinate sample |
@@ -1084,7 +1112,13 @@ Resume at the **P3/P4 activation-performance gate**, not P0:
 5. lift Physics and ShipController above the keyed active-planet runtime so cruise
    can hold zero full worlds rather than restoring pose across a remount;
 6. run A -> B -> A with terrain, water, tree, and structure edits plus ten-trip heap
-   soak evidence before enabling system travel for multiplayer.
+   soak evidence before enabling system travel for multiplayer;
+7. for direct flight beyond the local system, replace camera-anchored remote
+   markers with reciprocal deterministic galactic cell positions, a float64
+   sector/local ship pose, and a floating render origin. Feed projected pixel
+   size into `planetResidency.ts` for `point -> sky_proxy -> macro -> exact ->
+   active_surface` promotion; reuse the existing ready-gated handoff only for
+   representation ownership, never for canonical ship motion.
 
 Reproduce the implemented route with:
 

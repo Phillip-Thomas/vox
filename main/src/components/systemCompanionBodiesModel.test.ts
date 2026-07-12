@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildCompanionBodyModels,
+  companionCelestialPlacement,
   companionExactShellBlend,
   companionExactShellDrawCount,
   companionExactShellTriangleCount,
@@ -8,7 +9,9 @@ import {
   companionVisualBudget,
   createCompanionSurfaceGeometry,
   EXACT_TERRAIN_BATCH_SIZE,
-  EXACT_WATER_BATCH_SIZE
+  EXACT_WATER_BATCH_SIZE,
+  SURFACE_SKY_EXIT_FRACTION,
+  SURFACE_SKY_PREFERRED_DISTANCE
 } from './systemCompanionBodiesModel.ts';
 
 describe('system companion body model', () => {
@@ -89,6 +92,74 @@ describe('system companion body model', () => {
     expect(companionExactTerrainFaceCount(instanceData, 3)).toBe(9);
     expect(companionExactShellDrawCount(100_000, 9_569)).toBe(4);
     expect(companionExactShellTriangleCount(100_000, 9_569)).toBeLessThan(220_000);
+  });
+
+  it('places bodies exactly like the legacy sky-dome surrogate at blend 0', () => {
+    const base = {
+      physicalDistance: 2_400,
+      skyExitDistance: 120,
+      unitSurfaceBoundRadius: Math.sqrt(3),
+      nominalFaceRadius: 50,
+      horizonExtinction: 0.6
+    };
+    const placement = companionCelestialPlacement({ ...base, spaceBlend: 0 });
+    const expectedDistance = Math.min(
+      SURFACE_SKY_PREFERRED_DISTANCE,
+      base.skyExitDistance * SURFACE_SKY_EXIT_FRACTION
+    );
+    expect(placement.centerDistance).toBeCloseTo(expectedDistance, 6);
+    expect(placement.scale).toBeCloseTo(
+      expectedDistance * base.nominalFaceRadius / base.physicalDistance,
+      6
+    );
+    expect(placement.visibility).toBeCloseTo(base.horizonExtinction, 6);
+  });
+
+  it('converges to the exact physical placement at blend 1', () => {
+    const placement = companionCelestialPlacement({
+      physicalDistance: 3_600,
+      skyExitDistance: 8,
+      spaceBlend: 1,
+      nominalFaceRadius: 50,
+      horizonExtinction: 0
+    });
+    expect(placement.centerDistance).toBe(3_600);
+    expect(placement.scale).toBe(50);
+    expect(placement.visibility).toBe(1);
+  });
+
+  it('slides depth monotonically and exactly preserves angular size mid-blend', () => {
+    const base = {
+      physicalDistance: 2_200,
+      skyExitDistance: 58,
+      unitSurfaceBoundRadius: Math.sqrt(3),
+      nominalFaceRadius: 50,
+      horizonExtinction: 1
+    };
+    const trueAngular = base.nominalFaceRadius
+      * base.unitSurfaceBoundRadius
+      / base.physicalDistance;
+    let previousDistance = 0;
+    for (let step = 0; step <= 10; step++) {
+      const placement = companionCelestialPlacement({ ...base, spaceBlend: step / 10 });
+      expect(placement.centerDistance).toBeGreaterThanOrEqual(previousDistance);
+      previousDistance = placement.centerDistance;
+      // Depth changes, the silhouette does not.
+      const apparentAngular =
+        placement.scale * base.unitSurfaceBoundRadius / placement.centerDistance;
+      expect(apparentAngular).toBeCloseTo(trueAngular, 10);
+    }
+  });
+
+  it('never collapses the surrogate to the camera when the sky exit closes', () => {
+    const placement = companionCelestialPlacement({
+      physicalDistance: 2_200,
+      skyExitDistance: 0,
+      spaceBlend: 0.4,
+      nominalFaceRadius: 50,
+      horizonExtinction: 1
+    });
+    expect(placement.centerDistance).toBeGreaterThan(1);
   });
 
   it('builds finite colored dominant-face geometry rather than a sphere', () => {

@@ -337,6 +337,20 @@ export const ERA_FADE_WIDTH = 0.12;
 /** Paradox fold-back: chip voices return as texture at this level (owner ruling #5). */
 export const CHIP_FOLDBACK_LEVEL = 0.3;
 
+// --- Shared world-signal → score map (§5) ------------------------------------------------------
+
+/** Palette brightness proxy shared by live wiring and controlled offline evidence. */
+export const PALETTE_BRIGHT_BASE = 0.3;
+export const PALETTE_BRIGHT_TEMPERATURE = 0.4;
+export const PALETTE_BRIGHT_SATURATION = 0.3;
+/** Celestial and depth contributions to the continuous warmth/wonder rails. */
+export const DAYLIGHT_WARMTH_SCALE = 0.85;
+export const DAYLIGHT_WARMTH_FLOOR = 0.1;
+export const NIGHT_WONDER_SCALE = 0.55;
+export const SPACE_WONDER_LIFT = 0.5;
+export const SUBMERGENCE_WONDER_LIFT = 0.35;
+export const WONDER_FLOOR = 0.15;
+
 // --- Period-authentic era rungs (§8.5, P5) --------------------------------------------------------
 
 /**
@@ -344,6 +358,19 @@ export const CHIP_FOLDBACK_LEVEL = 0.3;
  * this fraction of its level (one PSG voice at a time — 1-bit soul).
  */
 export const CHIP_MONO_DUCK = 0;
+/** Story-score PSG channel budgets before material synthesis unlocks. */
+export const SCORE_BARE_PULSE_VOICE_CAP = 1;
+export const SCORE_COLOR_PULSE_VOICE_CAP = 2;
+export const SCORE_NO_VOICE_CAP = 0;
+export const SCORE_BARE_TRIANGLE_VOICE_CAP = 0;
+export const SCORE_COLOR_TRIANGLE_VOICE_CAP = 1;
+/** Shared hit-palette voice ceilings at each era rung. */
+export const HIT_BARE_UPPER_VOICE_CAP = 0;
+export const HIT_COLOR_UPPER_VOICE_CAP = 0;
+export const HIT_MATERIAL_UPPER_VOICE_CAP = 4;
+export const HIT_ALIVE_UPPER_VOICE_CAP = 4;
+export const HIT_BARE_MAX_PITCHED_VOICES = 0;
+export const HIT_COLOR_MAX_PITCHED_VOICES = 0;
 /** NES vibrato (unlocks at `color`): rate and depth of the chip-lead pitch LFO. */
 export const CHIP_VIBRATO_HZ = 5.5;
 export const CHIP_VIBRATO_CENTS = 12;

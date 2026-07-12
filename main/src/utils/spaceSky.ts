@@ -25,10 +25,11 @@ import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 // Night is preserved: at uDay=0 the dim star layers + nebula are at full strength
 // (dayKnock=1) and an early-out returns the pure cosmos with no scattering ALU.
 //
-// Material is now OPAQUE (transparent:false, depthWrite:true) — it is the opaque
-// backdrop. renderOrder=-1000 draws it first; depthTest=true keeps the planet
-// occluding the lower hemisphere. toneMapped stays true so the authored-low
-// linear in-scatter gets the same ACES curve as the rest of the scene.
+// Material is opaque but depthless: renderOrder=-1000 draws it first and all
+// terrain/celestial content paints over it. This makes the dome a true background
+// instead of a finite far wall that can clip a physically distant local planet.
+// toneMapped stays true so the authored-low linear in-scatter gets the same ACES
+// curve as the rest of the scene.
 
 export const SPACE_DOME_RADIUS = 220;
 export const SPACE_DOME_RENDER_ORDER = -1000;
@@ -562,9 +563,9 @@ export function createSpaceSkyMaterial(): THREE.ShaderMaterial {
     vertexShader: VERT,
     fragmentShader: FRAG,
     side: THREE.BackSide,
-    depthWrite: true,       // opaque backdrop now: writes depth so it is the far wall
-    depthTest: true,        // occluded by the opaque planet, shows in open sky
-    transparent: false,     // opaque pass; renderOrder -1000 draws it first
+    depthWrite: false,      // true background: never occludes local celestial content
+    depthTest: false,       // renderOrder -1000 draws it before all scene geometry
+    transparent: false,
     fog: false
     // toneMapped left at default (true) so ACES applies to the authored-low values.
   });

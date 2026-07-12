@@ -225,9 +225,9 @@ export function beginTravel(dest: WorldCoordinate): void {
 }
 
 /**
- * Begin the short "mini warp" that masks the deep-space ⇄ atmosphere sky change.
- * No world swap — the phase flips (enter/leaveAtmosphere) at the white-out
- * midpoint, hidden by the flash. 'enter' from deep_space → descent; 'leave' from
+ * Begin the short atmospheric transition veil. No world swap: the continuous
+ * altitude blend already keeps the sky and local bodies stable while the phase
+ * flips at the veil midpoint. 'enter' from deep_space → descent; 'leave' from
  * descent → deep_space.
  */
 export function beginAtmosphereWarp(dir: 'enter' | 'leave'): void {
@@ -391,10 +391,10 @@ export function tickWarp(dt: number, timestampMs = currentTimeMs()): void {
       setSnapshot({ phase: 'deep_space', controlMode: 'flight' });
       markWarpMetric('travel:deep_space_snapshot_set');
     } else if (warp.kind === 'enter') {
-      // Mini warp masking the space -> atmosphere sky change.
+      // Atmospheric veil midpoint; celestial visuals already follow altitude.
       enterAtmosphere();
     } else if (warp.kind === 'leave') {
-      // Mini warp masking the atmosphere -> space sky change.
+      // Atmospheric veil midpoint; celestial visuals already follow altitude.
       leaveAtmosphere();
     } else {
       warp.progress = 0.5;

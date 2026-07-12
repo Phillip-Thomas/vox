@@ -246,6 +246,18 @@ imaging. Bare and color deliberately remain period-authentic chip rungs —
 monophonic PSG/noise at bare, NES pulse/pulse/triangle/noise at color — and
 streamed loop assets remain present but demoted.
 
+Final release evidence on the landed tree: both tsconfigs clean; `129` vitest
+files / `985` tests green; production build green; the three-planet `32 min`
+pure battery green with bit-identical replays; and the real browser `32 min`
+soak green. In that browser soak the complete composed mix peaked at `0.558`
+with zero NaNs, clips, or silent windows, while its separate full-duration
+persistent-control mirror measured `3.72 dB / 0 violations`. All six owner
+excerpts and all sixteen controlled A/B WAVs were regenerated and passed (A/B
+delta RMS range `0.00412..0.09743`). The default FPS gate uses an actual
+SwiftShader WebGL renderer and the live material-era `a3-dawn` score at full
+intensity: median `60.39 fps`, p10 `60.36 fps`, score/baseline `1.000`, audio
+context running, score authority confirmed.
+
 ## 4. Contracts that must not break
 
 - `setScoreBeat`/`setScoreIntensity`/`scoreHit`/`unlockStoryScore` signatures

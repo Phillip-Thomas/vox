@@ -32,6 +32,11 @@ import {
   type SystemVectorTuple
 } from '../state/systemFlight.ts';
 import type { SystemCoordinate } from '../game/starSystem.ts';
+import {
+  ATMOS_ENTER_ALTITUDE,
+  ATMOS_LEAVE_ALTITUDE
+} from '../game/atmosphereSpace.ts';
+import { LOCAL_SYSTEM_FLIGHT_CAMERA_FAR } from '../game/celestialRenderScale.ts';
 import { coordinateKey } from '../utils/worldCoordinates.ts';
 import {
   getSystemTravelAssistTarget,
@@ -68,9 +73,11 @@ const LANDING_MAX_DURATION = 4.0;
  *  You cross into atmosphere well ABOVE the surface (≈2 planet-radii up) so the
  *  approach reads as entering a planet's airspace, not skimming its crust. Flying
  *  DOWN past ATMOS_ENTER enters the atmosphere; climbing UP past ATMOS_LEAVE
- *  reaches space. The gap is hysteresis so the phase can't flap at the boundary. */
-const ATMOS_ENTER = 100;
-const ATMOS_LEAVE = 135;
+ *  reaches space. The gap is hysteresis so the phase can't flap at the boundary.
+ *  Shared with the celestial atmosphere→space blend so the visual band and the
+ *  phase machine can never drift apart. */
+const ATMOS_ENTER = ATMOS_ENTER_ALTITUDE;
+const ATMOS_LEAVE = ATMOS_LEAVE_ALTITUDE;
 /** Launch (Space) ascension: how far off the ground it lifts, and over how long. */
 const LAUNCH_RISE = 34;
 const LAUNCH_DURATION = 1.4;
@@ -116,6 +123,7 @@ declare global {
   interface Window {
     __paravoxiaShipProbe?: {
       injectLookDelta(yawRadians: number, pitchRadians: number): void;
+      setLocalPosition(x: number, y: number, z: number): void;
     };
   }
 }
@@ -138,8 +146,9 @@ interface ShipControllerProps {
 /**
  * First-person 6-DOF spaceship flight controller.
  *
- * Owns its OWN makeDefault camera (far=8000 so the ~2400u impostors stay
- * visible, near=1 reclaims depth precision off-surface). No Rapier rigidbody:
+ * Owns its OWN makeDefault camera. Its shared local-system depth budget covers
+ * the widest companion pair plus the remote-system background band; near=1
+ * reclaims depth precision off-surface. No Rapier rigidbody:
  * position + velocity are integrated manually in useFrame because physics is
  * only needed on the surface; the only Rapier use is a downward raycast for
  * landing detection over a freshly-arrived world.
@@ -218,6 +227,11 @@ export default function ShipController({
       injectLookDelta(yawRadians: number, pitchRadians: number) {
         if (Number.isFinite(yawRadians)) yawInput.current += yawRadians;
         if (Number.isFinite(pitchRadians)) pitchInput.current += pitchRadians;
+      },
+      setLocalPosition(x: number, y: number, z: number) {
+        if (![x, y, z].every(Number.isFinite)) return;
+        position.current.set(x, y, z);
+        velocity.current.set(0, 0, 0);
       }
     };
     window.__paravoxiaShipProbe = bridge;
@@ -714,9 +728,9 @@ export default function ShipController({
     // seamless continuous flight.
     const ownsActivePlanet = getSystemFlightSnapshot().activePlanetId === activePlanetWorldId;
     if (ownsActivePlanet && snap === 'deep_space' && altitude < ATMOS_ENTER) {
-      beginAtmosphereWarp('enter');  // fly DOWN into atmosphere (mini-warp masks it)
+      beginAtmosphereWarp('enter');  // fly DOWN through the atmospheric exposure veil
     } else if (ownsActivePlanet && snap === 'descent' && altitude > ATMOS_LEAVE) {
-      beginAtmosphereWarp('leave');  // climb OUT to deep space (mini-warp masks it)
+      beginAtmosphereWarp('leave');  // climb OUT through the atmospheric exposure veil
     }
     // surface -> descent happens ONLY via the launch ascension (Space); landing
     // happens ONLY via F. Neither is automatic.
@@ -765,7 +779,7 @@ export default function ShipController({
       makeDefault
       fov={70}
       near={1}
-      far={8000}
+      far={LOCAL_SYSTEM_FLIGHT_CAMERA_FAR}
     >
       <ShipCockpit thrustRef={thrustRef} terrainSeed={terrainSeed} />
     </PerspectiveCamera>

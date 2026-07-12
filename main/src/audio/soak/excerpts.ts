@@ -578,6 +578,7 @@ export interface AudioSoakResult {
   archetype: ArchetypeId;
   bars: number;
   analysis: AudioAnalysis;
+  continuousControlAnalysis: AudioAnalysis;
   report: SoakReport;
   pass: boolean;
 }
@@ -715,13 +716,33 @@ export async function runAudioSoak(
     scenario: 'fullSoak',
     includeStemAuditCarriers: true
   });
+  // The full pass proves the composed mix is finite, unclipped, and never
+  // silent. A second 32-minute pass removes only scheduled note/hit envelopes
+  // and legacy audit-noise carriers, retaining the real persistent bed graph
+  // so short-window RMS measures world/control discontinuities rather than
+  // legal musical attacks. The strict thresholds are unchanged.
+  const continuousControlResult = await renderBedOffline({
+    planetSeed,
+    archetype,
+    seconds,
+    scenario: 'fullSoak',
+    continuousControlAudit: true,
+    driveLegacyMusic: false
+  });
   return {
     minutes,
     planetSeed,
     archetype,
     bars: result.bars,
     analysis: result.analysis,
+    continuousControlAnalysis: continuousControlResult.analysis,
     report: result.report,
-    pass: result.report.pass && audioHealthPass(result.analysis)
+    pass:
+      result.report.pass &&
+      continuousControlResult.report.pass &&
+      result.analysis.nanCount === 0 &&
+      result.analysis.clipCount === 0 &&
+      audioFloorPass(result.analysis) &&
+      audioHealthPass(continuousControlResult.analysis)
   };
 }

@@ -91,6 +91,55 @@ export const EXACT_SHELL_START_DISTANCE = 1_050;
 export const EXACT_TERRAIN_BATCH_SIZE = 5_000;
 export const EXACT_WATER_BATCH_SIZE = 4_096;
 
+/** Legacy surface-sky framing radius retained for stable near-sky proxy depth. */
+export const SURFACE_SKY_INNER_RADIUS = 208;
+export const SURFACE_SKY_PREFERRED_DISTANCE = 138;
+export const SURFACE_SKY_EXIT_FRACTION = 0.78;
+
+export interface CompanionCelestialPlacementInput {
+  /** True camera → body-center distance in render units. */
+  physicalDistance: number;
+  /** Ray exit distance through the legacy surface-sky framing sphere. */
+  skyExitDistance: number;
+  /** atmosphereSpaceBlend: 0 = sky-dome surrogate, 1 = physical placement. */
+  spaceBlend: number;
+  nominalFaceRadius: number;
+  /** Horizon extinction fade (0..1) that applies in pure surrogate mode. */
+  horizonExtinction: number;
+}
+
+export interface CompanionCelestialPlacement {
+  /** Body-center distance along the TRUE view ray from the camera. */
+  centerDistance: number;
+  scale: number;
+  /** Material visibility (surrogate horizon fade relaxes to 1 in space). */
+  visibility: number;
+}
+
+/**
+ * Places a companion body along its true view direction for any point in the
+ * atmosphere ⇄ space transition. Scale follows center depth at the same ratio,
+ * so the rendered geometry's angular silhouette is EXACTLY invariant while
+ * parallax ramps in. At spaceBlend=1 the result is the physical placement
+ * (centerDistance = physicalDistance, scale = nominalFaceRadius, no horizon fade).
+ *
+ * Pass `out` from a per-frame caller to avoid allocating on every call.
+ */
+export function companionCelestialPlacement(
+  input: CompanionCelestialPlacementInput,
+  out: CompanionCelestialPlacement = { centerDistance: 0, scale: 0, visibility: 0 }
+): CompanionCelestialPlacement {
+  const blend = THREE.MathUtils.clamp(input.spaceBlend, 0, 1);
+  const surrogateDistance = Math.min(
+    SURFACE_SKY_PREFERRED_DISTANCE,
+    Math.max(input.skyExitDistance, 2) * SURFACE_SKY_EXIT_FRACTION
+  );
+  out.centerDistance = THREE.MathUtils.lerp(surrogateDistance, input.physicalDistance, blend);
+  out.scale = out.centerDistance * input.nominalFaceRadius / Math.max(1e-6, input.physicalDistance);
+  out.visibility = THREE.MathUtils.lerp(input.horizonExtinction, 1, blend);
+  return out;
+}
+
 export function companionExactTerrainFaceCount(instanceData: Float32Array, terrainCount: number): number {
   let faces = 0;
   for (let index = 0; index < terrainCount; index++) {

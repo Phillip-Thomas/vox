@@ -6,7 +6,7 @@ import {
   subscribeGraphicsQuality,
   type QualityProfile
 } from '../config/graphicsSettings.ts';
-import type { PlanetSlot, SystemCoordinate } from '../game/starSystem.ts';
+import type { PlanetSlot, SystemCoordinate, Vec3Tuple } from '../game/starSystem.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
 import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
@@ -23,23 +23,47 @@ import {
   type PreparedWorldRenderData
 } from '../utils/worldGenCache.ts';
 import { getSunDirection } from './SkyController.tsx';
+import { atmosphereSpaceBlend } from '../game/atmosphereSpace.ts';
 import {
   buildCompanionBodyModels,
+  companionCelestialPlacement,
   companionExactShellBlend,
   companionExactTerrainFaceCount,
   companionVisualBudget,
   createCompanionCloudGeometry,
   createCompanionSurfaceGeometry,
   EXACT_TERRAIN_BATCH_SIZE,
-  EXACT_WATER_BATCH_SIZE
+  EXACT_WATER_BATCH_SIZE,
+  SURFACE_SKY_INNER_RADIUS
 } from './systemCompanionBodiesModel.ts';
 
 interface SystemCompanionBodiesProps {
   currentCoordinate: SystemCoordinate;
   planetSize: number;
   activePlanetSlot?: PlanetSlot;
+  activePlanetSystemPosition: Vec3Tuple;
   forceSingleBody?: boolean;
   bodyCountOverride?: 1 | 2 | 3;
+}
+
+interface CelestialProjectionProbe {
+  spaceBlend: number;
+  phase: string;
+  camera: [number, number, number];
+  bodies: Array<{
+    worldId: string;
+    visible: boolean;
+    centerDistance: number;
+    scale: number;
+    ndc: [number, number, number];
+    projectedBoundRadiusPixels: number;
+  }>;
+}
+
+declare global {
+  interface Window {
+    __paravoxiaCelestialProbe?: CelestialProjectionProbe;
+  }
 }
 
 interface ExactShellRuntime {
@@ -70,7 +94,7 @@ interface BodyRuntime {
   planetSlot: PlanetSlot;
   seed: number;
   group: THREE.Group | null;
-  relativePosition: THREE.Vector3;
+  systemPosition: THREE.Vector3;
   nominalFaceRadius: number;
   surfaceBoundRadius: number;
   unitSurfaceBoundRadius: number;
@@ -84,9 +108,6 @@ interface BodyRuntime {
   exactShell: ExactShellRuntime | null;
 }
 
-const SURFACE_SKY_INNER_RADIUS = 208;
-const SURFACE_SKY_PREFERRED_DISTANCE = 138;
-const SURFACE_SKY_EXIT_FRACTION = 0.78;
 const CLOUD_SCALE = 1.024;
 const COMPANION_PROGRAM_KEY = 'system-companion-unified-v1';
 const EXACT_COMPANION_PROGRAM_KEY = 'system-companion-exact-v1';
@@ -563,6 +584,7 @@ export default function SystemCompanionBodies({
   currentCoordinate,
   planetSize,
   activePlanetSlot = 0,
+  activePlanetSystemPosition,
   forceSingleBody = false,
   bodyCountOverride
 }: SystemCompanionBodiesProps) {
@@ -581,13 +603,36 @@ export default function SystemCompanionBodies({
   }, []);
   const scratch = useRef({
     cameraPosition: new THREE.Vector3(),
+    renderOrigin: new THREE.Vector3(),
+    activePlanetCenter: new THREE.Vector3(),
+    planetLocalCamera: new THREE.Vector3(),
+    bodyRenderPosition: new THREE.Vector3(),
+    projectedPosition: new THREE.Vector3(),
+    framebufferSize: new THREE.Vector2(),
     toBody: new THREE.Vector3(),
     direction: new THREE.Vector3(),
     effectiveUp: new THREE.Vector3(),
-    surrogatePosition: new THREE.Vector3()
+    surrogatePosition: new THREE.Vector3(),
+    // Reused per-frame in/out records for companionCelestialPlacement (no
+    // per-frame allocation, matching the vector scratch above).
+    placementInput: {
+      physicalDistance: 0,
+      skyExitDistance: 0,
+      spaceBlend: 0,
+      nominalFaceRadius: 0,
+      horizonExtinction: 0
+    },
+    placement: { centerDistance: 0, scale: 0, visibility: 0 }
   });
+  const projectionProbeEnabled = useRef(
+    typeof window !== 'undefined'
+      && new URLSearchParams(window.location.search).get('systemprobe') === '1'
+  ).current;
 
   useEffect(() => subscribeGraphicsQuality(() => setQualityProfile(getQualityProfile())), []);
+  useEffect(() => () => {
+    if (projectionProbeEnabled) delete window.__paravoxiaCelestialProbe;
+  }, [projectionProbeEnabled]);
 
   const bodyModels = useMemo(
     () => buildCompanionBodyModels({
@@ -640,7 +685,7 @@ export default function SystemCompanionBodies({
       planetSlot: descriptor.address.slot,
       seed: descriptor.seed,
       group: null,
-      relativePosition: new THREE.Vector3(...model.relativePosition),
+      systemPosition: new THREE.Vector3(...descriptor.systemPosition),
       nominalFaceRadius: descriptor.nominalFaceRadius,
       surfaceBoundRadius: descriptor.surfaceBoundRadius,
       unitSurfaceBoundRadius,
@@ -704,10 +749,10 @@ export default function SystemCompanionBodies({
   useEffect(() => () => ringGeometry.dispose(), [ringGeometry]);
   useEffect(() => () => exactWaterGeometry.dispose(), [exactWaterGeometry]);
 
-  useFrame(({ camera }) => {
+  useFrame(({ camera, gl }) => {
     const phase = getSpaceFlightSnapshot().phase;
-    const physicalSpace = phase === 'deep_space';
-    const systemTarget = getSystemFlightSnapshot().target;
+    const systemFlight = getSystemFlightSnapshot();
+    const systemTarget = systemFlight.target;
     const exactTargetWorldId = systemTarget?.kind === 'system_body'
       ? systemTarget.worldId
       : null;
@@ -716,10 +761,24 @@ export default function SystemCompanionBodies({
     const sunDirection = getSunDirection();
     const work = scratch.current;
     camera.getWorldPosition(work.cameraPosition);
+    work.renderOrigin.set(...systemFlight.renderOrigin);
+    work.activePlanetCenter
+      .set(...activePlanetSystemPosition)
+      .sub(work.renderOrigin);
+    work.planetLocalCamera
+      .copy(work.cameraPosition)
+      .sub(work.activePlanetCenter);
+    // Continuous altitude-driven frame choice: NOT the discrete phase flag. The
+    // phase flips mid-warp while the ship is still flying, so a flag-keyed
+    // switch makes the bodies ride with the camera and snap to their physical
+    // positions at the flash midpoint. The blend converges to the physical
+    // frame BEFORE the flip, so the flip itself changes nothing visually.
+    const spaceBlend = atmosphereSpaceBlend(work.planetLocalCamera.length(), planetSize);
+    const physicalSpace = spaceBlend >= 1;
     if (phase === 'surface') {
       work.effectiveUp.copy(getPlayerUp());
-    } else if (work.cameraPosition.lengthSq() > 1e-6) {
-      work.effectiveUp.copy(work.cameraPosition).normalize();
+    } else if (work.planetLocalCamera.lengthSq() > 1e-6) {
+      work.effectiveUp.copy(work.planetLocalCamera).normalize();
     } else {
       work.effectiveUp.copy(getPlayerUp());
     }
@@ -731,10 +790,14 @@ export default function SystemCompanionBodies({
       setMaterialSun(runtime.cloudMaterial, sunDirection);
       setMaterialSun(runtime.ringMaterial, sunDirection);
       const wantsExactShell = physicalSpace
+        && phase === 'deep_space'
         && budget.exactTerrainShell
         && runtime.key === exactTargetWorldId;
       const canOwnExactShell = wantsExactShell
         && (exactOwnerWorldId === null || exactOwnerWorldId === runtime.key);
+      work.bodyRenderPosition
+        .copy(runtime.systemPosition)
+        .sub(work.renderOrigin);
 
       if (physicalSpace) {
         const exactShell = canOwnExactShell
@@ -744,7 +807,7 @@ export default function SystemCompanionBodies({
             exactWaterGeometry
           )
           : runtime.exactShell;
-        work.toBody.copy(runtime.relativePosition).sub(work.cameraPosition);
+        work.toBody.copy(work.bodyRenderPosition).sub(work.cameraPosition);
         const centerDistance = work.toBody.length();
         const desiredExactBlend = exactShell?.ready && canOwnExactShell
           ? companionExactShellBlend(centerDistance)
@@ -766,7 +829,7 @@ export default function SystemCompanionBodies({
           if (!canOwnExactShell && exactBlend <= 0) disposeExactShell(runtime);
         }
         group.visible = true;
-        group.position.copy(runtime.relativePosition);
+        group.position.copy(work.bodyRenderPosition);
         group.scale.setScalar(runtime.nominalFaceRadius);
         setMaterialVisibility(runtime.surfaceMaterial, 1);
         setMaterialVisibility(runtime.cloudMaterial, 1);
@@ -779,38 +842,76 @@ export default function SystemCompanionBodies({
         for (const mesh of runtime.exactShell.meshes) mesh.visible = false;
       }
 
-      work.toBody.copy(runtime.relativePosition).sub(work.cameraPosition);
+      work.toBody.copy(work.bodyRenderPosition).sub(work.cameraPosition);
       const physicalDistance = work.toBody.length();
       if (physicalDistance <= runtime.surfaceBoundRadius + 1) {
         group.visible = false;
         continue;
       }
       work.direction.copy(work.toBody).multiplyScalar(1 / physicalDistance);
-      const skyExit = rayExitDistance(work.cameraPosition, work.direction, SURFACE_SKY_INNER_RADIUS);
-      if (skyExit <= 1) {
+      const skyExit = rayExitDistance(
+        work.planetLocalCamera,
+        work.direction,
+        SURFACE_SKY_INNER_RADIUS
+      );
+      if (skyExit <= 1 && spaceBlend <= 0) {
         group.visible = false;
         continue;
       }
 
-      const surrogateDistance = Math.min(
-        SURFACE_SKY_PREFERRED_DISTANCE,
-        skyExit * SURFACE_SKY_EXIT_FRACTION
-      );
-      const angularSin = THREE.MathUtils.clamp(runtime.surfaceBoundRadius / physicalDistance, 0, 0.95);
-      const angularTan = angularSin / Math.sqrt(Math.max(1e-6, 1 - angularSin * angularSin));
-      const surrogateBoundRadius = surrogateDistance * angularTan;
-      const surrogateScale = surrogateBoundRadius / runtime.unitSurfaceBoundRadius;
-      const extinction = smoothstep(-0.12, 0.2, work.direction.dot(work.effectiveUp));
+      const placementInput = work.placementInput;
+      placementInput.physicalDistance = physicalDistance;
+      placementInput.skyExitDistance = skyExit;
+      placementInput.spaceBlend = spaceBlend;
+      placementInput.nominalFaceRadius = runtime.nominalFaceRadius;
+      placementInput.horizonExtinction = smoothstep(-0.12, 0.2, work.direction.dot(work.effectiveUp));
+      const placement = companionCelestialPlacement(placementInput, work.placement);
 
-      group.visible = extinction > 0.002;
+      group.visible = placement.visibility > 0.002;
       work.surrogatePosition
         .copy(work.cameraPosition)
-        .addScaledVector(work.direction, surrogateDistance);
+        .addScaledVector(work.direction, placement.centerDistance);
       group.position.copy(work.surrogatePosition);
-      group.scale.setScalar(surrogateScale);
-      setMaterialVisibility(runtime.surfaceMaterial, extinction);
-      setMaterialVisibility(runtime.cloudMaterial, extinction);
-      setMaterialVisibility(runtime.ringMaterial, extinction);
+      group.scale.setScalar(placement.scale);
+      setMaterialVisibility(runtime.surfaceMaterial, placement.visibility);
+      setMaterialVisibility(runtime.cloudMaterial, placement.visibility);
+      setMaterialVisibility(runtime.ringMaterial, placement.visibility);
+    }
+
+    if (projectionProbeEnabled) {
+      const perspective = camera as THREE.PerspectiveCamera;
+      const focalLengthPixels = gl.getDrawingBufferSize(work.framebufferSize).y
+        / (2 * Math.tan(THREE.MathUtils.degToRad(perspective.fov) / 2));
+      window.__paravoxiaCelestialProbe = {
+        spaceBlend,
+        phase,
+        camera: [work.cameraPosition.x, work.cameraPosition.y, work.cameraPosition.z],
+        bodies: runtimes.map(runtime => {
+          const group = runtime.group;
+          if (!group) {
+            return {
+              worldId: runtime.key,
+              visible: false,
+              centerDistance: 0,
+              scale: 0,
+              ndc: [0, 0, 0],
+              projectedBoundRadiusPixels: 0
+            };
+          }
+          const centerDistance = group.position.distanceTo(work.cameraPosition);
+          const projected = work.projectedPosition.copy(group.position).project(camera);
+          return {
+            worldId: runtime.key,
+            visible: group.visible,
+            centerDistance,
+            scale: group.scale.x,
+            ndc: [projected.x, projected.y, projected.z],
+            projectedBoundRadiusPixels: centerDistance > 0
+              ? focalLengthPixels * runtime.unitSurfaceBoundRadius * group.scale.x / centerDistance
+              : Number.POSITIVE_INFINITY
+          };
+        })
+      };
     }
   });
 

@@ -106,6 +106,10 @@ function analysisPass(a) {
   );
 }
 
+function composedMixSafetyPass(a) {
+  return a.nanCount === 0 && a.clipCount === 0 && a.longestSilenceS === 0;
+}
+
 function printReport(report) {
   for (const c of report.checks) {
     console.log(`    [${c.pass ? 'PASS' : 'FAIL'}] ${c.name.padEnd(16)} ${c.detail}`);
@@ -281,8 +285,15 @@ try {
       { minutes: soakMinutes, seed: soakSeed, archetype: soakArchetype }
     );
     console.log(`\n=== AUDIO SOAK ${res.pass ? 'PASS' : 'FAIL'} — ${res.minutes} min, seed ${res.planetSeed} (${res.archetype}), ${res.bars} bars ===`);
-    const audioPass = analysisPass(res.analysis);
-    console.log(`  audio: ${fmtAnalysis(res.analysis)} ${audioPass ? '[PASS]' : '[FAIL]'}`);
+    const audioPass = composedMixSafetyPass(res.analysis);
+    console.log(
+      `  owner mix (composed onsets included): ${fmtAnalysis(res.analysis)} ` +
+        `${audioPass ? '[PASS]' : '[FAIL]'}`
+    );
+    console.log(
+      `  continuous-control audit: ${fmtAnalysis(res.continuousControlAnalysis)} ` +
+        `${analysisPass(res.continuousControlAnalysis) ? '[PASS]' : '[FAIL]'}`
+    );
     printReport(res.report);
     if (!res.pass) pass = false;
 

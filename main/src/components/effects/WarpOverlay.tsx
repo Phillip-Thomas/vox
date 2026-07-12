@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { getGraphicsQuality } from '../../config/graphicsSettings.ts';
 import { getWarp, tickWarp, warpOpacity } from '../../state/spaceFlight.ts';
 import { recordWarpMetricFrame } from '../../utils/warpMetrics.ts';
+import { warpVisualProfile } from './warpVisualProfile.ts';
 
 /**
  * In-Canvas driver: advances the warp each rendered frame. Mounted once in the
@@ -97,8 +98,8 @@ export function WarpFlash() {
       ctx.clearRect(0, 0, w, h);
 
       const animated = getGraphicsQuality().animatedShaders;
-      const systemHandoff = warp.kind === 'system_handoff';
-      if (animated && !systemHandoff) {
+      const profile = warpVisualProfile(warp.kind);
+      if (animated && profile.radialStreaks) {
         // Radial star-streaks accelerating outward — the "jump to lightspeed" look.
         ctx.lineCap = 'round';
         for (let i = 0; i < streaks.length; i++) {
@@ -123,32 +124,62 @@ export function WarpFlash() {
         }
       }
 
-      // White core bloom that builds to the opaque midpoint (hides the swap).
-      const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
-      const coreA = op * op; // sharper peak so the midpoint is fully white
-      if (systemHandoff) {
-        // Keep viewport-filling planets covered at the ownership commit, not only
-        // the radial center. The old scene remains visible during the lead-in/out.
-        ctx.fillStyle = `rgba(195,225,240,${Math.min(0.86, coreA * 0.95)})`;
+      if (profile.atmosphereBoundary) {
+        // Enter/leave moves through air, not past the local planets. A translucent
+        // edge wash reinforces exposure change while keeping celestial anchors
+        // readable through the phase midpoint.
+        const leaving = warp.kind === 'leave';
+        const wash = ctx.createRadialGradient(cx, cy, maxR * 0.08, cx, cy, maxR);
+        wash.addColorStop(0, `rgba(235,248,255,${op * 0.04})`);
+        wash.addColorStop(0.5, leaving
+          ? `rgba(163,218,244,${op * 0.1})`
+          : `rgba(190,220,245,${op * 0.08})`);
+        wash.addColorStop(1, leaving
+          ? `rgba(91,171,211,${op * 0.34})`
+          : `rgba(126,166,211,${op * 0.3})`);
+        ctx.fillStyle = wash;
         ctx.fillRect(0, 0, w, h);
-      }
-      core.addColorStop(0, `rgba(255,255,255,${Math.min(1, coreA * (systemHandoff ? 1.3 : 1.15))})`);
-      core.addColorStop(0.55, systemHandoff
-        ? `rgba(218,242,255,${coreA * 0.92})`
-        : `rgba(234,242,255,${coreA * 0.9})`);
-      core.addColorStop(1, systemHandoff
-        ? `rgba(121,184,213,${coreA * 0.42})`
-        : `rgba(199,216,255,${coreA * 0.35})`);
-      ctx.fillStyle = core;
-      ctx.fillRect(0, 0, w, h);
 
-      if (animated && systemHandoff) {
-        const ringRadius = maxR * (0.16 + (1 - op) * 0.2);
-        ctx.strokeStyle = `rgba(222,247,255,${op * 0.38})`;
-        ctx.lineWidth = 2 + op * 7;
-        ctx.beginPath();
-        ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
-        ctx.stroke();
+        if (animated) {
+          const ringRadius = maxR * (0.3 + warp.progress * 0.38);
+          ctx.strokeStyle = leaving
+            ? `rgba(216,246,255,${op * 0.22})`
+            : `rgba(220,232,255,${op * 0.18})`;
+          ctx.lineWidth = 1.5 + op * 3;
+          ctx.beginPath();
+          ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else {
+        // True travel/ownership boundaries retain a peak-cover bloom because a
+        // render owner or world can change underneath it.
+        const systemHandoff = profile.fullViewportCover;
+        const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+        const coreA = op * op;
+        if (systemHandoff) {
+          // Keep viewport-filling planets covered at the ownership commit, not only
+          // the radial center. The old scene remains visible during the lead-in/out.
+          ctx.fillStyle = `rgba(195,225,240,${Math.min(0.86, coreA * 0.95)})`;
+          ctx.fillRect(0, 0, w, h);
+        }
+        core.addColorStop(0, `rgba(255,255,255,${Math.min(1, coreA * (systemHandoff ? 1.3 : 1.15))})`);
+        core.addColorStop(0.55, systemHandoff
+          ? `rgba(218,242,255,${coreA * 0.92})`
+          : `rgba(234,242,255,${coreA * 0.9})`);
+        core.addColorStop(1, systemHandoff
+          ? `rgba(121,184,213,${coreA * 0.42})`
+          : `rgba(199,216,255,${coreA * 0.35})`);
+        ctx.fillStyle = core;
+        ctx.fillRect(0, 0, w, h);
+
+        if (animated && systemHandoff) {
+          const ringRadius = maxR * (0.16 + (1 - op) * 0.2);
+          ctx.strokeStyle = `rgba(222,247,255,${op * 0.38})`;
+          ctx.lineWidth = 2 + op * 7;
+          ctx.beginPath();
+          ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
       }
 
       raf = requestAnimationFrame(tick);

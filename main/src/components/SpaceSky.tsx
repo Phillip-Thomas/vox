@@ -16,21 +16,29 @@ import { getPlayerUp } from '../state/playerFrame.ts';
 import { buildPlanetAtmosphereProfile } from '../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../game/systems/realityRenderSystem.ts';
 import { getConstellationReveal } from '../story/skyMeaning.ts';
+import {
+  atmosphereSpaceBlend,
+  planetLocalCameraRadius
+} from '../game/atmosphereSpace.ts';
+import { NOMINAL_PLANET_FACE_RADIUS } from '../game/starSystem.ts';
+import { getSystemFlightSnapshot, type SystemVectorTuple } from '../state/systemFlight.ts';
 
-// In deep space the dome must follow the camera (it's a skybox) AND sit beyond
-// ALL scene content — the voxel planet at the origin (up to a few hundred units
-// away) and the camera-relative galaxy impostors (~2400-3500). depthTest stays
-// true, so scaling the radius-220 dome up to ~7000 (still inside the ship
-// camera's far=8000) keeps everything correctly drawing OVER the starfield
-// rather than the stars punching through the planet/impostors.
-const DEEP_SPACE_DOME_SCALE = 32; // 220 * 32 ≈ 7040 world units
+// The dome is camera-centered at every altitude and rendered as a depthless
+// background. Only atmospheric uniforms change during launch; celestial
+// directions never inherit a planet-centered -> camera-centered transform.
 
 /**
  * Procedural starfield + nebula backdrop. Rendered from within SkyController's
  * JSX. Owns its own gated useFrame that reads the shared sun direction and the
  * same 240s clock so its motion/visibility stays consistent with the sky.
  */
-export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) {
+export default function SpaceSky({
+  terrainSeed = 0,
+  activePlanetSystemPosition
+}: {
+  terrainSeed?: number;
+  activePlanetSystemPosition: SystemVectorTuple;
+}) {
   const meshRef = useRef<THREE.Mesh>(null);
   const matRef = useRef<THREE.ShaderMaterial>(null);
   const material = useMemo(() => createSpaceSkyMaterial(), []);
@@ -64,50 +72,48 @@ export default function SpaceSky({ terrainSeed = 0 }: { terrainSeed?: number }) 
   }, [inSpace, material]);
 
   useFrame(state => {
-    // Skybox placement first, every frame regardless of the animation gate: on
-    // the surface the dome sits at the origin (radius 220, the planet occludes
-    // its lower half); in deep space it follows the camera and scales out beyond
-    // all content so the starfield is a true backdrop.
+    // Translation follows the camera exactly; scale and orientation remain fixed.
+    // The star-direction mapping therefore cannot swim during atmosphere exit.
+    const flight = getSystemFlightSnapshot();
+    const blend = atmosphereSpaceBlend(
+      planetLocalCameraRadius(
+        state.camera.position,
+        flight.renderOrigin,
+        activePlanetSystemPosition
+      ),
+      NOMINAL_PLANET_FACE_RADIUS
+    );
     const mesh = meshRef.current;
     if (mesh) {
-      if (inSpace) {
-        mesh.position.copy(state.camera.position);
-        mesh.scale.setScalar(DEEP_SPACE_DOME_SCALE);
-      } else if (mesh.scale.x !== 1) {
-        mesh.position.set(0, 0, 0);
-        mesh.scale.setScalar(1);
-      }
+      mesh.position.copy(state.camera.position);
+      mesh.scale.setScalar(1);
     }
 
     const mat = matRef.current;
     if (!mat) return;
     const q = getGraphicsQuality();
     const animated = q.animatedShaders;
-    const cloudQuality = q.skyClouds ? 1.0 : 0.0;
 
-    // Deep space: stars/nebula forced fully on (uDay=0 -> early-out). When animated,
-    // keep advancing time for twinkle/drift; otherwise the seed already applied.
-    if (inSpace) {
-      if (!animated) return;
-      updateSpaceSky(mat, state.clock.elapsedTime, 0, 0, getSunDirection(), getMoonDirection(), getPlayerUp(), 0, getVoxelRealityEffects(), getConstellationReveal());
-      return;
-    }
+    // Settled in deep space on a non-animated profile: the inSpace effect above
+    // already seeded the pure cosmos and nothing changes per frame.
+    if (inSpace && !animated && blend >= 1) return;
 
-    // Surface: LOCAL day/night from the live sun direction vs the player's up, so
-    // it tracks both the sun's motion AND the player moving around the planet
-    // (chase-the-light). Updated every frame — it's just uniform writes; shader
-    // twinkle stays frozen on non-animated profiles (time = 0).
+    // LOCAL day/night from the live sun direction vs the player's up, faded out
+    // by the altitude blend: the day sky thins into the cosmos as you climb the
+    // atmosphere-exit band (and thickens back on the way down), converging on
+    // uDay=0 well before the phase flag flips. Just uniform writes per frame;
+    // shader twinkle stays frozen on non-animated profiles (time = 0).
     const sun = getSunDirection();
     const up = getPlayerUp();
     updateSpaceSky(
       mat,
       animated ? state.clock.elapsedTime : 0,
-      localDaylight(sun, up),
-      localGolden(sun, up),
+      localDaylight(sun, up) * (1 - blend),
+      localGolden(sun, up) * (1 - blend),
       sun,
       getMoonDirection(),
       up,
-      cloudQuality,
+      (q.skyClouds ? 1.0 : 0.0) * (1 - blend),
       getVoxelRealityEffects(),
       getConstellationReveal()
     );

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { FACE_NORMALS, dominantFaceForPosition } from './surfaceControls';
 import { seededUnit } from './worldCoordinates';
 
 // =============================================================================
@@ -46,14 +47,29 @@ export function shipHullColors(accent: THREE.Color): ShipHullColors {
 }
 
 /**
- * Upright, horizon-facing orientation at a surface position: -Z points along a
- * horizon tangent (camera convention), +Y is local up (away from the planet
- * center). The flight controller levels the ship to THIS at touchdown, so the
- * parked exterior must use the same frame — a fixed world-space rotation is
- * upside down on the bottom face and sideways on the walls of the cube planet.
+ * Resolve the flat cube-face normal supporting the ship. Callers that own a
+ * sticky/resolved surface frame can pass that exact normal (important at the
+ * shared edge itself); otherwise the position's dominant cube face is the
+ * deterministic authority. Radial `position.normalize()` is deliberately wrong
+ * here: it tilts a parked ship farther and farther off level toward a face edge.
  */
-export function shipLevelOrientation(pos: THREE.Vector3): THREE.Quaternion {
-  const up = pos.clone().normalize();
+export function shipSurfaceUp(pos: THREE.Vector3, resolvedUp?: THREE.Vector3): THREE.Vector3 {
+  if (resolvedUp && resolvedUp.lengthSq() > 0) return resolvedUp.clone().normalize();
+  if (pos.lengthSq() === 0) return FACE_NORMALS.top.clone();
+  return FACE_NORMALS[dominantFaceForPosition(pos)].clone();
+}
+
+/**
+ * Upright, horizon-facing orientation at a surface position: -Z points along a
+ * horizon tangent (camera convention), +Y is the supporting CUBE FACE normal.
+ * The flight controller levels the ship to THIS at touchdown, so the parked
+ * exterior must use the same frame.
+ */
+export function shipLevelOrientation(
+  pos: THREE.Vector3,
+  resolvedUp?: THREE.Vector3
+): THREE.Quaternion {
+  const up = shipSurfaceUp(pos, resolvedUp);
   let ref = new THREE.Vector3(0, 0, 1);
   if (Math.abs(up.dot(ref)) > 0.9) ref = new THREE.Vector3(1, 0, 0);
   const forward = new THREE.Vector3().crossVectors(ref, up).normalize();
@@ -66,8 +82,11 @@ export function shipLevelOrientation(pos: THREE.Vector3): THREE.Quaternion {
  * mapping the hull's +X nose onto the frame's -Z forward — so the exterior
  * points exactly where the cockpit was facing when you set down.
  */
-export function shipParkedOrientation(pos: THREE.Vector3): THREE.Quaternion {
-  return shipLevelOrientation(pos).multiply(
+export function shipParkedOrientation(
+  pos: THREE.Vector3,
+  resolvedUp?: THREE.Vector3
+): THREE.Quaternion {
+  return shipLevelOrientation(pos, resolvedUp).multiply(
     new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
   );
 }

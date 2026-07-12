@@ -32,11 +32,12 @@ describe('dayFactorFromDaylight', () => {
 });
 
 describe('createSpaceSkyMaterial', () => {
-  it('is the opaque backdrop: back side, depth-writing, fog off, drawn first', () => {
+  it('is a depthless camera backdrop: back side, fog off, drawn first', () => {
     const mat = createSpaceSkyMaterial();
     expect(mat.side).toBe(THREE.BackSide);
     expect(mat.transparent).toBe(false);
-    expect(mat.depthWrite).toBe(true);
+    expect(mat.depthWrite).toBe(false);
+    expect(mat.depthTest).toBe(false);
     expect(mat.fog).toBe(false);
     expect(SPACE_DOME_RENDER_ORDER).toBeLessThan(0);
     expect(SPACE_DOME_RADIUS).toBeGreaterThan(100);

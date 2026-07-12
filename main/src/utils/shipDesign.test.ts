@@ -10,7 +10,8 @@ import {
   shipAccentColor,
   shipHullColors,
   shipLevelOrientation,
-  shipParkedOrientation
+  shipParkedOrientation,
+  shipSurfaceUp
 } from './shipDesign.ts';
 
 function bounds(geo: THREE.BufferGeometry): THREE.Box3 {
@@ -61,19 +62,22 @@ describe('shipDesign', () => {
     geo.dispose();
   });
 
-  it('parks the ship upright on every face of the cube planet', () => {
+  it('parks the ship upright on the flat normal of every cube face', () => {
     const R = 55;
-    const spots = [
-      new THREE.Vector3(0, R, 0),   // top
-      new THREE.Vector3(0, -R, 0),  // bottom — the fixed-rotation bug rendered this upside down
-      new THREE.Vector3(R, 0, 0),
-      new THREE.Vector3(-R, 0, 0),
-      new THREE.Vector3(0, 0, R),
-      new THREE.Vector3(0, 0, -R),
-      new THREE.Vector3(30, -40, 12) // off-center on the bottom face
+    const spots: Array<[THREE.Vector3, THREE.Vector3]> = [
+      [new THREE.Vector3(0, R, 0), new THREE.Vector3(0, 1, 0)],
+      [new THREE.Vector3(0, -R, 0), new THREE.Vector3(0, -1, 0)],
+      [new THREE.Vector3(R, 0, 0), new THREE.Vector3(1, 0, 0)],
+      [new THREE.Vector3(-R, 0, 0), new THREE.Vector3(-1, 0, 0)],
+      [new THREE.Vector3(0, 0, R), new THREE.Vector3(0, 0, 1)],
+      [new THREE.Vector3(0, 0, -R), new THREE.Vector3(0, 0, -1)],
+      // Deliberately far off-center on the bottom face. Radial up would lean the
+      // hull by ~38 degrees here; cube-face up must remain exactly -Y.
+      [new THREE.Vector3(30, -40, 12), new THREE.Vector3(0, -1, 0)]
     ];
-    for (const pos of spots) {
-      const localUp = pos.clone().normalize();
+    for (const [pos, faceUp] of spots) {
+      const localUp = shipSurfaceUp(pos);
+      expect(localUp.dot(faceUp)).toBeGreaterThan(0.999);
 
       // Level frame: +Y maps onto the local up, -Z onto a horizon tangent.
       const level = shipLevelOrientation(pos);
@@ -91,6 +95,24 @@ describe('shipDesign', () => {
       expect(Math.abs(nose.dot(localUp))).toBeLessThan(0.001);
       expect(nose.dot(forward)).toBeGreaterThan(0.999);
     }
+  });
+
+  it('accepts the resolved current-face normal at an exact cube edge', () => {
+    const edge = new THREE.Vector3(55, 55, 4);
+    const topUp = new THREE.Vector3(0, 1, 0);
+
+    // Dominant-axis ties have a deterministic default, but the live sticky face
+    // is the stronger authority when a caller has it.
+    expect(shipSurfaceUp(edge)).toEqual(new THREE.Vector3(1, 0, 0));
+    expect(shipSurfaceUp(edge, topUp)).toEqual(topUp);
+
+    const level = shipLevelOrientation(edge, topUp);
+    const shipUp = new THREE.Vector3(0, 1, 0).applyQuaternion(level);
+    expect(shipUp.dot(topUp)).toBeGreaterThan(0.999);
+
+    const parked = shipParkedOrientation(edge, topUp);
+    const parkedUp = new THREE.Vector3(0, 1, 0).applyQuaternion(parked);
+    expect(parkedUp.dot(topUp)).toBeGreaterThan(0.999);
   });
 
   it('keeps the cockpit frame beyond the near plane and out of the view center', () => {

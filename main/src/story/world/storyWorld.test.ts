@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getAuditWorkerPath,
   getPondPose,
   getStorySidePlane,
   getWreckRelayPose,
@@ -67,5 +68,20 @@ describe('storyWorld', () => {
     expect(Math.abs(t.dot(d))).toBeLessThan(1e-9);
     expect(plane.up.toArray()).toEqual([0, 1, 0]);
     expect(d.y).toBe(0);
+  });
+
+  it('keeps the arriving auditor upright to the cube face near its edge', () => {
+    const path = getAuditWorkerPath(50, STORY_SEED);
+    expect(path.length).toBeGreaterThan(1);
+    for (const waypoint of path) {
+      expect(waypoint.up.toArray()).toEqual([0, 1, 0]);
+    }
+
+    // The far waypoint is deliberately far enough across the top face that its
+    // radial normal is visibly slanted. This guards the exact regression: the
+    // actor's up must remain the cube-face normal, not position.normalize().
+    const far = path[0];
+    const radialUp = far.position.clone().normalize();
+    expect(radialUp.dot(far.up)).toBeLessThan(0.95);
   });
 });
