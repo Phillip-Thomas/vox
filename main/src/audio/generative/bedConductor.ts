@@ -42,10 +42,12 @@ import {
 import { planApproachModulation, type KeySpec, type ModulationDecision } from './approachModulation.ts';
 import {
   resolveEraGates,
+  resolveAudioGust,
   resolveMacroDrift,
   resolveWorldClockTick,
   STAGE_RANK,
   type BedSignals,
+  type AudioGustControls,
   type EraGates,
   type WorldClockTick
 } from './worldSignals.ts';
@@ -80,7 +82,8 @@ import {
   PERC_K_MAX,
   PERC_K_MIN,
   SIDECHAIN_DEPTH,
-  SUB_MOTIF_SUBMERGENCE,
+  SUB_MOTIF_BLEND_END,
+  SUB_MOTIF_BLEND_START,
   SUBDIV_DOUBLE_ENERGY,
   SUBMERGE_ENERGY_SCALE,
   type ArrangementStateName,
@@ -97,6 +100,10 @@ import {
 // decision is made here, seeded, reproducible, and unit-testable.
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
+const smoothstep = (edge0: number, edge1: number, value: number): number => {
+  const t = clamp01((value - edge0) / Math.max(Number.EPSILON, edge1 - edge0));
+  return t * t * (3 - 2 * t);
+};
 
 export interface BedNoteEvent {
   /** Onset slot on the canonical 16-slot bar grid (may exceed 16 for spanning figures). */
@@ -175,7 +182,10 @@ export interface BedBarPlan {
   percussion: number[];
   tick: WorldClockTick;
   sidechainDepth: number;
-  subTakesMotif: boolean;
+  /** Continuous ostinato → tuned-sub crossfade (0 dry land .. 1 underwater). */
+  subMotifMix: number;
+  /** Same moving gust cell as the vegetation, resolved to persistent-audio controls. */
+  wind: AudioGustControls;
   /** BUILD phrase: the riser targets the next phrase boundary, exactly. */
   buildPhrase: boolean;
   /** First bar of a BLOOM (mediant permitted; the widest gesture). */
@@ -532,7 +542,11 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
         riser: base.riser
       };
 
-  const subTakesMotif = clamp01(s.submergence) >= SUB_MOTIF_SUBMERGENCE;
+  const subMotifMix = smoothstep(
+    SUB_MOTIF_BLEND_START,
+    SUB_MOTIF_BLEND_END,
+    clamp01(s.submergence)
+  );
 
   // Bare (§8.5): the motif exists only as the lone chip arp of chord tones.
   const chipMono = s.stage === 'bare';
@@ -579,7 +593,11 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
   }
 
   const tick = resolveWorldClockTick(s);
-  if (policy.tickForce) tick.present = true;
+  if (policy.tickForce) {
+    tick.present = true;
+    tick.presence = 1;
+  }
+  const wind = resolveAudioGust(s);
 
   const plan: BedBarPlan = {
     barIndex: event.barIndex,
@@ -597,7 +615,8 @@ export function planBedBar(state: BedConductorState, s: BedSignals): BedBarPlan 
     percussion,
     tick,
     sidechainDepth: SIDECHAIN_DEPTH * effectiveEnergy * gates.sidechain,
-    subTakesMotif,
+    subMotifMix,
+    wind,
     buildPhrase: state.arrangement.name === 'BUILD',
     bloomEntered,
     warpExitBoom: state.pendingWarpExitBoom,

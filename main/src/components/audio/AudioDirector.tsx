@@ -38,28 +38,20 @@ import {
   type MusicScene,
   type PlanetMusicMood
 } from '../../audio/musicDirector.ts';
-import { configureBedPlanet, updateBedSignals } from '../../audio/bedEngine.ts';
+import {
+  configureBedPlanet,
+  getBedDebugSnapshot,
+  updateBedSignals
+} from '../../audio/bedEngine.ts';
 import { isScoreMoodLeading } from '../../audio/scoreEngine.ts';
 import { SALT_REGION } from '../../audio/generative/seededMusic.ts';
 import { REGION_QUANT_BLOCKS } from '../../audio/generative/tuning.ts';
-
-// Palette → default timbre brightness (§8.4 palette row): warm/saturated
-// palettes open the pad filter, cold desaturated ones keep it dusky.
-const PALETTE_BRIGHT_BASE = 0.3;
-const PALETTE_BRIGHT_TEMPERATURE = 0.4;
-const PALETTE_BRIGHT_SATURATION = 0.3;
-
-function paletteBrightnessOf(profile: PlanetProfile): number {
-  return Math.min(
-    1,
-    Math.max(
-      0,
-      PALETTE_BRIGHT_BASE +
-        PALETTE_BRIGHT_TEMPERATURE * profile.palette.temperature +
-        PALETTE_BRIGHT_SATURATION * profile.palette.saturation
-    )
-  );
-}
+import type { BedSignals } from '../../audio/generative/worldSignals.ts';
+import { isScoreDebugEnabled, updateScoreDebug } from '../../audio/scoreDebug.ts';
+import {
+  celestialMusicPrimitives,
+  paletteBrightnessOf
+} from '../../audio/planetMusicSignals.ts';
 
 interface AudioDirectorProps {
   terrainSeed: number;
@@ -89,6 +81,9 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   const submergedRef = useRef(false);
   const windRef = useRef<WindProfile>(wind);
   const terrainSeedRef = useRef(terrainSeed);
+  const archetypeRef = useRef<ArchetypeId>(profile.archetype);
+  const paletteBrightnessRef = useRef(paletteBrightnessOf(profile));
+  const biomeWeightsRef = useRef(profile.biomeWeights);
   const destInfoRef = useRef<{ seed: number; archetype: ArchetypeId } | null>(null);
   const chordRootRef = useRef<number | null>(null);
 
@@ -105,7 +100,10 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
     // meter land on the next bar line — §8.1). The approach modulation has
     // already walked the harmony to this exact key when we arrive by flight.
     terrainSeedRef.current = terrainSeed;
-    configureBedPlanet(terrainSeed, profile.archetype, paletteBrightnessOf(profile));
+    archetypeRef.current = profile.archetype;
+    paletteBrightnessRef.current = paletteBrightnessOf(profile);
+    biomeWeightsRef.current = profile.biomeWeights;
+    configureBedPlanet(terrainSeed, profile.archetype, paletteBrightnessRef.current);
   }, [terrainSeed, profile]);
 
   useEffect(() => {
@@ -146,24 +144,26 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
       if (warp.active && !warpActiveRef.current) {
         const cue = warp.kind === 'travel'
           ? 'systemWarp'
-          : warp.kind === 'enter'
+          : warp.kind === 'enter' || warp.kind === 'system_handoff'
             ? 'atmosphereEnter'
             : 'atmosphereLeave';
         getMusicEngine().playTransitionCue(cue);
       }
       warpActiveRef.current = warp.active;
 
-      // Underwater: muffle the whole mix (sfx + music lowpass) and snap a splash
-      // on the threshold crossing. Edge-driven so the cutoff ramps once per
-      // transition (the "clunk"/"gasp"), not every frame. EfficientPlayer resets
-      // submergence to 0 on unmount, so boarding the ship can't leave it stuck.
-      const submerged = getCameraSubmergence() > 0.5;
+      // Underwater: continuously muffle the music bus with camera depth; SFX
+      // state and the splash remain edge-driven at the waterline. EfficientPlayer
+      // resets submergence to 0 on unmount, so boarding cannot leave it stuck.
+      const submergence = getCameraSubmergence();
+      const submerged = submergence > 0.5;
       if (submerged !== submergedRef.current) {
         submergedRef.current = submerged;
         getSfxEngine().setSubmerged(submerged ? 1 : 0);
-        setMusicSubmerged(submerged);
         getSfxEngine().play(submerged ? 'splashEnter' : 'splashExit');
       }
+      // Music follows the continuous camera depth; only the splash/SFX state is
+      // edge-triggered. audioCore slews the shared bus cutoff structurally.
+      setMusicSubmerged(submergence);
 
       const daylight = sceneRef.current === 'deepSpace'
         ? 0.5
@@ -174,10 +174,11 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
       // the ambient tension/energy when no story is running.)
       const reality = getVoxelRealityEffects();
       const inSpace = sceneRef.current === 'deepSpace';
+      const celestial = celestialMusicPrimitives(daylight, inSpace, submergence);
       setMusicPrimitiveTargets({
         era: Math.min(1, reality.chroma * 0.35 + reality.detail * 0.3 + reality.organic * 0.35),
-        warmth: daylight * 0.85 + 0.1,
-        wonder: Math.min(1, (1 - daylight) * 0.55 + (inSpace ? 0.5 : 0) + getCameraSubmergence() * 0.35 + 0.15),
+        warmth: celestial.warmth,
+        wonder: celestial.wonder,
         ...(getStoryStateSnapshot().active ? {} : { tension: warpIntensity * 0.5, energy: warpIntensity })
       });
       tickMusicPrimitives(dt);
@@ -222,7 +223,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         terrainSeedRef.current
       );
       const windProfile = windRef.current;
-      updateBedSignals({
+      const bedSignals: BedSignals = {
         era: prim.era,
         stage: getVoxelRealityStage(),
         tension: prim.tension,
@@ -238,11 +239,19 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         metal: reality.metal,
         daylight,
         golden: inSpace ? 0 : localGolden(getSunDirection(), getPlayerUp()),
-        submergence: getCameraSubmergence(),
+        submergence,
         windStrength: windProfile.strength,
         windTurbulence: windProfile.turbulence,
         windGustSpeed: windProfile.gustSpeed,
         windVeer: windProfile.veer,
+        windDirectionX: windProfile.direction.x,
+        windDirectionY: windProfile.direction.y,
+        windGustStrength: windProfile.gustStrength,
+        windGustScale: windProfile.gustScale,
+        windOffsetX: windProfile.offset.x,
+        windOffsetY: windProfile.offset.y,
+        playerX: pos.x,
+        playerZ: pos.z,
         scene: currentScene,
         warpActive: warp.active,
         warpProgress: warp.active ? Math.min(1, warp.progress) : 0,
@@ -251,11 +260,26 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         destinationSeed,
         destinationArchetype,
         storyLeads: isScoreMoodLeading()
-      });
+      };
+      updateBedSignals(bedSignals);
+
+      const chord = getMusicChord();
+      if (isScoreDebugEnabled()) {
+        updateScoreDebug({
+          signals: bedSignals,
+          planetSeed: terrainSeedRef.current,
+          archetype: archetypeRef.current,
+          paletteBrightness: paletteBrightnessRef.current,
+          biomeWeights: biomeWeightsRef.current,
+          chord,
+          mix,
+          bed: getBedDebugSnapshot()
+        });
+      }
 
       // The drone bank obeys the harmonic center (kill fixed pitches, P3):
       // edge-driven param glides, once per chord change, never per frame.
-      const chordRoot = getMusicChord().root;
+      const chordRoot = chord.root;
       if (chordRootRef.current !== chordRoot) {
         chordRootRef.current = chordRoot;
         engine.retuneDronesToChordRoot(chordRoot);

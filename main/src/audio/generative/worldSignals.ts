@@ -26,12 +26,26 @@ import {
   TICK_DESCENT_RAMP_SPAN,
   TICK_FORCED_LEVEL_FLOOR,
   TICK_GATE,
+  TICK_GATE_FADE_WIDTH,
   TICK_HZ_BASE,
   TICK_HZ_MAX,
   TICK_HZ_MIN,
   TICK_LEVEL_GAIN,
   TICK_SUBMERGE_FLOOR,
-  TICK_WARP_MULT
+  TICK_WARP_MULT,
+  WIND_AUDIO_DRIVE_BASE,
+  WIND_DIRECTION_EPSILON,
+  WIND_GUST_MIX_BASE,
+  WIND_GUST_MIX_SECONDARY,
+  WIND_GUST_SECONDARY_SCALE,
+  WIND_GUST_SECONDARY_SPEED,
+  WIND_GUST_SMOOTH_HIGH,
+  WIND_GUST_SMOOTH_LOW,
+  WIND_GUST_TURBULENCE_VEER,
+  WIND_HASH_DOT_OFFSET,
+  WIND_HASH_SCALE_X,
+  WIND_HASH_SCALE_Y,
+  WIND_STRENGTH_NORM
 } from './tuning.ts';
 
 // --- World signals → musical meaning (§8.4, pure resolvers) ------------------------------------
@@ -60,10 +74,20 @@ export interface BedSignals {
   daylight: number;
   golden: number;
   submergence: number;
+  /** WindProfile prevailing direction in the local tangent plane. */
+  windDirectionX: number;
+  windDirectionY: number;
   windStrength: number;
+  windGustStrength: number;
+  windGustScale: number;
   windTurbulence: number;
   windGustSpeed: number;
   windVeer: number;
+  windOffsetX: number;
+  windOffsetY: number;
+  /** Player world X/Z: audio samples the same moving gust cell as vegetation. */
+  playerX: number;
+  playerZ: number;
   scene: MusicScene;
   warpActive: boolean;
   warpProgress: number;
@@ -98,10 +122,18 @@ export function neutralBedSignals(): BedSignals {
     daylight: 0.7,
     golden: 0,
     submergence: 0,
+    windDirectionX: 1,
+    windDirectionY: 0,
     windStrength: 0.6,
+    windGustStrength: 1,
+    windGustScale: 0.04,
     windTurbulence: 0.3,
     windGustSpeed: 0.4,
     windVeer: 0.6,
+    windOffsetX: 0,
+    windOffsetY: 0,
+    playerX: 0,
+    playerZ: 0,
     scene: 'surface',
     warpActive: false,
     warpProgress: 0,
@@ -114,6 +146,92 @@ export function neutralBedSignals(): BedSignals {
 }
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
+const fract = (v: number): number => v - Math.floor(v);
+
+function smoothstep(edge0: number, edge1: number, value: number): number {
+  const t = clamp01((value - edge0) / Math.max(Number.EPSILON, edge1 - edge0));
+  return t * t * (3 - 2 * t);
+}
+
+// --- Shared visual/audio gust field (§8.4) ------------------------------------------------------
+
+/** Persistent-audio controls sampled from the same moving cells as treeMaterials.ts. */
+export interface AudioGustControls {
+  /** Shaped gust-cell value, 0..1. */
+  gust: number;
+  /** Normalized wash/tremolo drive from authored strength × the local gust. */
+  drive: number;
+  /** Local prevailing direction after field-driven veer, -1..1 in stereo X. */
+  pan: number;
+  /** Normalized micro-detune/noise disorder intent. */
+  turbulence: number;
+}
+
+/** GLSL-compatible hash used by the tree gust field (pure and deterministic). */
+function windHash21(x: number, y: number): number {
+  let px = fract(x * WIND_HASH_SCALE_X);
+  let py = fract(y * WIND_HASH_SCALE_Y);
+  const dot = px * (px + WIND_HASH_DOT_OFFSET) + py * (py + WIND_HASH_DOT_OFFSET);
+  px += dot;
+  py += dot;
+  return fract(px * py);
+}
+
+/** Bilinear value noise matching `twNoise` in treeMaterials.ts. */
+function windNoise(x: number, y: number): number {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const fx0 = fract(x);
+  const fy0 = fract(y);
+  const fx = fx0 * fx0 * (3 - 2 * fx0);
+  const fy = fy0 * fy0 * (3 - 2 * fy0);
+  const a = windHash21(ix, iy);
+  const b = windHash21(ix + 1, iy);
+  const c = windHash21(ix, iy + 1);
+  const d = windHash21(ix + 1, iy + 1);
+  const ab = a + (b - a) * fx;
+  const cd = c + (d - c) * fx;
+  return ab + (cd - ab) * fy;
+}
+
+/**
+ * Sample the visual gust field at the player and resolve audio-ready controls.
+ * No stochastic draw occurs here: identical BedSignals always produce identical
+ * controls, and walking into a visual gust cell moves the audio wash with it.
+ */
+export function resolveAudioGust(s: BedSignals): AudioGustControls {
+  const rawX = s.windDirectionX + WIND_DIRECTION_EPSILON;
+  const rawY = s.windDirectionY;
+  const dirLength = Math.hypot(rawX, rawY);
+  const dirX = dirLength > Number.EPSILON ? rawX / dirLength : 1;
+  const dirY = dirLength > Number.EPSILON ? rawY / dirLength : 0;
+  const crossX = -dirY;
+  const crossY = dirX;
+  const travel = s.timeSec * s.windGustSpeed;
+  const gustAX = s.playerX * s.windGustScale + dirX * travel + s.windOffsetX;
+  const gustAY = s.playerZ * s.windGustScale + dirY * travel + s.windOffsetY;
+  const gustA = windNoise(gustAX, gustAY);
+  const secondaryScale = s.windGustScale * WIND_GUST_SECONDARY_SCALE;
+  const secondaryTravel = travel * WIND_GUST_SECONDARY_SPEED;
+  const gustBX = s.playerZ * secondaryScale - crossX * secondaryTravel + s.windOffsetY;
+  const gustBY = s.playerX * secondaryScale - crossY * secondaryTravel + s.windOffsetX;
+  const gustB = windNoise(gustBX + gustA, gustBY + gustA);
+  const gust =
+    smoothstep(WIND_GUST_SMOOTH_LOW, WIND_GUST_SMOOTH_HIGH, gustA) *
+    (WIND_GUST_MIX_BASE + WIND_GUST_MIX_SECONDARY * gustB);
+  const turbulence = clamp01(s.windTurbulence);
+  const veer =
+    (gustA - 0.5) * s.windVeer +
+    (gustB - 0.5) * turbulence * WIND_GUST_TURBULENCE_VEER;
+  const cos = Math.cos(veer);
+  const sin = Math.sin(veer);
+  const pan = Math.max(-1, Math.min(1, dirX * cos - dirY * sin));
+  const strength = clamp01(s.windStrength / WIND_STRENGTH_NORM);
+  const drive = clamp01(
+    strength * (WIND_AUDIO_DRIVE_BASE + Math.max(0, s.windGustStrength) * gust)
+  );
+  return { gust, drive, pan, turbulence };
+}
 
 // --- Stage ordering (§8.5 rungs — transitions are EVENTS, §8.4 stage row) -------------------------
 
@@ -133,6 +251,8 @@ export interface WorldClockTick {
   hz: number;
   /** Audible at all (fades over whole bars in the rim). */
   present: boolean;
+  /** Continuous counterpart to `present`; the rim fades level with this scalar. */
+  presence: number;
   /** Loudness/attack intent, 0..1 (tension × clock pressure). */
   level: number;
   /**
@@ -149,8 +269,9 @@ export interface WorldClockTick {
 export function resolveClockPressure(s: BedSignals): number {
   let pressure = 1;
   if (s.scene === 'descent') {
-    // Radar-altimeter urgency: accelerates toward the ceiling as the ground
-    // nears (warp progress carries the approach-to-ground motion we have).
+    // Radar-altimeter urgency. The current world contract has no separate
+    // descent-progress rail: ordinary descent therefore uses the named BASE;
+    // only a genuinely co-occurring active warp can contribute progress.
     pressure *=
       TICK_DESCENT_PRESSURE * (TICK_DESCENT_RAMP_BASE + TICK_DESCENT_RAMP_SPAN * clamp01(s.warpProgress));
   }
@@ -165,13 +286,17 @@ export function resolveWorldClockTick(s: BedSignals): WorldClockTick {
   const hz = Math.min(TICK_HZ_MAX, Math.max(TICK_HZ_MIN, TICK_HZ_BASE * pressure));
   const forced = s.scene === 'descent' || s.warpActive;
   const present = forced || s.tension > TICK_GATE;
+  const presence = forced
+    ? 1
+    : smoothstep(TICK_GATE - TICK_GATE_FADE_WIDTH, TICK_GATE + TICK_GATE_FADE_WIDTH, s.tension);
   const level = clamp01(
     Math.max(forced ? TICK_FORCED_LEVEL_FLOOR : 0, s.tension) *
       clamp01(pressure / TICK_HZ_MAX) *
-      TICK_LEVEL_GAIN
+      TICK_LEVEL_GAIN *
+      presence
   );
   const splitHz = s.stage === 'paradox' ? hz * PARADOX_TICK_RATIO : null;
-  return { hz, present, level, splitHz };
+  return { hz, present, presence, level, splitHz };
 }
 
 // --- The era instrumentation ladder (§8.5 — voice unlocks fade in; a ramp, not a staircase) -------

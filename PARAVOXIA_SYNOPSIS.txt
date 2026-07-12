@@ -279,3 +279,8 @@ currently we have the crashed voxel ship, and the higher fidelity ship side by s
 the ship should not be able to be flown until we repair it in a later chapter
 
 different planets have different post-fx.
+
+
+SOUND NOTES:
+
+the music sometimes abruptly changes volume, the best I can tell it might be when the moon is directly overhead or somthing? we need to ensure there are never abrupt changes, its always smooth orchestrated transitions like a beautiful ongoing symphony... we have definitely made progress but I feel we need more evidence that the music changes based on the world... that audio and video are truly intertwined... and I think its still a bit too simple of sounds

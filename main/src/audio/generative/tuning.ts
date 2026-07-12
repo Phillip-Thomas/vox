@@ -111,10 +111,15 @@ export const MEDIANT_RATION = 1;
 export const MEDIANT_BASE_P = 0.3;
 /** Golden-hour multiplier on mediant probability (§8.4). */
 export const GOLDEN_MEDIANT_MULT = 3;
-/** localGolden above this counts as inside the golden window. */
-export const GOLDEN_WINDOW_MIN = 0.5;
 /** Mediant probability ceiling after multipliers. */
 export const MEDIANT_P_MAX = 0.9;
+/**
+ * Golden-hour plagal color: continuously prefer IV / ♭VII candidates by up
+ * to this much tension-distance score without changing the active mode.
+ */
+export const GOLDEN_PLAGAL_SCORE_BIAS = 0.08;
+/** Root intervals carrying the Mixolydian/plagal golden color. */
+export const GOLDEN_PLAGAL_ROOT_INTERVALS: readonly number[] = [5, 10];
 
 // --- Tension model weights (§6.5, Farbood-style blend) --------------------------------------
 
@@ -296,6 +301,8 @@ export const TICK_HZ_MIN = 0.5;
 export const TICK_HZ_MAX = 2.5;
 /** Tick audible when tension exceeds this (or descent/warp force presence). */
 export const TICK_GATE = 0.55;
+/** Half-width of the continuous tick-presence fade around TICK_GATE. */
+export const TICK_GATE_FADE_WIDTH = 0.08;
 /** Tick rate changes glide over at least this many seconds. */
 export const TICK_GLIDE_S = 2;
 /** Clock-pressure multiplier while warping (time compressing). */
@@ -491,10 +498,34 @@ export const REGISTER_SHIFT_MAX = 9;
 
 // --- Underwater (§8.4) ----------------------------------------------------------------------------------
 
-/** Above this submergence the tuned sub takes the motif (the bass sings the tune). */
-export const SUB_MOTIF_SUBMERGENCE = 0.5;
+/** Start/end of the ostinato → tuned-sub motif crossfade. */
+export const SUB_MOTIF_BLEND_START = 0.1;
+export const SUB_MOTIF_BLEND_END = 0.9;
 /** Submergence scales effective energy down (harmonic rhythm slows underwater). */
 export const SUBMERGE_ENERGY_SCALE = 1;
+
+// --- Shared visual/audio gust field (§8.4 wind rows) --------------------------------------------
+
+/** GLSL-compatible value-noise hash constants (mirrors treeMaterials.ts). */
+export const WIND_HASH_SCALE_X = 123.34;
+export const WIND_HASH_SCALE_Y = 345.45;
+export const WIND_HASH_DOT_OFFSET = 34.345;
+/** Second octave of the shared moving gust field. */
+export const WIND_GUST_SECONDARY_SCALE = 1.73;
+export const WIND_GUST_SECONDARY_SPEED = 0.63;
+/** Tree-field shaping: broad gust cells, then a secondary-cell modulation. */
+export const WIND_GUST_SMOOTH_LOW = 0.22;
+export const WIND_GUST_SMOOTH_HIGH = 0.88;
+export const WIND_GUST_MIX_BASE = 0.52;
+export const WIND_GUST_MIX_SECONDARY = 0.48;
+/** Turbulence contribution to the local direction veer (mirrors the tree field). */
+export const WIND_GUST_TURBULENCE_VEER = 1.1;
+/** Degenerate-direction guard used by the visual shader too. */
+export const WIND_DIRECTION_EPSILON = 0.0001;
+/** WindProfile's maximum authored base strength, used to normalize audio drive. */
+export const WIND_STRENGTH_NORM = 1.7;
+/** Quiet air floor before the shared gust cell lifts the wash/tremolo drive. */
+export const WIND_AUDIO_DRIVE_BASE = 0.42;
 
 // --- Approach modulation (§8.4 guard, owner ruling #1) ---------------------------------------------------
 

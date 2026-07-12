@@ -1,4 +1,5 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
+import { buildWindProfile, type WindProfile } from '../../utils/windProfile.ts';
 import { fnv1a32, seededUnit } from '../../utils/worldCoordinates.ts';
 import {
   createBedConductor,
@@ -19,6 +20,7 @@ import {
   PARADOX_MEDIANT_RATION,
   PHRASE_BARS,
   PHRASE_TABU,
+  SIDECHAIN_DEPTH,
   VL_COMMON_TONE_TENSION,
   VL_TOTAL_MAX,
   VL_VOICE_MAX
@@ -64,6 +66,14 @@ export const SOAK_SUBMERGE_FRAC: readonly [number, number] = [0.44, 0.5];
 export const SOAK_APPROACH_FRAC: readonly [number, number] = [0.58, 0.7];
 /** Region salt steps every this many seconds (simulated travel turns the rhythm). */
 export const SOAK_REGION_STEP_S = 45;
+/** World-signal event edges use a real ramp, never a rectangular gain/control step. */
+export const SOAK_SIGNAL_EDGE_RAMP_S = 12;
+/** Simulated travel through the shared visual/audio gust field. */
+export const SOAK_WIND_TRAVEL_SPEED = 0.35;
+export const SOAK_WIND_TRAVEL_RADIUS = 24;
+export const SOAK_WIND_TRAVEL_PERIOD_S = 173;
+/** Largest legal normalized bar-to-bar step among continuous signal controls. */
+export const SOAK_SIGNAL_MAX_STEP = 0.7;
 
 /** Audition/CLI reference planets (picked for maximal identity contrast). */
 export const SOAK_HOME_SEED = 5;
@@ -75,7 +85,6 @@ export const SOAK_CONTRAST_ARCHETYPE_B: ArchetypeId = 'volcanic'; // G# aeolian,
 
 const SALT_SOAK_ENERGY = fnv1a32('soak:energy-phase');
 const SALT_SOAK_TENSION = fnv1a32('soak:tension-phase');
-const SALT_SOAK_WIND = fnv1a32('soak:wind-phase');
 const SALT_SOAK_REGION = fnv1a32('soak:region');
 const SALT_SOAK_DEST = fnv1a32('soak:destination');
 
@@ -102,16 +111,43 @@ function railsFromDaylight(s: BedSignals, daylight: number): void {
   s.golden = clamp01(1 - Math.abs(daylight - SOAK_GOLDEN_CENTER) / SOAK_GOLDEN_HALF_WIDTH);
 }
 
-function windAt(s: BedSignals, planetSeed: number, tSec: number): void {
-  const phase = seededUnit(planetSeed, SALT_SOAK_WIND);
-  s.windStrength = 0.55 + 0.35 * Math.sin(TAU * (tSec / 210 + phase));
-  s.windGustSpeed = 0.4 + 0.2 * Math.sin(TAU * (tSec / 97 + phase * 2));
-  s.windTurbulence = 0.3;
-  s.windVeer = 0.6;
+function windAt(s: BedSignals, wind: WindProfile, tSec: number): void {
+  s.windDirectionX = wind.direction.x;
+  s.windDirectionY = wind.direction.y;
+  s.windStrength = wind.strength;
+  s.windGustStrength = wind.gustStrength;
+  s.windGustScale = wind.gustScale;
+  s.windGustSpeed = wind.gustSpeed;
+  s.windTurbulence = wind.turbulence;
+  s.windVeer = wind.veer;
+  s.windOffsetX = wind.offset.x;
+  s.windOffsetY = wind.offset.y;
+  s.playerX = tSec * SOAK_WIND_TRAVEL_SPEED;
+  s.playerZ = SOAK_WIND_TRAVEL_RADIUS * Math.sin(TAU * tSec / SOAK_WIND_TRAVEL_PERIOD_S);
 }
 
 function regionAt(s: BedSignals, planetSeed: number, tSec: number): void {
   s.regionUnit = seededUnit(planetSeed, SALT_SOAK_REGION ^ Math.floor(tSec / SOAK_REGION_STEP_S));
+}
+
+function smoothstep(edge0: number, edge1: number, value: number): number {
+  const u = clamp01((value - edge0) / Math.max(Number.EPSILON, edge1 - edge0));
+  return u * u * (3 - 2 * u);
+}
+
+/** Smooth 0→1→0 envelope for a scenario segment in fractional run time. */
+function segmentEnvelope(
+  tSec: number,
+  durationSec: number,
+  range: readonly [number, number]
+): number {
+  const start = range[0] * durationSec;
+  const end = range[1] * durationSec;
+  const ramp = Math.min(SOAK_SIGNAL_EDGE_RAMP_S, Math.max(0, (end - start) / 2));
+  if (ramp <= Number.EPSILON) return tSec >= start && tSec < end ? 1 : 0;
+  const enter = smoothstep(start, start + ramp, tSec);
+  const exit = 1 - smoothstep(end - ramp, end, tSec);
+  return Math.min(enter, exit);
 }
 
 /** The era rung the §8.5 ladder names for a continuous era value (bare→alive). */
@@ -131,11 +167,12 @@ export function makeSoakScript(
   planetSeed: number,
   durationSec: number
 ): SoakScript {
+  const wind = buildWindProfile(planetSeed);
   return (tSec: number): BedSignals => {
     const s = neutralBedSignals();
     s.timeSec = tSec;
     s.scene = 'surface';
-    windAt(s, planetSeed, tSec);
+    windAt(s, wind, tSec);
     regionAt(s, planetSeed, tSec);
 
     switch (name) {
@@ -170,8 +207,8 @@ export function makeSoakScript(
       case 'fullSoak': {
         const frac = tSec / Math.max(1, durationSec);
         const daylight = 0.5 + 0.5 * Math.sin(TAU * (tSec / SOAK_DAY_PERIOD_S - 0.25));
-        s.submergence =
-          frac >= SOAK_SUBMERGE_FRAC[0] && frac < SOAK_SUBMERGE_FRAC[1] ? 0.85 : 0;
+        const submergeEnvelope = segmentEnvelope(tSec, durationSec, SOAK_SUBMERGE_FRAC);
+        s.submergence = 0.85 * submergeEnvelope;
         railsFromDaylight(s, daylight);
         const ePhase = seededUnit(planetSeed, SALT_SOAK_ENERGY);
         const tPhase = seededUnit(planetSeed, SALT_SOAK_TENSION);
@@ -182,10 +219,11 @@ export function makeSoakScript(
           SOAK_TENSION_BASE + SOAK_TENSION_SWING * Math.sin(TAU * (tSec / SOAK_TENSION_PERIOD_S + tPhase))
         );
         if (frac >= SOAK_WARP_FRAC[0] && frac < SOAK_WARP_FRAC[1]) {
+          const warpEnvelope = segmentEnvelope(tSec, durationSec, SOAK_WARP_FRAC);
           s.warpActive = true;
           s.warpProgress = (frac - SOAK_WARP_FRAC[0]) / (SOAK_WARP_FRAC[1] - SOAK_WARP_FRAC[0]);
-          s.energy = clamp01(s.energy + 0.4);
-          s.tension = clamp01(s.tension + 0.25);
+          s.energy = clamp01(s.energy + 0.4 * warpEnvelope);
+          s.tension = clamp01(s.tension + 0.25 * warpEnvelope);
         }
         if (frac >= SOAK_APPROACH_FRAC[0] && frac < SOAK_APPROACH_FRAC[1]) {
           // The approach IS the modulation (§8.4) — then back to the surface,
@@ -229,6 +267,10 @@ export interface SoakBarRecord {
   bass: number;
   bandCenter: number;
   tension: number;
+  era: number;
+  daylight: number;
+  golden: number;
+  submergence: number;
   scene: string;
   landingPivot: boolean;
   /** The arrival spent the phrase's awe-chord — counted against the ration. */
@@ -247,10 +289,24 @@ export interface SoakBarRecord {
   publishTones: number[];
   tickHz: number;
   tickPresent: boolean;
+  tickPresence: number;
   tickLevel: number;
   sidechainDepth: number;
+  subMotifMix: number;
   padBrightness: number;
   textureLean: number;
+  eraChip: number;
+  eraPadChoir: number;
+  eraStereoWidth: number;
+  eraReverb: number;
+  eraSidechain: number;
+  eraPercussion: number;
+  eraShimmer: number;
+  eraSub: number;
+  windGust: number;
+  windDrive: number;
+  windPan: number;
+  windTurbulence: number;
   tempoBpm: number;
 }
 
@@ -303,6 +359,10 @@ export function createSoakCollector(
         bass: h.voicing.bass,
         bandCenter: h.bandCenter,
         tension: signals.tension,
+        era: signals.era,
+        daylight: signals.daylight,
+        golden: signals.golden,
+        submergence: signals.submergence,
         scene: signals.scene,
         landingPivot: plan.landingPivot,
         landingPivotMediant: plan.landingPivotMediant,
@@ -318,10 +378,24 @@ export function createSoakCollector(
         publishTones: [...plan.publish.tones],
         tickHz: plan.tick.hz,
         tickPresent: plan.tick.present,
+        tickPresence: plan.tick.presence,
         tickLevel: plan.tick.level,
         sidechainDepth: plan.sidechainDepth,
+        subMotifMix: plan.subMotifMix,
         padBrightness: plan.padBrightness,
         textureLean: plan.textureLean,
+        eraChip: plan.gates.chip,
+        eraPadChoir: plan.gates.padChoir,
+        eraStereoWidth: plan.gates.stereoWidth,
+        eraReverb: plan.gates.reverb,
+        eraSidechain: plan.gates.sidechain,
+        eraPercussion: plan.gates.percussion,
+        eraShimmer: plan.gates.shimmer,
+        eraSub: plan.gates.sub,
+        windGust: plan.wind.gust,
+        windDrive: plan.wind.drive,
+        windPan: plan.wind.pan,
+        windTurbulence: plan.wind.turbulence,
         tempoBpm: plan.tempoBpm
       });
       prevUppers = [...h.voicing.uppers] as [number, number, number];
@@ -382,6 +456,37 @@ export function statementChordContext(bars: readonly SoakBarRecord[], index: num
 export function statementHash(rec: SoakBarRecord, chordIds: readonly string[]): number {
   const rhythm = rec.melody.map((n) => `${n.slot}:${n.durationSlots}:${n.semis}`).join(',');
   return fnv1a32(`${chordIds.join(',')}|${rec.melodyChain}|${rhythm}|${rec.bandCenter}`);
+}
+
+const SMOOTH_SIGNAL_CONTROLS = [
+  'era',
+  'daylight',
+  'golden',
+  'submergence',
+  'subMotifMix',
+  'sidechainDepth',
+  'padBrightness',
+  'textureLean',
+  'eraChip',
+  'eraPadChoir',
+  'eraStereoWidth',
+  'eraReverb',
+  'eraSidechain',
+  'eraPercussion',
+  'eraShimmer',
+  'eraSub',
+  'windDrive',
+  'windPan',
+  'windTurbulence'
+] as const;
+
+type SmoothSignalControl = (typeof SMOOTH_SIGNAL_CONTROLS)[number];
+
+/** Normalize every audited continuous control to 0..1 before derivative checks. */
+function normalizedSignalControl(rec: SoakBarRecord, key: SmoothSignalControl): number {
+  if (key === 'sidechainDepth') return clamp01(rec.sidechainDepth / SIDECHAIN_DEPTH);
+  if (key === 'windPan') return clamp01((rec.windPan + 1) / 2);
+  return clamp01(rec[key]);
 }
 
 export function auditSoakLog(log: SoakLog): SoakReport {
@@ -543,7 +648,36 @@ export function auditSoakLog(log: SoakLog): SoakReport {
   }
   push('mode-drift', driftViolations, driftViolations ? driftDetail : `${driftCount} drift steps, all single-accidental`);
 
-  // 6. No harmony deadlock: the longest streak of failed change attempts
+  // 6. Signal smoothness (the symphony law): continuous world-driven audible
+  //    controls may travel, but may never jump rail-to-rail in one planned bar.
+  //    Discrete musical events (notes, hits, arrangement names) are deliberately
+  //    absent: their rim envelopes/crossfades have a separate rendered audit.
+  let signalStepViolations = 0;
+  let worstSignalStep = 0;
+  let signalStepDetail = '';
+  for (let i = 1; i < bars.length; i++) {
+    for (const key of SMOOTH_SIGNAL_CONTROLS) {
+      const previous = normalizedSignalControl(bars[i - 1], key);
+      const next = normalizedSignalControl(bars[i], key);
+      const delta = Math.abs(next - previous);
+      if (delta > worstSignalStep) worstSignalStep = delta;
+      if (delta > SOAK_SIGNAL_MAX_STEP) {
+        signalStepViolations++;
+        if (!signalStepDetail) {
+          signalStepDetail = `bar ${bars[i].barIndex} ${key} ${previous.toFixed(3)}→${next.toFixed(3)} (Δ${delta.toFixed(3)}, limit ${SOAK_SIGNAL_MAX_STEP})`;
+        }
+      }
+    }
+  }
+  push(
+    'signal-smoothness',
+    signalStepViolations,
+    signalStepViolations
+      ? signalStepDetail
+      : `worst normalized bar step ${worstSignalStep.toFixed(3)} (limit ${SOAK_SIGNAL_MAX_STEP})`
+  );
+
+  // 7. No harmony deadlock: the longest streak of failed change attempts
   //    (heldNoLegal among bars that attempted a change) stays short.
   let heldStreak = 0;
   let worstStreak = 0;
@@ -590,6 +724,7 @@ export function auditSoakLog(log: SoakLog): SoakReport {
     barNovelty: bars.length ? Number((barHashes.size / bars.length).toFixed(3)) : 1,
     tabuBypasses: bars.filter((r) => r.tabuBypass).length,
     commonToneRelaxes: bars.filter((r) => r.commonToneRelaxed).length,
+    worstSignalStep: Number(worstSignalStep.toFixed(3)),
     modes: Object.entries(modeHist)
       .map(([m, n]) => `${m}:${n}`)
       .join(' '),

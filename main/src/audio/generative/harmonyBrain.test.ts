@@ -6,6 +6,8 @@ import {
   derivePlanetKey,
   forceLandingPivot,
   publishHarmony,
+  resolveGoldenMediantProbability,
+  resolveGoldenPlagalBias,
   type HarmonyBarEvent,
   type HarmonyBrainState,
   type HarmonyRails
@@ -20,7 +22,10 @@ import {
 } from './theory.ts';
 import {
   CHORD_TABU,
+  GOLDEN_PLAGAL_SCORE_BIAS,
   IONIAN_WARMTH_GATE,
+  MEDIANT_BASE_P,
+  MEDIANT_P_MAX,
   MODE_DRIFT_MIN_PHRASES,
   PHRASE_BARS,
   TENSION_COLOR_GATE,
@@ -204,6 +209,39 @@ describe('mediant ration and phrase discipline (§6.3)', () => {
       const e = advanceHarmonyBar(state, varied(i), { forcedShape: 'RISE' });
       expect(e.cadenceBiased).toBe(false);
     }
+  });
+});
+
+describe('golden cadence is a continuous color bias (§8.4)', () => {
+  it('raises mediant probability monotonically without a window-edge step', () => {
+    const values: number[] = [];
+    for (let golden = 0; golden <= 1.001; golden += 0.01) {
+      values.push(resolveGoldenMediantProbability(golden));
+    }
+    expect(values[0]).toBe(MEDIANT_BASE_P);
+    expect(values[values.length - 1]).toBeCloseTo(MEDIANT_P_MAX, 12);
+    for (let i = 1; i < values.length; i++) {
+      expect(values[i]).toBeGreaterThanOrEqual(values[i - 1]);
+      expect(values[i] - values[i - 1]).toBeLessThan(0.01);
+    }
+    const below = resolveGoldenMediantProbability(0.5 - 1e-6);
+    const above = resolveGoldenMediantProbability(0.5 + 1e-6);
+    expect(above - below).toBeLessThan(1e-5);
+  });
+
+  it('continuously favors IV / ♭VII color without changing the mode', () => {
+    expect(resolveGoldenPlagalBias(5, 0)).toBe(0);
+    expect(resolveGoldenPlagalBias(5, 0.5)).toBeCloseTo(GOLDEN_PLAGAL_SCORE_BIAS * 0.5, 10);
+    expect(resolveGoldenPlagalBias(10, 1)).toBe(GOLDEN_PLAGAL_SCORE_BIAS);
+    expect(resolveGoldenPlagalBias(7, 1)).toBe(0);
+
+    const state = createHarmonyBrain(5150, { archetype: 'verdant' });
+    const mode = state.mode;
+    for (let golden = 0; golden <= 1; golden += 0.05) {
+      resolveGoldenMediantProbability(golden);
+      resolveGoldenPlagalBias(5, golden);
+    }
+    expect(state.mode).toBe(mode);
   });
 });
 

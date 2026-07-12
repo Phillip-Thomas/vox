@@ -22,6 +22,7 @@ export interface CompanionVisualBudget {
   cloudSubdivisions: number;
   ringSegments: number;
   separateCloudShell: boolean;
+  exactTerrainShell: boolean;
 }
 
 export interface CompanionBodyModelOptions {
@@ -73,16 +74,58 @@ export function buildCompanionBodyModels({
 export function companionVisualBudget(profile: QualityProfile): CompanionVisualBudget {
   switch (profile) {
     case 'ULTRA':
-      return { surfaceSubdivisions: 20, cloudSubdivisions: 14, ringSegments: 96, separateCloudShell: true };
+      return { surfaceSubdivisions: 32, cloudSubdivisions: 22, ringSegments: 112, separateCloudShell: true, exactTerrainShell: true };
     case 'HIGH':
-      return { surfaceSubdivisions: 16, cloudSubdivisions: 10, ringSegments: 72, separateCloudShell: true };
+      return { surfaceSubdivisions: 28, cloudSubdivisions: 18, ringSegments: 96, separateCloudShell: true, exactTerrainShell: true };
     case 'MEDIUM':
-      return { surfaceSubdivisions: 12, cloudSubdivisions: 0, ringSegments: 48, separateCloudShell: false };
+      return { surfaceSubdivisions: 20, cloudSubdivisions: 12, ringSegments: 64, separateCloudShell: true, exactTerrainShell: false };
     case 'LOW':
-      return { surfaceSubdivisions: 8, cloudSubdivisions: 0, ringSegments: 28, separateCloudShell: false };
+      return { surfaceSubdivisions: 14, cloudSubdivisions: 0, ringSegments: 36, separateCloudShell: false, exactTerrainShell: false };
     case 'POTATO':
-      return { surfaceSubdivisions: 4, cloudSubdivisions: 0, ringSegments: 16, separateCloudShell: false };
+      return { surfaceSubdivisions: 8, cloudSubdivisions: 0, ringSegments: 20, separateCloudShell: false, exactTerrainShell: false };
   }
+}
+
+export const EXACT_SHELL_FULL_DISTANCE = 420;
+export const EXACT_SHELL_START_DISTANCE = 1_050;
+export const EXACT_TERRAIN_BATCH_SIZE = 5_000;
+export const EXACT_WATER_BATCH_SIZE = 4_096;
+
+export function companionExactTerrainFaceCount(instanceData: Float32Array, terrainCount: number): number {
+  let faces = 0;
+  for (let index = 0; index < terrainCount; index++) {
+    let hiddenMask = Math.trunc(instanceData[index * 2 + 1]) & 0x3f;
+    let hiddenFaces = 0;
+    while (hiddenMask !== 0) {
+      hiddenMask &= hiddenMask - 1;
+      hiddenFaces++;
+    }
+    faces += 6 - hiddenFaces;
+  }
+  return faces;
+}
+
+export function companionExactShellDrawCount(terrainFaceCount: number, waterFaceCount: number): number {
+  const terrainDraws = terrainFaceCount > 0 ? 1 : 0;
+  const waterDraws = Math.ceil(Math.max(0, waterFaceCount) / EXACT_WATER_BATCH_SIZE);
+  return terrainDraws + waterDraws;
+}
+
+export function companionExactShellTriangleCount(terrainFaceCount: number, waterFaceCount: number): number {
+  return Math.max(0, terrainFaceCount + waterFaceCount) * 2;
+}
+
+/** Exact terrain dissolves in well before activation so landmarks never jump. */
+export function companionExactShellBlend(centerDistance: number): number {
+  if (!Number.isFinite(centerDistance)) return 0;
+  const t = THREE.MathUtils.clamp(
+    (centerDistance - EXACT_SHELL_FULL_DISTANCE)
+      / (EXACT_SHELL_START_DISTANCE - EXACT_SHELL_FULL_DISTANCE),
+    0,
+    1
+  );
+  const smooth = t * t * (3 - 2 * t);
+  return 1 - smooth;
 }
 
 export function createCompanionSurfaceGeometry(seed: number, requestedSubdivisions: number): THREE.BufferGeometry {

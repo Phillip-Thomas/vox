@@ -5,6 +5,8 @@ import {
   clearWorldGenCache,
   getWorldArrivalCandidate,
   getWorldGen,
+  getPreparedWorldRenderData,
+  getPreparedWorldTerrainMeshData,
   getWorldTerrainData,
   hasWorldGenCacheEntry,
   hydrateWorldGenCacheFromPackedPayload
@@ -57,6 +59,12 @@ describe('packed world cache hydration', () => {
 
     expect(hasWorldGenCacheEntry(8, identity.seed, identity.worldId)).toBe(true);
     expect(hasWorldGenCacheEntry(8, identity.seed, '8,9:p2')).toBe(false);
+    expect(getPreparedWorldTerrainMeshData(8, identity.seed, identity.worldId)?.count).toBe(1);
+    expect(getPreparedWorldTerrainMeshData(8, identity.seed, '8,9:p2')).toBeNull();
+    expect(getPreparedWorldRenderData(8, identity.seed, identity.worldId)).toMatchObject({
+      waterFaces: [{ x: 3, y: 4, z: -4, faceDir: 2 }]
+    });
+    expect(getPreparedWorldRenderData(8, identity.seed, '8,9:p2')).toBeNull();
     const terrain = getWorldTerrainData(8, identity.seed);
 
     expect(getWorldGen(8, identity.seed)).toBe(hydrated);
@@ -80,6 +88,7 @@ describe('packed world cache hydration', () => {
     expect(hydrated.generator.isWaterVoxel(3, 3, -4)).toBe(true);
     expect(hydrated.generator.isWaterVoxel(0, 0, 0)).toBe(false);
     expect(getWorldArrivalCandidate(8, identity.seed)).toEqual({ x: 4, y: 5, z: -4 });
+
   });
 
   it('does not reuse the default worker arrival for a custom preference', async () => {

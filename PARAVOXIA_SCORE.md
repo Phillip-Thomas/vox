@@ -217,6 +217,35 @@ comment recorded at 20). Verified: full screening under the isolated probe =
 PASS, 793.9s, done reached, ZERO rescues (ch1-nav 12.6s, ch3-gather 20.8s);
 123 files/925 tests green; both tsconfigs and the production build clean.
 
+**POLISH & UPSCALE LANDED 2026-07-12:** the SYMPHONY LAW is now structural,
+not an audition-time promise. Diagnosis used continuous day→night→day and
+focused control-only renders. The moon-overhead hypothesis was falsified: the
+zenith crossing is continuous and produced no edge. The shipped jump was the
+era-changing BUILD→BLOOM riser cleanup: it cancelled the in-flight rise and
+reset its actual gain of about `0.027` to the newly evaluated era-gated target
+of about `0.16` (about `15.5 dB` in the reproduced passage; its worst
+floor-to-target case was `0.0001→0.16`, `1600×` / about `64.1 dB`). The
+fix holds the value actually sounding and releases it through the named
+`RISER_CUT_S (2 s)`. During hardening, the new handoff audit also caught a
+distinct Chromium automation hazard: a linear ramp endpoint without a start anchor could interpolate from an
+older event, retroactively span rendered time, and present as an instantaneous
+story/bed cut. Persistent automation now uses start-anchored target slews with
+the named three-time-constant convention (§8.6), including the complementary
+`STORY_AUTHORITY_CROSSFADE_S (4.5 s)`. Fresh focused continuous-control
+sweeps: day→night→day `0.83 dB / 0 violations`; the diagnosed BUILD→BLOOM
+case `0.64 dB / 0`; story yield→scene-change→resume `3.92 dB / 0`.
+
+World/audio coupling is now owner-auditionable as eight controlled A/B pairs
+in `main/renders/` (§8.7) and inspectable live with `?scoredebug=1`. The same
+planet palette/celestial resolvers drive live and offline paths. Material and
+above gained the intended upscale: detuned stereo pad stacks with warm organ
+sustain and slow spectral motion, sine/triangle/harmonic sub layers plus a
+polyphonic tuned-sub motif handoff, FM shimmer, transient-shaped percussion,
+deterministic short and wide bloom convolution spaces, and wider bloom
+imaging. Bare and color deliberately remain period-authentic chip rungs —
+monophonic PSG/noise at bare, NES pulse/pulse/triangle/noise at color — and
+streamed loop assets remain present but demoted.
+
 ## 4. Contracts that must not break
 
 - `setScoreBeat`/`setScoreIntensity`/`scoreHit`/`unlockStoryScore` signatures
@@ -614,6 +643,101 @@ Story-mood note (P5): when a `MOODS` beat leads it keeps full authority
 (frozen contract). As moods generalize, a mood's `melody.scale` becomes a
 FILTER over the planet's motif genome rather than a random walk — the
 planet's tune haunts the story beats, played in the mood's mode.
+
+### 8.6 The SYMPHONY LAW — no uncomposed discontinuities (binding)
+
+Every persistent audible control — gain/level, filter cutoff, effect send,
+wet/dry balance, stereo position/width, sidechain depth, and continuous pitch
+or timbre mix — moves only through a NAMED slew or complementary crossfade.
+No boolean state, arrangement edge, era/stage gate, golden-hour boundary,
+story authority change, drone retune, streamed-stem target, or world-signal
+sample may write an audible step. Discrete notes, ticks, and hits remain
+designed onsets with authored attack/release envelopes; they do not license a
+step on the persistent rail beneath them.
+
+The shared automation primitive is START-ANCHORED at the transition time:
+hold the value actually sounding (`cancelAndHoldAtTime`, with the compatible
+fallback), then schedule `setTargetAtTime` from that instant. A named slew
+duration means **95% settled**, encoded as three time constants
+(`AUDIO_PARAM_SLEW_SETTLE_TAU_COUNT (3)`); it is never a bare time constant
+and never a ramp endpoint allowed to interpolate from an older event. An
+interrupted slew must begin from its held current value. Grammar-scale times
+belong in `generative/tuning.ts`; synth-rim times stay named and grouped at the
+top of their module. Owner-facing taste anchors include
+`STORY_AUTHORITY_CROSSFADE_S (4.5 s)` and `RISER_CUT_S (2 s)`.
+
+Smoothness is a soak assertion over adjacent `SMOOTHNESS_WINDOW_S (0.1 s)`
+RMS windows after the normal onset grace, not a subjective pass:
+
+- absolute adjacent-window delta must be `≤ SMOOTHNESS_MAX_DELTA_RMS (0.04)`;
+- when both windows are full-level (`RMS ≥ 0.02`), loudness delta must be
+  `≤ SMOOTHNESS_MAX_DELTA_DB (4.5 dB)`;
+- at the audible quiet-bed floor (either window `RMS ≥ 0.005`), the
+  denominator is clamped to `0.001 RMS` and delta must be
+  `≤ SMOOTHNESS_MAX_QUIET_DELTA_DB (12 dB)`.
+
+The battery keeps deliberate onsets and continuous controls distinct. The
+owner/evidence WAV is the complete composed mix. Its paired audit render
+suppresses only scheduled note/hit envelopes while retaining the exact
+persistent gain/filter/send/sidechain/story-authority rails; this makes an
+illegal control step attributable without misclassifying a legal chip note or
+bloom transient. Both paths still retain the no-NaN, no-clip, headroom, and
+quiet-bed-floor laws. Red regressions prove the audit can fail: a rendered
+full-level gain step fails, a quiet `0.002→0.019` order-of-magnitude step
+fails, and the old `0.027→0.16` BUILD→BLOOM riser reset fails. The same quiet
+move through its named `1.2 s` slew and the held riser through its named `2 s`
+release pass. Smoothness thresholds may only get stricter.
+
+### 8.7 Controlled signal→music evidence pairs
+
+Each pair below renders the same musical-time window and deterministic origin
+while varying ONE source concept; live-derived consequences (for example sun
+elevation → daylight/warmth/wonder, or reality stage → era gates) travel with
+that source exactly as they do in `AudioDirector`. The planet pair varies the
+single identity input — terrain seed — so its derived archetype, palette,
+key, mode, motif, rhythm, tempo, and meter are expected to change together.
+All files are under `main/renders/` and are regenerated from `main/` with
+`node score-soak-probe.mjs evidence` (or append one pair name).
+
+- **Daylight/night:**
+  `evidence-daylight-night_A-night-sunElevation-1_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-daylight-night_B-day-sunElevation0.6_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Golden hour:**
+  `evidence-golden-hour_A-golden0_seed7-verdant_As-mixolydian_76bpm-4-4.wav`
+  vs
+  `evidence-golden-hour_B-golden1_seed7-verdant_As-mixolydian_76bpm-4-4.wav`.
+- **Submergence:**
+  `evidence-submergence_A-surfaced0_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-submergence_B-submerged0.85_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Wind:**
+  `evidence-wind_A-windStrength0_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-wind_B-windStrength1.65_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Warp:**
+  `evidence-warp_A-warp-off_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-warp_B-warp-active_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Descent:**
+  `evidence-descent_A-scene-surface_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-descent_B-scene-descent_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Era/stage:**
+  `evidence-era-stage_A-bare-era0_seed5-verdant_Ds-dorian_78bpm-4-4.wav`
+  vs
+  `evidence-era-stage_B-alive-era1_seed5-verdant_Ds-dorian_78bpm-4-4.wav`.
+- **Planet seed:**
+  `evidence-planet-seed_A-seed8-anomaly_seed8-anomaly_F-lydian_67bpm-6-8.wav`
+  vs
+  `evidence-planet-seed_B-seed10-metallic_seed10-metallic_Gs-dorian_83bpm-4-4.wav`.
+
+In a development build, append `?scoredebug=1` to expose a throttled overlay,
+periodic `console.table`, and `window.__scoreDebug`. It displays the exact
+live signal snapshot beside its resolved chord, era gates, world-clock rate,
+shared gust-field drive/pan, macro drift, streamed/procedural mix targets, and
+current bed levels. With the flag absent, the normal rAF pays only the guard;
+no snapshot cloning, DOM writes, or console work runs.
 
 ## 9. Distilled research notes (do not re-research; method only)
 

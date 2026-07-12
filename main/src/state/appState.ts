@@ -122,13 +122,14 @@ function maybeReady(): void {
 
 /** Called once the voxel mesh is populated (EfficientPlanet populate effect). */
 export function markTerrainPopulated(): void {
+  if (!terrainPopulated) framesPainted = 0;
   terrainPopulated = true;
   maybeReady();
 }
 
 /** Called every frame by the in-Canvas counter. Cheap until ready, then a no-op. */
 export function markFramePainted(): void {
-  if (snapshot.sceneReady) return;
+  if (snapshot.sceneReady || !terrainPopulated) return;
   framesPainted++;
   maybeReady();
 }

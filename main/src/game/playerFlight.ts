@@ -8,8 +8,9 @@ export type ControlMode = 'fps' | 'flight';
 /**
  * 'travel' = the full interstellar jump (swaps the voxel world at the midpoint).
  * 'enter'/'leave' = the short atmosphere transition that only flips flight phase.
+ * 'system_handoff' = a local render-owner swap after continuous physical travel.
  */
-export type WarpKind = 'travel' | 'enter' | 'leave';
+export type WarpKind = 'travel' | 'enter' | 'leave' | 'system_handoff';
 
 export interface SpaceFlightSnapshot {
   phase: FlightPhase;

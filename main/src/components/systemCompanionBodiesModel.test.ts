@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildCompanionBodyModels,
+  companionExactShellBlend,
+  companionExactShellDrawCount,
+  companionExactShellTriangleCount,
+  companionExactTerrainFaceCount,
   companionVisualBudget,
-  createCompanionSurfaceGeometry
+  createCompanionSurfaceGeometry,
+  EXACT_TERRAIN_BATCH_SIZE,
+  EXACT_WATER_BATCH_SIZE
 } from './systemCompanionBodiesModel.ts';
 
 describe('system companion body model', () => {
@@ -54,11 +60,35 @@ describe('system companion body model', () => {
       medium.surfaceSubdivisions,
       low.surfaceSubdivisions,
       potato.surfaceSubdivisions
-    ]).toEqual([20, 16, 12, 8, 4]);
+    ]).toEqual([32, 28, 20, 14, 8]);
     expect(ultra.separateCloudShell).toBe(true);
     expect(high.separateCloudShell).toBe(true);
-    expect(medium.separateCloudShell).toBe(false);
+    expect(medium.separateCloudShell).toBe(true);
+    expect(ultra.exactTerrainShell).toBe(true);
+    expect(high.exactTerrainShell).toBe(true);
+    expect(medium.exactTerrainShell).toBe(false);
     expect(potato.ringSegments).toBeLessThan(low.ringSegments);
+  });
+
+  it('promotes the exact terrain shell smoothly before activation distance', () => {
+    expect(companionExactShellBlend(1_200)).toBe(0);
+    expect(companionExactShellBlend(1_050)).toBe(0);
+    expect(companionExactShellBlend(735)).toBeCloseTo(0.5, 5);
+    expect(companionExactShellBlend(420)).toBe(1);
+    expect(companionExactShellBlend(180)).toBe(1);
+  });
+
+  it('counts only exposed terrain quads and stays within the HIGH shell budget', () => {
+    const instanceData = new Float32Array([
+      0, 0b11_1110,
+      0, 0b11_1100,
+      0, 0
+    ]);
+    expect(EXACT_TERRAIN_BATCH_SIZE).toBe(5_000);
+    expect(EXACT_WATER_BATCH_SIZE).toBe(4_096);
+    expect(companionExactTerrainFaceCount(instanceData, 3)).toBe(9);
+    expect(companionExactShellDrawCount(100_000, 9_569)).toBe(4);
+    expect(companionExactShellTriangleCount(100_000, 9_569)).toBeLessThan(220_000);
   });
 
   it('builds finite colored dominant-face geometry rather than a sphere', () => {

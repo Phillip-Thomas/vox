@@ -10,6 +10,8 @@ import {
 import {
   createSystemTravelGateState,
   isWithinSystemActivationEnvelope,
+  rejectSystemTravelActivation,
+  retrySystemTravelPreparation,
   transitionSystemTravelGate,
   type SystemTravelGateState
 } from '../game/systemTravelDriverModel.ts';
@@ -18,16 +20,20 @@ import {
   commitSystemBodyTarget,
   getSystemFlightSnapshot
 } from '../state/systemFlight.ts';
-import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
+import {
+  cancelSystemHandoff,
+  getSpaceFlightSnapshot,
+  getWarp
+} from '../state/spaceFlight.ts';
 import { setSystemTravelAssistTarget } from '../state/systemTravelAssist.ts';
 
 export interface SystemTravelDriverProps {
   manifest: StarSystemManifest;
   activePlanetId: string | null;
   enabled: boolean;
-  onPrepareTarget: (descriptor: PlanetDescriptor) => void;
+  onPrepareTarget: (descriptor: PlanetDescriptor) => Promise<boolean>;
   onCancelTarget?: () => void;
-  onActivateTarget: (descriptor: PlanetDescriptor) => void;
+  onActivateTarget: (descriptor: PlanetDescriptor, onAbort: () => void) => boolean;
   isTargetReady?: (worldId: string) => boolean;
   aimConeRadians?: number;
   atmosphereEnvelope?: number;
@@ -36,15 +42,17 @@ export interface SystemTravelDriverProps {
 interface DriverRuntime {
   systemId: string;
   gate: SystemTravelGateState;
+  preparationRetry: { worldId: string; retryAtMs: number } | null;
 }
 
 interface CallbackRuntime {
-  prepare: (descriptor: PlanetDescriptor) => void;
-  activate: (descriptor: PlanetDescriptor) => void;
+  prepare: (descriptor: PlanetDescriptor) => Promise<boolean>;
+  activate: (descriptor: PlanetDescriptor, onAbort: () => void) => boolean;
   isReady: (worldId: string) => boolean;
 }
 
 const TARGET_ALWAYS_READY = (): boolean => true;
+const PREPARATION_RETRY_DELAY_MS = 1_500;
 
 function cancelOwnedTarget(worldId: string): void {
   const target = getSystemFlightSnapshot().target;
@@ -83,7 +91,8 @@ export default function SystemTravelDriver({
 
   const runtimeRef = useRef<DriverRuntime>({
     systemId: manifest.systemId,
-    gate: createSystemTravelGateState()
+    gate: createSystemTravelGateState(),
+    preparationRetry: null
   });
   const activeBoundRef = useRef<ActiveBodyOcclusionBound>({
     systemPosition: [0, 0, 0],
@@ -103,10 +112,14 @@ export default function SystemTravelDriver({
       if (runtime.gate.lockedWorldId) cancelPreparationRef.current?.();
       runtime.systemId = manifest.systemId;
       runtime.gate = createSystemTravelGateState();
+      runtime.preparationRetry = null;
     }
 
     const spaceFlight = getSpaceFlightSnapshot();
     const systemFlight = getSystemFlightSnapshot();
+    const warp = getWarp();
+    const systemHandoffActive = warp.active && warp.kind === 'system_handoff';
+    if (warp.active && !systemHandoffActive) return;
     let descriptor: PlanetDescriptor | null = null;
     let targetDistance = 0;
     let targetWithinEnvelope = false;
@@ -158,6 +171,26 @@ export default function SystemTravelDriver({
       }
     }
 
+    if (systemHandoffActive) {
+      const lockedWorldId = runtime.gate.lockedWorldId;
+      const liveTarget = systemFlight.target;
+      const leaseCurrent = enabled
+        && descriptor?.worldId === lockedWorldId
+        && targetWithinEnvelope
+        && targetReady
+        && liveTarget?.kind === 'system_body'
+        && liveTarget.worldId === lockedWorldId;
+      if (!warp.midpointFired && !leaseCurrent) {
+        cancelSystemHandoff('lease_invalidated');
+        if (lockedWorldId) {
+          cancelOwnedTarget(lockedWorldId);
+          cancelPreparationRef.current?.();
+        }
+        setSystemTravelAssistTarget(null);
+      }
+      return;
+    }
+
     setSystemTravelAssistTarget(descriptor
       ? {
           worldId: descriptor.worldId,
@@ -165,6 +198,12 @@ export default function SystemTravelDriver({
           ready: targetReady
         }
       : null);
+
+    const retry = runtime.preparationRetry;
+    if (retry && performance.now() >= retry.retryAtMs) {
+      runtime.gate = retrySystemTravelPreparation(runtime.gate, retry.worldId);
+      runtime.preparationRetry = null;
+    }
 
     const gate = runtime.gate;
     if (!descriptor) {
@@ -201,13 +240,39 @@ export default function SystemTravelDriver({
     }
     if (!descriptor) return;
     if (transition.actions.commit) commitSystemBodyTarget(descriptor.address);
-    if (transition.actions.prepare) callbacksRef.current.prepare(descriptor);
-    if (transition.actions.activate) callbacksRef.current.activate(descriptor);
+    if (transition.actions.prepare) {
+      const preparingWorldId = descriptor.worldId;
+      const scheduleRetry = () => {
+        const liveRuntime = runtimeRef.current;
+        if (liveRuntime.gate.preparedLockWorldId !== preparingWorldId) return;
+        liveRuntime.preparationRetry = {
+          worldId: preparingWorldId,
+          retryAtMs: performance.now() + PREPARATION_RETRY_DELAY_MS
+        };
+      };
+      void callbacksRef.current.prepare(descriptor)
+        .then(succeeded => { if (!succeeded) scheduleRetry(); })
+        .catch(scheduleRetry);
+    }
+    if (transition.actions.activate) {
+      const rejectActivation = () => {
+        const liveRuntime = runtimeRef.current;
+        liveRuntime.gate = rejectSystemTravelActivation(liveRuntime.gate, descriptor.worldId);
+      };
+      let accepted = false;
+      try {
+        accepted = callbacksRef.current.activate(descriptor, rejectActivation);
+      } catch (error) {
+        console.error('[system-travel] Failed to begin local handoff', error);
+      }
+      if (!accepted) rejectActivation();
+    }
   });
 
   useEffect(() => () => {
-    setSystemTravelAssistTarget(null);
     const lockedWorldId = runtimeRef.current.gate.lockedWorldId;
+    cancelSystemHandoff('driver_unmounted');
+    setSystemTravelAssistTarget(null);
     if (lockedWorldId) {
       cancelOwnedTarget(lockedWorldId);
       cancelPreparationRef.current?.();

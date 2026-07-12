@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   createSystemTravelGateState,
   isWithinSystemActivationEnvelope,
+  rejectSystemTravelActivation,
+  retrySystemTravelPreparation,
   transitionSystemTravelGate
 } from './systemTravelDriverModel.ts';
 
@@ -63,6 +65,45 @@ describe('system travel driver gate', () => {
     });
     expect(repeated.state).toBe(arrived.state);
     expect(repeated.actions.activate).toBe(false);
+  });
+
+  it('retries an activation whose handoff start or midpoint was rejected', () => {
+    const prepared = transitionSystemTravelGate(createSystemTravelGateState(), FAR_TARGET);
+    const arrived = transitionSystemTravelGate(prepared.state, {
+      ...FAR_TARGET,
+      distance: 180,
+      ready: true
+    });
+    const rejected = rejectSystemTravelActivation(arrived.state, FAR_TARGET.worldId);
+    const retry = transitionSystemTravelGate(rejected, {
+      ...FAR_TARGET,
+      distance: 175,
+      ready: true
+    });
+
+    expect(rejected.lockedWorldId).toBeNull();
+    expect(rejected.activatedLockWorldId).toBeNull();
+    expect(retry.actions.commit).toBe(true);
+    expect(retry.actions.activate).toBe(true);
+  });
+
+  it('restarts preparation after a committed target loses cache residency', () => {
+    const prepared = transitionSystemTravelGate(createSystemTravelGateState(), FAR_TARGET);
+    const arrived = transitionSystemTravelGate(prepared.state, {
+      ...FAR_TARGET,
+      distance: 180,
+      ready: true
+    });
+    const rejected = rejectSystemTravelActivation(arrived.state, FAR_TARGET.worldId);
+    const retry = transitionSystemTravelGate(rejected, {
+      ...FAR_TARGET,
+      distance: 170,
+      ready: false
+    });
+
+    expect(retry.actions.commit).toBe(true);
+    expect(retry.actions.prepare).toBe(true);
+    expect(retry.actions.activate).toBe(false);
   });
 
   it('holds the prepared lock inside the envelope until the target is ready', () => {
@@ -127,5 +168,16 @@ describe('system travel driver gate', () => {
       prepare: false,
       activate: true
     });
+  });
+
+  it('retries a failed asynchronous preparation without releasing aim', () => {
+    const prepared = transitionSystemTravelGate(createSystemTravelGateState(), FAR_TARGET);
+    const retryable = retrySystemTravelPreparation(prepared.state, FAR_TARGET.worldId);
+    const retry = transitionSystemTravelGate(retryable, FAR_TARGET);
+
+    expect(retryable.lockedWorldId).toBe(FAR_TARGET.worldId);
+    expect(retryable.preparedLockWorldId).toBeNull();
+    expect(retry.actions.commit).toBe(false);
+    expect(retry.actions.prepare).toBe(true);
   });
 });

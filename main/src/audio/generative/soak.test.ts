@@ -69,6 +69,23 @@ describe('soak scenarios', () => {
     expect(samples.some((s) => s.scene === 'approach' && s.destinationSeed !== null)).toBe(true);
     expect(samples.some((s) => s.golden > 0.5)).toBe(true);
   });
+
+  it('fullSoak ramps submergence/warp rails instead of scripting rectangular steps', () => {
+    const script = makeSoakScript('fullSoak', SMOKE.planetSeed, 1000);
+    const samples = Array.from({ length: 1001 }, (_, t) => script(t));
+    expect(samples.some((s) => s.submergence > 0 && s.submergence < 0.85)).toBe(true);
+    let maxSubmergenceStep = 0;
+    let maxEnergyStep = 0;
+    for (let i = 1; i < samples.length; i++) {
+      maxSubmergenceStep = Math.max(
+        maxSubmergenceStep,
+        Math.abs(samples[i].submergence - samples[i - 1].submergence)
+      );
+      maxEnergyStep = Math.max(maxEnergyStep, Math.abs(samples[i].energy - samples[i - 1].energy));
+    }
+    expect(maxSubmergenceStep).toBeLessThan(0.2);
+    expect(maxEnergyStep).toBeLessThan(0.2);
+  });
 });
 
 describe('pure soak runs (the musical laws hold across every scenario)', () => {
@@ -262,6 +279,18 @@ describe('the audits can FAIL (a green light that cannot turn red proves nothing
     }
     report = auditSoakLog(log2);
     expect(report.checks.find((c) => c.name === 'no-deadlock')!.pass).toBe(false);
+  });
+
+  it('flags a doctored 0→1 continuous-control step (smoothness can turn red)', () => {
+    const log = healthy();
+    const index = 10;
+    log.bars[index - 1].subMotifMix = 0;
+    log.bars[index].subMotifMix = 1;
+    const report = auditSoakLog(log);
+    const smoothness = report.checks.find((c) => c.name === 'signal-smoothness')!;
+    expect(smoothness.pass).toBe(false);
+    expect(smoothness.violations).toBeGreaterThan(0);
+    expect(smoothness.detail).toContain('subMotifMix');
   });
 });
 

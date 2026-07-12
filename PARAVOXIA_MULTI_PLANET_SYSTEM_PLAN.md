@@ -1,11 +1,12 @@
 # Paravoxia Multi-Planet Star System Plan
 
-Status: **PLAYABLE SINGLE-PLAYER SYSTEM TRAVEL IMPLEMENTED - RELEASE PERFORMANCE GATE OPEN**
+Status: **PLAYABLE SINGLE-PLAYER SYSTEM TRAVEL IMPLEMENTED - VISUAL HANDOFF POLISHED, RELEASE PERFORMANCE GATE OPEN**
 
 Owner request: some galaxy coordinates should contain multiple planets. A player
 must be able to launch from one, fly through real continuous system space, see the
 destination grow throughout the trip, enter its atmosphere, and land without an
-interstellar warp or a visible world-swap mask. Sibling planets must also be
+interstellar warp, teleport, or loading screen. A short local atmospheric bloom may
+cover the renderer ownership swap without interrupting physical travel. Sibling planets must also be
 visible from the surface as high-quality, aggressively LOD-managed celestial
 bodies.
 
@@ -25,8 +26,15 @@ system population (with `?systemBodies=0|1|2|3` overrides for comparison):
 - inactive siblings render from the surface and deep space with shared cuboid
   geometry/material programs, terrain palette, clouds, rings, terminators,
   atmosphere extinction, and quality-tier budgets;
+- HIGH/ULTRA promote only the committed target from the procedural far body into
+  exact worker-cached exposed terrain faces and water between 1,050 and 420 units
+  using complementary screen-space dither; terrain face arrays are built in
+  5,000-voxel CPU slices into one instanced draw, water uses bounded 4,096-face
+  draws, and a 450 ms bidirectional ramp prevents late readiness or retargeting
+  from popping. Saved edits restore only after the covered active-runtime mount;
 - a canonical system-flight store owns position, velocity, orientation, render
-  origin, target, activation epoch, and the single pose-writer lease;
+  origin, target, activation epoch, and the single pose-writer lease; the final
+  planet/rebase/epoch publication is one validated atomic store commit;
 - local-body aim lock, physical thrust travel, readiness-aware approach assist,
   and atmosphere activation work without calling interstellar warp or party warp;
 - a cancellable module worker prepares packed terrain, exposed voxels, deposits,
@@ -35,28 +43,48 @@ system population (with `?systemBodies=0|1|2|3` overrides for comparison):
   canonical world ID;
 - source ecology demotes during departure and target terrain, water, structures,
   flora, and fauna stage during arrival; only one full planet runtime is mounted;
+- the final owner swap uses a dedicated 0.85-second `system_handoff` atmospheric
+  veil: it commits at the covered midpoint, waits for a false-to-true renderer-ready
+  cycle, and has a 750 ms deadlock cap without invoking interstellar or party warp;
+- the midpoint revalidates target, system, activation epoch, cache residency,
+  single-player ownership, and source world; stale or rejected handoffs release the
+  activation gate for retry instead of committing a captured closure;
+- scene readiness ignores old-scene frames and requires eight destination frames
+  painted after the new terrain mesh reports populated;
 - offline persistence records the last canonical planet while retaining the
   legacy `lastWorld` fallback.
 
 Current evidence on HIGH at `1440x900`, system `-19,-17`:
 
 - 10,000-system determinism, separation, population, and envelope sweep passes;
-- surface companion delta is 139 -> 145 draws, 961,590 -> 970,422 triangles,
-  44 -> 45 shader programs, and p95 16.9 -> 16.8 ms;
+- surface companion delta after the higher far LOD is 139 -> 145 draws,
+  961,590 -> 988,566 triangles, 40 -> 41 shader programs, and p95
+  16.9 -> 17.0 ms;
+- five representative exact shells submit 65,294 -> 73,934 triangles in 3 -> 4
+  draws, with a two-program approach delta, below the HIGH 220k/6-draw/2-program
+  limits;
 - a real ShipController route crosses 2,221 units, activates `-19,-17:p1` in
-  about 9.7 seconds, and preserves canonical pose, velocity, and orientation;
-- no browser, React-depth, black-frame, loading-screen, warp, or party-warp error
-  was observed in the route probe;
-- final `npm run verify` passes with 925/925 client tests and 43/43 source server
+  about 10.0 seconds, and preserves canonical pose, velocity, and orientation;
+- approach captures at 1,000, 700, 420, and 240 units show progressive real
+  landmarks; the owner swap was captured at `system_handoff` progress `0.5` with
+  the destination already active and the veil held for renderer readiness;
+- no browser, React-depth, black-frame, loading-screen, interstellar-warp, or
+  party-warp error was observed in the route probe;
+- final `npm run verify` passes with 983/983 client tests and 43/43 source server
   tests, both TypeScript builds, and the production Vite bundle;
 
-This is not yet the release gate. The exact-runtime handoff still produces two
-headless Long Tasks (65 ms and 93 ms in the latest route) while instance buffers
-and the first exact frame become renderer-ready. CPU terrain population itself was
-18.5 ms and water fill 3.5 ms. The next pass must stage GPU upload/readiness and
-retain a pixel-matched proxy until the exact frame has painted. Byte-weighted cache
-limits, full A -> B -> A edit preservation, persistent Physics/controller ownership,
-and multiplayer system travel also remain open.
+This is not yet the release gate. Batching removed the former 59 ms exact-shell
+upload task at the LOD promotion boundary, and the local veil now covers the active
+runtime swap until its first ready frames. The latest non-screenshot route holds
+about 17.0 ms approach p95 and records no Long Task at the 1,050 -> 420 LOD
+transition, including the single exposed-terrain attribute publication.
+Destination activation still produces five staged Long Tasks between 50 and 97
+ms; measured active terrain and water publication account for about 17.1 ms and
+2.8 -> 3.9 ms, with later ecology/runtime staging owning the remaining work.
+Those tasks must be reduced rather than treated as solved by the visual cover.
+Byte-weighted cache limits, full A -> B -> A edit evidence, persistent
+Physics/controller ownership, all-profile cold/warm route evidence, and
+multiplayer system travel also remain open.
 
 ---
 
@@ -109,8 +137,9 @@ remain continuous.
       not their existence.
 - [x] Offline single-player remains functional at every phase.
 - [ ] Co-op cannot silently accept cross-planet mutations or poses.
-- [ ] No black frame, white flash, loading screen, or forced interstellar warp may
-      hide a same-system handoff.
+- [x] No black frame, loading screen, teleport, or forced interstellar warp hides a
+      same-system handoff. The intentional local atmospheric bloom covers only the
+      renderer-owner commit after continuous physical travel.
 
 ---
 
@@ -415,7 +444,7 @@ progress, memory budget, and physical activation safety bands.
 | interstellar marker | `<6px` | batched point/billboard | other systems |
 | sky proxy | `6-96px` projected bound, low error | shared low-cost procedural body | all siblings |
 | macro body | proxy error exceeds budget, or target is committed | cuboid terrain shell + atmosphere | committed/near body |
-| exact terrain | target ready, entry safety band about 600 units | packed exposed terrain render shell, no gameplay owner | max one |
+| exact terrain | target ready, dither begins at 1,050 units and completes by 420 | packed exposed terrain render shell, no gameplay owner | max one |
 | active surface | before outer atmosphere/landing safety band, activation ready | water + colliders + ecology + structures + voxel owner | max one |
 
 The physical bands are approach safety gates, not substitutes for visual error. A
@@ -431,9 +460,9 @@ available until exact activation is proven complete.
 - Use real system direction and physical angular size.
 - Match planet art direction: land, rock, ocean, ice, atmosphere, cloud, bloom,
   rings, and sun terminator.
-- The macro shell must sample the actual dominant-axis/cuboid terrain field. The
-  current `worldPreview` sphere is suitable for metadata colors, not for the final
-  approach silhouette.
+- The near target shell uses the actual exposed terrain matrices and material
+  colors from the prepared world cache. The distant `worldPreview` field remains
+  suitable for metadata-scale color and relief, not the final approach silhouette.
 - Construct the macro from six dominant-axis face heightfields produced by the real
   generator contract. Quantize toward the voxel silhouette; weld or skirt face
   seams; preserve ocean/material classification; test corners, seams, coastlines,
@@ -638,8 +667,8 @@ Target macro/approach shell caps:
 - POTATO: 16k
 
 During source demotion or target promotion, the matched exact-only control may add
-at most the tier's macro triangles, 6 transient draws, and 1 already-precompiled
-program. Record opaque/transparent passes and GPU time separately; doubled
+at most the tier's macro triangles, 6 transient draws, and 2 already-precompiled
+programs. Record opaque/transparent passes and GPU time separately; doubled
 atmospheres, cloud shells, bloom rims, or post-process registrations are forbidden.
 
 Add graphics controls in `main/src/config/graphicsSettings.ts` for:
@@ -841,7 +870,10 @@ Gate:
 - [ ] Add byte-weighted warm/active/return caches.
 - [ ] Key every mutable cache by canonical planet identity and payload/schema
       version, never seed alone.
-- [ ] Pace GPU upload and precompile target programs.
+- [x] Build terrain faces in 5,000-voxel CPU slices, publish them as one instanced
+      draw, pace water in 4,096-face draws, and prewarm both exact programs before
+      visible promotion.
+- [ ] Pace the active gameplay runtime's remaining GPU upload and activation work.
 
 Gate:
 
@@ -862,8 +894,9 @@ Gate:
 
 - [x] Add physical local body targeting and equivalent canonical system-cruise state.
 - [x] Keep interstellar targets on `beginTravel()`.
-- [ ] Add source proxy demotion, target macro promotion, reference-frame rebase,
-      exact terrain activation, and dither handoff.
+- [x] Add target exact-shell promotion, reference-frame rebase, exact terrain
+      activation, complementary dither, and a renderer-ready local handoff veil.
+- [ ] Add source proxy demotion before unmounting the source full runtime.
 - [ ] Generate and align the source macro before demotion; transfer image ownership
       to it before unmounting source terrain or colliders.
 - [ ] Execute every body change through the atomic activation epoch/lease.
@@ -877,7 +910,8 @@ Gate:
 
 - no frame gap >= 50 ms;
 - travel p95 <= baseline + 2 ms and FPS loss <= 5%;
-- no white/black/loading mask;
+- no black/loading screen, teleport, or interstellar warp; the local atmospheric
+  veil must remain bounded to the renderer ownership commit;
 - canonical/view-relative continuity and planet/system pose conversion tolerances
   pass every boarding, landing, demotion, rebase, and promotion;
 - projected center/radius transition <= 2 framebuffer pixels, with no silhouette
@@ -1036,16 +1070,20 @@ are proven.
 
 ## 18. Resume Here
 
-Resume at the **P3/P4 renderer-readiness gate**, not P0:
+Resume at the **P3/P4 activation-performance gate**, not P0:
 
-1. keep the target proxy visible until the exact target reports one painted frame;
-2. pace or pre-upload target instance buffers so every feature-attributed task is
-   below 50 ms, then repeat cold/warm routes on all quality profiles;
-3. replace count-only world-cache eviction with canonical, byte-weighted active,
+1. attribute and stage the remaining active-runtime activation work until every
+   feature task is below 50 ms; keep the ready-gated local veil as perceptual cover,
+   not as the performance fix;
+2. repeat cold/warm routes and LOD-boundary oscillation on all quality profiles,
+   including screenshot sequences and program/upload counters;
+3. blend the nearest-atmosphere sky, fog, grade, and audio continuously before the
+   final ownership commit;
+4. replace count-only world-cache eviction with canonical, byte-weighted active,
    warm-target, and return reservations;
-4. lift Physics and ShipController above the keyed active-planet runtime so cruise
+5. lift Physics and ShipController above the keyed active-planet runtime so cruise
    can hold zero full worlds rather than restoring pose across a remount;
-5. run A -> B -> A with terrain, water, tree, and structure edits plus ten-trip heap
+6. run A -> B -> A with terrain, water, tree, and structure edits plus ten-trip heap
    soak evidence before enabling system travel for multiplayer.
 
 Reproduce the implemented route with:

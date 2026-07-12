@@ -4,6 +4,7 @@ import {
   cancelSystemTarget,
   commitInterstellarTarget,
   commitSystemBodyTarget,
+  commitSystemPlanetHandoff,
   getSystemFlightSnapshot,
   planetLocalPoseToSystemPose,
   projectSystemPosition,
@@ -149,6 +150,37 @@ describe('system-flight ownership and targeting', () => {
       .toThrow('System-body target must belong to the current star system.');
     expect(() => setActiveSystemPlanet('8,-3:p1'))
       .toThrow('Active planet must belong to the current star system.');
+  });
+
+  it('commits the local body, render origin, location, and target as one boundary', () => {
+    resetSystemFlightForInterstellarArrival({
+      system: { x: 7, y: -3 },
+      activePlanetId: '7,-3',
+      pose: poseAt([2_100, 20, -4])
+    });
+    const targetEpoch = commitSystemBodyTarget({ system: { x: 7, y: -3 }, slot: 1 });
+    const poseBefore = getSystemFlightSnapshot().pose;
+    let notifications = 0;
+    const unsubscribe = subscribeSystemFlight(() => notifications++);
+
+    const committedEpoch = commitSystemPlanetHandoff({
+      worldId: '7,-3:p1',
+      renderOrigin: [2_200, 40, -10],
+      expectedActivationEpoch: targetEpoch
+    });
+    const committed = getSystemFlightSnapshot();
+    unsubscribe();
+
+    expect(committedEpoch).toBe(targetEpoch + 1);
+    expect(notifications).toBe(1);
+    expect(committed).toMatchObject({
+      locationMode: 'atmosphere',
+      activePlanetId: '7,-3:p1',
+      lastActivePlanetId: '7,-3:p1',
+      target: null,
+      renderOrigin: [2_200, 40, -10]
+    });
+    expect(committed.pose).toBe(poseBefore);
   });
 
   it('represents interstellar targets separately from same-system bodies', () => {

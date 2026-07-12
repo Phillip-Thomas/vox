@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   eraFade,
   neutralBedSignals,
+  resolveAudioGust,
   resolveClockPressure,
   resolveEraGates,
   resolveMacroDrift,
@@ -40,6 +41,19 @@ describe('world-clock tick (§8.1, owner ruling #2)', () => {
     expect(resolveWorldClockTick(sig({ tension: TICK_GATE + 0.01 })).present).toBe(true);
   });
 
+  it('exposes a continuous presence fade around the boolean compatibility gate', () => {
+    const values: number[] = [];
+    for (let tension = TICK_GATE - 0.12; tension <= TICK_GATE + 0.121; tension += 0.01) {
+      values.push(resolveWorldClockTick(sig({ tension })).presence);
+    }
+    expect(values[0]).toBe(0);
+    expect(values[values.length - 1]).toBe(1);
+    for (let i = 1; i < values.length; i++) {
+      expect(values[i]).toBeGreaterThanOrEqual(values[i - 1]);
+      expect(values[i] - values[i - 1]).toBeLessThan(0.12);
+    }
+  });
+
   it('warp compresses time, descent accelerates, depth dilates — all clamped', () => {
     const base = resolveClockPressure(sig({}));
     expect(resolveClockPressure(sig({ warpActive: true }))).toBeGreaterThan(base);
@@ -70,6 +84,56 @@ describe('world-clock tick (§8.1, owner ruling #2)', () => {
     expect(resolveWorldClockTick(sig({ stage: 'bare' })).splitHz).toBeNull();
     const split = resolveWorldClockTick(sig({ stage: 'paradox', tension: 0.9 }));
     expect(split.splitHz).toBeCloseTo(split.hz * PARADOX_TICK_RATIO, 10);
+  });
+});
+
+describe('shared visual/audio gust field (§8.4 wind coherence)', () => {
+  const windy = sig({
+    windDirectionX: 0.8,
+    windDirectionY: 0.6,
+    windStrength: 1.2,
+    windGustStrength: 1.1,
+    windGustScale: 0.05,
+    windGustSpeed: 0.7,
+    windTurbulence: 0.5,
+    windVeer: 0.9,
+    windOffsetX: 17,
+    windOffsetY: -23,
+    playerX: 48,
+    playerZ: -31,
+    timeSec: 91
+  });
+
+  it('is deterministic and returns bounded audio controls', () => {
+    const a = resolveAudioGust(windy);
+    const b = resolveAudioGust({ ...windy });
+    expect(b).toEqual(a);
+    expect(a.gust).toBeGreaterThanOrEqual(0);
+    expect(a.gust).toBeLessThanOrEqual(1);
+    expect(a.drive).toBeGreaterThanOrEqual(0);
+    expect(a.drive).toBeLessThanOrEqual(1);
+    expect(a.pan).toBeGreaterThanOrEqual(-1);
+    expect(a.pan).toBeLessThanOrEqual(1);
+    expect(a.turbulence).toBe(0.5);
+  });
+
+  it('moves with the same time and world-position inputs as the visual gust cells', () => {
+    const here = resolveAudioGust(windy);
+    const later = resolveAudioGust({ ...windy, timeSec: windy.timeSec + 17 });
+    const elsewhere = resolveAudioGust({ ...windy, playerX: windy.playerX + 64 });
+    expect(later.gust).not.toBe(here.gust);
+    expect(elsewhere.gust).not.toBe(here.gust);
+  });
+
+  it('is continuous while crossing a gust cell (no field-edge gain steps)', () => {
+    let previous = resolveAudioGust(windy);
+    for (let step = 1; step <= 100; step++) {
+      const next = resolveAudioGust({ ...windy, playerX: windy.playerX + step * 0.01 });
+      expect(Math.abs(next.gust - previous.gust)).toBeLessThan(0.01);
+      expect(Math.abs(next.drive - previous.drive)).toBeLessThan(0.01);
+      expect(Math.abs(next.pan - previous.pan)).toBeLessThan(0.01);
+      previous = next;
+    }
   });
 });
 

@@ -58,6 +58,12 @@ export interface InterstellarSystemReset {
   renderOrigin?: SystemVectorTuple;
 }
 
+export interface SystemPlanetHandoffCommit {
+  worldId: string;
+  renderOrigin: SystemVectorTuple;
+  expectedActivationEpoch: number;
+}
+
 type Listener = () => void;
 
 const ZERO_VECTOR: SystemVectorTuple = Object.freeze([0, 0, 0]);
@@ -146,6 +152,29 @@ export function setActiveSystemPlanet(worldId: string | null): number {
     ...snapshot,
     activePlanetId: worldId,
     lastActivePlanetId: worldId ?? snapshot.lastActivePlanetId,
+    activationEpoch
+  });
+  return activationEpoch;
+}
+
+/** Atomically transfer local render ownership without touching canonical ship pose. */
+export function commitSystemPlanetHandoff(input: SystemPlanetHandoffCommit): number {
+  assertPlanetBelongsToSystem(input.worldId, snapshot.systemId);
+  const renderOrigin = freezeVector(input.renderOrigin);
+  if (snapshot.activationEpoch !== input.expectedActivationEpoch) {
+    throw new Error('System-planet handoff activation epoch is stale.');
+  }
+  if (snapshot.target?.kind !== 'system_body' || snapshot.target.worldId !== input.worldId) {
+    throw new Error('System-planet handoff target is no longer current.');
+  }
+  const activationEpoch = snapshot.activationEpoch + 1;
+  publishBoundary({
+    ...snapshot,
+    locationMode: 'atmosphere',
+    activePlanetId: input.worldId,
+    lastActivePlanetId: input.worldId,
+    target: null,
+    renderOrigin,
     activationEpoch
   });
   return activationEpoch;

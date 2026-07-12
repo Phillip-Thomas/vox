@@ -1,8 +1,15 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
 import {
+  EVIDENCE_PAIR_NAMES,
   EXCERPT_NAMES,
+  renderEvidence,
   renderExcerpt,
   runAudioSoak,
+  runEraBuildSmoothnessSweep,
+  runStoryHandoffSmoothnessSweep,
+  runSmoothnessSweep,
+  type EvidencePairName,
+  type EvidenceVariant,
   type ExcerptName
 } from './excerpts.ts';
 
@@ -25,23 +32,43 @@ function toBase64(bytes: Uint8Array): string {
 
 export interface SoakPageApi {
   excerptNames: readonly ExcerptName[];
+  evidencePairNames: readonly EvidencePairName[];
   renderExcerpt(name: ExcerptName): Promise<{
     name: string;
     fileStem: string;
     description: string;
     seconds: number;
     analysis: Record<string, number>;
+    continuousControlAnalysis?: Record<string, number>;
     healthPass: boolean;
     report: unknown;
     wavBytes: number;
   }>;
+  renderEvidence(pair: EvidencePairName, variant: EvidenceVariant): Promise<{
+    name: string;
+    fileStem: string;
+    description: string;
+    seconds: number;
+    analysis: Record<string, number>;
+    continuousControlAnalysis?: Record<string, number>;
+    healthPass: boolean;
+    report: unknown;
+    mappingValues: Record<string, number | string>;
+    wavBytes: number;
+  }>;
   wavChunk(offset: number): string | null;
   runAudioSoak(minutes: number, seed?: number, archetype?: string): Promise<unknown>;
+  runSmoothnessSweep(): Promise<unknown>;
+  runEraBuildSmoothnessSweep(): Promise<unknown>;
+  runStoryHandoffSmoothnessSweep(
+    auditStem?: 'combined' | 'bed' | 'story' | 'legacy'
+  ): Promise<unknown>;
 }
 
 function buildApi(): SoakPageApi {
   return {
     excerptNames: EXCERPT_NAMES,
+    evidencePairNames: EVIDENCE_PAIR_NAMES,
     async renderExcerpt(name: ExcerptName) {
       console.log(`[soak-page] rendering excerpt ${name}…`);
       const started = performance.now();
@@ -57,8 +84,36 @@ function buildApi(): SoakPageApi {
         description: result.description,
         seconds: result.seconds,
         analysis: { ...result.analysis },
+        continuousControlAnalysis: result.continuousControlAnalysis
+          ? { ...result.continuousControlAnalysis }
+          : undefined,
         healthPass: result.healthPass,
         report: result.report,
+        wavBytes: lastWav.length
+      };
+    },
+    async renderEvidence(pair: EvidencePairName, variant: EvidenceVariant) {
+      console.log(`[soak-page] rendering evidence ${pair} ${variant}…`);
+      const started = performance.now();
+      const result = await renderEvidence(pair, variant);
+      lastWav = new Uint8Array(result.wav);
+      console.log(
+        `[soak-page] ${pair} ${variant} rendered in ${((performance.now() - started) / 1000).toFixed(1)}s ` +
+          `(peak ${result.analysis.peak.toFixed(3)}, rms ${result.analysis.rms.toFixed(4)}, ` +
+          `smooth ${result.analysis.maxSmoothnessDeltaDb.toFixed(2)} dB)`
+      );
+      return {
+        name: result.name,
+        fileStem: result.fileStem,
+        description: result.description,
+        seconds: result.seconds,
+        analysis: { ...result.analysis },
+        continuousControlAnalysis: result.continuousControlAnalysis
+          ? { ...result.continuousControlAnalysis }
+          : undefined,
+        healthPass: result.healthPass,
+        report: result.report,
+        mappingValues: result.mappingValues ?? {},
         wavBytes: lastWav.length
       };
     },
@@ -72,6 +127,33 @@ function buildApi(): SoakPageApi {
       const result = await runAudioSoak(minutes, seed, archetype as ArchetypeId | undefined);
       console.log(
         `[soak-page] soak rendered in ${((performance.now() - started) / 1000).toFixed(1)}s`
+      );
+      return result;
+    },
+    async runSmoothnessSweep() {
+      console.log('[soak-page] continuous day→night→day smoothness render…');
+      const started = performance.now();
+      const result = await runSmoothnessSweep();
+      console.log(
+        `[soak-page] smoothness sweep rendered in ${((performance.now() - started) / 1000).toFixed(1)}s`
+      );
+      return result;
+    },
+    async runEraBuildSmoothnessSweep() {
+      console.log('[soak-page] era-changing BUILD→BLOOM root-cause render…');
+      const started = performance.now();
+      const result = await runEraBuildSmoothnessSweep();
+      console.log(
+        `[soak-page] root-cause sweep rendered in ${((performance.now() - started) / 1000).toFixed(1)}s`
+      );
+      return result;
+    },
+    async runStoryHandoffSmoothnessSweep(auditStem = 'combined') {
+      console.log('[soak-page] story authority yield→scene-change→resume render…');
+      const started = performance.now();
+      const result = await runStoryHandoffSmoothnessSweep(auditStem);
+      console.log(
+        `[soak-page] story handoff sweep rendered in ${((performance.now() - started) / 1000).toFixed(1)}s`
       );
       return result;
     }

@@ -73,6 +73,11 @@ export interface WorldTerrainData {
   initialTerrainMeshData: InitialTerrainMeshData;
 }
 
+export interface PreparedWorldRenderData {
+  terrain: InitialTerrainMeshData;
+  waterFaces: ReadonlyArray<{ x: number; y: number; z: number; faceDir: number }>;
+}
+
 export interface WorldPrewarmOptions {
   terrainData?: boolean;
   waterFaces?: boolean;
@@ -212,6 +217,39 @@ export function hasWorldGenCacheEntry(
 ): boolean {
   const entry = cache.get(cacheKey(size, terrainSeed));
   return Boolean(entry && (worldId === undefined || entry.worldId === worldId));
+}
+
+/**
+ * Read-only render data for a prepared canonical planet. This does not promote
+ * the LRU entry; approach targeting remains the owner of residency decisions.
+ */
+export function getPreparedWorldTerrainMeshData(
+  size: number,
+  terrainSeed: number,
+  worldId: string
+): InitialTerrainMeshData | null {
+  const entry = cache.get(cacheKey(size, terrainSeed));
+  if (!entry || entry.worldId !== worldId) return null;
+  return entry.initialTerrainMeshData ?? null;
+}
+
+/** Canonical non-touching data used to stage the committed target's render shell. */
+export function getPreparedWorldRenderData(
+  size: number,
+  terrainSeed: number,
+  worldId: string
+): PreparedWorldRenderData | null {
+  const entry = cache.get(cacheKey(size, terrainSeed));
+  if (
+    !entry
+    || entry.worldId !== worldId
+    || !entry.initialTerrainMeshData
+    || !entry.waterFaces
+  ) return null;
+  return {
+    terrain: entry.initialTerrainMeshData,
+    waterFaces: entry.waterFaces
+  };
 }
 
 export function getWorldWaterVoxels(

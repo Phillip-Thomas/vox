@@ -38,6 +38,12 @@ interface RuntimeLayer {
   targetGain: number;
 }
 
+interface AutomatableLayer {
+  asset: MusicLayerAsset;
+  gain: GainNode | null;
+  targetGain: number;
+}
+
 interface ProceduralRuntime {
   pulseOsc: OscillatorNode;
   pulseGain: GainNode;
@@ -77,6 +83,28 @@ const DRONE_RUMBLE_FOLD_LO_HZ = 27.5; // sub rumble (was fixed 36 Hz)
 const DRONE_LIFE_FOLD_LO_HZ = 138; // life shimmer pair (was 174.61/220)
 const DRONE_GLASS_FOLD_LO_HZ = 550; // glass pair (was E5/B5)
 const DRONE_NIGHT_FOLD_LO_HZ = 70; // night pair (was E2/B2)
+export const STREAM_LAYER_MIN_SLEW_S = 0.45;
+export const PROCEDURAL_MIN_SLEW_S = 0.35;
+export const PROCEDURAL_FILTER_MIN_SLEW_S = 0.5;
+const MUSIC_ENGINE_UNLOCK_SLEW_S = 0.2;
+const STREAM_LAYER_START_SLEW_S = 0.8;
+const DRONE_FOLD_MIN_MULT = 0.75;
+const DRONE_FOLD_MAX_MULT = 4;
+const DRONE_FOLD_OCTAVE_MIN = -5;
+const DRONE_FOLD_OCTAVE_MAX = 5;
+const WARP_NOISE_SEED = 0x77617270;
+const WIND_NOISE_SEED = 0x77696e64;
+const WATER_NOISE_SEED = 0x77617472;
+const CUE_NOISE_SEED = 0x63756573;
+const OFFLINE_STEM_AUDIT_CARRIER_LEVEL = 0.012;
+const OFFLINE_STEM_AUDIT_BUFFER_S = 2;
+const OFFLINE_STEM_AUDIT_SEEDS: Readonly<Record<MusicLayerId, number>> = {
+  menu: 0x6d656e75,
+  surface: 0x73757266,
+  deepSpace: 0x64656570,
+  shimmer: 0x7368696d,
+  warp: 0x6c617965
+};
 
 const ZERO_PROCEDURAL: ProceduralMusicTargets = {
   pulse: 0,
@@ -89,6 +117,271 @@ const ZERO_PROCEDURAL: ProceduralMusicTargets = {
   water: 0,
   night: 0
 };
+
+const clampUnit = (value: number): number => Math.min(1, Math.max(0, value));
+
+function normalizeProceduralTargets(targets: ProceduralMusicTargets): ProceduralMusicTargets {
+  return {
+    pulse: clampUnit(targets.pulse),
+    ship: clampUnit(targets.ship),
+    warp: clampUnit(targets.warp),
+    life: clampUnit(targets.life),
+    wind: clampUnit(targets.wind),
+    glass: clampUnit(targets.glass),
+    rumble: clampUnit(targets.rumble),
+    water: clampUnit(targets.water),
+    night: clampUnit(targets.night)
+  };
+}
+
+/** Shared by loaded live stems and deterministic offline proxy stems. */
+function automateLayerTargets(
+  context: BaseAudioContext,
+  layers: Iterable<AutomatableLayer>,
+  targets: Partial<Record<MusicLayerId, number>>,
+  fadeSeconds: number
+): void {
+  const slew = Math.max(STREAM_LAYER_MIN_SLEW_S, fadeSeconds);
+  for (const layer of layers) {
+    const target = clampUnit(targets[layer.asset.id] ?? 0);
+    layer.targetGain = target;
+    if (layer.gain) rampGain(context, layer.gain.gain, target, slew);
+  }
+}
+
+/** Shared by the shipped runtime and the offline audit graph. */
+function automateProceduralTargets(
+  context: BaseAudioContext,
+  procedural: ProceduralRuntime,
+  targets: ProceduralMusicTargets,
+  fadeSeconds: number
+): void {
+  const gainSlew = Math.max(PROCEDURAL_MIN_SLEW_S, fadeSeconds);
+  const filterSlew = Math.max(PROCEDURAL_FILTER_MIN_SLEW_S, fadeSeconds);
+  const { pulse, ship, warp, life, wind, glass, rumble, water, night } = targets;
+  rampGain(context, procedural.pulseGain.gain, pulse, gainSlew);
+  rampGain(context, procedural.shipGain.gain, ship, gainSlew);
+  rampGain(context, procedural.warpNoiseGain.gain, warp * 0.045, gainSlew);
+  rampGain(context, procedural.warpToneGain.gain, warp * 0.075, gainSlew);
+  rampGain(context, procedural.lifeGain.gain, life, gainSlew);
+  rampGain(context, procedural.windGain.gain, wind * 0.32, gainSlew);
+  rampGain(context, procedural.glassGain.gain, glass, gainSlew);
+  rampGain(context, procedural.rumbleGain.gain, rumble * 0.45, gainSlew);
+  rampGain(context, procedural.waterGain.gain, water * 0.28, gainSlew);
+  rampGain(context, procedural.nightGain.gain, night, gainSlew);
+
+  // These filters are just as audible as gains. Route them through the shared
+  // start-anchored slew; a bare linear endpoint can interpolate from an old
+  // event and present as a current-time cutoff jump in Chromium.
+  rampGain(context, procedural.warpNoiseFilter.frequency, 620 + warp * 5200, filterSlew);
+  rampGain(context, procedural.warpTone.frequency, 140 + warp * 720, filterSlew);
+  rampGain(context, procedural.windFilter.frequency, 360 + wind * 680, filterSlew);
+  rampGain(context, procedural.waterFilter.frequency, 220 + water * 260, filterSlew);
+}
+
+function retuneProceduralDrones(
+  context: BaseAudioContext,
+  procedural: ProceduralRuntime,
+  rootSemisFromA: number
+): void {
+  const pc = ((Math.round(rootSemisFromA) % 12) + 12) % 12;
+  const rootHz = 55 * Math.pow(2, pc / 12);
+  const fold = (hz: number, lo: number, around: number): number => {
+    let best = hz;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    for (let octave = DRONE_FOLD_OCTAVE_MIN; octave <= DRONE_FOLD_OCTAVE_MAX; octave++) {
+      const candidate = hz * Math.pow(2, octave);
+      if (candidate < lo * DRONE_FOLD_MIN_MULT || candidate > lo * DRONE_FOLD_MAX_MULT) continue;
+      const distance = Math.abs(Math.log2(candidate / Math.max(Number.EPSILON, around)));
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = candidate;
+      }
+    }
+    return best;
+  };
+  const now = context.currentTime;
+  const glide = (param: AudioParam, hz: number): void => {
+    param.cancelAndHoldAtTime(now);
+    param.setTargetAtTime(hz, now, DRONE_RETUNE_TAU_S);
+  };
+  glide(
+    procedural.shipOsc.frequency,
+    fold(rootHz, DRONE_SHIP_FOLD_LO_HZ, procedural.shipOsc.frequency.value)
+  );
+  glide(
+    procedural.pulseOsc.frequency,
+    fold(rootHz, DRONE_PULSE_FOLD_LO_HZ, procedural.pulseOsc.frequency.value)
+  );
+  glide(
+    procedural.rumbleOsc.frequency,
+    fold(rootHz, DRONE_RUMBLE_FOLD_LO_HZ, procedural.rumbleOsc.frequency.value)
+  );
+  const lifeHz = fold(rootHz, DRONE_LIFE_FOLD_LO_HZ, procedural.lifeA.frequency.value);
+  glide(procedural.lifeA.frequency, lifeHz);
+  glide(procedural.lifeB.frequency, lifeHz * FIFTH_RATIO);
+  const glassHz = fold(rootHz, DRONE_GLASS_FOLD_LO_HZ, procedural.glassA.frequency.value);
+  glide(procedural.glassA.frequency, glassHz);
+  glide(procedural.glassB.frequency, glassHz * FIFTH_RATIO);
+  const nightHz = fold(rootHz, DRONE_NIGHT_FOLD_LO_HZ, procedural.nightA.frequency.value);
+  glide(procedural.nightA.frequency, nightHz);
+  glide(procedural.nightB.frequency, nightHz * FIFTH_RATIO);
+}
+
+/** One persistent procedural graph, shared by live playback and offline audits. */
+function createProceduralRuntime(
+  context: BaseAudioContext,
+  output: AudioNode
+): ProceduralRuntime {
+  const pulseOsc = context.createOscillator();
+  const pulseGain = context.createGain();
+  pulseOsc.type = 'sine';
+  pulseOsc.frequency.value = 47;
+  pulseGain.gain.value = 0;
+  pulseOsc.connect(pulseGain);
+  pulseGain.connect(output);
+  pulseOsc.start();
+
+  const shipOsc = context.createOscillator();
+  const shipGain = context.createGain();
+  shipOsc.type = 'triangle';
+  shipOsc.frequency.value = 64;
+  shipGain.gain.value = 0;
+  shipOsc.connect(shipGain);
+  shipGain.connect(output);
+  shipOsc.start();
+
+  const warpNoise = context.createBufferSource();
+  const warpNoiseFilter = context.createBiquadFilter();
+  const warpNoiseGain = context.createGain();
+  warpNoise.buffer = makeNoiseBuffer(context, 2, WARP_NOISE_SEED);
+  warpNoise.loop = true;
+  warpNoiseFilter.type = 'bandpass';
+  warpNoiseFilter.frequency.value = 620;
+  warpNoiseFilter.Q.value = 0.8;
+  warpNoiseGain.gain.value = 0;
+  warpNoise.connect(warpNoiseFilter);
+  warpNoiseFilter.connect(warpNoiseGain);
+  warpNoiseGain.connect(output);
+  warpNoise.start();
+
+  const warpTone = context.createOscillator();
+  const warpToneGain = context.createGain();
+  warpTone.type = 'sine';
+  warpTone.frequency.value = 140;
+  warpToneGain.gain.value = 0;
+  warpTone.connect(warpToneGain);
+  warpToneGain.connect(output);
+  warpTone.start();
+
+  const lifeGain = context.createGain();
+  const lifeA = context.createOscillator();
+  const lifeB = context.createOscillator();
+  lifeA.type = 'sine';
+  lifeB.type = 'triangle';
+  lifeA.frequency.value = 174.61;
+  lifeB.frequency.value = 220;
+  lifeGain.gain.value = 0;
+  lifeA.connect(lifeGain);
+  lifeB.connect(lifeGain);
+  lifeGain.connect(output);
+  lifeA.start();
+  lifeB.start();
+
+  const windNoise = context.createBufferSource();
+  const windFilter = context.createBiquadFilter();
+  const windGain = context.createGain();
+  windNoise.buffer = makeNoiseBuffer(context, 3, WIND_NOISE_SEED);
+  windNoise.loop = true;
+  windFilter.type = 'lowpass';
+  windFilter.frequency.value = 360;
+  windFilter.Q.value = 0.35;
+  windGain.gain.value = 0;
+  windNoise.connect(windFilter);
+  windFilter.connect(windGain);
+  windGain.connect(output);
+  windNoise.start();
+
+  const glassGain = context.createGain();
+  const glassA = context.createOscillator();
+  const glassB = context.createOscillator();
+  glassA.type = 'sine';
+  glassB.type = 'sine';
+  glassA.frequency.value = 659.25;
+  glassB.frequency.value = 987.77;
+  glassGain.gain.value = 0;
+  glassA.connect(glassGain);
+  glassB.connect(glassGain);
+  glassGain.connect(output);
+  glassA.start();
+  glassB.start();
+
+  const rumbleOsc = context.createOscillator();
+  const rumbleGain = context.createGain();
+  rumbleOsc.type = 'sawtooth';
+  rumbleOsc.frequency.value = 36;
+  rumbleGain.gain.value = 0;
+  rumbleOsc.connect(rumbleGain);
+  rumbleGain.connect(output);
+  rumbleOsc.start();
+
+  const waterNoise = context.createBufferSource();
+  const waterFilter = context.createBiquadFilter();
+  const waterGain = context.createGain();
+  waterNoise.buffer = makeNoiseBuffer(context, 3, WATER_NOISE_SEED);
+  waterNoise.loop = true;
+  waterFilter.type = 'lowpass';
+  waterFilter.frequency.value = 220;
+  waterFilter.Q.value = 0.4;
+  waterGain.gain.value = 0;
+  waterNoise.connect(waterFilter);
+  waterFilter.connect(waterGain);
+  waterGain.connect(output);
+  waterNoise.start();
+
+  const nightGain = context.createGain();
+  const nightA = context.createOscillator();
+  const nightB = context.createOscillator();
+  nightA.type = 'sine';
+  nightB.type = 'triangle';
+  nightA.frequency.value = 82.41;
+  nightB.frequency.value = 123.47;
+  nightGain.gain.value = 0;
+  nightA.connect(nightGain);
+  nightB.connect(nightGain);
+  nightGain.connect(output);
+  nightA.start();
+  nightB.start();
+
+  return {
+    pulseOsc,
+    pulseGain,
+    shipOsc,
+    shipGain,
+    warpNoise,
+    warpNoiseFilter,
+    warpNoiseGain,
+    warpTone,
+    warpToneGain,
+    lifeA,
+    lifeB,
+    lifeGain,
+    windNoise,
+    windFilter,
+    windGain,
+    glassA,
+    glassB,
+    glassGain,
+    rumbleOsc,
+    rumbleGain,
+    waterNoise,
+    waterFilter,
+    waterGain,
+    nightA,
+    nightB,
+    nightGain
+  };
+}
 
 class MusicEngine {
   // The engine's output into the shared music bus (audioCore owns volume/mute,
@@ -123,8 +416,8 @@ class MusicEngine {
     unlockAudio();
     await context.resume();
     this.startProcedural();
-    if (this.musicGain) rampGain(context, this.musicGain.gain, 1, 0.05);
-    this.setProceduralTargets(this.proceduralTargets, 0.05);
+    if (this.musicGain) rampGain(context, this.musicGain.gain, 1, MUSIC_ENGINE_UNLOCK_SLEW_S);
+    this.setProceduralTargets(this.proceduralTargets, MUSIC_ENGINE_UNLOCK_SLEW_S);
     this.loadAll();
   }
 
@@ -134,68 +427,24 @@ class MusicEngine {
   }
 
   setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void {
+    if (this.context) {
+      automateLayerTargets(this.context, this.layers.values(), targets, fadeSeconds);
+      return;
+    }
     for (const layer of this.layers.values()) {
-      const target = Math.min(1, Math.max(0, targets[layer.asset.id] ?? 0));
-      layer.targetGain = target;
-      if (layer.gain && this.context) {
-        rampGain(this.context, layer.gain.gain, target, fadeSeconds);
-      }
+      layer.targetGain = clampUnit(targets[layer.asset.id] ?? 0);
     }
   }
 
   setProceduralTargets(targets: ProceduralMusicTargets, fadeSeconds: number): void {
-    this.proceduralTargets = {
-      pulse: Math.min(1, Math.max(0, targets.pulse)),
-      ship: Math.min(1, Math.max(0, targets.ship)),
-      warp: Math.min(1, Math.max(0, targets.warp)),
-      life: Math.min(1, Math.max(0, targets.life)),
-      wind: Math.min(1, Math.max(0, targets.wind)),
-      glass: Math.min(1, Math.max(0, targets.glass)),
-      rumble: Math.min(1, Math.max(0, targets.rumble)),
-      water: Math.min(1, Math.max(0, targets.water)),
-      night: Math.min(1, Math.max(0, targets.night))
-    };
+    this.proceduralTargets = normalizeProceduralTargets(targets);
 
     if (!this.context || !this.procedural) return;
-    const { pulse, ship, warp, life, wind, glass, rumble, water, night } = this.proceduralTargets;
-    rampGain(this.context, this.procedural.pulseGain.gain, pulse, fadeSeconds);
-    rampGain(this.context, this.procedural.shipGain.gain, ship, fadeSeconds);
-    rampGain(this.context, this.procedural.warpNoiseGain.gain, warp * 0.045, fadeSeconds);
-    rampGain(this.context, this.procedural.warpToneGain.gain, warp * 0.075, fadeSeconds);
-    rampGain(this.context, this.procedural.lifeGain.gain, life, fadeSeconds);
-    rampGain(this.context, this.procedural.windGain.gain, wind * 0.32, fadeSeconds);
-    rampGain(this.context, this.procedural.glassGain.gain, glass, fadeSeconds);
-    rampGain(this.context, this.procedural.rumbleGain.gain, rumble * 0.45, fadeSeconds);
-    rampGain(this.context, this.procedural.waterGain.gain, water * 0.28, fadeSeconds);
-    rampGain(this.context, this.procedural.nightGain.gain, night, fadeSeconds);
-
-    const now = this.context.currentTime;
-    this.procedural.warpNoiseFilter.frequency.cancelScheduledValues(now);
-    this.procedural.warpNoiseFilter.frequency.setValueAtTime(
-      this.procedural.warpNoiseFilter.frequency.value,
-      now
-    );
-    this.procedural.warpNoiseFilter.frequency.linearRampToValueAtTime(
-      620 + warp * 5200,
-      now + Math.max(0.04, fadeSeconds)
-    );
-    this.procedural.warpTone.frequency.cancelScheduledValues(now);
-    this.procedural.warpTone.frequency.setValueAtTime(this.procedural.warpTone.frequency.value, now);
-    this.procedural.warpTone.frequency.linearRampToValueAtTime(
-      140 + warp * 720,
-      now + Math.max(0.04, fadeSeconds)
-    );
-    this.procedural.windFilter.frequency.cancelScheduledValues(now);
-    this.procedural.windFilter.frequency.setValueAtTime(this.procedural.windFilter.frequency.value, now);
-    this.procedural.windFilter.frequency.linearRampToValueAtTime(
-      360 + wind * 680,
-      now + Math.max(0.04, fadeSeconds)
-    );
-    this.procedural.waterFilter.frequency.cancelScheduledValues(now);
-    this.procedural.waterFilter.frequency.setValueAtTime(this.procedural.waterFilter.frequency.value, now);
-    this.procedural.waterFilter.frequency.linearRampToValueAtTime(
-      220 + water * 260,
-      now + Math.max(0.04, fadeSeconds)
+    automateProceduralTargets(
+      this.context,
+      this.procedural,
+      this.proceduralTargets,
+      fadeSeconds
     );
   }
 
@@ -212,31 +461,7 @@ class MusicEngine {
     const pc = ((Math.round(rootSemisFromA) % 12) + 12) % 12;
     this.chordRootPc = pc;
     if (!this.context || !this.procedural) return;
-    const rootHz = 55 * Math.pow(2, pc / 12);
-    const fold = (hz: number, lo: number): number => {
-      let f = hz;
-      while (f >= lo * 2) f /= 2;
-      while (f < lo) f *= 2;
-      return f;
-    };
-    const now = this.context.currentTime;
-    const glide = (param: AudioParam, hz: number): void => {
-      param.cancelScheduledValues(now);
-      param.setTargetAtTime(hz, now, DRONE_RETUNE_TAU_S);
-    };
-    const p = this.procedural;
-    glide(p.shipOsc.frequency, fold(rootHz, DRONE_SHIP_FOLD_LO_HZ));
-    glide(p.pulseOsc.frequency, fold(rootHz, DRONE_PULSE_FOLD_LO_HZ));
-    glide(p.rumbleOsc.frequency, fold(rootHz, DRONE_RUMBLE_FOLD_LO_HZ));
-    const lifeHz = fold(rootHz, DRONE_LIFE_FOLD_LO_HZ);
-    glide(p.lifeA.frequency, lifeHz);
-    glide(p.lifeB.frequency, lifeHz * FIFTH_RATIO);
-    const glassHz = fold(rootHz, DRONE_GLASS_FOLD_LO_HZ);
-    glide(p.glassA.frequency, glassHz);
-    glide(p.glassB.frequency, glassHz * FIFTH_RATIO);
-    const nightHz = fold(rootHz, DRONE_NIGHT_FOLD_LO_HZ);
-    glide(p.nightA.frequency, nightHz);
-    glide(p.nightB.frequency, nightHz * FIFTH_RATIO);
+    retuneProceduralDrones(this.context, this.procedural, pc);
   }
 
   playTransitionCue(cue: TransitionCue): void {
@@ -383,161 +608,13 @@ class MusicEngine {
 
     layer.gain = gain;
     layer.source = source;
-    rampGain(context, gain.gain, layer.targetGain, 0.8);
+    rampGain(context, gain.gain, layer.targetGain, STREAM_LAYER_START_SLEW_S);
   }
 
   private startProcedural(): void {
     if (!this.context || !this.musicGain || this.procedural) return;
 
-    const pulseOsc = this.context.createOscillator();
-    const pulseGain = this.context.createGain();
-    pulseOsc.type = 'sine';
-    pulseOsc.frequency.value = 47;
-    pulseGain.gain.value = 0;
-    pulseOsc.connect(pulseGain);
-    pulseGain.connect(this.musicGain);
-    pulseOsc.start();
-
-    const shipOsc = this.context.createOscillator();
-    const shipGain = this.context.createGain();
-    shipOsc.type = 'triangle';
-    shipOsc.frequency.value = 64;
-    shipGain.gain.value = 0;
-    shipOsc.connect(shipGain);
-    shipGain.connect(this.musicGain);
-    shipOsc.start();
-
-    const warpNoise = this.context.createBufferSource();
-    const warpNoiseFilter = this.context.createBiquadFilter();
-    const warpNoiseGain = this.context.createGain();
-    warpNoise.buffer = makeNoiseBuffer(this.context, 2);
-    warpNoise.loop = true;
-    warpNoiseFilter.type = 'bandpass';
-    warpNoiseFilter.frequency.value = 620;
-    warpNoiseFilter.Q.value = 0.8;
-    warpNoiseGain.gain.value = 0;
-    warpNoise.connect(warpNoiseFilter);
-    warpNoiseFilter.connect(warpNoiseGain);
-    warpNoiseGain.connect(this.musicGain);
-    warpNoise.start();
-
-    const warpTone = this.context.createOscillator();
-    const warpToneGain = this.context.createGain();
-    warpTone.type = 'sine';
-    warpTone.frequency.value = 140;
-    warpToneGain.gain.value = 0;
-    warpTone.connect(warpToneGain);
-    warpToneGain.connect(this.musicGain);
-    warpTone.start();
-
-    const lifeGain = this.context.createGain();
-    const lifeA = this.context.createOscillator();
-    const lifeB = this.context.createOscillator();
-    lifeA.type = 'sine';
-    lifeB.type = 'triangle';
-    lifeA.frequency.value = 174.61;
-    lifeB.frequency.value = 220;
-    lifeGain.gain.value = 0;
-    lifeA.connect(lifeGain);
-    lifeB.connect(lifeGain);
-    lifeGain.connect(this.musicGain);
-    lifeA.start();
-    lifeB.start();
-
-    const windNoise = this.context.createBufferSource();
-    const windFilter = this.context.createBiquadFilter();
-    const windGain = this.context.createGain();
-    windNoise.buffer = makeNoiseBuffer(this.context, 3);
-    windNoise.loop = true;
-    windFilter.type = 'lowpass';
-    windFilter.frequency.value = 360;
-    windFilter.Q.value = 0.35;
-    windGain.gain.value = 0;
-    windNoise.connect(windFilter);
-    windFilter.connect(windGain);
-    windGain.connect(this.musicGain);
-    windNoise.start();
-
-    const glassGain = this.context.createGain();
-    const glassA = this.context.createOscillator();
-    const glassB = this.context.createOscillator();
-    glassA.type = 'sine';
-    glassB.type = 'sine';
-    glassA.frequency.value = 659.25;
-    glassB.frequency.value = 987.77;
-    glassGain.gain.value = 0;
-    glassA.connect(glassGain);
-    glassB.connect(glassGain);
-    glassGain.connect(this.musicGain);
-    glassA.start();
-    glassB.start();
-
-    const rumbleOsc = this.context.createOscillator();
-    const rumbleGain = this.context.createGain();
-    rumbleOsc.type = 'sawtooth';
-    rumbleOsc.frequency.value = 36;
-    rumbleGain.gain.value = 0;
-    rumbleOsc.connect(rumbleGain);
-    rumbleGain.connect(this.musicGain);
-    rumbleOsc.start();
-
-    const waterNoise = this.context.createBufferSource();
-    const waterFilter = this.context.createBiquadFilter();
-    const waterGain = this.context.createGain();
-    waterNoise.buffer = makeNoiseBuffer(this.context, 3);
-    waterNoise.loop = true;
-    waterFilter.type = 'lowpass';
-    waterFilter.frequency.value = 220;
-    waterFilter.Q.value = 0.4;
-    waterGain.gain.value = 0;
-    waterNoise.connect(waterFilter);
-    waterFilter.connect(waterGain);
-    waterGain.connect(this.musicGain);
-    waterNoise.start();
-
-    const nightGain = this.context.createGain();
-    const nightA = this.context.createOscillator();
-    const nightB = this.context.createOscillator();
-    nightA.type = 'sine';
-    nightB.type = 'triangle';
-    nightA.frequency.value = 82.41;
-    nightB.frequency.value = 123.47;
-    nightGain.gain.value = 0;
-    nightA.connect(nightGain);
-    nightB.connect(nightGain);
-    nightGain.connect(this.musicGain);
-    nightA.start();
-    nightB.start();
-
-    this.procedural = {
-      pulseOsc,
-      pulseGain,
-      // (retuned to the harmonic center right below when a chord was published)
-      shipOsc,
-      shipGain,
-      warpNoise,
-      warpNoiseFilter,
-      warpNoiseGain,
-      warpTone,
-      warpToneGain,
-      lifeA,
-      lifeB,
-      lifeGain,
-      windNoise,
-      windFilter,
-      windGain,
-      glassA,
-      glassB,
-      glassGain,
-      rumbleOsc,
-      rumbleGain,
-      waterNoise,
-      waterFilter,
-      waterGain,
-      nightA,
-      nightB,
-      nightGain
-    };
+    this.procedural = createProceduralRuntime(this.context, this.musicGain);
 
     // A chord may have been published before the drones existed: obey it now.
     if (this.chordRootPc != null) this.retuneDronesToChordRoot(this.chordRootPc);
@@ -592,7 +669,7 @@ class MusicEngine {
     const filter = context.createBiquadFilter();
     const gain = context.createGain();
 
-    source.buffer = makeNoiseBuffer(context, Math.max(0.2, options.duration));
+    source.buffer = makeNoiseBuffer(context, Math.max(0.2, options.duration), CUE_NOISE_SEED);
     filter.type = options.filterType;
     filter.frequency.setValueAtTime(options.fromFrequency, now);
     filter.frequency.exponentialRampToValueAtTime(
@@ -615,6 +692,79 @@ class MusicEngine {
       gain.disconnect();
     };
   }
+}
+
+export interface OfflineMusicEngineRuntime {
+  setProceduralTargets(targets: ProceduralMusicTargets, fadeSeconds: number): void;
+  setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void;
+  retuneDronesToChordRoot(rootSemisFromA: number): void;
+}
+
+export interface OfflineMusicEngineRuntimeOptions {
+  /** Opt-in noise carriers for audits that must render streamed-layer slews. */
+  includeStemAuditCarriers?: boolean;
+}
+
+interface OfflineAuditLayer extends AutomatableLayer {
+  source: AudioBufferSourceNode | null;
+  trim: GainNode | null;
+}
+
+/**
+ * Bounded, fetch-free mirror of the shipped legacy music engine for offline
+ * sweeps. The procedural graph and both target automators are the live ones.
+ * Catalog GainNodes always exist so their live slew path remains exercisable.
+ * Owner/evidence renders are silent on those lanes by default; dedicated
+ * smoothness audits may opt into quiet seeded non-pitched noise carriers. No
+ * streamed asset is fetched or retired.
+ */
+export function createOfflineMusicEngineRuntime(
+  context: BaseAudioContext,
+  out: AudioNode,
+  options: OfflineMusicEngineRuntimeOptions = {}
+): OfflineMusicEngineRuntime {
+  const procedural = createProceduralRuntime(context, out);
+  const layers = new Map<MusicLayerId, OfflineAuditLayer>();
+
+  for (const asset of MUSIC_LAYER_ASSETS) {
+    const gain = context.createGain();
+    gain.gain.value = 0;
+    gain.connect(out);
+    let source: AudioBufferSourceNode | null = null;
+    let trim: GainNode | null = null;
+    if (options.includeStemAuditCarriers) {
+      source = context.createBufferSource();
+      trim = context.createGain();
+      source.buffer = makeNoiseBuffer(
+        context,
+        OFFLINE_STEM_AUDIT_BUFFER_S,
+        OFFLINE_STEM_AUDIT_SEEDS[asset.id]
+      );
+      source.loop = true;
+      trim.gain.value = OFFLINE_STEM_AUDIT_CARRIER_LEVEL;
+      source.connect(trim);
+      trim.connect(gain);
+      source.start();
+    }
+    layers.set(asset.id, { asset, source, trim, gain, targetGain: 0 });
+  }
+
+  return {
+    setProceduralTargets(targets, fadeSeconds) {
+      automateProceduralTargets(
+        context,
+        procedural,
+        normalizeProceduralTargets(targets),
+        fadeSeconds
+      );
+    },
+    setLayerTargets(targets, fadeSeconds) {
+      automateLayerTargets(context, layers.values(), targets, fadeSeconds);
+    },
+    retuneDronesToChordRoot(rootSemisFromA) {
+      retuneProceduralDrones(context, procedural, rootSemisFromA);
+    }
+  };
 }
 
 let engine: MusicEngine | null = null;

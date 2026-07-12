@@ -106,6 +106,7 @@ import { createWorldPrepRequest } from './utils/worldPrepProtocol.ts';
 import type { ArrivalMode } from './utils/worldArrival.ts';
 import { WarpDriver, WarpFlash } from './components/effects/WarpOverlay.tsx';
 import {
+  beginSystemHandoff,
   beginTravel,
   debugStartInDescent,
   debugStartInSpace,
@@ -118,11 +119,8 @@ import {
   useSpaceFlight
 } from './state/spaceFlight.ts';
 import {
-  cancelSystemTarget,
-  getSystemFlightSnapshot,
-  rebaseSystemRenderOrigin,
-  setActiveSystemPlanet,
-  setSystemLocationMode
+  commitSystemPlanetHandoff,
+  getSystemFlightSnapshot
 } from './state/systemFlight.ts';
 import { isWarpMetricsEnabled, markWarpMetric } from './utils/warpMetrics.ts';
 import {
@@ -130,6 +128,7 @@ import {
   getAppStateSnapshot,
   setGameCanvas,
   getGameCanvas,
+  resetSceneReady,
   returnToMenu
 } from './state/appState.ts';
 import LandingMenu from './components/ui/LandingMenu.tsx';
@@ -386,6 +385,8 @@ const App: React.FC = () => {
     // biofiber, stone, no early hazard — the Primitive era's necessities.
     return createCurrentWorld(findHospitableStart());
   });
+  const currentWorldRef = useRef(currentWorld);
+  currentWorldRef.current = currentWorld;
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
   const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');
   const [targetX, setTargetX] = useState('1');
@@ -827,8 +828,8 @@ const App: React.FC = () => {
     worldPrepClientRef.current = null;
   }, []);
 
-  const prepareSystemTarget = useCallback((planet: PlanetDescriptor) => {
-    if (hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return;
+  const prepareSystemTarget = useCallback(async (planet: PlanetDescriptor): Promise<boolean> => {
+    if (hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return true;
     const generation = ++worldPrepGenerationRef.current;
     const client = worldPrepClientRef.current ?? new WorldPrepClient();
     worldPrepClientRef.current = client;
@@ -841,27 +842,29 @@ const App: React.FC = () => {
       activationEpoch
     });
 
-    void client.prepare(request)
-      .then(payload => hydrateWorldGenCacheFromPackedPayload(payload, {
+    try {
+      const payload = await client.prepare(request);
+      await hydrateWorldGenCacheFromPackedPayload(payload, {
         budgetMs: 2.5,
         isCancelled: () => generation !== worldPrepGenerationRef.current
           || getSystemFlightSnapshot().activationEpoch !== activationEpoch
-      }))
-      .then(() => {
-        if (
-          generation !== worldPrepGenerationRef.current
-          || getSystemFlightSnapshot().activationEpoch !== activationEpoch
-        ) return;
-      })
-      .catch(error => {
-        if (error instanceof WorldPrepCancelledError) return;
-        if (generation !== worldPrepGenerationRef.current) return;
-        if (getSystemFlightSnapshot().activationEpoch !== activationEpoch) return;
+      });
+      return generation === worldPrepGenerationRef.current
+        && getSystemFlightSnapshot().activationEpoch === activationEpoch
+        && hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId);
+    } catch (error) {
+      if (
+        !(error instanceof WorldPrepCancelledError)
+        && generation === worldPrepGenerationRef.current
+        && getSystemFlightSnapshot().activationEpoch === activationEpoch
+      ) {
         console.warn('[system-travel] Target preparation failed', {
           worldId: planet.worldId,
           error
         });
-      });
+      }
+      return false;
+    }
   }, []);
 
   const cancelSystemTargetPreparation = useCallback(() => {
@@ -877,24 +880,58 @@ const App: React.FC = () => {
     [currentSystemManifest]
   );
 
-  const activateSystemTarget = useCallback((planet: PlanetDescriptor) => {
-    if (getMultiplayerSessionSnapshot().status === 'connected') return;
-    if (isStoryWorld(currentWorld.coordinate) || currentWorld.worldId === planet.worldId) return;
-    if (!hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return;
+  const activateSystemTarget = useCallback((planet: PlanetDescriptor, onAbort: () => void): boolean => {
+    if (getMultiplayerSessionSnapshot().status === 'connected') return false;
+    if (isStoryWorld(currentWorld.coordinate) || currentWorld.worldId === planet.worldId) return false;
+    if (!hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return false;
     const liveFlight = getSpaceFlightSnapshot();
-    if (liveFlight.controlMode !== 'flight' || liveFlight.phase !== 'deep_space') return;
+    if (liveFlight.controlMode !== 'flight' || liveFlight.phase !== 'deep_space') return false;
 
-    setActiveSystemPlanet(planet.worldId);
-    rebaseSystemRenderOrigin(planet.systemPosition);
-    setSystemLocationMode('atmosphere');
-    enterAtmosphere();
-    cancelSystemTarget();
-    setCurrentWorld({
+    const activationEpoch = getSystemFlightSnapshot().activationEpoch;
+    const sourceWorldId = currentWorld.worldId;
+    let committedEpoch: number | null = null;
+    return beginSystemHandoff({
       worldId: planet.worldId,
-      coordinate: { ...planet.coordinate },
-      seed: planet.seed
+      activationEpoch,
+      isCurrent: () => {
+        const systemFlight = getSystemFlightSnapshot();
+        const spaceFlight = getSpaceFlightSnapshot();
+        return currentWorldRef.current.worldId === sourceWorldId
+          && systemFlight.systemId === planet.systemId
+          && systemFlight.activationEpoch === activationEpoch
+          && systemFlight.target?.kind === 'system_body'
+          && systemFlight.target.worldId === planet.worldId
+          && spaceFlight.controlMode === 'flight'
+          && spaceFlight.phase === 'deep_space'
+          && getMultiplayerSessionSnapshot().status !== 'connected'
+          && hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId);
+      },
+      onMidpoint: () => {
+        committedEpoch = commitSystemPlanetHandoff({
+          worldId: planet.worldId,
+          renderOrigin: planet.systemPosition,
+          expectedActivationEpoch: activationEpoch
+        });
+        resetSceneReady();
+        enterAtmosphere();
+        setCurrentWorld({
+          worldId: planet.worldId,
+          coordinate: { ...planet.coordinate },
+          seed: planet.seed
+        });
+        setArrivalMode('approach');
+        return true;
+      },
+      readyToReveal: () => {
+        const systemFlight = getSystemFlightSnapshot();
+        return committedEpoch !== null
+          && currentWorldRef.current.worldId === planet.worldId
+          && systemFlight.activePlanetId === planet.worldId
+          && systemFlight.activationEpoch === committedEpoch
+          && getAppStateSnapshot().sceneReady;
+      },
+      onAbort
     });
-    setArrivalMode('approach');
   }, [currentWorld]);
 
   // ?debug=1 → free building (no resource cost) so the build catalog can be tested.
@@ -1084,6 +1121,7 @@ const App: React.FC = () => {
         {systemBodiesEnabled && (
           <SystemCompanionBodies
             currentCoordinate={currentWorld.coordinate}
+            planetSize={planetSize}
             activePlanetSlot={currentPlanetAddress.slot}
             forceSingleBody={isStoryWorld(currentWorld.coordinate)}
             bodyCountOverride={currentSystemManifest.planets.length as 1 | 2 | 3}

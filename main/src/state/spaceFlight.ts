@@ -52,6 +52,8 @@ export type {
 export const WARP_DURATION = 1.2;
 /** Seconds for the short atmosphere-crossing "mini warp". */
 export const MINI_WARP_DURATION = 0.85;
+/** Maximum extra peak-cover hold while the exact destination paints. */
+export const SYSTEM_HANDOFF_MAX_HOLD = 0.75;
 
 /** Altitude (world units above the planet surface radius ~50) that auto-launches. */
 export const LAUNCH_ALTITUDE = 130;
@@ -84,6 +86,33 @@ let localFlightSeq = 0;
  * agnostic.
  */
 let arrivalHandler: ((dest: WorldCoordinate) => void) | null = null;
+
+export interface SystemHandoffOptions {
+  worldId: string;
+  activationEpoch: number;
+  isCurrent: () => boolean;
+  onMidpoint: () => boolean;
+  readyToReveal: () => boolean;
+  onAbort?: (reason: SystemHandoffAbortReason) => void;
+}
+
+export type SystemHandoffAbortReason =
+  | 'lease_invalidated'
+  | 'midpoint_rejected'
+  | 'midpoint_error'
+  | 'driver_unmounted'
+  | 'reset';
+
+interface ActiveSystemHandoff extends SystemHandoffOptions {
+  observedNotReady: boolean;
+  holdStartedAtMs: number | null;
+  timeoutReported: boolean;
+  releaseAuthorized: boolean;
+  committed: boolean;
+  abortNotified: boolean;
+}
+
+let systemHandoff: ActiveSystemHandoff | null = null;
 
 function emit(): void {
   for (const listener of listeners) listener();
@@ -214,6 +243,58 @@ export function beginAtmosphereWarp(dir: 'enter' | 'leave'): void {
   warp.midpointFired = false;
 }
 
+/**
+ * Cover only the final local representation/owner handoff. Canonical travel has
+ * already happened physically; this never publishes an interstellar destination.
+ */
+export function beginSystemHandoff(options: SystemHandoffOptions): boolean {
+  if (warp.active) return false;
+  if (snapshot.controlMode !== 'flight' || snapshot.phase !== 'deep_space') return false;
+  systemHandoff = {
+    ...options,
+    observedNotReady: false,
+    holdStartedAtMs: null,
+    timeoutReported: false,
+    releaseAuthorized: false,
+    committed: false,
+    abortNotified: false
+  };
+  startWarpMetrics(`system:${options.worldId}`);
+  warp.active = true;
+  warp.progress = 0;
+  warp.kind = 'system_handoff';
+  warp.duration = MINI_WARP_DURATION;
+  warp.intensity = 0.94;
+  warp.midpointFired = false;
+  markWarpMetric('system_handoff:begin', {
+    worldId: options.worldId,
+    activationEpoch: options.activationEpoch,
+    durationMs: MINI_WARP_DURATION * 1000
+  });
+  return true;
+}
+
+/** Revoke a pre-commit local handoff and fade the veil back to the old scene. */
+export function cancelSystemHandoff(reason: SystemHandoffAbortReason): boolean {
+  const handoff = systemHandoff;
+  if (!handoff || !warp.active || warp.kind !== 'system_handoff') return false;
+  if (!handoff.committed) notifySystemHandoffAbort(handoff, reason);
+  handoff.releaseAuthorized = true;
+  if (!warp.midpointFired) {
+    if (warp.progress <= 0) {
+      finishWarpMetrics('system_handoff:cancelled');
+      systemHandoff = null;
+      warp.active = false;
+      warp.progress = 0;
+      return true;
+    }
+    // Mirror the current intensity onto the receding half; no midpoint commit runs.
+    warp.progress = Math.max(0.5, 1 - warp.progress);
+    warp.midpointFired = true;
+  }
+  return true;
+}
+
 /** Set/clear the impostor the player is currently aiming at while flying. */
 export function setTarget(target: WorldCoordinate | null): void {
   if (target === snapshot.target) return;
@@ -255,6 +336,7 @@ export function notifyLanded(): void {
  * ship + launch. Used by headless runtime checks and manual inspection.
  */
 export function debugStartInSpace(): void {
+  discardSystemHandoff('reset');
   warp.active = false;
   warp.progress = 0;
   warp.midpointFired = false;
@@ -267,6 +349,7 @@ export function debugStartInSpace(): void {
  * arrivalMode='approach' alongside this so ShipController spawns looking down.
  */
 export function debugStartInDescent(): void {
+  discardSystemHandoff('reset');
   warp.active = false;
   warp.progress = 0;
   warp.midpointFired = false;
@@ -275,6 +358,7 @@ export function debugStartInDescent(): void {
 
 /** Reset to a clean on-foot surface state (e.g. first spawn / hard reset). */
 export function resetTravel(): void {
+  discardSystemHandoff('reset');
   warp.active = false;
   warp.progress = 0;
   warp.midpointFired = false;
@@ -286,8 +370,11 @@ export function resetTravel(): void {
  * (WarpOverlay). Mutates the warp runtime directly; only fires React snapshot
  * changes at the midpoint and at completion, where the white-out hides them.
  */
-export function tickWarp(dt: number): void {
+export function tickWarp(dt: number, timestampMs = currentTimeMs()): void {
   if (!warp.active) return;
+  if (warp.kind === 'system_handoff' && warp.midpointFired && holdSystemHandoffAtPeak(timestampMs)) {
+    return;
+  }
   warp.progress += dt / warp.duration;
 
   if (!warp.midpointFired && warp.progress >= 0.5) {
@@ -306,9 +393,35 @@ export function tickWarp(dt: number): void {
     } else if (warp.kind === 'enter') {
       // Mini warp masking the space -> atmosphere sky change.
       enterAtmosphere();
-    } else {
+    } else if (warp.kind === 'leave') {
       // Mini warp masking the atmosphere -> space sky change.
       leaveAtmosphere();
+    } else {
+      warp.progress = 0.5;
+      const handoff = systemHandoff;
+      markWarpMetric('system_handoff:midpoint', {
+        worldId: handoff?.worldId ?? null,
+        activationEpoch: handoff?.activationEpoch ?? null
+      });
+      if (!handoff) {
+        markWarpMetric('system_handoff:missing_lease');
+      } else if (!safeSystemHandoffCurrent(handoff)) {
+        notifySystemHandoffAbort(handoff, 'lease_invalidated');
+      } else {
+        try {
+          if (handoff.onMidpoint()) {
+            handoff.committed = true;
+          } else {
+            notifySystemHandoffAbort(handoff, 'midpoint_rejected');
+          }
+        } catch (error) {
+          markWarpMetric('system_handoff:midpoint_error', {
+            message: error instanceof Error ? error.message : String(error)
+          });
+          notifySystemHandoffAbort(handoff, 'midpoint_error');
+        }
+      }
+      if (handoff?.committed && holdSystemHandoffAtPeak(timestampMs)) return;
     }
   }
 
@@ -316,6 +429,84 @@ export function tickWarp(dt: number): void {
     warp.active = false;
     warp.progress = 1;
     if (warp.kind === 'travel') finishWarpMetrics();
+    if (warp.kind === 'system_handoff') {
+      markWarpMetric('system_handoff:complete', {
+        committed: systemHandoff?.committed ?? false,
+        aborted: systemHandoff?.abortNotified ?? false
+      });
+      finishWarpMetrics('system_handoff:end');
+      systemHandoff = null;
+    }
     publishLocalFlightState();
   }
+}
+
+function holdSystemHandoffAtPeak(timestampMs: number): boolean {
+  const handoff = systemHandoff;
+  if (!handoff || !handoff.committed) return false;
+  if (handoff.releaseAuthorized) return false;
+  let ready = false;
+  try {
+    ready = handoff.readyToReveal();
+  } catch {
+    ready = false;
+  }
+  if (!ready) handoff.observedNotReady = true;
+  if (handoff.holdStartedAtMs === null) handoff.holdStartedAtMs = timestampMs;
+  const holdSeconds = Math.max(0, timestampMs - handoff.holdStartedAtMs) / 1000;
+  if (handoff.observedNotReady && ready) {
+    handoff.releaseAuthorized = true;
+    markWarpMetric('system_handoff:renderer_ready', { holdMs: holdSeconds * 1000 });
+    return false;
+  }
+
+  if (holdSeconds >= SYSTEM_HANDOFF_MAX_HOLD) {
+    handoff.releaseAuthorized = true;
+    if (!handoff.timeoutReported) {
+      handoff.timeoutReported = true;
+      markWarpMetric('system_handoff:renderer_timeout', { holdMs: holdSeconds * 1000 });
+    }
+    return false;
+  }
+  warp.progress = 0.5;
+  return true;
+}
+
+function safeSystemHandoffCurrent(handoff: ActiveSystemHandoff): boolean {
+  try {
+    return handoff.isCurrent();
+  } catch (error) {
+    markWarpMetric('system_handoff:lease_check_error', {
+      message: error instanceof Error ? error.message : String(error)
+    });
+    return false;
+  }
+}
+
+function notifySystemHandoffAbort(
+  handoff: ActiveSystemHandoff,
+  reason: SystemHandoffAbortReason
+): void {
+  if (handoff.abortNotified) return;
+  handoff.abortNotified = true;
+  handoff.releaseAuthorized = true;
+  markWarpMetric('system_handoff:abort', { reason, worldId: handoff.worldId });
+  try {
+    handoff.onAbort?.(reason);
+  } catch (error) {
+    markWarpMetric('system_handoff:abort_callback_error', {
+      message: error instanceof Error ? error.message : String(error)
+    });
+  }
+}
+
+function discardSystemHandoff(reason: SystemHandoffAbortReason): void {
+  if (!systemHandoff) return;
+  if (!systemHandoff.committed) notifySystemHandoffAbort(systemHandoff, reason);
+  if (warp.kind === 'system_handoff') finishWarpMetrics(`system_handoff:${reason}`);
+  systemHandoff = null;
+}
+
+function currentTimeMs(): number {
+  return typeof performance === 'undefined' ? Date.now() : performance.now();
 }

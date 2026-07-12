@@ -204,6 +204,11 @@ interface VoxelSave {
   added: Array<[number, number, number]>;       // FUTURE: player-placed blocks
 }
 
+export interface PersistedVoxelEdits {
+  fingerprint: number;
+  removed: ReadonlyArray<readonly [number, number, number]>;
+}
+
 // --- Player pose (per world: where you stood + which way you faced) ----------
 interface PlayerPose {
   pos: [number, number, number];
@@ -237,6 +242,20 @@ export function saveVoxelEdits(world: WorldSaveRef): void {
     added: []
   };
   write(scopedWorldKey(world, '.voxels').primary, data);
+}
+
+/** Read a valid saved terrain diff without applying it to the singleton voxel owner. */
+export function loadVoxelEditsForWorld(world: WorldSaveRef): PersistedVoxelEdits | null {
+  const save = readScoped<VoxelSave>(scopedWorldKey(world, '.voxels'));
+  if (!save) return null;
+  if (
+    save.generationSchemaVersion != null
+    && save.generationSchemaVersion !== GENERATION_SCHEMA_VERSION
+  ) return null;
+  return {
+    fingerprint: save.fingerprint,
+    removed: save.removed ?? []
+  };
 }
 
 /** Drop this world's persisted terrain diff (both the worldId-scoped key and the
@@ -273,9 +292,8 @@ export function clearPlayerPoseForWorld(world: WorldSaveRef): void {
  *  solid) and BEFORE the collision flush. Refuses a stale save (gen fingerprint
  *  mismatch). Must run synchronously while the live world matches `seed`. */
 export function restoreVoxelEditsForWorld(world: WorldSaveRef): void {
-  const save = readScoped<VoxelSave>(scopedWorldKey(world, '.voxels'));
+  const save = loadVoxelEditsForWorld(world);
   if (!save) return;
-  if (save.generationSchemaVersion != null && save.generationSchemaVersion !== GENERATION_SCHEMA_VERSION) return;
   if (save.fingerprint !== voxelSystem.getOriginalTerrainSize()) return; // terrain gen changed → drop
-  voxelSystem.applyTerrainDiff(save.removed ?? []);
+  voxelSystem.applyTerrainDiff(save.removed.map(position => [...position] as [number, number, number]));
 }

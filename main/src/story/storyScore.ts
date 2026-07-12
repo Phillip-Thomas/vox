@@ -72,6 +72,11 @@ export function unlockStoryScore(): void {
   unlockScore();
 }
 
+/** Read-only harness access; the frozen MOODS schema and ownership stay here. */
+export function getStoryScoreMood(beat: StoryBeat): ScoreMood | null {
+  return MOODS[beat] ?? null;
+}
+
 /**
  * Beat entry hook: retunes the whole instrument to the beat's mood. `null`
  * (sandbox / story over) hands the instrument to the CELESTIAL IDLE BED —

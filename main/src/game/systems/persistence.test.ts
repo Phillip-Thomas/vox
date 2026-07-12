@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
   restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
-  saveVoxelEdits, restoreVoxelEditsForWorld,
+  loadVoxelEditsForWorld, saveVoxelEdits, restoreVoxelEditsForWorld,
   savePlayerPose, loadPlayerPose,
   getLocalPersistenceMode,
   isLocalPersistenceEnabled,
@@ -196,6 +196,10 @@ describe('terrain voxel edits round-trip', () => {
     load(all);
     voxelSystem.removeVoxel(0, 1, 0); voxelSystem.exposeNeighbors(0, 1, 0);
     saveVoxelEdits(777);
+    expect(loadVoxelEditsForWorld(777)).toEqual({
+      fingerprint: all.length,
+      removed: [[0, 1, 0]]
+    });
 
     load(all); // simulate reload: identical terrain regen
     expect(voxelSystem.isDeleted(0, 1, 0)).toBe(false); // gone after fresh populate

@@ -43,6 +43,29 @@ export function createSystemTravelGateState(): SystemTravelGateState {
   };
 }
 
+/** Release a tentatively consumed activation so a rejected/aborted handoff retries. */
+export function rejectSystemTravelActivation(
+  state: SystemTravelGateState,
+  worldId: string
+): SystemTravelGateState {
+  if (state.activatedLockWorldId !== worldId) return state;
+  return {
+    ...state,
+    lockedWorldId: null,
+    preparedLockWorldId: null,
+    activatedLockWorldId: null
+  };
+}
+
+/** Allow a failed async preparation to retry without losing the current aim lock. */
+export function retrySystemTravelPreparation(
+  state: SystemTravelGateState,
+  worldId: string
+): SystemTravelGateState {
+  if (state.preparedLockWorldId !== worldId) return state;
+  return { ...state, preparedLockWorldId: null };
+}
+
 export function isWithinSystemActivationEnvelope(
   distance: number,
   nominalFaceRadius: number,

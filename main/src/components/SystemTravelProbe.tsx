@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { getWarp } from '../state/spaceFlight.ts';
 import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 
 export interface SystemProbeWindow {
@@ -41,6 +42,13 @@ export interface SystemProbeSnapshot {
     renderOrigin: number[];
     activationEpoch: number;
     target: string | null;
+  };
+  warp: {
+    active: boolean;
+    kind: string;
+    progress: number;
+    intensity: number;
+    midpointFired: boolean;
   };
   windows: SystemProbeWindow[];
   observedLongTasks: number;
@@ -125,6 +133,7 @@ export default function SystemTravelProbe({
 
     const getSnapshot = (): SystemProbeSnapshot => {
       const flight = getSystemFlightSnapshot();
+      const warp = getWarp();
       return {
         enabled: true,
         startedAt: startedAt.current,
@@ -144,6 +153,13 @@ export default function SystemTravelProbe({
           target: flight.target?.kind === 'system_body'
             ? flight.target.worldId
             : flight.target?.systemId ?? null
+        },
+        warp: {
+          active: warp.active,
+          kind: warp.kind,
+          progress: rounded(warp.progress),
+          intensity: rounded(warp.intensity),
+          midpointFired: warp.midpointFired
         },
         windows: windows.current.map(window => ({ ...window })),
         observedLongTasks: longTasks.current,

@@ -49,7 +49,8 @@ import {
   COLOR_P_SCALE,
   DEFAULT_MODE_WEIGHTS,
   GOLDEN_MEDIANT_MULT,
-  GOLDEN_WINDOW_MIN,
+  GOLDEN_PLAGAL_ROOT_INTERVALS,
+  GOLDEN_PLAGAL_SCORE_BIAS,
   HELD_RELAX_BARS,
   HARMONY_BARS_DEFAULT,
   HARMONY_BARS_FAST,
@@ -187,6 +188,22 @@ export interface AdvanceOptions {
 
 const clamp01 = (v: number): number => Math.min(1, Math.max(0, v));
 const triadIdx = (t: TriadSpec): number => pcMod(t.rootPc) * 2 + (t.quality === 'maj' ? 1 : 0);
+
+/** Continuous golden-cadence mediant probability (no window-edge probability step). */
+export function resolveGoldenMediantProbability(golden: number): number {
+  const lift = 1 + (GOLDEN_MEDIANT_MULT - 1) * clamp01(golden);
+  return Math.min(MEDIANT_P_MAX, MEDIANT_BASE_P * lift);
+}
+
+/**
+ * Continuous IV / ♭VII preference at golden hour. This changes candidate
+ * color only; it never changes the live mode or bypasses voice-leading law.
+ */
+export function resolveGoldenPlagalBias(rootInterval: number, golden: number): number {
+  return GOLDEN_PLAGAL_ROOT_INTERVALS.includes(pcMod(rootInterval))
+    ? GOLDEN_PLAGAL_SCORE_BIAS * clamp01(golden)
+    : 0;
+}
 
 /** Realize a color intent for a chord quality as intervals above the root. */
 function realizeColor(intent: string, quality: ChordQuality): number[] {
@@ -378,10 +395,7 @@ function changeChord(
     (state.phrasePos === 0 || opts?.hitScheduled === true || forceMediant) &&
     state.mediantsThisPhrase < mediantRation;
   if (mediantPermitted) {
-    const p = Math.min(
-      MEDIANT_P_MAX,
-      MEDIANT_BASE_P * (rails.golden > GOLDEN_WINDOW_MIN ? GOLDEN_MEDIANT_MULT : 1)
-    );
+    const p = resolveGoldenMediantProbability(rails.golden);
     // The stage-transition promise skips the probability draw — the mediant
     // was scheduled, not rolled (§8.4 stage row).
     if (forceMediant || musicUnit(seed, SALT_MEDIANT, bar) < p) {
@@ -471,7 +485,8 @@ function changeChord(
       colorDissonance: colorIntentDissonance(dressed),
       voicingMean
     });
-    return { ...c, diff: Math.abs(t - event.target) };
+    const goldenPlagalBias = resolveGoldenPlagalBias(c.triad.rootPc - state.tonicPc, rails.golden);
+    return { ...c, diff: Math.max(0, Math.abs(t - event.target) - goldenPlagalBias) };
   });
   let bestDiff = Infinity;
   for (const s of scored) bestDiff = Math.min(bestDiff, s.diff);

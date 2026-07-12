@@ -174,15 +174,51 @@ describe('arrangement + scene policies through the conductor', () => {
     expect(plan.tick.present).toBe(true);
   });
 
-  it('underwater: the harmonic rhythm slows and the sub takes the motif', () => {
+  it('underwater: the harmonic rhythm slows and the sub takes the motif by crossfade', () => {
     const dry = createBedConductor(1618, { archetype: 'oceanic' });
     const dryPlans = runBars(dry, 64, () => sig({ energy: 0.5, submergence: 0 }));
     const wet = createBedConductor(1618, { archetype: 'oceanic' });
     const wetPlans = runBars(wet, 64, () => sig({ energy: 0.5, submergence: 1 }));
     const changes = (plans: BedBarPlan[]): number => plans.filter((p) => p.harmony.changed).length;
     expect(changes(wetPlans)).toBeLessThan(changes(dryPlans));
-    expect(wetPlans.every((p) => p.subTakesMotif)).toBe(true);
-    expect(dryPlans.every((p) => !p.subTakesMotif)).toBe(true);
+    expect(wetPlans.every((p) => p.subMotifMix === 1)).toBe(true);
+    expect(dryPlans.every((p) => p.subMotifMix === 0)).toBe(true);
+  });
+
+  it('submergence never flips voices: subMotifMix is continuous and monotonic', () => {
+    const values: number[] = [];
+    for (let submergence = 0; submergence <= 1.001; submergence += 0.025) {
+      const state = createBedConductor(1618, { archetype: 'oceanic' });
+      values.push(planBedBar(state, sig({ submergence })).subMotifMix);
+    }
+    expect(values[0]).toBe(0);
+    expect(values[values.length - 1]).toBe(1);
+    expect(values.some((v) => v > 0 && v < 1)).toBe(true);
+    for (let i = 1; i < values.length; i++) {
+      expect(values[i]).toBeGreaterThanOrEqual(values[i - 1]);
+      expect(values[i] - values[i - 1]).toBeLessThan(0.14);
+    }
+  });
+
+  it('carries deterministic shared-gust controls into every bar plan', () => {
+    const signals = sig({
+      timeSec: 42,
+      windDirectionX: 0.6,
+      windDirectionY: 0.8,
+      windGustStrength: 1.2,
+      windGustScale: 0.05,
+      windOffsetX: 9,
+      windOffsetY: -11,
+      playerX: 64,
+      playerZ: -32
+    });
+    const a = planBedBar(createBedConductor(9001), signals);
+    const b = planBedBar(createBedConductor(9001), signals);
+    expect(b.wind).toEqual(a.wind);
+    expect(a.wind.gust).toBeGreaterThanOrEqual(0);
+    expect(a.wind.gust).toBeLessThanOrEqual(1);
+    expect(a.wind.drive).toBeGreaterThanOrEqual(0);
+    expect(a.wind.drive).toBeLessThanOrEqual(1);
   });
 
   it('travel turns the rhythm: the region salt rotates the Euclidean pattern', () => {
