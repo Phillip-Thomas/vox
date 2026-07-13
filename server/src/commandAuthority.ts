@@ -23,7 +23,7 @@ export type SharedMutationClaim =
   };
 
 const CLAIMED_COMMAND_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed', 'structure_removed']);
-const RESOURCE_SOURCES = new Set(['tree', 'loose_stone', 'forage']);
+const RESOURCE_SOURCES = new Set(['tree', 'loose_stone', 'forage', 'flora']);
 
 export function isClaimedSharedMutationType(commandType: string): boolean {
   return CLAIMED_COMMAND_TYPES.has(commandType);
@@ -40,7 +40,11 @@ export function sharedMutationClaimForCommand(commandType: string, payload: Json
       const source = readString(payload.source);
       if (!coord || !source || !RESOURCE_SOURCES.has(source)) return null;
       const kind = source === 'forage' ? readString(payload.kind) ?? source : source;
-      const collectibleType = `${source}:${kind}`;
+      // There is one logical flora node per voxel. Its visible kind controls the
+      // canonical drop, but must never create a second claim lane at that coord.
+      // Keep legacy forage types unchanged because production rows already use
+      // forage:berry / forage:root.
+      const collectibleType = source === 'flora' ? source : `${source}:${kind}`;
       return {
         kind: 'resource_taken',
         key: `collectible:${collectibleType}:${coordKey(coord)}`,

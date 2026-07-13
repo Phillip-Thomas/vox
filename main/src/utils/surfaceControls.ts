@@ -79,6 +79,24 @@ export interface SwimInput {
   descend: boolean; // swim down (descend key)
 }
 
+// --- Lava wading (viscous sink) ------------------------------------------------
+// Lava is a THICK fluid, not water: no buoyancy — the body slowly settles unless
+// the player struggles. composeLavaVelocity is blended over the walk result by
+// the lava-immersion factor, so the first instants of a misstep still let a
+// reflex jump escape; once the melt takes hold it swallows jumps and walking.
+export const LAVA_SINK_SPEED = 0.55;   // passive settle rate (u/s) — slow, inexorable
+export const LAVA_MOVE_SPEED = 1.5;    // wading speed (u/s) — a crawl vs walking (5)
+export const LAVA_VISCOSITY = 5;       // how fast velocity converges on the melt's will (per s)
+export const LAVA_STRUGGLE_RISE = 1.6; // hold jump: claw upward, slightly faster than the sink
+
+export interface LavaWadeInput {
+  forward: boolean;
+  backward: boolean;
+  left: boolean;
+  right: boolean;
+  struggle: boolean; // jump held — fight the sink
+}
+
 const DEFAULT_COYOTE_TIME = 0.14;
 const DEFAULT_JUMP_BUFFER = 0.12;
 const DEFAULT_SURFACE_CLEARANCE = PLAYER_CENTER_CLEARANCE;
@@ -93,6 +111,10 @@ const tempQuaternion = new THREE.Quaternion();
 const tempSwimRight = new THREE.Vector3();
 const tempSwimWish = new THREE.Vector3();
 const tempSwimTarget = new THREE.Vector3();
+const tempLavaForward = new THREE.Vector3();
+const tempLavaRight = new THREE.Vector3();
+const tempLavaWish = new THREE.Vector3();
+const tempLavaTarget = new THREE.Vector3();
 
 export const FACE_NORMALS: Record<CubeFace, THREE.Vector3> = {
   top: new THREE.Vector3(0, 1, 0),
@@ -513,4 +535,43 @@ export function composeSwimVelocity(
   }
 
   return next;
+}
+
+/**
+ * Viscous lava wade/sink velocity. Unlike composeSwimVelocity (6-DOF, buoyant,
+ * glidey), lava trudges in the surface-TANGENT plane only and its vertical axis
+ * is owned by the melt: a slow settle at LAVA_SINK_SPEED, or a slow claw upward
+ * while struggling (jump held). Everything — momentum, jump impulses, jetpack
+ * thrust — converges toward that target at LAVA_VISCOSITY per second, which is
+ * what makes the fluid read as thick. Caller blends the result over the walk
+ * velocity by the lava-immersion factor.
+ * Pure: returns a fresh vector; only touches module scratch.
+ */
+export function composeLavaVelocity(
+  currentVelocity: THREE.Vector3,
+  lookForward: THREE.Vector3,
+  up: THREE.Vector3,
+  input: LavaWadeInput,
+  deltaTime = FIXED_PHYSICS_STEP
+): THREE.Vector3 {
+  // Wade frame: the look flattened onto the tangent plane (degenerate only when
+  // looking straight along up; any tangent works there, so pick a deterministic one).
+  projectOntoPlane(lookForward, up, tempLavaForward);
+  if (tempLavaForward.lengthSq() < 1e-6) deterministicTangentForUp(up, tempLavaForward);
+  else tempLavaForward.normalize();
+  tempLavaRight.crossVectors(tempLavaForward, up).normalize();
+
+  const wish = tempLavaWish.set(0, 0, 0);
+  if (input.forward) wish.add(tempLavaForward);
+  if (input.backward) wish.sub(tempLavaForward);
+  if (input.right) wish.add(tempLavaRight);
+  if (input.left) wish.sub(tempLavaRight);
+  if (wish.lengthSq() > 1e-6) wish.normalize().multiplyScalar(LAVA_MOVE_SPEED);
+
+  const target = tempLavaTarget
+    .copy(wish)
+    .addScaledVector(up, input.struggle ? LAVA_STRUGGLE_RISE : -LAVA_SINK_SPEED);
+
+  const response = THREE.MathUtils.clamp(LAVA_VISCOSITY * deltaTime, 0, 1);
+  return currentVelocity.clone().lerp(target, response);
 }

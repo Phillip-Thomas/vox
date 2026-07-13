@@ -17,6 +17,10 @@ describe('buildTerrainProfile', () => {
     const b = buildTerrainProfile(seed);
     expect(a.tintColor.getHex()).toBe(b.tintColor.getHex());
     expect(a.tintStrength).toBe(b.tintStrength);
+    expect(a.surfaceOffset.toArray()).toEqual(b.surfaceOffset.toArray());
+    expect(a.surfaceScale).toBe(b.surfaceScale);
+    expect(a.weathering).toBe(b.weathering);
+    expect(a.mineralization).toBe(b.mineralization);
   });
 
   it('keeps the tint a whisper (strength in a small, bounded range)', () => {
@@ -46,5 +50,25 @@ describe('buildTerrainProfile', () => {
       }
     }
     expect(tints.size).toBeGreaterThan(20);
+  });
+
+  it('keeps the seeded material style diverse and bounded', () => {
+    const offsets = new Set<string>();
+    const scales = new Set<string>();
+    for (let i = 0; i < 200; i++) {
+      const profile = buildTerrainProfile(coordinateToSeed(i * 7, i - 19));
+      expect(profile.surfaceScale).toBeGreaterThanOrEqual(0.82);
+      expect(profile.surfaceScale).toBeLessThanOrEqual(1.18);
+      expect(profile.surfaceRelief).toBeGreaterThan(0);
+      expect(profile.surfaceRelief).toBeLessThanOrEqual(1);
+      expect(profile.weathering).toBeGreaterThanOrEqual(0.18);
+      expect(profile.weathering).toBeLessThanOrEqual(1);
+      expect(profile.mineralization).toBeGreaterThanOrEqual(0);
+      expect(profile.mineralization).toBeLessThanOrEqual(1);
+      offsets.add(profile.surfaceOffset.toArray().map(value => value.toFixed(2)).join(','));
+      scales.add(profile.surfaceScale.toFixed(3));
+    }
+    expect(offsets.size).toBeGreaterThan(190);
+    expect(scales.size).toBeGreaterThan(100);
   });
 });

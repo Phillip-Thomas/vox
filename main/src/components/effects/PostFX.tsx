@@ -39,12 +39,15 @@ import { getCameraSubmergence } from '../../state/playerSubmersion.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts';
 import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
+import { getShipFlightFeedback } from '../../state/shipFlightFeedback.ts';
+import { FlightMotionEffect, getFlightMotion } from './FlightMotionEffect.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
 const ColorGrade = wrapEffect(ColorGradeEffect);
 const EdgeOutline = wrapEffect(OutlineEffect);
 const Underwater = wrapEffect(UnderwaterEffect);
+const FlightMotion = wrapEffect(FlightMotionEffect);
 
 // Scratch for projecting the sun direction to screen space (god-ray origin).
 const _sunDir = new THREE.Vector3();
@@ -93,6 +96,12 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
   // Per-biome tint/sat are static; warmth + contrast track the sun: warm at golden
   // hour, cooler + slightly punchier at night.
   useFrame((state, delta) => {
+    const flightMotion = getFlightMotion();
+    if (flightMotion) {
+      const flight = getShipFlightFeedback();
+      flightMotion.setFrame(flight.reducedMotion ? 0 : flight.motion, flight.boost);
+    }
+
     const eff = getColorGrade();
     if (eff) {
       const sunY = getSunDirection().y;
@@ -192,6 +201,10 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       {/* Unified per-biome + time-of-day color grade (cohesion). Just before
           tone mapping so it grades the composited HDR frame once. */}
       {colorGrade ? <ColorGrade /> : <></>}
+
+      {/* Three-tap radial flight smear. Depth masking preserves the near cockpit
+          and central aiming region while distant stars stretch under boost. */}
+      <FlightMotion />
 
       {/* Depth-based underwater pass (extinction + haze + godrays + wobble +
           vignette + crossing wipe). A no-op above water (driven submergence=0);

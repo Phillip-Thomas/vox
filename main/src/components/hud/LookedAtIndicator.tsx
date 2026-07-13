@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getLookedAt } from '../../game/systems/targeting.ts';
 import { BLOCKS } from '../../game/data/blocks.ts';
 import { RESOURCES } from '../../game/data/resources.ts';
+import { floraHarvestDefinition } from '../../game/data/floraHarvest.ts';
 
 /**
  * Tiny readout of whatever is under the crosshair — a voxel block (with any ore
@@ -22,6 +23,8 @@ const LookedAtIndicator: React.FC = () => {
         label = 'Tree';
       } else if (target?.kind === 'stone') {
         label = 'Loose Stone';
+      } else if (target?.kind === 'flora') {
+        label = floraHarvestDefinition(target.floraKind).plantName;
       }
       setName(label);
     }, 120);

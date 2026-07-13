@@ -6,6 +6,7 @@ export type SfxEvent =
   | 'boardShip'
   | 'exitShip'
   | 'shipLaunch'
+  | 'shipBoost'
   | 'shipLand'
   | 'shipCrash'
   | 'splashEnter'
@@ -81,6 +82,11 @@ class SfxEngine {
       case 'shipLaunch':
         this.playNoise({ type: 'lowpass', from: 320, to: 850, duration: 0.34, gain: 0.06 });
         this.playTone({ type: 'sine', from: 72, to: 110, duration: 0.28, gain: 0.04 });
+        break;
+      case 'shipBoost':
+        this.playTone({ type: 'sine', from: 58, to: 126, duration: 0.34, gain: 0.052 });
+        this.playTone({ type: 'sawtooth', from: 190, to: 420, duration: 0.18, gain: 0.018 });
+        this.playNoise({ type: 'highpass', from: 520, to: 1800, duration: 0.2, gain: 0.028, q: 0.7 });
         break;
       case 'shipLand':
         this.playTone({ type: 'sine', from: 95, to: 55, duration: 0.22, gain: 0.038 });

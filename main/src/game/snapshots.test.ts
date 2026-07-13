@@ -27,6 +27,7 @@ import { getCampfires, placeCampfire, resetCampfires } from './systems/campfires
 import { getHarvestedTrees, markTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
 import { getCollectedStones, markStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
 import { getCollectedForage, markForageCollected, resetForagePickup } from './systems/foragePickup.ts';
+import { getHarvestedFlora, markFloraHarvested, resetFloraHarvest } from './systems/floraHarvest.ts';
 
 const emptySnapshot: GameSnapshot = {
   schemaVersion: 1,
@@ -70,6 +71,7 @@ function resetAllState() {
   resetTreeHarvest();
   resetStonePickup();
   resetForagePickup();
+  resetFloraHarvest();
   setFreeBuild(false);
   voxelSystem.reset();
 }
@@ -115,6 +117,7 @@ describe('game snapshots', () => {
     markTreeHarvested(1, 1, 1);
     markStoneCollected(2, 2, 2);
     markForageCollected(3, 3, 3);
+    markFloraHarvested(4, 4, 4);
 
     const saved = snapshot();
     resetAllState();
@@ -148,6 +151,7 @@ describe('game snapshots', () => {
     expect(getHarvestedTrees()).toEqual([[1, 1, 1]]);
     expect(getCollectedStones()).toEqual([[2, 2, 2]]);
     expect(getCollectedForage()).toEqual([[3, 3, 3]]);
+    expect(getHarvestedFlora()).toEqual([[4, 4, 4]]);
   });
 
   it('replace mode clears stale state before applying', () => {

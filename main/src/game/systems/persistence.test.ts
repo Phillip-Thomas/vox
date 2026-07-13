@@ -3,10 +3,13 @@ import * as THREE from 'three';
 import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
   restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
+  restoreFloraForWorld,
   loadVoxelEditsForWorld, saveVoxelEdits, restoreVoxelEditsForWorld,
   savePlayerPose, loadPlayerPose,
   getLocalPersistenceMode,
   isLocalPersistenceEnabled,
+  markMultiplayerResourceMarker,
+  replaceMultiplayerResourceMarkers,
   setLocalPersistenceMode
 } from './persistence.ts';
 import { voxelSystem, type TerrainVoxel } from '../../utils/efficientVoxelSystem.ts';
@@ -20,6 +23,7 @@ import { markTreeHarvested, isTreeHarvested, resetTreeHarvest } from './treeHarv
 import { collectStone, isStoneCollected, resetStonePickup } from './stonePickup.ts';
 import { getVitals, setVitals, resetVitals } from './survivalVitals.ts';
 import { collectForage, isForageCollected, resetForagePickup } from './foragePickup.ts';
+import { isFloraHarvested, markFloraHarvested, resetFloraHarvest } from './floraHarvest.ts';
 import { getWaterskinFill, fillWaterskin, resetWaterskin } from './consumeSystem.ts';
 import { restoreForageForWorld } from './persistence.ts';
 import { createWorldIdentity } from '../worldIdentity.ts';
@@ -49,7 +53,7 @@ beforeEach(() => {
   setLocalPersistenceMode('offline');
   resetInventory(); resetMaw(); resetProgression();
   resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetVitals();
-  resetForagePickup(); resetWaterskin();
+  resetForagePickup(); resetFloraHarvest(); resetWaterskin();
   setFreeBuild(true); // skip build cost in the round-trip
 });
 
@@ -88,21 +92,23 @@ describe('global save round-trip', () => {
 });
 
 describe('per-world save round-trip', () => {
-  it('restores structures, campfires, harvested trees, collected stones', () => {
+  it('restores structures, campfires, and every harvested surface resource', () => {
     placePiece([1, 2, 3], 3, 'foundation', 'wood');
     placePiece([1, 2, 3], 0, 'wall', 'wood');
     placeCampfire(new THREE.Vector3(1, 1, 1), new THREE.Vector3(0, 1, 0));
     markTreeHarvested(4, 5, 6);
     collectStone(7, 8, 9);
     collectForage(2, 2, 2, 'berry');
+    markFloraHarvested(3, 3, 3);
     saveWorld(SEED);
 
-    resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetForagePickup(); // wipe
+    resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetForagePickup(); resetFloraHarvest(); // wipe
     restoreStructuresForWorld(SEED);
     restoreCampfiresForWorld(SEED);
     restoreTreesForWorld(SEED);
     restoreStonesForWorld(SEED);
     restoreForageForWorld(SEED);
+    restoreFloraForWorld(SEED);
 
     expect(hasPanel(1, 2, 3, 3)).toBe(true);
     expect(hasPanel(1, 2, 3, 0)).toBe(true);
@@ -110,6 +116,7 @@ describe('per-world save round-trip', () => {
     expect(isTreeHarvested(4, 5, 6)).toBe(true);
     expect(isStoneCollected(7, 8, 9)).toBe(true);
     expect(isForageCollected(2, 2, 2)).toBe(true);
+    expect(isFloraHarvested(3, 3, 3)).toBe(true);
   });
 
   it('a different world seed does not load this world\'s data', () => {
@@ -118,6 +125,18 @@ describe('per-world save round-trip', () => {
     resetStructures();
     restoreStructuresForWorld(SEED + 1); // a different planet
     expect(getPieces()).toHaveLength(0);
+  });
+
+  it('keeps harvested-tree markers scoped to their canonical world id', () => {
+    markTreeHarvested(4, 5, 6);
+    saveWorld(WORLD);
+    resetTreeHarvest();
+
+    restoreTreesForWorld(OTHER_WORLD);
+    expect(isTreeHarvested(4, 5, 6)).toBe(false);
+
+    restoreTreesForWorld(WORLD);
+    expect(isTreeHarvested(4, 5, 6)).toBe(true);
   });
 
   it('writes world-id keys for world-aware save paths', () => {
@@ -325,5 +344,38 @@ describe('multiplayer local persistence guard', () => {
     }));
     expect(loadGlobal()).toBeNull();
     expect(loadPlayerPose(WORLD)).toBeNull();
+  });
+
+  it('replays cached authoritative tree markers after a destination field remount', () => {
+    setLocalPersistenceMode('multiplayer');
+    replaceMultiplayerResourceMarkers(WORLD.worldId, {
+      trees: [[4, 5, 6]],
+      stones: [[7, 8, 9]],
+      forage: [[2, 3, 4]],
+      flora: [[12, 13, 14]]
+    });
+
+    // Mirrors each destination field's reset-then-restore mount effect after the
+    // world_snapshot arrived during an in-progress party warp.
+    resetTreeHarvest();
+    resetStonePickup();
+    resetForagePickup();
+    resetFloraHarvest();
+    restoreTreesForWorld(WORLD);
+    restoreStonesForWorld(WORLD);
+    restoreForageForWorld(WORLD);
+    restoreFloraForWorld(WORLD);
+
+    expect(isTreeHarvested(4, 5, 6)).toBe(true);
+    expect(isStoneCollected(7, 8, 9)).toBe(true);
+    expect(isForageCollected(2, 3, 4)).toBe(true);
+    expect(isFloraHarvested(12, 13, 14)).toBe(true);
+
+    markMultiplayerResourceMarker(WORLD.worldId, 'tree', [10, 11, 12]);
+    resetTreeHarvest();
+    restoreTreesForWorld(WORLD);
+    expect(isTreeHarvested(4, 5, 6)).toBe(true);
+    expect(isTreeHarvested(10, 11, 12)).toBe(true);
+    expect(globalThis.localStorage.length).toBe(0);
   });
 });

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS, resolveMultiplayerConfig, shortPlayerId } from './multiplayerSession.ts';
+import {
+  MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS,
+  planSnapshotReliableCommandReconciliation,
+  resolveMultiplayerConfig,
+  shortPlayerId
+} from './multiplayerSession.ts';
 
 const readyEnv = {
   VITE_PARAVOXIA_COOP: '1',
@@ -58,5 +63,20 @@ describe('multiplayer session config', () => {
   it('shortens anonymous player ids for compact crew labels', () => {
     expect(shortPlayerId('alice')).toBe('alice');
     expect(shortPlayerId('0123456789abcdef')).toBe('0123...cdef');
+  });
+});
+
+describe('multiplayer reliable command reconnect reconciliation', () => {
+  it('settles accepted snapshot commands and rolls back absent commands at the authoritative cursor', () => {
+    const plan = planSnapshotReliableCommandReconciliation([
+      { commandId: 'tree-accepted', worldId: '0,0' },
+      { commandId: 'tree-lost-before-server', worldId: '0,0' },
+      { commandId: 'other-world-pending', worldId: '1,0' }
+    ], '0,0', new Set(['tree-accepted', 'unrelated-command']));
+
+    expect(plan).toEqual({
+      accepted: ['tree-accepted'],
+      stale: ['tree-lost-before-server']
+    });
   });
 });

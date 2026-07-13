@@ -30,6 +30,7 @@ export type ItemKind =
   | 'tool'        // the Maw line — sets effective mining tier when owned
   | 'suit'        // the Carapace line — hazard protection
   | 'module'      // ship/scanner/jetpack upgrade modules
+  | 'ingredient'  // gathered botanical/alchemical recipe inputs
   | 'consumable'  // one-shot items (charge cells, repair kits) — future
   | 'light'       // light sources (carried torch, placed campfire)
   | 'placeable';  // crafting stations / structures — future (needs StationId)
@@ -44,7 +45,7 @@ export type CraftedItemId =
   // primitive light sources
   | 'torch' | 'campfire'
   // primitive forage + survival
-  | 'berry' | 'root' | 'waterskin'
+  | 'berry' | 'root' | 'cactus_pulp' | 'fan_frond' | 'wild_bloom' | 'seedpod' | 'waterskin'
   // refined materials
   | 'refined_alloy' | 'silica_pane' | 'biocomposite'
   | 'cryo_cell' | 'thermal_ceramic' | 'charge_cell' | 'void_core'
@@ -174,6 +175,22 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
     id: 'root', name: 'Starch Root', kind: 'consumable', tier: 0, stackable: true,
     foodValue: 24,
     description: 'A fibrous tuber dug from the soil. Filling, if earthy.'
+  },
+  cactus_pulp: {
+    id: 'cactus_pulp', name: 'Cactus Pulp', kind: 'ingredient', tier: 0, stackable: true,
+    description: 'Cool, water-heavy flesh pared from an alien cactus. A sturdy base for restorative mixtures.'
+  },
+  fan_frond: {
+    id: 'fan_frond', name: 'Fan Frond', kind: 'ingredient', tier: 0, stackable: true,
+    description: 'A broad, fibrous frond whose capillaries readily carry tinctures and reagents.'
+  },
+  wild_bloom: {
+    id: 'wild_bloom', name: 'Wild Bloom', kind: 'ingredient', tier: 0, stackable: true,
+    description: 'A vivid planetary flower gathered intact, fragrant with unfamiliar volatile compounds.'
+  },
+  seedpod: {
+    id: 'seedpod', name: 'Seedpod', kind: 'ingredient', tier: 0, stackable: true,
+    description: 'A dry seed vessel packed with dormant oils and concentrated organic potential.'
   },
   waterskin: {
     id: 'waterskin', name: 'Waterskin', kind: 'consumable', tier: 0, stackable: false,

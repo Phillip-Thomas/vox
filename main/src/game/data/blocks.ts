@@ -103,6 +103,13 @@ export function getBlock(id: BlockId): BlockDefinition {
   return BLOCKS[id];
 }
 
+/** Liquid-tagged blocks (lava today) are volumes the body passes THROUGH: they
+ *  never stream a collider — movement treats them as fluid (see EfficientPlayer's
+ *  lava wade) instead of ground. */
+export function isLiquidBlock(id: BlockId): boolean {
+  return BLOCKS[id].tags.includes('liquid');
+}
+
 // Canonical block per render material — the inverse projection used by the
 // legacy adapter (multiple blocks can share a render material, e.g. basalt→STONE,
 // so we pin the ORIGINAL block for each MaterialType).

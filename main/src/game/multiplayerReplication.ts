@@ -7,9 +7,11 @@ import { applyWaterskinSnapshot, type WaterskinSnapshot } from './systems/consum
 import { applyProgressionSnapshot, type ProgressionSnapshot } from './systems/progressionSystem.ts';
 import type { JsonObject } from './multiplayerClient.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
-import { markTreeHarvested } from './systems/treeHarvest.ts';
-import { markStoneCollected } from './systems/stonePickup.ts';
-import { markForageCollected } from './systems/foragePickup.ts';
+import { markTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
+import { markStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
+import { markForageCollected, resetForagePickup } from './systems/foragePickup.ts';
+import { markFloraHarvested, resetFloraHarvest } from './systems/floraHarvest.ts';
+import { isFloraHarvestKind } from './data/floraHarvest.ts';
 import { restoreCampfires } from './systems/campfires.ts';
 import {
   applyDoorLeaf,
@@ -25,6 +27,10 @@ import {
 import type { BuildMaterialId } from './data/buildMaterials.ts';
 import type { BuildPieceType } from './data/buildPieces.ts';
 import { notifyWorldCollisionChanged, type CollisionCell } from './worldCollisionReconciliation.ts';
+import {
+  markMultiplayerResourceMarker,
+  replaceMultiplayerResourceMarkers
+} from './systems/persistence.ts';
 
 export interface RemotePoseUpdate {
   playerId: string;
@@ -35,6 +41,7 @@ export interface RemotePoseUpdate {
 
 export interface ReplicatedWorldEvent {
   seq: number;
+  commandId?: string;
   type: string;
   playerId: string;
   payload: JsonObject;
@@ -56,6 +63,15 @@ export interface WorldEventApplyOptions {
   worldId?: string;
   terrain?: TerrainReplicationTarget;
   water?: WaterReplicationTarget;
+}
+
+export interface WorldSnapshotApplyOptions extends WorldEventApplyOptions {
+  /**
+   * A full server snapshot owns the complete shared-resource truth. Clear any
+   * offline/predicted markers before replay so stale local trees cannot remain
+   * hidden merely because snapshots are otherwise additive and idempotent.
+   */
+  replaceResourceMarkers?: boolean;
 }
 
 export interface TerrainDiffReplayResult {
@@ -176,12 +192,33 @@ export function applyReplicatedWorldSnapshotTerrain(
 export function applyReplicatedWorldSnapshotEvents(
   snapshot: JsonObject,
   worldId: string,
-  options: WorldEventApplyOptions = {}
+  options: WorldSnapshotApplyOptions = {}
 ): WorldSnapshotReplayResult {
+  const events = extractSnapshotWorldEvents(snapshot);
+  if (options.replaceResourceMarkers) {
+    const trees: Array<[number, number, number]> = [];
+    const stones: Array<[number, number, number]> = [];
+    const forage: Array<[number, number, number]> = [];
+    const flora: Array<[number, number, number]> = [];
+    for (const event of events) {
+      if (event.type !== 'resource_taken') continue;
+      const coord = readCoord(event.payload.coord);
+      if (!coord) continue;
+      if (event.payload.source === 'tree') trees.push(coord);
+      else if (event.payload.source === 'loose_stone') stones.push(coord);
+      else if (event.payload.source === 'forage') forage.push(coord);
+      else if (event.payload.source === 'flora' && typeof event.payload.kind === 'string' && isFloraHarvestKind(event.payload.kind)) flora.push(coord);
+    }
+    replaceMultiplayerResourceMarkers(worldId, { trees, stones, forage, flora });
+    resetTreeHarvest();
+    resetStonePickup();
+    resetForagePickup();
+    resetFloraHarvest();
+  }
   let applied = 0;
   let queuedTerrain = 0;
   let queuedWater = 0;
-  for (const event of extractSnapshotWorldEvents(snapshot)) {
+  for (const event of events) {
     if (options.ignoreLocalPlayer && event.playerId === options.localPlayerId) continue;
     if (event.type === 'voxel_mined') {
       const before = getPendingReplicatedTerrainDiffCount(worldId);
@@ -317,7 +354,7 @@ export function applyReplicatedWorldEvent(
     case 'water_flooded':
       return applyReplicatedWaterFlooded(parsed.payload, options.water, options.worldId);
     case 'resource_taken':
-      return applyReplicatedResourceTaken(parsed.payload);
+      return applyReplicatedResourceTaken(parsed.payload, options.worldId);
     case 'structure_placed':
       return applyReplicatedStructurePlaced(parsed.payload, parsed.playerId, options.worldId);
     case 'structure_removed':
@@ -347,6 +384,7 @@ export function parseReplicatedWorldEvent(event: unknown): ReplicatedWorldEvent 
   }
   return {
     seq: value.seq as number,
+    ...(typeof value.commandId === 'string' ? { commandId: value.commandId } : {}),
     type: value.type,
     playerId: value.playerId,
     payload,
@@ -376,18 +414,26 @@ export function applyReplicatedWaterFlooded(
   return replayed.applied > 0 || replayed.queued > 0;
 }
 
-export function applyReplicatedResourceTaken(payload: JsonObject): boolean {
+export function applyReplicatedResourceTaken(payload: JsonObject, worldId?: string): boolean {
   const coord = readCoord(payload.coord);
   if (!coord) return false;
   switch (payload.source) {
     case 'tree':
       markTreeHarvested(coord[0], coord[1], coord[2]);
+      if (worldId) markMultiplayerResourceMarker(worldId, 'tree', coord);
       return true;
     case 'loose_stone':
       markStoneCollected(coord[0], coord[1], coord[2]);
+      if (worldId) markMultiplayerResourceMarker(worldId, 'loose_stone', coord);
       return true;
     case 'forage':
       markForageCollected(coord[0], coord[1], coord[2]);
+      if (worldId) markMultiplayerResourceMarker(worldId, 'forage', coord);
+      return true;
+    case 'flora':
+      if (typeof payload.kind !== 'string' || !isFloraHarvestKind(payload.kind)) return false;
+      markFloraHarvested(coord[0], coord[1], coord[2]);
+      if (worldId) markMultiplayerResourceMarker(worldId, 'flora', coord);
       return true;
     default:
       return false;

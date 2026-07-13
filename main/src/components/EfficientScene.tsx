@@ -388,6 +388,7 @@ export default function EfficientScene({
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="vegetation">
         <FloraField
           terrainSeed={terrainSeed}
+          persistenceWorld={commandContext.world}
           playerPosition={fieldPlayerPosition}
           progressiveMount={restoringSameSystemRuntime}
         />

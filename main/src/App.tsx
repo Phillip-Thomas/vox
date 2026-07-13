@@ -19,6 +19,7 @@ import VantageToast from './components/hud/VantageToast.tsx';
 import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
 import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
+import LavaHeatVignette from './components/hud/LavaHeatVignette.tsx';
 import VitalsMeter from './components/hud/VitalsMeter.tsx';
 import { getInventoryTopOffset } from './components/hud/VitalsMeter.model.ts';
 import InteractionPrompt from './components/hud/InteractionPrompt.tsx';
@@ -1209,12 +1210,13 @@ const App: React.FC = () => {
       {/* --- Minimal, diegetic in-game HUD (the story feed replaces it in Ch1-2) --- */}
       {appPhase === 'playing' && !atlasCapture && !storyHudTakeover(story) && (
         <>
-          <Crosshair />
+          {flight.controlMode === 'fps' && <Crosshair />}
           <TargetReticle />
           {flight.controlMode === 'fps' && <MiningProgress />}
           {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
           {flight.controlMode === 'fps' && <BuildIndicator />}
           {flight.controlMode === 'flight' && <CrashFlash />}
+          {flight.controlMode === 'fps' && <LavaHeatVignette />}
           {flight.controlMode === 'fps' && <LookedAtIndicator />}
           {flight.controlMode === 'fps' && <InteractionPrompt />}
           {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && !storyHudHideInventory() && (
@@ -1228,7 +1230,7 @@ const App: React.FC = () => {
                 worldId={currentWorldIdentity.worldId}
                 planetSize={planetSize}
               />
-              <CockpitReadout coordinateLabel={currentWorldKey} seed={currentWorld.seed} />
+              <CockpitReadout coordinateLabel={currentWorldKey} />
               <MultiplayerStatusBadge />
             </>
           )}

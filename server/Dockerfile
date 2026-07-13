@@ -1,7 +1,7 @@
 FROM node:22-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm ci
 
 FROM deps AS build
 COPY tsconfig.json ./
@@ -13,7 +13,7 @@ FROM node:22-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json* ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev --omit=optional
 COPY --from=build /app/dist ./dist
 COPY migrations ./migrations
 EXPOSE 8080

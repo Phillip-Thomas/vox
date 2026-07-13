@@ -4,6 +4,7 @@ import {
   addMawChargeCommand,
   collectStoneCommand,
   collectForageCommand,
+  harvestFloraCommand,
   consumeItemCommand,
   craftAndPlaceCampfireCommand,
   craftRecipeCommand,
@@ -33,6 +34,7 @@ import { addItem, getItemCount, resetInventory } from './systems/inventorySystem
 import { getPieceAt, resetStructures } from './systems/structureSystem.ts';
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { RECIPES } from './data/recipes.ts';
+import { FLORA_HARVEST } from './data/floraHarvest.ts';
 import { getAccessibleStations } from './data/stations.ts';
 import { getVitals, resetVitals, setVitals } from './systems/survivalVitals.ts';
 import { getWaterskinFill, resetWaterskin, setWaterskinFill } from './systems/consumeSystem.ts';
@@ -40,6 +42,7 @@ import { getMawCharge, resetMaw, setMawCharge } from './systems/mawSystem.ts';
 import { resetProgression } from './systems/progressionSystem.ts';
 import { resetStonePickup } from './systems/stonePickup.ts';
 import { resetTreeHarvest } from './systems/treeHarvest.ts';
+import { resetFloraHarvest } from './systems/floraHarvest.ts';
 import { EfficientVoxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { MaterialType } from '../types/materials.ts';
 import type { BlockId } from './data/blocks.ts';
@@ -67,6 +70,7 @@ beforeEach(() => {
   resetCampfires();
   resetStonePickup();
   resetTreeHarvest();
+  resetFloraHarvest();
   resetVitals();
   resetWaterskin();
   resetMaw();
@@ -110,6 +114,55 @@ describe('gameplay command wrappers', () => {
     expect(first.ok).toBe(true);
     expect(second.ok).toBe(true);
     expect(secondEvents[0].payload).toEqual(firstEvents[0].payload);
+  });
+
+  it('harvests flora through the canonical resource event and rollback contract', () => {
+    const events: DomainEvent[] = [];
+    const result = harvestFloraCommand(context(events), {
+      x: 7,
+      y: 8,
+      z: 9,
+      kind: 'flower',
+      commandId: 'flora-command'
+    });
+
+    expect(result.ok).toBe(true);
+    expect(getItemCount('wild_bloom')).toBeGreaterThanOrEqual(1);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      type: 'resource_taken',
+      payload: {
+        source: 'flora',
+        kind: 'flower',
+        coord: [7, 8, 9],
+        id: 'wild_bloom'
+      }
+    });
+    if (!result.ok) throw new Error('flora harvest should succeed');
+    expect(result.rollback).toEqual({
+      removeItems: [{ id: 'wild_bloom', qty: getItemCount('wild_bloom') }],
+      uncollectResource: { source: 'flora', coord: [7, 8, 9] }
+    });
+  });
+
+  it('predicts flora yields from the exact server target key', () => {
+    const firstContext = context();
+    const definition = FLORA_HARVEST.seedhead;
+    const expectedQty = createSimulationRng(
+      `resource_taken:flora:seedhead:${firstContext.world.worldId}:3,4,5`
+    ).int(definition.quantity[0], definition.quantity[1]);
+    const first = harvestFloraCommand(firstContext, { x: 3, y: 4, z: 5, kind: 'seedhead' });
+    expect(first.ok).toBe(true);
+    if (!first.ok) throw new Error('first flora harvest should succeed');
+    expect(first.deltas).toEqual([{ id: 'seedpod', qty: expectedQty }]);
+
+    resetInventory();
+    resetFloraHarvest();
+    const second = harvestFloraCommand(context(), { x: 3, y: 4, z: 5, kind: 'seedhead' });
+
+    expect(second.ok).toBe(true);
+    if (!second.ok) throw new Error('second flora harvest should succeed');
+    expect(second.deltas).toEqual(first.deltas);
   });
 
   it('predicts harvest yields from stable world target keys instead of local RNG state', () => {
@@ -351,6 +404,8 @@ describe('gameplay command wrappers', () => {
     expect(harvestTreeCommand(ctx, { x: 2, y: 2, z: 2 }).ok).toBe(false);
     expect(collectForageCommand(ctx, { x: 3, y: 3, z: 3, kind: 'root' }).ok).toBe(true);
     expect(collectForageCommand(ctx, { x: 3, y: 3, z: 3, kind: 'root' }).ok).toBe(false);
+    expect(harvestFloraCommand(ctx, { x: 6, y: 6, z: 6, kind: 'flower' }).ok).toBe(true);
+    expect(harvestFloraCommand(ctx, { x: 6, y: 6, z: 6, kind: 'shrub' }).ok).toBe(false);
 
     expect(placeStructureCommand(ctx, { cell: [0, 0, 0], face: 3, type: 'foundation', material: 'wood' }).ok).toBe(true);
     expect(placeStructureCommand(ctx, { cell: [0, 0, 0], face: 3, type: 'foundation', material: 'wood' }).ok).toBe(false);

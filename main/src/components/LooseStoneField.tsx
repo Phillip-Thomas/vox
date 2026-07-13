@@ -15,6 +15,7 @@ import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import { restoreStonesForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { buildStoneGeometry, createStoneMaterial } from '../utils/looseStone';
+import { commitRaycastInstanceTransforms } from '../utils/instancedMeshPicking.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
 import { useStoryState } from '../story/storyState.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
@@ -154,8 +155,10 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
       slot++;
     }
 
-    mesh.count = slot;
-    mesh.instanceMatrix.needsUpdate = true;
+    // Loose stones share the tree field's raycast path. Rebucket rebuilds move
+    // instances, so publish the matrices and invalidate Three's cached
+    // InstancedMesh bounds together or visible stones can become unpickable.
+    commitRaycastInstanceTransforms(mesh, slot);
     nearStones.current = near;
     looseStoneHandle.mesh = mesh;
     looseStoneHandle.slotVoxel.length = slot;

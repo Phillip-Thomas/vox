@@ -387,7 +387,7 @@ const SHEET_FRAGMENT_PRELUDE = /* glsl */ `
   vec3 seCol = uColorA;
 `;
 
-const SHEET_KIND_BODY: Record<SurfaceSheetKind, string> = {
+export const SURFACE_SHEET_KIND_GLSL: Record<SurfaceSheetKind, string> = {
   // Wind-driven saltation: long thin streams advected downwind, alive inside
   // moving gust patches, with skittering bright grains. Sand + ash films.
   flow: /* glsl */ `
@@ -397,15 +397,31 @@ const SHEET_KIND_BODY: Record<SurfaceSheetKind, string> = {
     float seStreaks = smoothstep(0.42, 0.9, seS1 * 0.7 + seS2 * 0.6);
     float sePatch = smoothstep(0.22, 0.78,
       seNoise(seP * uPatchScale + seW * (uTime * 0.02) + uWindOffset * 0.63));
-    vec2 seGrainCell = floor(vec2(sePw.x * uGrainScale - seT1 * 2.2, sePw.y * uGrainScale * 1.6));
-    float seGrains = step(0.88, seHash21(seGrainCell + uWindOffset));
+    vec2 seGrainUv = vec2(
+      sePw.x * uGrainScale - seT1 * 2.2,
+      sePw.y * uGrainScale * 1.6
+    );
+    vec2 seGrainCell = floor(seGrainUv);
+    vec2 seGrainLocal = fract(seGrainUv) - 0.5;
+    float seGrainSeed = seHash21(seGrainCell + uWindOffset);
+    vec2 seGrainJitter = vec2(
+      seHash21(seGrainCell + 13.7),
+      seHash21(seGrainCell + 47.1)
+    ) - 0.5;
+    seGrainLocal -= seGrainJitter * 0.42;
+    float seGrainShape = 1.0 - smoothstep(
+      0.08,
+      0.2,
+      length(vec2(seGrainLocal.x * 0.42, seGrainLocal.y * 2.8))
+    );
+    float seGrains = step(0.88, seGrainSeed) * seGrainShape;
     float seFlow = seStreaks * (0.3 + 0.7 * sePatch) * (0.5 + 0.5 * seGust * uWindGustStrength);
     seCol = mix(uColorA, uColorB, clamp(seS2 * 0.8 + seGust * 0.3, 0.0, 1.0));
     seCol += uColorB * seGrains * seFlow * 0.6;
-    // Streams carry the effect; a faint creeping film inside gust patches keeps
-    // the field alive between streams without tinting the whole face.
+    // Streams and shaped grains carry the effect. No full-cell alpha floor:
+    // even if this legacy material is used by a harness, its carrier stays hidden.
     seAlpha = uIntensity * uVisibility * seFade
-      * (seFlow * (0.75 + 0.25 * seS2) + sePatch * seGust * 0.06);
+      * (seFlow * (0.75 + 0.25 * seS2) + seGrains * seFlow * 0.24);
   `,
   // Living topsoil: moisture patches breathing across the field, crumbly worm
   // casts catching light, and thin wet crawl-trails that creep and fade.
@@ -534,7 +550,7 @@ export function createSurfaceSheetMaterial(config: SurfaceSheetConfig): THREE.Me
         `#include <map_fragment>
         {
           ${SHEET_FRAGMENT_PRELUDE}
-          ${SHEET_KIND_BODY[config.kind]}
+          ${SURFACE_SHEET_KIND_GLSL[config.kind]}
           if (seAlpha < 0.004) discard;
           diffuseColor.rgb = seCol;
           diffuseColor.a = seAlpha;
@@ -547,7 +563,7 @@ export function createSurfaceSheetMaterial(config: SurfaceSheetConfig): THREE.Me
       );
   };
 
-  material.customProgramCacheKey = () => `surface-sheet-${config.kind}-v1`;
+  material.customProgramCacheKey = () => `surface-sheet-${config.kind}-v2`;
   return material;
 }
 

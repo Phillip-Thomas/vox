@@ -5,6 +5,8 @@ import {
   SHIP_LENGTH,
   SHIP_WINGSPAN,
   createCockpitFrameGeometry,
+  createCockpitInteriorGeometry,
+  createCockpitLightGeometry,
   createShipCanopyGeometry,
   createShipHullGeometry,
   shipAccentColor,
@@ -133,5 +135,19 @@ describe('shipDesign', () => {
       expect(inCenter).toBe(false);
     }
     geo.dispose();
+  });
+
+  it('builds a bounded ultrawide cockpit enclosure within the triangle budget', () => {
+    const colors = shipHullColors(shipAccentColor(12345));
+    const interior = createCockpitInteriorGeometry(colors);
+    const lights = createCockpitLightGeometry(colors);
+    const box = bounds(interior);
+    expect(box.min.x).toBeLessThan(-5.5);
+    expect(box.max.x).toBeGreaterThan(5.5);
+    expect(box.max.z).toBeLessThan(-1);
+    expect(interior.attributes.position.count / 3).toBeLessThan(5000);
+    expect(lights.attributes.position.count / 3).toBeLessThan(500);
+    interior.dispose();
+    lights.dispose();
   });
 });

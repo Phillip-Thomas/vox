@@ -20,6 +20,7 @@ import { buildTreeProfile } from '../../utils/treeProfile';
 import { buildWaterProfile } from '../../utils/waterProfile';
 import { buildWindProfile } from '../../utils/windProfile';
 import type { WorldCoordinate } from '../../utils/worldCoordinates';
+import { MaterialType, materialId } from '../../types/materials';
 
 // User-authored vantages (recorded via PoseRecorder, filed into vantages.json):
 // exact camera pose pinned to a specific world/seed. Replayed verbatim — far
@@ -250,6 +251,56 @@ function topInstancePos(mesh: THREE.InstancedMesh, out: THREE.Vector3): boolean 
   out.set(arr[bi * 16 + 12], arr[bi * 16 + 13], arr[bi * 16 + 14]);
   return true;
 }
+
+export function topVoxelMaterialPos(
+  mesh: THREE.InstancedMesh,
+  allowedMaterialIds: readonly number[],
+  out: THREE.Vector3
+): boolean {
+  const data = mesh.geometry.getAttribute('aInstanceData') as THREE.InstancedBufferAttribute | undefined;
+  if (!data || data.itemSize < 1) return false;
+  const allowed = new Set(allowedMaterialIds);
+  const matrices = mesh.instanceMatrix.array as ArrayLike<number>;
+  let bestIndex = -1;
+  let bestY = -Infinity;
+  for (let i = 0; i < mesh.count; i++) {
+    if (allowed.size > 0 && !allowed.has(Math.round(data.getX(i)))) continue;
+    const y = matrices[i * 16 + 13];
+    if (y > bestY) {
+      bestY = y;
+      bestIndex = i;
+    }
+  }
+  if (bestIndex < 0) return false;
+  out.set(
+    matrices[bestIndex * 16 + 12],
+    matrices[bestIndex * 16 + 13],
+    matrices[bestIndex * 16 + 14]
+  );
+  return true;
+}
+
+const MATERIAL_VIEW_IDS: Partial<Record<string, readonly number[]>> = {
+  material: [],
+  frost: [materialId(MaterialType.ICE)],
+  lavaHeat: [materialId(MaterialType.LAVA)],
+  crystalGlints: [materialId(MaterialType.CRYSTAL)],
+  metallicFlecks: [
+    materialId(MaterialType.COPPER),
+    materialId(MaterialType.GOLD),
+    materialId(MaterialType.SILVER),
+    materialId(MaterialType.STONE),
+    materialId(MaterialType.BASALT)
+  ],
+  mineral: [
+    materialId(MaterialType.CRYSTAL),
+    materialId(MaterialType.COPPER),
+    materialId(MaterialType.GOLD),
+    materialId(MaterialType.SILVER),
+    materialId(MaterialType.STONE),
+    materialId(MaterialType.BASALT)
+  ]
+};
 
 function srgbHex(color: THREE.Color): string {
   return `#${color.clone().convertLinearToSRGB().getHexString()}`;
@@ -503,18 +554,29 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
       return label;
     };
 
+    const frameVoxelMaterial = (name: string): string | null => {
+      const allowedMaterialIds = MATERIAL_VIEW_IDS[name];
+      if (!allowedMaterialIds) return null;
+      const mesh = instancedByKey(scene, /voxel-pbr/);
+      if (!mesh || mesh.count <= 0 || !topVoxelMaterialPos(mesh, allowedMaterialIds, pos)) return null;
+      const base = pos.clone();
+      radial.copy(base).normalize();
+      tangentFor(radial, tangent);
+      const eye = base.clone()
+        .addScaledVector(tangent, 4.8)
+        .addScaledVector(radial, 1.6);
+      apply(eye, base.clone().addScaledVector(radial, 0.55), base);
+      return `${name}:voxel-shader`;
+    };
+
     const effectViewIds = (name: string): string[] | null => {
-      if (name === 'surfaceEffects' || name === 'material') return [];
-      if (name === 'hazard') return ['lavaCrust', 'lavaEmbers', 'ashDrift', 'sandFlow'];
-      if (name === 'mineral') return ['crystalGlints', 'metallicFlecks'];
+      if (name === 'surfaceEffects') return [];
+      if (name === 'hazard') return ['lavaEmbers', 'ashDrift', 'sandFlow'];
       if (name === 'sandDust') return ['sandFlow'];
-      if (name === 'dirtLife') return ['soilLife', 'wormLife'];
+      if (name === 'dirtLife') return ['wormLife'];
       if (name === 'pollen') return ['pollen'];
-      if (name === 'frost') return ['frost'];
-      if (name === 'lavaHeat') return ['lavaCrust', 'lavaEmbers'];
+      if (name === 'lavaHeat') return ['lavaEmbers'];
       if (name === 'ash') return ['ashDrift'];
-      if (name === 'crystalGlints') return ['crystalGlints'];
-      if (name === 'metallicFlecks') return ['metallicFlecks'];
       if (name === 'fungalSpores') return ['fungalSpores'];
       return null;
     };
@@ -596,10 +658,15 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
         apply(eye, eye.clone().addScaledVector(tangent, 40).addScaledVector(radial, -2), eye);
         return 'horizon';
       }
+      if (MATERIAL_VIEW_IDS[name] && name !== 'lavaHeat') {
+        return frameVoxelMaterial(name) ?? overhead(`${name}:no-material(overhead)`);
+      }
       const effectIds = effectViewIds(name);
       if (effectIds !== null) {
         const framed = frameInstance(surfaceEffectMesh(scene, effectIds), name, 4.8, 1.6, 0.55);
         if (framed) return framed;
+        const materialFramed = frameVoxelMaterial(name);
+        if (materialFramed) return materialFramed;
         return overhead(`${name}:no-effect(overhead)`);
       }
       return overhead('unknown(overhead)');

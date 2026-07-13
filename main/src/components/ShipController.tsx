@@ -42,6 +42,13 @@ import {
   getSystemTravelAssistTarget,
   systemApproachSpeedLimit
 } from '../state/systemTravelAssist.ts';
+import {
+  getShipFlightFeedback,
+  resetShipFlightFeedback,
+  resolveShipBoost,
+  updateShipFlightFeedback,
+  type ShipFlightFeedback
+} from '../state/shipFlightFeedback.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
@@ -124,6 +131,15 @@ declare global {
     __paravoxiaShipProbe?: {
       injectLookDelta(yawRadians: number, pitchRadians: number): void;
       setLocalPosition(x: number, y: number, z: number): void;
+      getFeedback(): ShipFlightFeedback;
+      getFov(): number;
+      getCockpitStats(): {
+        meshes: number;
+        triangles: number;
+        materials: number;
+        transparentMaterials: number;
+        scale: number;
+      };
     };
   }
 }
@@ -211,8 +227,8 @@ export default function ShipController({
   // Parked peripheral "peek" (yaw/pitch radians) — view-only; ship heading locked.
   const lookOffset = useRef({ yaw: 0, pitch: 0 });
   const lastPublished = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
-  // Live thrust 0..1 for the cockpit instruments (holo ring spin/brightness).
-  const thrustRef = useRef(0);
+  const feedbackForward = useRef(new THREE.Vector3());
+  const boostWasActive = useRef(false);
   const systemPoseWriter = useRef<SystemPoseWriterLease | null>(null);
   const localSystemPose = useRef({
     position: [0, 0, 0] as [number, number, number],
@@ -232,6 +248,35 @@ export default function ShipController({
         if (![x, y, z].every(Number.isFinite)) return;
         position.current.set(x, y, z);
         velocity.current.set(0, 0, 0);
+      },
+      getFeedback: () => ({ ...getShipFlightFeedback() }),
+      getFov: () => cameraRef.current?.fov ?? 70,
+      getCockpitStats: () => {
+        const cockpit = cameraRef.current?.getObjectByName('ship-cockpit');
+        let meshes = 0;
+        let triangles = 0;
+        const materials = new Set<THREE.Material>();
+        cockpit?.traverse(object => {
+          const mesh = object as THREE.Mesh;
+          if (!mesh.isMesh) return;
+          meshes++;
+          const geometry = mesh.geometry as THREE.BufferGeometry;
+          const instanceCount = (mesh as THREE.InstancedMesh).isInstancedMesh
+            ? (mesh as THREE.InstancedMesh).count
+            : 1;
+          triangles += (geometry.index
+            ? geometry.index.count / 3
+            : (geometry.attributes.position?.count ?? 0) / 3) * instanceCount;
+          const meshMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          for (const material of meshMaterials) materials.add(material);
+        });
+        return {
+          meshes,
+          triangles,
+          materials: materials.size,
+          transparentMaterials: [...materials].filter(material => material.transparent).length,
+          scale: cameraRef.current?.getObjectByName('ship-cockpit-rig')?.scale.x ?? 1
+        };
       }
     };
     window.__paravoxiaShipProbe = bridge;
@@ -362,7 +407,10 @@ export default function ShipController({
     spawn
   ]);
 
-  useEffect(() => () => setShipThrustSfx(0), []);
+  useEffect(() => () => {
+    setShipThrustSfx(0);
+    resetShipFlightFeedback();
+  }, []);
 
   // --- pointer lock + mouse look (mirrors CameraControls) -------------------
   useEffect(() => {
@@ -476,6 +524,38 @@ export default function ShipController({
     if (!cam) return;
     const dt = Math.min(rawDt, 1 / 30); // clamp big frame gaps
 
+    const syncFlightFeedback = (
+      throttle: number,
+      boost: boolean,
+      acceleration: number,
+      approachLimited = false
+    ) => {
+      const live = getSpaceFlightSnapshot();
+      const speed = velocity.current.length();
+      feedbackForward.current.set(0, 0, -1).applyQuaternion(orientation.current);
+      const state = updateShipFlightFeedback({
+        active: live.controlMode === 'flight',
+        phase: live.phase,
+        throttle,
+        boost,
+        speed,
+        maxSpeed: MAX_SPEED,
+        acceleration,
+        forwardSpeed: velocity.current.dot(feedbackForward.current),
+        approachLimited
+      }, dt);
+
+      const engineLevel = boost ? 1 : Math.abs(throttle);
+      setShipThrustSfx(engineLevel);
+      if (boost && !boostWasActive.current) playSfx('shipBoost');
+      boostWasActive.current = boost;
+
+      if (Math.abs(cam.fov - state.fov) > 0.001) {
+        cam.fov = state.fov;
+        cam.updateProjectionMatrix();
+      }
+    };
+
     // Eased auto-landing (F-initiated): glide the ship down to the touchdown
     // point, ignoring manual control, decelerating into a gentle set-down
     // (easeOutCubic). Only THIS lands the ship — never automatically.
@@ -483,7 +563,6 @@ export default function ShipController({
     // orientation, then settle as landed (-> parked). Manual control is suspended.
     const land = landingSeq.current;
     if (land) {
-      setShipThrustSfx(land.crashed ? 0 : 0.18);
       land.t = Math.min(1, land.t + dt / land.duration);
       const e = 1 - Math.pow(1 - land.t, 3); // easeOutCubic — settling finish
       position.current.lerpVectors(land.from, land.to, e);
@@ -494,6 +573,7 @@ export default function ShipController({
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current);
       displayQuat.current.copy(orientation.current);
+      syncFlightFeedback(land.crashed ? 0 : 0.18, false, land.crashed ? -1 : -0.18);
       if (land.t >= 1) {
         landingSeq.current = null;
         setShipThrustSfx(0);
@@ -510,7 +590,6 @@ export default function ShipController({
     // airborne with full control.
     const launch = launchSeq.current;
     if (launch) {
-      setShipThrustSfx(0.55);
       launch.t = Math.min(1, launch.t + dt / launch.duration);
       const e = launch.t * launch.t * (3 - 2 * launch.t); // smoothstep
       position.current.lerpVectors(launch.from, launch.to, e);
@@ -520,6 +599,7 @@ export default function ShipController({
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current);
       displayQuat.current.copy(orientation.current);
+      syncFlightFeedback(0.55, false, 0.55);
       if (launch.t >= 1) {
         launchSeq.current = null;
         enterAtmosphere(); // surface -> descent (now airborne)
@@ -532,7 +612,6 @@ export default function ShipController({
     // to launch before you can fly. No thrust, no rotation.
     const parkedSnap = getSpaceFlightSnapshot();
     if (parkedSnap.controlMode === 'flight' && parkedSnap.phase === 'surface') {
-      setShipThrustSfx(0);
       const lo = lookOffset.current;
       lo.yaw = THREE.MathUtils.clamp(lo.yaw + yawInput.current, -MAX_PEEK, MAX_PEEK);
       lo.pitch = THREE.MathUtils.clamp(lo.pitch + pitchInput.current, -MAX_PEEK, MAX_PEEK);
@@ -543,6 +622,7 @@ export default function ShipController({
       cam.position.copy(position.current);
       cam.quaternion.copy(orientation.current).multiply(peek);
       displayQuat.current.copy(cam.quaternion);
+      syncFlightFeedback(0, false, 0);
       return;
     }
 
@@ -586,12 +666,16 @@ export default function ShipController({
 
     // 3) Thrust along ship forward (recompute after rotation).
     localForward.set(0, 0, -1).applyQuaternion(quat);
-    const boost = controls.jump ? BOOST_MULTIPLIER : 1;
+    const boostActive = resolveShipBoost(
+      controls.sprint,
+      controls.jump,
+      isTouchActive(),
+      controls.forward
+    );
+    const boost = boostActive ? BOOST_MULTIPLIER : 1;
     let accel = 0;
     if (controls.forward) accel += THRUST_ACCEL * boost;
     if (controls.backward) accel -= THRUST_ACCEL;
-    setShipThrustSfx(controls.forward ? (controls.jump ? 1 : 0.58) : controls.backward ? 0.34 : 0);
-    thrustRef.current = controls.forward ? (controls.jump ? 1 : 0.58) : controls.backward ? 0.34 : 0;
     if (accel !== 0) {
       velocity.current.addScaledVector(localForward, accel * dt);
     }
@@ -604,6 +688,7 @@ export default function ShipController({
     }
 
     const assistTarget = getSystemTravelAssistTarget();
+    let approachLimited = false;
     if (assistTarget && getSpaceFlightSnapshot().phase === 'deep_space') {
       const systemX = position.current.x + planetSystemPosition[0];
       const systemY = position.current.y + planetSystemPosition[1];
@@ -622,6 +707,7 @@ export default function ShipController({
           + velocity.current.z * dirZ;
         const limit = systemApproachSpeedLimit(centerDistance, assistTarget.ready);
         if (inwardSpeed > limit) {
+          approachLimited = true;
           const excess = inwardSpeed - limit;
           velocity.current.x -= dirX * excess;
           velocity.current.y -= dirY * excess;
@@ -680,6 +766,13 @@ export default function ShipController({
     cam.position.copy(position.current);
     displayQuat.current.slerp(quat, 1 - Math.exp(-CAM_SMOOTH * dt));
     cam.quaternion.copy(displayQuat.current);
+    const throttle = controls.forward ? (boostActive ? 1 : 0.58) : controls.backward ? -0.34 : 0;
+    syncFlightFeedback(
+      throttle,
+      boostActive,
+      accel / (THRUST_ACCEL * BOOST_MULTIPLIER),
+      approachLimited
+    );
 
     // 7) Phase-driven launch + landing transitions (read the live snapshot).
     const liveSnap = getSpaceFlightSnapshot();
@@ -782,7 +875,7 @@ export default function ShipController({
       near={1}
       far={LOCAL_SYSTEM_FLIGHT_CAMERA_FAR}
     >
-      <ShipCockpit thrustRef={thrustRef} terrainSeed={terrainSeed} />
+      <ShipCockpit terrainSeed={terrainSeed} />
     </PerspectiveCamera>
   );
 }

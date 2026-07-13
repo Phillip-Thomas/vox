@@ -31,6 +31,7 @@ import {
   voxelCoordToWorld
 } from '../utils/cubeGravityConstants';
 import { getMoonDirection, getSunDirection } from './SkyController';
+import { isLiquidBlock } from '../game/data/blocks';
 
 export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
@@ -242,7 +243,8 @@ export default function EfficientPlanet({
 
   const requestCollisionBody = useCallback((x: number, y: number, z: number, worldId: number) => {
     if (worldId !== voxelSystem.getWorldId()) return;
-    if (!voxelSystem.hasVoxel(x, y, z)) return;
+    const voxel = voxelSystem.getVoxel(x, y, z);
+    if (!voxel || isLiquidBlock(voxel.blockId)) return; // liquids (lava) never solidify — the body wades in
     if (!isWithinCollisionRange(x, y, z)) return;
 
     const key = coordKey(x, y, z);
@@ -261,6 +263,7 @@ export default function EfficientPlanet({
 
     for (const [key, voxelData] of voxelSystem.getAllVoxels()) {
       if (voxelData.worldId !== activeWorldId) continue;
+      if (isLiquidBlock(voxelData.blockId)) continue;
       const [x, y, z] = voxelData.position;
       if (!isWithinCollisionRange(x, y, z)) continue;
 
@@ -370,7 +373,7 @@ export default function EfficientPlanet({
 
     for (const [key, voxelData] of allVoxels) {
       const [x, y, z] = key.split(',').map(Number);
-      if (voxelData.worldId === activeWorldId && isWithinCollisionRange(x, y, z)) {
+      if (voxelData.worldId === activeWorldId && !isLiquidBlock(voxelData.blockId) && isWithinCollisionRange(x, y, z)) {
         shouldHaveCollision.add(key);
       }
     }

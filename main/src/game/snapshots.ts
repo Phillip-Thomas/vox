@@ -65,6 +65,11 @@ import {
   markForageCollected,
   resetForagePickup
 } from './systems/foragePickup.ts';
+import {
+  getHarvestedFlora,
+  markFloraHarvested,
+  resetFloraHarvest
+} from './systems/floraHarvest.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { GENERATION_SCHEMA_VERSION } from './schema.ts';
 
@@ -93,6 +98,8 @@ export interface GameSnapshot {
     trees: Array<[number, number, number]>;
     stones: Array<[number, number, number]>;
     forage: Array<[number, number, number]>;
+    /** Optional for backward-compatible schema-v1 snapshots. */
+    flora?: Array<[number, number, number]>;
     voxels: VoxelDiffSnapshot;
   };
 }
@@ -125,6 +132,7 @@ export function snapshot(): GameSnapshot {
       trees: getHarvestedTrees(),
       stones: getCollectedStones(),
       forage: getCollectedForage(),
+      flora: getHarvestedFlora(),
       voxels: getVoxelDiffSnapshot()
     }
   };
@@ -148,6 +156,7 @@ export function applySnapshot(state: GameSnapshot, options: ApplySnapshotOptions
     resetTreeHarvest();
     resetStonePickup();
     resetForagePickup();
+    resetFloraHarvest();
   }
 
   restorePieces(state.world.structures);
@@ -155,6 +164,7 @@ export function applySnapshot(state: GameSnapshot, options: ApplySnapshotOptions
   for (const [x, y, z] of state.world.trees) markTreeHarvested(x, y, z);
   for (const [x, y, z] of state.world.stones) markStoneCollected(x, y, z);
   for (const [x, y, z] of state.world.forage) markForageCollected(x, y, z);
+  for (const [x, y, z] of state.world.flora ?? []) markFloraHarvested(x, y, z);
   if (options.applyVoxelDiff) applyVoxelDiffSnapshot(state.world.voxels);
 }
 

@@ -96,6 +96,17 @@ describe('gameplay command dispatch adapter', () => {
     expect(tx.sent).toHaveLength(1);
   });
 
+  it('rejects and rolls back an optimistic command when online send fails', () => {
+    const tx = transport('online');
+    tx.sendCommand = () => false;
+
+    const result = dispatchGameplayCommandWithTransport(() => accepted(), {}, tx);
+
+    expect(result.ok).toBe(false);
+    expect(result).toMatchObject({ code: 'stale' });
+    expect(tx.rollbacks).toBe(1);
+  });
+
   it('blocks shared mutations while a co-op room is not connected', () => {
     const tx = transport('blocked');
     let ran = false;

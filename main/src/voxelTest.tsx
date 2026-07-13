@@ -17,6 +17,7 @@
 //   ?profile=HIGH     graphics quality profile for shader gates.
 //   ?effects=sand     spawned sand dust surface-effect patch.
 //   ?effects=dirt     spawned loose-soil / micro-life surface-effect patch.
+//   ?effects=lava     spawned lava ember + thermal surface patch.
 //   ?effects=flora    spawned procedural flora ecology patch.
 //   ?effects=fauna    spawned procedural fauna ecology patch.
 //
@@ -75,8 +76,15 @@ const PROFILE = REQUESTED_PROFILE in QUALITY_PROFILES ? REQUESTED_PROFILE : DEFA
 if (PROFILE !== getQualityProfile()) setQualityProfile(PROFILE);
 const EFFECT_FLORA = EFFECTS === 'flora';
 const EFFECT_FAUNA = EFFECTS === 'fauna';
-const EFFECT_MATERIAL: MaterialType.SAND | MaterialType.DIRT | null =
-  EFFECTS === 'sand' ? MaterialType.SAND : EFFECTS === 'dirt' ? MaterialType.DIRT : null;
+type EffectMaterial = MaterialType.SAND | MaterialType.DIRT | MaterialType.LAVA;
+const EFFECT_MATERIAL: EffectMaterial | null =
+  EFFECTS === 'sand'
+    ? MaterialType.SAND
+    : EFFECTS === 'dirt'
+      ? MaterialType.DIRT
+      : EFFECTS === 'lava'
+        ? MaterialType.LAVA
+        : null;
 if (EFFECT_FAUNA) {
   const quality = getGraphicsQuality();
   overrideGraphicsQuality({
@@ -262,28 +270,45 @@ function Scene() {
 
 function EffectPatchCubes({
   coords,
-  materialType
+  materialType,
+  terrainSeed = SEED
 }: {
   coords: Array<[number, number, number]>;
-  materialType: MaterialType.SAND | MaterialType.DIRT | MaterialType.GRASS;
+  materialType: MaterialType.SAND | MaterialType.DIRT | MaterialType.GRASS | MaterialType.LAVA;
+  terrainSeed?: number;
 }) {
+  const terrainProfile = useMemo(() => buildTerrainProfile(terrainSeed), [terrainSeed]);
+  const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);
+  const appliedRef = useRef(false);
   const mesh = useMemo(() => {
-    const geometry = new THREE.BoxGeometry(1.98, 1.98, 1.98, 1, 1, 1);
-    const material = new THREE.MeshStandardMaterial({
-      color: MATERIALS[materialType].color,
-      roughness: 0.95,
-      metalness: 0
-    });
+    const geometry = new THREE.BoxGeometry(2, 2, 2, 1, 1, 1);
+    const data = new THREE.InstancedBufferAttribute(new Float32Array(coords.length * 2), 2);
+    geometry.setAttribute('aInstanceData', data);
+    const material = createVoxelMaterial();
     const im = new THREE.InstancedMesh(geometry, material, coords.length);
     coords.forEach(([x, y, z], index) => {
       const p = voxelCoordToWorld(x, y, z);
       matrix.makeTranslation(p.x, p.y, p.z);
       im.setMatrixAt(index, matrix);
+      im.setColorAt(index, MATERIALS[materialType].color);
+      data.setXY(index, materialId(materialType), 0);
     });
     im.instanceMatrix.needsUpdate = true;
+    if (im.instanceColor) im.instanceColor.needsUpdate = true;
+    data.needsUpdate = true;
     im.frustumCulled = false;
     return im;
   }, [coords, materialType]);
+
+  useFrame(({ clock }) => {
+    const material = mesh.material as THREE.MeshStandardMaterial;
+    if (!appliedRef.current && material.userData.shader) {
+      applyTerrainProfileToMaterial(terrainProfile, material);
+      applyVoxelWindProfileToMaterial(windProfile, material);
+      appliedRef.current = true;
+    }
+    updateVoxelMaterial(material, clock.elapsedTime, getGraphicsQuality(), VOXEL_REALITY_PRESETS.alive);
+  });
 
   useEffect(() => () => {
     mesh.geometry.dispose();
@@ -298,8 +323,12 @@ function EffectPatchCubes({
 // have no dirt micro-life). Scan deterministically from the requested seed to
 // the nearest seed whose art direction supports the requested material, so
 // ?effects=sand / ?effects=dirt ALWAYS shows the effect being inspected.
-function findEffectHarnessSeed(materialType: MaterialType.SAND | MaterialType.DIRT, baseSeed: number): number {
-  const weightKey = materialType === MaterialType.SAND ? 'sandDust' : 'looseSoilLife';
+function findEffectHarnessSeed(materialType: EffectMaterial, baseSeed: number): number {
+  const weightKey = materialType === MaterialType.SAND
+    ? 'sandDust'
+    : materialType === MaterialType.LAVA
+      ? 'lavaHeat'
+      : 'looseSoilLife';
   for (let i = 0; i < 64; i++) {
     const candidate = baseSeed + i * 7919;
     const art = buildPlanetArtDirection(candidate);
@@ -325,7 +354,7 @@ function DebugSceneHook() {
   return null;
 }
 
-function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND | MaterialType.DIRT }) {
+function SurfaceEffectScene({ materialType }: { materialType: EffectMaterial }) {
   const coords = useMemo<Array<[number, number, number]>>(() => {
     const list: Array<[number, number, number]> = [];
     for (let x = -5; x <= 5; x++) {
@@ -337,8 +366,16 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
   }, []);
   const effectSeed = useMemo(() => findEffectHarnessSeed(materialType, SEED), [materialType]);
   const player = useMemo(() => new THREE.Vector3(0, 52, 14), []);
-  const effectLabel = materialType === MaterialType.SAND ? 'sand flow' : 'loose dirt micro-life';
-  const fieldLabel = materialType === MaterialType.SAND ? 'Blowing sand field' : 'Loose soil + worms';
+  const effectLabel = materialType === MaterialType.SAND
+    ? 'sand saltation'
+    : materialType === MaterialType.LAVA
+      ? 'thermal channels + embers'
+      : 'loose dirt micro-life';
+  const fieldLabel = materialType === MaterialType.SAND
+    ? 'Blowing sand field'
+    : materialType === MaterialType.LAVA
+      ? 'Cooling lava field'
+      : 'Loose soil + worms';
 
   useEffect(() => {
     // Inspection harness: force enough density/distance that the effect under
@@ -382,7 +419,7 @@ function SurfaceEffectScene({ materialType }: { materialType: MaterialType.SAND 
       <directionalLight position={[8, 18, 9]} intensity={1.8} color="#fff0ce" />
       <directionalLight position={[-9, 10, -8]} intensity={0.42} color="#9bbdff" />
       <DebugSceneHook />
-      <EffectPatchCubes coords={coords} materialType={materialType} />
+      <EffectPatchCubes coords={coords} materialType={materialType} terrainSeed={effectSeed} />
       <SurfaceEffectField terrainSeed={effectSeed} playerPosition={player} />
       <Html position={[0, 55.5, -12]} center>
         <div style={headerStyle}>

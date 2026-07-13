@@ -17,6 +17,7 @@ import {
   chooseFaceFromPosition,
   composeVelocity,
   composeSwimVelocity,
+  composeLavaVelocity,
   dominantFaceForPosition,
   FACE_NORMALS,
   GRAVITY_STRENGTH,
@@ -42,6 +43,7 @@ import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
 import { getPlayerLook, getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
 import { setPlayerSubmerged, setCameraSubmersion } from '../state/playerSubmersion';
+import { setLocalLavaImmersion, resetLavaImmersion } from '../state/playerLavaImmersion';
 import {
   EDGE_HYSTERESIS,
   FIXED_PHYSICS_STEP,
@@ -66,12 +68,13 @@ import { clearMiningProgress, getMiningProgress, setMiningProgress } from '../ga
 import { isMawPowered } from '../game/systems/mawSystem';
 import { isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { isStoneCollected } from '../game/systems/stonePickup';
+import { isFloraHarvested } from '../game/systems/floraHarvest';
 import { isBuildEnabled, getSelectedPiece, getSelectedMaterial, getBuildRotation } from '../game/systems/buildState';
 import { canAfford, hasPanel, getPieceAt, oppositeFace, isOpenable, FACE_DIRS, type StructurePiece } from '../game/systems/structureSystem';
 import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, volumeOrientFromForward, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
 import { BUILD_PIECES } from '../game/data/buildPieces';
-import { tickVitals, tickOxygen, applyStamina, canSprint, getVitals } from '../game/systems/survivalVitals';
+import { tickVitals, tickOxygen, tickLavaDamage, applyStamina, canSprint, getVitals } from '../game/systems/survivalVitals';
 import { getWaterskinFill } from '../game/systems/consumeSystem';
 import { EDIBLE_ITEM_IDS } from '../game/data/items';
 import { getItemCount } from '../game/systems/inventorySystem';
@@ -84,6 +87,8 @@ import { getSpaceFlightSnapshot } from '../state/spaceFlight';
 import { clearBuildGhost, setBuildGhost } from '../game/systems/buildGhost';
 import { treeFieldHandle } from './TreeField';
 import { looseStoneHandle } from './LooseStoneField';
+import { floraFieldHandle } from './FloraField';
+import { pickNearestFlora } from '../utils/floraPicking.ts';
 import { structureFieldHandle } from './StructureField';
 import { setLookedAt, type LookedAt } from '../game/systems/targeting';
 import { playSfx, setJetpackSfx } from '../audio/sfxEngine.ts';
@@ -145,6 +150,7 @@ import {
 } from '../game/systems/jetpackSystem.ts';
 import {
   collectStoneCommand,
+  harvestFloraCommand,
   consumeItemCommand,
   drinkFromWaterskinCommand,
   drinkWaterCommand,
@@ -189,6 +195,9 @@ function isOnLadder(pos: THREE.Vector3): boolean {
 const MINE_TICK_MS = 260;
 // Loose stones are picked up, not mined — a short, tool-independent hold.
 const STONE_PICKUP_MS = 280;
+// Flora is gathered by hand: deliberate enough to avoid accidental stripping,
+// but much quicker than cutting a tree or mining terrain.
+const FLORA_PICKUP_MS = 360;
 // Speed multiplier when mining with an unfuelled charge-tool (bare-handed rate).
 const BARE_HAND_MUL = 0.35;
 // Continuous smooth-gravity field is now the DEFAULT (no faces/transitions/
@@ -216,6 +225,13 @@ const _poseForward = new THREE.Vector3();
 // "moment". Out is faster than in so surfacing clears the underwater state crisply.
 const SUBMERGE_IN_RATE = 6;
 const SUBMERGE_OUT_RATE = 9;
+// Lava-immersion smoothing (per second). In is SLOW — the melt takes hold over
+// ~a second, so a reflex jump right after a misstep still mostly escapes; past
+// LAVA_DEEP the melt owns jump/jetpack (mirror of `submerged` for water).
+const LAVA_IN_RATE = 2.5;
+const LAVA_OUT_RATE = 4;
+const LAVA_DEEP = 0.5;
+const _feet = new THREE.Vector3(); // per-step lava feet-cell test scratch
 const STEP_UP_HEIGHT = VOXEL_SCALE;
 const STEP_PROBE_FORWARD = PLAYER_CAPSULE_RADIUS + 1.15;
 const STEP_PROBE_LOW_OFFSET = -0.6;
@@ -340,6 +356,10 @@ export default function EfficientPlayer({
   const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
   const submergence = useRef(0);
   const cameraSubmergence = useRef(0); // render-camera channel — diverges from the eye under external lenses
+  // Lava: smoothed 0..1 hold of the melt (feet-cell test) + the raw flag the
+  // damage tick keys on. Published to playerLavaImmersion for the HUD heat pass.
+  const lavaImmersion = useRef(0);
+  const lastFeetInLava = useRef(false);
   const spawnGuard = useRef({ done: false, clock: 0 });
 
   // World swaps remount the player: the settle flag must never leak between
@@ -392,11 +412,13 @@ export default function EfficientPlayer({
   }, []);
 
   useEffect(() => () => setJetpackSfx(false), []);
-  // Reset submersion when the on-foot controller unmounts (board ship / leave
-  // world) so the underwater audio muffle + fog can't get stuck on.
+  // Reset submersion + lava when the on-foot controller unmounts (board ship /
+  // leave world) so the underwater audio muffle + fog — and the molten heat
+  // vignette — can't get stuck on.
   useEffect(() => () => {
     setPlayerSubmerged(0, 0);
     setCameraSubmersion(0, 0);
+    resetLavaImmersion();
   }, []);
 
   const updateVisualTransition = useCallback(() => {
@@ -651,7 +673,8 @@ export default function EfficientPlayer({
   type HarvestTarget =
     | { kind: 'voxel'; coord: { x: number; y: number; z: number }; voxel: NonNullable<ReturnType<typeof voxelSystem.getVoxel>> }
     | { kind: 'tree'; coord: { x: number; y: number; z: number } }
-    | { kind: 'stone'; coord: { x: number; y: number; z: number } };
+    | { kind: 'stone'; coord: { x: number; y: number; z: number } }
+    | { kind: 'flora'; floraKind: import('../game/data/floraHarvest.ts').FloraHarvestKind; coord: { x: number; y: number; z: number } };
   // Raster side-scroller: no camera ray (the camera looks AT the player) —
   // Terraria-style adjacency: probe cells ahead of the facing side / underfoot.
   const pickSideTarget = useCallback((): HarvestTarget | null => {
@@ -733,6 +756,23 @@ export default function EfficientPlayer({
       }
     }
 
+    // Canonical flora. Instance slots are presentation-only and are rebuilt as
+    // the player moves, so every hit resolves through the layer's voxel map.
+    const floraHit = pickNearestFlora(
+      raycaster.ray,
+      floraFieldHandle.pickTargets,
+      Math.min(BLOCK_REACH, bestDist),
+      isFloraHarvested
+    );
+    if (floraHit && floraHit.distance < bestDist) {
+      best = {
+        kind: 'flora',
+        floraKind: floraHit.kind,
+        coord: { x: floraHit.coord[0], y: floraHit.coord[1], z: floraHit.coord[2] }
+      };
+      bestDist = floraHit.distance;
+    }
+
     return best;
   }, [pickSideTarget]);
 
@@ -792,10 +832,10 @@ export default function EfficientPlayer({
     // Maw, its charge: empty + no Biofuel → slow bare-handed rate (auto-refuels if
     // a Biofuel is held). A non-charge tool (Hatchet/Pickaxe) never drains charge.
     if (ms.key !== key) {
-      if (target.kind === 'stone') {
+      if (target.kind === 'stone' || target.kind === 'flora') {
         // Loose stones are picked up by hand — quick, tool/charge independent.
         ms.usesCharge = false;
-        ms.duration = STONE_PICKUP_MS;
+        ms.duration = target.kind === 'stone' ? STONE_PICKUP_MS : FLORA_PICKUP_MS;
       } else {
         const isTree = target.kind === 'tree';
         const klass = isTree ? 'wood' : harvestClassForBlock(target.voxel.blockId);
@@ -828,6 +868,14 @@ export default function EfficientPlayer({
         if (result.ok) { playSfx('mine'); }
       } else if (target.kind === 'stone') {
         const result = dispatchGameplayCommand(() => collectStoneCommand(commandContext, { x: coord.x, y: coord.y, z: coord.z }));
+        if (result.ok) { playSfx('mine'); }
+      } else if (target.kind === 'flora') {
+        const result = dispatchGameplayCommand(() => harvestFloraCommand(commandContext, {
+          x: coord.x,
+          y: coord.y,
+          z: coord.z,
+          kind: target.floraKind
+        }));
         if (result.ok) { playSfx('mine'); }
       } else {
         commitMine(coord, getEquippedToolTier(), ms.usesCharge);
@@ -1108,6 +1156,16 @@ export default function EfficientPlayer({
         }
       }
     }
+    const floraHit = pickNearestFlora(
+      raycaster.ray,
+      floraFieldHandle.pickTargets,
+      Math.min(BLOCK_REACH, foundDist),
+      isFloraHarvested
+    );
+    if (floraHit && floraHit.distance < foundDist) {
+      found = { kind: 'flora', floraKind: floraHit.kind };
+      foundDist = floraHit.distance;
+    }
 
     setLookedAt(found);
   }, [pickSideTarget]);
@@ -1251,6 +1309,30 @@ export default function EfficientPlayer({
     const swimFactor = Math.min(1, submergence.current / 0.5);
     const submerged = submergence.current > 0.5;
 
+    // --- Lava: unlike water (an eye test — you can wade dry-chested), the melt
+    // counts from the FEET — the lower sphere of the capsule sitting in a lava
+    // cell. Liquid voxels stream no colliders (EfficientPlanet), so the capsule
+    // genuinely enters the cell and the viscous blend below takes over. The
+    // molten-wash overlay keys on the RENDER camera cell (_camEye, from the
+    // water block above) — the camera channel, not the body — so an external
+    // lens (survey chart, side rig) over a burning character stays readable.
+    const feetWorld = _feet.copy(position).addScaledVector(activeUp, -PLAYER_CAPSULE_HALF_HEIGHT);
+    const feetInLava = voxelSystem.getVoxel(
+      Math.round(feetWorld.x / VOXEL_SCALE),
+      Math.round(feetWorld.y / VOXEL_SCALE),
+      Math.round(feetWorld.z / VOXEL_SCALE)
+    )?.blockId === 'lava';
+    lastFeetInLava.current = feetInLava;
+    const lavaRate = feetInLava ? LAVA_IN_RATE : LAVA_OUT_RATE;
+    lavaImmersion.current += ((feetInLava ? 1 : 0) - lavaImmersion.current) * Math.min(1, lavaRate * FIXED_PHYSICS_STEP);
+    const cameraInLava = voxelSystem.getVoxel(
+      Math.round(_camEye.x / VOXEL_SCALE),
+      Math.round(_camEye.y / VOXEL_SCALE),
+      Math.round(_camEye.z / VOXEL_SCALE)
+    )?.blockId === 'lava';
+    setLocalLavaImmersion(lavaImmersion.current, feetInLava, cameraInLava);
+    const inLavaDeep = lavaImmersion.current > LAVA_DEEP;
+
     const grounded = checkGrounded(position, activeUp);
     lastGrounded.current = grounded;
 
@@ -1330,7 +1412,7 @@ export default function EfficientPlayer({
     const onLadder = isOnLadder(position);
     lastOnLadder.current = onLadder;
 
-    if (jump.shouldJump && !submerged && !onLadder) {
+    if (jump.shouldJump && !submerged && !onLadder && !inLavaDeep) {
       playSfx('jump');
       nextVelocity = applyJumpImpulse(nextVelocity, activeUp, DEFAULT_JUMP_SPEED);
     }
@@ -1342,7 +1424,7 @@ export default function EfficientPlayer({
     let jetpackActive = false;
     if (grounded) {
       refillJetpackFuel(JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP, commandContext.actorId);
-    } else if (jumpHeld && !jump.shouldJump && getJetpackFuelAmount(commandContext.actorId) > 0 && !submerged && !onLadder) {
+    } else if (jumpHeld && !jump.shouldJump && getJetpackFuelAmount(commandContext.actorId) > 0 && !submerged && !onLadder && !inLavaDeep) {
       jetpackActive = consumeJetpackFuel(FIXED_PHYSICS_STEP, commandContext.actorId) > 0;
       const upSpeed = nextVelocity.dot(activeUp);
       if (upSpeed < JETPACK_MAX_UP_SPEED) {
@@ -1381,6 +1463,23 @@ export default function EfficientPlayer({
       nextVelocity.lerp(swimVelocity, swimFactor);
     }
 
+    // In lava: blend the viscous wade/sink over everything above (walk, jump,
+    // jetpack) by how firm the melt's hold is. Early in the ramp a reflex jump
+    // still mostly wins; at full immersion the melt swallows it whole — hold
+    // jump to struggle upward, slightly faster than the sink. The dry path is
+    // byte-for-byte unchanged while the factor is 0.
+    if (lavaImmersion.current > 0.001 && cameraRef.current) {
+      const look = cameraRef.current.getWorldDirection(_swimLook);
+      const lavaVelocity = composeLavaVelocity(currentVelocity, look, activeUp, {
+        forward: movementInput.forward,
+        backward: movementInput.backward,
+        left: movementInput.left,
+        right: movementInput.right,
+        struggle: active && controls.jump === true
+      }, FIXED_PHYSICS_STEP);
+      nextVelocity.lerp(lavaVelocity, lavaImmersion.current);
+    }
+
     // (cooldown already decremented at the top of the step, before the resolver.)
     // Edge-walk is part of the DISCRETE system only; the smooth field never needs it.
     const transitionLocked = Boolean(rotationAnimation.current) || transitionCooldown.current > 0;
@@ -1406,11 +1505,12 @@ export default function EfficientPlayer({
         if (upSpeed < STEP_ASSIST_UP_SPEED) {
           nextVelocity.addScaledVector(activeUp, STEP_ASSIST_UP_SPEED - upSpeed);
         }
-      } else if (submergence.current > 0.05) {
-        // WATER MANTLE: swimming/wading against a one-block lip with a walkable
+      } else if (submergence.current > 0.05 || lavaImmersion.current > 0.05) {
+        // FLUID MANTLE: swimming/wading against a one-block lip with a walkable
         // top — haul the capsule over it. Stronger than the dry assist because
-        // buoyant drag opposes it; applied after the swim blend so it wins.
-        // This is what makes leaving water onto land actually possible.
+        // the fluid drag opposes it; applied after the swim/lava blends so it
+        // wins. This is what makes leaving water — or clawing out of a lava
+        // pool at its shore — actually possible.
         const mantleSpeed = STEP_ASSIST_UP_SPEED * 1.4;
         const upSpeed = nextVelocity.dot(activeUp);
         if (upSpeed < mantleSpeed) {
@@ -1463,6 +1563,9 @@ export default function EfficientPlayer({
     // Breath: drain while the eye is submerged (in normal surface play), refill
     // otherwise; drowning bleeds HP at empty (non-lethal — see tickOxygen).
     tickOxygen(vitalsDelta, decayActive && submergence.current > 0.5);
+    // Molten burn: keyed on the raw feet test so even a half-second misstep
+    // bites; paused with the rest of survival decay outside normal surface play.
+    tickLavaDamage(vitalsDelta, decayActive && lastFeetInLava.current);
     if (lastGroundedNotification.current !== lastGrounded.current) {
       const previous = lastGroundedNotification.current;
       lastGroundedNotification.current = lastGrounded.current;

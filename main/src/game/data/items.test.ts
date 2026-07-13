@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ITEMS, ALL_ITEM_IDS, getItem, isItemId } from './items.ts';
 import { ALL_RESOURCE_IDS, RESOURCES } from './resources.ts';
+import { FLORA_HARVEST_KINDS, FLORA_HARVEST } from './floraHarvest.ts';
 
 describe('item registry', () => {
   it('includes every resource as a kind:resource item with matching tier/name', () => {
@@ -55,5 +56,19 @@ describe('item registry', () => {
       expect(item.name.length).toBeGreaterThan(0);
       expect(item.description.length).toBeGreaterThan(0);
     }
+  });
+
+  it('registers every procedural flora drop as an inventory item', () => {
+    for (const kind of FLORA_HARVEST_KINDS) {
+      const drop = FLORA_HARVEST[kind];
+      expect(isItemId(drop.itemId)).toBe(true);
+      expect(drop.quantity[0]).toBeGreaterThan(0);
+      expect(drop.quantity[1]).toBeGreaterThanOrEqual(drop.quantity[0]);
+    }
+    expect(getItem('cactus_pulp').kind).toBe('ingredient');
+    expect(getItem('fan_frond').kind).toBe('ingredient');
+    expect(getItem('wild_bloom').kind).toBe('ingredient');
+    expect(getItem('seedpod').kind).toBe('ingredient');
+    expect(FLORA_HARVEST.shrub.itemId).toBe('berry');
   });
 });

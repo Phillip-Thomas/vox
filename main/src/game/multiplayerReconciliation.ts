@@ -12,6 +12,7 @@ import { removeCampfireIfOwnedBy } from './systems/campfires.ts';
 import { unmarkForageCollected } from './systems/foragePickup.ts';
 import { unmarkStoneCollected } from './systems/stonePickup.ts';
 import { unmarkTreeHarvested } from './systems/treeHarvest.ts';
+import { unmarkFloraHarvested } from './systems/floraHarvest.ts';
 import {
   removePieceWithoutRefundIfOwnedBy,
   restorePieces,
@@ -135,6 +136,7 @@ export function applyRejectedCommandRollback(rollback: unknown, options: Rollbac
     if (uncollectResource.source === 'tree') restored = unmarkTreeHarvested(x, y, z);
     else if (uncollectResource.source === 'loose_stone') restored = unmarkStoneCollected(x, y, z);
     else if (uncollectResource.source === 'forage') restored = unmarkForageCollected(x, y, z);
+    else if (uncollectResource.source === 'flora') restored = unmarkFloraHarvested(x, y, z);
     if (restored) {
       result.changed = true;
       result.restoredResources++;

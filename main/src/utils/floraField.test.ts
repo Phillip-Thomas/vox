@@ -3,7 +3,9 @@ import * as THREE from 'three';
 import { MaterialType } from '../types/materials.ts';
 import { voxelSystem } from './efficientVoxelSystem.ts';
 import {
+  CANONICAL_FLORA_DENSITY,
   FLORA_KINDS,
+  FLORA_INTERACTION_VISIBILITY_DISTANCE,
   buildFloraInstances,
   buildFloraProfile,
   chooseFloraKindForVoxel,
@@ -16,6 +18,7 @@ import {
   updateFloraMaterial,
   type FloraProfile
 } from './floraField.ts';
+import { voxelCoordToWorld } from './cubeGravityConstants.ts';
 import { QUALITY_PROFILES } from '../config/graphicsSettings.ts';
 import { VOXEL_REALITY_PRESETS } from '../game/systems/realityRenderSystem.ts';
 import { atlasRepresentativeSeeds } from './proceduralAtlasSeeds.ts';
@@ -173,6 +176,86 @@ describe('floraField', () => {
 
     expect(result.count).toBe(expectedCount);
     expect(mesh.count).toBe(expectedCount);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('keeps canonical nearby flora visible with presentation disabled and publishes pick slots', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    const coord: [number, number, number] = [2, 25, 1];
+    voxelSystem.addVoxel(coord[0], coord[1], coord[2], MaterialType.GRASS, grass);
+    const voxel = voxelSystem.getVoxel(coord[0], coord[1], coord[2])!;
+    const kind = chooseFloraKindForVoxel(voxel, coord[0], coord[1], coord[2], seed, profile);
+    const geometry = createFloraGeometry(kind, profile);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 4);
+    const slotVoxel: Array<[number, number, number]> = [];
+    // A deliberately stale sphere proves the build commits fresh broad-phase bounds.
+    mesh.boundingSphere = new THREE.Sphere(new THREE.Vector3(10_000, 10_000, 10_000), 1);
+
+    const result = buildFloraInstances(
+      kind,
+      mesh,
+      0,
+      FLORA_INTERACTION_VISIBILITY_DISTANCE,
+      voxelCoordToWorld(...coord),
+      seed,
+      profile,
+      { slotVoxel }
+    );
+
+    expect(result.count).toBe(1);
+    expect(slotVoxel).toEqual([coord]);
+    expect(mesh.count).toBe(1);
+    expect(mesh.boundingSphere?.center.length()).toBeLessThan(100);
+
+    // Presentation density zero still thins the same canonical node outside the
+    // interaction bubble; quality can remove distant decoration, never nearby play.
+    const farResult = buildFloraInstances(
+      kind,
+      mesh,
+      0,
+      10_000,
+      new THREE.Vector3(1_000, 1_000, 1_000),
+      seed,
+      profile,
+      { slotVoxel }
+    );
+    expect(farResult.count).toBe(0);
+    expect(slotVoxel).toEqual([]);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('filters harvested canonical flora from render and raycast mappings', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    const coord: [number, number, number] = [3, 25, 2];
+    voxelSystem.addVoxel(coord[0], coord[1], coord[2], MaterialType.GRASS, grass);
+    const voxel = voxelSystem.getVoxel(coord[0], coord[1], coord[2])!;
+    const kind = chooseFloraKindForVoxel(voxel, coord[0], coord[1], coord[2], seed, profile);
+    const geometry = createFloraGeometry(kind, profile);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 4);
+    const slotVoxel: Array<[number, number, number]> = [[99, 99, 99]];
+
+    const result = buildFloraInstances(
+      kind,
+      mesh,
+      CANONICAL_FLORA_DENSITY,
+      FLORA_INTERACTION_VISIBILITY_DISTANCE,
+      voxelCoordToWorld(...coord),
+      seed,
+      profile,
+      { isHarvested: (x, y, z) => x === coord[0] && y === coord[1] && z === coord[2], slotVoxel }
+    );
+
+    expect(result.count).toBe(0);
+    expect(mesh.count).toBe(0);
+    expect(slotVoxel).toEqual([]);
 
     geometry.dispose();
     material.dispose();

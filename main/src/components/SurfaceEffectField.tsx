@@ -13,22 +13,16 @@ import { measureWarpMetric } from '../utils/warpMetrics';
 import {
   applySurfaceEffectWindProfileToMaterial,
   buildSurfaceMoteInstances,
-  buildSurfaceSheetInstances,
   countSurfaceMoteVoxels,
-  countSurfaceSheetVoxels,
   createSurfaceMoteGeometry,
   createSurfaceMoteMaterial,
-  createSurfaceSheetGeometry,
-  createSurfaceSheetMaterial,
   surfaceEffectRealityDensityScale,
-  surfaceSheetIntensity,
   updateSurfaceEffectMaterial
 } from '../utils/surfaceEffects';
 import type {
   SurfaceEffectBuildResult,
   SurfaceEffectId,
-  SurfaceMoteConfig,
-  SurfaceSheetConfig
+  SurfaceMoteConfig
 } from '../utils/surfaceEffects';
 import {
   buildCritterAgents,
@@ -90,8 +84,6 @@ interface SurfaceEffectSpec {
     windProfile: WindProfile
   ) => SurfaceEffectBuildResult;
   applyWind: (profile: WindProfile, material: THREE.Material) => void;
-  /** Re-applied when the layer density changes (sheets scale pattern strength). */
-  applyDensity?: (material: THREE.Material, density: number) => void;
   update: (
     material: THREE.Material,
     time: number,
@@ -102,17 +94,6 @@ interface SurfaceEffectSpec {
 
 function scaled(color: THREE.Color, s: number): THREE.Color {
   return color.clone().multiplyScalar(s);
-}
-
-function sheetConfig(
-  art: PlanetArtDirection,
-  id: SurfaceEffectId,
-  materials: MaterialType[],
-  patch: Omit<SurfaceSheetConfig, 'id' | 'materials'>
-): SurfaceSheetConfig | null {
-  const filtered = eligibleMaterials(art, materials);
-  if (filtered.length === 0 || effectWeight(art, id) <= 0.04) return null;
-  return { id, materials: filtered, ...patch };
 }
 
 function moteConfig(
@@ -138,127 +119,46 @@ function critterConfig(
 }
 
 // -----------------------------------------------------------------------------
-// Per-planet effect registry: grounded sheets + airborne motes.
+// Per-planet effect registry: airborne motes only. Flush phenomena now live in
+// the shared voxel shader, eliminating one full transparent quad per voxel.
 // -----------------------------------------------------------------------------
-
-function buildSheetConfigs(art: PlanetArtDirection): SurfaceSheetConfig[] {
-  const p = art.palette;
-  const sand = paletteRoleToLinearColor(p.sandLight);
-  const soil = paletteRoleToLinearColor(p.soilDark);
-  const rock = paletteRoleToLinearColor(p.rockBase);
-
-  return [
-    // Sand saltation: streams of grains blowing downwind across the whole field.
-    sheetConfig(art, 'sandFlow', [MaterialType.SAND], {
-      kind: 'flow',
-      colorA: scaled(sand, 0.72),
-      colorB: scaled(sand, 1.35),
-      colorC: scaled(sand, 1.3),
-      intensity: 0.6,
-      patchScale: 0.07,
-      flowSpeed: 1.25,
-      grainScale: 2.4,
-      sparkle: 0,
-      emissive: 0,
-      feather: 0,
-      salt: 181
-    }),
-    // Living topsoil: moisture patches, crumbly casts, creeping wet trails.
-    sheetConfig(art, 'soilLife', [MaterialType.DIRT], {
-      kind: 'soil',
-      colorA: scaled(soil, 0.85),
-      colorB: scaled(soil, 1.55),
-      colorC: scaled(soil, 0.5),
-      intensity: 0.52,
-      patchScale: 0.06,
-      flowSpeed: 0.045,
-      grainScale: 5.5,
-      sparkle: 0,
-      emissive: 0,
-      feather: 0,
-      salt: 211
-    }),
-    // Frost: wind-combed feathers + embedded ice sparkle.
-    sheetConfig(art, 'frost', [MaterialType.ICE], {
-      kind: 'glint',
-      colorA: paletteRoleToLinearColor(p.waterFoam),
-      colorB: paletteRoleToLinearColor(p.skyHigh),
-      colorC: paletteRoleToLinearColor(p.waterFoam),
-      intensity: 0.5,
-      patchScale: 0.09,
-      flowSpeed: 0,
-      grainScale: 7,
-      sparkle: 0.55,
-      emissive: 0.25,
-      feather: 0.9,
-      salt: 371
-    }),
-    // Crystal facets firing as you move.
-    sheetConfig(art, 'crystalGlints', [MaterialType.CRYSTAL], {
-      kind: 'glint',
-      colorA: paletteRoleToLinearColor(p.mineralAccent),
-      colorB: paletteRoleToLinearColor(p.wingGlass),
-      colorC: paletteRoleToLinearColor(p.mineralAccent),
-      intensity: 0.45,
-      patchScale: 0.1,
-      flowSpeed: 0,
-      grainScale: 8,
-      sparkle: 0.95,
-      emissive: 0.7,
-      feather: 0,
-      salt: 491
-    }),
-    // Metal flecks embedded in ore-bearing rock.
-    sheetConfig(art, 'metallicFlecks', [MaterialType.STONE, MaterialType.COPPER, MaterialType.GOLD, MaterialType.SILVER], {
-      kind: 'glint',
-      colorA: paletteRoleToLinearColor(p.mineralAccent),
-      colorB: paletteRoleToLinearColor(p.waterFoam),
-      colorC: paletteRoleToLinearColor(p.mineralAccent),
-      intensity: 0.38,
-      patchScale: 0.1,
-      flowSpeed: 0,
-      grainScale: 9,
-      sparkle: 0.85,
-      emissive: 0.35,
-      feather: 0,
-      salt: 531
-    }),
-    // Ash films drifting slowly over volcanic rock.
-    sheetConfig(art, 'ashDrift', [MaterialType.BASALT, MaterialType.STONE], {
-      kind: 'flow',
-      colorA: scaled(rock, 0.72),
-      colorB: scaled(rock, 1.28),
-      colorC: scaled(rock, 1.1),
-      intensity: 0.4,
-      patchScale: 0.08,
-      flowSpeed: 0.65,
-      grainScale: 2,
-      sparkle: 0,
-      emissive: 0,
-      feather: 0,
-      salt: 451
-    }),
-    // Lava crust: hot cells pulsing through the cooling skin.
-    sheetConfig(art, 'lavaCrust', [MaterialType.LAVA], {
-      kind: 'glint',
-      colorA: scaled(paletteRoleToLinearColor(p.hazardAccent), 0.6),
-      colorB: paletteRoleToLinearColor(p.sunGlow),
-      colorC: paletteRoleToLinearColor(p.hazardAccent),
-      intensity: 0.62,
-      patchScale: 0.1,
-      flowSpeed: 0,
-      grainScale: 3.2,
-      sparkle: 0.4,
-      emissive: 1.7,
-      feather: 0,
-      salt: 411
-    })
-  ].filter((config): config is SurfaceSheetConfig => config !== null);
-}
 
 function buildMoteConfigs(art: PlanetArtDirection): SurfaceMoteConfig[] {
   const p = art.palette;
   return [
+    // Airborne saltation replaces the old full-face sand overlay. Tiny grains
+    // cross voxel boundaries without ever exposing a square carrier.
+    moteConfig(art, 'sandFlow', [MaterialType.SAND], {
+      colorA: paletteRoleToLinearColor(p.sandLight),
+      colorB: paletteRoleToLinearColor(p.waterFoam),
+      coverageBase: 0.18,
+      coverageGain: 0.34,
+      motesPerVoxel: 1,
+      size: 0.042,
+      baseLift: 0.02,
+      liftRange: 0.2,
+      driftSpeed: 1.25,
+      rise: 0,
+      alpha: 0.48,
+      emissive: 0,
+      salt: 181
+    }),
+    // Volcanic ash belongs in the air, not painted onto a perfect square.
+    moteConfig(art, 'ashDrift', [MaterialType.BASALT, MaterialType.STONE], {
+      colorA: scaled(paletteRoleToLinearColor(p.rockBase), 0.72),
+      colorB: scaled(paletteRoleToLinearColor(p.rockBase), 1.22),
+      coverageBase: 0.12,
+      coverageGain: 0.26,
+      motesPerVoxel: 1,
+      size: 0.05,
+      baseLift: 0.08,
+      liftRange: 0.72,
+      driftSpeed: 0.52,
+      rise: 0.08,
+      alpha: 0.34,
+      emissive: 0,
+      salt: 451
+    }),
     moteConfig(art, 'pollen', [MaterialType.GRASS], {
       colorA: paletteRoleToLinearColor(p.vegetationSSS),
       colorB: paletteRoleToLinearColor(p.flowerAccent),
@@ -295,13 +195,13 @@ function buildMoteConfigs(art: PlanetArtDirection): SurfaceMoteConfig[] {
       coverageBase: 0.26,
       coverageGain: 0.45,
       motesPerVoxel: 1.2,
-      size: 0.04,
+      size: 0.058,
       baseLift: 0.1,
-      liftRange: 1.4,
+      liftRange: 1.7,
       driftSpeed: 0.35,
       rise: 0.75,
-      alpha: 0.8,
-      emissive: 2.2,
+      alpha: 0.95,
+      emissive: 2.6,
       salt: 611
     })
   ].filter((config): config is SurfaceMoteConfig => config !== null);
@@ -344,26 +244,6 @@ function buildCritterConfigs(art: PlanetArtDirection): CritterConfig[] {
 function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
   const specs: SurfaceEffectSpec[] = [];
 
-  for (const config of buildSheetConfigs(art)) {
-    specs.push({
-      id: config.id,
-      densityScale: effectWeight(art, config.id),
-      createGeometry: createSurfaceSheetGeometry,
-      createMaterial: () => createSurfaceSheetMaterial(config),
-      count: (density, seed) => countSurfaceSheetVoxels(config, density, seed),
-      build: (mesh, density, maxDistance, playerWorld, seed) =>
-        buildSurfaceSheetInstances(config, mesh, density, maxDistance, playerWorld, seed),
-      applyWind: applySurfaceEffectWindProfileToMaterial,
-      applyDensity: (material, density) => {
-        const u = (material.userData.shader as
-          | { uniforms?: Record<string, { value: unknown }> }
-          | undefined)?.uniforms;
-        if (u?.uIntensity) (u.uIntensity.value as number) = surfaceSheetIntensity(density, config);
-      },
-      update: updateSurfaceEffectMaterial
-    });
-  }
-
   for (const config of buildMoteConfigs(art)) {
     specs.push({
       id: config.id,
@@ -382,11 +262,9 @@ function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
 }
 
 /**
- * Grounded material-driven surface detail. Deliberately separate from
- * `voxelMaterial` (the block skin): sheets lie flush ON exposed faces and
- * sample world-space fields so activity flows continuously across adjacent
- * same-material voxels; motes are sparse airborne specks; critters crawl
- * voxel-to-voxel (see surfaceCritters.ts).
+ * Sparse airborne material phenomena plus surface critters. All flush detail
+ * is authored in `voxelMaterial`; keeping transparent geometry only for things
+ * that truly leave the surface avoids carrier seams and excess overdraw.
  */
 export default function SurfaceEffectField({ terrainSeed, playerPosition }: SurfaceEffectFieldProps) {
   const [realitySnapshot, setRealitySnapshot] = useState(() => getVoxelRealitySnapshot());
@@ -516,7 +394,6 @@ function SurfaceEffectLayer({
 
     if (!profileAppliedRef.current && material.userData.shader) {
       spec.applyWind(windProfile, material);
-      spec.applyDensity?.(material, density);
       profileAppliedRef.current = true;
     }
     spec.update(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects());

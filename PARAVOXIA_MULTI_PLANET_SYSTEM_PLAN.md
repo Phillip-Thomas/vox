@@ -1057,6 +1057,34 @@ Production gate:
 Run all profiles on desktop/mobile and representative verdant, water-heavy,
 fungal, volcanic, and sparse systems.
 
+### Deep-space cockpit and feedback evidence (2026-07-12)
+
+The Kestrel flight experience now has a single hot-path feedback snapshot shared
+by controller, cockpit, camera, audio, HUD, and post processing:
+
+- desktop Shift and the existing touch THR input both resolve to forward boost;
+- the camera widens from 70 to a bounded 79 degrees, with X/Y counter-scaled
+  cockpit anchors, portrait shell compression, fast attack, controlled release,
+  and a reduced-motion 72-degree cap;
+- a merged pressure shell, roof, floor, side windows, console panels, faceted
+  canopy, animated throttle, speed/boost instruments, and cyan/amber engine rails
+  replace the open peripheral view;
+- one 72-instance flight-streak draw provides all-tier acceleration feedback;
+  HIGH/ULTRA also use a three-tap depth-aware radial pass that leaves the near
+  cockpit and central aiming region sharp;
+- the persistent keyboard-help card is replaced by live mode, system, velocity,
+  throttle, boost, and approach-limiter telemetry; the FPS crosshair is replaced
+  in flight by a stable dedicated boresight.
+
+The system-probe route was captured at 1440x900, 2560x1080, and 390x844 through
+idle, thrust, boost attack, sustained boost, and release. The cockpit measured 11
+meshes, 1,850 rendered triangles, 11 materials, and two transparent materials,
+with no resource growth across Shift transitions. On the 1440x900 HIGH route,
+settled p95 remained 16.8 ms; FOV reached 79.0 degrees and recovered to 70.07
+degrees during the measured release. No page or console errors were observed.
+Focused feedback/effect/geometry tests and the full `npm --prefix main run verify`
+gate pass.
+
 ---
 
 ## 16. Risk Register

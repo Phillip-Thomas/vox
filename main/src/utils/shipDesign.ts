@@ -310,15 +310,97 @@ export function createCockpitFrameGeometry(colors: ShipHullColors): THREE.Buffer
     // Overhead spine stub with the status-light housing.
     box(0, 1.52, -2.7, 0.5, 0.12, 1.1, colors.dark, -0.12),
 
-    // Control stick (starboard) and throttle lever (port), silhouetted low.
-    beam(new THREE.Vector3(0.95, -1.32, -2.2), new THREE.Vector3(0.86, -0.78, -2.3), 0.07, colors.mid),
-    box(0.84, -0.72, -2.32, 0.13, 0.13, 0.13, colors.accent),
-    beam(new THREE.Vector3(-0.95, -1.3, -2.25), new THREE.Vector3(-1.02, -0.92, -2.42), 0.09, colors.mid),
-    box(-1.03, -0.88, -2.44, 0.2, 0.09, 0.12, colors.mid)
+    // Controls animate separately in ShipCockpit so this merged draw stays static.
   ];
 
   const geo = mergeGeometries(parts, false);
   if (!geo) throw new Error('Failed to merge cockpit frame geometry');
+  geo.computeVertexNormals();
+  return geo;
+}
+
+/**
+ * Broad camera-space cockpit tub. Large faceted walls own the peripheral view
+ * on ultrawide screens while the forward aperture remains unobstructed.
+ */
+export function createCockpitInteriorGeometry(colors: ShipHullColors): THREE.BufferGeometry {
+  const cabinDark = lin(0x202b38);
+  const cabinMid = lin(0x4d6074);
+  const cabinLight = lin(0x91a2b2);
+  const inset = lin(0x101820);
+  const parts: THREE.BufferGeometry[] = [
+    // Sectioned pressure shell. The middle gap becomes a narrow peripheral
+    // window instead of an undifferentiated black sidewall.
+    box(-5.05, 0, -2.65, 1.75, 3.65, 1.65, cabinDark, 0, -0.08, -0.04),
+    box(5.05, 0, -2.65, 1.75, 3.65, 1.65, cabinDark, 0, 0.08, 0.04),
+    box(-3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, -0.1, -0.08),
+    box(3.45, 1.38, -2.58, 2.15, 0.92, 1.55, cabinDark, 0, 0.1, 0.08),
+    box(-3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, -0.08, 0.05),
+    box(3.5, -1.18, -2.38, 2.35, 1.18, 1.8, cabinDark, 0, 0.08, -0.05),
+    box(0, 2.03, -2.78, 8.25, 0.62, 1.55, cabinDark, -0.04),
+    box(0, -1.8, -2.42, 8.45, 0.76, 1.9, cabinDark, 0.07),
+
+    // Layered canopy hinges and sill ribs establish scale without blocking view.
+    beam(new THREE.Vector3(-2.04, 1.58, -3.48), new THREE.Vector3(-3.25, 1.84, -2.25), 0.13, cabinLight),
+    beam(new THREE.Vector3(2.04, 1.58, -3.48), new THREE.Vector3(3.25, 1.84, -2.25), 0.13, cabinLight),
+    beam(new THREE.Vector3(-2.05, -1.02, -2.6), new THREE.Vector3(-3.55, -1.58, -1.82), 0.14, cabinMid),
+    beam(new THREE.Vector3(2.05, -1.02, -2.6), new THREE.Vector3(3.55, -1.58, -1.82), 0.14, cabinMid),
+    beam(new THREE.Vector3(-4.15, 0.72, -1.83), new THREE.Vector3(-4.15, -0.38, -1.67), 0.11, cabinLight),
+    beam(new THREE.Vector3(4.15, 0.72, -1.83), new THREE.Vector3(4.15, -0.38, -1.67), 0.11, cabinLight),
+
+    // Recessed acoustic panels, small enough to read as trim rather than wings.
+    box(-3.0, 0.02, -1.74, 0.62, 1.48, 0.11, inset, 0, -0.12, -0.05),
+    box(3.0, 0.02, -1.74, 0.62, 1.48, 0.11, inset, 0, 0.12, 0.05),
+    box(-4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, -0.08),
+    box(4.78, 0.06, -1.88, 0.75, 1.72, 0.1, inset, 0, 0.08),
+
+    // Deep side consoles, central seat tub and overhead avionics cassette.
+    box(-2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, 0.18, 0.06),
+    box(2.38, -1.17, -1.92, 1.48, 0.34, 1.25, cabinMid, 0.1, -0.18, -0.06),
+    box(0, 1.61, -2.13, 2.65, 0.32, 0.68, cabinMid, -0.08),
+    box(0, 1.48, -1.76, 1.72, 0.13, 0.12, inset, -0.08),
+    box(0, -1.43, -1.55, 1.3, 0.5, 0.82, inset, 0.16),
+
+    // Panel seams and latch rails add a second readable scale to the silhouette.
+    beam(new THREE.Vector3(-5.5, 1.16, -2.12), new THREE.Vector3(-4.45, 0.98, -1.82), 0.055, cabinLight),
+    beam(new THREE.Vector3(5.5, 1.16, -2.12), new THREE.Vector3(4.45, 0.98, -1.82), 0.055, cabinLight),
+    beam(new THREE.Vector3(-5.5, -0.94, -2.05), new THREE.Vector3(-4.42, -0.8, -1.75), 0.05, colors.accent),
+    beam(new THREE.Vector3(5.5, -0.94, -2.05), new THREE.Vector3(4.42, -0.8, -1.75), 0.05, colors.accent)
+  ];
+  const geo = mergeGeometries(parts, false);
+  if (!geo) throw new Error('Failed to merge cockpit interior geometry');
+  // Keep even the rotated floor corners safely beyond the flight camera near=1.
+  geo.translate(0, 0, -0.22);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+/** One merged emissive rail draw used for engine and avionics reflections. */
+export function createCockpitLightGeometry(colors: ShipHullColors): THREE.BufferGeometry {
+  const amber = lin(0xff9a47);
+  const parts = [
+    beam(new THREE.Vector3(-5.25, -0.76, -1.53), new THREE.Vector3(-4.35, -0.66, -1.36), 0.04, colors.accent),
+    beam(new THREE.Vector3(5.25, -0.76, -1.53), new THREE.Vector3(4.35, -0.66, -1.36), 0.04, amber),
+    beam(new THREE.Vector3(-3.28, 0.58, -1.4), new THREE.Vector3(-3.28, -0.25, -1.29), 0.035, colors.accent),
+    beam(new THREE.Vector3(3.28, 0.58, -1.4), new THREE.Vector3(3.28, -0.25, -1.29), 0.035, amber),
+    beam(new THREE.Vector3(-1.18, 1.46, -1.73), new THREE.Vector3(-0.22, 1.46, -1.73), 0.032, colors.accent),
+    beam(new THREE.Vector3(0.22, 1.46, -1.73), new THREE.Vector3(1.18, 1.46, -1.73), 0.032, amber),
+    box(-2.28, -1.01, -1.28, 0.72, 0.038, 0.045, colors.accent, 0.16, 0.1),
+    box(2.28, -1.01, -1.28, 0.72, 0.038, 0.045, amber, 0.16, -0.1),
+    box(-0.62, 1.43, -1.62, 0.18, 0.045, 0.045, colors.accent),
+    box(0.62, 1.43, -1.62, 0.18, 0.045, 0.045, amber),
+    // Side-panel status ladders and dash annunciators.
+    box(-3.0, 0.36, -1.49, 0.38, 0.026, 0.025, colors.accent),
+    box(-3.0, 0.24, -1.49, 0.28, 0.026, 0.025, colors.accent),
+    box(-3.0, 0.12, -1.49, 0.18, 0.026, 0.025, colors.accent),
+    box(3.0, 0.36, -1.49, 0.38, 0.026, 0.025, amber),
+    box(3.0, 0.24, -1.49, 0.28, 0.026, 0.025, amber),
+    box(3.0, 0.12, -1.49, 0.18, 0.026, 0.025, amber),
+    box(-1.08, -0.84, -2.33, 0.32, 0.028, 0.025, colors.accent, 0.28),
+    box(1.08, -0.84, -2.33, 0.32, 0.028, 0.025, amber, 0.28)
+  ];
+  const geo = mergeGeometries(parts, false);
+  if (!geo) throw new Error('Failed to merge cockpit light geometry');
   geo.computeVertexNormals();
   return geo;
 }

@@ -11,6 +11,8 @@ import {
   createOfflineCommandContext,
   drinkFromWaterskinCommand,
   fillWaterskinCommand,
+  harvestTreeCommand,
+  harvestFloraCommand,
   mineVoxelCommand,
   placeStructureCommand,
   refuelMawCommand,
@@ -28,7 +30,8 @@ import { getWaterskinFill, resetAllWaterskins, setWaterskinFill } from './system
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts';
 import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
-import { resetTreeHarvest } from './systems/treeHarvest.ts';
+import { isTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
+import { isFloraHarvested, resetFloraHarvest } from './systems/floraHarvest.ts';
 import { getPieceAt, resetStructures } from './systems/structureSystem.ts';
 
 const actorId = 'alice';
@@ -56,12 +59,45 @@ beforeEach(() => {
   resetForagePickup();
   resetStonePickup();
   resetTreeHarvest();
+  resetFloraHarvest();
   resetCampfires();
   resetStructures();
   voxelSystem.reset();
 });
 
 describe('multiplayer reconciliation rollback', () => {
+  it('fully restores a predicted tree on a non-conflict rejection', () => {
+    const result = harvestTreeCommand(context(), { x: 7, y: 8, z: 9 });
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('harvestTree should have succeeded');
+    expect(isTreeHarvested(7, 8, 9)).toBe(true);
+    expect(getItemCount('wood', actorId)).toBeGreaterThan(0);
+
+    const applied = applyRejectedCommandRollback(result.rollback, {
+      actorId,
+      rejectCode: 'stale'
+    });
+
+    expect(applied.restoredResources).toBe(1);
+    expect(isTreeHarvested(7, 8, 9)).toBe(false);
+    expect(getItemCount('wood', actorId)).toBe(0);
+  });
+
+  it('keeps the authoritative tree gone but removes predicted wood on conflict', () => {
+    const result = harvestTreeCommand(context(), { x: 3, y: 4, z: 5 });
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('harvestTree should have succeeded');
+
+    const applied = applyRejectedCommandRollback(result.rollback, {
+      actorId,
+      rejectCode: 'conflict'
+    });
+
+    expect(applied.restoredResources).toBe(0);
+    expect(isTreeHarvested(3, 4, 5)).toBe(true);
+    expect(getItemCount('wood', actorId)).toBe(0);
+  });
+
   it('removes local pickup rewards on conflict without uncollecting the shared target', () => {
     const result = collectStoneCommand(context(), { x: 1, y: 2, z: 3 });
     expect(result.ok).toBe(true);
@@ -86,6 +122,23 @@ describe('multiplayer reconciliation rollback', () => {
     expect(applied.restoredResources).toBe(1);
     expect(getItemCount('root', actorId)).toBe(0);
     expect(isForageCollected(4, 5, 6)).toBe(false);
+  });
+
+  it('restores predicted flora and removes its ingredient on a non-conflict rejection', () => {
+    const result = harvestFloraCommand(context(), { x: 8, y: 9, z: 10, kind: 'flower' });
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('harvestFlora should have succeeded');
+    expect(isFloraHarvested(8, 9, 10)).toBe(true);
+    expect(getItemCount('wild_bloom', actorId)).toBeGreaterThan(0);
+
+    const applied = applyRejectedCommandRollback(result.rollback, {
+      actorId,
+      rejectCode: 'validation_failed'
+    });
+
+    expect(applied.restoredResources).toBe(1);
+    expect(isFloraHarvested(8, 9, 10)).toBe(false);
+    expect(getItemCount('wild_bloom', actorId)).toBe(0);
   });
 
   it('keeps conflicted terrain removed but reverses local mining rewards and Maw state', () => {

@@ -17,6 +17,7 @@ import {
   surfaceMoteCoverage,
   surfaceMotesPerVoxel,
   surfaceSheetIntensity,
+  SURFACE_SHEET_KIND_GLSL,
   type SurfaceMoteConfig,
   type SurfaceSheetConfig
 } from './surfaceEffects.ts';
@@ -208,5 +209,13 @@ describe('surface effects (grounded)', () => {
     expect(geometry.attributes.uv.count).toBe(8);
     expect(geometry.index?.count).toBe(12);
     geometry.dispose();
+  });
+
+  it('shapes individual flow grains instead of filling rectangular hash cells', () => {
+    const flow = SURFACE_SHEET_KIND_GLSL.flow;
+    expect(flow).toContain('seGrainLocal = fract(seGrainUv) - 0.5');
+    expect(flow).toContain('seGrainShape');
+    expect(flow).toContain('step(0.88, seGrainSeed) * seGrainShape');
+    expect(flow).not.toContain('sePatch * seGust * 0.06');
   });
 });

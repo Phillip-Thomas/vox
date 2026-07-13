@@ -21,7 +21,10 @@ import type { StationId } from './stations.ts';
 // Everything craftable. Excludes the items that are GRANTED or HARVESTED rather
 // than crafted (the Faulty Maw starter, foraged wood + berries + roots), so
 // RECIPES stays complete.
-export type RecipeId = Exclude<CraftedItemId, 'faulty_maw' | 'wood' | 'berry' | 'root'>;
+export type RecipeId = Exclude<
+  CraftedItemId,
+  'faulty_maw' | 'wood' | 'berry' | 'root' | 'cactus_pulp' | 'fan_frond' | 'wild_bloom' | 'seedpod'
+>;
 
 export interface Recipe {
   id: RecipeId;

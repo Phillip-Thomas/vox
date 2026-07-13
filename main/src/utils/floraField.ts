@@ -12,9 +12,20 @@ import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
 import { buildPlanetArtDirection, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
+import { commitRaycastInstanceTransforms } from './instancedMeshPicking';
 
 export const FLORA_KINDS = ['cactus', 'fan', 'flower', 'seedhead', 'shrub'] as const;
 export type FloraKind = typeof FLORA_KINDS[number];
+
+/**
+ * Canonical collectible population density. Unlike presentation density this
+ * must not vary with graphics quality: every client must agree that the same
+ * nearby plants exist.
+ */
+export const CANONICAL_FLORA_DENSITY = 0.6;
+
+/** Nearby canonical plants remain rendered even when presentation flora is off. */
+export const FLORA_INTERACTION_VISIBILITY_DISTANCE = 10;
 
 export interface FloraProfile {
   terrainSeed: number;
@@ -35,6 +46,15 @@ export interface FloraProfile {
 export interface FloraBuildResult {
   count: number;
   voxelCount: number;
+}
+
+export interface FloraBuildOptions {
+  /** Canonical plants inside this player-relative radius override presentation density. */
+  interactionVisibilityDistance?: number;
+  /** Collected nodes are removed from both the instance buffer and its pick map. */
+  isHarvested?: (x: number, y: number, z: number) => boolean;
+  /** Rebuilt in lockstep with instance ids for deterministic raycast resolution. */
+  slotVoxel?: Array<[number, number, number]>;
 }
 
 const FLORA_SURFACE_OFFSET = 1.02;
@@ -739,40 +759,52 @@ function computeFloraMatrix(
 export function buildFloraInstances(
   kind: FloraKind,
   mesh: THREE.InstancedMesh,
-  density: number,
+  presentationDensity: number,
   maxDistance: number,
   playerWorld: THREE.Vector3 | null,
   terrainSeed: number,
-  profile = buildFloraProfile(terrainSeed)
+  profile = buildFloraProfile(terrainSeed),
+  options: FloraBuildOptions = {}
 ): FloraBuildResult {
   const capacity = mesh.instanceMatrix.count;
   const maxDistSq = maxDistance * maxDistance;
+  const interactionDistance = options.interactionVisibilityDistance
+    ?? FLORA_INTERACTION_VISIBILITY_DISTANCE;
+  const interactionDistSq = interactionDistance * interactionDistance;
+  // Quality may thin the far presentation, but it may never introduce a node
+  // outside the canonical collectible population.
+  const farDensity = clamp(presentationDensity, 0, CANONICAL_FLORA_DENSITY);
+  const slotVoxel = options.slotVoxel;
+  if (slotVoxel) slotVoxel.length = 0;
   let slot = 0;
   let voxelCount = 0;
-
-  if (density <= 0) {
-    mesh.count = 0;
-    mesh.instanceMatrix.needsUpdate = true;
-    return { count: 0, voxelCount: 0 };
-  }
 
   for (const voxel of voxelSystem.getAllVoxels().values()) {
     if (slot >= capacity) break;
     const [x, y, z] = voxel.position;
-    if (!shouldPlaceFloraVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
-    if (chooseFloraKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
+    if (options.isHarvested?.(x, y, z)) continue;
 
     voxelCoordToWorld(x, y, z, _world);
-    if (maxDistance > 0 && playerWorld && _world.distanceToSquared(playerWorld) > maxDistSq) continue;
+    const playerDistSq = playerWorld ? _world.distanceToSquared(playerWorld) : Infinity;
+    if (maxDistance > 0 && playerWorld && playerDistSq > maxDistSq) continue;
+
+    const density = playerWorld && playerDistSq <= interactionDistSq
+      ? CANONICAL_FLORA_DENSITY
+      : farDensity;
+    if (!shouldPlaceFloraVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
+    if (chooseFloraKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
 
     voxelCount++;
     computeFloraMatrix(x, y, z, kind, _scratch, terrainSeed);
     mesh.setMatrixAt(slot, _scratch);
+    if (slotVoxel) slotVoxel[slot] = [x, y, z];
     slot++;
   }
 
-  mesh.count = slot;
-  mesh.instanceMatrix.needsUpdate = true;
+  if (slotVoxel) slotVoxel.length = slot;
+  // setMatrixAt/count do not invalidate Three's cached InstancedMesh sphere.
+  // Keep the render/pick buffer and broad-phase bounds as one spatial snapshot.
+  commitRaycastInstanceTransforms(mesh, slot);
   return { count: slot, voxelCount };
 }
 

@@ -47,12 +47,12 @@ export const MATERIALS: Record<MaterialType, Material> = {
     metalness: 0.0
   },
   [MaterialType.LAVA]: {
-    color: new THREE.Color(0xFF0000),
+    color: new THREE.Color(0xe84416),
     rarity: 0,
     roughness: 0.6,
     metalness: 0.0,
     emissive: new THREE.Color(0xff5a1e),
-    emissiveIntensity: 1.6
+    emissiveIntensity: 0.7
   },
   [MaterialType.GRASS]: {
     color: new THREE.Color(0x7CB342),
@@ -109,7 +109,7 @@ export const MATERIALS: Record<MaterialType, Material> = {
     color: new THREE.Color(0x6fe0ff), // glowing cyan crystal
     rarity: 0,
     roughness: 0.18,
-    metalness: 0.55,
+    metalness: 0.1,
     emissive: new THREE.Color(0x1a9ad0),
     emissiveIntensity: 0.55
   }

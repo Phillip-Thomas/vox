@@ -137,6 +137,9 @@ function buildPaletteGLSL(): string {
     `const vec3 LAVA_SCUM   = ${lin(0x211816)};`,
     // ORE vein fleck (bright mineral catch-light).
     `const vec3 ORE_VEIN    = ${lin(0xd8ddd0)};`,
+    `const vec3 COPPER_OXIDE = ${lin(0x3f806f)};`,
+    `const vec3 GOLD_DEEP    = ${lin(0x7c4b08)};`,
+    `const vec3 SILVER_DARK  = ${lin(0x59646e)};`,
     // BASALT: cool black volcanic stone with sparse warm mineral glow.
     `const vec3 BASALT_DARK  = ${lin(0x15151a)};`,
     `const vec3 BASALT_BASE  = ${lin(0x2c2a30)};`,
@@ -224,26 +227,58 @@ const NOISE_GLSL = /* glsl */ `
     return w / (w.x + w.y + w.z + 1e-5);
   }
 
-  // Triplanar-blended scalar fbm sampler (3-octave) at a given frequency.
+  vec3 vmStyledPos(vec3 p) {
+    return p * uSurfaceScale + uSurfaceOffset;
+  }
+
+  vec2 vmFaceUv(vec3 p, vec3 w) {
+    if (w.x >= w.y && w.x >= w.z) return p.zy;
+    if (w.y >= w.z) return p.xz;
+    return p.xy;
+  }
+
+  // Voxel faces are axis-aligned. Dominant-face sampling avoids evaluating all
+  // three projections while preserving the same seamless world-space domains.
   float vmTriFbm(vec3 p, vec3 w, float freq) {
-    return vmFbm3(p.yz * freq) * w.x
-         + vmFbm3(p.xz * freq) * w.y
-         + vmFbm3(p.xy * freq) * w.z;
+    if (w.x >= w.y && w.x >= w.z) return vmFbm3(p.yz * freq);
+    if (w.y >= w.z) return vmFbm3(p.xz * freq);
+    return vmFbm3(p.xy * freq);
   }
   float vmTriFbm2(vec3 p, vec3 w, float freq) {
-    return vmFbm(p.yz * freq) * w.x
-         + vmFbm(p.xz * freq) * w.y
-         + vmFbm(p.xy * freq) * w.z;
+    if (w.x >= w.y && w.x >= w.z) return vmFbm(p.yz * freq);
+    if (w.y >= w.z) return vmFbm(p.xz * freq);
+    return vmFbm(p.xy * freq);
   }
   float vmTriRidge(vec3 p, vec3 w, float freq) {
-    return vmRidge(p.yz * freq) * w.x
-         + vmRidge(p.xz * freq) * w.y
-         + vmRidge(p.xy * freq) * w.z;
+    if (w.x >= w.y && w.x >= w.z) return vmRidge(p.yz * freq);
+    if (w.y >= w.z) return vmRidge(p.xz * freq);
+    return vmRidge(p.xy * freq);
   }
   float vmTriSpeckle(vec3 p, vec3 w, float freq, float thresh) {
-    return vmSpeckle(p.yz * freq, thresh) * w.x
-         + vmSpeckle(p.xz * freq, thresh) * w.y
-         + vmSpeckle(p.xy * freq, thresh) * w.z;
+    if (w.x >= w.y && w.x >= w.z) return vmSpeckle(p.yz * freq, thresh);
+    if (w.y >= w.z) return vmSpeckle(p.xz * freq, thresh);
+    return vmSpeckle(p.xy * freq, thresh);
+  }
+
+  // One thermal mask drives lava color, relief, roughness and emission.
+  // x=molten channels, y=cooled plates, z=slow convective core.
+  vec3 vmLavaMasks(vec3 p, vec3 w) {
+    float t = uTime * uAnimated * uRealityThermal * 0.12;
+    vec3 q = p + vec3(t * 1.15, sin(t * 0.67) * 0.18, -t * 0.53);
+    float plateField = vmTriFbm2(q + vec3(7.1, -2.4, 4.8), w, 0.42);
+    float fractureA = smoothstep(0.86, 0.985, vmTriRidge(q, w, 1.08));
+    float fractureB = smoothstep(0.93, 0.995, vmTriRidge(q + vec3(13.0, 5.0, -9.0), w, 2.65));
+    float channel = clamp(max(fractureA * 0.78, fractureB * 0.48), 0.0, 1.0);
+    float crust = mix(0.5, 1.0, smoothstep(0.28, 0.74, plateField)) * (1.0 - channel * 0.94);
+    float boil = vmTriFbm(q + vec3(-3.0, 8.0, 2.0), w, 0.82);
+    return vec3(channel, crust, boil);
+  }
+
+  float vmOreMask(vec3 p, vec3 w, float styleShift) {
+    float seam = pow(clamp(vmTriRidge(p + styleShift, w, 1.12 + styleShift * 0.04), 0.0, 1.0), 6.0);
+    float pocket = smoothstep(0.54, 0.82, vmTriFbm2(p + vec3(7.0, -3.0, 11.0) * styleShift, w, 0.38));
+    float chip = vmTriSpeckle(p + styleShift * 3.1, w, 3.4, 0.88);
+    return clamp(seam * 0.72 + pocket * 0.52 + chip * 0.34, 0.0, 1.0);
   }
   vec2 vmWindBasis(vec3 p) {
     vec2 dir = normalize(uWindDir + vec2(0.0001, 0.0));
@@ -275,26 +310,26 @@ const NOISE_GLSL = /* glsl */ `
       float layer = vmTriFbm2(p, w, 0.35);
       return crack * 0.7 + layer * 0.4;
     } else if (mid == MAT_SAND) {
-      // SAND: fine grain + slow large ripples.
-      float ripple = sin(p.x * 1.6 + p.z * 1.1 + vmTriFbm2(p, w, 0.5) * 3.0) * 0.5 + 0.5;
+      // SAND: wind-oriented, domain-warped dunes plus fine grain.
+      vec2 uv = vmFaceUv(p, w);
+      vec2 wind = normalize(uWindDir + vec2(0.0001, 0.0));
+      float warp = vmFbm(uv * 0.38 + uWindOffset) * 2.8;
+      float ripple = sin(dot(uv, wind) * 1.85 + warp) * 0.5 + 0.5;
       float grain = vmTriFbm(p, w, 5.0);
       return ripple * 0.5 + grain * 0.45;
     } else if (mid == MAT_GRASS) {
       // GRASS block: soft mossy lumps.
       return vmTriFbm(p, w, 1.3) * 0.7;
     } else if (mid == MAT_WOOD) {
-      // WOOD: vertical bark grain with broader knot ridges.
-      float grain = vmTriRidge(p + vec3(0.0, p.y * 0.18, 0.0), w, 1.65);
+      // WOOD: bark fissures with broader knot ridges.
+      float grain = vmTriRidge(p + p * vec3(0.08, 0.2, 0.08), w, 1.65);
       float knot = vmTriFbm2(p + vec3(3.1, 0.0, -1.7), w, 0.7);
       return grain * 0.55 + knot * 0.38;
     } else if (mid == MAT_LAVA) {
-      // LAVA: slow boiling blisters; thermal stage decides whether it moves.
-      float thermal = max(uRealityThermal, 0.0);
-      float t = uTime * uAnimated * thermal * 0.22;
-      vec3 q = p + vec3(t * 1.3, sin(t * 0.7) * 0.25, -t * 0.65);
-      float boil = vmTriFbm(q, w, 1.3);
-      float cells = vmTriRidge(q, w, 2.45);
-      return (boil * 0.58 + cells * 0.48) * max(thermal, 0.25);
+      // Height is sampled four times for the normal gradient, so keep it to one
+      // dominant-face field instead of rebuilding the full thermal mask.
+      float channel = smoothstep(0.86, 0.985, vmTriRidge(p, w, 1.08));
+      return channel * 0.74;
     } else if (mid == MAT_BASALT) {
       // BASALT: fractured plates with subtle horizontal strata.
       float plates = vmTriRidge(p, w, 1.45);
@@ -311,10 +346,9 @@ const NOISE_GLSL = /* glsl */ `
       float facet = vmTriFbm2(p, w, 0.7);
       return ridge * 0.9 + facet * 0.35;
     } else if (mid == MAT_COPPER || mid == MAT_GOLD || mid == MAT_SILVER) {
-      // ORES: embedded vein ridges under the metallic BRDF.
-      float vein = vmTriRidge(p, w, 1.35);
-      float chip = vmTriSpeckle(p, w, 3.3, 0.86);
-      return vein * 0.46 + chip * 0.38;
+      float styleShift = mid == MAT_COPPER ? 1.0 : (mid == MAT_GOLD ? 2.0 : 3.0);
+      // Relief uses only the primary seam; color/PBR still use the richer mask.
+      return pow(clamp(vmTriRidge(p + styleShift, w, 1.12 + styleShift * 0.04), 0.0, 1.0), 6.0) * 0.78;
     }
     // Fallback: gentle generic relief.
     return vmTriFbm2(p, w, 0.9) * 0.5;
@@ -352,6 +386,8 @@ const SURFACE_GLSL = /* glsl */ `
       float clods = vmTriFbm(p, w, 0.9);
       float crev = vmTriFbm2(p, w, 1.7);
       float pebble = vmTriSpeckle(p, w, 3.2, 0.86) * fade;
+      float clay = smoothstep(0.62, 0.88, vmTriFbm2(p + vec3(9.0, -4.0, 6.0), w, 0.3))
+        * uSurfaceWeathering;
       float topSoil = smoothstep(0.18, 0.88, up);
       float dryWisp = smoothstep(0.54, 0.88, vmWindGust(p, 0.85)) * atmosphereFx * fade * topSoil;
       float threadField = vmTriFbm2(p + vec3(12.7, 0.0, -4.9), w, 0.78);
@@ -364,6 +400,7 @@ const SURFACE_GLSL = /* glsl */ `
       dirt *= mix(0.78, 1.07, smoothstep(0.18, 0.74, crev));
       dirt = mix(dirt, DIRT_PEBBLE, pebble * 0.82 + dryWisp * 0.30);
       dirt = mix(dirt, DIRT_THREAD, livingThread * 0.24);
+      dirt = mix(dirt, DIRT_LIGHT * vec3(1.05, 0.82, 0.68), clay * 0.18);
       float dRef = dot(DIRT_BASE, vec3(0.299, 0.587, 0.114));
       dirt *= clamp(baseLuma / max(dRef, 1e-3), 0.75, 1.3) * macroMul;
       col = mix(col, dirt, 0.92 * dirtFx);
@@ -371,9 +408,16 @@ const SURFACE_GLSL = /* glsl */ `
     } else if (mid == MAT_STONE) {
       float crack = vmTriRidge(p, w, 1.1);
       float fleck = vmTriSpeckle(p, w, 4.5, 0.90) * fade;
+      float mineralFleck = vmTriSpeckle(p + vec3(17.0, -5.0, 9.0), w, 6.2, 0.94)
+        * fade * metalFx * uSurfaceMineralization;
+      vec2 stoneUv = vmFaceUv(p, w);
+      float strata = sin(stoneUv.y * mix(1.1, 2.6, uSurfaceWeathering)
+        + vmFbm(stoneUv * 0.24) * 3.2) * 0.5 + 0.5;
       vec3 stone = mix(STONE_BASE, STONE_LIGHT, smoothstep(0.5, 0.95, crack));
       stone = mix(STONE_DARK, stone, smoothstep(0.12, 0.45, crack));
       stone = mix(stone, STONE_FLECK, fleck * 0.5);
+      stone = mix(stone, uMineralTint, mineralFleck * 0.62);
+      stone *= mix(0.9, 1.1, strata * uSurfaceWeathering);
       float sRef = dot(STONE_BASE, vec3(0.299, 0.587, 0.114));
       stone *= clamp(baseLuma / max(sRef, 1e-3), 0.8, 1.25) * macroMul;
       col = mix(col, stone, 0.9 * detailFx);
@@ -385,7 +429,8 @@ const SURFACE_GLSL = /* glsl */ `
       float warm = vmTriSpeckle(p, w, 3.8, 0.92) * fade;
       float ash = smoothstep(0.62, 0.92, vmWindGust(p, 1.25)) * atmosphereFx * fade;
       vec3 basalt = mix(BASALT_DARK, BASALT_BASE, smoothstep(0.18, 0.52, plates));
-      basalt = mix(basalt, BASALT_EDGE, smoothstep(0.66, 1.0, plates) * 0.6);
+      float plateEdge = pow(clamp(plates, 0.0, 1.0), mix(3.0, 7.0, uSurfaceRelief));
+      basalt = mix(basalt, BASALT_EDGE, plateEdge * 0.72);
       basalt *= mix(0.82, 1.08, strata);
       basalt = mix(basalt, BASALT_WARM, warm * (0.28 + thermalFx * 0.34));
       basalt = mix(basalt, STONE_FLECK, ash * 0.16);
@@ -397,9 +442,11 @@ const SURFACE_GLSL = /* glsl */ `
       float iceFx = max(detailFx, crystallineFx);
       float facets = vmTriRidge(p, w, 0.95);
       float frost = vmTriFbm(p, w, 2.4);
+      float depthBand = vmTriFbm2(p + vec3(17.0, 3.0, -8.0), w, 0.22);
       float windFrost = smoothstep(0.54, 0.9, vmWindGust(p + vec3(11.0, 0.0, -5.0), 1.15))
         * atmosphereFx * crystallineFx * fade * smoothstep(0.15, 0.95, up);
       vec3 ice = mix(ICE_DEEP, ICE_BASE, smoothstep(0.18, 0.68, frost));
+      ice = mix(ice * vec3(0.72, 0.9, 1.08), ice, smoothstep(0.28, 0.72, depthBand));
       ice = mix(ice, ICE_WHITE, smoothstep(0.58, 1.0, facets) * 0.72 + windFrost * 0.38);
       ice += ICE_GLOW * smoothstep(0.35, 0.9, 1.0 - facets) * 0.08 * crystallineFx;
       float iRef = dot(ICE_BASE, vec3(0.299, 0.587, 0.114));
@@ -411,23 +458,36 @@ const SURFACE_GLSL = /* glsl */ `
       float ridge = vmTriRidge(p, w, 2.0);
       float facet = vmTriFbm2(p, w, 0.7);
       float glint = vmTriSpeckle(p, w, 5.2, 0.88) * fade * crystallineFx;
+      vec2 crystalUv = vmFaceUv(p, w);
+      float plane = abs(sin(crystalUv.x * 2.1 + crystalUv.y * 1.3 + facet * 2.4));
       vec3 crystal = mix(CRYSTAL_DARK, CRYSTAL_BASE, smoothstep(0.25, 0.8, facet));
       crystal = mix(crystal, CRYSTAL_VIO, smoothstep(0.1, 0.32, ridge) * 0.28 * crystalFx);
       crystal = mix(crystal, CRYSTAL_HI, smoothstep(0.72, 1.0, ridge) * 0.72 * crystalFx + glint * 0.42);
+      crystal = mix(crystal, CRYSTAL_HI, smoothstep(0.94, 1.0, plane) * 0.16 * fade);
       float cRef = dot(CRYSTAL_BASE, vec3(0.299, 0.587, 0.114));
       crystal *= clamp(baseLuma / max(cRef, 1e-3), 0.8, 1.28) * macroMul;
       col = mix(col, crystal, 0.94 * crystalFx);
 
     } else if (mid == MAT_SAND) {
       float sandFx = max(detailFx, atmosphereFx * 0.55);
-      float ripple = sin(p.x * 1.6 + p.z * 1.1 + vmTriFbm2(p, w, 0.5) * 3.0) * 0.5 + 0.5;
+      vec2 sandUv = vmFaceUv(p, w);
+      vec2 sandWind = normalize(uWindDir + vec2(0.0001, 0.0));
+      vec2 sandSide = vec2(-sandWind.y, sandWind.x);
+      float duneWarp = vmFbm(sandUv * 0.32 + uWindOffset) * 3.4;
+      float ripple = sin(dot(sandUv, sandWind) * 1.85 + duneWarp) * 0.5 + 0.5;
       float sparkle = vmTriSpeckle(p, w, 7.0, 0.82) * fade;
       float gust = vmWindGust(p, 1.0);
       float dust = smoothstep(0.58, 0.88, gust) * atmosphereFx * fade * smoothstep(0.18, 0.92, up);
+      float saltationPhase = dot(sandUv, sandWind) * 7.5
+        - uTime * uAnimated * (1.1 + uWindStrength * 0.55)
+        + duneWarp * 1.7;
+      float saltation = pow(max(0.0, sin(saltationPhase)), 10.0)
+        * (1.0 - smoothstep(0.08, 0.28, abs(fract(dot(sandUv, sandSide) * 0.58 + duneWarp * 0.11) - 0.5)))
+        * dust;
       vec3 sand = mix(SAND_DARK, SAND_BASE, smoothstep(0.3, 0.7, ripple));
       sand = mix(sand, SAND_LIGHT, smoothstep(0.6, 1.0, ripple) * 0.7);
       sand += SAND_LIGHT * sparkle * 0.35 * detailFx;
-      sand = mix(sand, SAND_DUST, dust * 0.42);
+      sand = mix(sand, SAND_DUST, dust * 0.26 + saltation * 0.48);
       float saRef = dot(SAND_BASE, vec3(0.299, 0.587, 0.114));
       sand *= clamp(baseLuma / max(saRef, 1e-3), 0.85, 1.2) * macroMul;
       col = mix(col, sand, 0.88 * sandFx);
@@ -435,10 +495,12 @@ const SURFACE_GLSL = /* glsl */ `
     } else if (mid == MAT_GRASS) {
       float grassFx = max(detailFx, organicFx);
       float moss = vmTriFbm(p, w, 1.3);
+      float leafFleck = vmTriSpeckle(p, w, 5.6, 0.88) * fade * organicFx;
       float windShade = smoothstep(0.52, 0.9, vmWindGust(p, 0.95)) * atmosphereFx * organicFx * fade;
       vec3 mossCol = mix(MOSS_DARK, MOSS_BASE, smoothstep(0.3, 0.7, moss));
       mossCol = mix(mossCol, MOSS_LIGHT, smoothstep(0.65, 1.0, moss) * 0.8);
       mossCol = mix(mossCol, MOSS_LIGHT, windShade * 0.2);
+      mossCol = mix(mossCol, MOSS_LIGHT, leafFleck * 0.24);
 
       float clods = vmTriFbm(p, w, 0.9);
       vec3 dirtCol = mix(DIRT_DARK, DIRT_BASE, smoothstep(0.25, 0.7, clods));
@@ -454,7 +516,11 @@ const SURFACE_GLSL = /* glsl */ `
     } else if (mid == MAT_WOOD) {
       float woodFx = max(detailFx, organicFx * 0.75);
       float grain = vmTriRidge(p + vec3(0.0, p.y * 0.18, 0.0), w, 1.65);
-      float ring = sin(p.y * 3.2 + vmTriFbm2(p, w, 0.52) * 4.0) * 0.5 + 0.5;
+      vec2 woodUv = vmFaceUv(p, w);
+      float topWood = smoothstep(0.55, 0.92, up);
+      float barkRing = sin(p.y * 3.2 + vmTriFbm2(p, w, 0.52) * 4.0) * 0.5 + 0.5;
+      float endRing = sin(length(woodUv + vec2(vmFbm(woodUv * 0.35) - 0.5)) * 5.4) * 0.5 + 0.5;
+      float ring = mix(barkRing, endRing, topWood);
       float knot = vmTriSpeckle(p, w, 1.75, 0.88) * fade;
       vec3 wood = mix(WOOD_DARK, WOOD_BASE, smoothstep(0.16, 0.7, grain));
       wood = mix(wood, WOOD_LIGHT, smoothstep(0.52, 1.0, ring) * 0.34);
@@ -465,23 +531,36 @@ const SURFACE_GLSL = /* glsl */ `
 
     } else if (mid == MAT_LAVA) {
       float lavaFx = max(detailFx * 0.55, thermalFx);
-      float t = uTime * uAnimated * thermalFx * (0.18 + uWindStrength * 0.03);
-      vec3 q = p + vec3(t * 1.35, sin(t * 0.73) * 0.18, -t * 0.62);
-      float boil = vmTriFbm(q, w, 1.3);
-      float cells = vmTriRidge(q, w, 2.45);
-      float crust = vmTriFbm2(q + vec3(4.0, 0.0, -2.0), w, 0.55);
-      float hot = smoothstep(0.62, 1.0, max(boil, cells));
-      vec3 lava = mix(LAVA_DEEP, LAVA_ORANGE, smoothstep(0.22, 0.82, boil));
-      lava = mix(lava, LAVA_HOT, hot * (0.46 + thermalFx * 0.28));
-      lava = mix(lava, LAVA_SCUM, smoothstep(0.58, 0.93, crust) * (0.18 + detailFx * 0.18));
+      vec3 lavaMask = vmLavaMasks(p, w);
+      float channel = lavaMask.x;
+      float crust = lavaMask.y;
+      float boil = lavaMask.z;
+      vec3 lava = mix(LAVA_DEEP, LAVA_ORANGE, smoothstep(0.3, 0.88, boil) * 0.52);
+      lava = mix(lava, LAVA_ORANGE, channel * (0.62 + thermalFx * 0.14));
+      lava = mix(lava, LAVA_HOT, smoothstep(0.62, 0.96, channel) * (0.36 + thermalFx * 0.18));
+      lava = mix(lava, LAVA_SCUM, crust * (0.9 + detailFx * 0.06));
       float lRef = dot(LAVA_ORANGE, vec3(0.299, 0.587, 0.114));
       lava *= clamp(baseLuma / max(lRef, 1e-3), 0.68, 1.22);
       col = mix(col, lava, 0.94 * lavaFx);
 
     } else if (mid == MAT_COPPER || mid == MAT_GOLD || mid == MAT_SILVER) {
-      float vein = vmTriSpeckle(p, w, 3.0, 0.85) * fade;
-      float striation = smoothstep(0.62, 1.0, vmTriRidge(p, w, 1.35));
-      col = mix(col, ORE_VEIN, (vein * 0.22 + striation * 0.08) * metalFx);
+      float styleShift = mid == MAT_COPPER ? 1.0 : (mid == MAT_GOLD ? 2.0 : 3.0);
+      float ore = vmOreMask(p, w, styleShift);
+      float hostNoise = vmTriFbm2(p + vec3(4.0, -7.0, 2.0), w, 0.72);
+      vec3 host = mix(STONE_DARK, STONE_BASE, smoothstep(0.24, 0.76, hostNoise));
+      vec3 mineral = baseRGB * mix(0.72, 1.28, vmTriFbm2(p, w, 1.9));
+      if (mid == MAT_COPPER) {
+        float oxide = smoothstep(0.62, 0.88, vmTriFbm2(p + vec3(13.0), w, 0.5)) * uSurfaceWeathering;
+        mineral = mix(mineral, COPPER_OXIDE, oxide * 0.56);
+      } else if (mid == MAT_GOLD) {
+        mineral = mix(GOLD_DEEP, mineral, smoothstep(0.28, 0.74, ore));
+      } else {
+        float flake = abs(sin(dot(vmFaceUv(p, w), normalize(vec2(0.8, 0.35))) * 4.6));
+        mineral = mix(SILVER_DARK, mineral, smoothstep(0.3, 0.82, flake));
+      }
+      vec3 oreCol = mix(host, mineral, smoothstep(0.2, 0.78, ore));
+      oreCol = mix(oreCol, ORE_VEIN, smoothstep(0.82, 1.0, ore) * 0.34 * metalFx);
+      col = mix(col, oreCol * macroMul, max(detailFx, metalFx * 0.82));
 
     } else {
       float d = vmTriFbm2(p, w, 0.75);
@@ -504,6 +583,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uTime = { value: 0 };
     shader.uniforms.uAnimated = { value: 1 };
     shader.uniforms.uTriplanar = { value: 1 };
+    shader.uniforms.uCheapDetail = { value: 0 };
     shader.uniforms.uAO = { value: 1 };
     shader.uniforms.uRealityChroma = { value: 1 };
     shader.uniforms.uRealityDetail = { value: 1 };
@@ -512,6 +592,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     shader.uniforms.uRealityThermal = { value: 1 };
     shader.uniforms.uRealityCrystalline = { value: 1 };
     shader.uniforms.uRealityMetal = { value: 1 };
+    shader.uniforms.uRealityStyle = { value: 1 };
     shader.uniforms.uWindDir = { value: new THREE.Vector2(1, 0) };
     shader.uniforms.uWindStrength = { value: 1 };
     shader.uniforms.uWindGustScale = { value: 0.04 };
@@ -523,6 +604,14 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
     // no-op (strength 0) so terrain is unchanged until a profile is applied.
     shader.uniforms.uTerrainTint = { value: new THREE.Color(1, 1, 1) };
     shader.uniforms.uTerrainTintStrength = { value: 0 };
+    shader.uniforms.uSurfaceOffset = { value: new THREE.Vector3() };
+    shader.uniforms.uSurfaceScale = { value: 1 };
+    shader.uniforms.uSurfaceRelief = { value: 0.5 };
+    shader.uniforms.uSurfaceWeathering = { value: 0.5 };
+    shader.uniforms.uSurfaceMineralization = { value: 0 };
+    shader.uniforms.uRockTint = { value: new THREE.Color(1, 1, 1) };
+    shader.uniforms.uMineralTint = { value: new THREE.Color(1, 1, 1) };
+    shader.uniforms.uHazardTint = { value: new THREE.Color(1, 1, 1) };
     material.userData.shader = shader;
 
     // --- Vertex: forward material id + world pos/normal, bake per-corner AO.
@@ -566,6 +655,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         uniform float uTime;
         uniform float uAnimated;
         uniform float uTriplanar;
+        uniform float uCheapDetail;
         uniform float uRealityChroma;
         uniform float uRealityDetail;
         uniform float uRealityOrganic;
@@ -573,6 +663,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         uniform float uRealityThermal;
         uniform float uRealityCrystalline;
         uniform float uRealityMetal;
+        uniform float uRealityStyle;
         uniform vec2 uWindDir;
         uniform float uWindStrength;
         uniform float uWindGustScale;
@@ -582,6 +673,14 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         uniform vec3 uMoonDir;
         uniform vec3 uTerrainTint;
         uniform float uTerrainTintStrength;
+        uniform vec3 uSurfaceOffset;
+        uniform float uSurfaceScale;
+        uniform float uSurfaceRelief;
+        uniform float uSurfaceWeathering;
+        uniform float uSurfaceMineralization;
+        uniform vec3 uRockTint;
+        uniform vec3 uMineralTint;
+        uniform vec3 uHazardTint;
         varying float vMatId;
         varying float vAO;
         varying vec3 vWorldPos;
@@ -608,11 +707,12 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           vec3 w = vmTriW(vWorldNormal);
           int mid = int(vMatId + 0.5);
           float fade = vmDetailFade();
+          vec3 styledPos = vmStyledPos(vWorldPos);
           // up: how planet-outward this face points (for grass-block tops).
           float up = clamp(dot(vWorldNormal, normalize(vWorldPos)), 0.0, 1.0);
           diffuseColor.rgb = vmSurface(
             diffuseColor.rgb,
-            vWorldPos,
+            styledPos,
             w,
             mid,
             fade,
@@ -624,6 +724,48 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
             uRealityCrystalline,
             uRealityMetal
           );
+        } else if (uCheapDetail > 0.001) {
+          // One dominant-face sample keeps MEDIUM/LOW materials recognizable
+          // without the four height evaluations used by full relief.
+          float cheapFx = clamp(uCheapDetail, 0.0, 1.0);
+          vec3 cheapW = vmTriW(vWorldNormal);
+          int cheapMid = int(vMatId + 0.5);
+          vec3 cheapP = vmStyledPos(vWorldPos);
+          float cheapNoise = vmTriFbm2(cheapP, cheapW, 0.72);
+          diffuseColor.rgb *= mix(1.0, mix(0.9, 1.1, cheapNoise), cheapFx);
+          if (cheapMid == MAT_SAND) {
+            vec2 uv = vmFaceUv(cheapP, cheapW);
+            vec2 wind = normalize(uWindDir + vec2(0.0001, 0.0));
+            float ripple = sin(dot(uv, wind) * 1.85 + vmFbm(uv * 0.32) * 3.2) * 0.5 + 0.5;
+            vec3 cheapSand = mix(SAND_DARK, SAND_LIGHT, smoothstep(0.24, 0.82, ripple));
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapSand, cheapFx);
+          } else if (cheapMid == MAT_WOOD) {
+            float bark = vmTriRidge(cheapP, cheapW, 1.35);
+            vec3 cheapWood = mix(WOOD_DARK, WOOD_LIGHT, smoothstep(0.18, 0.82, bark));
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapWood, cheapFx);
+          } else if (cheapMid == MAT_LAVA) {
+            vec3 lavaMask = vmLavaMasks(cheapP, cheapW);
+            vec3 cheapLava = mix(LAVA_DEEP, LAVA_ORANGE, smoothstep(0.3, 0.88, lavaMask.z) * 0.5);
+            cheapLava = mix(cheapLava, LAVA_ORANGE, lavaMask.x * 0.68);
+            cheapLava = mix(cheapLava, LAVA_SCUM, lavaMask.y * 0.92);
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapLava, cheapFx);
+          } else if (cheapMid == MAT_BASALT || cheapMid == MAT_STONE) {
+            float fracture = vmTriRidge(cheapP, cheapW, cheapMid == MAT_BASALT ? 1.45 : 1.05);
+            vec3 cheapRock = diffuseColor.rgb * mix(0.72, 1.18, smoothstep(0.18, 0.82, fracture));
+            float mineralFleck = vmTriSpeckle(cheapP + vec3(17.0, -5.0, 9.0), cheapW, 6.2, 0.94)
+              * uSurfaceMineralization;
+            cheapRock = mix(cheapRock, uMineralTint, mineralFleck * 0.52);
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapRock, cheapFx);
+          } else if (cheapMid == MAT_ICE || cheapMid == MAT_CRYSTAL) {
+            float facet = vmTriRidge(cheapP, cheapW, cheapMid == MAT_ICE ? 0.95 : 1.8);
+            vec3 cheapFacet = diffuseColor.rgb * mix(0.78, 1.24, smoothstep(0.24, 0.9, facet));
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapFacet, cheapFx);
+          } else if (cheapMid == MAT_COPPER || cheapMid == MAT_GOLD || cheapMid == MAT_SILVER) {
+            float shift = cheapMid == MAT_COPPER ? 1.0 : (cheapMid == MAT_GOLD ? 2.0 : 3.0);
+            float ore = vmOreMask(cheapP, cheapW, shift);
+            vec3 cheapOre = mix(STONE_DARK, diffuseColor.rgb, smoothstep(0.22, 0.76, ore));
+            diffuseColor.rgb = mix(diffuseColor.rgb, cheapOre, cheapFx);
+          }
         }
         // Per-planet biome tint on ORGANIC ground only (dirt/grass/sand) so soil
         // coheres with the planet's grass/water; mineral materials stay neutral.
@@ -638,6 +780,34 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
             vec3 tintAtLuma = uTerrainTint * (pLuma / tLuma);
             diffuseColor.rgb = mix(diffuseColor.rgb, tintAtLuma, uTerrainTintStrength);
           }
+        }
+
+        // Resolved rock/mineral/hazard families inherit a bounded planet palette
+        // tint. World-space fields above provide variation without hard voxel-cell
+        // brightness steps, preserving continuity across adjacent faces.
+        int styleMid = int(vMatId + 0.5);
+        float rockFamily = float(styleMid == MAT_STONE || styleMid == MAT_BASALT);
+        float mineralFamily = float(
+          styleMid == MAT_COPPER || styleMid == MAT_GOLD || styleMid == MAT_SILVER
+          || styleMid == MAT_CRYSTAL || styleMid == MAT_ICE
+        );
+        float hazardFamily = float(styleMid == MAT_LAVA);
+        vec3 familyTint = uRockTint * rockFamily
+          + uMineralTint * mineralFamily
+          + uHazardTint * hazardFamily;
+        float familyMask = clamp(rockFamily + mineralFamily + hazardFamily, 0.0, 1.0);
+        if (familyMask > 0.0) {
+          float pLuma = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+          float tLuma = max(dot(familyTint, vec3(0.299, 0.587, 0.114)), 1e-3);
+          vec3 tintAtLuma = familyTint * (pLuma / tLuma);
+          float familyStrength = rockFamily * 0.07
+            + mineralFamily * mix(0.045, 0.11, uSurfaceWeathering)
+            + hazardFamily * 0.1;
+          diffuseColor.rgb = mix(
+            diffuseColor.rgb,
+            tintAtLuma,
+            familyStrength * clamp(uRealityStyle, 0.0, 1.0)
+          );
         }`
       )
       .replace(
@@ -659,6 +829,7 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           int bmid = int(vMatId + 0.5);
           vec3 bw = vmTriW(vWorldNormal);
           float bfade = vmDetailFade();
+          vec3 bp = vmStyledPos(vWorldPos);
           // Strength fades to 0 far away so far voxels stay smooth/quiet.
           float reliefFx = uRealityDetail;
           if (bmid == MAT_DIRT) reliefFx = max(uRealityDetail * 0.62, uRealityOrganic * 0.35);
@@ -666,13 +837,15 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           if (bmid == MAT_ICE || bmid == MAT_CRYSTAL) reliefFx = max(uRealityDetail, uRealityCrystalline * 0.78);
           if (bmid == MAT_WOOD || bmid == MAT_GRASS) reliefFx = max(uRealityDetail, uRealityOrganic * 0.65);
           if (bmid == MAT_COPPER || bmid == MAT_GOLD || bmid == MAT_SILVER) reliefFx = max(uRealityDetail, uRealityMetal * 0.62);
-          float strength = mix(0.12, 0.55, bfade) * clamp(reliefFx, 0.0, 1.25);
+          float strength = mix(0.1, 0.52, bfade)
+            * mix(0.68, 1.18, uSurfaceRelief)
+            * clamp(reliefFx, 0.0, 1.25);
           // Finite-difference gradient of the height field in world space.
           float eps = 0.06;
-          float h0 = vmHeight(vWorldPos, bw, bmid);
-          float hx = vmHeight(vWorldPos + vec3(eps, 0.0, 0.0), bw, bmid);
-          float hy = vmHeight(vWorldPos + vec3(0.0, eps, 0.0), bw, bmid);
-          float hz = vmHeight(vWorldPos + vec3(0.0, 0.0, eps), bw, bmid);
+          float h0 = vmHeight(bp, bw, bmid);
+          float hx = vmHeight(vmStyledPos(vWorldPos + vec3(eps, 0.0, 0.0)), bw, bmid);
+          float hy = vmHeight(vmStyledPos(vWorldPos + vec3(0.0, eps, 0.0)), bw, bmid);
+          float hz = vmHeight(vmStyledPos(vWorldPos + vec3(0.0, 0.0, eps)), bw, bmid);
           vec3 grad = vec3(hx - h0, hy - h0, hz - h0) / eps;
           // Remove the component along the face normal -> tangent-plane tilt.
           vec3 wn = normalize(vWorldNormal);
@@ -716,31 +889,57 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
         if (uTriplanar > 0.5 && uRealityDetail > 0.001) {
           int rmid = int(vMatId + 0.5);
           vec3 rw = vmTriW(vWorldNormal);
+          vec3 rp = vmStyledPos(vWorldPos);
           if (rmid == MAT_STONE) {
-            float crack = vmTriRidge(vWorldPos, rw, 1.1);
+            float crack = vmTriRidge(rp, rw, 1.1);
             roughnessFactor *= mix(1.0, mix(1.05, 0.86, smoothstep(0.4, 0.95, crack)), uRealityDetail);
+          } else if (rmid == MAT_DIRT) {
+            float moisture = vmTriFbm2(rp + vec3(9.0, -4.0, 6.0), rw, 0.3);
+            roughnessFactor *= mix(1.08, 0.78, smoothstep(0.48, 0.86, moisture) * uSurfaceWeathering);
+          } else if (rmid == MAT_SAND) {
+            float crest = vmHeight(rp, rw, rmid);
+            roughnessFactor *= mix(1.05, 0.82, smoothstep(0.62, 0.96, crest) * uRealityDetail);
+          } else if (rmid == MAT_GRASS) {
+            float moss = vmTriFbm(rp, rw, 1.3);
+            roughnessFactor *= mix(1.04, 0.84, smoothstep(0.62, 0.92, moss) * uRealityOrganic);
           } else if (rmid == MAT_BASALT) {
-            float plate = vmTriRidge(vWorldPos, rw, 1.45);
+            float plate = vmTriRidge(rp, rw, 1.45);
             roughnessFactor *= mix(1.0, mix(1.08, 0.82, smoothstep(0.55, 1.0, plate)), uRealityDetail);
           } else if (rmid == MAT_ICE) {
-            float facet = vmTriRidge(vWorldPos, rw, 0.95);
+            float facet = vmTriRidge(rp, rw, 0.95);
             roughnessFactor *= mix(1.0, mix(0.72, 1.12, smoothstep(0.2, 0.8, facet)), max(uRealityDetail, uRealityCrystalline));
           } else if (rmid == MAT_CRYSTAL) {
-            float ridge = vmTriRidge(vWorldPos, rw, 2.0);
+            float ridge = vmTriRidge(rp, rw, 2.0);
             roughnessFactor *= mix(1.0, mix(0.72, 0.45, smoothstep(0.65, 1.0, ridge)), max(uRealityDetail, uRealityCrystalline));
           } else if (rmid == MAT_LAVA) {
-            float cell = vmTriRidge(vWorldPos + vec3(uTime * uAnimated * 0.18, 0.0, 0.0), rw, 2.45);
-            roughnessFactor *= mix(1.0, mix(0.92, 0.48, smoothstep(0.58, 1.0, cell)), uRealityThermal);
+            vec3 lavaMask = vmLavaMasks(rp, rw);
+            roughnessFactor = mix(0.34, 0.96, lavaMask.y);
           } else if (rmid == MAT_WOOD) {
-            float grain = vmTriRidge(vWorldPos, rw, 1.65);
+            float grain = vmTriRidge(rp, rw, 1.65);
             roughnessFactor *= mix(1.0, mix(1.08, 0.82, smoothstep(0.48, 1.0, grain)), max(uRealityDetail, uRealityOrganic));
+          } else if (rmid == MAT_COPPER || rmid == MAT_GOLD || rmid == MAT_SILVER) {
+            float styleShift = rmid == MAT_COPPER ? 1.0 : (rmid == MAT_GOLD ? 2.0 : 3.0);
+            float ore = vmOreMask(rp, rw, styleShift);
+            roughnessFactor = mix(0.82, VOXEL_ROUGH[rmid], smoothstep(0.2, 0.8, ore));
           }
+          roughnessFactor = clamp(roughnessFactor, 0.08, 1.0);
         }`
       )
       .replace(
         '#include <metalnessmap_fragment>',
         `#include <metalnessmap_fragment>
-        metalnessFactor = VOXEL_METAL[int(vMatId + 0.5)];`
+        int metalMid = int(vMatId + 0.5);
+        metalnessFactor = VOXEL_METAL[metalMid];
+        if (uTriplanar > 0.5 && (metalMid == MAT_COPPER || metalMid == MAT_GOLD || metalMid == MAT_SILVER)) {
+          vec3 mw = vmTriW(vWorldNormal);
+          float styleShift = metalMid == MAT_COPPER ? 1.0 : (metalMid == MAT_GOLD ? 2.0 : 3.0);
+          float ore = vmOreMask(vmStyledPos(vWorldPos), mw, styleShift);
+          metalnessFactor *= mix(0.18, 1.0, smoothstep(0.2, 0.82, ore));
+        } else if (uTriplanar > 0.5 && (metalMid == MAT_STONE || metalMid == MAT_BASALT) && uSurfaceMineralization > 0.001) {
+          vec3 mw = vmTriW(vWorldNormal);
+          float fleck = vmTriSpeckle(vmStyledPos(vWorldPos) + vec3(17.0, -5.0, 9.0), mw, 6.2, 0.94);
+          metalnessFactor = mix(metalnessFactor, 0.58, fleck * uSurfaceMineralization * uRealityMetal);
+        }`
       )
       .replace(
         '#include <emissivemap_fragment>',
@@ -750,30 +949,38 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
           vec3 e = VOXEL_EMISSIVE[mid];
           if (mid == ${lavaId}) {
             vec3 ew = vmTriW(vWorldNormal);
-            float phase = dot(vWorldPos, vec3(0.15));
-            float boil = vmTriFbm(vWorldPos + vec3(uTime * uAnimated * 0.24, 0.0, -uTime * uAnimated * 0.11), ew, 1.3);
-            float cells = vmTriRidge(vWorldPos, ew, 2.45);
+            vec3 ep = vmStyledPos(vWorldPos);
+            float phase = dot(ep, vec3(0.15));
+            vec3 lavaMask = vmLavaMasks(ep, ew);
             float pulse = 0.82 + 0.18 * sin(uTime * 1.5 + phase);
-            float hot = smoothstep(0.62, 1.0, max(boil, cells));
-            e *= mix(1.0, pulse + hot * 0.34, uAnimated * uRealityThermal);
-            e += LAVA_HOT * hot * 0.42 * uRealityThermal;
+            float hot = lavaMask.x;
+            float styleReveal = clamp(max(uRealityDetail, uRealityThermal), 0.0, 1.0);
+            float thermalReveal = clamp(uRealityDetail * 0.1 + uRealityThermal * 0.48, 0.0, 0.58);
+            vec3 resolvedE = LAVA_ORANGE * (0.012 + lavaMask.z * 0.028) * (1.0 - lavaMask.y * 0.98);
+            resolvedE += mix(LAVA_ORANGE, LAVA_HOT, smoothstep(0.68, 0.96, hot))
+              * hot * thermalReveal * pulse;
+            e = mix(e, resolvedE, styleReveal);
           } else if (mid == MAT_BASALT) {
             vec3 ew = vmTriW(vWorldNormal);
-            float ember = vmTriSpeckle(vWorldPos, ew, 3.8, 0.94) * vmDetailFade();
+            float ember = vmTriSpeckle(vmStyledPos(vWorldPos), ew, 3.8, 0.94) * vmDetailFade();
             e += BASALT_WARM * ember * 0.18 * uRealityThermal;
           } else if (mid == MAT_ICE) {
             vec3 ew = vmTriW(vWorldNormal);
-            float inner = 1.0 - vmTriRidge(vWorldPos, ew, 0.95);
-            float frost = smoothstep(0.58, 0.9, vmWindGust(vWorldPos, 1.1)) * uRealityAtmosphere;
+            vec3 ep = vmStyledPos(vWorldPos);
+            float inner = 1.0 - vmTriRidge(ep, ew, 0.95);
+            float frost = smoothstep(0.58, 0.9, vmWindGust(ep, 1.1)) * uRealityAtmosphere;
             e += ICE_GLOW * (smoothstep(0.45, 0.9, inner) * 0.04 + frost * 0.025) * uRealityCrystalline;
           } else if (mid == MAT_CRYSTAL) {
             vec3 ew = vmTriW(vWorldNormal);
-            float ridge = vmTriRidge(vWorldPos, ew, 2.0);
-            float glint = vmTriSpeckle(vWorldPos, ew, 5.2, 0.9) * vmDetailFade();
+            vec3 ep = vmStyledPos(vWorldPos);
+            float ridge = vmTriRidge(ep, ew, 2.0);
+            float glint = vmTriSpeckle(ep, ew, 5.2, 0.9) * vmDetailFade();
             e += CRYSTAL_HI * (smoothstep(0.72, 1.0, ridge) * 0.18 + glint * 0.22) * uRealityCrystalline;
           } else if (mid == MAT_COPPER || mid == MAT_GOLD || mid == MAT_SILVER) {
             vec3 ew = vmTriW(vWorldNormal);
-            float glint = vmTriSpeckle(vWorldPos, ew, 4.6, 0.91) * vmDetailFade();
+            float styleShift = mid == MAT_COPPER ? 1.0 : (mid == MAT_GOLD ? 2.0 : 3.0);
+            float ore = vmOreMask(vmStyledPos(vWorldPos), ew, styleShift);
+            float glint = smoothstep(0.82, 1.0, ore) * vmDetailFade();
             e += ORE_VEIN * glint * 0.035 * uRealityMetal;
           }
           e += vVoxelGlowTerm;
@@ -788,9 +995,9 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
   };
 
   // Single shared material on one mesh: a stable key avoids per-object recompiles
-  // and reserves room for future variants (e.g. painterly). Bumped to v6 when
-  // shared sun/moon rim atmosphere was added for tree/fauna cohesion.
-  material.customProgramCacheKey = () => 'voxel-pbr-v6';
+  // and reserves room for future variants. V7 adds seeded surface styling and
+  // coherent per-material PBR masks without adding a second program.
+  material.customProgramCacheKey = () => 'voxel-pbr-v7';
 
   return material;
 }
@@ -811,6 +1018,14 @@ export function applyTerrainProfileToMaterial(
   if (!u) return;
   if (u.uTerrainTint) (u.uTerrainTint.value as THREE.Color).copy(profile.tintColor);
   if (u.uTerrainTintStrength) (u.uTerrainTintStrength.value as number) = profile.tintStrength;
+  if (u.uSurfaceOffset) (u.uSurfaceOffset.value as THREE.Vector3).copy(profile.surfaceOffset);
+  if (u.uSurfaceScale) (u.uSurfaceScale.value as number) = profile.surfaceScale;
+  if (u.uSurfaceRelief) (u.uSurfaceRelief.value as number) = profile.surfaceRelief;
+  if (u.uSurfaceWeathering) (u.uSurfaceWeathering.value as number) = profile.weathering;
+  if (u.uSurfaceMineralization) (u.uSurfaceMineralization.value as number) = profile.mineralization;
+  if (u.uRockTint) (u.uRockTint.value as THREE.Color).copy(profile.rockTint);
+  if (u.uMineralTint) (u.uMineralTint.value as THREE.Color).copy(profile.mineralTint);
+  if (u.uHazardTint) (u.uHazardTint.value as THREE.Color).copy(profile.hazardTint);
 }
 
 /** Push the deterministic per-planet wind profile into block-surface effects. */
@@ -850,10 +1065,25 @@ export function updateVoxelMaterial(
   const crystalline = quality.triplanarDetail ? reality.crystalline : 0;
   const metal = quality.triplanarDetail ? reality.metal : 0;
   const hasSurfaceEffects = detail + organic + atmosphere + thermal + crystalline + metal > 0.001;
+  const rawStyleResolution = Math.max(
+    reality.detail,
+    reality.organic,
+    reality.atmosphere,
+    reality.thermal,
+    reality.crystalline,
+    reality.metal
+  );
 
   if (u.uTime) (u.uTime.value as number) = time;
   if (u.uAnimated) (u.uAnimated.value as number) = animated;
   if (u.uTriplanar) (u.uTriplanar.value as number) = quality.triplanarDetail && hasSurfaceEffects ? 1 : 0;
+  if (u.uCheapDetail) {
+    (u.uCheapDetail.value as number) = !quality.triplanarDetail
+      && quality.bakedAO
+      && rawStyleResolution > 0.001
+      ? Math.min(1, rawStyleResolution)
+      : 0;
+  }
   if (u.uAO) (u.uAO.value as number) = quality.bakedAO ? 1 : 0;
   if (u.uRealityChroma) (u.uRealityChroma.value as number) = chroma;
   if (u.uRealityDetail) (u.uRealityDetail.value as number) = detail;
@@ -862,6 +1092,7 @@ export function updateVoxelMaterial(
   if (u.uRealityThermal) (u.uRealityThermal.value as number) = thermal;
   if (u.uRealityCrystalline) (u.uRealityCrystalline.value as number) = crystalline;
   if (u.uRealityMetal) (u.uRealityMetal.value as number) = metal;
+  if (u.uRealityStyle) (u.uRealityStyle.value as number) = rawStyleResolution;
   if (sunDir && u.uSunDir) (u.uSunDir.value as THREE.Vector3).copy(sunDir).normalize();
   if (moonDir && u.uMoonDir) (u.uMoonDir.value as THREE.Vector3).copy(moonDir).normalize();
 }

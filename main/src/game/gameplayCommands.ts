@@ -16,6 +16,8 @@ import { harvestVoxel } from './systems/harvestingSystem.ts';
 import { harvestTree } from './systems/treeHarvest.ts';
 import { collectStone } from './systems/stonePickup.ts';
 import { collectForage } from './systems/foragePickup.ts';
+import { collectFlora } from './systems/floraHarvest.ts';
+import type { FloraHarvestKind } from './data/floraHarvest.ts';
 import { craft, type CraftContext } from './systems/craftingSystem.ts';
 import {
   fitDoor,
@@ -397,6 +399,37 @@ export function collectForageCommand(
     rollback: {
       removeItems: [result],
       uncollectResource: { source: 'forage', coord: coordPayload(input.x, input.y, input.z) }
+    }
+  });
+}
+
+export function harvestFloraCommand(
+  context: CommandContext,
+  input: { x: number; y: number; z: number; kind: FloraHarvestKind; commandId?: string }
+): CommandResult {
+  const ref = commandRef('harvestFlora', input.commandId);
+  const result = collectFlora(
+    input.x,
+    input.y,
+    input.z,
+    input.kind,
+    deterministicCommandRng(`resource_taken:flora:${input.kind}:${context.world.worldId}:${coordKey(input.x, input.y, input.z)}`),
+    context.actorId
+  );
+  if (!result) return conflict(ref, 'flora already harvested');
+  return accepted(context, ref, [
+    event(context, 'resource_taken', {
+      source: 'flora',
+      kind: input.kind,
+      coord: coordPayload(input.x, input.y, input.z),
+      id: result.id,
+      qty: result.qty
+    })
+  ], {
+    deltas: [result],
+    rollback: {
+      removeItems: [result],
+      uncollectResource: { source: 'flora', coord: coordPayload(input.x, input.y, input.z) }
     }
   });
 }

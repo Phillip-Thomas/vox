@@ -97,6 +97,16 @@ interface ResourceDefinition {
   scanLevel: number;
 }
 
+const FLORA_DROPS = {
+  cactus: { id: 'cactus_pulp', yield: [1, 2] },
+  fan: { id: 'fan_frond', yield: [1, 2] },
+  flower: { id: 'wild_bloom', yield: [1, 2] },
+  seedhead: { id: 'seedpod', yield: [2, 3] },
+  shrub: { id: 'berry', yield: [1, 2] }
+} as const satisfies Record<string, { id: string; yield: readonly [number, number] }>;
+
+type FloraKind = keyof typeof FLORA_DROPS;
+
 interface BlockDefinition {
   drops: string[];
   bonusDrops?: Array<{ id: string; chance: number; min: number; max: number }>;
@@ -754,9 +764,24 @@ function resolveResourceTakenPayload(
       }
       return { code: 'validation_failed', reason: 'Forage pickup requires berry or root kind.' };
     }
+    case 'flora': {
+      const kind = readString(payload.kind);
+      if (!kind || !isFloraKind(kind)) {
+        return { code: 'validation_failed', reason: 'Flora harvest requires a known flora kind.' };
+      }
+      const drop = FLORA_DROPS[kind];
+      const qty = deterministicRng(
+        `resource_taken:flora:${kind}:${worldId}:${coordKey(coord)}`
+      ).int(drop.yield[0], drop.yield[1]);
+      return { commandPayload: { source, kind, coord, id: drop.id, qty } };
+    }
     default:
       return { code: 'validation_failed', reason: 'Unknown resource pickup source.' };
   }
+}
+
+function isFloraKind(value: string): value is FloraKind {
+  return Object.prototype.hasOwnProperty.call(FLORA_DROPS, value);
 }
 
 function resolveVoxelMinedPayload(

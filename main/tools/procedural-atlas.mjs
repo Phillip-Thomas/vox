@@ -20,20 +20,22 @@ const WINDOWS_FALLBACK_EXE = 'C:/Users/Phillip/AppData/Local/ms-playwright/chrom
 const ARCHETYPES = ['verdant', 'arid', 'frozen', 'volcanic', 'oceanic', 'crystal', 'metallic', 'fungal', 'anomaly'];
 const ALL_STAGES = ['bare', 'color', 'material', 'alive', 'paradox'];
 const ALL_QUALITIES = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTATO'];
-const EFFECT_VIEWS = new Set([
+const SPAWNED_EFFECT_VIEWS = new Set([
   'surfaceEffects',
-  'material',
   'hazard',
-  'mineral',
   'sandDust',
   'dirtLife',
   'pollen',
-  'frost',
   'lavaHeat',
   'ash',
-  'crystalGlints',
-  'metallicFlecks',
   'fungalSpores'
+]);
+const MATERIAL_VIEWS = new Set([
+  'material',
+  'mineral',
+  'frost',
+  'crystalGlints',
+  'metallicFlecks'
 ]);
 const STAGES_WITH_SURFACE_EFFECTS = new Set(['material', 'alive', 'paradox']);
 
@@ -284,8 +286,11 @@ function detectCaseDefects(entry) {
   }
   const expectsSurfaceEffects = STAGES_WITH_SURFACE_EFFECTS.has(entry.stage);
   for (const view of entry.views ?? []) {
-    if (entry.quality !== 'POTATO' && expectsSurfaceEffects && EFFECT_VIEWS.has(view.view) && String(view.resolved).includes('no-effect')) {
+    if (entry.quality !== 'POTATO' && expectsSurfaceEffects && SPAWNED_EFFECT_VIEWS.has(view.view) && String(view.resolved).includes('no-effect')) {
       add('missing_effect_vantage', 'medium', `${view.view} resolved to ${view.resolved}`);
+    }
+    if (MATERIAL_VIEWS.has(view.view) && String(view.resolved).includes('no-material')) {
+      add('missing_material_vantage', 'medium', `${view.view} resolved to ${view.resolved}`);
     }
   }
   return defects;

@@ -24,6 +24,8 @@ import {
   applyReplicatedWorldEvent,
   applyRemotePoseSnapshot,
   applyRemotePoseUpdate,
+  extractSnapshotWorldEvents,
+  parseReplicatedWorldEvent,
   toPosePayload
 } from './multiplayerReplication.ts';
 import {
@@ -90,6 +92,20 @@ type PendingReliableCommand = {
 };
 
 export const MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS = 33;
+
+export function planSnapshotReliableCommandReconciliation(
+  pending: ReadonlyArray<{ commandId: string; worldId: string }>,
+  snapshotWorldId: string,
+  acceptedCommandIds: ReadonlySet<string>
+): { accepted: string[]; stale: string[] } {
+  const accepted: string[] = [];
+  const stale: string[] = [];
+  for (const command of pending) {
+    if (command.worldId !== snapshotWorldId) continue;
+    (acceptedCommandIds.has(command.commandId) ? accepted : stale).push(command.commandId);
+  }
+  return { accepted, stale };
+}
 
 let connection: MultiplayerConnection | null = null;
 let poseTimer: PoseTimer | null = null;
@@ -290,9 +306,18 @@ export function sendMultiplayerAuthoritativeCommand(
 ): boolean {
   if (!result.ok) return false;
   const firstEvent = result.events[0];
-  const worldId = snapshot.status === 'connected' && snapshot.worldId
-    ? snapshot.worldId
-    : firstEvent?.worldId;
+  const eventWorldId = firstEvent?.worldId;
+  // Never relabel a local mutation into the session's current world during a
+  // warp/alignment race. Returning false makes the dispatch adapter roll back
+  // the optimistic tree/reward instead of claiming the same coord on a planet
+  // the player did not actually harvest.
+  if (
+    snapshot.status === 'connected'
+    && snapshot.worldId
+    && eventWorldId
+    && eventWorldId !== snapshot.worldId
+  ) return false;
+  const worldId = eventWorldId ?? snapshot.worldId;
   const actorId = firstEvent?.actorId ?? snapshot.playerId;
   if (!worldId || !actorId) return false;
   const sent = sendMultiplayerWorldCommand({
@@ -473,10 +498,12 @@ function handleServerMessage(
       return;
     case 'world_snapshot':
       applyServerWorldClock(message.snapshot, message.worldId);
+      reconcilePendingReliableCommandsFromSnapshot(message.snapshot, message.worldId);
       applyReplicatedPlayerStateSnapshot(message.snapshot, { replace: false });
       applyRemotePoseSnapshot(message.snapshot, message.worldId, snapshot.playerId);
       applyReplicatedWorldSnapshotEvents(message.snapshot, message.worldId, {
-        localPlayerId: snapshot.playerId
+        localPlayerId: snapshot.playerId,
+        replaceResourceMarkers: true
       });
       clearBufferedWorldEvents(message.worldId, message.seq);
       setSnapshot({ ...snapshot, seq: message.seq, worldId: message.worldId });
@@ -555,9 +582,14 @@ function handleWorldEvent(message: WorldEventMessage): void {
 }
 
 function applyWorldEventMessage(message: WorldEventMessage): void {
+  reconcilePendingReliableCommandFromEvent(message.event, message.worldId);
+  const event = parseReplicatedWorldEvent(message.event);
   applyReplicatedWorldEvent(message.event, {
     localPlayerId: snapshot.playerId,
-    ignoreLocalPlayer: true,
+    // Resource markers are idempotent and must consume the authoritative local
+    // echo as well: it is the reconnect-safe replacement for a lost ACK or a
+    // local field reset between prediction and backfill.
+    ignoreLocalPlayer: event?.type !== 'resource_taken',
     worldId: message.worldId
   });
   setSnapshot({ ...snapshot, seq: Math.max(snapshot.seq, message.seq), worldId: message.worldId });
@@ -628,8 +660,55 @@ function clearWorldEventBackfillState(): void {
 }
 
 function clearPendingReliableCommands(): void {
+  // Explicit disconnect/new-session boundaries abandon the old reliable lane.
+  // Undo its unacknowledged optimistic state before dropping the only rollback
+  // records, otherwise a pending tree and its wood can leak into offline saves.
+  for (const pending of pendingReliableCommands.values()) {
+    rollbackPendingReliableCommand(pending);
+  }
   pendingReliableCommands.clear();
   pendingPartyWarpCommandIds.clear();
+}
+
+function reconcilePendingReliableCommandFromEvent(event: unknown, worldId: string): void {
+  const value = toJsonObject(event);
+  const commandId = typeof value?.commandId === 'string' ? value.commandId : null;
+  if (!commandId) return;
+  const pending = pendingReliableCommands.get(commandId);
+  if (!pending || pending.worldId !== worldId) return;
+  // The authoritative event is the durable acceptance when the socket dropped
+  // before command_accepted arrived. Settling it prevents a later disconnect
+  // from rolling back a command the server has already committed.
+  pendingReliableCommands.delete(commandId);
+}
+
+function reconcilePendingReliableCommandsFromSnapshot(payload: JsonObject, worldId: string): void {
+  const acceptedCommandIds = new Set(
+    extractSnapshotWorldEvents(payload)
+      .map(event => event.commandId)
+      .filter((commandId): commandId is string => Boolean(commandId))
+  );
+  const plan = planSnapshotReliableCommandReconciliation(
+    [...pendingReliableCommands.values()],
+    worldId,
+    acceptedCommandIds
+  );
+  for (const commandId of plan.accepted) pendingReliableCommands.delete(commandId);
+  for (const commandId of plan.stale) {
+    const pending = pendingReliableCommands.get(commandId);
+    if (!pending) continue;
+    pendingReliableCommands.delete(commandId);
+    // A full snapshot is authoritative through its cursor. A pending command
+    // absent from that history did not land; undo its optimistic tree/reward.
+    rollbackPendingReliableCommand(pending);
+  }
+}
+
+function rollbackPendingReliableCommand(pending: PendingReliableCommand): void {
+  applyRejectedCommandRollback(pending.rollback, {
+    actorId: pending.actorId,
+    rejectCode: 'stale'
+  });
 }
 
 function handleCommandAccepted(message: Extract<MultiplayerServerMessage, { type: 'command_accepted' }>): void {

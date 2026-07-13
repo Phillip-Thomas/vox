@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  getVitals, getStamina, tickVitals, applyStamina, canSprint, setVitals, resetVitals, feed, drink
+  getVitals, getStamina, tickVitals, tickLavaDamage, applyStamina, canSprint, setVitals, resetVitals, feed, drink
 } from './survivalVitals.ts';
 
 beforeEach(() => resetVitals());
@@ -68,6 +68,36 @@ describe('stamina + sprint gating', () => {
     expect(canSprint()).toBe(false);
     applyStamina(100, false); // full regen, past threshold
     expect(canSprint()).toBe(true);
+  });
+});
+
+describe('lava damage over time', () => {
+  it('burns health at 15/s while in lava', () => {
+    tickLavaDamage(2, true);
+    expect(getVitals().health).toBe(70);
+  });
+
+  it('does nothing when not in lava', () => {
+    tickLavaDamage(10, false);
+    expect(getVitals().health).toBe(100);
+  });
+
+  it('clamps at 0 (non-lethal floor, like drowning)', () => {
+    tickLavaDamage(1000, true);
+    expect(getVitals().health).toBe(0);
+  });
+
+  it('ignores non-finite and non-positive deltas', () => {
+    tickLavaDamage(NaN, true);
+    tickLavaDamage(-5, true);
+    tickLavaDamage(0, true);
+    expect(getVitals().health).toBe(100);
+  });
+
+  it('is per-actor: burning a remote actor leaves the local player whole', () => {
+    tickLavaDamage(2, true, 'remote-bob');
+    expect(getVitals().health).toBe(100);
+    expect(getVitals('remote-bob').health).toBe(70);
   });
 });
 

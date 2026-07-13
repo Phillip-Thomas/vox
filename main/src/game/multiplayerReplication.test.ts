@@ -26,9 +26,10 @@ import {
   toPosePayload
 } from './multiplayerReplication.ts';
 import { getPlayerPose, resetPlayerPoses, setPlayerPose } from './systems/playerPoseSystem.ts';
-import { isTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
-import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
-import { isForageCollected, resetForagePickup } from './systems/foragePickup.ts';
+import { isTreeHarvested, markTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
+import { isStoneCollected, markStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
+import { isForageCollected, markForageCollected, resetForagePickup } from './systems/foragePickup.ts';
+import { isFloraHarvested, markFloraHarvested, resetFloraHarvest } from './systems/floraHarvest.ts';
 import { getCampfires, resetCampfires } from './systems/campfires.ts';
 import { getPieceAt, resetStructures, restorePieces } from './systems/structureSystem.ts';
 import { getItemCount, resetAllInventories } from './systems/inventorySystem.ts';
@@ -77,6 +78,7 @@ beforeEach(() => {
   resetTreeHarvest();
   resetStonePickup();
   resetForagePickup();
+  resetFloraHarvest();
   resetCampfires();
   resetStructures();
   resetAllInventories();
@@ -163,10 +165,15 @@ describe('multiplayer replication', () => {
   });
 
   it('applies authoritative player state snapshots into actor-keyed stores', () => {
+    // Optimistic tree wood is deliberately present first; even merge mode must
+    // replace the included actor with the exact authoritative inventory.
+    const optimisticInventory = { players: { inventory: { alice: { wood: 9 } } } };
+    expect(applyReplicatedPlayerStateSnapshot(optimisticInventory)).toBe(true);
+    expect(getItemCount('wood', 'alice')).toBe(9);
     const snapshot = {
       players: {
         inventory: {
-          alice: { iron_maw: 1, waterskin: 1 },
+          alice: { iron_maw: 1, waterskin: 1, wood: 3 },
           bob: { biofuel: 2 }
         },
         vitals: {
@@ -196,6 +203,7 @@ describe('multiplayer replication', () => {
     expect(applyReplicatedPlayerStateSnapshot(snapshot)).toBe(true);
 
     expect(getItemCount('iron_maw', 'alice')).toBe(1);
+    expect(getItemCount('wood', 'alice')).toBe(3);
     expect(getItemCount('biofuel', 'bob')).toBe(2);
     expect(getVitals('alice')).toMatchObject({ hunger: 62, thirst: 46, oxygen: 91 });
     expect(getMawCharge('bob')).toBe(50);
@@ -207,12 +215,14 @@ describe('multiplayer replication', () => {
   it('validates replicated world events before applying them', () => {
     expect(parseReplicatedWorldEvent({
       seq: 1,
+      commandId: 'tree-command-1',
       type: 'voxel_mined',
       playerId: 'bob',
       payload: { coord: [0, 1, 0] },
       timeMs: 123
     })).toMatchObject({
       seq: 1,
+      commandId: 'tree-command-1',
       type: 'voxel_mined',
       playerId: 'bob',
       payload: { coord: [0, 1, 0] },
@@ -394,6 +404,14 @@ describe('multiplayer replication', () => {
 
     expect(applyReplicatedWorldEvent({
       seq: 4,
+      type: 'resource_taken',
+      playerId: 'bob',
+      payload: { source: 'flora', coord: [4, 2, 3], kind: 'flower', id: 'wild_bloom', qty: 1 }
+    })).toBe(true);
+    expect(isFloraHarvested(4, 2, 3)).toBe(true);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 4,
       type: 'structure_placed',
       playerId: 'bob',
       payload: { cell: [0, 0, 0], face: 3, type: 'foundation', material: 'wood', up: 2 }
@@ -555,6 +573,58 @@ describe('multiplayer replication', () => {
       action: 'idle'
     });
     expect(getPieceAt(9, 9, 9, 0)).toBeUndefined();
+  });
+
+  it('replaces stale offline resource markers with full server snapshot truth', () => {
+    markTreeHarvested(90, 90, 90);
+    markStoneCollected(91, 91, 91);
+    markForageCollected(92, 92, 92);
+    markFloraHarvested(93, 93, 93);
+    const serverSnapshot = {
+      world: {
+        events: [
+          {
+            seq: 1,
+            type: 'resource_taken',
+            playerId: 'alice',
+            payload: { source: 'tree', coord: [1, 2, 3], id: 'wood', qty: 3 }
+          },
+          {
+            seq: 2,
+            type: 'resource_taken',
+            playerId: 'bob',
+            payload: { source: 'loose_stone', coord: [4, 5, 6], id: 'stone', qty: 1 }
+          },
+          {
+            seq: 3,
+            type: 'resource_taken',
+            playerId: 'bob',
+            payload: { source: 'forage', coord: [7, 8, 9], kind: 'root', id: 'root', qty: 1 }
+          },
+          {
+            seq: 4,
+            type: 'resource_taken',
+            playerId: 'bob',
+            payload: { source: 'flora', coord: [10, 11, 12], kind: 'seedhead', id: 'seedpod', qty: 2 }
+          }
+        ]
+      }
+    };
+
+    const result = applyReplicatedWorldSnapshotEvents(serverSnapshot, '0,0', {
+      localPlayerId: 'alice',
+      replaceResourceMarkers: true
+    });
+
+    expect(result.applied).toBe(4);
+    expect(isTreeHarvested(90, 90, 90)).toBe(false);
+    expect(isStoneCollected(91, 91, 91)).toBe(false);
+    expect(isForageCollected(92, 92, 92)).toBe(false);
+    expect(isFloraHarvested(93, 93, 93)).toBe(false);
+    expect(isTreeHarvested(1, 2, 3)).toBe(true);
+    expect(isStoneCollected(4, 5, 6)).toBe(true);
+    expect(isForageCollected(7, 8, 9)).toBe(true);
+    expect(isFloraHarvested(10, 11, 12)).toBe(true);
   });
 
   it('applies replicated doorway, door leaf, and door toggle events', () => {

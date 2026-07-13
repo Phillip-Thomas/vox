@@ -35,6 +35,7 @@ if (bobJoined.inviteCode !== created.inviteCode) {
 
 const timestamp = Date.now();
 const forgedTreeCommandId = `smoke-forged-tree-${timestamp}`;
+const duplicateTreeCommandId = `smoke-duplicate-tree-${timestamp}`;
 const forgedVoxelCommandId = `smoke-forged-voxel-${timestamp}`;
 const structureCommandId = `smoke-structure-${timestamp}`;
 const removeStructureCommandId = `smoke-remove-structure-${timestamp}`;
@@ -45,7 +46,11 @@ const outOfBoundsResourceCommandId = `smoke-oob-resource-${timestamp}`;
 const forgedDepositCommandId = `smoke-forged-deposit-${timestamp}`;
 const partyWarpCommandId = `smoke-party-warp-${timestamp}`;
 const oldWorldAfterWarpCommandId = `smoke-old-world-after-warp-${timestamp}`;
-const partyWarpDestinationWorldId = '2,-1';
+// Exercise the multi-planet world-ID contract in every live smoke. The primary
+// start world preserves legacy coverage; the destination proves the deployed
+// server accepts and persists a secondary planet rather than silently lagging
+// behind the current client/world-identity grammar.
+const partyWarpDestinationWorldId = process.env.PARAVOXIA_SMOKE_DESTINATION_WORLD_ID ?? '2,-1:p1';
 const replicatedCommands = [
   await sendAndExpectWorldEvent(aliceSocket, bobSocket, {
     commandId: forgedTreeCommandId,
@@ -93,6 +98,17 @@ const refundStructure = replicatedCommands[4]!;
 const treePayload = readEventPayload(forgedTree.accepted.events[0]);
 if (treePayload.id !== 'wood' || treePayload.qty === 999) {
   throw new Error(`Forged tree yield was not canonicalized: ${JSON.stringify(treePayload)}`);
+}
+bobSocket.send({
+  type: 'command',
+  commandId: duplicateTreeCommandId,
+  commandType: 'resource_taken',
+  worldId: bobJoined.worldId,
+  payload: { source: 'tree', coord: [21, 2, 3], id: 'wood', qty: 1 }
+});
+const duplicateTreeRejected = await bobSocket.waitForCommandRejected(duplicateTreeCommandId);
+if (duplicateTreeRejected.code !== 'conflict') {
+  throw new Error(`Duplicate tree claim rejected with unexpected code: ${duplicateTreeRejected.code}`);
 }
 const voxelPayload = readEventPayload(forgedVoxel.accepted.events[0]);
 const voxelDrops = Array.isArray(voxelPayload.drops) ? voxelPayload.drops : [];
@@ -217,7 +233,7 @@ if (
   aliceWarp.worldId !== partyWarpDestinationWorldId
   || bobWarp.worldId !== partyWarpDestinationWorldId
   || aliceWarp.handoff.worldId !== partyWarpDestinationWorldId
-  || bobWarp.handoff.actorPlayerId !== alice.localId
+  || bobWarp.handoff.actorPlayerId !== aliceJoined.playerId
 ) {
   throw new Error(`Party warp handoff mismatch: ${JSON.stringify({ aliceWarp, bobWarp })}`);
 }
@@ -262,7 +278,12 @@ console.log(JSON.stringify({
   inviteCode: created.inviteCode,
   worldId: bobJoined.worldId,
   activeWorldId: partyWarpDestinationWorldId,
-  players: [alice.localId, bob.localId, charlie.localId, dana.localId],
+  playerCount: new Set([
+    aliceJoined.playerId,
+    bobJoined.playerId,
+    charlieJoined.playerId,
+    danaJoined.playerId
+  ]).size,
   canonicalResource: {
     commandId: forgedTreeCommandId,
     seq: forgedTree.accepted.seq,
@@ -296,7 +317,7 @@ console.log(JSON.stringify({
   ],
   replicatedCommandTypes: replicatedCommands.map(command => readWorldEventType(command.worldEvent.event)),
   lateJoinSnapshot: {
-    player: charlie.localId,
+    joined: true,
     seq: charlieSnapshot.seq,
     eventCount: snapshotEvents.length
   },
@@ -306,7 +327,7 @@ console.log(JSON.stringify({
     handoff: aliceWarp.handoff,
     rejectedOldWorldCommand: { commandId: oldWorldAfterWarpCommandId, code: oldWorldRejected.code },
     postWarpLateJoin: {
-      player: dana.localId,
+      joined: true,
       worldId: danaJoined.worldId,
       seq: danaSnapshot.seq,
       eventCount: danaEvents.length

@@ -19,6 +19,7 @@ import { getCampfires, resetCampfires, restoreCampfires, type Campfire } from '.
 import { getHarvestedTrees, markTreeHarvested } from './treeHarvest.ts';
 import { getCollectedStones, markStoneCollected } from './stonePickup.ts';
 import { getCollectedForage, markForageCollected } from './foragePickup.ts';
+import { getHarvestedFlora, markFloraHarvested } from './floraHarvest.ts';
 import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
 import { getPlayerWorldPosition, getPlayerLook } from '../../state/playerFrame.ts';
 import { getVitals, setVitals, type VitalsState } from './survivalVitals.ts';
@@ -35,8 +36,18 @@ export type LocalPersistenceMode = 'offline' | 'multiplayer';
 type WorldSaveRef = number | Pick<WorldIdentity, 'worldId' | 'seed'> | CurrentWorld;
 
 let localPersistenceMode: LocalPersistenceMode = 'offline';
+export interface MultiplayerResourceMarkers {
+  trees: Array<[number, number, number]>;
+  stones: Array<[number, number, number]>;
+  forage: Array<[number, number, number]>;
+  flora: Array<[number, number, number]>;
+}
+const multiplayerResourceMarkersByWorld = new Map<string, MultiplayerResourceMarkers>();
 
 export function setLocalPersistenceMode(mode: LocalPersistenceMode): void {
+  if (mode === 'offline' && localPersistenceMode !== 'offline') {
+    multiplayerResourceMarkersByWorld.clear();
+  }
   localPersistenceMode = mode;
 }
 
@@ -46,6 +57,44 @@ export function getLocalPersistenceMode(): LocalPersistenceMode {
 
 export function isLocalPersistenceEnabled(): boolean {
   return localPersistenceMode === 'offline';
+}
+
+/** Cache full authoritative markers so a destination Tree/Stone/Forage field
+ * can reset on mount and still replay the snapshot that arrived during warp. */
+export function replaceMultiplayerResourceMarkers(
+  worldId: string,
+  markers: MultiplayerResourceMarkers
+): void {
+  multiplayerResourceMarkersByWorld.set(worldId, {
+    trees: markers.trees.map(coord => [...coord]),
+    stones: markers.stones.map(coord => [...coord]),
+    forage: markers.forage.map(coord => [...coord]),
+    flora: markers.flora.map(coord => [...coord])
+  });
+}
+
+export function markMultiplayerResourceMarker(
+  worldId: string,
+  source: 'tree' | 'loose_stone' | 'forage' | 'flora',
+  coord: [number, number, number]
+): void {
+  const markers = multiplayerResourceMarkersByWorld.get(worldId) ?? {
+    trees: [],
+    stones: [],
+    forage: [],
+    flora: []
+  };
+  const list = source === 'tree'
+    ? markers.trees
+    : source === 'loose_stone'
+      ? markers.stones
+      : source === 'forage'
+        ? markers.forage
+        : markers.flora;
+  if (!list.some(item => item[0] === coord[0] && item[1] === coord[1] && item[2] === coord[2])) {
+    list.push([...coord]);
+  }
+  multiplayerResourceMarkersByWorld.set(worldId, markers);
 }
 
 function isLegacySeed(ref: WorldSaveRef): ref is number {
@@ -145,6 +194,8 @@ interface WorldSave {
   trees: Array<[number, number, number]>;
   stones: Array<[number, number, number]>;
   forage?: Array<[number, number, number]>;
+  /** Harvested procedural flora. Optional keeps legacy saves readable. */
+  flora?: Array<[number, number, number]>;
 }
 
 export function saveWorld(world: WorldSaveRef): void {
@@ -155,7 +206,8 @@ export function saveWorld(world: WorldSaveRef): void {
     campfires: getCampfires().map(({ id: _id, ...campfire }) => campfire),
     trees: getHarvestedTrees(),
     stones: getCollectedStones(),
-    forage: getCollectedForage()
+    forage: getCollectedForage(),
+    flora: getHarvestedFlora()
   };
   write(scopedWorldKey(world).primary, data);
 }
@@ -183,13 +235,42 @@ export function clearCampfiresForWorld(world: WorldSaveRef): void {
   write(scopedWorldKey(world).primary, w);
 }
 export function restoreTreesForWorld(world: WorldSaveRef): void {
+  const replicated = multiplayerMarkersFor(world);
+  if (replicated) {
+    for (const t of replicated.trees) markTreeHarvested(t[0], t[1], t[2]);
+    return;
+  }
   const w = loadWorld(world); if (w?.trees) for (const t of w.trees) markTreeHarvested(t[0], t[1], t[2]);
 }
 export function restoreStonesForWorld(world: WorldSaveRef): void {
+  const replicated = multiplayerMarkersFor(world);
+  if (replicated) {
+    for (const s of replicated.stones) markStoneCollected(s[0], s[1], s[2]);
+    return;
+  }
   const w = loadWorld(world); if (w?.stones) for (const s of w.stones) markStoneCollected(s[0], s[1], s[2]);
 }
 export function restoreForageForWorld(world: WorldSaveRef): void {
+  const replicated = multiplayerMarkersFor(world);
+  if (replicated) {
+    for (const f of replicated.forage) markForageCollected(f[0], f[1], f[2]);
+    return;
+  }
   const w = loadWorld(world); if (w?.forage) for (const f of w.forage) markForageCollected(f[0], f[1], f[2]);
+}
+export function restoreFloraForWorld(world: WorldSaveRef): void {
+  const replicated = multiplayerMarkersFor(world);
+  if (replicated) {
+    for (const f of replicated.flora) markFloraHarvested(f[0], f[1], f[2]);
+    return;
+  }
+  const w = loadWorld(world); if (w?.flora) for (const f of w.flora) markFloraHarvested(f[0], f[1], f[2]);
+}
+
+function multiplayerMarkersFor(world: WorldSaveRef): MultiplayerResourceMarkers | null {
+  if (localPersistenceMode !== 'multiplayer') return null;
+  const worldId = worldIdFor(world);
+  return worldId ? multiplayerResourceMarkersByWorld.get(worldId) ?? null : null;
 }
 
 // --- Terrain voxel edits (SEPARATE key per world) ---------------------------

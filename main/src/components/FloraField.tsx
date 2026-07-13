@@ -9,7 +9,9 @@ import { voxelSystem } from '../utils/efficientVoxelSystem';
 import { measureWarpMetric } from '../utils/warpMetrics';
 import { getMoonDirection, getSunDirection } from './SkyController';
 import {
+  CANONICAL_FLORA_DENSITY,
   FLORA_KINDS,
+  FLORA_INTERACTION_VISIBILITY_DISTANCE,
   applyFloraWindProfileToMaterial,
   buildFloraInstances,
   buildFloraProfile,
@@ -20,14 +22,44 @@ import {
   type FloraKind
 } from '../utils/floraField';
 import type { FloraProfile } from '../utils/floraField';
+import {
+  getFloraHarvestVersion,
+  isFloraHarvested,
+  resetFloraHarvest
+} from '../game/systems/floraHarvest';
+import { restoreFloraForWorld } from '../game/systems/persistence';
+import type { WorldIdentity } from '../game/worldIdentity.ts';
 
 interface FloraFieldProps {
   terrainSeed: number;
+  persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
   progressiveMount?: boolean;
 }
 
 const HEADROOM = 24;
+
+export interface FloraPickTarget {
+  kind: FloraKind;
+  mesh: THREE.InstancedMesh;
+  slotVoxel: Array<[number, number, number]>;
+}
+
+/** Per-kind render meshes and their current instance-to-canonical-node mapping. */
+export const floraFieldHandle: { pickTargets: FloraPickTarget[] } = { pickTargets: [] };
+
+function publishFloraPickTarget(target: FloraPickTarget): void {
+  const index = floraFieldHandle.pickTargets.findIndex(entry => entry.kind === target.kind);
+  if (index >= 0) floraFieldHandle.pickTargets[index] = target;
+  else floraFieldHandle.pickTargets.push(target);
+}
+
+function unpublishFloraPickTarget(kind: FloraKind, mesh: THREE.InstancedMesh): void {
+  const index = floraFieldHandle.pickTargets.findIndex(
+    entry => entry.kind === kind && entry.mesh === mesh
+  );
+  if (index >= 0) floraFieldHandle.pickTargets.splice(index, 1);
+}
 
 /**
  * Procedural mid-story flora: small flowers, fans, shrubs, dry seedheads, and
@@ -36,6 +68,7 @@ const HEADROOM = 24;
  */
 export default function FloraField({
   terrainSeed,
+  persistenceWorld,
   playerPosition,
   progressiveMount = false
 }: FloraFieldProps) {
@@ -52,7 +85,12 @@ export default function FloraField({
     return () => window.cancelAnimationFrame(frame);
   }, [progressiveMount, visibleKindCount]);
 
-  if (density <= 0) return null;
+  // Harvest markers are world-relative. Restore before the field becomes an
+  // economy surface; multiplayer uses the cached authoritative snapshot here.
+  useEffect(() => {
+    resetFloraHarvest();
+    restoreFloraForWorld(persistenceWorld ?? terrainSeed);
+  }, [persistenceWorld, terrainSeed]);
 
   return (
     <>
@@ -83,9 +121,11 @@ function FloraLayer({
   playerPosition?: THREE.Vector3;
   profile: FloraProfile;
 }) {
-  const geometry = useMemo(() => (density > 0 ? createFloraGeometry(kind, profile) : null), [density, kind, profile]);
-  const material = useMemo(() => (density > 0 ? createFloraMaterial(kind, profile) : null), [density, kind, profile]);
+  const geometry = useMemo(() => createFloraGeometry(kind, profile), [kind, profile]);
+  const material = useMemo(() => createFloraMaterial(kind, profile), [kind, profile]);
   const meshRef = useRef<THREE.InstancedMesh>(null);
+  const publishedMeshRef = useRef<THREE.InstancedMesh | null>(null);
+  const slotVoxels = useRef<Array<[number, number, number]>>([]);
   const windAppliedRef = useRef(false);
   const signatureRef = useRef('');
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
@@ -93,7 +133,7 @@ function FloraLayer({
 
   const neededCapacity = () => measureWarpMetric(
     `flora:${kind}_count_capacity`,
-    () => countFloraVoxels(kind, density, terrainSeed, profile),
+    () => countFloraVoxels(kind, CANONICAL_FLORA_DENSITY, terrainSeed, profile),
     needed => ({ needed })
   );
 
@@ -106,25 +146,32 @@ function FloraLayer({
 
   const rebuild = () => {
     const mesh = meshRef.current;
-    if (!mesh || density <= 0) return;
+    if (!mesh) return;
     const quality = getGraphicsQuality();
-    measureWarpMetric(
+    const result = measureWarpMetric(
       `flora:${kind}_rebuild`,
       () => buildFloraInstances(
         kind,
         mesh,
         density,
-        quality.floraMaxDistance,
+        Math.max(quality.floraMaxDistance, FLORA_INTERACTION_VISIBILITY_DISTANCE),
         playerPosition ?? null,
         terrainSeed,
-        profile
+        profile,
+        {
+          interactionVisibilityDistance: FLORA_INTERACTION_VISIBILITY_DISTANCE,
+          isHarvested: isFloraHarvested,
+          slotVoxel: slotVoxels.current
+        }
       ),
       result => ({ count: result.count, voxelCount: result.voxelCount, capacity: mesh.instanceMatrix.count })
     );
+    publishedMeshRef.current = mesh;
+    publishFloraPickTarget({ kind, mesh, slotVoxel: slotVoxels.current });
+    return result;
   };
 
   useEffect(() => {
-    if (density <= 0) return;
     growCapacity(neededCapacity());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [density, terrainSeed, profile]);
@@ -132,7 +179,8 @@ function FloraLayer({
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
-    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getFloraHarvestVersion()}`;
+    if (playerPosition) lastBucketPos.current.copy(playerPosition);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity, profile]);
 
@@ -144,12 +192,15 @@ function FloraLayer({
     return () => {
       geometry?.dispose();
       material?.dispose();
+      const publishedMesh = publishedMeshRef.current;
+      if (publishedMesh) unpublishFloraPickTarget(kind, publishedMesh);
+      slotVoxels.current.length = 0;
     };
-  }, [geometry, material]);
+  }, [geometry, kind, material]);
 
   useFrame(({ clock }) => {
     const mesh = meshRef.current;
-    if (!material || density <= 0) return;
+    if (!material) return;
 
     if (!windAppliedRef.current && material.userData.shader) {
       applyFloraWindProfileToMaterial(profile.wind, material);
@@ -167,7 +218,7 @@ function FloraLayer({
       updateFloraMaterial(material, clock.elapsedTime, getGraphicsQuality(), getVoxelRealityEffects(), getSunDirection(), getMoonDirection());
     }
 
-    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getFloraHarvestVersion()}`;
     if (sig !== signatureRef.current) {
       const needed = neededCapacity();
       if (needed > capacity) {
@@ -183,7 +234,7 @@ function FloraLayer({
     }
   });
 
-  if (density <= 0 || !geometry || !material || capacity <= 0) return null;
+  if (!geometry || !material || capacity <= 0) return null;
 
   return (
     <instancedMesh

@@ -2,9 +2,13 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
   FACE_NORMALS,
+  LAVA_MOVE_SPEED,
+  LAVA_SINK_SPEED,
+  LAVA_STRUGGLE_RISE,
   applyJumpImpulse,
   areAdjacentFaces,
   chooseFaceFromPosition,
+  composeLavaVelocity,
   composeVelocity,
   getSurfaceState,
   gravityTupleForFace,
@@ -260,5 +264,60 @@ describe('surface controls', () => {
   it('applies jump as a single upward impulse while preserving tangent velocity', () => {
     const jumped = applyJumpImpulse(new THREE.Vector3(2, -4, 0), FACE_NORMALS.top, 5.5);
     expectVectorClose(jumped, new THREE.Vector3(2, 5.5, 0));
+  });
+});
+
+describe('lava wade (viscous sink)', () => {
+  const up = FACE_NORMALS.top;
+  const look = new THREE.Vector3(0, 0, -1);
+  const idle = { forward: false, backward: false, left: false, right: false, struggle: false };
+  const step = 1 / 60;
+
+  function settle(start: THREE.Vector3, input = idle, seconds = 2) {
+    let velocity = start.clone();
+    for (let i = 0; i < seconds * 60; i++) {
+      velocity = composeLavaVelocity(velocity, look, up, input, step);
+    }
+    return velocity;
+  }
+
+  it('settles toward the slow sink speed with no input', () => {
+    const settled = settle(new THREE.Vector3());
+    expectVectorClose(settled, new THREE.Vector3(0, -LAVA_SINK_SPEED, 0), 3);
+  });
+
+  it('swallows a jump impulse: upward launch speed converges back to the sink', () => {
+    const jumped = new THREE.Vector3(0, 6.8, 0); // DEFAULT_JUMP_SPEED launch
+    const settled = settle(jumped, idle, 2);
+    expect(settled.dot(up)).toBeCloseTo(-LAVA_SINK_SPEED, 3);
+  });
+
+  it('claws upward while struggling, slightly faster than the sink', () => {
+    const settled = settle(new THREE.Vector3(), { ...idle, struggle: true });
+    expect(settled.dot(up)).toBeCloseTo(LAVA_STRUGGLE_RISE, 3);
+    expect(LAVA_STRUGGLE_RISE).toBeGreaterThan(LAVA_SINK_SPEED); // escape must be possible
+  });
+
+  it('wades tangentially at a crawl — capped at LAVA_MOVE_SPEED, still sinking', () => {
+    const settled = settle(new THREE.Vector3(), { ...idle, forward: true });
+    const vertical = settled.dot(up);
+    const tangent = settled.clone().addScaledVector(up, -vertical);
+    expect(tangent.length()).toBeCloseTo(LAVA_MOVE_SPEED, 3);
+    expect(vertical).toBeCloseTo(-LAVA_SINK_SPEED, 3);
+  });
+
+  it('wade direction ignores look pitch (tangent-plane trudge, not a 3D swim)', () => {
+    const pitchedLook = new THREE.Vector3(0, -0.9, -0.45).normalize(); // staring into the melt
+    let velocity = new THREE.Vector3();
+    for (let i = 0; i < 120; i++) {
+      velocity = composeLavaVelocity(velocity, pitchedLook, up, { ...idle, forward: true }, step);
+    }
+    expect(velocity.dot(up)).toBeCloseTo(-LAVA_SINK_SPEED, 3); // pitch never adds dive speed
+  });
+
+  it('is pure: does not mutate the incoming velocity', () => {
+    const velocity = new THREE.Vector3(1, 2, 3);
+    composeLavaVelocity(velocity, look, up, idle, step);
+    expectVectorClose(velocity, new THREE.Vector3(1, 2, 3));
   });
 });

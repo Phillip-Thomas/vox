@@ -67,6 +67,7 @@ const STAMINA_RECOVER = MAX * 0.3;     // after exhaustion, recover to 30% befor
 const OXYGEN_DRAIN = MAX / 60;         // ~60s of breath from full underwater
 const OXYGEN_REGEN = MAX / 6;          // ~6s to refill (≈4× faster than drain)
 const DROWN_DAMAGE = 8;               // health per second when breath runs out
+const LAVA_DAMAGE = 15;               // health per second in lava — the harshest hazard (~7s from full)
 
 const clamp = (n: number) => Math.max(0, Math.min(MAX, n));
 
@@ -128,6 +129,16 @@ export function tickOxygen(dt: number, submerged: boolean, actorId?: ActorId): v
   } else {
     v.oxygen = clamp(v.oxygen + OXYGEN_REGEN * dt);
   }
+}
+
+/** Molten burn while any part of the body is in lava (feet-cell test — wading
+ *  already bites; sinking deeper doesn't stack). Silent (HUD polls). Non-lethal
+ *  floor like drowning — clamp at 0, no death path this phase — but at
+ *  LAVA_DAMAGE/s it's the closest the sandbox comes. */
+export function tickLavaDamage(dt: number, inLava: boolean, actorId?: ActorId): void {
+  if (!inLava || !Number.isFinite(dt) || dt <= 0) return;
+  const v = stateFor(actorId).vitals;
+  v.health = clamp(v.health - LAVA_DAMAGE * dt);
 }
 
 // --- Satisfiers (discrete events — emit so the HUD/persistence react) ---------

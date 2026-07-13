@@ -6,6 +6,7 @@
 import type { MaterialType } from '../../types/materials.ts';
 import { materialToLegacyBlock } from '../adapters.ts';
 import type { BlockId } from '../data/blocks.ts';
+import type { FloraHarvestKind } from '../data/floraHarvest.ts';
 import type { ResourceDeposit } from '../generation/resourceDeposits.ts';
 
 export interface LookedAtVoxel {
@@ -18,7 +19,8 @@ export interface LookedAtVoxel {
 export type LookedAt =
   | LookedAtVoxel
   | { kind: 'tree' }
-  | { kind: 'stone' };
+  | { kind: 'stone' }
+  | { kind: 'flora'; floraKind: FloraHarvestKind };
 
 let lookedAt: LookedAt | null = null;
 

@@ -579,19 +579,56 @@ captures verify desktop/mobile presentation under
 `.codex/design-runs/2026-06-27-remote-avatar-legibility/screenshots/`. Full `main`
 `npm run verify` passed with 70 test files / 485 tests plus production build.
 
+Evidence: 2026-07-12 tree interaction/authority audit found the dominant harvest failure in
+client spatial picking: Three.js retained stale `InstancedMesh.boundingSphere` data after tree
+streaming/LOD/harvest rebuilds, so visible trees could be rejected before per-instance ray tests.
+Tree and loose-stone rebuilds now commit raycast bounds with their matrices. Multiplayer closure
+also prevents cross-world command relabeling, reconciles pending command IDs after reconnect,
+replaces additive local resource markers from full snapshots, and caches authoritative markers
+per world across destination-field remounts. Server smoke now proves duplicate-tree first-wins
+and warps to a secondary planet by default. Local current-source smoke passed with four players,
+canonical tree yield, late join, and destination `2,-1:p1`; full `main` verification passed with
+135 test files / 1019 tests, and server verification passed with 6 files / 50 tests. The server
+runtime now locks Firebase Admin 14.1, omits unused optional Storage/Firestore packages from the
+production image (zero runtime audit findings), uses the emitted `dist/src/index.js` entrypoint,
+and hashes auth-disabled bearer strings into opaque local player IDs before logging. Release
+verification deployed Cloud Run revision `paravoxia-state-server-00023-672` at 100% traffic and
+Hosting asset `/assets/index-BszTzp00.js`. The authenticated four-player live smoke passed against
+Neon with canonical tree first-wins, authoritative command rejection, late join, party warp to
+`2,-1:p1`, rejection of an old-world command after handoff, and a post-warp late join on the
+secondary planet. Multi-planet co-op is current with the verified source.
+
+Evidence: 2026-07-12 flora-harvest vertical slice promoted all five procedural
+flora kinds from decoration to canonical resources. Nearby resource existence is
+now graphics-quality independent; per-kind instance maps feed a lightweight
+bounding-sphere ray, a short hand-gather action, deterministic inventory drops,
+rollback, per-world persistence, full-snapshot replacement, late-join/warp
+replication, and server-owned Neon claims. The new source remains generic
+`resource_taken` and needs no database migration. The remaining authority gap is
+server proof that terrain generation actually placed flora at a plausible claimed
+coordinate; known kind, canonical yield, and first-wins identity are enforced now.
+Full verification passed with 139 client files / 1056 tests, 6 server files / 58
+tests, both production builds, and the SwiftShader score-leading gate at 60.39 fps
+median. See `FLORA_HARVEST_SYSTEM_PLAN.md` for the landed contract and alchemy roadmap.
+
 ## Current Session Checkpoint
 
-Last updated: 2026-06-27 after local remote-avatar legibility pass.
-Working tree contains the local avatar legibility changes and design-run evidence.
+Last updated: 2026-07-12 after the tree picking, resource reconciliation, and backend drift audit.
+Working tree contains the local tree/backend closure plus unrelated concurrent ship-flight polish;
+preserve both scopes and do not discard either.
 
 Deployed state:
 
-- Cloud Run state server: `paravoxia-state-server-00022-gpl`, 100% traffic.
-- Firebase Hosting asset: `/assets/index-Hd-8Tm3Q.js` on `paravoxia.com` and
+- Cloud Run state server: `paravoxia-state-server-00023-672`, 100% traffic.
+- This revision is healthy, Neon-backed, and accepts secondary-planet world IDs; the live release
+  smoke completed a party handoff from `0,0` to `2,-1:p1`.
+- Firebase Hosting asset: `/assets/index-BszTzp00.js` on `paravoxia.com` and
   `paravox-game.web.app`.
 - Neon is configured in Cloud Run; `/readyz` returned `{"ok":true,"databaseConfigured":true}`.
 - WebSocket `/play` returned protocol `hello`.
-- Authenticated live smoke passed with four Firebase anonymous users via `npm run smoke:room`.
+- Authenticated live smoke passed with four Firebase anonymous users via `npm run smoke:room`,
+  including canonical resource authority, late join, secondary-planet warp, and stale-world
+  command rejection.
 
 Implementation checkpoint:
 
@@ -605,11 +642,13 @@ Implementation checkpoint:
   rejected after handoff.
 - Remote avatars now have non-color in-world state cues and an agent-camera screenshot harness
   for launch-quality legibility review.
+- Tree/resource identity remains canonical `(worldId, source, voxel coord)` with server first-wins;
+  client snapshots and reconnects now preserve that same authority across warps/remounts.
 
 Resume here:
 
-- Next likely Phase 1 work is the remaining launch-quality polish: remote avatar legibility,
-  documented security-minimum closeout, 2-8 player smoke coverage, and basic monitoring/logging.
+- Continue the remaining launch-quality polish: documented security-minimum closeout,
+  2-8 player smoke coverage, and basic monitoring/logging.
 - Server-owned passive vitals decay remains deferred to Phase 2 unless Phase 1 policy changes.
 - Keep using Firebase MCP for web config checks and `npm run smoke:room` for authenticated
   Cloud Run/Neon/live-room verification.

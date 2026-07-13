@@ -35,6 +35,7 @@ import {
   writeTreeInstanceVariation,
   type TreeInstanceVariation
 } from '../utils/treePopulation';
+import { commitRaycastInstanceTransforms } from '../utils/instancedMeshPicking.ts';
 
 // Extra instance slots so small grass-count fluctuations don't force a realloc.
 const HEADROOM = 32;
@@ -317,11 +318,9 @@ export default function TreeField({ planetSize, terrainSeed, persistenceWorld, p
       const leaf = leaves[variant]!;
       const blossom = blossoms[variant];
       const impostor = impostors[variant]!;
-      trunk.count = nearSlots[variant];
-      leaf.count = nearSlots[variant];
+      commitRaycastInstanceTransforms(trunk, nearSlots[variant]);
+      commitRaycastInstanceTransforms(leaf, nearSlots[variant]);
       impostor.count = farSlots[variant];
-      trunk.instanceMatrix.needsUpdate = true;
-      leaf.instanceMatrix.needsUpdate = true;
       impostor.instanceMatrix.needsUpdate = true;
       if (blossom) {
         blossom.count = nearSlots[variant];
