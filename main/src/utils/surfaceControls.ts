@@ -414,6 +414,21 @@ export function reprojectVelocityOntoFace(velocity: THREE.Vector3, up: THREE.Vec
   return velocity.clone().addScaledVector(up, -along);
 }
 
+/**
+ * Drop the INWARD (toward-planet) component of a velocity — the mirror of
+ * reprojectVelocityOntoFace (which drops the outward one). Used as the lava
+ * BED LOCK: the shell world only instantiates EXPOSED voxels, so the rock
+ * beneath a lava pool usually has no collider at all — the player may sink
+ * only while known lava continues below, and this clamp holds the body at the
+ * melt's last visible cell instead of letting it fall through into the
+ * planet's uninstantiated interior.
+ */
+export function removeInwardVelocity(velocity: THREE.Vector3, up: THREE.Vector3): THREE.Vector3 {
+  const inward = -velocity.dot(up);
+  if (inward <= 0) return velocity.clone();
+  return velocity.clone().addScaledVector(up, inward);
+}
+
 export function transitionAssistVelocity(velocity: THREE.Vector3, targetUp: THREE.Vector3, minimumInwardSpeed = 2) {
   const gravityDirection = targetUp.clone().multiplyScalar(-1);
   const inwardSpeed = velocity.dot(gravityDirection);

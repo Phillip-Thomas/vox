@@ -1,0 +1,22 @@
+{
+  "schema": "paravoxia.creativeRunQualityReport.v1",
+  "runId": "{{RUN_ID}}",
+  "generatedAt": "{{ISO_8601}}",
+  "validatorVersion": "{{VERSION_OR_GIT_SHA}}",
+  "passed": false,
+  "failureCount": 1,
+  "warningCount": 0,
+  "checks": [
+    {
+      "id": "template-replaced",
+      "status": "fail",
+      "message": "Template placeholders must be replaced before this run can pass.",
+      "artifactRefs": []
+    }
+  ],
+  "blockingFailures": [
+    "template-replaced"
+  ],
+  "warnings": [],
+  "overallStatus": "template_incomplete"
+}

@@ -846,7 +846,29 @@ export class MultiplayerPersistence {
           ]
         };
       }
-      case 'resource_taken':
+      case 'resource_taken': {
+        if (claim.conflictCollectibleTypes?.length) {
+          return {
+            sql: `
+              insert into world_collectibles (
+                room_id, world_id, collectible_type, coord, taken_by_player_id
+              )
+              select $1::uuid, $2, $8, $9::integer[], $4
+              where not exists (select 1 from existing_command)
+                and not exists (
+                  select 1
+                  from world_collectibles
+                  where room_id = $1::uuid
+                    and world_id = $2
+                    and coord = $9::integer[]
+                    and collectible_type = any($10::text[])
+                )
+              on conflict do nothing
+              returning null::text as player_id, null::text as item_id, 0::integer as qty
+            `,
+            params: [claim.collectibleType, claim.coord, claim.conflictCollectibleTypes]
+          };
+        }
         return {
           sql: `
             insert into world_collectibles (
@@ -859,6 +881,7 @@ export class MultiplayerPersistence {
           `,
           params: [claim.collectibleType, claim.coord]
         };
+      }
       case 'structure_placed':
         return {
           sql: `

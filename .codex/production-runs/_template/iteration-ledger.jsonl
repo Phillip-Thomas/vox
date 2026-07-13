@@ -1,0 +1,1 @@
+{"schema":"paravoxia.creativeIteration.v1","iteration":0,"route":"setup","budget":"{{BUDGET}}","changes":[],"weightedScore":null,"categoryFloor":null,"gateStatus":"template_incomplete","openDefects":{"critical":0,"high":0,"medium":0,"low":0},"evidenceRefs":[],"canonicalUrl":"{{URL}}","nextAction":"{{NEXT_ACTION}}","recordedAt":"{{ISO_8601}}"}

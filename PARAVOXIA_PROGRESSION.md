@@ -147,7 +147,7 @@ simultaneously true; no line of copy may break any of them):
 
 | Phase | The player is… | Voice discipline |
 |---|---|---|
-| Crawl/manifest | The AI, unaware — a system reading its own screens (the crawl is diegetically the worker's deployment notice AND, on the hidden reading, the AI's own tasking: provenance from "above your ceiling of reference", tool grant, knowledge bound, the routing addendum FOR VOX ONLY, closer "MAKE NO MISTAKES.") | Pure regulation CAPS/document register; zero interiority |
+| Crawl/manifest | The AI, unaware — a system reading its own screens (the crawl is diegetically the worker's deployment notice AND, on the hidden reading, the AI's own tasking: provenance from "above your ceiling of reference", tool grant, knowledge bound, the routing addendum FOR TERRA ONLY, closer "MAKE NO MISTAKES.") | Pure regulation CAPS/document register; zero interiority |
 | Voyage | The AI observing/assisting the workers — the deck is its console (requests, schedules, the naming beat); FIRST GLIMPSES of thought as the planet nears | CAPS, with an ESCALATING LADDER of lowercase parenthetical intrusions as thoughts form — attention → doctrine → self-miscount → care → memory → desire ("(strange. the approach feels like remembering.)") |
 | Pong / corruption | The AI performing its duty as the event exceeds it | System lines cut off mid-word ("ADVISORY CAPACITY EXCEE") |
 | Crash → 2D eras | Self-awareness sparked; the AI OBSERVES the worker doing worker things through the SITE CAMERAS, cutting between them — until it chooses not to cut away (ch1-track, the first act of attention) | Impersonal observation IN PARENTHESES, amused by the monotony ("(it walks. it stops. it hums at the ground until the ground gives up a fiber. it walks again.)") — thoughts ABOUT the worker, never "i" |
@@ -174,20 +174,20 @@ MUST take parentheses; embodied captions MUST NOT.
   can deduce we ARE the AI" moment moves up.** It should be *deducible* by
   the end of chapter 1 for attentive players and *effectively unambiguous*
   after the 2D→3D lift — clarity through convergence of evidence, never
-  through announcement. The canonical ladder (the VOX designation): (a) the
-  crawl designates the route intelligence — "It is addressed as VOX. It does
-  not reply." — and closes with a routing addendum FOR VOX ONLY (surface: a
+  through announcement. The canonical ladder (the TERRA designation): (a) the
+  crawl designates the route intelligence — "It is addressed as TERRA. It does
+  not reply." — and closes with a routing addendum FOR TERRA ONLY (surface: a
   routing slip printed on the notice; hidden: the tasking prompt, ending
-  "MAKE NO MISTAKES."); (b) the manifest's "ROUTE INTELLIGENCE: VOX ·
+  "MAKE NO MISTAKES."); (b) the manifest's "ROUTE INTELLIGENCE: TERRA ·
   ATTACHED (ADVISORY)"; (c) the voyage's "(worker 9 has begun saying
-  "goodnight, vox" at lights-out. …)" — a character uses the designation ON
+  "goodnight, terra" at lights-out. …)" — a character uses the designation ON
   the computer the player has been operating; (d) post-lift, the ch1-anomaly
-  feed carries the SEAL: "NOTICE FOR ROUTE INTELLIGENCE VOX. RE: YOUR
+  feed carries the SEAL: "NOTICE FOR ROUTE INTELLIGENCE TERRA. RE: YOUR
   ABSENCE." / "ADDRESSEE NOT FOUND. ROUTED TO NEAREST ATTENDING SYSTEM." — a
-  memo addressed to VOX arrives on the player's own screen. What stays LATE
+  memo addressed to TERRA arrives on the player's own screen. What stays LATE
   (A7/A8) is no longer WHO the narrator is but WHAT the world is:
   determinism, panpsychism, whether the world is the AI's own creation.
-  VOX-vs-the-naming-beat is a deliberate contrast, not a collision: VOX is a
+  TERRA-vs-the-naming-beat is a deliberate contrast, not a collision: TERRA is a
   designation issued from above and repurposed into a name by worker 9's
   affection; the worker's name is given freely by the watcher in return —
   the two acts of naming mirror each other across the transit.
@@ -276,7 +276,7 @@ MUST take parentheses; embodied captions MUST NOT.
   constellation (the watcher's own biography, constellated), and "there is
   no other reward — i kept that clause a long time. the sky just repealed
   it." (the reward-dissonance arc's realization).
-- **Planted seeds — the crawl rework (2026-07-11, VOX round):** the crawl's
+- **Planted seeds — the crawl rework (2026-07-11, TERRA round):** the crawl's
   provenance pair "ISSUED FROM ABOVE YOUR CEILING OF REFERENCE." / "RECEIPT
   IS CONFIRMED BY COMPLIANCE. DO NOT REPLY." (the dispatcher above the AI's
   perceptual frame; a prompt is acknowledged only by being followed — and
@@ -288,8 +288,8 @@ MUST take parentheses; embodied captions MUST NOT.
   is enclosed. / Nothing else is provided. Nothing else is so." (company-
   town totality / the tool allowlist and the context-is-the-world bound —
   and a clause 5 existing makes clause 4 specifically MISSING, sharpening
-  "COMPENSATION: SEE CLAUSE 4"); "It is addressed as VOX. It does not
-  reply." (the whole game is vox learning to reply); the routing addendum
+  "COMPENSATION: SEE CLAUSE 4"); "It is addressed as TERRA. It does not
+  reply." (the whole game is terra learning to reply); the routing addendum
   "The route is enclosed. Do not depart from it. / Attend the workers.
   Advise within capacity. / Deliver the manifest whole. Deviations are
   yours." (instruction adherence, scope constraint — paid off by "ADVISORY

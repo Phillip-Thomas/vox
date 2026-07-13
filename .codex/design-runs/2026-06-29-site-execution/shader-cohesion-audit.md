@@ -59,7 +59,7 @@ Changes:
 - Added uniform-driven flora species ids for cactus, fan, flower, seedhead, and shrub while keeping one shared program key: `flora-field-v2`.
 - Added flora sun/moon uniforms, world-space rim light, backlit bloom glow, wind-aware color variation, and roughness shaping.
 - Added flora material tests for lit shared-program behavior and reality/sun/moon uniform updates.
-- Added shared voxel sun/moon uniforms and a subtle material-aware rim/atmosphere glow to `voxel-pbr-v6`.
+- Added shared voxel sun/moon uniforms and a subtle material-aware rim/atmosphere glow; the current surface sweep advances the shared family to `voxel-pbr-v7`.
 - Kept voxel detail under the existing reality-stage and quality-profile gates; no new material variants were introduced.
 - Added voxel material tests for the shared program key, quality toggles, reality uniforms, and sun/moon normalization.
 
@@ -120,7 +120,7 @@ Evidence:
 
 ## Current Program Families Seen In Atlas
 
-- `voxel-pbr-v6`
+- `voxel-pbr-v7`
 - `water-blocks-iq-v4`
 - `grass-pbr-v5`
 - `tree-bark-v5`
@@ -129,19 +129,41 @@ Evidence:
 - `tree-impostor-v5`
 - `flora-field-v2`
 - `fauna-field-v4`
-- `sand-dust-v2`
-- `dirt-life-v4`
-- `surface-phenomenon-v1`
+- `surface-mote-v1`
+- `surface-critter-worm-v1`
+- `surface-critter-caterpillar-v1`
 - `loose-stone-v1`
 
 ## Open Shader Passes
 
-- Voxel material: continue branch/noise cost review after `voxel-pbr-v6`; visual cohesion pass is complete.
+- Voxel material: `voxel-pbr-v7` closes the full material-identity pass with dominant-face sampling, cheap height masks, distance fade, and seeded surface profiles.
 - Water: reality-stage cohesion pass is complete; later visual review can tune subjective foam/sparkle taste.
 - Flora: later geometry pass can improve petal/leaf volume and per-kind silhouettes; shader cohesion pass is complete.
-- Surface effects: reality density/visibility gates are complete; later visual review can tune effect-specific alpha/readability at material vantages.
+- Surface effects: flush phenomena are integrated into the voxel shader; runtime effects are limited to airborne motes and critters. Sand/lava temporal captures and adversarial review are complete.
 - Sky/post: reality-stage cohesion pass is complete; lower-quality-screen harshness should be judged in screenshot review.
 - Grass/tree materials: shader-cost and reality-gate audit is complete for current `grass-pbr-v5`, `tree-bark-v5`, `tree-leaf-v6`, `tree-blossom-v5`, and `tree-impostor-v5`; remaining work is subjective screenshot/taste review, not a known shader-program gap.
+
+## Batch 11 Voxel Surface And Material Sweep
+
+Status: `final machine and adversarial pass`
+
+- Removed seven per-voxel transparent sheet layers from runtime. Sand, soil, frost, crystal, metal, ash deposit, and lava crust now resolve inside the one shared voxel program; only saltation, ash, embers, pollen/spores, and critters allocate spatial effect instances.
+- Added a deterministic surface profile with domain offset/scale, relief, weathering, rock/mineral/hazard tints, and metallic-world mineralization. No texture assets or seed-specific program variants were added.
+- Replaced three-projection sampling with dominant-face sampling for axis-aligned voxels. Lava and ore relief use single-field height masks while richer coherent masks drive color/PBR/emission.
+- Made lava broad cooled plates with narrow connected molten channels and sparse hot cores. Animation and dynamic emission are gated by actual reality thermal resolution.
+- Added distinct stone strata, dirt clay/moisture, wind-warped sand, grass flecks, bark/end grain, basalt plates, ice depth/frost, crystal facets, and host-rock copper/gold/silver treatments.
+- MEDIUM/LOW use a proportional one-sample fallback; POTATO stays flat. `bare` and `color` remain unresolved, while `material -> alive -> paradox` increases detail monotonically.
+- Atlas material vantages now frame the authoritative per-instance material ID and distinguish shader-integrated material views from spawned-effect views.
+
+Evidence:
+
+- Showcase: `main/captures/procedural-atlas/2026-07-13T00-32-00-573Z-voxel-surface-sweep-accepted/`
+- Perf: `main/captures/procedural-atlas/2026-07-13T00-34-10-599Z-voxel-surface-perf-final/`
+- Reality: `main/captures/procedural-atlas/2026-07-13T00-46-03-130Z-voxel-surface-reality-accepted/`
+- Result: `74` cases, `231` screenshots, `0` console errors, `0` machine defects.
+- Showcase: `60fps`, max case p95 `16.9ms`, max worst-view p95 `17.0ms`, max `41` draws, max `37` programs.
+- Perf: `59-60fps`, max case p95 `17.0ms`, max worst-view p95 `17.1ms`, max `46` draws, max `37` programs.
+- Reality: min sampled FPS `56`, max case p95 `17.3ms`, max worst-view p95 `18.6ms`, with intentional bare/color ecology suppression correctly recognized.
 
 ## Batch 10 Procedural Tree Biology And Population Overhaul
 

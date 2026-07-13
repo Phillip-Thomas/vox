@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import {
   getQualityProfile,
@@ -7,6 +7,8 @@ import {
   type QualityProfile
 } from '../../config/graphicsSettings.ts';
 import AudioControls from './AudioControls.tsx';
+import ControlsReference from './ControlsReference.tsx';
+import type { ControlsReferenceContext } from './ControlsReference.model.ts';
 
 export interface NavApi {
   currentLabel: string;
@@ -28,6 +30,8 @@ interface PauseMenuProps {
   onResume: () => void;
   onQuitToMenu: () => void;
   nav: NavApi;
+  travelEnabled: boolean;
+  controlsContext: ControlsReferenceContext;
 }
 
 const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTATO'];
@@ -38,8 +42,29 @@ const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTA
  * (Set Course / Random / Previous / Nearby) and settings — the old debug
  * "World Coordinates" panel re-styled into the elevated-sci-fi system.
  */
-const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav }) => {
+const PauseMenu: React.FC<PauseMenuProps> = ({
+  open,
+  onResume,
+  onQuitToMenu,
+  nav,
+  travelEnabled,
+  controlsContext
+}) => {
   const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const frame = requestAnimationFrame(() => {
+      panelRef.current?.querySelector<HTMLElement>('[data-pause-resume]')?.focus();
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      if (previous?.isConnected) previous.focus({ preventScroll: true });
+    };
+  }, [open]);
+
   if (!open) return null;
 
   const chooseProfile = (p: QualityProfile) => {
@@ -47,8 +72,36 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
     setQualityProfile(p);
   };
 
+  const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      onResume();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable?.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
-    <div style={{
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pause-menu-title"
+      onKeyDown={handleDialogKeyDown}
+      style={{
       position: 'fixed', inset: 0, zIndex: theme.z.menu,
       fontFamily: theme.font.ui, color: theme.color.text,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -57,13 +110,14 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
       backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)',
       animation: 'pvFloatIn 200ms ease both'
     }}>
-      <div style={{
+      <div ref={panelRef} style={{
         ...glassPanel, background: theme.glass.backgroundStrong,
-        width: 'min(560px, 94vw)', maxHeight: '88vh', overflowY: 'auto',
-        padding: 'clamp(20px, 4vw, 34px)'
+        width: 'min(560px, 94vw)', maxHeight: '88vh', overflow: 'hidden',
+        padding: 'clamp(20px, 4vw, 34px)',
+        display: 'flex', flexDirection: 'column'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '0.12em' }}>PARAVOXIA</div>
+          <div id="pause-menu-title" style={{ fontSize: 24, fontWeight: 800, letterSpacing: '0.12em' }}>PARAVOXIA</div>
           <div style={{ fontSize: 11, letterSpacing: '0.24em', color: theme.color.textFaint, textTransform: 'uppercase' }}>Paused</div>
         </div>
 
@@ -72,13 +126,18 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
           display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: 14, marginBottom: 18,
           fontFamily: theme.font.mono, fontSize: 12, color: theme.color.textDim
         }}>
-          <span>SECTOR <b style={{ color: theme.color.accent }}>{nav.currentLabel}</b></span>
+          <span>{travelEnabled ? 'SECTOR' : 'STORY SITE'} <b style={{ color: theme.color.accent }}>{nav.currentLabel}</b></span>
           <span>SEED <b style={{ color: theme.color.text }}>{nav.seed}</b></span>
           <span>{nav.arrivalLabel}</span>
         </div>
 
-        {/* Star map / travel */}
-        <Section title="Star Map">
+        <div style={{ minHeight: 0, overflowY: 'auto', paddingRight: 4 }}>
+        <Section title="Controls">
+          <ControlsReference context={controlsContext} />
+        </Section>
+
+        {/* Star map / travel is a sandbox affordance, never an active Story exit. */}
+        {travelEnabled && <Section title="Star Map">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
             <Field label="X" value={nav.targetX} onChange={nav.setTargetX} onEnter={nav.onSetCourse} />
             <Field label="Y" value={nav.targetY} onChange={nav.setTargetY} onEnter={nav.onSetCourse} />
@@ -102,7 +161,7 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
               }}>{n.label}</button>
             ))}
           </div>
-        </Section>
+        </Section>}
 
         {/* Graphics */}
         <Section title="Graphics">
@@ -128,9 +187,13 @@ const PauseMenu: React.FC<PauseMenuProps> = ({ open, onResume, onQuitToMenu, nav
         <Section title="Audio">
           <AudioControls />
         </Section>
+        </div>
 
-        <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-          <PrimaryButton onClick={onResume} grow>▶  Resume</PrimaryButton>
+        <div style={{
+          display: 'flex', gap: 12, marginTop: 18, paddingTop: 16,
+          borderTop: '1px solid rgba(125,211,252,0.16)', flexShrink: 0
+        }}>
+          <PrimaryButton onClick={onResume} grow resumeTarget>▶  Resume</PrimaryButton>
           <SecondaryButton onClick={onQuitToMenu}>Quit to Menu</SecondaryButton>
         </div>
       </div>
@@ -164,8 +227,8 @@ const Field: React.FC<{ label: string; value: string; onChange: (v: string) => v
   </label>
 );
 
-const PrimaryButton: React.FC<{ onClick: () => void; children: React.ReactNode; grow?: boolean }> = ({ onClick, children, grow }) => (
-  <button onClick={onClick} style={{
+const PrimaryButton: React.FC<{ onClick: () => void; children: React.ReactNode; grow?: boolean; resumeTarget?: boolean }> = ({ onClick, children, grow, resumeTarget }) => (
+  <button data-pause-resume={resumeTarget ? '' : undefined} onClick={onClick} style={{
     flex: grow ? 1 : undefined,
     fontFamily: theme.font.ui, fontSize: 14, fontWeight: 700, letterSpacing: '0.04em',
     color: theme.color.void, background: `linear-gradient(180deg, ${theme.color.accent}, ${theme.color.accentStrong})`,

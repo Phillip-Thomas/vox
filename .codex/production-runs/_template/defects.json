@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "{{RUN_ID}}",
+  "defects": [
+    {
+      "id": "defect-{{NN}}",
+      "severity": "medium",
+      "category": "{{RUBRIC_OR_TAXONOMY_CATEGORY}}",
+      "status": "open",
+      "owner": "{{chapter|score|cinematography|integration|human}}",
+      "anchor": "{{ANCHOR_ID}}",
+      "statement": "{{OBSERVED_DEFECT}}",
+      "evidenceRefs": [
+        "{{EVIDENCE_REF}}"
+      ],
+      "requestedRepair": "{{BOUNDED_REPAIR}}",
+      "verificationRoute": "{{PROBE_AND_REVIEW_ROUTE}}",
+      "acceptedExceptionRef": null
+    }
+  ]
+}

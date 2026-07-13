@@ -32,7 +32,7 @@ import { createSimulationRng } from './rng.ts';
 import { createWorldIdentity } from './worldIdentity.ts';
 import { addItem, getItemCount, resetInventory } from './systems/inventorySystem.ts';
 import { getPieceAt, resetStructures } from './systems/structureSystem.ts';
-import { getCampfires, resetCampfires } from './systems/campfires.ts';
+import { getCampfires, placeCampfire, resetCampfires } from './systems/campfires.ts';
 import { RECIPES } from './data/recipes.ts';
 import { FLORA_HARVEST } from './data/floraHarvest.ts';
 import { getAccessibleStations } from './data/stations.ts';
@@ -306,6 +306,26 @@ describe('gameplay command wrappers', () => {
     expect(getItemCount('campfire')).toBe(0);
     expect(getCampfires()).toHaveLength(1);
     expect(events.map(event => event.type)).toEqual(['recipe_crafted', 'campfire_placed']);
+  });
+
+  it('rejects overlapping campfire placement before consuming ingredients', () => {
+    const ctx = context();
+    placeCampfire(new THREE.Vector3(1, 2, 3), new THREE.Vector3(0, 1, 0));
+    addItem('flint', 2);
+    addItem('biofuel', 1);
+    addItem('wood', 3);
+
+    const result = craftAndPlaceCampfireCommand(ctx, {
+      recipe: RECIPES.campfire,
+      craftContext: { stations: getAccessibleStations() },
+      position: { x: 1.5, y: 2, z: 3 },
+      up: { x: 0, y: 1, z: 0 }
+    });
+
+    expect(result.ok).toBe(false);
+    expect(getItemCount('flint')).toBe(2);
+    expect(getItemCount('biofuel')).toBe(1);
+    expect(getItemCount('wood')).toBe(3);
   });
 
   it('covers direct craft, campfire placement, and Maw charge add wrappers', () => {

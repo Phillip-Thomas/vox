@@ -532,3 +532,90 @@ Iteration: `10`
 - Perf: geometry/draw budgets pass with `54-60fps`, max worst-view p95 `21.1ms`, and no atlas slow-frame defect; the max was a zero-tree POTATO control.
 - Accepted external exception: current-checkout shader program counts exceed stale per-tier thresholds even in POTATO with trees disabled; no atlas budget was changed.
 - Human taste approval remains open.
+
+## Batch 11: Voxel Surface And Material Sweep
+
+Status: `final machine and adversarial pass`
+Route/surface: voxel harness plus procedural worlds via `?agent=1&atlas=1`
+Budget: `flagship`
+Iteration: `11`
+
+### Defects Addressed
+
+- Sand used full-cell grain hashes and one transparent 2x2 carrier per exposed voxel, producing perfect rectangular cadence inside otherwise convincing dust.
+- Lava's spawned layer was a sparse generic glint and tiny embers, so the hazard had little readable thermal behavior.
+- Static detail repeated across planets, lower tiers collapsed toward flat cubes, and multiple material families shared the same rounded noise language.
+
+### Changes
+
+- Consolidated flush detail into `voxel-pbr-v7`; runtime surface effects now contain only airborne motes and critters.
+- Added seeded surface domains and bounded art-direction tints without adding textures, draws, or shader variants.
+- Added continuous wind-warped sand, dark-crust lava with coherent molten/emissive masks, and distinct detail/PBR language for all twelve voxel materials.
+- Added metallic host-rock flecks so metallic planets retain surface identity even when ore blocks are not exposed.
+- Added proportional MEDIUM/LOW detail, strict reality-stage gates, dominant-face sampling, and cheaper height-only lava/ore masks.
+- Extended the standalone harness for lava effects and shared-material rendering; extended atlas camera/report semantics for shader-integrated material vantages.
+
+### Checks And Evidence
+
+- `npm run verify`: `140` test files / `1060` tests pass; TypeScript and production build pass.
+- Focused shader/profile/camera suites: `32` tests pass before full verification.
+- Showcase: `main/captures/procedural-atlas/2026-07-13T00-32-00-573Z-voxel-surface-sweep-accepted/` (`9` cases / `36` screenshots / `0` defects).
+- Perf: `main/captures/procedural-atlas/2026-07-13T00-34-10-599Z-voxel-surface-perf-final/` (`20` cases / `60` screenshots / `0` defects).
+- Reality: `main/captures/procedural-atlas/2026-07-13T00-46-03-130Z-voxel-surface-reality-accepted/` (`45` cases / `135` screenshots / `0` defects).
+- Perf range: `59-60fps`, max case p95 `17.0ms`, max worst-view p95 `17.1ms`, max `46` draws, max `37` programs.
+- Independent adversarial review approved sand continuity, cooled-lava hierarchy, HIGH/MEDIUM identity, and stage progression with no remaining visual blocker.
+
+### Deferred
+
+- Volcanic terrain still selects individual lava surface cells with the existing seeded 5% rule. Connected terrain-scale lava rivers/calderas are a separate world-generation topology pass, not hidden in this material closeout.
+
+## Batch 12: Demo Interruption, Controls, And Completion Shell
+
+Status: `refined pass`
+Route/surface: landing, active Story pause, sandbox pause, completed save, completion transition
+Budget: `focused flagship shell`
+Iteration: `4`
+
+### Changes
+
+- Added a pause-aware Story clock and froze physics/player/ship/touch paths behind pause.
+- Removed Star Map from active Story and added a defensive Story travel guard.
+- Added shared mode-aware desktop/touch Controls references without changing bindings.
+- Restored zoom, visible focus, reduced motion, focus trapping/restoration, and narrow-layout fit.
+- Added explicit completed-site continuation, confirmed Story replay, and completion recovery.
+- Isolated Story-site cleanup from unrelated live-world singleton state.
+
+### Checks And Evidence
+
+- `npm --prefix main run verify`: 143 files / 1,077 tests; TypeScript and production build pass.
+- Post-review focused suites: 48/48 pass; post-review TypeScript passes.
+- `main/captures/demo-shell/`: six accepted shell states.
+- Full report: `.codex/design-runs/2026-07-12-demo-shell/run-summary.md`.
+- Scope locks honored: no new Story, audio-path change, or desktop binding change.
+- Independent final re-reviews: no remaining concrete Batch 1 blocker; scoped score `4.62 / 5` against the `4.55` gate.
+
+## Batch 13: Primitive Systems Foundation
+
+Status: `machine implementation pass; browser approval pending`
+Route/surface: Systems Sandbox primitive gather/craft/shelter/recovery loop
+Budget: `deep`
+Iteration: `3`
+
+### Changes
+
+- Reduced the public Fabricator and server authority to six reachable primitive recipes.
+- Added quality-independent deadwood, guaranteed authoritative Flint, and active-Story economy isolation.
+- Added sealed shelter analysis, fire/shelter warmth, night exposure, gentle downed recovery, and nearest shelter/landing respawn.
+- Added retained-inventory recovery, desktop pointer-lock reacquisition, semantic build feedback, campfire spacing, and truthful decorative-roof labeling.
+- Extended persistence proof across inventory, vitals, waterskin, structures, campfire, pickups, voxel edits, pose, and recovered spawn truth.
+
+### Checks And Evidence
+
+- Focused client suites pass; focused server authority passes.
+- Full server verify: `62 / 62`, typecheck, and build pass.
+- Full client typecheck passes; `1,101 / 1,102` tests pass.
+- Only client failure: separate fauna-realism triangle budget, `1,004 > 800`.
+- Browser probe launched without page errors and reached Play readiness under the
+  extended timeout, but headless activation stalled at the trusted pointer-lock gesture.
+- Full report: `.codex/design-runs/2026-07-12-primitive-foundation/run-summary.md`.
+- Scope locks honored: no new Story, protected audio change, or desktop binding change.

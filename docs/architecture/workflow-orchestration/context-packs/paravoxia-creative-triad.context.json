@@ -1,0 +1,156 @@
+{
+  "schema": "terra.contextPack.v1",
+  "identity": {
+    "slug": "paravoxia-creative-triad",
+    "name": "Paravoxia Creative Triad",
+    "version": "v1"
+  },
+  "purpose": "Coordinate narrative, procedural score, and cinematography as peer creative authorities through durable scene contracts, cross-director notes, evidence, independent review, bounded repair, and human taste gates.",
+  "globalContextRef": "terra-global@v1",
+  "primaryWorkflowRef": "paravoxia-creative-triad@v1",
+  "sourceRefs": [
+    {
+      "slug": "production-authority",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.productionAuthority",
+      "required": true,
+      "purpose": "The active checkpoint and mutation authority for the run."
+    },
+    {
+      "slug": "creative-council",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.creativeCouncil",
+      "required": true,
+      "purpose": "Role ownership, communication, review, evidence, and publish boundaries."
+    },
+    {
+      "slug": "story-canon",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.storyCanon",
+      "required": true,
+      "purpose": "Narrative, gameplay, perspective, and fidelity-ladder truth."
+    },
+    {
+      "slug": "score-bible",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.scoreBible",
+      "required": true,
+      "purpose": "Musical grammar, harmonic authority, generative architecture, and evidence rules."
+    },
+    {
+      "slug": "cinematography-bible",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.cinematographyBible",
+      "required": true,
+      "purpose": "Shipped shot inventory, lens grammar, color script, render stack, and visual continuity rules."
+    },
+    {
+      "slug": "runtime-source",
+      "kind": "repository",
+      "bindingKey": "paravoxia.runtimeSource",
+      "required": true,
+      "purpose": "Executable story, camera, rendering, score, gameplay, test, and probe truth."
+    },
+    {
+      "slug": "production-run",
+      "kind": "artifact-directory",
+      "bindingKey": "paravoxia.productionRun",
+      "required": true,
+      "purpose": "Run-local contracts, treatments, notes, evidence, reviews, scorecards, and lessons."
+    }
+  ],
+  "defaultRunProfileRef": "paravoxia-creative-flagship@v1",
+  "qualityRubricRef": "paravoxia-creative-cohesion@v1",
+  "defectTaxonomyRef": "paravoxia-creative-defects@v1",
+  "requiredPrimitives": [
+    "WorkflowSpec",
+    "RunProfile",
+    "ContextPack",
+    "RoleContract",
+    "ArtifactRequirement",
+    "Gate",
+    "EvidenceBundle",
+    "QualityRubric",
+    "DefectTaxonomy",
+    "IterationLedger",
+    "ReviewPolicy",
+    "AdapterBindingSet",
+    "WorkflowRun",
+    "HumanDecision",
+    "ArtifactQualityReport",
+    "FinalDisposition"
+  ],
+  "fivePillarMapping": [
+    {
+      "pillar": "knowledge",
+      "orchestratorUse": "Load current production authority, shipped story/runtime, score and cinematography bibles, current captures, and prior lessons."
+    },
+    {
+      "pillar": "retrieval",
+      "orchestratorUse": "Give directors only affected canon and run evidence; keep blind reviewers isolated from intent, treatments, and notes."
+    },
+    {
+      "pillar": "judgement",
+      "orchestratorUse": "Use director signoffs, dissent, deterministic proof, independent audits, cohesion scoring, human taste, and final disposition."
+    },
+    {
+      "pillar": "resources",
+      "orchestratorUse": "Bind read, draft patch, safe command, browser capture, audio render, artifact, review, and publish decisions separately."
+    },
+    {
+      "pillar": "personality",
+      "orchestratorUse": "Preserve narrative voices, musical identity, visual identity, and concise evidence-backed operator reporting."
+    }
+  ],
+  "authoringMethod": [
+    "Record production authority and mutation boundary before creative work.",
+    "Extract shipped evidence and adjacent-scene continuity.",
+    "Frame story intent and player agency before score or cinematography treatment.",
+    "Generate score and cinematography first treatments independently.",
+    "Exchange structured peer notes and preserve dissent.",
+    "Freeze and sign one shared scene contract with named synchronization anchors.",
+    "Integrate shared runtime files through one patch lane.",
+    "Capture mechanical, visual, audio, accessibility, quality-tier, and performance evidence.",
+    "Run fresh independent domain and blind reviewers before cohesion judgement.",
+    "Route defects to bounded repair and regenerate evidence.",
+    "Require human taste and a separate publish decision where configured.",
+    "Record lessons that survive without chat history."
+  ],
+  "requiredOutputs": [
+    "production-lock",
+    "production-lock-machine",
+    "story-intent",
+    "score-treatment",
+    "cinematography-treatment",
+    "director-notes",
+    "dissent-register",
+    "scene-contract",
+    "director-signoffs",
+    "implementation-diff",
+    "verification-report",
+    "screenshot-report",
+    "audio-report",
+    "raw-audiovisual-evidence",
+    "independent-audits",
+    "critic-report",
+    "final-scorecard",
+    "creative-run-quality-report",
+    "human-decision",
+    "lessons-learned"
+  ],
+  "validationCommands": [
+    "node main/tools/creative-triad-gate.mjs --self-test",
+    "node main/tools/creative-triad-gate.mjs --run <production-run>",
+    "npm --prefix main run verify"
+  ],
+  "nonNegotiables": [
+    "Do not let a director approve its own implementation.",
+    "Do not let directors race mutations to shared timeline or rendering files.",
+    "Do not leak canon or intent to blind reviewers.",
+    "Do not flatten material dissent into generic compromise.",
+    "Do not advance beyond current production authority.",
+    "Do not publish from a director, patch, verifier, or judge role.",
+    "Do not approve beauty from headless evidence alone.",
+    "Do not accept thin treatments, unresolved blocking notes, partial scorecards, or missing lessons."
+  ]
+}

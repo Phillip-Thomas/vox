@@ -1,11 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  canContinueStory,
   chapterForBeat,
+  completeStory,
+  getStoryStateSnapshot,
+  hasCompletedStory,
+  restartStory,
   STORY_BEAT_ORDER,
   type StoryBeat
 } from './storyState.ts';
+import { getItemCount, addItem, resetInventory } from '../game/systems/inventorySystem.ts';
+import { getMilestones, hasMilestone, markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
 
 describe('storyState — beat order (drives debug jumps + seeding)', () => {
+  beforeEach(() => {
+    resetProgression();
+    resetInventory();
+  });
   it('orders beats monotonically through the chapters', () => {
     const chapterRank = { prologue: 0, ch1: 1, ch2: 2, ch3: 3, ch4: 4, complete: 5, none: -1 } as const;
     let last = -1;
@@ -41,5 +52,27 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     // A3: before = ch3-await-rest, plays = a3-dawn, after = done
     expect(at('ch3-await-rest')).toBeLessThan(at('a3-dawn'));
     expect(at('a3-dawn')).toBeLessThan(at('done'));
+  });
+
+  it('restarts a completed Story cleanly while preserving non-Story milestones', () => {
+    markMilestone('sandbox:kept');
+    completeStory();
+    addItem('wood', 9);
+    const previousRun = getStoryStateSnapshot().runId;
+    expect(hasCompletedStory()).toBe(true);
+
+    restartStory();
+
+    expect(getStoryStateSnapshot()).toMatchObject({
+      active: true,
+      chapter: 'prologue',
+      beat: 'crawl',
+      runId: previousRun + 1
+    });
+    expect(hasCompletedStory()).toBe(false);
+    expect(canContinueStory()).toBe(true);
+    expect(getItemCount('wood')).toBe(0);
+    expect(hasMilestone('sandbox:kept')).toBe(true);
+    expect(getMilestones().filter(milestone => milestone.startsWith('story:'))).toEqual(['story:started']);
   });
 });

@@ -47,7 +47,10 @@ export const BUILD_PIECES: Record<BuildPieceType, BuildPieceDef> = {
   window:      { type: 'window',      name: 'Window',      shape: 'panel',  family: 'wall',       costUnits: 2, hp: 130, insulation: 0.2,  seals: false, passable: true },
   gable:       { type: 'gable',       name: 'Gable Wall',  shape: 'panel',  family: 'wall',       costUnits: 1, hp: 120, insulation: 0.5,  seals: true },
   stairs:      { type: 'stairs',      name: 'Stairs',      shape: 'volume', family: 'volume',     costUnits: 4, hp: 160, insulation: 0.1,  seals: false },
-  sloped_roof: { type: 'sloped_roof', name: 'Sloped Roof', shape: 'volume', family: 'volume',     costUnits: 3, hp: 150, insulation: 0.5,  seals: true },
+  // Volume-boundary enclosure mapping is not implemented yet. Keep this useful
+  // visual piece in the palette, but label it honestly and require a Ceiling
+  // panel for shelter certification.
+  sloped_roof: { type: 'sloped_roof', name: 'Sloped Roof (Decorative)', shape: 'volume', family: 'volume', costUnits: 3, hp: 150, insulation: 0.1, seals: false },
   ladder:      { type: 'ladder',      name: 'Ladder',      shape: 'panel',  family: 'wall',       costUnits: 1, hp: 80,  insulation: 0,    seals: false, passable: true, climb: true },
   door:        { type: 'door',        name: 'Door',        shape: 'panel',  family: 'wall',       costUnits: 2, hp: 130, insulation: 0.5,  seals: true,  openable: true }
 };

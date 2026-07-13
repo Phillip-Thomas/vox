@@ -13,6 +13,8 @@ import {
 import { BUILD_PIECES, BUILD_PIECE_ORDER } from '../../game/data/buildPieces.ts';
 import { ALL_BUILD_MATERIALS, BUILD_MATERIALS, pieceCost } from '../../game/data/buildMaterials.ts';
 import { getItem } from '../../game/data/items.ts';
+import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
+import { getBuildGhost, subscribeBuildGhost, type BuildBlockReason } from '../../game/systems/buildGhost.ts';
 import { isTouchDevice, KEY_CODES, pressKey, releaseKey } from '../../utils/mobileInput.ts';
 
 /**
@@ -22,12 +24,23 @@ import { isTouchDevice, KEY_CODES, pressKey, releaseKey } from '../../utils/mobi
  */
 const BuildIndicator: React.FC = () => {
   const [, force] = useState(0);
-  useEffect(() => subscribeBuildState(() => force(n => n + 1)), []);
+  useEffect(() => {
+    const refresh = () => force(n => n + 1);
+    const unsubs = [subscribeBuildState(refresh), subscribeInventory(refresh), subscribeBuildGhost(refresh)];
+    return () => unsubs.forEach(unsub => unsub());
+  }, []);
   if (!isBuildEnabled()) return null;
 
   if (isTouchDevice()) return <MobileBuildEditor />;
 
   const selected = getSelectedPiece();
+  const selectedMaterial = getSelectedMaterial();
+  const selectedCost = pieceCost(selected, selectedMaterial);
+  const costLabel = selectedCost.map(cost => (
+    `${getItem(cost.id).name} ${getItemCount(cost.id)}/${cost.qty}`
+  )).join(' + ');
+  const affordable = selectedCost.every(cost => getItemCount(cost.id) >= cost.qty);
+  const placementStatus = buildPlacementStatus(getBuildGhost().reason, getBuildGhost().active, affordable);
 
   return (
     <div style={{
@@ -46,13 +59,22 @@ const BuildIndicator: React.FC = () => {
               border: `1px solid ${active ? 'rgba(125,255,160,0.6)' : 'rgba(125,211,252,0.25)'}`,
               color: active ? '#bfffd6' : '#aab6c2'
             }}>
-              <b style={{ opacity: 0.6 }}>{i + 1}</b> {BUILD_PIECES[type].name}
+              <b style={{ opacity: 0.6 }}>{i === 9 ? 0 : i + 1}</b> {BUILD_PIECES[type].name}
             </div>
           );
         })}
       </div>
       <div style={{ fontSize: 10, letterSpacing: 1, opacity: 0.7 }}>
-        BUILD MODE · [E] place · [X] remove · [1–{BUILD_PIECE_ORDER.length}] select · [B] exit
+        BUILD MODE · [E] place · [X] remove · [1–9, 0] select · [B] exit
+      </div>
+      <div style={{
+        fontSize: 10,
+        letterSpacing: 0.6,
+        color: affordable ? '#bfffd6' : '#fca5a5',
+        opacity: 0.92
+      }}>
+        {BUILD_PIECES[selected].name.toUpperCase()} · {costLabel}
+        {` · ${placementStatus}`}
       </div>
     </div>
   );
@@ -94,6 +116,9 @@ const MobileBuildEditor: React.FC = () => {
   const costLabel = pieceCost(selected, selectedMaterial)
     .map(item => `${item.qty} ${getItem(item.id).name}`)
     .join(' + ');
+  const affordable = pieceCost(selected, selectedMaterial)
+    .every(cost => getItemCount(cost.id) >= cost.qty);
+  const placementStatus = buildPlacementStatus(getBuildGhost().reason, getBuildGhost().active, affordable);
 
   return (
     <div style={{
@@ -151,6 +176,18 @@ const MobileBuildEditor: React.FC = () => {
               <span title={`Cost: ${costLabel}`}>{piece.name}</span>
               <span style={{ color: 'rgba(207,224,255,0.48)' }}>·</span>
               <span style={{ color: '#bfffd6' }}>{material.name}</span>
+            </div>
+            <div style={{
+              marginTop: 3,
+              color: placementStatus === 'READY TO PLACE' ? '#bfffd6' : '#fca5a5',
+              fontSize: 9,
+              fontWeight: 800,
+              letterSpacing: 0.55,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              {placementStatus}
             </div>
           </div>
 
@@ -305,5 +342,17 @@ const MobileBuildEditor: React.FC = () => {
     </div>
   );
 };
+
+function buildPlacementStatus(
+  reason: BuildBlockReason,
+  active: boolean,
+  affordable: boolean
+): string {
+  if (!affordable || reason === 'materials') return 'GATHER THE LISTED MATERIALS';
+  if (!active || reason === 'no_target') return 'AIM AT TERRAIN OR A BUILT PIECE';
+  if (reason === 'occupied') return 'CLEAR THE OCCUPIED SPACE';
+  if (reason === 'unsupported') return 'ADD SUPPORT OR TARGET A DOORWAY';
+  return 'READY TO PLACE';
+}
 
 export default BuildIndicator;

@@ -30,7 +30,7 @@ import {
   toggleDoor,
   type StructurePiece
 } from './systems/structureSystem.ts';
-import { placeCampfire } from './systems/campfires.ts';
+import { canPlaceCampfire, placeCampfire } from './systems/campfires.ts';
 import { addResource, getItemCount, removeItem } from './systems/inventorySystem.ts';
 import { drink, feed, getVitals, resetVitals } from './systems/survivalVitals.ts';
 import { fillWaterskin, getWaterskinFill, useWaterskin } from './systems/consumeSystem.ts';
@@ -374,7 +374,7 @@ export function collectStoneCommand(
 
 export function collectForageCommand(
   context: CommandContext,
-  input: { x: number; y: number; z: number; kind: 'berry' | 'root'; commandId?: string }
+  input: { x: number; y: number; z: number; kind: 'berry' | 'root' | 'deadwood'; commandId?: string }
 ): CommandResult {
   const ref = commandRef('collectForage', input.commandId);
   const result = collectForage(
@@ -559,8 +559,11 @@ export function placeCampfireCommand(
   input: { position: Vec3Like; up: Vec3Like; commandId?: string }
 ): CommandResult {
   const ref = commandRef('placeCampfire', input.commandId);
+  const position = new THREE.Vector3(input.position.x, input.position.y, input.position.z);
+  const placement = canPlaceCampfire(position);
+  if (!placement.ok) return rejected(ref, 'campfire needs clear ground away from another fire');
   placeCampfire(
-    new THREE.Vector3(input.position.x, input.position.y, input.position.z),
+    position,
     new THREE.Vector3(input.up.x, input.up.y, input.up.z),
     context.actorId
   );
@@ -584,11 +587,14 @@ export function craftAndPlaceCampfireCommand(
   input: { recipe: Recipe; craftContext: CraftContext; position: Vec3Like; up: Vec3Like; commandId?: string }
 ): CommandResult {
   const ref = commandRef('placeCampfire', input.commandId);
+  const position = new THREE.Vector3(input.position.x, input.position.y, input.position.z);
+  const placement = canPlaceCampfire(position);
+  if (!placement.ok) return rejected(ref, 'campfire needs clear ground away from another fire');
   const result = craft(input.recipe, { ...input.craftContext, actorId: context.actorId });
   if (!result.ok) return rejected(ref, result.blockedBy ?? 'campfire craft rejected');
   if (!removeItem('campfire', 1, context.actorId)) return rejected(ref, 'crafted campfire was not available to place');
   placeCampfire(
-    new THREE.Vector3(input.position.x, input.position.y, input.position.z),
+    position,
     new THREE.Vector3(input.up.x, input.up.y, input.up.z),
     context.actorId
   );

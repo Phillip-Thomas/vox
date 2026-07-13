@@ -35,16 +35,16 @@ export const STATIONS: Record<StationId, StationDefinition> = {
 };
 
 export const ALL_STATION_IDS = Object.keys(STATIONS) as StationId[];
+export const PORTABLE_DEMO_STATION_IDS: readonly StationId[] = ['hand'];
 
 export function getStation(id: StationId): StationDefinition {
   return STATIONS[id];
 }
 
 /**
- * Stations the player can currently craft at. For now the player carries a
- * portable fabricator, so every station is available; placeable stations (base
- * building) will later replace this with a reach-based check.
+ * Public demo station access. Advanced stations remain data/internal capability
+ * until later story systems introduce them honestly as placeable progression.
  */
 export function getAccessibleStations(): StationId[] {
-  return ALL_STATION_IDS;
+  return [...PORTABLE_DEMO_STATION_IDS];
 }

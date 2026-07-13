@@ -41,6 +41,8 @@ import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts'
 import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
 import { getShipFlightFeedback } from '../../state/shipFlightFeedback.ts';
 import { FlightMotionEffect, getFlightMotion } from './FlightMotionEffect.ts';
+import { DeathRenderEffect, getDeathRender } from './DeathRenderEffect.ts';
+import { getDeathView } from '../../game/systems/deathSequence.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
@@ -48,6 +50,7 @@ const ColorGrade = wrapEffect(ColorGradeEffect);
 const EdgeOutline = wrapEffect(OutlineEffect);
 const Underwater = wrapEffect(UnderwaterEffect);
 const FlightMotion = wrapEffect(FlightMotionEffect);
+const DeathRender = wrapEffect(DeathRenderEffect);
 
 // Scratch for projecting the sun direction to screen space (god-ray origin).
 const _sunDir = new THREE.Vector3();
@@ -96,6 +99,19 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
   // Per-biome tint/sat are static; warmth + contrast track the sun: warm at golden
   // hour, cooler + slightly punchier at night.
   useFrame((state, delta) => {
+    // Death decompile: one intensity signal from the sequence machine drives
+    // the whole arc; a uniform-branch no-op whenever nobody is dying.
+    const deathRender = getDeathRender();
+    if (deathRender) {
+      const death = getDeathView();
+      deathRender.setFrame(
+        death.intensity,
+        state.clock.elapsedTime,
+        death.cause,
+        death.phase === 'rewake' ? 1 : 0
+      );
+    }
+
     const flightMotion = getFlightMotion();
     if (flightMotion) {
       const flight = getShipFlightFeedback();
@@ -212,6 +228,12 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
           grade so the water is the final medium, before ACES. Gated ULTRA/HIGH;
           lower tiers use the always-on FogExp2 underwater override instead. */}
       {underwaterPostFX ? <Underwater /> : <></>}
+
+      {/* Death decompile (perception → glyph substrate). LAST before ACES so it
+          reads the fully composed frame — the thing being decompiled is the
+          player's finished perception, not a half-built buffer. No-op at
+          uProgress 0 (see DeathRenderEffect). */}
+      <DeathRender />
 
       {/* MUST be last: applies ACES once, replacing the renderer's tone map. */}
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />

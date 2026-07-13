@@ -1,0 +1,43 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": { "slug": "paravoxia-creative-scene", "name": "Paravoxia Creative Scene", "version": "v1" },
+  "domain": "audiovisual_game_direction",
+  "mode": "three_director_scene",
+  "executionBudget": {
+    "tier": "standard",
+    "maxModelCalls": 28,
+    "maxPatchLoops": 3,
+    "maxIndependentReviewPasses": 2,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnDirectorsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 2,
+    "requireCurrentAuthority": true,
+    "requireShippedEvidence": true,
+    "requireAdjacentSceneSurvey": true,
+    "requireIndependentTreatments": true,
+    "minimumDistinctTreatments": 1
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.75,
+    "categoryFloor": 4.3,
+    "stagedGate": "final",
+    "humanTasteApproval": { "required": false, "requiresHeadedRealGpuEvidence": false, "cannotBeInferredFromModelReview": true },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": true,
+    "routeOpenDefectsToOwningLane": true,
+    "stopWhenScoreStallsForLoops": 2,
+    "minimumMaterialScoreDelta": 0.05,
+    "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
+  },
+  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "dissent-register", "scene-contract", "implementation-diff", "verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "critic-report", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "stateCoverage": {
+    "requiredStates": ["desktop", "mobile", "reduced_motion", "lowest_supported_quality", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
+    "stressStatesRequired": true,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "A state may be omitted only when mechanically impossible for the scene and explicitly accepted by the Cohesion Judge."
+  }
+}

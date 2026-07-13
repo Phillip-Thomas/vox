@@ -19,6 +19,7 @@ import {
   deactivateStory,
   getStoryStateSnapshot,
   recordStoryChoice,
+  restartStory,
   STORY_MILESTONES
 } from './storyState.ts';
 import { getAuditWorkerPose } from './world/AuditWorker.tsx';
@@ -33,6 +34,7 @@ import { addItem, removeItem, getItemCount } from '../game/systems/inventorySyst
 import { getFeedRuntime } from './feedRuntime.ts';
 import { getStoryText } from './storyText.ts';
 import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
+import { resetStoryClock, setStoryPaused } from './storyClock.ts';
 
 function drainInventory(id: 'biofiber' | 'stone') {
   const n = getItemCount(id);
@@ -47,6 +49,7 @@ describe('storyDirector — chapter 1 and A1', () => {
   beforeEach(() => {
     deactivateStory();
     resetProgression();
+    resetStoryClock();
     resetVoxelRealityRenderState();
     drainInventory('biofiber');
     drainInventory('stone');
@@ -128,6 +131,36 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(hasMilestone(STORY_MILESTONES.a1)).toBe(true);
     expect(getStoryStateSnapshot().beat).toBe('ch2-color');
     expect(getFeedRuntime().desat).toBe(0); // the DOM grayscale released with it
+  });
+
+  it('a same-page replay resets director caption and one-shot runtime', () => {
+    advanceToBeat('ch3-gather');
+    tickSeconds(15.1);
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.gather);
+
+    restartStory();
+    expect(getStoryStateSnapshot().beat).toBe('crawl');
+    advanceToBeat('ch3-gather');
+    tickSeconds(15.1);
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.gather);
+  });
+
+  it('freezes A1 narrative time and effects while paused', () => {
+    advanceToBeat('ch1-anomaly');
+    tickSeconds(ANOMALY_SURVEY.fallbackSeconds + ANOMALY_SURVEY.armSeconds + 0.5);
+    beginA1();
+    tickSeconds(2);
+    const chromaBeforePause = getVoxelRealityEffects().chroma;
+    const beatBeforePause = getStoryStateSnapshot().beat;
+
+    setStoryPaused(true, 2000);
+    tickSeconds(A1_RAMP_SECONDS + 2);
+    expect(getStoryStateSnapshot().beat).toBe(beatBeforePause);
+    expect(getVoxelRealityEffects().chroma).toBeCloseTo(chromaBeforePause, 6);
+
+    setStoryPaused(false, 12000);
+    tickSeconds(A1_RAMP_SECONDS);
+    expect(getStoryStateSnapshot().beat).toBe('ch2-color');
   });
 
   it('A2 runs flood → death → liberation → handoff into chapter 3', () => {

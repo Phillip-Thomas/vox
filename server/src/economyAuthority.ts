@@ -1,8 +1,10 @@
 import type { JsonObject } from './protocol.js';
 import {
   isCollectibleCoordPlausible,
+  isCollectibleSurfaceCoordPlausible,
   isTerrainCoordInBounds,
   sameCoord,
+  seedForWorldId,
   type ServerCoord3
 } from './worldAuthority.js';
 
@@ -106,6 +108,19 @@ const FLORA_DROPS = {
 } as const satisfies Record<string, { id: string; yield: readonly [number, number] }>;
 
 type FloraKind = keyof typeof FLORA_DROPS;
+
+const DEADWOOD_BASE = 0.022;
+const DEADWOOD_SALT = 35;
+const FORAGE_HASH_SALT = 32;
+const FORAGE_MAX_DENSITY = 0.04 * 1.8;
+
+export function isAuthoritativeDeadwoodNode(coord: ServerCoord3, worldId: string): boolean {
+  const seed = seedForWorldId(worldId);
+  return seed !== null
+    && isCollectibleSurfaceCoordPlausible(coord)
+    && seededVoxelUnit(coord[0], coord[1], coord[2], DEADWOOD_SALT, seed) < DEADWOOD_BASE
+    && seededVoxelUnit(coord[0], coord[1], coord[2], FORAGE_HASH_SALT, seed) >= FORAGE_MAX_DENSITY;
+}
 
 interface BlockDefinition {
   drops: string[];
@@ -266,6 +281,18 @@ const RECIPES: Record<string, Recipe> = {
   ])
 };
 
+// The public demo deliberately freezes progression at the primitive field kit.
+// Keep later recipe data available for future chapters, but do not let clients
+// bypass the current progression boundary through multiplayer commands.
+const PUBLIC_DEMO_RECIPE_IDS = new Set([
+  'biofuel',
+  'stone_hatchet',
+  'stone_pickaxe',
+  'torch',
+  'campfire',
+  'waterskin'
+]);
+
 const SERVER_AUTH_COMMAND_TYPES = new Set(['recipe_crafted', 'craft_campfire']);
 SERVER_AUTH_COMMAND_TYPES.add('item_consumed');
 SERVER_AUTH_COMMAND_TYPES.add('water_drank');
@@ -303,7 +330,7 @@ const RESOURCES: Record<string, ResourceDefinition> = {
 const BLOCKS: Record<string, BlockDefinition> = {
   stone: {
     drops: ['stone'],
-    bonusDrops: [{ id: 'flint', chance: 0.35, min: 1, max: 1 }]
+    bonusDrops: [{ id: 'flint', chance: 1, min: 1, max: 1 }]
   },
   dirt: { drops: [] },
   grass: { drops: ['biofiber'], depositResources: ['biofiber', 'resin'] },
@@ -414,6 +441,9 @@ function resolveRecipeCraft(payload: JsonObject): AuthoritativeCommandResolution
   const recipeDef = recipeId ? RECIPES[recipeId] : undefined;
   if (!recipeId || !recipeDef) {
     return { code: 'validation_failed', reason: 'Unknown recipe.' };
+  }
+  if (!PUBLIC_DEMO_RECIPE_IDS.has(recipeId)) {
+    return { code: 'validation_failed', reason: 'Recipe is not available in the primitive field kit.' };
   }
   const eventPayload = canonicalRecipePayload(recipeDef);
   return {
@@ -757,12 +787,20 @@ function resolveResourceTakenPayload(
     }
     case 'forage': {
       const kind = readString(payload.kind);
+      const deadwoodHere = isAuthoritativeDeadwoodNode(coord, worldId);
+      if (kind === 'deadwood' && !deadwoodHere) {
+        return { code: 'validation_failed', reason: 'Deadwood pickup does not match a deterministic surface node.' };
+      }
+      if (kind !== 'deadwood' && deadwoodHere) {
+        return { code: 'validation_failed', reason: 'Forage kind does not match the deterministic surface node.' };
+      }
       if (kind === 'root') return { commandPayload: { source, kind, coord, id: 'root', qty: 1 } };
+      if (kind === 'deadwood') return { commandPayload: { source, kind, coord, id: 'wood', qty: 2 } };
       if (kind === 'berry') {
         const qty = deterministicRng(`resource_taken:forage:berry:${worldId}:${coordKey(coord)}`).int(1, 2);
         return { commandPayload: { source, kind, coord, id: 'berry', qty } };
       }
-      return { code: 'validation_failed', reason: 'Forage pickup requires berry or root kind.' };
+      return { code: 'validation_failed', reason: 'Forage pickup requires berry, root, or deadwood kind.' };
     }
     case 'flora': {
       const kind = readString(payload.kind);
@@ -778,6 +816,24 @@ function resolveResourceTakenPayload(
     default:
       return { code: 'validation_failed', reason: 'Unknown resource pickup source.' };
   }
+}
+
+function seededVoxelUnit(
+  x: number,
+  y: number,
+  z: number,
+  salt: number,
+  worldSeed: number
+): number {
+  let hash = Math.imul(x | 0, 374761393)
+    ^ Math.imul(y | 0, 668265263)
+    ^ Math.imul(z | 0, 2147483647)
+    ^ Math.imul(salt | 0, 1013904223)
+    ^ Math.imul(worldSeed | 0, 1597334677);
+  hash = Math.imul(hash ^ (hash >>> 15), 2246822519);
+  hash = Math.imul(hash ^ (hash >>> 13), 3266489917);
+  hash ^= hash >>> 16;
+  return (hash >>> 0) / 4294967296;
 }
 
 function isFloraKind(value: string): value is FloraKind {

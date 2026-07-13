@@ -9,8 +9,14 @@ import { seededVoxelUnit } from '../utils/seededHash';
 import { isDecoratableGrassVoxel } from '../utils/grassField';
 import { buildGrassProfile } from '../utils/grassProfile';
 import {
-  getForagePickupVersion, isForageCollected, resetForagePickup
+  FORAGE_HASH_SALT,
+  FORAGE_MAX_DENSITY,
+  getForagePickupVersion,
+  isDeadwoodNode,
+  isForageCollected,
+  resetForagePickup
 } from '../game/systems/foragePickup';
+import type { ForageKind } from '../game/systems/foragePickup.ts';
 import type { CommandContext } from '../game/commands.ts';
 import { collectForageCommand } from '../game/gameplayCommands.ts';
 import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
@@ -20,7 +26,6 @@ import { playSfx } from '../audio/sfxEngine.ts';
 
 // Edible plants — the FOOD bootstrap. Biome-gated (lush planets feed you, arid ones
 // starve you), unlike loose stones (fixed). Proximity pickup like stones.
-const FORAGE_SALT = 32;       // distinct hash channel (stone=31, trees=7, yaw=13/29)
 const FORAGE_TYPE_SALT = 34;  // berry vs root
 const FORAGE_BASE = 0.04;     // × biome densityMul → ~1 in 25 (lush) .. 1 in 70 (arid)
 const FORAGE_MAX_DIST = 55;
@@ -33,6 +38,8 @@ interface ForageFieldProps {
   terrainSeed: number;
   persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
+  /** Story chapters keep their authored tree economy; sandbox/completed-site play gets deadwood. */
+  allowDeadwood?: boolean;
 }
 
 const _world = new THREE.Vector3();
@@ -67,12 +74,33 @@ function buildForageGeometry(): THREE.BufferGeometry {
   return mergeGeometries(parts)!;
 }
 
+/** Tiny fallen branches: a resource marker, not decorative vegetation. */
+function buildDeadwoodGeometry(): THREE.BufferGeometry {
+  const parts = [
+    paint(new THREE.BoxGeometry(1.25, 0.16, 0.18).rotateY(0.18).translate(0, 0.12, 0), 0x704726),
+    paint(new THREE.BoxGeometry(0.72, 0.12, 0.14).rotateY(-0.72).translate(0.18, 0.19, 0.12), 0x8a5a2c),
+    paint(new THREE.BoxGeometry(0.48, 0.1, 0.12).rotateY(0.9).translate(-0.22, 0.2, -0.1), 0x5d381f)
+  ];
+  return mergeGeometries(parts)!;
+}
+
 function isRootNode(x: number, y: number, z: number, seed: number): boolean {
   return seededVoxelUnit(x, y, z, FORAGE_TYPE_SALT, seed) < 0.3;
 }
 
 function isForageVoxel(x: number, y: number, z: number, seed: number, density: number): boolean {
-  return seededVoxelUnit(x, y, z, FORAGE_SALT, seed) < density && !isForageCollected(x, y, z);
+  return seededVoxelUnit(x, y, z, FORAGE_HASH_SALT, seed) < density && !isForageCollected(x, y, z);
+}
+
+function isDeadwoodVoxel(
+  x: number,
+  y: number,
+  z: number,
+  seed: number,
+  foodHere: boolean,
+  allowDeadwood: boolean
+): boolean {
+  return allowDeadwood && !foodHere && isDeadwoodNode(x, y, z, seed) && !isForageCollected(x, y, z);
 }
 
 /**
@@ -104,18 +132,26 @@ export function nearestForageNodeWorld(
 }
 
 /** Scattered edible plants, collected by proximity (walk near → +berries/root). */
-export default function ForageField({ commandContext, terrainSeed, persistenceWorld, playerPosition }: ForageFieldProps) {
+export default function ForageField({
+  commandContext,
+  terrainSeed,
+  persistenceWorld,
+  playerPosition,
+  allowDeadwood = true
+}: ForageFieldProps) {
   const geometry = useMemo(() => buildForageGeometry(), []);
+  const deadwoodGeometry = useMemo(() => buildDeadwoodGeometry(), []);
   const material = useMemo(() => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0 }), []);
   const density = useMemo(() => {
     const d = FORAGE_BASE * buildGrassProfile(terrainSeed).densityMul;
-    return Number.isFinite(d) && d > 0 ? d : FORAGE_BASE; // guard a malformed profile
+    return Number.isFinite(d) && d > 0 ? Math.min(FORAGE_MAX_DENSITY, d) : FORAGE_BASE; // guard a malformed profile
   }, [terrainSeed]);
-  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const foodMeshRef = useRef<THREE.InstancedMesh>(null);
+  const deadwoodMeshRef = useRef<THREE.InstancedMesh>(null);
   const [capacity, setCapacity] = useState(0);
   const signatureRef = useRef('');
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
-  const nearNodes = useRef<Array<{ x: number; y: number; z: number; w: THREE.Vector3 }>>([]);
+  const nearNodes = useRef<Array<{ x: number; y: number; z: number; w: THREE.Vector3; kind: ForageKind }>>([]);
 
   const growCapacity = (needed: number) => {
     setCapacity(prev => (needed <= prev ? prev : Math.ceil(needed * 1.25) + HEADROOM));
@@ -127,7 +163,8 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
     for (const voxel of voxelSystem.getAllVoxels().values()) {
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
-      if (!isForageVoxel(x, y, z, terrainSeed, density)) continue;
+      const foodHere = isForageVoxel(x, y, z, terrainSeed, density);
+      if (!foodHere && !isDeadwoodVoxel(x, y, z, terrainSeed, foodHere, allowDeadwood)) continue;
       if (playerPosition) {
         voxelCoordToWorld(x, y, z, _world);
         if (_world.distanceToSquared(playerPosition) > maxSq) continue;
@@ -138,18 +175,21 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
   };
 
   const rebuild = () => {
-    const mesh = meshRef.current;
-    if (!mesh) return;
-    const cap = mesh.instanceMatrix.count;
+    const foodMesh = foodMeshRef.current;
+    const deadwoodMesh = deadwoodMeshRef.current;
+    if (!foodMesh || !deadwoodMesh) return;
+    const cap = foodMesh.instanceMatrix.count;
     const maxSq = FORAGE_MAX_DIST * FORAGE_MAX_DIST;
-    const near: Array<{ x: number; y: number; z: number; w: THREE.Vector3 }> = [];
+    const near: Array<{ x: number; y: number; z: number; w: THREE.Vector3; kind: ForageKind }> = [];
 
-    let slot = 0;
+    let foodSlot = 0;
+    let deadwoodSlot = 0;
     for (const voxel of voxelSystem.getAllVoxels().values()) {
-      if (slot >= cap) break;
       if (!isDecoratableGrassVoxel(voxel)) continue;
       const [x, y, z] = voxel.position;
-      if (!isForageVoxel(x, y, z, terrainSeed, density)) continue;
+      const foodHere = isForageVoxel(x, y, z, terrainSeed, density);
+      const deadwoodHere = isDeadwoodVoxel(x, y, z, terrainSeed, foodHere, allowDeadwood);
+      if (!foodHere && !deadwoodHere) continue;
 
       voxelCoordToWorld(x, y, z, _world);
       if (playerPosition && _world.distanceToSquared(playerPosition) > maxSq) continue;
@@ -167,13 +207,23 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
         _world.z + _up.z * SURFACE_OFFSET
       );
       _m.copy(_translate).multiply(_basis).multiply(_yaw).multiply(_scaleM);
-      mesh.setMatrixAt(slot, _m);
-      near.push({ x, y, z, w: _world.clone().addScaledVector(_up, 1.0) });
-      slot++;
+      const kind: ForageKind = deadwoodHere
+        ? 'deadwood'
+        : isRootNode(x, y, z, terrainSeed) ? 'root' : 'berry';
+      if (kind === 'deadwood') {
+        if (deadwoodSlot >= cap) continue;
+        deadwoodMesh.setMatrixAt(deadwoodSlot++, _m);
+      } else {
+        if (foodSlot >= cap) continue;
+        foodMesh.setMatrixAt(foodSlot++, _m);
+      }
+      near.push({ x, y, z, w: _world.clone().addScaledVector(_up, 1.0), kind });
     }
 
-    mesh.count = slot;
-    mesh.instanceMatrix.needsUpdate = true;
+    foodMesh.count = foodSlot;
+    foodMesh.instanceMatrix.needsUpdate = true;
+    deadwoodMesh.count = deadwoodSlot;
+    deadwoodMesh.instanceMatrix.needsUpdate = true;
     nearNodes.current = near;
   };
 
@@ -182,7 +232,7 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
   useEffect(() => {
     if (capacity <= 0) return;
     rebuild();
-    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getForagePickupVersion()}`;
+    signatureRef.current = `${voxelSystem.getWorldId()}:${terrainSeed}:${allowDeadwood}:${voxelSystem.getEditVersion()}:${getForagePickupVersion()}`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
@@ -194,19 +244,24 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
 
   // Dispose GPU resources on unmount only (geometry/material are stable useMemos, so
   // this must NOT fire on a mere terrainSeed change).
-  useEffect(() => () => { geometry.dispose(); material.dispose(); }, [geometry, material]);
+  useEffect(() => () => {
+    geometry.dispose();
+    deadwoodGeometry.dispose();
+    material.dispose();
+  }, [deadwoodGeometry, geometry, material]);
 
   useFrame(() => {
     if (playerPosition) {
       const rSq = PICKUP_RADIUS * PICKUP_RADIUS;
       for (const node of nearNodes.current) {
+        if (node.kind === 'deadwood' && !allowDeadwood) continue;
         if (isForageCollected(node.x, node.y, node.z)) continue;
         if (node.w.distanceToSquared(playerPosition) <= rSq) {
           const result = dispatchGameplayCommand(() => collectForageCommand(commandContext, {
             x: node.x,
             y: node.y,
             z: node.z,
-            kind: isRootNode(node.x, node.y, node.z, terrainSeed) ? 'root' : 'berry'
+            kind: node.kind
           }));
           if (result.ok) {
             playSfx('mine'); // a soft confirmation
@@ -215,7 +270,7 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
       }
     }
 
-    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}:${getForagePickupVersion()}`;
+    const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${allowDeadwood}:${voxelSystem.getEditVersion()}:${getForagePickupVersion()}`;
     if (sig !== signatureRef.current) {
       const needed = countNodes();
       if (needed > capacity) growCapacity(needed);
@@ -228,12 +283,21 @@ export default function ForageField({ commandContext, terrainSeed, persistenceWo
 
   if (capacity <= 0) return null;
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[geometry, material, capacity]}
-      frustumCulled={false}
-      castShadow={false}
-      receiveShadow={false}
-    />
+    <>
+      <instancedMesh
+        ref={foodMeshRef}
+        args={[geometry, material, capacity]}
+        frustumCulled={false}
+        castShadow={false}
+        receiveShadow={false}
+      />
+      <instancedMesh
+        ref={deadwoodMeshRef}
+        args={[deadwoodGeometry, material, capacity]}
+        frustumCulled={false}
+        castShadow={false}
+        receiveShadow={false}
+      />
+    </>
   );
 }

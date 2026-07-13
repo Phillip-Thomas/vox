@@ -18,6 +18,7 @@ import {
   composeVelocity,
   composeSwimVelocity,
   composeLavaVelocity,
+  deterministicTangentForUp,
   dominantFaceForPosition,
   FACE_NORMALS,
   GRAVITY_STRENGTH,
@@ -31,6 +32,7 @@ import {
   movementDirectionFromBasis,
   planarCameraBasis,
   predictPosition,
+  removeInwardVelocity,
   reprojectVelocityOntoFace,
   transitionVelocityAcrossEdge,
   transportControlFrame,
@@ -74,7 +76,16 @@ import { canAfford, hasPanel, getPieceAt, oppositeFace, isOpenable, FACE_DIRS, t
 import { resolveBuildTarget, marchWallTarget, marchCeilingTarget, volumeOrientFromForward, type BuildHit } from '../utils/buildPlacement';
 import { faceIndexForNormal } from '../game/systems/structureSystem';
 import { BUILD_PIECES } from '../game/data/buildPieces';
-import { tickVitals, tickOxygen, tickLavaDamage, applyStamina, canSprint, getVitals } from '../game/systems/survivalVitals';
+import {
+  tickVitals,
+  tickOxygen,
+  tickLavaDamage,
+  applyStamina,
+  canSprint,
+  getVitals,
+  isDowned,
+  type SurvivalEnvironment
+} from '../game/systems/survivalVitals';
 import { getWaterskinFill } from '../game/systems/consumeSystem';
 import { EDIBLE_ITEM_IDS } from '../game/data/items';
 import { getItemCount } from '../game/systems/inventorySystem';
@@ -112,6 +123,11 @@ import { isMapViewOpen, syncChartScreenUp, resetChartFrame } from '../game/mapVi
 import { tickSenseDiscovery } from '../story/senseDiscovery.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
 import { markSpawnSettled, resetSpawnSettle } from '../game/spawnSettle.ts';
+import { analyzeShelterAtWorldPosition, findShelterSpawn, isNearCampfire } from '../game/systems/shelterSystem.ts';
+import { consumeSurvivalRecoveryRequest } from '../game/systems/survivalRecovery.ts';
+import { localDaylight } from '../utils/dayNight.ts';
+import { getSunDirection } from './SkyController.tsx';
+import { getStoryStateSnapshot } from '../story/storyState.ts';
 
 const _zeroVelocity = new THREE.Vector3();
 
@@ -232,6 +248,7 @@ const LAVA_IN_RATE = 2.5;
 const LAVA_OUT_RATE = 4;
 const LAVA_DEEP = 0.5;
 const _feet = new THREE.Vector3(); // per-step lava feet-cell test scratch
+const _lavaBottom = new THREE.Vector3(); // capsule bottom-tip probe (lava bed lock)
 const STEP_UP_HEIGHT = VOXEL_SCALE;
 const STEP_PROBE_FORWARD = PLAYER_CAPSULE_RADIUS + 1.15;
 const STEP_PROBE_LOW_OFFSET = -0.6;
@@ -275,6 +292,7 @@ export interface PlayerDebugState {
 
 interface EfficientPlayerProps {
   commandContext: CommandContext;
+  paused?: boolean;
   planetSize: number;
   terrainSeed: number;
   initialPosition?: THREE.Vector3;
@@ -287,6 +305,7 @@ interface EfficientPlayerProps {
 
 export default function EfficientPlayer({
   commandContext,
+  paused = false,
   planetSize,
   terrainSeed,
   initialPosition,
@@ -361,6 +380,12 @@ export default function EfficientPlayer({
   const lavaImmersion = useRef(0);
   const lastFeetInLava = useRef(false);
   const spawnGuard = useRef({ done: false, clock: 0 });
+  const survivalEnvironment = useRef<SurvivalEnvironment>({
+    daylight: 1,
+    sheltered: false,
+    nearFire: false,
+    warmthEnabled: false
+  });
 
   // World swaps remount the player: the settle flag must never leak between
   // worlds (the story director + autopilot hold on it).
@@ -588,24 +613,32 @@ export default function EfficientPlayer({
     }
   }, [setSurface, updateVisualTransition]);
 
-  const resetPlayer = useCallback(() => {
+  const resetPlayer = useCallback((recoverVitals = false) => {
     const body = ref.current;
     if (!body) return;
 
-    const top = getSurfaceState('top');
-    const result = dispatchGameplayCommand(() => respawnCommand(commandContext, { position: resetSpawnPosition, up: top.up }));
-    if (!result.ok) return;
-    body.setTranslation(vectorToRapier(resetSpawnPosition), true);
+    const currentPosition = vectorFromRapier(body.translation());
+    const shelter = recoverVitals ? findShelterSpawn(currentPosition) : null;
+    const destination = shelter?.position ?? resetSpawnPosition;
+    const destinationSurface = getSurfaceState(dominantFaceForPosition(destination));
+    if (recoverVitals) {
+      const result = dispatchGameplayCommand(() => respawnCommand(commandContext, {
+        position: destination,
+        up: destinationSurface.up
+      }));
+      if (!result.ok) return;
+    }
+    body.setTranslation(vectorToRapier(destination), true);
     body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     body.setAngvel({ x: 0, y: 0, z: 0 }, true);
-    body.setRotation(new THREE.Quaternion(), true);
+    body.setRotation(quaternionForUp(destinationSurface.up), true);
     body.lockRotations(true, true);
     rotationAnimation.current = null;
-    visualCameraUp.current.copy(top.up);
-    lastPlanarForward.current.set(0, 0, -1);
+    visualCameraUp.current.copy(destinationSurface.up);
+    lastPlanarForward.current.copy(deterministicTangentForUp(destinationSurface.up, new THREE.Vector3()));
     resetChartFrame();
     transitionCooldown.current = 0;
-    setSurface(top);
+    setSurface(destinationSurface);
   }, [commandContext, resetSpawnPosition, setSurface]);
 
   const handlePointerLockChange = useCallback((locked: boolean) => {
@@ -971,8 +1004,16 @@ export default function EfficientPlayer({
       camera.getWorldDirection(_buildFwd);
       orient = (volumeOrientFromForward(upIdx, _buildFwd) + getBuildRotation()) % 4; // auto facing + R nudge
     }
-    const ok = target.valid && upperFree && canAfford(piece, material);
-    setBuildGhost(target.cell, target.face, piece, ok, upIdx, orient);
+    const affordable = canAfford(piece, material);
+    const ok = target.valid && upperFree && affordable;
+    const blockedBy = !target.valid
+      ? 'unsupported'
+      : !upperFree
+        ? 'occupied'
+        : !affordable
+          ? 'materials'
+          : null;
+    setBuildGhost(target.cell, target.face, piece, ok, upIdx, orient, blockedBy);
     if (place) {
       let placed = false;
       let result: ReturnType<typeof placeStructureCommand> | ReturnType<typeof placeDoorwayCommand> | ReturnType<typeof fitDoorCommand> | ReturnType<typeof placeVolumeCommand> | null = null;
@@ -1174,10 +1215,20 @@ export default function EfficientPlayer({
     const body = ref.current;
     if (!body) return;
 
+    if (isDowned(commandContext.actorId)) {
+      setJetpackSfx(false);
+      if (consumeSurvivalRecoveryRequest()) resetPlayer(true);
+      else {
+        body.setLinvel(vectorToRapier(_zeroVelocity), true);
+        body.setAngvel(vectorToRapier(_zeroVelocity), true);
+      }
+      return;
+    }
+
     const controls = withAutopilot(get());
     if (controls.reset && !isBuildEnabled()) { // R rotates the build piece while building
       setJetpackSfx(false);
-      resetPlayer();
+      resetPlayer(false);
       return;
     }
 
@@ -1325,6 +1376,18 @@ export default function EfficientPlayer({
     lastFeetInLava.current = feetInLava;
     const lavaRate = feetInLava ? LAVA_IN_RATE : LAVA_OUT_RATE;
     lavaImmersion.current += ((feetInLava ? 1 : 0) - lavaImmersion.current) * Math.min(1, lavaRate * FIXED_PHYSICS_STEP);
+    // Bed lock probe: the shell world only instantiates EXPOSED voxels, so the
+    // rock under a pool usually has no collider — sinking is allowed only while
+    // KNOWN lava continues below the capsule's bottom tip. Otherwise the melt
+    // holds the body at its last visible cell (see removeInwardVelocity below);
+    // it must never drop through into the uninstantiated interior.
+    const bottomTip = _lavaBottom.copy(position)
+      .addScaledVector(activeUp, -(PLAYER_CAPSULE_HALF_HEIGHT + PLAYER_CAPSULE_RADIUS + 0.05));
+    const lavaBelowBottom = feetInLava && voxelSystem.getVoxel(
+      Math.round(bottomTip.x / VOXEL_SCALE),
+      Math.round(bottomTip.y / VOXEL_SCALE),
+      Math.round(bottomTip.z / VOXEL_SCALE)
+    )?.blockId === 'lava';
     const cameraInLava = voxelSystem.getVoxel(
       Math.round(_camEye.x / VOXEL_SCALE),
       Math.round(_camEye.y / VOXEL_SCALE),
@@ -1479,6 +1542,13 @@ export default function EfficientPlayer({
       }, FIXED_PHYSICS_STEP);
       nextVelocity.lerp(lavaVelocity, lavaImmersion.current);
     }
+    // Lava bed lock: no visible lava below the bottom tip → the melt has hit
+    // its bed. Cancel all inward motion (sink, gravity, a dive) so the body
+    // rests waist-deep at the pool floor instead of falling through the shell.
+    // Struggle/mantle/jetpack still push OUT — only the inward axis is locked.
+    if (feetInLava && !lavaBelowBottom) {
+      nextVelocity = removeInwardVelocity(nextVelocity, activeUp);
+    }
 
     // (cooldown already decremented at the top of the step, before the resolver.)
     // Edge-walk is part of the DISCRETE system only; the smooth field never needs it.
@@ -1545,6 +1615,7 @@ export default function EfficientPlayer({
   useFrame((_, delta) => {
     const body = ref.current;
     if (!body) return;
+    if (paused) return;
 
     frameCount.current += 1;
     updateVisualTransition();
@@ -1552,13 +1623,29 @@ export default function EfficientPlayer({
     onPositionChange?.(position);
     setPlayerWorldPosition(position); // global for non-Canvas code (campfire placement)
 
+    if (isDowned(commandContext.actorId)) {
+      setJetpackSfx(false);
+      setInteraction(null);
+      clearMiningProgress();
+      return;
+    }
+
     // Gentle survival decay — only on-foot on a surface while actually playing
     // (paused in menus / flight / space / cinematic). Real dt; silent (HUD polls).
     const flightSnap = getSpaceFlightSnapshot();
     const decayActive = getAppStateSnapshot().phase === 'playing'
       && flightSnap.phase === 'surface' && flightSnap.controlMode === 'fps';
     const vitalsDelta = clampVitalsDelta(delta); // clamp so a tab-away/stall can't binge-decay
-    tickVitals(vitalsDelta, decayActive);
+    const environment = survivalEnvironment.current;
+    environment.daylight = localDaylight(getSunDirection(), surfaceRef.current.up);
+    environment.warmthEnabled = !getStoryStateSnapshot().active;
+    // Enclosure certification is structural rather than visual. Five checks/sec
+    // keeps door/build changes feeling immediate without flood-filling every frame.
+    if (frameCount.current % 12 === 1) {
+      environment.sheltered = analyzeShelterAtWorldPosition(position).sheltered;
+      environment.nearFire = isNearCampfire(position);
+    }
+    tickVitals(vitalsDelta, decayActive, commandContext.actorId, environment);
     tickSenseDiscovery(getJetpackFuelFraction(commandContext.actorId)); // story self-discovery (no-op outside story saves)
     // Breath: drain while the eye is submerged (in normal surface play), refill
     // otherwise; drowning bleeds HP at empty (non-lethal — see tickOxygen).

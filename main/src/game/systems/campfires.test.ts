@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import * as THREE from 'three';
-import { placeCampfire, getCampfires, getCampfireVersion, resetCampfires, restoreCampfires } from './campfires.ts';
+import { canPlaceCampfire, placeCampfire, getCampfires, getCampfireVersion, resetCampfires, restoreCampfires } from './campfires.ts';
 
 beforeEach(() => resetCampfires());
 
@@ -18,6 +18,12 @@ describe('placed campfires', () => {
     placeCampfire(new THREE.Vector3(5, 0, 0), new THREE.Vector3(0, 1, 0));
     const [a, b] = getCampfires();
     expect(a.id).not.toBe(b.id);
+  });
+
+  it('rejects a second fire inside the clear-ground spacing', () => {
+    placeCampfire(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0));
+    expect(canPlaceCampfire(new THREE.Vector3(1, 0, 0))).toEqual({ ok: false, reason: 'too_close' });
+    expect(canPlaceCampfire(new THREE.Vector3(3, 0, 0))).toEqual({ ok: true });
   });
 
   it('records and restores owner metadata', () => {

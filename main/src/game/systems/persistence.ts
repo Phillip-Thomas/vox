@@ -216,6 +216,23 @@ function loadWorld(world: WorldSaveRef): WorldSave | null {
   return readScoped<WorldSave>(scopedWorldKey(world));
 }
 
+/** Clear one world's persisted player-authored state. Live singleton stores are
+ * intentionally left alone: the caller may currently be standing on a different
+ * world, and clearing them would let that world's cleanup autosave an empty base.
+ * The subsequent world/Story run remount performs the normal live reset+restore.
+ * Terrain edits and pose use separate keys and are cleared by their helpers. */
+export function clearWorldStateForWorld(world: WorldSaveRef): void {
+  const store = storage();
+  if (!store) return;
+  const key = scopedWorldKey(world);
+  try {
+    store.removeItem(key.primary);
+    if (key.legacy) store.removeItem(key.legacy);
+  } catch {
+    // Storage unavailable/blocked: leave the current live world untouched.
+  }
+}
+
 // Per-field restores — each field calls its own in its reset-then-load effect, so
 // entering a world (boot OR warp) clears memory then loads THAT world's data.
 export function restoreStructuresForWorld(world: WorldSaveRef): void {

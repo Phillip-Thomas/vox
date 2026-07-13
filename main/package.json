@@ -39,7 +39,10 @@
     "atlas:smoke": "node tools/procedural-atlas.mjs --mode=smoke",
     "atlas:showcase": "node tools/procedural-atlas.mjs --mode=showcase",
     "atlas:baseline": "node tools/procedural-atlas.mjs --mode=baseline",
-    "atlas:perf": "node tools/procedural-atlas.mjs --mode=perf"
+    "atlas:perf": "node tools/procedural-atlas.mjs --mode=perf",
+    "atlas:fauna": "node tools/fauna-atlas.mjs",
+    "creative:gate": "node tools/creative-triad-gate.mjs",
+    "creative:smoke": "node tools/creative-triad-gate.mjs --self-test"
   },
   "browserslist": {
     "production": [

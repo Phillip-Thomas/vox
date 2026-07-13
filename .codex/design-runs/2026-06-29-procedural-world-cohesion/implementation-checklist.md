@@ -232,8 +232,8 @@ Exit gate:
   - [ ] flora scale/kind frequency,
   - [x] fauna scale/material/shape emphasis,
   - [ ] rock facets,
-  - [ ] surface effect dimensions,
-  - [ ] voxel detail frequencies.
+  - [x] surface effect dimensions,
+  - [x] voxel detail frequencies.
 - [ ] Define global scale expectations:
   - [ ] voxel block = 2 world units.
   - [ ] grass hair remains small.
@@ -241,7 +241,7 @@ Exit gate:
   - [ ] sheep/grazers are large enough to read.
   - [x] trees are canopy-scale, not player-height.
   - [ ] rocks do not overpower fauna or trees.
-  - [ ] surface effects stay thin/atmospheric.
+  - [x] surface effects stay thin/atmospheric.
 - [ ] Add tests for scale ranges:
   - [x] tree min/max height,
   - [x] fauna tiers,
@@ -285,11 +285,11 @@ Exit gate:
   - [x] LOW: sparse but still readable.
   - [x] POTATO: no expensive layers, no broken visuals.
 - [ ] Optimize high-cost offenders:
-  - [ ] reduce branchy shader paths,
+  - [x] reduce branchy shader paths,
   - [x] share program keys,
   - [x] increase culling,
   - [x] lower instance density,
-  - [ ] fade high-frequency detail with distance,
+  - [x] fade high-frequency detail with distance,
   - [ ] prefer instancing over many meshes.
 - [x] Add fauna no-reset regression for rebuilds preserving progress and gait phase.
 
@@ -318,11 +318,11 @@ Exit gate:
   - [x] sky/post.
 - [x] Add stage gates where missing.
 - [x] Atlas reality mode captures stage strips.
-- [ ] Visual review checks stage continuity.
+- [x] Visual review checks stage continuity.
 
 Exit gate:
 
-- [ ] Reality progression reads as intentional in screenshots.
+- [x] Reality progression reads as intentional in screenshots.
 - [x] Device quality and story stage remain separate.
 
 ## Phase 8: Deep Iterative Visual Refinement
@@ -331,7 +331,7 @@ For each atlas batch:
 
 - [x] Capture baseline matrix.
 - [x] Generate machine report.
-- [ ] Review screenshots with adversarial rubric.
+- [x] Review screenshots with adversarial rubric.
 - [x] Score each category.
 - [x] Select highest-leverage defect.
 - [x] Patch foundation before local polish when systemic.

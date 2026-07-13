@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { MaterialType } from '../types/materials.ts';
 import { voxelSystem } from './efficientVoxelSystem.ts';
+import { FAUNA_REGION_ID } from './faunaModel.ts';
 import {
   FAUNA_KINDS,
   buildFaunaInstances,
@@ -11,9 +12,11 @@ import {
   countFaunaVoxels,
   createFaunaGeometry,
   createFaunaMaterial,
+  createFaunaRenderSnapshot,
   faunaKindId,
   faunaLevelTransitionLift,
   faunaScaleForKind,
+  hasFaunaBodyClearance,
   isFaunaEligibleVoxel,
   isFaunaHabitatVoxel,
   isFaunaSurfaceDry,
@@ -85,12 +88,24 @@ describe('faunaField', () => {
     expect(isFaunaTravelVoxel('hopper', { material: MaterialType.SAND }, arid)).toBe(true);
   });
 
-  it('adds a clearance arc for voxel level transitions', () => {
+  it('adds a restrained clearance arc for voxel level transitions', () => {
     expect(faunaLevelTransitionLift('grazer', 0, 0.5)).toBe(0);
     expect(faunaLevelTransitionLift('grazer', 1, 0)).toBeCloseTo(0);
     expect(faunaLevelTransitionLift('grazer', 1, 1)).toBeCloseTo(0);
-    expect(faunaLevelTransitionLift('grazer', 1, 0.5)).toBeGreaterThan(0.9);
-    expect(faunaLevelTransitionLift('dragonfly', 1, 0.5)).toBeGreaterThan(0.5);
+    expect(faunaLevelTransitionLift('grazer', 1, 0.5)).toBeGreaterThan(0.25);
+    expect(faunaLevelTransitionLift('grazer', 1, 0.5)).toBeLessThan(0.6);
+    expect(faunaLevelTransitionLift('dragonfly', 1, 0.5)).toBeGreaterThan(0.3);
+    expect(faunaLevelTransitionLift('hopper', 1, 0.5)).toBeGreaterThan(faunaLevelTransitionLift('runner', 1, 0.5));
+  });
+
+  it('uses species scale to reject routes beneath solid overhangs', () => {
+    const profile = buildFaunaProfile(VERDANT_SEED);
+    voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, grass);
+    expect(hasFaunaBodyClearance('grazer', 0, 25, 0, profile)).toBe(true);
+    voxelSystem.addVoxel(0, 26, 0, MaterialType.STONE, new THREE.Color(0x777777));
+    expect(hasFaunaBodyClearance('grazer', 0, 25, 0, profile)).toBe(false);
+    expect(hasFaunaBodyClearance('runner', 0, 25, 0, profile)).toBe(false);
+    expect(hasFaunaBodyClearance('fish', 0, 25, 0, profile)).toBe(true);
   });
 
   it('sizes the herd hierarchy against the player (grazers horse-tall, never player-dwarfed)', () => {
@@ -363,17 +378,113 @@ describe('faunaField', () => {
     geometry.dispose();
   });
 
-  it('creates every fauna archetype with vertex color, part, and flex attributes', () => {
+  it('creates every fauna archetype with renderer adapter and semantic rig attributes', () => {
     const profile = buildFaunaProfile(12345);
     for (const kind of FAUNA_KINDS) {
       const geometry = createFaunaGeometry(kind, profile);
       expect(geometry.attributes.position.count).toBeGreaterThan(0);
       expect(geometry.attributes.color.count).toBe(geometry.attributes.position.count);
-      expect(geometry.attributes.aFaunaPart.count).toBe(geometry.attributes.position.count);
-      expect(geometry.attributes.aFaunaFlex.count).toBe(geometry.attributes.position.count);
+      for (const attribute of [
+        'uv',
+        'aFaunaFlex',
+        'aFaunaSurface',
+        'aFaunaJointPivot',
+        'aFaunaBend'
+      ]) {
+        expect(geometry.attributes[attribute].count).toBe(geometry.attributes.position.count);
+      }
       if (kind === 'dragonfly') {
-        const parts = geometry.attributes.aFaunaPart.array;
-        expect(Array.from(parts).some(value => value === 5)).toBe(true);
+        const surface = geometry.attributes.aFaunaSurface;
+        const regions = Array.from({ length: surface.count }, (_, index) => surface.getX(index));
+        expect(new Set(regions).size).toBeGreaterThan(2);
+      }
+      const triangles = (geometry.index?.count ?? geometry.getAttribute('position').count) / 3;
+      expect(triangles).toBeGreaterThan(100);
+      expect(triangles).toBeLessThanOrEqual(1600);
+      prepareFaunaInstanceAttributes(geometry, 1);
+      // instanceMatrix consumes four more locations; WebGL2 only guarantees 16.
+      expect(Object.keys(geometry.attributes).length + 4).toBeLessThanOrEqual(16);
+      geometry.dispose();
+    }
+  });
+
+  it('keeps every fauna mesh finite, outward wound, and valid for front-face culling', () => {
+    const profile = buildFaunaProfile(12345);
+    const openSurfaceRegions = new Set([
+      FAUNA_REGION_ID.wing,
+      FAUNA_REGION_ID.fin
+    ]);
+
+    for (const kind of FAUNA_KINDS) {
+      const geometry = createFaunaGeometry(kind, profile);
+      const position = geometry.getAttribute('position');
+      const normal = geometry.getAttribute('normal');
+      const surface = geometry.getAttribute('aFaunaSurface');
+      const index = geometry.index;
+      const triangleCount = (index?.count ?? position.count) / 3;
+      const referencedVertices = new Set<number>();
+      let solidSurfaceArea = 0;
+      let solidSignedVolume = 0;
+
+      for (let triangle = 0; triangle < triangleCount; triangle++) {
+        const ia = index ? index.getX(triangle * 3) : triangle * 3;
+        const ib = index ? index.getX(triangle * 3 + 1) : triangle * 3 + 1;
+        const ic = index ? index.getX(triangle * 3 + 2) : triangle * 3 + 2;
+
+        for (const vertex of [ia, ib, ic]) {
+          expect(Number.isInteger(vertex)).toBe(true);
+          expect(vertex).toBeGreaterThanOrEqual(0);
+          expect(vertex).toBeLessThan(position.count);
+          referencedVertices.add(vertex);
+        }
+
+        const ax = position.getX(ia);
+        const ay = position.getY(ia);
+        const az = position.getZ(ia);
+        const bx = position.getX(ib);
+        const by = position.getY(ib);
+        const bz = position.getZ(ib);
+        const cx = position.getX(ic);
+        const cy = position.getY(ic);
+        const cz = position.getZ(ic);
+        expect([ax, ay, az, bx, by, bz, cx, cy, cz].every(Number.isFinite)).toBe(true);
+
+        const abx = bx - ax;
+        const aby = by - ay;
+        const abz = bz - az;
+        const acx = cx - ax;
+        const acy = cy - ay;
+        const acz = cz - az;
+        const crossX = aby * acz - abz * acy;
+        const crossY = abz * acx - abx * acz;
+        const crossZ = abx * acy - aby * acx;
+        const doubleArea = Math.hypot(crossX, crossY, crossZ);
+        expect(doubleArea).toBeGreaterThan(1e-7);
+
+        const isOpenSurface = [ia, ib, ic].some(vertex =>
+          openSurfaceRegions.has(surface.getX(vertex))
+        );
+        if (!isOpenSurface) {
+          solidSurfaceArea += doubleArea * 0.5;
+          solidSignedVolume += (
+            ax * (by * cz - bz * cy)
+            + ay * (bz * cx - bx * cz)
+            + az * (bx * cy - by * cx)
+          ) / 6;
+        }
+      }
+
+      // Open membrane sheets have no meaningful volume. The remaining anatomy
+      // must retain a clear positive orientation under Three.js front-face culling.
+      expect(solidSignedVolume).toBeGreaterThan(solidSurfaceArea * 0.005);
+      for (const vertex of referencedVertices) {
+        const nx = normal.getX(vertex);
+        const ny = normal.getY(vertex);
+        const nz = normal.getZ(vertex);
+        const length = Math.hypot(nx, ny, nz);
+        expect([nx, ny, nz, length].every(Number.isFinite)).toBe(true);
+        expect(length).toBeGreaterThan(0.99);
+        expect(length).toBeLessThan(1.01);
       }
       geometry.dispose();
     }
@@ -386,8 +497,16 @@ describe('faunaField', () => {
       const material = createFaunaMaterial(kind, profile);
       expect(material).toBeInstanceOf(THREE.MeshStandardMaterial);
       expect(material.vertexColors).toBe(true);
-      expect(material.roughness).toBeGreaterThan(0.7);
-      expect(material.customProgramCacheKey()).toBe('fauna-field-v7');
+      expect(material.roughness).toBeGreaterThan(0.3);
+      expect(material.transparent).toBe(false);
+      expect(material.opacity).toBe(1);
+      expect(material.alphaHash).toBe(false);
+      expect(material.alphaTest).toBe(0);
+      expect(material.depthTest).toBe(true);
+      expect(material.depthWrite).toBe(true);
+      expect(material.blending).toBe(THREE.NormalBlending);
+      expect(material.side).toBe(kind === 'dragonfly' ? THREE.DoubleSide : THREE.FrontSide);
+      expect(material.customProgramCacheKey()).toBe('fauna-field-v9');
       keys.add(material.customProgramCacheKey());
       expect(faunaKindId(kind)).toBeGreaterThanOrEqual(0);
       material.dispose();
@@ -509,6 +628,31 @@ describe('faunaField', () => {
     expect(rebuilt.agents[0].stridePhase).toBeCloseTo(strideBefore);
     expect((geometry.attributes.aFaunaStride as THREE.InstancedBufferAttribute).getX(0)).toBeCloseTo(strideBefore);
     expect(posAfter.distanceTo(posBefore)).toBeLessThan(0.01);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('exports deterministic renderer-neutral agent snapshots', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (let x = 0; x < 8; x++) voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, grass);
+    const kind = FAUNA_KINDS.find(candidate => countFaunaVoxels(candidate, 10, seed, profile) > 0) ?? 'grazer';
+    const geometry = createFaunaGeometry(kind, profile);
+    prepareFaunaInstanceAttributes(geometry, 12);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 12);
+    const built = buildFaunaInstances(kind, mesh, 10, 0, null, seed, profile);
+    const snapshot = createFaunaRenderSnapshot(built.agents[0], 3.5, profile.scaleMul);
+
+    expect(createFaunaRenderSnapshot(built.agents[0], 3.5, profile.scaleMul)).toEqual(snapshot);
+    expect(JSON.parse(JSON.stringify(snapshot))).toEqual(snapshot);
+    expect(snapshot.schemaVersion).toBe(1);
+    expect(snapshot.kindId).toBe(faunaKindId(kind));
+    expect(snapshot.locomotionPhase).toBeGreaterThanOrEqual(0);
+    expect(snapshot.locomotionPhase).toBeLessThan(1);
+    expect(snapshot.forward.every(Number.isFinite)).toBe(true);
+    expect(snapshot.up.every(Number.isFinite)).toBe(true);
 
     geometry.dispose();
     material.dispose();

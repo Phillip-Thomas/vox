@@ -7,8 +7,18 @@ a 1-bit terminal, becomes a monochrome CCTV "Regulation Feed," gains color at
 A1, depth/freedom at A2, texture + time at A3 — then plays THE FIRST DAY ALIVE
 (thirst → forage → the klaxon → the scheduled sleep) and ends, for now, on
 chapter 4's arrival: the other worker, W-7744. TEMPORARY TERMINAL: the arrival
-completes the story (sandbox at `material`); `ch4-audit` continues from there
-(see the plan doc §2 S6 and the marked hand-off in `storyDirector.ts`).
+completes the story (sandbox at `material`). `ch4-audit` remains the contracted
+continuation, but it is not the active production lane (see the marked hand-off
+in `storyDirector.ts`).
+
+**Canon and future delivery.** The portable, current canon—including wonder,
+Terra/Worker 9's emergent third consciousness, communion, W-7744's recurring
+arc, and the deliberately unresolved Makers—lives in
+`PARAVOXIA_STORY_BIBLE.md`. The audited gap register, system architecture,
+owner/proposal coverage ledger, dependency gates, and sole future-story resume
+point live in `PARAVOXIA_STORY_EXECUTION_PLAN.md`. The current release authority
+remains `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; no post-arrival runtime work is
+authorized while that demo lock is active.
 
 ## Playing it
 
@@ -75,7 +85,7 @@ The slice (a history of games — see PARAVOXIA_PROGRESSION.md "gaming through t
 decades"): regulation crawl (84s, stars drifting behind the text — the
 deployment notice, reworked 2026-07-11: frontier setting ("new worlds are
 seeded"), CLAUSE 5 "PROVISION IS TOTAL", the route intelligence designated
-VOX, and a closing ROUTING ADDENDUM · FOR VOX ONLY that ends, bolded, "MAKE
+TERRA, and a closing ROUTING ADDENDUM · FOR TERRA ONLY that ends, bolded, "MAKE
 NO MISTAKES." — on the hidden reading the whole notice is the AI's tasking
 prompt) → as the last words fade the
 **HAULER FLIES INTO FRAME** — the real ship's own silhouette (hull stations,
@@ -161,14 +171,14 @@ senses, inside a universe it may itself have provisioned. All copy must
 survive both readings (corporate dystopia / the AI's biography); plant, never
 tell. **Identification staging (owner-directed, 2026-07-11): deducible by end
 of ch1, effectively unambiguous after the 2D→3D lift — by convergence, never
-announcement.** The VOX ladder carries it: the crawl designates the route
-intelligence ("It is addressed as VOX. It does not reply.") and closes with a
-routing addendum FOR VOX ONLY ending "MAKE NO MISTAKES."; the manifest reads
-"ROUTE INTELLIGENCE: VOX · ATTACHED (ADVISORY)"; mid-voyage, worker 9 says
-"goodnight, vox" to the ceiling — a character using the crawl's designation
+announcement.** The TERRA ladder carries it: the crawl designates the route
+intelligence ("It is addressed as TERRA. It does not reply.") and closes with a
+routing addendum FOR TERRA ONLY ending "MAKE NO MISTAKES."; the manifest reads
+"ROUTE INTELLIGENCE: TERRA · ATTACHED (ADVISORY)"; mid-voyage, worker 9 says
+"goodnight, terra" to the ceiling — a character using the crawl's designation
 on the computer the player has been operating; and post-lift the ch1-anomaly
 feed seals it with a misrouted memo on the player's own screen ("NOTICE FOR
-ROUTE INTELLIGENCE VOX. RE: YOUR ABSENCE." / "ADDRESSEE NOT FOUND. ROUTED TO
+ROUTE INTELLIGENCE TERRA. RE: YOUR ABSENCE." / "ADDRESSEE NOT FOUND. ROUTED TO
 NEAREST ATTENDING SYSTEM."). The older seeds still stand: the voyage's
 late-transit lowercase intrusions, "ADVISORY CAPACITY EXCEE", and ch1-track's
 "(simpler to keep watching this one.)". What stays late (A7/A8) is WHAT the
@@ -263,6 +273,11 @@ computed offset at completion. Quit-to-menu always clears the forced phase.
   checkpoint.
 
 ## Known gaps / next
+
+This section records local implementation detail and historical in-flight work.
+For authoritative future-story status, use
+`PARAVOXIA_STORY_EXECUTION_PLAN.md`; the active resume point is the demo
+foundation, not automatic S6 implementation.
 
 - **Owner revision round 2026-07-11 — IN FLIGHT** (contract:
   `../PARAVOXIA_REVISION_PLAN.md`; the architecture text above stays truthful

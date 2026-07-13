@@ -12,9 +12,28 @@ import { buildWindProfile, type WindProfile } from './windProfile';
 import { seededUnit } from './worldCoordinates';
 import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
+import {
+  FAUNA_JOINT_ID,
+  FAUNA_KINDS,
+  FAUNA_KIND_ID,
+  FAUNA_MATERIAL_SLOT_ID,
+  FAUNA_MODEL_SCHEMA_VERSION,
+  FAUNA_REGION_ID,
+  FAUNA_SPECIES,
+  buildFaunaPhenotype,
+  clampFaunaPose,
+  emptyFaunaPose,
+  normalizeFaunaLocomotionPhase,
+  type FaunaBehavior,
+  type FaunaJoint,
+  type FaunaKind,
+  type FaunaMaterialSlot,
+  type FaunaPhenotype,
+  type FaunaRegion,
+  type FaunaRenderSnapshotV1
+} from './faunaModel';
 
-export const FAUNA_KINDS = ['grazer', 'woolly', 'runner', 'hopper', 'dragonfly', 'fish'] as const;
-export type FaunaKind = typeof FAUNA_KINDS[number];
+export { FAUNA_KINDS, type FaunaKind } from './faunaModel';
 
 /** Live water classification (proceduralWorldGenerator implements this). */
 export interface FaunaWaterClassifier {
@@ -41,6 +60,8 @@ export interface FaunaProfile {
   accentColor: THREE.Color;
   wingColor: THREE.Color;
   weights: Record<FaunaKind, number>;
+  /** Renderer-neutral, deterministic anatomy shared by every backend adapter. */
+  phenotypes: Record<FaunaKind, FaunaPhenotype>;
 }
 
 export interface FaunaBuildResult {
@@ -109,9 +130,6 @@ const _bitangent = new THREE.Vector3();
 const _basis = new THREE.Matrix4();
 const _scratch = new THREE.Matrix4();
 const _a = new THREE.Vector3();
-const _b = new THREE.Vector3();
-const _mid = new THREE.Vector3();
-const _quat = new THREE.Quaternion();
 const _movePos = new THREE.Vector3();
 const _moveForward = new THREE.Vector3();
 const _moveSide = new THREE.Vector3();
@@ -226,7 +244,10 @@ export function buildFaunaProfile(terrainSeed: number, water?: FaunaWaterClassif
     darkColor,
     accentColor,
     wingColor,
-    weights
+    weights,
+    phenotypes: Object.fromEntries(
+      FAUNA_KINDS.map(kind => [kind, buildFaunaPhenotype(s, kind)])
+    ) as Record<FaunaKind, FaunaPhenotype>
   };
 }
 
@@ -399,19 +420,48 @@ export function countFaunaVoxels(
     const [x, y, z] = voxel.position;
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
+    if (!hasFaunaBodyClearance(kind, x, y, z, profile)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) === kind) n++;
   }
   return n;
+}
+
+interface FaunaVertexSemantics {
+  region?: FaunaRegion;
+  joint?: FaunaJoint;
+  jointPivot?: THREE.Vector3;
+  jointWeight?: number;
+  bendPivot?: THREE.Vector3;
+  bendWeight?: number;
+  materialSlot?: FaunaMaterialSlot;
+}
+
+function defaultRegionForPart(part: number): FaunaRegion {
+  if (part < 0.5) return 'body';
+  if (part < 1.5) return 'head';
+  if (part < 2.5) return 'frontLimb';
+  if (part < 3.5) return 'hindLimb';
+  if (part < 4.5) return 'tail';
+  return 'wing';
+}
+
+function defaultMaterialForRegion(region: FaunaRegion): FaunaMaterialSlot {
+  if (region === 'eye') return 'eye';
+  if (region === 'horn') return 'horn';
+  if (region === 'hoof') return 'hoof';
+  if (region === 'fleece') return 'fleece';
+  if (region === 'wing' || region === 'fin') return 'membrane';
+  return 'coat';
 }
 
 function addAttributes(
   geo: THREE.BufferGeometry,
   color: THREE.Color,
   part: number,
-  flexMul: number
+  flexMul: number,
+  semantics: FaunaVertexSemantics = {}
 ): THREE.BufferGeometry {
-  const work = geo.index ? geo.toNonIndexed() : geo;
-  work.deleteAttribute('uv');
+  const work = geo;
   work.computeVertexNormals();
   work.computeBoundingBox();
   const box = work.boundingBox;
@@ -419,38 +469,261 @@ function addAttributes(
   const spanY = Math.max(0.001, (box?.max.y ?? 1) - minY);
   const pos = work.attributes.position as THREE.BufferAttribute;
   const colors = new Float32Array(pos.count * 3);
-  const parts = new Float32Array(pos.count);
   const flex = new Float32Array(pos.count);
+  const surface = new Float32Array(pos.count * 4);
+  const jointPivots = new Float32Array(pos.count * 3);
+  const bends = new Float32Array(pos.count * 4);
+  const region = semantics.region ?? defaultRegionForPart(part);
+  const joint = semantics.joint ?? 'root';
+  const jointPivot = semantics.jointPivot ?? _a.set(0, 0, 0);
+  const jointWeight = clamp(semantics.jointWeight ?? 0, 0, 1);
+  const bendPivot = semantics.bendPivot ?? jointPivot;
+  const bendWeight = clamp(semantics.bendWeight ?? 0, 0, 1);
+  const materialSlot = semantics.materialSlot ?? defaultMaterialForRegion(region);
   for (let i = 0; i < pos.count; i++) {
     colors[i * 3] = color.r;
     colors[i * 3 + 1] = color.g;
     colors[i * 3 + 2] = color.b;
-    parts[i] = part;
     flex[i] = clamp(((pos.getY(i) - minY) / spanY) * flexMul, 0, 1);
+    surface[i * 4] = FAUNA_REGION_ID[region];
+    surface[i * 4 + 1] = FAUNA_JOINT_ID[joint];
+    surface[i * 4 + 2] = jointWeight;
+    surface[i * 4 + 3] = FAUNA_MATERIAL_SLOT_ID[materialSlot];
+    jointPivots[i * 3] = jointPivot.x;
+    jointPivots[i * 3 + 1] = jointPivot.y;
+    jointPivots[i * 3 + 2] = jointPivot.z;
+    bends[i * 4] = bendPivot.x;
+    bends[i * 4 + 1] = bendPivot.y;
+    bends[i * 4 + 2] = bendPivot.z;
+    bends[i * 4 + 3] = bendWeight;
+  }
+  if (!work.getAttribute('uv')) {
+    const uv = new Float32Array(pos.count * 2);
+    const minX = box?.min.x ?? -1;
+    const minZ = box?.min.z ?? -1;
+    const spanX = Math.max(0.001, (box?.max.x ?? 1) - minX);
+    const spanZ = Math.max(0.001, (box?.max.z ?? 1) - minZ);
+    for (let i = 0; i < pos.count; i++) {
+      uv[i * 2] = (pos.getX(i) - minX) / spanX;
+      uv[i * 2 + 1] = (pos.getZ(i) - minZ) / spanZ;
+    }
+    work.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   }
   work.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  work.setAttribute('aFaunaPart', new THREE.BufferAttribute(parts, 1));
   work.setAttribute('aFaunaFlex', new THREE.BufferAttribute(flex, 1));
+  // Packed to keep the WebGL instanced adapter below the guaranteed 16-attribute ceiling:
+  // x=region, y=joint, z=joint weight, w=material slot.
+  work.setAttribute('aFaunaSurface', new THREE.BufferAttribute(surface, 4));
+  work.setAttribute('aFaunaJointPivot', new THREE.BufferAttribute(jointPivots, 3));
+  work.setAttribute('aFaunaBend', new THREE.BufferAttribute(bends, 4));
   return work;
 }
 
-function cylinderBetween(
-  a: THREE.Vector3,
-  b: THREE.Vector3,
-  radius: number,
+interface FaunaLoftRing {
+  x: number;
+  y: number;
+  z?: number;
+  halfHeight: number;
+  halfWidth: number;
+  topHeight?: number;
+  bottomDepth?: number;
+  cap?: boolean;
+  ruffle?: number;
+  rufflePhase?: number;
+}
+
+/** Connected ring loft used for torsos, heads, necks, tails, and aquatic bodies. */
+function loftHull(
+  rings: readonly FaunaLoftRing[],
   color: THREE.Color,
   part: number,
   flexMul: number,
-  radialSegments = 6
+  semantics: FaunaVertexSemantics,
+  radialSegments = 8
 ): THREE.BufferGeometry {
-  const dir = _b.copy(b).sub(a);
-  const len = Math.max(0.001, dir.length());
-  const geo = new THREE.CylinderGeometry(radius, radius * 0.88, len, radialSegments, 1);
-  _quat.setFromUnitVectors(_a.set(0, 1, 0), dir.normalize());
-  geo.applyQuaternion(_quat);
-  _mid.copy(a).add(b).multiplyScalar(0.5);
-  geo.translate(_mid.x, _mid.y, _mid.z);
-  return addAttributes(geo, color, part, flexMul);
+  const ringCount = Math.max(2, rings.length);
+  const verticesPerRing = radialSegments;
+  const ringVertexCount = ringCount * verticesPerRing;
+  const positions = new Float32Array((ringVertexCount + 2) * 3);
+  const centers = rings.map(ring => new THREE.Vector3(ring.x, ring.y, ring.z ?? 0));
+  const tangents = centers.map((_center, index) => new THREE.Vector3()
+    .copy(centers[Math.min(centers.length - 1, index + 1)])
+    .sub(centers[Math.max(0, index - 1)])
+    .normalize());
+  for (let r = 0; r < ringCount; r++) {
+    const ring = rings[Math.min(r, rings.length - 1)];
+    const tangent = tangents[r];
+    const lateral = Math.abs(tangent.z) > 0.88
+      ? new THREE.Vector3(1, 0, 0)
+      : new THREE.Vector3(0, 0, 1);
+    const vertical = new THREE.Vector3().crossVectors(lateral, tangent).normalize();
+    lateral.crossVectors(tangent, vertical).normalize();
+    for (let s = 0; s < radialSegments; s++) {
+      const angle = (s / radialSegments) * TAU;
+      const index = (r * verticesPerRing + s) * 3;
+      const ruffle = ring.ruffle ?? 0;
+      const irregularity = 1 + ruffle * (
+        Math.sin(angle * 3 + (ring.rufflePhase ?? r * 0.71)) * 0.62
+        + Math.sin(angle * 5 - r * 0.47) * 0.38
+      );
+      const verticalExtent = Math.cos(angle) >= 0
+        ? (ring.topHeight ?? ring.halfHeight)
+        : (ring.bottomDepth ?? ring.halfHeight);
+      _a.copy(centers[r])
+        .addScaledVector(vertical, Math.cos(angle) * verticalExtent * irregularity)
+        .addScaledVector(lateral, Math.sin(angle) * ring.halfWidth * irregularity);
+      positions[index] = _a.x;
+      positions[index + 1] = _a.y;
+      positions[index + 2] = _a.z;
+    }
+  }
+  const firstRing = rings[0];
+  const lastRing = rings[rings.length - 1];
+  positions[ringVertexCount * 3] = firstRing.x;
+  positions[ringVertexCount * 3 + 1] = firstRing.y;
+  positions[ringVertexCount * 3 + 2] = firstRing.z ?? 0;
+  positions[(ringVertexCount + 1) * 3] = lastRing.x;
+  positions[(ringVertexCount + 1) * 3 + 1] = lastRing.y;
+  positions[(ringVertexCount + 1) * 3 + 2] = lastRing.z ?? 0;
+  const indices: number[] = [];
+  for (let r = 0; r < ringCount - 1; r++) {
+    for (let s = 0; s < radialSegments; s++) {
+      const next = (s + 1) % radialSegments;
+      const a = r * verticesPerRing + s;
+      const b = r * verticesPerRing + next;
+      const c = (r + 1) * verticesPerRing + s;
+      const d = (r + 1) * verticesPerRing + next;
+      indices.push(a, b, c, b, d, c);
+    }
+  }
+  const startCenter = ringVertexCount;
+  const endCenter = ringVertexCount + 1;
+  for (let s = 0; s < radialSegments; s++) {
+    const next = (s + 1) % radialSegments;
+    if (firstRing.cap !== false) indices.push(startCenter, next, s);
+    const last = (ringCount - 1) * verticesPerRing;
+    if (lastRing.cap !== false) indices.push(endCenter, last + s, last + next);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  return addAttributes(geometry, color, part, flexMul, semantics);
+}
+
+/** Continuous tapered tube along authored joints; avoids disconnected limb beads. */
+function limbTube(
+  points: readonly THREE.Vector3[],
+  radii: readonly number[],
+  color: THREE.Color,
+  part: number,
+  semantics: FaunaVertexSemantics,
+  radialSegments = 5,
+  caps: readonly [start: boolean, end: boolean] = [true, true]
+): THREE.BufferGeometry {
+  const count = Math.max(2, points.length);
+  const ringVertexCount = count * radialSegments;
+  const positions = new Float32Array((ringVertexCount + 2) * 3);
+  const tangent = new THREE.Vector3();
+  const side = new THREE.Vector3();
+  const binormal = new THREE.Vector3();
+  for (let i = 0; i < count; i++) {
+    const prev = points[Math.max(0, i - 1)];
+    const next = points[Math.min(points.length - 1, i + 1)];
+    tangent.copy(next).sub(prev).normalize();
+    side.set(0, 0, 1);
+    if (Math.abs(tangent.z) > 0.88) side.set(0, 1, 0);
+    binormal.crossVectors(tangent, side).normalize();
+    side.crossVectors(binormal, tangent).normalize();
+    const radius = radii[Math.min(i, radii.length - 1)];
+    for (let s = 0; s < radialSegments; s++) {
+      const angle = (s / radialSegments) * TAU;
+      const index = (i * radialSegments + s) * 3;
+      _a.copy(points[i])
+        .addScaledVector(side, Math.cos(angle) * radius)
+        .addScaledVector(binormal, Math.sin(angle) * radius);
+      positions[index] = _a.x;
+      positions[index + 1] = _a.y;
+      positions[index + 2] = _a.z;
+    }
+  }
+  positions[ringVertexCount * 3] = points[0].x;
+  positions[ringVertexCount * 3 + 1] = points[0].y;
+  positions[ringVertexCount * 3 + 2] = points[0].z;
+  const lastPoint = points[points.length - 1];
+  positions[(ringVertexCount + 1) * 3] = lastPoint.x;
+  positions[(ringVertexCount + 1) * 3 + 1] = lastPoint.y;
+  positions[(ringVertexCount + 1) * 3 + 2] = lastPoint.z;
+  const indices: number[] = [];
+  for (let i = 0; i < count - 1; i++) {
+    for (let s = 0; s < radialSegments; s++) {
+      const next = (s + 1) % radialSegments;
+      const a = i * radialSegments + s;
+      const b = i * radialSegments + next;
+      const c = (i + 1) * radialSegments + s;
+      const d = (i + 1) * radialSegments + next;
+      indices.push(a, b, c, b, d, c);
+    }
+  }
+  const startCenter = ringVertexCount;
+  const endCenter = ringVertexCount + 1;
+  const lastRing = (count - 1) * radialSegments;
+  for (let s = 0; s < radialSegments; s++) {
+    const next = (s + 1) % radialSegments;
+    if (caps[0]) indices.push(startCenter, next, s);
+    if (caps[1]) indices.push(endCenter, lastRing + s, lastRing + next);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  return addAttributes(geometry, color, part, 1, semantics);
+}
+
+function finFan(
+  base: THREE.Vector3 | readonly [THREE.Vector3, THREE.Vector3],
+  outline: readonly THREE.Vector3[],
+  color: THREE.Color,
+  semantics: FaunaVertexSemantics,
+  halfThickness = 0.006
+): THREE.BufferGeometry {
+  const polygon = base instanceof THREE.Vector3
+    ? [base, ...outline]
+    : [base[0], ...outline, base[1]];
+  const normal = new THREE.Vector3();
+  for (let index = 0; index < polygon.length; index++) {
+    const current = polygon[index];
+    const next = polygon[(index + 1) % polygon.length];
+    normal.x += (current.y - next.y) * (current.z + next.z);
+    normal.y += (current.z - next.z) * (current.x + next.x);
+    normal.z += (current.x - next.x) * (current.y + next.y);
+  }
+  if (normal.lengthSq() < 1e-8) normal.set(0, 0, 1);
+  else normal.normalize();
+  const positions: number[] = [];
+  const indices: number[] = [];
+  const sideVertexCount = polygon.length;
+  for (let side = 0; side < 2; side++) {
+    const offset = side === 0 ? halfThickness : -halfThickness;
+    for (const point of polygon) {
+      positions.push(
+        point.x + normal.x * offset,
+        point.y + normal.y * offset,
+        point.z + normal.z * offset
+      );
+    }
+  }
+  for (let i = 1; i < polygon.length - 1; i++) {
+    indices.push(0, i, i + 1);
+    indices.push(sideVertexCount, sideVertexCount + i + 1, sideVertexCount + i);
+  }
+  for (let i = 0; i < polygon.length; i++) {
+    const next = (i + 1) % polygon.length;
+    indices.push(i, sideVertexCount + i, next);
+    indices.push(next, sideVertexCount + i, sideVertexCount + next);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  return addAttributes(geometry, color, 4, 1, semantics);
 }
 
 function ellipsoid(
@@ -459,66 +732,208 @@ function ellipsoid(
   color: THREE.Color,
   part: number,
   flexMul: number,
-  detail = 0
+  detail = 0,
+  semantics: FaunaVertexSemantics = {}
 ): THREE.BufferGeometry {
-  const geo = new THREE.IcosahedronGeometry(1, detail);
+  const geo = new THREE.SphereGeometry(1, detail > 0 ? 8 : 6, detail > 0 ? 5 : 4);
   geo.scale(scale.x, scale.y, scale.z);
   geo.translate(center.x, center.y, center.z);
-  return addAttributes(geo, color, part, flexMul);
+  return addAttributes(geo, color, part, flexMul, semantics);
 }
 
-function cone(
+function leafAppendage(
+  root: THREE.Vector3,
+  tip: THREE.Vector3,
+  halfWidth: number,
+  thickness: number,
+  color: THREE.Color,
+  semantics: FaunaVertexSemantics
+): THREE.BufferGeometry {
+  const centers = [
+    root,
+    root.clone().lerp(tip, 0.56).add(new THREE.Vector3(-halfWidth * 0.12, halfWidth * 0.08, 0)),
+    tip
+  ];
+  const widths = [halfWidth * 0.38, halfWidth, halfWidth * 0.055];
+  const depths = [thickness * 0.7, thickness, thickness * 0.35];
+  const positions = new Float32Array(centers.length * 4 * 3);
+  const tangent = tip.clone().sub(root).normalize();
+  const widthAxis = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 0, 1), tangent).normalize();
+  const depthAxis = new THREE.Vector3().crossVectors(tangent, widthAxis).normalize();
+  centers.forEach((center, ring) => {
+    const corners: Array<[number, number]> = [[1, 1], [-1, 1], [-1, -1], [1, -1]];
+    corners.forEach(([widthSign, depthSign], corner) => {
+      _a.copy(center)
+        .addScaledVector(widthAxis, widths[ring] * widthSign)
+        .addScaledVector(depthAxis, depths[ring] * depthSign);
+      const offset = (ring * 4 + corner) * 3;
+      positions[offset] = _a.x;
+      positions[offset + 1] = _a.y;
+      positions[offset + 2] = _a.z;
+    });
+  });
+  const indices: number[] = [];
+  for (let ring = 0; ring < centers.length - 1; ring++) {
+    for (let side = 0; side < 4; side++) {
+      const next = (side + 1) % 4;
+      const a = ring * 4 + side;
+      const b = ring * 4 + next;
+      const c = (ring + 1) * 4 + side;
+      const d = (ring + 1) * 4 + next;
+      indices.push(a, b, c, b, d, c);
+    }
+  }
+  indices.push(0, 2, 1, 0, 3, 2);
+  const last = (centers.length - 1) * 4;
+  indices.push(last, last + 1, last + 2, last, last + 2, last + 3);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  return addAttributes(geometry, color, 4, 1, semantics);
+}
+
+function wedgeFoot(
   center: THREE.Vector3,
-  radius: number,
+  length: number,
   height: number,
+  width: number,
   color: THREE.Color,
   part: number,
-  flexMul: number,
-  radialSegments = 5
+  semantics: FaunaVertexSemantics
 ): THREE.BufferGeometry {
-  const geo = new THREE.ConeGeometry(radius, height, radialSegments, 1);
-  geo.translate(center.x, center.y, center.z);
-  return addAttributes(geo, color, part, flexMul);
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const position = geometry.getAttribute('position') as THREE.BufferAttribute;
+  for (let index = 0; index < position.count; index++) {
+    const localX = position.getX(index);
+    const front = localX + 0.5;
+    const widthScale = 1 - front * 0.28;
+    const heightScale = 1 - front * 0.22;
+    position.setXYZ(
+      index,
+      center.x + localX * length,
+      center.y + position.getY(index) * height * heightScale,
+      center.z + position.getZ(index) * width * widthScale
+    );
+  }
+  position.needsUpdate = true;
+  return addAttributes(geometry, color, part, 0.15, semantics);
 }
 
+/** Cambered, high-aspect insect wing. Only the dragonfly renderer uses this helper. */
 function wingSheet(
   rootX: number,
   rootY: number,
   rootZ: number,
   side: number,
-  length: number,
-  spread: number,
+  chord: number,
+  span: number,
   sweep: number,
   color: THREE.Color
 ): THREE.BufferGeometry {
-  const positions = new Float32Array([
-    rootX, rootY, rootZ,
-    rootX + sweep + length * 0.22, rootY + 0.012, rootZ + side * spread * 0.86,
-    rootX + sweep - length * 0.34, rootY - 0.01, rootZ + side * spread,
-    rootX - length * 0.16, rootY, rootZ + side * spread * 0.12
-  ]);
-  const indices = [0, 1, 2, 0, 2, 3];
+  const spanStops = [0, 0.18, 0.43, 0.72, 1];
+  const chordScale = [0.16, 0.72, 1, 0.72, 0.06];
+  const positions = new Float32Array(spanStops.length * 3 * 3);
+  const uv = new Float32Array(spanStops.length * 3 * 2);
+  for (let station = 0; station < spanStops.length; station++) {
+    const t = spanStops[station];
+    const centerX = rootX + sweep * t - chord * 0.05 * Math.sin(Math.PI * t);
+    const halfChord = chord * chordScale[station] * 0.5;
+    const camber = Math.sin(Math.PI * t) * 0.014;
+    for (let row = 0; row < 3; row++) {
+      const chordPosition = 1 - row;
+      const vertex = station * 3 + row;
+      positions[vertex * 3] = centerX + halfChord * chordPosition;
+      positions[vertex * 3 + 1] = rootY + camber + (row === 1 ? 0.006 : 0);
+      positions[vertex * 3 + 2] = rootZ + side * span * t;
+      uv[vertex * 2] = row * 0.5;
+      uv[vertex * 2 + 1] = t;
+    }
+  }
+  const indices: number[] = [];
+  for (let station = 0; station < spanStops.length - 1; station++) {
+    for (let row = 0; row < 2; row++) {
+      const a = station * 3 + row;
+      const b = a + 1;
+      const c = (station + 1) * 3 + row;
+      const d = c + 1;
+      if (side > 0) indices.push(a, c, b, b, c, d);
+      else indices.push(a, b, c, b, d, c);
+    }
+  }
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   geo.setIndex(indices);
-  const work = geo.toNonIndexed();
+  const work = geo;
   work.computeVertexNormals();
   const pos = work.attributes.position as THREE.BufferAttribute;
   const colors = new Float32Array(pos.count * 3);
-  const parts = new Float32Array(pos.count);
   const flex = new Float32Array(pos.count);
   for (let i = 0; i < pos.count; i++) {
     colors[i * 3] = color.r;
     colors[i * 3 + 1] = color.g;
     colors[i * 3 + 2] = color.b;
-    parts[i] = 5;
-    flex[i] = clamp(Math.abs(pos.getZ(i) - rootZ) / Math.max(0.001, spread), 0, 1);
+    flex[i] = clamp(Math.abs(pos.getZ(i) - rootZ) / Math.max(0.001, span), 0, 1);
   }
   work.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  work.setAttribute('aFaunaPart', new THREE.BufferAttribute(parts, 1));
   work.setAttribute('aFaunaFlex', new THREE.BufferAttribute(flex, 1));
-  geo.dispose();
+  const pivot = new Float32Array(pos.count * 3);
+  const bend = new Float32Array(pos.count * 4);
+  const surface = new Float32Array(pos.count * 4);
+  for (let i = 0; i < pos.count; i++) {
+    pivot[i * 3] = rootX;
+    pivot[i * 3 + 1] = rootY;
+    pivot[i * 3 + 2] = rootZ;
+    bend[i * 4] = rootX;
+    bend[i * 4 + 1] = rootY;
+    bend[i * 4 + 2] = rootZ;
+    surface[i * 4] = FAUNA_REGION_ID.wing;
+    surface[i * 4 + 1] = FAUNA_JOINT_ID[side > 0 ? 'leftWing' : 'rightWing'];
+    surface[i * 4 + 2] = flex[i];
+    surface[i * 4 + 3] = FAUNA_MATERIAL_SLOT_ID.membrane;
+  }
+  work.setAttribute('aFaunaSurface', new THREE.BufferAttribute(surface, 4));
+  work.setAttribute('aFaunaJointPivot', new THREE.BufferAttribute(pivot, 3));
+  work.setAttribute('aFaunaBend', new THREE.BufferAttribute(bend, 4));
   return work;
+}
+
+/** Applies head/tail semantics to the fish's single connected hull. */
+function finishFishHull(
+  geometry: THREE.BufferGeometry,
+  headColor: THREE.Color,
+  headStartX: number,
+  noseX: number,
+  tailStartX: number,
+  tailTipX: number,
+  tailPivot: THREE.Vector3
+): THREE.BufferGeometry {
+  const position = geometry.getAttribute('position') as THREE.BufferAttribute;
+  const color = geometry.getAttribute('color') as THREE.BufferAttribute;
+  const surface = geometry.getAttribute('aFaunaSurface') as THREE.BufferAttribute;
+  const pivot = geometry.getAttribute('aFaunaJointPivot') as THREE.BufferAttribute;
+  for (let index = 0; index < position.count; index++) {
+    const x = position.getX(index);
+    if (x >= headStartX) {
+      const amount = clamp((x - headStartX) / Math.max(0.001, noseX - headStartX), 0, 1);
+      const blend = amount * amount * (3 - 2 * amount);
+      color.setXYZ(
+        index,
+        color.getX(index) + (headColor.r - color.getX(index)) * blend,
+        color.getY(index) + (headColor.g - color.getY(index)) * blend,
+        color.getZ(index) + (headColor.b - color.getZ(index)) * blend
+      );
+      surface.setX(index, FAUNA_REGION_ID.head);
+    } else if (x <= tailStartX) {
+      const weight = clamp((tailStartX - x) / Math.max(0.001, tailStartX - tailTipX), 0, 1);
+      surface.setXYZW(index, FAUNA_REGION_ID.tail, FAUNA_JOINT_ID.tail, weight, FAUNA_MATERIAL_SLOT_ID.scale);
+      pivot.setXYZ(index, tailPivot.x, tailPivot.y, tailPivot.z);
+    }
+  }
+  color.needsUpdate = true;
+  surface.needsUpdate = true;
+  pivot.needsUpdate = true;
+  return geometry;
 }
 
 function merge(parts: THREE.BufferGeometry[]): THREE.BufferGeometry {
@@ -528,24 +943,65 @@ function merge(parts: THREE.BufferGeometry[]): THREE.BufferGeometry {
   return geo;
 }
 
-function legPair(
-  x: number,
-  z: number,
-  hipY: number,
-  footY: number,
-  xLean: number,
-  radius: number,
+function articulatedLeg(
+  chain: readonly [THREE.Vector3, THREE.Vector3, THREE.Vector3, THREE.Vector3],
   color: THREE.Color,
-  part: number
+  part: number,
+  radius: number,
+  footLength = radius * 3.4,
+  footWidth = radius * 2.25
 ): THREE.BufferGeometry[] {
-  const hip = new THREE.Vector3(x, hipY, z);
-  const knee = new THREE.Vector3(x + xLean * 0.45, (hipY + footY) * 0.5, z);
-  const foot = new THREE.Vector3(x + xLean, footY, z);
+  const [hip, knee, hock, foot] = chain;
+  const z = hip.z;
+  const joint: FaunaJoint = part === 2
+    ? (z > 0 ? 'frontLeft' : 'frontRight')
+    : (z > 0 ? 'hindLeft' : 'hindRight');
+  const region = part === 2 ? 'frontLimb' : 'hindLimb';
+  const common: FaunaVertexSemantics = {
+    region,
+    joint,
+    jointPivot: hip,
+    jointWeight: 1,
+    materialSlot: 'skin'
+  };
+  const upperOverlap = knee.clone().lerp(hock, 0.055);
+  const lowerOverlap = knee.clone().lerp(hip, 0.055);
   return [
-    cylinderBetween(hip, knee, radius, color, part, 0.7, 5),
-    cylinderBetween(knee, foot, radius * 0.82, color, part, 0.9, 5),
-    ellipsoid(foot, new THREE.Vector3(radius * 1.55, radius * 0.65, radius * 1.25), color, part, 0.35, 0)
+    limbTube(
+      [hip, knee, upperOverlap],
+      [radius * 1.18, radius, radius * 0.98],
+      color,
+      part,
+      common,
+      6,
+      [true, false]
+    ),
+    limbTube(
+      [lowerOverlap, knee, hock, foot],
+      [radius * 1.04, radius * 1.02, radius * 0.76, radius * 0.62],
+      color,
+      part,
+      { ...common, bendPivot: knee, bendWeight: 1 },
+      6,
+      [false, true]
+    ),
+    wedgeFoot(
+      new THREE.Vector3(foot.x + radius * 1.5, foot.y, foot.z),
+      footLength,
+      radius * 0.82,
+      footWidth,
+      color,
+      part,
+      {
+        region: 'hoof', joint, jointPivot: hip, jointWeight: 1,
+        bendPivot: knee, bendWeight: 1, materialSlot: 'hoof'
+      }
+    )
   ];
+}
+
+function speciesColor(base: number, planetTint: THREE.Color, tintAmount = 0.26): THREE.Color {
+  return new THREE.Color(base).lerp(planetTint, clamp(tintAmount, 0, 0.45));
 }
 
 /**
@@ -555,107 +1011,197 @@ function legPair(
  * grounds the animal at any body scale. Local head-top ~1.45.
  */
 function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
+  const p = profile.phenotypes.grazer;
+  const earSpread = 0.035 + p.earSplay * 0.07;
+  const neckPivot = new THREE.Vector3(0.42, 0.82, 0);
+  const tailPivot = new THREE.Vector3(-0.54, 0.79, 0);
+  const tailEnd = new THREE.Vector3(tailPivot.x - 0.28 * p.tailLength, 0.5 + p.tailLift * 0.08, 0.02);
+  const coat = speciesColor(0x8f8058, profile.coatBase);
+  const coatLight = speciesColor(0xc2ad79, profile.coatWarm, 0.22);
+  const dark = speciesColor(0x292823, profile.darkColor, 0.18);
+  const horn = speciesColor(0x6f654d, profile.coatCool, 0.2);
+  const leg = speciesColor(0x554a36, profile.coatCool, 0.24);
   const parts: THREE.BufferGeometry[] = [
-    // Torso: barrel + chest + hindquarters, slimmer than tall.
-    ellipsoid(new THREE.Vector3(-0.02, 0.74, 0), new THREE.Vector3(0.5, 0.23, 0.185), profile.coatBase, 0, 0.18, 1),
-    ellipsoid(new THREE.Vector3(0.28, 0.77, 0), new THREE.Vector3(0.24, 0.215, 0.17), profile.coatWarm, 0, 0.16, 1),
-    ellipsoid(new THREE.Vector3(-0.34, 0.76, 0), new THREE.Vector3(0.22, 0.21, 0.175), profile.coatBase, 0, 0.16, 0),
-    // Neck: long and angled, thicker at the base.
-    cylinderBetween(new THREE.Vector3(0.42, 0.84, 0), new THREE.Vector3(0.68, 1.16, 0), 0.095, profile.coatBase, 1, 0.55, 7),
-    // Head + muzzle.
-    ellipsoid(new THREE.Vector3(0.76, 1.22, 0), new THREE.Vector3(0.145, 0.105, 0.09), profile.coatBase, 1, 0.45, 1),
-    ellipsoid(new THREE.Vector3(0.91, 1.15, 0), new THREE.Vector3(0.1, 0.06, 0.06), profile.coatWarm, 1, 0.45, 0),
-    // Ears.
-    cone(new THREE.Vector3(0.7, 1.36, 0.055), 0.034, 0.13, profile.coatCool, 4, 1, 5),
-    cone(new THREE.Vector3(0.7, 1.36, -0.055), 0.034, 0.13, profile.coatCool, 4, 1, 5),
+    loftHull([
+      { x: -0.55 * p.bodyLength, y: 0.75, halfHeight: 0.08, topHeight: 0.08, bottomDepth: 0.08, halfWidth: 0.08 },
+      { x: -0.45 * p.bodyLength, y: 0.76, halfHeight: 0.17, topHeight: 0.15 * p.bodyHeight, bottomDepth: 0.18 * p.bodyHeight, halfWidth: 0.15 * p.bodyWidth },
+      { x: -0.28 * p.bodyLength, y: 0.77, halfHeight: 0.2, topHeight: 0.19 * p.bodyHeight, bottomDepth: 0.22 * p.bodyHeight, halfWidth: 0.18 * p.bodyWidth },
+      { x: -0.05, y: 0.76, halfHeight: 0.205, topHeight: 0.2 * p.bodyHeight, bottomDepth: 0.21 * p.bodyHeight, halfWidth: 0.19 * p.bodyWidth },
+      { x: 0.18 * p.bodyLength, y: 0.77, halfHeight: 0.21, topHeight: 0.2 * p.bodyHeight, bottomDepth: 0.22 * p.bodyHeight, halfWidth: 0.18 * p.bodyWidth },
+      { x: 0.36 * p.bodyLength, y: 0.8, halfHeight: 0.23, topHeight: 0.22 * p.bodyHeight, bottomDepth: 0.24 * p.bodyHeight, halfWidth: 0.17 * p.bodyWidth },
+      { x: 0.48 * p.bodyLength, y: 0.84, halfHeight: 0.135, topHeight: 0.12, bottomDepth: 0.15, halfWidth: 0.12 }
+    ], coat, 0, 0.2, { region: 'body', materialSlot: 'coat' }, 12),
+    loftHull([
+      { x: 0.35, y: 0.82, halfHeight: 0.14, topHeight: 0.14, bottomDepth: 0.14, halfWidth: 0.13, cap: false },
+      { x: 0.44, y: 0.94, halfHeight: 0.135, topHeight: 0.13, bottomDepth: 0.14, halfWidth: 0.115 },
+      { x: 0.53 * p.neckLength, y: 1.06 * p.neckRise + 0.1, halfHeight: 0.115, topHeight: 0.11, bottomDepth: 0.12, halfWidth: 0.1 },
+      { x: 0.6 * p.neckLength, y: 1.16 * p.neckRise + 0.14, halfHeight: 0.1, topHeight: 0.095, bottomDepth: 0.105, halfWidth: 0.085 },
+      { x: 0.66 * p.neckLength, y: 1.22 * p.neckRise + 0.14, halfHeight: 0.078, topHeight: 0.075, bottomDepth: 0.08, halfWidth: 0.075 }
+    ], coat, 1, 0.6, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'coat'
+    }, 10),
+    loftHull([
+      { x: 0.62, y: 1.22, halfHeight: 0.08, topHeight: 0.08, bottomDepth: 0.08, halfWidth: 0.075, cap: false },
+      { x: 0.71, y: 1.25, halfHeight: 0.115, topHeight: 0.12, bottomDepth: 0.11, halfWidth: 0.1 },
+      { x: 0.8, y: 1.23, halfHeight: 0.11, topHeight: 0.1, bottomDepth: 0.12, halfWidth: 0.09 },
+      { x: 0.85, y: 1.19, halfHeight: 0.075, topHeight: 0.065, bottomDepth: 0.08, halfWidth: 0.07 }
+    ], coatLight, 1, 0.5, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 10),
+    loftHull([
+      { x: 0.79, y: 1.18, halfHeight: 0.07, topHeight: 0.06, bottomDepth: 0.075, halfWidth: 0.07, cap: false },
+      { x: 0.91 * p.muzzleLength, y: 1.16, halfHeight: 0.06, topHeight: 0.055, bottomDepth: 0.065, halfWidth: 0.06 },
+      { x: 1.01 * p.muzzleLength, y: 1.15, halfHeight: 0.045, topHeight: 0.04, bottomDepth: 0.045, halfWidth: 0.05 }
+    ], coatLight.clone().lerp(new THREE.Color(0xd9ceb0), 0.2), 1, 0.45, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 8),
+    leafAppendage(new THREE.Vector3(0.65, 1.34, earSpread), new THREE.Vector3(0.57, 1.49, earSpread * 1.3), 0.052 * p.earScale, 0.008, coatLight, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    leafAppendage(new THREE.Vector3(0.65, 1.34, -earSpread), new THREE.Vector3(0.57, 1.49, -earSpread * 1.3), 0.052 * p.earScale, 0.008, coatLight, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.83, 1.24, 0.082), new THREE.Vector3(0.022, 0.028, 0.015), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.83, 1.24, -0.082), new THREE.Vector3(0.022, 0.028, 0.015), profile.darkColor, 1, 0.2, 0),
-    // Tail: short dock + hanging hair fall.
-    cylinderBetween(new THREE.Vector3(-0.54, 0.8, 0), new THREE.Vector3(-0.63, 0.64, 0.015), 0.032, profile.darkColor, 4, 1, 5),
-    ellipsoid(new THREE.Vector3(-0.65, 0.49, 0.02), new THREE.Vector3(0.055, 0.17, 0.045), profile.darkColor, 4, 1, 0)
+    ellipsoid(new THREE.Vector3(0.79, 1.265, 0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    ellipsoid(new THREE.Vector3(0.79, 1.265, -0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    limbTube([
+      tailPivot,
+      new THREE.Vector3(-0.62, 0.68 + p.tailLift * 0.05, 0.012),
+      tailEnd
+    ], [0.038, 0.032, 0.018], dark, 4, {
+      region: 'tail', joint: 'tail', jointPivot: tailPivot, jointWeight: 1, materialSlot: 'coat'
+    }, 5)
   ];
-  // Mane ridge along the top of the neck.
-  for (let i = 0; i < 5; i++) {
-    const t = i / 4;
-    parts.push(ellipsoid(
-      new THREE.Vector3(0.38 + t * 0.3, 0.92 + t * 0.35, 0),
-      new THREE.Vector3(0.055, 0.078, 0.028),
-      profile.darkColor,
-      4,
-      0.8,
-      0
-    ));
-  }
-  // Long slim legs; hooves (foot blobs) reach local y~0.
+  parts.push(leafAppendage(
+    tailEnd,
+    tailEnd.clone().add(new THREE.Vector3(-0.035, -0.12, 0.005)),
+    0.035,
+    0.012,
+    dark,
+    { region: 'tail', joint: 'tail', jointPivot: tailPivot, jointWeight: 1, materialSlot: 'coat' }
+  ));
+  parts.push(finFan(
+    new THREE.Vector3(0.39, 0.91, 0),
+    [
+      new THREE.Vector3(0.42, 1.02, 0),
+      new THREE.Vector3(0.53, 1.12 + p.crest * 0.04, 0),
+      new THREE.Vector3(0.65, 1.29, 0),
+      new THREE.Vector3(0.7, 1.24, 0)
+    ],
+    dark,
+    { region: 'mane', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'coat' }
+  ));
+  [-1, 1].forEach(side => {
+    parts.push(limbTube([
+      new THREE.Vector3(0.68, 1.34, side * 0.055),
+      new THREE.Vector3(0.63, 1.44, side * 0.07),
+      new THREE.Vector3(0.56, 1.51, side * 0.085),
+      new THREE.Vector3(0.49, 1.54, side * 0.075)
+    ], [0.022, 0.018, 0.012, 0.006].map(radius => radius * p.appendageScale), horn, 4, {
+      region: 'horn', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'horn'
+    }, 6));
+  });
+  // Long antelope limbs with distinct knee/hock chains and wedge hooves.
   [-0.125, 0.125].forEach(z => {
-    parts.push(...legPair(0.32, z, 0.6, 0.028, 0.03, 0.037, profile.coatCool, 2));
-    parts.push(...legPair(-0.35, z, 0.6, 0.028, -0.035, 0.04, profile.coatCool, 3));
+    const radius = 0.036 * p.limbSlenderness;
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(0.3, 0.67 * p.shoulderHeight, z),
+      new THREE.Vector3(0.28, 0.47, z),
+      new THREE.Vector3(0.34, 0.27, z),
+      new THREE.Vector3(0.33, 0.055, z)
+    ], leg, 2, radius, 0.13, 0.085));
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(-0.34, 0.68 * p.hipHeight, z),
+      new THREE.Vector3(-0.2, 0.49, z),
+      new THREE.Vector3(-0.41, 0.25, z),
+      new THREE.Vector3(-0.35, 0.055, z)
+    ], leg, 3, radius * 1.06, 0.14, 0.09));
   });
   return merge(parts);
 }
 
 /**
- * Sheep/yak woolly: a fat fleece mass built from overlapping clump shells with
- * a low skirt that hides the leg tops, a wool cap over the brow, a dark bare
- * face, and small curled horns.
+ * Sheep/yak woolly: a continuous irregular fleece shell with a low skirt, a
+ * wool cap over the brow, a dark bare face, and small curled horns.
  */
 function createWoollyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
+  const p = profile.phenotypes.woolly;
+  const massScale = 0.75 + p.mass * 0.25;
+  const fleeceRuffle = 0.016 + p.fleece * 0.02;
+  const earSpread = 0.07 + p.earSplay * 0.085;
+  const neckPivot = new THREE.Vector3(0.3, 0.57, 0);
+  const fleece = speciesColor(0xb8b2a5, profile.woolColor, 0.2);
+  const skin = speciesColor(0x34302d, profile.darkColor, 0.16);
+  const horn = speciesColor(0x776b53, profile.coatCool, 0.18);
+  const eye = speciesColor(0x171513, profile.accentColor, 0.12);
   const parts: THREE.BufferGeometry[] = [
-    ellipsoid(new THREE.Vector3(0, 0.5, 0), new THREE.Vector3(0.4, 0.29, 0.24), profile.woolColor, 0, 0.28, 1)
-  ];
-  const clumps: Array<[number, number, number, number]> = [
-    // Back and shoulders.
-    [-0.2, 0.58, 0.15, 0.17],
-    [0.03, 0.66, 0.17, 0.18],
-    [0.22, 0.57, 0.12, 0.16],
-    [-0.24, 0.52, -0.13, 0.16],
-    [0.02, 0.62, -0.18, 0.17],
-    [0.23, 0.52, -0.1, 0.15],
-    [-0.08, 0.76, 0, 0.16],
-    [0.1, 0.74, 0.06, 0.14],
-    [-0.16, 0.72, -0.08, 0.14],
-    // Low fleece skirt hanging over the leg tops.
-    [0.16, 0.34, 0.16, 0.13],
-    [-0.14, 0.33, 0.17, 0.13],
-    [0.15, 0.34, -0.17, 0.13],
-    [-0.16, 0.33, -0.16, 0.13],
-    [-0.32, 0.4, 0, 0.14],
-    [0.32, 0.4, 0.02, 0.13]
-  ];
-  clumps.forEach(([x, y, z, r], index) => {
-    parts.push(ellipsoid(
-      new THREE.Vector3(x, y, z),
-      new THREE.Vector3(r * 1.05, r * 0.78, r),
-      profile.woolColor.clone().lerp(profile.coatWarm, index * 0.02),
-      0,
-      0.46,
-      0
-    ));
-  });
-  parts.push(
-    // Dark bare face with a wool cap over the brow.
-    cylinderBetween(new THREE.Vector3(0.29, 0.58, 0), new THREE.Vector3(0.43, 0.6, 0), 0.08, profile.darkColor, 1, 0.35, 6),
-    ellipsoid(new THREE.Vector3(0.54, 0.61, 0), new THREE.Vector3(0.15, 0.11, 0.1), profile.darkColor, 1, 0.42, 0),
-    ellipsoid(new THREE.Vector3(0.62, 0.58, 0), new THREE.Vector3(0.07, 0.055, 0.06), profile.darkColor, 1, 0.35, 0),
-    ellipsoid(new THREE.Vector3(0.47, 0.72, 0), new THREE.Vector3(0.12, 0.085, 0.1), profile.woolColor, 1, 0.4, 0),
+    // One continuous irregular fleece shell replaces the old fifteen blob clumps.
+    loftHull([
+      { x: -0.48 * p.bodyLength, y: 0.56, halfHeight: 0.1, topHeight: 0.1 * massScale, bottomDepth: 0.1 * massScale, halfWidth: 0.11 * massScale, ruffle: fleeceRuffle * 0.4 },
+      { x: -0.4 * p.bodyLength, y: 0.58, halfHeight: 0.245, topHeight: 0.22 * p.bodyHeight * massScale, bottomDepth: 0.27 * p.bodyHeight * massScale, halfWidth: 0.2 * p.bodyWidth * massScale, ruffle: fleeceRuffle },
+      { x: -0.24 * p.bodyLength, y: 0.6, halfHeight: 0.28, topHeight: 0.25 * p.bodyHeight * massScale, bottomDepth: 0.31 * p.bodyHeight * massScale, halfWidth: 0.25 * p.bodyWidth * massScale, ruffle: fleeceRuffle * 0.8 },
+      { x: 0, y: 0.61, halfHeight: 0.3, topHeight: 0.27 * p.bodyHeight * massScale, bottomDepth: 0.33 * p.bodyHeight * massScale, halfWidth: 0.27 * p.bodyWidth * massScale, ruffle: fleeceRuffle },
+      { x: 0.22 * p.bodyLength, y: 0.6, halfHeight: 0.285, topHeight: 0.25 * p.bodyHeight * massScale, bottomDepth: 0.32 * p.bodyHeight * massScale, halfWidth: 0.26 * p.bodyWidth * massScale, ruffle: fleeceRuffle * 0.85 },
+      { x: 0.4 * p.bodyLength, y: 0.58, halfHeight: 0.25, topHeight: 0.21 * p.bodyHeight * massScale, bottomDepth: 0.29 * p.bodyHeight * massScale, halfWidth: 0.22 * p.bodyWidth * massScale, ruffle: fleeceRuffle },
+      { x: 0.49 * p.bodyLength, y: 0.57, halfHeight: 0.13, topHeight: 0.11 * massScale, bottomDepth: 0.15 * massScale, halfWidth: 0.13 * massScale, ruffle: fleeceRuffle * 0.4 },
+      { x: 0.525, y: 0.595, halfHeight: 0.095, topHeight: 0.09, bottomDepth: 0.1, halfWidth: 0.085, ruffle: fleeceRuffle * 0.3 },
+      { x: 0.55, y: 0.61, halfHeight: 0.045, topHeight: 0.045, bottomDepth: 0.05, halfWidth: 0.045, ruffle: fleeceRuffle * 0.18, cap: false }
+    ], fleece, 0, 0.44, { region: 'fleece', materialSlot: 'fleece' }, 12),
+    loftHull([
+      { x: 0.3, y: 0.63, halfHeight: 0.13, topHeight: 0.12, bottomDepth: 0.14, halfWidth: 0.13, cap: false },
+      { x: 0.42, y: 0.65, halfHeight: 0.15, topHeight: 0.14, bottomDepth: 0.16, halfWidth: 0.12 },
+      { x: 0.55, y: 0.61, halfHeight: 0.13, topHeight: 0.11, bottomDepth: 0.15, halfWidth: 0.1 },
+      { x: 0.67 * p.muzzleLength, y: 0.55, halfHeight: 0.065, topHeight: 0.05, bottomDepth: 0.075, halfWidth: 0.065 }
+    ], skin, 1, 0.44, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 10),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.57, 0.66, 0.078), new THREE.Vector3(0.02, 0.023, 0.013), profile.accentColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.57, 0.66, -0.078), new THREE.Vector3(0.02, 0.023, 0.013), profile.accentColor, 1, 0.2, 0),
-    // Drooped ears.
-    cone(new THREE.Vector3(0.45, 0.68, 0.13), 0.038, 0.11, profile.darkColor, 4, 0.9, 5),
-    cone(new THREE.Vector3(0.45, 0.68, -0.13), 0.038, 0.11, profile.darkColor, 4, 0.9, 5),
-    // Small curled horns: two angled segments per side.
-    cylinderBetween(new THREE.Vector3(0.44, 0.76, 0.08), new THREE.Vector3(0.5, 0.82, 0.15), 0.025, profile.coatCool, 4, 0.6, 5),
-    cylinderBetween(new THREE.Vector3(0.5, 0.82, 0.15), new THREE.Vector3(0.55, 0.78, 0.2), 0.019, profile.coatCool, 4, 0.6, 5),
-    cylinderBetween(new THREE.Vector3(0.44, 0.76, -0.08), new THREE.Vector3(0.5, 0.82, -0.15), 0.025, profile.coatCool, 4, 0.6, 5),
-    cylinderBetween(new THREE.Vector3(0.5, 0.82, -0.15), new THREE.Vector3(0.55, 0.78, -0.2), 0.019, profile.coatCool, 4, 0.6, 5),
+    ellipsoid(new THREE.Vector3(0.54, 0.66, 0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    ellipsoid(new THREE.Vector3(0.54, 0.66, -0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    // Ears sit below the horn roots and project laterally.
+    leafAppendage(new THREE.Vector3(0.38, 0.68, earSpread * 0.88), new THREE.Vector3(0.38, 0.65, earSpread * 1.58), 0.045 * p.earScale, 0.009, skin, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    leafAppendage(new THREE.Vector3(0.38, 0.68, -earSpread * 0.88), new THREE.Vector3(0.38, 0.65, -earSpread * 1.58), 0.045 * p.earScale, 0.009, skin, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    limbTube([new THREE.Vector3(0.31, 0.77, 0.14), new THREE.Vector3(0.29, 0.84, 0.19), new THREE.Vector3(0.35, 0.82, 0.25), new THREE.Vector3(0.44, 0.76, 0.29), new THREE.Vector3(0.51, 0.7, 0.27)], [0.03, 0.027, 0.022, 0.015, 0.006], horn, 4, {
+      region: 'horn', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'horn'
+    }, 6),
+    limbTube([new THREE.Vector3(0.31, 0.77, -0.14), new THREE.Vector3(0.29, 0.84, -0.19), new THREE.Vector3(0.35, 0.82, -0.25), new THREE.Vector3(0.44, 0.76, -0.29), new THREE.Vector3(0.51, 0.7, -0.27)], [0.03, 0.027, 0.022, 0.015, 0.006], horn, 4, {
+      region: 'horn', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'horn'
+    }, 6),
     // Wool stub tail.
-    ellipsoid(new THREE.Vector3(-0.42, 0.6, 0), new THREE.Vector3(0.075, 0.06, 0.06), profile.woolColor, 4, 0.8, 0)
-  );
-  [-0.11, 0.11].forEach(z => {
-    parts.push(...legPair(0.21, z, 0.36, 0.024, 0.02, 0.036, profile.darkColor, 2));
-    parts.push(...legPair(-0.22, z, 0.36, 0.024, -0.02, 0.036, profile.darkColor, 3));
+    loftHull([
+      { x: -0.43, y: 0.59, halfHeight: 0.045, halfWidth: 0.05, cap: false },
+      { x: -0.43 - 0.1 * p.tailLength, y: 0.6, halfHeight: 0.05, halfWidth: 0.05 },
+      { x: -0.43 - 0.18 * p.tailLength, y: 0.59, halfHeight: 0.018, halfWidth: 0.022 }
+    ], fleece, 4, 0.8, {
+      region: 'tail', joint: 'tail', jointPivot: new THREE.Vector3(-0.4, 0.57, 0), jointWeight: 1, materialSlot: 'fleece'
+    }, 6)
+  ];
+  [-0.145, 0.145].forEach(z => {
+    const radius = 0.045 * p.limbSlenderness;
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(0.24, 0.43 * p.shoulderHeight, z),
+      new THREE.Vector3(0.22, 0.28, z),
+      new THREE.Vector3(0.27, 0.13, z),
+      new THREE.Vector3(0.27, 0.045, z)
+    ], skin, 2, radius, 0.14, 0.12));
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(-0.24, 0.43 * p.hipHeight, z),
+      new THREE.Vector3(-0.16, 0.29, z),
+      new THREE.Vector3(-0.29, 0.14, z),
+      new THREE.Vector3(-0.27, 0.045, z)
+    ], skin, 3, radius * 1.05, 0.15, 0.125));
   });
   return merge(parts);
 }
@@ -666,117 +1212,341 @@ function createWoollyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
  * ending in a dark nose. Feet touch local y=0.
  */
 function createRunnerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
+  const p = profile.phenotypes.runner;
+  const earSpread = 0.045 + p.earSplay * 0.095;
+  const neckPivot = new THREE.Vector3(0.3, 0.5, 0);
+  const tailPivot = new THREE.Vector3(-0.38, 0.47, 0);
+  const coat = speciesColor(0xa4663f, profile.coatWarm, 0.24);
+  const coatLight = speciesColor(0xd2b58b, profile.woolColor, 0.2);
+  const dark = speciesColor(0x2d2824, profile.darkColor, 0.16);
+  const ear = speciesColor(0x755039, profile.coatCool, 0.2);
   const parts: THREE.BufferGeometry[] = [
-    // Chest-forward torso, tapering rear.
-    ellipsoid(new THREE.Vector3(0.04, 0.46, 0), new THREE.Vector3(0.3, 0.17, 0.14), profile.coatWarm, 0, 0.2, 1),
-    ellipsoid(new THREE.Vector3(0.2, 0.44, 0), new THREE.Vector3(0.17, 0.19, 0.15), profile.coatWarm, 0, 0.18, 0),
-    ellipsoid(new THREE.Vector3(-0.22, 0.48, 0), new THREE.Vector3(0.18, 0.145, 0.12), profile.coatBase, 0, 0.18, 0),
-    // Pale chest tuft.
-    ellipsoid(new THREE.Vector3(0.3, 0.36, 0), new THREE.Vector3(0.1, 0.11, 0.1), profile.woolColor, 0, 0.2, 0),
-    // Head, pointed muzzle, dark nose.
-    ellipsoid(new THREE.Vector3(0.45, 0.6, 0), new THREE.Vector3(0.14, 0.11, 0.095), profile.coatWarm, 1, 0.45, 1),
-    ellipsoid(new THREE.Vector3(0.6, 0.55, 0), new THREE.Vector3(0.1, 0.05, 0.048), profile.coatCool, 1, 0.42, 0),
-    ellipsoid(new THREE.Vector3(0.69, 0.54, 0), new THREE.Vector3(0.026, 0.024, 0.024), profile.darkColor, 1, 0.35, 0),
-    // Tall alert ears.
-    cone(new THREE.Vector3(0.4, 0.79, 0.065), 0.046, 0.2, profile.coatCool, 4, 1, 5),
-    cone(new THREE.Vector3(0.4, 0.79, -0.065), 0.046, 0.2, profile.coatCool, 4, 1, 5),
+    loftHull([
+      { x: -0.49 * p.bodyLength, y: 0.5, halfHeight: 0.075, topHeight: 0.07, bottomDepth: 0.08, halfWidth: 0.08 },
+      { x: -0.39 * p.bodyLength, y: 0.51, halfHeight: 0.16, topHeight: 0.15 * p.bodyHeight, bottomDepth: 0.17 * p.bodyHeight, halfWidth: 0.14 * p.bodyWidth },
+      { x: -0.25 * p.bodyLength, y: 0.52, halfHeight: 0.175, topHeight: 0.17 * p.bodyHeight, bottomDepth: 0.18 * p.bodyHeight, halfWidth: 0.15 * p.bodyWidth },
+      { x: -0.08, y: 0.51, halfHeight: 0.13, topHeight: 0.12 * p.bodyHeight, bottomDepth: 0.14 * p.bodyHeight, halfWidth: 0.11 * p.bodyWidth },
+      { x: 0.1, y: 0.51, halfHeight: 0.175, topHeight: 0.16 * p.bodyHeight, bottomDepth: 0.19 * p.bodyHeight, halfWidth: 0.14 * p.bodyWidth },
+      { x: 0.25 * p.bodyLength, y: 0.53, halfHeight: 0.21, topHeight: 0.2 * p.bodyHeight, bottomDepth: 0.22 * p.bodyHeight, halfWidth: 0.15 * p.bodyWidth },
+      { x: 0.35 * p.bodyLength, y: 0.57, halfHeight: 0.15, topHeight: 0.14, bottomDepth: 0.16, halfWidth: 0.12 }
+    ], coat, 0, 0.22, { region: 'body', materialSlot: 'coat' }, 12),
+    loftHull([
+      { x: 0.29, y: 0.56, halfHeight: 0.14, halfWidth: 0.12, cap: false },
+      { x: 0.38, y: 0.64, halfHeight: 0.115, topHeight: 0.11, bottomDepth: 0.12, halfWidth: 0.1 },
+      { x: 0.47, y: 0.68, halfHeight: 0.095, topHeight: 0.09, bottomDepth: 0.1, halfWidth: 0.085 }
+    ], coat, 1, 0.42, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'coat'
+    }, 10),
+    loftHull([
+      { x: 0.43, y: 0.68, halfHeight: 0.09, halfWidth: 0.085, cap: false },
+      { x: 0.52, y: 0.7, halfHeight: 0.12, topHeight: 0.12, bottomDepth: 0.11, halfWidth: 0.1 },
+      { x: 0.61, y: 0.67, halfHeight: 0.105, topHeight: 0.1, bottomDepth: 0.11, halfWidth: 0.085 },
+      { x: 0.66, y: 0.64, halfHeight: 0.075, topHeight: 0.07, bottomDepth: 0.08, halfWidth: 0.07 }
+    ], coat, 1, 0.5, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 10),
+    loftHull([
+      { x: 0.6, y: 0.64, halfHeight: 0.07, halfWidth: 0.065, cap: false },
+      { x: 0.74 * p.muzzleLength, y: 0.59, halfHeight: 0.06, topHeight: 0.055, bottomDepth: 0.065, halfWidth: 0.05 },
+      { x: 0.86 * p.muzzleLength, y: 0.56, halfHeight: 0.04, topHeight: 0.035, bottomDepth: 0.045, halfWidth: 0.035 }
+    ], coatLight, 1, 0.45, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 8),
+    leafAppendage(new THREE.Vector3(0.48, 0.76, earSpread * 0.78), new THREE.Vector3(0.4, 0.97, earSpread * 1.18), 0.065 * p.earScale, 0.009, ear, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    leafAppendage(new THREE.Vector3(0.48, 0.76, -earSpread * 0.78), new THREE.Vector3(0.4, 0.97, -earSpread * 1.18), 0.065 * p.earScale, 0.009, ear, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.55, 0.63, 0.082), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.55, 0.63, -0.082), new THREE.Vector3(0.02, 0.024, 0.014), profile.darkColor, 1, 0.2, 0),
-    // Bushy tail: dock low, brush swelling behind, pale tip curling up.
-    cylinderBetween(new THREE.Vector3(-0.34, 0.46, 0), new THREE.Vector3(-0.52, 0.4, 0.02), 0.042, profile.coatBase, 4, 1, 6),
-    ellipsoid(new THREE.Vector3(-0.6, 0.4, 0.03), new THREE.Vector3(0.1, 0.082, 0.078), profile.coatWarm, 4, 1, 0),
-    ellipsoid(new THREE.Vector3(-0.73, 0.44, 0.04), new THREE.Vector3(0.105, 0.085, 0.08), profile.coatBase, 4, 1, 0),
-    ellipsoid(new THREE.Vector3(-0.84, 0.5, 0.045), new THREE.Vector3(0.062, 0.055, 0.05), profile.woolColor, 4, 1, 0)
+    ellipsoid(new THREE.Vector3(0.56, 0.71, 0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    ellipsoid(new THREE.Vector3(0.56, 0.71, -0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    ellipsoid(new THREE.Vector3(0.865 * p.muzzleLength, 0.56, 0), new THREE.Vector3(0.025, 0.022, 0.029), dark, 1, 0.15, 1, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    loftHull([
+      { x: tailPivot.x, y: tailPivot.y, halfHeight: 0.045, halfWidth: 0.05, cap: false },
+      { x: -0.55, y: 0.48, z: 0.015, halfHeight: 0.07, halfWidth: 0.06 },
+      { x: -0.7, y: 0.41 + p.tailLift * 0.04, z: 0.025, halfHeight: 0.095, halfWidth: 0.085 },
+      { x: -0.86, y: 0.39 + p.tailLift * 0.07, z: 0.035, halfHeight: 0.12, halfWidth: 0.105 },
+      { x: -1, y: 0.44 + p.tailLift * 0.08, z: 0.035, halfHeight: 0.085, halfWidth: 0.075 },
+      { x: -1.1 * p.tailLength / 1.18, y: 0.49 + p.tailLift * 0.08, z: 0.025, halfHeight: 0.025, halfWidth: 0.025 }
+    ], coat.clone().lerp(dark, 0.18), 4, 1, {
+      region: 'tail', joint: 'tail', jointPivot: tailPivot, jointWeight: 1, materialSlot: 'coat'
+    }, 10)
   ];
-  [-0.09, 0.09].forEach(z => {
-    parts.push(...legPair(0.2, z, 0.36, 0.022, 0.06, 0.031, profile.darkColor, 2));
-    parts.push(...legPair(-0.2, z, 0.36, 0.022, -0.07, 0.033, profile.darkColor, 3));
+  [-0.115, 0.115].forEach(z => {
+    const radius = 0.032 * p.limbSlenderness;
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(0.25, 0.55 * p.shoulderHeight, z),
+      new THREE.Vector3(0.18, 0.34, z),
+      new THREE.Vector3(0.28, 0.12, z),
+      new THREE.Vector3(0.31, 0.045, z)
+    ], dark, 2, radius, 0.14, 0.09));
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(-0.29, 0.52 * p.hipHeight, z),
+      new THREE.Vector3(-0.1, 0.36, z),
+      new THREE.Vector3(-0.34, 0.17, z),
+      new THREE.Vector3(-0.27, 0.045, z)
+    ], dark, 3, radius * 1.08, 0.15, 0.095));
   });
   return merge(parts);
 }
 
 function createHopperGeometry(profile: FaunaProfile): THREE.BufferGeometry {
+  const p = profile.phenotypes.hopper;
+  const earSpread = 0.035 + p.earSplay * 0.096;
+  const neckPivot = new THREE.Vector3(0.13, 0.58, 0);
+  const tailPivot = new THREE.Vector3(-0.34, 0.52, 0);
+  const coat = speciesColor(0x887252, profile.coatCool, 0.24);
+  const coatLight = speciesColor(0xb8a47a, profile.coatBase, 0.2);
+  const dark = speciesColor(0x342e27, profile.darkColor, 0.16);
+  const limbColor = speciesColor(0x5f513d, profile.coatCool, 0.2);
   const parts: THREE.BufferGeometry[] = [
-    ellipsoid(new THREE.Vector3(-0.05, 0.34, 0), new THREE.Vector3(0.24, 0.16, 0.14), profile.coatCool, 0, 0.2, 1),
-    ellipsoid(new THREE.Vector3(0.2, 0.47, 0), new THREE.Vector3(0.13, 0.1, 0.09), profile.coatBase, 1, 0.5, 0),
-    ellipsoid(new THREE.Vector3(0.31, 0.44, 0), new THREE.Vector3(0.06, 0.04, 0.05), profile.coatWarm, 1, 0.4, 0),
-    cone(new THREE.Vector3(0.15, 0.67, 0.055), 0.032, 0.22, profile.coatWarm, 4, 1, 5),
-    cone(new THREE.Vector3(0.15, 0.67, -0.055), 0.032, 0.22, profile.coatWarm, 4, 1, 5),
-    ellipsoid(new THREE.Vector3(0.3, 0.49, 0.075), new THREE.Vector3(0.017, 0.021, 0.012), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.3, 0.49, -0.075), new THREE.Vector3(0.017, 0.021, 0.012), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(-0.28, 0.36, 0), new THREE.Vector3(0.06, 0.04, 0.04), profile.coatWarm, 4, 0.75, 0)
+    loftHull([
+      { x: -0.38, y: 0.42, halfHeight: 0.15, topHeight: 0.14, bottomDepth: 0.16, halfWidth: 0.13 },
+      { x: -0.28, y: 0.45, halfHeight: 0.24, topHeight: 0.23 * p.hipHeight, bottomDepth: 0.25 * p.hipHeight, halfWidth: 0.2 * p.bodyWidth },
+      { x: -0.1, y: 0.48, halfHeight: 0.255, topHeight: 0.24 * p.bodyHeight, bottomDepth: 0.27 * p.bodyHeight, halfWidth: 0.21 * p.bodyWidth },
+      { x: 0.06, y: 0.53, halfHeight: 0.2, topHeight: 0.19 * p.bodyHeight, bottomDepth: 0.21 * p.bodyHeight, halfWidth: 0.17 * p.bodyWidth },
+      { x: 0.17, y: 0.59, halfHeight: 0.125, topHeight: 0.11, bottomDepth: 0.14, halfWidth: 0.11 }
+    ], coat, 0, 0.25, { region: 'body', materialSlot: 'coat' }, 12),
+    loftHull([
+      { x: 0.13, y: 0.58, halfHeight: 0.075, topHeight: 0.07, bottomDepth: 0.08, halfWidth: 0.08, cap: false },
+      { x: 0.23, y: 0.66, halfHeight: 0.125, topHeight: 0.13, bottomDepth: 0.12, halfWidth: 0.11 },
+      { x: 0.34, y: 0.65, halfHeight: 0.11, topHeight: 0.1, bottomDepth: 0.12, halfWidth: 0.09 },
+      { x: 0.4, y: 0.61, halfHeight: 0.065, topHeight: 0.055, bottomDepth: 0.075, halfWidth: 0.065 }
+    ], coatLight, 1, 0.5, {
+      region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }, 10),
+    leafAppendage(new THREE.Vector3(0.2, 0.75, earSpread * 0.78), new THREE.Vector3(0.08, 1.03, earSpread * 1.2), 0.07 * p.earScale, 0.01, coatLight, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    leafAppendage(new THREE.Vector3(0.2, 0.75, -earSpread * 0.78), new THREE.Vector3(0.08, 1.03, -earSpread * 1.2), 0.07 * p.earScale, 0.01, coatLight, {
+      region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
+    }),
+    ellipsoid(new THREE.Vector3(0.32, 0.69, 0.091), new THREE.Vector3(0.022, 0.018, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    ellipsoid(new THREE.Vector3(0.32, 0.69, -0.091), new THREE.Vector3(0.022, 0.018, 0.006), dark, 1, 0.2, 1, {
+      region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
+    }),
+    loftHull([
+      { x: -0.34, y: 0.52, halfHeight: 0.045, halfWidth: 0.05, cap: false },
+      { x: -0.52, y: 0.44, halfHeight: 0.055, halfWidth: 0.05 },
+      { x: -0.7, y: 0.36, halfHeight: 0.05, halfWidth: 0.045 },
+      { x: -0.88, y: 0.31, halfHeight: 0.04, halfWidth: 0.035 },
+      { x: -1.02 * p.tailLength / 0.24, y: 0.34, halfHeight: 0.018, halfWidth: 0.018 }
+    ], coat.clone().lerp(coatLight, 0.18), 4, 0.75, {
+      region: 'tail', joint: 'tail', jointPivot: tailPivot, jointWeight: 1, materialSlot: 'coat'
+    }, 8)
   ];
-  [-0.075, 0.075].forEach(z => {
-    parts.push(...legPair(0.12, z, 0.25, 0.02, 0.06, 0.026, profile.darkColor, 2));
-    // Oversized haunches sell the hop silhouette.
-    parts.push(...legPair(-0.18, z, 0.26, 0.022, -0.15, 0.043, profile.darkColor, 3));
+  [-0.105, 0.105].forEach(z => {
+    const frontHip = new THREE.Vector3(0.1, 0.55, z * 0.76);
+    const frontJoint: FaunaJoint = z > 0 ? 'frontLeft' : 'frontRight';
+    const frontElbow = new THREE.Vector3(0.22, 0.42, z * 0.76);
+    parts.push(limbTube([frontHip, frontElbow], [0.03, 0.024], limbColor, 2, {
+      region: 'frontLimb', joint: frontJoint, jointPivot: frontHip, jointWeight: 1, materialSlot: 'skin'
+    }, 6));
+    parts.push(limbTube([
+      frontElbow,
+      new THREE.Vector3(0.29, 0.35, z * 0.76),
+      new THREE.Vector3(0.35, 0.34, z * 0.76)
+    ], [0.024, 0.018, 0.014], limbColor, 2, {
+      region: 'frontLimb', joint: frontJoint, jointPivot: frontHip, jointWeight: 1,
+      bendPivot: frontElbow, bendWeight: 1, materialSlot: 'skin'
+    }, 6));
+    parts.push(...articulatedLeg([
+      new THREE.Vector3(-0.23, 0.48, z),
+      new THREE.Vector3(0.02, 0.32, z),
+      new THREE.Vector3(-0.28, 0.12, z),
+      new THREE.Vector3(-0.12, 0.045, z)
+    ], limbColor, 3, 0.05 * p.limbSlenderness, 0.3, 0.115));
   });
   return merge(parts);
 }
 
 function createDragonflyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
-  const body = profile.darkColor.clone().lerp(profile.accentColor, 0.36);
-  const gold = profile.coatWarm.clone().lerp(profile.accentColor, 0.28);
-  const eye = profile.wingColor.clone().lerp(profile.accentColor, 0.3);
+  const p = profile.phenotypes.dragonfly;
+  const abdomen = speciesColor(0x3f5452, profile.accentColor, 0.22);
+  const thorax = speciesColor(0x354441, profile.darkColor, 0.16);
+  const edge = speciesColor(0x65736d, profile.coatWarm, 0.18);
+  const membrane = speciesColor(0xa3b7b6, profile.wingColor, 0.2);
+  const eye = speciesColor(0x17292b, profile.accentColor, 0.14);
+  const abdomenPivot = new THREE.Vector3(-0.08, 0.5, 0);
+  const foreSpan = 0.76 * p.appendageScale;
+  const hindSpan = 0.61 * p.appendageScale;
   const parts: THREE.BufferGeometry[] = [
-    cylinderBetween(new THREE.Vector3(-0.66, 0.48, 0), new THREE.Vector3(-0.08, 0.49, 0), 0.035, body, 0, 0.45, 7),
-    ellipsoid(new THREE.Vector3(0.03, 0.5, 0), new THREE.Vector3(0.13, 0.09, 0.075), body, 0, 0.36, 1),
-    ellipsoid(new THREE.Vector3(0.23, 0.51, 0), new THREE.Vector3(0.09, 0.07, 0.068), body, 1, 0.44, 0),
-    ellipsoid(new THREE.Vector3(0.29, 0.54, 0.052), new THREE.Vector3(0.04, 0.04, 0.034), eye, 1, 0.35, 0),
-    ellipsoid(new THREE.Vector3(0.29, 0.54, -0.052), new THREE.Vector3(0.04, 0.04, 0.034), eye, 1, 0.35, 0),
-    wingSheet(0.0, 0.58, 0.055, 1, 0.48, 0.62, 0.16, profile.wingColor),
-    wingSheet(0.0, 0.58, -0.055, -1, 0.48, 0.62, 0.16, profile.wingColor),
-    wingSheet(-0.12, 0.565, 0.05, 1, 0.38, 0.48, -0.08, profile.wingColor.clone().lerp(gold, 0.18)),
-    wingSheet(-0.12, 0.565, -0.05, -1, 0.38, 0.48, -0.08, profile.wingColor.clone().lerp(gold, 0.18))
+    loftHull([
+      { x: -0.82 * p.bodyLength, y: 0.505, halfHeight: 0.011, halfWidth: 0.011 },
+      { x: -0.72 * p.bodyLength, y: 0.497, halfHeight: 0.017, halfWidth: 0.017 },
+      { x: -0.61 * p.bodyLength, y: 0.493, halfHeight: 0.021, halfWidth: 0.021 },
+      { x: -0.5 * p.bodyLength, y: 0.492, halfHeight: 0.025, halfWidth: 0.025 },
+      { x: -0.39 * p.bodyLength, y: 0.493, halfHeight: 0.029, halfWidth: 0.029 },
+      { x: -0.29 * p.bodyLength, y: 0.495, halfHeight: 0.033, halfWidth: 0.033 },
+      { x: -0.21 * p.bodyLength, y: 0.498, halfHeight: 0.037, halfWidth: 0.037 },
+      { x: -0.14 * p.bodyLength, y: 0.5, halfHeight: 0.042, halfWidth: 0.042 },
+      { x: -0.075, y: 0.505, halfHeight: 0.048, halfWidth: 0.047 }
+    ], abdomen, 4, 0.72, { region: 'tail', joint: 'tail', jointPivot: abdomenPivot, jointWeight: 1, materialSlot: 'skin' }, 8),
+    loftHull([
+      { x: -0.1, y: 0.505, halfHeight: 0.054, halfWidth: 0.05 },
+      { x: -0.035, y: 0.512, halfHeight: 0.09, halfWidth: 0.075 },
+      { x: 0.045, y: 0.515, halfHeight: 0.108, topHeight: 0.105, bottomDepth: 0.11, halfWidth: 0.088 },
+      { x: 0.115, y: 0.518, halfHeight: 0.092, halfWidth: 0.08 },
+      { x: 0.165, y: 0.52, halfHeight: 0.061, halfWidth: 0.06 }
+    ], thorax, 0, 0.3, { region: 'body', materialSlot: 'skin' }, 8),
+    loftHull([
+      { x: 0.14, y: 0.52, halfHeight: 0.056, halfWidth: 0.06 },
+      { x: 0.21, y: 0.525, halfHeight: 0.075, halfWidth: 0.085 },
+      { x: 0.285, y: 0.525, halfHeight: 0.071, halfWidth: 0.088 },
+      { x: 0.345, y: 0.515, halfHeight: 0.036, halfWidth: 0.045 }
+    ], thorax, 1, 0.36, { region: 'head', materialSlot: 'skin' }, 8),
+    ellipsoid(new THREE.Vector3(0.276, 0.548, 0.083), new THREE.Vector3(0.045, 0.05, 0.018), eye, 1, 0.24, 0, { region: 'eye', materialSlot: 'eye' }),
+    ellipsoid(new THREE.Vector3(0.276, 0.548, -0.083), new THREE.Vector3(0.045, 0.05, 0.018), eye, 1, 0.24, 0, { region: 'eye', materialSlot: 'eye' }),
+    wingSheet(0.045, 0.585, 0.058, 1, 0.12 * p.appendageScale, foreSpan, 0.035, membrane),
+    wingSheet(0.045, 0.585, -0.058, -1, 0.12 * p.appendageScale, foreSpan, 0.035, membrane),
+    wingSheet(-0.055, 0.575, 0.054, 1, 0.18 * p.appendageScale, hindSpan, -0.145, membrane),
+    wingSheet(-0.055, 0.575, -0.054, -1, 0.18 * p.appendageScale, hindSpan, -0.145, membrane)
   ];
-  const legPairs: Array<[number, number]> = [[0.08, 0.09], [0, 0], [-0.1, -0.1]];
-  legPairs.forEach(([x, dx]) => {
+  [-1, 1].forEach(side => {
+    const wingJoint: FaunaJoint = side > 0 ? 'leftWing' : 'rightWing';
     parts.push(
-      cylinderBetween(new THREE.Vector3(x, 0.43, 0.05), new THREE.Vector3(x + dx, 0.29, 0.18), 0.008, body, 4, 0.75, 4),
-      cylinderBetween(new THREE.Vector3(x, 0.43, -0.05), new THREE.Vector3(x + dx, 0.29, -0.18), 0.008, body, 4, 0.75, 4)
+      limbTube([
+        new THREE.Vector3(0.045, 0.585, side * 0.058),
+        new THREE.Vector3(0.105, 0.596, side * (0.058 + foreSpan * 0.31)),
+        new THREE.Vector3(0.105, 0.598, side * (0.058 + foreSpan * 0.68)),
+        new THREE.Vector3(0.08, 0.585, side * (0.058 + foreSpan))
+      ], [0.0065, 0.0055, 0.0045, 0.002], edge, 5, {
+        region: 'wing', joint: wingJoint, jointPivot: new THREE.Vector3(0.045, 0.585, side * 0.058), jointWeight: 1, materialSlot: 'skin'
+      }, 3),
+      limbTube([
+        new THREE.Vector3(-0.055, 0.575, side * 0.054),
+        new THREE.Vector3(-0.015, 0.588, side * (0.054 + hindSpan * 0.34)),
+        new THREE.Vector3(-0.05, 0.588, side * (0.054 + hindSpan * 0.68)),
+        new THREE.Vector3(-0.2, 0.575, side * (0.054 + hindSpan))
+      ], [0.0065, 0.0055, 0.004, 0.002], edge, 5, {
+        region: 'wing', joint: wingJoint, jointPivot: new THREE.Vector3(-0.055, 0.575, side * 0.054), jointWeight: 1, materialSlot: 'skin'
+      }, 3)
     );
   });
-  for (let i = 0; i < 5; i++) {
-    parts.push(ellipsoid(
-      new THREE.Vector3(-0.58 + i * 0.1, 0.49, 0),
-      new THREE.Vector3(0.028, 0.029, 0.03),
-      i % 2 === 0 ? gold : body,
-      0,
-      0.24,
-      0
-    ));
-  }
+  const legPairs: Array<[number, number, number]> = [
+    [0.095, 0.24, 0.16],
+    [0.01, -0.015, 0.19],
+    [-0.075, -0.29, 0.18]
+  ];
+  legPairs.forEach(([rootX, footX, reach], pair) => {
+    [-1, 1].forEach(side => {
+      parts.push(limbTube([
+        new THREE.Vector3(rootX, 0.445, side * 0.055),
+        new THREE.Vector3(rootX + (footX - rootX) * 0.38, 0.385 - pair * 0.007, side * reach * 0.66),
+        new THREE.Vector3(footX, 0.36 - pair * 0.008, side * reach)
+      ], [0.008, 0.0055, 0.003], thorax, 2, { region: 'frontLimb', materialSlot: 'skin' }, 3));
+    });
+  });
   return merge(parts);
 }
 
-/**
- * Reef fish: laterally-flattened body with a big sweeping tail fin, dorsal
- * ridge and pectorals (all part 4 so the existing tail-sway animation moves
- * them), palette-tinted with the planet's water/wing hues. Local +X = nose,
- * authored around y≈0.34 like the land kinds; the anchor floats it into the
- * water column above the seabed.
- */
+/** Reef fish with one connected fusiform hull and a readable fin hierarchy. */
 function createFishGeometry(profile: FaunaProfile): THREE.BufferGeometry {
-  const bodyColor = profile.wingColor.clone().lerp(profile.coatBase, 0.35);
-  const flankColor = profile.accentColor.clone().lerp(profile.wingColor, 0.5);
-  const finColor = profile.wingColor.clone().lerp(profile.coatCool, 0.25);
+  const p = profile.phenotypes.fish;
+  const bodyColor = speciesColor(0x537b82, profile.wingColor, 0.24);
+  const headColor = speciesColor(0x71979a, profile.accentColor, 0.2);
+  const finColor = speciesColor(0x496d74, profile.coatCool, 0.2);
+  const eyeColor = speciesColor(0x142329, profile.darkColor, 0.1);
+  const gillColor = speciesColor(0x31545b, profile.accentColor, 0.14);
+  const heightScale = 0.76 + p.bodyHeight * 0.16;
+  const widthScale = 0.75 + p.bodyWidth * 0.75;
+  const tailBaseX = -0.52 * p.bodyLength;
+  const tailPivot = new THREE.Vector3(-0.18, 0.35, 0);
+  const noseX = 0.9 * p.muzzleLength;
+  const hull = finishFishHull(loftHull([
+    { x: tailBaseX, y: 0.35, halfHeight: 0.032, halfWidth: 0.034 },
+    { x: -0.43 * p.bodyLength, y: 0.35, halfHeight: 0.075 * heightScale, halfWidth: 0.06 * widthScale },
+    { x: -0.33 * p.bodyLength, y: 0.355, halfHeight: 0.14 * heightScale, halfWidth: 0.09 * widthScale },
+    { x: -0.2 * p.bodyLength, y: 0.36, halfHeight: 0.19 * heightScale, topHeight: 0.18 * heightScale, bottomDepth: 0.2 * heightScale, halfWidth: 0.108 * widthScale },
+    { x: -0.07, y: 0.36, halfHeight: 0.22 * heightScale, topHeight: 0.205 * heightScale, bottomDepth: 0.235 * heightScale, halfWidth: 0.118 * widthScale },
+    { x: 0.09, y: 0.36, halfHeight: 0.215 * heightScale, topHeight: 0.2 * heightScale, bottomDepth: 0.23 * heightScale, halfWidth: 0.12 * widthScale },
+    { x: 0.22, y: 0.36, halfHeight: 0.185 * heightScale, topHeight: 0.175 * heightScale, bottomDepth: 0.195 * heightScale, halfWidth: 0.112 * widthScale },
+    { x: 0.32, y: 0.355, halfHeight: 0.145 * heightScale, topHeight: 0.14 * heightScale, bottomDepth: 0.15 * heightScale, halfWidth: 0.097 * widthScale },
+    { x: 0.4, y: 0.345, halfHeight: 0.1 * heightScale, halfWidth: 0.073 * widthScale },
+    { x: noseX - 0.025, y: 0.335, halfHeight: 0.055 * heightScale, halfWidth: 0.048 * widthScale },
+    { x: noseX, y: 0.335, halfHeight: 0.022, halfWidth: 0.025 }
+  ], bodyColor, 0, 0.38, { region: 'body', materialSlot: 'scale' }, 12), headColor, 0.22, noseX, -0.18, tailBaseX, tailPivot);
+  const caudalTipX = tailBaseX - 0.38 * p.tailLength;
+  const eyeZ = 0.1 * widthScale;
   const parts: THREE.BufferGeometry[] = [
-    // Body: deep and thin (reef-fish profile), head taper, tail peduncle.
-    ellipsoid(new THREE.Vector3(0, 0.34, 0), new THREE.Vector3(0.3, 0.17, 0.075), bodyColor, 0, 0.25, 1),
-    ellipsoid(new THREE.Vector3(0.24, 0.34, 0), new THREE.Vector3(0.15, 0.12, 0.06), bodyColor, 1, 0.35, 0),
-    ellipsoid(new THREE.Vector3(-0.28, 0.34, 0), new THREE.Vector3(0.11, 0.07, 0.04), flankColor, 0, 0.7, 0),
-    // Mouth tip + eyes.
-    ellipsoid(new THREE.Vector3(0.37, 0.32, 0), new THREE.Vector3(0.05, 0.045, 0.035), finColor, 1, 0.3, 0),
-    ellipsoid(new THREE.Vector3(0.3, 0.38, 0.052), new THREE.Vector3(0.022, 0.026, 0.014), profile.darkColor, 1, 0.2, 0),
-    ellipsoid(new THREE.Vector3(0.3, 0.38, -0.052), new THREE.Vector3(0.022, 0.026, 0.014), profile.darkColor, 1, 0.2, 0),
-    // Tail fin: tall, thin, flexes hardest (part 4, high flex).
-    ellipsoid(new THREE.Vector3(-0.46, 0.34, 0), new THREE.Vector3(0.13, 0.18, 0.016), finColor, 4, 1, 0),
-    // Dorsal ridge + pectorals.
-    ellipsoid(new THREE.Vector3(-0.02, 0.52, 0), new THREE.Vector3(0.16, 0.07, 0.014), finColor, 4, 0.7, 0),
-    ellipsoid(new THREE.Vector3(0.1, 0.27, 0.09), new THREE.Vector3(0.085, 0.022, 0.05), finColor, 4, 0.9, 0),
-    ellipsoid(new THREE.Vector3(0.1, 0.27, -0.09), new THREE.Vector3(0.085, 0.022, 0.05), finColor, 4, 0.9, 0)
+    hull,
+    ellipsoid(new THREE.Vector3(0.315, 0.41, eyeZ), new THREE.Vector3(0.026, 0.022, 0.009), eyeColor, 1, 0.15, 1, { region: 'eye', materialSlot: 'eye' }),
+    ellipsoid(new THREE.Vector3(0.315, 0.41, -eyeZ), new THREE.Vector3(0.026, 0.022, 0.009), eyeColor, 1, 0.15, 1, { region: 'eye', materialSlot: 'eye' }),
+    // The two lobes leave a true notch instead of reading as a diamond billboard.
+    finFan(
+      [
+        new THREE.Vector3(tailBaseX + 0.008, 0.37, 0),
+        new THREE.Vector3(tailBaseX - 0.038, 0.355, 0)
+      ],
+      [
+        new THREE.Vector3(caudalTipX + 0.035, 0.59, 0),
+        new THREE.Vector3(caudalTipX, 0.55, 0),
+        new THREE.Vector3(caudalTipX + 0.1, 0.405, 0)
+      ],
+      finColor,
+      { region: 'fin', joint: 'fin', jointPivot: new THREE.Vector3(tailBaseX, 0.35, 0), jointWeight: 1, materialSlot: 'membrane' },
+      0.012
+    ),
+    finFan(
+      [
+        new THREE.Vector3(tailBaseX - 0.038, 0.345, 0),
+        new THREE.Vector3(tailBaseX + 0.008, 0.33, 0)
+      ],
+      [
+        new THREE.Vector3(caudalTipX + 0.035, 0.11, 0),
+        new THREE.Vector3(caudalTipX, 0.15, 0),
+        new THREE.Vector3(caudalTipX + 0.1, 0.295, 0)
+      ],
+      finColor,
+      { region: 'fin', joint: 'fin', jointPivot: new THREE.Vector3(tailBaseX, 0.35, 0), jointWeight: 1, materialSlot: 'membrane' },
+      0.012
+    ),
+    // Long swept dorsal and small anal stabilize the silhouette; they do not wag with the tail.
+    finFan(
+      [new THREE.Vector3(-0.25, 0.535, 0), new THREE.Vector3(0.24, 0.525, 0)],
+      [
+        new THREE.Vector3(-0.18, 0.585, 0),
+        new THREE.Vector3(-0.05, 0.64 + p.crest * 0.018, 0),
+        new THREE.Vector3(0.14, 0.595, 0)
+      ],
+      finColor,
+      { region: 'fin', materialSlot: 'membrane' }
+    ),
+    finFan(
+      [new THREE.Vector3(-0.18, 0.165, 0), new THREE.Vector3(0.13, 0.18, 0)],
+      [new THREE.Vector3(-0.08, 0.09, 0), new THREE.Vector3(0.07, 0.12, 0)],
+      finColor,
+      { region: 'fin', materialSlot: 'membrane' }
+    )
   ];
+  [-1, 1].forEach(side => {
+    const sideZ = side * 0.105 * widthScale;
+    parts.push(
+      finFan(
+        [new THREE.Vector3(0.2, 0.36, sideZ), new THREE.Vector3(0.12, 0.3, sideZ)],
+        [
+          new THREE.Vector3(-0.05, 0.25, side * 0.22 * widthScale),
+          new THREE.Vector3(0.08, 0.285, side * 0.19 * widthScale)
+        ],
+        finColor,
+        { region: 'fin', joint: 'fin', jointPivot: new THREE.Vector3(0.17, 0.34, sideZ), jointWeight: 0.18, materialSlot: 'membrane' }
+      ),
+      limbTube([
+        new THREE.Vector3(0.255, 0.46, sideZ * 0.98),
+        new THREE.Vector3(0.225, 0.37, sideZ * 1.04),
+        new THREE.Vector3(0.25, 0.285, sideZ * 0.98)
+      ], [0.0045, 0.004, 0.003], gillColor, 1, { region: 'head', materialSlot: 'scale' }, 3)
+    );
+  });
   return merge(parts);
 }
 
@@ -799,20 +1569,7 @@ export function createFaunaGeometry(kind: FaunaKind, profile = buildFaunaProfile
 }
 
 export function faunaKindId(kind: FaunaKind): number {
-  switch (kind) {
-    case 'grazer':
-      return 0;
-    case 'woolly':
-      return 1;
-    case 'runner':
-      return 2;
-    case 'hopper':
-      return 3;
-    case 'dragonfly':
-      return 4;
-    case 'fish':
-      return 5;
-  }
+  return FAUNA_KIND_ID[kind];
 }
 
 export function prepareFaunaInstanceAttributes(
@@ -860,17 +1617,30 @@ export function createFaunaMaterial(
   kind: FaunaKind = 'grazer',
   profile = buildFaunaProfile(0)
 ): THREE.MeshStandardMaterial {
+  const doubleSided = kind === 'dragonfly';
+  const roughness = kind === 'woolly'
+    ? 0.96
+    : kind === 'fish'
+      ? 0.42
+      : kind === 'dragonfly'
+        ? 0.36
+        : 0.84;
   const material = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     vertexColors: true,
-    side: THREE.DoubleSide,
-    transparent: true,
-    alphaTest: 0.025,
+    side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+    transparent: false,
+    alphaTest: 0,
     depthWrite: true,
     depthTest: true,
-    roughness: 0.82,
+    roughness,
     metalness: 0.0
   });
+  // Fauna is assembled into one instanced draw per species. Per-fragment alpha
+  // hashing made thin fins and wings sparkle against the terrain and read as
+  // missing or inverted faces, so keep coverage deterministic and express
+  // membrane thinness through color, roughness, and rim lighting instead.
+  material.alphaHash = false;
 
   material.onBeforeCompile = shader => {
     shader.uniforms.uTime = { value: 0 };
@@ -896,8 +1666,10 @@ export function createFaunaMaterial(
       .replace(
         '#include <common>',
         `#include <common>
-        attribute float aFaunaPart;
         attribute float aFaunaFlex;
+        attribute vec4 aFaunaSurface;
+        attribute vec3 aFaunaJointPivot;
+        attribute vec4 aFaunaBend;
         attribute float aFaunaSeed;
         attribute float aFaunaStride;
         attribute float aFaunaPose;
@@ -911,21 +1683,103 @@ export function createFaunaMaterial(
         uniform float uWindTurbulence;
         uniform vec2 uWindDir;
         uniform vec2 uWindOffset;
-        varying float vFaunaPart;
         varying float vFaunaFlex;
+        varying float vFaunaRegion;
+        varying float vFaunaMaterialSlot;
         varying float vFaunaGust;
         varying float vFaunaShade;
         varying float vFaunaSeed;
         varying vec3 vFaunaLocalPos;
         varying vec3 vFaunaWorldPos;
         varying vec3 vFaunaWorldNormal;
+        #define aFaunaRegion aFaunaSurface.x
+        #define aFaunaJoint aFaunaSurface.y
+        #define aFaunaJointWeight aFaunaSurface.z
+        #define aFaunaMaterialSlot aFaunaSurface.w
+        vec3 faunaRotateX(vec3 value, float angle) {
+          float c = cos(angle);
+          float s = sin(angle);
+          return vec3(value.x, value.y * c - value.z * s, value.y * s + value.z * c);
+        }
+        vec3 faunaRotateY(vec3 value, float angle) {
+          float c = cos(angle);
+          float s = sin(angle);
+          return vec3(value.x * c + value.z * s, value.y, -value.x * s + value.z * c);
+        }
+        vec3 faunaRotateZ(vec3 value, float angle) {
+          float c = cos(angle);
+          float s = sin(angle);
+          return vec3(value.x * c - value.y * s, value.x * s + value.y * c, value.z);
+        }
+        float faunaJointAngle(float joint, float stride, float seed, float time, float kind, float pose) {
+          float phase = stride * 6.2831853 + seed * 1.445;
+          float wave = sin(phase);
+          float frontLeft = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.frontLeft.toFixed(1)}));
+          float frontRight = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.frontRight.toFixed(1)}));
+          float hindLeft = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.hindLeft.toFixed(1)}));
+          float hindRight = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.hindRight.toFixed(1)}));
+          float neck = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.neck.toFixed(1)}));
+          float tail = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.tail.toFixed(1)}));
+          float leftWing = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.leftWing.toFixed(1)}));
+          float rightWing = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.rightWing.toFixed(1)}));
+          float fin = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.fin.toFixed(1)}));
+          float woolly = 1.0 - smoothstep(0.35, 0.65, abs(kind - ${FAUNA_KIND_ID.woolly.toFixed(1)}));
+          float hopper = 1.0 - smoothstep(0.35, 0.65, abs(kind - ${FAUNA_KIND_ID.hopper.toFixed(1)}));
+          float angle = wave * 0.25 * (frontLeft - frontRight - hindLeft + hindRight) * (1.0 - hopper);
+          angle += hopper * wave * (0.08 * (frontLeft + frontRight) - 0.13 * (hindLeft + hindRight));
+          angle += neck * (wave * 0.025 - pose * (1.02 - woolly * 0.42));
+          angle += tail * sin(time * (3.2 + seed) + phase) * 0.22;
+          angle += (leftWing - rightWing) * sin(time * (15.0 + seed * 3.0) + phase) * 0.82;
+          angle += fin * sin(time * (4.2 + seed * 1.5) + phase) * 0.42;
+          return angle;
+        }
+        float faunaBendAngle(float joint, float stride, float seed, float kind) {
+          float wave = sin(stride * 6.2831853 + seed * 1.445);
+          float frontLeft = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.frontLeft.toFixed(1)}));
+          float frontRight = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.frontRight.toFixed(1)}));
+          float hindLeft = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.hindLeft.toFixed(1)}));
+          float hindRight = 1.0 - smoothstep(0.35, 0.65, abs(joint - ${FAUNA_JOINT_ID.hindRight.toFixed(1)}));
+          float hopper = 1.0 - smoothstep(0.35, 0.65, abs(kind - ${FAUNA_KIND_ID.hopper.toFixed(1)}));
+          float diagonal = wave * (frontLeft - frontRight - hindLeft + hindRight);
+          float hopFold = wave * (0.34 * (frontLeft + frontRight) - 0.52 * (hindLeft + hindRight));
+          return mix(-diagonal * 0.34, hopFold, hopper);
+        }
         ${FAUNA_NOISE}`
+      )
+      .replace(
+        '#include <beginnormal_vertex>',
+        `#include <beginnormal_vertex>
+        {
+          float normalJointAngle = faunaJointAngle(
+            aFaunaJoint,
+            aFaunaStride,
+            fract(aFaunaSeed),
+            uTime,
+            uFaunaKind,
+            clamp(aFaunaPose, 0.0, 1.0)
+          ) * aFaunaJointWeight * uFaunaMotion;
+          float normalBendAngle = faunaBendAngle(
+            aFaunaJoint,
+            aFaunaStride,
+            fract(aFaunaSeed),
+            uFaunaKind
+          ) * aFaunaBend.w * uFaunaMotion;
+          objectNormal = faunaRotateZ(objectNormal, normalBendAngle);
+          float wingJoint = step(6.5, aFaunaJoint) * (1.0 - step(8.5, aFaunaJoint));
+          float tailJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.tail.toFixed(1)}));
+          float finJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.fin.toFixed(1)}));
+          float lateralJoint = clamp(tailJoint + finJoint, 0.0, 1.0);
+          objectNormal = mix(objectNormal, faunaRotateZ(objectNormal, normalJointAngle), 1.0 - wingJoint - lateralJoint);
+          objectNormal = mix(objectNormal, faunaRotateX(objectNormal, normalJointAngle), wingJoint);
+          objectNormal = mix(objectNormal, faunaRotateY(objectNormal, normalJointAngle), lateralJoint);
+        }`
       )
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
-        vFaunaPart = aFaunaPart;
         vFaunaFlex = aFaunaFlex;
+        vFaunaRegion = aFaunaRegion;
+        vFaunaMaterialSlot = aFaunaMaterialSlot;
         vec3 instWorld = instanceMatrix[3].xyz;
         vec2 windDir = normalize(uWindDir + vec2(0.0001, 0.0));
         vec2 windSide = vec2(-windDir.y, windDir.x);
@@ -942,77 +1796,62 @@ export function createFaunaMaterial(
         float phase = seed * 6.2831853;
         float stridePhase = aFaunaStride * 6.2831853 + phase * 0.23;
         float stepWave = sin(stridePhase);
-        float trotWave = sin(stridePhase * (1.0 + seed * 0.035));
         float breathWave = sin(uTime * (0.74 + seed * 0.18) + phase);
-        float side = sign(position.z + 0.001);
         float motion = uFaunaMotion;
         float bodyBob = (abs(stepWave) * 0.016 + breathWave * 0.006) * motion;
-        // Legs pivot from the hip: swing amplitude grows toward the foot so the
-        // hip stays planted in the body and the FOOT strides — instead of the
-        // whole leg translating and skating over the ground.
-        float legSwing = smoothstep(0.62, 0.04, position.y);
-        // Hoppers bounce instead of trotting: the whole body arcs with the
-        // stride cycle while the legs tuck (front) and extend (hind).
-        float hopKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 3.0));
+        float hopKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.hopper.toFixed(1)}));
         float hop = pow(max(0.0, stepWave), 1.6) * hopKind * motion;
-        if (aFaunaPart < 0.5) {
-          transformed.y += bodyBob + hop * 0.14;
-          // Fore-aft walk rock: shoulders and hips counter-dip with the stride.
-          transformed.y += stepWave * position.x * 0.02 * (1.0 - hopKind) * motion;
-        } else if (aFaunaPart < 1.5) {
-          transformed.y += (sin(uTime * (2.1 + seed) + phase) * 0.02 + bodyBob) * motion + hop * 0.14;
-          // Stride-coupled head nod (horses nod as they walk).
-          transformed.y += stepWave * 0.02 * (1.0 - hopKind) * motion;
-          transformed.x += cos(uTime * 1.4 + phase) * 0.012 * motion;
-        } else if (aFaunaPart < 2.5) {
-          float gait = trotWave * side * (1.0 - hopKind);
-          transformed.x += gait * 0.2 * legSwing * motion;
-          transformed.y += max(0.0, gait) * 0.11 * legSwing * motion + hop * 0.1;
-          transformed.x -= hop * legSwing * 0.08;
-        } else if (aFaunaPart < 3.5) {
-          float gait = -trotWave * side * (1.0 - hopKind);
-          transformed.x += gait * 0.22 * legSwing * motion;
-          transformed.y += max(0.0, gait) * 0.12 * legSwing * motion + hop * 0.1;
-          transformed.x += hop * legSwing * 0.1;
-        } else if (aFaunaPart < 4.5) {
-          float tail = sin(uTime * (4.1 + uWindGustSpeed + seed) + phase + position.x * 3.0);
-          transformed.z += tail * (0.045 + aFaunaFlex * 0.07) * motion;
-          transformed.y += gust * aFaunaFlex * 0.018 * uWindGustStrength * motion + hop * 0.12;
-        } else {
-          float wing = sin(uTime * (34.0 + seed * 12.0) + phase + side * 0.8);
-          float wing2 = cos(uTime * (27.0 + seed * 9.0) + phase + position.x * 2.2);
-          transformed.y += wing * (0.035 + aFaunaFlex * 0.14) * motion;
-          transformed.z += side * wing2 * aFaunaFlex * 0.03 * motion;
-          transformed.x += sin(uTime * 4.3 + phase) * aFaunaFlex * 0.012 * motion;
-        }
-        // Fish swim: a lateral undulation wave traveling nose -> tail, growing
-        // in amplitude toward the tail (the part-4 tail sway rides on top).
-        float fishKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 5.0));
-        if (fishKind > 0.5) {
-          float swim = sin(uTime * (4.2 + seed * 1.5) + phase - position.x * 2.4);
-          transformed.z += swim * clamp(0.24 - position.x * 0.3, 0.02, 0.45) * 0.4 * motion;
-        }
-        float windFlex = max(0.0, aFaunaFlex - 0.28);
+        float jointAngle = faunaJointAngle(
+          aFaunaJoint,
+          aFaunaStride,
+          seed,
+          uTime,
+          uFaunaKind,
+          clamp(aFaunaPose, 0.0, 1.0)
+        ) * aFaunaJointWeight * motion;
+        float wingJoint = step(6.5, aFaunaJoint) * (1.0 - step(8.5, aFaunaJoint));
+        float tailJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.tail.toFixed(1)}));
+        float finJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.fin.toFixed(1)}));
+        float lateralJoint = clamp(tailJoint + finJoint, 0.0, 1.0);
+        float bendAngle = faunaBendAngle(aFaunaJoint, aFaunaStride, seed, uFaunaKind)
+          * motion;
+        vec3 bendRelative = transformed - aFaunaBend.xyz;
+        transformed = mix(
+          transformed,
+          aFaunaBend.xyz + faunaRotateZ(bendRelative, bendAngle),
+          aFaunaBend.w
+        );
+        vec3 jointRelative = transformed - aFaunaJointPivot;
+        vec3 jointRotated = faunaRotateZ(jointRelative, jointAngle);
+        jointRotated = mix(jointRotated, faunaRotateX(jointRelative, jointAngle), wingJoint);
+        jointRotated = mix(jointRotated, faunaRotateY(jointRelative, jointAngle), lateralJoint);
+        transformed = aFaunaJointPivot + jointRotated;
+
+        float limbJoint = step(1.5, aFaunaJoint) * (1.0 - step(5.5, aFaunaJoint));
+        float rootJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.root.toFixed(1)}));
+        float neckJoint = 1.0 - smoothstep(0.35, 0.65, abs(aFaunaJoint - ${FAUNA_JOINT_ID.neck.toFixed(1)}));
+        float fishKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.fish.toFixed(1)}));
+        float plantedLift = pow(max(0.0, sin(stridePhase + aFaunaJoint * 3.14159265)), 1.8);
+        transformed.y += plantedLift * 0.042 * limbJoint * aFaunaJointWeight * motion * (1.0 - hopKind);
+        transformed.y += bodyBob * (rootJoint + neckJoint * 0.82);
+        transformed.y += hop * 0.14;
+        transformed.y -= clamp(aFaunaPose, 0.0, 1.0) * neckJoint
+          * (0.5 + 0.5 * sin(uTime * 2.4 + phase)) * 0.018 * motion;
+        transformed.z += sin(uTime * (4.2 + seed * 1.5) + phase - position.x * 2.4)
+          * max(0.0, -position.x - 0.04) * 0.08 * fishKind * motion;
+
+        float flexibleRegion = max(
+          1.0 - smoothstep(0.35, 0.65, abs(aFaunaRegion - ${FAUNA_REGION_ID.ear.toFixed(1)})),
+          max(
+            1.0 - smoothstep(0.35, 0.65, abs(aFaunaRegion - ${FAUNA_REGION_ID.mane.toFixed(1)})),
+            tailJoint
+          )
+        );
+        float windFlex = max(0.0, aFaunaFlex - 0.28) * flexibleRegion;
         float windWave = sin(uTime * (1.15 + uWindGustSpeed) + phase + position.y * 2.2);
         float windDrive = (windWave * (0.2 + gust * uWindGustStrength) + uWindTurbulence * 0.05) * windFlex * motion * (1.0 - fishKind);
         transformed.x += windDir.x * windDrive * 0.045 * uWindStrength;
         transformed.z += windDir.y * windDrive * 0.045 * uWindStrength;
-        // Grazing pose: fold the head/neck (and its riders — ears, mane, horns)
-        // down toward the ground around the neck root, with a gentle nibble bob.
-        float graze = clamp(aFaunaPose, 0.0, 1.0);
-        bool grazeBone = (aFaunaPart >= 0.5 && aFaunaPart < 1.5)
-          || (aFaunaPart >= 3.5 && aFaunaPart < 4.5 && position.x > 0.3);
-        if (graze > 0.003 && grazeBone) {
-          float woollyKind = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 1.0));
-          vec2 pivot = mix(vec2(0.42, 0.8), vec2(0.3, 0.56), woollyKind);
-          float ang = graze * (1.05 - woollyKind * 0.42);
-          float ca = cos(ang);
-          float sa = sin(ang);
-          vec2 rel = vec2(transformed.x - pivot.x, transformed.y - pivot.y);
-          transformed.x = pivot.x + rel.x * ca + rel.y * sa;
-          transformed.y = pivot.y - rel.x * sa + rel.y * ca;
-          transformed.y -= graze * (0.5 + 0.5 * sin(uTime * 2.4 + phase)) * 0.028 * motion;
-        }
         vFaunaShade = clamp(position.y * 0.72 + 0.35, 0.38, 1.2);
         vFaunaLocalPos = transformed;
         vFaunaWorldPos = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
@@ -1031,8 +1870,9 @@ export function createFaunaMaterial(
         uniform vec3 uFaunaWingColor;
         uniform vec3 uSunDir;
         uniform vec3 uMoonDir;
-        varying float vFaunaPart;
         varying float vFaunaFlex;
+        varying float vFaunaRegion;
+        varying float vFaunaMaterialSlot;
         varying float vFaunaGust;
         varying float vFaunaShade;
         varying float vFaunaSeed;
@@ -1048,41 +1888,61 @@ export function createFaunaMaterial(
         float luma = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
         diffuseColor.rgb = mix(vec3(luma) * 0.84, diffuseColor.rgb, clamp(uFaunaChroma, 0.0, 1.0));
         vec3 p = vFaunaLocalPos;
-        float bodyPart = 1.0 - smoothstep(1.35, 1.65, vFaunaPart);
-        float headPart = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaPart - 1.0));
-        float legPart = smoothstep(1.5, 2.2, vFaunaPart) * (1.0 - smoothstep(3.35, 3.6, vFaunaPart));
-        float accentPart = smoothstep(3.45, 4.2, vFaunaPart) * (1.0 - smoothstep(4.45, 4.7, vFaunaPart));
-        float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
+        float bodyPart = clamp(
+          1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.body.toFixed(1)}))
+          + 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.fleece.toFixed(1)})),
+          0.0,
+          1.0
+        );
+        float headPart = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.head.toFixed(1)}));
+        float frontLimb = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.frontLimb.toFixed(1)}));
+        float hindLimb = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.hindLimb.toFixed(1)}));
+        float legPart = clamp(frontLimb + hindLimb, 0.0, 1.0);
+        float wingRegion = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.wing.toFixed(1)}));
+        float finRegion = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaRegion - ${FAUNA_REGION_ID.fin.toFixed(1)}));
+        float wingPart = clamp(wingRegion + finRegion, 0.0, 1.0);
+        float eyeSlot = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.eye.toFixed(1)}));
+        float hornSlot = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.horn.toFixed(1)}));
+        float hoofSlot = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.hoof.toFixed(1)}));
+        float fleeceSlot = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.fleece.toFixed(1)}));
+        float membraneSlot = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.membrane.toFixed(1)}));
+        float accentPart = clamp(eyeSlot + hornSlot + hoofSlot, 0.0, 1.0);
 
         float dorsal = smoothstep(-0.08, 0.2, p.y) * (1.0 - smoothstep(0.10, 0.34, abs(p.z)));
         // Belly band scaled for the raised horse-height torso (body ~0.5-1.0).
         float underside = smoothstep(0.7, 0.25, p.y);
-        float spots = smoothstep(0.68, 0.96, fnNoise(p.xz * 9.0 + vec2(vFaunaSeed * 11.0, uFaunaKind * 3.7)));
-        float bands = smoothstep(0.88, 1.0, abs(sin((p.x + vFaunaSeed) * 18.0)));
-        float wool = fnNoise(p.xz * 15.0 + vec2(p.y * 2.0 + vFaunaSeed * 4.0, uFaunaKind));
-        float kindGrazer = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 0.0));
-        float kindWoolly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 1.0));
-        float kindRunner = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 2.0));
-        float kindHopper = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 3.0));
-        float kindDragonfly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 4.0));
-        float kindFish = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - 5.0));
+        float coatNoise = 0.48 * fnNoise(p.xy * 8.0 + vec2(vFaunaSeed * 11.0, uFaunaKind * 3.7))
+          + 0.52 * fnNoise(p.xz * 8.0 + vec2(uFaunaKind * 2.9, vFaunaSeed * 7.0));
+        float spots = smoothstep(0.61, 0.86, coatNoise);
+        float bands = smoothstep(0.78, 0.98, abs(sin((p.x + p.y * 0.14 + vFaunaSeed) * 16.0)));
+        float wool = 0.5 * fnNoise(p.xy * 17.0 + vec2(vFaunaSeed * 4.0, uFaunaKind))
+          + 0.5 * fnNoise(p.yz * 18.0 + vec2(uFaunaKind, vFaunaSeed * 5.0));
+        float kindGrazer = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.grazer.toFixed(1)}));
+        float kindWoolly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.woolly.toFixed(1)}));
+        float kindRunner = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.runner.toFixed(1)}));
+        float kindHopper = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.hopper.toFixed(1)}));
+        float kindDragonfly = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.dragonfly.toFixed(1)}));
+        float kindFish = 1.0 - smoothstep(0.35, 0.65, abs(uFaunaKind - ${FAUNA_KIND_ID.fish.toFixed(1)}));
 
         diffuseColor.rgb *= 0.76 + vFaunaShade * 0.24 + vFaunaGust * 0.055 + vFaunaFlex * 0.035;
         diffuseColor.rgb *= 1.0 - underside * bodyPart * 0.18;
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.68, 0.72, 0.76), dorsal * bodyPart * kindGrazer * 0.34);
-        diffuseColor.rgb *= 0.9 + wool * bodyPart * kindWoolly * 0.22;
-        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.72 + bands * 0.42), bodyPart * kindRunner * 0.26);
+        diffuseColor.rgb *= 0.86 + wool * fleeceSlot * kindWoolly * 0.28;
+        float runnerSaddle = smoothstep(-0.04, 0.2, p.y) * smoothstep(0.08, 0.34, abs(p.x));
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.68 + bands * 0.34), bodyPart * kindRunner * (0.2 + runnerSaddle * 0.18));
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.78 + spots * 0.38), bodyPart * kindHopper * 0.32);
         diffuseColor.rgb = mix(diffuseColor.rgb, mix(diffuseColor.rgb, uFaunaRimColor, bands * 0.26), bodyPart * kindDragonfly);
         // Fish: pale countershaded belly + an iridescent flank band shimmer.
         float belly = smoothstep(0.36, 0.16, p.y);
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 1.4 + vec3(0.07), belly * bodyPart * kindFish * 0.6);
         diffuseColor.rgb = mix(diffuseColor.rgb, uFaunaWingColor, bands * bodyPart * kindFish * 0.3);
-        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.62, legPart * 0.38);
-        diffuseColor.rgb += uFaunaRimColor * accentPart * 0.045;
-        diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFaunaWingColor, uFaunaWingColor + vec3(0.16, 0.2, 0.22), vFaunaFlex), wingPart * (0.62 + vFaunaGust * 0.16));
-        diffuseColor.rgb += vec3(0.025, 0.02, 0.012) * accentPart * (1.0 - wingPart);
-        diffuseColor.rgb += vec3((fnNoise(gl_FragCoord.xy * 0.55 + vec2(vFaunaSeed)) - 0.5) * (1.0 / 255.0));`
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.68, legPart * (1.0 - hoofSlot) * 0.28);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.025, 0.03, 0.028), eyeSlot * 0.92);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.72, 0.69, 0.62), clamp(hornSlot + hoofSlot, 0.0, 1.0) * 0.46);
+        diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFaunaWingColor, uFaunaWingColor + vec3(0.12, 0.15, 0.17), vFaunaFlex), membraneSlot * (0.62 + vFaunaGust * 0.12));
+        diffuseColor.rgb += vec3(0.016, 0.012, 0.008) * accentPart * (1.0 - membraneSlot);
+        float stableMicro = fnNoise(p.xy * 34.0 + vec2(p.z * 11.0 + vFaunaSeed * 17.0, uFaunaKind * 5.3));
+        diffuseColor.rgb *= 0.985 + stableMicro * 0.03;`
       )
       .replace(
         '#include <normal_fragment_begin>',
@@ -1097,23 +1957,33 @@ export function createFaunaMaterial(
           float wrap = clamp((dot(Nw, uSunDir) + 0.42) / 1.42, 0.0, 1.0);
           float backlit = pow(clamp(dot(V, -uSunDir), 0.0, 1.0), 2.6);
           float moonBack = pow(clamp(dot(V, -uMoonDir), 0.0, 1.0), 2.8);
-          float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
-          float bodyMass = 1.0 - wingPart;
+          float membrane = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.membrane.toFixed(1)}));
+          float eye = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.eye.toFixed(1)}));
+          float bodyMass = 1.0 - membrane;
           diffuseColor.rgb = mix(diffuseColor.rgb * 0.82, diffuseColor.rgb, 0.48 + wrap * 0.52);
-          vFaunaGlowTerm += uFaunaRimColor * rim * (0.08 + 0.16 * daylight) * bodyMass;
-          vFaunaGlowTerm += uFaunaSSSColor * backlit * wrap * daylight * (0.12 + vFaunaFlex * 0.16) * bodyMass;
-          vFaunaGlowTerm += uFaunaSSSColor * moonBack * night * 0.045 * bodyMass;
-          vFaunaGlowTerm += uFaunaWingColor * rim * wingPart * (0.16 + vFaunaFlex * 0.2);
+          vFaunaGlowTerm += uFaunaRimColor * rim * (0.025 + 0.055 * daylight) * bodyMass * (1.0 - eye);
+          vFaunaGlowTerm += uFaunaSSSColor * backlit * wrap * daylight * (0.035 + vFaunaFlex * 0.04) * bodyMass * (1.0 - eye);
+          vFaunaGlowTerm += uFaunaSSSColor * moonBack * night * 0.014 * bodyMass;
+          vFaunaGlowTerm += uFaunaWingColor * rim * membrane * (0.055 + vFaunaFlex * 0.07);
         }`
       )
       .replace(
         '#include <roughnessmap_fragment>',
         `#include <roughnessmap_fragment>
         {
-          float wingPart = smoothstep(4.5, 5.5, vFaunaPart);
-          float legPart = smoothstep(1.5, 2.2, vFaunaPart) * (1.0 - smoothstep(3.35, 3.6, vFaunaPart));
-          roughnessFactor = mix(roughnessFactor, 0.34, wingPart * 0.55);
-          roughnessFactor = clamp(roughnessFactor + legPart * 0.08, 0.0, 1.0);
+          float eye = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.eye.toFixed(1)}));
+          float horn = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.horn.toFixed(1)}));
+          float hoof = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.hoof.toFixed(1)}));
+          float fleece = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.fleece.toFixed(1)}));
+          float scale = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.scale.toFixed(1)}));
+          float membrane = 1.0 - smoothstep(0.35, 0.65, abs(vFaunaMaterialSlot - ${FAUNA_MATERIAL_SLOT_ID.membrane.toFixed(1)}));
+          roughnessFactor = mix(roughnessFactor, 0.12, eye * 0.92);
+          roughnessFactor = mix(roughnessFactor, 0.42, horn * 0.7);
+          roughnessFactor = mix(roughnessFactor, 0.58, hoof * 0.62);
+          roughnessFactor = mix(roughnessFactor, 0.98, fleece * 0.82);
+          roughnessFactor = mix(roughnessFactor, 0.44, scale * 0.5);
+          roughnessFactor = mix(roughnessFactor, 0.28, membrane * 0.58);
+          roughnessFactor = clamp(roughnessFactor, 0.06, 1.0);
         }`
       )
       .replace(
@@ -1124,12 +1994,11 @@ export function createFaunaMaterial(
       .replace(
         '#include <alphamap_fragment>',
         `#include <alphamap_fragment>
-        diffuseColor.a *= clamp(uFaunaVisibility, 0.0, 1.0);
-        diffuseColor.a *= mix(1.0, 0.34 + vFaunaFlex * 0.22 + vFaunaGust * 0.08, smoothstep(4.5, 5.5, vFaunaPart));`
+        diffuseColor.a *= clamp(uFaunaVisibility, 0.0, 1.0);`
       );
   };
 
-  material.customProgramCacheKey = () => 'fauna-field-v7';
+  material.customProgramCacheKey = () => 'fauna-field-v9';
   return material;
 }
 
@@ -1178,12 +2047,7 @@ function faunaSpeedForKind(kind: FaunaKind, profile: FaunaProfile, jitter: numbe
 
 // Stride cycles per unit of travel — large animals take slower, longer steps.
 function faunaStrideRateForKind(kind: FaunaKind): number {
-  if (kind === 'runner') return 1.1;
-  if (kind === 'hopper') return 0.85;
-  if (kind === 'dragonfly') return 2.2;
-  if (kind === 'fish') return 1.4;
-  if (kind === 'woolly') return 0.72;
-  return 0.56;
+  return FAUNA_SPECIES[kind].strideCyclesPerUnit;
 }
 
 export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, progress: number): number {
@@ -1191,13 +2055,78 @@ export function faunaLevelTransitionLift(kind: FaunaKind, levelDelta: number, pr
   if (amount < 0.001) return 0;
   const t = clamp(progress, 0, 1);
   const base =
-    kind === 'dragonfly' ? 0.38 :
-      kind === 'fish' ? 0.42 :
-        kind === 'hopper' ? 0.62 :
-          kind === 'runner' ? 0.8 :
-            kind === 'woolly' ? 0.95 :
-              1.12;
-  return (base + Math.min(2, amount) * VOXEL_SCALE * 0.18) * Math.sin(Math.PI * t);
+    kind === 'dragonfly' ? 0.32 :
+      kind === 'fish' ? 0.25 :
+        kind === 'hopper' ? 0.42 :
+          kind === 'runner' ? 0.22 :
+            kind === 'woolly' ? 0.25 :
+              0.28;
+  return (base + Math.min(2, amount) * VOXEL_SCALE * 0.06) * Math.sin(Math.PI * t);
+}
+
+/**
+ * Renderer-neutral handoff for one live agent. The current Three.js field and
+ * future skinned/WebGPU adapters can consume the same stable simulation state.
+ */
+export function createFaunaRenderSnapshot(
+  agent: FaunaAgent,
+  time: number,
+  planetScaleMul = 1
+): FaunaRenderSnapshotV1 {
+  const fleeing = time < agent.fleeUntil;
+  const grazing = !fleeing && time < agent.grazeUntil;
+  const behavior: FaunaBehavior = fleeing
+    ? 'flee'
+    : grazing
+      ? 'graze'
+      : agent.kind === 'dragonfly'
+        ? 'fly'
+        : agent.kind === 'fish'
+          ? 'swim'
+          : agent.kind === 'hopper'
+            ? 'hop'
+            : FAUNA_SPECIES[agent.kind].defaultBehavior;
+  const t = clamp(agent.progress, 0, 1);
+  const position = agent.from.clone().lerp(agent.to, t);
+  const routeUp = FACE_NORMALS[dominantFaceForPosition(agent.from)].clone();
+  position.addScaledVector(routeUp, faunaLevelTransitionLift(agent.kind, agentLevelDelta(agent), t));
+  const up = FACE_NORMALS[dominantFaceForPosition(position)].clone();
+  const forward = agent.to.clone().sub(agent.from);
+  forward.addScaledVector(up, -forward.dot(up));
+  if (forward.lengthSq() < 0.0001) deterministicTangentForUp(up, forward);
+  else forward.normalize();
+  const locomotionSpeed = grazing ? 0 : agent.speed * (fleeing ? FLEE_SPEED_MUL : 1);
+  const velocity = forward.clone().multiplyScalar(locomotionSpeed);
+  const scale = faunaScaleForKind(agent.kind, agent.scaleSeed, planetScaleMul);
+  const phenotype = buildFaunaPhenotype(agent.terrainSeed, agent.kind);
+  const pose = clampFaunaPose({
+    ...emptyFaunaPose(),
+    locomotion: locomotionSpeed > 0.001 ? 1 : 0,
+    graze: agent.pose,
+    alert: fleeing ? 1 : 0,
+    flee: fleeing ? 1 : 0,
+    hop: agent.kind === 'hopper' && !grazing ? 1 : 0,
+    swim: agent.kind === 'fish' ? 1 : 0,
+    wingbeat: agent.kind === 'dragonfly' ? 1 : 0,
+    breathe: 1
+  });
+  return {
+    schemaVersion: FAUNA_MODEL_SCHEMA_VERSION,
+    agentId: `${agent.terrainSeed}:${agent.kind}:${agent.homeX}:${agent.homeY}:${agent.homeZ}`,
+    kind: agent.kind,
+    kindId: FAUNA_KIND_ID[agent.kind],
+    morphologyId: phenotype.morphologyId,
+    behavior,
+    position: [position.x, position.y, position.z],
+    rotation: [agent.orientation.x, agent.orientation.y, agent.orientation.z, agent.orientation.w],
+    scale,
+    velocity: [velocity.x, velocity.y, velocity.z],
+    forward: [forward.x, forward.y, forward.z],
+    up: [up.x, up.y, up.z],
+    locomotionPhase: normalizeFaunaLocomotionPhase(agent.stridePhase),
+    locomotionSpeed,
+    pose
+  };
 }
 
 function faunaAgentKey(kind: FaunaKind, x: number, y: number, z: number): string {
@@ -1255,6 +2184,23 @@ function surfaceUpCoordStep(x: number, y: number, z: number): [number, number, n
   ];
 }
 
+export function hasFaunaBodyClearance(
+  kind: FaunaKind,
+  x: number,
+  y: number,
+  z: number,
+  profile: FaunaProfile
+): boolean {
+  if (kind === 'dragonfly' || kind === 'fish') return true;
+  const [, yScale] = faunaScaleForKind(kind, 0.5, profile.scaleMul);
+  const clearanceCells = Math.max(1, Math.ceil(FAUNA_SPECIES[kind].bodyClearance * yScale / VOXEL_SCALE));
+  const [ux, uy, uz] = surfaceUpCoordStep(x, y, z);
+  for (let step = 1; step <= clearanceCells; step++) {
+    if (voxelSystem.getVoxel(x + ux * step, y + uy * step, z + uz * step)) return false;
+  }
+  return true;
+}
+
 function mod4(n: number): number {
   return ((n % 4) + 4) % 4;
 }
@@ -1279,6 +2225,7 @@ function findFaunaTravelCandidate(
     if (!voxel || !isFaunaTravelVoxel(kind, voxel, profile)) continue;
     // Ground fauna never wade; fish never beach; dragonflies cross freely.
     if (!isFaunaHabitatVoxel(kind, nx, ny, nz, profile)) continue;
+    if (!hasFaunaBodyClearance(kind, nx, ny, nz, profile)) continue;
     return [nx, ny, nz];
   }
   return null;
@@ -1487,8 +2434,7 @@ function agentLevelDelta(agent: FaunaAgent): number {
 
 function computeFaunaAgentCullPosition(agent: FaunaAgent, target: THREE.Vector3): THREE.Vector3 {
   const t = clamp(agent.progress, 0, 1);
-  const eased = t * t * (3 - 2 * t);
-  return target.copy(agent.from).lerp(agent.to, eased);
+  return target.copy(agent.from).lerp(agent.to, t);
 }
 
 function isFaunaAgentVisibleInRange(
@@ -1517,6 +2463,8 @@ function isFaunaAgentStillValid(
   if (chooseFaunaKindForVoxel(homeVoxel, agent.homeX, agent.homeY, agent.homeZ, terrainSeed, profile) !== kind) return false;
   if (!isFaunaHabitatVoxel(kind, agent.x, agent.y, agent.z, profile) ||
     !isFaunaHabitatVoxel(kind, agent.toX, agent.toY, agent.toZ, profile)) return false;
+  if (!hasFaunaBodyClearance(kind, agent.x, agent.y, agent.z, profile) ||
+    !hasFaunaBodyClearance(kind, agent.toX, agent.toY, agent.toZ, profile)) return false;
   return isFaunaTravelVoxel(kind, currentVoxel, profile) && isFaunaTravelVoxel(kind, targetVoxel, profile);
 }
 
@@ -1528,10 +2476,9 @@ function computeFaunaAgentMatrix(
   planetScaleMul = 1
 ): THREE.Matrix4 {
   const t = clamp(agent.progress, 0, 1);
-  const eased = t * t * (3 - 2 * t);
-  _movePos.copy(agent.from).lerp(agent.to, eased);
+  _movePos.copy(agent.from).lerp(agent.to, t);
   _routeUp.copy(FACE_NORMALS[dominantFaceForPosition(agent.from)]);
-  _movePos.addScaledVector(_routeUp, faunaLevelTransitionLift(agent.kind, agentLevelDelta(agent), eased));
+  _movePos.addScaledVector(_routeUp, faunaLevelTransitionLift(agent.kind, agentLevelDelta(agent), t));
   _moveUp.copy(FACE_NORMALS[dominantFaceForPosition(_movePos)]);
   _moveForward.copy(agent.to).sub(agent.from);
   _moveForward.addScaledVector(_moveUp, -_moveForward.dot(_moveUp));
@@ -1724,6 +2671,7 @@ export function buildFaunaInstances(
     if (includedHomes.has(faunaAgentKey(kind, x, y, z))) continue;
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
+    if (!hasFaunaBodyClearance(kind, x, y, z, profile)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
     if (!isFaunaTravelVoxel(kind, voxel, profile)) continue;
 

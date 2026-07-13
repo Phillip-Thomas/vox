@@ -209,3 +209,26 @@ Evidence:
 - `main/captures/procedural-atlas/2026-07-12T02-08-03-280Z-tree-overhaul-perf-final3/summary.json`
 
 Machine result: focused `51 / 51` tree tests and the full `818 / 818` repository suite pass; TypeScript typecheck and production build pass. All `144` profiled phenotypes pass all-attribute determinism plus structural/budget invariants, and smoke is clean. The perf matrix has no slow-frame defect, spans `54-60fps`, and peaks at `21.1ms` in a zero-tree POTATO control; HIGH/ULTRA tree cases hold `60fps` with max p95 `17.1ms`. Program-count defects remain in the broader current checkout, including POTATO where trees are disabled, and are recorded as an external accepted exception rather than hidden by threshold changes.
+
+## 2026-07-12 Voxel Surface And Material Sweep
+
+The rectangular sand artifact came from two sources: a hash selected entire procedural cells, and runtime placed a full 2x2 transparent sheet over every eligible voxel. Flush phenomena now live in the shared voxel shader, where world-continuous shaped fields cannot expose carrier geometry. Runtime surface effects are reserved for genuinely airborne motes and critters.
+
+`voxel-pbr-v7` gives all twelve materials separate surface/PBR language and seed-derived domains. Lava now has broad cooled plates, connected molten channels, sparse hot cores, coherent relief/roughness/emission, and visible embers. Metallic planets expose mineral flecks in host rock; MEDIUM/LOW preserve identity proportionally; bare/color remain flat and motionless.
+
+Verification passed with `140` test files / `1060` tests plus TypeScript and production build. Final showcase, perf, and reality atlases cover `74` cases and `231` screenshots with no console errors or defects. Performance holds `59-60fps` in the perf matrix with max p95 `17.0ms`; the reality matrix max case p95 is `17.3ms`. Independent adversarial review reports no remaining visual blocker.
+
+Resume point: terrain-scale connected lava flows/calderas are the next separate volcanic-world topology opportunity. The material and surface-effect sweep itself is closed.
+
+## 2026-07-12 Demo Shell And Interruption Foundation
+
+Batch 1 of `PARAVOXIA_DEMO_FOUNDATION_PLAN.md` is complete. Pause now freezes
+the existing Story director and gameplay paths, the active Story has no world
+travel surface, and controls are discoverable on landing and pause without
+remapping. Completed saves can return to the site or explicitly confirm a clean
+Story replay while preserving non-Story worlds.
+
+Verification passes with 143 test files / 1,077 tests, TypeScript, a production
+build under the 1.60 MB gzip guard, and six accepted shell states. The next
+execution batch is the primitive gather/craft/shelter/warmth/recovery loop; no
+later Story or audio work is authorized by this checkpoint.

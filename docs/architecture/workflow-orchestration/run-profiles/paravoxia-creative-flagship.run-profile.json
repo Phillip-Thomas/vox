@@ -1,0 +1,87 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": {
+    "slug": "paravoxia-creative-flagship",
+    "name": "Paravoxia Creative Flagship",
+    "version": "v1"
+  },
+  "domain": "audiovisual_game_direction",
+  "mode": "three_director_flagship",
+  "executionBudget": {
+    "tier": "flagship",
+    "maxModelCalls": 42,
+    "maxPatchLoops": 4,
+    "maxIndependentReviewPasses": 3,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnDirectorsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 4,
+    "requireCurrentAuthority": true,
+    "requireShippedEvidence": true,
+    "requireAdjacentSceneSurvey": true,
+    "requireIndependentTreatments": true,
+    "minimumDistinctTreatments": 2
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.8,
+    "categoryFloor": 4.5,
+    "stagedGate": "final",
+    "humanTasteApproval": {
+      "required": true,
+      "requiresHeadedRealGpuEvidence": true,
+      "cannotBeInferredFromModelReview": true
+    },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": true,
+    "routeOpenDefectsToOwningLane": true,
+    "stopWhenScoreStallsForLoops": 2,
+    "minimumMaterialScoreDelta": 0.05,
+    "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
+  },
+  "requiredEvidence": [
+    "production-lock",
+    "production-lock-machine",
+    "shipped-reference-map",
+    "story-intent",
+    "score-treatment",
+    "cinematography-treatment",
+    "director-notes",
+    "director-signoffs",
+    "dissent-register",
+    "scene-contract",
+    "implementation-diff",
+    "verification-report",
+    "screenshot-report",
+    "audio-report",
+    "raw-audiovisual-evidence",
+    "narrative-audit",
+    "score-audit",
+    "cinematography-audit",
+    "naive-audience-report",
+    "critic-report",
+    "final-scorecard",
+    "creative-run-quality-report",
+    "human-decision",
+    "lessons-learned"
+  ],
+  "stateCoverage": {
+    "requiredStates": [
+      "desktop",
+      "mobile",
+      "reduced_motion",
+      "lowest_supported_quality",
+      "deep_link",
+      "replay",
+      "pause_focus",
+      "quit_to_menu",
+      "story_completion",
+      "sandbox_inactive"
+    ],
+    "stressStatesRequired": true,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "A state or evidence class may be omitted only by an explicit run-scoped human decision."
+  }
+}

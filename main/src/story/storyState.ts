@@ -3,14 +3,25 @@ import {
   setVoxelRealityStage,
   type VoxelRealityStage
 } from '../game/systems/realityRenderSystem.ts';
-import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
-import { addItem } from '../game/systems/inventorySystem.ts';
+import { getMilestones, hasMilestone, markMilestone, removeMilestonesByPrefix } from '../game/systems/progressionSystem.ts';
+import { addItem, resetInventory } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
 import { seedSupplyPodsCollected } from './supplyPods.ts';
-import { clearCampfiresForWorld, clearPlayerPoseForWorld, clearVoxelEditsForWorld } from '../game/systems/persistence.ts';
+import {
+  clearCampfiresForWorld,
+  clearPlayerPoseForWorld,
+  clearVoxelEditsForWorld,
+  clearWorldStateForWorld
+} from '../game/systems/persistence.ts';
 import { createWorldIdentity } from '../game/worldIdentity.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
+import { resetMaw } from '../game/systems/mawSystem.ts';
+import { resetVitals } from '../game/systems/survivalVitals.ts';
+import { resetWaterskin } from '../game/systems/consumeSystem.ts';
+import { resetJetpackFuel } from '../game/systems/jetpackSystem.ts';
+import { clearStoryText } from './storyText.ts';
+import { resetStoryClock } from './storyClock.ts';
 
 // --- Story mode state ---------------------------------------------------------
 //
@@ -50,6 +61,8 @@ export interface StorySnapshot {
   active: boolean;
   chapter: StoryChapter;
   beat: StoryBeat | null;
+  /** In-memory scene remount token for an explicit clean replay. */
+  runId: number;
 }
 
 // Milestone ids (persisted checkpoints). Free-form strings by design — see
@@ -91,7 +104,7 @@ export const STORY_MILESTONES = {
   complete: 'story:complete'
 } as const;
 
-let snapshot: StorySnapshot = { active: false, chapter: 'none', beat: null };
+let snapshot: StorySnapshot = { active: false, chapter: 'none', beat: null, runId: 0 };
 
 const listeners = new Set<() => void>();
 
@@ -183,6 +196,11 @@ export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
  *  finished-slice saves see "Continue Story" again and resume at ch3-thirst. */
 export function canContinueStory(): boolean {
   return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch4Arrived);
+}
+
+/** True once the current public Story Demo boundary has been reached. */
+export function hasCompletedStory(): boolean {
+  return hasMilestone(STORY_MILESTONES.ch4Arrived);
 }
 
 // --- deep links / debug jumps ---------------------------------------------------
@@ -367,6 +385,28 @@ export function beginStory(): void {
   clearStalePreFireCampfires(entry.beat);
   setVoxelRealityStage(stageForStoryPoint(entry));
   setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
+}
+
+/** Explicit, destructive replay requested by the player. Preserves non-Story
+ * progression and every non-Story world, but resets the carried loadout and the
+ * pinned Story site so the opening cannot inherit completed-run advantages. */
+export function restartStory(): void {
+  const storyWorld = createWorldIdentity(STORY_COORDINATE);
+  removeMilestonesByPrefix('story:');
+  resetInventory();
+  resetMaw();
+  resetVitals();
+  resetWaterskin();
+  resetJetpackFuel();
+  clearWorldStateForWorld(storyWorld);
+  clearVoxelEditsForWorld(storyWorld);
+  clearPlayerPoseForWorld(storyWorld);
+  clearStoryText();
+  resetStoryClock();
+  setStoryForcedDayPhase(null);
+  setVoxelRealityStage('bare');
+  setSnapshot({ active: false, chapter: 'none', beat: null, runId: snapshot.runId + 1 });
+  beginStory();
 }
 
 /** Director-only: move to the next beat (and chapter, when the beat crosses). */

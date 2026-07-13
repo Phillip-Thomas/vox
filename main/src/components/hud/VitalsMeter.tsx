@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
-import { getVitals } from '../../game/systems/survivalVitals';
+import { getSurvivalEnvironment, getVitals } from '../../game/systems/survivalVitals';
 import { getMawChargeFraction } from '../../game/systems/mawSystem.ts';
 import { ownsChargeTool } from '../../game/systems/loadoutSystem.ts';
 import { getJetpackFuel } from '../EfficientPlayer.tsx';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { theme } from '../../ui/theme.ts';
 import { storyStatVisible } from '../../story/storyState.ts';
+import { getStoryStateSnapshot } from '../../story/storyState.ts';
 import { hudGlassPanelStyle } from './hudChrome.ts';
 import {
   formatJetpackFuelFraction,
@@ -26,6 +27,7 @@ const VitalsMeter: React.FC = () => {
   const mawRow = useRef<HTMLDivElement | null>(null);
   const mawFill = useRef<HTMLDivElement | null>(null);
   const mawValue = useRef<HTMLSpanElement | null>(null);
+  const thermalStatus = useRef<HTMLDivElement | null>(null);
   const initial = getVitals();
   const touch = isTouchDevice();
   const placement = getVitalsPanelPlacement(touch);
@@ -34,6 +36,7 @@ const VitalsMeter: React.FC = () => {
     let raf = 0;
     const tick = () => {
       const v = getVitals();
+      const environment = getSurvivalEnvironment();
       for (let i = 0; i < VITAL_BARS.length; i++) {
         // Self-discovery: each row exists only once its sensation has been
         // FELT (story saves; pure sandbox shows everything).
@@ -68,6 +71,19 @@ const VitalsMeter: React.FC = () => {
           : 'linear-gradient(90deg, #fca5a5, rgba(255,255,255,0.72))';
       }
       if (mawValue.current) mawValue.current.textContent = formatMawChargeFraction(getMawChargeFraction());
+      if (thermalStatus.current) {
+        thermalStatus.current.style.display = storyStatVisible('warmth') && !getStoryStateSnapshot().active ? 'flex' : 'none';
+        thermalStatus.current.textContent = environment.status === 'fire'
+          ? '● FIRE WARMTH'
+          : environment.status === 'sheltered'
+            ? '◆ SHELTERED'
+            : environment.status === 'exposed'
+              ? '▲ NIGHT EXPOSURE'
+              : environment.status === 'daylight' ? '○ DAYLIGHT RECOVERY' : '— THERMAL STABLE';
+        thermalStatus.current.style.color = environment.status === 'exposed'
+          ? theme.color.danger
+          : environment.status === 'fire' ? '#fbbf24' : theme.color.accent;
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -208,6 +224,21 @@ const VitalsMeter: React.FC = () => {
             {formatMawChargeFraction(getMawChargeFraction())}
           </span>
         </div>
+        <div
+          ref={thermalStatus}
+          data-testid="thermal-status"
+          style={{
+            display: storyStatVisible('warmth') ? 'flex' : 'none',
+            alignItems: 'center',
+            minHeight: 12,
+            marginTop: 2,
+            color: theme.color.accent,
+            fontFamily: theme.font.mono,
+            fontSize: 8,
+            fontWeight: 800,
+            letterSpacing: '0.12em'
+          }}
+        >— THERMAL STABLE</div>
       </div>
       <div style={{
         height: 1,

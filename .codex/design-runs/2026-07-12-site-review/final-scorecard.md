@@ -26,8 +26,9 @@ Weighted baseline: `3.78 / 5`.
 - Threshold: `4.75 / 5`
 - Category floor: `4.3 / 5`
 - Result: `repeat / not award-ready yet`
-- Critical defects: unfinished story endpoint; no singular closed vertical slice
-- High defects: non-reactive profiles, main-thread boot, eager audio, huge initial JS, controls/a11y, incomplete consequence loop, missing browser release gates
+- Critical defects for the full game: unchanged. For the owner-defined demo, the current story endpoint is an accepted boundary rather than a defect.
+- High demo defects: non-reactive profiles, main-thread boot, control discovery/recovery, incomplete primitive consequence loop, unclear completed-save semantics, and missing browser release gates.
+- Protected observation: audio footprint is not active work; audio regression testing only.
 - Missing states: error/reconnect/conflict/focus/long-content/loading and real-device stress matrix
 - Human taste approval: pending; prior machine score is not human approval
 - Creative ambition: exceptional
@@ -51,4 +52,12 @@ Weighted baseline: `3.78 / 5`.
 - Audit artifacts added: this site-review folder
 - Checks: main typecheck, 140 files / 1,060 tests, production build; server 6 files / 58 tests and build; live screenshot/perf probes
 - Canonical preview: `http://127.0.0.1:5201/`
-- First execution run: `award-slice-entry-and-finale`, with reactive quality/audio fixes in the same initial foundation batch
+- First execution run: `demo-interruption-controls-and-recovery`; no story expansion or audio changes
+
+## Batch 1 Execution Update
+
+- Result: `refined pass`, scoped score `4.62 / 5` against the `4.55` Batch gate
+- Delivered: true pause, Story travel exclusion, shared control reference, focus/zoom repair, completed-site and confirmed replay recovery
+- Verification: 143 files / 1,077 tests, TypeScript, production build, six-state shell matrix, two clean adversarial re-reviews
+- Scope: no new story, audio change, or desktop binding change
+- Next: Batch 2 primitive systems closure

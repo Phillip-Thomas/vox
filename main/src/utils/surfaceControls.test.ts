@@ -15,6 +15,7 @@ import {
   gravityTupleForFace,
   movementDirectionFromBasis,
   planarCameraBasis,
+  removeInwardVelocity,
   transitionVelocityAcrossEdge,
   transportControlFrame,
   transitionAssistVelocity,
@@ -328,5 +329,18 @@ describe('lava wade (viscous sink)', () => {
     const velocity = new THREE.Vector3(1, 2, 3);
     composeLavaVelocity(velocity, look, up, idle, step);
     expectVectorClose(velocity, new THREE.Vector3(1, 2, 3));
+  });
+
+  it('bed lock (removeInwardVelocity) cancels only the inward component', () => {
+    // Sinking at the bed: downward motion dropped, wade/tangent kept.
+    const locked = removeInwardVelocity(new THREE.Vector3(2, -4, 0), up);
+    expectVectorClose(locked, new THREE.Vector3(2, 0, 0));
+    // Struggling/climbing out: outward motion passes through untouched.
+    const rising = removeInwardVelocity(new THREE.Vector3(2, 3, 0), up);
+    expectVectorClose(rising, new THREE.Vector3(2, 3, 0));
+    // Pure: the input is not mutated.
+    const velocity = new THREE.Vector3(0, -1, 0);
+    removeInwardVelocity(velocity, up);
+    expectVectorClose(velocity, new THREE.Vector3(0, -1, 0));
   });
 });

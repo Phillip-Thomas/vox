@@ -49,6 +49,9 @@ export interface FloraPickTarget {
 export const floraFieldHandle: { pickTargets: FloraPickTarget[] } = { pickTargets: [] };
 
 function publishFloraPickTarget(target: FloraPickTarget): void {
+  // The demo exposes only flora with an immediate survival use. Other species
+  // remain visual until their later recipes are honestly available.
+  if (target.kind !== 'shrub') return;
   const index = floraFieldHandle.pickTargets.findIndex(entry => entry.kind === target.kind);
   if (index >= 0) floraFieldHandle.pickTargets[index] = target;
   else floraFieldHandle.pickTargets.push(target);

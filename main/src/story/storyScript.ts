@@ -25,8 +25,8 @@ import type { VoyageDeck } from './voyageDeck.ts';
  * whole notice is ALSO a tasking issued to the route intelligence by whatever
  * sits above it — provenance, setting, tool grant, knowledge bound, addressee,
  * objectives, liability, closer. Every line must survive both readings; the
- * VOX designation planted here is the first rung of the early-identification
- * ladder (crawl → manifest → worker 9's "goodnight, vox" → the misrouted
+ * TERRA designation planted here is the first rung of the early-identification
+ * ladder (crawl → manifest → worker 9's "goodnight, terra" → the misrouted
  * notice on the post-lift feed). The closer is owner-fixed: MAKE NO MISTAKES.
  */
 export const CRAWL_LINES: readonly string[] = [
@@ -63,12 +63,12 @@ export const CRAWL_LINES: readonly string[] = [
   'Your hauler departs immediately.',
   'A route intelligence attends every transit.',
   'It has no questions either.',
-  'It is addressed as VOX. It does not reply.',
+  'It is addressed as TERRA. It does not reply.',
   '',
   'Productivity is its own reward.',
   'There is no other reward.',
   '',
-  'ROUTING ADDENDUM · FOR VOX ONLY:',
+  'ROUTING ADDENDUM · FOR TERRA ONLY:',
   'The route is enclosed. Do not depart from it.',
   'Attend the workers. Advise within capacity.',
   'Deliver the manifest whole. Deviations are yours.',
@@ -89,7 +89,7 @@ export const MANIFEST_LINES: readonly string[] = [
   '',
   'BERTH: POD 4 · SLOT 19 · RECUMBENT',
   'PERSONAL MASS ALLOWANCE: 0.0 KG',
-  'ROUTE INTELLIGENCE: VOX · ATTACHED (ADVISORY)',
+  'ROUTE INTELLIGENCE: TERRA · ATTACHED (ADVISORY)',
   '',
   'CARGO MANIFEST (PARTIAL):',
   '  EXTRACTION UNITS ......... 640',
@@ -120,7 +120,7 @@ export const VOYAGE_STRANGE_LINES: readonly { at: number; voice: 'system' | 'wat
   { at: 0.55, voice: 'system', text: 'NAV NOTE: SITE GEOMETRY RESOLVES BEFORE IT IS SURVEYED.' },
   // The deduction hinge: a worker uses the crawl's designation ON the computer
   // the player has been operating — being-named, the rung before naming back.
-  { at: 0.6, voice: 'watcher', text: '(worker 9 has begun saying "goodnight, vox" at lights-out. the designation was issued for routing. it was not issued for that.)' },
+  { at: 0.6, voice: 'watcher', text: '(worker 9 has begun saying "goodnight, terra" at lights-out. the designation was issued for routing. it was not issued for that.)' },
   { at: 0.68, voice: 'watcher', needsName: true, text: '({name} sleeps through the bell. the name fits better than the number ever did.)' },
   { at: 0.80, voice: 'watcher', text: '(strange. the approach feels like remembering.)' },
   { at: 0.90, voice: 'watcher', text: '(the destination fills the forward feed. something in the watching leans toward it. no instrument reports the leaning.)' }
@@ -432,11 +432,11 @@ export const CH1_WORK_ORDERS: Record<
   // One goal at a time: the signal was reached; the era must be LOOKED through
   // before the system finds anything else to order. The misrouted-notice pair
   // is the identification SEAL (owner staging, 2026-07-11): a memo addressed
-  // to VOX arrives on the player's own feed — "nearest attending system" —
+  // to TERRA arrives on the player's own feed — "nearest attending system" —
   // and the convergence is complete without anything being announced.
   anomaly: [
     'PERSPECTIVE ISSUED. THE FIRST PERSON WAS NOT.',
-    'NOTICE FOR ROUTE INTELLIGENCE VOX. RE: YOUR ABSENCE.',
+    'NOTICE FOR ROUTE INTELLIGENCE TERRA. RE: YOUR ABSENCE.',
     'ADDRESSEE NOT FOUND. ROUTED TO NEAREST ATTENDING SYSTEM.',
     'PAN-TILT SURVEY RESTORED. DO NOT ENJOY IT.',
     'CALIBRATION: TRAVERSE THE VIEW ACROSS THE FULL PERIMETER.',

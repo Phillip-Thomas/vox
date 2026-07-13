@@ -1,0 +1,304 @@
+{
+  "schema": "terra.workflowSpec.v1",
+  "identity": {
+    "slug": "paravoxia-creative-triad",
+    "name": "Paravoxia Creative Triad",
+    "version": "v1"
+  },
+  "goal": "Turn an authorized Paravoxia scene intent into a signed, implemented, evidenced, independently reviewed, cohesive audiovisual experience through peer story, score, and cinematography direction without self-approval or hidden context.",
+  "scope": {
+    "surfaceFamily": "interactive_audiovisual_scene",
+    "mutationPolicy": "authorized_draft_patch_with_separate_publish_decision",
+    "runtimeBoundary": "local_or_hosted_production_worker",
+    "contextPackRefs": ["paravoxia-creative-triad@v1"],
+    "defaultRunProfileRef": "paravoxia-creative-flagship@v1",
+    "qualityRubricRef": "paravoxia-creative-cohesion@v1",
+    "defectTaxonomyRef": "paravoxia-creative-defects@v1"
+  },
+  "inputs": [
+    {
+      "slug": "user-request",
+      "required": true,
+      "description": "The requested scene, chapter, recut, or audiovisual quality outcome."
+    },
+    {
+      "slug": "target-repo",
+      "required": true,
+      "description": "The repository boundary containing current authority, canon, runtime, and evidence."
+    },
+    {
+      "slug": "target-scene",
+      "required": true,
+      "description": "The beat, connected sequence, chapter, or approved visual surface."
+    },
+    {
+      "slug": "production-authority",
+      "required": true,
+      "description": "The current checkpoint, protected paths, allowed mutations, and publish boundary."
+    }
+  ],
+  "roleContracts": [
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "creative-producer",
+      "title": "Creative Producer And Orchestrator",
+      "allowedInputs": ["user-request", "target-repo", "target-scene", "production-authority", "production-lock-machine", "story-intent", "score-treatment", "cinematography-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "chapter-reconciliation", "score-reconciliation", "cinematography-reconciliation", "chapter-contract-signoff", "score-contract-signoff", "cinematography-contract-signoff"],
+      "allowedResources": ["artifact:read", "artifact:write"],
+      "requiredOutputs": ["production-lock", "production-lock-machine", "director-notes", "director-signoffs", "dissent-register", "scene-contract"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "paravoxia.sceneContract.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "chapter-director",
+      "title": "Chapter Director",
+      "allowedInputs": ["production-lock", "target-scene", "shipped-reference-map", "score-treatment", "cinematography-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "director-notes", "dissent-register", "scene-contract", "critic-report", "defects"],
+      "requiredOutputs": ["story-intent", "shipped-reference-map", "chapter-peer-notes", "chapter-reconciliation", "chapter-contract-signoff", "chapter-repair-direction"],
+      "forbiddenActions": ["score:write", "cinematography:write", "publish:write"],
+      "outputContract": "paravoxia.storyIntent.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "score-director",
+      "title": "Score Director",
+      "allowedInputs": ["production-lock", "story-intent", "shipped-reference-map", "score-treatment", "cinematography-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "director-notes", "dissent-register", "scene-contract", "critic-report", "defects"],
+      "requiredOutputs": ["score-treatment", "score-peer-notes", "score-reconciliation", "score-contract-signoff", "score-repair-direction"],
+      "forbiddenActions": ["story:write", "cinematography:write", "publish:write"],
+      "outputContract": "paravoxia.scoreTreatment.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "cinematography-director",
+      "title": "Cinematography Director",
+      "allowedInputs": ["production-lock", "story-intent", "shipped-reference-map", "score-treatment", "cinematography-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "director-notes", "dissent-register", "scene-contract", "critic-report", "defects"],
+      "requiredOutputs": ["cinematography-treatment", "cinematography-peer-notes", "cinematography-reconciliation", "cinematography-contract-signoff", "cinematography-repair-direction"],
+      "forbiddenActions": ["story:write", "score:write", "publish:write"],
+      "outputContract": "paravoxia.cinematographyTreatment.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "integration-engineer",
+      "title": "Signed Contract Integration Engineer",
+      "allowedInputs": ["production-lock", "production-lock-machine", "scene-contract", "story-intent", "score-treatment", "cinematography-treatment", "critic-report", "defects", "chapter-repair-direction", "score-repair-direction", "cinematography-repair-direction"],
+      "allowedResources": ["repo:read", "repo:draft:write", "command:run_safe"],
+      "requiredOutputs": ["implementation-diff", "check-results"],
+      "forbiddenActions": ["contract:rewrite", "publish:write"],
+      "outputContract": "terra.patchCandidate.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "mechanical-verifier",
+      "title": "Mechanical And Evidence Verifier",
+      "allowedInputs": ["production-lock", "production-lock-machine", "scene-contract", "implementation-diff", "target-scene"],
+      "allowedResources": ["repo:read", "command:run_safe", "screenshot:capture", "audio:render", "artifact:write"],
+      "requiredOutputs": ["verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "check-results"],
+      "forbiddenActions": ["patch:write", "taste:approve", "publish:write"],
+      "outputContract": "paravoxia.sceneVerificationReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "narrative-auditor",
+      "title": "Independent Narrative Auditor",
+      "allowedInputs": ["production-lock", "story-intent", "scene-contract", "verification-report", "screenshot-report"],
+      "requiredOutputs": ["narrative-audit", "defects"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.criticReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "score-continuity-auditor",
+      "title": "Independent Score Continuity Auditor",
+      "allowedInputs": ["production-lock", "score-treatment", "scene-contract", "verification-report", "audio-report", "screenshot-report"],
+      "requiredOutputs": ["score-audit", "defects"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.criticReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "cinematography-continuity-auditor",
+      "title": "Independent Cinematography Continuity Auditor",
+      "allowedInputs": ["production-lock", "cinematography-treatment", "scene-contract", "verification-report", "screenshot-report"],
+      "requiredOutputs": ["cinematography-audit", "defects"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.criticReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "blind-scene-viewer",
+      "title": "Blind First-Time Scene Viewer",
+      "allowedInputs": ["raw-audiovisual-evidence"],
+      "requiredOutputs": ["naive-audience-report", "defects"],
+      "forbiddenActions": ["canon:read", "intent:read", "patch:write", "publish:write"],
+      "outputContract": "paravoxia.naiveAudienceReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "review-moderator",
+      "title": "Independent Review Moderator",
+      "allowedInputs": ["narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "verification-report", "dissent-register"],
+      "requiredOutputs": ["critic-report", "defects"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "paravoxia.reviewSynthesis.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "cohesion-judge",
+      "title": "Audiovisual Cohesion Judge",
+      "allowedInputs": ["story-intent", "score-treatment", "cinematography-treatment", "scene-contract", "director-notes", "director-signoffs", "dissent-register", "critic-report", "verification-report", "screenshot-report", "audio-report", "defects"],
+      "requiredOutputs": ["cohesion-judge-report", "final-scorecard", "defects"],
+      "forbiddenActions": ["patch:write", "exception:accept", "publish:write"],
+      "outputContract": "terra.scorecard.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "human-approver",
+      "title": "Human Taste Scope And Publish Approver",
+      "allowedInputs": ["production-lock", "scene-contract", "dissent-register", "cohesion-judge-report", "final-scorecard", "creative-run-quality-report"],
+      "requiredOutputs": ["human-decision"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.humanDecision.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "artifact-quality-auditor",
+      "title": "Creative Run Artifact Quality Auditor",
+      "allowedInputs": ["production-lock", "production-lock-machine", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "dissent-register", "scene-contract", "verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "critic-report", "cohesion-judge-report", "final-scorecard", "human-decision", "defects"],
+      "allowedResources": ["artifact:read", "artifact:write", "command:run_safe"],
+      "requiredOutputs": ["creative-run-quality-report"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.artifactQualityReport.v1"
+    },
+    {
+      "schema": "terra.roleContract.v1",
+      "slug": "lessons-recorder",
+      "title": "Creative Production Lessons Recorder",
+      "allowedInputs": ["production-lock", "final-scorecard", "critic-report", "cohesion-judge-report", "creative-run-quality-report", "human-decision"],
+      "requiredOutputs": ["run-summary", "lessons-learned"],
+      "forbiddenActions": ["patch:write", "publish:write"],
+      "outputContract": "terra.lessonsLearned.v1"
+    }
+  ],
+  "artifactRequirements": [
+    { "schema": "terra.artifactRequirement.v1", "slug": "production-lock", "format": "markdown", "required": true, "producerStep": "lock-production-scope", "consumerSteps": ["frame-story-intent", "compose-score-treatment", "author-cinematography-treatment", "review-peers-as-chapter", "review-peers-as-score", "review-peers-as-cinematography", "reconcile-as-chapter", "reconcile-as-score", "reconcile-as-cinematography", "compile-director-notes", "freeze-scene-contract", "sign-contract-as-chapter", "sign-contract-as-score", "sign-contract-as-cinematography", "assemble-director-signoffs", "implement-signed-contract", "capture-proof", "audit-narrative", "audit-score", "audit-cinematography", "judge-cohesion", "human-taste-and-scope", "audit-run-quality", "record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "production-lock-machine", "format": "json", "required": true, "producerStep": "lock-production-scope", "consumerSteps": ["freeze-scene-contract", "implement-signed-contract", "capture-proof", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "shipped-reference-map", "format": "markdown", "required": true, "producerStep": "frame-story-intent", "consumerSteps": ["compose-score-treatment", "author-cinematography-treatment", "review-peers-as-chapter", "review-peers-as-score", "review-peers-as-cinematography"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "story-intent", "format": "markdown", "required": true, "producerStep": "frame-story-intent", "consumerSteps": ["compose-score-treatment", "author-cinematography-treatment", "review-peers-as-chapter", "review-peers-as-score", "review-peers-as-cinematography", "freeze-scene-contract", "implement-signed-contract", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-treatment", "format": "markdown", "required": true, "producerStep": "compose-score-treatment", "consumerSteps": ["review-peers-as-chapter", "review-peers-as-score", "review-peers-as-cinematography", "freeze-scene-contract", "implement-signed-contract", "audit-score", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-treatment", "format": "markdown", "required": true, "producerStep": "author-cinematography-treatment", "consumerSteps": ["review-peers-as-chapter", "review-peers-as-score", "review-peers-as-cinematography", "freeze-scene-contract", "implement-signed-contract", "audit-cinematography", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "chapter-peer-notes", "format": "json", "required": true, "producerStep": "review-peers-as-chapter", "consumerSteps": ["reconcile-as-score", "reconcile-as-cinematography", "compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-peer-notes", "format": "json", "required": true, "producerStep": "review-peers-as-score", "consumerSteps": ["reconcile-as-chapter", "reconcile-as-cinematography", "compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-peer-notes", "format": "json", "required": true, "producerStep": "review-peers-as-cinematography", "consumerSteps": ["reconcile-as-chapter", "reconcile-as-score", "compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "chapter-reconciliation", "format": "json", "required": true, "producerStep": "reconcile-as-chapter", "consumerSteps": ["compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-reconciliation", "format": "json", "required": true, "producerStep": "reconcile-as-score", "consumerSteps": ["compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-reconciliation", "format": "json", "required": true, "producerStep": "reconcile-as-cinematography", "consumerSteps": ["compile-director-notes"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "director-notes", "format": "json", "required": true, "producerStep": "compile-director-notes", "consumerSteps": ["freeze-scene-contract", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "dissent-register", "format": "markdown", "required": true, "producerStep": "compile-director-notes", "consumerSteps": ["freeze-scene-contract", "sign-contract-as-chapter", "sign-contract-as-score", "sign-contract-as-cinematography", "critique-independent-reviews", "judge-cohesion", "human-taste-and-scope", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "scene-contract", "format": "json", "required": true, "producerStep": "freeze-scene-contract", "consumerSteps": ["sign-contract-as-chapter", "sign-contract-as-score", "sign-contract-as-cinematography", "assemble-director-signoffs", "implement-signed-contract", "capture-proof", "audit-narrative", "audit-score", "audit-cinematography", "judge-cohesion", "human-taste-and-scope", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "chapter-contract-signoff", "format": "json", "required": true, "producerStep": "sign-contract-as-chapter", "consumerSteps": ["assemble-director-signoffs"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-contract-signoff", "format": "json", "required": true, "producerStep": "sign-contract-as-score", "consumerSteps": ["assemble-director-signoffs"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-contract-signoff", "format": "json", "required": true, "producerStep": "sign-contract-as-cinematography", "consumerSteps": ["assemble-director-signoffs"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "director-signoffs", "format": "json", "required": true, "producerStep": "assemble-director-signoffs", "consumerSteps": ["implement-signed-contract", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "implementation-diff", "format": "diff", "required": true, "producerStep": "implement-signed-contract", "consumerSteps": ["capture-proof", "repair-signed-contract"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "verification-report", "format": "json", "required": true, "producerStep": "capture-proof", "consumerSteps": ["audit-narrative", "audit-score", "audit-cinematography", "critique-independent-reviews", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "screenshot-report", "format": "markdown", "required": true, "producerStep": "capture-proof", "consumerSteps": ["audit-narrative", "audit-score", "audit-cinematography", "blind-audience-review", "critique-independent-reviews", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "audio-report", "format": "markdown", "required": true, "producerStep": "capture-proof", "consumerSteps": ["audit-score", "blind-audience-review", "critique-independent-reviews", "judge-cohesion", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "raw-audiovisual-evidence", "format": "json", "required": true, "producerStep": "capture-proof", "consumerSteps": ["blind-audience-review", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "narrative-audit", "format": "markdown", "required": true, "producerStep": "audit-narrative", "consumerSteps": ["critique-independent-reviews", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-audit", "format": "markdown", "required": true, "producerStep": "audit-score", "consumerSteps": ["critique-independent-reviews", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-audit", "format": "markdown", "required": true, "producerStep": "audit-cinematography", "consumerSteps": ["critique-independent-reviews", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "naive-audience-report", "format": "markdown", "required": true, "producerStep": "blind-audience-review", "consumerSteps": ["critique-independent-reviews", "audit-run-quality"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "critic-report", "format": "markdown", "required": true, "producerStep": "critique-independent-reviews", "consumerSteps": ["judge-cohesion", "direct-narrative-repair", "direct-score-repair", "direct-cinematography-repair", "repair-signed-contract", "audit-run-quality", "record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "chapter-repair-direction", "format": "json", "required": false, "producerStep": "direct-narrative-repair", "consumerSteps": ["repair-signed-contract"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "score-repair-direction", "format": "json", "required": false, "producerStep": "direct-score-repair", "consumerSteps": ["repair-signed-contract"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cinematography-repair-direction", "format": "json", "required": false, "producerStep": "direct-cinematography-repair", "consumerSteps": ["repair-signed-contract"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "cohesion-judge-report", "format": "markdown", "required": true, "producerStep": "judge-cohesion", "consumerSteps": ["human-taste-and-scope", "audit-run-quality", "record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "final-scorecard", "format": "json", "required": true, "producerStep": "judge-cohesion", "consumerSteps": ["human-taste-and-scope", "audit-run-quality", "record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "human-decision", "format": "json", "required": false, "producerStep": "human-taste-and-scope", "consumerSteps": ["audit-run-quality", "record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "creative-run-quality-report", "format": "json", "required": true, "producerStep": "audit-run-quality", "consumerSteps": ["record-lessons"] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "run-summary", "format": "markdown", "required": true, "producerStep": "record-lessons", "consumerSteps": [] },
+    { "schema": "terra.artifactRequirement.v1", "slug": "lessons-learned", "format": "markdown", "required": true, "producerStep": "record-lessons", "consumerSteps": [] }
+  ],
+  "adapterRequirements": [
+    { "schema": "terra.adapterRequirement.v1", "id": "creative-reasoning-runner", "family": "model_adapter", "requiredCapabilities": ["long_context_reasoning", "structured_artifact_output", "independent_role_sessions"], "allowedSurfaces": ["local_developer_runtime", "hosted_worker"] },
+    { "schema": "terra.adapterRequirement.v1", "id": "draft-patch-runner", "family": "patch_adapter", "requiredCapabilities": ["repo_draft_write", "diff_output", "scoped_mutation"], "allowedSurfaces": ["local_developer_runtime", "pull_request_worker"] },
+    { "schema": "terra.adapterRequirement.v1", "id": "safe-verification-runner", "family": "tool_adapter", "requiredCapabilities": ["safe_command_run", "browser_render", "screenshot_matrix", "audio_render", "performance_trace", "command_result_capture"], "allowedSurfaces": ["local_developer_runtime", "hosted_worker"] },
+    { "schema": "terra.adapterRequirement.v1", "id": "artifact-store", "family": "artifact_adapter", "requiredCapabilities": ["artifact_read", "artifact_write", "binary_evidence_store"], "allowedSurfaces": ["local_developer_runtime", "hosted_worker"] },
+    { "schema": "terra.adapterRequirement.v1", "id": "human-review", "family": "review_adapter", "requiredCapabilities": ["approve", "reject", "accept_exception", "record_taste_decision", "record_publish_decision"], "allowedSurfaces": ["local_developer_runtime", "control_plane"] }
+  ],
+  "modelPolicies": [
+    {
+      "schema": "terra.modelPolicy.v1",
+      "slug": "creative-triad-balanced",
+      "primaryCapability": "high_reasoning_audiovisual_game_direction",
+      "fallbackCapabilities": ["general_reasoning", "human_review"],
+      "secondOpinionTriggers": ["director_objection", "score_stalled", "treatment_tie", "flagship_scene", "blind_intent_divergence", "unclear_repair_direction"],
+      "budget": { "preferDeterministicChecksBeforeCritique": true, "maxModelReviewPasses": 3 }
+    }
+  ],
+  "gates": [
+    { "schema": "terra.gate.v1", "id": "production-scope-locked", "type": "schema_valid", "title": "Human and machine production authority locks agree and hashes are current", "blocking": true, "checks": ["production-lock.authorityRef", "production-lock.allowedBeats", "production-lock.protectedPaths", "production-lock.mutationBoundary", "production-lock.publishBoundary", "production-lock-machine.authorityHashesCurrent == true", "production-lock-machine.allowedAndProtectedPathsDisjoint == true", "production-lock-machine.publishAllowed == false"] },
+    { "schema": "terra.gate.v1", "id": "story-intent-grounded", "type": "schema_valid", "title": "Story intent is grounded in shipped truth and player causality", "blocking": true, "checks": ["story-intent.playerAction", "story-intent.emotionalTurn", "story-intent.agencyWindows", "story-intent.syncAnchors", "shipped-reference-map.currentEvidence"] },
+    { "schema": "terra.gate.v1", "id": "treatments-substantive-and-independent", "type": "schema_valid", "title": "Score and cinematography treatments are substantive and independently formed", "blocking": true, "checks": ["score-treatment.anchorMap", "score-treatment.evidencePlan", "cinematography-treatment.shotLedger", "cinematography-treatment.colorScript", "cinematography-treatment.variants", "treatments.independentFirstPasses == true"] },
+    { "schema": "terra.gate.v1", "id": "director-notes-closed", "type": "schema_valid", "title": "All peer lanes exchanged notes and blocking objections are dispositioned", "blocking": true, "checks": ["director-notes.communicationGraphComplete == true", "director-notes.unacknowledged == 0", "director-notes.openCritical == 0", "director-notes.openHigh == 0", "dissent-register.materialConflictsDispositioned == true"] },
+    { "schema": "terra.gate.v1", "id": "scene-contract-signed", "type": "schema_valid", "title": "One scene contract revision is complete and signed by all directors", "blocking": true, "checks": ["scene-contract.schema == \"paravoxia.sceneContract.v1\"", "scene-contract.syncAnchors", "scene-contract.shots", "director-signoffs.chapter", "director-signoffs.score", "director-signoffs.cinematography", "director-signoffs.sameRevision == true"] },
+    { "schema": "terra.gate.v1", "id": "implementation-checks-pass", "type": "command_passed", "title": "Authorized implementation and static checks pass", "blocking": true, "checks": ["check-results.productionScope == true", "check-results.typecheck == true", "check-results.tests == true", "check-results.build == true", "check-results.creativeGate == true"] },
+    { "schema": "terra.gate.v1", "id": "proof-matrix-complete", "type": "evidence_present", "title": "Flow, exact anchors, raw audiovisual media, variants, reset, and performance evidence are complete", "blocking": true, "checks": ["verification-report.flow", "verification-report.exactAnchors", "verification-report.resetMatrix", "verification-report.performance", "screenshot-report.desktop", "screenshot-report.mobile", "screenshot-report.reducedMotion", "screenshot-report.lowestQuality", "audio-report.requiredEvidenceDispositioned", "raw-audiovisual-evidence.continuousVideo", "raw-audiovisual-evidence.frameStrips", "raw-audiovisual-evidence.audio", "raw-audiovisual-evidence.playbackMetadata", "raw-audiovisual-evidence.intentFreeInstructions"] },
+    { "schema": "terra.gate.v1", "id": "independent-reviews-complete", "type": "artifact_exists", "title": "Narrative, score, cinematography, blind audience, and synthesis reviews are complete", "blocking": true, "checks": ["narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "critic-report"] },
+    { "schema": "terra.gate.v1", "id": "no-blocking-defects", "type": "no_blocking_defects", "title": "No unresolved critical or high creative defects remain", "blocking": true, "checks": [] },
+    { "schema": "terra.gate.v1", "id": "cohesion-score-passes", "type": "score_threshold", "title": "Creative cohesion score and category floor pass the selected run profile", "blocking": true, "checks": ["final-scorecard.weightedScore >= run-profile.approval.weightedScoreThreshold", "final-scorecard.categoryFloor >= run-profile.approval.categoryFloor", "final-scorecard.fullCategoryCoverage == true", "final-scorecard.decision in [\"approved\", \"ready-for-human-taste\"]"] },
+    { "schema": "terra.gate.v1", "id": "human-taste-disposition-valid", "type": "schema_valid", "title": "Human taste is approved whenever the selected profile or defects require it", "blocking": true, "checks": ["run-profile.approval.humanTasteApproval.required == false || human-decision.decision == \"approved\"", "run-profile.approval.humanTasteApproval.requiresHeadedRealGpuEvidence == false || human-decision.headedRealGpuEvidence == true", "human-decision == null || human-decision.scopeMatchesProductionLock == true"] },
+    { "schema": "terra.gate.v1", "id": "creative-artifact-quality-passes", "type": "schema_valid", "title": "Creative run artifacts are substantive, independent, evidenced, and complete", "blocking": true, "checks": ["creative-run-quality-report.passed == true", "creative-run-quality-report.failureCount == 0"] }
+  ],
+  "steps": [
+    { "schema": "terra.workflowStep.v1", "id": "lock-production-scope", "type": "model_task", "title": "Lock Human And Machine Production Scope", "roleContractRef": "creative-producer", "inputs": ["user-request", "target-repo", "target-scene", "production-authority"], "outputs": ["production-lock", "production-lock-machine"], "allowedAdapterFamilies": ["model_adapter", "artifact_adapter", "review_adapter"], "gatesAfter": ["production-scope-locked"] },
+    { "schema": "terra.workflowStep.v1", "id": "frame-story-intent", "type": "model_task", "title": "Frame Story Intent And Shipped References", "roleContractRef": "chapter-director", "inputs": ["production-lock", "target-scene", "target-repo"], "outputs": ["story-intent", "shipped-reference-map"], "allowedAdapterFamilies": ["model_adapter", "artifact_adapter"], "gatesBefore": ["production-scope-locked"], "gatesAfter": ["story-intent-grounded"] },
+    { "schema": "terra.workflowStep.v1", "id": "compose-score-treatment", "type": "model_task", "title": "Compose Independent Score Treatment", "roleContractRef": "score-director", "inputs": ["production-lock", "story-intent", "shipped-reference-map"], "outputs": ["score-treatment"], "allowedAdapterFamilies": ["model_adapter", "artifact_adapter"], "executionGroup": "independent-treatments", "gatesBefore": ["story-intent-grounded"] },
+    { "schema": "terra.workflowStep.v1", "id": "author-cinematography-treatment", "type": "model_task", "title": "Author Independent Cinematography Treatment", "roleContractRef": "cinematography-director", "inputs": ["production-lock", "story-intent", "shipped-reference-map"], "outputs": ["cinematography-treatment"], "allowedAdapterFamilies": ["model_adapter", "artifact_adapter"], "executionGroup": "independent-treatments", "gatesBefore": ["story-intent-grounded"], "gatesAfter": ["treatments-substantive-and-independent"] },
+    { "schema": "terra.workflowStep.v1", "id": "review-peers-as-chapter", "type": "review", "title": "Chapter Director Reviews Both Peer Treatments", "roleContractRef": "chapter-director", "inputs": ["production-lock", "story-intent", "score-treatment", "cinematography-treatment", "shipped-reference-map"], "outputs": ["chapter-peer-notes"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-first-wave", "gatesBefore": ["treatments-substantive-and-independent"] },
+    { "schema": "terra.workflowStep.v1", "id": "review-peers-as-score", "type": "review", "title": "Score Director Reviews Both Peer Treatments", "roleContractRef": "score-director", "inputs": ["production-lock", "story-intent", "score-treatment", "cinematography-treatment", "shipped-reference-map"], "outputs": ["score-peer-notes"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-first-wave", "gatesBefore": ["treatments-substantive-and-independent"] },
+    { "schema": "terra.workflowStep.v1", "id": "review-peers-as-cinematography", "type": "review", "title": "Cinematography Director Reviews Both Peer Treatments", "roleContractRef": "cinematography-director", "inputs": ["production-lock", "story-intent", "score-treatment", "cinematography-treatment", "shipped-reference-map"], "outputs": ["cinematography-peer-notes"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-first-wave", "gatesBefore": ["treatments-substantive-and-independent"] },
+    { "schema": "terra.workflowStep.v1", "id": "reconcile-as-chapter", "type": "review", "title": "Chapter Director Responds To Both Peer Note Sets", "roleContractRef": "chapter-director", "inputs": ["production-lock", "score-peer-notes", "cinematography-peer-notes", "story-intent", "score-treatment", "cinematography-treatment"], "outputs": ["chapter-reconciliation"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-response-wave" },
+    { "schema": "terra.workflowStep.v1", "id": "reconcile-as-score", "type": "review", "title": "Score Director Responds To Both Peer Note Sets", "roleContractRef": "score-director", "inputs": ["production-lock", "chapter-peer-notes", "cinematography-peer-notes", "story-intent", "score-treatment", "cinematography-treatment"], "outputs": ["score-reconciliation"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-response-wave" },
+    { "schema": "terra.workflowStep.v1", "id": "reconcile-as-cinematography", "type": "review", "title": "Cinematography Director Responds To Both Peer Note Sets", "roleContractRef": "cinematography-director", "inputs": ["production-lock", "chapter-peer-notes", "score-peer-notes", "story-intent", "score-treatment", "cinematography-treatment"], "outputs": ["cinematography-reconciliation"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-response-wave" },
+    { "schema": "terra.workflowStep.v1", "id": "compile-director-notes", "type": "artifact_collection", "title": "Compile Director-Authored Notes Responses And Dissent Without Rewriting Them", "roleContractRef": "creative-producer", "inputs": ["production-lock", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "chapter-reconciliation", "score-reconciliation", "cinematography-reconciliation"], "outputs": ["director-notes", "dissent-register"], "allowedAdapterFamilies": ["artifact_adapter", "review_adapter"], "gatesAfter": ["director-notes-closed"] },
+    { "schema": "terra.workflowStep.v1", "id": "freeze-scene-contract", "type": "model_task", "title": "Synthesize Frozen Shared Scene Contract From Dispositioned Director Work", "roleContractRef": "creative-producer", "inputs": ["production-lock", "production-lock-machine", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "dissent-register"], "outputs": ["scene-contract"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "gatesBefore": ["director-notes-closed"] },
+    { "schema": "terra.workflowStep.v1", "id": "sign-contract-as-chapter", "type": "review", "title": "Chapter Director Signs Narrative And Agency Contract Lane", "roleContractRef": "chapter-director", "inputs": ["production-lock", "scene-contract", "director-notes", "dissent-register"], "outputs": ["chapter-contract-signoff"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-signoffs" },
+    { "schema": "terra.workflowStep.v1", "id": "sign-contract-as-score", "type": "review", "title": "Score Director Signs Musical And Synchronization Contract Lane", "roleContractRef": "score-director", "inputs": ["production-lock", "scene-contract", "director-notes", "dissent-register"], "outputs": ["score-contract-signoff"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-signoffs" },
+    { "schema": "terra.workflowStep.v1", "id": "sign-contract-as-cinematography", "type": "review", "title": "Cinematography Director Signs Visual And Camera Contract Lane", "roleContractRef": "cinematography-director", "inputs": ["production-lock", "scene-contract", "director-notes", "dissent-register"], "outputs": ["cinematography-contract-signoff"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "director-signoffs" },
+    { "schema": "terra.workflowStep.v1", "id": "assemble-director-signoffs", "type": "artifact_collection", "title": "Assemble Three Independently Authored Signatures Without Substitution", "roleContractRef": "creative-producer", "inputs": ["production-lock", "scene-contract", "chapter-contract-signoff", "score-contract-signoff", "cinematography-contract-signoff"], "outputs": ["director-signoffs"], "allowedAdapterFamilies": ["artifact_adapter", "review_adapter"], "gatesAfter": ["scene-contract-signed"] },
+    { "schema": "terra.workflowStep.v1", "id": "implement-signed-contract", "type": "patch_application", "title": "Implement Signed Scene Contract", "roleContractRef": "integration-engineer", "inputs": ["production-lock", "production-lock-machine", "scene-contract", "story-intent", "score-treatment", "cinematography-treatment"], "outputs": ["implementation-diff", "check-results"], "allowedAdapterFamilies": ["patch_adapter", "tool_adapter"], "gatesBefore": ["scene-contract-signed"], "gatesAfter": ["implementation-checks-pass"] },
+    { "schema": "terra.workflowStep.v1", "id": "capture-proof", "type": "artifact_collection", "title": "Capture Raw Audiovisual Flow Frame Audio Variant Reset And Performance Proof", "roleContractRef": "mechanical-verifier", "inputs": ["production-lock", "production-lock-machine", "scene-contract", "implementation-diff", "target-scene"], "outputs": ["verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "check-results"], "allowedAdapterFamilies": ["tool_adapter", "artifact_adapter"], "gatesBefore": ["implementation-checks-pass"], "gatesAfter": ["proof-matrix-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "audit-narrative", "type": "review", "title": "Run Independent Narrative Audit", "roleContractRef": "narrative-auditor", "inputs": ["production-lock", "story-intent", "scene-contract", "verification-report", "screenshot-report"], "outputs": ["narrative-audit", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "independent-reviews", "gatesBefore": ["proof-matrix-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "audit-score", "type": "review", "title": "Run Independent Score Continuity Audit", "roleContractRef": "score-continuity-auditor", "inputs": ["production-lock", "score-treatment", "scene-contract", "verification-report", "audio-report", "screenshot-report"], "outputs": ["score-audit", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "independent-reviews", "gatesBefore": ["proof-matrix-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "audit-cinematography", "type": "review", "title": "Run Independent Cinematography Continuity Audit", "roleContractRef": "cinematography-continuity-auditor", "inputs": ["production-lock", "cinematography-treatment", "scene-contract", "verification-report", "screenshot-report"], "outputs": ["cinematography-audit", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "independent-reviews", "gatesBefore": ["proof-matrix-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "blind-audience-review", "type": "review", "title": "Run Blind First-Time Review From Raw Intent-Free Audiovisual Evidence", "roleContractRef": "blind-scene-viewer", "inputs": ["raw-audiovisual-evidence"], "outputs": ["naive-audience-report", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "executionGroup": "independent-reviews", "gatesBefore": ["proof-matrix-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "critique-independent-reviews", "type": "review", "title": "Critique And Moderate Independent Reviews Without Flattening Dissent", "roleContractRef": "review-moderator", "inputs": ["narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "verification-report", "dissent-register"], "outputs": ["critic-report", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "gatesAfter": ["independent-reviews-complete"] },
+    { "schema": "terra.workflowStep.v1", "id": "judge-cohesion", "type": "review", "title": "Judge Cross-Domain Scene Cohesion", "roleContractRef": "cohesion-judge", "inputs": ["story-intent", "score-treatment", "cinematography-treatment", "scene-contract", "director-notes", "director-signoffs", "dissent-register", "critic-report", "verification-report", "screenshot-report", "audio-report", "defects"], "outputs": ["cohesion-judge-report", "final-scorecard", "defects"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "gatesBefore": ["independent-reviews-complete"], "gatesAfter": ["no-blocking-defects", "cohesion-score-passes"] },
+    { "schema": "terra.workflowStep.v1", "id": "direct-narrative-repair", "type": "review", "title": "Chapter Director Directs Narrative Agency And Canon Repairs", "roleContractRef": "chapter-director", "inputs": ["production-lock", "scene-contract", "critic-report", "defects", "director-notes", "dissent-register"], "outputs": ["chapter-repair-direction"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "activationCondition": "defects.open.owner.chapter > 0" },
+    { "schema": "terra.workflowStep.v1", "id": "direct-score-repair", "type": "review", "title": "Score Director Directs Music Mix And Cue Repairs", "roleContractRef": "score-director", "inputs": ["production-lock", "scene-contract", "critic-report", "defects", "director-notes", "dissent-register"], "outputs": ["score-repair-direction"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "activationCondition": "defects.open.owner.score > 0" },
+    { "schema": "terra.workflowStep.v1", "id": "direct-cinematography-repair", "type": "review", "title": "Cinematography Director Directs Shot Lens Palette And Render Repairs", "roleContractRef": "cinematography-director", "inputs": ["production-lock", "scene-contract", "critic-report", "defects", "director-notes", "dissent-register"], "outputs": ["cinematography-repair-direction"], "allowedAdapterFamilies": ["model_adapter", "review_adapter", "artifact_adapter"], "activationCondition": "defects.open.owner.cinematography > 0" },
+    { "schema": "terra.workflowStep.v1", "id": "repair-signed-contract", "type": "patch_application", "title": "Integrate Director-Routed Repairs Without Rewriting Creative Intent", "roleContractRef": "integration-engineer", "inputs": ["production-lock", "scene-contract", "critic-report", "defects", "implementation-diff", "chapter-repair-direction", "score-repair-direction", "cinematography-repair-direction"], "outputs": ["implementation-diff", "check-results"], "allowedAdapterFamilies": ["patch_adapter", "tool_adapter"], "activationCondition": "defects.open.total > 0 && defects.allMaterialOwnersDirected == true", "gatesAfter": ["implementation-checks-pass"], "retryPolicy": { "loopToStep": "capture-proof", "until": "no-blocking-defects", "maxLoops": 4 } },
+    { "schema": "terra.workflowStep.v1", "id": "human-taste-and-scope", "type": "human_decision", "title": "Record Headed Human Taste And Scope Decision When Required", "roleContractRef": "human-approver", "inputs": ["production-lock", "scene-contract", "dissent-register", "cohesion-judge-report", "final-scorecard"], "outputs": ["human-decision"], "allowedAdapterFamilies": ["review_adapter"], "activationCondition": "run-profile.approval.humanTasteApproval.required == true || defects.requiresHumanTaste == true || production.releaseCandidate == true", "gatesBefore": ["no-blocking-defects", "cohesion-score-passes"], "gatesAfter": ["human-taste-disposition-valid"] },
+    { "schema": "terra.workflowStep.v1", "id": "audit-run-quality", "type": "deterministic_check", "title": "Audit Creative Run Artifact Quality", "roleContractRef": "artifact-quality-auditor", "inputs": ["production-lock", "production-lock-machine", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "dissent-register", "scene-contract", "verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "narrative-audit", "score-audit", "cinematography-audit", "naive-audience-report", "critic-report", "cohesion-judge-report", "final-scorecard", "human-decision", "defects"], "outputs": ["creative-run-quality-report"], "allowedAdapterFamilies": ["tool_adapter", "artifact_adapter"], "gatesBefore": ["no-blocking-defects", "cohesion-score-passes", "human-taste-disposition-valid"], "gatesAfter": ["creative-artifact-quality-passes"] },
+    { "schema": "terra.workflowStep.v1", "id": "record-lessons", "type": "artifact_collection", "title": "Record Run Summary And Durable Lessons", "roleContractRef": "lessons-recorder", "inputs": ["production-lock", "final-scorecard", "critic-report", "cohesion-judge-report", "creative-run-quality-report", "human-decision"], "outputs": ["run-summary", "lessons-learned"], "allowedAdapterFamilies": ["artifact_adapter", "model_adapter"], "gatesBefore": ["creative-artifact-quality-passes"] }
+  ],
+  "stopConditions": [
+    { "id": "approved", "type": "all_gates_passed", "description": "Creative score, artifact quality, headed human taste, and lessons gates pass; the run is ready for a separate publish decision." },
+    { "id": "blocked-by-authority", "type": "resource_policy_blocked", "description": "The requested mutation exceeds current production, canon, protected-path, or publish authority." },
+    { "id": "blocked-for-human", "type": "human_decision_required", "description": "A material taste, scope, canon, exception, or publish decision cannot be inferred safely." },
+    { "id": "repair-budget-exhausted", "type": "retry_budget_exhausted", "description": "Repair loops or score-stall policy are exhausted with blocking defects or incomplete evidence." }
+  ],
+  "inspection": {
+    "defaultView": "creative_cohesion",
+    "primaryArtifacts": ["production-lock", "scene-contract", "director-notes", "dissent-register", "verification-report", "screenshot-report", "audio-report", "critic-report", "cohesion-judge-report", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+    "qualityQuestions": [
+      "Do story, score, image, and player control express one event?",
+      "Is every material decision grounded in current shipped evidence and authority?",
+      "Did each director challenge both peer lanes and sign one contract revision?",
+      "Did blind perception match intent at the intended loudness?",
+      "Are focal subject, palette, lens, score, and state continuity preserved across adjacent scenes and variants?",
+      "Did exact-anchor, reset, performance, and headed taste evidence prove the result?",
+      "Is all dissent, repair, exception, and learning durable and inspectable?"
+    ]
+  }
+}

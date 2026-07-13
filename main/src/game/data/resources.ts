@@ -71,8 +71,8 @@ export const RESOURCES: Record<ResourceId, ResourceDefinition> = {
   },
   flint: {
     id: 'flint', name: 'Flint', tier: 1, category: 'mineral',
-    // Not vein-generated (baseFrequency 0) — it only appears as a chance byproduct
-    // of breaking stone (see blocks.ts bonusDrops). toolTier 1 = needs a Pickaxe.
+    // Not vein-generated (baseFrequency 0) — it is the guaranteed primitive
+    // byproduct of breaking stone. toolTier 1 = needs a Pickaxe.
     baseFrequency: 0, depthBands: ['surface', 'shallow', 'mid', 'deep'],
     clusterSize: 1, toolTier: 1, yield: [1, 1], scanLevel: 0
   },

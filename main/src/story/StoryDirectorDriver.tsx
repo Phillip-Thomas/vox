@@ -80,7 +80,11 @@ function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; lab
   return storyFreeMarkerTarget();
 }
 
-const StoryDirectorDriver: React.FC = () => {
+interface StoryDirectorDriverProps {
+  paused?: boolean;
+}
+
+const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = false }) => {
   const size = useThree(s => s.size);
   const setDpr = useThree(s => s.setDpr);
   const appliedDpr = useRef<number | null>(null);
@@ -97,11 +101,12 @@ const StoryDirectorDriver: React.FC = () => {
       setDpr(quantized ?? Math.min(window.devicePixelRatio || 1, 1.5));
     }
 
-    if (!story.active) return;
+    if (!story.active || paused) return;
     const playing = getAppStateSnapshot().phase === 'playing';
+    if (!playing) return;
     const camera = state.camera as THREE.PerspectiveCamera;
     const dt = Math.min(rawDt, 0.1);
-    storyDirectorTick(dt, playing && camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
+    storyDirectorTick(dt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
     if (isMovieMode()) autopilotTick(dt);
 
     const r = getFeedRuntime();

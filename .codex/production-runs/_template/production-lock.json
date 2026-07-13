@@ -1,0 +1,41 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "{{RUN_ID}}",
+  "mode": "scene",
+  "status": "locked",
+  "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "2. Locked Owner Decisions and 9. Resume Here",
+      "sha256": "{{SHA256_OF_AUTHORITY_FILE}}"
+    }
+  ],
+  "mutationBoundary": "planning-only",
+  "allowedPaths": [],
+  "protectedPaths": [
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/public/audio/"
+  ],
+  "lockedBeats": ["{{BEAT_ID}}"],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": false,
+    "copyChangeDecisionRefs": [],
+    "protectedAudioPaths": [
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/public/audio/"
+    ],
+    "openGateRefs": [
+      "headed-primitive-journey",
+      "fauna-triangle-budget",
+      "full-client-verify",
+      "batch-3-existing-story-screening"
+    ]
+  },
+  "canonicalPreviewUrl": null,
+  "publishAllowed": false,
+  "frozenAt": "{{ISO_8601}}"
+}

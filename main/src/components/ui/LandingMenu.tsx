@@ -13,8 +13,15 @@ import CoopPanel from './CoopPanel.tsx';
 import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
 import { unlockMusicAudio } from '../../audio/musicEngine.ts';
 import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
-import { beginStory, canContinueStory, getStoryStateSnapshot, useStoryState } from '../../story/storyState.ts';
+import {
+  beginStory,
+  canContinueStory,
+  getStoryStateSnapshot,
+  hasCompletedStory,
+  useStoryState
+} from '../../story/storyState.ts';
 import { unlockStoryScore } from '../../story/storyScore.ts';
+import ControlsReference from './ControlsReference.tsx';
 
 /**
  * The landing screen. Renders over the SAME live <Canvas> that becomes the game:
@@ -37,16 +44,25 @@ function unlockAudio(): void {
 
 interface LandingMenuProps {
   startWorldId: string;
+  onReplayStory: () => void;
+  onReturnToStorySite: () => void;
+  returningToStorySite: boolean;
 }
 
-const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
+const LandingMenu: React.FC<LandingMenuProps> = ({
+  startWorldId,
+  onReplayStory,
+  onReturnToStorySite,
+  returningToStorySite
+}) => {
   const { phase, sceneReady } = useAppState();
   const story = useStoryState();
   const isTouch = isTouchDevice();
-  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop'>(null);
+  const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop' | 'replay'>(null);
   const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
   const coopEnabled = useMemo(() => isCoopAuthEnabled(), []);
   const compactMenu = useMemo(() => (typeof window === 'undefined' ? false : window.innerWidth <= 700), []);
+  const storyCompleted = hasCompletedStory();
   // Keep the overlay mounted briefly after Play so it can fade out over the
   // now-live game instead of cutting hard.
   const [gone, setGone] = useState(phase !== 'menu');
@@ -113,14 +129,17 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
       }} />
 
       {/* Content column, anchored lower-left for a cinematic feel. */}
-      <div style={{
+      <div className="pv-landing-content" style={{
         position: 'absolute',
         left: 'min(8vw, 88px)',
         bottom: 'max(12vh, 96px)',
         display: 'flex',
         flexDirection: 'column',
         gap: 22,
-        maxWidth: 'min(92vw, 520px)'
+        maxWidth: 'min(92vw, 560px)',
+        maxHeight: 'calc(100% - 32px)',
+        overflowY: 'auto',
+        padding: '4px 8px 4px 4px'
       }}>
         <div style={{ animation: 'pvFloatIn 700ms cubic-bezier(0.22,1,0.36,1) both' }}>
           <div style={{
@@ -148,7 +167,7 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
             letterSpacing: '0.32em', textTransform: 'uppercase',
             color: theme.color.textDim, paddingLeft: 3
           }}>
-            A Voxel Universe
+            Make no mistakes
           </div>
         </div>
 
@@ -178,8 +197,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
 
           <button
             onClick={() => {
-              if (leaving || story.active) return;
+              if (leaving || story.active || returningToStorySite) return;
               unlockAudio();
+              if (storyCompleted) {
+                onReturnToStorySite();
+                return;
+              }
               // The prologue overlay takes the screen immediately; the story-world
               // swap and generation happen behind its opaque terminal.
               beginStory();
@@ -194,13 +217,26 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
               border: `1px solid ${theme.color.accentSoft}`,
               borderRadius: theme.radius.pill,
               padding: '13px 30px',
-              cursor: 'pointer',
+              cursor: returningToStorySite ? 'wait' : 'pointer',
               transition: `all ${theme.transition.base}`,
               outline: 'none'
             }}
           >
-            {canContinueStory() ? '◈  Continue Story' : '◈  Story'}
+            {returningToStorySite
+              ? '◈  Preparing Site…'
+              : storyCompleted
+                ? '◈  Return to Site'
+                : canContinueStory() ? '◈  Continue Story' : '◈  Story'}
           </button>
+
+          {storyCompleted && (
+            <GhostLink
+              active={panel === 'replay'}
+              aria-expanded={panel === 'replay'}
+              aria-controls="landing-replay-confirmation"
+              onClick={() => setPanel(p => p === 'replay' ? null : 'replay')}
+            >Replay Story</GhostLink>
+          )}
 
           {!sceneReady && (
             <span style={{
@@ -211,7 +247,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
             }} />
           )}
 
-          <GhostLink active={panel === 'controls'} onClick={() => setPanel(p => p === 'controls' ? null : 'controls')}>Controls</GhostLink>
+          <GhostLink
+            active={panel === 'controls'}
+            aria-expanded={panel === 'controls'}
+            aria-controls="landing-controls-reference"
+            onClick={() => setPanel(p => p === 'controls' ? null : 'controls')}
+          >Controls</GhostLink>
           <GhostLink active={panel === 'graphics'} onClick={() => setPanel(p => p === 'graphics' ? null : 'graphics')}>Graphics</GhostLink>
           <GhostLink active={panel === 'audio'} onClick={() => setPanel(p => p === 'audio' ? null : 'audio')}>Audio</GhostLink>
           {coopEnabled && (
@@ -220,14 +261,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
         </div>
 
         {panel === 'controls' && (
-          <Panel>
-            <PanelTitle>Controls</PanelTitle>
-            <Row k={isTouch ? 'Left stick' : 'WASD / Arrows'} v="Move" />
-            <Row k={isTouch ? 'Right side' : 'Mouse'} v="Look" />
-            <Row k={isTouch ? 'JMP' : 'Space'} v="Jump / jetpack" />
-            <Row k={isTouch ? 'MINE' : 'E'} v="Mine / harvest block" />
-            <Row k={isTouch ? 'F' : 'F'} v="Board / exit ship" />
-            <Row k={isTouch ? '—' : 'Esc'} v="Pause & star map" />
+          <Panel id="landing-controls-reference" wide>
+            <PanelTitle id="landing-controls-title">Controls</PanelTitle>
+            <ControlsReference
+              labelledBy="landing-controls-title"
+              context={{ device: isTouch ? 'touch' : 'desktop', mode: 'overview' }}
+            />
           </Panel>
         )}
 
@@ -272,6 +311,37 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
             <CoopPanel startWorldId={startWorldId} />
           </Panel>
         )}
+
+        {panel === 'replay' && (
+          <Panel id="landing-replay-confirmation">
+            <PanelTitle>Replay Story</PanelTitle>
+            <div style={{ color: theme.color.textDim, fontSize: 13, lineHeight: 1.55 }}>
+              Replay resets Story progress, the Story site, carried inventory, suit status, and saved Story pose. Worlds outside the Story site remain saved.
+            </div>
+            <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+              <button
+                type="button"
+                onClick={() => setPanel(null)}
+                style={{
+                  flex: 1, minHeight: 40, borderRadius: theme.radius.md,
+                  border: '1px solid rgba(125,211,252,0.24)',
+                  background: 'rgba(125,211,252,0.07)', color: theme.color.text,
+                  fontFamily: theme.font.ui, fontWeight: 650, cursor: 'pointer'
+                }}
+              >Cancel</button>
+              <button
+                type="button"
+                onClick={onReplayStory}
+                style={{
+                  flex: 1.4, minHeight: 40, borderRadius: theme.radius.md,
+                  border: '1px solid rgba(252,165,165,0.3)',
+                  background: 'rgba(252,165,165,0.08)', color: theme.color.danger,
+                  fontFamily: theme.font.ui, fontWeight: 750, cursor: 'pointer'
+                }}
+              >Replay from Beginning</button>
+            </div>
+          </Panel>
+        )}
       </div>
 
       <div style={{
@@ -287,9 +357,9 @@ const LandingMenu: React.FC<LandingMenuProps> = ({ startWorldId }) => {
   );
 };
 
-const GhostLink: React.FC<{ active?: boolean; onClick: () => void; children: React.ReactNode }> = ({ active, onClick, children }) => (
+const GhostLink: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { active?: boolean }> = ({ active, children, ...props }) => (
   <button
-    onClick={onClick}
+    {...props}
     style={{
       fontFamily: theme.font.ui, fontSize: 14, letterSpacing: '0.04em',
       color: active ? theme.color.accent : theme.color.textDim,
@@ -302,28 +372,21 @@ const GhostLink: React.FC<{ active?: boolean; onClick: () => void; children: Rea
   </button>
 );
 
-const Panel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div style={{
-    ...glassPanel, padding: '16px 18px', maxWidth: 360,
+const Panel: React.FC<{ children: React.ReactNode; id?: string; wide?: boolean }> = ({ children, id, wide }) => (
+  <div id={id} style={{
+    ...glassPanel, padding: '16px 18px', maxWidth: wide ? 560 : 360,
     animation: 'pvFloatIn 240ms ease both'
   }}>
     {children}
   </div>
 );
 
-const PanelTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div style={{
+const PanelTitle: React.FC<{ children: React.ReactNode; id?: string }> = ({ children, id }) => (
+  <div id={id} style={{
     fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase',
     color: theme.color.accent, marginBottom: 10
   }}>
     {children}
-  </div>
-);
-
-const Row: React.FC<{ k: string; v: string }> = ({ k, v }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 18, fontSize: 13, padding: '3px 0' }}>
-    <span style={{ fontFamily: theme.font.mono, color: theme.color.accent, opacity: 0.92 }}>{k}</span>
-    <span style={{ color: theme.color.textDim }}>{v}</span>
   </div>
 );
 

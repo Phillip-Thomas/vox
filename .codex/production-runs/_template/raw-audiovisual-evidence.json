@@ -1,0 +1,41 @@
+{
+  "schema": "paravoxia.rawAudiovisualEvidence.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "sourceRevision": "{{GIT_SHA}}",
+  "capturedAt": "{{ISO_8601}}",
+  "containsCreativeIntent": false,
+  "continuousVideo": {
+    "path": "{{EVIDENCE_VIDEO_PATH}}",
+    "sha256": "{{SHA256}}",
+    "durationSeconds": 0,
+    "startAnchor": "replace-anchor-start",
+    "endAnchor": "replace-anchor-end"
+  },
+  "frameStrips": [
+    {
+      "path": "{{EVIDENCE_FRAME_STRIP_PATH}}",
+      "sha256": "{{SHA256}}",
+      "anchors": ["replace-anchor-start", "replace-anchor-end"],
+      "variant": "desktop"
+    }
+  ],
+  "audio": [
+    {
+      "path": "{{EVIDENCE_AUDIO_PATH}}",
+      "sha256": "{{SHA256}}",
+      "startAnchor": "replace-anchor-start",
+      "endAnchor": "replace-anchor-end",
+      "disposition": "{{CAPTURED_OR_PROTECTED_REGRESSION}}"
+    }
+  ],
+  "playbackMetadata": {
+    "canonicalUrl": "{{URL}}",
+    "viewport": "{{WIDTH_X_HEIGHT}}",
+    "qualityTier": "{{QUALITY_TIER}}",
+    "reducedMotion": false,
+    "audioRoute": "{{AUDIO_ROUTE}}",
+    "instructions": "Play once continuously before inspecting frame strips. Report only observed audiovisual experience."
+  },
+  "intentFreeInstructions": "Do not read bibles, source, treatments, contracts, notes, or other reviewer reports before filing the blind first pass."
+}

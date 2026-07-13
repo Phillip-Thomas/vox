@@ -341,3 +341,23 @@ Atlas run: `main/captures/procedural-atlas/2026-06-29T04-20-42-640Z-batch3-perf-
 - POTATO screenshots intentionally show no expensive spawned effects.
 
 Human/adversarial visual review remains required for final approval.
+
+## Batch 11 Voxel Surface Sweep
+
+Evidence:
+
+- Material showcase: `main/captures/procedural-atlas/2026-07-13T00-32-00-573Z-voxel-surface-sweep-accepted/`
+- Cross-quality perf views: `main/captures/procedural-atlas/2026-07-13T00-34-10-599Z-voxel-surface-perf-final/`
+- Five-stage reality strips: `main/captures/procedural-atlas/2026-07-13T00-46-03-130Z-voxel-surface-reality-accepted/`
+
+Visual review:
+
+- Arid sand shows continuous wind-oriented dunes and dusty micrograin with no square carrier edges or per-voxel brightness checker.
+- Volcanic lava reads as broad dark cooling crust, connected orange channels, sparse hot cores, and rising embers rather than a generic glint layer.
+- Stone, dirt, wood, grass, basalt, ice, crystal, copper, gold, and silver retain distinct macro/micro/PBR identities in the all-material board.
+- HIGH carries relief and full phenomena; MEDIUM retains material identity with a one-sample fallback; POTATO intentionally avoids expensive spawned layers.
+- `bare -> color -> material -> alive -> paradox` is visually monotonic. Bare/color remain flat and do not pulse or allocate ecology/effects.
+
+Adversarial result: `pass`. The first lava revision was rejected as uniformly white-hot; the accepted revision increased cooled negative space and narrowed emission to connected thermal channels. No visual blocker remains.
+
+Machine result: `74` cases, `231` screenshots, `0` console errors, `0` defects. Max accepted case p95 across the three suites is `17.3ms`; max single-view p95 is `18.6ms`.

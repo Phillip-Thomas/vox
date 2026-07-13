@@ -27,7 +27,7 @@
 
 - Strong reusable signals: cyan-on-void telemetry, mono regulation copy, glass panels, live rendered cube-planet backdrop, diegetic story feed, sparse pill controls.
 - Strongest language: regulation-versus-awakening story copy.
-- Weakest language: generic `A Voxel Universe`, `Play Now`, single-letter HUD buttons, and early-build framing.
+- Weakest language at audit time: generic `A Voxel Universe`, `Play Now`, single-letter HUD buttons, and early-build framing. The owner-selected `Make no mistakes` replacement resolves the subtitle only.
 - Input/hint ownership is fragmented between Drei mappings, raw event listeners, ship/player components, story phases, and touch models.
 
 ## Brand And Asset Inventory
@@ -36,7 +36,7 @@
 - Runtime visual asset folders contain no authored image/model/animation library; world, ship, vegetation, fauna, sky, and most VFX are generated in code.
 - Runtime media assets are five music tracks totaling about 9.4 MB compressed; the score also has a procedural WebAudio layer.
 - Procedural generation is a major differentiator, but hero characters, creatures, wreck/ship landmarks, and close-range surfaces currently inherit the same code-generated ceiling.
-- Missing assets that would materially help: a small authored hero-prop/character animation layer, material-specific sound set, and spatial ambient palette. This need not replace procedural worlds.
+- Missing visual assets that would materially help: a small authored hero-prop/character animation layer. Audio is a protected baseline for this demo lift and is not an implementation target.
 
 ## Data And State
 
@@ -50,7 +50,7 @@
 - Preserve the current dirty branch and concurrent edits.
 - Preserve strong instancing, worker transfer protocol, atlas tooling, PBR/procedural shaders, and story premise.
 - Highest leverage: finish one authored slice, make existing settings truthful, reduce first-load/main-thread pressure, close the primitive survival loop, and expose controls/accessibility.
-- Main risks: feature breadth, accepted render exceptions, large eager audio/JS memory, non-reactive quality tiers, and absence of browser-journey release gates.
+- Main risks: feature breadth, accepted render exceptions, JS/main-thread pressure, non-reactive quality tiers, and absence of browser-journey release gates. Audio receives regression coverage only under the owner lock.
 
 ## Gate
 

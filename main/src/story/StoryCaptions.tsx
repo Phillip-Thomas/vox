@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
+import { storyNow } from './storyClock.ts';
 
 // --- The awakening voice -----------------------------------------------------------
 //
@@ -23,7 +24,7 @@ const StoryCaptions: React.FC = () => {
     const tick = () => {
       raf = requestAnimationFrame(tick);
       if (!el) return;
-      const elapsed = performance.now() - active.shownAt;
+      const elapsed = storyNow() - active.shownAt;
       const revealed = Math.min(active.text.length, Math.floor(elapsed / 34));
       el.textContent = active.text.slice(0, revealed);
       const fadeStart = active.ttlMs - 700;
@@ -36,7 +37,7 @@ const StoryCaptions: React.FC = () => {
   }, [active]);
 
   if (!active) return null;
-  const expired = performance.now() - active.shownAt > active.ttlMs;
+  const expired = storyNow() - active.shownAt > active.ttlMs;
   if (expired) return null;
 
   return (

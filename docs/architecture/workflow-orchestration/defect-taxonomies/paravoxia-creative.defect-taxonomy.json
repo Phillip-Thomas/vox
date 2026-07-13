@@ -1,0 +1,95 @@
+{
+  "schema": "terra.defectTaxonomy.v1",
+  "identity": {
+    "slug": "paravoxia-creative-defects",
+    "name": "Paravoxia Creative Defects",
+    "version": "v1"
+  },
+  "severityLevels": ["critical", "high", "medium", "low"],
+  "categories": [
+    {
+      "slug": "authority_violation",
+      "defaultOwnerRole": "creative-producer",
+      "routingHints": ["lock-production-scope", "human-taste-and-scope"],
+      "description": "The run changes protected paths, future content, canon, or publish state without current authority."
+    },
+    {
+      "slug": "canon_or_intent_break",
+      "defaultOwnerRole": "chapter-director",
+      "routingHints": ["frame-story-intent", "repair-signed-contract"],
+      "description": "Story, perspective, metaphor, player verb, or intended ambiguity is contradicted or obscured."
+    },
+    {
+      "slug": "player_agency_break",
+      "defaultOwnerRole": "chapter-director",
+      "routingHints": ["frame-story-intent", "repair-signed-contract", "capture-proof"],
+      "description": "Camera, input, pacing, or transition steals, strands, or ambiguously returns control."
+    },
+    {
+      "slug": "focal_hierarchy_failure",
+      "defaultOwnerRole": "cinematography-director",
+      "routingHints": ["author-cinematography-treatment", "repair-signed-contract", "capture-proof"],
+      "description": "The intended subject is not the first legible read or is defeated by blocking, crop, clutter, HUD, or procedural variation."
+    },
+    {
+      "slug": "camera_or_lens_discontinuity",
+      "defaultOwnerRole": "cinematography-director",
+      "routingHints": ["author-cinematography-treatment", "repair-signed-contract"],
+      "description": "A cut, FOV, rig, screen direction, motion, easing, or hand-back is unjustified, discontinuous, or not reset."
+    },
+    {
+      "slug": "palette_light_or_grade_drift",
+      "defaultOwnerRole": "cinematography-director",
+      "routingHints": ["author-cinematography-treatment", "capture-proof", "repair-signed-contract"],
+      "description": "Semantic palette roles, light, fog, materials, sky, water, or grade cease to describe one continuous atmosphere."
+    },
+    {
+      "slug": "unearned_or_generic_effect",
+      "defaultOwnerRole": "cinematography-director",
+      "routingHints": ["author-cinematography-treatment", "repair-signed-contract"],
+      "description": "A render effect reveals unearned fidelity, lacks perceptual meaning, hides weak composition, or reduces the scene to generic cinematic styling."
+    },
+    {
+      "slug": "score_harmony_or_motif_break",
+      "defaultOwnerRole": "score-director",
+      "routingHints": ["compose-score-treatment", "repair-signed-contract"],
+      "description": "Harmonic authority, voice leading, motif, era instrumentation, arrangement, silence, or mix loses musical coherence."
+    },
+    {
+      "slug": "audiovisual_anchor_desync",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["freeze-scene-contract", "implement-signed-contract", "capture-proof", "repair-signed-contract"],
+      "description": "Story, score, camera, caption, effect, or control references duplicated timing or lands away from its shared anchor."
+    },
+    {
+      "slug": "variant_or_accessibility_parity",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["implement-signed-contract", "capture-proof", "repair-signed-contract"],
+      "description": "Mobile, reduced-motion, or lower-quality variants change story meaning, focal subject, readability, or control safety."
+    },
+    {
+      "slug": "performance_or_runtime_regression",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["implement-signed-contract", "capture-proof", "repair-signed-contract"],
+      "description": "The scene misses frame/audio budgets, leaks state, breaks sandbox, or regresses build, flow, reset, or persistence."
+    },
+    {
+      "slug": "weak_review_or_evidence",
+      "defaultOwnerRole": "mechanical-verifier",
+      "routingHints": ["capture-proof", "audit-creative-network", "audit-run-quality"],
+      "description": "Evidence is stale, coarse, partial, self-reviewed, missing variants, or too thin to support approval."
+    },
+    {
+      "slug": "unresolved_director_conflict",
+      "defaultOwnerRole": "creative-producer",
+      "routingHints": ["cross-examine-directors", "freeze-scene-contract", "judge-cohesion", "human-taste-and-scope"],
+      "description": "A material peer objection or taste thesis was ignored, self-closed, or flattened rather than dispositioned."
+    }
+  ],
+  "routingPolicy": {
+    "critical": "block_until_fixed_or_owner_rejects_scope",
+    "high": "route_to_owner_then_repeat_evidence_and_independent_review",
+    "medium": "route_to_owner_unless_human_accepts_run_scoped_exception",
+    "low": "record_and_fix_when_in_scope"
+  }
+}

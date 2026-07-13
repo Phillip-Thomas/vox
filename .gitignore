@@ -14,7 +14,14 @@ build/
 
 # Agentic Byproducts
 captures/
-.claude/
+# Keep transient Claude state ignored, but version the curated Paravoxia
+# directors and orchestration skills. These are product infrastructure, not
+# session byproducts.
+.claude/*
+!.claude/agents/
+!.claude/agents/**
+!.claude/skills/
+!.claude/skills/**
 
 # Environment variables
 .env

@@ -8,6 +8,7 @@ import {
   savePlayerPose, loadPlayerPose,
   getLocalPersistenceMode,
   isLocalPersistenceEnabled,
+  clearWorldStateForWorld,
   markMultiplayerResourceMarker,
   replaceMultiplayerResourceMarkers,
   setLocalPersistenceMode
@@ -184,6 +185,23 @@ describe('per-world save round-trip', () => {
 
     expect(hasPanel(2, 0, 0, 3)).toBe(true);
     expect(hasPanel(1, 0, 0, 3)).toBe(false);
+  });
+
+  it('clears only the target save without mutating another live world', () => {
+    placePiece([1, 0, 0], 3, 'foundation', 'wood');
+    saveWorld(WORLD);
+    resetStructures();
+    placePiece([9, 0, 0], 3, 'foundation', 'wood');
+
+    clearWorldStateForWorld(WORLD);
+
+    expect(getPieces()).toHaveLength(1);
+    expect(hasPanel(9, 0, 0, 3)).toBe(true);
+    expect(globalThis.localStorage.getItem(worldKey())).toBeNull();
+    saveWorld(OTHER_WORLD);
+    resetStructures();
+    restoreStructuresForWorld(OTHER_WORLD);
+    expect(hasPanel(9, 0, 0, 3)).toBe(true);
   });
 });
 

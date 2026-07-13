@@ -1,0 +1,574 @@
+{
+  "schema": "paravoxia.sceneContract.v1",
+  "sceneId": "replace-scene-id",
+  "contractVersion": "draft-v0",
+  "status": "draft",
+  "supersedesVersion": null,
+  "production": {
+    "mode": "scene",
+    "authorityRefs": [
+      "{{REPLACE_WITH_AUTHORITY_PATH_AND_SECTION}}"
+    ],
+    "productionLockRef": "production-lock.json",
+    "mutationBoundary": "planning-only",
+    "allowedPaths": [],
+    "protectedPaths": [
+      "{{REPLACE_WITH_PROTECTED_PATH}}"
+    ],
+    "ownerDecisionRefs": [],
+    "canonicalPreviewUrl": null,
+    "frozenAt": null
+  },
+  "scope": {
+    "title": "{{REPLACE_WITH_BOUNDED_SCENE_TITLE}}",
+    "beats": [
+      "{{REPLACE_WITH_BEAT_REF}}"
+    ],
+    "shippedReferenceRefs": [
+      "shipped-reference-map.md#replace-reference"
+    ],
+    "priorEvidenceRefs": [
+      "{{REPLACE_WITH_PRIOR_EVIDENCE_REF}}"
+    ],
+    "targetDevices": [
+      "desktop",
+      "mobile"
+    ],
+    "targetQualityTiers": [
+      "high",
+      "medium",
+      "low",
+      "potato"
+    ],
+    "nonGoals": [
+      "{{REPLACE_WITH_EXPLICIT_NON_GOAL}}"
+    ]
+  },
+  "story": {
+    "intentRef": "story-intent.md",
+    "purpose": "{{REPLACE_WITH_PLAYER_AND_STORY_PURPOSE}}",
+    "emotionalBefore": "{{REPLACE_WITH_EMOTIONAL_BEFORE}}",
+    "emotionalAfter": "{{REPLACE_WITH_EMOTIONAL_AFTER}}",
+    "intendedAmbiguity": "{{REPLACE_WITH_INTENDED_AMBIGUITY}}",
+    "nonNegotiableCanon": [
+      "{{REPLACE_WITH_NON_NEGOTIABLE_CANON}}"
+    ],
+    "realityStageCeiling": "bare",
+    "events": [
+      {
+        "id": "replace-event",
+        "beat": "{{REPLACE_WITH_BEAT_REF}}",
+        "anchorRef": "replace-anchor-start",
+        "event": "{{REPLACE_WITH_CAUSAL_STORY_EVENT}}",
+        "playerAction": "{{REPLACE_WITH_PLAYER_VERB}}",
+        "stateBeforeRefs": [],
+        "stateAfterRefs": [],
+        "informationRevealed": "{{REPLACE_WITH_INFORMATION_OR_AUTHORED_WITHHOLDING}}",
+        "acceptanceCriterion": "{{REPLACE_WITH_OBSERVABLE_STORY_CRITERION}}"
+      }
+    ],
+    "agencyWindows": [
+      {
+        "id": "replace-agency-window",
+        "startAnchorRef": "replace-anchor-start",
+        "endAnchorRef": "replace-anchor-end",
+        "movement": "disabled",
+        "look": "disabled",
+        "interaction": "disabled",
+        "motivation": "{{REPLACE_WITH_AGENCY_MOTIVATION}}",
+        "handBack": "{{REPLACE_WITH_REVERSIBLE_HAND_BACK}}",
+        "pauseBehavior": "{{REPLACE_WITH_PAUSE_BEHAVIOR}}",
+        "focusLossBehavior": "{{REPLACE_WITH_FOCUS_LOSS_BEHAVIOR}}",
+        "replayBehavior": "{{REPLACE_WITH_REPLAY_BEHAVIOR}}",
+        "mobileBehavior": "{{REPLACE_WITH_MOBILE_BEHAVIOR}}",
+        "reducedMotionBehavior": "{{REPLACE_WITH_REDUCED_MOTION_BEHAVIOR}}"
+      }
+    ]
+  },
+  "syncAnchors": [
+    {
+      "id": "replace-anchor-start",
+      "beat": "{{REPLACE_WITH_BEAT_REF}}",
+      "order": 0,
+      "event": "{{REPLACE_WITH_START_EVENT}}",
+      "source": "story-event",
+      "story": {
+        "eventRef": "replace-event",
+        "relation": "at",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "replace-cue",
+          "relation": "at",
+          "offsetMs": 0,
+          "musicalIntent": "{{REPLACE_WITH_MUSICAL_START_INTENT}}"
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "replace-shot",
+          "relation": "at",
+          "offsetMs": 0,
+          "visualIntent": "{{REPLACE_WITH_VISUAL_START_INTENT}}"
+        }
+      ],
+      "acceptanceCriterion": "{{REPLACE_WITH_EXACT_START_ANCHOR_CRITERION}}"
+    },
+    {
+      "id": "replace-anchor-end",
+      "beat": "{{REPLACE_WITH_BEAT_REF}}",
+      "order": 1,
+      "event": "{{REPLACE_WITH_END_EVENT_OR_HAND_BACK}}",
+      "source": "runtime-event",
+      "story": {
+        "eventRef": "replace-event",
+        "relation": "after",
+        "offsetMs": 0
+      },
+      "score": [
+        {
+          "cueRef": "replace-cue",
+          "relation": "until",
+          "offsetMs": 0,
+          "musicalIntent": "{{REPLACE_WITH_MUSICAL_EXIT_INTENT}}"
+        }
+      ],
+      "cinematography": [
+        {
+          "shotRef": "replace-shot",
+          "relation": "until",
+          "offsetMs": 0,
+          "visualIntent": "{{REPLACE_WITH_VISUAL_EXIT_INTENT}}"
+        }
+      ],
+      "acceptanceCriterion": "{{REPLACE_WITH_EXACT_END_ANCHOR_CRITERION}}"
+    }
+  ],
+  "cinematography": {
+    "treatmentRef": "cinematography-treatment.md",
+    "thesis": "{{REPLACE_WITH_VISUAL_THESIS}}",
+    "currentCutRefs": [
+      "{{REPLACE_WITH_SHIPPED_CUT_REF}}"
+    ],
+    "adjacentSceneRefs": [],
+    "cameraLineage": [
+      "lens-rig"
+    ],
+    "paletteRef": "replace-palette",
+    "shotOrder": [
+      "replace-shot"
+    ]
+  },
+  "palette": {
+    "id": "replace-palette",
+    "family": "planet-derived",
+    "sourceRefs": [
+      "{{REPLACE_WITH_PALETTE_AUTHORITY_REF}}"
+    ],
+    "semanticRoles": [
+      {
+        "id": "replace-role-ground",
+        "role": "{{REPLACE_WITH_GROUND_OR_FIELD_ROLE}}",
+        "valueRef": "{{REPLACE_WITH_CANONICAL_VALUE_REF}}",
+        "hex": null,
+        "usage": "{{REPLACE_WITH_USAGE_BOUNDARY}}"
+      },
+      {
+        "id": "replace-role-accent",
+        "role": "{{REPLACE_WITH_SCARCE_FOCAL_ACCENT_ROLE}}",
+        "valueRef": "{{REPLACE_WITH_CANONICAL_VALUE_REF}}",
+        "hex": null,
+        "usage": "{{REPLACE_WITH_USAGE_BOUNDARY}}"
+      }
+    ],
+    "continuityRefs": [
+      "{{REPLACE_WITH_ADJACENT_PALETTE_EVIDENCE_REF}}"
+    ],
+    "focalAccent": {
+      "roleRef": "replace-role-accent",
+      "scarcityIntent": "{{REPLACE_WITH_ACCENT_SCARCITY_RULE}}"
+    },
+    "anomaly": null
+  },
+  "shots": [
+    {
+      "id": "replace-shot",
+      "beat": "{{REPLACE_WITH_BEAT_REF}}",
+      "startAnchorRef": "replace-anchor-start",
+      "endAnchorRef": "replace-anchor-end",
+      "focalHierarchy": {
+        "primary": "{{REPLACE_WITH_ONE_PRIMARY_FOCAL_SUBJECT}}",
+        "secondary": "{{REPLACE_WITH_SECONDARY_SUBJECT_OR_AUTHORED_ABSENCE}}",
+        "allowedAmbiguity": "{{REPLACE_WITH_ALLOWED_VISUAL_AMBIGUITY}}",
+        "subjectOccupancyIntent": "{{REPLACE_WITH_FRAME_OCCUPANCY_INTENT}}",
+        "horizonIntent": "{{REPLACE_WITH_HORIZON_INTENT}}",
+        "negativeSpaceIntent": "{{REPLACE_WITH_NEGATIVE_SPACE_INTENT}}"
+      },
+      "cameraAuthority": "lens-rig",
+      "framing": {
+        "scale": "wide",
+        "blocking": "{{REPLACE_WITH_BLOCKING}}",
+        "screenDirection": {
+          "axis": "{{REPLACE_WITH_AXIS}}",
+          "movement": "{{REPLACE_WITH_SCREEN_DIRECTION}}",
+          "continuityRule": "{{REPLACE_WITH_AXIS_CONTINUITY_RULE}}"
+        },
+        "desktopSafeArea": "{{REPLACE_WITH_DESKTOP_SAFE_AREA}}",
+        "mobileSafeArea": "{{REPLACE_WITH_MOBILE_SAFE_AREA}}",
+        "exitComposition": "{{REPLACE_WITH_EXIT_COMPOSITION}}"
+      },
+      "lens": {
+        "startFovDeg": 50,
+        "endFovDeg": 50,
+        "durationMs": 0,
+        "easing": "linear placeholder; replace before candidate",
+        "focusTarget": "{{REPLACE_WITH_FOCUS_TARGET}}",
+        "physicalIntent": {
+          "mappingStatus": "intent-only",
+          "character": "{{REPLACE_WITH_PHYSICAL_LENS_CHARACTER}}",
+          "focalLengthMm": null,
+          "filmbackWidthMm": null,
+          "focusDistance": null,
+          "depthOfFieldIntent": "{{REPLACE_WITH_DEPTH_OF_FIELD_INTENT}}",
+          "shutterMotionIntent": "{{REPLACE_WITH_SHUTTER_AND_MOTION_INTENT}}"
+        },
+        "mobileCropRisk": "{{REPLACE_WITH_MOBILE_CROP_RISK_AND_MITIGATION}}"
+      },
+      "motion": {
+        "mode": "locked",
+        "durationMs": 0,
+        "easing": "linear placeholder; replace before candidate",
+        "target": "{{REPLACE_WITH_CAMERA_TARGET}}",
+        "rollPolicy": "{{REPLACE_WITH_ROLL_POLICY}}",
+        "inputBlend": "{{REPLACE_WITH_INPUT_BLEND_OR_LOCK}}",
+        "collisionPlan": "{{REPLACE_WITH_COLLISION_PLAN}}",
+        "occlusionPlan": "{{REPLACE_WITH_OCCLUSION_PLAN}}"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "reason": "{{REPLACE_WITH_TRANSITION_STORY_REASON}}",
+        "durationMs": 0,
+        "easing": "linear placeholder; replace before candidate"
+      },
+      "paletteRef": "replace-palette",
+      "effects": {
+        "realityStage": "bare",
+        "effectCeiling": [],
+        "grade": {
+          "intent": "{{REPLACE_WITH_GRADE_INTENT}}",
+          "presetRef": null,
+          "exposureIntent": "{{REPLACE_WITH_EXPOSURE_INTENT}}",
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "intent": "{{REPLACE_WITH_LIGHTING_INTENT}}",
+          "sourceRefs": [
+            "{{REPLACE_WITH_LIGHT_AUTHORITY_REF}}"
+          ],
+          "atmosphereIntent": "{{REPLACE_WITH_FOG_AND_ATMOSPHERE_INTENT}}",
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "agencyWindowRefs": [
+          "replace-agency-window"
+        ],
+        "movement": "disabled",
+        "look": "disabled",
+        "interaction": "disabled",
+        "handBackAnchorRef": "replace-anchor-end",
+        "handBackBehavior": "{{REPLACE_WITH_VISIBLE_REVERSIBLE_HAND_BACK}}"
+      },
+      "variantRefs": [
+        "variant-desktop",
+        "variant-mobile",
+        "variant-reduced-motion",
+        "quality-high",
+        "quality-medium",
+        "quality-low",
+        "quality-potato"
+      ],
+      "resetRef": "reset-camera",
+      "evidenceRefs": [
+        "screenshot-report.md#replace-shot"
+      ]
+    }
+  ],
+  "score": {
+    "treatmentRef": "score-treatment.md",
+    "mood": "{{REPLACE_WITH_SCORE_MOOD}}",
+    "eraFidelity": "{{REPLACE_WITH_ERA_AND_DIEGETIC_FIDELITY}}",
+    "cues": [
+      {
+        "id": "replace-cue",
+        "cueRef": null,
+        "type": "silence",
+        "anchorRef": "replace-anchor-start",
+        "relation": "at",
+        "offsetMs": 0,
+        "phraseIntent": "{{REPLACE_WITH_PHRASE_OR_SILENCE_SHAPE}}",
+        "barIntent": null,
+        "mixIntent": "{{REPLACE_WITH_MIX_PRIORITY}}",
+        "silenceIntent": "{{REPLACE_WITH_AUTHORED_SILENCE_INTENT}}",
+        "resetRef": "reset-score",
+        "evidenceRefs": [
+          "audio-report.md#replace-cue"
+        ]
+      }
+    ],
+    "mixIntent": "{{REPLACE_WITH_SCENE_MIX_HIERARCHY}}",
+    "performancePlan": "{{REPLACE_WITH_SCORE_CPU_VOICE_NODE_AND_SOAK_PLAN}}",
+    "evidenceRefs": [
+      "audio-report.md"
+    ]
+  },
+  "variants": {
+    "desktop": {
+      "id": "variant-desktop",
+      "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+      "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+      "cameraChanges": "{{REPLACE_WITH_DESKTOP_CAMERA_RULE}}",
+      "effectChanges": "{{REPLACE_WITH_DESKTOP_EFFECT_RULE}}",
+      "agencyChanges": "{{REPLACE_WITH_DESKTOP_AGENCY_RULE}}",
+      "evidenceRefs": [
+        "screenshot-report.md#desktop"
+      ]
+    },
+    "mobile": {
+      "id": "variant-mobile",
+      "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+      "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+      "cameraChanges": "{{REPLACE_WITH_MOBILE_CROP_AND_CAMERA_RULE}}",
+      "effectChanges": "{{REPLACE_WITH_MOBILE_EFFECT_RULE}}",
+      "agencyChanges": "{{REPLACE_WITH_MOBILE_AGENCY_RULE}}",
+      "evidenceRefs": [
+        "screenshot-report.md#mobile"
+      ]
+    },
+    "reducedMotion": {
+      "id": "variant-reduced-motion",
+      "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+      "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+      "cameraChanges": "{{REPLACE_WITH_REDUCED_MOTION_CAMERA_RULE}}",
+      "effectChanges": "{{REPLACE_WITH_REDUCED_MOTION_EFFECT_RULE}}",
+      "agencyChanges": "{{REPLACE_WITH_REDUCED_MOTION_AGENCY_RULE}}",
+      "evidenceRefs": [
+        "screenshot-report.md#reduced-motion"
+      ]
+    },
+    "qualityTiers": [
+      {
+        "id": "quality-high",
+        "tier": "high",
+        "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+        "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+        "simplifications": [],
+        "paletteFallback": "{{REPLACE_WITH_HIGH_TIER_PALETTE_RULE}}",
+        "effectFallback": "{{REPLACE_WITH_HIGH_TIER_EFFECT_RULE}}",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-high"
+        ]
+      },
+      {
+        "id": "quality-medium",
+        "tier": "medium",
+        "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+        "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+        "simplifications": [
+          "{{REPLACE_WITH_MEDIUM_TIER_SIMPLIFICATION}}"
+        ],
+        "paletteFallback": "{{REPLACE_WITH_MEDIUM_TIER_PALETTE_RULE}}",
+        "effectFallback": "{{REPLACE_WITH_MEDIUM_TIER_EFFECT_RULE}}",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-medium"
+        ]
+      },
+      {
+        "id": "quality-low",
+        "tier": "low",
+        "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+        "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+        "simplifications": [
+          "{{REPLACE_WITH_LOW_TIER_SIMPLIFICATION}}"
+        ],
+        "paletteFallback": "{{REPLACE_WITH_LOW_TIER_PALETTE_RULE}}",
+        "effectFallback": "{{REPLACE_WITH_LOW_TIER_EFFECT_RULE}}",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-low"
+        ]
+      },
+      {
+        "id": "quality-potato",
+        "tier": "potato",
+        "preservedFocalSubject": "{{REPLACE_WITH_PRESERVED_FOCAL_SUBJECT}}",
+        "preservedMeaning": "{{REPLACE_WITH_PRESERVED_MEANING}}",
+        "simplifications": [
+          "{{REPLACE_WITH_POTATO_TIER_SIMPLIFICATION}}"
+        ],
+        "paletteFallback": "{{REPLACE_WITH_POTATO_TIER_PALETTE_RULE}}",
+        "effectFallback": "{{REPLACE_WITH_POTATO_TIER_EFFECT_RULE}}",
+        "evidenceRefs": [
+          "screenshot-report.md#quality-potato"
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "targetFps": 60,
+    "minimumFps": 30,
+    "maximumFrameTimeMs": 33.4,
+    "maximumDrawCalls": 0,
+    "maximumShaderPrograms": 0,
+    "maximumGpuMemoryMb": 1,
+    "deviceProfiles": [
+      "{{REPLACE_WITH_DEVICE_PROFILE_REF}}"
+    ],
+    "criticalAnchors": [
+      "replace-anchor-start",
+      "replace-anchor-end"
+    ],
+    "measurementPlan": "Draft fail-safe budgets intentionally permit no draw calls or shader programs; replace them with measured targets before candidate status."
+  },
+  "reset": {
+    "triggers": [
+      "beat-exit",
+      "deep-link",
+      "replay",
+      "pause",
+      "quit",
+      "focus-loss",
+      "completion",
+      "sandbox"
+    ],
+    "states": [
+      {
+        "id": "reset-camera",
+        "domain": "camera",
+        "stateRef": "{{REPLACE_WITH_CAMERA_STATE_REF}}",
+        "resetValue": "{{REPLACE_WITH_CANONICAL_CAMERA_DEFAULT}}",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "{{REPLACE_WITH_CAMERA_RESET_CRITERION}}"
+      },
+      {
+        "id": "reset-grade",
+        "domain": "grade",
+        "stateRef": "{{REPLACE_WITH_GRADE_STATE_REF}}",
+        "resetValue": "{{REPLACE_WITH_CANONICAL_GRADE_DEFAULT}}",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "{{REPLACE_WITH_GRADE_RESET_CRITERION}}"
+      },
+      {
+        "id": "reset-lighting",
+        "domain": "lighting",
+        "stateRef": "{{REPLACE_WITH_LIGHTING_STATE_REF}}",
+        "resetValue": "{{REPLACE_WITH_CANONICAL_LIGHTING_DEFAULT}}",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "{{REPLACE_WITH_LIGHTING_RESET_CRITERION}}"
+      },
+      {
+        "id": "reset-score",
+        "domain": "score",
+        "stateRef": "{{REPLACE_WITH_SCORE_STATE_REF}}",
+        "resetValue": "{{REPLACE_WITH_CANONICAL_SCORE_DEFAULT}}",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "{{REPLACE_WITH_SCORE_RESET_CRITERION}}"
+      }
+    ],
+    "sandboxNoOp": {
+      "required": true,
+      "criterion": "{{REPLACE_WITH_SANDBOX_INERTNESS_CRITERION}}"
+    },
+    "probeRefs": [
+      "{{REPLACE_WITH_RESET_PROBE_REF}}"
+    ]
+  },
+  "evidence": {
+    "acceptanceCriteria": [
+      "{{REPLACE_WITH_SCENE_ACCEPTANCE_CRITERION}}"
+    ],
+    "captures": [
+      {
+        "id": "capture-replace-shot",
+        "kind": "dense-frame-strip",
+        "anchorRefs": [
+          "replace-anchor-start",
+          "replace-anchor-end"
+        ],
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-potato"
+        ],
+        "pathOrPlanRef": "screenshot-report.md#replace-shot",
+        "status": "planned",
+        "acceptanceCriterion": "{{REPLACE_WITH_BEFORE_AT_AFTER_AND_FOCAL_PARITY_CRITERION}}"
+      }
+    ],
+    "mechanicalChecks": [
+      {
+        "id": "check-creative-gate",
+        "commandOrProbeRef": "npm --prefix main run creative:gate -- --run {{RUN_PATH}} --phase contract",
+        "status": "planned",
+        "resultRef": null,
+        "acceptanceCriterion": "The production artifact gate passes without exceptions."
+      }
+    ],
+    "continuity": {
+      "previousBeatRefs": [],
+      "nextBeatRefs": [],
+      "paletteRefs": [
+        "{{REPLACE_WITH_PREVIOUS_AND_NEXT_PALETTE_EVIDENCE}}"
+      ],
+      "lensRefs": [
+        "{{REPLACE_WITH_PREVIOUS_AND_NEXT_LENS_EVIDENCE}}"
+      ]
+    },
+    "headedTaste": {
+      "required": false,
+      "realGpuRequired": false,
+      "status": "not-required",
+      "decisionRef": null
+    },
+    "directorSignoffsRef": "director-signoffs.json"
+  }
+}

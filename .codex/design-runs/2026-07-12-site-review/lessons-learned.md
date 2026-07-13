@@ -2,6 +2,9 @@
 
 ## Product
 
+- Owner direction: make the current Story Demo and systems foundation incredible before advancing the story.
+- Owner direction: the existing audio engine is protected and should not be refactored in this lane.
+- Owner direction: desktop controls feel good; preserve their feel/bindings and improve only missing discovery/recovery/accessibility essentials.
 - Paravoxia is closest to award quality when it acts like an authored game about perception, not when it acts like a catalogue of voxel systems.
 - The story premise is more differentiated than the generic sandbox entry; the menu hierarchy should admit that.
 - A deliberate endpoint now is more valuable than an unfinished continuation later.

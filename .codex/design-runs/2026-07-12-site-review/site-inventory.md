@@ -28,10 +28,10 @@
 ## Journey Map
 
 - Current primary path: landing -> `Play Now` sandbox -> self-directed systems.
-- Highest-value path should be: landing -> Begin/Continue Story -> deliberate arrival finale -> earned sandbox continuation.
+- Owner-selected demo path: landing -> existing Story through W-7744 arrival -> completed-site continuation or honest Systems Sandbox. No later story beat is part of this lift.
 - Sandbox loop today: gather -> craft/build -> persist, but shelter, exposure, failure, repair, and era unlock do not yet close the loop.
 - Co-op networking is deeper than co-op goals and in-game management.
-- Dead ends: temporary story terminal, unreachable Maw repair, exposed future recipes, non-lethal meters, missing controls recovery.
+- Demo gaps: completed-save continuation, exposed future recipes, non-lethal meters, and missing controls recovery. Maw repair and later story progression are intentionally hidden/deferred.
 
 ## Shared Patterns
 

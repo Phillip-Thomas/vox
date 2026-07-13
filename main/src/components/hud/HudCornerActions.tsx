@@ -10,6 +10,7 @@ interface HudCornerActionsProps {
   onToggleBuild: () => void;
   onOpenCrafting: () => void;
   onPause: () => void;
+  pauseLabel?: string;
 }
 
 const HudCornerActions: React.FC<HudCornerActionsProps> = ({
@@ -19,7 +20,8 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
   allowCraft = true,
   onToggleBuild,
   onOpenCrafting,
-  onPause
+  onPause,
+  pauseLabel = 'Pause and open star map'
 }) => {
   const showFootActions = controlMode === 'fps';
 
@@ -50,8 +52,8 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
       <button
         type="button"
         onClick={onPause}
-        aria-label="Pause and open star map"
-        title="Pause and open star map"
+        aria-label={pauseLabel}
+        title={pauseLabel}
         style={hudIconButtonStyle()}
       >
         M

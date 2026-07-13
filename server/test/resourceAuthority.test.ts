@@ -3,7 +3,23 @@ import {
   sharedMutationClaimForCommand,
   sharedMutationValidationError
 } from '../src/commandAuthority.js';
-import { resolveServerCanonicalCommandPayload } from '../src/economyAuthority.js';
+import {
+  isAuthoritativeDeadwoodNode,
+  resolveServerAuthoritativeCommand,
+  resolveServerCanonicalCommandPayload
+} from '../src/economyAuthority.js';
+
+function findDeadwoodCoord(worldId: string): [number, number, number] {
+  for (let x = -25; x <= 25; x++) {
+    for (let y = -25; y <= 25; y++) {
+      for (let z = -25; z <= 25; z++) {
+        const coord: [number, number, number] = [x, y, z];
+        if (isAuthoritativeDeadwoodNode(coord, worldId)) return coord;
+      }
+    }
+  }
+  throw new Error(`No authoritative deadwood coordinate found for ${worldId}`);
+}
 
 describe('resource authority', () => {
   it('derives one stable claim from source + integer voxel coord, never client yield fields', () => {
@@ -147,19 +163,117 @@ describe('resource authority', () => {
     expect(otherCoord?.key).not.toBe(flower?.key);
   });
 
-  it('preserves legacy forage claim types while adding flora source claims', () => {
-    expect(sharedMutationClaimForCommand('resource_taken', {
+  it('uses one forage mutation claim per coordinate across every submitted kind', () => {
+    const berry = sharedMutationClaimForCommand('resource_taken', {
       source: 'forage',
       kind: 'berry',
       coord: [4, 24, -3]
-    })).toMatchObject({
-      key: 'collectible:forage:berry:4,24,-3',
-      collectibleType: 'forage:berry'
+    });
+    const root = sharedMutationClaimForCommand('resource_taken', {
+      source: 'forage',
+      kind: 'root',
+      coord: [4, 24, -3]
+    });
+    const deadwood = sharedMutationClaimForCommand('resource_taken', {
+      source: 'forage',
+      kind: 'deadwood',
+      coord: [4, 24, -3]
+    });
+    expect(berry).toEqual(root);
+    expect(root).toEqual(deadwood);
+    expect(berry).toMatchObject({
+      key: 'collectible:forage:4,24,-3',
+      collectibleType: 'forage',
+      conflictCollectibleTypes: ['forage', 'forage:berry', 'forage:root', 'forage:deadwood']
     });
     expect(sharedMutationValidationError('resource_taken', {
       source: 'flora',
       kind: 'flower',
       coord: [4, 24, -3]
     })).toBeNull();
+  });
+
+  it('canonicalizes deadwood to two wood and uses a stable first-wins claim', () => {
+    const coord = findDeadwoodCoord('0,0');
+    const payload = {
+      source: 'forage',
+      kind: 'deadwood',
+      coord,
+      id: 'void_glass',
+      qty: 999
+    };
+    const canonical = resolveServerCanonicalCommandPayload(
+      'resource_taken',
+      payload,
+      { worldId: '0,0' }
+    );
+
+    expect(canonical).toEqual({
+      commandPayload: {
+        source: 'forage',
+        kind: 'deadwood',
+        coord,
+        id: 'wood',
+        qty: 2
+      }
+    });
+    expect(sharedMutationClaimForCommand('resource_taken', payload)).toEqual(
+      sharedMutationClaimForCommand('resource_taken', {
+        source: 'forage',
+        kind: 'deadwood',
+        coord
+      })
+    );
+  });
+
+  it('rejects forged deadwood coordinates and a wrong kind at a deadwood node', () => {
+    const worldId = '0,0';
+    const validCoord = findDeadwoodCoord(worldId);
+    const invalidCoord = ([[25, 25, 25], [25, 25, 24], [25, 24, 24]] as Array<[number, number, number]>)
+      .find(coord => !isAuthoritativeDeadwoodNode(coord, worldId))!;
+    expect(invalidCoord).toBeTruthy();
+
+    expect(resolveServerCanonicalCommandPayload(
+      'resource_taken',
+      { source: 'forage', kind: 'deadwood', coord: invalidCoord },
+      { worldId }
+    )).toEqual({
+      code: 'validation_failed',
+      reason: 'Deadwood pickup does not match a deterministic surface node.'
+    });
+    expect(resolveServerCanonicalCommandPayload(
+      'resource_taken',
+      { source: 'forage', kind: 'berry', coord: validCoord },
+      { worldId }
+    )).toEqual({
+      code: 'validation_failed',
+      reason: 'Forage kind does not match the deterministic surface node.'
+    });
+  });
+
+  it('guarantees one flint in every authoritative stone yield', () => {
+    for (let x = -20; x <= 20; x++) {
+      const canonical = resolveServerCanonicalCommandPayload(
+        'voxel_mined',
+        { coord: [x, 1, 0], blockId: 'stone' },
+        { worldId: '0,0' }
+      );
+      expect(canonical).not.toBeNull();
+      expect(canonical).not.toHaveProperty('code');
+      if (!canonical || 'code' in canonical) continue;
+      expect(canonical.commandPayload.drops).toEqual(expect.arrayContaining([
+        { id: 'flint', qty: 1 }
+      ]));
+    }
+  });
+
+  it('rejects recipes beyond the public primitive field kit', () => {
+    expect(resolveServerAuthoritativeCommand('recipe_crafted', { recipeId: 'torch' })).toMatchObject({
+      commandPayload: { recipeId: 'torch' }
+    });
+    expect(resolveServerAuthoritativeCommand('recipe_crafted', { recipeId: 'refined_alloy' })).toEqual({
+      code: 'validation_failed',
+      reason: 'Recipe is not available in the primitive field kit.'
+    });
   });
 });

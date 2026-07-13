@@ -3,28 +3,31 @@
 ## Hard Guardrails
 
 - Preserve the core thesis: rendering fidelity is story progression, not a settings gimmick.
+- Freeze story content at the existing W-7744 arrival. Demo work may repair existing-beat defects but may not add canon, dialogue, beats, awakenings, or later-story payoffs.
+- Treat the current audio/score engine and audio assets as protected. This lane performs audio regression testing only.
+- Preserve current desktop control feel and bindings. Improve discoverability, recovery, focus, and touch parity without a broad input rewrite or remapping system.
 - Preserve the cube-planet identity, procedural ecology, free surface-to-space travel, offline sandbox, and invited co-op behavior.
 - Do not replace the game HUD with a generic web component library or cover play with tutorial cards.
 - Browser first: desktop and touch must remain viable; WebGL 2 remains the production fallback.
 - Accessibility is a release requirement: keyboard recovery, visible focus, zoom, reduced motion, readable copy, and modal focus ownership.
-- Review only. No production/gameplay code changes are authorized in this run.
+- The only production change authorized in this planning follow-up is the exact landing tagline `Make no mistakes`.
 
 ## Creative Brief
 
 - Desired tone: uncanny, cinematic, tactile, lonely, systemic, and authored rather than merely procedural.
 - Audience: players who value discovery, unusual narrative form, survival/exploration, and ambitious browser technology.
-- Quality target: an award-jury-ready 30-60 minute slice with a deliberate ending, plus a credible sandbox continuation.
+- Quality target: a seemingly complete Story Demo through the current arrival, plus an honestly bounded Systems Sandbox proving the foundation for later work.
 - Motion: physical and causal; avoid ambient noise that does not communicate state.
 - Preferred patterns: diegetic UI, material-specific feedback, authored hero moments, readable restraint.
 - Reject: generic voxel-survival imitation, more breadth without payoff, decorative shaders used as a substitute for interaction, and unsupported "ULTRA" claims.
 
 ## Open Field
 
-- Front-door hierarchy and story/sandbox naming.
-- Progression pacing and the award-slice stopping point.
+- Public demo labeling and the Story Demo / Systems Sandbox boundary.
+- Presentation, pacing, checkpoints, and recovery inside the already-built story only.
 - Art-direction hierarchy between procedural background systems and authored hero assets.
 - Runtime loading, quality adaptation, culling, input, accessibility, and test architecture.
-- The exact xenology/discovery and co-op signature loops.
+- The exact primitive systems loop and the ship/hide/experimental feature matrix.
 
 ## Quality Config
 

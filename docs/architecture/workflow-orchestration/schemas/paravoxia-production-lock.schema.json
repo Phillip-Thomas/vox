@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-production-lock.schema.json",
+  "title": "Paravoxia Production Lock v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "runId",
+    "mode",
+    "status",
+    "sourceRevision",
+    "authority",
+    "mutationBoundary",
+    "allowedPaths",
+    "protectedPaths",
+    "lockedBeats",
+    "currentRestrictions",
+    "publishAllowed",
+    "frozenAt"
+  ],
+  "properties": {
+    "schema": { "const": "paravoxia.productionLock.v1" },
+    "runId": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["delta", "scene", "chapter", "flagship"] },
+    "status": { "const": "locked" },
+    "sourceRevision": { "type": "string", "minLength": 1 },
+    "authority": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "section", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "section": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "mutationBoundary": { "enum": ["planning-only", "bounded-runtime", "full-scene-runtime"] },
+    "allowedPaths": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "protectedPaths": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "lockedBeats": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "currentRestrictions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storyCeiling", "postArrivalStoryMutationAllowed", "copyChangeDecisionRefs", "protectedAudioPaths", "openGateRefs"],
+      "properties": {
+        "storyCeiling": { "type": "string", "minLength": 1 },
+        "postArrivalStoryMutationAllowed": { "type": "boolean" },
+        "copyChangeDecisionRefs": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "protectedAudioPaths": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "openGateRefs": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "canonicalPreviewUrl": { "anyOf": [{ "type": "null" }, { "type": "string", "format": "uri" }] },
+    "publishAllowed": { "const": false },
+    "frozenAt": { "type": "string", "format": "date-time" }
+  }
+}

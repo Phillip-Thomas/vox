@@ -54,11 +54,11 @@ describe('dropsForBlock / harvestVoxel', () => {
 });
 
 describe('stone bonus drop (flint)', () => {
-  it('dropsForBlock(stone) is just stone (bonus drops are separate/chance-based)', () => {
+  it('dropsForBlock(stone) is just stone (bounded bonus drops stay separate)', () => {
     expect(dropsForBlock('stone')).toEqual(['stone']);
   });
 
-  it('harvesting stone repeatedly sometimes yields flint, and always stone', () => {
+  it('every harvested stone yields one flint so the first two fund a campfire', () => {
     let flint = 0;
     for (let i = 0; i < 200; i++) {
       resetInventory();
@@ -67,9 +67,8 @@ describe('stone bonus drop (flint)', () => {
       expect(getResourceCount('stone')).toBeGreaterThan(0);
       flint += getResourceCount('flint');
     }
-    // ~35% chance over 200 tries — overwhelmingly likely to be >0 and <200.
-    expect(flint).toBeGreaterThan(0);
-    expect(flint).toBeLessThan(200);
+    // No luck gate: each successful stone break contributes exactly one.
+    expect(flint).toBe(200);
   });
 
   it('needs a tier-1 tool (the Pickaxe) to break stone at all', () => {

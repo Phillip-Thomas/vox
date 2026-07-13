@@ -15,6 +15,7 @@ export const WORLD_SEED_NAMESPACE = 'paravox:v1';
 export const PLANET_SEED_NAMESPACE = 'paravox:planet:v1';
 export const SERVER_PLANET_RADIUS = 25;
 export const SERVER_CORE_RADIUS = SERVER_PLANET_RADIUS * 0.15;
+export const SERVER_SURFACE_SHELL_DEPTH = 8;
 const MAX_WORLD_COORDINATE_ABS = 1_000_000;
 const WORLD_ID_PATTERN = /^(-?\d+),(-?\d+)(?::p([12]))?$/;
 
@@ -60,6 +61,15 @@ export function isTerrainCoordInBounds(coord: ServerCoord3): boolean {
 
 export function isCollectibleCoordPlausible(coord: ServerCoord3): boolean {
   return isTerrainCoordInBounds(coord) && distanceFromCenter(coord) > SERVER_CORE_RADIUS;
+}
+
+/** Cheap authoritative surface bound for deterministic ground collectibles.
+ * Terrain height varies by seed, but real surface nodes always live in this
+ * outer cube shell; interior coordinates cannot mint surface resources. */
+export function isCollectibleSurfaceCoordPlausible(coord: ServerCoord3): boolean {
+  return isCollectibleCoordPlausible(coord)
+    && Math.max(Math.abs(coord[0]), Math.abs(coord[1]), Math.abs(coord[2]))
+      >= SERVER_PLANET_RADIUS - SERVER_SURFACE_SHELL_DEPTH;
 }
 
 export function sameCoord(a: ServerCoord3, b: ServerCoord3): boolean {

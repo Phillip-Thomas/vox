@@ -9,6 +9,8 @@
 // Renderers subscribe for structure changes; per-frame animation (typewriter
 // reveal) happens in the renderers' own rAF against `shownAt`.
 
+import { storyNow } from './storyClock.ts';
+
 export type StoryTextChannel = 'workorder' | 'violation' | 'caption' | 'system' | 'audit';
 
 export interface StoryTextState {
@@ -73,18 +75,18 @@ export function clearViolations(): void {
 }
 
 export function showCaption(text: string, ttlMs = 5200): void {
-  state.caption = { text, shownAt: performance.now(), ttlMs };
+  state.caption = { text, shownAt: storyNow(), ttlMs };
   emit();
 }
 
 export function showSystemLine(text: string, ttlMs = 4000): void {
-  state.system = { text, shownAt: performance.now(), ttlMs };
+  state.system = { text, shownAt: storyNow(), ttlMs };
   emit();
 }
 
 /** The AUDIT band (ch3-signal onward): the network / the auditor's suit. */
 export function showAuditLine(text: string, header?: string, ttlMs = 6500): void {
-  state.audit = { text, header, shownAt: performance.now(), ttlMs };
+  state.audit = { text, header, shownAt: storyNow(), ttlMs };
   emit();
 }
 

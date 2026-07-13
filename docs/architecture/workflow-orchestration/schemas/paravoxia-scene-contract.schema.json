@@ -1,0 +1,1876 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-scene-contract.schema.json",
+  "title": "Paravoxia Scene Contract v1",
+  "description": "The signed cross-domain implementation handoff for one Paravoxia scene or bounded scene delta.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sceneId",
+    "contractVersion",
+    "status",
+    "production",
+    "scope",
+    "story",
+    "syncAnchors",
+    "cinematography",
+    "palette",
+    "shots",
+    "score",
+    "variants",
+    "performance",
+    "reset",
+    "evidence"
+  ],
+  "properties": {
+    "schema": {
+      "const": "paravoxia.sceneContract.v1"
+    },
+    "sceneId": {
+      "$ref": "#/$defs/stableId"
+    },
+    "contractVersion": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "candidate",
+        "frozen",
+        "superseded"
+      ]
+    },
+    "supersedesVersion": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
+    },
+    "production": {
+      "$ref": "#/$defs/production"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "story": {
+      "$ref": "#/$defs/story"
+    },
+    "syncAnchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/syncAnchor"
+      }
+    },
+    "cinematography": {
+      "$ref": "#/$defs/cinematography"
+    },
+    "palette": {
+      "$ref": "#/$defs/palette"
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/shot"
+      }
+    },
+    "score": {
+      "$ref": "#/$defs/score"
+    },
+    "variants": {
+      "$ref": "#/$defs/variants"
+    },
+    "performance": {
+      "$ref": "#/$defs/performance"
+    },
+    "reset": {
+      "$ref": "#/$defs/reset"
+    },
+    "evidence": {
+      "$ref": "#/$defs/evidence"
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "refList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/ref"
+      }
+    },
+    "production": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "authorityRefs",
+        "productionLockRef",
+        "mutationBoundary",
+        "allowedPaths",
+        "protectedPaths",
+        "ownerDecisionRefs",
+        "canonicalPreviewUrl"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "delta",
+            "scene",
+            "chapter",
+            "flagship"
+          ]
+        },
+        "authorityRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "productionLockRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "mutationBoundary": {
+          "enum": [
+            "planning-only",
+            "bounded-runtime",
+            "full-scene-runtime"
+          ]
+        },
+        "allowedPaths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "protectedPaths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "ownerDecisionRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "canonicalPreviewUrl": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "format": "uri"
+            }
+          ]
+        },
+        "frozenAt": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "format": "date-time"
+            }
+          ]
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "beats",
+        "shippedReferenceRefs",
+        "priorEvidenceRefs",
+        "targetDevices",
+        "targetQualityTiers",
+        "nonGoals"
+      ],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "beats": {
+          "$ref": "#/$defs/refList"
+        },
+        "shippedReferenceRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "priorEvidenceRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "targetDevices": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "desktop",
+              "mobile",
+              "tablet"
+            ]
+          }
+        },
+        "targetQualityTiers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              "potato"
+            ]
+          }
+        },
+        "nonGoals": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "story": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intentRef",
+        "purpose",
+        "emotionalBefore",
+        "emotionalAfter",
+        "intendedAmbiguity",
+        "nonNegotiableCanon",
+        "realityStageCeiling",
+        "events",
+        "agencyWindows"
+      ],
+      "properties": {
+        "intentRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "purpose": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "emotionalBefore": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "emotionalAfter": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "intendedAmbiguity": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "nonNegotiableCanon": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "realityStageCeiling": {
+          "$ref": "#/$defs/realityStage"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/storyEvent"
+          }
+        },
+        "agencyWindows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/agencyWindow"
+          }
+        }
+      }
+    },
+    "storyEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "beat",
+        "anchorRef",
+        "event",
+        "playerAction",
+        "stateBeforeRefs",
+        "stateAfterRefs",
+        "informationRevealed",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "beat": {
+          "$ref": "#/$defs/ref"
+        },
+        "anchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "event": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "playerAction": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "stateBeforeRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "stateAfterRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "informationRevealed": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "agencyWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "startAnchorRef",
+        "endAnchorRef",
+        "movement",
+        "look",
+        "interaction",
+        "motivation",
+        "handBack",
+        "pauseBehavior",
+        "focusLossBehavior",
+        "replayBehavior",
+        "mobileBehavior",
+        "reducedMotionBehavior"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "startAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "endAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "movement": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "look": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "interaction": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "motivation": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "handBack": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "pauseBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "focusLossBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "replayBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mobileBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reducedMotionBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "controlAuthority": {
+      "enum": [
+        "player",
+        "director",
+        "blended",
+        "disabled"
+      ]
+    },
+    "syncAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "beat",
+        "order",
+        "event",
+        "source",
+        "story",
+        "score",
+        "cinematography",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "beat": {
+          "$ref": "#/$defs/ref"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "event": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source": {
+          "enum": [
+            "story-event",
+            "player-action",
+            "camera-event",
+            "score-event",
+            "runtime-event"
+          ]
+        },
+        "story": {
+          "$ref": "#/$defs/storyAnchorRelation"
+        },
+        "score": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scoreAnchorRelation"
+          }
+        },
+        "cinematography": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/cinematographyAnchorRelation"
+          }
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "storyAnchorRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventRef",
+        "relation",
+        "offsetMs"
+      ],
+      "properties": {
+        "eventRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "relation": {
+          "$ref": "#/$defs/anchorRelation"
+        },
+        "offsetMs": {
+          "type": "number"
+        }
+      }
+    },
+    "scoreAnchorRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cueRef",
+        "relation",
+        "offsetMs",
+        "musicalIntent"
+      ],
+      "properties": {
+        "cueRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "relation": {
+          "$ref": "#/$defs/anchorRelation"
+        },
+        "offsetMs": {
+          "type": "number"
+        },
+        "musicalIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "cinematographyAnchorRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shotRef",
+        "relation",
+        "offsetMs",
+        "visualIntent"
+      ],
+      "properties": {
+        "shotRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "relation": {
+          "$ref": "#/$defs/anchorRelation"
+        },
+        "offsetMs": {
+          "type": "number"
+        },
+        "visualIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "anchorRelation": {
+      "enum": [
+        "at",
+        "before",
+        "after",
+        "through",
+        "until"
+      ]
+    },
+    "cinematography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "treatmentRef",
+        "thesis",
+        "currentCutRefs",
+        "adjacentSceneRefs",
+        "cameraLineage",
+        "paletteRef",
+        "shotOrder"
+      ],
+      "properties": {
+        "treatmentRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "thesis": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "currentCutRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "adjacentSceneRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "cameraLineage": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/cameraAuthority"
+          }
+        },
+        "paletteRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "shotOrder": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "sourceRefs",
+        "semanticRoles",
+        "continuityRefs",
+        "focalAccent",
+        "anomaly"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "family": {
+          "enum": [
+            "phosphor-transit",
+            "regulation-mono",
+            "chroma-breach",
+            "embodied-noon",
+            "fire-night",
+            "material-dawn",
+            "audit-return",
+            "planet-derived"
+          ]
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "semanticRoles": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/paletteRole"
+          }
+        },
+        "continuityRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "focalAccent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "roleRef",
+            "scarcityIntent"
+          ],
+          "properties": {
+            "roleRef": {
+              "$ref": "#/$defs/stableId"
+            },
+            "scarcityIntent": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "anomaly": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "brokenRule",
+                "storyReason"
+              ],
+              "properties": {
+                "brokenRule": {
+                  "$ref": "#/$defs/nonEmptyString"
+                },
+                "storyReason": {
+                  "$ref": "#/$defs/nonEmptyString"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "paletteRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "valueRef",
+        "usage"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "role": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "valueRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "hex": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          ]
+        },
+        "usage": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "beat",
+        "startAnchorRef",
+        "endAnchorRef",
+        "focalHierarchy",
+        "cameraAuthority",
+        "framing",
+        "lens",
+        "motion",
+        "transition",
+        "paletteRef",
+        "effects",
+        "agency",
+        "variantRefs",
+        "resetRef",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "beat": {
+          "$ref": "#/$defs/ref"
+        },
+        "startAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "endAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "focalHierarchy": {
+          "$ref": "#/$defs/focalHierarchy"
+        },
+        "cameraAuthority": {
+          "$ref": "#/$defs/cameraAuthority"
+        },
+        "framing": {
+          "$ref": "#/$defs/framing"
+        },
+        "lens": {
+          "$ref": "#/$defs/lens"
+        },
+        "motion": {
+          "$ref": "#/$defs/cameraMotion"
+        },
+        "transition": {
+          "$ref": "#/$defs/transition"
+        },
+        "paletteRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "effects": {
+          "$ref": "#/$defs/effects"
+        },
+        "agency": {
+          "$ref": "#/$defs/shotAgency"
+        },
+        "variantRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "focalHierarchy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary",
+        "secondary",
+        "allowedAmbiguity",
+        "subjectOccupancyIntent",
+        "horizonIntent",
+        "negativeSpaceIntent"
+      ],
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "secondary": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "allowedAmbiguity": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "subjectOccupancyIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "horizonIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "negativeSpaceIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "cameraAuthority": {
+      "enum": [
+        "lens-rig",
+        "feed-camera",
+        "cinematic-look",
+        "player-camera",
+        "prologue-vector"
+      ]
+    },
+    "framing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scale",
+        "blocking",
+        "screenDirection",
+        "desktopSafeArea",
+        "mobileSafeArea",
+        "exitComposition"
+      ],
+      "properties": {
+        "scale": {
+          "enum": [
+            "extreme-wide",
+            "wide",
+            "full",
+            "medium",
+            "close",
+            "extreme-close",
+            "first-person",
+            "top-down",
+            "isometric",
+            "vector-field"
+          ]
+        },
+        "blocking": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "screenDirection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "axis",
+            "movement",
+            "continuityRule"
+          ],
+          "properties": {
+            "axis": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "movement": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "continuityRule": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "desktopSafeArea": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "mobileSafeArea": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "exitComposition": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "lens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startFovDeg",
+        "endFovDeg",
+        "durationMs",
+        "easing",
+        "focusTarget",
+        "physicalIntent",
+        "mobileCropRisk"
+      ],
+      "properties": {
+        "startFovDeg": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 120
+        },
+        "endFovDeg": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 120
+        },
+        "durationMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "easing": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "focusTarget": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "physicalIntent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mappingStatus",
+            "character",
+            "focalLengthMm",
+            "filmbackWidthMm",
+            "focusDistance",
+            "depthOfFieldIntent",
+            "shutterMotionIntent"
+          ],
+          "properties": {
+            "mappingStatus": {
+              "enum": [
+                "verified-mapped",
+                "intent-only",
+                "not-applicable"
+              ]
+            },
+            "character": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "focalLengthMm": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              ]
+            },
+            "filmbackWidthMm": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              ]
+            },
+            "focusDistance": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "number",
+                  "minimum": 0
+                }
+              ]
+            },
+            "depthOfFieldIntent": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "shutterMotionIntent": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "mobileCropRisk": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "cameraMotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "durationMs",
+        "easing",
+        "target",
+        "rollPolicy",
+        "inputBlend",
+        "collisionPlan",
+        "occlusionPlan"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "locked",
+            "hard-cut",
+            "track",
+            "dolly",
+            "orbit",
+            "crane",
+            "pan-tilt",
+            "look-pull",
+            "rig-blend",
+            "player-owned",
+            "vector-transform"
+          ]
+        },
+        "durationMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "easing": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "target": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "rollPolicy": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "inputBlend": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "collisionPlan": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "occlusionPlan": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "declaredCut",
+        "reason",
+        "durationMs",
+        "easing"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "none",
+            "hard-cut",
+            "continuous",
+            "rig-blend",
+            "treatment-collapse",
+            "occlusion",
+            "flash",
+            "sleep-fade",
+            "diegetic-screen",
+            "static-blip"
+          ]
+        },
+        "declaredCut": {
+          "type": "boolean"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "durationMs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "easing": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "realityStage",
+        "effectCeiling",
+        "grade",
+        "lighting",
+        "postEffects"
+      ],
+      "properties": {
+        "realityStage": {
+          "$ref": "#/$defs/realityStage"
+        },
+        "effectCeiling": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "grade": {
+          "$ref": "#/$defs/grade"
+        },
+        "lighting": {
+          "$ref": "#/$defs/lighting"
+        },
+        "postEffects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/postEffect"
+          }
+        }
+      }
+    },
+    "realityStage": {
+      "enum": [
+        "bare",
+        "color",
+        "material",
+        "alive",
+        "paradox"
+      ]
+    },
+    "grade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent",
+        "presetRef",
+        "exposureIntent",
+        "resetRef"
+      ],
+      "properties": {
+        "intent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "presetRef": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/ref"
+            }
+          ]
+        },
+        "exposureIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intent",
+        "sourceRefs",
+        "atmosphereIntent",
+        "resetRef"
+      ],
+      "properties": {
+        "intent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "atmosphereIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        }
+      }
+    },
+    "postEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "effectRef",
+        "verb",
+        "entryAnchorRef",
+        "exitAnchorRef",
+        "parametersRef",
+        "reducedMotionBehavior",
+        "lowTierFallback",
+        "resetRef"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "effectRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "verb": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "entryAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "exitAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "parametersRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "reducedMotionBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "lowTierFallback": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        }
+      }
+    },
+    "shotAgency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agencyWindowRefs",
+        "movement",
+        "look",
+        "interaction",
+        "handBackAnchorRef",
+        "handBackBehavior"
+      ],
+      "properties": {
+        "agencyWindowRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "movement": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "look": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "interaction": {
+          "$ref": "#/$defs/controlAuthority"
+        },
+        "handBackAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "handBackBehavior": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "treatmentRef",
+        "mood",
+        "eraFidelity",
+        "cues",
+        "mixIntent",
+        "performancePlan",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "treatmentRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "mood": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "eraFidelity": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cues": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/scoreCue"
+          }
+        },
+        "mixIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "performancePlan": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "scoreCue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "cueRef",
+        "type",
+        "anchorRef",
+        "relation",
+        "offsetMs",
+        "phraseIntent",
+        "barIntent",
+        "mixIntent",
+        "silenceIntent",
+        "resetRef",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "cueRef": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/ref"
+            }
+          ]
+        },
+        "type": {
+          "enum": [
+            "music",
+            "silence",
+            "stinger",
+            "diegetic",
+            "transition"
+          ]
+        },
+        "anchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "relation": {
+          "$ref": "#/$defs/anchorRelation"
+        },
+        "offsetMs": {
+          "type": "number"
+        },
+        "phraseIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "barIntent": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "mixIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "silenceIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "variants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "desktop",
+        "mobile",
+        "reducedMotion",
+        "qualityTiers"
+      ],
+      "properties": {
+        "desktop": {
+          "$ref": "#/$defs/experienceVariant"
+        },
+        "mobile": {
+          "$ref": "#/$defs/experienceVariant"
+        },
+        "reducedMotion": {
+          "$ref": "#/$defs/experienceVariant"
+        },
+        "qualityTiers": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/qualityVariant"
+          }
+        }
+      }
+    },
+    "experienceVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "preservedFocalSubject",
+        "preservedMeaning",
+        "cameraChanges",
+        "effectChanges",
+        "agencyChanges",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "preservedFocalSubject": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "preservedMeaning": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "cameraChanges": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "effectChanges": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "agencyChanges": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "qualityVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "tier",
+        "preservedFocalSubject",
+        "preservedMeaning",
+        "simplifications",
+        "paletteFallback",
+        "effectFallback",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "tier": {
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "potato"
+          ]
+        },
+        "preservedFocalSubject": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "preservedMeaning": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "simplifications": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "paletteFallback": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "effectFallback": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "targetFps",
+        "minimumFps",
+        "maximumFrameTimeMs",
+        "maximumDrawCalls",
+        "maximumShaderPrograms",
+        "maximumGpuMemoryMb",
+        "deviceProfiles",
+        "criticalAnchors",
+        "measurementPlan"
+      ],
+      "properties": {
+        "targetFps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "minimumFps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maximumFrameTimeMs": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maximumDrawCalls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maximumShaderPrograms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maximumGpuMemoryMb": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "deviceProfiles": {
+          "$ref": "#/$defs/refList"
+        },
+        "criticalAnchors": {
+          "$ref": "#/$defs/refList"
+        },
+        "measurementPlan": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "reset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "triggers",
+        "states",
+        "sandboxNoOp",
+        "probeRefs"
+      ],
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ]
+          }
+        },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/resetState"
+          }
+        },
+        "sandboxNoOp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "criterion"
+          ],
+          "properties": {
+            "required": {
+              "const": true
+            },
+            "criterion": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "probeRefs": {
+          "$ref": "#/$defs/refList"
+        }
+      }
+    },
+    "resetState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "domain",
+        "stateRef",
+        "resetValue",
+        "triggers",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "domain": {
+          "enum": [
+            "story",
+            "score",
+            "camera",
+            "grade",
+            "lighting",
+            "effect",
+            "agency",
+            "quality"
+          ]
+        },
+        "stateRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "resetValue": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "triggers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ]
+          }
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acceptanceCriteria",
+        "captures",
+        "mechanicalChecks",
+        "continuity",
+        "headedTaste",
+        "directorSignoffsRef"
+      ],
+      "properties": {
+        "acceptanceCriteria": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "captures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/captureEvidence"
+          }
+        },
+        "mechanicalChecks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/checkEvidence"
+          }
+        },
+        "continuity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "previousBeatRefs",
+            "nextBeatRefs",
+            "paletteRefs",
+            "lensRefs"
+          ],
+          "properties": {
+            "previousBeatRefs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/ref"
+              }
+            },
+            "nextBeatRefs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/ref"
+              }
+            },
+            "paletteRefs": {
+              "$ref": "#/$defs/refList"
+            },
+            "lensRefs": {
+              "$ref": "#/$defs/refList"
+            }
+          }
+        },
+        "headedTaste": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "realGpuRequired",
+            "status",
+            "decisionRef"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "realGpuRequired": {
+              "type": "boolean"
+            },
+            "status": {
+              "enum": [
+                "not-required",
+                "pending",
+                "passed",
+                "failed"
+              ]
+            },
+            "decisionRef": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/ref"
+                }
+              ]
+            }
+          }
+        },
+        "directorSignoffsRef": {
+          "$ref": "#/$defs/ref"
+        }
+      }
+    },
+    "captureEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "anchorRefs",
+        "variantRefs",
+        "pathOrPlanRef",
+        "status",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "enum": [
+            "exact-frame",
+            "dense-frame-strip",
+            "video",
+            "audio",
+            "anchor-trace",
+            "performance-trace",
+            "reset-probe"
+          ]
+        },
+        "anchorRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "variantRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "pathOrPlanRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "captured",
+            "passed",
+            "failed"
+          ]
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "checkEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "commandOrProbeRef",
+        "status",
+        "resultRef",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "commandOrProbeRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "passed",
+            "failed",
+            "blocked"
+          ]
+        },
+        "resultRef": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/ref"
+            }
+          ]
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  }
+}

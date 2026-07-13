@@ -1,0 +1,43 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": { "slug": "paravoxia-creative-chapter", "name": "Paravoxia Creative Chapter", "version": "v1" },
+  "domain": "audiovisual_game_direction",
+  "mode": "three_director_chapter",
+  "executionBudget": {
+    "tier": "deep",
+    "maxModelCalls": 38,
+    "maxPatchLoops": 4,
+    "maxIndependentReviewPasses": 3,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnDirectorsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 3,
+    "requireCurrentAuthority": true,
+    "requireShippedEvidence": true,
+    "requireAdjacentSceneSurvey": true,
+    "requireIndependentTreatments": true,
+    "minimumDistinctTreatments": 1
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.75,
+    "categoryFloor": 4.3,
+    "stagedGate": "final",
+    "humanTasteApproval": { "required": false, "requiresHeadedRealGpuEvidence": false, "cannotBeInferredFromModelReview": true },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": true,
+    "routeOpenDefectsToOwningLane": true,
+    "stopWhenScoreStallsForLoops": 2,
+    "minimumMaterialScoreDelta": 0.05,
+    "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
+  },
+  "requiredEvidence": ["parent-production-lock", "child-scene-contracts", "cross-scene-lens-palette-motif-agency-matrix", "director-notes", "director-signoffs", "implementation-diff", "verification-report", "raw-audiovisual-evidence", "independent-domain-audits", "naive-audience-report", "critic-report", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "stateCoverage": {
+    "requiredStates": ["every_child_scene", "desktop", "mobile", "reduced_motion", "lowest_supported_quality", "chapter_entry", "chapter_exit", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
+    "stressStatesRequired": true,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "A chapter state or child scene may be omitted only by explicit owner scope decision; cross-scene continuity cannot be scoped out."
+  }
+}

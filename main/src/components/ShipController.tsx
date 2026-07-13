@@ -146,6 +146,7 @@ declare global {
 
 interface ShipControllerProps {
   planetSize: number;
+  paused?: boolean;
   terrainSeed: number;
   systemCoordinate: SystemCoordinate;
   activePlanetWorldId: string;
@@ -177,6 +178,7 @@ interface ShipControllerProps {
  */
 export default function ShipController({
   planetSize,
+  paused = false,
   terrainSeed,
   systemCoordinate,
   activePlanetWorldId,
@@ -430,12 +432,14 @@ export default function ShipController({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
+      if (paused) return;
       if (!isLocked.current && !isTouchActive()) return;
       yawInput.current += -event.movementX * MOUSE_SENSITIVITY;
       pitchInput.current += -event.movementY * MOUSE_SENSITIVITY;
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (paused) return;
       if (event.key === 'Escape' && document.pointerLockElement === element) {
         document.exitPointerLock();
         return;
@@ -516,12 +520,12 @@ export default function ShipController({
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [gl.domElement]);
+  }, [gl.domElement, paused]);
 
   // --- per-frame flight integration -----------------------------------------
   useFrame((_, rawDt) => {
     const cam = cameraRef.current;
-    if (!cam) return;
+    if (!cam || paused) return;
     const dt = Math.min(rawDt, 1 / 30); // clamp big frame gaps
 
     const syncFlightFeedback = (

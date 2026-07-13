@@ -1,0 +1,91 @@
+{
+  "schema": "terra.qualityRubric.v1",
+  "identity": {
+    "slug": "paravoxia-creative-cohesion",
+    "name": "Paravoxia Creative Cohesion",
+    "version": "v1"
+  },
+  "domain": "audiovisual_game_direction",
+  "scale": {
+    "min": 1,
+    "max": 5,
+    "passing": 4.8,
+    "categoryFloor": 4.5
+  },
+  "categories": [
+    {
+      "slug": "narrative_and_player_causality",
+      "label": "Narrative And Player Causality",
+      "weight": 14,
+      "signals": ["story event and player verb are clear", "mystery lands at intended loudness", "camera and score preserve agency"]
+    },
+    {
+      "slug": "audiovisual_emotional_alignment",
+      "label": "Audiovisual Emotional Alignment",
+      "weight": 16,
+      "signals": ["story turn, score phrase, image, and control reinforce one event", "silence and restraint are authored", "no department merely annotates another"]
+    },
+    {
+      "slug": "cinematic_composition_and_lens",
+      "label": "Cinematic Composition And Lens",
+      "weight": 14,
+      "signals": ["one legible focal subject", "blocking and negative space are intentional", "lens and camera motion reveal story meaning"]
+    },
+    {
+      "slug": "score_coherence_and_sync",
+      "label": "Score Coherence And Synchronization",
+      "weight": 12,
+      "signals": ["harmonic authority and motif continuity hold", "cues land on shared anchors", "mix and arrangement preserve the scene"]
+    },
+    {
+      "slug": "palette_light_and_render_cohesion",
+      "label": "Palette Light And Render Cohesion",
+      "weight": 10,
+      "signals": ["semantic palette roles continue across scenes", "light fog materials and grade share one atmosphere", "effects express earned perception"]
+    },
+    {
+      "slug": "transition_and_state_integrity",
+      "label": "Transition And State Integrity",
+      "weight": 10,
+      "signals": ["cuts are declared and motivated", "camera score and effects hand off cleanly", "all persistent state resets"]
+    },
+    {
+      "slug": "creative_ambition_and_specificity",
+      "label": "Creative Ambition And Paravoxia Specificity",
+      "weight": 10,
+      "signals": ["flagship moments earn bespoke mechanisms", "work is not generic cinematic coverage", "browser constraints become style"]
+    },
+    {
+      "slug": "interaction_accessibility_and_variants",
+      "label": "Interaction Accessibility And Variants",
+      "weight": 6,
+      "signals": ["forced attention is bounded", "mobile and reduced motion preserve meaning", "quality tiers preserve focal parity"]
+    },
+    {
+      "slug": "performance_and_implementation_fidelity",
+      "label": "Performance And Implementation Fidelity",
+      "weight": 5,
+      "signals": ["emotional turns meet frame budget", "implementation matches signed contract", "sandbox and existing paths remain safe"]
+    },
+    {
+      "slug": "evidence_review_and_learning",
+      "label": "Evidence Review And Learning",
+      "weight": 3,
+      "signals": ["evidence covers exact anchors and variants", "independent review and dissent are substantive", "lessons are durable"]
+    }
+  ],
+  "blockingDefectPolicy": {
+    "criticalOrHighOpenDefectsFail": true,
+    "mediumCategoriesFailUnlessAccepted": [
+      "narrative_and_player_causality",
+      "audiovisual_emotional_alignment",
+      "cinematic_composition_and_lens",
+      "score_coherence_and_sync",
+      "palette_light_and_render_cohesion",
+      "transition_and_state_integrity",
+      "interaction_accessibility_and_variants",
+      "performance_and_implementation_fidelity"
+    ],
+    "acceptedExceptionsRequireHumanDecision": true
+  }
+}

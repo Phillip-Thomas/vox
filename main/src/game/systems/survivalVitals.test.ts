@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  getVitals, getStamina, tickVitals, tickLavaDamage, applyStamina, canSprint, setVitals, resetVitals, feed, drink
+  getSurvivalEnvironment, getVitals, getStamina, isDowned, tickVitals, tickLavaDamage,
+  applyStamina, canSprint, setVitals, resetVitals, feed, drink
 } from './survivalVitals.ts';
 
 beforeEach(() => resetVitals());
@@ -19,7 +20,7 @@ describe('vitals decay', () => {
     expect(v.hunger).toBeLessThan(100);
     expect(v.thirst).toBeLessThan(100);
     expect(v.thirst).toBeLessThan(v.hunger); // thirst decays faster
-    expect(v.warmth).toBe(100); // held full until temperature model
+    expect(v.warmth).toBe(100); // no environment input means no thermal simulation
   });
 
   it('clamps at 0 (never negative)', () => {
@@ -48,6 +49,46 @@ describe('vitals decay', () => {
     setVitals({ health: 80, hunger: 60, thirst: 100 }); // clearly above
     tickVitals(0.5, true);
     expect(getVitals().health).toBeGreaterThan(80); // regen
+  });
+});
+
+describe('temperature, shelter, and recovery', () => {
+  const exposedNight = { daylight: 0, sheltered: false, nearFire: false, warmthEnabled: true };
+
+  it('drains warmth only while exposed at night', () => {
+    tickVitals(30, true, undefined, exposedNight);
+    expect(getVitals().warmth).toBe(76);
+    expect(getSurvivalEnvironment().status).toBe('exposed');
+  });
+
+  it('a sealed shelter recovers warmth without making fire irrelevant', () => {
+    setVitals({ warmth: 30 });
+    tickVitals(10, true, undefined, { ...exposedNight, sheltered: true });
+    expect(getVitals().warmth).toBeCloseTo(34.5);
+    expect(getSurvivalEnvironment().status).toBe('sheltered');
+  });
+
+  it('a campfire restores warmth fastest, especially inside shelter', () => {
+    setVitals({ warmth: 20 });
+    tickVitals(10, true, undefined, { ...exposedNight, nearFire: true });
+    expect(getVitals().warmth).toBe(40);
+    tickVitals(10, true, undefined, { ...exposedNight, nearFire: true, sheltered: true });
+    expect(getVitals().warmth).toBe(70);
+    expect(getSurvivalEnvironment().status).toBe('fire');
+  });
+
+  it('daylight gently restores warmth', () => {
+    setVitals({ warmth: 50 });
+    tickVitals(20, true, undefined, { ...exposedNight, daylight: 1 });
+    expect(getVitals().warmth).toBe(63);
+    expect(getSurvivalEnvironment().status).toBe('daylight');
+  });
+
+  it('zero warmth eventually enters a gentle downed state', () => {
+    setVitals({ warmth: 0, health: 20, hunger: 40 });
+    tickVitals(10, true, undefined, exposedNight);
+    expect(getVitals().health).toBe(0);
+    expect(isDowned()).toBe(true);
   });
 });
 

@@ -1,0 +1,43 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": { "slug": "paravoxia-creative-delta", "name": "Paravoxia Creative Delta", "version": "v1" },
+  "domain": "audiovisual_game_direction",
+  "mode": "three_director_delta",
+  "executionBudget": {
+    "tier": "fast",
+    "maxModelCalls": 18,
+    "maxPatchLoops": 2,
+    "maxIndependentReviewPasses": 2,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnDirectorsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 1,
+    "requireCurrentAuthority": true,
+    "requireShippedEvidence": true,
+    "requireAdjacentSceneSurvey": true,
+    "requireIndependentTreatments": true,
+    "minimumDistinctTreatments": 1
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.75,
+    "categoryFloor": 4.3,
+    "stagedGate": "final",
+    "humanTasteApproval": { "required": false, "requiresHeadedRealGpuEvidence": false, "cannotBeInferredFromModelReview": true },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": true,
+    "routeOpenDefectsToOwningLane": true,
+    "stopWhenScoreStallsForLoops": 2,
+    "minimumMaterialScoreDelta": 0.05,
+    "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
+  },
+  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "scene-contract", "implementation-diff", "verification-report", "raw-audiovisual-evidence", "affected-domain-audit", "critic-report", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "stateCoverage": {
+    "requiredStates": ["affected_desktop", "affected_mobile", "reduced_motion", "lowest_supported_quality", "affected_reset_paths", "sandbox_inactive"],
+    "stressStatesRequired": false,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "Only demonstrably unaffected states may be scoped out, with a written verifier rationale and Cohesion Judge acceptance."
+  }
+}

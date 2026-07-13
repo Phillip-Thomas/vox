@@ -1,0 +1,23 @@
+{
+  "schema": "paravoxia.directorSignoffs.v1",
+  "contractRevision": "{{CONTRACT_REVISION}}",
+  "chapter": {
+    "disposition": "object",
+    "revision": "{{CONTRACT_REVISION}}",
+    "signedBy": "{{CHAPTER_DIRECTOR}}",
+    "signedAt": "{{ISO_8601}}"
+  },
+  "score": {
+    "disposition": "object",
+    "revision": "{{CONTRACT_REVISION}}",
+    "signedBy": "{{SCORE_DIRECTOR}}",
+    "signedAt": "{{ISO_8601}}"
+  },
+  "cinematography": {
+    "disposition": "object",
+    "revision": "{{CONTRACT_REVISION}}",
+    "signedBy": "{{CINEMATOGRAPHY_DIRECTOR}}",
+    "signedAt": "{{ISO_8601}}"
+  },
+  "sameRevision": false
+}

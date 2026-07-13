@@ -8,8 +8,21 @@ import { MultiplayerPersistence } from '../src/persistence.js';
 import { createStateServer } from '../src/stateServer.js';
 import { PROTOCOL_VERSION, type ServerMessage } from '../src/protocol.js';
 import type { LoadedRoomState, RoomState, ShardEvent } from '../src/rooms.js';
+import { isAuthoritativeDeadwoodNode } from '../src/economyAuthority.js';
 
 const servers: Array<{ close: () => Promise<void> }> = [];
+
+function findDeadwoodCoord(worldId: string): [number, number, number] {
+  for (let x = -25; x <= 25; x++) {
+    for (let y = -25; y <= 25; y++) {
+      for (let z = -25; z <= 25; z++) {
+        const coord: [number, number, number] = [x, y, z];
+        if (isAuthoritativeDeadwoodNode(coord, worldId)) return coord;
+      }
+    }
+  }
+  throw new Error(`No authoritative deadwood coordinate found for ${worldId}`);
+}
 
 afterEach(async () => {
   vi.restoreAllMocks();
@@ -706,6 +719,52 @@ describe('state server', () => {
       payload: { source: 'tree', coord: [2, 2, 3], id: 'wood', qty: 2 }
     }));
     await expectRejected(alice.messages, 'tree-second', 'conflict');
+
+    const deadwoodCoord = findDeadwoodCoord('0,0');
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'deadwood-first',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'forage', kind: 'deadwood', coord: deadwoodCoord, id: 'wood', qty: 2 }
+    }));
+    const deadwood = await waitForMessage(
+      bob.messages,
+      'command_accepted',
+      message => message.commandId === 'deadwood-first'
+    );
+    expect(deadwood.events[0]).toMatchObject({
+      type: 'resource_taken',
+      payload: { source: 'forage', kind: 'deadwood', coord: deadwoodCoord, id: 'wood', qty: 2 }
+    });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'deadwood-second',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'forage', kind: 'deadwood', coord: deadwoodCoord, id: 'wood', qty: 2 }
+    }));
+    await expectRejected(alice.messages, 'deadwood-second', 'conflict');
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'forage-kind-first',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'forage', kind: 'berry', coord: [2, 2, 5], id: 'berry', qty: 1 }
+    }));
+    await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'forage-kind-first');
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'forage-kind-second',
+      commandType: 'resource_taken',
+      worldId: '0,0',
+      payload: { source: 'forage', kind: 'root', coord: [2, 2, 5], id: 'root', qty: 1 }
+    }));
+    await expectRejected(alice.messages, 'forage-kind-second', 'conflict');
 
     alice.ws.send(JSON.stringify({
       type: 'command',

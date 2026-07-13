@@ -22,6 +22,7 @@ let nextId = 1;
 let version = 0;
 const listeners = new Set<() => void>();
 const DUPLICATE_EPSILON = 0.0001;
+export const CAMPFIRE_MIN_SPACING = 2.5;
 
 function emit() {
   listeners.forEach(l => l());
@@ -36,6 +37,20 @@ export function placeCampfire(pos: THREE.Vector3, up: THREE.Vector3, actorId?: A
   campfires.push({ id: nextId++, pos: [pos.x, pos.y, pos.z], up: [up.x, up.y, up.z], ...ownership(actorId) });
   version++;
   emit();
+}
+
+export function canPlaceCampfire(
+  pos: THREE.Vector3,
+  minSpacing = CAMPFIRE_MIN_SPACING
+): { ok: true } | { ok: false; reason: 'too_close' } {
+  const minSq = minSpacing * minSpacing;
+  const blocked = campfires.some(campfire => {
+    const dx = pos.x - campfire.pos[0];
+    const dy = pos.y - campfire.pos[1];
+    const dz = pos.z - campfire.pos[2];
+    return dx * dx + dy * dy + dz * dz < minSq;
+  });
+  return blocked ? { ok: false, reason: 'too_close' } : { ok: true };
 }
 
 export function getCampfires(): readonly Campfire[] {

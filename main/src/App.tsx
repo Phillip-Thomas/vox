@@ -91,7 +91,7 @@ import MapOverlay from './components/hud/MapOverlay.tsx';
 const milestoneCount = () => getMilestones().length;
 import { subscribeTreeHarvest } from './game/systems/treeHarvest.ts';
 import { subscribeStonePickup } from './game/systems/stonePickup.ts';
-import { subscribeVitals } from './game/systems/survivalVitals.ts';
+import { isDowned, subscribeVitals } from './game/systems/survivalVitals.ts';
 import { subscribeWaterskin } from './game/systems/consumeSystem.ts';
 import {
   hasWorldGenCacheEntry,
@@ -129,6 +129,7 @@ import {
   getAppStateSnapshot,
   setGameCanvas,
   getGameCanvas,
+  enterPlaying,
   resetSceneReady,
   returnToMenu
 } from './state/appState.ts';
@@ -137,9 +138,11 @@ import StoryOverlays from './story/StoryOverlays.tsx';
 import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
 import StoryDebugPanel, { storyDebugEnabled } from './story/StoryDebugPanel.tsx';
 import {
+  beginStory,
   deactivateStory,
   getStoryStateSnapshot,
   initStoryFromSave,
+  restartStory,
   storyHudMask,
   STORY_MILESTONES,
   storyHudHideInventory,
@@ -148,9 +151,13 @@ import {
   useStoryState
 } from './story/storyState.ts';
 import { getStoryInputPolicy } from './story/storyInputPolicy.ts';
+import { setStoryPaused } from './story/storyClock.ts';
 import { isStoryWorld, STORY_COORDINATE } from './story/world/storyWorld.ts';
 import PauseMenu, { type NavApi } from './components/ui/PauseMenu.tsx';
+import StoryCompletePanel from './components/ui/StoryCompletePanel.tsx';
+import DeathSequenceOverlay from './components/hud/DeathSequenceOverlay.tsx';
 import CraftingPanel from './components/ui/CraftingPanel.tsx';
+import { requestSurvivalRecovery } from './game/systems/survivalRecovery.ts';
 import AudioDirector from './components/audio/AudioDirector.tsx';
 import { playSfx } from './audio/sfxEngine.ts';
 import './App.css';
@@ -402,13 +409,39 @@ const App: React.FC = () => {
   const [hudVisible, setHudVisible] = useState(true);
   const isTouch = useMemo(() => isTouchDevice(), []);
   const flight = useSpaceFlight();
-  const { phase: appPhase } = useAppState();
+  const { phase: appPhase, sceneReady: appSceneReady } = useAppState();
   const story = useStoryState();
   // Milestone-gated HUD (the ch3 sense introductions) re-renders on progression.
   useSyncExternalStore(subscribeProgression, milestoneCount, milestoneCount);
   const [paused, setPaused] = useState(false);
+  const [storyCompleteOpen, setStoryCompleteOpen] = useState(false);
+  const [pendingCompletedSiteEntry, setPendingCompletedSiteEntry] = useState(false);
+  const setPauseState = useCallback((next: boolean) => {
+    setStoryPaused(next);
+    setPaused(next);
+  }, []);
+  useEffect(() => () => setStoryPaused(false), []);
+  const storyWasActive = useRef(story.active);
+  useEffect(() => {
+    const completedNow = storyWasActive.current
+      && !story.active
+      && story.chapter === 'complete'
+      && appPhase === 'playing';
+    storyWasActive.current = story.active;
+    if (!completedNow) return;
+    setStoryCompleteOpen(true);
+    setPauseState(true);
+    if (document.pointerLockElement) document.exitPointerLock();
+  }, [appPhase, story.active, story.chapter, setPauseState]);
   const [craftingOpen, setCraftingOpen] = useState(false);
   const [localActorId, setLocalActorIdState] = useState(() => getLocalActorId());
+  const downed = useSyncExternalStore(
+    subscribeVitals,
+    () => isDowned(localActorId),
+    () => false
+  );
+  const downedRef = useRef(downed);
+  downedRef.current = downed;
   // Ref mirror so the pointer-lock listener (bound once) can read the live value
   // without a stale closure — same trick the lock handler uses for app phase.
   const craftingOpenRef = useRef(false);
@@ -431,6 +464,16 @@ const App: React.FC = () => {
   useEffect(() => subscribeLocalActorId(() => setLocalActorIdState(getLocalActorId())), []);
   useEffect(() => subscribeBuildState(() => setBuildHudTick(n => n + 1)), []);
 
+  useEffect(() => {
+    if (!downed) return;
+    craftingOpenRef.current = false;
+    setCraftingOpen(false);
+    setMapViewOpen(false);
+    setBuildEnabled(false);
+    setPauseState(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+  }, [downed, setPauseState]);
+
   // Entering story mode from the menu swaps to the pinned story world. The swap
   // happens behind the (opaque) prologue overlay while the app phase is still
   // 'menu', so the remount + regeneration are never visible.
@@ -448,7 +491,7 @@ const App: React.FC = () => {
     if (getAppStateSnapshot().phase !== 'playing') return;
     craftingOpenRef.current = true;
     setCraftingOpen(true);
-    setPaused(false);
+    setPauseState(false);
     if (document.pointerLockElement) document.exitPointerLock();
   };
   const closeCrafting = () => {
@@ -464,13 +507,14 @@ const App: React.FC = () => {
   // react to the lock state instead. Re-acquiring lock closes it.
   useEffect(() => {
     const onLockChange = () => {
-      if (document.pointerLockElement) { setPaused(false); return; }
+      if (document.pointerLockElement) { setPauseState(false); return; }
+      if (downedRef.current) return;
       if (craftingOpenRef.current) return; // Fabricator released lock on purpose
-      if (getAppStateSnapshot().phase === 'playing' && !isTouch) setPaused(true);
+      if (getAppStateSnapshot().phase === 'playing' && !isTouch) setPauseState(true);
     };
     document.addEventListener('pointerlockchange', onLockChange);
     return () => document.removeEventListener('pointerlockchange', onLockChange);
-  }, [isTouch]);
+  }, [isTouch, setPauseState]);
 
   // M toggles the survey chart (the nav era's overhead view, retained as a
   // tool). Story saves unlock it by completing the nav rung; from then on the
@@ -480,6 +524,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code !== 'KeyM') return;
+      if (isDowned()) return;
+      if (paused) return;
       if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
       const policy = getStoryInputPolicy();
       if (policy.lookMode !== 'free') return;
@@ -490,7 +536,7 @@ const App: React.FC = () => {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [flight.controlMode]);
+  }, [flight.controlMode, paused]);
 
   // Any beat change closes the chart (cutscenes own the camera).
   useEffect(() => {
@@ -502,6 +548,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'KeyC') {
+        if (isDowned()) return;
         if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
         if (!getStoryInputPolicy().allowCraft) return; // story chapters gate the Fabricator
         if (craftingOpenRef.current) closeCrafting();
@@ -519,6 +566,7 @@ const App: React.FC = () => {
   // mode keeps pointer lock — it does NOT release the cursor like the Fabricator.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (isDowned()) return;
       if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
       if (craftingOpenRef.current || paused) return;
       if (!getStoryInputPolicy().allowBuild) return; // story chapters gate build mode
@@ -538,36 +586,97 @@ const App: React.FC = () => {
   useEffect(() => { if (flight.controlMode !== 'fps') setBuildEnabled(false); }, [flight.controlMode]);
 
   const resumeFromPause = () => {
-    setPaused(false);
+    setPauseState(false);
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
   };
 
   const quitToMenu = () => {
-    setPaused(false);
+    setPauseState(false);
     if (document.pointerLockElement) document.exitPointerLock();
     deactivateStory(); // progress is already checkpointed in milestones
     returnToMenu();
+  };
+
+  const continueAtCompletedSite = () => {
+    setStoryCompleteOpen(false);
+    setPauseState(false);
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
+    }
+  };
+
+  const returnCompletedToMenu = () => {
+    setStoryCompleteOpen(false);
+    setPauseState(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+    returnToMenu();
+  };
+
+  const recoverFromDowned = () => {
+    requestSurvivalRecovery();
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* canvas click remains available */ }
+    }
+  };
+
+  const replayStoryFromBeginning = () => {
+    setStoryCompleteOpen(false);
+    setPauseState(false);
+    if (document.pointerLockElement) document.exitPointerLock();
+    returnToMenu();
+    restartStory();
+    const replayWorld = createCurrentWorld(STORY_COORDINATE);
+    setPreviousWorld(null);
+    setCurrentWorld(replayWorld);
+    setArrivalMode('surface');
+    resetSceneReady();
+    saveGlobal(replayWorld, getCurrentDayPhase());
+  };
+
+  const returnToCompletedStorySite = () => {
+    beginStory();
+    const siteWorld = createCurrentWorld(STORY_COORDINATE);
+    setPendingCompletedSiteEntry(true);
+    if (!isTouch) {
+      try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
+    }
+    if (currentWorld.worldId !== siteWorld.worldId) {
+      setPreviousWorld(currentWorld);
+      resetSceneReady();
+      setCurrentWorld(siteWorld);
+    }
+    setArrivalMode('surface');
   };
 
   const toggleBuildHud = () => {
     if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
     craftingOpenRef.current = false;
     setCraftingOpen(false);
-    setPaused(false);
+    setPauseState(false);
     toggleBuildMode();
   };
   const pauseAndOpenStarMap = () => {
     craftingOpenRef.current = false;
     setCraftingOpen(false);
     if (document.pointerLockElement) document.exitPointerLock();
-    setPaused(true);
+    setPauseState(true);
   };
   const currentWorldKey = currentWorld.worldId;
   const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
   const inventoryTopOffset = useMemo(() => getInventoryTopOffset(isTouch), [isTouch]);
   const currentWorldIdentity = useMemo(() => worldIdentityFromCurrentWorld(currentWorld), [currentWorld.worldId, currentWorld.seed]);
+  useEffect(() => {
+    if (!pendingCompletedSiteEntry || appPhase !== 'menu' || !appSceneReady) return;
+    if (!isStoryWorld(currentWorld.coordinate)) return;
+    // This runs after the old world's effect cleanup/autosave and after the new
+    // Story scene has painted, so lastWorld cannot be overwritten by the world
+    // we just left and the landing shell never reveals an unready destination.
+    saveGlobal(currentWorldIdentity, getCurrentDayPhase());
+    setPendingCompletedSiteEntry(false);
+    enterPlaying();
+  }, [appPhase, appSceneReady, currentWorld.coordinate, currentWorldIdentity, pendingCompletedSiteEntry]);
   const commandContext = useMemo(
     () => createOfflineCommandContext(currentWorldIdentity, { actorId: localActorId }),
     [currentWorldIdentity.worldId, currentWorldIdentity.generationSchemaVersion, localActorId]
@@ -729,6 +838,7 @@ const App: React.FC = () => {
     flyDebug,
     descentDebug,
     debugUiEnabled,
+    storyCompletePreview,
     systemBodiesEnabled,
     systemBodyCountOverride,
     systemProbeEnabled
@@ -773,7 +883,8 @@ const App: React.FC = () => {
       systemProbeEnabled: params.get('systemprobe') === '1',
       // ?debug=1 -> reveal the developer overlays (voxel stats, collider toggle,
       // raw coordinate panel). Hidden from the production UI otherwise.
-      debugUiEnabled: params.get('debug') === '1'
+      debugUiEnabled: params.get('debug') === '1',
+      storyCompletePreview: import.meta.env.DEV && params.get('storyCompletePreview') === '1'
     };
   }, []);
 
@@ -1018,31 +1129,34 @@ const App: React.FC = () => {
     if (!(flight.phase === 'surface' && flight.controlMode === 'flight')) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.code !== 'KeyF' || event.repeat) return;
+      if (paused) return;
       playSfx('exitShip');
       exitShip();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [flight.phase, flight.controlMode]);
+  }, [flight.phase, flight.controlMode, paused]);
 
   // Press H to hide/show the HUD panels (desktop). On mobile the corner toggle
   // button does the same via tap. Ignored while typing in the coordinate inputs.
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.code !== 'KeyH') return;
+      if (paused) return;
       const el = document.activeElement;
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
       setHudVisible(v => !v);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [paused]);
 
   // Travelling from the star map closes the menu and (desktop) re-grabs lock so
   // the warp plays in first person.
   const travel = (action: () => void) => {
+    if (getStoryStateSnapshot().active) return;
     action();
-    setPaused(false);
+    setPauseState(false);
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
@@ -1150,7 +1264,7 @@ const App: React.FC = () => {
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
         {/* Story director tick — same placement rationale as WarpDriver. */}
-        <StoryDirectorDriver />
+        <StoryDirectorDriver paused={paused || downed || storyCompleteOpen || storyCompletePreview} />
         <SceneReadyProbe />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
@@ -1159,7 +1273,7 @@ const App: React.FC = () => {
           onRender={systemProbeEnabled ? recordSystemReactProfile : () => undefined}
         >
           <EfficientScene
-            key={currentWorldKey}
+            key={`${currentWorldKey}:${story.runId}`}
             commandContext={commandContext}
             activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
             terrainSeed={currentWorld.seed}
@@ -1168,6 +1282,7 @@ const App: React.FC = () => {
             overview={overviewEnabled}
             agent={agentEnabled}
             cinematic={appPhase === 'menu'}
+            paused={paused || storyCompleteOpen || storyCompletePreview}
             profileSystemTravel={systemProbeEnabled}
             onGroundedChange={grounded => {
               if (grounded) {
@@ -1200,7 +1315,12 @@ const App: React.FC = () => {
       <WarpFlash />
 
       {/* --- Landing screen (over the live cinematic render) --- */}
-      <LandingMenu startWorldId={currentWorldIdentity.worldId} />
+      <LandingMenu
+        startWorldId={currentWorldIdentity.worldId}
+        onReplayStory={replayStoryFromBeginning}
+        onReturnToStorySite={returnToCompletedStorySite}
+        returningToStorySite={pendingCompletedSiteEntry}
+      />
 
       {/* --- Story overlays (prologue terminal / regulation feed / captions) --- */}
       <StoryOverlays />
@@ -1234,7 +1354,7 @@ const App: React.FC = () => {
               <MultiplayerStatusBadge />
             </>
           )}
-          {isTouch && <TouchControls controlMode={flight.controlMode} />}
+          {isTouch && !paused && !downed && !storyCompleteOpen && !storyCompletePreview && <TouchControls controlMode={flight.controlMode} />}
 
           <HudCornerActions
             controlMode={flight.controlMode}
@@ -1244,6 +1364,7 @@ const App: React.FC = () => {
             onToggleBuild={toggleBuildHud}
             onOpenCrafting={openCrafting}
             onPause={pauseAndOpenStarMap}
+            pauseLabel={story.active ? 'Pause' : 'Pause and open star map'}
           />
         </>
       )}
@@ -1255,7 +1376,44 @@ const App: React.FC = () => {
       <CraftingPanel open={craftingOpen} onClose={closeCrafting} commandContext={commandContext} />
 
       {/* --- Pause / star map menu --- */}
-      <PauseMenu open={paused} onResume={resumeFromPause} onQuitToMenu={quitToMenu} nav={nav} />
+      <PauseMenu
+        open={paused && !downed && !storyCompleteOpen && !storyCompletePreview}
+        onResume={resumeFromPause}
+        onQuitToMenu={quitToMenu}
+        nav={nav}
+        travelEnabled={!story.active}
+        controlsContext={{
+          device: isTouch ? 'touch' : 'desktop',
+          mode: flight.controlMode === 'flight' ? 'flight' : buildModeOpen ? 'build' : 'fps',
+          storyActive: story.active,
+          allowBuild: getStoryInputPolicy().allowBuild,
+          allowCraft: getStoryInputPolicy().allowCraft,
+          moveSpeedScale: getStoryInputPolicy().moveSpeedScale,
+          allowJump: getStoryInputPolicy().allowJump,
+          allowSprint: getStoryInputPolicy().allowSprint,
+          lookMode: getStoryInputPolicy().lookMode
+        }}
+      />
+
+      <StoryCompletePanel
+        open={storyCompleteOpen || storyCompletePreview}
+        onContinue={continueAtCompletedSite}
+        onReturnToMenu={returnCompletedToMenu}
+        onReplay={replayStoryFromBeginning}
+      />
+
+      {/* Death sequence: collapse -> substrate -> panel -> rewake. The overlay
+          owns the sequence machine's edges and mounts the DownedPanel itself
+          once the reflective beat has played (see DeathSequenceOverlay). */}
+      <DeathSequenceOverlay
+        playing={appPhase === 'playing'}
+        downed={downed}
+        onRecover={recoverFromDowned}
+        onReturnToMenu={() => {
+          if (document.pointerLockElement) document.exitPointerLock();
+          returnToMenu();
+        }}
+      />
 
       {/* --- Developer overlays (?debug=1) --- */}
       {showDebugHud && (

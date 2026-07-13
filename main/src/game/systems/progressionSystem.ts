@@ -70,6 +70,21 @@ export function getMilestones(actorId?: ActorId): string[] {
   return [...stateFor(actorId).milestones];
 }
 
+/** Remove one product-owned milestone namespace while preserving unrelated
+ * progression. Story replay uses this instead of wiping sandbox achievements. */
+export function removeMilestonesByPrefix(prefix: string, actorId?: ActorId): number {
+  if (!prefix) return 0;
+  const state = stateFor(actorId);
+  let removed = 0;
+  for (const milestone of state.milestones) {
+    if (!milestone.startsWith(prefix)) continue;
+    state.milestones.delete(milestone);
+    removed++;
+  }
+  if (removed > 0) emit();
+  return removed;
+}
+
 export function resetProgression(actorId?: ActorId): void {
   if (actorId) progression.delete(actorId);
   else progression.clear();

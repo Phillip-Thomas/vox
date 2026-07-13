@@ -10,7 +10,7 @@ import { PHOSPHOR, PHOSPHOR_DIM } from './TerminalPrologue.tsx';
 // translating up over CRAWL_SECONDS. Enter/Space/click fast-forwards.
 
 // crawl-length: 52s carried 27 lines (~1.9s/line). The 2026-07-11 rework grew
-// the notice to 44 lines (provenance, setting, clause 5, VOX, the routing
+// the notice to 44 lines (provenance, setting, clause 5, TERRA, the routing
 // addendum, "MAKE NO MISTAKES.") — 84s preserves the same reading pace. The
 // movie dwells the full length by design; players fast-forward (Enter/click).
 const CRAWL_SECONDS = 84;

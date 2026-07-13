@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-director-note.schema.json",
+  "title": "Paravoxia Director Note v1",
+  "description": "One directed, evidence-backed note in a Paravoxia creative-triad director-notes.jsonl artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "from",
+    "to",
+    "beat",
+    "anchor",
+    "kind",
+    "severity",
+    "statement",
+    "evidenceRefs",
+    "requestedAction",
+    "status",
+    "disposition"
+  ],
+  "properties": {
+    "schema": {
+      "const": "paravoxia.directorNote.v1"
+    },
+    "id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "contractVersion": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "from": {
+      "$ref": "#/$defs/directorId"
+    },
+    "to": {
+      "$ref": "#/$defs/directorId"
+    },
+    "beat": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "anchor": {
+      "$ref": "#/$defs/stableId"
+    },
+    "kind": {
+      "enum": [
+        "proposal",
+        "constraint",
+        "question",
+        "objection",
+        "acceptance",
+        "decision"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "statement": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "requestedAction": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "owner": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/noteOwner"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "open",
+        "acknowledged",
+        "accepted",
+        "rejected",
+        "resolved",
+        "closed",
+        "routed",
+        "superseded",
+        "withdrawn"
+      ]
+    },
+    "response": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/response"
+        }
+      ]
+    },
+    "disposition": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/disposition"
+        }
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "objection"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "owner",
+          "response",
+          "disposition"
+        ],
+        "properties": {
+          "owner": {
+            "$ref": "#/$defs/noteOwner"
+          },
+          "severity": {
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "open"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "disposition": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "acknowledged"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "response",
+          "disposition"
+        ],
+        "properties": {
+          "response": {
+            "$ref": "#/$defs/response"
+          },
+          "disposition": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "accepted",
+              "rejected",
+              "resolved",
+              "closed",
+              "routed",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "response",
+          "disposition"
+        ],
+        "properties": {
+          "response": {
+            "$ref": "#/$defs/response"
+          },
+          "disposition": {
+            "$ref": "#/$defs/disposition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "withdrawn"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "disposition"
+        ],
+        "properties": {
+          "disposition": {
+            "$ref": "#/$defs/disposition"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "directorId": {
+      "enum": [
+        "chapter",
+        "score",
+        "cinematography"
+      ]
+    },
+    "noteOwner": {
+      "enum": [
+        "chapter",
+        "score",
+        "cinematography",
+        "integration-engineer",
+        "orchestrator",
+        "cohesion-judge",
+        "human-approver"
+      ]
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "statement",
+        "evidenceRefs"
+      ],
+      "properties": {
+        "by": {
+          "$ref": "#/$defs/noteOwner"
+        },
+        "statement": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "respondedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "decidedBy",
+        "reason",
+        "evidenceRefs",
+        "actionRef"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "accepted",
+            "accepted-with-change",
+            "rejected",
+            "deferred",
+            "routed",
+            "superseded",
+            "withdrawn"
+          ]
+        },
+        "decidedBy": {
+          "$ref": "#/$defs/noteOwner"
+        },
+        "reason": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "actionRef": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          ]
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

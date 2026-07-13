@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import { getItem } from '../../game/data/items.ts';
 import { getAccessibleStations, getStation, type StationId } from '../../game/data/stations.ts';
-import { recipesForStation, type Recipe } from '../../game/data/recipes.ts';
+import type { Recipe } from '../../game/data/recipes.ts';
 import { canCraft, type CraftContext } from '../../game/systems/craftingSystem.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
@@ -11,6 +11,9 @@ import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gam
 import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
 import { getStoryInputPolicy } from '../../story/storyInputPolicy.ts';
 import { getStoryStateSnapshot } from '../../story/storyState.ts';
+import { getPublicFabricatorSections } from './Fabricator.model.ts';
+import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
+import { isFeetInLava } from '../../state/playerLavaImmersion.ts';
 
 interface CraftingPanelProps {
   open: boolean;
@@ -27,14 +30,82 @@ interface CraftingPanelProps {
  */
 const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandContext }) => {
   const [, force] = useState(0);
+  const [status, setStatus] = useState('Primitive field kit ready.');
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   useEffect(() => subscribeInventory(() => force(n => n + 1)), []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const frame = requestAnimationFrame(() => {
+      panelRef.current?.querySelector<HTMLElement>('[data-fabricator-primary]')?.focus();
+    });
+    const overlay = overlayRef.current;
+    const parent = overlay?.parentElement;
+    const siblings = overlay && parent
+      ? [...parent.children].filter((child): child is HTMLElement => child instanceof HTMLElement && child !== overlay)
+      : [];
+    const previous = siblings.map(element => ({
+      element,
+      inert: element.inert,
+      ariaHidden: element.getAttribute('aria-hidden')
+    }));
+    for (const element of siblings) {
+      element.inert = true;
+      element.setAttribute('aria-hidden', 'true');
+    }
+    return () => {
+      cancelAnimationFrame(frame);
+      for (const { element, inert, ariaHidden } of previous) {
+        element.inert = inert;
+        if (ariaHidden == null) element.removeAttribute('aria-hidden');
+        else element.setAttribute('aria-hidden', ariaHidden);
+      }
+      if (previousFocusRef.current?.isConnected) previousFocusRef.current.focus();
+    };
+  }, [open]);
+
   if (!open) return null;
 
   const ctx: CraftContext = { stations: getAccessibleStations() };
-  const stations = getAccessibleStations();
+  const sections = getPublicFabricatorSections(getStoryInputPolicy().recipeAllowed);
 
   return (
-    <div style={{
+    <div
+      ref={overlayRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="fabricator-title"
+      onKeyDown={event => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          event.stopPropagation();
+          onClose();
+          return;
+        }
+        if (event.key !== 'Tab') return;
+        const focusable = panelRef.current?.querySelectorAll<HTMLElement>('button:not([disabled])');
+        if (!focusable?.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }}
+      onBlurCapture={event => {
+        const next = event.relatedTarget;
+        if (next instanceof Node && panelRef.current?.contains(next)) return;
+        requestAnimationFrame(() => {
+          panelRef.current?.querySelector<HTMLElement>('[data-fabricator-primary]')?.focus();
+        });
+      }}
+      style={{
       position: 'fixed', inset: 0, zIndex: theme.z.menu,
       fontFamily: theme.font.ui, color: theme.color.text,
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
@@ -42,14 +113,14 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
       backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)',
       animation: 'pvFloatIn 200ms ease both'
     }}>
-      <div style={{
+      <div ref={panelRef} style={{
         ...glassPanel, background: theme.glass.backgroundStrong,
         width: 'min(640px, 95vw)', maxHeight: '88vh', overflowY: 'auto',
         padding: 'clamp(20px, 4vw, 34px)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 4 }}>
-          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '0.12em' }}>FABRICATOR</div>
-          <button onClick={onClose} aria-label="Close fabricator" style={{
+          <div id="fabricator-title" style={{ fontSize: 24, fontWeight: 800, letterSpacing: '0.12em' }}>FABRICATOR</div>
+          <button data-fabricator-primary onClick={onClose} aria-label="Close fabricator" style={{
             fontFamily: theme.font.mono, fontSize: 12, letterSpacing: '0.1em',
             color: theme.color.textDim, background: 'transparent',
             border: '1px solid rgba(125,211,252,0.25)', borderRadius: theme.radius.sm,
@@ -58,21 +129,37 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
         </div>
         <div style={{ fontSize: 11, letterSpacing: '0.18em', color: theme.color.textFaint, textTransform: 'uppercase', marginBottom: 6 }}>
           {getStoryStateSnapshot().active
-            ? 'Field assembly · none of this is regulation'
-            : 'Portable assembly · all stations online'}
+            ? 'Primitive field assembly · none of this is regulation'
+            : 'Portable field kit · primitive patterns only'}
         </div>
 
-        {stations.map(stationId => (
-          <StationSection key={stationId} stationId={stationId} ctx={ctx} commandContext={commandContext} />
+        <div aria-live="polite" style={{
+          marginTop: 10, minHeight: 18, color: theme.color.accent,
+          fontFamily: theme.font.mono, fontSize: 11, lineHeight: 1.5
+        }}>{status}</div>
+
+        {sections.map(section => (
+          <StationSection
+            key={section.stationId}
+            stationId={section.stationId}
+            recipes={section.recipes}
+            ctx={ctx}
+            commandContext={commandContext}
+            onStatus={setStatus}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext; commandContext: CommandContext }> = ({ stationId, ctx, commandContext }) => {
-  // Story chapters whitelist a recipe subset (sandbox: the allow-all policy).
-  const recipes = recipesForStation(stationId).filter(r => getStoryInputPolicy().recipeAllowed(r.id));
+const StationSection: React.FC<{
+  stationId: StationId;
+  recipes: Recipe[];
+  ctx: CraftContext;
+  commandContext: CommandContext;
+  onStatus: (message: string) => void;
+}> = ({ stationId, recipes, ctx, commandContext, onStatus }) => {
   if (recipes.length === 0) return null;
   const station = getStation(stationId);
   return (
@@ -82,13 +169,20 @@ const StationSection: React.FC<{ stationId: StationId; ctx: CraftContext; comman
       </div>
       <div style={{ fontSize: 11, color: theme.color.textFaint, marginBottom: 12 }}>{station.description}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {recipes.map(r => <RecipeRow key={r.id} recipe={r} ctx={ctx} commandContext={commandContext} />)}
+        {recipes.map(r => (
+          <RecipeRow key={r.id} recipe={r} ctx={ctx} commandContext={commandContext} onStatus={onStatus} />
+        ))}
       </div>
     </div>
   );
 };
 
-const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: CommandContext }> = ({ recipe, ctx, commandContext }) => {
+const RecipeRow: React.FC<{
+  recipe: Recipe;
+  ctx: CraftContext;
+  commandContext: CommandContext;
+  onStatus: (message: string) => void;
+}> = ({ recipe, ctx, commandContext, onStatus }) => {
   const out = getItem(recipe.id);
   const check = canCraft(recipe, ctx);
   const affordable = check.ok;
@@ -125,12 +219,17 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: C
       <button
         onClick={() => {
           if (!affordable) return;
+          let crafted = false;
           if (recipe.id === 'campfire') {
+            if (getPlayerSubmergence() > 0.2 || isFeetInLava()) {
+              onStatus('Campfire cannot be placed while submerged or standing in lava. Move out and try again.');
+              return;
+            }
             // A campfire is placed where you stand, not stockpiled — drop it to the
             // player's feet and consume the just-crafted item.
             const feet = getPlayerWorldPosition().addScaledVector(getPlayerUp(), -1.1);
             const up = getPlayerUp();
-            dispatchGameplayCommand(
+            const result = dispatchGameplayCommand(
               () => craftAndPlaceCampfireCommand(commandContext, { recipe, craftContext: ctx, position: feet, up }),
               {
                 multiplayer: {
@@ -143,8 +242,9 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: C
                 }
               }
             );
+            crafted = result.ok;
           } else {
-            dispatchGameplayCommand(
+            const result = dispatchGameplayCommand(
               () => craftRecipeCommand(commandContext, { recipe, craftContext: ctx }),
               {
                 multiplayer: {
@@ -153,7 +253,11 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: C
                 }
               }
             );
+            crafted = result.ok;
           }
+          onStatus(crafted
+            ? recipe.id === 'campfire' ? 'Campfire placed at your feet.' : `${out.name} crafted.`
+            : `Unable to craft ${out.name}. Check materials and placement.`);
         }}
         disabled={!affordable}
         style={{
@@ -169,7 +273,7 @@ const RecipeRow: React.FC<{ recipe: Recipe; ctx: CraftContext; commandContext: C
           boxShadow: affordable ? '0 4px 14px rgba(56,189,248,0.3)' : 'none',
           transition: `all ${theme.transition.base}`
         }}
-      >Craft</button>
+      >{check.blockedBy === 'owned' ? 'Owned' : 'Craft'}</button>
     </div>
   );
 };

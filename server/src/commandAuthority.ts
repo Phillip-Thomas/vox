@@ -2,7 +2,13 @@ import type { JsonObject } from './protocol.js';
 
 export type SharedMutationClaim =
   | { kind: 'voxel_mined'; key: string; coord: [number, number, number] }
-  | { kind: 'resource_taken'; key: string; collectibleType: string; coord: [number, number, number] }
+  | {
+    kind: 'resource_taken';
+    key: string;
+    collectibleType: string;
+    coord: [number, number, number];
+    conflictCollectibleTypes?: string[];
+  }
   | {
     kind: 'structure_placed';
     key: string;
@@ -42,14 +48,19 @@ export function sharedMutationClaimForCommand(commandType: string, payload: Json
       const kind = source === 'forage' ? readString(payload.kind) ?? source : source;
       // There is one logical flora node per voxel. Its visible kind controls the
       // canonical drop, but must never create a second claim lane at that coord.
-      // Keep legacy forage types unchanged because production rows already use
-      // forage:berry / forage:root.
-      const collectibleType = source === 'flora' ? source : `${source}:${kind}`;
+      // Food and deadwood are mutually exclusive deterministic variants of one
+      // forage node. One coordinate therefore gets one first-wins claim lane.
+      const collectibleType = source === 'flora' || source === 'forage'
+        ? source
+        : `${source}:${kind}`;
       return {
         kind: 'resource_taken',
         key: `collectible:${collectibleType}:${coordKey(coord)}`,
         collectibleType,
-        coord
+        coord,
+        ...(source === 'forage' ? {
+          conflictCollectibleTypes: ['forage', 'forage:berry', 'forage:root', 'forage:deadwood']
+        } : {})
       };
     }
     case 'structure_placed': {

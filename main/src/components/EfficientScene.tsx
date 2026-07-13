@@ -89,6 +89,7 @@ interface EfficientSceneProps {
    *  world renders + warms up behind the menu. */
   cinematic?: boolean;
   profileSystemTravel?: boolean;
+  paused?: boolean;
   onGroundedChange?: (grounded: boolean) => void;
   onDebugChange?: (debug: SceneDebugState) => void;
 }
@@ -103,6 +104,7 @@ export default function EfficientScene({
   agent = false,
   cinematic = false,
   profileSystemTravel = false,
+  paused = false,
   onGroundedChange,
   onDebugChange
 }: EfficientSceneProps) {
@@ -311,7 +313,7 @@ export default function EfficientScene({
   }, [controlMode, phase]);
 
   return (
-    <Physics gravity={[0, 0, 0]} timeStep={FIXED_PHYSICS_STEP} maxCcdSubsteps={2}>
+    <Physics paused={paused} gravity={[0, 0, 0]} timeStep={FIXED_PHYSICS_STEP} maxCcdSubsteps={2}>
       <ProfiledSystemSubsystem enabled={profileSystemTravel} id="terrain">
         <EfficientPlanet
           size={planetSize}
@@ -341,6 +343,7 @@ export default function EfficientScene({
         />
       ) : controlMode === 'flight' ? (
         <ShipController
+          paused={paused}
           planetSize={planetSize}
           terrainSeed={terrainSeed}
           systemCoordinate={commandContext.world.coordinate}
@@ -354,6 +357,7 @@ export default function EfficientScene({
         />
       ) : (
         <EfficientPlayer
+          paused={paused}
           commandContext={commandContext}
           planetSize={planetSize}
           terrainSeed={terrainSeed}
@@ -410,7 +414,13 @@ export default function EfficientScene({
         <SurfaceEffectField terrainSeed={terrainSeed} playerPosition={fieldPlayerPosition} />
         <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={fieldPlayerPosition} />
         {!storyPreAwakened && (
-          <ForageField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={fieldPlayerPosition} />
+          <ForageField
+            commandContext={commandContext}
+            terrainSeed={terrainSeed}
+            persistenceWorld={commandContext.world}
+            playerPosition={fieldPlayerPosition}
+            allowDeadwood={!story.active}
+          />
         )}
         </ProfiledSystemSubsystem>
       )}

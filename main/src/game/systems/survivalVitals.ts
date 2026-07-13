@@ -8,9 +8,9 @@ import { getLocalActorId, type ActorId } from '../playerActors.ts';
 // (eat/drink/damage/death) do, which keeps the debounced autosave from firing every
 // frame. Persistence treats vitals as GLOBAL (see persistence.ts).
 //
-// Phase-1 scope: gentle, NON-LETHAL decay (hunger/thirst drift down slowly; no health
-// damage yet). Warmth is held full until the temperature model lands. Stamina drives
-// sprint. Satisfiers (food/water) + lethality come in the next slices.
+// The demo loop keeps hunger/thirst gentle, but temperature now connects local
+// night, sealed shelters, and campfires. Zero health is a recoverable downed state;
+// inventory loss/corpses remain deliberately out of scope.
 
 export interface VitalsState {
   health: number;
@@ -68,12 +68,45 @@ const OXYGEN_DRAIN = MAX / 60;         // ~60s of breath from full underwater
 const OXYGEN_REGEN = MAX / 6;          // ~6s to refill (≈4× faster than drain)
 const DROWN_DAMAGE = 8;               // health per second when breath runs out
 const LAVA_DAMAGE = 15;               // health per second in lava — the harshest hazard (~7s from full)
+const NIGHT_WARMTH_DRAIN = 0.8;        // a full exposed night is dangerous, not instant
+const DAY_WARMTH_RECOVERY = 0.65;
+const SHELTER_WARMTH_RECOVERY = 0.45;
+const FIRE_WARMTH_RECOVERY = 2;
+const SHELTER_FIRE_WARMTH_RECOVERY = 3;
+const COLD_DAMAGE = 2.5;
+
+export type ThermalStatus = 'stable' | 'daylight' | 'exposed' | 'sheltered' | 'fire';
+
+export interface SurvivalEnvironment {
+  daylight: number;
+  sheltered: boolean;
+  nearFire: boolean;
+  /** Story owns its authored chill separately; sandbox passes true. */
+  warmthEnabled: boolean;
+}
+
+export interface SurvivalEnvironmentSnapshot extends SurvivalEnvironment {
+  status: ThermalStatus;
+}
+
+let localEnvironment: SurvivalEnvironmentSnapshot = {
+  daylight: 1,
+  sheltered: false,
+  nearFire: false,
+  warmthEnabled: false,
+  status: 'stable'
+};
 
 const clamp = (n: number) => Math.max(0, Math.min(MAX, n));
 
 export function getVitals(actorId?: ActorId): VitalsState { return cloneVitals(stateFor(actorId).vitals); }
 export function getStamina(actorId?: ActorId): number { return stateFor(actorId).vitals.stamina; }
 export function isStaminaExhausted(actorId?: ActorId): boolean { return stateFor(actorId).exhausted; }
+export function isDowned(actorId?: ActorId): boolean { return stateFor(actorId).vitals.health <= 0; }
+
+export function getSurvivalEnvironment(): SurvivalEnvironmentSnapshot {
+  return { ...localEnvironment };
+}
 
 export function subscribeVitals(cb: () => void): () => void {
   listeners.add(cb);
@@ -82,16 +115,49 @@ export function subscribeVitals(cb: () => void): () => void {
 
 /** Passive decay tick (real dt). Only decays when `active` (on-foot, surface, playing).
  *  Silent (no emit) — the HUD polls. */
-export function tickVitals(dt: number, active: boolean, actorId?: ActorId): void {
+export function tickVitals(
+  dt: number,
+  active: boolean,
+  actorId?: ActorId,
+  environment?: SurvivalEnvironment
+): void {
   if (!active || !Number.isFinite(dt) || dt <= 0) return;
   const v = stateFor(actorId).vitals;
+  const wasDowned = v.health <= 0;
   v.hunger = clamp(v.hunger - HUNGER_DECAY * dt);
   v.thirst = clamp(v.thirst - THIRST_DECAY * dt);
-  // warmth: no temperature model yet → held full (next slice).
-  // health: NON-LETHAL for now → no starvation/dehydration damage; gentle regen when fed.
-  if (v.hunger > WELL_FED && v.thirst > WELL_FED && v.health < MAX) {
+
+  if (environment) {
+    const daylight = clamp(environment.daylight);
+    const atNight = daylight < 0.2;
+    const status: ThermalStatus = !environment.warmthEnabled
+      ? 'stable'
+      : environment.nearFire
+        ? 'fire'
+        : environment.sheltered
+          ? 'sheltered'
+          : atNight ? 'exposed' : 'daylight';
+    if (actorKey(actorId) === getLocalActorId()) {
+      localEnvironment = { ...environment, daylight, status };
+    }
+    if (environment.warmthEnabled) {
+      const warmthRate = environment.sheltered && environment.nearFire
+        ? SHELTER_FIRE_WARMTH_RECOVERY
+        : environment.nearFire
+          ? FIRE_WARMTH_RECOVERY
+          : environment.sheltered
+            ? SHELTER_WARMTH_RECOVERY
+            : atNight ? -NIGHT_WARMTH_DRAIN : DAY_WARMTH_RECOVERY;
+      v.warmth = clamp(v.warmth + warmthRate * dt);
+      if (v.warmth <= 0) v.health = clamp(v.health - COLD_DAMAGE * dt);
+    }
+  }
+
+  // Hunger/thirst remain gentle in this demo; fed, hydrated, warm players recover.
+  if (v.hunger > WELL_FED && v.thirst > WELL_FED && v.warmth > 20 && v.health < MAX) {
     v.health = clamp(v.health + HEALTH_REGEN * dt);
   }
+  if (!wasDowned && v.health <= 0) emit();
 }
 
 /** Can the player sprint right now? (Not exhausted + has stamina.) */
@@ -120,6 +186,7 @@ export function applyStamina(dt: number, sprinting: boolean, actorId?: ActorId):
 export function tickOxygen(dt: number, submerged: boolean, actorId?: ActorId): void {
   if (!Number.isFinite(dt) || dt <= 0) return;
   const v = stateFor(actorId).vitals;
+  const wasDowned = v.health <= 0;
   if (submerged) {
     v.oxygen = clamp(v.oxygen - OXYGEN_DRAIN * dt);
     if (v.oxygen <= 0) {
@@ -129,6 +196,7 @@ export function tickOxygen(dt: number, submerged: boolean, actorId?: ActorId): v
   } else {
     v.oxygen = clamp(v.oxygen + OXYGEN_REGEN * dt);
   }
+  if (!wasDowned && v.health <= 0) emit();
 }
 
 /** Molten burn while any part of the body is in lava (feet-cell test — wading
@@ -138,7 +206,9 @@ export function tickOxygen(dt: number, submerged: boolean, actorId?: ActorId): v
 export function tickLavaDamage(dt: number, inLava: boolean, actorId?: ActorId): void {
   if (!inLava || !Number.isFinite(dt) || dt <= 0) return;
   const v = stateFor(actorId).vitals;
+  const wasDowned = v.health <= 0;
   v.health = clamp(v.health - LAVA_DAMAGE * dt);
+  if (!wasDowned && v.health <= 0) emit();
 }
 
 // --- Satisfiers (discrete events — emit so the HUD/persistence react) ---------
@@ -185,6 +255,13 @@ export function resetVitals(actorId?: ActorId): void {
 
 export function resetAllVitals(): void {
   actors.clear();
+  localEnvironment = {
+    daylight: 1,
+    sheltered: false,
+    nearFire: false,
+    warmthEnabled: false,
+    status: 'stable'
+  };
   emit();
 }
 

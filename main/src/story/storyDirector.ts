@@ -51,6 +51,7 @@ import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
 import { storyAnchors } from './world/storyWorld.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
+import { isStoryPaused } from './storyClock.ts';
 import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption, showSystemLine } from './storyText.ts';
@@ -131,8 +132,10 @@ interface DirectorRuntime {
   a3Woke: boolean;
   /** A3 bloom-wave origin (captured at the ramp; zero until then). */
   bloomCenter: THREE.Vector3;
-  /** The R3F clock at the latest tick (for releasing the world clock cleanly). */
+  /** Narrative elapsed time. Advances only while Story playback is live. */
   elapsedSeconds: number;
+  /** Raw R3F/world elapsed time, used only to release the world clock cleanly. */
+  worldElapsedSeconds: number;
   restUnregister: (() => void) | null;
   /** Fractional harvester recharge carried between ticks (flushed whole points). */
   mawRechargeAccum: number;
@@ -191,55 +194,60 @@ interface DirectorRuntime {
   workerScratch: THREE.Vector3;
 }
 
-const d: DirectorRuntime = {
-  beat: null,
-  beatClock: 0,
-  ch1Clock: 0,
-  flashesFired: CH1_FLASH_SCHEDULE.map(() => false),
-  flashFramesLeft: 0,
-  glitchDecay: 0,
-  a1FlickerNoise: mulberry32(0x7c07),
-  a2NextViolationAt: 0,
-  a2ViolationIndex: 0,
-  a2HudDead: false,
-  captionsFired: new Set(),
-  dayPhase: 0.25,
-  a3Woke: false,
-  bloomCenter: new THREE.Vector3(),
-  elapsedSeconds: 0,
-  restUnregister: null,
-  mawRechargeAccum: 0,
-  descentImpacted: false,
-  fixedCells: new Set(),
-  fixedCamCell: null,
-  liftSnapped: false,
-  liftLookTarget: new THREE.Vector3(),
-  prevThirst: -1,
-  prevHunger: -1,
-  prevWaterskin: -1,
-  lastCaptionAt: 0,
-  musingGap: MUSING_GAP_SECONDS[0],
-  signalPhaseFrom: 0.25,
-  vigilPhaseFrom: 0.42,
-  signalKlaxons: 0,
-  forageAteAt: -1,
-  anomalySectorsSeen: new Set(),
-  anomalyMassStage: false,
-  anomalyDesignatedAt: -1,
-  gravityEdgeAt: -1,
-  gatherSkipDecided: false,
-  gatherSkipFlint: false,
-  gatherFlintAtPrompt: -1,
-  shipLookHeld: 0,
-  shipLookFallbackAt: -1,
-  vigilNightAt: -1,
-  vigilLookHeld: 0,
-  stargazeStart: -1,
-  constellationRampStart: -1,
-  arrivalWoke: false,
-  bareFramesLeft: 0,
-  workerScratch: new THREE.Vector3()
-};
+function createDirectorRuntime(): DirectorRuntime {
+  return {
+    beat: null,
+    beatClock: 0,
+    ch1Clock: 0,
+    flashesFired: CH1_FLASH_SCHEDULE.map(() => false),
+    flashFramesLeft: 0,
+    glitchDecay: 0,
+    a1FlickerNoise: mulberry32(0x7c07),
+    a2NextViolationAt: 0,
+    a2ViolationIndex: 0,
+    a2HudDead: false,
+    captionsFired: new Set(),
+    dayPhase: 0.25,
+    a3Woke: false,
+    bloomCenter: new THREE.Vector3(),
+    elapsedSeconds: 0,
+    worldElapsedSeconds: 0,
+    restUnregister: null,
+    mawRechargeAccum: 0,
+    descentImpacted: false,
+    fixedCells: new Set(),
+    fixedCamCell: null,
+    liftSnapped: false,
+    liftLookTarget: new THREE.Vector3(),
+    prevThirst: -1,
+    prevHunger: -1,
+    prevWaterskin: -1,
+    lastCaptionAt: 0,
+    musingGap: MUSING_GAP_SECONDS[0],
+    signalPhaseFrom: 0.25,
+    vigilPhaseFrom: 0.42,
+    signalKlaxons: 0,
+    forageAteAt: -1,
+    anomalySectorsSeen: new Set(),
+    anomalyMassStage: false,
+    anomalyDesignatedAt: -1,
+    gravityEdgeAt: -1,
+    gatherSkipDecided: false,
+    gatherSkipFlint: false,
+    gatherFlintAtPrompt: -1,
+    shipLookHeld: 0,
+    shipLookFallbackAt: -1,
+    vigilNightAt: -1,
+    vigilLookHeld: 0,
+    stargazeStart: -1,
+    constellationRampStart: -1,
+    arrivalWoke: false,
+    bareFramesLeft: 0,
+    workerScratch: new THREE.Vector3()
+  };
+}
+
+let d = createDirectorRuntime();
 
 /** Seconds since the current beat began (survey dwells, resolver gates). */
 export function getStoryBeatClock(): number {
@@ -631,8 +639,19 @@ export function beginVigilSleep(): void {
 }
 
 let lastBeat: StoryBeat | null = null;
+let lastRunId = getStoryStateSnapshot().runId;
 function syncBeat(): void {
   const s = getStoryStateSnapshot();
+  if (s.runId !== lastRunId) {
+    if (d.restUnregister) d.restUnregister();
+    d = createDirectorRuntime();
+    lastBeat = null;
+    lastRunId = s.runId;
+    resetFeedRuntime();
+    clearLifeReveal();
+    setCinematicLookWeight(0);
+    setCinematicLookTarget(null);
+  }
   const beat = s.active ? s.beat : null;
   if (beat !== lastBeat) {
     lastBeat = beat;
@@ -1525,7 +1544,7 @@ function tickArrival(dt: number): void {
 
   if (t >= T.endAt) {
     // Hand the sun to the live clock at dawn-2's phase (the A3 grammar).
-    setDayPhaseOffset(d.dayPhase - d.elapsedSeconds / DAY_LENGTH_SECONDS);
+    setDayPhaseOffset(d.dayPhase - d.worldElapsedSeconds / DAY_LENGTH_SECONDS);
     // W-7744 does NOT evaporate: "he stays to look." His pose module keeps him
     // standing at the relay; StoryWorldProps keeps him mounted through 'done'.
     // TEMPORARY: ch4-audit continues from here (see PARAVOXIA_CH4_PLAN.md §2 S6).
@@ -1538,17 +1557,20 @@ function tickArrival(dt: number): void {
 /**
  * Called every R3F frame by StoryDirectorDriver (in-Canvas). `camera` is the
  * live default camera (the on-foot PerspectiveCamera while playing);
- * `elapsedSeconds` is the R3F clock (the same clock the world clock reads).
+ * `worldElapsedSeconds` is the raw R3F clock (the same clock the world clock
+ * reads). Narrative scheduling uses accumulated `dt`, so a pause never becomes
+ * a caption/musing/fallback time jump when playback resumes.
  */
 export function storyDirectorTick(
   dt: number,
   camera: THREE.PerspectiveCamera | null,
-  elapsedSeconds = d.elapsedSeconds + dt
+  worldElapsedSeconds = d.worldElapsedSeconds + dt
 ): void {
   const s = getStoryStateSnapshot();
-  if (!s.active) return;
+  if (!s.active || isStoryPaused()) return;
   d.beatClock += dt;
-  d.elapsedSeconds = elapsedSeconds;
+  d.elapsedSeconds += dt;
+  d.worldElapsedSeconds = worldElapsedSeconds;
 
   const r = getFeedRuntime();
   r.frame += 1;

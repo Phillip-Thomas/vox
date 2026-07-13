@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
+import { storyNow } from './storyClock.ts';
 
 // --- The audit band ------------------------------------------------------------------
 //
@@ -21,7 +22,7 @@ const AuditBand: React.FC = () => {
     const tick = () => {
       raf = requestAnimationFrame(tick);
       if (!el) return;
-      const elapsed = performance.now() - audit.shownAt;
+      const elapsed = storyNow() - audit.shownAt;
       const revealed = Math.min(audit.text.length, Math.floor(elapsed / 22));
       el.textContent = audit.text.slice(0, revealed);
       const fadeStart = audit.ttlMs - 600;
@@ -34,7 +35,7 @@ const AuditBand: React.FC = () => {
   }, [audit]);
 
   if (!audit) return null;
-  if (performance.now() - audit.shownAt > audit.ttlMs) return null;
+  if (storyNow() - audit.shownAt > audit.ttlMs) return null;
 
   return (
     <div

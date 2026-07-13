@@ -53,6 +53,15 @@ describe('canCraft gating', () => {
     expect(canCraft(gated, ALL_STATIONS).blockedBy).toBe('tech');
     expect(canCraft(gated, { stations: ALL_STATION_IDS, unlocked: new Set(['metallurgy']) }).ok).toBe(true);
   });
+
+  it('does not craft duplicate non-stackable primitive gear', () => {
+    addItem('waterskin', 1);
+    addItem('biofiber', 4);
+    addItem('wood', 1);
+    expect(canCraft(RECIPES.waterskin, { stations: ['hand'] })).toEqual({ ok: false, blockedBy: 'owned' });
+    expect(craft(RECIPES.waterskin, { stations: ['hand'] }).ok).toBe(false);
+    expect(getItemCount('biofiber')).toBe(4);
+  });
 });
 
 describe('craft consumes inputs and banks outputs', () => {

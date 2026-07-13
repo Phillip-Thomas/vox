@@ -44,10 +44,9 @@ export const BLOCKS: Record<BlockId, BlockDefinition> = {
     // toolTier 1: the Faulty Maw (tier 0) can't cut stone — you need a Stone Pick
     // or the Repaired Maw. Soft blocks (dirt/sand/grass/wood) stay tier 0.
     hardness: 1.5, toolTier: 1, drops: ['stone'],
-    // Half of all broken stone yields a flint nodule — reliable enough that
-    // breaking a handful banks the 2 flint the campfire wants (the ch3 chain),
-    // without flooding the sandbox. Per-voxel deterministic (see harvestVoxel rng).
-    bonusDrops: [{ id: 'flint', chance: 0.5, min: 1, max: 1 }],
+    // One flint per broken stone makes the critical primitive fire path bounded:
+    // after crafting the pickaxe, two stone breaks always fund a campfire.
+    bonusDrops: [{ id: 'flint', chance: 1, min: 1, max: 1 }],
     tags: ['rock']
   },
   dirt: {

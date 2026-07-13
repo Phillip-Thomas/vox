@@ -16,6 +16,7 @@
 | View/state | Viewport | Path | Result | Notes |
 | --- | --- | --- | --- | --- |
 | Landing desktop | 1440x900 | `/tmp/paravoxia-audit/landing-desktop.png` | mixed | Strong macro identity; Story hierarchy too weak |
+| Landing tagline follow-up | 1440x900 | `main/captures/demo-foundation-landing.png` | pass | Live DOM and menu capture confirm `MAKE NO MISTAKES`; canvas hidden only for headless WebGL readback stability |
 | Landing mobile | 390x844 | `/tmp/paravoxia-audit/landing-mobile.png` | mixed | Functional, but copy/buttons crowd the lower viewport |
 | Story 1-bit | 1440x900 | `/tmp/paravoxia-audit/story-ch1.png` | pass concept | Distinctive and intentional; needs full-motion pacing review |
 | Story color/feed | 1440x900 | `/tmp/paravoxia-audit/story-ch2.png` | mixed | Intent is clear; isolated frame is flat/low-information by design |
@@ -40,6 +41,7 @@
 | View | Appealing | Purposeful | Meaningful | Space | Brand | Goal | Copy | Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Landing desktop | yes | mixed | mixed | yes | yes | no | mixed | make Story primary and premise specific |
+| Landing tagline follow-up | yes | yes | yes | yes | yes | unchanged | yes | preserve the owner-selected copy |
 | Landing mobile | yes | mixed | mixed | mixed | yes | no | mixed | simplify hierarchy and reserve safe HUD space |
 | Story 1-bit | yes | yes | yes | yes | yes | mixed | yes | screen complete flow in motion |
 | Story embodied | mixed | yes | yes | no | yes | mixed | yes | reframe hero subjects and transitions |
@@ -53,7 +55,7 @@
 - Tablet/laptop breakpoints.
 - Loading/error/empty/reconnect/conflict/accessibility states.
 - Real-device thermal and memory behavior.
-- Audio listening critique and spatial mix capture.
+- Audio regression proof; creative audio critique is intentionally outside the owner-directed demo lift.
 - Gamepad/cross-browser journey evidence.
 
 ## Gate

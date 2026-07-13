@@ -5,7 +5,7 @@
 - Repo: `/home/thomasphillip/Projects/vox`
 - Surface: complete Paravoxia browser game
 - Date: `2026-07-12`
-- Final decision: `repeat / focused execution required`
+- Final decision: `owner-directed demo foundation plan ready; focused execution required`
 - Baseline score: `3.78 / 5`
 - Plan score: `4.82 / 5`
 - Human approval: pending
@@ -58,7 +58,7 @@
 | Adversarial critique | pass | independent product/render/visual audits agree on priorities |
 | Baseline score | fail | 3.78 vs 4.75 final target |
 | Plan quality | pass | 4.82 |
-| Implementation | not run | review-only scope |
+| Implementation | partial | exact landing tagline landed; broader lift remains planned |
 | Lessons saved | pass | local run folder only |
 
 ## Defect Trend
@@ -66,8 +66,21 @@
 | Stage | Critical | High | Medium | Low |
 | --- | ---: | ---: | ---: | ---: |
 | Baseline | 1 | 8 | 10 | several |
-| After plan | 1 | 8 | 10 | unchanged; no production patches authorized |
+| After owner direction | 1 | 8 | 9 | generic landing subtitle resolved; remaining demo lift is staged |
 
 ## Next Action
 
-Start a flagship single-surface execution run for the story-first landing plus intentional arrival finale. In its foundation sub-pass, also make graphics profiles reactive, fix eager audio, create the action registry/accessibility contract, and add browser profile-delta/entry-flow tests.
+Batch 1 passed in `.codex/design-runs/2026-07-12-demo-shell/`: Story-safe pause,
+travel exclusion, mode-aware control help, focus/zoom behavior, and completed-save
+replay semantics are implemented with bindings unchanged and audio untouched.
+
+Batch 2 implementation is recorded in
+`.codex/design-runs/2026-07-12-primitive-foundation/`: the six-recipe primitive
+loop, shelter/fire warmth, retained-inventory recovery, spawn truth, persistence,
+and co-op authority parity pass deterministic gates. Browser/headed approval remains
+open because headless Chromium reaches Play readiness but stalls at the trusted
+pointer-lock gesture; do not begin Batch 3 screening until the headed journey and
+the separate fauna triangle budget pass.
+
+Owner follow-up evidence: the live landing DOM and 1440x900 menu capture confirm
+`MAKE NO MISTAKES`; TypeScript validation passed after the production copy change.

@@ -7,8 +7,9 @@
 // callers (the crafting UI) pass it in, which keeps this fully testable.
 
 import type { Recipe } from '../data/recipes.ts';
+import { getItem } from '../data/items.ts';
 import type { StationId } from '../data/stations.ts';
-import { addItem, hasItems, removeItem } from './inventorySystem.ts';
+import { addItem, getItemCount, hasItems, removeItem } from './inventorySystem.ts';
 import type { ActorId } from '../playerActors.ts';
 
 export interface CraftContext {
@@ -20,7 +21,7 @@ export interface CraftContext {
   unlocked?: Set<string>;
 }
 
-export type CraftBlock = 'station' | 'tech' | 'materials';
+export type CraftBlock = 'station' | 'tech' | 'materials' | 'owned';
 
 export interface CraftCheck {
   ok: boolean;
@@ -38,6 +39,9 @@ export function recipeReady(recipe: Recipe, ctx: CraftContext): boolean {
 export function canCraft(recipe: Recipe, ctx: CraftContext): CraftCheck {
   if (!ctx.stations.includes(recipe.station)) return { ok: false, blockedBy: 'station' };
   if (recipe.requiredTech && !ctx.unlocked?.has(recipe.requiredTech)) return { ok: false, blockedBy: 'tech' };
+  if (recipe.outputs.some(output => !getItem(output.id).stackable && getItemCount(output.id, ctx.actorId) > 0)) {
+    return { ok: false, blockedBy: 'owned' };
+  }
   if (!hasItems(recipe.inputs, ctx.actorId)) return { ok: false, blockedBy: 'materials' };
   return { ok: true };
 }
