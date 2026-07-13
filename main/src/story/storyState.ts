@@ -42,8 +42,8 @@ export type StoryBeat =
   | 'crawl' | 'manifest' | 'voyage' | 'deflect' | 'crash'
   // chapter 1 — the monochrome ladder: crash-landing descent, then the history
   // of game perspectives one era at a time — fixed-screen, the tracking unlock,
-  // the scrolling side-scroller (quota + salvage), the belt-scroll depth band,
-  // top-down nav, isometric height, the 2D→3D lift, the pan-tilt CCTV feed
+  // the scrolling side-scroller (quota + salvage), its locked-row pod recovery,
+  // top-down nav, isometric height, the 2D→3D lift, the embodied pan-tilt survey
   | 'descent' | 'ch1-fixed' | 'ch1-track' | 'ch1-raster'
   | 'ch1-depth' | 'ch1-nav' | 'ch1-iso'
   | 'ch1-lift' | 'ch1-anomaly' | 'a1-ramp'

@@ -3,6 +3,12 @@ import {
   createWorldArrivalPose,
   findTopFaceSurfaceVoxel
 } from './worldArrival';
+import { getWorldGen } from './worldGenCache.ts';
+import {
+  isDryClearResumePosition,
+  isValidatedSpawnPosition,
+  resolveShipPlayerEgressPosition
+} from './spawnValidation.ts';
 
 describe('world arrival poses', () => {
   it('chooses the same surface voxel for the same world seed', () => {
@@ -30,4 +36,27 @@ describe('world arrival poses', () => {
     expect(pose.shipPosition.y).toBeLessThan(pose.playerSurfacePosition.y);
     expect(pose.shipPosition.y).toBeGreaterThan(pose.surfaceVoxel.y * 2);
   });
+
+  it('gives both actors a dry, flat, clear canonical spawn across terrain presets', () => {
+    for (const seed of [12345, 54321, 98765, 13579, 24680]) {
+      const pose = createWorldArrivalPose(50, seed);
+      const terrain = getWorldGen(50, seed).generator;
+      expect(
+        isValidatedSpawnPosition(terrain, 50, pose.playerSurfacePosition, 'player'),
+        `${seed}:player:${JSON.stringify(pose.playerSurfacePosition.toArray())}:${JSON.stringify(pose.surfaceVoxel)}`
+      ).toBe(true);
+      expect(
+        isValidatedSpawnPosition(terrain, 50, pose.shipPosition, 'ship'),
+        `${seed}:ship:${JSON.stringify(pose.shipPosition.toArray())}:${JSON.stringify(pose.surfaceVoxel)}`
+      ).toBe(true);
+      const egress = resolveShipPlayerEgressPosition(terrain, 50, pose.shipPosition, 'top');
+      expect(egress, `${seed}:egress`).not.toBeNull();
+      const settledEgress = egress!.clone();
+      settledEgress.y -= 1;
+      expect(
+        isDryClearResumePosition(terrain, 50, settledEgress),
+        `${seed}:settled-egress`
+      ).toBe(true);
+    }
+  }, 20_000);
 });

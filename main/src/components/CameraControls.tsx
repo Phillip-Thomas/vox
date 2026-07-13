@@ -11,17 +11,26 @@ import { isTouchActive } from '../utils/mobileInput';
 import { PLAYER_EYE_HEIGHT } from '../utils/cubeGravityConstants';
 import { getPlayerLook, setPlayerLook } from '../state/playerFrame';
 import { getCameraSubmergence } from '../state/playerSubmersion';
-import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
+import { getStoryInputPolicy, SANDBOX_FOV, SANDBOX_POLICY } from '../story/storyInputPolicy.ts';
 import { createFeedLookState, feedAccumulateLook } from '../story/feedCamera.ts';
 import { applyActiveRigTransform, applyLiftCameraTransform, applyOverheadCameraTransform, getLensRig, getSideLens, rigMoveBasis } from '../story/sideLens.ts';
 import { isMapViewOpen, syncChartScreenUp, MAP_VIEW_HEIGHT } from '../game/mapView.ts';
-import { getCinematicLookTarget, getCinematicLookWeight } from '../story/cinematicLook.ts';
+import {
+  applyCinematicCameraPose,
+  getCinematicCameraPose,
+  getCinematicGazeIntent,
+  getCinematicLookTarget,
+  getCinematicLookWeight
+} from '../story/cinematicLook.ts';
+import { createSurfaceGazeResult, solveSurfaceGaze } from '../utils/surfaceGaze.ts';
 import { getSunDirection } from './SkyController.tsx';
 
 const _sideForward = new THREE.Vector3();
 const _sideRight = new THREE.Vector3();
 const _sunTangent = new THREE.Vector3();
 const _pullDir = new THREE.Vector3();
+const _gazeEye = new THREE.Vector3();
+const _gazeResult = createSurfaceGazeResult();
 
 // Underwater camera sway — a lazy roll about the view axis + a gentle nod, scaled
 // by submergence, so the camera reads as floating in a fluid (invisible in a
@@ -165,8 +174,24 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     // mouse input — control dissolves back to the player as the weight decays.
     const pull = getCinematicLookWeight();
     if (pull > 0.001) {
+      const gazeIntent = getCinematicGazeIntent();
       const lookTarget = getCinematicLookTarget();
-      if (lookTarget) {
+      if (gazeIntent) {
+        cameraRef.current.getWorldPosition(_gazeEye);
+        solveSurfaceGaze({
+          eye: _gazeEye,
+          viewerUp: surfaceUp.current,
+          currentForward: surfaceForward.current,
+          goal: gazeIntent.goal,
+          goalUp: gazeIntent.goalUp,
+          subjectLift: gazeIntent.subjectLift,
+          routeDirection: gazeIntent.routeDirection,
+          mode: gazeIntent.mode,
+          elapsed: gazeIntent.elapsed,
+          seed: gazeIntent.seed
+        }, _gazeResult);
+        _pullDir.copy(_gazeResult.direction);
+      } else if (lookTarget) {
         cameraRef.current.getWorldPosition(_pullDir).multiplyScalar(-1).add(lookTarget);
         _pullDir.normalize();
       } else {
@@ -187,6 +212,13 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     // the ch1 LIFT, sideBlend carries the camera from the side vantage INTO the
     // worker's eyes — the literal 2D→3D moment.
     const storyPolicy = getStoryInputPolicy();
+    // StoryDirector stops ticking the instant Story deactivates. Restore the
+    // physical lens here too, so quit/reset and completion cannot strand a
+    // narrowed authored FOV in the sandbox.
+    if (storyPolicy === SANDBOX_POLICY && Math.abs(cameraRef.current.fov - SANDBOX_FOV) > 1e-6) {
+      cameraRef.current.fov = SANDBOX_FOV;
+      cameraRef.current.updateProjectionMatrix();
+    }
     const sideLens = storyPolicy.lookMode === 'side' ? getSideLens() : null;
     if (sideLens) {
       if (storyPolicy.sideBlend <= 0.001) {
@@ -216,7 +248,7 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     // oriented by the rolled chart frame (axis-aligned per face, continuous
     // across edges — the look state is ignored and preserved untouched, so
     // closing lands exactly where you were).
-    if (isMapViewOpen() && storyPolicy.lookMode === 'free') {
+    if (isMapViewOpen() && storyPolicy.lookMode === 'free' && getCinematicCameraPose().weight <= 0.001) {
       const camera = cameraRef.current;
       applyOverheadCameraTransform(camera, surfaceUp.current, syncChartScreenUp(surfaceUp.current), MAP_VIEW_HEIGHT);
       camera.getWorldPosition(_mapWorldPos);
@@ -256,6 +288,11 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       pitch.current,
       PLAYER_EYE_HEIGHT
     );
+
+    // Arrival and other authored booms blend from the already-correct embodied
+    // gravity frame. The rigid body and persisted look never move; weight 0 is
+    // therefore an exact return to the player's eyes, including on reset/quit.
+    applyCinematicCameraPose(cameraRef.current);
 
     // Underwater float-sway, scaled by submergence (0 = no effect on land).
     const submergence = getCameraSubmergence();

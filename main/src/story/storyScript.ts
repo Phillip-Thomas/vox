@@ -411,9 +411,9 @@ export const CH1_WORK_ORDERS: Record<
   ],
   depth: [
     'QUOTA MET. PRODUCTIVITY NOMINAL.',
-    'LATERAL CLEARANCE: GRANTED (±3 ROWS)',
-    'SUPPLY PODS DETECTED OFF THE WORK LINE. RECOVER THEM.',
-    'ADVANCE [W] · RETREAT [S] · DO NOT BECOME AMBITIOUS.'
+    'PROFILE ACCESS EXTENDED. WORK LINE REMAINS AUTHORITATIVE.',
+    'SUPPLY PODS PROJECTED TO THE WORK LINE. RECOVER THEM.',
+    'TRAVERSE [A]/[D] · ROW TRANSFER: WITHHELD.'
   ],
   nav: [
     'UNREGISTERED SIGNAL AT SURVEY EDGE.',
@@ -805,6 +805,10 @@ export const VIGIL_LINES = {
 } as const;
 
 /** The auditor's arrival: dawn 2, and the letterbox returns WITH the system's agent. */
+const ARRIVAL_AUDIT_AT = 41.5;
+const ARRIVAL_AUDIT_LINE_SECONDS = 6.5;
+const ARRIVAL_VISUAL_BREATH_SECONDS = 3;
+
 export const ARRIVAL = {
   holdBlackSeconds: 2.0,
   fadeUpSeconds: 2.0,
@@ -812,8 +816,8 @@ export const ARRIVAL = {
   wakePhase: 0.985,
   walkStartAt: 6,
   walkSeconds: 24,
-  /** Feet held through the whole approach — the arrival IS the shot; the
-   *  camera stays on him until he has spoken, then both release together. */
+  /** Feet held through the approach and found recognition; the release starts
+   *  as the tracking boom returns to Terra's eyes. */
   freezeUntilSeconds: 32,
   someoneAt: 7,
   gaitAt: 20,
@@ -822,8 +826,12 @@ export const ARRIVAL = {
   blinkAt: 38,
   borrowedAt: 39.2,
   /** His last line before the hand-off: the audit has BEGUN — he stays. */
-  auditAt: 41.5,
-  endAt: 45
+  auditAt: ARRIVAL_AUDIT_AT,
+  /** The audit band owns its full authored TTL before any completion surface. */
+  auditLineSeconds: ARRIVAL_AUDIT_LINE_SECONDS,
+  /** A silent held image after the line clears; completion is not the cut. */
+  visualBreathSeconds: ARRIVAL_VISUAL_BREATH_SECONDS,
+  endAt: ARRIVAL_AUDIT_AT + ARRIVAL_AUDIT_LINE_SECONDS + ARRIVAL_VISUAL_BREATH_SECONDS
 } as const;
 
 export const ARRIVAL_CAPTIONS = {

@@ -74,7 +74,7 @@
       "schema": "terra.roleContract.v1",
       "slug": "score-director",
       "title": "Score Director",
-      "allowedInputs": ["production-lock", "story-correction-brief", "runtime-story-inventory", "source-of-truth-map", "naive-reader-report", "canon-audit", "contradiction-report", "chapter-story-treatment", "score-story-treatment", "cinematography-story-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "director-notes", "dissent-register", "canon-decision-register", "story-authority-candidate"],
+      "allowedInputs": ["production-lock", "story-correction-brief", "runtime-story-inventory", "shipped-audio-baseline", "source-of-truth-map", "naive-reader-report", "canon-audit", "contradiction-report", "chapter-story-treatment", "score-story-treatment", "cinematography-story-treatment", "chapter-peer-notes", "score-peer-notes", "cinematography-peer-notes", "director-notes", "dissent-register", "canon-decision-register", "story-authority-candidate"],
       "requiredOutputs": ["score-story-treatment", "score-peer-notes", "score-reconciliation", "score-story-signoff"],
       "forbiddenActions": ["canon:write", "cinematography:write", "owner-decision:infer", "publish:write"],
       "outputContract": "paravoxia.scoreStoryTreatment.v1"

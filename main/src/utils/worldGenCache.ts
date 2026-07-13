@@ -53,6 +53,8 @@ export interface CachedWorldGen {
   allWaterVoxels?: Array<{ x: number; y: number; z: number }>;
   waterFaces?: Array<{ x: number; y: number; z: number; faceDir: number }>;
   arrivalCandidate?: { x: number; y: number; z: number };
+  /** Dry, level, ship-clear canonical arrival selected on first world entry. */
+  validatedArrivalCandidate?: { x: number; y: number; z: number };
 }
 
 export interface WorldPrepHydrationOptions {

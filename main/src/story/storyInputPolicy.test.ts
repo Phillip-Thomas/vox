@@ -42,7 +42,7 @@ describe('storyInputPolicy', () => {
     expect(p.allowCraft).toBe(false);
   });
 
-  it('feed chapters lock look, slow movement, and gate build/craft/interactions', () => {
+  it('the embodied survey locks look and actions without retaining camera-feed resolution', () => {
     beginStory(); // fresh save -> prologue
     advanceToBeat('ch1-anomaly');
     const p = getStoryInputPolicy();
@@ -53,6 +53,7 @@ describe('storyInputPolicy', () => {
     expect(p.allowCraft).toBe(false);
     expect(p.allowBaseInteraction('drink')).toBe(false);
     expect(p.targetFov).toBeLessThan(SANDBOX_POLICY.targetFov);
+    expect(p.targetDpr).toBeNull();
     expect(p.voxelPropsOnly).toBe(true);
   });
 

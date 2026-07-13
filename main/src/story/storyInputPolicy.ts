@@ -77,7 +77,7 @@ const CH3_RECIPES = new Set(['biofuel', 'stone_hatchet', 'stone_pickaxe', 'torch
 /** The first day alive: the campfire chain plus the waterskin (carry the answer). */
 const CH3_TAIL_RECIPES = new Set([...CH3_RECIPES, 'waterskin']);
 
-/** CCTV render crunch: subtle pixelation between the raster era and free 3D. */
+/** External-camera render crunch (retained for camera-owned feed variants). */
 export const FEED_DPR = 0.85;
 /** Raster (side-scroller) era: honest chunky pixels. */
 export const RASTER_DPR = 0.4;
@@ -101,6 +101,14 @@ function feedPolicy(): StoryInputPolicy {
     voxelPropsOnly: true,
     mawRechargePerSecond: 6
   };
+}
+
+/**
+ * The first-person survey keeps the regulation movement/look constraints, but
+ * it is the player's embodied view: no external-camera resolution treatment.
+ */
+function embodiedSurveyPolicy(): StoryInputPolicy {
+  return { ...feedPolicy(), targetDpr: null };
 }
 
 /** The 2D side-scroller era: A/D travel, jump on, plane-locked, chunky pixels. */
@@ -164,19 +172,20 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     case 'ch1-iso':
       return { ...rasterPolicy(), targetDpr: ISO_DPR, targetFov: 38 };
     case 'ch1-anomaly':
-      return feedPolicy();
-    // Post-A1: the chroma suppressor AND the pan-tilt interlock fail together —
-    // the feed's chrome remains (dither, tickets, redaction) but the neck is
-    // the player's: full free look, camera-relative (diagonal) movement.
+      return embodiedSurveyPolicy();
+    // Post-A1: the chroma suppressor AND the pan-tilt interlock fail together.
+    // Regulation tickets/redaction remain on the embodied HUD, but the neck is
+    // the player's: full free look, camera-relative (diagonal) movement. CCTV
+    // pixels already ended with the lift.
     case 'ch2-color':
     case 'ch2-approach':
-      return { ...feedPolicy(), lookMode: 'free', feedBlend: 1 };
+      return { ...embodiedSurveyPolicy(), lookMode: 'free', feedBlend: 1 };
     // Scripted sequences start frozen; their timelines unfreeze/lerp the live
     // object (setStoryMoveScale / setStoryTargetFov below).
     case 'a1-ramp':
-      return { ...feedPolicy(), moveSpeedScale: 0 };
+      return { ...embodiedSurveyPolicy(), moveSpeedScale: 0 };
     case 'a2-awakening':
-      return { ...feedPolicy(), lookMode: 'free', feedBlend: 1, moveSpeedScale: 0 };
+      return { ...embodiedSurveyPolicy(), lookMode: 'free', feedBlend: 1, moveSpeedScale: 0 };
     case 'ch3-gather':
     case 'ch3-dusk':
     case 'ch3-await-rest':

@@ -28,6 +28,7 @@ import {
 import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from './storyScript.ts';
 import { getSupplyPodPositions, isPodCollected, seedSupplyPodsCollected } from './supplyPods.ts';
 import { currentNavWaypointPosition, seedNavWaypointsReached } from './navWaypoints.ts';
+import { taskRowMoveIntent } from './taskRowNavigation.ts';
 
 // --- Story autopilot (movie mode) -----------------------------------------------
 //
@@ -209,15 +210,44 @@ function walkToward(target: THREE.Vector3, stop: number, lookLift = LOOK_LIFT): 
   return distance;
 }
 
+/**
+ * Profile-era walk on the one authored task row. Unlike the general external-
+ * lens walker this can emit only A/D and does not rhythmically hold jump: the
+ * normal step assist handles the row, while the stuck watchdog remains the sole
+ * last-resort hop for a real terrain obstruction.
+ */
+function walkTowardTaskRow(target: THREE.Vector3, stop: number): number {
+  const lens = getSideLens();
+  if (!lens) return walkToward(target, stop);
+  const player = getPlayerWorldPosition();
+  const distance = gaitDistance(target, player);
+  _target.copy(target);
+  noteGoal(target);
+  walkTargetLive = true;
+  if (distance > stop) {
+    const intent = taskRowMoveIntent(lens, player, target);
+    controls.forward = intent.forward;
+    controls.backward = intent.backward;
+    controls.left = intent.left;
+    controls.right = intent.right;
+  } else {
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+  }
+  controls.jump = false;
+  return distance;
+}
+
 const _lensFwd = new THREE.Vector3();
 const _lensRight = new THREE.Vector3();
 const _toTarget = new THREE.Vector3();
 
 /**
- * Screen-relative walk under an external lens rig: maps the world-space
- * direction to the goal onto the rig's move basis (any elevation/azimuth), so
- * one helper drives the belt-scroll, nav, and iso eras. Falls back to the
- * free-look walkToward outside a lens.
+ * Screen-relative two-axis movement after NAV VIEW has made terrain depth an
+ * honest part of play. Normal steering still leaves jump off; the existing
+ * stuck watchdog owns the rare obstacle-recovery hop.
  */
 function walkTowardLens(target: THREE.Vector3, stop: number): number {
   const lens = getSideLens();
@@ -226,7 +256,7 @@ function walkTowardLens(target: THREE.Vector3, stop: number): number {
   const player = getPlayerWorldPosition();
   _toTarget.copy(target).sub(player);
   const distance = gaitDistance(target, player);
-  _target.copy(target); // the stuck watchdog's nudge steers toward this
+  _target.copy(target);
   noteGoal(target);
   walkTargetLive = true;
   if (distance > stop) {
@@ -242,8 +272,7 @@ function walkTowardLens(target: THREE.Vector3, stop: number): number {
     controls.right = false;
     controls.left = false;
   }
-  const pushing = controls.forward || controls.backward || controls.left || controls.right;
-  controls.jump = pushing && beatClock % 2.4 < 0.18;
+  controls.jump = false;
   return distance;
 }
 
@@ -262,7 +291,7 @@ function extractRhythm(to: THREE.Vector3 | null): void {
     controls.right = false;
     controls.jump = false;
   } else {
-    walkTowardLens(to, 0.9);
+    walkTowardTaskRow(to, 0.9);
   }
 }
 
@@ -416,7 +445,7 @@ export function autopilotTick(dt: number): void {
         controls.delete = false;
         const lens = getSideLens();
         if (lens) {
-          walkTowardLens(
+          walkTowardTaskRow(
             _goalScratch.copy(getPlayerWorldPosition()).addScaledVector(lens.travelAxis, 30),
             1
           );
@@ -443,7 +472,7 @@ export function autopilotTick(dt: number): void {
         extractRhythm(debrisGoal ?? sweepGoal());
       } else if (debrisGoal) {
         controls.delete = false;
-        walkTowardLens(debrisGoal, 0.9);
+        walkTowardTaskRow(debrisGoal, 0.9);
       } else {
         // Stone stragglers: keep drifting — proximity pickup needs motion.
         extractRhythm(sweepGoal());
@@ -457,7 +486,7 @@ export function autopilotTick(dt: number): void {
       break;
     }
     case 'ch1-depth': {
-      // Recovery run: nearest uncollected pod, screen-relative (W/S now live).
+      // Recovery run: nearest uncollected pod on the authoritative work row.
       const player = getPlayerWorldPosition();
       let nearest = -1;
       let nearestDist = Infinity;
@@ -469,7 +498,7 @@ export function autopilotTick(dt: number): void {
           nearest = i;
         }
       });
-      if (nearest >= 0) walkTowardLens(getSupplyPodPositions()[nearest], 0.8);
+      if (nearest >= 0) walkTowardTaskRow(getSupplyPodPositions()[nearest], 0.8);
       if (beatClock > timeout) seedSupplyPodsCollected(); // screening must go on
       break;
     }
@@ -484,8 +513,8 @@ export function autopilotTick(dt: number): void {
       break;
     }
     case 'ch1-iso': {
-      // The climb: steer at the mesa summit (the iso→lift gate keys on it); hops
-      // + the stuck watchdog's upward nudges haul the capsule up the staircase.
+      // NAV VIEW has already opened the second ground axis: cross the revealed
+      // terrain to the uncrowded mesa, then let step assist walk its staircase.
       if (signalMesaHandle.summit) {
         walkTowardLens(signalMesaHandle.summit, 1.6);
       }

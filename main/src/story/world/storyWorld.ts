@@ -87,6 +87,9 @@ export const MESA_HEIGHT = 3;
 
 /** The mesa's ground pose — the stepped voxel rise the iso era teaches height on. */
 export function getSignalMesaPose(planetSize: number, terrainSeed: number): StoryPropPose {
+  // The mesa deliberately leaves the work row AFTER NAV VIEW unlocks the second
+  // ground axis. This keeps the 2D strip readable and makes the overhead reveal
+  // mechanically meaningful instead of merely changing the camera angle.
   return surfacePoseNear(planetSize, terrainSeed, 14, -8, 0.5);
 }
 
@@ -129,7 +132,7 @@ function surfacePoseOnAdjacentFace(planetSize: number, terrainSeed: number): Sto
     radius = Math.max(radius, Math.abs(v.x), Math.abs(v.y), Math.abs(v.z));
   }
   const y = radius - EDGE_DROP; // down the +X face, past the top edge
-  const z = arrival.z - 8;      // the mesa's row — keeps the crossing short
+  const z = arrival.z - 8;      // continue from the post-NAV mesa toward the edge
   // Outermost solid voxel along +X in this column = the +X face's flat surface.
   let surfX = radius;
   while (surfX > 0 && !solid.has(`${surfX},${y},${z}`)) surfX--;
@@ -146,8 +149,8 @@ function surfacePoseOnAdjacentFace(planetSize: number, terrainSeed: number): Sto
  * side plane's frame, mirroring the supply pods.
  */
 export function getNavWaypointPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
-  // Raw voxel offsets, same frame as the stone/mesa at (14,-8) — a dogleg off
-  // the strip that ENDS SHORT of the mesa: the climb belongs to the iso era.
+  // The first fix steps visibly off the old work line; the remaining dogleg
+  // teaches both overhead axes and ends short of the mesa's isometric climb.
   const offsets: Array<[number, number]> = [[6, 2], [11, -3], [10, -7]];
   return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 0.6));
 }
@@ -196,15 +199,27 @@ export function getPodImpactPose(planetSize: number, terrainSeed: number): Story
 }
 
 /**
- * Supply pods for the belt-scroll era: deliberately OFF the work line (depth
- * offsets inside the ±3.5 clearance band, both directions) so recovering them
- * demands the first W/S steps. Offsets are (along, depth) in voxel units.
+ * Supply pods for the last profile-era recovery run. The physical 2D strip has
+ * one authoritative traversable row, so every pod that gates NAV VIEW is on
+ * that row. Offsets are along the strip in voxel units; the next beat reveals
+ * the broader terrain from overhead after the recovery is complete.
  */
 export function getSupplyPodPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
-  // Raw voxel offsets (the strip travels ±X toward the stone); z is the depth
-  // axis — ±3 sits inside the ±3.5 clearance band, both directions.
-  const offsets: Array<[number, number]> = [[4, 3], [-6, -3], [10, 2]];
-  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 0.7));
+  const plane = getStorySidePlane(planetSize, terrainSeed);
+  const alongX = Math.abs(plane.travelAxis.x) > 0.5;
+  // Distinct from the debris offsets so the recovered hull remains readable.
+  // Keep the whole recovery inside the pinned world's verified dry plateau;
+  // farther ends of this row descend into the shoreline and are not walkable.
+  const offsets = [-12, 1, 13];
+  return offsets.map(offset =>
+    surfacePoseNear(
+      planetSize,
+      terrainSeed,
+      alongX ? offset * Math.sign(plane.travelAxis.x) : 0,
+      alongX ? 0 : offset * Math.sign(plane.travelAxis.z),
+      0.7
+    )
+  );
 }
 
 /** The hero apple tree: farther out, opposite direction — a committed walk. */
@@ -343,7 +358,7 @@ export const DEBRIS_MAX = 6;
 export function getDebrisPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
   const plane = getStorySidePlane(planetSize, terrainSeed);
   const alongX = Math.abs(plane.travelAxis.x) > 0.5;
-  const offsets = [-9, 6, -14, 11, -4, 15]; // interleaved so any count spreads both ways
+  const offsets = [-9, 6, -14, 11, -4, 14]; // interleaved, all inside the dry plateau
   return offsets.slice(0, DEBRIS_MAX).map(offset =>
     surfacePoseNear(
       planetSize,

@@ -14,9 +14,9 @@ import { getDebrisPoses } from './storyWorld.ts';
 
 // --- The hull debris field ----------------------------------------------------------
 //
-// Voxel wreckage scattered by the descent along the raster strip. Walk-over
-// pickup (the LooseStoneField proximity pattern); each piece is 2–3 grid-aligned
-// scorched boxes with a faint blink so they read on the dithered 1-bit feed.
+// Voxel wreckage and local impact rubble scattered along the one raster task
+// row. Walk-over pickup (the LooseStoneField proximity pattern); each piece is
+// 2–3 grid-aligned scorched boxes with a faint blink so it reads on the dither.
 
 const PICKUP_RADIUS = 2.8;
 const HULL = '#8f9c96';
@@ -77,6 +77,9 @@ const DebrisField: React.FC<DebrisFieldProps> = ({ planetSize, terrainSeed }) =>
           <mesh geometry={box} material={materials.scorch} scale={[0.5, 0.7, 0.5]} position={[0.5, 0.1, 0.2]} />
           {i % 2 === 0 && (
             <mesh geometry={box} material={materials.scorch} scale={[0.4, 0.3, 0.6]} position={[-0.5, -0.1, -0.2]} />
+          )}
+          {i < 3 && (
+            <mesh geometry={box} material={materials.scorch} scale={[0.42, 0.28, 0.38]} position={[-0.72, -0.3, 0.48]} />
           )}
         </group>
       ))}

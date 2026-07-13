@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../../ui/theme.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getInteraction, subscribeInteraction } from '../../game/systems/interactionSystem.ts';
@@ -7,7 +7,7 @@ import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
 import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
 import { collectedPodCount, SUPPLY_POD_COUNT } from '../supplyPods.ts';
 import { NAV_WAYPOINT_COUNT, reachedNavWaypointCount } from '../navWaypoints.ts';
-import { getFeedRuntime } from '../feedRuntime.ts';
+import { cameraChromeVisualState, getFeedRuntime } from '../feedRuntime.ts';
 import { getMiningProgress } from '../../game/systems/miningProgress.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyText.ts';
 import { useStoryState } from '../storyState.ts';
@@ -63,6 +63,10 @@ const RegulationFeedHud: React.FC = () => {
 
   const counterRef = useRef<HTMLDivElement>(null);
   const camRef = useRef<HTMLDivElement>(null);
+  const cameraFrameRef = useRef<HTMLDivElement>(null);
+  const cameraStatusRef = useRef<HTMLDivElement>(null);
+  const cameraReticleRef = useRef<HTMLDivElement>(null);
+  const embodiedReticleRef = useRef<HTMLDivElement>(null);
   const harvestRef = useRef<HTMLDivElement>(null);
   const redactionRef = useRef<HTMLDivElement>(null);
   const redactionLabelRef = useRef<HTMLDivElement>(null);
@@ -70,11 +74,24 @@ const RegulationFeedHud: React.FC = () => {
   const markerChevronRef = useRef<HTMLDivElement>(null);
   const markerLabelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let raf = 0;
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const r = getFeedRuntime();
+      const cameraChrome = cameraChromeVisualState(r);
+      const cameraDisplay = cameraChrome.visible ? 'block' : 'none';
+      for (const node of [cameraFrameRef.current, cameraStatusRef.current, cameraReticleRef.current]) {
+        if (!node) continue;
+        node.style.display = cameraDisplay;
+        node.style.opacity = String(cameraChrome.opacity);
+      }
+      const embodiedReticle = embodiedReticleRef.current;
+      if (embodiedReticle) {
+        const embodiedOpacity = 1 - cameraChrome.opacity;
+        embodiedReticle.style.display = embodiedOpacity >= 0.01 ? 'block' : 'none';
+        embodiedReticle.style.opacity = String(embodiedOpacity);
+      }
       const counter = counterRef.current;
       if (counter) {
         const stamp = `FRM ${String(r.frame).padStart(7, '0')}`;
@@ -133,7 +150,9 @@ const RegulationFeedHud: React.FC = () => {
         }
       }
     };
-    raf = requestAnimationFrame(tick);
+    // Ownership may already be embodied on a direct beat link. Mutate the
+    // chrome before first paint so REC/SITE framing cannot flash for one frame.
+    tick();
     return () => cancelAnimationFrame(raf);
   }, []);
 
@@ -160,11 +179,13 @@ const RegulationFeedHud: React.FC = () => {
         letterSpacing: '0.1em'
       }}
     >
-      {/* corner brackets */}
-      <div style={bracket({ top: 16, left: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
-      <div style={bracket({ top: 16, right: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
-      <div style={bracket({ bottom: 16, left: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
-      <div style={bracket({ bottom: 16, right: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
+      {/* External-camera framing dissolves as the lift enters the body. */}
+      <div ref={cameraFrameRef} style={{ position: 'fixed', inset: 0, display: 'none', opacity: 0 }}>
+        <div style={bracket({ top: 16, left: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
+        <div style={bracket({ top: 16, right: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
+        <div style={bracket({ bottom: 16, left: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
+        <div style={bracket({ bottom: 16, right: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
+      </div>
 
       {/* header + standing work order */}
       <div style={{ position: 'fixed', top: 26, left: 56, fontSize: 11, lineHeight: 1.75, maxWidth: 460 }}>
@@ -177,7 +198,10 @@ const RegulationFeedHud: React.FC = () => {
       </div>
 
       {/* REC + frame counter */}
-      <div style={{ position: 'fixed', top: 26, right: 56, textAlign: 'right', fontSize: 11, lineHeight: 1.8 }}>
+      <div
+        ref={cameraStatusRef}
+        style={{ position: 'fixed', top: 26, right: 56, textAlign: 'right', fontSize: 11, lineHeight: 1.8, display: 'none', opacity: 0 }}
+      >
         <div>
           <span style={{
             display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
@@ -227,7 +251,7 @@ const RegulationFeedHud: React.FC = () => {
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>RECOVERY</div>
           <div>SUPPLY PODS {collectedPodCount()}/{SUPPLY_POD_COUNT}</div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
-            LATERAL CLEARANCE ±3 ROWS · [W]/[S]
+            WORK LINE LOCKED · [A]/[D]
           </div>
         </div>
       )}
@@ -282,13 +306,18 @@ const RegulationFeedHud: React.FC = () => {
         </div>
       )}
 
-      {/* feed reticle */}
-      <div style={{
+      {/* Camera reticle becomes a quiet embodied aiming point at handoff. */}
+      <div ref={cameraReticleRef} style={{
         position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
-        fontSize: 16, color: FEED_INK_DIM
+        fontSize: 16, color: FEED_INK_DIM, display: 'none', opacity: 0
       }}>
         +
       </div>
+      <div ref={embodiedReticleRef} style={{
+        position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+        width: 3, height: 3, borderRadius: '50%', background: FEED_INK_DIM,
+        display: 'none', opacity: 0
+      }} />
 
       {/* hold-to-harvest readout */}
       <div

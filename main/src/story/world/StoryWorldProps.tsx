@@ -130,7 +130,8 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
       {story.chapter === 'ch1' && (
         <DebrisField planetSize={planetSize} terrainSeed={terrainSeed} />
       )}
-      {/* Supply pods off the work line — the belt-scroll era's recovery run. */}
+      {/* Supply pods on the authoritative profile row — recovering the full
+          line earns the transition into top-down NAV VIEW. */}
       {story.chapter === 'ch1' && (
         <SupplyPods planetSize={planetSize} terrainSeed={terrainSeed} />
       )}

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { theme } from '../../ui/theme.ts';
-import { getFeedRuntime } from '../feedRuntime.ts';
+import { cameraFeedVisualState, getFeedRuntime } from '../feedRuntime.ts';
 
 // --- The Regulation Feed treatment ---------------------------------------------
 //
@@ -9,8 +9,8 @@ import { getFeedRuntime } from '../feedRuntime.ts';
 //
 //   1. backdrop-filter layer — grayscale + contrast crush of everything beneath
 //      (WebGL canvas included). Catches the sky/props that per-material chroma
-//      can't reach. Grayscale amount tracks feedRuntime.desat so A1's flashes and
-//      ramp drop it frame-accurately.
+//      can't reach. Grayscale amount tracks feedRuntime.desat while an external
+//      camera owns the view, so A1's flashes and the embodied handoff stay exact.
 //   2. ordered-dither tile — an 8×8 Bayer PNG (generated once) tiled at low
 //      opacity for the 1-bit readout feel.
 //   3. scanlines — repeating gradient with a slow drift; rolls hard on glitches.
@@ -67,12 +67,13 @@ const FeedOverlay: React.FC = () => {
   const glitchRef = useRef<HTMLCanvasElement>(null);
   const flashRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let raf = 0;
-    let lastDesat = -1;
+    let lastFilterKey = '';
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const r = getFeedRuntime();
+      const cameraFeed = cameraFeedVisualState(r);
       const filter = filterRef.current;
       const dither = ditherRef.current;
       const scan = scanRef.current;
@@ -93,21 +94,24 @@ const FeedOverlay: React.FC = () => {
       // and the layer UNMOUNTS from compositing (display:none) whenever it is at
       // identity: a live backdrop-filter forces a full-screen readback every
       // frame even at grayscale(0), which is pure dead weight post-A1.
-      const desat = Math.round(r.desat * 100) / 100;
-      if (desat !== lastDesat) {
-        lastDesat = desat;
+      const desat = Math.round(cameraFeed.desat * 100) / 100;
+      const treatment = Math.round(cameraFeed.treatment * 100) / 100;
+      const filterKey = `${desat}:${treatment}`;
+      if (filterKey !== lastFilterKey) {
+        lastFilterKey = filterKey;
         if (desat < 0.01) {
           filter.style.display = 'none';
         } else {
           filter.style.display = 'block';
-          const contrast = 1 + 0.26 * r.treatment * desat;
-          const bright = 1 + 0.05 * r.treatment;
+          const contrast = 1 + 0.26 * treatment * desat;
+          const bright = 1 + 0.05 * treatment;
           filter.style.backdropFilter = `grayscale(${desat}) contrast(${contrast}) brightness(${bright})`;
           (filter.style as unknown as Record<string, string>).webkitBackdropFilter = filter.style.backdropFilter;
         }
       }
-      // Treatment layers leave the compositor entirely once dissolved (A2+).
-      const treatmentGone = r.treatment < 0.01;
+      // Treatment layers leave the compositor entirely once dissolved OR once
+      // the ch1 lift has moved the view into the player's eyes.
+      const treatmentGone = treatment < 0.01;
       const treatmentDisplay = treatmentGone ? 'none' : 'block';
       if (dither.style.display !== treatmentDisplay) {
         dither.style.display = treatmentDisplay;
@@ -115,10 +119,10 @@ const FeedOverlay: React.FC = () => {
         vignette.style.display = treatmentDisplay;
       }
       if (!treatmentGone) {
-        dither.style.opacity = String(0.5 * r.treatment);
-        scan.style.opacity = String(0.5 * r.treatment);
-        scan.style.transform = r.scanRoll > 0.001 ? `translateY(${r.scanRoll * 46}px)` : 'translateY(0)';
-        vignette.style.opacity = String(0.9 * r.treatment);
+        dither.style.opacity = String(0.5 * treatment);
+        scan.style.opacity = String(0.5 * treatment);
+        scan.style.transform = cameraFeed.scanRoll > 0.001 ? `translateY(${cameraFeed.scanRoll * 46}px)` : 'translateY(0)';
+        vignette.style.opacity = String(0.9 * treatment);
       }
 
       // Glitch canvas: paint only while glitching; one clear when it ends.
@@ -129,28 +133,30 @@ const FeedOverlay: React.FC = () => {
           glitch.height = glitch.clientHeight;
         }
         ctx.clearRect(0, 0, glitch.width, glitch.height);
-        if (r.glitch > 0.01) {
-          const bands = 2 + Math.floor(r.glitch * 6);
+        if (cameraFeed.glitch > 0.01) {
+          const bands = 2 + Math.floor(cameraFeed.glitch * 6);
           for (let i = 0; i < bands; i++) {
             const y = Math.random() * glitch.height;
-            const h = 2 + Math.random() * 12 * r.glitch;
-            const off = (Math.random() - 0.5) * 60 * r.glitch;
-            ctx.fillStyle = `rgba(255,255,255,${0.10 * r.glitch})`;
+            const h = 2 + Math.random() * 12 * cameraFeed.glitch;
+            const off = (Math.random() - 0.5) * 60 * cameraFeed.glitch;
+            ctx.fillStyle = `rgba(255,255,255,${0.10 * cameraFeed.glitch})`;
             ctx.fillRect(off, y, glitch.width, h);
-            ctx.fillStyle = `rgba(0,0,0,${0.22 * r.glitch})`;
+            ctx.fillStyle = `rgba(0,0,0,${0.22 * cameraFeed.glitch})`;
             ctx.fillRect(-off, y + h, glitch.width, h * 0.6);
           }
         }
       }
     };
-    raf = requestAnimationFrame(tick);
+    // Apply once before the browser's first paint. In particular, an embodied
+    // deep link must never expose the default dither/scanline DOM for one frame.
+    tick();
     return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
     <div aria-hidden style={{ ...layerBase, zIndex: theme.z.hud - 2 }}>
       {/* 1 — grayscale/contrast of everything beneath */}
-      <div ref={filterRef} style={layerBase} />
+      <div ref={filterRef} style={{ ...layerBase, display: 'none' }} />
       {/* 2 — ordered dither tile */}
       <div
         ref={ditherRef}
@@ -159,7 +165,9 @@ const FeedOverlay: React.FC = () => {
           backgroundImage: `url(${BAYER_URI})`,
           backgroundSize: '8px 8px',
           imageRendering: 'pixelated',
-          mixBlendMode: 'overlay'
+          mixBlendMode: 'overlay',
+          display: 'none',
+          opacity: 0
         }}
       />
       {/* 3 — scanlines (slow drift via keyframes; roll via transform) */}
@@ -169,7 +177,9 @@ const FeedOverlay: React.FC = () => {
           ...layerBase,
           inset: -60,
           background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.30) 0px, rgba(0,0,0,0.30) 1px, transparent 1px, transparent 3px)',
-          animation: 'pvFeedScanDrift 9s linear infinite'
+          animation: 'pvFeedScanDrift 9s linear infinite',
+          display: 'none',
+          opacity: 0
         }}
       />
       {/* 4 — CCTV vignette */}
@@ -178,7 +188,9 @@ const FeedOverlay: React.FC = () => {
         style={{
           ...layerBase,
           background:
-            'radial-gradient(115% 95% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.36) 84%, rgba(0,0,0,0.72) 100%)'
+            'radial-gradient(115% 95% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.36) 84%, rgba(0,0,0,0.72) 100%)',
+          display: 'none',
+          opacity: 0
         }}
       />
       {/* 5 — imperative tear/noise canvas */}

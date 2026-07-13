@@ -90,6 +90,10 @@ import { getWaterskinFill } from '../game/systems/consumeSystem';
 import { EDIBLE_ITEM_IDS } from '../game/data/items';
 import { getItemCount } from '../game/systems/inventorySystem';
 import { getWorldGen } from '../utils/worldGenCache';
+import {
+  resolveSafePlayerResetPosition,
+  shouldBypassSurfaceSpawnSettle
+} from '../utils/spawnValidation.ts';
 import { getAppStateSnapshot } from '../state/appState';
 import { setInteraction, type ActiveInteraction } from '../game/systems/interactionSystem';
 import { isBoardable } from '../state/shipProximity';
@@ -297,6 +301,8 @@ interface EfficientPlayerProps {
   terrainSeed: number;
   initialPosition?: THREE.Vector3;
   resetPosition?: THREE.Vector3;
+  /** Parked ship paired with resetPosition; keeps live R resets outside its hull. */
+  resetShipPosition?: THREE.Vector3;
   onPositionChange?: (position: THREE.Vector3) => void;
   onSurfaceChange?: (surface: SurfaceState) => void;
   onGroundedChange?: (grounded: boolean) => void;
@@ -310,6 +316,7 @@ export default function EfficientPlayer({
   terrainSeed,
   initialPosition,
   resetPosition,
+  resetShipPosition,
   onPositionChange,
   onSurfaceChange,
   onGroundedChange,
@@ -373,13 +380,26 @@ export default function EfficientPlayer({
   // + a smoothed 0..1 of how far the EYE is underwater. Drives the swim physics
   // branch and is published to playerSubmersion for audio / fog / post / particles.
   const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
+  const liveSpawnTerrain = useMemo(() => ({
+    shouldVoxelExist: (x: number, y: number, z: number) =>
+      waterGen.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
+    isWaterVoxel: (x: number, y: number, z: number) =>
+      voxelSystem.isDeleted(x, y, z) || waterGen.isWaterVoxel(x, y, z),
+    generateBlockForPosition: (x: number, y: number, z: number) =>
+      waterGen.generateBlockForPosition(x, y, z)
+  }), [waterGen]);
   const submergence = useRef(0);
   const cameraSubmergence = useRef(0); // render-camera channel — diverges from the eye under external lenses
   // Lava: smoothed 0..1 hold of the melt (feet-cell test) + the raw flag the
   // damage tick keys on. Published to playerLavaImmersion for the HUD heat pass.
   const lavaImmersion = useRef(0);
   const lastFeetInLava = useRef(false);
-  const spawnGuard = useRef({ done: false, clock: 0 });
+  const spawnGuard = useRef<{
+    done: boolean;
+    clock: number;
+    /** Reset/recovery target; null means the component's initial spawn. */
+    target: THREE.Vector3 | null;
+  }>({ done: false, clock: 0, target: null });
   const survivalEnvironment = useRef<SurvivalEnvironment>({
     daylight: 1,
     sheltered: false,
@@ -393,6 +413,7 @@ export default function EfficientPlayer({
     resetSpawnSettle();
     spawnGuard.current.done = false;
     spawnGuard.current.clock = 0;
+    spawnGuard.current.target = null;
   }, []);
   const defaultSpawnPosition = useMemo(
     () => new THREE.Vector3(0, planetSize + PLAYER_CENTER_CLEARANCE + 2, 0),
@@ -619,7 +640,15 @@ export default function EfficientPlayer({
 
     const currentPosition = vectorFromRapier(body.translation());
     const shelter = recoverVitals ? findShelterSpawn(currentPosition) : null;
-    const destination = shelter?.position ?? resetSpawnPosition;
+    const destination = shelter?.position ?? resolveSafePlayerResetPosition(
+      liveSpawnTerrain,
+      planetSize,
+      resetSpawnPosition,
+      { shipPosition: resetShipPosition }
+    );
+    // An impossible generation/edit state must never turn R into an unsafe
+    // teleport. Leave the current body in place if no dry surface exists.
+    if (!destination) return;
     const destinationSurface = getSurfaceState(dominantFaceForPosition(destination));
     if (recoverVitals) {
       const result = dispatchGameplayCommand(() => respawnCommand(commandContext, {
@@ -638,8 +667,14 @@ export default function EfficientPlayer({
     lastPlanarForward.current.copy(deterministicTangentForUp(destinationSurface.up, new THREE.Vector3()));
     resetChartFrame();
     transitionCooldown.current = 0;
+    // R/recovery can jump farther than the collider stream. Re-arm the same hold
+    // used at first mount and pin to this destination until support is present.
+    resetSpawnSettle();
+    spawnGuard.current.done = false;
+    spawnGuard.current.clock = 0;
+    spawnGuard.current.target = destination.clone();
     setSurface(destinationSurface);
-  }, [commandContext, resetSpawnPosition, setSurface]);
+  }, [commandContext, liveSpawnTerrain, planetSize, resetShipPosition, resetSpawnPosition, setSurface]);
 
   const handlePointerLockChange = useCallback((locked: boolean) => {
     controlsActive.current = locked;
@@ -1240,20 +1275,30 @@ export default function EfficientPlayer({
     // approach spawns deliberately high above the stream range and skips it.
     if (!spawnGuard.current.done) {
       spawnGuard.current.clock += FIXED_PHYSICS_STEP;
-      const highSpawn = initialSpawnPosition.length() > planetSize / 2 + 8;
+      const settlePosition = spawnGuard.current.target ?? initialSpawnPosition;
+      // `planetSize` is already the rendered world radius (50 wu). Dividing it
+      // again classified every normal ~54-wu surface spawn as an airborne
+      // approach and skipped this collider-stream hold—the slow-load fall-through
+      // that made automated runs begin inside the cube. Only a genuine approach
+      // well above the surface should bypass settling.
+      const highSpawn = shouldBypassSurfaceSpawnSettle(
+        settlePosition,
+        planetSize
+      );
       let grounded = highSpawn;
       if (!grounded) {
-        const up = FACE_NORMALS[dominantFaceForPosition(initialSpawnPosition)];
-        _spawnProbeOrigin.copy(initialSpawnPosition).addScaledVector(up, 0.5);
+        const up = FACE_NORMALS[dominantFaceForPosition(settlePosition)];
+        _spawnProbeOrigin.copy(settlePosition).addScaledVector(up, 0.5);
         _spawnProbeDir.copy(up).multiplyScalar(-1);
         const ray = new rapier.Ray(vectorToRapier(_spawnProbeOrigin), vectorToRapier(_spawnProbeDir));
         grounded = world.castRay(ray, SPAWN_SETTLE_PROBE_LENGTH, true, undefined, undefined, undefined, body) != null;
       }
       if (grounded || spawnGuard.current.clock >= SPAWN_SETTLE_MAX_SECONDS) {
         spawnGuard.current.done = true;
+        spawnGuard.current.target = null;
         markSpawnSettled();
       } else {
-        body.setTranslation(vectorToRapier(initialSpawnPosition), true);
+        body.setTranslation(vectorToRapier(settlePosition), true);
         body.setLinvel(vectorToRapier(_zeroVelocity), true);
         return;
       }

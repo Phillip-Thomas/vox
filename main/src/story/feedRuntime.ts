@@ -30,9 +30,16 @@ export interface FeedRedaction {
 }
 
 export interface FeedRuntime {
+  /**
+   * 0 = the live view is embodied, 1 = it belongs to an external/site camera.
+   * The ch1 lift continuously hands this ownership from the side lens to the
+   * player's eyes. CCTV-only post effects must multiply by this value; HUD and
+   * cinematic punctuation deliberately do not.
+   */
+  externalCameraMix: number;
   /** Opacity of the saturation-kill layer (0 during chroma flashes / post-A1). */
   desat: number;
-  /** Master opacity of the dither/scanline/vignette treatment (A2 dissolves it). */
+  /** Regulation-treatment state; CCTV pixels also require externalCameraMix. */
   treatment: number;
   /** Instantaneous glitch-tear intensity for the imperative canvas (0 = idle). */
   glitch: number;
@@ -59,6 +66,7 @@ export interface FeedRuntime {
 }
 
 const runtime: FeedRuntime = {
+  externalCameraMix: 1,
   desat: 1,
   treatment: 1,
   glitch: 0,
@@ -78,7 +86,46 @@ export function getFeedRuntime(): FeedRuntime {
   return runtime;
 }
 
+export interface CameraFeedVisualState {
+  desat: number;
+  treatment: number;
+  glitch: number;
+  scanRoll: number;
+}
+
+export interface CameraChromeVisualState {
+  opacity: number;
+  visible: boolean;
+}
+
+function unit(value: number): number {
+  return Math.min(1, Math.max(0, value));
+}
+
+/** Camera-specific HUD chrome follows the same ownership handoff as the pixels. */
+export function cameraChromeVisualState(source: FeedRuntime = runtime): CameraChromeVisualState {
+  const opacity = unit(source.externalCameraMix);
+  return { opacity, visible: opacity >= 0.01 };
+}
+
+/**
+ * The camera-feed post-process has one owner: an external camera. Keeping this
+ * multiplication here prevents scanlines, dither, grayscale, or glitch tears
+ * from leaking into the first-person view even if a later story beat still uses
+ * the Regulation HUD or writes a transition impulse into the shared runtime.
+ */
+export function cameraFeedVisualState(source: FeedRuntime = runtime): CameraFeedVisualState {
+  const ownership = cameraChromeVisualState(source).opacity;
+  return {
+    desat: unit(source.desat) * ownership,
+    treatment: unit(source.treatment) * ownership,
+    glitch: unit(source.glitch) * ownership,
+    scanRoll: unit(source.scanRoll) * ownership
+  };
+}
+
 export function resetFeedRuntime(): void {
+  runtime.externalCameraMix = 1;
   runtime.desat = 1;
   runtime.treatment = 1;
   runtime.glitch = 0;

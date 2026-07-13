@@ -1,6 +1,6 @@
 import type * as THREE from 'three';
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
-import { addItem } from '../game/systems/inventorySystem.ts';
+import { addItem, getItemCount } from '../game/systems/inventorySystem.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
 
 // --- Hull-debris salvage (the raster act's second verb) ------------------------------
@@ -14,6 +14,7 @@ import { playSfx } from '../audio/sfxEngine.ts';
 // How many pieces this run scattered (voyage hull outcome). Milestone-backed so
 // it survives reloads with zero new save fields.
 const SCATTER_MARK = 'story:debris-scattered:';
+const STONE_BACKFILL_MARK = 'story:debris-stone-backfill:v2';
 
 export function setDebrisScattered(count: number): void {
   const clamped = Math.max(3, Math.min(6, Math.round(count)));
@@ -28,15 +29,41 @@ export function getDebrisScattered(): number {
   return 4;
 }
 
-/** Per-piece loot — totals cover the campfire chain (wood 3 / flint 2) by 4. */
-const DEBRIS_LOOT: ReadonlyArray<ReadonlyArray<{ id: 'wood' | 'flint'; qty: number }>> = [
-  [{ id: 'wood', qty: 2 }],
-  [{ id: 'flint', qty: 1 }],
-  [{ id: 'wood', qty: 1 }],
+/**
+ * Per-piece loot. The first three impact sites include four pieces of local
+ * stone kicked loose by the crash, guaranteeing the raster quota on the same
+ * row even on the minimum-debris voyage outcome. The hull material still
+ * covers the later campfire chain (wood 3 / flint 2) by piece four.
+ */
+const DEBRIS_LOOT: ReadonlyArray<ReadonlyArray<{ id: 'wood' | 'flint' | 'stone'; qty: number }>> = [
+  [{ id: 'wood', qty: 2 }, { id: 'stone', qty: 2 }],
+  [{ id: 'flint', qty: 1 }, { id: 'stone', qty: 1 }],
+  [{ id: 'wood', qty: 1 }, { id: 'stone', qty: 1 }],
   [{ id: 'flint', qty: 1 }],
   [{ id: 'wood', qty: 1 }],
   [{ id: 'wood', qty: 1 }]
 ];
+
+/**
+ * One-time migration for saves that collected debris before impact stone was
+ * added to its loot. Crafting is disabled throughout ch1-raster, so topping the
+ * current stone count up to the already-earned amount cannot replace legitimate
+ * spending; it only restores rewards the old build never issued.
+ */
+export function backfillLegacyDebrisStone(): number {
+  if (hasMilestone(STONE_BACKFILL_MARK)) return 0;
+  let earned = 0;
+  for (let index = 0; index < Math.min(3, getDebrisScattered()); index++) {
+    if (!isDebrisCollected(index)) continue;
+    for (const loot of DEBRIS_LOOT[index] ?? []) {
+      if (loot.id === 'stone') earned += loot.qty;
+    }
+  }
+  const restored = Math.max(0, earned - getItemCount('stone'));
+  if (restored > 0) addItem('stone', restored);
+  markMilestone(STONE_BACKFILL_MARK);
+  return restored;
+}
 
 function milestoneFor(index: number): string {
   return `story:debris:${index}`;

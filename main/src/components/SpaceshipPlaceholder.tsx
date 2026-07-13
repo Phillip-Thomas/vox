@@ -10,12 +10,16 @@ import {
   shipHullColors,
   shipParkedOrientation
 } from '../utils/shipDesign.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
+import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
+import { resolveSafeShipBoardingPosition } from '../utils/spawnValidation.ts';
 
 const BOARD_RANGE = 3.5;
 const BOARD_RANGE_SQ = BOARD_RANGE * BOARD_RANGE;
 
 interface SpaceshipPlaceholderProps {
   position: THREE.Vector3;
+  planetSize?: number;
   terrainSeed: number;
   activeApproach: boolean;
   /** Live player position (from EfficientScene) for the boarding proximity check. */
@@ -38,6 +42,7 @@ interface SpaceshipPlaceholderProps {
  */
 export default function SpaceshipPlaceholder({
   position,
+  planetSize = 50,
   terrainSeed,
   activeApproach,
   playerPosition,
@@ -48,6 +53,12 @@ export default function SpaceshipPlaceholder({
   const boardableRef = useRef(false);
   const glowRef = useRef<THREE.MeshStandardMaterial>(null);
   const beaconRef = useRef<THREE.MeshStandardMaterial>(null);
+  const validationRef = useRef({
+    editVersion: -1,
+    terrainSeed: Number.NaN,
+    position: new THREE.Vector3(Infinity, Infinity, Infinity),
+    safe: false
+  });
 
   // Boarding is only offered while on foot on the surface.
   const boardable = phase === 'surface' && controlMode === 'fps';
@@ -56,6 +67,17 @@ export default function SpaceshipPlaceholder({
     () => shipAccentColor(terrainSeed, activeApproach),
     [activeApproach, terrainSeed]
   );
+  const spawnTerrain = useMemo(() => {
+    const generator = getWorldGen(planetSize, terrainSeed).generator;
+    return {
+      shouldVoxelExist: (x: number, y: number, z: number) =>
+        generator.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
+      isWaterVoxel: (x: number, y: number, z: number) =>
+        voxelSystem.isDeleted(x, y, z) || generator.isWaterVoxel(x, y, z),
+      generateBlockForPosition: (x: number, y: number, z: number) =>
+        generator.generateBlockForPosition(x, y, z)
+    };
+  }, [planetSize, terrainSeed]);
   const hullGeometry = useMemo(() => createShipHullGeometry(shipHullColors(accent)), [accent]);
   const canopyGeometry = useMemo(() => createShipCanopyGeometry(), []);
   // Upright on the supporting CUBE FACE normal, nose along the direction the
@@ -88,7 +110,26 @@ export default function SpaceshipPlaceholder({
   useFrame(({ clock }) => {
     // A static wreck never offers boarding — skip the proximity publish entirely.
     if (interactive) {
-      const close = boardable && !!playerPosition && playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
+      const editVersion = voxelSystem.getEditVersion();
+      if (
+        validationRef.current.editVersion !== editVersion
+        || validationRef.current.terrainSeed !== terrainSeed
+        || validationRef.current.position.distanceToSquared(position) > 0.001
+      ) {
+        validationRef.current.editVersion = editVersion;
+        validationRef.current.terrainSeed = terrainSeed;
+        validationRef.current.position.copy(position);
+        validationRef.current.safe = resolveSafeShipBoardingPosition(
+          spawnTerrain,
+          planetSize,
+          position,
+          0
+        ) !== null;
+      }
+      const close = validationRef.current.safe
+        && boardable
+        && !!playerPosition
+        && playerPosition.distanceToSquared(position) <= BOARD_RANGE_SQ;
       if (close !== boardableRef.current) {
         boardableRef.current = close;
         setBoardable(close);

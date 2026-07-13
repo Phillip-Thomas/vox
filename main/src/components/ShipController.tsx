@@ -5,7 +5,12 @@ import { useRapier } from '@react-three/rapier';
 import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
 import ShipCockpit from './ShipCockpit.tsx';
 import { shipLevelOrientation, shipSurfaceUp } from '../utils/shipDesign.ts';
-import { vectorFromRapier, vectorToRapier, shipImpactOutcome } from '../utils/surfaceControls';
+import {
+  dominantFaceForPosition,
+  vectorFromRapier,
+  vectorToRapier,
+  shipImpactOutcome
+} from '../utils/surfaceControls';
 import { isTouchActive } from '../utils/mobileInput';
 import type { WorldArrivalPose } from '../utils/worldArrival';
 import {
@@ -49,6 +54,13 @@ import {
   updateShipFlightFeedback,
   type ShipFlightFeedback
 } from '../state/shipFlightFeedback.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
+import {
+  findValidSpawnSite,
+  resolveSafeShipBoardingPosition
+} from '../utils/spawnValidation.ts';
+import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
+import { landingHitMatchesValidatedTerrain } from '../utils/shipLandingValidation.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
@@ -152,7 +164,7 @@ interface ShipControllerProps {
   activePlanetWorldId: string;
   planetSystemPosition?: SystemVectorTuple;
   arrivalPose: WorldArrivalPose;
-  /** Boarding spawn (player position when F was pressed on the surface). */
+  /** Validated parked-ship rest point used when boarding on the surface. */
   boardingPosition: THREE.Vector3;
   onGroundedChange?: (grounded: boolean) => void;
   onPositionChange?: (position: THREE.Vector3) => void;
@@ -193,6 +205,20 @@ export default function ShipController({
   const { gl } = useThree();
   const { world, rapier } = useRapier();
   const { phase } = useSpaceFlight();
+  const spawnTerrain = useMemo(
+    () => {
+      const generator = getWorldGen(planetSize, terrainSeed).generator;
+      return {
+        shouldVoxelExist: (x: number, y: number, z: number) =>
+          generator.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
+        isWaterVoxel: (x: number, y: number, z: number) =>
+          voxelSystem.isDeleted(x, y, z) || generator.isWaterVoxel(x, y, z),
+        generateBlockForPosition: (x: number, y: number, z: number) =>
+          generator.generateBlockForPosition(x, y, z)
+      };
+    },
+    [planetSize, terrainSeed]
+  );
 
   // Snapshot phase + spawn inputs ONCE (the component remounts per world swap, so
   // a fresh mount re-reads phase; mid-flight prop churn must NOT reset the ship).
@@ -310,11 +336,13 @@ export default function ShipController({
         pos: new THREE.Vector3(...localPose.position),
         velocity: new THREE.Vector3(...localPose.velocity),
         quat: new THREE.Quaternion(...localPose.quaternion),
-        restoredFromSystemPose: true
+        restoredFromSystemPose: true,
+        relocatedSurfaceSpawn: false
       };
     }
 
     let pos: THREE.Vector3;
+    let relocatedSurfaceSpawn = false;
     if (phaseAtMount === 'descent' || phaseAtMount === 'approach') {
       // Just warped in above a fresh world: start high, looking down.
       pos = approach.clone();
@@ -324,8 +352,21 @@ export default function ShipController({
       // the descent is short. Faces the planet so it's dead ahead.
       pos = approach.clone().normalize().multiplyScalar(surfaceRadius + ATMOS_LEAVE + 25);
     } else {
-      // surface / launch: lift off from the boarding spot (or the parked ship).
-      pos = boardingRef.current.clone();
+      // Surface / launch: revalidate at the instant of boarding. The pad may
+      // have been mined or flooded since touchdown; a last-frame edit race can
+      // relocate the craft to the nearest complete ship+egress pad, never into
+      // the stale hole.
+      const safeBoarding = resolveSafeShipBoardingPosition(
+        spawnTerrain,
+        planetSize,
+        boardingRef.current,
+        Math.floor(planetSize / 2)
+      );
+      if (!safeBoarding) {
+        throw new Error('No dry, level ship boarding pad exists on this surface.');
+      }
+      pos = safeBoarding;
+      relocatedSurfaceSpawn = pos.distanceToSquared(boardingRef.current) > 0.01;
     }
 
     // Orient the ship for the spawn context.
@@ -347,11 +388,14 @@ export default function ShipController({
       pos,
       velocity: new THREE.Vector3(),
       quat,
-      restoredFromSystemPose: false
+      restoredFromSystemPose: false,
+      relocatedSurfaceSpawn
     };
   }, [
     activePlanetWorldId,
+    planetSize,
     planetSystemPosition,
+    spawnTerrain,
     surfaceRadius,
     systemCoordinate
   ]);
@@ -363,6 +407,10 @@ export default function ShipController({
     orientation.current.copy(spawn.quat);
     landingSeq.current = null;
   }, [spawn]);
+
+  useEffect(() => {
+    if (spawn.relocatedSurfaceSpawn) onLanded?.(spawn.pos);
+  }, [onLanded, spawn]);
 
   useEffect(() => {
     const systemId = coordinateKey(systemCoordinate);
@@ -461,15 +509,28 @@ export default function ShipController({
         const hit = world.castRayAndGetNormal(ray, LANDING_APPROACH_DIST, true);
         if (!hit) return; // no ground within range (too high / over a gap)
         const contactUp = vectorFromRapier(hit.normal).normalize();
-        const to = position.current.clone()
-          .addScaledVector(downDir, hit.timeOfImpact)
+        const contactPoint = position.current.clone()
+          .addScaledVector(downDir, hit.timeOfImpact);
+        const contactRest = contactPoint.clone()
           .addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
+        const site = findValidSpawnSite(spawnTerrain, planetSize, contactRest, {
+          kind: 'ship',
+          face: dominantFaceForPosition(contactUp),
+          // Never slide through a shoreline/cliff to a remote pad. The pilot
+          // must actually be over a valid touchdown footprint.
+          maxSearchRadius: 0,
+          requirePlayerEgress: true
+        });
+        if (!site || !landingHitMatchesValidatedTerrain(contactPoint, contactUp, site)) {
+          return; // non-terrain collider, water, slope, obstruction, or no safe pad
+        }
+        const to = site.position;
         const dist = position.current.distanceTo(to);
         landingSeq.current = {
           from: position.current.clone(),
           to,
           fromQuat: orientation.current.clone(),
-          toQuat: levelOrientation(to, contactUp), // level to the contacted cube face
+          toQuat: levelOrientation(to, site.up), // level to the validated cube face
           t: 0,
           duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION),
           crashed: false
@@ -520,7 +581,7 @@ export default function ShipController({
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [gl.domElement, paused]);
+  }, [gl.domElement, paused, planetSize, spawnTerrain, world, rapier]);
 
   // --- per-frame flight integration -----------------------------------------
   useFrame((_, rawDt) => {
@@ -738,28 +799,47 @@ export default function ShipController({
       if (hit && hit.timeOfImpact <= speed * dt + CRASH_CLEARANCE) {
         const contactUp = vectorFromRapier(hit.normal).normalize();
         const inwardSpeed = -velocity.current.dot(contactUp); // speed into the contacted face
-        const rest = position.current.clone()
-          .addScaledVector(downDir, hit.timeOfImpact)
+        const contactPoint = position.current.clone()
+          .addScaledVector(downDir, hit.timeOfImpact);
+        const contactRest = contactPoint.clone()
           .addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
         if (shipImpactOutcome(inwardSpeed, CRASH_SPEED) === 'crash') {
-          // CRASH: forced crash-landing to the touchdown point + impact flash.
-          landingSeq.current = {
-            from: position.current.clone(),
-            to: rest,
-            fromQuat: orientation.current.clone(),
-            toQuat: levelOrientation(rest, contactUp),
-            t: 0,
-            duration: CRASH_LAND_DURATION,
-            crashed: true
-          };
-          velocity.current.set(0, 0, 0);
-          setShipThrustSfx(0);
-          playSfx('shipCrash');
-          triggerCrashFlash();
+          const safeSite = findValidSpawnSite(spawnTerrain, planetSize, contactRest, {
+            kind: 'ship',
+            face: dominantFaceForPosition(contactUp),
+            maxSearchRadius: 0,
+            requirePlayerEgress: true
+          });
+          const hitValidatedTerrain = safeSite
+            && landingHitMatchesValidatedTerrain(contactPoint, contactUp, safeSite);
+          // A prop, water, steep, or blocked impact can damage and deflect the
+          // ship, but it must not become a parked spawn on terrain beneath it.
+          if (!safeSite || !hitValidatedTerrain) {
+            position.current.copy(contactRest).addScaledVector(contactUp, CRASH_CLEARANCE);
+            velocity.current.addScaledVector(contactUp, Math.max(0, inwardSpeed) + 8);
+            setShipThrustSfx(0);
+            playSfx('shipCrash');
+            triggerCrashFlash();
+          } else {
+            // CRASH: forced crash-landing to the touchdown point + impact flash.
+            landingSeq.current = {
+              from: position.current.clone(),
+              to: safeSite.position,
+              fromQuat: orientation.current.clone(),
+              toQuat: levelOrientation(safeSite.position, safeSite.up),
+              t: 0,
+              duration: CRASH_LAND_DURATION,
+              crashed: true
+            };
+            velocity.current.set(0, 0, 0);
+            setShipThrustSfx(0);
+            playSfx('shipCrash');
+            triggerCrashFlash();
+          }
         } else {
           // Soft contact: clamp to the surface and remove the inward velocity
           // component so you skim along instead of sinking through.
-          position.current.copy(rest);
+          position.current.copy(contactRest);
           if (inwardSpeed > 0) velocity.current.addScaledVector(contactUp, inwardSpeed);
         }
       }

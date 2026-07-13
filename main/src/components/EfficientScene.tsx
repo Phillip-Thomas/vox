@@ -31,14 +31,23 @@ import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
 import PlayerAvatarPoseHarness from './PlayerAvatarPoseHarness.tsx';
 import { useSpaceFlight } from '../state/spaceFlight.ts';
-import { dominantFaceForPosition, getSurfaceState, SurfaceState } from '../utils/surfaceControls';
+import {
+  FACE_NORMALS,
+  dominantFaceForPosition,
+  getSurfaceState,
+  SurfaceState
+} from '../utils/surfaceControls';
 import { FIXED_PHYSICS_STEP } from '../utils/cubeGravityConstants';
 import {
   ArrivalMode,
-  createWorldArrivalPose
+  createWorldArrivalPose,
+  createWorldArrivalPoseFromSurfaceVoxel
 } from '../utils/worldArrival';
 import { measureWarpMetric } from '../utils/warpMetrics';
-import { loadPlayerPose } from '../game/systems/persistence.ts';
+import {
+  loadPlayerPose,
+  loadVoxelEditsForWorld
+} from '../game/systems/persistence.ts';
 import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
 import type { CommandContext } from '../game/commands.ts';
 import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
@@ -55,6 +64,12 @@ import {
 } from '../state/systemFlight.ts';
 import { coordinateKey } from '../utils/worldCoordinates.ts';
 import { getSystemTravelAssistTarget } from '../state/systemTravelAssist.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
+import {
+  findValidSpawnSite,
+  isDryClearResumePosition,
+  resolveShipPlayerEgressPosition
+} from '../utils/spawnValidation.ts';
 
 export const planetSize = 50;
 const PRIMARY_SYSTEM_POSITION = [0, 0, 0] as const;
@@ -118,18 +133,107 @@ export default function EfficientScene({
   // parked ship must never appear alongside it — suppress it for the whole story
   // (active chapters AND the completed 'done' world). Non-story seeds: unchanged.
   const storyWorldShip = isStoryWorldSeed(terrainSeed) && (story.active || story.chapter === 'complete');
+  const spawnTerrain = useMemo(() => {
+    const entry = getWorldGen(planetSize, terrainSeed);
+    const persisted = loadVoxelEditsForWorld(commandContext.world);
+    const deleted = persisted?.fingerprint === entry.voxels.length
+      ? new Set(persisted.removed.map(([x, y, z]) => `${x},${y},${z}`))
+      : new Set<string>();
+    return {
+      shouldVoxelExist: (x: number, y: number, z: number) =>
+        entry.generator.shouldVoxelExist(x, y, z) && !deleted.has(`${x},${y},${z}`),
+      // A persisted hole is hazardous even before WaterBlocks replays dynamic
+      // flooding; treating it as wet prevents arrival from choosing its floor.
+      isWaterVoxel: (x: number, y: number, z: number) =>
+        deleted.has(`${x},${y},${z}`) || entry.generator.isWaterVoxel(x, y, z),
+      generateBlockForPosition: (x: number, y: number, z: number) =>
+        entry.generator.generateBlockForPosition(x, y, z)
+    };
+  }, [commandContext.world, terrainSeed]);
   const arrivalPose = useMemo(
     () => measureWarpMetric(
       'scene:arrival_pose',
-      () => createWorldArrivalPose(planetSize, terrainSeed),
+      () => {
+        const canonical = createWorldArrivalPose(planetSize, terrainSeed);
+        const exact = findValidSpawnSite(
+          spawnTerrain,
+          planetSize,
+          canonical.shipPosition,
+          {
+            kind: 'ship',
+            face: 'top',
+            maxSearchRadius: 0,
+            requirePlayerEgress: !storyWorldShip
+          }
+        );
+        const resolved = exact ?? findValidSpawnSite(
+          spawnTerrain,
+          planetSize,
+          canonical.shipPosition,
+          {
+            kind: 'ship',
+            face: 'top',
+            maxSearchRadius: Math.floor(planetSize),
+            requirePlayerEgress: !storyWorldShip
+          }
+        );
+        if (!resolved) {
+          throw new Error(`No live dry arrival pad exists for terrain seed ${terrainSeed}.`);
+        }
+        const pose = createWorldArrivalPoseFromSurfaceVoxel(resolved.supportVoxel);
+        if (!storyWorldShip) {
+          const playerEgress = resolveShipPlayerEgressPosition(
+            spawnTerrain,
+            planetSize,
+            pose.shipPosition,
+            resolved.face
+          );
+          if (!playerEgress) {
+            throw new Error(`Arrival pad for terrain seed ${terrainSeed} has no safe ship exit.`);
+          }
+          pose.playerSurfacePosition.copy(playerEgress);
+          pose.approachPosition.copy(playerEgress).addScaledVector(resolved.up, 30);
+        }
+        return pose;
+      },
       pose => ({
         surfaceX: pose.surfaceVoxel.x,
         surfaceY: pose.surfaceVoxel.y,
         surfaceZ: pose.surfaceVoxel.z
       })
     ),
-    [terrainSeed]
+    [spawnTerrain, storyWorldShip, terrainSeed]
   );
+  useEffect(() => {
+    const face = dominantFaceForPosition(arrivalPose.shipPosition);
+    const up = FACE_NORMALS[face];
+    const expectedSettled = arrivalPose.playerSurfacePosition.clone().addScaledVector(up, -1);
+    const exactShip = findValidSpawnSite(
+      spawnTerrain,
+      planetSize,
+      arrivalPose.shipPosition,
+      {
+        kind: 'ship',
+        face,
+        maxSearchRadius: 0,
+        requirePlayerEgress: !storyWorldShip
+      }
+    );
+    const host = window as Window & { __voxelDebug?: Record<string, unknown> };
+    host.__voxelDebug = {
+      ...host.__voxelDebug,
+      spawn: {
+        terrainSeed,
+        face,
+        supportVoxel: arrivalPose.surfaceVoxel,
+        playerRequested: arrivalPose.playerSurfacePosition.toArray(),
+        playerExpectedSettled: expectedSettled.toArray(),
+        shipRequested: arrivalPose.shipPosition.toArray(),
+        safe: exactShip !== null
+          && isDryClearResumePosition(spawnTerrain, planetSize, expectedSettled)
+      }
+    };
+  }, [arrivalPose, spawnTerrain, storyWorldShip, terrainSeed]);
   const systemFlightAtMount = useRef(getSystemFlightSnapshot()).current;
   const restoringSameSystemRuntime = systemFlightAtMount.systemId === coordinateKey(commandContext.world.coordinate)
     && systemFlightAtMount.activePlanetId === commandContext.world.worldId
@@ -154,7 +258,19 @@ export default function EfficientScene({
       : loadPlayerPose(commandContext.world);
     if (saved) {
       setPlayerLook(new THREE.Vector3(...saved.forward), saved.pitch);
-      const pos = new THREE.Vector3(...saved.pos);
+      const savedPosition = new THREE.Vector3(...saved.pos);
+      const resumeIsSafe = isDryClearResumePosition(spawnTerrain, planetSize, savedPosition);
+      const validated = resumeIsSafe
+        ? null
+        : findValidSpawnSite(
+          spawnTerrain,
+          planetSize,
+          savedPosition,
+          { kind: 'player', maxSearchRadius: 12 }
+        );
+      const pos = resumeIsSafe
+        ? savedPosition
+        : validated?.position ?? arrivalPose.playerSurfacePosition.clone();
       setPlayerWorldPosition(pos); // correct immediately, before the first frame publishes
       return pos;
     }
@@ -241,6 +357,20 @@ export default function EfficientScene({
   // null on world swap (EfficientScene remounts).
   const [landedShipPos, setLandedShipPos] = useState<THREE.Vector3 | null>(null);
   const handleLanded = useCallback((rest: THREE.Vector3) => setLandedShipPos(rest.clone()), []);
+  const landedPlayerSpawn = useMemo(() => {
+    if (!landedShipPos) return initialPlayerPosition;
+    // Ship and player have different origins above the same support. Reusing the
+    // lower ship rest point as the capsule center embeds the player's feet in the
+    // voxel; resolve the player-specific clearance before the FPS rig remounts.
+    const playerEgress = resolveShipPlayerEgressPosition(
+      spawnTerrain,
+      planetSize,
+      landedShipPos
+    );
+    return playerEgress
+      ? playerEgress
+      : arrivalPose.playerSurfacePosition;
+  }, [arrivalPose.playerSurfacePosition, initialPlayerPosition, landedShipPos, spawnTerrain]);
   const [surfaceState, setSurfaceState] = useState<SurfaceState>(
     () => getSurfaceState(dominantFaceForPosition(initialPlayerPosition))
   );
@@ -350,7 +480,7 @@ export default function EfficientScene({
           activePlanetWorldId={commandContext.world.worldId}
           planetSystemPosition={activePlanetSystemPosition}
           arrivalPose={arrivalPose}
-          boardingPosition={playerPosition}
+          boardingPosition={landedShipPos ?? arrivalPose.shipPosition}
           onGroundedChange={onGroundedChange}
           onPositionChange={publishPlayerPosition}
           onLanded={handleLanded}
@@ -361,8 +491,9 @@ export default function EfficientScene({
           commandContext={commandContext}
           planetSize={planetSize}
           terrainSeed={terrainSeed}
-          initialPosition={landedShipPos ?? initialPlayerPosition}
-          resetPosition={arrivalPose.playerSurfacePosition}
+          initialPosition={landedPlayerSpawn}
+          resetPosition={landedShipPos ? landedPlayerSpawn : arrivalPose.playerSurfacePosition}
+          resetShipPosition={storyWorldShip ? undefined : landedShipPos ?? arrivalPose.shipPosition}
           onPositionChange={publishPlayerPosition}
           onSurfaceChange={setSurfaceState}
           onGroundedChange={onGroundedChange}
@@ -377,6 +508,7 @@ export default function EfficientScene({
       {!storyPreAwakened && !storyWorldShip && (
         <SpaceshipPlaceholder
           position={landedShipPos ?? arrivalPose.shipPosition}
+          planetSize={planetSize}
           terrainSeed={terrainSeed}
           activeApproach={arrivalMode === 'approach'}
           playerPosition={playerPosition}

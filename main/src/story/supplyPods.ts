@@ -3,13 +3,13 @@ import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.t
 import { addItem } from '../game/systems/inventorySystem.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
 
-// --- Supply pods (the belt-scroll era's verb) ---------------------------------------
+// --- Supply pods (the profile task row's final verb) --------------------------------
 //
-// When LATERAL CLEARANCE opens the depth band (ch1-depth), three supply pods sit
-// OFF the work line — recovering them forces the first W/S steps, teaching that
-// a third axis exists before the player ever sees it. Their loot feeds the ch3
-// campfire chain honestly (the biofuel that used to be magicked in). Collected
-// state lives in milestones (`story:pod:<i>`) — zero new save fields.
+// Three supply pods sit ON the one physically traversable profile row. Recovering
+// all three is the trigger that earns NAV VIEW, where the third axis becomes an
+// honest playable space instead of something movie mode brute-forces with W/S +
+// jetpack. Their loot feeds the ch3 campfire chain honestly. Collected state
+// lives in milestones (`story:pod:<i>`) — zero new save fields.
 
 export const SUPPLY_POD_COUNT = 3;
 

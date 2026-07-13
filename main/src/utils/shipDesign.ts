@@ -15,8 +15,9 @@ import { seededUnit } from './worldCoordinates';
 // to each planet's seed (same hue family the placeholder used).
 //
 // Local axes: +X = nose, +Y = up, +Z = starboard. The parked ship's origin is
-// the flight rest point ~2.5 wu above the touchdown voxel (SHIP_GROUND_CLEARANCE
-// in ShipController), which is exactly the stance height the legs are built for.
+// the flight rest point ~2.5 wu above the touchdown surface
+// (SHIP_GROUND_CLEARANCE in ShipController), which is exactly the stance height
+// the legs are built for. Static voxel queries add the voxel half-extent first.
 // =============================================================================
 
 /** Overall dimensions (world units; player standing height is 3.6). */
@@ -24,6 +25,8 @@ export const SHIP_LENGTH = 6.6;
 export const SHIP_WINGSPAN = 6.0;
 /** Legs reach this far below the ship origin (the flight rest height). */
 export const SHIP_LEG_REACH = 2.42;
+/** Tail-side capsule centre: clears the 1.95wu hull tail and stays boardable. */
+export const SHIP_PLAYER_EGRESS_DISTANCE = 2.5;
 
 export interface ShipHullColors {
   light: THREE.Color;
@@ -89,6 +92,16 @@ export function shipParkedOrientation(
   return shipLevelOrientation(pos, resolvedUp).multiply(
     new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2)
   );
+}
+
+/** Safe on-foot spawn offset behind the parked hull, tangent to its surface. */
+export function shipPlayerEgressOffset(
+  pos: THREE.Vector3,
+  resolvedUp?: THREE.Vector3
+): THREE.Vector3 {
+  return new THREE.Vector3(-1, 0, 0)
+    .applyQuaternion(shipParkedOrientation(pos, resolvedUp))
+    .setLength(SHIP_PLAYER_EGRESS_DISTANCE);
 }
 
 /**

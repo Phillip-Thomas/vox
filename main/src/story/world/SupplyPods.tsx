@@ -11,12 +11,11 @@ import {
 } from '../supplyPods.ts';
 import { getSupplyPodPoses } from './storyWorld.ts';
 
-// --- The off-line supply pods --------------------------------------------------------
+// --- The work-line supply pods -------------------------------------------------------
 //
-// The belt-scroll era's objective: sealed Authority drop pods sitting OFF the
-// work line (inside the lateral-clearance band). Same walk-over pickup and
-// blink language as the hull debris, but a cleaner silhouette — these were
-// DELIVERED, not crashed: a squat capsule with a beacon fin.
+// The last profile-era objective: sealed Authority drop pods projected onto the
+// one traversable work row. Same walk-over pickup and blink language as the hull
+// debris, but a cleaner silhouette — these were DELIVERED, not crashed.
 
 const PICKUP_RADIUS = 3.0; // 3D radius incl. the ~2.2u capsule-center-to-ground gap
 const SHELL = '#9aa8a1';

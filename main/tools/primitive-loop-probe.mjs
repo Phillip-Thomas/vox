@@ -84,22 +84,27 @@ async function enterPlay(page) {
         window.__primitiveProbeInput.push({ type: 'pointerlockerror' });
       });
     });
-    // A direct browser mouse event supplies trusted user activation without
-    // Playwright waiting forever on the menu's continuous button animation.
-    await trustedPlayClick(page);
-  } else {
-    // DOM activation keeps the shell smoke useful in headless Chromium, but it does
-    // not satisfy the trusted pointer-lock approval gate.
-    await page.getByRole('button', { name: /Play Now/ }).evaluate(button => button.click());
   }
-  await page.waitForFunction(() => ![...document.querySelectorAll('button')]
-    .some(button => button.textContent?.includes('Play Now')), undefined, { timeout: 5_000 })
+  // Direct browser input works in both modes and keeps the shell smoke on the
+  // same activation path as a person. Only headed mode claims pointer-lock proof.
+  await trustedPlayClick(page);
+  await page.waitForFunction(() => {
+    return window.__paravoxiaAppState?.phase === 'playing';
+  }, undefined, { timeout: 12_000 })
+    .then(() => page.waitForFunction(() => ![...document.querySelectorAll('button')]
+      .some(button => button.textContent?.includes('Play Now') || button.textContent?.includes('Generating world')), undefined, { timeout: 12_000 }))
     .catch(async error => {
-      const receipt = await page.evaluate(() => ({
-        events: window.__primitiveProbeInput ?? [],
-        locked: document.pointerLockElement !== null,
-        activeTag: document.activeElement?.tagName ?? ''
-      }));
+      const receipt = await page.evaluate(() => {
+        return {
+          events: window.__primitiveProbeInput ?? [],
+          locked: document.pointerLockElement !== null,
+          activeTag: document.activeElement?.tagName ?? '',
+          app: window.__paravoxiaAppState ?? null,
+          playButtons: [...document.querySelectorAll('button')]
+            .filter(button => button.textContent?.includes('Play Now'))
+            .map(button => ({ text: button.textContent, disabled: button.disabled, connected: button.isConnected }))
+        };
+      });
       throw new Error(`Play menu did not close after trusted click: ${JSON.stringify(receipt)}; ${error.message}`);
     });
   if (headed) {
@@ -116,6 +121,79 @@ async function enterPlay(page) {
     else await resume.evaluate(button => button.click());
     await page.waitForTimeout(300);
   }
+}
+
+async function assertSettledCanonicalSpawn(page) {
+  await page.waitForFunction(() => {
+    const player = window.__voxelDebug?.player;
+    const spawn = window.__voxelDebug?.spawn;
+    if (!spawn?.safe || !player?.grounded || !Array.isArray(player.velocity)) return false;
+    return Math.hypot(...player.velocity) < 0.2;
+  }, undefined, { timeout: 30_000 }).catch(async error => {
+    const receipt = await page.evaluate(() => {
+      return {
+        app: window.__paravoxiaAppState ?? null,
+        player: window.__voxelDebug?.player ?? null,
+        pointerLocked: document.pointerLockElement !== null,
+        buttons: [...document.querySelectorAll('button')]
+          .map(button => button.textContent?.trim().slice(0, 80))
+          .filter(Boolean)
+      };
+    });
+    throw new Error(`Player did not settle on validated terrain: ${JSON.stringify(receipt)}; ${error.message}`);
+  });
+
+  const report = await page.evaluate(() => {
+    const player = window.__voxelDebug?.player;
+    const spawn = window.__voxelDebug?.spawn;
+    if (!player || !Array.isArray(player.position)) return { ok: false, reason: 'missing player debug pose' };
+    if (!spawn || !Array.isArray(spawn.playerExpectedSettled)) {
+      return { ok: false, reason: 'missing scene spawn contract' };
+    }
+    // The production scene publishes the result of the same live/persisted
+    // terrain contract it used to mount the player and ship. This keeps the
+    // playthrough gate valid against both Vite source mode and a built preview.
+    const expected = spawn.playerExpectedSettled;
+    const actual = player.position;
+    const distance = Math.hypot(
+      actual[0] - expected[0],
+      actual[1] - expected[1],
+      actual[2] - expected[2]
+    );
+    return {
+      ok: spawn.safe === true && distance <= 0.35,
+      grounded: player.grounded,
+      velocity: player.velocity,
+      supportVoxel: spawn.supportVoxel,
+      requested: spawn.playerRequested,
+      shipRequested: spawn.shipRequested,
+      expected,
+      actual,
+      distance
+    };
+  });
+  if (!report.ok) throw new Error(`Unsafe or unsettled initial spawn: ${JSON.stringify(report)}`);
+  return report;
+}
+
+async function primeCanonicalProbeWorld(page, coordinate = { x: -1, y: -1 }) {
+  await page.addInitScript(({ x, y }) => {
+    const guard = '__paravoxiaPrimitiveProbeWorldV1';
+    if (sessionStorage.getItem(guard) === '1') return;
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('pvx.')) localStorage.removeItem(key);
+    }
+    const worldId = `${x},${y}`;
+    localStorage.setItem('pvx.v1.global', JSON.stringify({
+      inventory: {},
+      mawCharge: 0,
+      era: 'primitive',
+      milestones: [],
+      lastWorld: { x, y },
+      lastPlanetWorldId: worldId
+    }));
+    sessionStorage.setItem(guard, '1');
+  }, coordinate);
 }
 
 async function runCase(label, task) {
@@ -139,13 +217,11 @@ async function runCase(label, task) {
 }
 
 await runCase('public-primitive-fabricator', async page => {
+  await primeCanonicalProbeWorld(page);
   await page.goto(new URL('?profile=POTATO', baseUrl).toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
   await enterPlay(page);
-  await page.evaluate(() => window.dispatchEvent(new KeyboardEvent('keydown', {
-    code: 'KeyC',
-    key: 'c',
-    bubbles: true
-  })));
+  const spawn = await assertSettledCanonicalSpawn(page);
+  await page.keyboard.press('c');
   const dialog = page.getByRole('dialog', { name: 'FABRICATOR' });
   await dialog.waitFor({ state: 'visible', timeout: 10_000 });
   const body = await dialog.innerText();
@@ -162,12 +238,14 @@ await runCase('public-primitive-fabricator', async page => {
   await dialog.waitFor({ state: 'hidden', timeout: 5_000 });
   const thermal = page.getByTestId('thermal-status');
   await thermal.waitFor({ state: 'visible', timeout: 5_000 });
-  return { screenshot: 'primitive-fabricator-potato.png', thermal: await thermal.innerText() };
+  return { screenshot: 'primitive-fabricator-potato.png', thermal: await thermal.innerText(), spawn };
 });
 
 await runCase('persisted-downed-recovery', async page => {
+  await primeCanonicalProbeWorld(page);
   await page.goto(new URL('?profile=POTATO', baseUrl).toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
   await enterPlay(page);
+  const initialSpawn = await assertSettledCanonicalSpawn(page);
   await page.waitForTimeout(1_100);
   const saveKey = await page.evaluate(() => Object.keys(localStorage).find(key => key.endsWith('.global')) ?? null);
   if (!saveKey) throw new Error('Global save did not initialize');
@@ -186,9 +264,10 @@ await runCase('persisted-downed-recovery', async page => {
   await dialog.getByRole('button', { name: 'Recover' }).click();
   await dialog.waitFor({ state: 'hidden', timeout: 10_000 });
   await page.waitForTimeout(1_000);
+  const recoveredSpawn = await assertSettledCanonicalSpawn(page);
   const health = await page.evaluate(key => JSON.parse(localStorage.getItem(key) ?? '{}').vitals?.health, saveKey);
   if (health !== 100) throw new Error(`Recovery did not persist full health: ${health}`);
-  return { screenshot: 'downed-recovery.png', health };
+  return { screenshot: 'downed-recovery.png', health, initialSpawn, recoveredSpawn };
 });
 
 await browser.close();

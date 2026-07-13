@@ -31,7 +31,6 @@ import {
   setStorySideBlend,
   setStoryTargetDpr,
   setStoryTargetFov,
-  FEED_DPR,
   FEED_FOV,
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
@@ -42,17 +41,28 @@ import { setConstellationReveal } from './skyMeaning.ts';
 import { hifiWreckHandle } from './world/hifiWreck.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
-import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
-import { debrisSalvageComplete } from './debrisSalvage.ts';
+import { backfillLegacyDebrisStone, debrisSalvageComplete } from './debrisSalvage.ts';
 import { supplyPodsComplete } from './supplyPods.ts';
 import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
 import { storyAnchors } from './world/storyWorld.ts';
+import { STORY_TASK_ROW_DEPTH_BAND } from './taskRowNavigation.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { isStoryPaused } from './storyClock.ts';
-import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
+import {
+  clearCinematicCameraPose,
+  setCinematicCameraPose,
+  setCinematicLookTarget,
+  setCinematicLookWeight
+} from './cinematicLook.ts';
+import {
+  arrivalCameraWeightAt,
+  arrivalFovAt,
+  arrivalLookWeightAt,
+  computeArrivalCameraFrame
+} from './arrivalCinematography.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption, showSystemLine } from './storyText.ts';
 import {
@@ -319,9 +329,6 @@ function echoLines(): string[] {
 /** Width (world units) of one fixed-screen cell — the era where the frame is bolted. */
 const FIXED_SCREEN_CELL = 24;
 
-/** Belt-scroll clearance in voxel ROWS — must cover the supply pods (±3 rows). */
-const DEPTH_BAND_ROWS = 3.5;
-
 const ISO_RIG: LensRig = {
   elevation: 0.6, // ~34° — the classic axonometric silhouette, not a high oblique
   azimuth: Math.PI / 4,
@@ -342,7 +349,9 @@ const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = 
   'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL }, seconds: 0 },
   'ch1-track': { rig: { ...SIDE_RIG }, seconds: 6.5 }, // the unbolt IS the cutscene
   'ch1-raster': { rig: { ...SIDE_RIG }, seconds: 0 },
-  'ch1-depth': { rig: { ...SIDE_RIG, depthBand: DEPTH_BAND_ROWS * VOXEL_SCALE, distance: 18 }, seconds: 2.5 },
+  // The profile view has one real traversable task row. The camera can breathe
+  // wider here, but movement stays plane-locked until NAV VIEW reveals the map.
+  'ch1-depth': { rig: { ...SIDE_RIG, depthBand: STORY_TASK_ROW_DEPTH_BAND, distance: 18 }, seconds: 2.5 },
   'ch1-nav': {
     rig: { elevation: Math.PI / 2, azimuth: 0, distance: 34, lift: 0, focusLift: 0, followQuant: 0, depthBand: Infinity },
     seconds: 5
@@ -350,6 +359,19 @@ const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = 
   'ch1-iso': { rig: { ...ISO_RIG }, seconds: 5 },
   'ch1-lift': { rig: { ...ISO_RIG }, seconds: 0 } // direct jumps start at the iso vantage
 };
+
+/** Beats whose picture is literally owned by a site/external camera. */
+const EXTERNAL_CAMERA_BEATS = new Set<StoryBeat>([
+  'descent',
+  'ch1-fixed',
+  'ch1-track',
+  'ch1-raster',
+  'ch1-depth',
+  'ch1-nav',
+  'ch1-iso',
+  // The lift begins outside the body and continuously releases this mix.
+  'ch1-lift'
+]);
 
 function onBeatEntered(beat: StoryBeat | null): void {
   d.beat = beat;
@@ -364,7 +386,12 @@ function onBeatEntered(beat: StoryBeat | null): void {
   // Cutscene state never survives a beat change (envelopes re-assert per frame).
   setCinematicLookWeight(0);
   setCinematicLookTarget(null);
-  getFeedRuntime().cinematic = 0;
+  clearCinematicCameraPose();
+  const feed = getFeedRuntime();
+  feed.cinematic = 0;
+  // Beat entry is the replay/deep-link authority for camera-feed ownership.
+  // First-person beats never inherit CCTV treatment from an earlier rung.
+  feed.externalCameraMix = beat && EXTERNAL_CAMERA_BEATS.has(beat) ? 1 : 0;
   // The score retunes to the beat's mood (null fades it out for the sandbox).
   setScoreBeat(beat);
   // Constellation reveal persistence: the resolved sky belongs to a STORY save
@@ -406,6 +433,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
     case 'ch1-raster':
       // Direct jumps land here too — re-run the arrival init (idempotent).
       resetFeedRuntime();
+      backfillLegacyDebrisStone();
       getFeedRuntime().descent = 1.1;
       d.ch1Clock = 0;
       d.flashesFired = CH1_FLASH_SCHEDULE.map(() => false);
@@ -434,7 +462,8 @@ function onBeatEntered(beat: StoryBeat | null): void {
       setWorkOrder([...CH1_WORK_ORDERS.iso]);
       break;
     case 'ch1-anomaly':
-      // The raster→pan-tilt upgrade announces itself with a glitch pulse.
+      // The external lens is gone: this is an embodied, constrained pan-tilt
+      // survey. The HUD remains useful, but the CCTV post-process stays off.
       // STAGE 1: the calibration sweep — one goal at a time; the mass is not
       // designated (no marker, no [F]) until the era has been looked through.
       d.glitchDecay = 0.7;
@@ -457,10 +486,9 @@ function onBeatEntered(beat: StoryBeat | null): void {
       playSfx('storyAwaken');
       break;
     case 'ch2-color':
-      // Post-A1 (also the deep-link/resume entry): color is through; the feed
-      // chrome stays but the CAGE fails with it — the pan-tilt interlock goes
-      // with the chroma suppressor, and the neck is suddenly the player's
-      // (free look + diagonals; the policy grants it, this line explains it).
+      // Post-A1 (also the deep-link/resume entry): color is through. The
+      // regulation HUD stays, but the external-camera treatment has already
+      // ended at the lift; the pan-tilt interlock now fails too.
       getFeedRuntime().desat = 0;
       getFeedRuntime().treatment = 1;
       getFeedRuntime().descent = 1.1; // wreck present on direct jumps too
@@ -651,6 +679,7 @@ function syncBeat(): void {
     clearLifeReveal();
     setCinematicLookWeight(0);
     setCinematicLookTarget(null);
+    clearCinematicCameraPose();
   }
   const beat = s.active ? s.beat : null;
   if (beat !== lastBeat) {
@@ -672,7 +701,7 @@ subscribeStory(syncBeat);
 // Deep links activate the story BEFORE this module loads — catch up immediately.
 syncBeat();
 
-// Quota completion (in the raster side-scroller) opens the belt-scroll era.
+// Quota completion (on the raster task row) opens the widened profile era.
 subscribeInventory(() => {
   const s = getStoryStateSnapshot();
   if (!s.active || s.beat !== 'ch1-raster') return;
@@ -806,8 +835,8 @@ function tickA1Ramp(): void {
 }
 
 // A2 — the depth awakening. Four movements: the system panics (violation flood),
-// the system dies (HUD death), the world opens (liberation: look/FOV/treatment
-// lerp), and the handoff into free 3D. ~12 seconds that the whole game is about.
+// the regulation HUD dies, the world opens (FOV + control liberation), and the
+// handoff into free 3D. ~12 seconds that the whole game is about.
 function tickA2(): void {
   const t = d.beatClock;
   const T = A2_TIMELINE;
@@ -837,9 +866,8 @@ function tickA2(): void {
       d.a2HudDead = true;
       setWorkOrder([]);
       clearViolations();
-      // Snap to device resolution NOW, in one step, while the glitch chaos
-      // masks it — a lerped dpr would reallocate framebuffers repeatedly right
-      // through the liberation (the exact hitches a cutscene can't afford).
+      // Replay/deep-link safety: embodied chapters already use device DPR, but
+      // reassert it at the HUD death rather than let an old raster target leak.
       setStoryTargetDpr(null);
     }
     return;
@@ -852,8 +880,8 @@ function tickA2(): void {
     }
     const k = smoothstep((t - deathEnd) / T.liberationSeconds);
     // (The look is already free — ch2 runs unlocked since the A1 interlock
-    // fault — so the liberation is carried by the FOV, the treatment, and the
-    // resolution, not by a camera cage opening.)
+    // fault — so the liberation is carried by the widening embodied FOV, the
+    // dying regulation channel, and the score, not a camera cage opening.)
     setStoryTargetFov(FEED_FOV + (SANDBOX_FOV - FEED_FOV) * k);
     setScoreIntensity(0.5 + k * 0.5); // the liberation IS the crescendo
     r.treatment = 1 - k;
@@ -941,7 +969,7 @@ function tickCh1Lift(): void {
   const r = getFeedRuntime();
   const lens = getSideLens();
 
-  // Letterbox frames the whole traverse; releases as the feed HUD returns.
+  // Letterbox frames the whole traverse; releases as the regulation HUD returns.
   r.cinematic = envelope(t, 0, 1, LIFT_SECONDS - 1.6, LIFT_SECONDS);
 
   // The first-person endpoint should face down the strip the player just
@@ -958,6 +986,9 @@ function tickCh1Lift(): void {
   // The traverse itself: profile → eyes over the middle 4.5 seconds.
   const liftBlend = smoothstep(Math.min(1, Math.max(0, (t - 1.2) / 4.5)));
   setStorySideBlend(liftBlend);
+  // CCTV belongs to the external lens, not to the body. Fade it in exact
+  // opposition to the camera's travel into the player's eyes.
+  r.externalCameraMix = 1 - liftBlend;
   // Consciousness arrives WITH the perspective: the watcher's parenthetical
   // voice all the way in (pre-lift grammar), then the first pronoun in the
   // story — the story's first BARE lowercase line, one flicker before the
@@ -966,11 +997,11 @@ function tickCh1Lift(): void {
   if (t >= 5.4) fireCaptionOnce('lift-i', 'i—');
   setScoreIntensity(0.35 + liftBlend * 0.65); // the score rises with the camera
 
-  // Mid-lift, one glitch pulse masks the single resolution snap (never lerp
-  // dpr — framebuffer reallocation is a hitch a cutscene can't afford).
+  // Mid-lift, one glitch pulse masks the single resolution snap back to the
+  // device DPR (never lerp framebuffers through the move).
   if (!d.liftSnapped && t >= 1.2 + 4.5 * 0.5) {
     d.liftSnapped = true;
-    setStoryTargetDpr(FEED_DPR);
+    setStoryTargetDpr(null);
     r.glitch = 0.8;
     r.scanRoll = 0.5;
     playSfx('storyGlitch');
@@ -981,6 +1012,7 @@ function tickCh1Lift(): void {
 
   if (t >= LIFT_SECONDS) {
     setStorySideBlend(1);
+    r.externalCameraMix = 0;
     advanceToBeat('ch1-anomaly'); // entry pulses + sets the pan-tilt work order
   }
 }
@@ -1461,6 +1493,10 @@ export function vigilRestReady(): boolean {
 // S5 — the arrival: dawn 2, and the letterbox returns WITH the system's agent.
 const _arrLook = new THREE.Vector3();
 const _arrSeg = new THREE.Vector3();
+const _arrCameraEye = new THREE.Vector3();
+const _arrCameraTarget = new THREE.Vector3();
+const _arrCameraUp = new THREE.Vector3();
+const _arrCameraRig: LensRig = { ...SIDE_RIG };
 
 /** Place the auditor at normalized progress u along his surface-snapped path. */
 function placeAuditWorker(u: number): void {
@@ -1487,7 +1523,7 @@ function placeAuditWorker(u: number): void {
   }
 }
 
-function tickArrival(dt: number): void {
+function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
   const t = d.beatClock;
   const T = ARRIVAL;
   const r = getFeedRuntime();
@@ -1502,6 +1538,7 @@ function tickArrival(dt: number): void {
   }
   advanceFirstDayPhase(dt);
   r.sleepFade = Math.max(0, 1 - (t - T.holdBlackSeconds) / T.fadeUpSeconds);
+  setStoryTargetFov(arrivalFovAt(t));
   // The first letterbox since A3 — cinema grammar returns with its agent.
   r.cinematic = envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 1.5, T.endAt - 2, T.endAt);
 
@@ -1517,13 +1554,28 @@ function tickArrival(dt: number): void {
       d.workerScratch.copy(getPlayerWorldPosition()).sub(worker.position);
       if (d.workerScratch.lengthSq() > 0.5) worker.heading.copy(d.workerScratch.normalize());
     }
-    // The camera stays on him for the whole approach — the arrival IS the
-    // shot — and releases only after he has spoken.
+    // The camera stays on him for the approach. A short side-lens boom revives
+    // the opening's regulated frame at the recognition cues, but blends from
+    // and back to Terra's eyes before the perceptual blink.
     _arrLook.copy(worker.position).addScaledVector(worker.up, 1.4);
     setCinematicLookTarget(_arrLook);
-    setCinematicLookWeight(
-      envelope(t, T.holdBlackSeconds + 1, T.holdBlackSeconds + 2.5, T.zeroAt, T.zeroAt + 3)
-    );
+    setCinematicLookWeight(arrivalLookWeightAt(t));
+    const lens = getSideLens();
+    const cameraWeight = arrivalCameraWeightAt(t);
+    if (lens && cameraWeight > 0) {
+      computeArrivalCameraFrame(
+        lens,
+        t,
+        worker.position,
+        _arrCameraEye,
+        _arrCameraTarget,
+        _arrCameraUp,
+        _arrCameraRig
+      );
+      setCinematicCameraPose(_arrCameraEye, _arrCameraTarget, _arrCameraUp, cameraWeight);
+    } else {
+      clearCinematicCameraPose();
+    }
   }
   if (t >= T.freezeUntilSeconds) setStoryMoveScale(Math.min(1, (t - T.freezeUntilSeconds) / 1.5));
 
@@ -1543,6 +1595,16 @@ function tickArrival(dt: number): void {
   setScoreIntensity(0.35 + envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 6, T.endAt - 6, T.endAt) * 0.45);
 
   if (t >= T.endAt) {
+    // The driver stops ticking as soon as completeStory deactivates Story mode.
+    // Restore the actual lens, not only its policy target, before that happens.
+    setStoryTargetFov(SANDBOX_FOV);
+    if (camera) {
+      camera.fov = SANDBOX_FOV;
+      camera.updateProjectionMatrix();
+    }
+    setCinematicLookWeight(0);
+    setCinematicLookTarget(null);
+    clearCinematicCameraPose();
     // Hand the sun to the live clock at dawn-2's phase (the A3 grammar).
     setDayPhaseOffset(d.dayPhase - d.worldElapsedSeconds / DAY_LENGTH_SECONDS);
     // W-7744 does NOT evaporate: "he stays to look." His pose module keeps him
@@ -1654,7 +1716,7 @@ export function storyDirectorTick(
       tickCh1Flashes(dt);
       if (d.beatClock >= 3.5) {
         // Pre-lift watcher voice → parenthetical (the perspective-map grammar).
-        fireCaptionOnce('depth-word', '(the world has a depth. wait — what is "depth"? how is that word known?)');
+        fireCaptionOnce('depth-word', '(the world has a depth. the line does not. why can the eye go where the body cannot?)');
       }
       // All pods recovered (or a resume that arrives with them recovered).
       if (d.beatClock >= 1 && supplyPodsComplete()) {
@@ -1773,7 +1835,7 @@ export function storyDirectorTick(
       tickShipLook(dt, camera); // resolves the ship-look fallback armed at the relay
       break;
     case 'ch4-arrival':
-      tickArrival(dt);
+      tickArrival(dt, camera);
       break;
     default:
       break;

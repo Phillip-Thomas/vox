@@ -10,8 +10,8 @@ import { drink, feed, getVitals, setVitals } from '../game/systems/survivalVital
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
-import { getCinematicLookWeight } from './cinematicLook.ts';
-import { seedDebrisCollected } from './debrisSalvage.ts';
+import { getCinematicCameraPose, getCinematicLookWeight } from './cinematicLook.ts';
+import { seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
 import { ARRIVAL, CH3_CAPTIONS, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
 import {
   advanceToBeat,
@@ -31,10 +31,11 @@ import {
   setVoxelRealityStage
 } from '../game/systems/realityRenderSystem.ts';
 import { addItem, removeItem, getItemCount } from '../game/systems/inventorySystem.ts';
-import { getFeedRuntime } from './feedRuntime.ts';
+import { cameraFeedVisualState, getFeedRuntime } from './feedRuntime.ts';
 import { getStoryText } from './storyText.ts';
 import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
+import { getLensRig } from './sideLens.ts';
 
 function drainInventory(id: 'biofiber' | 'stone') {
   const n = getItemCount(id);
@@ -43,6 +44,10 @@ function drainInventory(id: 'biofiber' | 'stone') {
 
 function tickSeconds(seconds: number, step = 1 / 60) {
   for (let t = 0; t < seconds; t += step) storyDirectorTick(step, null);
+}
+
+function tickCameraSeconds(seconds: number, camera: THREE.PerspectiveCamera, step = 1 / 60) {
+  for (let t = 0; t < seconds; t += step) storyDirectorTick(step, camera);
 }
 
 describe('storyDirector — chapter 1 and A1', () => {
@@ -66,25 +71,79 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // quota-gated only
   });
 
-  it('meeting the quota + salvage opens the belt-scroll era and records the milestone', () => {
-    seedDebrisCollected(); // hull debris recovered
+  it('keeps 2D recovery row-locked, then opens both ground axes at NAV VIEW', () => {
+    advanceToBeat('ch1-depth');
+    expect(getLensRig().depthBand).toBe(0);
+    advanceToBeat('ch1-nav');
+    expect(getLensRig().depthBand).toBe(Infinity);
+    advanceToBeat('ch1-iso');
+    expect(getLensRig().depthBand).toBe(Infinity);
+  });
+
+  it('meeting the on-row quota + salvage opens pod recovery and records the milestone', () => {
+    setDebrisScattered(3); // minimum voyage outcome must still carry the quota
+    seedDebrisCollected(); // hull debris + on-row impact stone recovered
+    expect(getItemCount('stone')).toBeGreaterThanOrEqual(CH1_QUOTA.stone);
     addItem('biofiber', CH1_QUOTA.biofiber);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // fiber alone is not enough
-    addItem('stone', CH1_QUOTA.stone);
     expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
 
-  it('the 2D→3D lift plays as a real ~7s cutscene and hands over to the feed', () => {
+  it('backfills on-row impact stone once for legacy mid-raster saves', () => {
+    deactivateStory();
+    resetProgression();
+    drainInventory('stone');
+    // Legacy builds recorded these collection milestones without stone loot.
+    markMilestone('story:debris-scattered:3');
+    markMilestone('story:debris:0');
+    markMilestone('story:debris:1');
+    expect(getItemCount('stone')).toBe(0);
+
+    beginStory();
+    advanceToBeat('ch1-raster');
+    expect(getItemCount('stone')).toBe(3);
+
+    // The migration is idempotent even if the beat is re-entered.
+    removeItem('stone', 3);
+    advanceToBeat('crawl');
+    advanceToBeat('ch1-raster');
+    expect(getItemCount('stone')).toBe(0);
+  });
+
+  it('the 2D→3D lift hands the picture from the site camera to embodied first person', () => {
     advanceToBeat('ch1-lift');
+    expect(getFeedRuntime().externalCameraMix).toBe(1);
     // Letterbox up mid-way, feet held…
     tickSeconds(2);
     expect(getFeedRuntime().cinematic).toBeGreaterThan(0.5);
     expect(getStoryInputPolicy().moveSpeedScale).toBe(0);
     expect(getStoryInputPolicy().sideBlend).toBeGreaterThan(0);
-    // …then it hands over to the pan-tilt feed.
+    expect(getFeedRuntime().externalCameraMix).toBeGreaterThan(0);
+    expect(getFeedRuntime().externalCameraMix).toBeLessThan(1);
+    // …then it hands over to the embodied pan-tilt survey. The Regulation
+    // HUD can remain, but every CCTV-only visual and the raster DPR are gone.
     tickSeconds(5.5);
     expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
+    expect(getFeedRuntime().externalCameraMix).toBe(0);
+    expect(cameraFeedVisualState().treatment).toBe(0);
+    expect(cameraFeedVisualState().desat).toBe(0);
+    expect(cameraFeedVisualState().glitch).toBe(0);
+    expect(getStoryInputPolicy().targetDpr).toBeNull();
+  });
+
+  it('deep-link and same-page replay cannot leak CCTV treatment into first person', () => {
+    advanceToBeat('ch1-anomaly');
+    expect(getFeedRuntime().externalCameraMix).toBe(0);
+    expect(cameraFeedVisualState().treatment).toBe(0);
+
+    restartStory();
+    expect(getStoryStateSnapshot().beat).toBe('crawl');
+    advanceToBeat('ch1-lift');
+    expect(getFeedRuntime().externalCameraMix).toBe(1);
+    tickSeconds(7.5);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-anomaly');
+    expect(getFeedRuntime().externalCameraMix).toBe(0);
+    expect(cameraFeedVisualState().treatment).toBe(0);
   });
 
   it('resuming into the raster beat with the quota already met advances on the next tick', () => {
@@ -96,7 +155,7 @@ describe('storyDirector — chapter 1 and A1', () => {
     advanceToBeat('ch1-raster');
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
     tickSeconds(0.1);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-depth'); // the belt-scroll era opens
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth'); // the work-line recovery opens
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
 
@@ -300,6 +359,29 @@ describe('storyDirector — chapter 1 and A1', () => {
     const order = getStoryText().workorder.join('\n');
     expect(order).toContain('THE SCHEDULE WAS KEPT');
     expect(order).not.toContain('TRANSIT RECORD INCOMPLETE');
+  });
+
+  it('arrival preserves the last audit line, breathes, and restores the physical lens before completion', () => {
+    advanceToBeat('ch4-arrival');
+    const camera = new THREE.PerspectiveCamera(75, 16 / 9, 0.05, 500);
+
+    tickCameraSeconds(ARRIVAL.auditAt + 0.1, camera);
+    expect(getStoryStateSnapshot().active).toBe(true);
+    expect(getStoryText().audit?.text).toBe('AUDIT IN PROGRESS. RESUME NOTHING.');
+    expect(getStoryText().audit?.ttlMs).toBe(6500);
+
+    // The line's full TTL is still inside the active arrival, not under the
+    // completion surface. Half of the following silent breath is active too.
+    tickCameraSeconds(ARRIVAL.auditLineSeconds - 0.2, camera);
+    expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
+    tickCameraSeconds(ARRIVAL.visualBreathSeconds / 2, camera);
+    expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
+
+    tickCameraSeconds(ARRIVAL.visualBreathSeconds, camera);
+    expect(getStoryStateSnapshot().active).toBe(false);
+    expect(camera.fov).toBe(75);
+    expect(getCinematicCameraPose().weight).toBe(0);
+    expect(getCinematicLookWeight()).toBe(0);
   });
 
   it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {

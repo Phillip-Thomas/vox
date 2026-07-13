@@ -59,6 +59,12 @@ let snapshot: AppStateSnapshot = {
   sceneReady: false
 };
 
+function publishDebugSnapshot(): void {
+  if (typeof window === 'undefined') return;
+  (window as Window & { __paravoxiaAppState?: AppStateSnapshot }).__paravoxiaAppState = snapshot;
+}
+publishDebugSnapshot();
+
 // Not part of the snapshot: these mutate every frame / often and must NOT
 // trigger re-renders. We only emit when `sceneReady` actually flips.
 let terrainPopulated = false;
@@ -72,6 +78,7 @@ function emit(): void {
 
 function setSnapshot(patch: Partial<AppStateSnapshot>): void {
   snapshot = { ...snapshot, ...patch };
+  publishDebugSnapshot();
   emit();
 }
 
