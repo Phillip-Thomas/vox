@@ -1,0 +1,14 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "score",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_ACTIVE_SCENE_CONTRACT}}",
+  "defectIds": ["defect-{{NN}}"],
+  "contractChangeRequired": false,
+  "boundedActions": ["{{BOUNDED_SCORE_OR_MIX_REPAIR}}"],
+  "evidenceRefs": ["{{EVIDENCE_REF}}"],
+  "verificationRoute": "{{MECHANICAL_AND_INDEPENDENT_REVIEW_ROUTE}}",
+  "authoredBy": "{{SCORE_DIRECTOR}}",
+  "authoredAt": "{{ISO_8601}}"
+}

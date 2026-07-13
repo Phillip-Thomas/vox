@@ -13,9 +13,13 @@ Contract revision: `{{CONTRACT_REVISION}}`
 ## Findings
 
 - Causal event and player verb: `{{FINDING}}`
+- Character desire, opposition, tactic, and belief change: `{{FINDING}}`
+- Setup/payoff trace: `{{FINDING}}`
 - Canon and chronology: `{{FINDING}}`
+- Author-only / contracted / visible / inferred / open reveal levels: `{{FINDING}}`
 - Intended ambiguity and both readings: `{{FINDING}}`
-- Agency windows and hand-back: `{{FINDING}}`
+- Agency type, mandatory path, fallback/rescue, and hand-back: `{{FINDING}}`
+- Whether automated fallbacks are wrongly counted as player acceptance: `{{FINDING}}`
 - Tutorial/gameplay purpose: `{{FINDING}}`
 - Reality-stage fidelity: `{{FINDING}}`
 - Incoming/outgoing/reset continuity: `{{FINDING}}`

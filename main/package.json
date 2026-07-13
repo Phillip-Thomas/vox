@@ -31,7 +31,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json --pretty false && tsc --noEmit -p tsconfig.node.json --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "npm run typecheck && npm run test && npm run build",
+    "verify": "npm run typecheck && npm run story:authority && npm run test && npm run build",
     "score:soak:pure": "vite-node tools/score-soak-cli.ts",
     "score:soak": "node score-soak-probe.mjs soak",
     "score:audition": "node score-soak-probe.mjs excerpts",
@@ -41,8 +41,13 @@
     "atlas:baseline": "node tools/procedural-atlas.mjs --mode=baseline",
     "atlas:perf": "node tools/procedural-atlas.mjs --mode=perf",
     "atlas:fauna": "node tools/fauna-atlas.mjs",
+    "fauna:budget": "vite-node tools/fauna-geometry-budget.ts",
+    "primitive:probe": "node tools/primitive-loop-probe.mjs",
+    "primitive:probe:headed": "node tools/primitive-loop-probe.mjs --headed",
     "creative:gate": "node tools/creative-triad-gate.mjs",
-    "creative:smoke": "node tools/creative-triad-gate.mjs --self-test"
+    "creative:smoke": "node tools/creative-triad-gate.mjs --self-test",
+    "story:authority": "node tools/story-authority-gate.mjs",
+    "story:authority:smoke": "node tools/story-authority-gate.mjs --self-test"
   },
   "browserslist": {
     "production": [

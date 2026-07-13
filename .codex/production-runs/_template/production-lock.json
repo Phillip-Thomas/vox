@@ -4,6 +4,8 @@
   "mode": "scene",
   "status": "locked",
   "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "runProfileRef": "paravoxia-creative-scene@v1",
+  "releaseCandidate": false,
   "authority": [
     {
       "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",

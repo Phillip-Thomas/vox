@@ -1,8 +1,10 @@
 # Paravoxia — Crafting & Progression
 
-**The single source of truth for the crafting/progression system.** Read this to
-understand what exists, how it connects, and where it's going. Last updated
-2026-06-23.
+**Crafting-system reference, not story authority.** Read this for the economy's
+layered model and historical era design. Verify current primitive-loop delivery
+against `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; verify narrative canon and sequencing
+against `PARAVOXIA_STORY_BIBLE.md` and `PARAVOXIA_STORY_EXECUTION_PLAN.md`.
+Last updated 2026-06-23; status diagrams below may describe their original pass.
 
 Design docs (historical/forward-looking): `~/.claude/plans/tiered-forging-ascent.md`
 (original economy design) and `~/.claude/plans/primitive-emergent-eras.md` (the era
@@ -19,7 +21,7 @@ crash-land with almost nothing and rebuild.
    PRIMITIVE  ──(repair the Maw + build the first devices)──▶  EMERGENT  ──▶  PARAVOX MACHINA
    crash-landed, stone-age          the space tech comes back online        extradimensional
    hand-craft + foraging            devices: Smelter / Assembler / Survey    rift tooling, exotic matter
-   ◀── YOU ARE HERE (built) ──▶     ◀── recipes exist, gating WIP ──▶        ◀── designed-for only ──▶
+   ◀── FOUNDATION LOOP ───────▶     ◀── recipes exist, gating WIP ──▶        ◀── designed-for only ──▶
 ```
 
 `EraId = 'primitive' | 'emergent' | 'paravox_machina'` (`game/data/eras.ts`).

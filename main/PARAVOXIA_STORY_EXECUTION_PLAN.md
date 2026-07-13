@@ -4,9 +4,13 @@
 
 **Runtime status:** **BLOCKED BY DEMO LOCK**
 
+**Documentation status:** **existing-story reconciliation — ACTIVE**
+
 **Canon source:** `PARAVOXIA_STORY_BIBLE.md`
 
 **Active production resume point:** `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`
+
+**Machine authority contract:** `story-authority.json`
 
 This is the mutable delivery checkpoint for turning the complete story direction
 into playable systems. It inventories what exists, what is partial, what does
@@ -114,10 +118,19 @@ resolve the player identity, merger mechanism, W-7744 chapter timing, or Makers.
 
 ---
 
-## 3. Active block and immediate resume point
+## 3. Parallel lanes and immediate resume points
 
-The future-story lane stays blocked until the current demo-foundation plan is
-closed. Its live resume point is:
+Story work now has two deliberately separate lanes:
+
+- **Documentation and council lane — active now.** Reconcile the shipped story,
+  canon, plot direction, legacy status claims, reviewer authority, and
+  implementation-readiness contracts. This lane may patch documentation,
+  manifests, agents, workflows, templates, and non-mutating validation.
+- **Runtime lane — blocked.** The future-story lane stays blocked until the
+  current demo-foundation plan is closed and the owner explicitly opens
+  post-arrival runtime work.
+
+The runtime lane's live resume point remains:
 
 1. complete a headed, trusted pointer-lock journey on a clean save;
 2. prove gather → craft → shelter/fire → night → warmth/recovery → reload;
@@ -137,6 +150,18 @@ Until those pass:
 Documentation reconciliation may continue because it does not change shipped
 behavior.
 
+The active story-correction commission uses the Creative Council's dedicated
+story workflow. It starts from an intent-free shipped-copy inventory and a
+separate canon audit, plus a shipped cue/silence/motif baseline that prevents
+Score from designing against prose alone. It then requires independent Chapter, Score, and
+Cinematography treatments, cross-director notes, a decision register, three
+distinct invocation-backed signoffs over one candidate hash, a separate owner
+decision before any authority patch, deterministic authority validation, and
+independent cohesion judgement. The blind reader receives only a hashed
+corpus through a no-tool invocation; a self-attested promise not to inspect
+canon does not satisfy isolation. A planning pass cannot authorize its own
+copy or runtime changes.
+
 ---
 
 ## 4. Audited gap register
@@ -155,6 +180,7 @@ not a promising subsystem hidden behind an unreachable path.
 | F05 | Milestones are mostly free-form strings | Typed, versioned narrative/evidence ledger | Compiler/test rejects invalid stage, scene, actor, or migration combinations |
 | F06 | Existing story geometry is broadly playable | Assertions for rough-seed flatness, safe story space, landmark reachability, and respawn | Seed matrix proves every authored route and interaction remains reachable |
 | F07 | Narrative stages coexist with hardware settings | A formal narrative-fidelity × device-quality contract | Low quality preserves every clue; high quality never leaks a later awakening |
+| F08 | Beat/copy/effect authorship is split across scripts, director ticks, and components | Typed runtime scene registry plus stable scene/event/anchor trace | Every player-visible event has one owner, stable IDs, source refs, and cross-domain evidence without scraping inline copy |
 
 ### 4.2 Contracted Chapter 4 continuation
 
@@ -687,6 +713,12 @@ Deliverables:
 
 - keep `PARAVOXIA_STORY_BIBLE.md` as portable canon;
 - keep this file as the only mutable future-story checkpoint;
+- keep `story-authority.json` synchronized with the shipped `StoryBeat` order,
+  public ceiling, contracted continuation IDs, and open gates;
+- keep the portable `paravoxia-story-council@v1` workflow, story reconciliation
+  run profile, rubric, taxonomy, and reviewer authority order valid;
+- run `npm run story:authority` for every material story-doc or story-agent
+  change;
 - reconcile stale status language in `STORY.md`, `CRAFTING.md`,
   `../PARAVOXIA_PROGRESSION.md`, `../PARAVOXIA_CH4_PLAN.md`, root `TODO.md`, and
   any contributor handoff after their owning lane permits edits;
@@ -696,6 +728,9 @@ Deliverables:
 
 Exit evidence:
 
+- `npm run story:authority` and its synthetic-drift smoke pass;
+- the Story Bible, this plan, runtime overview, council, and legacy banners
+  agree on authority and current status;
 - no source claims S6 is currently playable;
 - no source calls W-7744 recurrence, Worker 9 survival, wonder, or third
   consciousness optional;
@@ -712,14 +747,19 @@ Exit evidence:
 
 Deliverables:
 
-1. versioned typed scene/awakening/capability identifiers;
+1. a versioned typed runtime scene registry covering scene, awakening,
+   capability, event, reveal, agency, and shared-anchor identifiers;
 2. one authoritative command per story side effect;
 3. idempotent checkpoint transactions;
 4. migration fixtures for saves that treated `ch4-arrival` as complete;
 5. story gates for oxygen, Maw repair, jet, same-system departure, warp, and
    later lenses;
 6. explicit sandbox/free-play policy when story authority is inactive;
-7. debug-only state inspector and event trace.
+7. debug-only state inspector and stable evidence trace carrying actor,
+   scene/event/anchor, source, story effect, camera/effect, score, control,
+   fallback/rescue, and checkpoint disposition;
+8. one declared authorship boundary for player-visible story copy and event
+   metadata, with adapters for existing inline sources during migration.
 
 Exit evidence:
 
@@ -752,7 +792,8 @@ Packets:
 
 Exit evidence:
 
-- golden snapshots for all A0–A4 shipped states;
+- golden snapshots for A0–A3 plus the shipped first-day and W-7744-arrival
+  states; A4 remains contracted, not shipped;
 - two-observer side-by-side capture;
 - no global state leak after actor switch/rejoin;
 - low/high device-quality equivalence;
@@ -1033,18 +1074,31 @@ its evidence gate.
 Allowed now:
 
 - finish the bible and this plan;
+- inventory the complete shipped beat/copy surface and run the isolated
+  naive-reader/canon-auditor pair;
+- commission plot-wide Chapter, Score, and Cinematography treatments and
+  preserve their dissent without changing shipped copy;
+- maintain the machine authority manifest, story-council workflow, reviewer
+  templates, and deterministic drift gate;
 - update documentation pointers/status when the relevant path is writable;
 - record the current demo resume point;
 - flag stale “S6 next” or completion language;
 - keep runtime untouched.
 
-P0 does not close D0 and cannot be used to claim later story is in production.
+P0 does not close D0, approve a copy change, or claim later story is in
+production. Story corrections that require runtime mutation remain queued as
+signed defects until D0/G1 or a narrower explicit owner authorization permits
+them.
 
 ### 9.2 D0 — Protect the primitive browser journey
 
 D0 remains exactly the active demo plan's lane. Do not trade its headed
 pointer-lock proof or fauna budget for future-story architecture. The primitive
 journey must be satisfying on its own before a perception engine expands it.
+Its Batch 3 screening must include a blind read of the current
+`ch4-arrival` → temporary `done` → material-sandbox handoff, report every movie
+fallback or rescue separately from manual player action, and refuse to credit
+future/author-only truths as already communicated.
 
 ### 9.3 G1 — Explicit lane opening
 
@@ -1416,7 +1470,9 @@ A packet is rejected if it:
 
 ## 13. Resume Here
 
-**Current status: BLOCKED BY DEMO LOCK.**
+**Documentation/council status: ACTIVE EXISTING-STORY RECONCILIATION.**
+
+**Runtime status: BLOCKED BY DEMO LOCK.**
 
 Completed in this planning pass:
 
@@ -1430,11 +1486,21 @@ Completed in this planning pass:
   determinism, anti-mirror, and multiplayer gates;
 - audited current runtime substrates and registered all known missing systems;
 - sequenced future work from authority/perception substrate through S6–A8;
+- established a machine story-authority contract and a dedicated three-director
+  story-council workflow so plot correction is no longer forced through a
+  scene-implementation contract;
 - changed no post-arrival runtime, protected copy, score, or audio behavior.
 
-Next active action is **not in this plan**: resume the headed primitive-loop and
-fauna-budget closeout in `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`, then run its full
-verification and story-screening gate.
+The next **documentation/council** action is to run the existing-story
+commission against the complete shipped A0→arrival copy and current-cut
+evidence, preserve the blind first read, and turn only evidence-backed findings
+into owner-facing correction decisions. The new workflow may improve these
+documents and readiness contracts now; it may not silently revise shipped copy.
+
+The next **runtime** action remains outside this plan: resume the headed
+primitive-loop and fauna-budget closeout in
+`../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`, then run its full verification and
+existing-story screening gate.
 
 After that plan is explicitly closed and G1 is authorized:
 

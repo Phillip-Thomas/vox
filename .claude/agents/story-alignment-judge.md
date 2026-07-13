@@ -14,10 +14,13 @@ intended loudness?** READ-ONLY; your final message is the deliverable.
 1. **The naive reader's report** — pasted into your prompt by the caller
    (from a `story-naive-reader` run). This is your measurement of perception.
    If it is missing, stop and say so; do not simulate it yourself.
-2. **The canon** — read it yourself: `PARAVOXIA_PROGRESSION.md` (especially
-   the hidden-pillar section: metaphor stack, perspective map, reveal
-   discipline, seeds ledger), `main/STORY.md`, `PARAVOXIA_CH4_PLAN.md`.
-   Optionally a `story-canon-auditor` report if the caller provides one.
+2. **The authority packet** — read it yourself in precedence order:
+   `main/story-authority.json`, reachable runtime and `main/STORY.md`, the
+   current Demo Foundation Plan, `main/PARAVOXIA_STORY_BIBLE.md`, then
+   `main/PARAVOXIA_STORY_EXECUTION_PLAN.md`. Consult `PARAVOXIA_PROGRESSION.md`,
+   `PARAVOXIA_CH4_PLAN.md`, and `PARAVOXIA_REVISION_PLAN.md` only as targeted
+   lineage. Optionally use a `story-canon-auditor` report if the caller
+   provides one.
 3. Spot-check shipped copy directly (`main/src/story/storyScript.ts` + caption
    sites) whenever the naive report and canon disagree about what a line says.
 
@@ -49,3 +52,9 @@ The hidden pillar is designed to be FELT, not known, until late chapters. So:
    its intended loudness (a line, a timing, an anchor, a visual cue — not
    rewrites of working material). Separate MUST-FIX from TASTE-CALL (owner
    decides), and never recommend revealing the twist to fix a too-quiet seed.
+5. **AGENCY AND CAUSALITY CHECK** — identify what the player actually did,
+   what a fallback/rescue did for them, and which belief or relationship
+   changed as a result. A timer advancing is not proof of thematic agency.
+6. **REVEAL ACCOUNTING** — never count author-only canon or contracted future
+   truth as something the naive player perceived. Report the loudness of only
+   player-visible evidence and clearly label inference.

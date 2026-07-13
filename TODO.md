@@ -40,11 +40,14 @@ A living parking lot for planned work. Newest ideas at the top of each section.
 
 ## Main thread
 
-- [x] **Story mode vertical slice (A0→A3)** — SHIPPED 2026-07-09: terminal
-  prologue → Regulation Feed → A1 color → apple tree/A2 depth → Ch3 dusk/rest →
-  A3 material dawn. See `main/STORY.md` + `PARAVOXIA_PROGRESSION.md` (full
-  9-awakening design). Next story work: A2 ortho→perspective camera pull,
-  prologue keyboard selection, mobile pass, playtest-driven pacing.
+- [x] **Story mode shipped slice (A0→W-7744 arrival)** — terminal prologue →
+  Regulation Feed → A1 color → apple tree/A2 depth → Ch3 survival/material dawn
+  → first-day needs → vigil → W-7744 arrival → temporary `done`. Runtime truth:
+  `main/STORY.md`. Current canon and forward sequencing:
+  `main/PARAVOXIA_STORY_BIBLE.md` and
+  `main/PARAVOXIA_STORY_EXECUTION_PLAN.md`. The active story task is
+  documentation/council reconciliation; S6 runtime work remains behind the demo
+  lock, owner Gate G1, and typed story substrate.
 - [ ] **Crafting / recipes** — turn the inventory + multi-biome resources into the
   travel loop (the original next-step before the gravity/atmosphere detour).
 

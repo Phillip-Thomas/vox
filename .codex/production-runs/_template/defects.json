@@ -1,6 +1,18 @@
 {
   "schema": "paravoxia.creativeDefectRegister.v1",
   "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "compiledAt": "{{ISO_8601}}",
+  "compiledBy": "{{FRESH_REVIEW_MODERATOR_ID}}",
+  "sourceReports": [
+    { "path": "story-audit.md", "sha256": "{{SHA256}}" },
+    { "path": "score-audit.md", "sha256": "{{SHA256}}" },
+    { "path": "cinematography-audit.md", "sha256": "{{SHA256}}" },
+    { "path": "naive-audience-report.md", "sha256": "{{SHA256}}" },
+    { "path": "critic-report.md", "sha256": "{{SHA256}}" }
+  ],
+  "requiresHumanTaste": false,
   "defects": [
     {
       "id": "defect-{{NN}}",
@@ -15,6 +27,9 @@
       ],
       "requestedRepair": "{{BOUNDED_REPAIR}}",
       "verificationRoute": "{{PROBE_AND_REVIEW_ROUTE}}",
+      "sourceReportRefs": ["story-audit.md"],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
       "acceptedExceptionRef": null
     }
   ]

@@ -13,6 +13,12 @@ dissent; intended effect; or another reviewer's conclusions: `{{YES_OR_NO}}`.
 
 - What I believed happened: `{{OBSERVED_INTERPRETATION}}`
 - What I believed the player did or caused: `{{AGENCY_INTERPRETATION}}`
+- What each recognized character/presence wanted, what opposed it, and what
+  belief appeared to change: `{{CHARACTER_INTERPRETATION}}`
+- Facts directly shown / conclusions inferred / questions left unknown:
+  `{{SEEN_INFERRED_UNKNOWN}}`
+- Events requiring action / events advanced by waiting / visible fallback or
+  rescue: `{{AGENCY_FALLBACK_LOG}}`
 - Emotional before/after: `{{PERCEIVED_ARC}}`
 - First and second focal subjects: `{{FOCAL_READ}}`
 - Camera language I noticed: `{{OBSERVATION}}`

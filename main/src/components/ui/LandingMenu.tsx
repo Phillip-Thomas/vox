@@ -82,13 +82,16 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   const play = () => {
     if (!sceneReady || leaving) return;
     unlockAudio();
+    // Commit the shell transition before asking the browser for pointer lock.
+    // Some Chromium builds synchronously re-enter document focus/lock handling;
+    // the menu must never remain over a successfully locked game if that happens.
+    enterPlaying();
     // Pointer lock MUST be requested synchronously inside this gesture. The
     // player's CameraControls seeds its lock state from document.pointerLockElement
-    // on mount, so requesting before it mounts is fine (skip on touch).
+    // on mount, so requesting during this same handler is safe (skip on touch).
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
-    enterPlaying();
   };
 
   const chooseProfile = (p: QualityProfile) => {

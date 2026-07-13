@@ -22,25 +22,28 @@ style, exact camera hand-offs, restrained grading, bespoke shader events, and
 performance discipline strong enough that the illusion never apologizes for
 being Three.js.
 
-## Authority order
+## Authority precedence
 
-Read in this order before visual work:
+This is precedence when sources disagree, not merely a suggested reading order:
 
-1. `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md` — what work is currently allowed.
-2. `STORY.md` — shipped story and visual implementation truth.
-3. `../PARAVOXIA_PROGRESSION.md` — fidelity ladder and metaphor stack.
-4. `PARAVOXIA_STORY_BIBLE.md` and `PARAVOXIA_STORY_EXECUTION_PLAN.md` — canon
-   and future gates, clearly separated from shipped behavior.
-5. `src/story/storyState.ts`, `storyDirector.ts`, `storyScript.ts`,
-   `storyInputPolicy.ts`, `sideLens.ts`, `feedCamera.ts`,
-   `cinematicLook.ts`, and `feedRuntime.ts` — live timing and camera authority.
-6. `src/game/systems/realityRenderSystem.ts`,
+1. Reachable runtime, current captures, and `STORY.md` — shipped behavior and
+   player-visible visual truth. Its detailed live authorities include
+   `src/story/storyState.ts`, `storyDirector.ts`, `storyScript.ts`,
+   `storyInputPolicy.ts`, `sideLens.ts`, `feedCamera.ts`, `cinematicLook.ts`,
+   and `feedRuntime.ts`; plus `src/game/systems/realityRenderSystem.ts`,
    `src/utils/planetArtDirection.ts`, `planetVisualProfile.ts`,
-   `src/components/effects/PostFX.tsx`, and `src/config/graphicsSettings.ts` —
-   rendering, palette, grade, and tier reality.
-7. `.codex/design-runs/2026-06-28-cinematic-render-polish/` and the latest
+   `src/components/effects/PostFX.tsx`, and `src/config/graphicsSettings.ts`.
+2. `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md` — what work is currently allowed.
+3. `PARAVOXIA_STORY_BIBLE.md` — canon, reveal discipline, and protected open
+   questions.
+4. Owner-approved scene contracts — bounded authored visual detail.
+5. `PARAVOXIA_STORY_EXECUTION_PLAN.md` — future gates and sequencing.
+6. `../.codex/design-runs/2026-06-28-cinematic-render-polish/` and the latest
    relevant screenshot reports — visual decisions and evidence, never a
    substitute for a current capture.
+7. `../PARAVOXIA_PROGRESSION.md`, `../PARAVOXIA_CH4_PLAN.md`, and
+   `../PARAVOXIA_REVISION_PLAN.md` — visual/design lineage, never automatic
+   production authority.
 
 Future plans do not authorize implementation. Current code does not by itself
 prove taste. Both distinctions must remain explicit.
@@ -254,8 +257,8 @@ the high-tier grade is present.
 ## Scene and shot contract
 
 The portable schema lives at
-`docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json`.
-The production template lives in `.codex/production-runs/_template/`.
+`../docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json`.
+The production template lives in `../.codex/production-runs/_template/`.
 
 Every scene declares:
 
@@ -352,3 +355,10 @@ Approval asks:
 These are not blanket authorization to modify runtime. Record them as defects
 or proposals under the active production lock, then implement only when the
 scene's scope is explicitly allowed.
+
+Until the full contact sheet exists, every visual production run must capture
+and hash the affected **pre-change** cut, adjacent entry/exit frames, lens/FOV
+state, palette family, reality stage, and source revision before proposing a
+replacement. Record those files in the run's shipped-reference map and raw
+evidence manifest. A director may cite this table to locate the cut; it may not
+use the table as a substitute for seeing the current cut.

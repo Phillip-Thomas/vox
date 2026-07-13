@@ -13,6 +13,24 @@ The source of truth is `PARAVOXIA_CREATIVE_COUNCIL.md`. Visual continuity is in
 `main/CINEMATOGRAPHY.md`. The portable workflow spec, run profile, rubric, and
 defect taxonomy are under `docs/architecture/workflow-orchestration/`.
 
+## Route the commission before creating a scene run
+
+Use this scene-production workflow for a bounded cut, scene, chapter packet,
+awakening, recut, or audiovisual implementation. If the request is instead to
+correct the existing plot, reconcile canon, choose new story direction, update
+the Story Bible/Execution Plan, or design the whole-story character and
+audiovisual arc, route first to the `story-review` skill's full story-council
+mode and:
+
+```text
+docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json
+```
+
+That lane produces a signed documentation/canon candidate, not a scene contract
+or runtime patch. Only after its authority gates and the separate production
+lock allow a specific packet should work return here. Do not smuggle a plot
+decision through a scene treatment.
+
 ## First action: authority gate
 
 Read `PARAVOXIA_DEMO_FOUNDATION_PLAN.md` and the latest repo checkpoint before
@@ -71,6 +89,13 @@ exists. Keep one URL for probes, screenshots, and owner review.
 
 ## Stage 1: grounded story intent
 
+Before a treatment, commission the mechanical verifier to capture the affected
+current shipped cut and adjacent entry/exit state. Hash the raw files and
+record source revision, anchors, camera authority/FOV, palette/reality state,
+viewport, and quality tier in `shipped-visual-baseline.json`. This is director
+grounding, not a taste verdict. If the current cut cannot be seen, stop visual
+redesign rather than designing from the bible alone.
+
 Commission the `chapter-director` to write `story-intent.md`, not code. It must
 include:
 
@@ -106,8 +131,13 @@ continuity, and stay inside the production lock.
 
 ## Stage 3: cross-director notes
 
-Give all three directors both peer treatments. Each director writes structured
-notes to `director-notes.jsonl` and a signoff disposition:
+Give all three directors both peer treatments. Each writes its two outgoing
+first-wave notes to `<director>-peer-notes.jsonl`. Then each recipient writes
+responses and dispositions to `<director>-reconciliation.jsonl`. The
+orchestrator may compile those six sources into `director-notes.jsonl`, but
+the deterministic gate rejects rewritten statements, substituted responses,
+missing routes, or a director closing its own note. Each director also records
+a signoff disposition:
 
 - `approve`
 - `approve-with-notes`
@@ -179,7 +209,15 @@ story work requires the production lock to permit it.
 
 After every material patch loop, update the run ledger with route, budget,
 iteration, changes, score/gate status, defects, evidence, canonical URL, and
-next action.
+next action. Each entry points to immutable run-local snapshots of that
+iteration's contract and defect register; never rewrite history in place.
+
+Before capture/review, record the exact implementation diff and static command
+evidence in `check-results.json`, then run:
+
+```bash
+npm --prefix main run creative:gate -- --run .codex/production-runs/<run> --phase implementation
+```
 
 ## Stage 6: mechanical proof
 
@@ -200,6 +238,11 @@ Required when relevant:
 - score pure/OfflineAudioContext soak, excerpts, and score FPS when audio is
   authorized and changed;
 - replay, deep link, pause/focus, quit, completion, and sandbox reset/no-op.
+
+Hash every typed evidence reference into `evidence-registry.json`. The final
+gate runs `ffprobe` against video, frame-strip, and audio files and compares the
+actual stream metadata with the declared probe. A plausible extension and
+matching SHA-256 are not evidence if the bytes do not decode.
 
 Headless proof cannot approve pointer-lock feel, exposure/color, motion feel,
 or beauty. Record those as headed gates.
@@ -238,6 +281,15 @@ owner, anchor, requested repair, and verification route. Route:
 Patch, re-run deterministic proof, recapture, and re-run affected independent
 reviewers. Maximum loops come from the run profile. If weighted score improves
 less than 0.05 twice, classify the stall before another patch.
+
+Before any repair patch, compile `repair-contract-disposition.json`. Each
+director-owned direction must name its defect IDs, current contract version and
+SHA-256, bounded action, and `contractChangeRequired`. Only `false` may return
+directly to integration. If any direction is `true`, reopen the treatments and
+note exchange, increment `scene-contract.json` with `supersedesVersion`, and
+collect three fresh director signatures over the new contract SHA-256. Evidence,
+reviews, defect compilation, scoring, and the iteration ledger must all bind the
+new revision; the old signatures never carry forward.
 
 ## Final gates
 

@@ -1,10 +1,17 @@
 # PARAVOXIA — Revision Plan (owner round 2026-07-11, eight concerns)
 
-**What this is.** The story/copy/design contract for the 2026-07-11 owner round.
+**Authority status: FULFILLED HISTORICAL CONTRACT.** The owner round landed for
+the shipped A0→`ch4-arrival` scope. This document preserves its decisions and
+FINAL-copy provenance; surviving S6/S9-and-later deltas remain contracted but
+are not authorized production. Current canon lives in
+`main/PARAVOXIA_STORY_BIBLE.md`; current sequencing and gates live in
+`main/PARAVOXIA_STORY_EXECUTION_PLAN.md`.
+
+**What this is.** The preserved story/copy/design contract for the 2026-07-11 owner round.
 Every design decision, every FINAL copy block (ready to paste), every beat
 placement and trigger. Mechanical implementation is contracted to parallel
-agents; this doc + the implementation spec handed to them are the source of
-truth. All copy below has been tested against the voice laws (two voices,
+agents; this document is authoritative only as the historical record of that
+round. All copy below has been tested against the voice laws (two voices,
 parenthetical pre-conscious grammar, rank-issued selfhood, timelessness) and
 the both-readings law (corporate dystopia / the AI's biography).
 

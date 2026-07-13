@@ -154,7 +154,8 @@ ordered `[F] Rest`) → **ch4-arrival** (~45s: dawn 2, the letterbox returns
 WITH the system's agent — W-7744 walks the work strip past the player to the
 wreck relay, "WORKER W-7743. YOU ARE FOUND.", one 2-frame BARE-BLINK of his
 seeing, and his closing band line "AUDIT IN PROGRESS. RESUME NOTHING.") →
-story completes (TEMPORARY — ch4-audit next), sandbox continues — and W-7744
+story completes (TEMPORARY — `ch4-audit` is the first contracted continuation,
+not the active build), sandbox continues — and W-7744
 STAYS, standing at the relay ("he stays to look"): the auditor, the wreck, the
 relay (lamp live — the carrier is up), the mesa, the stone, and the tree all
 persist into the `done` world.
@@ -279,15 +280,15 @@ For authoritative future-story status, use
 `PARAVOXIA_STORY_EXECUTION_PLAN.md`; the active resume point is the demo
 foundation, not automatic S6 implementation.
 
-- **Owner revision round 2026-07-11 — IN FLIGHT** (contract:
-  `../PARAVOXIA_REVISION_PLAN.md`; the architecture text above stays truthful
-  to shipped code until these land):
+- **Owner revision round 2026-07-11 — LANDED FOR THE SHIPPED SCOPE**
+  (historical contract: `../PARAVOXIA_REVISION_PLAN.md`; surviving future-scene
+  deltas remain contracted, not active production):
   - Voyage overhaul: AI-perspective deck rewrite (dispenser reframe, option
     asides, system cards, cap 9), the NAMING BEAT (typed worker name), the
     VOYAGE_STRANGE escalation ladder, manifest `COMPENSATION: SEE CLAUSE 4`.
-  - Ch2 redaction billboard growth bug (the box grows while unattended and
-    can consume the screen) — being fixed; the redaction-box-as-advertisement
-    design is UNCHANGED (it should hold its projected size).
+  - Ch2 redaction billboard now derives size from true range and caps its
+    projection at 45% of viewport height; the redaction-as-advertisement design
+    is unchanged.
   - Anomaly mass relocates to an adjacent cube face; ch1-iso→lift gate
     re-keys to the mesa summit; first gravity-edge crossing gets its caption
     pair (revision plan §5).
@@ -298,11 +299,15 @@ foundation, not automatic S6 implementation.
     (revision plan §7).
   - ch4-vigil star-gazing sequence + `setConstellationReveal(0..1)` shader
     hook + `story:ch4:constellations` persistence (revision plan §2).
-  - Prologue bottom console is `flex: 0 0 45%` — should size to content with
-    a max, freeing the graphics pane.
+  - Prologue bottom console sizes to content with a 45% maximum, preserving the
+    graphics pane.
 - Prologue number keys (1/2/3) don't select card options (mouse only).
-- Esc during A1/A2 opens the pause menu over the cutscene (director clock keeps
-  running; acceptable, revisit).
+- Esc during A1/A2 opens the pause menu over the cutscene. Director ticks and
+  the shared story clock now freeze; the overlay composition and pointer-lock
+  handback still need a headed presentation pass.
+- Movie timeout fallbacks and rescue paths are verification safety nets, not
+  proof that a player performed or understood a thematic action. Acceptance
+  reports must identify any fallback or rescue used.
 - Touch/mobile story pass untested.
 - A2's camera choreography is FOV+constraint release only — the planned
   ortho→perspective projection pull is a future upgrade.

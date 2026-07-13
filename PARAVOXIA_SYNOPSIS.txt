@@ -1,5 +1,10 @@
 **PARAVOXIA**
 
+AUTHORITY STATUS: HISTORICAL PREMISE AND IDEATION. This synopsis preserves the
+original thematic seed; it does not override current canon in
+main/PARAVOXIA_STORY_BIBLE.md or delivery status in
+main/PARAVOXIA_STORY_EXECUTION_PLAN.md.
+
 You awaken with fragments of advanced technology scattered around you—broken relics of a purpose you no longer question. The machines have failed. The systems are silent. Stranded upon a cubic world, you do what you were always meant to do:
 
 Work.

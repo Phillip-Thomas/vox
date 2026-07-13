@@ -400,7 +400,7 @@ describe('faunaField', () => {
       }
       const triangles = (geometry.index?.count ?? geometry.getAttribute('position').count) / 3;
       expect(triangles).toBeGreaterThan(100);
-      expect(triangles).toBeLessThanOrEqual(1600);
+      expect(triangles).toBeLessThanOrEqual(800);
       prepareFaunaInstanceAttributes(geometry, 1);
       // instanceMatrix consumes four more locations; WebGL2 only guarantees 16.
       expect(Object.keys(geometry.attributes).length + 4).toBeLessThanOrEqual(16);

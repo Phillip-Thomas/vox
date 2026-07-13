@@ -1,0 +1,9 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "chapter",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "disposition": "object",
+  "signedBy": "{{CHAPTER_DIRECTOR}}",
+  "signedAt": "{{ISO_8601}}"
+}

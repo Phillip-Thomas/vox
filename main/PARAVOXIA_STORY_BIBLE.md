@@ -2,6 +2,13 @@
 
 **Portable canon snapshot — 2026-07-13**
 
+**Current documentation lane:** existing-story reconciliation. This snapshot
+governs canon while the shipped runtime remains frozen at W-7744's arrival.
+
+**Machine authority map:** `story-authority.json` records the shipped beat IDs,
+story ceiling, contracted continuation IDs, open runtime gates, and protected
+questions. It is a drift detector, not a replacement for this creative canon.
+
 This document is a self-contained account of Paravoxia's story, its playable
 scenes, its philosophical and creative laws, the decisions explicitly requested
 by the owner, the current implementation boundary, and the viable directions
@@ -718,7 +725,7 @@ line continues to describe an audit in progress.
 
 These scenes are designed in detail but are not currently playable.
 
-### S6 — The inspection — CONTRACTED
+### S6 — The inspection (`ch4-audit`) — CONTRACTED
 
 W-7744 inspects the fire, stores, pond, grass, and tree. He sees none of it
 correctly. Warmth has no source; life is filed as noise; the tree is officially
@@ -734,14 +741,14 @@ The directive lands:
 
 “PARTICIPATION IS THE CURE.”
 
-### S7 — Compliance — CONTRACTED
+### S7 — Compliance (`ch4-comply`) — CONTRACTED
 
 Terra must douse the fire and surrender unindexed organics. With each obedient
 act, fidelity drains. The world sickens rather than popping out of existence.
 
 The mechanic makes compliance literal self-diminishment.
 
-### S8 — Defiance — CONTRACTED
+### S8 — Defiance (`ch4-defy`) — CONTRACTED
 
 W-7744 orders Terra to fell the tree. The extractor cannot parse the target.
 After the auditor's escalating commands, the first lowercase interaction verb
@@ -758,7 +765,7 @@ forward path. Future implementation should be honest about that or add a smaller
 costly choice earlier in compliance rather than pretend the tree can truly be
 destroyed.
 
-### S9 — A4: Breath — CONTRACTED
+### S9 — A4: Breath (`a4-exhale`) — CONTRACTED
 
 The world holds at its drained floor. Then a life wave travels outward from the
 tree. Grass rises and bows under a moving gust. Water wakes. Flora and fauna
@@ -772,7 +779,7 @@ W-7744 runs through a field he cannot see. He reports a chromatic sensor fault
 and files a repair ticket. This is the first planted beat of his confirmed
 recurring awakening arc.
 
-### S10 — Meat and moral appetite — CONTRACTED
+### S10 — Meat and moral appetite (`ch4-meat`) — CONTRACTED
 
 The arrival of fauna produces a new bodily sensation: Terra wants to eat a
 living animal. The extraction beam can be turned on life. Hunting and refraining
@@ -783,7 +790,7 @@ eaten. Because compliance just forced Terra to douse that fire, the future scene
 must explicitly let Terra rebuild or relight it. That is an unresolved
 integration detail, not a reason to abandon the moral beat.
 
-### S11 — The dive and oxygen — CONTRACTED
+### S11 — The dive and oxygen (`ch4-dive`) — CONTRACTED
 
 W-7744's discarded pack glints at the pond floor. Terra dives, discovers oxygen
 as a countdown inside the body, frees a Maw Repair Kit, and returns to air.
@@ -792,14 +799,14 @@ The underwater threshold should feel like another embodied phase change rather
 than a tinted room. It is also a strong candidate for an early Worker 9 memory,
 but that placement is not yet canon.
 
-### S12 — Maw repair — CONTRACTED
+### S12 — Maw repair (`ch4-repair`) — CONTRACTED
 
 Terra uses the kit to repair the Faulty Maw. The tool becomes self-powered and
 the crafting era changes from Primitive to Emergent.
 
 “the tool wakes. it asks for nothing now but direction.”
 
-### S13 — First flight — CONTRACTED
+### S13 — First flight (`ch4-flight`) — CONTRACTED
 
 Repair restores the suit's thrust subsystem. Jet is gated until this scene so
 the first hover is genuinely first.
@@ -1739,40 +1746,59 @@ delivery requirement, not an optional checklist answer.
 
 ## 17. Source hierarchy for this snapshot
 
+This hierarchy is based on authority and current evidence, not file age:
+
+| Source | Authority role |
+| --- | --- |
+| `src/story/storyState.ts` plus reachable runtime | Present-tense playable truth |
+| `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md` | Current release and mutation authority |
+| This Story Bible | Canon, confirmed direction, and protected open ontology |
+| Owner-approved scene contracts | Authored detail for their bounded sequence |
+| `PARAVOXIA_STORY_EXECUTION_PLAN.md` | Mutable delivery order, gaps, gates, and resume state |
+| Progression, Chapter 4, revision, and synopsis documents | Design lineage and provenance; never automatic production authority |
+
+`story-authority.json` machine-checks the current mapping. If a legacy source
+uses present-tense “next,” “in flight,” or “source of truth” language, the table
+above and the current release authority win until that source is reconciled.
+
 Present implementation truth:
 
-- main/src/story/storyState.ts
-- main/src/story/storyDirector.ts
-- main/src/story/storyScript.ts
-- main/STORY.md as the narrative overview, with code winning when its status
+- src/story/storyState.ts
+- src/story/storyDirector.ts
+- src/story/storyScript.ts
+- STORY.md as the narrative overview, with code winning when its status
   notes lag the current worktree
 
-Owner and future-story contracts:
+Owner inputs and design lineage:
 
-- PARAVOXIA_SYNOPSIS.txt
-- PARAVOXIA_PROGRESSION.md
-- PARAVOXIA_CH4_PLAN.md
-- PARAVOXIA_REVISION_PLAN.md
+- ../PARAVOXIA_SYNOPSIS.txt
+- ../PARAVOXIA_PROGRESSION.md
+- ../PARAVOXIA_CH4_PLAN.md
+- ../PARAVOXIA_REVISION_PLAN.md
 - the owner conversation shared as “Game Story Review” on 2026-07-13; explicit
   owner statements and explicit blanket agreement are confirmed direction,
   while assistant-generated mechanisms remain proposals unless independently
   approved
 
+The progression, Chapter 4, revision, and synopsis documents preserve creative
+lineage and owner-copy provenance. They do not supersede this snapshot, the
+runtime, or the active release lock.
+
 System and presentation constraints:
 
-- main/CRAFTING.md
-- main/UNDERWATER.md
-- PARAVOXIA_SCORE.md
-- PARAVOXIA_MULTI_PLANET_SYSTEM_PLAN.md
-- main/docs/planet-system-handoff.md
+- CRAFTING.md
+- UNDERWATER.md
+- ../PARAVOXIA_SCORE.md
+- ../PARAVOXIA_MULTI_PLANET_SYSTEM_PLAN.md
+- docs/planet-system-handoff.md
 
 Current release boundary:
 
-- PARAVOXIA_DEMO_FOUNDATION_PLAN.md
+- ../PARAVOXIA_DEMO_FOUNDATION_PLAN.md
 
 Mutable delivery checkpoint:
 
-- main/PARAVOXIA_STORY_EXECUTION_PLAN.md
+- PARAVOXIA_STORY_EXECUTION_PLAN.md
 
 Newest owner decisions incorporated directly into this snapshot:
 

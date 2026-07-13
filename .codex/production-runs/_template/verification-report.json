@@ -2,6 +2,7 @@
   "schema": "paravoxia.sceneVerificationReport.v1",
   "runId": "{{RUN_ID}}",
   "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
   "generatedAt": "{{ISO_8601}}",
   "sourceRevision": "{{GIT_SHA}}",
   "canonicalUrl": "{{URL}}",

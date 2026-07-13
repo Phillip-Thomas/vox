@@ -72,3 +72,18 @@ of scope.
 - Locked by: `{{ORCHESTRATOR}}`
 - Locked at: `{{ISO_8601}}`
 - Open authority questions: `{{QUESTIONS_OR_NONE}}`
+
+## Machine-lock mirror
+
+This block must repeat the exact finalized values in `production-lock.json`;
+the contract gate rejects drift.
+
+- Machine run ID: `{{RUN_ID}}`
+- Machine mode: `{{delta|scene|chapter|flagship}}`
+- Machine source revision: `{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}`
+- Machine run profile: `paravoxia-creative-{{delta|scene|chapter|flagship}}@v1`
+- Machine release candidate: `{{true|false}}`
+- Machine mutation boundary: `{{planning-only|bounded-runtime|full-scene-runtime}}`
+- Machine authority paths: `{{AUTHORITY_PATHS}}`
+- Machine allowed paths: `{{ALLOWED_PATHS_OR_NONE}}`
+- Machine protected paths: `{{PROTECTED_PATHS}}`

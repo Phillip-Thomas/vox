@@ -973,7 +973,7 @@ function articulatedLeg(
       color,
       part,
       common,
-      6,
+      4,
       [true, false]
     ),
     limbTube(
@@ -982,7 +982,7 @@ function articulatedLeg(
       color,
       part,
       { ...common, bendPivot: knee, bendWeight: 1 },
-      6,
+      4,
       [false, true]
     ),
     wedgeFoot(
@@ -1030,7 +1030,7 @@ function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       { x: 0.18 * p.bodyLength, y: 0.77, halfHeight: 0.21, topHeight: 0.2 * p.bodyHeight, bottomDepth: 0.22 * p.bodyHeight, halfWidth: 0.18 * p.bodyWidth },
       { x: 0.36 * p.bodyLength, y: 0.8, halfHeight: 0.23, topHeight: 0.22 * p.bodyHeight, bottomDepth: 0.24 * p.bodyHeight, halfWidth: 0.17 * p.bodyWidth },
       { x: 0.48 * p.bodyLength, y: 0.84, halfHeight: 0.135, topHeight: 0.12, bottomDepth: 0.15, halfWidth: 0.12 }
-    ], coat, 0, 0.2, { region: 'body', materialSlot: 'coat' }, 12),
+    ], coat, 0, 0.2, { region: 'body', materialSlot: 'coat' }, 8),
     loftHull([
       { x: 0.35, y: 0.82, halfHeight: 0.14, topHeight: 0.14, bottomDepth: 0.14, halfWidth: 0.13, cap: false },
       { x: 0.44, y: 0.94, halfHeight: 0.135, topHeight: 0.13, bottomDepth: 0.14, halfWidth: 0.115 },
@@ -1039,7 +1039,7 @@ function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       { x: 0.66 * p.neckLength, y: 1.22 * p.neckRise + 0.14, halfHeight: 0.078, topHeight: 0.075, bottomDepth: 0.08, halfWidth: 0.075 }
     ], coat, 1, 0.6, {
       region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'coat'
-    }, 10),
+    }, 8),
     loftHull([
       { x: 0.62, y: 1.22, halfHeight: 0.08, topHeight: 0.08, bottomDepth: 0.08, halfWidth: 0.075, cap: false },
       { x: 0.71, y: 1.25, halfHeight: 0.115, topHeight: 0.12, bottomDepth: 0.11, halfWidth: 0.1 },
@@ -1047,7 +1047,7 @@ function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       { x: 0.85, y: 1.19, halfHeight: 0.075, topHeight: 0.065, bottomDepth: 0.08, halfWidth: 0.07 }
     ], coatLight, 1, 0.5, {
       region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
-    }, 10),
+    }, 8),
     loftHull([
       { x: 0.79, y: 1.18, halfHeight: 0.07, topHeight: 0.06, bottomDepth: 0.075, halfWidth: 0.07, cap: false },
       { x: 0.91 * p.muzzleLength, y: 1.16, halfHeight: 0.06, topHeight: 0.055, bottomDepth: 0.065, halfWidth: 0.06 },
@@ -1062,10 +1062,10 @@ function createGrazerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
     }),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.79, 1.265, 0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.79, 1.265, 0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
-    ellipsoid(new THREE.Vector3(0.79, 1.265, -0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.79, 1.265, -0.091), new THREE.Vector3(0.024, 0.018, 0.006), dark, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
     limbTube([
@@ -1160,10 +1160,10 @@ function createWoollyGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
     }, 10),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.54, 0.66, 0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.54, 0.66, 0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
-    ellipsoid(new THREE.Vector3(0.54, 0.66, -0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.54, 0.66, -0.101), new THREE.Vector3(0.022, 0.017, 0.006), eye, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
     // Ears sit below the horn roots and project laterally.
@@ -1229,7 +1229,7 @@ function createRunnerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       { x: 0.1, y: 0.51, halfHeight: 0.175, topHeight: 0.16 * p.bodyHeight, bottomDepth: 0.19 * p.bodyHeight, halfWidth: 0.14 * p.bodyWidth },
       { x: 0.25 * p.bodyLength, y: 0.53, halfHeight: 0.21, topHeight: 0.2 * p.bodyHeight, bottomDepth: 0.22 * p.bodyHeight, halfWidth: 0.15 * p.bodyWidth },
       { x: 0.35 * p.bodyLength, y: 0.57, halfHeight: 0.15, topHeight: 0.14, bottomDepth: 0.16, halfWidth: 0.12 }
-    ], coat, 0, 0.22, { region: 'body', materialSlot: 'coat' }, 12),
+    ], coat, 0, 0.22, { region: 'body', materialSlot: 'coat' }, 8),
     loftHull([
       { x: 0.29, y: 0.56, halfHeight: 0.14, halfWidth: 0.12, cap: false },
       { x: 0.38, y: 0.64, halfHeight: 0.115, topHeight: 0.11, bottomDepth: 0.12, halfWidth: 0.1 },
@@ -1259,13 +1259,13 @@ function createRunnerGeometry(profile: FaunaProfile): THREE.BufferGeometry {
       region: 'ear', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
     }),
     // Eyes.
-    ellipsoid(new THREE.Vector3(0.56, 0.71, 0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.56, 0.71, 0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
-    ellipsoid(new THREE.Vector3(0.56, 0.71, -0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 1, {
+    ellipsoid(new THREE.Vector3(0.56, 0.71, -0.101), new THREE.Vector3(0.021, 0.016, 0.006), dark, 1, 0.2, 0, {
       region: 'eye', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'eye'
     }),
-    ellipsoid(new THREE.Vector3(0.865 * p.muzzleLength, 0.56, 0), new THREE.Vector3(0.025, 0.022, 0.029), dark, 1, 0.15, 1, {
+    ellipsoid(new THREE.Vector3(0.865 * p.muzzleLength, 0.56, 0), new THREE.Vector3(0.025, 0.022, 0.029), dark, 1, 0.15, 0, {
       region: 'head', joint: 'neck', jointPivot: neckPivot, jointWeight: 1, materialSlot: 'skin'
     }),
     loftHull([

@@ -151,5 +151,12 @@ export function setGameCanvas(el: HTMLCanvasElement | null): void {
 }
 
 export function getGameCanvas(): HTMLCanvasElement | null {
+  if (typeof document === 'undefined') return gameCanvas;
+  // React/R3F can replace the canvas during development remounts or a renderer
+  // recovery. Never request pointer lock on a detached element: Chromium rejects
+  // it because its root document is no longer the active document.
+  if (gameCanvas?.isConnected && gameCanvas.ownerDocument === document) return gameCanvas;
+  const liveCanvas = document.querySelector('canvas');
+  gameCanvas = liveCanvas instanceof HTMLCanvasElement ? liveCanvas : null;
   return gameCanvas;
 }

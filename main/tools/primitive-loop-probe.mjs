@@ -6,13 +6,20 @@ const baseUrl = process.env.PARAVOXIA_URL ?? 'http://127.0.0.1:5201/';
 const chromePath = process.env.CHROME_PATH ?? '/snap/bin/chromium';
 const onlyCase = process.env.PARAVOXIA_CASE ?? null;
 const playTimeoutMs = Number(process.env.PARAVOXIA_PLAY_TIMEOUT_MS ?? 30_000);
+const headed = process.env.PARAVOXIA_HEADED === '1' || process.argv.includes('--headed');
 const outputDir = path.resolve('captures/primitive-loop');
 await mkdir(outputDir, { recursive: true });
 
 const browser = await chromium.launch({
-  headless: true,
+  headless: !headed,
   executablePath: chromePath,
-  args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']
+  args: [
+    '--no-sandbox',
+    '--disable-dev-shm-usage',
+    '--ignore-gpu-blocklist',
+    '--enable-webgl',
+    ...(headed ? ['--use-angle=gl'] : ['--enable-unsafe-swiftshader'])
+  ]
 });
 
 const results = [];
@@ -31,17 +38,82 @@ async function waitForPlay(page) {
   }, undefined, { timeout: playTimeoutMs });
 }
 
+async function trustedMouseClick(page, locator) {
+  // `force` skips Playwright's stability wait (the menu button intentionally
+  // pulses forever) while still emitting a native browser input event.
+  await locator.click({ force: true, timeout: 10_000 });
+}
+
+async function trustedPlayClick(page) {
+  const target = await page.evaluate(() => {
+    const button = [...document.querySelectorAll('button')]
+      .find(item => item.textContent?.includes('Play Now'));
+    if (!(button instanceof HTMLButtonElement)) return null;
+    const rect = button.getBoundingClientRect();
+    const x = rect.x + rect.width / 2;
+    const y = rect.y + rect.height / 2;
+    const hit = document.elementFromPoint(x, y);
+    return {
+      x,
+      y,
+      width: rect.width,
+      height: rect.height,
+      disabled: button.disabled,
+      hitTag: hit?.tagName ?? '',
+      hitText: hit?.textContent?.trim().slice(0, 80) ?? ''
+    };
+  });
+  if (!target || target.width <= 0 || target.height <= 0 || target.disabled) {
+    throw new Error(`Play target is not click-ready: ${JSON.stringify(target)}`);
+  }
+  await page.mouse.click(target.x, target.y);
+}
+
 async function enterPlay(page) {
   await waitForPlay(page);
-  // Native Playwright click waits on the pointer-lock gesture in headless Chromium.
-  // DOM activation is sufficient for this shell probe; headed approval owns real lock.
-  await page.getByRole('button', { name: /Play Now/ }).evaluate(button => button.click());
+  if (headed) {
+    await page.evaluate(() => {
+      window.__primitiveProbeInput = [];
+      document.addEventListener('click', event => {
+        window.__primitiveProbeInput.push({ type: 'click', trusted: event.isTrusted, tag: event.target?.tagName ?? '' });
+      }, { capture: true, once: true });
+      document.addEventListener('pointerlockchange', () => {
+        window.__primitiveProbeInput.push({ type: 'pointerlockchange', locked: document.pointerLockElement !== null });
+      });
+      document.addEventListener('pointerlockerror', () => {
+        window.__primitiveProbeInput.push({ type: 'pointerlockerror' });
+      });
+    });
+    // A direct browser mouse event supplies trusted user activation without
+    // Playwright waiting forever on the menu's continuous button animation.
+    await trustedPlayClick(page);
+  } else {
+    // DOM activation keeps the shell smoke useful in headless Chromium, but it does
+    // not satisfy the trusted pointer-lock approval gate.
+    await page.getByRole('button', { name: /Play Now/ }).evaluate(button => button.click());
+  }
   await page.waitForFunction(() => ![...document.querySelectorAll('button')]
-    .some(button => button.textContent?.includes('Play Now')), undefined, { timeout: 5_000 });
+    .some(button => button.textContent?.includes('Play Now')), undefined, { timeout: 5_000 })
+    .catch(async error => {
+      const receipt = await page.evaluate(() => ({
+        events: window.__primitiveProbeInput ?? [],
+        locked: document.pointerLockElement !== null,
+        activeTag: document.activeElement?.tagName ?? ''
+      }));
+      throw new Error(`Play menu did not close after trusted click: ${JSON.stringify(receipt)}; ${error.message}`);
+    });
+  if (headed) {
+    await page.waitForFunction(() => document.pointerLockElement !== null, undefined, { timeout: 5_000 })
+      .catch(async error => {
+        const receipt = await page.evaluate(() => window.__primitiveProbeInput ?? []);
+        throw new Error(`Pointer lock was not acquired after trusted click: ${JSON.stringify(receipt)}; ${error.message}`);
+      });
+  }
   await page.waitForTimeout(800);
   const resume = page.getByRole('button', { name: 'Resume', exact: true });
   if (await resume.isVisible().catch(() => false)) {
-    await resume.evaluate(button => button.click());
+    if (headed) await trustedMouseClick(page, resume);
+    else await resume.evaluate(button => button.click());
     await page.waitForTimeout(300);
   }
 }
@@ -57,6 +129,8 @@ async function runCase(label, task) {
     results.push({ label, ok: true, errors, ...detail });
     console.error(`[primitive-loop] PASS ${label}`);
   } catch (error) {
+    const failureScreenshot = path.join(outputDir, `${label}-failure.png`);
+    await page.screenshot({ path: failureScreenshot, timeout: 20_000 }).catch(() => undefined);
     results.push({ label, ok: false, errors, error: error instanceof Error ? error.message : String(error) });
     console.error(`[primitive-loop] FAIL ${label}: ${error instanceof Error ? error.message : String(error)}`);
   } finally {
@@ -118,5 +192,5 @@ await runCase('persisted-downed-recovery', async page => {
 });
 
 await browser.close();
-console.log(JSON.stringify({ baseUrl, outputDir, playTimeoutMs, results }, null, 2));
+console.log(JSON.stringify({ baseUrl, outputDir, playTimeoutMs, headed, trustedPointerLockInput: headed, results }, null, 2));
 process.exit(results.some(result => !result.ok || result.errors.length > 0) ? 1 : 0);

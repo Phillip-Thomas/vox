@@ -44,6 +44,19 @@ Every production run starts by copying this authority into the human-readable
 director that discovers a conflicting instruction must stop the mutation,
 record the conflict, and route it to the orchestrator.
 
+Story sources have an explicit order: reachable runtime for shipped behavior,
+the Demo Foundation Plan for mutation/release authority,
+`main/PARAVOXIA_STORY_BIBLE.md` for current canon, an owner-approved scene or
+canon contract for its exact scope, and
+`main/PARAVOXIA_STORY_EXECUTION_PLAN.md` for delivery sequencing. Progression,
+CH4, Revision, synopsis, and older plans preserve lineage; they cannot regain
+production authority through recency or detail.
+
+`main/story-authority.json` is the machine-readable story boundary. Validate
+it with `npm --prefix main run story:authority`; its smoke test must reject
+synthetic beat and role drift. It is a drift guard, not a replacement for the
+Bible, execution plan, owner decisions, or creative judgement.
+
 ## Separation of duties
 
 | Role | Owns | Can challenge | Cannot unilaterally change |
@@ -77,11 +90,35 @@ This workflow applies Terra's five pillars explicitly:
 
 ## Production modes
 
+### Story reconciliation / preproduction
+
+Use this mode before scene production when the commission concerns existing
+plot correction, canon reconciliation, new story direction, character arcs,
+chapter sequencing, or whole-story score/cinematography. The active lane is
+documentation only. Inventory the shipped story, run isolated blind and canon
+audits, capture the shipped cue/silence/motif baseline before Score direction,
+commission independent plot-wide treatments from all three directors,
+exchange and answer peer notes, preserve dissent, freeze a signed canon
+candidate and decision register, validate three distinct signatures over its
+exact hash, obtain a separate owner decision over that candidate, patch only
+the bounded authority documents, then run deterministic validation,
+documentation review, alignment review, and the independent Story Cohesion
+Judge. The blind reader is a no-tool, corpus-only invocation whose input hash
+and allowed-resource receipt are part of the run evidence; prompt-level
+non-disclosure is not accepted as isolation proof.
+
+This mode uses
+`docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json`.
+It does not create an implementation-ready scene contract, authorize copy, or
+cross the runtime lock. Approved direction returns to a Delta/Scene/Chapter/
+Flagship run only when production authority opens the exact packet.
+
 ### Delta
 
 One bounded defect, cue, framing correction, or palette-continuity repair.
-Run the affected director, the directly affected peer, the domain auditor, and
-the cohesion judge. Recapture the affected transition densely.
+Keep exploration narrow, but retain all three peer signatures and the full
+independent final review network; the smaller scope is not permission to hide a
+cross-domain regression. Recapture the affected transition densely.
 
 ### Scene
 
@@ -92,7 +129,9 @@ auditors, the blind viewer, the verifier, and the cohesion judge.
 
 A set of scenes with shared dramatic architecture. Use a parent run plus child
 scene contracts. Review cross-scene palette, motif, lens, and player-agency
-continuity after every child batch.
+continuity after every child batch. Run the executable contract,
+implementation, and final gate in every child scene directory; the parent run
+collects those reports and never substitutes one synthetic scene contract.
 
 ### Flagship
 
@@ -134,20 +173,27 @@ and a final score of at least 4.80/5 with no category below 4.50.
     accessibility/performance, and cohesion reviews do not share conclusions
     until their first reports are complete.
 11. **Repair by owner.** Defects route to the owning director or integrator;
-    evidence is regenerated and reviewers re-run. Repair loops are bounded and
-    visible in the iteration ledger.
+    each direction declares whether it changes creative intent. Contract-stable
+    repairs may return to integration. Any intent change reopens treatments,
+    freezes a new contract revision, and requires three fresh signatures before
+    implementation. Evidence is regenerated and reviewers re-run. Repair loops
+    are bounded and visible in the iteration ledger.
 12. **Approve and learn.** Deterministic quality, creative score, human taste
     when required, and publish authority are separate gates. Record durable
     lessons before closeout.
 
 ## Director-note protocol
 
-Notes live in `director-notes.jsonl`. One JSON object occupies each line:
+First-wave notes live in the three `<director>-peer-notes.jsonl` files;
+recipient-authored responses live in the three
+`<director>-reconciliation.jsonl` files. `director-notes.jsonl` is their
+machine-checked compiled ledger. One JSON object occupies each line:
 
 ```json
 {
   "schema": "paravoxia.directorNote.v1",
   "id": "note-a3-014",
+  "contractVersion": "a3-v4",
   "from": "cinematography",
   "to": "score",
   "beat": "a3-dawn",
@@ -158,7 +204,11 @@ Notes live in `director-notes.jsonl`. One JSON object occupies each line:
   "evidenceRefs": ["frame:a3-prefront", "contract:anchor:a3.life-front-crosses-player"],
   "requestedAction": "Move the bloom hit to the named anchor plus 0.2 seconds.",
   "status": "open",
-  "disposition": null
+  "owner": "score",
+  "response": null,
+  "disposition": null,
+  "createdAt": "2026-07-13T16:00:00.000Z",
+  "updatedAt": "2026-07-13T16:00:00.000Z"
 }
 ```
 
@@ -180,7 +230,10 @@ Before contract freeze, each director must:
 
 - production authority and contract revision;
 - beats and intended player state;
-- story events and player-agency windows;
+- character desire/opposition/belief changes, reveal/withhold status, causal
+  setup/payoff, story events, and player-agency windows;
+- explicit agency type, mandatory path, fallback/rescue semantics, and whether
+  any automated path is disqualified from narrative acceptance;
 - named synchronization anchors;
 - stable shot IDs, focal subjects, screen direction, blocking, camera
   authority, FOV/physical-lens intent, motion/easing, safe areas, and exits;
@@ -219,6 +272,9 @@ quality, and score mood/cue APIs remain canonical in code.
 - `story-naive-reader` measures cold narrative perception.
 - `story-canon-auditor` checks canon and both readings.
 - `story-alignment-judge` compares perception with intent.
+- `story-cohesion-judge` judges plot, character, reveal, agency, whole-story
+  audiovisual direction, authority, readiness, and dissent for story-council
+  runs.
 - `score-continuity-auditor` checks harmonic, motif, mix, and cue continuity.
 - `scene-naive-viewer` watches only the captured audiovisual experience.
 - `cinematography-continuity-auditor` checks shot, palette, lens, render,
@@ -260,24 +316,41 @@ context. Required artifacts are:
 
 - `production-lock.md`
 - `production-lock.json`
+- `shipped-reference-map.md`
+- `shipped-visual-baseline.json` plus its hashed pre-change media
 - `story-intent.md`
 - `score-treatment.md`
 - `cinematography-treatment.md`
 - `scene-contract.json`
 - `director-notes.jsonl`
+- `chapter-peer-notes.jsonl`, `score-peer-notes.jsonl`, and
+  `cinematography-peer-notes.jsonl`
+- `chapter-reconciliation.jsonl`, `score-reconciliation.jsonl`, and
+  `cinematography-reconciliation.jsonl`
 - `director-signoffs.json`
+- `chapter-contract-signoff.json`, `score-contract-signoff.json`, and
+  `cinematography-contract-signoff.json`
 - `dissent-register.md`
+- `implementation.diff`
 - `verification-report.json`
+- `check-results.json`
 - `screenshot-report.md`
 - `audio-report.md`
 - `raw-audiovisual-evidence.json` plus its hashed media under `evidence/`
+- `evidence-registry.json`, resolving every typed evidence reference to a
+  hashed run-local file
 - `naive-audience-report.md`
 - `story-audit.md`
 - `score-audit.md`
 - `cinematography-audit.md`
+- `critic-report.md`
+- `defects.json`
+- `repair-contract-disposition.json`
+- `iteration-ledger.jsonl`
 - `cohesion-judge.md`
 - `final-scorecard.json`
-- `human-decision.json`
+- `human-decision.json` when the selected profile, release-candidate state,
+  headed-taste requirement, defect register, or exception requires it
 - `creative-run-quality-report.json`
 - `run-summary.md`
 - `lessons-learned.md`

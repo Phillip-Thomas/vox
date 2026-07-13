@@ -33,7 +33,7 @@
     "minimumMaterialScoreDelta": 0.05,
     "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
   },
-  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "scene-contract", "implementation-diff", "verification-report", "raw-audiovisual-evidence", "affected-domain-audit", "critic-report", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-visual-baseline", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "scene-contract", "implementation-diff", "check-results", "verification-report", "raw-audiovisual-evidence", "evidence-registry", "story-audit", "score-audit", "cinematography-audit", "naive-audience-report", "critic-report", "defects", "repair-contract-disposition", "iteration-ledger", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
   "stateCoverage": {
     "requiredStates": ["affected_desktop", "affected_mobile", "reduced_motion", "lowest_supported_quality", "affected_reset_paths", "sandbox_inactive"],
     "stressStatesRequired": false,

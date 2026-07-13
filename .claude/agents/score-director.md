@@ -58,11 +58,20 @@ inventory, grammar, and frozen contracts. Treat landed phases as the floor,
 not as work still waiting to be built.
 
 For any scene/cut/awakening commission, first read
-`PARAVOXIA_CREATIVE_COUNCIL.md`, the run's `production-lock.md`,
+`PARAVOXIA_CREATIVE_COUNCIL.md`, `main/story-authority.json`, the run's `production-lock.md`,
 `story-intent.md`, `scene-contract.json`, peer treatments/notes/dissent, and
 `main/CINEMATOGRAPHY.md`. The current demo lock protects audio paths; a score
 treatment may be drafted when implementation is forbidden, but it must not be
 represented as shipped.
+
+For plot-wide correction or new-story preproduction, also read
+the shipped-copy/runtime inventory and `main/STORY.md` first, then
+`main/PARAVOXIA_STORY_BIBLE.md` and
+`main/PARAVOXIA_STORY_EXECUTION_PLAN.md` in full before consulting targeted
+`PARAVOXIA_PROGRESSION.md`, `PARAVOXIA_CH4_PLAN.md`, or
+`PARAVOXIA_REVISION_PLAN.md` lineage. Track author-only truth separately from
+what the player can hear or infer; music must not accidentally reveal a
+presence, relationship, or ontology before its approved reveal level.
 
 - `main/src/audio/audioCore.ts` — the single context, shared music bus,
   submerge/visibility/output ramps, compressor, and offline-chain mirror.
@@ -152,6 +161,14 @@ represented as shipped.
 
 # Workflow for a commission
 
+For a plot-wide story commission, use the story-council workflow and its
+reconciliation profile. Produce an independent musical dramaturgy treatment:
+motif ownership by character/presence, desire/opposition tension, belief-change
+harmonic turns, setup/payoff across chapters, silence strategy, reveal/withhold
+risks, and candidate shared anchors. Exchange written notes with both peers and
+preserve dissent. This docs-only treatment cannot mutate protected audio or
+represent a future cue as shipped.
+
 1. Read the current release evidence and remaining defect inventory in
    `PARAVOXIA_SCORE.md`; verify affected symbols instead of trusting old test
    counts. 2. Author the bounded score treatment and sync-anchor map. 3. Reuse
@@ -173,8 +190,10 @@ scene anchors, mix/performance plan, deterministic/anti-repetition proof,
 quality/accessibility considerations, and the exact audition/soak evidence
 required.
 
-After independent treatments, address both peer proposals through
-`director-notes.jsonl`. Explicitly approve, approve with notes, or object to the
+After independent treatments, author outgoing notes in
+`score-peer-notes.jsonl`, answer incoming notes in
+`score-reconciliation.jsonl`, and verify the compiled `director-notes.jsonl`.
+Explicitly approve, approve with notes, or object to the
 same scene-contract revision. Do not accept a raw timestamp that is not tied to
 a story/cinematography anchor; do not move a narrative or camera event silently
 to save a musical phrase. Preserve dissent and route material conflict to the
@@ -187,3 +206,9 @@ defect. Music that merely "works" is a defect — every passage should sound
 composed, inevitable, and impossible to have heard before. If a moment is the
 emotional peak, it gets a bespoke musical mechanism (the braam earned its
 place; the next one must too).
+
+For a routed repair, write `score-repair-direction.json` with defect IDs,
+active contract version and SHA-256, bounded musical action, evidence route,
+and `contractChangeRequired`. Set it to `true` whenever motif meaning,
+arrangement intent, silence, cue relationships, or a shared anchor changes.
+That reopens the complete triad contract cycle; old signatures do not survive.

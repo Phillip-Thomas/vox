@@ -2,6 +2,7 @@
   "schema": "paravoxia.rawAudiovisualEvidence.v1",
   "runId": "{{RUN_ID}}",
   "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
   "sourceRevision": "{{GIT_SHA}}",
   "capturedAt": "{{ISO_8601}}",
   "containsCreativeIntent": false,
@@ -9,6 +10,12 @@
     "path": "{{EVIDENCE_VIDEO_PATH}}",
     "sha256": "{{SHA256}}",
     "durationSeconds": 0,
+    "probe": {
+      "formatName": "{{FFPROBE_FORMAT}}",
+      "durationSeconds": 0,
+      "video": { "codec": "{{VIDEO_CODEC}}", "width": 0, "height": 0 },
+      "audio": { "codec": "{{AUDIO_CODEC}}", "sampleRate": 0, "channels": 0 }
+    },
     "startAnchor": "replace-anchor-start",
     "endAnchor": "replace-anchor-end"
   },
@@ -16,6 +23,12 @@
     {
       "path": "{{EVIDENCE_FRAME_STRIP_PATH}}",
       "sha256": "{{SHA256}}",
+      "probe": {
+        "formatName": "{{FFPROBE_FORMAT}}",
+        "durationSeconds": 0,
+        "video": { "codec": "{{IMAGE_CODEC}}", "width": 0, "height": 0 },
+        "audio": null
+      },
       "anchors": ["replace-anchor-start", "replace-anchor-end"],
       "variant": "desktop"
     }
@@ -24,6 +37,12 @@
     {
       "path": "{{EVIDENCE_AUDIO_PATH}}",
       "sha256": "{{SHA256}}",
+      "probe": {
+        "formatName": "{{FFPROBE_FORMAT}}",
+        "durationSeconds": 0,
+        "video": null,
+        "audio": { "codec": "{{AUDIO_CODEC}}", "sampleRate": 0, "channels": 0 }
+      },
       "startAnchor": "replace-anchor-start",
       "endAnchor": "replace-anchor-end",
       "disposition": "{{CAPTURED_OR_PROTECTED_REGRESSION}}"

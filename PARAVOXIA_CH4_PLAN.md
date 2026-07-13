@@ -1,10 +1,16 @@
 # PARAVOXIA — Chapter 4 Plan: "The First Day Alive" → "The Other Worker" (A4: Breath)
 
+**Authority status: CONTRACTED SCENE REFERENCE — NOT ACTIVE PRODUCTION.**
+S1–S5 are shipped; S6–S13 preserve design and copy provenance. Runtime
+continuation remains blocked by the demo production lock and owner Gate G1.
+Current canon lives in `main/PARAVOXIA_STORY_BIBLE.md`; sequencing, readiness,
+and delivery gates live in `main/PARAVOXIA_STORY_EXECUTION_PLAN.md`.
+
 **Commission:** continue down the list of stats. Every remaining suit sense gets a REAL
 discovery scene in the temp/fire mold — a situation that CAUSES the sensation, a task
 that answers it, the stat appearing at the moment of feeling — carried by the post-A3
-stretch and Chapter 4, at the shipped slice's quality bar. This doc is the
-implementation contract.
+stretch and Chapter 4, at the shipped slice's quality bar. This document is the
+historical scene contract; it does not authorize current implementation.
 
 **STATUS (2026-07-10): S1–S5 SHIPPED** (`ch3-thirst` → `ch3-forage` → `ch3-signal` →
 `ch4-vigil` → `ch4-arrival`), movie-verified end to end (3 cold `descent→done` runs:
@@ -12,7 +18,9 @@ implementation contract.
 headless swiftshader, 60 steady). **TEMPORARY TERMINAL:** after the arrival timeline
 completes, the story completes via the existing completion path (plus
 `story:ch4:arrived`); the hand-off is marked `// TEMPORARY: ch4-audit continues from
-here` in `storyDirector.ts` `tickArrival`. S6 (`ch4-audit`) is the next build.
+here` in `storyDirector.ts` `tickArrival`. S6 (`ch4-audit`) is the first
+contracted continuation after the demo gates, owner Gate G1, and the typed story
+substrate are approved; it is not the active build.
 Owner decisions and shipped deltas are recorded in §5 / §6; implementation truth
 lives in `main/STORY.md`.
 
@@ -231,9 +239,9 @@ rest prompt: `rest. it is ordered. i would have anyway. that is the trick of ord
 that fit.` [worker: soft coercion / AI: alignment — desires shaped to match directives;
 the chapter's quietest and maybe best plant]
 
-**(a2) STAR-GAZING ADDITION (owner revision round 2026-07-11 — contracted in
-`PARAVOXIA_REVISION_PLAN.md` §2; wiring + the `setConstellationReveal(0..1)` shader
-hook are in flight with parallel agents).** The waiting night earns its length: bored
+**(a2) STAR-GAZING ADDITION (owner revision round 2026-07-11 — shipped for the
+current vigil; contract provenance in `PARAVOXIA_REVISION_PLAN.md` §2, including
+the landed `setConstellationReveal(0..1)` hook).** The waiting night earns its length: bored
 under the scheduled sleep, the player stares at the chaos-noise stars — and patterns
 emerge because a perceiver chose them. The sequence also carries the REWARD-DISSONANCE
 ARC's realization (line 7) and the game's theme line (line 4).
@@ -537,8 +545,10 @@ the extraction beam accepts a fauna target (grazer/woolly only — the slow kind
 → the agent despawns → `meat` item (+ a small hide/none — keep it one item). Persistence
 mirrors `story:pod:<i>`: harvested agents key as `story:fauna:<homeVoxelKey>` milestones,
 excluded from the deterministic rebuild only when `isStoryWorldSeed`. Sandbox worlds:
-untouched (no hunt outside story until a real system lands). `meat`: new consumable,
-`foodValue 40`, eaten via `[G]`. The beat advances on EITHER path (hunt+eat, or the
+untouched (no hunt outside story until a real system lands). `meat`: a raw,
+non-edible intermediate. At a lit campfire, a story-scoped hold-`[F]` `cook`
+interaction converts it to `cooked_meat` (`foodValue 44`, eaten via `[G]`). The
+beat advances on EITHER path (hunt+cook+eat, or the
 refrain timer) — the choice logs as `story:choice:hunt:taken|refrained` and is never
 graded. Marks `ch4Meat`. Exit cue (fires after resolution): `there is a straight edge
 in the pond. the world does not grow straight edges. we make those.` [worker:
@@ -556,11 +566,11 @@ a low, patient counter-line under the hunt cues (the shadow in the pastoral).
 **(e) Names.** `MEAT.senseRadius=6`, `.dwellSeconds=2`, `.refrainSeconds=60`,
 `.huntHoldSeconds=1.5`. Item `meat`. Score mood `ch4-meat`.
 
-**(f) Open questions (taste).** 1) Hunt via the extraction beam (grim, on-theme: the
-harvest tool turned on the living) vs a new thrown-stone verb (gamier, more "fair") —
-recommend the beam; the wrongness is the point and the copy owns it. 2) Raw meat eaten
-directly vs requiring the campfire (a cook step) — recommend raw now, cooking as a
-polish pass note.
+**(f) Resolved taste direction.** Hunt via the extraction beam: the harvest tool
+turned on the living, with the copy owning the wrongness. Raw meat is not edible;
+the player must cook it on a lit campfire. Because `ch4-comply` orders the original
+fire doused, the council must resolve how fire is rebuilt or otherwise available
+without erasing that cost before S10 is approved for production.
 
 ### S11 · `ch4-dive` — the straight line in the pond (OXYGEN)
 
@@ -873,8 +883,9 @@ bloom (first hover).
    third meaning (warmth → rest → sustenance) — and ch4-comply's ORDER 1 (douse the
    fire) now also takes the kitchen. Engineering delta: two items instead of one,
    plus the cook interaction; the moral captions in S10(a) stand unchanged.
-6. **The auditor's return**: still open — the plan seeds his first glitch and keeps
-   him alive for the emergent era's B-plot.
+6. **The auditor's return**: recurrence is confirmed. Timing, motive, cost, and its
+   relationship to the greater threat remain open; the plan seeds the first glitch
+   and keeps W-7744 alive for the emergent era's B-plot.
 
 ### 5.1 Ambient musings (owner-commissioned, SHIPPED with S1–S5)
 
@@ -887,8 +898,8 @@ without purpose."
   to be is not nothing. it is how somewhere gets chosen." · "i keep waiting for the
   next order. the waiting is the last order still running." · "nobody is measuring
   me. i am still counting. old habits, or new ones — i cannot tell whose."
-- **Pool grows to 11 (2026-07-11, the reward-dissonance arc's floating middle —
-  in flight):** `{ id: 'reward', text: 'the clause said there is no other reward.
+- **Pool grew to 11 (2026-07-11, the shipped reward-dissonance arc's floating
+  middle):** `{ id: 'reward', text: 'the clause said there is no other reward.
   the water disagreed. the berries seconded the water.' }` [worker: doctrine vs.
   lived good / AI: the reward function contradicted by qualia; "seconded" keeps the
   satire bureaucratic]
@@ -947,7 +958,7 @@ without purpose."
   resolution (noted for playtest review).
 - **EXTENSION (2026-07-11): the mass moves to an adjacent face.** The
   anomaly stone relocates to a cube face adjacent to the mesa's, and the
-  ch1-iso→lift gate re-keys to the MESA SUMMIT (mechanical agent in flight).
+  ch1-iso→lift gate re-keys to the MESA SUMMIT (shipped for the current slice).
   Consequences, canonized: the lift births first person at the summit;
   ch1-anomaly's stage-2 marker now sends the player over a cube edge — the
   FIRST GRAVITY TRANSITION happens embodied, on the way to the first
@@ -1058,10 +1069,11 @@ reading):
   embodied voice stays bare. Rule recorded in the progression doc's
   perspective map + STORY.md.
 
-### 6.4 Owner revision round (2026-07-11): eight concerns — CONTRACTED, IN FLIGHT
+### 6.4 Owner revision round (2026-07-11): shipped-scope changes landed; future deltas contracted
 
-Full design + FINAL copy: `PARAVOXIA_REVISION_PLAN.md` (the contract).
-Mechanical work runs with parallel agents. Index of where each concern lands:
+Full design + FINAL copy lineage: `PARAVOXIA_REVISION_PLAN.md`. The shipped
+A0→arrival changes landed. S6/S9 and later deltas remain contracted future work
+and require the current production gates. Index of where each concern lands:
 
 1. **The reward-dissonance arc** — six beats, one clause: crawl doctrine
    (shipped) → manifest `COMPENSATION: SEE CLAUSE 4` (new) → voyage
@@ -1070,7 +1082,7 @@ Mechanical work runs with parallel agents. Index of where each concern lands:
    star-gazing realization (S4 (a2), line 7) → a4-exhale confirmation
    (S9 movement 2, `no quota asked for this. it comes anyway.`).
 2. **Star-gazing / constellations** — S4 (a2) above;
-   `setConstellationReveal` hook in flight; long-term astrology canon in
+   `setConstellationReveal` hook shipped for the current vigil; long-term astrology canon in
    PARAVOXIA_PROGRESSION.md Chapter 5 ("THE SKY IS THE INDEX").
 3. **The theme line** — STARGAZE line 4: `all of this arrives through
    issued senses. what waits past their reach?`
@@ -1081,8 +1093,8 @@ Mechanical work runs with parallel agents. Index of where each concern lands:
    payoff canonized at A8), the VOYAGE_STRANGE escalation ladder, ledger
    drift, console UI sizing note. Contract: revision plan §4 + Appendix A.
 5. **Mass relocation** — §6.1 EXTENSION above.
-6. **Billboard growth bug** — fix in flight; redaction-as-advertisement
-   design unchanged; logged in STORY.md gaps.
+6. **Billboard growth bug** — fixed with viewport-capped, range-derived
+   projection; redaction-as-advertisement design unchanged.
 7. **Campfire teaching chain (ch3-gather)** — fire-reasoning → gather
    wood/fiber/stone → hatchet → flint-from-stone (SUPPLEMENTS supply-pod
    flint; skip caption when already held) → craft fire → rest. CHILL canon

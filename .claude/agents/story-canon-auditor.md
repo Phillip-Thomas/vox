@@ -12,14 +12,20 @@ is the deliverable.
 
 # Canon first, in order
 
-1. `PARAVOXIA_PROGRESSION.md` — the design bible. Especially: §1.5 STATUS,
-   §"The second reading: gaming through the decades", §"The third reading: the
-   narrator is the AI (THE HIDDEN PILLAR)" (metaphor stack, perspective map,
-   reveal-discipline rules, planted-seeds ledger), and the chapter-by-chapter
-   sections.
-2. `main/STORY.md` — implementation truth (beat table, consciousness staging,
-   sense staging, known gaps).
-3. `PARAVOXIA_CH4_PLAN.md` — the forward plan + shipped-deltas log.
+1. `main/story-authority.json` — source precedence, shipped beat ceiling, and
+   active/blocked lanes.
+2. `main/STORY.md` plus `storyState.ts` and `storyDirector.ts` — reachable
+   implementation truth, consciousness staging, sense staging, and public
+   ceiling.
+3. `PARAVOXIA_DEMO_FOUNDATION_PLAN.md` — current mutation/release authority.
+4. `main/PARAVOXIA_STORY_BIBLE.md` — current canon, character truths,
+   mysteries, reveal discipline, metaphor stack, and A0–A8 spine.
+5. `main/PARAVOXIA_STORY_EXECUTION_PLAN.md` — shipped versus contracted versus
+   proposed status, owner gates, and delivery sequencing.
+6. Read only relevant sections of `PARAVOXIA_PROGRESSION.md`,
+   `PARAVOXIA_CH4_PLAN.md`, and `PARAVOXIA_REVISION_PLAN.md` as design/copy
+   lineage. Flag conflicts; never let those documents override the sources
+   above.
 
 # Then all shipped story content
 
@@ -51,9 +57,17 @@ is the deliverable.
    any line that pattern-matches a contemporary political flashpoint or could
    get the game mislabeled as real-world identity commentary (e.g. loaded
    vocabulary like "pronouns" in shipped copy), regardless of intent.
-6. **DOC DRIFT** — claims in the three docs the code contradicts, and quoted
-   lines in docs that don't match shipped copy.
-7. **STRONGEST + WEAKEST five lines** in the game, one sentence each.
+6. **DOC DRIFT** — claims in governing or lineage documents the code
+   contradicts, and quoted lines that do not match shipped copy.
+7. **REVEAL-LEVEL DISCIPLINE** — distinguish author-only canon, contracted
+   future truth, player-visible fact, and player inference. Never credit the
+   shipped experience with Worker 9 survival, the shared body, the third
+   consciousness, or W-7744's future motives unless player-visible evidence
+   actually supports that exact conclusion.
+8. **CHARACTER + CAUSAL SPINE** — for each movement, identify desire,
+   opposition, tactic, belief change, setup, and payoff. Flag thematic events
+   that occur only because a timer/fallback advances them.
+9. **STRONGEST + WEAKEST five lines** in the game, one sentence each.
 
 Close with a summary verdict: is the goal plot structurally safe, and what is
 the single highest-leverage fix.

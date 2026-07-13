@@ -1,0 +1,27 @@
+{
+  "schema": "terra.defectTaxonomy.v1",
+  "identity": { "slug": "paravoxia-story-defects", "name": "Paravoxia Story Defects", "version": "v1" },
+  "severityLevels": ["critical", "high", "medium", "low"],
+  "categories": [
+    { "slug": "authority_inversion", "defaultOwnerRole": "creative-producer", "routingHints": ["inventory-shipped-story", "freeze-story-authority-candidate"], "description": "A legacy proposal or plan outranks runtime, release authority, canon, or an owner decision." },
+    { "slug": "shipped_claim_mismatch", "defaultOwnerRole": "story-inventory-verifier", "routingHints": ["inventory-shipped-story", "verify-story-authority"], "description": "A present-tense story claim does not match reachable runtime or current copy." },
+    { "slug": "causal_gap", "defaultOwnerRole": "chapter-director", "routingHints": ["direct-story-correction", "cross-examine-story-directions"], "description": "A plot turn lacks an intelligible desire, obstacle, action, consequence, setup, or payoff." },
+    { "slug": "character_motivation_gap", "defaultOwnerRole": "chapter-director", "routingHints": ["direct-story-correction"], "description": "A character acts as a theme-delivery device rather than from a legible and evolving drive." },
+    { "slug": "agency_misrepresentation", "defaultOwnerRole": "chapter-director", "routingHints": ["direct-story-correction", "audit-canon-and-continuity"], "description": "A forced rite, timeout, fallback, or rescue is presented as genuine player choice or earned action." },
+    { "slug": "reveal_leak", "defaultOwnerRole": "chapter-director", "routingHints": ["audit-canon-and-continuity", "align-intent-with-cold-read"], "description": "Author-only truth, later identity, or open ontology reaches the player too clearly or too early." },
+    { "slug": "mystery_without_evidence", "defaultOwnerRole": "chapter-director", "routingHints": ["direct-story-correction", "judge-story-cohesion"], "description": "Ambiguity is asserted without concrete, interpretable player evidence." },
+    { "slug": "score_story_disconnect", "defaultOwnerRole": "score-director", "routingHints": ["direct-score-story-arc", "cross-examine-story-directions"], "description": "Musical motif, harmony, or release does not set up, transform, or pay off the story's emotional causality." },
+    { "slug": "visual_story_disconnect", "defaultOwnerRole": "cinematography-director", "routingHints": ["direct-cinematography-story-arc", "cross-examine-story-directions"], "description": "Shot, lens, palette, camera, or rendering change annotates spectacle instead of carrying story meaning." },
+    { "slug": "open_ontology_accidentally_closed", "defaultOwnerRole": "creative-producer", "routingHints": ["freeze-story-authority-candidate", "owner-decision-required"], "description": "A candidate resolves the Makers, Terra authorship, simulation, third-consciousness mapping, or final frame without owner authority." },
+    { "slug": "legacy_status_drift", "defaultOwnerRole": "documentation-patch-engineer", "routingHints": ["patch-authority-docs", "verify-story-authority"], "description": "An older document still claims current production, next-build, or in-flight authority after supersession." },
+    { "slug": "reference_or_manifest_drift", "defaultOwnerRole": "story-inventory-verifier", "routingHints": ["verify-story-authority", "repair-story-authority-docs"], "description": "Beat IDs, source paths, status vocabulary, links, or the machine authority manifest disagree." },
+    { "slug": "unresolved_director_dissent", "defaultOwnerRole": "creative-producer", "routingHints": ["cross-examine-story-directions", "owner-decision-required"], "description": "A material peer objection or taste thesis was ignored, self-closed, or flattened." },
+    { "slug": "runtime_lock_violation", "defaultOwnerRole": "creative-producer", "routingHints": ["lock-story-correction-scope"], "description": "A planning commission mutates shipped story, protected audio, or post-arrival runtime while the demo lock is active." }
+  ],
+  "routingPolicy": {
+    "critical": "block_until_fixed_or_owner_rejects_scope",
+    "high": "route_to_owning_director_then_repeat_independent_review",
+    "medium": "require_owner_response_or_run_scoped_acceptance",
+    "low": "record_and_fix_when_in_scope"
+  }
+}

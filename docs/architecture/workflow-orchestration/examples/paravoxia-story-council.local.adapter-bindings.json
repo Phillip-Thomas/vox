@@ -1,0 +1,234 @@
+{
+  "schema": "terra.adapterBindingSet.v1",
+  "identity": {
+    "slug": "paravoxia-story-council-local",
+    "name": "Paravoxia Story Council Local Bindings",
+    "version": "v1"
+  },
+  "workflowSpecRef": "paravoxia-story-council@v1",
+  "environment": {
+    "surface": "local_developer_runtime",
+    "resultExposure": "operator_visible"
+  },
+  "operatorControls": {
+    "privilegedCommandsRequireApproval": true,
+    "repoWritesRequireReview": true,
+    "publishRequiresExplicitDecision": true
+  },
+  "bindings": [
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "creative-reasoning-runner",
+      "family": "model_adapter",
+      "adapter": {
+        "slug": "env-configured-story-creative-runner",
+        "label": "Environment-configured story creative runner"
+      },
+      "capabilities": [
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "runnerArgvRef": "env:PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON",
+        "transport": "file_json",
+        "identityClass": "creative_author"
+      },
+      "limits": {
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "story-tool-runner",
+      "family": "tool_adapter",
+      "adapter": {
+        "slug": "paravoxia-story-safe-tools",
+        "label": "Allowlisted Paravoxia story inspection tools"
+      },
+      "capabilities": [
+        "repo_reference_scan",
+        "safe_command_run",
+        "command_result_capture",
+        "artifact_hash"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "executionMode": "argv_no_shell",
+        "workspaceBoundary": ".",
+        "evidenceRoot": "evidence/commands"
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "story-artifact-store",
+      "family": "artifact_adapter",
+      "adapter": {
+        "slug": "paravoxia-story-filesystem-artifacts",
+        "label": "Local persisted story-council artifacts"
+      },
+      "capabilities": [
+        "artifact_read",
+        "artifact_write",
+        "artifact_bundle_export"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "root": ".terra/workflow-runs/paravoxia-story-council",
+        "runLocalOnly": true
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "documentation-patch-runner",
+      "family": "patch_adapter",
+      "adapter": {
+        "slug": "paravoxia-reviewable-documentation-patch",
+        "label": "Reviewable documentation-only patch runner"
+      },
+      "capabilities": [
+        "repo_draft_write",
+        "diff_output",
+        "no_publish_without_gate"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "runnerArgvRef": "env:TERRA_PATCH_CLI_ARGV_JSON",
+        "transport": "file_json",
+        "writeMode": "draft_diff_only",
+        "mutationBoundary": "documentation_only"
+      },
+      "limits": {
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "story-review-runner",
+      "family": "review_adapter",
+      "adapter": {
+        "slug": "env-configured-independent-story-reviewer",
+        "label": "Environment-configured independent story reviewer"
+      },
+      "capabilities": [
+        "independent_review",
+        "approve",
+        "reject",
+        "route_owner_decision",
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "runnerArgvRef": "env:PARAVOXIA_STORY_REVIEW_RUNNER_ARGV_JSON",
+        "transport": "file_json",
+        "recordFormat": "terra.humanDecision.v1",
+        "identityClass": "independent_reviewer",
+        "mustDifferFrom": "creative_author"
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false
+      }
+    }
+  ],
+  "commandCatalog": [
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "story-authority",
+      "title": "Validate Paravoxia story authority",
+      "bindingRequirementId": "story-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "story:authority"
+      ],
+      "resultKey": "storyAuthorityGate",
+      "timeoutMs": 120000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "story-authority-smoke",
+      "title": "Exercise Paravoxia story-authority negative cases",
+      "bindingRequirementId": "story-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "story:authority:smoke"
+      ],
+      "resultKey": "storyAuthoritySmoke",
+      "timeoutMs": 120000,
+      "privileged": false
+    }
+  ],
+  "roleCatalog": [
+    {
+      "schema": "terra.roleAdapterBinding.v1",
+      "id": "creative",
+      "title": "Environment-configured creative author",
+      "bindingRequirementId": "creative-reasoning-runner",
+      "argv": [
+        "node",
+        "main/tools/story-council-role-cli-runner.mjs",
+        "creative",
+        "$INVOCATION_PATH",
+        "$RESULT_PATH"
+      ],
+      "resultTransport": "file_json",
+      "timeoutMs": 600000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.roleAdapterBinding.v1",
+      "id": "independent-review",
+      "title": "Environment-configured independent reviewer",
+      "bindingRequirementId": "story-review-runner",
+      "argv": [
+        "node",
+        "main/tools/story-council-role-cli-runner.mjs",
+        "review",
+        "$INVOCATION_PATH",
+        "$RESULT_PATH"
+      ],
+      "resultTransport": "file_json",
+      "timeoutMs": 600000,
+      "privileged": false
+    }
+  ],
+  "patchCatalog": [
+    {
+      "schema": "terra.patchAdapterBinding.v1",
+      "id": "documentation-draft",
+      "title": "Environment-configured documentation draft patch",
+      "bindingRequirementId": "documentation-patch-runner",
+      "argv": [
+        "node",
+        "../TerraForm/scripts/dev/workflow-patch-cli-runner.mjs",
+        "$INVOCATION_PATH",
+        "$RESULT_PATH"
+      ],
+      "resultTransport": "file_json",
+      "timeoutMs": 600000,
+      "privileged": false
+    }
+  ]
+}

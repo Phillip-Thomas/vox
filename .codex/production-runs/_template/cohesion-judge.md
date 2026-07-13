@@ -20,9 +20,14 @@ exceptions, or publish.
 ## Combined experience
 
 - One causal event across story, image, score, and control: `{{JUDGMENT}}`
+- Character desire, opposition, tactic, and earned belief change: `{{JUDGMENT}}`
+- Setup/payoff and reveal/withhold accounting: `{{JUDGMENT}}`
 - Emotional alignment without redundant annotation: `{{JUDGMENT}}`
 - Focal and musical hierarchy: `{{JUDGMENT}}`
 - Agency, restraint, and hand-back: `{{JUDGMENT}}`
+- Mandatory action, authored rite, choice, fallback, timeout, and rescue are
+  labelled honestly; automated paths do not prove player acceptance:
+  `{{JUDGMENT}}`
 - Palette, lens, motif, and adjacent-scene continuity: `{{JUDGMENT}}`
 - Creative ambition and Paravoxia specificity: `{{JUDGMENT}}`
 - Accessibility, performance, reset, and implementation fidelity: `{{JUDGMENT}}`
@@ -33,6 +38,8 @@ exceptions, or publish.
 - Blocking defects: `{{IDS_OR_NONE}}`
 - Medium unaccepted alignment defects: `{{IDS_OR_NONE}}`
 - Human-only decisions: `{{DECISIONS_OR_NONE}}`
+- Author-only canon incorrectly credited as player perception:
+  `{{IDS_OR_NONE}}`
 
 ## Scorecard cross-check
 

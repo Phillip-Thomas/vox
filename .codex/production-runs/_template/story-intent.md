@@ -22,11 +22,23 @@ Contract target: `{{SCENE_ID}}` revision `{{REVISION}}`
 - Tutorial/gameplay purpose: `{{PURPOSE}}`
 - Reality-stage ceiling: `{{CEILING}}`
 
+## Character and causal spine
+
+| Character/presence | Desire | Opposition | Tactic | Belief before | Belief after | Player-visible evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| `{{CHARACTER_ID}}` | `{{DESIRE}}` | `{{OPPOSITION}}` | `{{TACTIC}}` | `{{BELIEF_BEFORE}}` | `{{BELIEF_AFTER}}` | `{{EVIDENCE_OR_INTENDED_WITHHOLDING}}` |
+
+## Reveal and payoff ledger
+
+| ID | Truth or question | Level before | Level after | Setup refs | Payoff refs | Leak/understatement risk |
+| --- | --- | --- | --- | --- | --- | --- |
+| `{{REVEAL_ID}}` | `{{TRUTH_OR_QUESTION}}` | `{{AUTHOR_ONLY_CONTRACTED_VISIBLE_INFERRED_OPEN}}` | `{{LEVEL_AFTER}}` | `{{SETUP_REFS}}` | `{{PAYOFF_REFS}}` | `{{RISK}}` |
+
 ## Beat and agency ledger
 
-| Beat | Shared anchor | Event | Player control before/during/after | Required hand-back | Acceptance signal |
-| --- | --- | --- | --- | --- | --- |
-| `{{BEAT_ID}}` | `{{ANCHOR_ID}}` | `{{EVENT}}` | `{{AGENCY_WINDOW}}` | `{{HAND_BACK}}` | `{{OBSERVABLE_RESULT}}` |
+| Beat | Shared anchor | Event | Cause/payoff refs | Agency type and mandatory path | Fallback/rescue semantics | Required hand-back | Acceptance signal |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `{{BEAT_ID}}` | `{{ANCHOR_ID}}` | `{{EVENT}}` | `{{CAUSE_AND_PAYOFF_REFS}}` | `{{CHOICE_RITE_MANDATORY_AND_PATH}}` | `{{FALLBACK_RESCUE_AND_WHETHER_THEY_COUNT}}` | `{{HAND_BACK}}` | `{{OBSERVABLE_RESULT}}` |
 
 ## Constraints for peer directors
 

@@ -1,0 +1,46 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "{{RUN_ID}}",
+  "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "sceneId": "replace-scene-id",
+  "capturedAt": "{{ISO_8601}}",
+  "captureAuthority": "current shipped runtime before this run's implementation",
+  "captures": [
+    {
+      "path": "{{PRE_CHANGE_CAPTURE_PATH}}",
+      "sha256": "{{SHA256}}",
+      "probe": {
+        "formatName": "{{FFPROBE_FORMAT}}",
+        "durationSeconds": 0,
+        "video": { "codec": "{{VIDEO_CODEC}}", "width": 0, "height": 0 },
+        "audio": null
+      },
+      "beat": "{{BEAT_ID}}",
+      "anchor": "replace-anchor-start",
+      "kind": "continuous-video",
+      "viewport": "{{WIDTH_X_HEIGHT}}",
+      "qualityTier": "{{QUALITY_TIER}}"
+    }
+  ],
+  "cameraStates": [
+    {
+      "beat": "{{BEAT_ID}}",
+      "anchor": "replace-anchor-start",
+      "authority": "lens-rig",
+      "fovDeg": 50,
+      "sourceRef": "{{RUNTIME_SYMBOL_REF}}"
+    }
+  ],
+  "paletteStates": [
+    {
+      "beat": "{{BEAT_ID}}",
+      "anchor": "replace-anchor-start",
+      "family": "planet-derived",
+      "sourceRefs": ["main/src/utils/planetArtDirection.ts", "main/src/utils/planetVisualProfile.ts"]
+    }
+  ],
+  "realityStage": "bare",
+  "adjacentEntryRefs": ["{{PREVIOUS_BEAT_CAPTURE_REF}}"],
+  "adjacentExitRefs": ["{{NEXT_BEAT_CAPTURE_REF}}"],
+  "headedStatus": "{{pending|captured}}"
+}

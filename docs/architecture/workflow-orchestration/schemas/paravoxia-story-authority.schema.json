@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-story-authority.schema.json",
+  "title": "Paravoxia Story Authority v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "snapshotDate", "status", "sources", "dynamicSources", "sourcePrecedence", "shippedBeatOrder", "contractedContinuation", "openRuntimeGates", "lockedOpenQuestions", "requiredCouncilRoles", "requiredIndependentReviews"],
+  "properties": {
+    "schema": { "const": "paravoxia.storyAuthority.v1" },
+    "snapshotDate": { "type": "string", "format": "date" },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["documentationLane", "runtimeLane", "storyCeiling", "publicTerminalBeat"],
+      "properties": {
+        "documentationLane": { "const": "existing-story-reconciliation" },
+        "runtimeLane": { "const": "blocked-by-demo-lock" },
+        "storyCeiling": { "const": "ch4-arrival" },
+        "publicTerminalBeat": { "const": "done" }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtimeBeatAuthority", "shippedOverview", "canon", "executionPlan", "releaseAuthority", "creativeCouncil", "designLineage"],
+      "properties": {
+        "runtimeBeatAuthority": { "const": "src/story/storyState.ts" },
+        "shippedOverview": { "const": "STORY.md" },
+        "canon": { "const": "PARAVOXIA_STORY_BIBLE.md" },
+        "executionPlan": { "const": "PARAVOXIA_STORY_EXECUTION_PLAN.md" },
+        "releaseAuthority": { "const": "../PARAVOXIA_DEMO_FOUNDATION_PLAN.md" },
+        "creativeCouncil": { "const": "../PARAVOXIA_CREATIVE_COUNCIL.md" },
+        "designLineage": {
+          "const": ["../PARAVOXIA_PROGRESSION.md", "../PARAVOXIA_CH4_PLAN.md", "../PARAVOXIA_REVISION_PLAN.md"]
+        }
+      }
+    },
+    "dynamicSources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownerApprovedSceneContract"],
+      "properties": {
+        "ownerApprovedSceneContract": {
+          "const": {
+            "kind": "run-artifact",
+            "schema": "paravoxia.sceneContract.v1",
+            "pathPattern": ".codex/production-runs/<run-id>/scene-contract.json",
+            "authorityCondition": "matching-production-lock-and-explicit-owner-approval"
+          }
+        }
+      }
+    },
+    "sourcePrecedence": {
+      "const": ["runtimeBeatAuthority", "releaseAuthority", "canon", "ownerApprovedSceneContract", "executionPlan", "designLineage"]
+    },
+    "shippedBeatOrder": {
+      "const": ["crawl", "manifest", "voyage", "deflect", "crash", "descent", "ch1-fixed", "ch1-track", "ch1-raster", "ch1-depth", "ch1-nav", "ch1-iso", "ch1-lift", "ch1-anomaly", "a1-ramp", "ch2-color", "ch2-approach", "a2-awakening", "ch3-gather", "ch3-dusk", "ch3-await-rest", "a3-dawn", "ch3-thirst", "ch3-forage", "ch3-signal", "ch4-vigil", "ch4-arrival", "done"]
+    },
+    "contractedContinuation": {
+      "const": [
+        { "beat": "ch4-audit", "scene": "S6", "status": "CONTRACTED" },
+        { "beat": "ch4-comply", "scene": "S7", "status": "CONTRACTED" },
+        { "beat": "ch4-defy", "scene": "S8", "status": "CONTRACTED" },
+        { "beat": "a4-exhale", "scene": "S9", "awakening": "A4", "status": "CONTRACTED" },
+        { "beat": "ch4-meat", "scene": "S10", "status": "CONTRACTED" },
+        { "beat": "ch4-dive", "scene": "S11", "status": "CONTRACTED" },
+        { "beat": "ch4-repair", "scene": "S12", "status": "CONTRACTED" },
+        { "beat": "ch4-flight", "scene": "S13", "status": "CONTRACTED" }
+      ]
+    },
+    "openRuntimeGates": {
+      "const": ["headed-primitive-journey", "fauna-triangle-budget", "full-client-verify", "batch-3-existing-story-screening", "owner-opens-post-arrival-lane"]
+    },
+    "lockedOpenQuestions": {
+      "const": ["player-third-consciousness-mapping", "third-consciousness-form-and-mechanics", "third-consciousness-persistence-and-separability", "third-consciousness-evidence-grammar", "worker9-reveal-timing", "w7744-return-cause", "greater-threat-ontology", "maker-identity-number-and-motive", "terra-authorship-literalness", "simulation-status", "final-frame-ontology"]
+    },
+    "requiredCouncilRoles": {
+      "const": ["chapter-director", "score-director", "cinematography-director", "creative-producer"]
+    },
+    "requiredIndependentReviews": {
+      "const": ["story-naive-reader", "story-canon-auditor", "story-alignment-judge", "story-cohesion-judge"]
+    }
+  }
+}

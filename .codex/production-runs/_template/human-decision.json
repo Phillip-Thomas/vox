@@ -2,6 +2,7 @@
   "schema": "paravoxia.humanDecision.v1",
   "runId": "{{RUN_ID}}",
   "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
   "reviewer": "{{HUMAN_APPROVER}}",
   "reviewedAt": "{{ISO_8601}}",
   "decision": "pending",

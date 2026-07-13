@@ -1,21 +1,25 @@
 {
   "schema": "paravoxia.directorSignoffs.v1",
   "contractRevision": "{{CONTRACT_REVISION}}",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
   "chapter": {
     "disposition": "object",
     "revision": "{{CONTRACT_REVISION}}",
+    "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
     "signedBy": "{{CHAPTER_DIRECTOR}}",
     "signedAt": "{{ISO_8601}}"
   },
   "score": {
     "disposition": "object",
     "revision": "{{CONTRACT_REVISION}}",
+    "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
     "signedBy": "{{SCORE_DIRECTOR}}",
     "signedAt": "{{ISO_8601}}"
   },
   "cinematography": {
     "disposition": "object",
     "revision": "{{CONTRACT_REVISION}}",
+    "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
     "signedBy": "{{CINEMATOGRAPHY_DIRECTOR}}",
     "signedAt": "{{ISO_8601}}"
   },

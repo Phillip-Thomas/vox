@@ -54,6 +54,35 @@
       "{{REPLACE_WITH_NON_NEGOTIABLE_CANON}}"
     ],
     "realityStageCeiling": "bare",
+    "characterDynamics": [
+      {
+        "id": "replace-character-dynamic",
+        "characterRef": "{{REPLACE_WITH_CHARACTER_OR_PRESENCE}}",
+        "desire": "{{REPLACE_WITH_SCENE_DESIRE}}",
+        "opposition": "{{REPLACE_WITH_ACTIVE_OPPOSITION}}",
+        "tactic": "{{REPLACE_WITH_TACTIC_OR_AUTHORED_NON_ACTION}}",
+        "beliefBefore": "{{REPLACE_WITH_BELIEF_BEFORE}}",
+        "beliefAfter": "{{REPLACE_WITH_BELIEF_AFTER}}",
+        "playerVisibleEvidenceRefs": [
+          "{{REPLACE_WITH_PLAYER_VISIBLE_EVIDENCE_REF}}"
+        ],
+        "revealRefs": [
+          "replace-reveal"
+        ]
+      }
+    ],
+    "revealLedger": [
+      {
+        "id": "replace-reveal",
+        "subject": "{{REPLACE_WITH_TRUTH_QUESTION_OR_RELATIONSHIP}}",
+        "levelBefore": "author-only",
+        "levelAfter": "player-inference",
+        "setupRefs": [],
+        "payoffRefs": [],
+        "playerEvidence": "{{REPLACE_WITH_EXACT_PLAYER_EVIDENCE_OR_WITHHOLDING}}",
+        "protectedQuestion": false
+      }
+    ],
     "events": [
       {
         "id": "replace-event",
@@ -63,6 +92,11 @@
         "playerAction": "{{REPLACE_WITH_PLAYER_VERB}}",
         "stateBeforeRefs": [],
         "stateAfterRefs": [],
+        "causeRefs": [],
+        "payoffRefs": [],
+        "revealRefs": [
+          "replace-reveal"
+        ],
         "informationRevealed": "{{REPLACE_WITH_INFORMATION_OR_AUTHORED_WITHHOLDING}}",
         "acceptanceCriterion": "{{REPLACE_WITH_OBSERVABLE_STORY_CRITERION}}"
       }
@@ -75,6 +109,14 @@
         "movement": "disabled",
         "look": "disabled",
         "interaction": "disabled",
+        "agencyType": "authored-rite",
+        "mandatoryPath": "{{REPLACE_WITH_REQUIRED_PLAYER_PATH_OR_OBSERVATION}}",
+        "fallbackAllowed": false,
+        "fallbackSemantics": "No fallback is accepted for the thematic action.",
+        "fallbackCountsAsNarrativeAcceptance": false,
+        "rescueAllowed": false,
+        "rescueSemantics": "No rescue path is authorized for the thematic action.",
+        "rescueCountsAsNarrativeAcceptance": false,
         "motivation": "{{REPLACE_WITH_AGENCY_MOTIVATION}}",
         "handBack": "{{REPLACE_WITH_REVERSIBLE_HAND_BACK}}",
         "pauseBehavior": "{{REPLACE_WITH_PAUSE_BEHAVIOR}}",

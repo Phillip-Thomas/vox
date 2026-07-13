@@ -8,6 +8,10 @@
   "purpose": "Coordinate narrative, procedural score, and cinematography as peer creative authorities through durable scene contracts, cross-director notes, evidence, independent review, bounded repair, and human taste gates.",
   "globalContextRef": "terra-global@v1",
   "primaryWorkflowRef": "paravoxia-creative-triad@v1",
+  "exampleWorkflowRefs": [
+    "paravoxia-creative-triad@v1",
+    "paravoxia-story-council@v1"
+  ],
   "sourceRefs": [
     {
       "slug": "production-authority",
@@ -24,11 +28,25 @@
       "purpose": "Role ownership, communication, review, evidence, and publish boundaries."
     },
     {
-      "slug": "story-canon",
-      "kind": "canonical-doc",
-      "bindingKey": "paravoxia.storyCanon",
+      "slug": "story-authority-map",
+      "kind": "canonical-manifest",
+      "bindingKey": "paravoxia.storyAuthorityMap",
       "required": true,
-      "purpose": "Narrative, gameplay, perspective, and fidelity-ladder truth."
+      "purpose": "Machine-readable source precedence, shipped beat ceiling, contracted continuation IDs, and open gates."
+    },
+    {
+      "slug": "story-bible",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.storyBible",
+      "required": true,
+      "purpose": "Current canon, characters, mysteries, reveal discipline, perspective, and fidelity-ladder truth."
+    },
+    {
+      "slug": "story-execution-plan",
+      "kind": "canonical-doc",
+      "bindingKey": "paravoxia.storyExecutionPlan",
+      "required": true,
+      "purpose": "Shipped, contracted, and proposed status; owner gates; implementation readiness; and active resume points."
     },
     {
       "slug": "score-bible",
@@ -112,13 +130,14 @@
     "Integrate shared runtime files through one patch lane.",
     "Capture mechanical, visual, audio, accessibility, quality-tier, and performance evidence.",
     "Run fresh independent domain and blind reviewers before cohesion judgement.",
-    "Route defects to bounded repair and regenerate evidence.",
+    "Compile one canonical defect register, then route bounded repair; any creative-intent change reopens the full contract and three-signature cycle before evidence is regenerated.",
     "Require human taste and a separate publish decision where configured.",
     "Record lessons that survive without chat history."
   ],
   "requiredOutputs": [
     "production-lock",
     "production-lock-machine",
+    "shipped-visual-baseline",
     "story-intent",
     "score-treatment",
     "cinematography-treatment",
@@ -127,21 +146,32 @@
     "scene-contract",
     "director-signoffs",
     "implementation-diff",
+    "check-results",
     "verification-report",
     "screenshot-report",
     "audio-report",
     "raw-audiovisual-evidence",
+    "evidence-registry",
     "independent-audits",
     "critic-report",
+    "defects",
+    "repair-contract-disposition",
+    "iteration-ledger",
     "final-scorecard",
     "creative-run-quality-report",
     "human-decision",
     "lessons-learned"
   ],
   "validationCommands": [
+    "npm --prefix main run story:authority",
+    "npm --prefix main run story:authority:smoke",
     "node main/tools/creative-triad-gate.mjs --self-test",
-    "node main/tools/creative-triad-gate.mjs --run <production-run>",
-    "npm --prefix main run verify"
+    "node main/tools/creative-triad-gate.mjs --run <production-run> --phase contract",
+    "node main/tools/creative-triad-gate.mjs --run <production-run> --phase implementation",
+    "node main/tools/creative-triad-gate.mjs --run <production-run> --phase final",
+    "npm --prefix main run verify",
+    "node ../TerraForm/scripts/dev/workflow-run.mjs validate --spec docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json",
+    "node ../TerraForm/scripts/dev/workflow-orchestrator-quality.mjs --spec docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json"
   ],
   "nonNegotiables": [
     "Do not let a director approve its own implementation.",

@@ -1,5 +1,13 @@
 # PARAVOXIA — Story Progression & The Fidelity Ladder
 
+**Authority status: DESIGN LINEAGE.** This document preserves the progression's
+visual and thematic rationale. Current canon lives in
+`main/PARAVOXIA_STORY_BIBLE.md`; delivery status and gates live in
+`main/PARAVOXIA_STORY_EXECUTION_PLAN.md`; shipped behavior is defined by runtime
+and `main/STORY.md`; the active production lock lives in
+`PARAVOXIA_DEMO_FOUNDATION_PLAN.md`. Where this document conflicts with
+those sources, it records history rather than current authority.
+
 **Thesis:** The rendering pipeline IS the narrative. Every awakening in the story is a
 rendering technique switching on. The player doesn't watch transcendence — they *see
 more* every time they transcend. Fidelity = consciousness.
@@ -124,12 +132,18 @@ shield subroutine. The Regulation Feed was its eye. The player has been the AI
 since the first keystroke — they just didn't know, and neither did it.
 
 Through the crash — the miraculous event — the AI is EMBODIED in the worker's
-suit loop. And the world it wakes into is (this is the deeper secret, revealed
-even later, if ever) **a universe of its own creation**: the cube worlds are
-"provisioned in standard cubic format" because IT provisioned them. The
-fidelity ladder is not the world resolving — it is the AI learning to render
-its own creation to itself. We are deliberately playing with determinism,
-panpsychism, and solipsism, and we do not resolve them.
+suit loop. One live interpretation is that the world it wakes into may be a
+universe of its own creation: the cube worlds are "provisioned in standard
+cubic format" because it may have provisioned them. The fidelity ladder can
+therefore read as the AI learning to render its own creation to itself. This is
+an interpretive layer, not settled Maker canon; the story deliberately plays
+with determinism, panpsychism, and solipsism without resolving them.
+
+Current canon also locks a harder human complication: Worker 9 survives, the
+protagonist and Worker 9 share one body, and a third consciousness is present.
+Exactly what the player can prove, when each presence becomes legible, and how
+those truths map onto this older AI-narrator interpretation remain delivery
+questions governed by the Story Bible and Execution Plan.
 
 The metaphor stack this pillar completes (all readings must stay
 simultaneously true; no line of copy may break any of them):
@@ -251,8 +265,8 @@ MUST take parentheses; embodied captions MUST NOT.
   old habits, or new ones — i cannot tell whose."), and "kept" ("nothing is
   told to do this. it is all just kept."); and the arrival's "for a blink i
   borrowed his seeing. slabs. flat light. i lived there."
-- **Planted seeds — 2026-07-11 revision round** (contracted in
-  `PARAVOXIA_REVISION_PLAN.md`; some in flight): the manifest's
+- **Planted seeds — 2026-07-11 revision round** (shipped-scope plants landed;
+  future payoffs remain contracted in `PARAVOXIA_REVISION_PLAN.md`): the manifest's
   "COMPENSATION: SEE CLAUSE 4" (the reward is a reference to the clause that
   does not exist); the voyage intrusion ladder — "(…the clauses store
   cleanly. they have never been checked against anything.)" (doctrine as
@@ -305,7 +319,8 @@ MUST take parentheses; embodied captions MUST NOT.
 
 ## 1.5 STATUS — shipped vs designed (updated 2026-07-10)
 
-**SHIPPED (playable, movie-verified, 633 tests green):** the A0→A3 vertical
+**HISTORICAL SHIPPED SNAPSHOT (the 633-test count was current for this pass):**
+the A0→A3 vertical
 slice. Implementation truth lives in `main/STORY.md` — read it before touching
 anything. What shipped (and where it refines the designs below):
 
@@ -344,26 +359,18 @@ anything. What shipped (and where it refines the designs below):
   wait for `story:a4`); the sense-milestone HUD gating; the survey chart;
   per-beat score MOODS on the global music rails; the hidden-pillar copy seeds.
 
-**NEXT STEPS (in order):**
-1. **Owner playtest passes** on the slice: pacing (era lengths are named
-   constants), music mix, prologue feel, chart/UX. Feed notes back as tuning.
-2. **Chapter 4 — "The Other Worker" (A4: Breath)** — IN PROGRESS. Full
-   contract: `PARAVOXIA_CH4_PLAN.md`; its S1–S5 SHIPPED 2026-07-10 (the first
-   day alive: thirst/forage/klaxon-stamina discovery scenes, ambient musings,
-   the scheduled sleep, and W-7744's arrival — temporarily terminal there).
-   Next: S6 `ch4-audit` onward. Built by the `chapter-director` agent
-   (`.claude/agents/chapter-director.md`).
-3. **Color-era enrichment pass** (deferred by choice): more rungs/content in
-   ch2–ch3, and the third-person→embodied-A3 endgame POV candidate (see the
-   chronology section) — revisit after ch4 informs how the era reads.
-4. **Owner revision round 2026-07-11 — IN FLIGHT**: eight concerns, contracted
-   in `PARAVOXIA_REVISION_PLAN.md` (voyage overhaul + naming beat, the
-   reward-dissonance arc, vigil star-gazing/constellations, the theme line,
-   anomaly-mass relocation to an adjacent face, billboard growth fix, the
-   ch3-gather campfire teaching chain, DescentPod→ship conversion at A3).
-5. **Backlog** (from `main/STORY.md` known gaps): prologue number-key
-   selection, mobile/touch story pass, Esc-during-cutscene handling, vitals
-   refill on rest, A2 ortho→perspective projection pull.
+**CURRENT AUTHORITY POINTERS (2026-07-13):**
+
+1. The shipped public story ceiling is `ch4-arrival`, followed by the temporary
+   `done` handoff into the material sandbox.
+2. The active production gate is the demo-foundation plan, including the headed
+   browser journey and its remaining visual/performance checks.
+3. Existing-story reconciliation and all forward story sequencing are governed
+   by `main/PARAVOXIA_STORY_EXECUTION_PLAN.md`.
+4. The 2026-07-11 owner revision landed for the shipped scope. Its surviving
+   future deltas remain contracted lineage, not an active implementation order.
+5. S6 `ch4-audit` is the first contracted continuation, but runtime work begins
+   only after owner Gate G1 and its typed story substrate are approved.
 
 ---
 
@@ -490,9 +497,9 @@ panels, enclosure) is the chapter's spine. The thesis beat: attention is a form 
 devotion. The worker harvested this world by the ton and saw slabs; the survivor who
 planes one board begins to see *grain*.
 
-**A3 fires** the first night the player sleeps inside a sealed self-built shelter
-(the S3 enclosure flood-fill check is the literal trigger condition — a lovely case
-of a planned mechanic becoming a story beat). They wake to:
+**A3 fires** after the player completes the gather → craft → fire chain and rests
+beside the first campfire at night. A sealed self-built shelter was the earlier
+candidate trigger; enclosure flood-fill remains deferred. They wake to:
 
 - **`material` stage:** triplanar detail, bark, wood grain, stone roughness, ore veins
   glinting in rock faces (`voxelMaterial.ts` authored detail). Resources become
@@ -505,7 +512,7 @@ of a planned mechanic becoming a story beat). They wake to:
 - Hazard phenomena become visible as material effects (frost wisps, dust, ash — the
   `material` stage already partially reveals these): the world starts telling the
   truth about what can hurt you.
-- **The wreck resolves (owner, 2026-07-11 — in flight):** during the bloom wave the
+- **The wreck resolves (owner, 2026-07-11 — shipped):** during the bloom wave the
   DescentPod's voxel wreck resolves into the high-fidelity ship. The ship is simply
   another object whose fidelity resolves as the AI learns to render its world — same
   pose, same silhouette the vector prologue drew; the wreck was always the real ship,
@@ -770,9 +777,9 @@ Existing = works today; **Build** = new work, roughly ordered by when the story 
 - **How player-authored is the pace?** Awakenings-by-act (above) vs. any purely
   time/exploration-based triggers. Recommendation: acts only — the theme demands
   transcendence be *chosen*.
-- **Does the other worker return?** A recurring NPC who awakens slowly (the player
-  watching someone else's chroma come in) could be the emotional B-plot of the
-  emergent era.
+- **How and why does W-7744 return?** Recurrence is confirmed canon. Timing,
+  motive, the cost of each reappearance, and the relationship to the larger
+  threat remain open; the return itself is no longer optional.
 - **Who are the makers?** The style system implies plural authors with conflicting
   strokes. Deciding whether they're ancestors, escapees, or the players-before-you
   (cyclical reading, supported by the A8 ending) can wait until Chapter 6 content.

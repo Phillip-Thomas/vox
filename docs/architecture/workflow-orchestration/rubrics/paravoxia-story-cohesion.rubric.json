@@ -1,0 +1,23 @@
+{
+  "schema": "terra.qualityRubric.v1",
+  "identity": { "slug": "paravoxia-story-cohesion", "name": "Paravoxia Story Cohesion", "version": "v1" },
+  "domain": "story_authority_and_plot_development",
+  "scale": { "min": 1, "max": 5, "passing": 4.7, "categoryFloor": 4.25 },
+  "categories": [
+    { "slug": "shipped_truth_accuracy", "label": "Shipped Truth Accuracy", "weight": 13, "signals": ["every present-tense claim matches reachable runtime", "aspiration and shipped behavior are never conflated", "story ceiling and open gates remain explicit"] },
+    { "slug": "causal_plot_coherence", "label": "Causal Plot Coherence", "weight": 15, "signals": ["each beat follows from character action and consequence", "setup and payoff are traceable", "future direction extends rather than replaces the existing spine"] },
+    { "slug": "character_desire_opposition_and_change", "label": "Character Desire Opposition And Change", "weight": 13, "signals": ["Terra Worker 9 and W-7744 have distinguishable drives", "opposition produces action", "change is independently earned rather than explained into existence"] },
+    { "slug": "player_agency_and_authored_rites", "label": "Player Agency And Authored Rites", "weight": 11, "signals": ["choice authored rite fallback and rescue are labelled honestly", "player action causes thematic turns", "movie mode never becomes the claimed player experience"] },
+    { "slug": "reveal_withhold_and_mystery", "label": "Reveal Withhold And Mystery", "weight": 11, "signals": ["author-only truth cannot leak as player knowledge", "intended ambiguity has concrete evidence", "answers enlarge questions without resolving protected ontology"] },
+    { "slug": "audiovisual_story_arc", "label": "Audiovisual Story Arc", "weight": 12, "signals": ["score camera lens palette and rendering express causal story changes", "motifs and images have setup development and payoff", "future spectacle is earned by lived story"] },
+    { "slug": "canon_and_authority_governance", "label": "Canon And Authority Governance", "weight": 10, "signals": ["source precedence is explicit and machine checked", "owner-only decisions remain open", "legacy plans are preserved without regaining production authority"] },
+    { "slug": "implementation_readiness", "label": "Implementation Readiness", "weight": 8, "signals": ["stable beat IDs and gates exist", "acceptance evidence and migration obligations are explicit", "creative council can commission a bounded packet without hidden chat context"] },
+    { "slug": "independent_review_and_dissent", "label": "Independent Review And Dissent", "weight": 4, "signals": ["blind and canon reviews stay isolated", "all three directors challenge peers", "material dissent is preserved and routed"] },
+    { "slug": "documentation_precision_and_learning", "label": "Documentation Precision And Learning", "weight": 3, "signals": ["cross references and status language agree", "patch scope is bounded", "lessons prevent recurrence"] }
+  ],
+  "blockingDefectPolicy": {
+    "criticalOrHighOpenDefectsFail": true,
+    "mediumCategoriesFailUnlessAccepted": ["shipped_truth_accuracy", "causal_plot_coherence", "character_desire_opposition_and_change", "player_agency_and_authored_rites", "reveal_withhold_and_mystery", "canon_and_authority_governance"],
+    "acceptedExceptionsRequireHumanDecision": true
+  }
+}
