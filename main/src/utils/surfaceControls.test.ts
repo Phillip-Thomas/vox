@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
+  DEFAULT_MOVE_SPEED,
   FACE_NORMALS,
   LAVA_MOVE_SPEED,
   LAVA_SINK_SPEED,
@@ -273,6 +274,15 @@ describe('lava wade (viscous sink)', () => {
   const idle = { forward: false, backward: false, left: false, right: false, struggle: false };
   const step = 1 / 60;
 
+  it('pins the tuning invariants: a real (but slow) sink, a crawl vs walking', () => {
+    // Anchored to literals so a refactor can't silently null the feature: the
+    // sink must exist and stay SLOW, the wade must stay far below walk speed.
+    expect(LAVA_SINK_SPEED).toBeGreaterThan(0);
+    expect(LAVA_SINK_SPEED).toBeLessThan(1);
+    expect(LAVA_MOVE_SPEED).toBeLessThan(DEFAULT_MOVE_SPEED / 2);
+    expect(LAVA_STRUGGLE_RISE).toBeGreaterThan(LAVA_SINK_SPEED); // escape must be possible
+  });
+
   function settle(start: THREE.Vector3, input = idle, seconds = 2) {
     let velocity = start.clone();
     for (let i = 0; i < seconds * 60; i++) {
@@ -295,7 +305,6 @@ describe('lava wade (viscous sink)', () => {
   it('claws upward while struggling, slightly faster than the sink', () => {
     const settled = settle(new THREE.Vector3(), { ...idle, struggle: true });
     expect(settled.dot(up)).toBeCloseTo(LAVA_STRUGGLE_RISE, 3);
-    expect(LAVA_STRUGGLE_RISE).toBeGreaterThan(LAVA_SINK_SPEED); // escape must be possible
   });
 
   it('wades tangentially at a crawl — capped at LAVA_MOVE_SPEED, still sinking', () => {

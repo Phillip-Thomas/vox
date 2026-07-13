@@ -95,8 +95,7 @@ function buildMaterialIdGLSL(): string {
 
 // Stylized art-direction palette, authored in sRGB then linearized for the
 // shader (pipeline is linear + ACES). These are TINTS the detail math nudges
-// the instanceColor toward — they are NOT a hard replacement, so the
-// per-instance instanceColor variation is preserved. Chosen to sit cohesively
+// the authored instanceColor toward; they are not a hard replacement. Chosen to sit cohesively
 // with the grass blades (0x4a7a24 -> 0x9bd64a) and water shallow (0x2bb6c8).
 function lin(hex: number): string {
   const c = new THREE.Color(hex).convertSRGBToLinear();
@@ -1005,8 +1004,8 @@ export function createVoxelMaterial(): THREE.MeshStandardMaterial {
 /**
  * Push the per-planet terrain tint from the profile into the material (call once
  * the shader has compiled; re-call when the planet seed changes). The palette is
- * baked GLSL, so we only drive the soil hue-nudge uniforms — the program stays
- * shared across planets.
+ * baked GLSL, while uniforms drive seeded domain, relief, weathering, mineral
+ * exposure, and bounded family tints. The program stays shared across planets.
  */
 export function applyTerrainProfileToMaterial(
   profile: TerrainProfile,

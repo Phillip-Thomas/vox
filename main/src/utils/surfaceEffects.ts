@@ -9,22 +9,21 @@ import type { VoxelRealityEffects } from '../game/systems/realityRenderSystem';
 import type { WindProfile } from './windProfile';
 
 // =============================================================================
-// GROUNDED VOXEL SURFACE EFFECTS
+// VOXEL SURFACE EFFECT UTILITIES
 // =============================================================================
 //
-// Replaces the old lifted ribbon/card "phenomena" (which read as an aura hanging
-// over every voxel) with three grounded primitives:
+// Runtime flush phenomena now live in voxelMaterial's shared shader. That avoids
+// square carrier boundaries, transparent sorting, and one overlay instance per
+// exposed voxel. SurfaceEffectField constructs only these spatial primitives:
 //
-//  1. SHEETS  — one quad lying flush ON each exposed eligible face. The fragment
-//     shader samples WORLD-SPACE noise in the face's tangent plane, so patterns
-//     (blowing sand streams, soil moisture, glinting frost) continue seamlessly
-//     across every run of adjacent same-material voxels instead of repeating a
-//     per-voxel motif. Wind advection uses the shared planet WindProfile.
-//  2. MOTES   — sparse, tiny airborne particles (pollen, spores, embers) that
+//  1. MOTES   — sparse, tiny airborne particles (pollen, spores, embers) that
 //     drift downwind through a small wrap-around cell, for the few phenomena
 //     that genuinely belong in the air. Small + dim: atmosphere, not aura.
-//  3. CRITTERS — see surfaceCritters.ts: worm/caterpillar agents that crawl
+//  2. CRITTERS — see surfaceCritters.ts: worm/caterpillar agents that crawl
 //     across adjacent same-material voxels.
+//
+// The sheet API below is retained as a deprecated compatibility/test utility. It
+// is not constructed by the runtime field and must not be used for flush detail.
 //
 // All layers stay mapped to the global systems: per-planet WindProfile,
 // VoxelRealityEffects stage gating, art-direction palette colors, and the
@@ -47,6 +46,7 @@ export type SurfaceEffectId =
 
 export type SurfaceSheetKind = 'flow' | 'soil' | 'glint';
 
+/** @deprecated Flush surface detail belongs in the shared voxel shader. */
 export interface SurfaceSheetConfig {
   id: SurfaceEffectId;
   kind: SurfaceSheetKind;
@@ -181,7 +181,7 @@ export function surfaceEffectRealityDensityScale(reality: VoxelRealityEffects): 
 }
 
 /**
- * Sheet pattern strength for a density (sheets never drop voxels — continuity).
+ * Deprecated sheet pattern strength retained for compatibility tests.
  * Flat response floor keeps low-weight planets clearly readable: ecology
  * weights of ~0.3 still need a visible phenomenon, just a calmer one.
  */
@@ -478,7 +478,7 @@ export const SURFACE_SHEET_KIND_GLSL: Record<SurfaceSheetKind, string> = {
 // -----------------------------------------------------------------------------
 
 /**
- * Flush surface sheet. MeshStandardMaterial keeps the effect inside the scene's
+ * Deprecated flush surface sheet. MeshStandardMaterial keeps the effect inside the scene's
  * lighting/fog (no unlit glow at night), with the pattern injected via
  * onBeforeCompile like grass/voxel materials.
  */

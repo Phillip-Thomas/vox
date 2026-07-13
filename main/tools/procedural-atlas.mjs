@@ -278,7 +278,7 @@ function detectCaseDefects(entry) {
   if (metrics.triangles > budget.triangles) add('too_many_triangles', 'medium', `${metrics.triangles} tris above ${budget.triangles}`);
   if ((metrics.programCount ?? 0) > budget.programs) add('shader_explosion', 'high', `${metrics.programCount} programs above ${budget.programs}`);
   const layers = metrics.layerCounts ?? {};
-  const expectsOrganic =
+  const expectsOrganic = STAGES_WITH_SURFACE_EFFECTS.has(entry.stage) &&
     entry.profiles?.artDirection?.ecology?.richness > 0.35 &&
     entry.profiles?.artDirection?.ecology?.materialEligibility?.trees?.length > 0;
   if (entry.quality !== 'POTATO' && expectsOrganic && ((layers.grass ?? 0) + (layers.trees ?? 0) + (layers.flora ?? 0) + (layers.fauna ?? 0)) <= 0) {

@@ -29,6 +29,7 @@ describe('voxelMaterial', () => {
       uSurfaceScale: { value: 1 },
       uSurfaceRelief: { value: 0 },
       uSurfaceWeathering: { value: 0 },
+      uSurfaceMineralization: { value: 0 },
       uRockTint: { value: new THREE.Color() },
       uMineralTint: { value: new THREE.Color() },
       uHazardTint: { value: new THREE.Color() }
@@ -40,6 +41,7 @@ describe('voxelMaterial', () => {
     expect(uniforms.uSurfaceOffset.value.toArray()).toEqual(profile.surfaceOffset.toArray());
     expect(uniforms.uSurfaceScale.value).toBe(profile.surfaceScale);
     expect(uniforms.uSurfaceRelief.value).toBe(profile.surfaceRelief);
+    expect(uniforms.uSurfaceMineralization.value).toBe(profile.mineralization);
     expect(uniforms.uRockTint.value.getHex()).toBe(profile.rockTint.getHex());
     expect(material.customProgramCacheKey()).toBe('voxel-pbr-v7');
     material.dispose();
@@ -60,6 +62,7 @@ describe('voxelMaterial', () => {
       uRealityThermal: { value: 1 },
       uRealityCrystalline: { value: 1 },
       uRealityMetal: { value: 1 },
+      uRealityStyle: { value: 1 },
       uSunDir: { value: new THREE.Vector3() },
       uMoonDir: { value: new THREE.Vector3() }
     };
@@ -92,6 +95,15 @@ describe('voxelMaterial', () => {
     updateVoxelMaterial(material, 14, QUALITY_PROFILES.MEDIUM, VOXEL_REALITY_PRESETS.alive);
     expect(uniforms.uTriplanar.value).toBe(0);
     expect(uniforms.uCheapDetail.value).toBe(1);
+
+    updateVoxelMaterial(material, 15, QUALITY_PROFILES.MEDIUM, VOXEL_REALITY_PRESETS.material);
+    expect(uniforms.uCheapDetail.value).toBeCloseTo(VOXEL_REALITY_PRESETS.material.detail);
+    expect(uniforms.uRealityStyle.value).toBeCloseTo(VOXEL_REALITY_PRESETS.material.detail);
+
+    updateVoxelMaterial(material, 16, QUALITY_PROFILES.HIGH, VOXEL_REALITY_PRESETS.bare);
+    expect(uniforms.uTriplanar.value).toBe(0);
+    expect(uniforms.uCheapDetail.value).toBe(0);
+    expect(uniforms.uRealityStyle.value).toBe(0);
 
     material.dispose();
   });
