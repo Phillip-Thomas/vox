@@ -52,6 +52,16 @@ export const SIDE_CAMERA_DISTANCE = 16;
 export const SIDE_CAMERA_LIFT = 3.0;
 export const SIDE_CAMERA_FOCUS_LIFT = 1.4;
 
+/**
+ * Fixed-screen cells are centred on the crash/arrival origin. Cell 0 therefore
+ * owns half a screen in either travel direction and the camera only cuts after
+ * the worker actually crosses an adjacent-frame boundary.
+ */
+export function fixedScreenCellIndex(along: number, cellWidth: number): number {
+  if (!Number.isFinite(along) || !Number.isFinite(cellWidth) || cellWidth <= 0) return 0;
+  return Math.floor((along + cellWidth / 2) / cellWidth);
+}
+
 // --- The lens rig ---------------------------------------------------------------
 //
 // Side view, top-down, and isometric are the SAME external camera at different
@@ -159,7 +169,7 @@ export function computeRigFrame(
     // the lens origin so the shot never bobs with terrain.
     _rigRel.copy(anchor).sub(lens.origin);
     const along = _rigRel.dot(lens.travelAxis);
-    const cell = (Math.floor(along / rig.followQuant) + 0.5) * rig.followQuant;
+    const cell = fixedScreenCellIndex(along, rig.followQuant) * rig.followQuant;
     const depth = _rigRel.dot(lens.depthAxis);
     _rigAnchor.copy(lens.origin)
       .addScaledVector(lens.travelAxis, cell)

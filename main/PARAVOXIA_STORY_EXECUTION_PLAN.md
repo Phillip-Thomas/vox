@@ -8,6 +8,8 @@
 
 **Canon source:** `PARAVOXIA_STORY_BIBLE.md`
 
+**Owner-directed next-batch treatment:** `PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md`
+
 **Active production resume point:** `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`
 
 **Machine authority contract:** `story-authority.json`
@@ -22,6 +24,13 @@ lane ends at W-7744's arrival and protects existing story copy, score, audio,
 controls, and later-story boundaries. Planning and canon documentation are
 allowed; later runtime work begins only after the demo gate is explicitly
 closed and the owner opens the next lane.
+
+When that lane opens, the confirmed post-Breath order is **Maw repair → dive →
+ship repair → continuous same-system travel → abundant alien-verdant
+Tidegarden base building**.
+Free-play accomplishments and observations run alongside that authored spine;
+they reward capability and attention without becoming XP, consciousness scores,
+or gates on the critical path. The first interstellar warp still owns A5 Light.
 
 ---
 
@@ -62,8 +71,11 @@ When sources disagree, use this order:
 2. the active demo-foundation plan for what may ship in the current lane;
 3. `PARAVOXIA_STORY_BIBLE.md` for canon, confirmed direction, and open ontology;
 4. owner-approved scene contracts for their authored sequence;
-5. this plan for future delivery order and acceptance evidence;
-6. exploratory proposals from the shared “Game Story Review” conversation.
+5. `PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md` for the Maw → dive → ship → local
+   travel → Tidegarden treatment and its free-play observation/accomplishment
+   contract;
+6. this plan for future delivery order and acceptance evidence;
+7. exploratory proposals from the shared “Game Story Review” conversation.
 
 An assistant-generated mechanism is not owner canon merely because it appears
 in the shared conversation. This plan preserves every such idea as a candidate,
@@ -199,11 +211,11 @@ not a promising subsystem hidden behind an unreachable path.
 | C11 | Extraction beam exists | Fauna targeting, refusal boundaries, damage/harvest semantics | Hunt is legible, ethical framing remains intact, no pre-A4 target leak |
 | C12 | Campfire/crafting exist | Meat, cooking, and relight/rebuild contract | Raw/cooked states are distinct; fire prerequisite works after the vigil |
 | C13 | Interaction system lacks the needed story hold grammar | Cancel-safe hold interaction with progress and accessibility alternative | Keyboard/pointer/controller paths cannot double-fire or soft-lock |
-| C14 | Maw and repair vocabulary exist | Pack pickup and Maw kit acquisition | Inventory, HUD, save, and story ledger agree after pickup/reload |
-| C15 | Underwater/oxygen core exists | Authored dive, pressure, roughly 60-second oxygen rhythm, discovery timing | Entry feels like another medium; depletion/recovery/death are fair and gated |
-| C16 | Maw is not repaired in story | Repair, morph, feedback, and persistent capability transition | Repair is visually continuous, saved, and not a generic menu unlock |
-| C17 | Jet substrate leaks early | First-hover scene and post-repair gate | No earlier activation; first thrust/hover is authored and recoverable |
-| C18 | No S13 completion boundary | First-flight objective and honest next-goal handoff | Chapter ends at the Emergent threshold, not at false galaxy completion |
+| C14 | Maw and repair vocabulary exist | Dry-land pack pickup and Maw kit acquisition after Breath | Inventory, HUD, save, and story ledger agree after pickup/reload; the kit is never placed underwater |
+| C15 | Maw is not repaired in story | Maw repair, morph, feedback, and persistent capability transition before the dive | Repair is visually continuous, saved, and not a generic menu unlock |
+| C16 | Underwater/oxygen core exists | Post-repair dive, pressure, roughly 60-second oxygen rhythm, and Kestrel Keel Memory recovery | Entry feels like another medium; depletion/recovery/death are fair and the Maw changes how the medium is read |
+| C17 | Jet substrate leaks early | Lift Cell installation during ship reconstruction and an authored first-hover scene | No earlier activation; first thrust/hover is recoverable and cannot bypass the dive |
+| C18 | The legacy S13 boundary no longer matches owner sequence | Honest handoff from dive into visible ship reconstruction | The chapter opens the Emergent settlement batch without claiming A5 or false galaxy completion |
 | C19 | Score has rich stage/story signals | Protected S6–S13 mood states and transition ownership | Added adapters preserve assets/mix architecture and have no abrupt handoff |
 | C20 | Movie mode covers current story | S6–S13 autopilot and unattended recovery | Full run completes from clean save with no teleport or skipped thematic verb |
 
@@ -211,14 +223,17 @@ not a promising subsystem hidden behind an unreachable path.
 
 | ID | Current truth | Missing obligation | Done when |
 | --- | --- | --- | --- |
-| E01 | Crafting has future vocabulary | Fully bounded Emergent stations/devices | Only implemented recipes surface; every station has a story need and sandbox use |
-| E02 | Ship resolves visually but remains wrecked | Reconstruction arc, resource logic, visible repair stages | Each repair changes capabilities and remembered meaning, not only a meter |
-| E03 | Scanner/hazards/warp foundations are partial | Authored consumers and failure/recovery loops | Tools ask new questions and do not merely highlight loot |
-| E04 | Same-system travel substrate exists | Production A→B→A continuity, save, time, origin shift, landing | Round trip preserves both worlds, landmarks, story authority, and player inventory |
-| E05 | Light-stage rendering controls exist | A5 first-warp scene and quality-independent narrative reveal | Warp earns A5; low and high hardware tiers disclose identical meaning |
-| E06 | Constellation scene records a global milestone | Persistent, actor-specific constellation navigation grammar | Different perceivers can form/revisit meanings over shared seed truth |
-| E07 | Underwater core is mature but identity wiring is incomplete | Per-planet palette/ecology/music/perception integration | Each world keeps vibrant legibility while expressing its own medium |
-| E08 | W-7744 recurrence is confirmed | A5 return motive, belief state, fault concealment, evidence of greater threat | Owner approves scene contract; behavior shows change without mind-reading exposition |
+| E01 | Crafting has future vocabulary but client/server catalogs diverge | One shared authoritative item/recipe/build-material catalog plus bounded repair cradle, field smelter, wreck assembler, destination material bench, and Habitat Core with recipe-knowledge gates | Client/server parity and computed story BOM pass; only learned recipes surface and every station has a lasting use |
+| E02 | Ship resolves visually but remains wrecked | Four-stage reconstruction, resource logic, remembered scar, and versioned ship state | Hull, life support, lift, and navigation each visibly alter one persistent ship and unlock one capability |
+| E03 | Scanner and environmental-response foundations are partial | Authored evidence consumers, oxygen, wind/pollen/ecology/night rhythms, shelter acoustics, and recovery | Tools ask new questions; environmental changes have readable cues without turning the starter sibling into a punishment biome |
+| E04 | Same-system travel substrate exists | Exact two-body story fixture and production origin→sibling→origin continuity | Round trip preserves both worlds, landmarks, bases, ship, story authority, and inventory without interstellar warp |
+| E05 | Current generated story companions are volcanic/arid and conflict with owner direction | Pin `-1,-1:p1` / seed `1600321158` to the versioned alien-verdant Tidegarden profile; validate landing, mixed-resource economy, site choice, stewardship, and rest | Every planet consumer resolves the same hazard-free profile and any valid player-chosen site can support a functional habitat through one complete ecology/night cycle |
+| E06 | Milestones exist but attention is not represented | Separate actor-specific accomplishment and provisional-observation ledgers | Physical acts and noticed patterns persist, dedupe by meaningful context, and never become XP or critical-path gates |
+| E07 | Automation has surface helpers but no legal multi-medium contract | Surface route, 3D swim route with oxygen reserve, and ship-intent adapters | Movie mode completes every medium without key synthesis, teleport, water walking, or invalid spawns |
+| E08 | Underwater and planet profiles are mature but identity wiring is incomplete | Per-planet palette, ecology, music, perception, and climate-consumer integration | Each world keeps vibrant legibility while expressing its own medium on every quality tier |
+| E09 | Light-stage rendering controls exist | A5 first-interstellar-warp scene and quality-independent narrative reveal after the settlement batch | Local travel spends no A5 capital; the first true warp earns Light on low and high tiers |
+| E10 | Constellation scene records a global milestone | Persistent, actor-specific constellation navigation grammar | Different perceivers can form and revisit meanings over shared seed truth |
+| E11 | W-7744 recurrence is confirmed | A5 return motive, belief state, fault concealment, evidence of greater threat | Owner approves scene contract; behavior shows change without mind-reading exposition |
 
 ### 4.4 A6, A7, A8, and endgame technology
 
@@ -496,8 +511,8 @@ not individually locked canon.
 | A3 — Grain | peace, wonder, belonging | build warmth, rest, live without quota | what makes life meaningful? why beauty? | can value exist without productivity or permission? | a deliberately spacious “Wonder Chapter”: water, forage, stars, music, building, climbing, anomalies, quiet life |
 | A3→A4 inquiry | unease, relationship | investigate tracks, roots, movement, weather, machinery | what connects living things? what can W-7744 not see? | can two observers inhabit different worlds together? | pattern recognition and revisits; no pre-A4 fauna body leak |
 | A4 — Breath | conviction, care | survive the audit and protect the tree | what deserves protection? | is moral action also a way of seeing? | forced compliance, regression, refusal, breath front, ecology; W-7744's independent fault |
-| Post-A4 Emergent bridge | appetite, responsibility, possibility | hunt/cook, dive/breathe, repair Maw, make first hover | what must embodiment consume, repair, or spare? | what does leaving owe to the place that made leaving possible? | S10–S13; first suit flight is not yet A5 or galaxy access |
-| A5 — Light | awe | rebuild the ship, navigate, and complete first interstellar warp | what is a world? | are environments expressions or viewpoints? | same-system continuity first; constellations become navigation; universe becomes stranger, not only larger |
+| Post-A4 Emergent bridge | appetite, responsibility, possibility, relation | repair Maw, dive/breathe, rebuild ship, cross locally, choose a site, make a second hearth | what must embodiment consume, repair, spare, or sustain? | what does leaving owe to the place that made leaving possible? | Maw→dive→ship→local sibling→base; observations accompany play; appetite stays optional; A5 remains ahead |
+| A5 — Light | awe | earn the Range Coil, navigate, and complete first interstellar warp | what is a world beyond the relationship already made? | are environments expressions or viewpoints? | two-world continuity already proven; constellations become navigation; universe becomes stranger, not only larger |
 | A5→A6 inquiry | reverence, suspicion | compare worlds, signatures, histories, and fragments | what makes a style intentional? | can a world “believe” something? | archaeology of ideas rather than artifact counts; cross-world contradiction |
 | A6 — The Hand | reverence, responsibility | decipher/compare authored evidence | what is an author? | can creation outgrow or reinterpret its creator? | planetary philosophies, Maker evidence without Maker answer, possible W-7744 collaboration only after gate |
 | A6→A7 inquiry | doubt, disorientation | reconcile inconsistent memories and observers | which account is wrong—or incomplete? | can incompatible realities coexist? | Worker 9 traces, W-7744 readings, temporal echoes, observer-dependent tools, causal gaps |
@@ -921,34 +936,63 @@ four reviewable packets:
    extraction, continuous regression, protected-tree refusal.
 2. **S9: Breath.** One continuous life reveal, W-7744 flight/fault, pack drop,
    story:a4 authority.
-3. **S10–S11: appetite and medium.** Extraction-beam hunt, meat/campfire,
-   protected hold input, authored dive/oxygen.
-4. **S12–S13: repair and possibility.** Maw kit/repair/morph, jet authority,
-   first hover, first flight, honest next-goal handoff.
+3. **Owner-directed Direction: Maw repair.** Recover the dry-land field pack,
+   perform the atomic Maw repair/morph, and let chosen use—not Authority—define
+   its first direction. Appetite/hunt/refrain remains persistent optional play.
+4. **Owner-directed Below: dive and recovery.** Use the repaired Maw in the
+   authored oxygen medium, recover the Kestrel Keel Memory, bank it on dry
+   shore, and hand honestly into ship reconstruction. The legacy S10–S13 IDs
+   remain provenance until the authority candidate assigns final beat IDs.
 
 Every packet ships with unit/state tests, clean-save and mid-save proof,
 movie-mode proof, visual/audio capture, performance budget, accessibility pass,
 and a canon review against the bible.
 
-### WS9 — Emergent bridge and A5 Light
+### WS9A — Emergent settlement bridge: The Distance Between Fires
 
-**Blocked by complete S6–S13 and story-specific travel contract.**
+**Blocked by WS8, the owner-approved sibling profile, and the story-specific
+travel contract.**
 
 Deliverables:
 
-- bounded Emergent recipe/station set driven by narrative needs;
-- visible ship reconstruction and capability progression;
-- scanner and hazard loops that ask questions rather than mark loot;
-- production same-system A→B→A continuity;
+- bounded, placeable Emergent recipe/station set driven by narrative needs;
+- four-stage visible ship reconstruction and capability progression;
+- exact two-body Story fixture with the abundant alien-verdant Tidegarden
+  sibling whose profile is authoritative for terrain, ecology, economy,
+  palette, score, and landing validation;
+- scanner, wind/pollen/night ecology, and stewardship loops that ask questions rather
+  than mark loot or punish first arrival;
+- production origin → sibling → origin → sibling continuity;
+- free-layout habitat construction and a working Second Hearth;
+- separate actor-specific accomplishment and provisional-observation ledgers;
+- legal surface, swim, and vehicle automation adapters.
+
+Exit evidence:
+
+- a complete origin → sibling → origin → sibling journey survives save/reload;
+- A5 remains unspent by suit hover, launch, local travel, landing, and base rest;
+- the sibling is abundant and biologically distinct rather than volcanic,
+  frozen, or a recolored duplicate of the origin;
+- player-chosen construction adapts to the site and leaves room for restraint;
+- all required meaning survives low quality and reduced motion.
+
+### WS9B — A5 Light
+
+**Blocked by WS9A and enough two-world free play to make departure mean
+something.**
+
+Deliverables:
+
+- Range Coil and the bounded material/knowledge path that earns it;
 - actor-specific constellation navigation;
 - story-gated first interstellar warp and A5 Light transition;
 - approved W-7744 recurrence and first concrete greater-threat evidence.
 
 Exit evidence:
 
-- a complete origin → sibling → origin → warp journey survives save/reload;
-- A5 is earned by first warp, not first suit hover or local flight;
-- the new world is philosophically stranger, not merely a different biome;
+- origin → sibling → origin → first warp survives save/reload;
+- A5 is earned only by the first true interstellar warp;
+- the destination is philosophically stranger, not merely a different biome;
 - all required meaning survives low quality and reduced motion.
 
 ### WS10 — A6 The Hand
@@ -1062,10 +1106,11 @@ its evidence gate.
 | P1 | Future substrate | G1 | WS1 authority/save gates and WS2 single-player parity pass with no visible regression |
 | P2 | S6–S8 | P1 | Inspection/compliance/refusal complete, checkpointed, captured, and canon-approved |
 | P3 | S9/A4 Breath | P2 | Alive reveal, W-7744 fault/flight, story:a4, budget and accessibility proof |
-| P4 | S10–S13 | P3 | Hunt/cook/dive/oxygen/Maw/jet/first-flight loop complete and honest |
+| P4 | Direction + Below | P3 | Dry pack, Maw repair, authored dive/oxygen, Keel Memory shore banking, and optional appetite contract complete and honest |
 | P5 | Internal signature proofs | P4 | Lens, rift, teardown, tree, and identity representation risks measured; none ship as early canon |
-| P6 | Emergent + A5 | P4 plus travel/planet gates | Ship reconstruction, A→B→A, constellations, first warp/Light, W-7744 return complete |
-| P7 | A6 | P6 plus planet grammar proof | Authorship evidence and world-signature arc complete; Makers remain open |
+| P6A | Emergent settlement | P4 plus travel/sibling-profile gates | Ship reconstruction, local travel, Tidegarden habitat, observations, and origin→sibling→origin→sibling persistence complete; A5 remains unspent |
+| P6B | A5 Light | P6A plus Range Coil/constellation gates | First interstellar warp/Light and approved W-7744 return complete |
+| P7 | A6 | P6B plus planet grammar proof | Authorship evidence and world-signature arc complete; Makers remain open |
 | P8 | A7 | P7 plus greater-threat/Worker 9 owner gates | Paradox Lens, rifts, operational threat, and Worker 9 reveal complete |
 | P9 | A8 | P8 plus final identity/chooser gates | Frame teardown and ending complete; postgame preserves wonder and non-finality |
 
@@ -1119,9 +1164,10 @@ exceptions.
 
 ### 9.5 P2–P4 — Finish one complete Chapter 4 movement
 
-Deliver inspection → forced diminishment → refusal → Breath → appetite → medium
-→ repair → possibility as a complete sequence. Public scope should not stop at
-half an audit, and first flight must not masquerade as first warp.
+Deliver inspection → forced diminishment → refusal → Breath → Maw repair →
+medium/dive → possibility as a complete sequence. Appetite remains an optional,
+persistent response rather than a blocker. Public scope should not stop at half
+an audit, and first hover must not masquerade as first warp.
 
 ### 9.6 P5 — Retire endgame risks without spending the ending
 
@@ -1130,8 +1176,10 @@ identity representation, accessibility, and save safety. Delete or redesign a
 failed implementation; preserve the narrative capital until A7/A8 have been
 earned.
 
-### 9.7 P6–P9 — Expand through lived questions
+### 9.7 P6A–P9 — Expand through lived questions
 
+- P6A must make two worlds relational through repair, local travel, stewardship,
+  and return without spending Light.
 - A5 must make the universe stranger, not merely larger.
 - A6 must let authorship become arguable, not explained.
 - A7 must make perception a verb and the greater threat actionable, not final.
@@ -1161,15 +1209,16 @@ decision open is preferable to canonizing it through an implementation default.
 
 | Gate | Needed by | Decision | Must remain open afterward |
 | --- | --- | --- | --- |
-| G-CH4-01 | P2 | How the campfire is relit/rebuilt before cooking | No broader branch rewrite |
+| R-CH4-01 | P2 | RESOLVED: persisted doused fire relights with ordinary fuel; a legal replacement campfire also satisfies cooking | No auto-light, free refund, or broader branch rewrite |
 | G-CH4-02 | P2 | Any small expressive input inside the contracted forced sequence | Final bare “no.” and protected tree remain fixed |
 | G-PER-01 | P1 | Resolver type/data ownership and performance budget | Ultimate ontology and player/third mapping |
 | G-COM-01 | P1/WS7 | Whether first communion prototype is approved | Whether communion is literal cosmic law |
 | G-PCG-01 | WS4 | Whether name/attention co-authorship proceeds beyond research | Makers and player-as-Maker hypothesis |
 | G-PCG-02 | WS4 | Generation vs perception boundary, privacy, reset, multiplayer ownership | No personality inference |
-| G-A5-01 | P6 | W-7744's reason for returning and what he currently believes | His full interiority and final turn |
-| G-A5-02 | P6 | First operational evidence of greater threat | Threat's ultimate ontology |
-| G-A5-03 | P6 | How subjective constellations map to objective seeds | Whether meaning is discovered or created in final terms |
+| G-EM-01 | P6A | Final Tidegarden v1 profile weights, palette audition, resource guarantees, and generation fingerprint for fixed p1 identity | A claim that abundance exists for Terra's use |
+| G-A5-01 | P6B | W-7744's reason for returning and what he currently believes | His full interiority and final turn |
+| G-A5-02 | P6B | First operational evidence of greater threat | Threat's ultimate ontology |
+| G-A5-03 | P6B | How subjective constellations map to objective seeds | Whether meaning is discovered or created in final terms |
 | G-A6-01 | P7 | What playable evidence makes authorship arguable | Maker identity/number/motive |
 | G-A6-02 | P7 | Whether/when W-7744 collaborates | His awakening cannot be installed |
 | G-A7-01 | P8 | Operational threat braid and apparent extraction function | Final cosmological answer |
@@ -1370,7 +1419,7 @@ every small thought is preserved without becoming accidental canon.
 | G08 | W-7744 arrival/loss ends the peaceful interval | Existing shipped arrival |
 | G09 | Pre-A4 investigation studies roots, migration, weather, machinery, and W-7744's blindness | A3→A4 inquiry plan; no dormant-life body leak |
 | G10 | A4 is conviction/protection/refusal/life/ecology | Contracted Chapter 4 |
-| G11 | Maw repair/flight creates possibility after Breath | S10–S13 bridge, not A4 trigger itself |
+| G11 | Maw repair, dive, reconstruction, local flight, and the second hearth create possibility after Breath | Owner-directed Emergent bridge, not A4 or A5 trigger itself |
 | G12 | Galaxy exploration asks what worlds believe through styles/music/constellations | WS6 and A5/A6 exploration |
 | G13 | A5 is awe/world/travel with first intentional-creation evidence approaching | A5 makes world larger; authorship threshold remains A6 |
 | G14 | Later archaeology gathers ideas, cross-references, and conflicting philosophies rather than artifacts | A5→A6 design |

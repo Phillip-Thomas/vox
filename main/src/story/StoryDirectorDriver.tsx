@@ -15,6 +15,7 @@ import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { REDACTION_BANDS } from './storyScript.ts';
 import { currentNavWaypointIndex, currentNavWaypointPosition, NAV_WAYPOINT_COUNT } from './navWaypoints.ts';
 import { getSupplyPodPositions, isPodCollected } from './supplyPods.ts';
+import { projectDirectionalMarker, type DirectionalMarkerProjection } from './directionalMarker.ts';
 
 /**
  * In-Canvas tick for the story director. Lives INSIDE the R3F frame loop (and
@@ -33,7 +34,12 @@ const _center = new THREE.Vector3();
 const _toTree = new THREE.Vector3();
 const _camDir = new THREE.Vector3();
 const _camPos = new THREE.Vector3();
-const _camQuat = new THREE.Quaternion();
+const _markerProjection: DirectionalMarkerProjection = {
+  x: 0, y: 0, angle: 0, offscreen: true, surfaceOccluded: false
+};
+const _redactionProjection: DirectionalMarkerProjection = {
+  x: 0, y: 0, angle: 0, offscreen: true, surfaceOccluded: false
+};
 
 function redactionLabelFor(distance: number): string {
   let label = REDACTION_BANDS[0].label;
@@ -119,56 +125,19 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = fals
     if (markerTarget) {
       const playerPos = getPlayerWorldPosition();
       const range = Math.max(0, playerPos.distanceTo(markerTarget.position) - 1.5);
-      // Direction to the goal in CAMERA space — meaningful in front, beside,
-      // or behind (a raw NDC projection flips behind the camera, which used to
-      // aim the chevron at nothing).
-      camera.getWorldPosition(_camPos);
-      camera.getWorldQuaternion(_camQuat);
-      _camQuat.invert();
-      _toTree.copy(markerTarget.position).sub(_camPos).applyQuaternion(_camQuat);
-      const depth = -_toTree.z; // camera looks down -Z
-      const halfW = size.width / 2;
-      const halfH = size.height / 2;
-      const margin = 70;
+      const projection = projectDirectionalMarker(camera, markerTarget.position, {
+        width: size.width,
+        height: size.height,
+        margin: 70,
+        preferredSide: 1
+      }, _markerProjection);
       const m = r.marker;
       m.visible = true;
       m.label = `${markerTarget.label} · ${Math.round(range)}m`;
-
-      let onscreen = false;
-      if (depth > 0.5) {
-        const ndc = _center.copy(markerTarget.position).project(camera);
-        const x = ndc.x * halfW + halfW;
-        const y = -ndc.y * halfH + halfH;
-        onscreen = x >= margin && x <= size.width - margin && y >= margin && y <= size.height - margin;
-        if (onscreen) {
-          m.offscreen = false;
-          m.x = x;
-          m.y = y;
-          m.angle = 0;
-        }
-      }
-      if (!onscreen) {
-        // Edge chevron: screen-space direction straight from camera space
-        // (screen y grows DOWN, camera y grows up).
-        let sx = _toTree.x;
-        let sy = -_toTree.y;
-        const len = Math.hypot(sx, sy);
-        if (len < 1e-4) {
-          sx = 0;
-          sy = 1; // dead astern with no lateral hint: point down
-        } else {
-          sx /= len;
-          sy /= len;
-        }
-        const scale = Math.min(
-          (halfW - margin) / Math.max(1e-4, Math.abs(sx)),
-          (halfH - margin) / Math.max(1e-4, Math.abs(sy))
-        );
-        m.offscreen = true;
-        m.x = halfW + sx * scale;
-        m.y = halfH + sy * scale;
-        m.angle = Math.atan2(sy, sx);
-      }
+      m.offscreen = projection.offscreen;
+      m.x = projection.x;
+      m.y = projection.y;
+      m.angle = projection.angle;
     } else if (r.marker.visible) {
       r.marker.visible = false;
     }
@@ -177,12 +146,27 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = fals
     const feedBeat = story.beat === 'ch2-color' || story.beat === 'ch2-approach';
     if (!playing || !feedBeat || !heroTreeHandle.position || !heroTreeHandle.up) {
       if (r.redaction.visible) r.redaction.visible = false;
+      if (r.redactionIndicator.visible) r.redactionIndicator.visible = false;
       if (!feedBeat) r.garble = story.beat === 'a2-awakening' ? r.garble : 0;
       return;
     }
 
     const playerPos = getPlayerWorldPosition();
     const distance = playerPos.distanceTo(heroTreeHandle.position);
+    const stress = THREE.MathUtils.clamp(1 - distance / 20, 0, 1);
+    r.redaction.stress = stress;
+    r.redaction.label = redactionLabelFor(distance);
+
+    // Escalation is proximity-owned, not camera-owned: looking away swaps the
+    // box for a direction icon but cannot pause the feed/score response.
+    r.garble = stress * 0.8;
+    if (story.beat === 'ch2-approach') {
+      setScoreIntensity(0.45 + stress * 0.55);
+      if (stress > 0.25) {
+        r.glitch = Math.max(r.glitch, (stress - 0.25) * 0.6);
+        r.scanRoll = Math.max(r.scanRoll, (stress - 0.25) * 0.3);
+      }
+    }
 
     // Closing in flips the approach beat (work order pivots, escalation arms).
     if (story.beat === 'ch2-color' && distance < APPROACH_DISTANCE) {
@@ -195,16 +179,32 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = fals
     // drop the box entirely once the sphere leaves the frustum.
     _center.copy(heroTreeHandle.position).addScaledVector(heroTreeHandle.up, heroTreeHandle.height * 0.55);
     camera.getWorldDirection(_camDir);
-    _toTree.copy(_center).sub(camera.position);
+    camera.getWorldPosition(_camPos);
+    _toTree.copy(_center).sub(_camPos);
     const depth = _toTree.dot(_camDir); // on-axis: > 0 means in front of the camera
     const range = Math.max(0.5, _toTree.length()); // true distance to the sphere centre
-    if (depth <= 0.5) {
-      r.redaction.visible = false;
-      return;
+    const ndc = _toTree.copy(_center).project(camera);
+    const censorIntersectsView = depth > 0.5 && Math.abs(ndc.x) <= 1.35 && Math.abs(ndc.y) <= 1.35;
+    const lookingDirectly = depth > 0.5 && Math.abs(ndc.x) <= 0.55 && Math.abs(ndc.y) <= 0.55;
+    if (!lookingDirectly) {
+      const direction = projectDirectionalMarker(camera, _center, {
+        width: size.width,
+        height: size.height,
+        margin: 76,
+        forceEdge: true,
+        preferredSide: -1
+      }, _redactionProjection);
+      const indicator = r.redactionIndicator;
+      indicator.visible = true;
+      indicator.offscreen = true;
+      indicator.x = direction.x;
+      indicator.y = direction.y;
+      indicator.angle = direction.angle;
+      indicator.label = `REDACTED SUBJECT · ${Math.round(Math.max(0, distance - 1.5))}m`;
+    } else {
+      r.redactionIndicator.visible = false;
     }
-    const ndc = _center.clone().project(camera);
-    // Meaningfully outside the view (behind is already handled above): stop censoring.
-    if (Math.abs(ndc.x) > 1.6 || Math.abs(ndc.y) > 1.6) {
+    if (!censorIntersectsView) {
       r.redaction.visible = false;
       return;
     }
@@ -219,25 +219,11 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = fals
     const cx = ndc.x * halfW + halfW;
     const cy = -ndc.y * halfH + halfH;
 
-    const stress = THREE.MathUtils.clamp(1 - distance / 20, 0, 1);
     r.redaction.visible = true;
     r.redaction.x = THREE.MathUtils.clamp(cx - pxRadius, -pxRadius, size.width);
     r.redaction.y = THREE.MathUtils.clamp(cy - pxRadius * 1.1, -pxRadius, size.height);
     r.redaction.w = pxRadius * 2;
     r.redaction.h = pxRadius * 2.7; // reach the trunk base — censor the WHOLE question
-    r.redaction.stress = stress;
-    r.redaction.label = redactionLabelFor(distance);
-
-    // The feed strains as the unrenderable thing fills the frame — and the
-    // score's heartbeat climbs with the same proximity.
-    r.garble = stress * 0.8;
-    if (story.beat === 'ch2-approach') {
-      setScoreIntensity(0.45 + stress * 0.55);
-      if (stress > 0.25) {
-        r.glitch = Math.max(r.glitch, (stress - 0.25) * 0.6);
-        r.scanRoll = Math.max(r.scanRoll, (stress - 0.25) * 0.3);
-      }
-    }
   });
   return null;
 };

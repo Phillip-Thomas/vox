@@ -1,6 +1,15 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import * as THREE from 'three';
-import { beginA1, beginA2, beginA3, beginVigilSleep, storyDirectorTick, vigilRestReady } from './storyDirector.ts';
+import {
+  beginA1,
+  beginA2,
+  beginA3,
+  beginVigilSleep,
+  CH1_COLLECTION_TIMING,
+  getStoryBeatClock,
+  storyDirectorTick,
+  vigilRestReady
+} from './storyDirector.ts';
 import { getConstellationReveal } from './skyMeaning.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { placeCampfire, resetCampfires } from '../game/systems/campfires.ts';
@@ -10,8 +19,13 @@ import { drink, feed, getVitals, setVitals } from '../game/systems/survivalVital
 import { getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getStoryForcedDayPhase } from './storyDayPhase.ts';
-import { getCinematicCameraPose, getCinematicLookWeight } from './cinematicLook.ts';
+import {
+  getCinematicCameraPose,
+  getCinematicLookTarget,
+  getCinematicLookWeight
+} from './cinematicLook.ts';
 import { seedDebrisCollected, setDebrisScattered } from './debrisSalvage.ts';
+import { seedSupplyPodsCollected } from './supplyPods.ts';
 import { ARRIVAL, CH3_CAPTIONS, DUSK, FIRST_DAY, SIGNAL, VIGIL } from './storyScript.ts';
 import {
   advanceToBeat,
@@ -36,6 +50,9 @@ import { getStoryText } from './storyText.ts';
 import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
 import { getLensRig } from './sideLens.ts';
+import { getAuditWorkerPath, storyAnchors, STORY_SEED } from './world/storyWorld.ts';
+
+const STORY_PLANET_SIZE = 50;
 
 function drainInventory(id: 'biofiber' | 'stone') {
   const n = getItemCount(id);
@@ -58,6 +75,9 @@ describe('storyDirector — chapter 1 and A1', () => {
     resetVoxelRealityRenderState();
     drainInventory('biofiber');
     drainInventory('stone');
+    storyAnchors.planetSize = STORY_PLANET_SIZE;
+    storyAnchors.terrainSeed = STORY_SEED;
+    storyAnchors.auditPath = getAuditWorkerPath(STORY_PLANET_SIZE, STORY_SEED);
     // Enter ch1 the way the prologue handoff does.
     markMilestone(STORY_MILESTONES.prologueSeen);
     beginStory();
@@ -83,8 +103,13 @@ describe('storyDirector — chapter 1 and A1', () => {
   it('meeting the on-row quota + salvage opens pod recovery and records the milestone', () => {
     setDebrisScattered(3); // minimum voyage outcome must still carry the quota
     seedDebrisCollected(); // hull debris + on-row impact stone recovered
+    tickSeconds(8); // the recovery act has had time to establish itself
     expect(getItemCount('stone')).toBeGreaterThanOrEqual(CH1_QUOTA.stone);
     addItem('biofiber', CH1_QUOTA.biofiber);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
+    tickSeconds(CH1_COLLECTION_TIMING.completionHoldSeconds - 0.1);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-raster'); // final pickup feedback remains readable
+    tickSeconds(0.2);
     expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
   });
@@ -146,7 +171,7 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(cameraFeedVisualState().treatment).toBe(0);
   });
 
-  it('resuming into the raster beat with the quota already met advances on the next tick', () => {
+  it('resuming into raster with a completed quota still presents the collection act', () => {
     // Collect while the watcher is not looking (simulates a reload-with-items).
     advanceToBeat('crawl');
     seedDebrisCollected();
@@ -154,9 +179,23 @@ describe('storyDirector — chapter 1 and A1', () => {
     addItem('stone', CH1_QUOTA.stone);
     advanceToBeat('ch1-raster');
     expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
-    tickSeconds(0.1);
-    expect(getStoryStateSnapshot().beat).toBe('ch1-depth'); // the work-line recovery opens
+    tickSeconds(CH1_COLLECTION_TIMING.rasterMinimumSeconds - 0.1);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
+    tickSeconds(0.2);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
     expect(hasMilestone(STORY_MILESTONES.ch1Quota)).toBe(true);
+  });
+
+  it('resuming with recovered pods still holds the widened-profile act before top-down', () => {
+    advanceToBeat('crawl');
+    seedSupplyPodsCollected();
+    advanceToBeat('ch1-depth');
+
+    tickSeconds(CH1_COLLECTION_TIMING.depthMinimumSeconds - 0.1);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
+    tickSeconds(0.2);
+    expect(getStoryStateSnapshot().beat).toBe('ch1-nav');
+    expect(hasMilestone(STORY_MILESTONES.ch1Depth)).toBe(true);
   });
 
   it('beginA1 only fires from the anomaly beat, and only once the mass is designated', () => {
@@ -250,12 +289,23 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryForcedDayPhase()).toBeCloseTo(0.25, 5); // regulation noon holds
     placeCampfire(new THREE.Vector3(0, 25, 0), new THREE.Vector3(0, 1, 0));
     expect(getStoryStateSnapshot().beat).toBe('ch3-dusk');
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.fireBuilt);
     // the dusk CUTSCENE: bars + camera pull + held feet, then control returns
     tickSeconds(2);
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.fireBuilt);
     expect(getFeedRuntime().cinematic).toBeGreaterThan(0.5);
     expect(getCinematicLookWeight()).toBeGreaterThan(0.5);
     expect(getStoryInputPolicy().moveSpeedScale).toBe(0);
-    tickSeconds(8); // t = 10 — cutscene over, sun still sliding
+    // The made warmth owns the opening image before the gaze travels skyward.
+    expect(getCinematicCameraPose().weight).toBeGreaterThan(0.99);
+    expect(getCinematicCameraPose().target.distanceTo(new THREE.Vector3(0, 25.65, 0))).toBeLessThan(0.01);
+    expect(getCinematicLookTarget()).not.toBeNull();
+    tickSeconds(4); // t = 6 — authored fire boom released, gaze now on live sun
+    expect(getStoryText().caption?.text).toBe(CH3_CAPTIONS.duskStart);
+    expect(getCinematicCameraPose().weight).toBe(0);
+    expect(getCinematicLookTarget()).toBeNull();
+    expect(getCinematicLookWeight()).toBeGreaterThan(0.5);
+    tickSeconds(4); // t = 10 — cutscene over, sun still sliding
     expect(getFeedRuntime().cinematic).toBe(0);
     expect(getCinematicLookWeight()).toBe(0);
     expect(getStoryInputPolicy().moveSpeedScale).toBe(1);
@@ -382,6 +432,22 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(camera.fov).toBe(75);
     expect(getCinematicCameraPose().weight).toBe(0);
     expect(getCinematicLookWeight()).toBe(0);
+  });
+
+  it('holds before first contact when no safe auditor route exists', () => {
+    storyAnchors.planetSize = null;
+    storyAnchors.terrainSeed = null;
+    storyAnchors.auditPath = null;
+    advanceToBeat('ch4-arrival');
+
+    tickSeconds(ARRIVAL.endAt + 5);
+    expect(getStoryStateSnapshot()).toMatchObject({
+      active: true,
+      beat: 'ch4-arrival'
+    });
+    expect(getAuditWorkerPose().visible).toBe(false);
+    expect(getStoryBeatClock()).toBeLessThan(ARRIVAL.someoneAt);
+    expect(getStoryInputPolicy().moveSpeedScale).toBe(1);
   });
 
   it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {

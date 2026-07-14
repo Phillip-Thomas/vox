@@ -5,9 +5,14 @@ import {
   type WorldCoordinate
 } from '../../utils/worldCoordinates.ts';
 import { findTopFaceSurfaceVoxel } from '../../utils/worldArrival.ts';
-import { voxelCoordToWorld } from '../../utils/cubeGravityConstants.ts';
+import { VOXEL_SCALE, voxelCoordToWorld } from '../../utils/cubeGravityConstants.ts';
 import { FACE_NORMALS } from '../../utils/surfaceControls.ts';
 import { getWorldGen } from '../../utils/worldGenCache.ts';
+import {
+  planAgentSurfaceRoute,
+  type AgentSurfaceTerrainQuery
+} from '../../utils/agentSurfaceNavigation.ts';
+import { findValidSpawnSite, type SpawnTerrainQuery } from '../../utils/spawnValidation.ts';
 
 // --- The story world ------------------------------------------------------------
 //
@@ -239,7 +244,9 @@ export const storyAnchors: {
   auditPath: StoryPropPose[] | null;
   /** The live story world's seed (forage probes need it). */
   terrainSeed: number | null;
-} = { pond: null, auditPath: null, terrainSeed: null };
+  /** Rendered cube radius in world units (shared agent navigation needs it). */
+  planetSize: number | null;
+} = { pond: null, auditPath: null, terrainSeed: null, planetSize: null };
 
 export interface PondPose {
   /** A point on the water surface at the pond's near edge (drink/marker goal). */
@@ -269,6 +276,39 @@ export function getPondPose(planetSize: number, terrainSeed: number): PondPose |
   const gen = getWorldGen(planetSize, terrainSeed).generator;
   const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
 
+  const dryShoreNear = (waterX: number, waterZ: number): THREE.Vector3 | null => {
+    const candidates: Array<{ x: number; z: number; radius: number; arrivalDistance: number }> = [];
+    for (let radius = 1; radius <= 6; radius++) {
+      for (let dx = -radius; dx <= radius; dx++) {
+        for (let dz = -radius; dz <= radius; dz++) {
+          if (Math.max(Math.abs(dx), Math.abs(dz)) !== radius) continue;
+          const x = waterX + dx;
+          const z = waterZ + dz;
+          candidates.push({
+            x,
+            z,
+            radius,
+            arrivalDistance: (x - arrival.x) ** 2 + (z - arrival.z) ** 2
+          });
+        }
+      }
+    }
+    // Nearest shoreline first; ties prefer the arrival side so the authored walk
+    // approaches the pond instead of circling behind it.
+    candidates.sort((a, b) => a.radius - b.radius
+      || a.arrivalDistance - b.arrivalDistance
+      || a.x - b.x
+      || a.z - b.z);
+    for (const candidate of candidates) {
+      const ground = findTopFaceSurfaceVoxel(planetSize, terrainSeed, candidate);
+      if (gen.isWaterVoxel(ground.x, ground.y + 1, ground.z)) continue;
+      if (gen.isWaterVoxel(ground.x, ground.y + 2, ground.z)) continue;
+      return voxelCoordToWorld(ground.x, ground.y, ground.z)
+        .addScaledVector(FACE_NORMALS.top, 1.05);
+    }
+    return null;
+  };
+
   const waterAt = (ox: number, oz: number): { voxel: { x: number; y: number; z: number }; depth: number } | null => {
     const ground = findTopFaceSurfaceVoxel(planetSize, terrainSeed, {
       x: arrival.x + ox,
@@ -288,13 +328,14 @@ export function getPondPose(planetSize: number, terrainSeed: number): PondPose |
       for (const z of Math.abs(x) === radius ? rangeInclusive(-radius, radius).filter(v => v % 2 === 0) : [-radius, radius]) {
         const hit = waterAt(x, z);
         if (!hit) continue;
-        const up = voxelCoordToWorld(hit.voxel.x, hit.voxel.y, hit.voxel.z).normalize();
+        // This is explicitly a top-face scan. Radial up tilts the authored point
+        // toward the cube corner and can round an apparently dry shore into water.
+        const up = FACE_NORMALS.top.clone();
         const surfaceVoxelY = hit.voxel.y + hit.depth;
         const surface = voxelCoordToWorld(hit.voxel.x, surfaceVoxelY, hit.voxel.z).addScaledVector(up, 0.5);
         const floor = voxelCoordToWorld(hit.voxel.x, hit.voxel.y, hit.voxel.z).addScaledVector(up, 0.6);
-        // Shore: step back toward the arrival, horizontally, out of the water.
-        const back = new THREE.Vector3(Math.sign(-x) || 1, 0, Math.sign(-z) || 0);
-        const shore = surface.clone().addScaledVector(back, 2.2);
+        const shore = dryShoreNear(hit.voxel.x, hit.voxel.z);
+        if (!shore) continue;
         const pose: PondPose = { surface, shore, floor, up, depth: hit.depth };
         if (hit.depth >= 2) {
           pondCache.set(key, pose);
@@ -326,25 +367,82 @@ export function getWreckRelayPose(planetSize: number, terrainSeed: number): Stor
   );
 }
 
+/** Root clearance above a support voxel centre: one half voxel + contact margin. */
+export const AUDIT_WORKER_GROUND_CLEARANCE = VOXEL_SCALE / 2 + 0.05;
+
+function proceduralAgentTerrain(planetSize: number, terrainSeed: number): AgentSurfaceTerrainQuery {
+  const generator = getWorldGen(planetSize, terrainSeed).generator;
+  return {
+    isSolidVoxel: (x, y, z) => generator.shouldVoxelExist(x, y, z),
+    isWaterVoxel: (x, y, z) => generator.isWaterVoxel(x, y, z),
+    isHazardousVoxel: (x, y, z) => generator.generateBlockForPosition(x, y, z) === 'lava'
+  };
+}
+
+function spawnTerrainFromAgent(terrain: AgentSurfaceTerrainQuery): SpawnTerrainQuery {
+  return {
+    shouldVoxelExist: terrain.isSolidVoxel,
+    isWaterVoxel: terrain.isWaterVoxel,
+    // Spawn validation only distinguishes hazardous support from ordinary solid
+    // support; retain that semantic without inventing a second terrain query.
+    generateBlockForPosition: (x, y, z) =>
+      terrain.isHazardousVoxel?.(x, y, z) ? 'lava' : 'stone'
+  };
+}
+
 /**
- * The auditor's approach: surface-snapped samples from beyond the signal mesa's
- * ridge down to the wreck relay. The director walks him along this polyline
- * (arc-length lerp); the samples keep his boots near the terrain.
+ * The auditor's approach: a validated dry humanoid spawn plus a contiguous
+ * one-cell surface route down to the wreck relay. The optional terrain query is
+ * the live-world adapter at runtime, so player edits and dynamic water are
+ * authoritative; tests and static consumers fall back to the pinned generator.
  */
-export function getAuditWorkerPath(planetSize: number, terrainSeed: number): StoryPropPose[] {
-  // He comes DOWN THE WORK STRIP — the regulation line the player once walked —
-  // from beyond the horizon toward the wreck. (Deliberately clear of the signal
-  // mesa prop at (14,-8): terrain snapping knows nothing about props.)
-  // Offset one row (z=+3) so he passes BESIDE the worker who stands at the
-  // arrival column — close enough to read, never through them — then stands
-  // between the site and the relay, clear of the pod wreck at (-5, 0) and of
-  // the console at (-5, 2), facing the site.
-  const offsets: Array<[number, number]> = [
-    [34, 3], [28, 3], [22, 3], [16, 3], [10, 3], [4, 3], [-2, 1]
-  ];
-  // Lift 1.05: surface poses are voxel CENTERS (top face sits +1.0 above) —
-  // his boots belong on the ground, not half a voxel inside it.
-  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 1.05));
+export function getAuditWorkerPath(
+  planetSize: number,
+  terrainSeed: number,
+  terrain: AgentSurfaceTerrainQuery = proceduralAgentTerrain(planetSize, terrainSeed)
+): StoryPropPose[] {
+  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  // Begin beyond the sunrise ridge but still inside the owned top face. The old
+  // +34 request exceeded the cube, collapsed three samples onto the same edge
+  // cell, and that cell was flooded in the pinned world.
+  const preferredStart = voxelCoordToWorld(arrival.x + 20, arrival.y, arrival.z - 1);
+  const spawn = findValidSpawnSite(
+    spawnTerrainFromAgent(terrain),
+    planetSize,
+    preferredStart,
+    { kind: 'player', face: 'top', maxSearchRadius: 8 }
+  );
+  if (!spawn) return [];
+
+  const up = FACE_NORMALS.top;
+  const start = voxelCoordToWorld(
+    spawn.supportVoxel.x,
+    spawn.supportVoxel.y,
+    spawn.supportVoxel.z
+  ).addScaledVector(up, AUDIT_WORKER_GROUND_CLEARANCE);
+  // He finishes between the site and relay, clear of the wreck and console,
+  // then turns to face the anomalous worker.
+  const goal = surfacePoseNear(
+    planetSize,
+    terrainSeed,
+    -2,
+    1,
+    AUDIT_WORKER_GROUND_CLEARANCE
+  ).position;
+  const route = planAgentSurfaceRoute(terrain, planetSize, start, goal, {
+    face: 'top',
+    differentFaceFallback: 'unreachable',
+    clearanceCells: 2,
+    maxSlopeCells: 1,
+    edgeMarginCells: 1,
+    maxVisitedCells: 8192,
+    waypointClearanceWorld: AUDIT_WORKER_GROUND_CLEARANCE,
+    // W-7744 is walking into frame. A blocked dry route means he waits offstage;
+    // it never silently changes his fiction into swimming or jetpacking.
+    allowJetpackCrossing: false
+  });
+  if (route.mode !== 'walk' && route.mode !== 'direct') return [];
+  return route.waypoints.map(position => ({ position, up: up.clone() }));
 }
 
 /** Max debris pieces the descent can scatter (voyage hull outcome trims it). */

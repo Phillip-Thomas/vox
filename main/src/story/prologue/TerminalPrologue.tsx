@@ -52,7 +52,10 @@ const TerminalPrologue: React.FC = () => {
   // settled mode; live transitions play their bridges (fly-in, align, dive).
   useEffect(() => {
     if (phase === 'crawl') setVectorMode('void');
-    else if (phase === 'manifest') setVectorMode(vectorScene.mode === 'void' ? 'enter' : 'dock');
+    else if (phase === 'manifest') {
+      if (vectorScene.mode === 'void') setVectorMode('enter');
+      else if (vectorScene.mode !== 'enter') setVectorMode('dock');
+    }
     else if (phase === 'voyage') setVectorMode('voyage');
     else if (phase === 'deflect' || phase === 'corruption' || phase === 'acknowledge') {
       // 'dive' hands off to 'court' itself (see the voyage onDone below); a
@@ -121,7 +124,12 @@ const TerminalPrologue: React.FC = () => {
       {/* The persistent phosphor vector scene — every phase plays inside it. */}
       <PrologueVector />
 
-      {phase === 'crawl' && <RegulationCrawl onDone={() => { advanceToBeat('manifest'); setPhase('manifest'); }} />}
+      {phase === 'crawl' && (
+        <RegulationCrawl
+          onExitStart={() => setVectorMode('enter')}
+          onDone={() => { advanceToBeat('manifest'); setPhase('manifest'); }}
+        />
+      )}
       {phase === 'manifest' && <ManifestScreen onDone={() => { advanceToBeat('voyage'); setPhase('voyage'); }} />}
       {phase === 'voyage' && !diving && (
         <VoyageLedger

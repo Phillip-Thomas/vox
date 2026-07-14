@@ -11,9 +11,10 @@ import * as THREE from 'three';
 // weight decays, the player's own hand wins back the camera with no snap.
 
 let weight = 0;
+const targetValue = new THREE.Vector3();
 let target: THREE.Vector3 | null = null;
 
-export type CinematicGazeMode = 'travel' | 'inspect' | 'ambient';
+export type CinematicGazeMode = 'travel' | 'inspect' | 'ambient' | 'interact';
 
 /** Semantic look request used by autonomous actors. Unlike a raw world target,
  * this preserves the subject's surface frame and the route's first segment so
@@ -63,7 +64,7 @@ export function getCinematicLookWeight(): number {
 
 /** World position to steer toward; null = the sun direction. */
 export function setCinematicLookTarget(position: THREE.Vector3 | null): void {
-  target = position;
+  target = position ? targetValue.copy(position) : null;
 }
 
 export function getCinematicLookTarget(): THREE.Vector3 | null {

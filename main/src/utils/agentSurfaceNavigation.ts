@@ -369,8 +369,17 @@ export function planAgentSurfaceRoute(
     const scanCells = config.maxJetpackWaterDepthCells + config.clearanceCells;
     for (let lift = 1; lift <= scanCells; lift++) {
       const coord = addAxis(support, frame.up, lift);
-      const solid = terrain.isSolidVoxel(coord.x, coord.y, coord.z);
-      const hazard = hazardous(coord);
+      // Procedural terrain can logically bulge one or more cells beyond the
+      // rendered/collider cube. Boundary support is exposed by definition; an
+      // unrendered logical voxel outside that cube must not become an invisible
+      // ceiling for agents (spawnValidation follows the same contract).
+      const insideRenderedTerrain = Math.max(
+        Math.abs(coord.x),
+        Math.abs(coord.y),
+        Math.abs(coord.z)
+      ) <= radiusCells;
+      const solid = insideRenderedTerrain && terrain.isSolidVoxel(coord.x, coord.y, coord.z);
+      const hazard = insideRenderedTerrain && hazardous(coord);
       const water = terrain.isWaterVoxel(coord.x, coord.y, coord.z);
       if (water) waterDepthCells = Math.max(waterDepthCells, lift);
       if (lift <= config.clearanceCells && (solid || hazard)) bodyBlocked = true;

@@ -37,11 +37,25 @@ here are:
   treats intelligence as tending toward communion. This law is embodied rather
   than exhaustively explained; exact merger mechanics, persistence, and
   separability remain open;
+- the next owner-directed Emergent movement is **Maw repair → dive → ship
+  repair → continuous same-system travel → base building on the nearby
+  planet**, with crafting expanding through narrative need and free-play
+  accomplishments/observations feeding later scenes;
+- that first sibling is **abundant, living, and explicitly neither volcanic nor
+  frozen**. The current direction is the Tidegarden, an alien-verdant wet-hill
+  world whose provisional cyan/cobalt/magenta ecology helps distinguish one
+  living grammar from another; its base
+  chapter is about selection, reciprocity, and stewardship rather than lethal
+  climate punishment;
+- the nearby trip does **not** spend A5: first interstellar warp remains the
+  trigger for Light;
 - the identity, number, motives, and relationship of the **Makers remain TBD**.
 
 The execution path for all unfinished or nonexistent story systems is maintained
-in `PARAVOXIA_STORY_EXECUTION_PLAN.md`. That plan may become more specific as
-implementation evidence changes; this bible remains the portable canon and
+in `PARAVOXIA_STORY_EXECUTION_PLAN.md`. The owner-directed Emergent movement has
+its detailed preproduction treatment in
+`PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md`. Those plans may become more specific
+as implementation evidence changes; this bible remains the portable canon and
 creative-constraint source.
 
 ## Status language
@@ -126,12 +140,17 @@ to destroy the tree—the first question—Terra refuses. The world exhales into
 full life. W-7744 flees through a field he sees as empty and records his own
 first chromatic fault.
 
-From there the story expands from survival into investigation. Terra repairs
-its tools and ship, leaves one cube, and discovers larger cubes. Constellations
-become an index of seeded worlds. Planetary styles become evidence of
-authorship. Hollowed extraction worlds and impossible technologies point toward
-something outside the inherited structure. Terra eventually learns to use
-perception itself as a tool through the Paradox Lens.
+From there the story expands from survival into investigation. Terra repairs the
+Maw, descends beneath the pond for a ship-critical memory, reconstructs the
+wreck, and physically crosses the local system. On the abundant alien-verdant
+Tidegarden, Terra builds a chosen habitat among relationships it did not create
+and learns that home can be a relation between worlds, not only the site of
+origin. That nearby crossing does not trigger A5. Later,
+Terra leaves the system by interstellar warp and discovers larger cubes.
+Constellations become an index of seeded worlds. Planetary styles become
+evidence of authorship. Hollowed extraction worlds and impossible technologies
+point toward something outside the inherited structure. Terra eventually learns
+to use perception itself as a tool through the Paradox Lens.
 
 Two character revelations must travel through that expansion:
 
@@ -305,7 +324,7 @@ The rendering pipeline is the narrative. Fidelity is consciousness.
 | A2 — Depth | SHIPPED | Eat the apple | Feed dies; free look, movement, and full spatial agency open | Embodied Terra is liberated from the surviving administrative frame |
 | A3 — Grain | SHIPPED | Build a fire and rest beside it at night | Material, texture, dawn, grass/tree bloom | Attention becomes devotion; Terra begins living |
 | A4 — Breath | CONTRACTED | Refuse the sterilization order at the tree | Alive stage: moving flora, fauna, wind, water | Will and defiance make the world breathe |
-| A5 — Light | DESIGNED | First interstellar warp | Full light quality, post effects, resolved space | Leaving one cube reveals a sky of larger cubes |
+| A5 — Light | DESIGNED | First interstellar warp beyond the local system | Full light quality, post effects, resolved interstellar space | Leaving the two-world relationship reveals a larger administered sky |
 | A6 — The Hand | DESIGNED | Read or decipher a Maker fragment | Per-world authored visual styles become legible | Style becomes evidence of authorship |
 | A7 — Paradox | DESIGNED | Cross a void rift | Wrong physics, over-real effects, finer resolution | Perception becomes a tool through the Paradox Lens |
 | A8 — The Frame | DESIGNED | Activate the Paradox Machina | Fidelity strips down to wireframe, data, terminal | The final enclosure is the renderer itself |
@@ -320,7 +339,7 @@ questions guide scene design without turning every suggested beat into canon:
 | A2 — Depth | presence | What is a body? | Why does this body know what Terra was never taught? |
 | A3 — Grain | peace and belonging | What makes life meaningful without productivity? | Why is there beauty no quota requested? |
 | A4 — Breath | conviction and care | What deserves protection? | What can another observer not see? |
-| A5 — Light | awe | What is a world? | Is every environment also an expression? |
+| A5 — Light | awe | What does a world mean beyond the relationship already made? | Is every environment also an expression? |
 | A6 — The Hand | reverence | What is an author? | Can a creation outgrow or reinterpret its creator? |
 | A7 — Paradox | humility | What is reality when observers disagree? | Does observation participate in creation? |
 | A8 — The Frame | wonder | Who is asking? | What if awakening has no final rung? |
@@ -336,8 +355,9 @@ The exact engine and axis set are implementation proposals, not locked canon.
 The crafting eras align with the awakenings:
 
 - **Primitive — A1 through A4.** Deliberately long, bodily, local, and grounded.
-- **Emergent — A5 through A6.** Maw repair, devices, ship restoration, scanning,
-  hazards, and world travel.
+- **Emergent — begins after A4 at Maw repair and continues through A5/A6.**
+  Devices, ship restoration, scanning, environmental response, local travel, settlement, and
+  later interstellar travel become available only as the story creates a need.
 - **Paravox Machina — A7 through A8.** Rift tooling, impossible matter,
   perception-as-verb, and the frame.
 
@@ -725,6 +745,17 @@ line continues to describe an audit in progress.
 
 These scenes are designed in detail but are not currently playable.
 
+**Owner-directed sequence revision — 2026-07-13:** the A4 audit/refusal/Breath
+movement below remains intact. After Breath, Maw repair now precedes the dive;
+the repair kit lands on dry ground and the repaired Maw frees a ship-critical
+component underwater. Ship reconstruction, continuous same-system travel, and a
+Tidegarden habitat follow. The sibling is abundant and alien-verdant, not
+volcanic or frozen; its first-base pressure is stewardship and site fit rather
+than lethal exposure. Appetite becomes a persistent optional choice
+rather than a critical-path gate. The legacy S10–S13 IDs below remain visible
+until the council/authority migration freezes replacement IDs. The binding
+preproduction treatment is `PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md`.
+
 ### S6 — The inspection (`ch4-audit`) — CONTRACTED
 
 W-7744 inspects the fire, stores, pond, grass, and tree. He sees none of it
@@ -779,7 +810,7 @@ W-7744 runs through a field he cannot see. He reports a chromatic sensor fault
 and files a repair ticket. This is the first planted beat of his confirmed
 recurring awakening arc.
 
-### S10 — Meat and moral appetite (`ch4-meat`) — CONTRACTED
+### S10 — Meat and moral appetite (`ch4-meat`) — REPOSITIONED DIRECTION
 
 The arrival of fauna produces a new bodily sensation: Terra wants to eat a
 living animal. The extraction beam can be turned on life. Hunting and refraining
@@ -787,29 +818,38 @@ are both valid and persist.
 
 Owner decisions require meat to be cooked on the campfire before it can be
 eaten. Because compliance just forced Terra to douse that fire, the future scene
-must explicitly let Terra rebuild or relight it. That is an unresolved
-integration detail, not a reason to abandon the moral beat.
+uses a persisted doused-fire `[F] Relight` interaction with ordinary fuel. If the
+fire was legally dismantled, a player-built replacement campfire can satisfy
+cooking. The recovery preserves compliance's cost and prevents a hunt-path
+soft-lock.
 
-### S11 — The dive and oxygen (`ch4-dive`) — CONTRACTED
+### S11 — The dive and oxygen (`ch4-dive`) — REVISED, AFTER MAW REPAIR
 
-W-7744's discarded pack glints at the pond floor. Terra dives, discovers oxygen
-as a countdown inside the body, frees a Maw Repair Kit, and returns to air.
+After repairing the Maw, Terra follows its submerged structural resonance into
+the pond, discovers oxygen as a countdown inside the body, frees a
+ship-critical Kestrel maintenance memory, and returns to air. W-7744's pack no
+longer supplies the underwater objective.
 
 The underwater threshold should feel like another embodied phase change rather
 than a tinted room. It is also a strong candidate for an early Worker 9 memory,
 but that placement is not yet canon.
 
-### S12 — Maw repair (`ch4-repair`) — CONTRACTED
+### S12 — Maw repair (`ch4-repair`) — REVISED, PRECEDES THE DIVE
 
-Terra uses the kit to repair the Faulty Maw. The tool becomes self-powered and
-the crafting era changes from Primitive to Emergent.
+W-7744's pack is caught and opened by life he cannot perceive during his flight
+from Breath. Terra retrieves its dry-land field kit and repairs the Faulty Maw.
+The tool becomes self-powered and the crafting era changes from Primitive to
+Emergent. This scene now occurs before the revised dive even though the legacy
+S11/S12 numbering remains pending authority migration.
 
 “the tool wakes. it asks for nothing now but direction.”
 
-### S13 — First flight (`ch4-flight`) — CONTRACTED
+### S13 — First flight (`ch4-flight`) — REPOSITIONED INTO SHIP RECONSTRUCTION
 
-Repair restores the suit's thrust subsystem. Jet is gated until this scene so
-the first hover is genuinely first.
+The Maw repair opens Emergent crafting but does not immediately restore thrust.
+After the dive, a Lift Cell installed during visible ship reconstruction restores
+the suit's thrust subsystem. Jet is gated until that repair so the first hover is
+genuinely first and is used to reach an upper-hull socket.
 
 “the ground's hold is a habit, not a law.”
 
@@ -817,8 +857,10 @@ From the wreck's spine Terra looks over the alive world and forms the next goal:
 
 “the wreck that brought me here will leave here. i will build the leaving.”
 
-The existing Chapter 4 plan ends here, at A4/alive and the Emergent threshold.
-The newly confirmed W-7744 recurrence continues beyond it.
+The revised Emergent movement continues through the dive, staged ship repair,
+physical sibling-world travel, and the first remote habitat. It remains below
+A5 until the later first interstellar warp. W-7744's recurrence continues beyond
+his first fault, but his return motive and timing remain open.
 
 ---
 
@@ -1274,7 +1316,7 @@ Smelter, Assembler, and Survey Console.
 | Perception is per perceiver; constellations are intended to become per perceiver | Binding direction; current constellation runtime is not actor-specific |
 | Same-system story travel must be physically continuous and remain locked until its authored Emergent/A5 gate | Binding |
 | Underwater must feel like crossing into another medium, with 6-DOF swim, roughly 60 seconds of oxygen, non-instant drowning pressure, and a core state that survives every graphics tier | Binding; core system SHIPPED |
-| Underwater palettes should vary by planet, remain vibrant and legible by default, and become murkier on alien/arid worlds | Binding direction; palette wiring unfinished |
+| Underwater palettes should vary by planet, remain vibrant and legible by default, and become murkier only when the authoritative profile specifies turbidity/aridity; alienness alone never reduces legibility | Binding direction; palette wiring unfinished |
 | W-7744 is frightened and unable to perceive life, not simply evil | CONTRACTED |
 | Terra's final Chapter 4 refusal is the bare lowercase “no.” | CONTRACTED and owner-approved |
 | Compliance drains fidelity | CONTRACTED |
@@ -1326,7 +1368,8 @@ Systems already available for future storytelling include:
 - underwater movement, oxygen, fog, particles, and deep oceans;
 - deterministic planet identities, archetypes, hazards, resources, palettes,
   and scanning data;
-- physical same-system travel in free play, still story-gated until A5;
+- physical same-system travel in free play, still story-gated until the
+  owner-directed Emergent crossing before A5;
 - a world-seeded procedural score whose motifs can survive stage changes;
 - multiplayer foundations capable of supporting asymmetric perception later.
 
@@ -1352,15 +1395,21 @@ the alive world into perception. W-7744 receives his first undeniable fault.
 
 ### Primitive-to-Emergent rupture
 
-Terra confronts appetite, oxygen, repair, power, and first flight. Maw repair
-opens the Emergent era. The ship remains broken; rebuilding it becomes the goal
-that will create the capacity to leave. W-7744 remains opposed; pursuit is a
-recommended but unauthored continuation.
+Terra repairs the Maw, confronts oxygen and bodily limit in the pond, and uses
+the recovered Kestrel memory to rebuild the ship in visible stages. Maw repair
+opens the Emergent era, but recipes arrive only when a lived need makes them
+meaningful. A Lift Cell restores the first suit hover during reconstruction.
+Terra then flies physically to the abundant alien-verdant Tidegarden and
+establishes a sheltered working habitat among its existing ecological paths.
+The two-world round trip proves continuity and makes return possible;
+it does not trigger A5. W-7744 remains opposed and independently faulted;
+pursuit is a recommended but unauthored continuation.
 
 ### A5 — Light and the larger prison
 
-Physical departure and first warp reveal that the cube was not the universe but
-one unit in a larger administered structure. Constellations become a navigation
+Terra has already left the origin cube and made a two-world relationship. The
+first interstellar warp now carries Terra beyond that local system and reveals
+the pair as one neighborhood in a larger administered structure. Constellations become a navigation
 and prediction grammar. W-7744's exact A5 recurrence remains unauthored; hiding
 his perceptual faults is one recommended development.
 
@@ -1754,6 +1803,7 @@ This hierarchy is based on authority and current evidence, not file age:
 | `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md` | Current release and mutation authority |
 | This Story Bible | Canon, confirmed direction, and protected open ontology |
 | Owner-approved scene contracts | Authored detail for their bounded sequence |
+| `PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md` | Owner-directed Maw → dive → ship → local travel → Tidegarden treatment |
 | `PARAVOXIA_STORY_EXECUTION_PLAN.md` | Mutable delivery order, gaps, gates, and resume state |
 | Progression, Chapter 4, revision, and synopsis documents | Design lineage and provenance; never automatic production authority |
 

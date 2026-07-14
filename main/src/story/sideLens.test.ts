@@ -7,6 +7,7 @@ import {
   applyRigCameraTransform,
   applySideCameraTransform,
   computeRigFrame,
+  fixedScreenCellIndex,
   rigMoveBasis,
   setLensRig,
   sideHarvestProbePoints,
@@ -139,22 +140,50 @@ describe('sideLens', () => {
     expect(up.dot(lens.depthAxis)).toBeLessThan(-0.99);
   });
 
-  it('fixed-screen quantization bolts the anchor to cell centers and pins height', () => {
+  it('fixed-screen quantization holds the crash frame until the worker crosses an adjacent frame', () => {
     const lens = makeLens();
     const rig: LensRig = { ...SIDE_RIG, followQuant: 20 };
     const eye = new THREE.Vector3();
     const target = new THREE.Vector3();
     const up = new THREE.Vector3();
-    // Anywhere within [0,20) along travel → same anchor (cell center 10);
-    // vertical wobble must not move the frame.
-    computeRigFrame(lens, rig, new THREE.Vector3(3, 51.5, 0), eye, target, up);
+    // The opening cell is centred on the arrival/crash origin; vertical wobble
+    // and travel inside either half of the screen must not move the frame.
+    computeRigFrame(lens, rig, new THREE.Vector3(-9.9, 51.5, 0), eye, target, up);
     const eyeA = eye.clone();
-    computeRigFrame(lens, rig, new THREE.Vector3(19, 50.2, 0), eye, target, up);
+    computeRigFrame(lens, rig, new THREE.Vector3(9.9, 50.2, 0), eye, target, up);
     expect(eye.distanceTo(eyeA)).toBeLessThan(1e-6);
-    expect(eyeA.x).toBeCloseTo(10, 5);
-    // Crossing the edge flips a full screen
-    computeRigFrame(lens, rig, new THREE.Vector3(21, 50, 0), eye, target, up);
-    expect(eye.x).toBeCloseTo(30, 5);
+    expect(eyeA.x).toBeCloseTo(0, 5);
+    // Crossing either edge flips exactly one full screen.
+    computeRigFrame(lens, rig, new THREE.Vector3(10.1, 50, 0), eye, target, up);
+    expect(eye.x).toBeCloseTo(20, 5);
+    computeRigFrame(lens, rig, new THREE.Vector3(-10.1, 50, 0), eye, target, up);
+    expect(eye.x).toBeCloseTo(-20, 5);
+  });
+
+  it('keeps the first fixed frame identical to the crash frame at the arrival origin', () => {
+    const lens = makeLens();
+    const fixedRig: LensRig = { ...SIDE_RIG, followQuant: 24 };
+    const sideEye = new THREE.Vector3();
+    const sideTarget = new THREE.Vector3();
+    const sideUp = new THREE.Vector3();
+    const fixedEye = new THREE.Vector3();
+    const fixedTarget = new THREE.Vector3();
+    const fixedUp = new THREE.Vector3();
+
+    computeRigFrame(lens, SIDE_RIG, lens.origin, sideEye, sideTarget, sideUp);
+    computeRigFrame(lens, fixedRig, lens.origin, fixedEye, fixedTarget, fixedUp);
+
+    expect(fixedEye.distanceTo(sideEye)).toBeLessThan(1e-6);
+    expect(fixedTarget.distanceTo(sideTarget)).toBeLessThan(1e-6);
+    expect(fixedUp.distanceTo(sideUp)).toBeLessThan(1e-6);
+  });
+
+  it('uses one centred cell index for camera framing and SITE CAM bookkeeping', () => {
+    expect(fixedScreenCellIndex(0, 24)).toBe(0);
+    expect(fixedScreenCellIndex(11.9, 24)).toBe(0);
+    expect(fixedScreenCellIndex(-11.9, 24)).toBe(0);
+    expect(fixedScreenCellIndex(12.1, 24)).toBe(1);
+    expect(fixedScreenCellIndex(-12.1, 24)).toBe(-1);
   });
 
   it('rigMoveBasis: side is (-depth, +travel); nav and iso stay orthonormal + screen-consistent', () => {

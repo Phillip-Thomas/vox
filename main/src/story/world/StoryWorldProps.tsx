@@ -15,6 +15,7 @@ import NavBeacons from './NavBeacons.tsx';
 import SignalMesa from './SignalMesa.tsx';
 import WreckRelay from './WreckRelay.tsx';
 import AuditWorker, { getAuditWorkerPose } from './AuditWorker.tsx';
+import { createLiveAgentSurfaceTerrain } from '../../utils/agentSurfaceNavigationRuntime.ts';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
@@ -61,12 +62,18 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
   // computed once per world mount; the director never learns planetSize itself.
   useEffect(() => {
     storyAnchors.pond = getPondPose(planetSize, terrainSeed);
-    storyAnchors.auditPath = getAuditWorkerPath(planetSize, terrainSeed);
+    storyAnchors.auditPath = getAuditWorkerPath(
+      planetSize,
+      terrainSeed,
+      createLiveAgentSurfaceTerrain(planetSize, terrainSeed)
+    );
     storyAnchors.terrainSeed = terrainSeed;
+    storyAnchors.planetSize = planetSize;
     return () => {
       storyAnchors.pond = null;
       storyAnchors.auditPath = null;
       storyAnchors.terrainSeed = null;
+      storyAnchors.planetSize = null;
     };
   }, [planetSize, terrainSeed]);
 
@@ -81,7 +88,11 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
     if (runtime.descent < 1) runtime.descent = 1.1;
     const pose = getAuditWorkerPose();
     if (pose.visible) return;
-    const path = getAuditWorkerPath(planetSize, terrainSeed);
+    const path = getAuditWorkerPath(
+      planetSize,
+      terrainSeed,
+      createLiveAgentSurfaceTerrain(planetSize, terrainSeed)
+    );
     const post = path[path.length - 1];
     if (!post) return;
     pose.position.copy(post.position);
@@ -89,6 +100,7 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
     // He faces the site he is auditing (the arrival strip's origin).
     const site = getStorySidePlane(planetSize, terrainSeed).origin;
     pose.heading.copy(site).sub(post.position);
+    pose.heading.addScaledVector(pose.up, -pose.heading.dot(pose.up));
     if (pose.heading.lengthSq() < 1e-6) pose.heading.set(0, 0, 1);
     pose.heading.normalize();
     pose.stride = 0;

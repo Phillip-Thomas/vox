@@ -22,7 +22,11 @@ import {
   getCinematicLookTarget,
   getCinematicLookWeight
 } from '../story/cinematicLook.ts';
-import { createSurfaceGazeResult, solveSurfaceGaze } from '../utils/surfaceGaze.ts';
+import {
+  createSurfaceGazeResult,
+  solveSurfaceGaze,
+  steerSurfaceForwardToward
+} from '../utils/surfaceGaze.ts';
 import { getSunDirection } from './SkyController.tsx';
 
 const _sideForward = new THREE.Vector3();
@@ -191,6 +195,16 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
           seed: gazeIntent.seed
         }, _gazeResult);
         _pullDir.copy(_gazeResult.direction);
+        if (typeof window !== 'undefined') {
+          (window as unknown as { __cinematicGaze?: object }).__cinematicGaze = {
+            pitchDegrees: Math.round(THREE.MathUtils.radToDeg(_gazeResult.pitch) * 10) / 10,
+            direct: _gazeResult.direct,
+            surfaceOccluded: _gazeResult.surfaceOccluded,
+            routeAlignment: Math.round(
+              _gazeResult.tangentForward.dot(_gazeResult.indicatorDirection) * 1000
+            ) / 1000
+          };
+        }
       } else if (lookTarget) {
         cameraRef.current.getWorldPosition(_pullDir).multiplyScalar(-1).add(lookTarget);
         _pullDir.normalize();
@@ -201,7 +215,13 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
       if (_sunTangent.lengthSq() > 1e-6) {
         _sunTangent.normalize();
         const k = Math.min(1, pull * 3 * dt);
-        surfaceForward.current.lerp(_sunTangent, k).normalize();
+        steerSurfaceForwardToward(
+          surfaceForward.current,
+          _sunTangent,
+          surfaceUp.current,
+          k,
+          surfaceForward.current
+        );
         const targetPitch = clampCameraPitch(Math.asin(THREE.MathUtils.clamp(_pullDir.dot(surfaceUp.current), -1, 1)));
         pitch.current += (targetPitch - pitch.current) * k;
       }

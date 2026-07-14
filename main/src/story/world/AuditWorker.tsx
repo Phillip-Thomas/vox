@@ -54,10 +54,13 @@ const _q = new THREE.Quaternion();
 const _fwd = new THREE.Vector3();
 const _right = new THREE.Vector3();
 
+/** Local boot sole. Combined with the route's +0.05 contact margin, this is 0. */
+export const AUDIT_WORKER_BOOT_SOLE_Y = -0.05;
+
 const AuditWorker: React.FC = () => {
   const groupRef = useRef<THREE.Group>(null);
-  const leftLegRef = useRef<THREE.Mesh>(null);
-  const rightLegRef = useRef<THREE.Mesh>(null);
+  const leftLegRef = useRef<THREE.Group>(null);
+  const rightLegRef = useRef<THREE.Group>(null);
   const torsoRef = useRef<THREE.Group>(null);
 
   const materials = useMemo(() => ({
@@ -114,13 +117,18 @@ const AuditWorker: React.FC = () => {
 
   return (
     <group ref={groupRef} visible={false}>
-      {/* Legs hinge at the hip line (y ≈ 0.86). */}
-      <mesh ref={leftLegRef} position={[-0.14, 0.86, 0]} material={materials.dark}>
-        <boxGeometry args={[0.2, 0.86, 0.24]} />
-      </mesh>
-      <mesh ref={rightLegRef} position={[0.14, 0.86, 0]} material={materials.dark}>
-        <boxGeometry args={[0.2, 0.86, 0.24]} />
-      </mesh>
+      {/* Hip pivots own the swing; the old meshes rotated around their centres
+          and left both visible boot soles almost half a unit above the ground. */}
+      <group ref={leftLegRef} position={[-0.14, 0.95, 0]}>
+        <mesh position={[0, -0.5, 0]} material={materials.dark}>
+          <boxGeometry args={[0.2, 1, 0.24]} />
+        </mesh>
+      </group>
+      <group ref={rightLegRef} position={[0.14, 0.95, 0]}>
+        <mesh position={[0, -0.5, 0]} material={materials.dark}>
+          <boxGeometry args={[0.2, 1, 0.24]} />
+        </mesh>
+      </group>
       <group ref={torsoRef} position={[0, 1.3, 0]}>
         <mesh position={[0, 0, 0]} material={materials.suit}>
           <boxGeometry args={[0.56, 0.7, 0.34]} />

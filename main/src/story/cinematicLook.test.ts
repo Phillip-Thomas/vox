@@ -4,10 +4,18 @@ import {
   applyCinematicCameraPose,
   clearCinematicCameraPose,
   getCinematicCameraPose,
-  setCinematicCameraPose
+  getCinematicGazeIntent,
+  getCinematicLookTarget,
+  setCinematicGazeIntent,
+  setCinematicCameraPose,
+  setCinematicLookTarget
 } from './cinematicLook.ts';
 
 afterEach(clearCinematicCameraPose);
+afterEach(() => {
+  setCinematicGazeIntent(null);
+  setCinematicLookTarget(null);
+});
 
 describe('cinematic camera pose', () => {
   it('lands exactly on an authored world frame even under a transformed player parent', () => {
@@ -49,5 +57,22 @@ describe('cinematic camera pose', () => {
     expect(applyCinematicCameraPose(camera)).toBe(false);
     expect(camera.position.distanceTo(beforePosition)).toBe(0);
     expect(Math.abs(camera.quaternion.dot(beforeQuaternion))).toBeCloseTo(1, 8);
+  });
+});
+
+describe('cinematic gaze inputs', () => {
+  it('copies raw targets and semantic actor intent', () => {
+    const raw = new THREE.Vector3(1, 2, 3);
+    setCinematicLookTarget(raw);
+    raw.setScalar(99);
+    expect(getCinematicLookTarget()?.toArray()).toEqual([1, 2, 3]);
+
+    const goal = new THREE.Vector3(8, 9, 10);
+    const route = new THREE.Vector3(0, 0, -1);
+    setCinematicGazeIntent({ goal, routeDirection: route, subjectLift: 2 });
+    goal.setScalar(100);
+    route.setScalar(100);
+    expect(getCinematicGazeIntent()?.goal.toArray()).toEqual([8, 9, 10]);
+    expect(getCinematicGazeIntent()?.routeDirection?.toArray()).toEqual([0, 0, -1]);
   });
 });

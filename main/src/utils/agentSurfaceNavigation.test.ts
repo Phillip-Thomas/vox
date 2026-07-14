@@ -176,6 +176,29 @@ describe('planAgentSurfaceRoute', () => {
     expect(waypointCells(route)).not.toContain('0,0');
   });
 
+  it('ignores logical terrain beyond the rendered shell when checking body clearance', () => {
+    const radiusCells = PLANET_SIZE / VOXEL_SCALE;
+    const terrain: AgentSurfaceTerrainQuery = {
+      // The generator may report a logical bulge at y=radius+1 even though the
+      // renderer/collider world ends at radius. The exposed boundary remains a
+      // valid floor and the invisible bulge cannot block it.
+      isSolidVoxel: (_x, y) => y === radiusCells || y === radiusCells + 1,
+      isWaterVoxel: () => false
+    };
+    const route = planAgentSurfaceRoute(
+      terrain,
+      PLANET_SIZE,
+      actorPosition(-3, 0, radiusCells),
+      actorPosition(3, 0, radiusCells),
+      { allowJetpackCrossing: false }
+    );
+
+    expect(route.mode).toBe('walk');
+    expect(waypointCells(route)).toEqual([
+      '-3,0', '-2,0', '-1,0', '0,0', '1,0', '2,0', '3,0'
+    ]);
+  });
+
   it('returns the explicit direct fallback for a different cube face', () => {
     const start = actorPosition(0, 0);
     const goal = new THREE.Vector3(

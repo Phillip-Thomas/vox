@@ -21,6 +21,27 @@ interface CraftingPanelProps {
   commandContext: CommandContext;
 }
 
+interface CraftStorySnapshot {
+  active: boolean;
+  beat: string | null;
+  runId: number;
+}
+
+/** A successful recipe that advances story ownership must dismiss the modal. */
+export function craftTriggeredStoryTransition(
+  crafted: boolean,
+  before: CraftStorySnapshot,
+  after: CraftStorySnapshot
+): boolean {
+  return crafted
+    && (before.active || after.active)
+    && (
+      before.active !== after.active
+      || before.beat !== after.beat
+      || before.runId !== after.runId
+    );
+}
+
 /**
  * The Fabricator: the player's crafting screen. Lists every recipe at the
  * stations currently reachable (a portable fabricator grants all for now),
@@ -146,6 +167,7 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
             ctx={ctx}
             commandContext={commandContext}
             onStatus={setStatus}
+            onStoryTriggered={onClose}
           />
         ))}
       </div>
@@ -159,7 +181,8 @@ const StationSection: React.FC<{
   ctx: CraftContext;
   commandContext: CommandContext;
   onStatus: (message: string) => void;
-}> = ({ stationId, recipes, ctx, commandContext, onStatus }) => {
+  onStoryTriggered: () => void;
+}> = ({ stationId, recipes, ctx, commandContext, onStatus, onStoryTriggered }) => {
   if (recipes.length === 0) return null;
   const station = getStation(stationId);
   return (
@@ -170,7 +193,14 @@ const StationSection: React.FC<{
       <div style={{ fontSize: 11, color: theme.color.textFaint, marginBottom: 12 }}>{station.description}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {recipes.map(r => (
-          <RecipeRow key={r.id} recipe={r} ctx={ctx} commandContext={commandContext} onStatus={onStatus} />
+          <RecipeRow
+            key={r.id}
+            recipe={r}
+            ctx={ctx}
+            commandContext={commandContext}
+            onStatus={onStatus}
+            onStoryTriggered={onStoryTriggered}
+          />
         ))}
       </div>
     </div>
@@ -182,7 +212,8 @@ const RecipeRow: React.FC<{
   ctx: CraftContext;
   commandContext: CommandContext;
   onStatus: (message: string) => void;
-}> = ({ recipe, ctx, commandContext, onStatus }) => {
+  onStoryTriggered: () => void;
+}> = ({ recipe, ctx, commandContext, onStatus, onStoryTriggered }) => {
   const out = getItem(recipe.id);
   const check = canCraft(recipe, ctx);
   const affordable = check.ok;
@@ -219,6 +250,7 @@ const RecipeRow: React.FC<{
       <button
         onClick={() => {
           if (!affordable) return;
+          const storyBeforeCraft = getStoryStateSnapshot();
           let crafted = false;
           if (recipe.id === 'campfire') {
             if (getPlayerSubmergence() > 0.2 || isFeetInLava()) {
@@ -258,6 +290,12 @@ const RecipeRow: React.FC<{
           onStatus(crafted
             ? recipe.id === 'campfire' ? 'Campfire placed at your feet.' : `${out.name} crafted.`
             : `Unable to craft ${out.name}. Check materials and placement.`);
+          // Campfire placement emits synchronously; by the time the command
+          // returns, the director has entered its fire-to-dusk sequence. Close
+          // before the first cinematic frame so the modal never masks the shot.
+          if (craftTriggeredStoryTransition(crafted, storyBeforeCraft, getStoryStateSnapshot())) {
+            onStoryTriggered();
+          }
         }}
         disabled={!affordable}
         style={{

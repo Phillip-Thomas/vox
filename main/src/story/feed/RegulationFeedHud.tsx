@@ -70,6 +70,9 @@ const RegulationFeedHud: React.FC = () => {
   const harvestRef = useRef<HTMLDivElement>(null);
   const redactionRef = useRef<HTMLDivElement>(null);
   const redactionLabelRef = useRef<HTMLDivElement>(null);
+  const redactionIndicatorRef = useRef<HTMLDivElement>(null);
+  const redactionIndicatorChevronRef = useRef<HTMLDivElement>(null);
+  const redactionIndicatorLabelRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
   const markerChevronRef = useRef<HTMLDivElement>(null);
   const markerLabelRef = useRef<HTMLDivElement>(null);
@@ -147,6 +150,23 @@ const RegulationFeedHud: React.FC = () => {
           label.textContent = garbleText(red.label, red.stress * 0.4);
         } else {
           box.style.display = 'none';
+        }
+      }
+
+      // A censored subject does not cease to exist when the wearer looks away:
+      // replace its box with a separate edge direction (never the objective id).
+      const redactionIndicator = redactionIndicatorRef.current;
+      const redactionChevron = redactionIndicatorChevronRef.current;
+      const redactionIndicatorLabel = redactionIndicatorLabelRef.current;
+      if (redactionIndicator && redactionChevron && redactionIndicatorLabel) {
+        const indicator = r.redactionIndicator;
+        if (indicator.visible && r.treatment > 0.05) {
+          redactionIndicator.style.display = 'flex';
+          redactionIndicator.style.transform = `translate(${indicator.x}px, ${indicator.y}px) translate(-50%, -50%)`;
+          redactionChevron.style.transform = `rotate(${indicator.angle}rad)`;
+          redactionIndicatorLabel.textContent = indicator.label;
+        } else {
+          redactionIndicator.style.display = 'none';
         }
       }
     };
@@ -384,6 +404,49 @@ const RegulationFeedHud: React.FC = () => {
         }}
       >
         <div ref={redactionLabelRef} style={{ fontSize: 10, letterSpacing: '0.16em', padding: 10, textAlign: 'center' }} />
+      </div>
+
+      {/* Off-view censored subject: a directional warning, intentionally distinct
+          from the work-order/objective bracket. */}
+      <div
+        ref={redactionIndicatorRef}
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          display: 'none',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 5,
+          color: 'rgba(255,210,138,0.92)',
+          willChange: 'transform',
+          filter: 'drop-shadow(0 1px 5px rgba(0,0,0,0.9))'
+        }}
+      >
+        <div
+          ref={redactionIndicatorChevronRef}
+          style={{
+            fontSize: 22,
+            lineHeight: 1,
+            transformOrigin: '50% 50%',
+            borderLeft: '4px solid rgba(2,4,3,0.92)',
+            paddingLeft: 2
+          }}
+        >
+          ▶
+        </div>
+        <div
+          ref={redactionIndicatorLabelRef}
+          style={{
+            fontSize: 9,
+            letterSpacing: '0.16em',
+            whiteSpace: 'nowrap',
+            color: 'rgba(255,210,138,0.92)',
+            background: 'rgba(2,4,3,0.82)',
+            border: '1px solid rgba(255,210,138,0.45)',
+            padding: '3px 7px'
+          }}
+        />
       </div>
 
       <style>{`

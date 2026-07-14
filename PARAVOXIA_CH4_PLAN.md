@@ -6,6 +6,15 @@ continuation remains blocked by the demo production lock and owner Gate G1.
 Current canon lives in `main/PARAVOXIA_STORY_BIBLE.md`; sequencing, readiness,
 and delivery gates live in `main/PARAVOXIA_STORY_EXECUTION_PLAN.md`.
 
+**OWNER SEQUENCE OVERRIDE — 2026-07-13:** the legacy S10–S13 order and
+underwater Maw-kit reward preserved below are provenance, not current direction.
+After A4 Breath, the binding order is **dry-land pack → Maw repair → dive for the
+Kestrel Keel Memory → visible ship repair → continuous local-system travel →
+Tidegarden habitat**. The abundant alien-verdant sibling is explicitly neither
+volcanic nor frozen, and local travel does not trigger A5. The complete treatment
+is `main/PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md`; final replacement beat IDs wait
+for the council/authority migration.
+
 **Commission:** continue down the list of stats. Every remaining suit sense gets a REAL
 discovery scene in the temp/fire mold — a situation that CAUSES the sensation, a task
 that answers it, the stat appearing at the moment of feeling — carried by the post-A3
@@ -60,15 +69,19 @@ lives in `main/STORY.md`.
 | S7 | `ch4-comply` | ch4 | sterilization | — (fidelity DRAINS) | orders 1–2 performed |
 | S8 | `ch4-defy` | ch4 | "no." | — | `[F] Refuse` at the tree |
 | S9 | `a4-exhale` | ch4 | breath | **A4** — `alive` stage | exhale timeline completes |
-| S10 | `ch4-meat` | ch4 | the sensation | **hunger-for-meat** (moral beat) | hunt or refrain |
-| S11 | `ch4-dive` | ch4 | the straight line in the pond | **OXYGEN** row + the kit | surface with the Maw Repair Kit |
-| S12 | `ch4-repair` | ch4 | the tool wakes | **MAW** reborn; era → emergent | `[F] Repair` at the wreck |
-| S13 | `ch4-flight` | ch4 | up agrees | **JET** row + first hover | reach the wreck-spine marker |
+| S10† | `ch4-meat` | ch4/free play | the sensation | **hunger-for-meat** (moral beat) | persistent optional hunt/refrain/cook choice |
+| S12† | `ch4-repair` | ch5 | the tool wakes | **MAW** reborn; era → emergent | dry-land pack and atomic repair |
+| S11† | `ch4-dive` | ch6 | the straight line in the pond | **OXYGEN** row + Keel Memory | bank the ship memory on dry shore |
+| S13† | `ch4-flight` | ch7 | up agrees | **JET** row + first hover | relocated into Lift Cell/ship reconstruction |
 | — | `done` | complete | — | story completes at `alive` | — |
 
-Day structure: A3 dawn → S1–S2 morning (live clock) → S3 forced golden-hour lerp →
-S4 dusk-2/night-2 (scripted, DUSK grammar reused) → S5 dawn-2 → S6–S9 morning 2 →
-S10–S13 the rest of day 2 → done (clock released, sandbox continues at `alive`).
+† Legacy IDs are retained for provenance; row order reflects the current owner
+sequence, and final IDs belong to the authority migration.
+
+Day structure through Breath: A3 dawn → S1–S2 morning (live clock) → S3 forced
+golden-hour lerp → S4 dusk-2/night-2 (scripted, DUSK grammar reused) → S5 dawn-2
+→ S6–S9 morning 2. Post-Breath time and sequence now follow the Emergent batch
+plan rather than this historical S10–S13 day map.
 
 Milestones (new, `STORY_MILESTONES` additions): `ch3Signal:'story:ch3:signal'`,
 `ch4Vigil:'story:ch4:vigil'`, `ch4Arrived:'story:ch4:arrived'`,
@@ -490,15 +503,17 @@ sensory-lowercase pattern by being pure will — deliberately. Recommendation: k
    `LOGGING SENSOR FAULT: CHROMATIC. FILING REPAIR TICKET.` [the exact grammar of the
    player's own ch2 ticket — HIS first glitch begins here; A8's cyclical ending, seeded
    without one explanatory word]
-   As he crosses the pond edge he sheds his pack (splash + one line: `MASS ABANDONED TO
-   EXPEDITE WITHDRAWAL. DEDUCTED.`) — the dive object planted diegetically inside the
+   As he crosses living ground, a branch he cannot perceive catches and tears his pack.
+   It lands on dry ground beside the ridge/relay route (`MASS ABANDONED TO EXPEDITE
+   WITHDRAWAL. DEDUCTED.`) — the Maw-repair object planted diegetically inside the
    showpiece. Player, quiet, as the bars release: `a repair ticket, for a glimpse. i
    filed one once. no one came to fix me.`
 
 **(b) Gameplay.** Pure cutscene (moveScale 0 through movement 2, released during 3).
 Ends: stage lands EXACTLY on `alive`, overrides clear, life-reveal clears, densities
 settle at the device profile (ramped over the wave, `EXHALE.densitySeconds=30` per the
-progression doc), `a4` already marked → `ch4-meat`.
+progression doc), and `a4` is marked. The next critical beat is the owner-directed
+dry-pack/Maw repair in the Emergent plan; appetite becomes optional persistent play.
 
 **(c) Movie.** Hands-off; hard timeline. TIMEOUT 55s (timeline ~40s).
 
@@ -520,7 +535,13 @@ timelineSeconds:40 }`. Score mood `a4-exhale`. Milestone `a4` (the
 
 **(f) Open questions.** None — this is the commissioned centerpiece.
 
-### S10 · `ch4-meat` — the sensation (HUNGER stage 2, the moral beat)
+> **LEGACY SUPERSEDED — DO NOT IMPLEMENT S10–S13 FROM THIS SECTION.** The copy and
+> mechanisms below preserve the 2026-07-10 proposal only. Their order, rewards,
+> gates, timeouts, and completion semantics are void. Use
+> `main/PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md` and the revised Bible/Execution
+> Plan for production.
+
+### S10 · `ch4-meat` — the sensation (HUNGER stage 2, the moral beat) — LEGACY
 
 **(a) Narrative.** The herds settle to grazing. Day-2 hunger (kept low since S4) meets
 them. The sensation arrives WITH the fauna, as commissioned — and the game makes eating
@@ -569,8 +590,9 @@ a low, patient counter-line under the hunt cues (the shadow in the pastoral).
 **(f) Resolved taste direction.** Hunt via the extraction beam: the harvest tool
 turned on the living, with the copy owning the wrongness. Raw meat is not edible;
 the player must cook it on a lit campfire. Because `ch4-comply` orders the original
-fire doused, the council must resolve how fire is rebuilt or otherwise available
-without erasing that cost before S10 is approved for production.
+fire doused, current direction preserves it as fuel-gated `[F] Relight`; a legally
+dismantled fire may be replaced through normal campfire building. This note remains
+legacy because appetite is no longer a critical-path beat.
 
 ### S11 · `ch4-dive` — the straight line in the pond (OXYGEN)
 
@@ -689,6 +711,10 @@ scene is worth it.
 
 ## 3. Score plan (new `MOODS` entries, in the shipped format's language)
 
+> **LEGACY NOTE:** S6–S9 musical intent remains useful. The `ch4-meat`,
+> `ch4-dive`, `ch4-repair`, and `ch4-flight` rows retain motif provenance only;
+> their sequencing and cue ownership are superseded by the Emergent batch plan.
+
 All on the global rails; the era rail does half the work automatically (comply-drain
 lowers it, the exhale raises it). Concrete starting values — tune by ear after a movie
 run:
@@ -715,6 +741,13 @@ bloom (first hover).
 ---
 
 ## 4. Engineering appendix
+
+> **LEGACY SUPERSEDED — DO NOT IMPLEMENT THIS APPENDIX AS A BUILD ORDER.** It
+> mixes shipped S1–S5 history, still-relevant S6–S9 ideas, and void S10–S13
+> mechanics such as an underwater Maw kit, forced oxygen multiplier, immediate
+> jet restoration, timeout grants, and the old terminal boundary. Current
+> runtime code governs shipped truth; the Bible, Execution Plan, and Emergent
+> batch govern future implementation.
 
 ### 4.1 State machine (`storyState.ts`)
 

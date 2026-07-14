@@ -332,6 +332,36 @@ function seedForBeat(beat: StoryBeat): void {
   }
 }
 
+/**
+ * Explicit debug/movie jumps are reproducible rehearsals, not checkpoint
+ * resumes. Clear only Story-owned progression plus the pinned Story world's
+ * authored state; unrelated sandbox worlds and milestones remain untouched.
+ */
+function resetDebugStoryRun(storyWorld: ReturnType<typeof createWorldIdentity>): void {
+  removeMilestonesByPrefix('story:');
+  resetInventory();
+  resetMaw();
+  resetVitals();
+  resetWaterskin();
+  resetJetpackFuel();
+  clearWorldStateForWorld(storyWorld);
+  clearCampfiresForWorld(storyWorld);
+  clearVoxelEditsForWorld(storyWorld);
+  clearPlayerPoseForWorld(storyWorld);
+  clearStoryText();
+  resetStoryClock();
+  setStoryForcedDayPhase(null);
+}
+
+function movieRunRequested(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return new URLSearchParams(window.location.search).get('movie') === '1';
+  } catch {
+    return false;
+  }
+}
+
 // --- lifecycle ----------------------------------------------------------------
 
 /**
@@ -350,23 +380,27 @@ export function initStoryFromSave(): void {
   clearVoxelEditsForWorld(storyWorld);
   clearPlayerPoseForWorld(storyWorld);
   if (param === 'full') {
-    beginStory();
+    // A screening is a full deterministic rehearsal. Normal `?story=1` keeps
+    // its Continue semantics; movie mode must never inherit completed pickups.
+    if (movieRunRequested()) restartStory();
+    else beginStory();
     return;
   }
-  // Dev BEAT jumps start pristine (like the voxel/pose clears above): drop any
-  // stale campfire so a jump never inherits an earlier debug session's fire. The
-  // fire-gated beats re-place one via StoryWorldProps' dev pre-place.
-  clearCampfiresForWorld(storyWorld);
+  // Dev BEAT jumps start pristine, then reconstruct only the prerequisites for
+  // their chosen beat. This prevents a replayed crash from inheriting completed
+  // debris/pods and silently skipping the two profile collection acts.
+  const runId = snapshot.runId + 1;
+  resetDebugStoryRun(storyWorld);
   seedForBeat(param);
   const chapter = chapterForBeat(param);
   if (chapter === 'complete') {
     // "After A3": the finished world — sandbox at the earned stage.
     setVoxelRealityStage('material');
-    setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
+    setSnapshot({ active: false, chapter: 'complete', beat: 'done', runId });
     return;
   }
   setVoxelRealityStage(stageForStoryPoint({ chapter, beat: param }));
-  setSnapshot({ active: true, chapter, beat: param });
+  setSnapshot({ active: true, chapter, beat: param, runId });
 }
 
 /**

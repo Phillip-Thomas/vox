@@ -61,6 +61,9 @@ export interface FeedRuntime {
    *  SITE CAM tag derives its id from this (the camera-switch fiction). */
   camCell: number;
   redaction: FeedRedaction;
+  /** Separate from the objective marker: an edge-only direction to a censored
+   * subject whenever its redaction box is outside the current view. */
+  redactionIndicator: FeedMarker;
   /** Survey marker — the feed's target designator (the ch1 anomaly objective). */
   marker: FeedMarker;
 }
@@ -79,6 +82,7 @@ const runtime: FeedRuntime = {
   descent: -1,
   camCell: 0,
   redaction: { visible: false, x: 0, y: 0, w: 0, h: 0, label: '', stress: 0 },
+  redactionIndicator: { visible: false, x: 0, y: 0, offscreen: true, angle: 0, label: '' },
   marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' }
 };
 
@@ -140,5 +144,6 @@ export function resetFeedRuntime(): void {
   runtime.redaction.visible = false;
   runtime.redaction.stress = 0;
   runtime.redaction.label = '';
+  runtime.redactionIndicator.visible = false;
   runtime.marker.visible = false;
 }

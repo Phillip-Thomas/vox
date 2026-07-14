@@ -292,3 +292,10 @@ the music sometimes abruptly changes volume, the best I can tell it might be whe
 
 
 caves in some planets, so players can potentially fly straight through the center of planets
+
+
+1) in between the crash, and the first 2D scene, the camera jumps from the crash scene to the next frame over... the camera should remain on the crash scene, and not switch untilt he character (or automode) walk into an adjacent frame
+2) It seems we have accidentally done away completely with teh 2D scroller colleciton phase, so it feels like something was skipped in between crashing and going into the topdown view
+2) before looking at the leaving light once we build the camfire A) when crafting triggers a story, we should automatically close the crafting window... B) before we set gaze on the leaving sun, we should gaze at the fire with a cool cinemegraphic scene, then naturally transition to the sun once we observe the fire
+3) all numbers generated during oregon trail and pong should permanently impact pcg... the amount of deflections we succesfully do, the name we give worker 9, regulation index, rations remaining.. all that... but it should either move faster, or be more engaging like a cool character creation mini game
+

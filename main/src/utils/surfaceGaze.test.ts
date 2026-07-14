@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { FACE_NORMALS } from './surfaceControls.ts';
-import { createSurfaceGazeResult, solveSurfaceGaze } from './surfaceGaze.ts';
+import {
+  createSurfaceGazeResult,
+  solveSurfaceGaze,
+  steerSurfaceForwardToward
+} from './surfaceGaze.ts';
 
 const FACE_POINTS = {
   top: new THREE.Vector3(0, 52, 0),
@@ -13,6 +17,20 @@ const FACE_POINTS = {
 } as const;
 
 describe('surface-aware agent gaze', () => {
+  it('turns through an exactly antipodal objective instead of normalized-lerp locking', () => {
+    const forward = new THREE.Vector3(1, 0, 0);
+    const desired = new THREE.Vector3(-1, 0, 0);
+    steerSurfaceForwardToward(forward, desired, FACE_NORMALS.top, 0.1, forward);
+    expect(forward.x).toBeLessThan(1);
+    expect(Math.abs(forward.dot(FACE_NORMALS.top))).toBeLessThan(1e-8);
+    const firstAngle = forward.angleTo(desired);
+    for (let i = 0; i < 40; i++) {
+      steerSurfaceForwardToward(forward, desired, FACE_NORMALS.top, 0.1, forward);
+    }
+    expect(forward.angleTo(desired)).toBeLessThan(firstAngle);
+    expect(forward.angleTo(desired)).toBeLessThan(THREE.MathUtils.degToRad(3));
+  });
+
   it.each([
     ['top', 'right'], ['top', 'front'], ['bottom', 'left'],
     ['right', 'front'], ['left', 'back'], ['front', 'top']
@@ -84,6 +102,44 @@ describe('surface-aware agent gaze', () => {
     });
     expect(result.tangentForward.z).toBeLessThan(-0.99);
     expect(Math.abs(result.tangentForward.x)).toBeLessThan(0.08);
+  });
+
+  it('aims the interaction ray exactly at a nearby low subject instead of preserving travel yaw', () => {
+    const eye = new THREE.Vector3(0, 53.5, 0);
+    const water = new THREE.Vector3(3, 50.2, 2);
+    const direct = water.clone().sub(eye).normalize();
+    const result = solveSurfaceGaze({
+      eye,
+      viewerUp: FACE_NORMALS.top,
+      currentForward: new THREE.Vector3(1, 0, 0),
+      goal: water,
+      goalUp: FACE_NORMALS.top,
+      // The dry approach leg deliberately differs from the water ray.
+      routeDirection: new THREE.Vector3(-1, 0, 0),
+      mode: 'interact',
+      elapsed: 4.2,
+      seed: 7744
+    });
+    expect(result.direct).toBe(true);
+    expect(result.direction.dot(direct)).toBeGreaterThan(0.999999);
+    // A shoreline drink genuinely needs more down-look than natural travel.
+    expect(result.pitch).toBeLessThan(THREE.MathUtils.degToRad(-12));
+  });
+
+  it('keeps explicit interaction gaze on the horizon until a cross-face subject is reachable', () => {
+    const result = solveSurfaceGaze({
+      eye: new THREE.Vector3(0, 53.5, 0),
+      viewerUp: FACE_NORMALS.top,
+      currentForward: new THREE.Vector3(1, 0, 0),
+      goal: new THREE.Vector3(52, 10, 0),
+      goalUp: FACE_NORMALS.right,
+      mode: 'interact',
+      elapsed: 0,
+      seed: 1
+    });
+    expect(result.direct).toBe(false);
+    expect(result.surfaceOccluded).toBe(true);
+    expect(Math.abs(result.pitch)).toBeLessThan(THREE.MathUtils.degToRad(1));
   });
 
   it('is elapsed-time deterministic rather than frame-step dependent', () => {

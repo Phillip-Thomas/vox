@@ -6,7 +6,7 @@ import {
   VOXEL_REALITY_PRESETS
 } from '../game/systems/realityRenderSystem.ts';
 import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
-import { getItemCount, hasItems, subscribeInventory } from '../game/systems/inventorySystem.ts';
+import { getItemCount, hasItems } from '../game/systems/inventorySystem.ts';
 import { getRecipe } from '../game/data/recipes.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
 import { getVitals, isStaminaExhausted, setVitals } from '../game/systems/survivalVitals.ts';
@@ -34,8 +34,16 @@ import {
   FEED_FOV,
   SANDBOX_FOV
 } from './storyInputPolicy.ts';
-import { getSideFacing, getSideLens, setLensRig, SIDE_RIG, type LensRig } from './sideLens.ts';
-import { getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
+import {
+  fixedScreenCellIndex,
+  getSideFacing,
+  getSideLens,
+  setLensRig,
+  SIDE_RIG,
+  type LensRig
+} from './sideLens.ts';
+import { getPlayerLook, getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { getSunDirection } from '../components/SkyController.tsx';
 import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
 import { setConstellationReveal } from './skyMeaning.ts';
 import { hifiWreckHandle } from './world/hifiWreck.ts';
@@ -47,7 +55,15 @@ import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
-import { storyAnchors } from './world/storyWorld.ts';
+import { getAuditWorkerPath, storyAnchors } from './world/storyWorld.ts';
+import { createLiveAgentSurfaceTerrain } from '../utils/agentSurfaceNavigationRuntime.ts';
+import {
+  easedGroundedTravelProgress,
+  groundedSurfaceRouteLength,
+  sampleGroundedSurfaceRoute,
+  turnGroundedHeadingToward,
+  type GroundedSurfaceSample
+} from '../utils/groundedSurfaceMotion.ts';
 import { STORY_TASK_ROW_DEPTH_BAND } from './taskRowNavigation.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { isStoryPaused } from './storyClock.ts';
@@ -63,6 +79,12 @@ import {
   arrivalLookWeightAt,
   computeArrivalCameraFrame
 } from './arrivalCinematography.ts';
+import {
+  DUSK_CINEMATIC,
+  computeDuskFireCameraFrame,
+  computeDuskGazeTarget,
+  duskCinematicStateAt
+} from './duskCinematography.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
 import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption, showSystemLine } from './storyText.ts';
 import {
@@ -156,6 +178,9 @@ interface DirectorRuntime {
   /** ch1-fixed: the cell currently on camera (null until the lens reports) —
    *  a change is a camera CUT: static blip + the HUD's SITE CAM tag flips. */
   fixedCamCell: number | null;
+  /** Beat-clock stamps for the final pickup in each profile collection act. */
+  rasterCompleteAt: number;
+  depthCompleteAt: number;
   /** ch1-lift one-shot: the mid-lift dpr snap + glitch mask fired. */
   liftSnapped: boolean;
   /** Scratch target for the lift's look-ahead pull. */
@@ -198,6 +223,8 @@ interface DirectorRuntime {
   constellationRampStart: number;
   /** ch4-arrival one-shots. */
   arrivalWoke: boolean;
+  /** Live terrain/edit revision that owns the grounded auditor route. */
+  arrivalRouteRevision: string | null;
   /** 2-frame BARE drop (the auditor's eyes) — inverse of the chroma flash. */
   bareFramesLeft: number;
   /** Scratch for the auditor's walk. */
@@ -227,6 +254,8 @@ function createDirectorRuntime(): DirectorRuntime {
     descentImpacted: false,
     fixedCells: new Set(),
     fixedCamCell: null,
+    rasterCompleteAt: -1,
+    depthCompleteAt: -1,
     liftSnapped: false,
     liftLookTarget: new THREE.Vector3(),
     prevThirst: -1,
@@ -252,6 +281,7 @@ function createDirectorRuntime(): DirectorRuntime {
     stargazeStart: -1,
     constellationRampStart: -1,
     arrivalWoke: false,
+    arrivalRouteRevision: null,
     bareFramesLeft: 0,
     workerScratch: new THREE.Vector3()
   };
@@ -328,6 +358,18 @@ function echoLines(): string[] {
 
 /** Width (world units) of one fixed-screen cell — the era where the frame is bolted. */
 const FIXED_SCREEN_CELL = 24;
+
+/**
+ * Collection acts remain on screen long enough to read as authored phases,
+ * including when a replay/save enters with its quota already satisfied. The
+ * final-pickup hold lets the completed ledger and pickup feedback land before
+ * the camera earns another axis.
+ */
+export const CH1_COLLECTION_TIMING = {
+  rasterMinimumSeconds: 6,
+  depthMinimumSeconds: 6,
+  completionHoldSeconds: 2.5
+} as const;
 
 const ISO_RIG: LensRig = {
   elevation: 0.6, // ~34° — the classic axonometric silhouette, not a high oblique
@@ -439,12 +481,14 @@ function onBeatEntered(beat: StoryBeat | null): void {
       d.flashesFired = CH1_FLASH_SCHEDULE.map(() => false);
       setStoryForcedDayPhase(0.25);
       setMawCharge(getArrivalCellCharge());
+      d.rasterCompleteAt = -1;
       setWorkOrder([...CH1_WORK_ORDERS.raster, ...echoLines()]);
       break;
     case 'ch1-depth':
       getFeedRuntime().descent = 1.1; // direct-jump safe
       setStoryForcedDayPhase(0.25);
       d.glitchDecay = 0.55; // each era hand-off announces itself
+      d.depthCompleteAt = -1;
       setWorkOrder([...CH1_WORK_ORDERS.depth]);
       break;
     case 'ch1-nav':
@@ -537,7 +581,6 @@ function onBeatEntered(beat: StoryBeat | null): void {
       // The first sun event: the story takes the camera for a few seconds.
       playSfx('storyAwaken');
       setStoryMoveScale(0);
-      fireCaptionOnce('dusk', CH3_CAPTIONS.duskStart);
       ensureRestInteraction();
       break;
     case 'ch3-await-rest':
@@ -603,6 +646,7 @@ function onBeatEntered(beat: StoryBeat | null): void {
     }
     case 'ch4-arrival':
       d.arrivalWoke = false;
+      d.arrivalRouteRevision = null;
       if (d.restUnregister) {
         d.restUnregister();
         d.restUnregister = null;
@@ -700,16 +744,6 @@ function syncBeat(): void {
 subscribeStory(syncBeat);
 // Deep links activate the story BEFORE this module loads — catch up immediately.
 syncBeat();
-
-// Quota completion (on the raster task row) opens the widened profile era.
-subscribeInventory(() => {
-  const s = getStoryStateSnapshot();
-  if (!s.active || s.beat !== 'ch1-raster') return;
-  if (quotaCollected().met) {
-    markMilestone(STORY_MILESTONES.ch1Quota);
-    advanceToBeat('ch1-depth');
-  }
-});
 
 // The first campfire brings the first dusk (fire before dark — earned warmth),
 // and the story acknowledges the act immediately.
@@ -1123,8 +1157,14 @@ function tickShipLook(dt: number, camera: THREE.PerspectiveCamera | null): void 
   }
 }
 
-/** Seconds the dusk cutscene holds the frame (camera pull + letterbox + freeze). */
-const DUSK_CUTSCENE_SECONDS = 8;
+const _duskFirePosition = new THREE.Vector3();
+const _duskFireUp = new THREE.Vector3();
+const _duskPlayerPosition = new THREE.Vector3();
+const _duskPlayerEye = new THREE.Vector3();
+const _duskCameraEye = new THREE.Vector3();
+const _duskCameraTarget = new THREE.Vector3();
+const _duskCameraUp = new THREE.Vector3();
+const _duskGazeTarget = new THREE.Vector3();
 
 // Chapter 3's sun: the director owns the forced phase through the scripted first
 // dusk and the night, releasing it to the live world clock only at completion —
@@ -1135,14 +1175,77 @@ function tickCh3Sun(dt: number): void {
   if (s.beat === 'ch3-dusk') {
     const k = smoothstep(Math.min(1, d.beatClock / DUSK.lerpSeconds));
     d.dayPhase = 0.25 + (DUSK.targetPhase - 0.25) * k;
-    // The cutscene: bars in, camera pulled to the setting sun, feet held — then
-    // everything hands back while the light keeps leaving.
+    // The first fire earns its own image before sunset: a low three-quarter
+    // portrait arcs around the flames, returns to the player's eyes, and carries
+    // their gaze from the warmth they made to the light now leaving. Every layer
+    // shares this state clock, so lens, bars, feet, score, and gaze cannot drift.
     const t = d.beatClock;
-    getFeedRuntime().cinematic = envelope(t, 0, 1.2, 6, DUSK_CUTSCENE_SECONDS);
-    setCinematicLookWeight(envelope(t, 0.2, 1.6, 5, 7));
-    // Strings swell while the story holds the camera, then settle to dusk.
-    setScoreIntensity(0.35 + envelope(t, 0, 2.5, 5.5, DUSK_CUTSCENE_SECONDS) * 0.65);
-    if (t >= 6) setStoryMoveScale(Math.min(1, (t - 6) / 1.5));
+    const fire = getCampfires()[0] ?? null;
+    const cinematic = duskCinematicStateAt(t, fire != null);
+    // Let "i made warmth" live on the fire portrait. The leaving-light line
+    // arrives only as the gaze itself begins to rise toward that light.
+    if (t >= (fire ? DUSK_CINEMATIC.fireHoldEnd : 0.2)) {
+      fireCaptionOnce('dusk', CH3_CAPTIONS.duskStart);
+    }
+    getFeedRuntime().cinematic = cinematic.letterbox;
+    setStoryMoveScale(cinematic.movement);
+    setStoryTargetFov(cinematic.fov);
+    setScoreIntensity(cinematic.score);
+    setCinematicLookWeight(cinematic.look);
+
+    if (fire) {
+      _duskFirePosition.set(fire.pos[0], fire.pos[1], fire.pos[2]);
+      _duskFireUp.set(fire.up[0], fire.up[1], fire.up[2]);
+      if (_duskFireUp.lengthSq() < 1e-8) _duskFireUp.copy(getPlayerUp());
+      else _duskFireUp.normalize();
+      _duskPlayerPosition.copy(getPlayerWorldPosition());
+      const playerForward = getPlayerLook().forward;
+      computeDuskFireCameraFrame(
+        _duskFirePosition,
+        _duskFireUp,
+        _duskPlayerPosition,
+        playerForward,
+        cinematic.orbitRadians,
+        _duskCameraEye,
+        _duskCameraTarget,
+        _duskCameraUp
+      );
+      if (cinematic.fireCamera > 0.001) {
+        setCinematicCameraPose(
+          _duskCameraEye,
+          _duskCameraTarget,
+          _duskCameraUp,
+          cinematic.fireCamera
+        );
+      } else {
+        clearCinematicCameraPose();
+      }
+
+      if (cinematic.fireToSun < 0.999 && cinematic.look > 0.001) {
+        _duskPlayerEye.copy(_duskPlayerPosition).addScaledVector(_duskFireUp, 1.6);
+        computeDuskGazeTarget(
+          _duskPlayerEye,
+          _duskCameraTarget,
+          getSunDirection(),
+          cinematic.fireToSun,
+          _duskGazeTarget
+        );
+        setCinematicLookTarget(_duskGazeTarget);
+      } else {
+        // Null is the live sun direction in CameraControls. At the end of the
+        // blended arc this is visually identical, and keeps following the sky.
+        setCinematicLookTarget(null);
+      }
+    } else {
+      // Timeout/deep-link safety: no fire means retain the former sun-only shot.
+      clearCinematicCameraPose();
+      setCinematicLookTarget(null);
+    }
+    if (t >= DUSK_CINEMATIC.endSeconds) {
+      setCinematicLookWeight(0);
+      setCinematicLookTarget(null);
+      clearCinematicCameraPose();
+    }
     tickStoryChill(dt, 0.85);
     if (d.beatClock >= DUSK.lerpSeconds) advanceToBeat('ch3-await-rest');
   } else if (s.beat === 'ch3-await-rest') {
@@ -1492,35 +1595,53 @@ export function vigilRestReady(): boolean {
 
 // S5 — the arrival: dawn 2, and the letterbox returns WITH the system's agent.
 const _arrLook = new THREE.Vector3();
-const _arrSeg = new THREE.Vector3();
 const _arrCameraEye = new THREE.Vector3();
 const _arrCameraTarget = new THREE.Vector3();
 const _arrCameraUp = new THREE.Vector3();
 const _arrCameraRig: LensRig = { ...SIDE_RIG };
+const _arrMotion: GroundedSurfaceSample = {
+  position: new THREE.Vector3(),
+  heading: new THREE.Vector3(),
+  distance: 0,
+  segmentIndex: -1,
+  segmentProgress: 0
+};
+const AUDIT_WORKER_TURN_RATE = Math.PI * 0.8;
 
-/** Place the auditor at normalized progress u along his surface-snapped path. */
-function placeAuditWorker(u: number): void {
+/** Re-plan against live edits/water before the distant actor becomes visible. */
+function refreshAuditWorkerRoute(): boolean {
+  const planetSize = storyAnchors.planetSize;
+  const terrainSeed = storyAnchors.terrainSeed;
+  if (planetSize == null || terrainSeed == null) {
+    return (storyAnchors.auditPath?.length ?? 0) >= 2;
+  }
+  const terrain = createLiveAgentSurfaceTerrain(planetSize, terrainSeed);
+  if (d.arrivalRouteRevision !== terrain.revision) {
+    storyAnchors.auditPath = getAuditWorkerPath(planetSize, terrainSeed, terrain);
+    d.arrivalRouteRevision = terrain.revision;
+  }
+  return (storyAnchors.auditPath?.length ?? 0) >= 2;
+}
+
+/** Place the auditor along a contiguous dry path with bounded step/turn motion. */
+function placeAuditWorker(u: number, dt: number): void {
   const path = storyAnchors.auditPath;
   const worker = getAuditWorkerPose();
   if (!path || path.length < 2) return;
-  let total = 0;
-  for (let i = 1; i < path.length; i++) total += path[i].position.distanceTo(path[i - 1].position);
-  let remaining = Math.min(1, Math.max(0, u)) * total;
-  worker.stride = remaining; // stride distance drives the metronome gait
-  for (let i = 1; i < path.length; i++) {
-    const a = path[i - 1];
-    const b = path[i];
-    const len = a.position.distanceTo(b.position);
-    if (remaining <= len || i === path.length - 1) {
-      const k = len > 1e-6 ? Math.min(1, remaining / len) : 0;
-      worker.position.copy(a.position).lerp(b.position, k);
-      worker.up.copy(a.up).lerp(b.up, k).normalize();
-      _arrSeg.copy(b.position).sub(a.position);
-      if (_arrSeg.lengthSq() > 1e-6) worker.heading.copy(_arrSeg.normalize());
-      return;
-    }
-    remaining -= len;
-  }
+  worker.up.copy(path[0].up).normalize();
+  const total = groundedSurfaceRouteLength(path, worker.up);
+  const progress = easedGroundedTravelProgress(u);
+  sampleGroundedSurfaceRoute(path, progress * total, worker.up, _arrMotion);
+  worker.position.copy(_arrMotion.position);
+  worker.stride = _arrMotion.distance;
+  if (_arrMotion.heading.lengthSq() <= 1e-6 || u >= 1) return;
+  if (!worker.visible || u <= 0) worker.heading.copy(_arrMotion.heading);
+  else turnGroundedHeadingToward(
+    worker.heading,
+    _arrMotion.heading,
+    worker.up,
+    AUDIT_WORKER_TURN_RATE * Math.max(0, dt)
+  );
 }
 
 function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
@@ -1530,9 +1651,33 @@ function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
   if (!d.arrivalWoke) {
     d.arrivalWoke = true;
     d.dayPhase = T.wakePhase; // just before sunrise 2 — he comes out of the light
+    refreshAuditWorkerRoute();
   }
   if (t < T.holdBlackSeconds) {
     r.sleepFade = 1;
+    setStoryForcedDayPhase(d.dayPhase);
+    return;
+  }
+  const worker = getAuditWorkerPose();
+  const u = (t - T.walkStartAt) / T.walkSeconds;
+  // Once he is in shot, the frozen arrival owns this route. Replanning a changed
+  // world from the original spawn mid-walk would itself be a teleport.
+  const routeReady = worker.visible
+    ? (storyAnchors.auditPath?.length ?? 0) >= 2
+    : refreshAuditWorkerRoute();
+  if (!routeReady && t >= T.walkStartAt - 1.5) {
+    // Checks and balances: no route means no disembodied dialogue and no false
+    // completion. Hold before the first sighting, release player control so a
+    // live obstruction can be cleared, and retry only when terrain revision moves.
+    d.beatClock = T.walkStartAt - 1.5;
+    worker.visible = false;
+    r.sleepFade = 0;
+    r.cinematic = 0;
+    setStoryMoveScale(1);
+    setStoryTargetFov(SANDBOX_FOV);
+    setCinematicLookWeight(0);
+    setCinematicLookTarget(null);
+    clearCinematicCameraPose();
     setStoryForcedDayPhase(d.dayPhase);
     return;
   }
@@ -1543,16 +1688,21 @@ function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
   r.cinematic = envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 1.5, T.endAt - 2, T.endAt);
 
   // The auditor walks his straight lines, ridge → relay.
-  const worker = getAuditWorkerPose();
-  const u = (t - T.walkStartAt) / T.walkSeconds;
-  if (t >= T.walkStartAt - 1.5) {
-    placeAuditWorker(u);
+  if (t >= T.walkStartAt - 1.5 && routeReady) {
+    placeAuditWorker(u, dt);
     worker.visible = true;
     worker.walk = u > 0 && u < 1 ? 1 : 0;
     if (u >= 1) {
       // Standing at the relay, he faces the anomalous worker. He waits.
       d.workerScratch.copy(getPlayerWorldPosition()).sub(worker.position);
-      if (d.workerScratch.lengthSq() > 0.5) worker.heading.copy(d.workerScratch.normalize());
+      if (d.workerScratch.lengthSq() > 0.5) {
+        turnGroundedHeadingToward(
+          worker.heading,
+          d.workerScratch.normalize(),
+          worker.up,
+          AUDIT_WORKER_TURN_RATE * Math.max(0, dt)
+        );
+      }
     }
     // The camera stays on him for the approach. A short side-lens boom revives
     // the opening's regulated frame at the recognition cues, but blends from
@@ -1669,7 +1819,7 @@ export function storyDirectorTick(
       const lens = getSideLens();
       if (lens) {
         const along = _fixedRel.copy(getPlayerWorldPosition()).sub(lens.origin).dot(lens.travelAxis);
-        const cell = Math.floor(along / FIXED_SCREEN_CELL);
+        const cell = fixedScreenCellIndex(along, FIXED_SCREEN_CELL);
         r.camCell = cell;
         if (d.fixedCamCell === null) {
           d.fixedCamCell = cell; // the opening camera — no cut on entry
@@ -1705,11 +1855,17 @@ export function storyDirectorTick(
       break;
     case 'ch1-raster':
       tickCh1Flashes(dt);
-      // Belt-and-braces: a resume that ARRIVES with the quota already met fires
-      // no inventory event, so the watcher alone could strand the beat.
+      // A resume can arrive complete, and the final live pickup can complete
+      // between frames. Latch either case, then let the act visibly resolve.
       if (quotaCollected().met) {
-        markMilestone(STORY_MILESTONES.ch1Quota);
-        advanceToBeat('ch1-depth');
+        if (d.rasterCompleteAt < 0) d.rasterCompleteAt = d.beatClock;
+        if (
+          d.beatClock >= CH1_COLLECTION_TIMING.rasterMinimumSeconds
+          && d.beatClock >= d.rasterCompleteAt + CH1_COLLECTION_TIMING.completionHoldSeconds
+        ) {
+          markMilestone(STORY_MILESTONES.ch1Quota);
+          advanceToBeat('ch1-depth');
+        }
       }
       break;
     case 'ch1-depth':
@@ -1719,9 +1875,15 @@ export function storyDirectorTick(
         fireCaptionOnce('depth-word', '(the world has a depth. the line does not. why can the eye go where the body cannot?)');
       }
       // All pods recovered (or a resume that arrives with them recovered).
-      if (d.beatClock >= 1 && supplyPodsComplete()) {
-        markMilestone(STORY_MILESTONES.ch1Depth);
-        advanceToBeat('ch1-nav');
+      if (supplyPodsComplete()) {
+        if (d.depthCompleteAt < 0) d.depthCompleteAt = d.beatClock;
+        if (
+          d.beatClock >= CH1_COLLECTION_TIMING.depthMinimumSeconds
+          && d.beatClock >= d.depthCompleteAt + CH1_COLLECTION_TIMING.completionHoldSeconds
+        ) {
+          markMilestone(STORY_MILESTONES.ch1Depth);
+          advanceToBeat('ch1-nav');
+        }
       }
       break;
     case 'ch1-nav':

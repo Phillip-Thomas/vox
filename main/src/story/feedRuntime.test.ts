@@ -31,6 +31,7 @@ describe('camera-feed visual ownership', () => {
     runtime.externalCameraMix = 0;
     runtime.flash = 0.75;
     runtime.marker.visible = true;
+    runtime.redactionIndicator.visible = true;
 
     expect(cameraFeedVisualState()).toEqual({
       desat: 0,
@@ -43,13 +44,16 @@ describe('camera-feed visual ownership', () => {
     // camera-feed post effects, so the handoff leaves them available.
     expect(runtime.flash).toBe(0.75);
     expect(runtime.marker.visible).toBe(true);
+    expect(runtime.redactionIndicator.visible).toBe(true);
     expect(runtime.treatment).toBe(1);
   });
 
   it('restores external-camera ownership on a clean runtime reset', () => {
     getFeedRuntime().externalCameraMix = 0;
+    getFeedRuntime().redactionIndicator.visible = true;
     resetFeedRuntime();
     expect(getFeedRuntime().externalCameraMix).toBe(1);
+    expect(getFeedRuntime().redactionIndicator.visible).toBe(false);
     expect(cameraFeedVisualState().treatment).toBe(1);
   });
 

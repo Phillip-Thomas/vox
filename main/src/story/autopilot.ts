@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { getStoryStateSnapshot, STORY_MILESTONES, type StoryBeat } from './storyState.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
-import { getPlayerWorldPosition, getPlayerUp } from '../state/playerFrame.ts';
+import { getPlayerLook, getPlayerWorldPosition, getPlayerUp } from '../state/playerFrame.ts';
 import { requestPlayerNudge } from './playerNudge.ts';
 import { addItem, getItemCount, removeItem } from '../game/systems/inventorySystem.ts';
 import { getCampfires, placeCampfire } from '../game/systems/campfires.ts';
@@ -17,7 +17,12 @@ import { storyAnchors } from './world/storyWorld.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { anomalyMassDesignated, beginA1, beginA2, vigilRestReady } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
-import { setCinematicLookTarget, setCinematicLookWeight } from './cinematicLook.ts';
+import {
+  setCinematicGazeIntent,
+  setCinematicLookTarget,
+  setCinematicLookWeight,
+  type CinematicGazeMode
+} from './cinematicLook.ts';
 import { getLensRig, getSideLens, rigMoveBasis } from './sideLens.ts';
 import {
   getDebrisPositions,
@@ -29,6 +34,17 @@ import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from './storyScript.ts';
 import { getSupplyPodPositions, isPodCollected, seedSupplyPodsCollected } from './supplyPods.ts';
 import { currentNavWaypointPosition, seedNavWaypointsReached } from './navWaypoints.ts';
 import { taskRowMoveIntent } from './taskRowNavigation.ts';
+import {
+  planAgentSurfaceRoute,
+  type AgentSurfaceRoute
+} from '../utils/agentSurfaceNavigation.ts';
+import { createLiveAgentSurfaceTerrain } from '../utils/agentSurfaceNavigationRuntime.ts';
+import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
+import {
+  beginsCrossFaceRouteHandoff,
+  surfaceFaceFromUp,
+  surfaceSteeringIntent
+} from './autopilotSteering.ts';
 
 // --- Story autopilot (movie mode) -----------------------------------------------
 //
@@ -151,6 +167,31 @@ let walkTargetLive = false;
 const _nudge = new THREE.Vector3();
 const _stillDelta = new THREE.Vector3();
 
+type NavigationAction = 'idle' | 'walk' | 'jetpack' | 'direct' | 'unreachable';
+
+interface ActiveNavigationRoute {
+  route: AgentSurfaceRoute;
+  goal: THREE.Vector3;
+  revision: string;
+  cursor: number;
+  plannedAt: number;
+}
+
+let activeNavigationRoute: ActiveNavigationRoute | null = null;
+let navigationAction: NavigationAction = 'idle';
+let navigationReason = 'not-planned';
+const _navigationWaypoint = new THREE.Vector3();
+const _navigationDirection = new THREE.Vector3();
+const CROSS_FACE_CONTINUATION_SECONDS = 1.1;
+let crossFaceContinuationUntil = -1;
+
+function resetNavigationRoute(): void {
+  activeNavigationRoute = null;
+  navigationAction = 'idle';
+  navigationReason = 'not-planned';
+  crossFaceContinuationUntil = -1;
+}
+
 function clearControls(): void {
   controls.forward = false;
   controls.backward = false;
@@ -181,32 +222,236 @@ function gaitDistance(target: THREE.Vector3, player: THREE.Vector3): number {
 /** Base gaze lift over a goal: the camera aims at the SUBJECT, not its base. */
 const LOOK_LIFT = 1.4;
 
-const _aim = new THREE.Vector3();
+const _gazeRoute = new THREE.Vector3();
 
 /**
- * Where the camera should look for a given goal: the goal lifted to body
- * height, rising further as the walk closes in — so arrivals (and whatever
- * cutscene fires on them) land FRAMED on the object, never on the ground at
- * the player's feet.
+ * Publish a semantic gaze instead of a raw chord through the cube. The camera
+ * resolves it against its visually transported up: far/cross-face subjects are
+ * a local-horizon bearing; nearby same-face subjects become an inspection.
  */
-function aimAt(target: THREE.Vector3, distance: number, lookLift = LOOK_LIFT): THREE.Vector3 {
-  const closeness = Math.max(0, 1 - distance / 8);
-  return _aim.copy(target).addScaledVector(getPlayerUp(), lookLift + closeness * 1.1);
+function lookNaturallyToward(
+  target: THREE.Vector3,
+  player: THREE.Vector3,
+  lookLift = LOOK_LIFT,
+  routeTarget: THREE.Vector3 = target,
+  mode?: CinematicGazeMode
+): void {
+  _gazeRoute.copy(routeTarget).sub(player);
+  setCinematicGazeIntent({
+    goal: target,
+    routeDirection: _gazeRoute,
+    subjectLift: lookLift,
+    mode: mode ?? (player.distanceTo(target) < 12 ? 'inspect' : 'travel'),
+    elapsed: beatClock,
+    seed: 7744
+  });
+}
+
+interface NavigationStep {
+  waypoint: THREE.Vector3;
+  action: NavigationAction;
+  route: AgentSurfaceRoute | null;
+  /** Hold the transported camera/player forward through a cube-edge roll. */
+  preserveForward: boolean;
+}
+
+/**
+ * Resolve (and cache) the next dry surface waypoint. Planning is keyed by the
+ * quantized goal, owning face, and live terrain/water revision; it never runs
+ * every frame. A large deviation gets one bounded replan rather than letting the
+ * old path's watchdog drag the actor back through an obstacle.
+ */
+function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): NavigationStep {
+  const planetSize = storyAnchors.planetSize;
+  const terrainSeed = storyAnchors.terrainSeed;
+  if (planetSize == null || terrainSeed == null) {
+    navigationAction = 'direct';
+    navigationReason = 'world-navigation-unavailable';
+    return {
+      waypoint: _navigationWaypoint.copy(goal),
+      action: navigationAction,
+      route: null,
+      preserveForward: false
+    };
+  }
+
+  const terrain = createLiveAgentSurfaceTerrain(planetSize, terrainSeed);
+  // Exact edge positions are tied by construction. Gravity up is the physics
+  // authority and has already committed to the destination face.
+  const face = surfaceFaceFromUp(getPlayerUp());
+  const goalFace = dominantFaceForPosition(goal);
+  const cached = activeNavigationRoute;
+  if (cached && cached.goal.distanceToSquared(goal) <= 1 && beginsCrossFaceRouteHandoff(
+    cached.route.reason,
+    cached.route.face,
+    face,
+    goalFace
+  )) {
+    // Do not ask same-face A* to start on the seam cell. Carry the already-held
+    // forward input through the visual/gravity roll, then replan from clear land.
+    cached.route.face = face;
+    cached.plannedAt = beatClock;
+    crossFaceContinuationUntil = beatClock + CROSS_FACE_CONTINUATION_SECONDS;
+  }
+  const goalChanged = !cached || cached.goal.distanceToSquared(goal) > 1;
+  const faceChanged = !cached || cached.route.face !== face;
+  const revisionChanged = !cached || cached.revision !== terrain.revision;
+  const cachedWaypoint = cached?.route.waypoints[cached.cursor];
+  const preserveCrossFaceForward = !!cached
+    && beatClock < crossFaceContinuationUntil
+    && cached.route.face === face
+    && face === goalFace;
+  const farOffRoute = !!cachedWaypoint
+    && !preserveCrossFaceForward
+    && beatClock - (cached?.plannedAt ?? 0) > 0.75
+    && player.distanceToSquared(cachedWaypoint) > 9 * 9;
+
+  if (preserveCrossFaceForward) {
+    navigationAction = 'direct';
+    navigationReason = 'cross-face-forward-handoff';
+    return {
+      waypoint: _navigationWaypoint.copy(goal),
+      action: navigationAction,
+      route: cached.route,
+      preserveForward: true
+    };
+  }
+
+  if (goalChanged || faceChanged || revisionChanged || farOffRoute) {
+    const route = planAgentSurfaceRoute(terrain, planetSize, player, goal, {
+      // Once both endpoints belong to the physics-owned face, force that frame
+      // so a position tie at the edge cannot send the planner back to the old one.
+      ...(goalFace === face ? { face } : {}),
+      differentFaceFallback: 'direct',
+      allowJetpackCrossing: true,
+      maxJetpackWaterCells: 3,
+      maxJetpackWaterDepthCells: 2,
+      jetpackDetourExtraCells: 4,
+      jetpackDetourRatio: 1.5,
+      maxVisitedCells: 4096
+    });
+    activeNavigationRoute = {
+      route,
+      goal: goal.clone(),
+      revision: terrain.revision,
+      cursor: route.waypoints.length > 1 ? 1 : 0,
+      plannedAt: beatClock
+    };
+  }
+
+  const active = activeNavigationRoute;
+  if (!active || active.route.mode === 'unreachable' || active.route.waypoints.length === 0) {
+    navigationAction = 'unreachable';
+    navigationReason = active?.route.reason ?? 'no-route';
+    return {
+      waypoint: _navigationWaypoint.copy(player),
+      action: navigationAction,
+      route: active?.route ?? null,
+      preserveForward: false
+    };
+  }
+
+  // Consume adjacent A* cells as the body reaches them. The final cell remains
+  // authoritative; route replanning owns any larger displacement.
+  while (active.cursor < active.route.waypoints.length - 1) {
+    const candidate = active.route.waypoints[active.cursor];
+    if (!candidate || player.distanceToSquared(candidate) > 1.35 * 1.35) break;
+    active.cursor++;
+  }
+  const waypoint = active.route.waypoints[active.cursor] ?? goal;
+  const crossing = active.route.waterCrossing;
+  const onJetpackLeg = !!crossing
+    && active.cursor >= Math.max(0, crossing.firstWaterWaypointIndex - 1)
+    && active.cursor <= Math.min(active.route.waypoints.length - 1, crossing.lastWaterWaypointIndex + 1);
+  navigationAction = onJetpackLeg
+    ? 'jetpack'
+    : active.route.mode === 'direct'
+      ? 'direct'
+      : 'walk';
+  navigationReason = active.route.reason;
+  return {
+    waypoint: _navigationWaypoint.copy(waypoint),
+    action: navigationAction,
+    route: active.route,
+    preserveForward: false
+  };
+}
+
+/** Map a world route segment onto the player's current surface camera frame.
+ * Movement therefore follows the path even while the eyes make a small human
+ * scan around it. */
+function steerFreeToward(player: THREE.Vector3, waypoint: THREE.Vector3): void {
+  const up = getPlayerUp();
+  _navigationDirection.copy(waypoint).sub(player)
+    .addScaledVector(up, -_navigationDirection.dot(up));
+  if (_navigationDirection.lengthSq() < 0.04) {
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+    return;
+  }
+  const intent = surfaceSteeringIntent(_navigationDirection, up, getPlayerLook().forward);
+  controls.forward = intent.forward;
+  controls.backward = intent.backward;
+  controls.right = intent.right;
+  controls.left = intent.left;
 }
 
 /** Aim the camera at a world point and hold forward until within `stop` range.
  *  `lookLift` raises the gaze onto the goal's subject (trees want their crown). */
-function walkToward(target: THREE.Vector3, stop: number, lookLift = LOOK_LIFT): number {
+function walkToward(
+  target: THREE.Vector3,
+  stop: number,
+  lookLift = LOOK_LIFT,
+  gazeTarget: THREE.Vector3 = target,
+  interactionGazeWithin = 0
+): number {
   const player = getPlayerWorldPosition();
   const distance = gaitDistance(target, player);
-  setCinematicLookTarget(aimAt(target, distance, lookLift));
+  const step = distance > stop ? nextNavigationStep(player, target) : null;
+  const gazeMode: CinematicGazeMode | undefined = interactionGazeWithin > 0 && distance <= interactionGazeWithin
+    ? 'interact'
+    : undefined;
+  lookNaturallyToward(gazeTarget, player, lookLift, step?.waypoint ?? target, gazeMode);
   setCinematicLookWeight(1);
-  _target.copy(target); // gait/nudges steer at the BASE; only the gaze lifts
   noteGoal(target);
+  if (distance <= stop) {
+    _target.copy(target);
+    walkTargetLive = true;
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+    controls.jump = false;
+    navigationAction = 'idle';
+    return distance;
+  }
+  if (!step || step.action === 'unreachable') {
+    _target.copy(target);
+    walkTargetLive = false;
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+    controls.jump = false;
+    return distance;
+  }
+  _target.copy(step.waypoint); // watchdog nudges only toward the current safe leg
   walkTargetLive = true;
-  controls.forward = distance > stop;
-  // Hop periodically so single-block ledges never wall the walk.
-  controls.jump = controls.forward && beatClock % 2.4 < 0.18;
+  if (step.preserveForward) {
+    // EfficientPlayer and CameraControls both transport their forward basis
+    // across the edge. Preserve that held input until the roll is complete.
+    controls.forward = true;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+  } else {
+    steerFreeToward(player, step.waypoint);
+  }
+  // Normal ledges use step assist. Space is reserved for a planned dry-to-dry
+  // crossing so the pilot never rhythmically hops itself into a pond.
+  controls.jump = step.action === 'jetpack';
   return distance;
 }
 
@@ -254,12 +499,13 @@ function walkTowardLens(target: THREE.Vector3, stop: number): number {
   if (!lens) return walkToward(target, stop);
   rigMoveBasis(lens, getLensRig(), _lensFwd, _lensRight);
   const player = getPlayerWorldPosition();
-  _toTarget.copy(target).sub(player);
   const distance = gaitDistance(target, player);
-  _target.copy(target);
   noteGoal(target);
-  walkTargetLive = true;
-  if (distance > stop) {
+  const step = distance > stop ? nextNavigationStep(player, target) : null;
+  if (distance > stop && step && step.action !== 'unreachable') {
+    _target.copy(step.waypoint);
+    _toTarget.copy(step.waypoint).sub(player);
+    walkTargetLive = true;
     const f = _toTarget.dot(_lensFwd);
     const r = _toTarget.dot(_lensRight);
     controls.forward = f > 0.4;
@@ -271,8 +517,10 @@ function walkTowardLens(target: THREE.Vector3, stop: number): number {
     controls.backward = false;
     controls.right = false;
     controls.left = false;
+    _target.copy(target);
+    walkTargetLive = distance <= stop;
   }
-  controls.jump = false;
+  controls.jump = step?.action === 'jetpack';
   return distance;
 }
 
@@ -399,7 +647,9 @@ export function autopilotTick(dt: number): void {
     movieAte = false;
     forageGoal = null;
     forageGoalAt = -10;
+    resetNavigationRoute();
     clearControls();
+    setCinematicGazeIntent(null);
     setCinematicLookTarget(null);
   }
   // Never push (or rescue-nudge) an unsettled player: while the world is still
@@ -410,6 +660,7 @@ export function autopilotTick(dt: number): void {
   }
   if (!beat || !isAutopilotDriving()) {
     clearControls();
+    setCinematicGazeIntent(null);
     // MOVIE FRAMING: the awakening cutscenes drive themselves, but the SHOT
     // must hold its subject — begin and end on the thing that caused it,
     // never on the ground the pilot happened to be staring at.
@@ -425,7 +676,10 @@ export function autopilotTick(dt: number): void {
       setCinematicLookTarget(_target);
       setCinematicLookWeight(0.85);
     } else if (beat === 'a2-awakening' && heroTreeHandle.position) {
-      setCinematicLookTarget(_target.copy(heroTreeHandle.position).addScaledVector(getPlayerUp(), treeCrownLift()));
+      setCinematicLookTarget(
+        _target.copy(heroTreeHandle.position)
+          .addScaledVector(heroTreeHandle.up ?? getPlayerUp(), treeCrownLift())
+      );
       setCinematicLookWeight(0.85);
     }
     return;
@@ -526,6 +780,7 @@ export function autopilotTick(dt: number): void {
       // pans the gaze around the horizon (eye height — never the ground) until
       // the survey returns the deviation.
       if (!anomalyMassDesignated()) {
+        setCinematicGazeIntent(null);
         const a = beatClock * 0.6;
         _goalScratch.copy(getPlayerWorldPosition());
         _goalScratch.x += Math.cos(a) * 14;
@@ -604,8 +859,10 @@ export function autopilotTick(dt: number): void {
       // named before it is answered, exactly as real play paces it.
       const pond = storyAnchors.pond;
       if (pond && beatClock > 36) {
-        const distance = walkToward(pond.surface, 1.1);
-        if (distance <= 3.4) pulseInteract();
+        // Stay on the validated dry shore and look into the water. Interaction's
+        // ray reaches the surface from here; entering the pond is never required.
+        const distance = walkToward(pond.shore, 1.15, 0, pond.surface, 2.6);
+        if (distance <= 1.8) pulseInteract();
       }
       if (beatClock > timeout) {
         drink(60); // screening must go on — the director advances on the rise
@@ -689,6 +946,7 @@ export function autopilotTick(dt: number): void {
         setCinematicLookTarget(
           _goalScratch.copy(player).addScaledVector(_toGoal, 4).addScaledVector(up, 10)
         );
+        setCinematicGazeIntent(null);
         setCinematicLookWeight(1);
       } else {
         controls.forward = false;
@@ -713,6 +971,17 @@ export function autopilotTick(dt: number): void {
       clock: Math.round(beatClock * 10) / 10,
       pos: [Math.round(pos.x * 100) / 100, Math.round(pos.y * 100) / 100, Math.round(pos.z * 100) / 100],
       goal: walkTargetLive ? [Math.round(_target.x * 10) / 10, Math.round(_target.y * 10) / 10, Math.round(_target.z * 10) / 10] : null,
+      routeAction: navigationAction,
+      routeOutcome: navigationReason,
+      routePlanMode: activeNavigationRoute?.route.mode ?? null,
+      routeWaterCells: activeNavigationRoute?.route.waterCrossing?.waterCellCount ?? 0,
+      routeWaypoint: activeNavigationRoute
+        ? [
+            Math.round(_navigationWaypoint.x * 10) / 10,
+            Math.round(_navigationWaypoint.y * 10) / 10,
+            Math.round(_navigationWaypoint.z * 10) / 10
+          ]
+        : null,
       controls: { ...controls },
       stillTime: Math.round(stillTime * 10) / 10,
       nudges: nudgesOnGoal,
@@ -732,6 +1001,7 @@ export function autopilotTick(dt: number): void {
 
   // --- stuck watchdog (runs over whatever the beat handler decided) -----------
   const pushing = controls.forward || controls.backward || controls.left || controls.right;
+  const plannedRecoveryUnsafe = navigationAction === 'jetpack' || navigationAction === 'unreachable';
   const pos = getPlayerWorldPosition();
   if (Number.isFinite(_lastPos.x)) {
     // HORIZONTAL displacement only: jumping in place must read as STUCK —
@@ -743,7 +1013,7 @@ export function autopilotTick(dt: number): void {
     else stillTime = 0;
   }
   _lastPos.copy(pos);
-  if (pushing && stillTime > 2.2 && beatClock > unstickUntil) {
+  if (pushing && !plannedRecoveryUnsafe && stillTime > 2.2 && beatClock > unstickUntil) {
     unstickFlips++;
     stillTime = 0;
     // ESCALATION: three failed break-outs against the same geometry means the
@@ -767,7 +1037,7 @@ export function autopilotTick(dt: number): void {
   // Arrived-but-inert: the gait released at its stop radius, a goal is still
   // live, and nothing has advanced — the trigger volume must be inches away.
   // Shove gently toward the goal (and count it, so deferral can move on).
-  if (walkTargetLive && !pushing) {
+  if (walkTargetLive && !plannedRecoveryUnsafe && !pushing) {
     arrivedTime += dt;
     if (arrivedTime > 4) {
       arrivedTime = 0;
@@ -783,7 +1053,7 @@ export function autopilotTick(dt: number): void {
     arrivedTime = 0;
   }
 
-  if (beatClock < unstickUntil) {
+  if (!plannedRecoveryUnsafe && beatClock < unstickUntil) {
     // Break-out routine: mash jump; on alternating attempts, briefly reverse.
     controls.jump = true;
     if (unstickFlips % 2 === 0 && beatClock < unstickUntil - 0.8) {
