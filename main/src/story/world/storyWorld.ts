@@ -47,6 +47,11 @@ export const STORY_COORDINATE: WorldCoordinate = findStoryCoordinate();
 
 export const STORY_SEED = coordinateToSeed(STORY_COORDINATE.x, STORY_COORDINATE.y);
 
+// Story geometry is authored against the canonical primary planet, never a
+// second seed-only generator. Keeping the identity local avoids a dependency
+// cycle through tidegardenRoute (which imports STORY_COORDINATE from here).
+const STORY_PRIMARY_WORLD_ID = `${STORY_COORDINATE.x},${STORY_COORDINATE.y}`;
+
 export function isStoryWorld(coordinate: WorldCoordinate): boolean {
   return coordinate.x === STORY_COORDINATE.x && coordinate.y === STORY_COORDINATE.y;
 }
@@ -66,6 +71,24 @@ export interface StoryPropPose {
   up: THREE.Vector3;
 }
 
+export interface FieldPackSafePose extends StoryPropPose {
+  readonly supportVoxel: Readonly<{ x: number; y: number; z: number }>;
+  readonly relocated: boolean;
+}
+
+export type FieldPackDropPoseSource =
+  | 'a4-planned-tear'
+  | 'physical-tear'
+  | 'direct-ch5-fallback';
+
+/** One scoped receipt owns every Chapter 5 pack consumer. */
+export interface FieldPackDropPoseAuthority extends FieldPackSafePose {
+  readonly worldId: string;
+  readonly terrainRevision: string;
+  readonly storyRunId: number;
+  readonly source: FieldPackDropPoseSource;
+}
+
 function surfacePoseNear(
   planetSize: number,
   terrainSeed: number,
@@ -73,11 +96,16 @@ function surfacePoseNear(
   voxelOffsetZ: number,
   lift: number
 ): StoryPropPose {
-  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  const arrival = findTopFaceSurfaceVoxel(
+    planetSize,
+    terrainSeed,
+    { x: 4, z: -4 },
+    STORY_PRIMARY_WORLD_ID
+  );
   const voxel = findTopFaceSurfaceVoxel(planetSize, terrainSeed, {
     x: arrival.x + voxelOffsetX,
     z: arrival.z + voxelOffsetZ
-  });
+  }, STORY_PRIMARY_WORLD_ID);
   const center = voxelCoordToWorld(voxel.x, voxel.y, voxel.z);
   // This helper samples the TOP cube face explicitly. Its normal is therefore
   // grid +Y everywhere on that face — never the spherical/radial direction to
@@ -128,8 +156,17 @@ export function getAnomalyStonePose(planetSize: number, terrainSeed: number): St
  */
 function surfacePoseOnAdjacentFace(planetSize: number, terrainSeed: number): StoryPropPose {
   const EDGE_DROP = 6; // voxels below the top edge — well clear of the edge hysteresis
-  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
-  const { voxels } = getWorldGen(planetSize, terrainSeed);
+  const arrival = findTopFaceSurfaceVoxel(
+    planetSize,
+    terrainSeed,
+    { x: 4, z: -4 },
+    STORY_PRIMARY_WORLD_ID
+  );
+  const { voxels } = getWorldGen(
+    planetSize,
+    terrainSeed,
+    STORY_PRIMARY_WORLD_ID
+  );
   const solid = new Set<string>();
   let radius = 0;
   for (const v of voxels) {
@@ -173,7 +210,12 @@ export function getStorySidePlane(planetSize: number, terrainSeed: number): {
   depthAxis: THREE.Vector3;
   up: THREE.Vector3;
 } {
-  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  const arrival = findTopFaceSurfaceVoxel(
+    planetSize,
+    terrainSeed,
+    { x: 4, z: -4 },
+    STORY_PRIMARY_WORLD_ID
+  );
   const originCenter = voxelCoordToWorld(arrival.x, arrival.y, arrival.z);
   // Voxel-grid-aligned up (the arrival site is on the top face): a side-scroller
   // wants a level horizon and grid-square blocks, not the spherical normal.
@@ -232,6 +274,130 @@ export function getHeroTreePose(planetSize: number, terrainSeed: number): StoryP
   return surfacePoseNear(planetSize, terrainSeed, -16, 14, 0.95);
 }
 
+/**
+ * The field pack torn from W-7744 during A4. This is a validated prop spawn, not
+ * a decorative offset: it needs a level dry footprint and clear humanoid
+ * approach because the kit is the sole causal source of the Maw repair.
+ */
+export function getFieldPackPose(
+  planetSize: number,
+  terrainSeed: number,
+  terrain: AgentSurfaceTerrainQuery = proceduralAgentTerrain(planetSize, terrainSeed)
+): FieldPackSafePose | null {
+  const tree = getHeroTreePose(planetSize, terrainSeed);
+  const preferred = tree.position.clone().add(new THREE.Vector3(7, 0, -5));
+  const site = findValidSpawnSite(
+    spawnTerrainFromAgent(terrain),
+    planetSize,
+    preferred,
+    { kind: 'player', face: 'top', maxSearchRadius: 10 }
+  );
+  if (!site) return null;
+  return {
+    position: voxelCoordToWorld(
+      site.supportVoxel.x,
+      site.supportVoxel.y,
+      site.supportVoxel.z
+    ).addScaledVector(site.up, VOXEL_SCALE / 2 + 0.18),
+    up: site.up.clone(),
+    supportVoxel: Object.freeze({ ...site.supportVoxel }),
+    relocated: site.relocated
+  };
+}
+
+export interface EstablishFieldPackDropPoseInput {
+  planetSize: number;
+  terrainSeed: number;
+  terrain: AgentSurfaceTerrainQuery;
+  worldId: string;
+  terrainRevision: string;
+  storyRunId: number;
+  source: FieldPackDropPoseSource;
+}
+
+let fieldPackDropPoseAuthority: FieldPackDropPoseAuthority | null = null;
+
+function sameFieldPackScope(
+  authority: FieldPackDropPoseAuthority,
+  worldId: string,
+  storyRunId: number
+): boolean {
+  return authority.worldId === worldId && authority.storyRunId === storyRunId;
+}
+
+function fieldPackPoseLocked(authority: FieldPackDropPoseAuthority): boolean {
+  return authority.source === 'physical-tear' || authority.source === 'direct-ch5-fallback';
+}
+
+/**
+ * Select or commit the one live-terrain pack pose for this run and world.
+ * A planned A4 pose may move when the edit/water revision changes before the
+ * physical tear. Once torn (or reconstructed by a direct Ch5 entry), the pose
+ * is immutable for the rest of that run so render and interaction cannot fork.
+ */
+export function establishFieldPackDropPose(
+  input: EstablishFieldPackDropPoseInput
+): FieldPackDropPoseAuthority | null {
+  const existing = fieldPackDropPoseAuthority;
+  if (existing && !sameFieldPackScope(existing, input.worldId, input.storyRunId)) {
+    resetFieldPackDropPoseAuthority();
+  } else if (existing && fieldPackPoseLocked(existing)) {
+    return existing;
+  } else if (
+    existing
+    && existing.terrainRevision === input.terrainRevision
+    && existing.source === input.source
+  ) {
+    return existing;
+  }
+
+  const safe = getFieldPackPose(input.planetSize, input.terrainSeed, input.terrain);
+  if (!safe) {
+    if (fieldPackDropPoseAuthority && !fieldPackPoseLocked(fieldPackDropPoseAuthority)) {
+      fieldPackDropPoseAuthority = null;
+      storyAnchors.fieldPack = null;
+    }
+    return null;
+  }
+  const authority: FieldPackDropPoseAuthority = Object.freeze({
+    position: safe.position.clone(),
+    up: safe.up.clone(),
+    supportVoxel: safe.supportVoxel,
+    relocated: safe.relocated,
+    worldId: input.worldId,
+    terrainRevision: input.terrainRevision,
+    storyRunId: input.storyRunId,
+    source: input.source
+  });
+  fieldPackDropPoseAuthority = authority;
+  storyAnchors.fieldPack = authority;
+  return authority;
+}
+
+export function getFieldPackDropPoseAuthority(
+  worldId?: string,
+  storyRunId?: number
+): FieldPackDropPoseAuthority | null {
+  const authority = fieldPackDropPoseAuthority;
+  if (!authority) return null;
+  if (worldId !== undefined && authority.worldId !== worldId) return null;
+  if (storyRunId !== undefined && authority.storyRunId !== storyRunId) return null;
+  return authority;
+}
+
+/** Scope-aware cleanup prevents an old React effect from clearing a new world. */
+export function resetFieldPackDropPoseAuthority(
+  scope?: { worldId: string; storyRunId: number }
+): void {
+  if (
+    scope
+    && fieldPackDropPoseAuthority
+    && !sameFieldPackScope(fieldPackDropPoseAuthority, scope.worldId, scope.storyRunId)
+  ) return;
+  fieldPackDropPoseAuthority = null;
+  storyAnchors.fieldPack = null;
+}
+
 // --- the first day alive / chapter 4 -------------------------------------------------
 
 /**
@@ -242,11 +408,23 @@ export function getHeroTreePose(planetSize: number, terrainSeed: number): StoryP
 export const storyAnchors: {
   pond: PondPose | null;
   auditPath: StoryPropPose[] | null;
+  /** One live-edited, run/world-scoped receipt shared by all pack consumers. */
+  fieldPack: FieldPackDropPoseAuthority | null;
+  worldId: string | null;
+  storyRunId: number | null;
   /** The live story world's seed (forage probes need it). */
   terrainSeed: number | null;
   /** Rendered cube radius in world units (shared agent navigation needs it). */
   planetSize: number | null;
-} = { pond: null, auditPath: null, terrainSeed: null, planetSize: null };
+} = {
+  pond: null,
+  auditPath: null,
+  fieldPack: null,
+  worldId: null,
+  storyRunId: null,
+  terrainSeed: null,
+  planetSize: null
+};
 
 export interface PondPose {
   /** A point on the water surface at the pond's near edge (drink/marker goal). */
@@ -268,13 +446,23 @@ const pondCache = new Map<string, PondPose | null>();
  * needs a floor below the surface). Cached per size:seed; asserted in
  * storyWorld.test.ts (the pinned world must keep its pond within reach).
  */
-export function getPondPose(planetSize: number, terrainSeed: number): PondPose | null {
-  const key = `${planetSize}:${terrainSeed}`;
+export function getPondPose(
+  planetSize: number,
+  terrainSeed: number,
+  worldId?: string
+): PondPose | null {
+  const resolvedWorldId = worldId ?? STORY_PRIMARY_WORLD_ID;
+  const key = `${planetSize}:${terrainSeed}:${resolvedWorldId}`;
   const cached = pondCache.get(key);
   if (cached !== undefined) return cached;
 
-  const gen = getWorldGen(planetSize, terrainSeed).generator;
-  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  const gen = getWorldGen(planetSize, terrainSeed, resolvedWorldId).generator;
+  const arrival = findTopFaceSurfaceVoxel(
+    planetSize,
+    terrainSeed,
+    { x: 4, z: -4 },
+    resolvedWorldId
+  );
 
   const dryShoreNear = (waterX: number, waterZ: number): THREE.Vector3 | null => {
     const candidates: Array<{ x: number; z: number; radius: number; arrivalDistance: number }> = [];
@@ -300,7 +488,12 @@ export function getPondPose(planetSize: number, terrainSeed: number): PondPose |
       || a.x - b.x
       || a.z - b.z);
     for (const candidate of candidates) {
-      const ground = findTopFaceSurfaceVoxel(planetSize, terrainSeed, candidate);
+      const ground = findTopFaceSurfaceVoxel(
+        planetSize,
+        terrainSeed,
+        candidate,
+        resolvedWorldId
+      );
       if (gen.isWaterVoxel(ground.x, ground.y + 1, ground.z)) continue;
       if (gen.isWaterVoxel(ground.x, ground.y + 2, ground.z)) continue;
       return voxelCoordToWorld(ground.x, ground.y, ground.z)
@@ -310,10 +503,15 @@ export function getPondPose(planetSize: number, terrainSeed: number): PondPose |
   };
 
   const waterAt = (ox: number, oz: number): { voxel: { x: number; y: number; z: number }; depth: number } | null => {
-    const ground = findTopFaceSurfaceVoxel(planetSize, terrainSeed, {
-      x: arrival.x + ox,
-      z: arrival.z + oz
-    });
+    const ground = findTopFaceSurfaceVoxel(
+      planetSize,
+      terrainSeed,
+      {
+        x: arrival.x + ox,
+        z: arrival.z + oz
+      },
+      resolvedWorldId
+    );
     if (!gen.isWaterVoxel(ground.x, ground.y + 1, ground.z)) return null;
     let depth = 1;
     while (depth < 8 && gen.isWaterVoxel(ground.x, ground.y + 1 + depth, ground.z)) depth++;
@@ -349,6 +547,16 @@ export function getPondPose(planetSize: number, terrainSeed: number): PondPose |
   return shallow;
 }
 
+/** The Keel Memory rests on the actual pond floor inside the authored medium. */
+export function getKeelMemoryPose(planetSize: number, terrainSeed: number): StoryPropPose | null {
+  const pond = getPondPose(planetSize, terrainSeed);
+  if (!pond || pond.depth < 2) return null;
+  return {
+    position: pond.floor.clone().addScaledVector(pond.up, 0.18),
+    up: pond.up.clone()
+  };
+}
+
 /**
  * The wreck relay: the network's re-established voice, planted at the crash
  * strip's impact site (the DescentPod's landmark) — chapter 4's set-piece anchor.
@@ -371,7 +579,11 @@ export function getWreckRelayPose(planetSize: number, terrainSeed: number): Stor
 export const AUDIT_WORKER_GROUND_CLEARANCE = VOXEL_SCALE / 2 + 0.05;
 
 function proceduralAgentTerrain(planetSize: number, terrainSeed: number): AgentSurfaceTerrainQuery {
-  const generator = getWorldGen(planetSize, terrainSeed).generator;
+  const generator = getWorldGen(
+    planetSize,
+    terrainSeed,
+    STORY_PRIMARY_WORLD_ID
+  ).generator;
   return {
     isSolidVoxel: (x, y, z) => generator.shouldVoxelExist(x, y, z),
     isWaterVoxel: (x, y, z) => generator.isWaterVoxel(x, y, z),
@@ -401,7 +613,12 @@ export function getAuditWorkerPath(
   terrainSeed: number,
   terrain: AgentSurfaceTerrainQuery = proceduralAgentTerrain(planetSize, terrainSeed)
 ): StoryPropPose[] {
-  const arrival = findTopFaceSurfaceVoxel(planetSize, terrainSeed);
+  const arrival = findTopFaceSurfaceVoxel(
+    planetSize,
+    terrainSeed,
+    { x: 4, z: -4 },
+    STORY_PRIMARY_WORLD_ID
+  );
   // Begin beyond the sunrise ridge but still inside the owned top face. The old
   // +34 request exceeded the cube, collapsed three samples onto the same edge
   // cell, and that cell was flooded in the pinned world.

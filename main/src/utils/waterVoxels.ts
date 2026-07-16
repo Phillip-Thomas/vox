@@ -38,8 +38,8 @@ export const FACE_NORMALS: ReadonlyArray<readonly [number, number, number]> = [
  * floods. The generator classifies each empty cell at/below sea level as water
  * and returns only the air-exposed surface voxels.
  */
-export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[] {
-  return getWorldWaterVoxels(size, terrainSeed);
+export function buildWaterVoxels(size: number, terrainSeed: number, worldId?: string): WaterVoxel[] {
+  return getWorldWaterVoxels(size, terrainSeed, worldId);
 }
 
 /**
@@ -49,6 +49,6 @@ export function buildWaterVoxels(size: number, terrainSeed: number): WaterVoxel[
  * faces that touch air. Rendering these as flat quads eliminates the
  * hollow-glass-box artifact (a flat quad has no interior) and tiles seamlessly.
  */
-export function buildWaterFaces(size: number, terrainSeed: number): WaterFace[] {
-  return getWorldWaterFaces(size, terrainSeed);
+export function buildWaterFaces(size: number, terrainSeed: number, worldId?: string): WaterFace[] {
+  return getWorldWaterFaces(size, terrainSeed, worldId);
 }

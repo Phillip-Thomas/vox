@@ -1,4 +1,5 @@
 import { getLocalActorId, type ActorId } from '../playerActors.ts';
+import type { PlanetThermalBehavior } from '../PlanetProfile.ts';
 
 // --- Survival vitals (Primitive era) -----------------------------------------
 //
@@ -83,6 +84,9 @@ export interface SurvivalEnvironment {
   nearFire: boolean;
   /** Story owns its authored chill separately; sandbox passes true. */
   warmthEnabled: boolean;
+  /** Resolved planet rule. Nonlethal worlds still model warmth, but ambient
+   * exposure can never turn an ecological night into hidden health damage. */
+  thermalBehavior?: PlanetThermalBehavior;
 }
 
 export interface SurvivalEnvironmentSnapshot extends SurvivalEnvironment {
@@ -94,6 +98,7 @@ let localEnvironment: SurvivalEnvironmentSnapshot = {
   sheltered: false,
   nearFire: false,
   warmthEnabled: false,
+  thermalBehavior: 'standard',
   status: 'stable'
 };
 
@@ -149,7 +154,9 @@ export function tickVitals(
             ? SHELTER_WARMTH_RECOVERY
             : atNight ? -NIGHT_WARMTH_DRAIN : DAY_WARMTH_RECOVERY;
       v.warmth = clamp(v.warmth + warmthRate * dt);
-      if (v.warmth <= 0) v.health = clamp(v.health - COLD_DAMAGE * dt);
+      if (v.warmth <= 0 && (environment.thermalBehavior ?? 'standard') === 'standard') {
+        v.health = clamp(v.health - COLD_DAMAGE * dt);
+      }
     }
   }
 
@@ -260,6 +267,7 @@ export function resetAllVitals(): void {
     sheltered: false,
     nearFire: false,
     warmthEnabled: false,
+    thermalBehavior: 'standard',
     status: 'stable'
   };
   emit();

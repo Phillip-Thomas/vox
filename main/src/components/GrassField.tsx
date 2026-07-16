@@ -9,9 +9,8 @@ import { measureWarpMetric } from '../utils/warpMetrics';
 import {
   applyGrassInstanceBuffer,
   applyGrassProfileToMaterial,
-  bladesPerVoxel,
   buildGrassInstances,
-  countGrassVoxels,
+  countGrassInstancesForWindow,
   createBladeGeometry,
   createGrassMaterial,
   getPrewarmedGrassInstanceBuffer,
@@ -19,9 +18,11 @@ import {
 } from '../utils/grassField';
 import { buildGrassProfile } from '../utils/grassProfile';
 import { getSunDirection } from './SkyController';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface GrassFieldProps {
   terrainSeed: number;
+  planetProfile?: PlanetProfile;
   /** Player world position, used for far-distance culling (optional). */
   playerPosition?: THREE.Vector3;
 }
@@ -44,7 +45,7 @@ interface GrassFieldProps {
  * that exceeds the current GPU buffer, bumps `capacity`. React then recreates
  * the <instancedMesh> with a bigger buffer, and a capacity-keyed effect fills it.
  */
-export default function GrassField({ terrainSeed, playerPosition }: GrassFieldProps) {
+export default function GrassField({ terrainSeed, planetProfile, playerPosition }: GrassFieldProps) {
   // Density is fixed at mount; a profile switch is rare and would remount.
   const density = getGraphicsQuality().grassDensity;
 
@@ -54,7 +55,10 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
 
   // Per-planet grass biome (colour family cohered with the tree profile, plus
   // height/width/dryness/wind). Rebuilt only when the planet seed changes.
-  const profile = useMemo(() => buildGrassProfile(terrainSeed), [terrainSeed]);
+  const profile = useMemo(
+    () => buildGrassProfile(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
   const profileAppliedRef = useRef(false);
   const useInitialPrewarmRef = useRef(true);
   // Player position at the last cull re-center; we re-run the (alloc-free) rebuild
@@ -62,8 +66,10 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   // grass streams in continuously (mirrors TreeField), not only on a terrain edit.
   const lastBucketPos = useRef(new THREE.Vector3(Infinity, Infinity, Infinity));
 
-  // Headroom (extra blade slots) so small grass-count fluctuations from terrain
-  // edits don't force a buffer reallocation every time.
+  // A 10u-expanded count window is a geometric upper bound for everything that
+  // can enter the active render window before its next re-center (triangle
+  // inequality). Small fixed headroom absorbs a couple of live terrain edits.
+  const RECENTER_DISTANCE = 10;
   const HEADROOM = 256;
 
   // GPU buffer capacity, as growing state. Starts at 0 because no grass voxels
@@ -71,18 +77,28 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
   // once voxels appear or terrain grows; React recreates the mesh on change.
   const [capacity, setCapacity] = useState(0);
 
-  /** Blade slots needed right now for all exposed grass voxels. */
+  /** Blade slots needed for the current covered, distance-windowed neighborhood. */
   const neededCapacity = () => measureWarpMetric(
     'grass:count_capacity',
-    () => bladesPerVoxel(density, profile.densityMul) * countGrassVoxels(),
-    needed => ({ needed })
+    () => {
+      const renderDistance = getGraphicsQuality().grassMaxDistance;
+      return countGrassInstancesForWindow(
+        density,
+        renderDistance > 0 ? renderDistance + RECENTER_DISTANCE : 0,
+        playerPosition ?? null,
+        terrainSeed,
+        profile.densityMul,
+        profile.coverage
+      );
+    },
+    result => ({ needed: result.count, grassVoxels: result.voxelCount })
   );
 
-  /** Grow `capacity` (never shrink) to fit `needed`, with margin + headroom. */
+  /** Grow `capacity` (never shrink) to fit the conservative window + headroom. */
   const growCapacity = (needed: number) => {
     setCapacity(prev => {
       if (needed <= prev) return prev;
-      return Math.ceil(needed * 1.25) + HEADROOM;
+      return needed + HEADROOM;
     });
   };
 
@@ -92,7 +108,7 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
     const mesh = meshRef.current;
     if (!mesh || density <= 0) return;
     const quality = getGraphicsQuality();
-    measureWarpMetric(
+    const result = measureWarpMetric(
       'grass:rebuild_instances',
       () => {
         const prewarmed = useInitialPrewarmRef.current
@@ -122,13 +138,21 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
       },
       result => ({ count: result.count, capacity: mesh.instanceMatrix.count, prewarmed: result.prewarmed })
     );
+    // A large teleport can mutate the mailbox between the sizing render and
+    // this fill. The builder clamps safely; detect that defensive clamp and
+    // immediately reserve the new window instead of leaving a sparse field.
+    if (result.count >= mesh.instanceMatrix.count) {
+      const needed = neededCapacity().count;
+      if (needed > mesh.instanceMatrix.count) growCapacity(needed);
+    }
+    if (playerPosition) lastBucketPos.current.copy(playerPosition);
   };
 
   // Initial sizing: by the time React commits this effect the planet's voxels
   // usually exist; if not, the per-frame poll below will grow capacity shortly.
   useEffect(() => {
     if (density <= 0) return;
-    growCapacity(neededCapacity());
+    growCapacity(neededCapacity().count);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [density]);
 
@@ -186,7 +210,7 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
 
     const sig = `${voxelSystem.getWorldId()}:${terrainSeed}:${voxelSystem.getEditVersion()}`;
     if (sig !== signatureRef.current) {
-      const needed = neededCapacity();
+      const needed = neededCapacity().count;
       if (needed > capacity) {
         // Buffer too small (e.g. first voxels appeared): grow it. The
         // capacity-keyed effect rebuilds once React recreates the mesh.
@@ -197,11 +221,16 @@ export default function GrassField({ terrainSeed, playerPosition }: GrassFieldPr
         rebuild();
         if (playerPosition) lastBucketPos.current.copy(playerPosition);
       }
-    } else if (mesh && playerPosition && lastBucketPos.current.distanceToSquared(playerPosition) > 100) {
+    } else if (
+      mesh
+      && playerPosition
+      && lastBucketPos.current.distanceToSquared(playerPosition) > RECENTER_DISTANCE ** 2
+    ) {
       // Player moved >10u since the last re-center — re-run the distance cull so
       // grass appears in newly-entered areas without needing a terrain edit.
-      lastBucketPos.current.copy(playerPosition);
-      rebuild();
+      const needed = neededCapacity().count;
+      if (needed > capacity) growCapacity(needed);
+      else rebuild();
     }
   });
 

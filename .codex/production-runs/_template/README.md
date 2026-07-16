@@ -10,8 +10,9 @@ This directory is the durable production record; chat is not an authority.
 
 1. Fill `production-lock.md` and its machine-readable mirror
    `production-lock.json` before commissioning creative work.
-2. Map shipped truth in `shipped-reference-map.md` and capture/hash the
-   affected pre-change cut in `shipped-visual-baseline.json`.
+2. Map shipped truth in `shipped-reference-map.md`; capture/hash the affected
+   pre-change cut in `shipped-visual-baseline.json` and the executable objective,
+   marker, HUD, and feedback contract in `shipped-ux-baseline.json`.
 3. Have the Chapter Director author `story-intent.md`.
 4. Commission `score-treatment.md` and `cinematography-treatment.md`
    independently from that story intent.
@@ -20,8 +21,9 @@ This directory is the durable production record; chat is not an authority.
 6. Resolve material dissent, freeze `scene-contract.json`, and collect all
    three signatures in `director-signoffs.json` for the same revision and
    exact `sha256sum scene-contract.json` value.
-7. Implement through one integrator, capture proof, then run independent
-   reviews before the Cohesion Judge.
+7. Implement through one integrator, capture audiovisual and objective-lifecycle
+   proof in `objective-lifecycle-evidence.json`, then run independent domain,
+   Player Experience, and blind reviews before the Cohesion Judge.
 8. For flagship, release-candidate, exception, or explicitly headed work,
    record human taste separately from the publish decision. Otherwise remove
    the unused `human-decision.json` template.
@@ -45,6 +47,7 @@ it never means automatically published.
 | `production-lock.md` | Orchestrator |
 | `production-lock.json` | Orchestrator; deterministic authority gate |
 | `shipped-visual-baseline.json` | Mechanical Verifier before treatments |
+| `shipped-ux-baseline.json` | Mechanical Verifier before treatments; source hashes and current objective/marker contract |
 | `story-intent.md` | Chapter Director |
 | `score-treatment.md` | Score Director |
 | `cinematography-treatment.md` | Cinematography Director |
@@ -59,7 +62,8 @@ it never means automatically published.
 | proof reports | Mechanical Verifier |
 | `evidence-registry.json` | Mechanical Verifier; hashes every typed evidence reference to a run-local file |
 | `raw-audiovisual-evidence.json` and `evidence/` media | Mechanical Verifier; blind-review input |
-| domain audits and blind report | Fresh independent reviewers |
+| domain audits, `ux-audit.md`, and blind report | Fresh independent reviewers |
+| `objective-lifecycle-evidence.json` | Mechanical Verifier; objective lifecycle, marker parity, feedback, reset, and variant evidence |
 | `critic-report.md`, `cohesion-judge.md` | Independent moderators/judge |
 | `human-decision.json` | Human Approver |
 | scorecard, quality report, summary, lessons | Judge, validator, recorder |
@@ -76,6 +80,7 @@ Run the artifact gate before implementation and again at closeout:
 npm --prefix main run creative:gate -- --run .codex/production-runs/{{RUN_ID}} --phase contract
 npm --prefix main run creative:gate -- --run .codex/production-runs/{{RUN_ID}} --phase implementation
 npm --prefix main run creative:gate -- --run .codex/production-runs/{{RUN_ID}} --phase final
+npm --prefix main run creative:workflow:check
 ```
 
 Also run every check authorized by `production-lock.md`. Flagship work requires

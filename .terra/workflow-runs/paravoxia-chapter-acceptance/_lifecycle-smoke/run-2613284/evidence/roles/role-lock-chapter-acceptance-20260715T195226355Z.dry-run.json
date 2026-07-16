@@ -1,0 +1,105 @@
+{
+  "invocation": {
+    "schema": "terra.roleInvocation.v1",
+    "id": "role-lock-chapter-acceptance-20260715T195226355Z",
+    "workflowSpecRef": "paravoxia-chapter-acceptance@v1",
+    "runId": "paravoxia-chapter-acceptance-workflow-smoke",
+    "step": {
+      "schema": "terra.workflowStep.v1",
+      "id": "lock-chapter-acceptance",
+      "type": "model_task",
+      "title": "Lock Exact Read-Only Chapter Acceptance Scope",
+      "roleContractRef": "chapter-acceptance-orchestrator",
+      "inputs": [
+        "user-request",
+        "target-repo",
+        "target-chapter",
+        "candidate-revision",
+        "production-authority",
+        "chapter-registry",
+        "signed-council-authority",
+        "signed-scene-authority",
+        "previous-chapter-context",
+        "next-chapter-context"
+      ],
+      "outputs": [
+        "chapter-acceptance-lock"
+      ],
+      "allowedAdapterFamilies": [
+        "model_adapter",
+        "artifact_adapter",
+        "review_adapter"
+      ],
+      "gatesAfter": [
+        "acceptance-scope-read-only"
+      ]
+    },
+    "role": {
+      "schema": "terra.roleContract.v1",
+      "slug": "chapter-acceptance-orchestrator",
+      "title": "Read-Only Chapter Acceptance Orchestrator",
+      "allowedInputs": [
+        "user-request",
+        "target-repo",
+        "target-chapter",
+        "candidate-revision",
+        "production-authority",
+        "chapter-registry",
+        "signed-council-authority",
+        "signed-scene-authority",
+        "previous-chapter-context",
+        "next-chapter-context",
+        "chapter-acceptance-lock",
+        "chapter-acceptance-manifest",
+        "council-compliance-matrix",
+        "chapter-registry-report",
+        "council-authority-bundle",
+        "scene-authority-bundle",
+        "validation-report",
+        "chapter-mechanical-evidence",
+        "chapter-functional-evidence",
+        "chapter-boundary-continuity-evidence",
+        "critic-report",
+        "defect-register",
+        "cohesion-judge-report",
+        "final-scorecard",
+        "human-decision",
+        "repair-commission",
+        "chapter-acceptance-quality-report"
+      ],
+      "allowedResources": [
+        "repo:read",
+        "artifact:read",
+        "artifact:write"
+      ],
+      "requiredOutputs": [
+        "chapter-acceptance-lock",
+        "chapter-acceptance-report",
+        "repair-commission"
+      ],
+      "forbiddenActions": [
+        "repo:write",
+        "patch:write",
+        "publish:write",
+        "exception:accept"
+      ],
+      "outputContract": "paravoxia.chapterAcceptanceReport.v1"
+    },
+    "inputs": {
+      "user-request": "Lifecycle wiring proof only; do not perform or claim chapter acceptance.",
+      "target-repo": ".",
+      "target-chapter": "ch5",
+      "candidate-revision": "fixture-revision-without-real-evidence",
+      "production-authority": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "chapter-registry": "main/chapter-registry.json",
+      "signed-council-authority": "fixture://missing-signed-council-authority",
+      "signed-scene-authority": "fixture://missing-signed-scene-authority",
+      "previous-chapter-context": "fixture://missing-previous-chapter-context",
+      "next-chapter-context": "fixture://missing-next-chapter-context"
+    },
+    "allowedOutputs": [
+      "chapter-acceptance-lock"
+    ],
+    "createdAt": "2026-07-15T19:52:26.355Z"
+  }
+}

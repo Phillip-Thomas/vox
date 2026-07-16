@@ -1,21 +1,30 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
+  DEFAULT_JUMP_SPEED,
   DEFAULT_MOVE_SPEED,
   FACE_NORMALS,
   LAVA_MOVE_SPEED,
   LAVA_SINK_SPEED,
   LAVA_STRUGGLE_RISE,
+  SHALLOW_UNSUPPORTED_SWIM_FACTOR,
   applyJumpImpulse,
   areAdjacentFaces,
   chooseFaceFromPosition,
   composeLavaVelocity,
+  composeSwimVelocity,
   composeVelocity,
   getSurfaceState,
   gravityTupleForFace,
+  integrateLocalGravity,
   movementDirectionFromBasis,
   planarCameraBasis,
   removeInwardVelocity,
+  isFluidMantleLandingSafe,
+  shouldApplyDryStepAssist,
+  shouldApplyFluidMantle,
+  resolveJetpackGrounding,
+  resolveWaterSwimFactor,
   transitionVelocityAcrossEdge,
   transportControlFrame,
   transitionAssistVelocity,
@@ -39,6 +48,106 @@ function expectVectorClose(actual: THREE.Vector3, expected: THREE.Vector3, preci
 }
 
 describe('surface controls', () => {
+  it('releases dry step assist as soon as a grounded body materially enters fluid', () => {
+    expect(shouldApplyDryStepAssist(true, 0, 0)).toBe(true);
+    expect(shouldApplyDryStepAssist(true, 0.001, 0)).toBe(true);
+    expect(shouldApplyDryStepAssist(true, 0.02, 0)).toBe(false);
+    expect(shouldApplyDryStepAssist(true, 0, 0.02)).toBe(false);
+    expect(shouldApplyDryStepAssist(false, 0, 0)).toBe(false);
+  });
+
+  it('treats fluid mantle as an exit assist and never opposes a water dive', () => {
+    expect(shouldApplyFluidMantle(0.8, 0, true)).toBe(false);
+    expect(shouldApplyFluidMantle(0.8, 0, false)).toBe(true);
+    expect(shouldApplyFluidMantle(0.02, 0, false)).toBe(false);
+    expect(shouldApplyFluidMantle(0.02, 0, false, true)).toBe(true);
+    expect(shouldApplyFluidMantle(0.02, 0, true, true)).toBe(false);
+    expect(shouldApplyFluidMantle(0.8, 0.8, true)).toBe(true);
+  });
+
+  it('only mantles toward dry, non-hazardous capsule foot space', () => {
+    expect(isFluidMantleLandingSafe({
+      feetInWater: true,
+      feetOnHazard: false
+    })).toBe(false); // underwater ledge / another water cell
+    expect(isFluidMantleLandingSafe({
+      feetInWater: false,
+      feetOnHazard: true
+    })).toBe(false); // lava or another live terrain hazard
+    expect(isFluidMantleLandingSafe({
+      feetInWater: true,
+      feetOnHazard: true
+    })).toBe(false);
+    expect(isFluidMantleLandingSafe({
+      feetInWater: false,
+      feetOnHazard: false
+    })).toBe(true); // dry bank
+  });
+
+  it('sustains an authorized jump through a lingering grounded probe without lifting stale input', () => {
+    expect(resolveJetpackGrounding(true, true, true, DEFAULT_JUMP_SPEED)).toEqual({
+      allowThrust: true,
+      refill: false,
+      retainLaunchAuthorization: true
+    });
+    expect(resolveJetpackGrounding(true, true, false, 8.33)).toEqual({
+      allowThrust: false,
+      refill: true,
+      retainLaunchAuthorization: false
+    });
+    expect(resolveJetpackGrounding(true, true, true, 0)).toEqual({
+      allowThrust: false,
+      refill: true,
+      retainLaunchAuthorization: false
+    });
+    expect(resolveJetpackGrounding(false, true, false, 0).allowThrust).toBe(true);
+    expect(resolveJetpackGrounding(false, false, true, DEFAULT_JUMP_SPEED).allowThrust).toBe(false);
+  });
+
+  it('never refills released jetpack input while unsupported in deep water', () => {
+    expect(resolveJetpackGrounding(false, false, false, -2)).toEqual({
+      allowThrust: false,
+      refill: false,
+      retainLaunchAuthorization: false
+    });
+    expect(resolveJetpackGrounding(false, true, false, 1).refill).toBe(false);
+  });
+
+  it('carries the swim stroke across an eye-dry unsupported waterline without changing dry or dive input', () => {
+    const shallowFactor = resolveWaterSwimFactor(0, true, false, false);
+    expect(shallowFactor).toBe(SHALLOW_UNSUPPORTED_SWIM_FACTOR);
+    expect(resolveWaterSwimFactor(0, false, false, false)).toBe(0);
+    expect(resolveWaterSwimFactor(0, true, true, false)).toBe(0);
+    expect(resolveWaterSwimFactor(0, true, false, true)).toBe(0);
+    expect(resolveWaterSwimFactor(0.4, true, false, true)).toBeCloseTo(0.8);
+
+    // Reproduce the dead-zone frame: the bank blocks ordinary tangent walking,
+    // the eye is dry, fuel may be empty, and forward + ascend must still yield a
+    // physical outward/upward swim velocity without touching jetpack state.
+    const up = FACE_NORMALS.top;
+    const forward = new THREE.Vector3(0, 0, -1);
+    const stopped = new THREE.Vector3();
+    const gravityVelocity = integrateLocalGravity(
+      stopped,
+      up.clone().multiplyScalar(-9.81),
+      up,
+      1 / 60,
+      false
+    );
+    const walking = composeVelocity(gravityVelocity, forward, up);
+    const swimming = composeSwimVelocity(stopped, forward, up, {
+      forward: true,
+      backward: false,
+      left: false,
+      right: false,
+      ascend: true,
+      descend: false
+    }, 1 / 60);
+    const escaped = walking.lerp(swimming, shallowFactor);
+    expect(escaped.dot(up)).toBeGreaterThan(0);
+    expect(escaped.clone().addScaledVector(up, -escaped.dot(up)).length()).toBeGreaterThan(0);
+  });
+
   it('uses a standing player height that blocks 1-high channels but fits 2-high tunnels', () => {
     expect(PLAYER_STANDING_HEIGHT).toBeGreaterThan(VOXEL_SCALE);
     expect(PLAYER_STANDING_HEIGHT).toBeLessThan(VOXEL_SCALE * 2);

@@ -1,0 +1,93 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-07-13-distance-between-fires",
+  "mode": "flagship",
+  "status": "locked",
+  "sourceRevision": "3d68948c18c7c362abb4ec66b74ff1c685bf2d1f+working-tree-20260714T003216Z",
+  "runProfileRef": "paravoxia-creative-flagship@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner Lane Override and 9. Resume Here",
+      "sha256": "722f784546a7425b4ed9de5cd5ede3d11e4795b818d8a1c776e1ca00aef96cac"
+    },
+    {
+      "path": "main/PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md",
+      "section": "1-18 complete production treatment",
+      "sha256": "c5a594f00a14d4a31e81b0fb064447b63c3fd12e85666ba4aa4134e8ed99c2fd"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "section": "Emergent movement and protected canon",
+      "sha256": "02fff0ace9d44e7f193008db15b68b01b69d2e8e9725bdc627345fb67584acff"
+    },
+    {
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "section": "Owner-authorized staged implementation and P6A",
+      "sha256": "26d386b0dcf0b67410ff1e4b4d9311cb76e3c2f1091583f9e789d9c9bba97cb9"
+    }
+  ],
+  "mutationBoundary": "full-scene-runtime",
+  "allowedPaths": [
+    "main/src",
+    "main/tools",
+    "main/story-authority.json",
+    "main/PARAVOXIA_STORY_BIBLE.md",
+    "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+    "main/PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md",
+    "server/src",
+    "server/test",
+    "server/tests",
+    "PARAVOXIA_DEMO_FOUNDATION_PLAN.md"
+  ],
+  "protectedPaths": [
+    "main/public/audio",
+    "main/src/audio/scoreEngine.ts",
+    "main/src/audio/bedEngine.ts",
+    "main/src/story/voyageDeck.ts",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "ch4-audit",
+    "ch4-comply",
+    "ch4-defy",
+    "a4-exhale",
+    "ch5-maw",
+    "ch6-dive",
+    "ch7-reconstruct",
+    "ch7-board",
+    "ch8-launch",
+    "ch8-crossing",
+    "ch8-landfall",
+    "ch9-settle",
+    "ch9-hearth"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [
+      "owner-instruction-2026-07-13-implement-all"
+    ],
+    "protectedAudioPaths": [
+      "main/public/audio",
+      "main/src/audio/scoreEngine.ts",
+      "main/src/audio/bedEngine.ts"
+    ],
+    "openGateRefs": [
+      "server-issued-embodied-story-receipts",
+      "three-rescue-free-cold-runs",
+      "quality-profile-matrix",
+      "reduced-motion-equivalence",
+      "supported-headed-input",
+      "headed-real-gpu-taste",
+      "origin-sibling-persistence-roundtrip",
+      "tidegarden-support-water-authority-disposition",
+      "human-release-decision"
+    ]
+  },
+  "canonicalPreviewUrl": "http://127.0.0.1:5201/",
+  "publishAllowed": false,
+  "frozenAt": "2026-07-14T00:32:16Z"
+}

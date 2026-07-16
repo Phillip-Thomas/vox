@@ -5,18 +5,24 @@ import { getPlayerLook, getPlayerWorldPosition, getPlayerUp } from '../state/pla
 import { requestPlayerNudge } from './playerNudge.ts';
 import { addItem, getItemCount, removeItem } from '../game/systems/inventorySystem.ts';
 import { getCampfires, placeCampfire } from '../game/systems/campfires.ts';
-import { drink, feed } from '../game/systems/survivalVitals.ts';
-import { markMilestone } from '../game/systems/progressionSystem.ts';
+import { drink, feed, getVitals } from '../game/systems/survivalVitals.ts';
+import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
+import { getLocalActorId } from '../game/playerActors.ts';
+import { getHabitatWorldState } from '../game/systems/habitatSystem.ts';
 import { getItem } from '../game/data/items.ts';
 import { nearestForageNodeWorld } from '../components/ForageField.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
-import { storyAnchors } from './world/storyWorld.ts';
+import {
+  getKeelMemoryPose,
+  storyAnchors
+} from './world/storyWorld.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { anomalyMassDesignated, beginA1, beginA2, vigilRestReady } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
+import { setStoryMoveScale } from './storyInputPolicy.ts';
 import {
   setCinematicGazeIntent,
   setCinematicLookTarget,
@@ -34,17 +40,93 @@ import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from './storyScript.ts';
 import { getSupplyPodPositions, isPodCollected, seedSupplyPodsCollected } from './supplyPods.ts';
 import { currentNavWaypointPosition, seedNavWaypointsReached } from './navWaypoints.ts';
 import { taskRowMoveIntent } from './taskRowNavigation.ts';
-import {
-  planAgentSurfaceRoute,
-  type AgentSurfaceRoute
-} from '../utils/agentSurfaceNavigation.ts';
+import type { AgentSurfaceRoute } from '../utils/agentSurfaceNavigation.ts';
 import { createLiveAgentSurfaceTerrain } from '../utils/agentSurfaceNavigationRuntime.ts';
 import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
 import {
-  beginsCrossFaceRouteHandoff,
+  PLAYER_EDGE_RADIUS,
+  VOXEL_SCALE
+} from '../utils/cubeGravityConstants.ts';
+import {
+  advanceCrossFaceSurfaceLegPhase,
+  crossFaceCrossingTarget,
+  enteredPlannedSurfaceFace,
+  planCrossFaceSurfaceLeg,
+  reachedCrossFaceDestinationEntry,
   surfaceFaceFromUp,
-  surfaceSteeringIntent
+  surfaceSteeringIntent,
+  type CrossFaceSurfaceLeg,
+  type CrossFaceSurfaceLegPhase
 } from './autopilotSteering.ts';
+import {
+  EMERGENT_AUDIT_MILESTONES
+} from './emergentAudit.ts';
+import { EMERGENT_MAW_MILESTONES } from './emergentMawRepair.ts';
+import { EMERGENT_UNIQUE_ITEM_MILESTONES } from './emergentUniqueItems.ts';
+import {
+  AUTHORED_DIVE_ENTER_SUBMERGENCE,
+  AUTHORED_DIVE_MILESTONES
+} from './emergentDive.ts';
+import { resolveStoryInteraction } from './storyInteractions.ts';
+import { hifiWreckHandle } from './world/hifiWreck.ts';
+import { getShipPosition, isBoardable } from '../state/shipProximity.ts';
+import {
+  enterShip,
+  exitShip,
+  getSpaceFlightSnapshot
+} from '../state/spaceFlight.ts';
+import { getCurrentDayPhase } from '../game/worldClock.ts';
+import {
+  buildAndCertifyEmergentMovieShelter,
+  completeEmergentMovieSafeRest,
+  findEmergentMovieHabitatGoal,
+  getEmergentMovieSettlementBinding,
+  getEmergentMovieWreckBinding,
+  installEmergentMovieHabitatCore,
+  prepareEmergentMovieHabitatCore,
+  prepareEmergentMovieWreckCraft
+} from './emergentMovieRuntime.ts';
+import {
+  TIDEGARDEN_SETTLEMENT_MILESTONES
+} from './tidegardenSettlement.ts';
+import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
+import { getPlayerSubmersion } from '../state/playerSubmersion.ts';
+import { getLocalPlayerSurfaceContact } from '../state/playerSurfaceContact.ts';
+import {
+  autopilotSwimPhysicsOverride,
+  nextDiveAimReady,
+  nextDiveColumnLock,
+  nextDiveRecoveryState,
+  planAutopilotSwim,
+  type AutopilotSwimMode
+} from './autopilotSwim.ts';
+import {
+  advanceMovieWreckHoverRehearsal,
+  createMovieWreckHoverRehearsalState,
+  movieWreckInteractionMotion,
+  movieWreckReconstructionMotionOwner,
+  reconcileMovieWreckHoverRehearsalRun,
+  resolveMovieWreckInteractionAnnulusGoal,
+  shouldApproachMovieWreck,
+  shouldApproachMovieWreckHoverSocket,
+  shouldExitWaterBeforeMovieWreck,
+  shouldRecoverMovieWreckWetStart
+} from './autopilotReconstruction.ts';
+import { allowsMovieTeleportRecovery } from './autopilotSafety.ts';
+import { isStoryJetInstalled } from './emergentCapabilities.ts';
+import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import {
+  hasFirstHoverGroundedReturn,
+  hasFirstLegalHoverReceipt,
+  hasWreckDiagnosisReceipt
+} from './reconstructionEmbodiment.ts';
+import { plannedJetpackJumpDecision } from './autopilotJetpackNavigation.ts';
+import {
+  planReachableCrossFaceRoute,
+  shouldExtendCrossFaceContinuation,
+  shouldReplanUnreachableRoute,
+  type NavigationSurfaceContactSignature
+} from './autopilotCrossFaceNavigation.ts';
 
 // --- Story autopilot (movie mode) -----------------------------------------------
 //
@@ -55,7 +137,9 @@ import {
 // that skips ahead — anything too hard to automate cannot stall the screening.
 //
 // Cutscene beats (a1-ramp, a2-awakening, ch3-dusk, a3-dawn) drive themselves;
-// the autopilot goes hands-off and lets them play.
+// the autopilot goes hands-off and lets them play. The original presentation
+// ladder retains bounded screening rescues; the emergent arc (ch4-audit onward)
+// has no timeout acceptance and advances only through its gameplay receipts.
 
 export interface AutopilotControls {
   forward: boolean;
@@ -63,6 +147,7 @@ export interface AutopilotControls {
   left: boolean;
   right: boolean;
   jump: boolean;
+  descend: boolean;  // player-equivalent swim-down axis (Ctrl / Z)
   sprint: boolean;   // the klaxon run (ch3-signal)
   delete: boolean;   // hold-to-mine
   interact: boolean; // F pulses
@@ -74,6 +159,7 @@ const controls: AutopilotControls = {
   left: false,
   right: false,
   jump: false,
+  descend: false,
   sprint: false,
   delete: false,
   interact: false
@@ -91,7 +177,11 @@ const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
   'ch1-fixed', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso',
   'ch1-anomaly', 'ch2-color', 'ch2-approach',
   'ch3-gather', 'ch3-await-rest',
-  'ch3-thirst', 'ch3-forage', 'ch3-signal', 'ch4-vigil'
+  'ch3-thirst', 'ch3-forage', 'ch3-signal', 'ch4-vigil',
+  'ch4-audit', 'ch4-comply', 'ch4-defy',
+  'ch5-maw', 'ch6-dive', 'ch7-reconstruct', 'ch7-board',
+  'ch8-launch', 'ch8-crossing', 'ch8-landfall',
+  'ch9-settle', 'ch9-hearth'
 ]);
 
 export function isAutopilotDriving(): boolean {
@@ -102,10 +192,71 @@ export function isAutopilotDriving(): boolean {
 }
 
 export function getAutopilotControls(): Readonly<AutopilotControls> {
+  const story = getStoryStateSnapshot();
+  if (MOVIE && story.active && story.beat === 'ch6-dive') {
+    const actorId = getLocalActorId();
+    const mode = autopilotSwimPhysicsOverride({
+      submergence: getPlayerSubmersion(actorId).submergence,
+      acquired: hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemory, actorId),
+      surfaceReceipt: hasMilestone(AUTHORED_DIVE_MILESTONES.surfacedWithKeel, actorId),
+      recoveryActive: diveRecoveryActive,
+      oxygen: getVitals(actorId).oxygen,
+      columnLocked: diveColumnLocked
+    });
+    if (mode === 'hold') {
+      controls.forward = false;
+      controls.backward = false;
+      controls.left = false;
+      controls.right = false;
+      controls.jump = false;
+      // Vertical-only player input pins the body against the real pond floor
+      // without a forward collision that could activate the exit mantle.
+      controls.descend = true;
+    } else if (mode === 'dive') {
+      controls.forward = true;
+      controls.backward = false;
+      controls.left = false;
+      controls.right = false;
+      controls.jump = false;
+      controls.descend = true;
+    } else if (mode === 'ascend') {
+      // Jump is the player's normal positive local-up swim axis. Do not retain
+      // forward while the previous frame may still be looking down at the Keel.
+      controls.forward = false;
+      controls.backward = false;
+      controls.left = false;
+      controls.right = false;
+      controls.jump = true;
+      controls.descend = false;
+    } else {
+      controls.descend = false;
+    }
+  }
   return controls;
 }
 
-// Per-beat timeouts (seconds) — the "skip what's too hard" guarantee.
+export interface AutopilotFlightDirective {
+  active: boolean;
+  beat: StoryBeat | null;
+  targetWorldId: string | null;
+  controls: Readonly<AutopilotControls>;
+}
+
+/** ShipController consumes the same virtual controls as the on-foot body. */
+export function getAutopilotFlightDirective(): AutopilotFlightDirective {
+  const story = getStoryStateSnapshot();
+  const beat = story.active ? story.beat : null;
+  const active = MOVIE && (beat === 'ch8-launch' || beat === 'ch8-crossing' || beat === 'ch8-landfall');
+  return {
+    active,
+    beat,
+    targetWorldId: beat === 'ch8-crossing' ? TIDEGARDEN_WORLD_ID : null,
+    controls
+  };
+}
+
+// Legacy presentation-ladder timeouts. No emergent beat is listed here: those
+// scenes may wait, but they may not turn elapsed time into narrative evidence.
 const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   'ch1-fixed': 55,
   'ch1-raster': 95,
@@ -133,13 +284,20 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
 let clockBeat: StoryBeat | null = null;
 let beatClock = 0;
 let interactPulseAt = 0;
+let wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
 const _target = new THREE.Vector3();
 const _goalScratch = new THREE.Vector3();
+const _hoverApproachScratch = new THREE.Vector3();
+const _wreckInteractionScratch = new THREE.Vector3();
+const _swimLookTarget = new THREE.Vector3();
 
 // Goal continuity: nudges are counted PER GOAL so a beat handler can give up on
 // an unreachable target (defer it) instead of teleport-hammering it forever.
 const _goalRef = new THREE.Vector3(Infinity, Infinity, Infinity);
 let nudgesOnGoal = 0;
+let teleportNudgesTotal = 0;
+let teleportNudgeRunId = -1;
+let dryCrossFaceWaterContactFramesTotal = 0;
 
 function noteGoal(target: THREE.Vector3): void {
   if (_goalRef.distanceTo(target) > 2.5) {
@@ -173,23 +331,79 @@ interface ActiveNavigationRoute {
   route: AgentSurfaceRoute;
   goal: THREE.Vector3;
   revision: string;
+  jetpackAvailable: boolean;
+  crossFaceLeg: CrossFaceSurfaceLeg | null;
+  crossFacePhase: Exclude<CrossFaceSurfaceLegPhase, 'complete'>;
+  crossFaceTarget: THREE.Vector3 | null;
+  crossFaceDestinationEntry: THREE.Vector3 | null;
+  crossFaceSafeContinuationDistance: number | null;
+  crossFaceDestinationContinuationMode: 'dry' | 'jetpack' | null;
   cursor: number;
   plannedAt: number;
+  plannedFrom: THREE.Vector3;
+  plannedSurfaceContact: NavigationSurfaceContactSignature;
 }
 
 let activeNavigationRoute: ActiveNavigationRoute | null = null;
 let navigationAction: NavigationAction = 'idle';
 let navigationReason = 'not-planned';
+let plannedJetpackReleaseUntil = -1;
+let plannedJetpackWasActive = false;
+let plannedJetpackWasWetStartEgress = false;
 const _navigationWaypoint = new THREE.Vector3();
 const _navigationDirection = new THREE.Vector3();
-const CROSS_FACE_CONTINUATION_SECONDS = 1.1;
-let crossFaceContinuationUntil = -1;
+const _crossFaceContinuationDirection = new THREE.Vector3();
+const _crossFaceContinuationStart = new THREE.Vector3();
+const _crossFaceContinuationTarget = new THREE.Vector3();
+const CROSS_FACE_CONTINUATION_MIN_SECONDS = 1.1;
+const CROSS_FACE_CONTINUATION_MAX_SECONDS = 9;
+const CROSS_FACE_CONTINUATION_FALLBACK_DISTANCE = 3 * VOXEL_SCALE;
+const CROSS_FACE_CONTINUATION_PROBE_SECONDS = 0.35;
+let crossFaceContinuationMinUntil = -1;
+let crossFaceContinuationMaxUntil = -1;
+let crossFaceContinuationProbeAt = -1;
+let crossFaceContinuationFace: ReturnType<typeof surfaceFaceFromUp> | null = null;
+let crossFaceContinuationExpectsDry = false;
+let crossFaceContinuationUsesJetpack = false;
+let crossFaceContinuationHasDestinationEntry = false;
+let crossFaceContinuationMaxDistance = CROSS_FACE_CONTINUATION_FALLBACK_DISTANCE;
+
+function clearCrossFaceContinuation(): void {
+  crossFaceContinuationMinUntil = -1;
+  crossFaceContinuationMaxUntil = -1;
+  crossFaceContinuationProbeAt = -1;
+  crossFaceContinuationFace = null;
+  crossFaceContinuationExpectsDry = false;
+  crossFaceContinuationUsesJetpack = false;
+  crossFaceContinuationHasDestinationEntry = false;
+  crossFaceContinuationMaxDistance = CROSS_FACE_CONTINUATION_FALLBACK_DISTANCE;
+  _crossFaceContinuationDirection.set(0, 0, 0);
+  _crossFaceContinuationStart.set(0, 0, 0);
+  _crossFaceContinuationTarget.set(0, 0, 0);
+}
+
+function crossFaceContinuationStep(
+  reason = 'cross-face-forward-handoff'
+): NavigationStep {
+  navigationAction = crossFaceContinuationUsesJetpack ? 'jetpack' : 'direct';
+  navigationReason = crossFaceContinuationUsesJetpack ? 'wet-start-egress' : reason;
+  return {
+    waypoint: _navigationWaypoint.copy(_crossFaceContinuationTarget),
+    action: navigationAction,
+    route: null,
+    // Literal forward is important only while the camera/gravity frame is
+    // rolling. After that minimum window, semantic gaze may turn toward the
+    // next objective; map controls back onto the stored world-space direction
+    // so an observation cannot reverse the physical shoreline handoff.
+    preserveForward: beatClock < crossFaceContinuationMinUntil
+  };
+}
 
 function resetNavigationRoute(): void {
   activeNavigationRoute = null;
   navigationAction = 'idle';
   navigationReason = 'not-planned';
-  crossFaceContinuationUntil = -1;
+  clearCrossFaceContinuation();
 }
 
 function clearControls(): void {
@@ -198,6 +412,7 @@ function clearControls(): void {
   controls.left = false;
   controls.right = false;
   controls.jump = false;
+  controls.descend = false;
   controls.sprint = false;
   controls.delete = false;
   controls.interact = false;
@@ -212,6 +427,9 @@ const _toGoal = new THREE.Vector3();
  * it directly UNDER them. This keeps the intent alive until both close.
  */
 function gaitDistance(target: THREE.Vector3, player: THREE.Vector3): number {
+  if (surfaceFaceFromUp(getPlayerUp()) !== dominantFaceForPosition(target)) {
+    return player.distanceTo(target);
+  }
   _toGoal.copy(target).sub(player);
   const up = getPlayerUp();
   const vertical = _toGoal.dot(up);
@@ -262,9 +480,19 @@ interface NavigationStep {
  * old path's watchdog drag the actor back through an obstacle.
  */
 function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): NavigationStep {
-  const planetSize = storyAnchors.planetSize;
+  const settlement = getEmergentMovieSettlementBinding();
+  const planetSize = storyAnchors.planetSize ?? settlement?.planetSize ?? null;
   const terrainSeed = storyAnchors.terrainSeed;
-  if (planetSize == null || terrainSeed == null) {
+  const terrain = planetSize == null
+    ? null
+    : terrainSeed == null
+      ? settlement?.agentTerrain ?? null
+      : createLiveAgentSurfaceTerrain(
+        planetSize,
+        terrainSeed,
+        STORY_PRIMARY_WORLD_ID
+      );
+  if (planetSize == null || !terrain) {
     navigationAction = 'direct';
     navigationReason = 'world-navigation-unavailable';
     return {
@@ -275,68 +503,152 @@ function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): Navigat
     };
   }
 
-  const terrain = createLiveAgentSurfaceTerrain(planetSize, terrainSeed);
   // Exact edge positions are tied by construction. Gravity up is the physics
   // authority and has already committed to the destination face.
   const face = surfaceFaceFromUp(getPlayerUp());
   const goalFace = dominantFaceForPosition(goal);
-  const cached = activeNavigationRoute;
-  if (cached && cached.goal.distanceToSquared(goal) <= 1 && beginsCrossFaceRouteHandoff(
-    cached.route.reason,
-    cached.route.face,
-    face,
-    goalFace
+  let cached = activeNavigationRoute;
+  if ((cached?.route.reason === 'wet-start-egress'
+      || cached?.route.reason === 'partial-water-crossing-egress')
+    && cached.route.resolvedGoal
+    && player.distanceToSquared(cached.route.resolvedGoal) <= 1.35 * 1.35) {
+    // Multi-water travel is deliberately split at each dry bank. Replan from
+    // grounded terrain so every crossing gets its own bounded fuel budget.
+    activeNavigationRoute = null;
+    cached = null;
+  }
+  if (cached?.crossFaceLeg && enteredPlannedSurfaceFace(
+    cached.crossFaceLeg.fromFace,
+    cached.crossFaceLeg.nextFace,
+    face
   )) {
-    // Do not ask same-face A* to start on the seam cell. Carry the already-held
-    // forward input through the visual/gravity roll, then replan from clear land.
-    cached.route.face = face;
-    cached.plannedAt = beatClock;
-    crossFaceContinuationUntil = beatClock + CROSS_FACE_CONTINUATION_SECONDS;
+    // Every edge roll, including an intermediate face on an opposite-face trip,
+    // inherits the transported forward basis before any new A* query is allowed.
+    _crossFaceContinuationDirection.copy(cached.crossFaceLeg.continuationDirection);
+    _crossFaceContinuationStart.copy(player);
+    crossFaceContinuationHasDestinationEntry = cached.crossFaceDestinationEntry !== null;
+    if (cached.crossFaceDestinationEntry) {
+      _crossFaceContinuationTarget.copy(cached.crossFaceDestinationEntry);
+      crossFaceContinuationMaxDistance = Math.max(
+        VOXEL_SCALE,
+        player.distanceTo(cached.crossFaceDestinationEntry) + VOXEL_SCALE,
+        (cached.crossFaceSafeContinuationDistance ?? 0) + VOXEL_SCALE
+      );
+    } else {
+      crossFaceContinuationMaxDistance = CROSS_FACE_CONTINUATION_FALLBACK_DISTANCE;
+      _crossFaceContinuationTarget.copy(player).addScaledVector(
+        _crossFaceContinuationDirection,
+        crossFaceContinuationMaxDistance
+      );
+    }
+    crossFaceContinuationFace = cached.crossFaceLeg.nextFace;
+    crossFaceContinuationExpectsDry = cached.crossFaceDestinationContinuationMode === 'dry';
+    crossFaceContinuationUsesJetpack = cached.crossFaceDestinationContinuationMode === 'jetpack';
+    crossFaceContinuationMinUntil = beatClock + CROSS_FACE_CONTINUATION_MIN_SECONDS;
+    crossFaceContinuationMaxUntil = beatClock + CROSS_FACE_CONTINUATION_MAX_SECONDS;
+    crossFaceContinuationProbeAt = crossFaceContinuationMinUntil;
+    activeNavigationRoute = null;
+    cached = null;
+  }
+  if (crossFaceContinuationFace) {
+    // A proximity interaction may advance to the next objective before the
+    // body reaches a planner-owned support column. Keep the physical handoff
+    // across that goal change; the new goal's first successful route probe is
+    // what releases continuation.
+    const reachedDestinationEntry = crossFaceContinuationHasDestinationEntry
+      && reachedCrossFaceDestinationEntry(
+        player,
+        _crossFaceContinuationTarget,
+        crossFaceContinuationFace
+      );
+    const continuationInvalid = face !== crossFaceContinuationFace
+      || beatClock >= crossFaceContinuationMaxUntil
+      || player.distanceTo(_crossFaceContinuationStart) >= crossFaceContinuationMaxDistance;
+    if (reachedDestinationEntry || continuationInvalid) {
+      clearCrossFaceContinuation();
+    } else if (beatClock < crossFaceContinuationMinUntil
+      || beatClock < crossFaceContinuationProbeAt) {
+      return crossFaceContinuationStep();
+    }
   }
   const goalChanged = !cached || cached.goal.distanceToSquared(goal) > 1;
   const faceChanged = !cached || cached.route.face !== face;
   const revisionChanged = !cached || cached.revision !== terrain.revision;
+  const jetpackAvailable = isStoryJetInstalled(getLocalActorId());
+  const capabilityChanged = !cached || cached.jetpackAvailable !== jetpackAvailable;
   const cachedWaypoint = cached?.route.waypoints[cached.cursor];
-  const preserveCrossFaceForward = !!cached
-    && beatClock < crossFaceContinuationUntil
-    && cached.route.face === face
-    && face === goalFace;
+  const crossingLatched = !!cached?.crossFaceLeg
+    && cached.crossFacePhase === 'crossing'
+    && cached.goal.distanceToSquared(goal) <= 1
+    && face === cached.crossFaceLeg.fromFace;
   const farOffRoute = !!cachedWaypoint
-    && !preserveCrossFaceForward
     && beatClock - (cached?.plannedAt ?? 0) > 0.75
     && player.distanceToSquared(cachedWaypoint) > 9 * 9;
+  const currentSurfaceContact = getLocalPlayerSurfaceContact();
+  const staleUnreachablePlan = !!cached && shouldReplanUnreachableRoute({
+    routeMode: cached.route.mode,
+    plannedFrom: cached.plannedFrom,
+    player,
+    plannedContact: cached.plannedSurfaceContact,
+    currentContact: currentSurfaceContact
+  });
 
-  if (preserveCrossFaceForward) {
-    navigationAction = 'direct';
-    navigationReason = 'cross-face-forward-handoff';
-    return {
-      waypoint: _navigationWaypoint.copy(goal),
-      action: navigationAction,
-      route: cached.route,
-      preserveForward: true
-    };
-  }
-
-  if (goalChanged || faceChanged || revisionChanged || farOffRoute) {
-    const route = planAgentSurfaceRoute(terrain, planetSize, player, goal, {
-      // Once both endpoints belong to the physics-owned face, force that frame
-      // so a position tie at the edge cannot send the planner back to the old one.
-      ...(goalFace === face ? { face } : {}),
-      differentFaceFallback: 'direct',
-      allowJetpackCrossing: true,
-      maxJetpackWaterCells: 3,
-      maxJetpackWaterDepthCells: 2,
-      jetpackDetourExtraCells: 4,
-      jetpackDetourRatio: 1.5,
-      maxVisitedCells: 4096
+  if (!crossingLatched && (
+    goalChanged
+    || faceChanged
+    || revisionChanged
+    || capabilityChanged
+    || farOffRoute
+    || staleUnreachablePlan
+  )) {
+    const crossFaceLeg = face === goalFace
+      ? null
+      : planCrossFaceSurfaceLeg({
+          player,
+          goal,
+          currentFace: face,
+          goalFace,
+          lookForward: getPlayerLook().forward,
+          planetRadius: planetSize,
+          edgeEntryRadius: planetSize - PLAYER_EDGE_RADIUS,
+          cornerInset: VOXEL_SCALE
+        });
+    const planned = planReachableCrossFaceRoute({
+      terrain,
+      planetSize,
+      player,
+      goal,
+      face,
+      crossFaceLeg,
+      jetpackAvailable
     });
     activeNavigationRoute = {
-      route,
+      route: planned.route,
       goal: goal.clone(),
       revision: terrain.revision,
-      cursor: route.waypoints.length > 1 ? 1 : 0,
-      plannedAt: beatClock
+      jetpackAvailable,
+      crossFaceLeg: planned.crossFaceLeg,
+      crossFacePhase: 'approach',
+      crossFaceTarget: null,
+      crossFaceDestinationEntry: planned.destinationEntry?.clone() ?? null,
+      crossFaceSafeContinuationDistance: planned.safeContinuationDistance,
+      crossFaceDestinationContinuationMode: planned.destinationContinuationMode,
+      cursor: planned.route.waypoints.length > 1 ? 1 : 0,
+      plannedAt: beatClock,
+      plannedFrom: player.clone(),
+      plannedSurfaceContact: { ...currentSurfaceContact }
     };
+    if (crossFaceContinuationFace) {
+      if (shouldExtendCrossFaceContinuation(planned.route)) {
+        // The body has rolled onto the new face but still hangs beyond its
+        // traversable terrain band. Do not cache the rejection: carry the real
+        // movement frame inward, then probe the live planner again.
+        activeNavigationRoute = null;
+        crossFaceContinuationProbeAt = beatClock + CROSS_FACE_CONTINUATION_PROBE_SECONDS;
+        return crossFaceContinuationStep('cross-face-forward-handoff-start-column');
+      }
+      clearCrossFaceContinuation();
+    }
   }
 
   const active = activeNavigationRoute;
@@ -349,6 +661,36 @@ function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): Navigat
       route: active?.route ?? null,
       preserveForward: false
     };
+  }
+
+  if (active.crossFaceLeg) {
+    const approach = active.route.resolvedGoal ?? active.crossFaceLeg.approach;
+    const nextPhase = advanceCrossFaceSurfaceLegPhase({
+      phase: active.crossFacePhase,
+      currentFace: face,
+      nextFace: active.crossFaceLeg.nextFace,
+      approachDistance: gaitDistance(approach, player),
+      approachTolerance: 1.45
+    });
+    if (nextPhase === 'crossing') {
+      if (active.crossFacePhase !== 'crossing' || !active.crossFaceTarget) {
+        active.crossFaceTarget = crossFaceCrossingTarget({
+          player,
+          fromFace: active.crossFaceLeg.fromFace,
+          nextFace: active.crossFaceLeg.nextFace,
+          planetRadius: planetSize
+        });
+      }
+      active.crossFacePhase = 'crossing';
+      navigationAction = 'direct';
+      navigationReason = 'cross-face-edge-crossing';
+      return {
+        waypoint: _navigationWaypoint.copy(active.crossFaceTarget),
+        action: navigationAction,
+        route: active.route,
+        preserveForward: false
+      };
+    }
   }
 
   // Consume adjacent A* cells as the body reaches them. The final cell remains
@@ -453,6 +795,27 @@ function walkToward(
   // crossing so the pilot never rhythmically hops itself into a pond.
   controls.jump = step.action === 'jetpack';
   return distance;
+}
+
+/**
+ * Preserve a composed gaze after a physical goal has accepted. The generic
+ * arrived-goal watchdog exists to close stubborn trigger volumes; leaving that
+ * goal live after shelter certification would instead nudge the actor back out
+ * of the room during the director's deliberate breathing space (or while
+ * waiting for night).
+ */
+function holdAt(target: THREE.Vector3, lookLift = LOOK_LIFT): void {
+  const player = getPlayerWorldPosition();
+  lookNaturallyToward(target, player, lookLift);
+  setCinematicLookWeight(1);
+  _target.copy(target);
+  walkTargetLive = false;
+  controls.forward = false;
+  controls.backward = false;
+  controls.left = false;
+  controls.right = false;
+  controls.jump = false;
+  navigationAction = 'idle';
 }
 
 /**
@@ -562,6 +925,11 @@ const deferredDebris = new Set<number>();
 let movieAte = false;
 let forageGoal: THREE.Vector3 | null = null;
 let forageGoalAt = -10;
+let emergentInteractionAt = -10;
+let habitatGoal: THREE.Vector3 | null = null;
+let diveRecoveryActive = false;
+let diveAimReady = false;
+let diveColumnLocked = false;
 
 /** The hero tree's crown height as a gaze lift (the redaction censors the
  *  whole tree; the SHOT should hold the canopy, not the trunk base). */
@@ -616,6 +984,84 @@ function pulseInteract(): void {
   if (beatClock - interactPulseAt > 1) interactPulseAt = beatClock;
 }
 
+/**
+ * Movie mode resolves the same registered interaction as [F], but without
+ * relying on a browser key repeat. Proximity and every transaction's own proof
+ * checks remain authoritative.
+ */
+function performStoryInteraction(expectedId?: string): boolean {
+  if (beatClock - emergentInteractionAt < 0.65) return false;
+  const interaction = resolveStoryInteraction(null, getPlayerWorldPosition());
+  if (!interaction || (expectedId && interaction.id !== expectedId)) return false;
+  emergentInteractionAt = beatClock;
+  interaction.perform();
+  return true;
+}
+
+/**
+ * Water is the destination in the dive, so the dry-route planner must not turn
+ * it into an obstacle. Physics still owns swimming, sinking, oxygen and shore
+ * exit; this only supplies a direct camera-relative movement intent.
+ */
+function moveThroughWaterToward(
+  target: THREE.Vector3,
+  stop: number,
+  mode: AutopilotSwimMode,
+  lookTarget?: THREE.Vector3,
+  columnLocked = false
+): number {
+  const player = getPlayerWorldPosition();
+  const submergence = getPlayerSubmersion(getLocalActorId()).submergence;
+  const plan = planAutopilotSwim({
+    player,
+    target,
+    up: getPlayerUp(),
+    submergence,
+    stopDistance: stop,
+    mode,
+    columnLocked
+  });
+  setStoryMoveScale(plan.surfaceMoveScale);
+  _target.copy(target);
+  noteGoal(target);
+  if (plan.useFluidLook) {
+    // Underwater forward is genuinely 6-DOF: CameraControls pitches the live
+    // player camera along this raw ray, then EfficientPlayer feeds that same
+    // full direction into composeSwimVelocity. The surface-gaze solver is
+    // intentionally bypassed here because its correct land behavior removes
+    // downward pitch to avoid staring at the ground.
+    setCinematicGazeIntent(null);
+    setCinematicLookTarget(lookTarget ?? _swimLookTarget
+      .copy(player)
+      .addScaledVector(plan.lookDirection, Math.max(8, plan.distance)));
+  } else {
+    setCinematicLookTarget(null);
+    lookNaturallyToward(target, player, 0, target, plan.distance <= stop + 2 ? 'interact' : 'travel');
+  }
+  setCinematicLookWeight(1);
+  walkTargetLive = plan.forward;
+  navigationAction = 'direct';
+  navigationReason = mode === 'dive' ? 'authored-water-dive' : 'authored-water-return';
+  if (!plan.forward) {
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+  } else if (plan.useFluidMovement) {
+    // Do not add surface-yaw strafing to the pitched swim ray. Forward alone is
+    // the player's normal "swim where I look" control.
+    controls.forward = true;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+  } else {
+    steerFreeToward(player, target);
+  }
+  controls.jump = plan.ascend;
+  controls.sprint = false;
+  return plan.distance;
+}
+
 function grantMissingCampfireMaterials(): void {
   const need = (id: 'flint' | 'biofuel' | 'wood', n: number) => {
     const have = getItemCount(id);
@@ -630,6 +1076,16 @@ function grantMissingCampfireMaterials(): void {
 export function autopilotTick(dt: number): void {
   if (!MOVIE) return;
   const story = getStoryStateSnapshot();
+  wreckHoverRehearsal = reconcileMovieWreckHoverRehearsalRun(
+    wreckHoverRehearsal,
+    teleportNudgeRunId,
+    story.runId
+  );
+  if (story.runId !== teleportNudgeRunId) {
+    teleportNudgeRunId = story.runId;
+    teleportNudgesTotal = 0;
+    dryCrossFaceWaterContactFramesTotal = 0;
+  }
   const beat = story.active ? story.beat : null;
   if (beat !== clockBeat) {
     clockBeat = beat;
@@ -639,6 +1095,9 @@ export function autopilotTick(dt: number): void {
     arrivedTime = 0;
     unstickUntil = -1;
     unstickFlips = 0;
+    plannedJetpackReleaseUntil = -1;
+    plannedJetpackWasActive = false;
+    plannedJetpackWasWetStartEgress = false;
     _lastPos.set(Infinity, Infinity, Infinity);
     _goalRef.set(Infinity, Infinity, Infinity);
     nudgesOnGoal = 0;
@@ -647,6 +1106,12 @@ export function autopilotTick(dt: number): void {
     movieAte = false;
     forageGoal = null;
     forageGoalAt = -10;
+    emergentInteractionAt = -10;
+    habitatGoal = null;
+    diveRecoveryActive = false;
+    diveAimReady = false;
+    diveColumnLocked = false;
+    wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
     resetNavigationRoute();
     clearControls();
     setCinematicGazeIntent(null);
@@ -654,7 +1119,7 @@ export function autopilotTick(dt: number): void {
   }
   // Never push (or rescue-nudge) an unsettled player: while the world is still
   // streaming in under the spawn, the pilot waits with everyone else.
-  if (!isSpawnSettled()) {
+  if (getSpaceFlightSnapshot().controlMode === 'fps' && !isSpawnSettled()) {
     clearControls();
     return;
   }
@@ -959,8 +1424,370 @@ export function autopilotTick(dt: number): void {
       }
       break;
     }
+    case 'ch4-audit': {
+      const actorId = getLocalActorId();
+      let target: THREE.Vector3 | null = null;
+      let interactionId: string | undefined;
+      if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.fireMismatch, actorId)) {
+        const fire = getCampfires()[0];
+        target = fire ? new THREE.Vector3(...fire.pos) : null;
+        interactionId = 'story-audit-fire';
+      } else if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.lifeMismatch, actorId)) {
+        target = storyAnchors.pond?.shore ?? null;
+        interactionId = 'story-audit-life';
+      } else if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.treeMismatch, actorId)) {
+        target = heroTreeHandle.position;
+        interactionId = 'story-audit-tree';
+      }
+      if (target) {
+        walkToward(target, 3.25, interactionId === 'story-audit-tree' ? treeCrownLift() : 0.8);
+        if (getPlayerWorldPosition().distanceTo(target) <= 4.8) performStoryInteraction(interactionId);
+      }
+      break;
+    }
+    case 'ch4-comply': {
+      const actorId = getLocalActorId();
+      let target: THREE.Vector3 | null = null;
+      let interactionId: string | undefined;
+      if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.fireComplied, actorId)) {
+        const fire = getCampfires()[0];
+        target = fire ? new THREE.Vector3(...fire.pos) : null;
+        interactionId = 'story-comply-fire';
+      } else if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.organicsComplied, actorId)) {
+        target = wreckRelayHandle.position;
+        interactionId = 'story-comply-organics';
+      }
+      if (target) {
+        walkToward(target, 3.1, 0.8);
+        if (getPlayerWorldPosition().distanceTo(target) <= 4) performStoryInteraction(interactionId);
+      }
+      break;
+    }
+    case 'ch4-defy': {
+      const target = heroTreeHandle.position;
+      if (target) {
+        walkToward(target, 3.1, treeCrownLift());
+        if (getPlayerWorldPosition().distanceTo(target) <= 4) {
+          performStoryInteraction('story-refuse-tree');
+        }
+      }
+      break;
+    }
+    case 'ch5-maw': {
+      const actorId = getLocalActorId();
+      const directionResolved = hasMilestone(
+        EMERGENT_MAW_MILESTONES.directionResolved,
+        actorId
+      );
+      const pondResonant = hasMilestone(
+        EMERGENT_MAW_MILESTONES.pondResonance,
+        actorId
+      );
+      if (directionResolved && !pondResonant) {
+        const pond = storyAnchors.pond;
+        if (!pond) break;
+        // Route to authored dry ground, then use the same accessible Attend
+        // action available to manual play. Interaction gaze gives the response
+        // a composed frame without taking ownership away from the camera rig.
+        const shoreDistance = walkToward(
+          pond.shore,
+          3,
+          1.35,
+          pond.surface,
+          5.2
+        );
+        if (shoreDistance <= 5.2) {
+          performStoryInteraction('story-maw-pond-attend');
+        }
+        break;
+      }
+
+      const pack = storyAnchors.fieldPack;
+      if (pack && !pondResonant) {
+        walkToward(pack.position, 2.7, 0.7);
+        if (getPlayerWorldPosition().distanceTo(pack.position) <= 3.7) {
+          performStoryInteraction(
+            hasMilestone('story:item:maw-repair-kit:acquired', actorId)
+              ? 'story-maw-repair'
+              : 'story-field-kit'
+          );
+        }
+      }
+      break;
+    }
+    case 'ch6-dive': {
+      const actorId = getLocalActorId();
+      const size = storyAnchors.planetSize;
+      const seed = storyAnchors.terrainSeed;
+      if (size === null || seed === null) break;
+      const acquired = hasMilestone(EMERGENT_UNIQUE_ITEM_MILESTONES.keelMemory, actorId);
+      const submergence = getPlayerSubmersion(actorId).submergence;
+      const surfacedWithKeel = hasMilestone(
+        AUTHORED_DIVE_MILESTONES.surfacedWithKeel,
+        actorId
+      );
+      diveRecoveryActive = surfacedWithKeel
+        ? false
+        : acquired && submergence >= AUTHORED_DIVE_ENTER_SUBMERGENCE
+          ? true
+          : nextDiveRecoveryState({
+              active: diveRecoveryActive,
+              oxygen: getVitals(actorId).oxygen,
+              submergence
+            });
+      const returning = surfacedWithKeel || diveRecoveryActive;
+      const pond = storyAnchors.pond;
+      const keelTarget = getKeelMemoryPose(size, seed)?.position ?? null;
+      if (!returning && !diveAimReady && pond && keelTarget) {
+        const shoreDistance = moveThroughWaterToward(
+          pond.shore,
+          2.7,
+          'dive',
+          keelTarget
+        );
+        diveAimReady = nextDiveAimReady({
+          active: diveAimReady,
+          pitch: getPlayerLook().pitch,
+          shoreDistance,
+          submergence
+        });
+        break;
+      }
+      const target = returning
+        ? pond?.shore ?? null
+        : keelTarget;
+      if (!target) break;
+      if (!returning && keelTarget) {
+        diveColumnLocked = nextDiveColumnLock({
+          active: diveColumnLocked,
+          player: getPlayerWorldPosition(),
+          target: keelTarget,
+          up: getPlayerUp(),
+          submergence,
+          stopDistance: 2.4
+        });
+      }
+      const distance = moveThroughWaterToward(
+        target,
+        returning ? 2.7 : 2.4,
+        returning ? 'surface' : 'dive',
+        undefined,
+        !returning && diveColumnLocked
+      );
+      if (surfacedWithKeel && submergence <= 0.2 && distance <= 4.1) {
+        performStoryInteraction('story-keel-bank');
+      } else if (!diveRecoveryActive && keelTarget
+        && getPlayerWorldPosition().distanceTo(keelTarget) <= 3.2) {
+        performStoryInteraction('story-keel-free');
+      }
+      break;
+    }
+    case 'ch7-reconstruct': {
+      const binding = getEmergentMovieWreckBinding();
+      const target = binding?.workstationPosition ?? hifiWreckHandle.position;
+      if (!target) break;
+      const submergence = getPlayerSubmersion(getLocalActorId()).submergence;
+      if (shouldExitWaterBeforeMovieWreck(submergence)) {
+        moveThroughWaterToward(target, 2.8, 'surface');
+        break;
+      }
+      const actorId = getLocalActorId();
+      const repairStage = getShipRepairStage();
+      const hoverSocket = hifiWreckHandle.hoverSocketPosition;
+      const liftInstalled = repairStage === 'lift_online' || repairStage === 'flight_ready';
+      const firstHoverComplete = hasFirstLegalHoverReceipt(actorId);
+      const groundedReturnComplete = hasFirstHoverGroundedReturn(actorId);
+      const motionOwner = movieWreckReconstructionMotionOwner({
+        diagnosed: hasWreckDiagnosisReceipt(actorId),
+        liftInstalled,
+        hoverSocketAvailable: hoverSocket !== null,
+        firstHoverComplete,
+        groundedReturnComplete
+      });
+      if (motionOwner === 'hover-rehearsal' && hoverSocket) {
+        const player = getPlayerWorldPosition();
+        const hoverDistance = gaitDistance(hoverSocket, player);
+        const shouldApproachHoverSocket = shouldApproachMovieWreckHoverSocket(hoverDistance);
+        wreckHoverRehearsal = advanceMovieWreckHoverRehearsal(wreckHoverRehearsal, {
+          withinApproach: !shouldApproachHoverSocket,
+          physicallySupported: getLocalPlayerSurfaceContact().physicallySupported
+        });
+        if (!wreckHoverRehearsal.active && shouldApproachHoverSocket) {
+          const up = getPlayerUp();
+          // Project the visible upper socket onto the already validated bench
+          // support plane. Navigation owns only this grounded approach; the
+          // normal jump/jet controller owns every vertical sample afterward.
+          _hoverApproachScratch.copy(hoverSocket).addScaledVector(
+            up,
+            target.dot(up) - hoverSocket.dot(up)
+          );
+          walkToward(_hoverApproachScratch, 0.8, 0, hoverSocket);
+        } else {
+          holdAt(hoverSocket, 0);
+        }
+        break;
+      }
+      wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
+      if (motionOwner === 'grounded-return' && hoverSocket) {
+        // Releasing the movie controls is the real landing half of the proof.
+        holdAt(hoverSocket, 0);
+        break;
+      }
+      const distance = getPlayerWorldPosition().distanceTo(target);
+      const interactionMotion = movieWreckInteractionMotion(distance);
+      if (shouldApproachMovieWreck(distance)) {
+        walkToward(target, 2.8, 0.8);
+        if (navigationAction === 'unreachable'
+          && shouldRecoverMovieWreckWetStart(navigationReason)) {
+          // An unreachable route is cached. Clear it on every wet-column
+          // recovery step so the dry planner can take over immediately after
+          // the capsule reaches traversable shore.
+          resetNavigationRoute();
+          moveThroughWaterToward(target, 2.8, 'surface');
+        }
+        break;
+      }
+      if (interactionMotion === 'retreat') {
+        const player = getPlayerWorldPosition();
+        const wreck = hifiWreckHandle.position;
+        const up = getPlayerUp();
+        const annulusGoal = wreck && resolveMovieWreckInteractionAnnulusGoal({
+          player: [player.x, player.y, player.z],
+          workstation: [target.x, target.y, target.z],
+          wreck: [wreck.x, wreck.y, wreck.z],
+          surfaceUp: [up.x, up.y, up.z]
+        });
+        if (annulusGoal) {
+          _wreckInteractionScratch.set(...annulusGoal);
+          // Ordinary surface navigation validates every retreat step. Keeping
+          // gaze on the bench naturally produces a short backward/side step;
+          // no recovery teleport or synthetic interaction is involved.
+          walkToward(_wreckInteractionScratch, 0.3, 0.2, target, 4.4);
+        } else {
+          holdAt(target, 0.8);
+        }
+        break;
+      }
+      // The live resolver has already proven physical reach. Stand and look at
+      // the bench instead of pushing into its tighter route waypoint: releasing
+      // jump before Lift Cell installation gives the normal jump controller the
+      // real false -> true edge required for the first legal hover.
+      holdAt(target, 0.8);
+      // Recipe fabrication is allowed only while the live wreck bench has
+      // published assembler access. The next frame's registered F action then
+      // consumes the crafted part in the ordered repair transaction.
+      prepareEmergentMovieWreckCraft(getLocalActorId());
+      performStoryInteraction();
+      break;
+    }
+    case 'ch7-board': {
+      const ship = getShipPosition();
+      if (!ship) break;
+      const target = _goalScratch.set(ship[0], ship[1], ship[2]);
+      walkToward(target, 2.4, 1.1);
+      if (isBoardable() && getPlayerWorldPosition().distanceTo(target) <= 3.5) enterShip();
+      break;
+    }
+    case 'ch8-launch': {
+      const flight = getSpaceFlightSnapshot();
+      controls.jump = flight.controlMode === 'flight' && flight.phase === 'surface';
+      controls.forward = flight.controlMode === 'flight' && flight.phase !== 'surface';
+      controls.sprint = controls.forward;
+      break;
+    }
+    case 'ch8-crossing': {
+      controls.forward = getSpaceFlightSnapshot().controlMode === 'flight';
+      controls.sprint = controls.forward;
+      break;
+    }
+    case 'ch8-landfall': {
+      const flight = getSpaceFlightSnapshot();
+      if (flight.controlMode === 'flight' && flight.phase === 'descent') {
+        controls.forward = true;
+        controls.interact = true;
+      } else if (flight.controlMode === 'flight' && flight.phase === 'surface') {
+        exitShip();
+      }
+      break;
+    }
+    case 'ch9-settle': {
+      const actorId = getLocalActorId();
+      const binding = getEmergentMovieSettlementBinding();
+      if (!binding) break;
+      const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+      // The flight-ready Kestrel keeps its Fabricator linked across the active
+      // world. Build the Habitat Core before exploration for a deterministic
+      // screening cadence; manual play may craft it at the chosen site. Site
+      // placement remains gated by attending Tidegarden's relationship beat.
+      if (!habitat && !prepareEmergentMovieHabitatCore(actorId)) {
+        const ship = getShipPosition();
+        if (ship) {
+          const shipPosition = _goalScratch.set(ship[0], ship[1], ship[2]);
+          walkToward(shipPosition, 4.5, 1.1);
+          if (getPlayerWorldPosition().distanceTo(shipPosition) <= 7.5) {
+            prepareEmergentMovieHabitatCore(actorId);
+          }
+        }
+        break;
+      }
+      if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, actorId)) {
+        const relationship = binding.relationship;
+        if (!relationship) break;
+        walkToward(relationship.position, 3.4, 0.5);
+        if (getPlayerWorldPosition().distanceTo(relationship.position) <= 5) {
+          performStoryInteraction('story-tidegarden-attend');
+        }
+        break;
+      }
+
+      if (!habitat) {
+        habitatGoal ??= findEmergentMovieHabitatGoal(getPlayerWorldPosition());
+        if (!habitatGoal) break;
+        const siteDistance = walkToward(habitatGoal, 0.45, 0.4);
+        // The spawn validator's canonical capsule center sits about one visual
+        // foot above the live Rapier center. Gait distance deliberately treats
+        // that as the same grounded cell; validation below re-proves the exact
+        // dry support before any foundation is allowed.
+        if (siteDistance <= 0.8) {
+          installEmergentMovieHabitatCore(getPlayerWorldPosition(), actorId);
+        }
+        break;
+      }
+
+      const corePosition = _goalScratch.set(...habitat.core.position);
+      const coreDistance = walkToward(corePosition, 0.35, 0.8);
+      if (coreDistance <= 0.8) {
+        if (buildAndCertifyEmergentMovieShelter(getPlayerWorldPosition(), actorId)) {
+          holdAt(corePosition, 0.8);
+        }
+      }
+      break;
+    }
+    case 'ch9-hearth': {
+      const actorId = getLocalActorId();
+      const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+      if (!habitat) break;
+      const corePosition = _goalScratch.set(...habitat.core.position);
+      const coreDistance = walkToward(corePosition, 0.35, 0.8);
+      if (coreDistance <= 0.8) {
+        completeEmergentMovieSafeRest(getPlayerWorldPosition(), getCurrentDayPhase(), actorId);
+        // Rest is allowed only at real night. Hold inside the proven enclosure
+        // between attempts instead of feeding the goal to the stuck watchdog.
+        holdAt(corePosition, 0.8);
+      }
+      break;
+    }
     default:
       break;
+  }
+
+  const surfaceContact = getLocalPlayerSurfaceContact();
+  const purportedDryCrossFaceMovement = navigationReason === 'cross-face-edge-crossing'
+    ? !!activeNavigationRoute && activeNavigationRoute.route.waterCrossing === null
+    : navigationReason.startsWith('cross-face-forward-handoff')
+      && crossFaceContinuationExpectsDry;
+  if (purportedDryCrossFaceMovement && surfaceContact.feetInWater) {
+    dryCrossFaceWaterContactFramesTotal++;
   }
 
   // Dev affordance (movie only): capture harnesses sample the pilot's state.
@@ -985,6 +1812,9 @@ export function autopilotTick(dt: number): void {
       controls: { ...controls },
       stillTime: Math.round(stillTime * 10) / 10,
       nudges: nudgesOnGoal,
+      teleportNudgesTotal,
+      dryCrossFaceWaterContactFramesTotal,
+      surfaceContact,
       lens: (() => {
         const l = getSideLens();
         if (!l) return null;
@@ -1002,6 +1832,7 @@ export function autopilotTick(dt: number): void {
   // --- stuck watchdog (runs over whatever the beat handler decided) -----------
   const pushing = controls.forward || controls.backward || controls.left || controls.right;
   const plannedRecoveryUnsafe = navigationAction === 'jetpack' || navigationAction === 'unreachable';
+  const teleportRecoveryAllowed = allowsMovieTeleportRecovery(beat);
   const pos = getPlayerWorldPosition();
   if (Number.isFinite(_lastPos.x)) {
     // HORIZONTAL displacement only: jumping in place must read as STUCK —
@@ -1013,6 +1844,36 @@ export function autopilotTick(dt: number): void {
     else stillTime = 0;
   }
   _lastPos.copy(pos);
+  const wetStartEgress = navigationReason === 'wet-start-egress';
+  const plannedJetpack = plannedJetpackJumpDecision({
+    active: navigationAction === 'jetpack',
+    pushing,
+    entering: navigationAction === 'jetpack'
+      && pushing
+      && (!plannedJetpackWasActive || (plannedJetpackWasWetStartEgress && !wetStartEgress)),
+    routeReason: navigationReason,
+    now: beatClock,
+    horizontalStillSeconds: stillTime,
+    releaseUntil: plannedJetpackReleaseUntil
+  });
+  if (navigationAction === 'jetpack') {
+    controls.jump = plannedJetpack.jumpHeld;
+    if (plannedJetpack.holdMovement) {
+      // Rearm on the dry launch cell. Continuing to walk during this release
+      // steps the body into water, where the player's real submerged controller
+      // correctly suppresses jetpack thrust before the repress can occur.
+      controls.forward = false;
+      controls.backward = false;
+      controls.left = false;
+      controls.right = false;
+    }
+    plannedJetpackReleaseUntil = plannedJetpack.releaseUntil;
+    if (plannedJetpack.resetStillTime) stillTime = 0;
+  } else {
+    plannedJetpackReleaseUntil = -1;
+  }
+  plannedJetpackWasActive = navigationAction === 'jetpack' && pushing;
+  plannedJetpackWasWetStartEgress = navigationAction === 'jetpack' && wetStartEgress;
   if (pushing && !plannedRecoveryUnsafe && stillTime > 2.2 && beatClock > unstickUntil) {
     unstickFlips++;
     stillTime = 0;
@@ -1020,7 +1881,7 @@ export function autopilotTick(dt: number): void {
     // straight line is unwalkable (a 2-block rise, a corner pocket). The
     // screening must go on: teleport-nudge toward the goal (movie-only; the
     // physics side is gated on isAutopilotDriving).
-    if (unstickFlips >= 2 && walkTargetLive) {
+    if (unstickFlips >= 2 && walkTargetLive && teleportRecoveryAllowed) {
       _nudge.copy(_target).sub(pos);
       const up = getPlayerUp();
       _nudge.addScaledVector(up, -_nudge.dot(up)); // horizontal component only
@@ -1028,6 +1889,7 @@ export function autopilotTick(dt: number): void {
       _nudge.addScaledVector(up, 2.3); // over the lip, gravity settles the rest
       requestPlayerNudge(_nudge);
       nudgesOnGoal++;
+      teleportNudgesTotal++;
       unstickFlips = 0;
       unstickUntil = beatClock; // no reverse dance after a nudge — just walk
     } else {
@@ -1037,7 +1899,7 @@ export function autopilotTick(dt: number): void {
   // Arrived-but-inert: the gait released at its stop radius, a goal is still
   // live, and nothing has advanced — the trigger volume must be inches away.
   // Shove gently toward the goal (and count it, so deferral can move on).
-  if (walkTargetLive && !plannedRecoveryUnsafe && !pushing) {
+  if (walkTargetLive && teleportRecoveryAllowed && !plannedRecoveryUnsafe && !pushing) {
     arrivedTime += dt;
     if (arrivedTime > 4) {
       arrivedTime = 0;
@@ -1048,6 +1910,7 @@ export function autopilotTick(dt: number): void {
       if (_nudge.lengthSq() > 0.01) _nudge.normalize().multiplyScalar(1.2);
       _nudge.addScaledVector(upA, 0.4);
       requestPlayerNudge(_nudge);
+      teleportNudgesTotal++;
     }
   } else {
     arrivedTime = 0;
@@ -1063,6 +1926,27 @@ export function autopilotTick(dt: number): void {
       const l = controls.left;
       controls.left = controls.right;
       controls.right = l;
+    }
+  }
+
+  // The probe object is created before watchdog decisions so it can include
+  // route-planner state. Refresh the mutable fields after the final control
+  // override; otherwise release pulses misleadingly appear as held jump input.
+  if (typeof window !== 'undefined') {
+    const debug = (window as unknown as {
+      __autopilot?: {
+        controls?: typeof controls;
+        stillTime?: number;
+        jetpackReleaseRemaining?: number;
+      };
+    }).__autopilot;
+    if (debug) {
+      debug.controls = { ...controls };
+      debug.stillTime = Math.round(stillTime * 10) / 10;
+      debug.jetpackReleaseRemaining = Math.max(
+        0,
+        Math.round((plannedJetpackReleaseUntil - beatClock) * 10) / 10
+      );
     }
   }
 }

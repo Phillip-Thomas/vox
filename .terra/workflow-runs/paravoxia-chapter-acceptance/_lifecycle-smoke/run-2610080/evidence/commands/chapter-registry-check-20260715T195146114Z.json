@@ -1,0 +1,21 @@
+{
+  "schema": "terra.commandResult.v1",
+  "id": "chapter-registry-check",
+  "title": "Validate the Paravoxia chapter registry",
+  "resultKey": "chapterRegistryCheck",
+  "argv": [
+    "npm",
+    "--prefix",
+    "main",
+    "run",
+    "chapter:registry:check"
+  ],
+  "status": "passed",
+  "exitCode": 0,
+  "timedOut": false,
+  "stdout": "\n> voxel-game@0.1.0 chapter:registry:check\n> node tools/chapter-registry-gate.mjs\n\nChapter registry gate passed: 3167 checks\n",
+  "stderr": "",
+  "evidencePath": "evidence/commands/chapter-registry-check-20260715T195146114Z.json",
+  "startedAt": "2026-07-15T19:51:46.114Z",
+  "finishedAt": "2026-07-15T19:51:46.292Z"
+}

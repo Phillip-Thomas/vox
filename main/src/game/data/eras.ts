@@ -6,7 +6,9 @@
 // is the designed-for endgame. Recipes/devices are tagged with the era they belong
 // to; the progression store advances `currentEra` when milestone items are crafted.
 
-export type EraId = 'primitive' | 'emergent' | 'paravox_machina';
+import { ECONOMY_CATALOG } from './generatedEconomyCatalog.ts';
+
+export type EraId = (typeof ECONOMY_CATALOG.eraIds)[number];
 
 export interface EraDefinition {
   id: EraId;
@@ -31,7 +33,7 @@ export const ERAS: Record<EraId, EraDefinition> = {
   }
 };
 
-export const ERA_ORDER: EraId[] = ['primitive', 'emergent', 'paravox_machina'];
+export const ERA_ORDER: EraId[] = [...ECONOMY_CATALOG.eraIds];
 
 export function getEra(id: EraId): EraDefinition {
   return ERAS[id];

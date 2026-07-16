@@ -24,6 +24,30 @@ import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
 import { getPlayerWorldPosition, getPlayerLook } from '../../state/playerFrame.ts';
 import { getVitals, setVitals, type VitalsState } from './survivalVitals.ts';
 import { getWaterskinFill, setWaterskinFill } from './consumeSystem.ts';
+import {
+  applyAccomplishmentLedgerSnapshot,
+  getAccomplishmentLedgerSnapshot,
+  resetAccomplishments,
+  type AccomplishmentLedgerSnapshot
+} from './accomplishmentLedger.ts';
+import {
+  applyObservationLedgerSnapshot,
+  getObservationLedgerSnapshot,
+  resetObservations,
+  type ObservationLedgerSnapshot
+} from './observationLedger.ts';
+import {
+  applyShipRestorationSnapshot,
+  getShipRestorationSnapshot,
+  resetShipRestoration,
+  type ShipRestorationState
+} from './shipRestoration.ts';
+import {
+  applyHabitatWorldSnapshot,
+  clearHabitatWorld,
+  getHabitatWorldSnapshot,
+  type HabitatWorldState
+} from './habitatSystem.ts';
 import type { ItemId } from '../data/items.ts';
 import type { EraId } from '../data/eras.ts';
 import type { CurrentWorld, WorldCoordinate } from '../../utils/worldCoordinates.ts';
@@ -151,6 +175,12 @@ export interface GlobalSave {
   dayPhase?: number;       // time-of-day to resume at (0..1); SkyController offset
   vitals?: VitalsState;    // survival meters (health/hunger/thirst/warmth/stamina)
   waterskin?: number;      // carried-water fill level
+  /** Durable actor accomplishments. Optional keeps pre-ledger saves readable. */
+  accomplishments?: AccomplishmentLedgerSnapshot;
+  /** Interpretive evidence/revisions. Never used as a Story prerequisite. */
+  observations?: ObservationLedgerSnapshot;
+  /** Versioned ship repair, location, and system-space state. */
+  shipRestoration?: ShipRestorationState;
 }
 
 export function saveGlobal(lastWorld: WorldCoordinate | CurrentWorld | null, dayPhase?: number): void {
@@ -165,7 +195,10 @@ export function saveGlobal(lastWorld: WorldCoordinate | CurrentWorld | null, day
   const data: GlobalSave = {
     inventory: getInventory(), mawCharge: getMawCharge(), era: getCurrentEra(),
     milestones: getMilestones(), lastWorld: coordinate, lastPlanetWorldId, dayPhase,
-    vitals: getVitals(), waterskin: getWaterskinFill()
+    vitals: getVitals(), waterskin: getWaterskinFill(),
+    accomplishments: getAccomplishmentLedgerSnapshot(),
+    observations: getObservationLedgerSnapshot(),
+    shipRestoration: getShipRestorationSnapshot()
   };
   write(GLOBAL_KEY, data);
 }
@@ -183,6 +216,12 @@ export function restoreGlobal(save: GlobalSave): void {
   for (const m of save.milestones ?? []) markMilestone(m);
   if (save.vitals) setVitals(save.vitals);
   if (save.waterskin != null) setWaterskinFill(save.waterskin);
+  resetAccomplishments();
+  resetObservations();
+  resetShipRestoration();
+  if (save.accomplishments) applyAccomplishmentLedgerSnapshot(save.accomplishments);
+  if (save.observations) applyObservationLedgerSnapshot(save.observations);
+  if (save.shipRestoration) applyShipRestorationSnapshot(save.shipRestoration);
 }
 
 // --- Per-world ---------------------------------------------------------------
@@ -196,18 +235,22 @@ interface WorldSave {
   forage?: Array<[number, number, number]>;
   /** Harvested procedural flora. Optional keeps legacy saves readable. */
   flora?: Array<[number, number, number]>;
+  /** Installed/certified Habitat Core truth for this specific planet. */
+  habitat?: HabitatWorldState;
 }
 
 export function saveWorld(world: WorldSaveRef): void {
+  const worldId = worldIdFor(world);
   const data: WorldSave = {
-    worldId: worldIdFor(world) ?? undefined,
+    worldId: worldId ?? undefined,
     seed: legacySeed(world),
     structures: getPieces(),
     campfires: getCampfires().map(({ id: _id, ...campfire }) => campfire),
     trees: getHarvestedTrees(),
     stones: getCollectedStones(),
     forage: getCollectedForage(),
-    flora: getHarvestedFlora()
+    flora: getHarvestedFlora(),
+    ...(worldId ? { habitat: getHabitatWorldSnapshot(worldId) ?? undefined } : {})
   };
   write(scopedWorldKey(world).primary, data);
 }
@@ -216,12 +259,19 @@ function loadWorld(world: WorldSaveRef): WorldSave | null {
   return readScoped<WorldSave>(scopedWorldKey(world));
 }
 
-/** Clear one world's persisted player-authored state. Live singleton stores are
- * intentionally left alone: the caller may currently be standing on a different
- * world, and clearing them would let that world's cleanup autosave an empty base.
+/** Clear one world's persisted player-authored state. Shared render-field stores
+ * are intentionally left alone: the caller may currently be standing on a
+ * different world, and clearing them would let that world's cleanup autosave an
+ * empty base. Habitat truth is keyed by world and is safe to clear immediately.
  * The subsequent world/Story run remount performs the normal live reset+restore.
  * Terrain edits and pose use separate keys and are cleared by their helpers. */
 export function clearWorldStateForWorld(world: WorldSaveRef): void {
+  // The Habitat Core is live world-local truth as well as persisted state. An
+  // explicit Story replay must clear it even in private/incognito contexts where
+  // localStorage is unavailable; otherwise the next run can inherit a core while
+  // its actor milestones were deliberately removed and deadlock settlement.
+  const worldId = worldIdFor(world);
+  if (worldId) clearHabitatWorld(worldId);
   const store = storage();
   if (!store) return;
   const key = scopedWorldKey(world);
@@ -229,7 +279,7 @@ export function clearWorldStateForWorld(world: WorldSaveRef): void {
     store.removeItem(key.primary);
     if (key.legacy) store.removeItem(key.legacy);
   } catch {
-    // Storage unavailable/blocked: leave the current live world untouched.
+    // Storage unavailable/blocked: the live Habitat truth was still cleared.
   }
 }
 
@@ -240,6 +290,15 @@ export function restoreStructuresForWorld(world: WorldSaveRef): void {
 }
 export function restoreCampfiresForWorld(world: WorldSaveRef): void {
   const w = loadWorld(world); if (w?.campfires) restoreCampfires(w.campfires);
+}
+export function restoreHabitatForWorld(world: WorldSaveRef): void {
+  const worldId = worldIdFor(world);
+  if (!worldId) return;
+  const w = loadWorld(world);
+  // Do not erase a newer live placement merely because autosave has not run
+  // yet and a scene subtree remounted. Explicit world clearing removes both
+  // persistence and the live map through clearWorldStateForWorld.
+  if (w?.habitat) applyHabitatWorldSnapshot(worldId, w.habitat);
 }
 /** Drop a world's persisted campfires (memory + the saved blob, other fields kept).
  *  Story entry uses this so a dev-jump's debug pre-place fire — or any stale fire —

@@ -9,8 +9,10 @@ import {
 } from '../game/starSystem.ts';
 import {
   deriveWorldPreviewTraits,
-  previewSurfaceValue
+  previewSurfaceValue,
+  WORLD_PREVIEW_PLANET_RADIUS
 } from '../utils/worldPreview.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 export interface CompanionBodyModel {
   descriptor: PlanetDescriptor;
@@ -177,9 +179,13 @@ export function companionExactShellBlend(centerDistance: number): number {
   return 1 - smooth;
 }
 
-export function createCompanionSurfaceGeometry(seed: number, requestedSubdivisions: number): THREE.BufferGeometry {
+export function createCompanionSurfaceGeometry(
+  seed: number,
+  requestedSubdivisions: number,
+  planetProfile?: PlanetProfile
+): THREE.BufferGeometry {
   const subdivisions = THREE.MathUtils.clamp(Math.trunc(requestedSubdivisions), 2, 32);
-  const traits = deriveWorldPreviewTraits(seed);
+  const traits = deriveWorldPreviewTraits(seed, WORLD_PREVIEW_PLANET_RADIUS, planetProfile);
   const positions: number[] = [];
   const colors: number[] = [];
   const uvs: number[] = [];
@@ -247,9 +253,13 @@ export function createCompanionSurfaceGeometry(seed: number, requestedSubdivisio
   return geometry;
 }
 
-export function createCompanionCloudGeometry(seed: number, subdivisions: number): THREE.BufferGeometry {
-  const geometry = createCompanionSurfaceGeometry(seed, subdivisions);
-  const traits = deriveWorldPreviewTraits(seed);
+export function createCompanionCloudGeometry(
+  seed: number,
+  subdivisions: number,
+  planetProfile?: PlanetProfile
+): THREE.BufferGeometry {
+  const geometry = createCompanionSurfaceGeometry(seed, subdivisions, planetProfile);
+  const traits = deriveWorldPreviewTraits(seed, WORLD_PREVIEW_PLANET_RADIUS, planetProfile);
   const position = geometry.getAttribute('position');
   const colors = new Float32Array(position.count * 4);
   const direction = new THREE.Vector3();

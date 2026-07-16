@@ -64,6 +64,18 @@ export interface GraphicsQuality {
 
 export type QualityProfile = 'ULTRA' | 'HIGH' | 'MEDIUM' | 'LOW' | 'POTATO';
 
+export const QUALITY_PROFILE_STORAGE_KEY = 'paravoxia.graphics.profile';
+
+export interface QualityProfileStorage {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+}
+
+export interface QualityProfileSelection {
+  profile: QualityProfile;
+  source: 'url' | 'storage' | 'default';
+}
+
 export const QUALITY_PROFILES: Record<QualityProfile, GraphicsQuality> = {
   ULTRA: {
     triplanarDetail: true,
@@ -216,10 +228,76 @@ export function getQualityProfile(): QualityProfile {
   return currentProfile;
 }
 
-export function setQualityProfile(profile: QualityProfile) {
+export function parseQualityProfile(value: string | null | undefined): QualityProfile | null {
+  if (!value) return null;
+  const normalized = value.trim().toUpperCase();
+  return normalized in QUALITY_PROFILES ? normalized as QualityProfile : null;
+}
+
+function browserProfileStorage(): QualityProfileStorage | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+export function readPersistedQualityProfile(
+  storage: QualityProfileStorage | null = browserProfileStorage()
+): QualityProfile | null {
+  if (!storage) return null;
+  try {
+    return parseQualityProfile(storage.getItem(QUALITY_PROFILE_STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+
+export function resolveQualityProfileSelection(
+  requested: string | null | undefined,
+  persisted: string | null | undefined
+): QualityProfileSelection {
+  const requestedProfile = parseQualityProfile(requested);
+  if (requestedProfile) return { profile: requestedProfile, source: 'url' };
+  const persistedProfile = parseQualityProfile(persisted);
+  if (persistedProfile) return { profile: persistedProfile, source: 'storage' };
+  return { profile: DEFAULT_PROFILE, source: 'default' };
+}
+
+export interface SetQualityProfileOptions {
+  /** UI choices persist by default; startup and automatic fallbacks opt out. */
+  persist?: boolean;
+  /** Injectable for tests and storage-restricted browser shells. */
+  storage?: QualityProfileStorage | null;
+}
+
+export function setQualityProfile(
+  profile: QualityProfile,
+  { persist = true, storage = browserProfileStorage() }: SetQualityProfileOptions = {}
+) {
   currentProfile = profile;
   current = { ...QUALITY_PROFILES[profile] };
+  if (persist && storage) {
+    try {
+      storage.setItem(QUALITY_PROFILE_STORAGE_KEY, profile);
+    } catch {
+      // Private/restricted browser storage must never prevent a quality change.
+    }
+  }
   listeners.forEach(fn => fn(current));
+}
+
+/** Exact, intentionally conservative software-renderer detection. */
+export function isSoftwareWebGLRenderer(renderer: string | null | undefined): boolean {
+  if (!renderer) return false;
+  return /(?:swiftshader|llvmpipe|software rasterizer|software renderer)/i.test(renderer);
+}
+
+/** One-shot IBL capture budget. LOW/POTATO avoid the cube readback entirely. */
+export function environmentResolutionForProfile(profile: QualityProfile): 128 | 256 | null {
+  if (profile === 'LOW' || profile === 'POTATO') return null;
+  return profile === 'MEDIUM' ? 128 : 256;
 }
 
 /** Override individual flags (e.g. for debugging) without switching profile. */

@@ -1,5 +1,7 @@
 import type { InteractionId } from '../game/systems/interactionSystem.ts';
 import { getStoryStateSnapshot, subscribeStory, type StoryBeat } from './storyState.ts';
+import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import { atLeast } from './emergentCapabilities.ts';
 
 // --- Story input policy ---------------------------------------------------------
 //
@@ -76,6 +78,19 @@ const CH3_RECIPES = new Set(['biofuel', 'stone_hatchet', 'stone_pickaxe', 'torch
 
 /** The first day alive: the campfire chain plus the waterskin (carry the answer). */
 const CH3_TAIL_RECIPES = new Set([...CH3_RECIPES, 'waterskin']);
+
+function ch7RecipeAllowed(id: string): boolean {
+  if (CH3_TAIL_RECIPES.has(id)) return true;
+  const stage = getShipRepairStage();
+  if (id === 'lift_cell') return atLeast(stage, 'hull_sealed');
+  if (id === 'logic_wafer') return atLeast(stage, 'lift_online');
+  return false;
+}
+
+function ch9RecipeAllowed(id: string): boolean {
+  return ch7RecipeAllowed(id)
+    || (id === 'habitat_core' && atLeast(getShipRepairStage(), 'flight_ready'));
+}
 
 /** External-camera render crunch (retained for camera-owned feed variants). */
 export const FEED_DPR = 0.85;
@@ -206,6 +221,52 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
         moveSpeedScale: 0,
         allowCraft: false
       };
+    case 'ch4-audit':
+    case 'ch4-comply':
+    case 'ch4-defy':
+      return {
+        ...ch3Policy(),
+        allowCraft: false,
+        recipeAllowed: allowNone,
+        allowBaseInteraction: id => id === 'drink' || id === 'door'
+      };
+    case 'a4-exhale':
+      return {
+        ...ch3Policy(),
+        moveSpeedScale: 0,
+        allowJump: false,
+        allowSprint: false,
+        allowCraft: false,
+        recipeAllowed: allowNone,
+        allowBaseInteraction: allowNone
+      };
+    case 'ch5-maw':
+    case 'ch6-dive':
+      return {
+        ...SANDBOX_POLICY,
+        allowBuild: false,
+        recipeAllowed: id => CH3_TAIL_RECIPES.has(id),
+        allowBaseInteraction: id => id !== 'board'
+      };
+    case 'ch7-reconstruct':
+      return {
+        ...SANDBOX_POLICY,
+        allowBuild: false,
+        recipeAllowed: ch7RecipeAllowed,
+        allowBaseInteraction: id => id !== 'board'
+      };
+    case 'ch7-board':
+    case 'ch8-launch':
+    case 'ch8-crossing':
+      return { ...SANDBOX_POLICY, allowBuild: false, allowCraft: false, recipeAllowed: allowNone };
+    case 'ch8-landfall':
+      return { ...SANDBOX_POLICY, allowBuild: false, allowCraft: false, recipeAllowed: allowNone };
+    case 'ch9-settle':
+    case 'ch9-hearth':
+      return {
+        ...SANDBOX_POLICY,
+        recipeAllowed: ch9RecipeAllowed
+      };
     default:
       return { ...SANDBOX_POLICY };
   }
@@ -223,6 +284,17 @@ refresh();
 
 export function getStoryInputPolicy(): StoryInputPolicy {
   return current;
+}
+
+/**
+ * Recipe knowledge survives Story handback independently of input/camera mode.
+ * A repaired Kestrel keeps only the patterns actually earned through its
+ * monotonic repair stages; an untouched sandbox retains its normal catalog.
+ */
+export function isFabricatorRecipeAllowed(id: string): boolean {
+  const story = getStoryStateSnapshot();
+  if (story.active) return current.recipeAllowed(id);
+  return getShipRepairStage() === 'wrecked' ? true : ch9RecipeAllowed(id);
 }
 
 // --- director live-mutation hooks (no-ops against the frozen sandbox object) ----

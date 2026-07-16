@@ -78,6 +78,17 @@
     "status": "not_run",
     "evidenceRefs": []
   },
+  "storyUx": {
+    "status": "not_run",
+    "objectiveHealthReady": false,
+    "exactMarkerParity": false,
+    "actionableWorkOrders": false,
+    "feedbackCueSingleFire": false,
+    "feedbackOwnsProgression": false,
+    "staleObjectiveAfterBeatExit": null,
+    "reportRef": "objective-lifecycle-evidence.json",
+    "evidenceRefs": []
+  },
   "headedGates": [
     {
       "gate": "beauty_motion_exposure_pointer_lock_or_taste",

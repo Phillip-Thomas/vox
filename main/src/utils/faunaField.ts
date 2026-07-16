@@ -12,6 +12,7 @@ import { buildWindProfile, type WindProfile } from './windProfile';
 import { seededUnit } from './worldCoordinates';
 import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 import {
   FAUNA_JOINT_ID,
   FAUNA_KINDS,
@@ -173,11 +174,15 @@ function separationFromVegetation(hue: number, art: PlanetArtDirection): number 
   );
 }
 
-export function buildFaunaProfile(terrainSeed: number, water?: FaunaWaterClassifier): FaunaProfile {
+export function buildFaunaProfile(
+  terrainSeed: number,
+  water?: FaunaWaterClassifier,
+  planetProfile?: PlanetProfile
+): FaunaProfile {
   const s = terrainSeed | 0;
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
-  const wind = buildWindProfile(s, biome);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
+  const wind = buildWindProfile(s, planetProfile ?? biome);
   const { aridity, hue, lushness, saturation, temperature } = biome;
   const hueJitter = (seededUnit(s, 451) - 0.5) * 0.09;
   const coatHue = (hue + hueJitter + 0.035 + aridity * 0.035 + 1) % 1;

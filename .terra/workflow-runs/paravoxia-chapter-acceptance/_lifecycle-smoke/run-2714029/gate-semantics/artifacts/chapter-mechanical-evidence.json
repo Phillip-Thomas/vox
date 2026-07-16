@@ -1,0 +1,11 @@
+{
+  "schema": "paravoxia.chapterMechanicalEvidence.v1",
+  "targetChapterMatchesInput": true,
+  "candidateRevisionMatchesInput": true,
+  "requiredObjectiveBeatsPassed": true,
+  "requiredVariantProfilesPassed": true,
+  "performanceBudgetsPassed": true,
+  "boundaryProofComplete": true,
+  "preflightAuthorityCertified": true,
+  "machineReadyForCouncilReview": true
+}

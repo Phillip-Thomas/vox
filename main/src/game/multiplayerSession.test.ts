@@ -3,6 +3,7 @@ import {
   MULTIPLAYER_POSE_PUBLISH_INTERVAL_MS,
   planSnapshotReliableCommandReconciliation,
   resolveMultiplayerConfig,
+  resolveMultiplayerPartyWarpDestination,
   shortPlayerId
 } from './multiplayerSession.ts';
 
@@ -63,6 +64,18 @@ describe('multiplayer session config', () => {
   it('shortens anonymous player ids for compact crew labels', () => {
     expect(shortPlayerId('alice')).toBe('alice');
     expect(shortPlayerId('0123456789abcdef')).toBe('0123...cdef');
+  });
+
+  it('preserves canonical planet identity for a same-coordinate party handoff', () => {
+    expect(resolveMultiplayerPartyWarpDestination('-1,-1:p1')).toEqual({
+      worldId: '-1,-1:p1',
+      coordinate: { x: -1, y: -1 }
+    });
+    expect(resolveMultiplayerPartyWarpDestination({ x: -1, y: -1 })).toEqual({
+      worldId: '-1,-1',
+      coordinate: { x: -1, y: -1 }
+    });
+    expect(resolveMultiplayerPartyWarpDestination('-1,-1:p9')).toBeNull();
   });
 });
 

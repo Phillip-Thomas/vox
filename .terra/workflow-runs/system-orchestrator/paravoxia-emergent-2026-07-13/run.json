@@ -1,0 +1,629 @@
+{
+  "schema": "terra.workflowRun.v1",
+  "id": "paravoxia-emergent-2026-07-13",
+  "workflowSpecRef": "system-orchestrator@v1",
+  "sourceSpec": "../TerraForm/docs/architecture/workflow-orchestration/examples/system-orchestrator.workflow.json",
+  "status": "completed",
+  "currentStep": null,
+  "createdAt": "2026-07-14T00:14:47.926Z",
+  "updatedAt": "2026-07-15T04:37:33.809Z",
+  "inputs": {
+    "user-request": "implement-approved-emergent-story-batch",
+    "target-repo": "/home/thomasphillip/Projects/vox",
+    "target-surface": "packet0-through-tidegarden",
+    "orchestrator-context": "terra-global+system-standard+paravoxia-creative-triad"
+  },
+  "checkResults": {
+    "build": true,
+    "lint": true,
+    "clientTestFiles": 202,
+    "clientTests": 1437,
+    "serverTestFiles": 8,
+    "serverTests": 73,
+    "storyAuthorityChecks": 1035,
+    "creativeContractChecks": 2320,
+    "runtimeCases": 14,
+    "diagnosticRuntimeCases": 11,
+    "boundedRuntimeProofs": 8,
+    "fullColdRunsPassed": 3,
+    "fullColdRunsRequired": 3,
+    "acceptedSourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+    "releaseGatesOpen": 8
+  },
+  "steps": [
+    {
+      "id": "frame-system-task",
+      "title": "Frame system task",
+      "type": "model_task",
+      "roleContractRef": "system-task-framer",
+      "status": "completed",
+      "gatesBefore": [],
+      "gatesAfter": [
+        "task-brief-clear"
+      ],
+      "outputs": [
+        "task-brief"
+      ]
+    },
+    {
+      "id": "survey-system",
+      "title": "Survey repo and Terra context",
+      "type": "tool_task",
+      "roleContractRef": "system-repo-surveyor",
+      "status": "completed",
+      "gatesBefore": [
+        "task-brief-clear"
+      ],
+      "gatesAfter": [
+        "system-context-complete"
+      ],
+      "outputs": [
+        "repo-survey",
+        "system-context"
+      ]
+    },
+    {
+      "id": "plan-system",
+      "title": "Plan implementation",
+      "type": "model_task",
+      "roleContractRef": "system-implementation-planner",
+      "status": "completed",
+      "gatesBefore": [
+        "system-context-complete"
+      ],
+      "gatesAfter": [
+        "implementation-plan-complete"
+      ],
+      "outputs": [
+        "implementation-plan"
+      ]
+    },
+    {
+      "id": "implement-system",
+      "title": "Create implementation patch candidate",
+      "type": "patch_application",
+      "roleContractRef": "system-implementation-engineer",
+      "status": "completed",
+      "gatesBefore": [
+        "implementation-plan-complete"
+      ],
+      "gatesAfter": [
+        "system-checks-pass"
+      ],
+      "outputs": [
+        "implementation-diff",
+        "check-results"
+      ]
+    },
+    {
+      "id": "verify-system",
+      "title": "Verify system behavior",
+      "type": "tool_task",
+      "roleContractRef": "system-verifier",
+      "status": "completed",
+      "gatesBefore": [
+        "system-checks-pass"
+      ],
+      "gatesAfter": [
+        "runtime-evidence-present",
+        "system-checks-pass"
+      ],
+      "outputs": [
+        "runtime-report",
+        "check-results"
+      ]
+    },
+    {
+      "id": "critique-system",
+      "title": "Critique system implementation",
+      "type": "review",
+      "roleContractRef": "system-critic",
+      "status": "completed",
+      "gatesBefore": [],
+      "gatesAfter": [
+        "no-blocking-defects"
+      ],
+      "outputs": [
+        "critic-report",
+        "defects"
+      ]
+    },
+    {
+      "id": "patch-defects",
+      "title": "Patch blocking system defects",
+      "type": "patch_application",
+      "roleContractRef": "system-repair-engineer",
+      "status": "skipped",
+      "gatesBefore": [],
+      "gatesAfter": [],
+      "outputs": [
+        "implementation-diff",
+        "check-results"
+      ]
+    },
+    {
+      "id": "score-final",
+      "title": "Score system quality",
+      "type": "deterministic_check",
+      "roleContractRef": "system-judge",
+      "status": "completed",
+      "gatesBefore": [],
+      "gatesAfter": [
+        "scorecard-passes"
+      ],
+      "outputs": [
+        "final-scorecard"
+      ]
+    },
+    {
+      "id": "record-lessons",
+      "title": "Record system lessons",
+      "type": "artifact_collection",
+      "roleContractRef": "lessons-recorder",
+      "status": "completed",
+      "gatesBefore": [
+        "scorecard-passes"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "run-summary",
+        "lessons-learned"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "slug": "task-brief",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "frame-system-task",
+      "status": "present",
+      "path": "artifacts/task-brief.md",
+      "summary": {
+        "goal": "approved-emergent-batch",
+        "successCriteria": [
+          "packet-gates",
+          "creative-contracts",
+          "runtime-proof"
+        ],
+        "nonGoals": [
+          "no-A5",
+          "no-publish",
+          "no-protected-reveals"
+        ],
+        "riskBudget": "staged-draft"
+      },
+      "updatedAt": "2026-07-14T00:16:24.215Z"
+    },
+    {
+      "slug": "repo-survey",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "survey-system",
+      "status": "present",
+      "path": "artifacts/repo-survey.md",
+      "updatedAt": "2026-07-14T00:16:24.391Z"
+    },
+    {
+      "slug": "system-context",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "survey-system",
+      "status": "present",
+      "path": "artifacts/system-context.md",
+      "summary": {
+        "globalContext": "terra-global@v1",
+        "fivePillars": [
+          "knowledge",
+          "retrieval",
+          "judgement",
+          "resources",
+          "personality"
+        ],
+        "validationMatrix": [
+          "focused-tests",
+          "client-server-verify",
+          "browser-proof",
+          "creative-gates"
+        ]
+      },
+      "updatedAt": "2026-07-14T00:16:24.561Z"
+    },
+    {
+      "slug": "implementation-plan",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "plan-system",
+      "status": "present",
+      "path": "artifacts/implementation-plan.md",
+      "summary": {
+        "patchScope": [
+          "packet0",
+          "packet1",
+          "packet2",
+          "packet3",
+          "packet4"
+        ],
+        "riskAssessment": [
+          "authority",
+          "persistence",
+          "travel",
+          "economy",
+          "audiovisual"
+        ],
+        "verificationPlan": [
+          "unit",
+          "verify",
+          "browser",
+          "headed",
+          "council"
+        ]
+      },
+      "updatedAt": "2026-07-14T00:16:24.725Z"
+    },
+    {
+      "slug": "implementation-diff",
+      "format": "diff",
+      "required": true,
+      "producerStep": "implement-system",
+      "status": "present",
+      "path": "artifacts/implementation.diff",
+      "summary": {
+        "acceptedSourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+        "mixedWorktreePreserved": true
+      },
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "check-results",
+      "format": "json",
+      "required": true,
+      "producerStep": "verify-system",
+      "status": "present",
+      "path": "artifacts/check-results.json",
+      "summary": {
+        "build": "passed",
+        "lint": "passed",
+        "clientTestFiles": 202,
+        "clientTests": 1437,
+        "serverTestFiles": 8,
+        "serverTests": 73,
+        "boundedRuntimeProofs": 8,
+        "fullColdRunsPassed": 3,
+        "fullColdRunsRequired": 3,
+        "releaseGatesOpen": 8
+      },
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "runtime-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "verify-system",
+      "status": "present",
+      "path": "artifacts/runtime-report.json",
+      "summary": {
+        "status": "passed-official-triple-headless-release-partial",
+        "cases": 14,
+        "diagnosticCases": 11,
+        "boundedProofs": 8,
+        "fullColdRunsPassed": 3,
+        "acceptedSourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+        "runtimeErrors": 0
+      },
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "critic-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "critique-system",
+      "status": "present",
+      "path": "artifacts/critic-report.md",
+      "summary": {
+        "criticalOpen": 0,
+        "highOpen": 0,
+        "fixedBlockers": 14,
+        "releaseGatesOpen": 8
+      },
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "defects",
+      "format": "json",
+      "required": true,
+      "producerStep": "critique-system",
+      "status": "present",
+      "path": "artifacts/defects.json",
+      "summary": {
+        "criticalOpen": 0,
+        "highOpen": 0,
+        "fixed": 14,
+        "deferred": 3,
+        "releaseGatesOpen": 8
+      },
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "final-scorecard",
+      "format": "json",
+      "required": true,
+      "producerStep": "score-final",
+      "status": "present",
+      "path": "artifacts/final-scorecard.json",
+      "summary": {
+        "weightedScore": 4.612,
+        "categoryFloor": 4.4,
+        "decision": "passed-implementation-scope"
+      },
+      "updatedAt": "2026-07-14T05:54:26Z"
+    },
+    {
+      "slug": "run-summary",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "record-lessons",
+      "status": "present",
+      "path": "artifacts/run-summary.md",
+      "updatedAt": "2026-07-15T04:32:11Z"
+    },
+    {
+      "slug": "lessons-learned",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "record-lessons",
+      "status": "present",
+      "path": "artifacts/lessons-learned.md",
+      "updatedAt": "2026-07-14T05:54:26Z"
+    }
+  ],
+  "evidenceBundles": [
+    {
+      "id": "paravoxia-command-results",
+      "kind": "command_results",
+      "createdByStep": "verify-system",
+      "artifactRefs": [
+        "check-results"
+      ],
+      "commandRefs": [
+        "main-verify",
+        "server-verify",
+        "creative-contract-gate"
+      ],
+      "summary": "Client, server, authority, signed AV, and creative contract checks passed."
+    },
+    {
+      "id": "paravoxia-runtime-trace",
+      "kind": "runtime_trace",
+      "createdByStep": "verify-system",
+      "artifactRefs": [
+        "runtime-report"
+      ],
+      "summary": "Eleven earlier cases remain diagnostic only. Three official uninterrupted rescue-free ch4-audit-to-done POTATO runs passed 64/64 required anchors against source fingerprint a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262; the three-run mechanical gate is 3/3."
+    },
+    {
+      "id": "paravoxia-adversarial-review",
+      "kind": "model_review",
+      "createdByStep": "critique-system",
+      "artifactRefs": [
+        "critic-report",
+        "defects"
+      ],
+      "summary": "Fourteen blocking implementation seams fixed; no critical or high implementation defect remains, while eight release gates and all adapter requirements stay open."
+    }
+  ],
+  "gateResults": [
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "task-brief-clear",
+      "title": "Task brief has goal, success criteria, non-goals, and risk budget",
+      "type": "schema_valid",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "task-brief",
+        "task-brief",
+        "task-brief",
+        "task-brief"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "system-context-complete",
+      "title": "System context includes global context, five pillars, and validation matrix",
+      "type": "schema_valid",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "system-context",
+        "system-context",
+        "system-context"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "implementation-plan-complete",
+      "title": "Implementation plan defines patch scope, risk, and verification",
+      "type": "schema_valid",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "implementation-plan",
+        "implementation-plan",
+        "implementation-plan"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "system-checks-pass",
+      "title": "Build and lint or equivalent system checks pass",
+      "type": "command_passed",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "check-results",
+        "check-results"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "runtime-evidence-present",
+      "title": "Runtime or behavior evidence exists",
+      "type": "artifact_exists",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "runtime-report"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "no-blocking-defects",
+      "title": "No unresolved critical or high system defects remain",
+      "type": "no_blocking_defects",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "defects",
+        "defects"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    },
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "scorecard-passes",
+      "title": "System quality score passes",
+      "type": "score_threshold",
+      "status": "passed",
+      "blocking": true,
+      "evidenceRefs": [
+        "final-scorecard",
+        "final-scorecard"
+      ],
+      "blockingReasons": [],
+      "checkedAt": "2026-07-15T04:37:33.809Z"
+    }
+  ],
+  "humanDecisions": [],
+  "scorecards": [
+    {
+      "schema": "terra.scorecard.v1",
+      "rubricRef": "system-quality.v1",
+      "weightedScore": 4.612,
+      "threshold": 4.5,
+      "categoryFloor": 4.4,
+      "categoryFloorThreshold": 4,
+      "categoryScores": [
+        {
+          "slug": "correctness",
+          "score": 4.8
+        },
+        {
+          "slug": "architecture_fit",
+          "score": 4.7
+        },
+        {
+          "slug": "maintainability",
+          "score": 4.5
+        },
+        {
+          "slug": "verification",
+          "score": 4.4
+        },
+        {
+          "slug": "safety",
+          "score": 4.7
+        },
+        {
+          "slug": "operability",
+          "score": 4.6
+        },
+        {
+          "slug": "documentation_and_lessons",
+          "score": 4.5
+        }
+      ],
+      "blockingDefects": [],
+      "acceptedExceptions": [],
+      "decision": "passed-implementation-scope",
+      "evidenceRefs": [
+        "check-results",
+        "runtime-report",
+        "critic-report",
+        "defects"
+      ]
+    }
+  ],
+  "defects": [],
+  "adapterBindings": [
+    {
+      "requirementId": "primary-reasoning-runner",
+      "family": "model_adapter",
+      "requiredCapabilities": [
+        "long_context_reasoning",
+        "structured_markdown_output"
+      ],
+      "status": "unbound",
+      "binding": null
+    },
+    {
+      "requirementId": "patch-runner",
+      "family": "patch_adapter",
+      "requiredCapabilities": [
+        "repo_draft_write",
+        "diff_output"
+      ],
+      "status": "unbound",
+      "binding": null
+    },
+    {
+      "requirementId": "safe-command-runner",
+      "family": "tool_adapter",
+      "requiredCapabilities": [
+        "safe_command_run",
+        "command_result_capture"
+      ],
+      "status": "unbound",
+      "binding": null
+    },
+    {
+      "requirementId": "artifact-store",
+      "family": "artifact_adapter",
+      "requiredCapabilities": [
+        "artifact_read",
+        "artifact_write"
+      ],
+      "status": "unbound",
+      "binding": null
+    },
+    {
+      "requirementId": "human-review",
+      "family": "review_adapter",
+      "requiredCapabilities": [
+        "approve",
+        "reject",
+        "accept_exception"
+      ],
+      "status": "unbound",
+      "binding": null
+    }
+  ],
+  "finalDisposition": {
+    "schema": "terra.finalDisposition.v1",
+    "decision": "approved",
+    "actor": "system-judge",
+    "decidedAt": "2026-07-14T05:54:26Z",
+    "summary": "Implementation candidate and its three-run headless mechanical evidence are approved for the scoped draft. Eight release gates remain open, all adapters remain unbound, and production publish plus human real-GPU taste approval remain separate, ungranted authorities."
+  }
+}

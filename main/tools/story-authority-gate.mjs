@@ -41,6 +41,178 @@ function includesNormalized(source, phrase) {
   return source.replace(/\s+/g, ' ').includes(phrase.replace(/\s+/g, ' '))
 }
 
+const EXPECTED_PRODUCTION_BEATS = [
+  'ch4-audit',
+  'ch4-comply',
+  'ch4-defy',
+  'a4-exhale',
+  'ch5-maw',
+  'ch6-dive',
+  'ch7-reconstruct',
+  'ch7-board',
+  'ch8-launch',
+  'ch8-crossing',
+  'ch8-landfall',
+  'ch9-settle',
+  'ch9-hearth'
+]
+
+const EXPECTED_RUNTIME_EVIDENCE_CHAIN = [
+  {
+    beat: 'ch4-audit',
+    checkpointKey: 'ch4Audit',
+    checkpoint: 'story:ch4:audit-complete',
+    resumeBeat: 'ch4-comply',
+    evidence: [
+      'milestone:story:audit:fire-mismatch',
+      'milestone:story:audit:life-mismatch',
+      'milestone:story:audit:tree-mismatch'
+    ]
+  },
+  {
+    beat: 'ch4-comply',
+    checkpointKey: 'ch4Complied',
+    checkpoint: 'story:ch4:compliance-complete',
+    resumeBeat: 'ch4-defy',
+    evidence: [
+      'milestone:story:comply:fire-doused',
+      'milestone:story:comply:organics-resolved',
+      'milestone:story:comply:regression-settled'
+    ]
+  },
+  {
+    beat: 'ch4-defy',
+    checkpointKey: 'ch4Defied',
+    checkpoint: 'story:ch4:refusal-complete',
+    resumeBeat: 'a4-exhale',
+    evidence: ['milestone:story:defy:refusal-committed']
+  },
+  {
+    beat: 'a4-exhale',
+    checkpointKey: 'a4Handback',
+    checkpoint: 'story:a4:handback',
+    resumeBeat: 'ch5-maw',
+    evidence: [
+      'milestone:story:a4',
+      'milestone:story:a4:field-pack-dropped'
+    ]
+  },
+  {
+    beat: 'ch5-maw',
+    checkpointKey: 'ch5Maw',
+    checkpoint: 'story:ch5:maw-repaired',
+    resumeBeat: 'ch6-dive',
+    evidence: ['milestone:maw_repaired']
+  },
+  {
+    beat: 'ch6-dive',
+    checkpointKey: 'ch6Dive',
+    checkpoint: 'story:ch6:keel-banked',
+    resumeBeat: 'ch7-reconstruct',
+    evidence: [
+      'milestone:story:dive:waterline-entered',
+      'milestone:story:sense:oxygen',
+      'milestone:story:item:kestrel-keel-memory:acquired',
+      'milestone:story:dive:surfaced-with-keel',
+      'milestone:story:item:kestrel-keel-memory:banked'
+    ]
+  },
+  {
+    beat: 'ch7-reconstruct',
+    checkpointKey: 'ch7Reconstructed',
+    checkpoint: 'story:ch7:flight-ready',
+    resumeBeat: 'ch7-board',
+    evidence: [
+      'state:ship-restoration/flight_ready',
+      'milestone:story:route:tidegarden:online'
+    ]
+  },
+  {
+    beat: 'ch7-board',
+    checkpointKey: 'ch7Boarded',
+    checkpoint: 'story:ch7:boarded',
+    resumeBeat: 'ch8-launch',
+    evidence: ['state:space-flight/control-mode=flight']
+  },
+  {
+    beat: 'ch8-launch',
+    checkpointKey: 'ch8Launched',
+    checkpoint: 'story:ch8:launched',
+    resumeBeat: 'ch8-crossing',
+    evidence: [
+      'state:space-flight/control-mode=flight',
+      'state:space-flight/phase=deep_space'
+    ]
+  },
+  {
+    beat: 'ch8-crossing',
+    checkpointKey: 'ch8Crossed',
+    checkpoint: 'story:ch8:crossed',
+    resumeBeat: 'ch8-landfall',
+    evidence: [
+      'state:system-flight/active-planet=-1,-1:p1',
+      'state:space-flight/phase!=deep_space'
+    ]
+  },
+  {
+    beat: 'ch8-landfall',
+    checkpointKey: 'ch8Landfall',
+    checkpoint: 'story:ch8:landfall',
+    resumeBeat: 'ch9-settle',
+    evidence: [
+      'state:system-flight/active-planet=-1,-1:p1',
+      'state:space-flight/phase=surface',
+      'state:space-flight/control-mode=fps'
+    ]
+  },
+  {
+    beat: 'ch9-settle',
+    checkpointKey: 'ch9Settled',
+    checkpoint: 'story:ch9:settled',
+    resumeBeat: 'ch9-hearth',
+    evidence: [
+      'milestone:story:tidegarden:relationship-attended',
+      'milestone:story:tidegarden:habitat-core-online',
+      'milestone:story:tidegarden:shelter-certified'
+    ]
+  },
+  {
+    beat: 'ch9-hearth',
+    checkpointKey: 'ch9Hearth',
+    checkpoint: 'story:ch9:hearth',
+    resumeBeat: 'done',
+    evidence: [
+      'milestone:story:tidegarden:safe-rest-completed',
+      'milestone:story:tidegarden:two-world-handoff'
+    ]
+  }
+]
+
+const EXPECTED_OPEN_RELEASE_GATES = [
+  'server-issued-embodied-story-receipts',
+  'three-rescue-free-cold-runs',
+  'quality-profile-matrix',
+  'reduced-motion-equivalence',
+  'supported-headed-input',
+  'headed-real-gpu-taste',
+  'origin-sibling-persistence-roundtrip',
+  'tidegarden-support-water-authority-disposition',
+  'human-release-decision'
+]
+
+function extractStringObject(source, exportName, collector) {
+  const escapedName = exportName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const body = source.match(new RegExp(`export const ${escapedName}\\s*=\\s*\\{([\\s\\S]*?)\\}\\s*as const;`))?.[1]
+  collector.assert(Boolean(body), 'runtime.milestone-source', `${exportName} must remain a statically inspectable string object`)
+  return new Map(body
+    ? [...body.matchAll(/^\s*([A-Za-z0-9_]+):\s*'([^']+)'/gm)].map(match => [match[1], match[2]])
+    : [])
+}
+
+function escapedRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function extractBeatOrder(source, collector) {
   const body = source.match(/export const STORY_BEAT_ORDER:[\s\S]*?=\s*\[([\s\S]*?)\];/)?.[1]
   collector.assert(Boolean(body), 'runtime.beat-order-source', 'STORY_BEAT_ORDER must remain a statically inspectable array')
@@ -112,10 +284,45 @@ function validate(manifestOverride = null, workflowOverride = null) {
   const manifest = manifestOverride || readJson(manifestPath, collector, 'manifest.read')
   if (!manifest) return collector
 
-  collector.assert(manifest.schema === 'paravoxia.storyAuthority.v1', 'manifest.schema', 'Story authority manifest schema must be paravoxia.storyAuthority.v1')
+  collector.assert(manifest.schema === 'paravoxia.storyAuthority.v2', 'manifest.schema', 'Story authority manifest schema must be paravoxia.storyAuthority.v2')
   collector.assert(manifest.status?.documentationLane === 'existing-story-reconciliation', 'manifest.docs-lane', 'Documentation lane must identify existing-story reconciliation')
-  collector.assert(manifest.status?.runtimeLane === 'blocked-by-demo-lock', 'manifest.runtime-lane', 'Runtime lane must remain blocked by the demo lock')
+  collector.assert(manifest.status?.runtimeLane === 'owner-authorized-implemented-release-gated', 'manifest.runtime-lane', 'Runtime lane must distinguish implemented Story from release approval')
+  collector.assert(manifest.status?.runtimeStoryCeiling === 'ch9-hearth', 'manifest.runtime-ceiling', 'Implemented runtime must end at the second hearth')
+  collector.assert(manifest.status?.releaseStoryCeiling === 'ch4-arrival', 'manifest.release-ceiling', 'Unpublished implementation must preserve the current release ceiling')
+  collector.assert(manifest.status?.runtimeTerminalBeat === 'done', 'manifest.runtime-terminal', 'The runtime terminal must remain done')
   collector.assert(/^\d{4}-\d{2}-\d{2}$/.test(manifest.snapshotDate || ''), 'manifest.snapshot-date', 'Story authority snapshotDate must be an ISO calendar date')
+
+  const authoritySchema = readJson(
+    path.join(repoRoot, 'docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json'),
+    collector,
+    'manifest.schema-read'
+  )
+  const schemaConstFields = [
+    'schema',
+    'status',
+    'sources',
+    'dynamicSources',
+    'sourcePrecedence',
+    'activeProduction',
+    'runtimeBeatOrder',
+    'runtimeEvidenceChain',
+    'openReleaseGates',
+    'lockedOpenQuestions',
+    'requiredCouncilRoles',
+    'requiredIndependentReviews'
+  ]
+  for (const field of schemaConstFields) {
+    collector.assert(
+      JSON.stringify(authoritySchema?.properties?.[field]?.const) === JSON.stringify(manifest[field]),
+      'manifest.schema-const',
+      `JSON Schema const for ${field} must exactly match the live story-authority manifest`
+    )
+  }
+  collector.assert(
+    JSON.stringify(authoritySchema?.required) === JSON.stringify(Object.keys(manifest)),
+    'manifest.schema-required',
+    'JSON Schema required fields must exactly cover the story-authority manifest'
+  )
 
   const expectedPrecedence = [
     'runtimeBeatAuthority',
@@ -134,6 +341,7 @@ function validate(manifestOverride = null, workflowOverride = null) {
     sceneContractSource?.kind === 'run-artifact'
       && sceneContractSource?.schema === 'paravoxia.sceneContract.v1'
       && sceneContractSource?.pathPattern === '.codex/production-runs/<run-id>/scene-contract.json'
+      && sceneContractSource?.activePath === '../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json'
       && sceneContractSource?.authorityCondition === 'matching-production-lock-and-explicit-owner-approval',
     'manifest.dynamic-scene-contract',
     'ownerApprovedSceneContract must be a declared, run-scoped source gated by the matching production lock and explicit owner approval'
@@ -148,6 +356,7 @@ function validate(manifestOverride = null, workflowOverride = null) {
 
   const sourceEntries = [
     manifest.sources?.runtimeBeatAuthority,
+    ...(manifest.sources?.runtimeEvidence || []),
     manifest.sources?.shippedOverview,
     manifest.sources?.canon,
     manifest.sources?.executionPlan,
@@ -162,39 +371,221 @@ function validate(manifestOverride = null, workflowOverride = null) {
 
   const storyState = readText(path.resolve(mainRoot, manifest.sources.runtimeBeatAuthority), collector, 'runtime.read')
   const runtimeBeats = extractBeatOrder(storyState, collector)
-  const manifestBeats = manifest.shippedBeatOrder || []
-  collector.assert(JSON.stringify(runtimeBeats) === JSON.stringify(manifestBeats), 'runtime.beat-order', 'Machine authority must exactly match the shipped STORY_BEAT_ORDER', { runtimeBeats, manifestBeats })
-  collector.assert(new Set(manifestBeats).size === manifestBeats.length, 'manifest.beat-duplicates', 'Shipped beat order cannot contain duplicate IDs')
-  const ceilingIndex = manifestBeats.indexOf(manifest.status?.storyCeiling)
-  collector.assert(ceilingIndex >= 0 && manifestBeats[ceilingIndex + 1] === manifest.status?.publicTerminalBeat, 'manifest.story-ceiling', 'The public terminal must immediately follow the current story ceiling')
-  const contractedBeats = (manifest.contractedContinuation || []).map((entry) => entry.beat)
-  const expectedContinuation = [
-    { beat: 'ch4-audit', scene: 'S6', status: 'CONTRACTED' },
-    { beat: 'ch4-comply', scene: 'S7', status: 'CONTRACTED' },
-    { beat: 'ch4-defy', scene: 'S8', status: 'CONTRACTED' },
-    { beat: 'a4-exhale', scene: 'S9', awakening: 'A4', status: 'CONTRACTED' },
-    { beat: 'ch4-meat', scene: 'S10', status: 'CONTRACTED' },
-    { beat: 'ch4-dive', scene: 'S11', status: 'CONTRACTED' },
-    { beat: 'ch4-repair', scene: 'S12', status: 'CONTRACTED' },
-    { beat: 'ch4-flight', scene: 'S13', status: 'CONTRACTED' }
+  const manifestBeats = manifest.runtimeBeatOrder || []
+  collector.assert(JSON.stringify(runtimeBeats) === JSON.stringify(manifestBeats), 'runtime.beat-order', 'Machine authority must exactly match the implemented STORY_BEAT_ORDER', { runtimeBeats, manifestBeats })
+  collector.assert(new Set(manifestBeats).size === manifestBeats.length, 'manifest.beat-duplicates', 'Runtime beat order cannot contain duplicate IDs')
+  const runtimeCeilingIndex = manifestBeats.indexOf(manifest.status?.runtimeStoryCeiling)
+  collector.assert(
+    runtimeCeilingIndex >= 0 && manifestBeats[runtimeCeilingIndex + 1] === manifest.status?.runtimeTerminalBeat,
+    'manifest.runtime-ceiling-order',
+    'The runtime terminal must immediately follow the implemented Story ceiling'
+  )
+  const releaseCeilingIndex = manifestBeats.indexOf(manifest.status?.releaseStoryCeiling)
+  collector.assert(
+    releaseCeilingIndex >= 0 && releaseCeilingIndex < runtimeCeilingIndex,
+    'manifest.release-before-runtime',
+    'Release ceiling must remain earlier than the owner-authorized implementation ceiling'
+  )
+
+  const expectedActiveProduction = {
+    runId: '2026-07-13-distance-between-fires',
+    sceneId: 'distance-between-fires',
+    contractVersion: 'intent-v1',
+    productionLockPath: '../.codex/production-runs/2026-07-13-distance-between-fires/production-lock.json',
+    implementationStatus: 'runtime-implemented',
+    releaseStatus: 'gated-unpublished'
+  }
+  collector.assert(
+    JSON.stringify(manifest.activeProduction) === JSON.stringify(expectedActiveProduction),
+    'manifest.active-production',
+    'Active production identity and implemented-but-unpublished status are protected',
+    { expected: expectedActiveProduction, actual: manifest.activeProduction }
+  )
+
+  const activeContractPath = typeof sceneContractSource?.activePath === 'string'
+    ? path.resolve(mainRoot, sceneContractSource.activePath)
+    : ''
+  collector.assert(
+    Boolean(activeContractPath) && activeContractPath.startsWith(`${repoRoot}${path.sep}`) && fs.existsSync(activeContractPath),
+    'production.contract-path',
+    'Active scene contract must resolve inside the repository'
+  )
+  const sceneContract = activeContractPath
+    ? readJson(activeContractPath, collector, 'production.contract-read')
+    : null
+  const productionLockPath = typeof manifest.activeProduction?.productionLockPath === 'string'
+    ? path.resolve(mainRoot, manifest.activeProduction.productionLockPath)
+    : ''
+  collector.assert(
+    Boolean(productionLockPath) && productionLockPath.startsWith(`${repoRoot}${path.sep}`) && fs.existsSync(productionLockPath),
+    'production.lock-path',
+    'Active production lock must resolve inside the repository'
+  )
+  const productionLock = productionLockPath
+    ? readJson(productionLockPath, collector, 'production.lock-read')
+    : null
+  collector.assert(
+    sceneContract?.schema === 'paravoxia.sceneContract.v1'
+      && sceneContract?.sceneId === manifest.activeProduction?.sceneId
+      && sceneContract?.contractVersion === manifest.activeProduction?.contractVersion
+      && sceneContract?.status === 'frozen',
+    'production.contract-identity',
+    'Machine authority must point at the exact frozen scene contract identity'
+  )
+  collector.assert(
+    JSON.stringify(sceneContract?.scope?.beats) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    'production.contract-beats',
+    'Frozen scene-contract beat order must match the implemented continuation',
+    { expected: EXPECTED_PRODUCTION_BEATS, actual: sceneContract?.scope?.beats }
+  )
+  collector.assert(
+    productionLock?.schema === 'paravoxia.productionLock.v1'
+      && productionLock?.runId === manifest.activeProduction?.runId
+      && productionLock?.status === 'locked'
+      && productionLock?.currentRestrictions?.postArrivalStoryMutationAllowed === true
+      && productionLock?.currentRestrictions?.copyChangeDecisionRefs?.includes('owner-instruction-2026-07-13-implement-all')
+      && productionLock?.publishAllowed === false
+      && productionLock?.releaseCandidate === false,
+    'production.lock-authority',
+    'Production lock must authorize implementation while forbidding publication and release-candidate claims'
+  )
+  collector.assert(
+    JSON.stringify(productionLock?.lockedBeats) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    'production.locked-beats',
+    'Production lock and frozen scene contract must protect the same beat order'
+  )
+  collector.assert(
+    sceneContract?.production?.ownerDecisionRefs?.includes('owner-instruction-2026-07-13-implement-all'),
+    'production.owner-decision-ref',
+    'Frozen contract must retain the owner instruction authorizing this implementation'
+  )
+
+  const evidenceChain = manifest.runtimeEvidenceChain || []
+  const evidenceBeats = evidenceChain.map(entry => entry.beat)
+  collector.assert(
+    JSON.stringify(evidenceChain) === JSON.stringify(EXPECTED_RUNTIME_EVIDENCE_CHAIN),
+    'manifest.runtime-evidence-chain',
+    'Every implemented continuation beat must retain its exact checkpoint, resume target, and causal evidence',
+    { expected: EXPECTED_RUNTIME_EVIDENCE_CHAIN, actual: evidenceChain }
+  )
+  collector.assert(
+    JSON.stringify(evidenceBeats) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    'manifest.evidence-beat-order',
+    'Runtime evidence chain must exactly match frozen production beat order'
+  )
+  collector.assert(
+    JSON.stringify(manifestBeats.slice(releaseCeilingIndex + 1, runtimeCeilingIndex + 1)) === JSON.stringify(EXPECTED_PRODUCTION_BEATS),
+    'runtime.continuation-order',
+    'The implemented continuation must be one contiguous runtime suffix between the release ceiling and done'
+  )
+  collector.assert(
+    new Set(evidenceChain.map(entry => entry.checkpointKey)).size === evidenceChain.length
+      && new Set(evidenceChain.map(entry => entry.checkpoint)).size === evidenceChain.length,
+    'manifest.evidence-checkpoint-uniqueness',
+    'Each continuation beat must own one unique durable checkpoint'
+  )
+
+  const storyMilestones = extractStringObject(storyState, 'STORY_MILESTONES', collector)
+  const evidenceTexts = new Map((manifest.sources?.runtimeEvidence || []).map(source => [
+    source,
+    readText(path.resolve(mainRoot, source), collector, `runtime.evidence-read:${source}`)
+  ]))
+  const combinedEvidenceText = [storyState, ...evidenceTexts.values()].join('\n')
+  const directorSource = evidenceTexts.get('src/story/emergentStoryDirector.ts') || ''
+  const resumeChapter = beat => beat === 'done'
+    ? 'complete'
+    : beat === 'a4-exhale'
+      ? 'ch4'
+      : beat.match(/^ch(\d+)-/)?.[1]
+        ? `ch${beat.match(/^ch(\d+)-/)[1]}`
+        : null
+  for (const entry of evidenceChain) {
+    collector.assert(
+      storyMilestones.get(entry.checkpointKey) === entry.checkpoint,
+      'runtime.checkpoint-map',
+      `${entry.beat} checkpoint key must resolve to ${entry.checkpoint}`
+    )
+    const chapter = resumeChapter(entry.resumeBeat)
+    collector.assert(Boolean(chapter), 'runtime.resume-chapter', `Unable to derive chapter for ${entry.resumeBeat}`)
+    if (chapter) {
+      collector.assert(
+        includesNormalized(
+          storyState,
+          `if (hasMilestone(STORY_MILESTONES.${entry.checkpointKey})) return { chapter: '${chapter}', beat: '${entry.resumeBeat}' };`
+        ),
+        'runtime.resume-clause',
+        `${entry.checkpointKey} must resume at ${entry.resumeBeat}`
+      )
+    }
+    if (entry.resumeBeat === 'done') {
+      collector.assert(
+        includesNormalized(storyState, `markMilestone(STORY_MILESTONES.${entry.checkpointKey});`)
+          && includesNormalized(directorSource, 'completeStory();'),
+        'runtime.final-transition',
+        `${entry.beat} must commit its final checkpoint through completeStory`
+      )
+    } else {
+      const transition = new RegExp(
+        `markMilestone\\(STORY_MILESTONES\\.${escapedRegex(entry.checkpointKey)},[\\s\\S]{0,700}?advanceToBeat\\('${escapedRegex(entry.resumeBeat)}'\\)`
+      )
+      collector.assert(
+        transition.test(directorSource),
+        'runtime.evidence-transition',
+        `${entry.beat} must commit ${entry.checkpointKey} before advancing to ${entry.resumeBeat}`
+      )
+    }
+    for (const evidenceRef of entry.evidence || []) {
+      if (!evidenceRef.startsWith('milestone:')) continue
+      const milestone = evidenceRef.slice('milestone:'.length)
+      collector.assert(
+        combinedEvidenceText.includes(`'${milestone}'`),
+        'runtime.evidence-milestone',
+        `${entry.beat} evidence milestone ${milestone} must exist in a declared runtime source`
+      )
+    }
+  }
+
+  const stateEvidenceAssertions = [
+    ['state:ship-restoration/flight_ready', "if (getShipRepairStage() !== 'flight_ready') return;"],
+    ['state:space-flight/control-mode=flight', "if (flight.controlMode !== 'flight') return;"],
+    ['state:space-flight/phase=deep_space', "if (flight.controlMode !== 'flight' || flight.phase !== 'deep_space') return;"],
+    ['state:system-flight/active-planet=-1,-1:p1', 'system.activePlanetId !== TIDEGARDEN_WORLD_ID'],
+    ['state:space-flight/phase!=deep_space', "flight.phase === 'deep_space'"],
+    ['state:space-flight/phase=surface', "flight.phase !== 'surface'"],
+    ['state:space-flight/control-mode=fps', "if (flight.controlMode !== 'fps') return;"]
   ]
-  collector.assert(JSON.stringify(manifest.contractedContinuation) === JSON.stringify(expectedContinuation), 'manifest.contracted-continuation', 'S6-S13 continuation IDs, scene numbers, A4 marker, order, and CONTRACTED status are protected', {
-    expected: expectedContinuation,
-    actual: manifest.contractedContinuation
+  const declaredStateEvidence = new Set(evidenceChain.flatMap(entry => entry.evidence || []).filter(ref => ref.startsWith('state:')))
+  for (const [evidenceRef, runtimePredicate] of stateEvidenceAssertions) {
+    collector.assert(declaredStateEvidence.has(evidenceRef), 'manifest.state-evidence', `Evidence chain is missing ${evidenceRef}`)
+    collector.assert(includesNormalized(directorSource, runtimePredicate), 'runtime.state-evidence', `${evidenceRef} must remain a live runtime predicate`)
+  }
+  collector.assert(
+    includesNormalized(evidenceTexts.get('src/game/systems/shipRestoration.ts') || '', "if (target === 'flight_ready') commitTidegardenRouteOnline();"),
+    'runtime.route-transaction',
+    'Flight-ready repair must commit Tidegarden route authority in the same transaction'
+  )
+
+  const contractAnchors = sceneContract?.syncAnchors || []
+  let priorContractBeatIndex = -1
+  for (const anchor of contractAnchors) {
+    const beatIndex = EXPECTED_PRODUCTION_BEATS.indexOf(anchor.beat)
+    collector.assert(beatIndex >= 0, 'production.anchor-beat', `Sync anchor ${anchor.id} references an undeclared production beat ${anchor.beat}`)
+    collector.assert(beatIndex >= priorContractBeatIndex, 'production.anchor-order', `Sync anchor ${anchor.id} regresses the production beat order`)
+    priorContractBeatIndex = Math.max(priorContractBeatIndex, beatIndex)
+  }
+  for (const beat of EXPECTED_PRODUCTION_BEATS) {
+    collector.assert(contractAnchors.some(anchor => anchor.beat === beat), 'production.anchor-coverage', `Frozen contract needs at least one causal sync anchor for ${beat}`)
+  }
+
+  collector.assert(JSON.stringify(manifest.openReleaseGates) === JSON.stringify(EXPECTED_OPEN_RELEASE_GATES), 'manifest.release-gates', 'The exact unpublished release-gate sequence is protected', {
+    expected: EXPECTED_OPEN_RELEASE_GATES,
+    actual: manifest.openReleaseGates
   })
-  collector.assert(contractedBeats.length === 8 && new Set(contractedBeats).size === contractedBeats.length, 'manifest.contracted-beats', 'S6-S13 need eight unique contracted beat IDs')
-  collector.assert(contractedBeats.every((beat) => !manifestBeats.includes(beat)), 'runtime.future-leak', 'Contracted continuation beats must not appear in shipped runtime', contractedBeats.filter((beat) => manifestBeats.includes(beat)))
-  const expectedRuntimeGates = [
-    'headed-primitive-journey',
-    'fauna-triangle-budget',
-    'full-client-verify',
-    'batch-3-existing-story-screening',
-    'owner-opens-post-arrival-lane'
-  ]
-  collector.assert(JSON.stringify(manifest.openRuntimeGates) === JSON.stringify(expectedRuntimeGates), 'manifest.runtime-gates', 'The exact runtime-opening gate sequence is protected', {
-    expected: expectedRuntimeGates,
-    actual: manifest.openRuntimeGates
-  })
+  collector.assert(
+    JSON.stringify(productionLock?.currentRestrictions?.openGateRefs) === JSON.stringify(manifest.openReleaseGates),
+    'production.release-gates',
+    'Machine release gates must exactly mirror the active production lock'
+  )
   const requiredLockedQuestions = [
     'player-third-consciousness-mapping',
     'third-consciousness-form-and-mechanics',
@@ -217,16 +608,16 @@ function validate(manifestOverride = null, workflowOverride = null) {
   const bible = readText(path.resolve(mainRoot, manifest.sources.canon), collector, 'bible.read')
   const executionPlan = readText(path.resolve(mainRoot, manifest.sources.executionPlan), collector, 'plan.read')
   const releaseAuthority = readText(path.resolve(mainRoot, manifest.sources.releaseAuthority), collector, 'release.read')
-  for (const entry of manifest.contractedContinuation || []) {
-    collector.assert(bible.includes(`\`${entry.beat}\``), 'bible.contracted-id', `Story Bible must name the contracted runtime ID ${entry.beat}`)
+  for (const phrase of ['Maw repair', 'Kestrel memory', 'Tidegarden', 'abundant and alien-verdant', 'sheltered working habitat']) {
+    collector.assert(includesNormalized(bible, phrase), 'bible.implemented-canon', `Story Bible must retain implemented-movement canon: ${phrase}`)
   }
   for (const phrase of ['Portable canon snapshot', 'Worker 9 remains conscious', 'third consciousness', 'W-7744 is recurring', 'Makers remain TBD', 'DEMO LOCK']) {
     collector.assert(includesNormalized(bible, phrase), 'bible.canon-lock', `Story Bible is missing canon/status marker: ${phrase}`)
   }
-  for (const phrase of ['BLOCKED BY DEMO LOCK', 'existing-story reconciliation', 'owner explicitly opens post-arrival runtime work', 'PARAVOXIA_STORY_BIBLE.md']) {
+  for (const phrase of ['OWNER-AUTHORIZED STAGED IMPLEMENTATION', 'existing-story reconciliation', 'signed scene contract', 'PARAVOXIA_STORY_BIBLE.md']) {
     collector.assert(includesNormalized(executionPlan, phrase), 'plan.authority-marker', `Story Execution Plan is missing authority marker: ${phrase}`)
   }
-  for (const phrase of ['Do not build `ch4-audit`, S6-S13, A4', 'Any copy change inside the existing story requires an explicit owner decision']) {
+  for (const phrase of ['OWNER LANE OVERRIDE', 'Any copy change inside the existing story requires an explicit owner decision']) {
     collector.assert(includesNormalized(releaseAuthority, phrase), 'release.lock-marker', `Demo authority is missing lock marker: ${phrase}`)
   }
 
@@ -330,7 +721,7 @@ function selfTest() {
   if (current.failures.length > 0) return report(current)
   const manifest = JSON.parse(fs.readFileSync(path.join(mainRoot, 'story-authority.json'), 'utf8'))
   const drifted = structuredClone(manifest)
-  drifted.shippedBeatOrder = drifted.shippedBeatOrder.slice(0, -1)
+  drifted.runtimeBeatOrder = drifted.runtimeBeatOrder.slice(0, -1)
   const driftResult = validate(drifted)
   const workflow = JSON.parse(fs.readFileSync(path.join(repoRoot, 'docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json'), 'utf8'))
   const brokenWorkflow = structuredClone(workflow)
@@ -342,8 +733,9 @@ function selfTest() {
   const mutatedManifests = [
     ['manifest.source-precedence', (candidate) => candidate.sourcePrecedence.reverse()],
     ['manifest.dynamic-scene-contract', (candidate) => { delete candidate.dynamicSources.ownerApprovedSceneContract.authorityCondition }],
-    ['manifest.contracted-continuation', (candidate) => { candidate.contractedContinuation[0].status = 'PROPOSED' }],
-    ['manifest.runtime-gates', (candidate) => candidate.openRuntimeGates.shift()],
+    ['manifest.active-production', (candidate) => { candidate.activeProduction.contractVersion = 'drifted-v0' }],
+    ['manifest.runtime-evidence-chain', (candidate) => candidate.runtimeEvidenceChain[5].evidence.pop()],
+    ['manifest.release-gates', (candidate) => candidate.openReleaseGates.shift()],
     ['manifest.locked-questions', (candidate) => candidate.lockedOpenQuestions.shift()],
     ['manifest.council-roles', (candidate) => candidate.requiredCouncilRoles.pop()],
     ['manifest.independent-reviews', (candidate) => candidate.requiredIndependentReviews.pop()]
@@ -360,7 +752,7 @@ function selfTest() {
     process.stderr.write('Story authority self-test failed to reject synthetic drift\n')
     return false
   }
-  process.stdout.write(`Story authority smoke passed: ${current.checks} live checks plus beat, precedence, dynamic-source, continuation, gate, question, role, review, graph, and cycle drift rejection\n`)
+  process.stdout.write(`Story authority smoke passed: ${current.checks} live checks plus beat, precedence, production identity, evidence-chain, release-gate, question, role, review, graph, and cycle drift rejection\n`)
   return true
 }
 

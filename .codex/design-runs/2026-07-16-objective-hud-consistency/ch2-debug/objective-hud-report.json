@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-07-16T15:07:39.509Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "graphicsProfile": "POTATO",
+  "results": [
+    {
+      "beat": "ch2-approach",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch2-approach&debug=1&profile=POTATO",
+      "elapsedMs": 27248,
+      "objectiveFirstSeenMs": 26,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/ch2-debug/mobile-ch2-approach.png",
+      "evidence": {
+        "beat": "ch2-approach",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEREDACTED SUBJECT · FRUITAPPROACH THE FRUIT AT HAND HEIGHT.[F] EAT.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "transform": "",
+          "computedTransform": "none",
+          "labelTransform": "",
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": -34.6015625,
+            "y": 398.4296875,
+            "width": 221.203125,
+            "height": 47.140625,
+            "right": 186.6015625,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelRect": {
+            "x": -34.6015625,
+            "y": 425.4296875,
+            "width": 221.203125,
+            "height": 20.140625,
+            "right": 186.6015625,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelInsideViewport": false,
+          "transform": "translate(76px, 422px) translate(-50%, -50%)",
+          "labelTransform": "translateX(52.6016px)"
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "failed",
+      "failure": "redaction direction label leaves the viewport"
+    }
+  ]
+}

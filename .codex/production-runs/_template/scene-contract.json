@@ -127,6 +127,56 @@
       }
     ]
   },
+  "guidance": {
+    "baselineArtifact": "shipped-ux-baseline.json",
+    "lifecycleEvidenceArtifact": "objective-lifecycle-evidence.json",
+    "auditArtifact": "ux-audit.md",
+    "objectives": [
+      {
+        "id": "replace-objective",
+        "agencyWindowRef": "replace-agency-window",
+        "kind": "interact",
+        "enterAnchorRef": "replace-anchor-start",
+        "clearAnchorRef": "replace-anchor-end",
+        "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+        "requiresMarker": true,
+        "workOrder": [
+          "{{REPLACE_WITH_ROUTE_OR_CONTEXT_INSTRUCTION}}",
+          "{{REPLACE_WITH_EXACT_ACTION_AND_INPUT}}"
+        ],
+        "feedback": {
+          "eventType": "objective-enter",
+          "presentationOnly": true,
+          "advancesProgression": false,
+          "emissionsPerEntry": 1,
+          "intent": "{{REPLACE_WITH_ONE_SHOT_SCORE_CINEMA_OR_SFX_ACKNOWLEDGEMENT}}"
+        },
+        "variantRefs": [
+          "variant-desktop",
+          "variant-mobile",
+          "variant-reduced-motion",
+          "quality-high",
+          "quality-medium",
+          "quality-low",
+          "quality-potato"
+        ],
+        "variantIntent": "{{REPLACE_WITH_DESKTOP_MOBILE_REDUCED_MOTION_AND_QUALITY_GUIDANCE_PARITY}}",
+        "resetRef": "reset-guidance",
+        "resetTriggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "resetIntent": "{{REPLACE_WITH_OBJECTIVE_CLEAR_AND_NO_STALE_GUIDANCE_INTENT}}",
+        "acceptanceCriterion": "{{REPLACE_WITH_ACTIONABLE_EXACT_MARKER_ONE_SHOT_FEEDBACK_AND_CLEAR_CRITERION}}"
+      }
+    ]
+  },
   "syncAnchors": [
     {
       "id": "replace-anchor-start",
@@ -553,6 +603,23 @@
           "sandbox"
         ],
         "acceptanceCriterion": "{{REPLACE_WITH_SCORE_RESET_CRITERION}}"
+      },
+      {
+        "id": "reset-guidance",
+        "domain": "guidance",
+        "stateRef": "{{REPLACE_WITH_ACTIVE_GUIDED_OBJECTIVE_STATE_REF}}",
+        "resetValue": "{{REPLACE_WITH_IDLE_GUIDANCE_STATE}}",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ],
+        "acceptanceCriterion": "{{REPLACE_WITH_NO_STALE_OBJECTIVE_OR_MARKER_HEALTH_CRITERION}}"
       }
     ],
     "sandboxNoOp": {

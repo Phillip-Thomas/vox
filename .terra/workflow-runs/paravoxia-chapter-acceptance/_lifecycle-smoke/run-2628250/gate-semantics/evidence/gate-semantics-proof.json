@@ -1,0 +1,15 @@
+{
+  "schema": "terra.chapterAcceptanceGateSemanticsProof.v1",
+  "synthetic": true,
+  "assertions": {
+    "independentReviewIntegrityPasses": true,
+    "approvedDecisionCannotBypassOpenMaterialMedium": true,
+    "approvedDecisionCannotBypassInvalidHumanProvenance": true,
+    "correctedMaterialDefectRegisterPasses": true,
+    "precomputedFinalDecisionChecksPass": true,
+    "allGateExpressionsPassActualTerraEvaluator": true,
+    "redMechanicalReportAttachedAndRouted": true,
+    "wrongRunMechanicalReportRejected": true
+  },
+  "checkedAt": "2026-07-15T19:54:44.784Z"
+}

@@ -2,9 +2,17 @@
 
 Owner direction: 2026-07-12
 
+**OWNER LANE OVERRIDE — 2026-07-13:** this document remains the release gate for
+the existing public demo, but it no longer freezes separately contracted
+post-arrival implementation. The owner has authorized staged construction of
+the A4 prelude and **Maw → dive → ship → local travel → Tidegarden** movement
+through the Creative Triad. That work may not be published as part of the demo
+until its own contracts, deterministic checks, headed taste, and release
+decision pass. Existing shipped copy and audio remain protected baselines.
+
 This is the source of truth for turning the current Paravoxia build into a
-seemingly complete, impressive public demo while the remaining story stays
-frozen. It supersedes any older review recommendation that calls for new story
+seemingly complete, impressive public demo while later story remains outside
+that release surface. It supersedes any older review recommendation that calls for new story
 beats, an audio-engine refactor, broad control remapping, more world breadth,
 or a renderer migration before the demo gate.
 
@@ -40,8 +48,9 @@ The central quality test is:
 
 ### Story content lock
 
-- Story content stops at the existing W-7744 arrival.
-- Do not build `ch4-audit`, S6-S13, A4, or any later story material in this lane.
+- The published demo story still stops at the existing W-7744 arrival.
+- Post-arrival work is allowed only inside an explicit, hashed production lock;
+  it must remain unshipped until its Creative-Triad and release gates pass.
 - Do not add dialogue, lore, a teaser scene, or a new canonical ending.
 - Allowed story work is limited to defects in what already exists: blockers,
   checkpoint/resume failures, pause-time leakage, camera collision, unreadable
@@ -379,7 +388,8 @@ This matrix must be finalized in Batch 0 and kept honest through release.
 
 ## 8. Explicit Non-Goals
 
-- No new story content, awakening, canon, dialogue, or later chapter.
+- No uncontracted story content, awakening, canon, dialogue, or later chapter
+  may enter the public demo release.
 - No audio engine or asset changes.
 - No desktop input rewrite or remapping system.
 - No new planet/biome breadth solely for the demo.
@@ -412,4 +422,5 @@ Resume with the remaining Batch 2 approval gate:
 3. resolve the separate fauna triangle-budget regression, then rerun full client verify;
 4. only after those gates pass, begin Batch 3 screening of existing Story content.
 
-Do not add later story or change protected audio while this plan is active.
+Do not publish later story or alter the shipped audio baseline through this demo
+lane. Post-arrival production proceeds only through its separate lock.

@@ -40,7 +40,9 @@ import {
   canDebitPlayerInventory,
   createPlayersStateSnapshot,
   createWorldSnapshot,
+  currentShardWorldTimeMs,
   ensurePlayerState,
+  sharedShipRepairStage,
   type CommandFingerprint,
   type PlayerSession,
   type RoomState,
@@ -392,12 +394,35 @@ async function handleCommand(
     reject(canonicalResolution.code, canonicalResolution.reason);
     return;
   }
+  const shard = rooms.getOrCreateShard(state.room, message.worldId);
   const playerState = isServerAuthoritativeCommand(message.commandType)
     ? persistence.configured
       ? await persistence.loadPlayerState(state.player!.playerId)
       : ensurePlayerState(state.room, state.player!.playerId)
     : undefined;
-  const authoritativeResolution = resolveServerAuthoritativeCommand(message.commandType, message.payload, playerState);
+  const latestAuthenticatedPose = shard.authoritativePoses.get(state.player!.playerId);
+  const authoritativeResolution = resolveServerAuthoritativeCommand(
+    message.commandType,
+    message.payload,
+    playerState,
+    {
+      commandId: message.commandId,
+      worldId: message.worldId,
+      playerId: state.player!.playerId,
+      worldTimeMs: currentShardWorldTimeMs(state.room, shard),
+      serverTimeMs: Date.now(),
+      worldEvents: shard.events,
+      ...(latestAuthenticatedPose ? {
+        authenticatedPose: {
+          playerId: state.player!.playerId,
+          worldId: message.worldId,
+          seq: latestAuthenticatedPose.seq,
+          receivedAtMs: latestAuthenticatedPose.receivedAtMs
+        }
+      } : {}),
+      sharedShipRepairStage: sharedShipRepairStage(state.room)
+    }
+  );
   if (authoritativeResolution && 'code' in authoritativeResolution) {
     reject(authoritativeResolution.code, authoritativeResolution.reason);
     return;
@@ -406,7 +431,6 @@ async function handleCommand(
     ?? authoritativeResolution?.commandPayload
     ?? canonicalResolution?.commandPayload
     ?? message.payload;
-  const shard = rooms.getOrCreateShard(state.room, message.worldId);
   const fingerprint = fingerprintCommand(state.player!, message, commandPayload);
   const cached = shard.commandCache.get(message.commandId);
   if (cached) {
@@ -1187,16 +1211,27 @@ function handlePose(
     return;
   }
   const shard = rooms.getOrCreateShard(state.room, message.worldId);
-  const currentPose = readObject(shard.poses.get(state.player!.playerId));
-  const currentSeq = readInt(currentPose?.seq) ?? -1;
+  const playerId = state.player!.playerId;
+  const currentSeq = shard.authoritativePoses.get(playerId)?.seq ?? -1;
   if (message.seq <= currentSeq) return;
-  shard.poses.set(state.player!.playerId, message.pose);
+  const canonicalPose: JsonObject = {
+    ...message.pose,
+    playerId,
+    worldId: message.worldId,
+    seq: message.seq
+  };
+  shard.poses.set(playerId, canonicalPose);
+  shard.authoritativePoses.set(playerId, {
+    seq: message.seq,
+    receivedAtMs: Date.now(),
+    pose: canonicalPose
+  });
   broadcastRoom(state, socketsBySessionId, {
     type: 'pose_update',
-    playerId: state.player!.playerId,
+    playerId,
     worldId: message.worldId,
     seq: message.seq,
-    pose: message.pose
+    pose: canonicalPose
   });
 }
 
@@ -1298,12 +1333,29 @@ async function sendRoomResume(
 ): Promise<void> {
   if (!state.room || !state.session) return;
   rooms.getOrCreateShard(state.room, worldId);
+  await hydrateShardEvents(rooms, persistence, state.room, worldId);
+  await hydrateRoomPlayerAuthorityState(state.room, persistence);
   send(ws, {
     type: 'room_joined',
     roomId: state.room.roomId,
     inviteCode: state.room.inviteCode,
     playerId: state.player!.playerId,
     worldId
+  });
+  const fullState = createWorldSnapshot(state.room, worldId);
+  // Preserve suffix replay while also restoring non-event player/route state.
+  // This prevents a reconnect from keeping stale inventory or forgetting the
+  // origin-world ship stages after the party has reached p1.
+  send(ws, {
+    type: 'resume_state',
+    roomId: state.room.roomId,
+    worldId,
+    seq: state.room.shards.get(worldId)?.seq ?? 0,
+    state: {
+      worldTimeMs: fullState.worldTimeMs,
+      players: fullState.players,
+      story: fullState.story
+    }
   });
   await handleRequestWorldEvents(ws, state, rooms, persistence, worldId, lastAppliedSeq);
 }

@@ -122,6 +122,7 @@ export type ServerMessage =
   | { type: 'room_joined'; roomId: string; inviteCode: string; playerId: string; worldId: string }
   | { type: 'room_roster'; roomId: string; players: RoomRosterPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
+  | { type: 'resume_state'; roomId: string; worldId: string; seq: number; state: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'party_warp'; roomId: string; worldId: string; seq: number; handoff: PartyWarpHandoff }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }

@@ -38,11 +38,19 @@ import { UnderwaterEffect, getUnderwater } from './UnderwaterEffect.ts';
 import { getCameraSubmergence } from '../../state/playerSubmersion.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import { buildPlanetPostGradeProfile } from '../../utils/planetVisualProfile.ts';
+import type { PlanetProfile } from '../../game/PlanetProfile.ts';
 import { getVoxelRealityEffects } from '../../game/systems/realityRenderSystem.ts';
 import { getShipFlightFeedback } from '../../state/shipFlightFeedback.ts';
 import { FlightMotionEffect, getFlightMotion } from './FlightMotionEffect.ts';
 import { DeathRenderEffect, getDeathRender } from './DeathRenderEffect.ts';
 import { getDeathView } from '../../game/systems/deathSequence.ts';
+import { getSignedScenePostFxCueState } from '../../story/signedSceneAvRuntime.ts';
+import {
+  getVisualAccessibilityPreferences,
+  nextWaterlineWipe,
+  resolveLowOxygenVignette,
+  resolveUnderwaterAccessibilityPolicy
+} from '../../utils/underwaterAccessibility.ts';
 
 // Turn the custom Effect classes into R3F components.
 const Painterly = wrapEffect(PainterlyEffect);
@@ -60,6 +68,8 @@ const _sunPoint = new THREE.Vector3();
 interface PostFXProps {
   /** Planet seed — drives the per-biome color grade. */
   terrainSeed?: number;
+  /** Canonical authored profile when a world diverges from its seed-only roll. */
+  planetProfile?: PlanetProfile;
 }
 
 /**
@@ -77,7 +87,7 @@ function useComposerToneMapping() {
   }, [gl]);
 }
 
-export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
+export default function PostFX({ terrainSeed = 0, planetProfile }: PostFXProps) {
   useComposerToneMapping();
 
   // Read once on mount; `painterly` can be forced via overrideGraphicsQuality
@@ -90,7 +100,10 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
   const underwaterPostFX = quality.underwaterPostFX;
   const underwaterGodrays = quality.underwaterGodrays;
 
-  const grade = useMemo(() => buildPlanetPostGradeProfile(terrainSeed), [terrainSeed]);
+  const grade = useMemo(
+    () => buildPlanetPostGradeProfile(terrainSeed, planetProfile),
+    [terrainSeed, planetProfile]
+  );
   // Edge-triggered submerge/emerge wipe + previous submerged state for it.
   const prevSubmerged = useRef(false);
   const wipe = useRef(0);
@@ -124,12 +137,23 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       const daylight = THREE.MathUtils.smoothstep(sunY, -0.12, 0.18);
       const golden = daylight * (1 - THREE.MathUtils.smoothstep(sunY, 0.05, 0.32));
       const reality = getVoxelRealityEffects();
+      // The signed scene rail never creates world truth. It only gives the
+      // existing, prewarmed grade a very small support lift while a contracted
+      // effect window is active. Low tiers simply do not mount this composer;
+      // their generated fallback remains geometry/material/state.
+      const signedPost = getSignedScenePostFxCueState();
+      const signedSupport = signedPost.supportMix * (signedPost.reducedMotion ? 0.35 : 1);
       const chroma = THREE.MathUtils.clamp(reality.chroma, 0, 1);
       const resolved = THREE.MathUtils.clamp(Math.max(reality.detail, reality.atmosphere), 0, 1.25);
-      const tintAmount = grade.tintAmount * THREE.MathUtils.lerp(0.28, 1.1, Math.max(chroma, resolved * 0.7));
-      const saturation = THREE.MathUtils.lerp(0.08, grade.saturation, chroma) * THREE.MathUtils.lerp(0.96, 1.04, resolved);
+      const tintAmount = grade.tintAmount
+        * THREE.MathUtils.lerp(0.28, 1.1, Math.max(chroma, resolved * 0.7))
+        * (1 + signedSupport * 0.04);
+      const saturation = THREE.MathUtils.lerp(0.08, grade.saturation, chroma)
+        * THREE.MathUtils.lerp(0.96, 1.04, resolved)
+        * (1 + signedSupport * 0.008);
       const warmth = (grade.warmthBias + golden * 0.8 - (1 - daylight) * 0.35) * THREE.MathUtils.lerp(0.45, 1.05, chroma);
-      const contrast = THREE.MathUtils.lerp(0.92, grade.contrast + (1 - daylight) * 0.05, THREE.MathUtils.clamp(0.38 + resolved * 0.62, 0, 1.08));
+      const contrast = THREE.MathUtils.lerp(0.92, grade.contrast + (1 - daylight) * 0.05, THREE.MathUtils.clamp(0.38 + resolved * 0.62, 0, 1.08))
+        + signedSupport * 0.012;
       const lift = THREE.MathUtils.lerp(0.024, 0.008, THREE.MathUtils.clamp(resolved, 0, 1));
       const shoulder = THREE.MathUtils.lerp(0.46, 0.28, THREE.MathUtils.clamp(resolved, 0, 1));
       eff.setGrade(
@@ -149,9 +173,20 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
       if (uw) {
         const submergence = getCameraSubmergence();
         const submerged = submergence > 0.5;
-        // Edge-trigger the crossing wipe (1 -> 0 over ~0.35s).
-        if (submerged !== prevSubmerged.current) { prevSubmerged.current = submerged; wipe.current = 1; }
-        if (wipe.current > 0) wipe.current = Math.max(0, wipe.current - delta / 0.35);
+        const crossedWaterline = submerged !== prevSubmerged.current;
+        if (crossedWaterline) prevSubmerged.current = submerged;
+        const underwaterAccessibility = resolveUnderwaterAccessibilityPolicy(
+          getVisualAccessibilityPreferences()
+        );
+        // Standard mode keeps the authored 0.35s band. Reduced motion/flash
+        // suppresses it while the continuous medium blend remains as a neutral
+        // waterline dissolve.
+        wipe.current = nextWaterlineWipe(
+          wipe.current,
+          crossedWaterline,
+          delta,
+          underwaterAccessibility
+        );
 
         // Project the sun direction to screen-space for the god-ray origin.
         let sunUvX = -100;
@@ -163,12 +198,25 @@ export default function PostFX({ terrainSeed = 0 }: PostFXProps) {
           if (_sunPoint.z < 1.0) { sunUvX = _sunPoint.x * 0.5 + 0.5; sunUvY = _sunPoint.y * 0.5 + 0.5; }
         }
 
-        // Low-oxygen vignette pulse (the M3 breath visual hooks in here).
+        // Low-oxygen edge treatment. Accessibility variants keep a steady edge
+        // instead of removing the critical evidence or pulsing the viewport.
         const oxygen = getVitals().oxygen;
-        const vignette = oxygen < 25 ? 0.5 + 0.5 * Math.sin(state.clock.elapsedTime * 7.0) : 0;
+        const vignette = resolveLowOxygenVignette(
+          oxygen,
+          state.clock.elapsedTime,
+          underwaterAccessibility
+        );
 
         uw.uniforms.get('uGodrays')!.value = underwaterGodrays ? 1 : 0;
-        uw.setFrame(submergence, state.clock.elapsedTime, sunUvX, sunUvY, wipe.current, vignette);
+        uw.setFrame(
+          submergence,
+          state.clock.elapsedTime,
+          sunUvX,
+          sunUvY,
+          wipe.current,
+          vignette,
+          underwaterAccessibility.refractionWobbleScale
+        );
       }
     }
   });

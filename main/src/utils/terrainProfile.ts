@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
 import { seededUnit } from './worldCoordinates';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // --- Per-planet terrain tint (derived from the BIOME) ------------------------
 //
@@ -50,10 +51,13 @@ function roleColor(role: PaletteRoleColor): THREE.Color {
 /**
  * Build the deterministic per-planet terrain tint. Same seed -> identical.
  */
-export function buildTerrainProfile(terrainSeed: number): TerrainProfile {
+export function buildTerrainProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): TerrainProfile {
   const s = terrainSeed | 0;
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
   const { aridity, alien } = biome;
 
   // Tint follows the planet-level terrain role. Overall subtlety is governed by

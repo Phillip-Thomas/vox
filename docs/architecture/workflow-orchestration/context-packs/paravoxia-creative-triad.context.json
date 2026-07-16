@@ -70,6 +70,13 @@
       "purpose": "Executable story, camera, rendering, score, gameplay, test, and probe truth."
     },
     {
+      "slug": "story-ux-runtime",
+      "kind": "repository-subtree",
+      "bindingKey": "paravoxia.storyUxRuntime",
+      "required": true,
+      "purpose": "Executable objective, work-order, directional-marker, HUD, accessibility, lifecycle-health, and semantic audiovisual-feedback truth."
+    },
+    {
       "slug": "production-run",
       "kind": "artifact-directory",
       "bindingKey": "paravoxia.productionRun",
@@ -101,11 +108,11 @@
   "fivePillarMapping": [
     {
       "pillar": "knowledge",
-      "orchestratorUse": "Load current production authority, shipped story/runtime, score and cinematography bibles, current captures, and prior lessons."
+      "orchestratorUse": "Load current production authority, shipped story/runtime, the bounded story UX runtime, score and cinematography bibles, current captures, and prior lessons."
     },
     {
       "pillar": "retrieval",
-      "orchestratorUse": "Give directors only affected canon and run evidence; keep blind reviewers isolated from intent, treatments, and notes."
+      "orchestratorUse": "Give directors the affected canon, current objective and guidance contract, and run evidence; keep blind reviewers isolated from intent, treatments, and notes."
     },
     {
       "pillar": "judgement",
@@ -122,14 +129,14 @@
   ],
   "authoringMethod": [
     "Record production authority and mutation boundary before creative work.",
-    "Extract shipped evidence and adjacent-scene continuity.",
-    "Frame story intent and player agency before score or cinematography treatment.",
+    "Extract shipped visual and story UX evidence plus adjacent-scene continuity.",
+    "Frame story intent, player agency, and the objective lifecycle before score or cinematography treatment.",
     "Generate score and cinematography first treatments independently.",
     "Exchange structured peer notes and preserve dissent.",
     "Freeze and sign one shared scene contract with named synchronization anchors.",
     "Integrate shared runtime files through one patch lane.",
-    "Capture mechanical, visual, audio, accessibility, quality-tier, and performance evidence.",
-    "Run fresh independent domain and blind reviewers before cohesion judgement.",
+    "Capture mechanical, visual, audio, objective-lifecycle, accessibility, quality-tier, and performance evidence.",
+    "Run fresh independent narrative, score, cinematography, player-experience, and blind reviewers before cohesion judgement.",
     "Compile one canonical defect register, then route bounded repair; any creative-intent change reopens the full contract and three-signature cycle before evidence is regenerated.",
     "Require human taste and a separate publish decision where configured.",
     "Record lessons that survive without chat history."
@@ -138,6 +145,7 @@
     "production-lock",
     "production-lock-machine",
     "shipped-visual-baseline",
+    "shipped-ux-baseline",
     "story-intent",
     "score-treatment",
     "cinematography-treatment",
@@ -151,8 +159,10 @@
     "screenshot-report",
     "audio-report",
     "raw-audiovisual-evidence",
+    "objective-lifecycle-evidence",
     "evidence-registry",
     "independent-audits",
+    "ux-audit",
     "critic-report",
     "defects",
     "repair-contract-disposition",
@@ -170,6 +180,8 @@
     "node main/tools/creative-triad-gate.mjs --run <production-run> --phase implementation",
     "node main/tools/creative-triad-gate.mjs --run <production-run> --phase final",
     "npm --prefix main run verify",
+    "jq empty .terra/context-source-bindings/paravoxia-creative-triad.local.json .terra/context-source-bindings/frontend-design.local.json",
+    "node ../TerraForm/scripts/dev/workflow-run.mjs validate --spec docs/architecture/workflow-orchestration/examples/paravoxia-creative-triad.workflow.json",
     "node ../TerraForm/scripts/dev/workflow-run.mjs validate --spec docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json",
     "node ../TerraForm/scripts/dev/workflow-orchestrator-quality.mjs --spec docs/architecture/workflow-orchestration/examples/paravoxia-story-council.workflow.json"
   ],
@@ -177,6 +189,7 @@
     "Do not let a director approve its own implementation.",
     "Do not let directors race mutations to shared timeline or rendering files.",
     "Do not leak canon or intent to blind reviewers.",
+    "Do not let a guided non-cinematic objective ship without an actionable work order, an exact marker match, lifecycle-clear evidence, and an independent player-experience audit.",
     "Do not flatten material dissent into generic compromise.",
     "Do not advance beyond current production authority.",
     "Do not publish from a director, patch, verifier, or judge role.",

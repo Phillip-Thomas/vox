@@ -10,6 +10,7 @@ import {
   buildGrassInstanceBuffer,
   buildGrassInstances,
   computeBladeMatrix,
+  countGrassInstancesForWindow,
   countGrassVoxels,
   createBladeGeometry,
   createGrassMaterial,
@@ -216,6 +217,47 @@ describe('buildGrassInstances', () => {
     expect(result.count).toBe(perVoxel); // only the near voxel placed
   });
 
+  it('counts the exact same distance-and-coverage window that the live builder fills', () => {
+    for (let x = 0; x < 12; x++) {
+      voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, green);
+    }
+    voxelSystem.addVoxel(2, 25, 1, MaterialType.STONE, green);
+
+    const density = 2;
+    const player = voxelCoordToWorld(2, 25, 0, new THREE.Vector3());
+    const demand = countGrassInstancesForWindow(
+      density,
+      11,
+      player,
+      777,
+      1.1,
+      0.57
+    );
+    const mesh = new THREE.InstancedMesh(
+      createBladeGeometry(),
+      new THREE.MeshStandardMaterial(),
+      demand.count
+    );
+    const built = buildGrassInstances(mesh, density, 11, player, 777, 1, 1, 1.1, 0.57);
+
+    expect(demand.voxelCount).toBe(12);
+    expect(built.count).toBe(demand.count);
+    expect(mesh.count).toBe(demand.count);
+  });
+
+  it('an expanded count window safely contains a render window after a bounded move', () => {
+    for (let x = -20; x <= 20; x++) {
+      voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, green);
+    }
+    const density = 2;
+    const initial = voxelCoordToWorld(0, 25, 0, new THREE.Vector3());
+    const shifted = initial.clone().add(new THREE.Vector3(9.5, 0, 0));
+    const reserved = countGrassInstancesForWindow(density, 30, initial, 99, 1, 0.72);
+    const visibleAfterMove = countGrassInstancesForWindow(density, 20, shifted, 99, 1, 0.72);
+
+    expect(reserved.count).toBeGreaterThanOrEqual(visibleAfterMove.count);
+  });
+
   it('clamps to mesh capacity', () => {
     voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, green);
     const mesh = new THREE.InstancedMesh(
@@ -256,6 +298,7 @@ describe('buildGrassInstances', () => {
     });
     const cached = applyGrassInstanceBuffer(cachedMesh, buffer);
 
+    expect(buffer.matrices.length).toBe(buffer.count * 16);
     expect(cached).toEqual(live);
     expect(Array.from(cachedMesh.instanceMatrix.array.slice(0, cached.count * 16)))
       .toEqual(Array.from(liveMesh.instanceMatrix.array.slice(0, live.count * 16)));

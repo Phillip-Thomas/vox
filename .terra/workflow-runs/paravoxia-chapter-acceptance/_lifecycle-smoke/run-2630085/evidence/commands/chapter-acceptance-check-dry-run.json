@@ -1,0 +1,48 @@
+{
+  "schema": "terra.commandDryRun.v1",
+  "id": "chapter-acceptance-check",
+  "resultKey": "chapterAcceptanceCheck",
+  "catalogArgv": [
+    "node",
+    "main/tools/chapter-acceptance-workflow-command.mjs"
+  ],
+  "serializedCommand": {
+    "schema": "paravoxia.chapterAcceptanceWorkflowCommand.v1",
+    "targetChapter": "ch5",
+    "candidateRevision": "fixture-revision-without-real-evidence",
+    "executionMode": "argv_no_shell",
+    "cwd": "/home/thomasphillip/Projects/vox/main",
+    "artifactRoot": "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance",
+    "runDir": "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2630085",
+    "outputDir": "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2630085/evidence/mechanical-chapter-acceptance",
+    "reportPath": "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2630085/evidence/mechanical-chapter-acceptance/chapter-mechanical-evidence.json",
+    "argv": [
+      "/home/linuxbrew/.linuxbrew/Cellar/node/25.6.1/bin/node",
+      "/home/thomasphillip/Projects/vox/main/tools/chapter-acceptance.mjs",
+      "--chapter",
+      "ch5",
+      "--candidate-revision",
+      "fixture-revision-without-real-evidence",
+      "--runs",
+      "1",
+      "--smoke",
+      "--skip-preflight",
+      "--screenshot-mode",
+      "none",
+      "--max-seconds",
+      "240",
+      "--output",
+      "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2630085/evidence/mechanical-chapter-acceptance",
+      "--report",
+      "/home/thomasphillip/Projects/vox/.terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2630085/evidence/mechanical-chapter-acceptance/chapter-mechanical-evidence.json"
+    ],
+    "dryRun": true,
+    "operatorLongRun": false,
+    "executionPolicy": "serialization_only"
+  },
+  "executed": false,
+  "callerControlledArtifactRedirectRejected": true,
+  "callerControlledCandidateRevisionRejected": true,
+  "proofScope": "binding_and_argv_serialization_only",
+  "recordedAt": "2026-07-15T19:55:16.230Z"
+}

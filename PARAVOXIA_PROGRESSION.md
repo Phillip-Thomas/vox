@@ -272,7 +272,7 @@ MUST take parentheses; embodied captions MUST NOT.
   cleanly. they have never been checked against anything.)" (doctrine as
   unverified axiom), "(the manifest records zero questions. the count is
   wrong. it is wrong by at least one.)" (the watcher's own first question,
-  uncounted), "(…mercy scales. that is worth knowing.)" (generalization),
+  uncounted), "(…one input, and the dark held all of them.)" (mercy felt at scale, not named),
   "(…it is enormous, the nothing that happens.)" (the withheld bell); the
   NAMING BEAT's "UNREGISTERED DESIGNATION. NOT RETAINED." → "(retained.)"
   (the manifest's un-retained prior designation, resolved before it was

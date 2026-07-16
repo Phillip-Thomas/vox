@@ -1,0 +1,22 @@
+{
+  "schema": "paravoxia.chapterMechanicalEvidence.v1",
+  "reportVersion": 1,
+  "chapter": {
+    "id": "ch5"
+  },
+  "source": {
+    "revision": "fixture-revision-without-real-evidence"
+  },
+  "disposition": "repair-required",
+  "openGates": [
+    "synthetic-repair"
+  ],
+  "targetChapterMatchesInput": true,
+  "candidateRevisionMatchesInput": true,
+  "requiredObjectiveBeatsPassed": false,
+  "requiredVariantProfilesPassed": false,
+  "performanceBudgetsPassed": false,
+  "boundaryProofComplete": false,
+  "preflightAuthorityCertified": false,
+  "machineReadyForCouncilReview": false
+}

@@ -1,17 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import { getItem } from '../../game/data/items.ts';
-import { getAccessibleStations, getStation, type StationId } from '../../game/data/stations.ts';
+import {
+  getAccessibleStations,
+  getStation,
+  getStationAccessRevision,
+  subscribeStationAccess,
+  type StationId
+} from '../../game/data/stations.ts';
 import type { Recipe } from '../../game/data/recipes.ts';
 import { canCraft, type CraftContext } from '../../game/systems/craftingSystem.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
+import {
+  getShipRepairStage,
+  subscribeShipRestoration
+} from '../../game/systems/shipRestoration.ts';
 import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import type { CommandContext } from '../../game/commands.ts';
 import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gameplayCommands.ts';
 import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
-import { getStoryInputPolicy } from '../../story/storyInputPolicy.ts';
+import { isFabricatorRecipeAllowed } from '../../story/storyInputPolicy.ts';
 import { getStoryStateSnapshot } from '../../story/storyState.ts';
-import { getPublicFabricatorSections } from './Fabricator.model.ts';
+import { fabricatorAccessCopy, getPublicFabricatorSections } from './Fabricator.model.ts';
 import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
 import { isFeetInLava } from '../../state/playerLavaImmersion.ts';
 
@@ -44,17 +54,22 @@ export function craftTriggeredStoryTransition(
 
 /**
  * The Fabricator: the player's crafting screen. Lists every recipe at the
- * stations currently reachable (a portable fabricator grants all for now),
+ * stations currently usable (the field kit plus active world/vehicle stations),
  * grouped by station. Inputs show have/need and a recipe only crafts when its
  * materials are met. Subscribes to the inventory so counts + craftability update
  * live as you craft. Pointer-lock / pause coordination is handled by App.
  */
 const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandContext }) => {
   const [, force] = useState(0);
-  const [status, setStatus] = useState('Primitive field kit ready.');
+  const [status, setStatus] = useState('Fabricator ready.');
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  useSyncExternalStore(subscribeStationAccess, getStationAccessRevision, getStationAccessRevision);
+  // Remote co-op repairs can unlock the next pattern without changing this
+  // actor's inventory or the station union. Subscribe to the shared ship stage
+  // so an already-open Fabricator updates on that authoritative transition.
+  useSyncExternalStore(subscribeShipRestoration, getShipRepairStage, getShipRepairStage);
   useEffect(() => subscribeInventory(() => force(n => n + 1)), []);
 
   useEffect(() => {
@@ -90,8 +105,10 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
 
   if (!open) return null;
 
-  const ctx: CraftContext = { stations: getAccessibleStations() };
-  const sections = getPublicFabricatorSections(getStoryInputPolicy().recipeAllowed);
+  const accessibleStations = getAccessibleStations();
+  const ctx: CraftContext = { stations: accessibleStations };
+  const sections = getPublicFabricatorSections(isFabricatorRecipeAllowed);
+  const storyActive = getStoryStateSnapshot().active;
 
   return (
     <div
@@ -149,9 +166,7 @@ const CraftingPanel: React.FC<CraftingPanelProps> = ({ open, onClose, commandCon
           }}>ESC ✕</button>
         </div>
         <div style={{ fontSize: 11, letterSpacing: '0.18em', color: theme.color.textFaint, textTransform: 'uppercase', marginBottom: 6 }}>
-          {getStoryStateSnapshot().active
-            ? 'Primitive field assembly · none of this is regulation'
-            : 'Portable field kit · primitive patterns only'}
+          {fabricatorAccessCopy(accessibleStations, storyActive)}
         </div>
 
         <div aria-live="polite" style={{

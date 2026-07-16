@@ -23,6 +23,7 @@ import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import { restoreForageForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { playSfx } from '../audio/sfxEngine.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // Edible plants — the FOOD bootstrap. Biome-gated (lush planets feed you, arid ones
 // starve you), unlike loose stones (fixed). Proximity pickup like stones.
@@ -36,6 +37,7 @@ const HEADROOM = 32;
 interface ForageFieldProps {
   commandContext: CommandContext;
   terrainSeed: number;
+  planetProfile?: PlanetProfile;
   persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
   /** Story chapters keep their authored tree economy; sandbox/completed-site play gets deadwood. */
@@ -111,9 +113,10 @@ function isDeadwoodVoxel(
 export function nearestForageNodeWorld(
   from: THREE.Vector3,
   terrainSeed: number,
-  maxDist = 60
+  maxDist = 60,
+  planetProfile?: PlanetProfile
 ): THREE.Vector3 | null {
-  const profileDensity = FORAGE_BASE * buildGrassProfile(terrainSeed).densityMul;
+  const profileDensity = FORAGE_BASE * buildGrassProfile(terrainSeed, planetProfile).densityMul;
   const density = Number.isFinite(profileDensity) && profileDensity > 0 ? profileDensity : FORAGE_BASE;
   let best: THREE.Vector3 | null = null;
   let bestSq = maxDist * maxDist;
@@ -135,6 +138,7 @@ export function nearestForageNodeWorld(
 export default function ForageField({
   commandContext,
   terrainSeed,
+  planetProfile,
   persistenceWorld,
   playerPosition,
   allowDeadwood = true
@@ -143,9 +147,9 @@ export default function ForageField({
   const deadwoodGeometry = useMemo(() => buildDeadwoodGeometry(), []);
   const material = useMemo(() => new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0 }), []);
   const density = useMemo(() => {
-    const d = FORAGE_BASE * buildGrassProfile(terrainSeed).densityMul;
+    const d = FORAGE_BASE * buildGrassProfile(terrainSeed, planetProfile).densityMul;
     return Number.isFinite(d) && d > 0 ? Math.min(FORAGE_MAX_DENSITY, d) : FORAGE_BASE; // guard a malformed profile
-  }, [terrainSeed]);
+  }, [planetProfile, terrainSeed]);
   const foodMeshRef = useRef<THREE.InstancedMesh>(null);
   const deadwoodMeshRef = useRef<THREE.InstancedMesh>(null);
   const [capacity, setCapacity] = useState(0);

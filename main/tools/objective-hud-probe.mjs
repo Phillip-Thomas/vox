@@ -1,0 +1,307 @@
+import { chromium } from 'playwright-core';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+const baseUrl = process.env.PARAVOXIA_URL ?? 'http://127.0.0.1:5173/';
+const chromePath = process.env.CHROME_PATH ?? '/snap/bin/chromium';
+const graphicsProfile = process.env.PARAVOXIA_OBJECTIVE_GRAPHICS_PROFILE ?? 'POTATO';
+const outputDir = path.resolve(
+  process.env.PARAVOXIA_OBJECTIVE_OUTPUT ?? 'captures/objective-hud'
+);
+const cases = (process.env.PARAVOXIA_OBJECTIVE_CASES
+  ?? 'ch1-anomaly,ch2-approach,ch3-gather,ch4-audit,ch5-maw,ch6-dive,ch8-crossing')
+  .split(',')
+  .map(value => value.trim())
+  .filter(Boolean);
+const requestedProfiles = new Set((process.env.PARAVOXIA_OBJECTIVE_PROFILES ?? 'desktop,mobile')
+  .split(',')
+  .map(value => value.trim().toLowerCase())
+  .filter(Boolean));
+const profiles = [
+  {
+    id: 'desktop',
+    viewport: { width: 1440, height: 900 },
+    hasTouch: false,
+    isMobile: false,
+    reducedMotion: 'no-preference'
+  },
+  {
+    id: 'mobile',
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+    reducedMotion: 'reduce'
+  }
+].filter(profile => requestedProfiles.has(profile.id));
+
+if (profiles.length === 0) throw new Error('No valid objective HUD probe profile selected.');
+await mkdir(outputDir, { recursive: true });
+
+const browser = await chromium.launch({
+  headless: true,
+  executablePath: chromePath,
+  args: [
+    '--no-sandbox',
+    '--disable-dev-shm-usage',
+    '--ignore-gpu-blocklist',
+    '--enable-webgl',
+    '--enable-unsafe-swiftshader'
+  ]
+});
+
+const results = [];
+try {
+  for (const profile of profiles) {
+    for (const beat of cases) {
+      const context = await browser.newContext({
+        viewport: profile.viewport,
+        hasTouch: profile.hasTouch,
+        isMobile: profile.isMobile,
+        reducedMotion: profile.reducedMotion
+      });
+      const page = await context.newPage();
+      const errors = [];
+      page.on('pageerror', error => errors.push(`pageerror: ${error.message}`));
+      page.on('console', message => {
+        if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+      });
+
+      const url = new URL(baseUrl);
+      url.searchParams.set('story', beat);
+      url.searchParams.set('debug', '1');
+      // HUD geometry and ownership do not depend on expensive world detail.
+      // Force a deterministic low-cost render so headless software WebGL can
+      // reach the same scene-ready boundary that publishes world-space anchors.
+      url.searchParams.set('profile', graphicsProfile);
+      const startedAt = Date.now();
+      let entryAt = null;
+      let objectiveFirstSeenMs = null;
+      let evidence = null;
+      let screenshot = null;
+      let failure = null;
+
+      try {
+        await page.goto(url.toString(), { waitUntil: 'domcontentloaded', timeout: 30_000 });
+        await page.waitForFunction(() => {
+          if (window.__paravoxiaAppState?.phase === 'playing') return true;
+          return [...document.querySelectorAll('button')].some(button => (
+            button.textContent?.includes('Play Now') && !button.disabled
+          ));
+        }, undefined, { timeout: 60_000 });
+
+        const alreadyPlaying = await page.evaluate(
+          () => window.__paravoxiaAppState?.phase === 'playing'
+        );
+        if (!alreadyPlaying) {
+          await page.getByRole('button', { name: /Play Now/i }).click({ force: true });
+        }
+        entryAt = Date.now();
+        await page.waitForFunction(expectedBeat => (
+          window.__paravoxiaAppState?.phase === 'playing'
+          && window.__storyBeat === expectedBeat
+          && document.querySelector('canvas') instanceof HTMLCanvasElement
+        ), beat, { timeout: 45_000 });
+        await page.waitForSelector('[aria-label="Current story objective"]', {
+          state: 'visible',
+          timeout: 5_000
+        });
+        objectiveFirstSeenMs = Date.now() - entryAt;
+
+        // Required markers may wait for the relevant world prop/body publisher,
+        // but the card itself must already be present while that scene prepares.
+        await page.waitForFunction(() => {
+          const card = document.querySelector('[aria-label="Current story objective"]');
+          if (!(card instanceof HTMLElement)) return false;
+          return card.dataset.objectiveRequiresMarker !== 'true'
+            || card.dataset.objectiveHealth === 'ready';
+        }, undefined, { timeout: 45_000 }).catch(() => undefined);
+        await page.waitForTimeout(750);
+
+        evidence = await page.evaluate(() => {
+          const rect = element => {
+            if (!(element instanceof HTMLElement)) return null;
+            const box = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              x: box.x,
+              y: box.y,
+              width: box.width,
+              height: box.height,
+              right: box.right,
+              bottom: box.bottom,
+              visible: style.display !== 'none'
+                && style.visibility !== 'hidden'
+                && Number(style.opacity || 1) > 0
+                && box.width > 0
+                && box.height > 0
+            };
+          };
+          const intersects = (a, b) => Boolean(
+            a?.visible && b?.visible
+            && a.x < b.right && a.right > b.x
+            && a.y < b.bottom && a.bottom > b.y
+          );
+          const cards = [...document.querySelectorAll('[aria-label="Current story objective"]')];
+          const card = cards[0] instanceof HTMLElement ? cards[0] : null;
+          const cardRect = rect(card);
+          const marker = document.querySelector('[data-story-free-marker="true"]');
+          const redaction = document.querySelector('[data-redaction-indicator="true"]');
+          const markerChildren = marker instanceof HTMLElement ? [...marker.children] : [];
+          const redactionChildren = redaction instanceof HTMLElement ? [...redaction.children] : [];
+          const legacyMarkers = [...document.querySelectorAll('[data-regulation-objective-marker="true"]')];
+          const joystickRect = rect(document.querySelector('[data-testid="touch-joystick"]'));
+          const actionRect = rect(document.querySelector('[data-testid="touch-action-cluster"]'));
+          const vitalsRect = rect(document.querySelector('[data-testid="vitals-meter"]'));
+          const inventoryRect = rect(document.querySelector('[data-testid="inventory-panel"]'));
+          const markerRect = rect(marker);
+          const markerLabelRect = rect(markerChildren.at(-1));
+          const redactionRect = rect(redaction);
+          const redactionLabelRect = rect(redactionChildren.at(-1));
+          const insideViewport = box => Boolean(
+            box
+            && box.x >= 0
+            && box.y >= 0
+            && box.right <= innerWidth
+            && box.bottom <= innerHeight
+          );
+          return {
+            beat: window.__storyBeat ?? null,
+            app: window.__paravoxiaAppState ?? null,
+            viewport: { width: innerWidth, height: innerHeight },
+            objectiveCount: cards.length,
+            objective: card ? {
+              id: card.dataset.objectiveId ?? null,
+              markerLabel: card.dataset.objectiveMarkerLabel ?? null,
+              health: card.dataset.objectiveHealth ?? null,
+              requiresMarker: card.dataset.objectiveRequiresMarker ?? null,
+              text: card.textContent?.trim() ?? '',
+              rect: cardRect,
+              insideViewport: Boolean(
+                cardRect
+                && cardRect.x >= 0
+                && cardRect.y >= 0
+                && cardRect.right <= innerWidth
+                && cardRect.bottom <= innerHeight
+              )
+            } : null,
+            marker: {
+              count: document.querySelectorAll('[data-story-free-marker="true"]').length,
+              rect: markerRect,
+              labelRect: markerLabelRect,
+              labelInsideViewport: !markerLabelRect?.visible || insideViewport(markerLabelRect),
+              transform: marker instanceof HTMLElement ? marker.style.transform : null,
+              computedTransform: marker instanceof HTMLElement ? getComputedStyle(marker).transform : null,
+              labelTransform: markerChildren.at(-1) instanceof HTMLElement
+                ? markerChildren.at(-1).style.transform
+                : null,
+              motionPresentation: marker instanceof HTMLElement
+                ? marker.dataset.motionPresentation ?? null
+                : null
+            },
+            redactionIndicator: {
+              rect: redactionRect,
+              labelRect: redactionLabelRect,
+              labelInsideViewport: !redactionLabelRect?.visible || insideViewport(redactionLabelRect)
+              ,transform: redaction instanceof HTMLElement ? redaction.style.transform : null
+              ,labelTransform: redactionChildren.at(-1) instanceof HTMLElement
+                ? redactionChildren.at(-1).style.transform
+                : null
+            },
+            legacyMarkerCount: legacyMarkers.length,
+            topHud: {
+              vitalsRect,
+              inventoryRect,
+              markerIntersectsVitals: intersects(markerRect, vitalsRect)
+                || intersects(markerLabelRect, vitalsRect),
+              markerIntersectsInventory: intersects(markerRect, inventoryRect)
+                || intersects(markerLabelRect, inventoryRect),
+              redactionIntersectsVitals: intersects(redactionRect, vitalsRect)
+                || intersects(redactionLabelRect, vitalsRect),
+              redactionIntersectsInventory: intersects(redactionRect, inventoryRect)
+                || intersects(redactionLabelRect, inventoryRect)
+            },
+            touchControls: {
+              joystickRect,
+              actionRect,
+              objectiveIntersectsJoystick: intersects(cardRect, joystickRect),
+              objectiveIntersectsActions: intersects(cardRect, actionRect)
+            }
+          };
+        });
+
+        const failures = [];
+        if (evidence.objectiveCount !== 1) {
+          failures.push(`expected one objective surface, found ${evidence.objectiveCount}`);
+        }
+        if (!evidence.objective?.id) failures.push('objective id is missing');
+        if (!evidence.objective?.markerLabel) failures.push('objective marker label is missing');
+        if (!evidence.objective?.insideViewport) failures.push('objective card leaves the viewport');
+        if (evidence.objective?.requiresMarker === 'true' && evidence.objective.health !== 'ready') {
+          failures.push(`required marker health is ${evidence.objective?.health ?? 'missing'}`);
+        }
+        if (evidence.objective?.requiresMarker === 'false' && evidence.objective.health !== 'ready') {
+          failures.push(`markerless objective health is ${evidence.objective?.health ?? 'missing'}`);
+        }
+        if (!evidence.marker.labelInsideViewport) failures.push('directional marker label leaves the viewport');
+        if (!evidence.redactionIndicator.labelInsideViewport) {
+          failures.push('redaction direction label leaves the viewport');
+        }
+        if (evidence.legacyMarkerCount !== 0) failures.push('legacy marker still owns embodied guidance');
+        if (evidence.topHud.markerIntersectsVitals) failures.push('directional marker intersects survival vitals');
+        if (evidence.topHud.markerIntersectsInventory) failures.push('directional marker intersects inventory');
+        if (evidence.topHud.redactionIntersectsVitals) failures.push('redaction direction intersects survival vitals');
+        if (evidence.topHud.redactionIntersectsInventory) failures.push('redaction direction intersects inventory');
+        if (evidence.touchControls.objectiveIntersectsJoystick) {
+          failures.push('objective card intersects the movement joystick');
+        }
+        if (evidence.touchControls.objectiveIntersectsActions) {
+          failures.push('objective card intersects the touch action cluster');
+        }
+        if (profile.hasTouch && !evidence.touchControls.joystickRect?.visible) {
+          failures.push('embodied mobile objective has no movement joystick');
+        }
+        if (profile.hasTouch && !evidence.touchControls.actionRect?.visible) {
+          failures.push('embodied mobile objective has no action controls');
+        }
+        if (failures.length > 0) failure = failures.join('; ');
+
+        screenshot = path.join(outputDir, `${profile.id}-${beat}.png`);
+        await page.screenshot({ path: screenshot, timeout: 60_000, animations: 'disabled' });
+      } catch (error) {
+        failure = error instanceof Error ? error.message : String(error);
+      }
+
+      const unexpectedErrors = errors.filter(message => !(
+        message.includes('AudioContext')
+        || message.includes('favicon')
+        || message.includes('WebGL') && message.includes('ReadPixels')
+      ));
+      if (!failure && unexpectedErrors.length > 0) failure = unexpectedErrors.join('; ');
+      results.push({
+        beat,
+        profile: profile.id,
+        url: url.toString(),
+        elapsedMs: Date.now() - startedAt,
+        objectiveFirstSeenMs,
+        screenshot,
+        evidence,
+        errors: unexpectedErrors,
+        status: failure ? 'failed' : 'passed',
+        failure
+      });
+      await context.close();
+    }
+  }
+} finally {
+  await browser.close();
+}
+
+const reportPath = path.join(outputDir, 'objective-hud-report.json');
+await writeFile(reportPath, `${JSON.stringify({
+  generatedAt: new Date().toISOString(),
+  baseUrl,
+  graphicsProfile,
+  results
+}, null, 2)}\n`);
+process.stdout.write(`${JSON.stringify({ reportPath, results }, null, 2)}\n`);
+if (results.some(result => result.status === 'failed')) process.exitCode = 1;

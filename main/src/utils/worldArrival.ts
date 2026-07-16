@@ -32,13 +32,14 @@ const SHIP_SURFACE_CLEARANCE = VOXEL_SCALE / 2 + 2.5;
 export function findTopFaceSurfaceVoxel(
   size: number,
   terrainSeed: number,
-  preferred = DEFAULT_SITE
+  preferred = DEFAULT_SITE,
+  worldId?: string
 ): SurfaceVoxel {
   // Only the canonical arrival needs the strict shared player/ship contract.
   // Callers that supply a custom column (pond scans, prop placement) still need
   // the literal terrain surface even when it is wet or sloped.
   if (preferred.x === DEFAULT_SITE.x && preferred.z === DEFAULT_SITE.z) {
-    const entry = getWorldGen(size, terrainSeed);
+    const entry = getWorldGen(size, terrainSeed, worldId);
     if (entry.validatedArrivalCandidate) return { ...entry.validatedArrivalCandidate };
     const preferredWorld = new THREE.Vector3(
       preferred.x * VOXEL_SCALE,
@@ -61,11 +62,15 @@ export function findTopFaceSurfaceVoxel(
     // generation-contract failure and must surface as such.
     throw new Error(`No dry, level arrival pad exists for terrain seed ${terrainSeed}.`);
   }
-  return getWorldArrivalCandidate(size, terrainSeed, preferred);
+  return getWorldArrivalCandidate(size, terrainSeed, preferred, worldId);
 }
 
-export function createWorldArrivalPose(size: number, terrainSeed: number): WorldArrivalPose {
-  const surfaceVoxel = findTopFaceSurfaceVoxel(size, terrainSeed);
+export function createWorldArrivalPose(
+  size: number,
+  terrainSeed: number,
+  worldId?: string
+): WorldArrivalPose {
+  const surfaceVoxel = findTopFaceSurfaceVoxel(size, terrainSeed, DEFAULT_SITE, worldId);
   return createWorldArrivalPoseFromSurfaceVoxel(surfaceVoxel);
 }
 

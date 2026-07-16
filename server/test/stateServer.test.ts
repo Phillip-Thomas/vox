@@ -9,6 +9,7 @@ import { createStateServer } from '../src/stateServer.js';
 import { PROTOCOL_VERSION, type ServerMessage } from '../src/protocol.js';
 import type { LoadedRoomState, RoomState, ShardEvent } from '../src/rooms.js';
 import { isAuthoritativeDeadwoodNode } from '../src/economyAuthority.js';
+import { ECONOMY_CATALOG } from '../src/generated/economyCatalog.js';
 
 const servers: Array<{ close: () => Promise<void> }> = [];
 
@@ -354,15 +355,40 @@ describe('state server', () => {
       pose: validPose({ position: [10001, 0, 0], seq: 2 })
     }));
     await waitForMessage(alice.messages, 'error', message => message.code === 'invalid_pose');
+    expect(
+      started.server.rooms.getRoom(created.roomId)?.shards.get('0,0')?.authoritativePoses.size
+    ).toBe(0);
 
+    const poseReceivedAfterMs = Date.now();
     alice.ws.send(JSON.stringify({
       type: 'pose_update',
       worldId: '0,0',
       seq: 3,
-      pose: validPose({ position: [1, 2, 3], seq: 3 })
+      pose: validPose({ playerId: 'mallory', worldId: '9,9', position: [1, 2, 3], seq: 999 })
     }));
     const relayed = await waitForMessage(bob.messages, 'pose_update', message => message.playerId === 'alice' && message.seq === 3);
-    expect(relayed.pose).toMatchObject({ position: [1, 2, 3], action: 'idle' });
+    expect(relayed.pose).toMatchObject({
+      playerId: 'alice',
+      worldId: '0,0',
+      seq: 3,
+      position: [1, 2, 3],
+      action: 'idle'
+    });
+    const authoritativePose = started.server.rooms
+      .getRoom(created.roomId)
+      ?.shards.get('0,0')
+      ?.authoritativePoses.get('alice');
+    expect(authoritativePose).toMatchObject({
+      seq: 3,
+      pose: {
+        playerId: 'alice',
+        worldId: '0,0',
+        seq: 3,
+        position: [1, 2, 3],
+        action: 'idle'
+      }
+    });
+    expect(authoritativePose?.receivedAtMs).toBeGreaterThanOrEqual(poseReceivedAfterMs);
 
     const startIndex = bob.messages.length;
     alice.ws.send(JSON.stringify({
@@ -373,6 +399,11 @@ describe('state server', () => {
     }));
     await wait(50);
     expect(bob.messages.slice(startIndex).some(message => message.type === 'pose_update')).toBe(false);
+    expect(
+      started.server.rooms.getRoom(created.roomId)
+        ?.shards.get('0,0')
+        ?.authoritativePoses.get('alice')
+    ).toMatchObject({ seq: 3, pose: { position: [1, 2, 3] } });
 
     alice.ws.close();
     bob.ws.close();
@@ -494,6 +525,344 @@ describe('state server', () => {
     charlie.ws.close();
     bob.ws.close();
     alice.ws.close();
+  });
+
+  it('keeps the emergent arc authoritative across two actors, p1 travel, actor-owned habitat receipts, and reconnect', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const started = await startTestServer();
+    const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+    const originWorldId = '-1,-1';
+    const tidegardenWorldId = '-1,-1:p1';
+
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: originWorldId }));
+    const created = await waitForType(alice.messages, 'room_created');
+    await waitForType(alice.messages, 'room_joined');
+    await waitForType(alice.messages, 'world_snapshot');
+
+    const bob = await connectAndAuth(started.wsUrl, 'bob-token');
+    bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
+    await waitForType(bob.messages, 'room_joined');
+    await waitForType(bob.messages, 'world_snapshot');
+
+    const accepted = async (
+      client: typeof alice,
+      commandId: string,
+      commandType: string,
+      worldId: string,
+      payload: Record<string, unknown> = {}
+    ) => {
+      client.ws.send(JSON.stringify({ type: 'command', commandId, commandType, worldId, payload }));
+      return waitForMessage(client.messages, 'command_accepted', message => message.commandId === commandId);
+    };
+
+    await accepted(alice, 'story-kit-alice', 'story_item_acquired', originWorldId, {
+      itemId: 'maw_repair_kit'
+    });
+    const mawBeginCommandId = 'story-maw-alice:ritual-begun';
+    await accepted(alice, mawBeginCommandId, 'maw_repair_begun', originWorldId);
+    const mawBeginEvent = started.server.rooms
+      .getRoom(created.roomId)
+      ?.shards.get(originWorldId)
+      ?.events.find(event => event.commandId === mawBeginCommandId);
+    if (!mawBeginEvent) throw new Error('Maw ritual begin receipt should exist');
+    mawBeginEvent.timeMs = Date.now() - 8_000;
+    await accepted(alice, 'story-maw-alice', 'maw_repaired', originWorldId, {
+      ritualBeginCommandId: mawBeginCommandId
+    });
+    await accepted(alice, 'story-keel-alice', 'story_item_acquired', originWorldId, {
+      itemId: 'kestrel_keel_memory'
+    });
+    await accepted(alice, 'story-keel-bank-alice', 'story_item_banked', originWorldId, {
+      itemId: 'kestrel_keel_memory',
+      oxygen: 71
+    });
+    await accepted(alice, 'story-salvage-alice', 'wreck_salvage_claimed', originWorldId);
+
+    const room = started.server.rooms.getRoom(created.roomId);
+    if (!room) throw new Error('room should exist');
+    const aliceInventory = room.playerInventories.get('alice');
+    if (!aliceInventory) throw new Error('alice inventory should exist');
+    for (const transaction of ECONOMY_CATALOG.storyTransactions.shipRepairStages) {
+      for (const stack of transaction.inputs) {
+        aliceInventory.set(stack.id, (aliceInventory.get(stack.id) ?? 0) + stack.qty);
+      }
+    }
+    for (const transaction of ECONOMY_CATALOG.storyTransactions.shipRepairStages) {
+      await accepted(
+        alice,
+        `story-ship-${transaction.stage}`,
+        'ship_repair_stage',
+        originWorldId,
+        { stage: transaction.stage }
+      );
+    }
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-party-to-tidegarden',
+      commandType: 'party_warp_requested',
+      worldId: originWorldId,
+      payload: { destinationWorldId: tidegardenWorldId }
+    }));
+    const warpAccepted = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === 'story-party-to-tidegarden'
+    );
+    expect(warpAccepted.worldId).toBe(tidegardenWorldId);
+    const partyWarp = await waitForMessage(
+      bob.messages,
+      'party_warp',
+      message => message.worldId === tidegardenWorldId
+    );
+    expect(partyWarp.handoff).toMatchObject({
+      fromWorldId: originWorldId,
+      worldId: tidegardenWorldId,
+      destination: { x: -1, y: -1 }
+    });
+    await waitForMessage(alice.messages, 'world_snapshot', message => message.worldId === tidegardenWorldId);
+    await waitForMessage(bob.messages, 'world_snapshot', message => message.worldId === tidegardenWorldId);
+
+    // The Kestrel is party-owned. Bob did not submit Alice's repair commands,
+    // but the shared flight-ready ship must still authorize his finite Ch9
+    // reserve and the recipe it unlocks.
+    const bobReserveAccepted = await accepted(
+      bob,
+      'story-founding-reserve-bob',
+      'kestrel_founding_reserve_claimed',
+      tidegardenWorldId
+    );
+    expect(bobReserveAccepted.deltas).toMatchObject({
+      players: {
+        progression: {
+          bob: {
+            milestones: expect.arrayContaining(['story:route:tidegarden:online'])
+          }
+        }
+      }
+    });
+    await accepted(bob, 'story-craft-habitat-core-bob', 'recipe_crafted', tidegardenWorldId, {
+      recipeId: 'habitat_core'
+    });
+    expect(room.playerInventories.get('bob')?.get('habitat_core')).toBe(1);
+
+    await accepted(
+      alice,
+      'story-relationship-alice',
+      'tidegarden_relationship_attended',
+      tidegardenWorldId,
+      { relationshipId: 'tideline-root-water-exchange', waterDepth: 2, sourceKey: 'deterministic-waterline' }
+    );
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-site-bob-with-alice-relationship',
+      commandType: 'tidegarden_site_chosen',
+      worldId: tidegardenWorldId,
+      payload: {
+        worldId: tidegardenWorldId,
+        cell: [4, 25, -4],
+        supportCell: [4, 24, -4],
+        up: [0, 1, 0]
+      }
+    }));
+    await expectRejected(
+      bob.messages,
+      'story-site-bob-with-alice-relationship',
+      'validation_failed'
+    );
+    await accepted(
+      alice,
+      'story-site-alice',
+      'tidegarden_site_chosen',
+      tidegardenWorldId,
+      {
+        worldId: tidegardenWorldId,
+        cell: [4, 25, -4],
+        supportCell: [4, 24, -4],
+        up: [0, 1, 0]
+      }
+    );
+
+    await accepted(
+      alice,
+      'story-founding-reserve-alice',
+      'kestrel_founding_reserve_claimed',
+      tidegardenWorldId
+    );
+    await accepted(alice, 'story-craft-habitat-core', 'recipe_crafted', tidegardenWorldId, {
+      recipeId: 'habitat_core'
+    });
+
+    const shelterId = `habitat:${tidegardenWorldId}:4,25,-4`;
+    const corePayload = {
+      shelterId,
+      cell: [4, 25, -4],
+      supportCell: [4, 24, -4],
+      position: [8, 50.24, -8],
+      up: [0, 1, 0]
+    };
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-core-without-foundation',
+      commandType: 'habitat_core_placed',
+      worldId: tidegardenWorldId,
+      payload: corePayload
+    }));
+    await expectRejected(alice.messages, 'story-core-without-foundation', 'validation_failed');
+    expect(aliceInventory.get('habitat_core')).toBe(1);
+
+    aliceInventory.set('wood', 15);
+    await accepted(
+      alice,
+      'story-enclosure-3',
+      'structure_placed',
+      tidegardenWorldId,
+      { cell: [4, 25, -4], face: 3, type: 'foundation', material: 'wood' }
+    );
+    await accepted(alice, 'story-core-alice', 'habitat_core_placed', tidegardenWorldId, corePayload);
+
+    room.playerInventories.get('bob')?.set('habitat_core', 1);
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-core-bob-with-alice-chain',
+      commandType: 'habitat_core_placed',
+      worldId: tidegardenWorldId,
+      payload: corePayload
+    }));
+    await expectRejected(bob.messages, 'story-core-bob-with-alice-chain', 'validation_failed');
+    expect(room.playerInventories.get('bob')?.get('habitat_core')).toBe(1);
+
+    const forgedShelterPayload = {
+      shelterId,
+      cell: [4, 25, -4],
+      // Both values are intentionally forged; accepted structure events own
+      // the canonical enclosure analysis.
+      insulation: 99,
+      interiorCellCount: 99
+    };
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-shelter-before-enclosure',
+      commandType: 'habitat_shelter_certified',
+      worldId: tidegardenWorldId,
+      payload: forgedShelterPayload
+    }));
+    await expectRejected(alice.messages, 'story-shelter-before-enclosure', 'validation_failed');
+
+    const enclosure = [
+      { face: 0, type: 'wall' },
+      { face: 1, type: 'wall' },
+      { face: 4, type: 'wall' },
+      { face: 5, type: 'wall' },
+      { face: 2, type: 'ceiling' }
+    ] as const;
+    for (const piece of enclosure) {
+      await accepted(
+        alice,
+        `story-enclosure-${piece.face}`,
+        'structure_placed',
+        tidegardenWorldId,
+        { cell: [4, 25, -4], face: piece.face, type: piece.type, material: 'wood' }
+      );
+    }
+    await accepted(
+      alice,
+      'story-shelter-alice',
+      'habitat_shelter_certified',
+      tidegardenWorldId,
+      forgedShelterPayload
+    );
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-shelter-bob-with-alice-chain',
+      commandType: 'habitat_shelter_certified',
+      worldId: tidegardenWorldId,
+      payload: forgedShelterPayload
+    }));
+    await expectRejected(
+      bob.messages,
+      'story-shelter-bob-with-alice-chain',
+      'validation_failed'
+    );
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-rest-during-day',
+      commandType: 'habitat_safe_rest_completed',
+      worldId: tidegardenWorldId,
+      payload: { shelterId, dayPhase: 0.72 }
+    }));
+    await expectRejected(alice.messages, 'story-rest-during-day', 'validation_failed');
+    room.createdAtMs = Date.now() - 0.72 * 240_000;
+    await accepted(alice, 'story-rest-alice', 'habitat_safe_rest_completed', tidegardenWorldId, {
+      shelterId,
+      dayPhase: 0.72
+    });
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'story-rest-bob-with-alice-chain',
+      commandType: 'habitat_safe_rest_completed',
+      worldId: tidegardenWorldId,
+      payload: { shelterId, dayPhase: 0.72 }
+    }));
+    await expectRejected(
+      bob.messages,
+      'story-rest-bob-with-alice-chain',
+      'validation_failed'
+    );
+
+    alice.ws.close();
+    const resumedAlice = await connectAndAuth(started.wsUrl, 'alice-token');
+    resumedAlice.ws.send(JSON.stringify({
+      type: 'join_room',
+      inviteCode: created.inviteCode,
+      resume: { worldId: tidegardenWorldId, lastAppliedSeq: 0 }
+    }));
+    const resumedJoin = await waitForType(resumedAlice.messages, 'room_joined');
+    const resumedState = await waitForType(resumedAlice.messages, 'resume_state');
+    expect(resumedJoin.worldId).toBe(tidegardenWorldId);
+    expect(resumedState.state).toMatchObject({
+      players: {
+        inventory: { alice: { iron_maw: 1, kestrel_keel_memory: 1 } },
+        progression: {
+          alice: {
+            milestones: expect.arrayContaining([
+              'maw_repaired',
+              'ship_repair:flight_ready',
+              'story:route:tidegarden:online',
+              'story:tidegarden:habitat-core-online',
+              'story:tidegarden:shelter-certified',
+              'story:tidegarden:safe-rest-completed',
+              'story:tidegarden:two-world-handoff'
+            ])
+          }
+        }
+      },
+      story: {
+        ship: {
+          repairStage: 'flight_ready',
+          currentWorldId: tidegardenWorldId
+        },
+        relationshipAttendedBy: ['alice'],
+        habitat: {
+          worldId: tidegardenWorldId,
+          core: { actorId: 'alice', shelterId, cell: [4, 25, -4] },
+          shelterCertification: { shelterId, insulation: expect.any(Number), interiorCellCount: 1 },
+          safeRest: { shelterId, dayPhase: expect.any(Number) }
+        }
+      }
+    });
+    const resumedStory = resumedState.state.story as {
+      habitat: {
+        shelterCertification: { insulation: number };
+        safeRest: { dayPhase: number };
+      };
+    };
+    expect(resumedStory.habitat.shelterCertification.insulation).toBeCloseTo(0.475);
+    expect(resumedStory.habitat.safeRest.dayPhase).toBeGreaterThanOrEqual(0.55);
+    expect(resumedStory.habitat.safeRest.dayPhase).toBeLessThanOrEqual(0.95);
+
+    resumedAlice.ws.close();
+    bob.ws.close();
   });
 
   it('broadcasts predicted door toggles immediately and rolls them back on reject', async () => {
@@ -1225,8 +1594,9 @@ describe('state server', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     const started = await startTestServer();
     const alice = await connectAndAuth(started.wsUrl, 'alice-token');
+    const originWorldId = '-1,-1';
 
-    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: '0,0' }));
+    alice.ws.send(JSON.stringify({ type: 'create_room', startWorldId: originWorldId }));
     const created = await waitForType(alice.messages, 'room_created');
     await waitForType(alice.messages, 'room_joined');
     await waitForType(alice.messages, 'world_snapshot');
@@ -1241,13 +1611,14 @@ describe('state server', () => {
       type: 'command',
       commandId: 'eat-without-berry',
       commandType: 'item_consumed',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { itemId: 'berry', food: 999, water: 999 }
     }));
     await expectRejected(alice.messages, 'eat-without-berry', 'validation_failed');
 
     room.playerInventories.set('alice', new Map([
       ['faulty_maw', 1],
+      ['maw_repair_kit', 1],
       ['berry', 1],
       ['waterskin', 1],
       ['biofuel', 1]
@@ -1257,7 +1628,7 @@ describe('state server', () => {
       type: 'command',
       commandId: 'eat-berry',
       commandType: 'item_consumed',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { itemId: 'berry', food: 999, water: 999 }
     }));
     const ate = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'eat-berry');
@@ -1269,6 +1640,7 @@ describe('state server', () => {
         inventory: {
           alice: {
             faulty_maw: 1,
+            maw_repair_kit: 1,
             waterskin: 1,
             biofuel: 1
           }
@@ -1290,7 +1662,7 @@ describe('state server', () => {
       type: 'command',
       commandId: 'fill-waterskin',
       commandType: 'waterskin_filled',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { amount: 25 }
     }));
     const filled = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'fill-waterskin');
@@ -1301,7 +1673,7 @@ describe('state server', () => {
       type: 'command',
       commandId: 'drink-from-waterskin',
       commandType: 'water_drank',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { source: 'waterskin', amount: 10, fill: 999 }
     }));
     const drank = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'drink-from-waterskin');
@@ -1312,7 +1684,7 @@ describe('state server', () => {
       type: 'command',
       commandId: 'maw-refuel',
       commandType: 'maw_refueled',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { amount: 999, charge: 999 }
     }));
     const refueled = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-refuel');
@@ -1324,7 +1696,7 @@ describe('state server', () => {
       type: 'command',
       commandId: 'maw-spend',
       commandType: 'maw_charge_spent',
-      worldId: '0,0',
+      worldId: originWorldId,
       payload: { amount: 4, charge: 999 }
     }));
     const spent = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-spend');
@@ -1333,13 +1705,58 @@ describe('state server', () => {
 
     alice.ws.send(JSON.stringify({
       type: 'command',
+      commandId: 'maw-repair-direct',
+      commandType: 'maw_repaired',
+      worldId: originWorldId,
+      payload: { elapsedMs: 999_999 }
+    }));
+    await expectRejected(alice.messages, 'maw-repair-direct', 'validation_failed');
+
+    const ritualBeginCommandId = 'maw-repair:ritual-begun';
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: ritualBeginCommandId,
+      commandType: 'maw_repair_begun',
+      worldId: originWorldId,
+      payload: { elapsedMs: 999_999 }
+    }));
+    const begun = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === ritualBeginCommandId
+    );
+    expect(begun.events[0]).toMatchObject({
+      type: 'maw_repair_begun',
+      payload: { ritualBeginCommandId, ritualSeconds: 8 }
+    });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'maw-repair-too-early',
+      commandType: 'maw_repaired',
+      worldId: originWorldId,
+      payload: { ritualBeginCommandId, elapsedMs: 999_999 }
+    }));
+    await expectRejected(alice.messages, 'maw-repair-too-early', 'validation_failed');
+    const ritualBeginEvent = room.shards
+      .get(originWorldId)
+      ?.events.find(event => event.commandId === ritualBeginCommandId);
+    if (!ritualBeginEvent) throw new Error('Maw ritual begin receipt should exist');
+    ritualBeginEvent.timeMs = Date.now() - 8_000;
+
+    const repairCommand = {
+      type: 'command',
       commandId: 'maw-repair',
       commandType: 'maw_repaired',
-      worldId: '0,0',
-      payload: { ignored: true }
-    }));
+      worldId: originWorldId,
+      payload: { ritualBeginCommandId, elapsedMs: 0 }
+    };
+    alice.ws.send(JSON.stringify(repairCommand));
     const repaired = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'maw-repair');
-    expect(repaired.events[0]).toMatchObject({ type: 'maw_repaired', payload: {} });
+    expect(repaired.events[0]).toMatchObject({
+      type: 'maw_repaired',
+      payload: { ritualBeginCommandId, minimumAttendanceMs: 8_000 }
+    });
     expect(room.playerInventories.get('alice')).toEqual(new Map([
       ['waterskin', 1],
       ['iron_maw', 1]
@@ -1367,6 +1784,151 @@ describe('state server', () => {
       }
     });
 
+    const retryStartIndex = alice.messages.length;
+    alice.ws.send(JSON.stringify(repairCommand));
+    const retry = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === 'maw-repair',
+      retryStartIndex
+    );
+    expect(retry).toEqual(repaired);
+    expect(room.playerInventories.get('alice')?.get('iron_maw')).toBe(1);
+    const mawRepairEvent = room.shards
+      .get(originWorldId)
+      ?.events.find(event => event.commandId === repairCommand.commandId);
+    if (!mawRepairEvent) throw new Error('Maw repair receipt should exist');
+    mawRepairEvent.timeMs = Date.now() - 2_000;
+
+    const directionCommand = {
+      type: 'command',
+      commandId: 'maw-first-direction',
+      commandType: 'maw_first_direction_resolved',
+      worldId: originWorldId,
+      payload: { choice: 'lowered-and-listened', elapsedMs: 999_999 }
+    };
+    alice.ws.send(JSON.stringify(directionCommand));
+    const direction = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === directionCommand.commandId
+    );
+    expect(direction.events[0]).toMatchObject({
+      type: 'maw_first_direction_resolved',
+      payload: {
+        choice: 'lowered-and-listened',
+        repairCommandId: 'maw-repair',
+        proofCommandId: null,
+        targetKind: 'unassigned',
+        minimumPurposeGapMs: 2_000
+      }
+    });
+
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: originWorldId,
+      seq: 1,
+      pose: validPose({ worldId: originWorldId, seq: 1 })
+    }));
+    await waitForCondition(() => Boolean(
+      room.shards.get(originWorldId)?.authoritativePoses.get('alice')?.seq === 1
+    ));
+    const pondBeginCommand = {
+      type: 'command',
+      commandId: 'maw-pond-observation-begun',
+      commandType: 'maw_pond_observation_begun',
+      worldId: originWorldId,
+      payload: { visible: true, playerAtShore: true, elapsedMs: 999_999 }
+    };
+    alice.ws.send(JSON.stringify(pondBeginCommand));
+    const pondBegin = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === pondBeginCommand.commandId
+    );
+    expect(pondBegin.events[0]).toMatchObject({
+      type: 'maw_pond_observation_begun',
+      payload: {
+        observationBeginCommandId: pondBeginCommand.commandId,
+        directionCommandId: directionCommand.commandId,
+        poseSeq: 1,
+        minimumObservationMs: 550,
+        physicalProximityCertified: false
+      }
+    });
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'maw-pond-too-early',
+      commandType: 'maw_pond_resonance_observed',
+      worldId: originWorldId,
+      payload: {
+        observationBeginCommandId: pondBeginCommand.commandId,
+        elapsedMs: 999_999,
+        physicalProximityCertified: true
+      }
+    }));
+    await expectRejected(alice.messages, 'maw-pond-too-early', 'validation_failed');
+    const pondBeginEvent = room.shards
+      .get(originWorldId)
+      ?.events.find(event => event.commandId === pondBeginCommand.commandId);
+    if (!pondBeginEvent) throw new Error('Maw pond begin receipt should exist');
+    pondBeginEvent.timeMs = Date.now() - 550;
+    alice.ws.send(JSON.stringify({
+      type: 'pose_update',
+      worldId: originWorldId,
+      seq: 2,
+      pose: validPose({ worldId: originWorldId, seq: 2 })
+    }));
+    await waitForCondition(() => Boolean(
+      room.shards.get(originWorldId)?.authoritativePoses.get('alice')?.seq === 2
+    ));
+
+    const pondCommand = {
+      type: 'command',
+      commandId: 'maw-pond-resonance',
+      commandType: 'maw_pond_resonance_observed',
+      worldId: originWorldId,
+      payload: {
+        observationBeginCommandId: pondBeginCommand.commandId,
+        elapsedMs: 0,
+        physicalProximityCertified: true
+      }
+    };
+    alice.ws.send(JSON.stringify(pondCommand));
+    const pond = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === pondCommand.commandId
+    );
+    expect(pond.events[0]).toMatchObject({
+      type: 'maw_pond_resonance_observed',
+      payload: {
+        observationBeginCommandId: pondBeginCommand.commandId,
+        directionCommandId: directionCommand.commandId,
+        beginPoseSeq: 1,
+        completionPoseSeq: 2,
+        minimumObservationMs: 550,
+        physicalProximityCertified: false
+      }
+    });
+    expect(room.playerStates.get('alice')?.progression.milestones).toEqual(expect.arrayContaining([
+      'maw_repaired',
+      'story:maw:first-direction-resolved',
+      'story:maw:first-direction:lowered-and-listened',
+      'story:maw:pond-resonance-visible'
+    ]));
+
+    const pondRetryStartIndex = alice.messages.length;
+    alice.ws.send(JSON.stringify(pondCommand));
+    const pondRetry = await waitForMessage(
+      alice.messages,
+      'command_accepted',
+      message => message.commandId === pondCommand.commandId,
+      pondRetryStartIndex
+    );
+    expect(pondRetry).toEqual(pond);
+
     const bob = await connectAndAuth(started.wsUrl, 'bob-token');
     bob.ws.send(JSON.stringify({ type: 'join_room', inviteCode: created.inviteCode }));
     await waitForType(bob.messages, 'room_joined');
@@ -1384,7 +1946,12 @@ describe('state server', () => {
         progression: {
           alice: {
             era: 'emergent',
-            milestones: ['maw_repaired']
+            milestones: expect.arrayContaining([
+              'maw_repaired',
+              'story:maw:first-direction-resolved',
+              'story:maw:first-direction:lowered-and-listened',
+              'story:maw:pond-resonance-visible'
+            ])
           }
         }
       }

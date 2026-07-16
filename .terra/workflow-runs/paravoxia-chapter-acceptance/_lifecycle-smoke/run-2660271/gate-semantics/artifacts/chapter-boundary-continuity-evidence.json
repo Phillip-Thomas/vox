@@ -1,0 +1,12 @@
+{
+  "previousToTarget": {
+    "status": "pass"
+  },
+  "targetToNextAccepted": true,
+  "runtimeUnavailableBoundariesLabelled": true,
+  "storyAndSaveStateContinuous": true,
+  "controlAndObjectiveStateContinuous": true,
+  "cameraPaletteRealityStateContinuous": true,
+  "scoreTransportMotifMixContinuous": true,
+  "desktopMobileReducedMotionLowestQualityCovered": true
+}

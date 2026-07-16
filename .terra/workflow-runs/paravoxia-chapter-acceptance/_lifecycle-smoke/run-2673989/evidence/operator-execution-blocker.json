@@ -1,0 +1,17 @@
+{
+  "schema": "paravoxia.chapterAcceptanceExecutionBlocker.v1",
+  "status": "blocked",
+  "code": "missing_role_runner_configuration",
+  "stepId": "lock-chapter-acceptance",
+  "stepType": "model_task",
+  "requiredAdapterFamily": "model_adapter",
+  "requiredAdapterRequirementId": "acceptance-reasoning-runner",
+  "message": "PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON is unset; no read-only structured role runner is configured.",
+  "details": {
+    "runnerEnv": "PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON",
+    "configurationExample": "export PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON='[\"<read-only-runner>\",\"$PROMPT_PATH\",\"$RESULT_PATH\"]'"
+  },
+  "recoverable": true,
+  "continueCommand": "node main/tools/creative-chapter-acceptance-workflow.mjs --run .terra/workflow-runs/paravoxia-chapter-acceptance/_lifecycle-smoke/run-2673989/run.json --continue",
+  "recordedAt": "2026-07-15T20:12:46.792Z"
+}

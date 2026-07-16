@@ -6,8 +6,17 @@ import { BLOCKS, ALL_BLOCK_IDS, CANONICAL_BLOCK_FOR_MATERIAL } from './data/bloc
 import { BIOMES, ALL_BIOME_IDS } from './data/biomes.ts';
 import { PLANET_ARCHETYPES, ALL_ARCHETYPE_IDS, type ArchetypeId } from './data/planetArchetypes.ts';
 import { blockToRenderMaterial, materialToLegacyBlock } from './adapters.ts';
-import { buildPlanetProfile } from './PlanetProfile.ts';
+import {
+  TIDEGARDEN_PROFILE_ID,
+  TIDEGARDEN_PROFILE_VERSION,
+  TIDEGARDEN_SEED,
+  TIDEGARDEN_WORLD_ID,
+  buildPlanetProfile,
+  createPlanetProfileHash,
+  resolvePlanetProfile
+} from './PlanetProfile.ts';
 import { GENERATION_SCHEMA_VERSION } from './schema.ts';
+import { createPlanetIdentity } from './starSystem.ts';
 import { hasVoxelShaderDetail } from '../utils/voxelMaterial.ts';
 import { buildPlanetManifest } from './generation/buildPlanetManifest.ts';
 import { resourceCanOccurOnProfile } from './generation/resourceDeposits.ts';
@@ -105,6 +114,99 @@ describe('PlanetProfile determinism', () => {
       expect(total).toBeGreaterThan(0.999);
       expect(total).toBeLessThan(1.001);
     }
+  });
+});
+
+describe('canonical planet profile resolution', () => {
+  it('leaves the high-bit origin profile on the unchanged procedural path', () => {
+    const origin = createPlanetIdentity({ system: { x: -1, y: -1 }, slot: 0 });
+    expect(origin.seed).toBe(3215739679);
+
+    const resolved = resolvePlanetProfile({ worldId: origin.worldId, seed: origin.seed });
+    expect(resolved.profileId).toBe('procedural');
+    expect(resolved.thermalBehavior).toBe('standard');
+    expect(resolved.identitySeed).toBe(origin.seed);
+    expect(resolved.profile).toEqual(buildPlanetProfile(origin.seed));
+  });
+
+  it('pins only canonical p1 to deterministic Tidegarden v1 generation truth', () => {
+    const sibling = createPlanetIdentity({ system: { x: -1, y: -1 }, slot: 1 });
+    expect(sibling.worldId).toBe(TIDEGARDEN_WORLD_ID);
+    expect(sibling.seed).toBe(TIDEGARDEN_SEED);
+    expect(buildPlanetProfile(sibling.seed).archetype).toBe('volcanic');
+
+    const first = resolvePlanetProfile({ worldId: sibling.worldId, seed: sibling.seed });
+    const second = resolvePlanetProfile({ worldId: sibling.worldId, seed: sibling.seed });
+    expect(first).toEqual(second);
+    expect(first.profileId).toBe(TIDEGARDEN_PROFILE_ID);
+    expect(first.profileVersion).toBe(TIDEGARDEN_PROFILE_VERSION);
+    expect(first.thermalBehavior).toBe('nonlethal');
+    expect(first.profile).toMatchObject({
+      archetype: 'verdant',
+      archetypeName: 'Tidegarden v1',
+      terrainProfile: 'hills',
+      hazards: ['none'],
+      biome: {
+        kind: 'alien',
+        lushness: 0.75,
+        aridity: 0.2,
+        temperature: 0.56,
+        hue: 0.5,
+        grassHue: 0.4,
+        leafHue: 0.6,
+        saturation: 0.72,
+        alien: true
+      }
+    });
+    expect(first.profile.resourceBiases.stone).toBeGreaterThan(1);
+    expect(first.profile.resourceBiases.resin).toBeGreaterThan(1);
+    expect(first.profile.resourceBiases.biofiber).toBeGreaterThan(1);
+    expect(first.profile.resourceBiases.iron_trace).toBeGreaterThan(
+      first.profile.resourceBiases.copper_ore ?? 0
+    );
+    expect(first.profile.resourceBiases.frost_crystal).toBeUndefined();
+  });
+
+  it('permanently excludes p2 and seed-only callers from the Tidegarden pin', () => {
+    const p2 = createPlanetIdentity({ system: { x: -1, y: -1 }, slot: 2 });
+    const resolvedP2 = resolvePlanetProfile({ worldId: p2.worldId, seed: p2.seed });
+    const seedOnly = resolvePlanetProfile({ seed: TIDEGARDEN_SEED });
+
+    expect(resolvedP2.profileId).toBe('procedural');
+    expect(resolvedP2.profile.archetype).toBe('arid');
+    expect(seedOnly.profileId).toBe('procedural');
+    expect(seedOnly.profile.archetype).toBe('volcanic');
+    expect(resolvedP2.profileHash).not.toBe(seedOnly.profileHash);
+  });
+
+  it('rejects mismatched canonical identity and fingerprints version plus content', () => {
+    const sibling = createPlanetIdentity({ system: { x: -1, y: -1 }, slot: 1 });
+    expect(() => resolvePlanetProfile({
+      worldId: sibling.worldId,
+      seed: sibling.seed + 1
+    })).toThrow(/does not match canonical world/);
+
+    const resolved = resolvePlanetProfile({ worldId: sibling.worldId, seed: sibling.seed });
+    const source = {
+      worldId: resolved.worldId,
+      identitySeed: resolved.identitySeed,
+      profileId: resolved.profileId,
+      profileVersion: resolved.profileVersion,
+      thermalBehavior: resolved.thermalBehavior,
+      profile: resolved.profile
+    };
+    expect(createPlanetProfileHash(source)).toBe(resolved.profileHash);
+    expect(createPlanetProfileHash({
+      ...source,
+      profileVersion: source.profileVersion + 1
+    })).not.toBe(resolved.profileHash);
+    expect(createPlanetProfileHash({
+      ...source,
+      profile: {
+        ...source.profile,
+        biome: { ...source.profile.biome, lushness: source.profile.biome.lushness - 0.01 }
+      }
+    })).not.toBe(resolved.profileHash);
   });
 });
 

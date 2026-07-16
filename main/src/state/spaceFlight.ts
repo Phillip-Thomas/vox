@@ -76,7 +76,32 @@ const warp: WarpRuntime = {
   midpointFired: false
 };
 
+export interface AtmosphereExitReceipt {
+  readonly previousPhase: 'descent';
+  readonly phase: 'deep_space';
+  readonly controlMode: 'flight';
+}
+
+export interface ShipExitReceipt {
+  readonly phase: 'surface';
+  readonly previousControlMode: 'flight';
+  readonly controlMode: 'fps';
+}
+
+const ATMOSPHERE_EXIT_RECEIPT: AtmosphereExitReceipt = Object.freeze({
+  previousPhase: 'descent',
+  phase: 'deep_space',
+  controlMode: 'flight'
+});
+const SHIP_EXIT_RECEIPT: ShipExitReceipt = Object.freeze({
+  phase: 'surface',
+  previousControlMode: 'flight',
+  controlMode: 'fps'
+});
+
 const listeners = new Set<() => void>();
+const atmosphereExitListeners = new Set<(receipt: AtmosphereExitReceipt) => void>();
+const shipExitListeners = new Set<(receipt: ShipExitReceipt) => void>();
 let localFlightSeq = 0;
 
 /**
@@ -86,6 +111,12 @@ let localFlightSeq = 0;
  * agnostic.
  */
 let arrivalHandler: ((dest: WorldCoordinate) => void) | null = null;
+
+// Story boarding can replace the legacy one-frame surface/fps -> surface/flight
+// switch with a physical hatch transaction. The interceptor is registered only
+// while that exterior exists; sandbox and later landings keep the direct path.
+let shipBoardingInterceptor: (() => boolean) | null = null;
+let shipExitInterceptor: (() => boolean) | null = null;
 
 export interface SystemHandoffOptions {
   worldId: string;
@@ -158,6 +189,20 @@ function subscribe(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
+/** Fires only after leaveAtmosphere successfully commits descent -> deep_space. */
+export function subscribeAtmosphereExit(
+  listener: (receipt: AtmosphereExitReceipt) => void
+): () => void {
+  atmosphereExitListeners.add(listener);
+  return () => atmosphereExitListeners.delete(listener);
+}
+
+/** Fires only after exitShip successfully commits surface/flight -> surface/fps. */
+export function subscribeShipExit(listener: (receipt: ShipExitReceipt) => void): () => void {
+  shipExitListeners.add(listener);
+  return () => shipExitListeners.delete(listener);
+}
+
 function getSnapshot(): SpaceFlightSnapshot {
   return snapshot;
 }
@@ -192,18 +237,39 @@ export function setArrivalHandler(handler: ((dest: WorldCoordinate) => void) | n
   arrivalHandler = handler;
 }
 
+/** Return false from the interceptor to hold the control transfer at the hatch. */
+export function setShipBoardingInterceptor(interceptor: (() => boolean) | null): () => void {
+  shipBoardingInterceptor = interceptor;
+  return () => {
+    if (shipBoardingInterceptor === interceptor) shipBoardingInterceptor = null;
+  };
+}
+
+/** Return false from the interceptor to hold a landed-ship exit transaction. */
+export function setShipExitInterceptor(interceptor: (() => boolean) | null): () => void {
+  shipExitInterceptor = interceptor;
+  return () => {
+    if (shipExitInterceptor === interceptor) shipExitInterceptor = null;
+  };
+}
+
 // --- actions ----------------------------------------------------------------
 
 /** Board the parked ship from foot. */
-export function enterShip(): void {
-  if (snapshot.phase !== 'surface' || snapshot.controlMode !== 'fps') return;
+export function enterShip(): boolean {
+  if (snapshot.phase !== 'surface' || snapshot.controlMode !== 'fps') return false;
+  if (shipBoardingInterceptor && !shipBoardingInterceptor()) return false;
   setSnapshot({ controlMode: 'flight' });
+  return true;
 }
 
 /** Leave the landed ship and return to on-foot control. */
-export function exitShip(): void {
-  if (snapshot.phase !== 'surface' || snapshot.controlMode !== 'flight') return;
+export function exitShip(): boolean {
+  if (snapshot.phase !== 'surface' || snapshot.controlMode !== 'flight') return false;
+  if (shipExitInterceptor && !shipExitInterceptor()) return false;
   setSnapshot({ controlMode: 'fps' });
+  for (const listener of shipExitListeners) listener(SHIP_EXIT_RECEIPT);
+  return true;
 }
 
 /**
@@ -323,6 +389,7 @@ export function leaveAtmosphere(): void {
   if (snapshot.controlMode !== 'flight') return;
   if (snapshot.phase !== 'descent') return;
   setSnapshot({ phase: 'deep_space', destination: null });
+  for (const listener of atmosphereExitListeners) listener(ATMOSPHERE_EXIT_RECEIPT);
 }
 
 /** Called from the surface grounding callback once the ship touches down. */
@@ -354,6 +421,26 @@ export function debugStartInDescent(): void {
   warp.progress = 0;
   warp.midpointFired = false;
   setSnapshot({ phase: 'descent', controlMode: 'flight', destination: null, target: null });
+}
+
+/**
+ * Rehydrate the coarse flight state that accompanies a persisted canonical ship
+ * pose. Unlike the debug entry points this is a save boundary: it restores only
+ * a location mode already validated by the ship-restoration layer and never
+ * advances travel, landing, or Story evidence.
+ */
+export function restoreFlightAtLocation(
+  locationMode: 'surface' | 'atmosphere' | 'local_space'
+): void {
+  discardSystemHandoff('reset');
+  warp.active = false;
+  warp.progress = 0;
+  warp.midpointFired = false;
+  setSnapshot(locationMode === 'surface'
+    ? { phase: 'surface', controlMode: 'fps', destination: null, target: null }
+    : locationMode === 'atmosphere'
+      ? { phase: 'descent', controlMode: 'flight', destination: null, target: null }
+      : { phase: 'deep_space', controlMode: 'flight', destination: null, target: null });
 }
 
 /** Reset to a clean on-foot surface state (e.g. first spawn / hard reset). */

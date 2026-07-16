@@ -68,6 +68,11 @@ const FINAL_JSON = [
   'repair-contract-disposition.json',
   'final-scorecard.json',
 ]
+const UX_BASELINE_FILE = 'shipped-ux-baseline.json'
+const UX_LIFECYCLE_FILE = 'objective-lifecycle-evidence.json'
+const UX_AUDIT_FILE = 'ux-audit.md'
+const UX_ARTIFACT_FILES = [UX_BASELINE_FILE, UX_LIFECYCLE_FILE, UX_AUDIT_FILE]
+const UX_VARIANTS = ['desktop', 'mobile', 'reducedMotion', 'lowestQuality']
 const PLACEHOLDER_PATTERN = /\b(?:TODO|TBD|PLACEHOLDER|FILL[ -]?ME|REPLACE[ -]?ME)\b|<[^>\n]+>/i
 const MARKDOWN_SECTION_RULES = {
   'production-lock.md': ['authority', 'locked scope', 'protected paths', 'stop conditions', 'lock disposition'],
@@ -82,6 +87,7 @@ const MARKDOWN_SECTION_RULES = {
   'story-audit.md': ['independence', 'findings', 'defects', 'verdict'],
   'score-audit.md': ['independence', 'findings', 'defects', 'verdict'],
   'cinematography-audit.md': ['independence', 'findings', 'defects', 'verdict'],
+  'ux-audit.md': ['independence', 'contract and baseline', 'objective lifecycle', 'marker exactness', 'feedback and progression', 'variants and accessibility', 'reset and stale state', 'findings', 'verdict'],
   'critic-report.md': ['review integrity', 'conflict', 'defects', 'disposition'],
   'cohesion-judge.md': ['evidence completeness', 'combined experience', 'dissent', 'scorecard', 'decision'],
   'run-summary.md': ['disposition', 'what changed', 'evidence', 'quality', 'resume point'],
@@ -119,6 +125,17 @@ function resolveRunPath(rawPath) {
     path.resolve(repoRoot, rawPath),
   ]
   return candidates.find((candidate) => fs.existsSync(candidate)) || candidates.at(-1)
+}
+
+function uxModeRequested(runPath) {
+  if (UX_ARTIFACT_FILES.some((name) => fs.existsSync(path.join(runPath, name)))) return true
+  const contractPath = path.join(runPath, 'scene-contract.json')
+  if (!fs.existsSync(contractPath)) return false
+  try {
+    return isObject(JSON.parse(fs.readFileSync(contractPath, 'utf8'))?.guidance)
+  } catch {
+    return false
+  }
 }
 
 function makeCollector() {
@@ -313,6 +330,53 @@ function statusPassed(value) {
   return false
 }
 
+function actionableWorkOrder(kind, workOrder) {
+  if (!Array.isArray(workOrder) || workOrder.length === 0 || workOrder.some((line) => !nonEmptyString(line))) return false
+  const action = workOrder.at(-1).trim()
+  const patterns = {
+    travel: /\b(?:follow|return|go|move|reach|travel|enter|leave|climb|cross|land|hover|approach|walk|run|swim|jetpack)\b/i,
+    interact: /(?:\[[a-z]\]|\b(?:interact|attend|recover|scan|trace|read|look|aim|use|activate|install|certify|relight|confirm|touch|take|open|secure)\b)/i,
+    craft: /(?:\[c\]|\b(?:craft|fabricate|assemble|make)\b)/i,
+    build: /(?:\[b\]|\b(?:build|place|construct|install|enclose)\b)/i,
+    wait: /\b(?:wait|rest|observe|hold|remain|sleep|watch)\b/i,
+  }
+  return Boolean(patterns[kind]?.test(action))
+}
+
+function validateGuidanceContract(contract, anchorSet, agencyIds, variantIds, resetIds, collector) {
+  const guidance = contract?.guidance
+  if (!guidance) return
+  collector.assert(guidance.baselineArtifact === UX_BASELINE_FILE, 'ux.contract-baseline-artifact', `Guidance baseline artifact must be ${UX_BASELINE_FILE}`)
+  collector.assert(guidance.lifecycleEvidenceArtifact === UX_LIFECYCLE_FILE, 'ux.contract-lifecycle-artifact', `Guidance lifecycle artifact must be ${UX_LIFECYCLE_FILE}`)
+  collector.assert(guidance.auditArtifact === UX_AUDIT_FILE, 'ux.contract-audit-artifact', `Guidance audit artifact must be ${UX_AUDIT_FILE}`)
+  const objectives = Array.isArray(guidance.objectives) ? guidance.objectives : []
+  const objectiveIds = objectives.map((objective) => objective?.id).filter(nonEmptyString)
+  collector.assert(objectives.length > 0, 'ux.contract-objectives', 'Guidance mode requires at least one objective')
+  collector.assert(objectiveIds.length === objectives.length && new Set(objectiveIds).size === objectives.length, 'ux.contract-objective-ids', 'Guidance objective IDs must be present and unique')
+  const anchorOrders = new Map((contract.syncAnchors || []).map((anchor) => [anchorId(anchor), anchor?.order]))
+  const contractResetTriggers = new Set(contract.reset?.triggers || [])
+
+  for (const objective of objectives) {
+    const label = nonEmptyString(objective?.id) ? objective.id : '<unnamed-objective>'
+    collector.assert(['travel', 'interact', 'craft', 'build', 'wait'].includes(objective?.kind), 'ux.contract-kind', `${label} must use a supported objective kind`, objective?.kind)
+    collector.assert(agencyIds.has(objective?.agencyWindowRef), 'ux.contract-agency-ref', `${label} agencyWindowRef must resolve`, objective?.agencyWindowRef)
+    collector.assert(anchorSet.has(objective?.enterAnchorRef) && anchorSet.has(objective?.clearAnchorRef), 'ux.contract-anchor-refs', `${label} enter and clear anchors must resolve`, { enter: objective?.enterAnchorRef, clear: objective?.clearAnchorRef })
+    const enterOrder = anchorOrders.get(objective?.enterAnchorRef)
+    const clearOrder = anchorOrders.get(objective?.clearAnchorRef)
+    collector.assert(Number.isFinite(enterOrder) && Number.isFinite(clearOrder) && clearOrder >= enterOrder, 'ux.contract-anchor-order', `${label} clear anchor cannot precede its enter anchor`, { enterOrder, clearOrder })
+    collector.assert(nonEmptyString(objective?.markerLabel) && objective?.requiresMarker === true, 'ux.contract-marker', `${label} requires one exact nonempty directional marker label`)
+    collector.assert(actionableWorkOrder(objective?.kind, objective?.workOrder), 'ux.contract-work-order', `${label} final work-order line must state an action appropriate to ${objective?.kind}`, objective?.workOrder)
+    collector.assert(objective?.feedback?.eventType === 'objective-enter' && objective?.feedback?.presentationOnly === true && objective?.feedback?.advancesProgression === false && objective?.feedback?.emissionsPerEntry === 1, 'ux.contract-feedback', `${label} feedback must be one-shot presentation only and cannot advance progression`)
+    const objectiveVariantRefs = new Set(objective?.variantRefs || [])
+    collector.assert(variantIds.size > 0 && [...variantIds].every((id) => objectiveVariantRefs.has(id)) && [...objectiveVariantRefs].every((id) => variantIds.has(id)), 'ux.contract-variants', `${label} variantRefs must exactly cover every contracted desktop, mobile, reduced-motion, and quality variant`, [...objectiveVariantRefs])
+    collector.assert(nonEmptyString(objective?.variantIntent), 'ux.contract-variant-intent', `${label} must state guidance parity intent across variants`)
+    collector.assert(resetIds.has(objective?.resetRef), 'ux.contract-reset-ref', `${label} resetRef must resolve`, objective?.resetRef)
+    const resetTriggers = new Set(objective?.resetTriggers || [])
+    collector.assert(contractResetTriggers.size > 0 && [...contractResetTriggers].every((trigger) => resetTriggers.has(trigger)) && [...resetTriggers].every((trigger) => contractResetTriggers.has(trigger)), 'ux.contract-reset-triggers', `${label} reset triggers must exactly cover the scene reset contract`, [...resetTriggers])
+    collector.assert(nonEmptyString(objective?.resetIntent) && nonEmptyString(objective?.acceptanceCriterion), 'ux.contract-intent', `${label} must state reset intent and an observable acceptance criterion`)
+  }
+}
+
 function validateSceneContract(contract, collector) {
   if (!contract) return
   collector.assert(contract.schema === 'paravoxia.sceneContract.v1', 'contract.schema', 'Scene contract schema must be paravoxia.sceneContract.v1')
@@ -389,6 +453,7 @@ function validateSceneContract(contract, collector) {
     ...(contract.variants?.qualityTiers || []).map((variant) => variant.id),
   ])
   const resetIds = new Set((contract.reset?.states || []).map((state) => state.id))
+  validateGuidanceContract(contract, anchorSet, agencyIds, variantIds, resetIds, collector)
   for (const shot of shots) {
     const label = nonEmptyString(shot?.id) ? shot.id : '<unnamed-shot>'
     collector.assert(anchorSet.has(shot?.startAnchorRef), 'contract.shot-start', `${label} startAnchorRef must resolve`, shot?.startAnchorRef)
@@ -671,6 +736,152 @@ function validateShippedVisualBaseline(baseline, contract, lock, runPath, collec
   collector.assert(!includesPlaceholder(baseline), 'baseline.placeholders', 'Shipped visual baseline cannot contain template placeholders')
 }
 
+function validateShippedUxBaseline(baseline, contract, lock, collector) {
+  if (!baseline) return
+  collector.assert(baseline.schema === 'paravoxia.shippedUxBaseline.v1', 'ux.baseline-schema', 'Shipped UX baseline must use paravoxia.shippedUxBaseline.v1')
+  collector.assert(baseline.runId === lock?.runId && baseline.sourceRevision === lock?.sourceRevision, 'ux.baseline-source', 'Shipped UX baseline must target the production-lock run and source revision')
+  collector.assert(baseline.sceneId === contract?.sceneId, 'ux.baseline-scene', 'Shipped UX baseline scene ID must match the scene contract')
+  collector.assert(nonEmptyString(baseline.capturedAt) && !Number.isNaN(Date.parse(baseline.capturedAt)), 'ux.baseline-time', 'Shipped UX baseline needs a valid capture timestamp')
+
+  const repoRoot = resolveRepoRoot()
+  const sources = Array.isArray(baseline.sourceFiles) ? baseline.sourceFiles : []
+  const sourcePaths = sources.map((source) => source?.path)
+  collector.assert(sources.length > 0, 'ux.baseline-sources', 'Shipped UX baseline must hash at least one current main/src/story/ux source file')
+  collector.assert(sourcePaths.every(nonEmptyString) && new Set(sourcePaths).size === sourcePaths.length, 'ux.baseline-source-unique', 'Shipped UX baseline source paths must be present and unique')
+  collector.assert(sourcePaths.some((sourcePath) => sourcePath?.startsWith('main/src/story/ux/')), 'ux.baseline-source-scope', 'Shipped UX baseline must include at least one source under main/src/story/ux')
+  for (const source of sources) {
+    const sourcePath = nonEmptyString(source?.path) ? path.resolve(repoRoot, source.path) : null
+    const insideRepo = sourcePath?.startsWith(`${repoRoot}${path.sep}`)
+    collector.assert(insideRepo, 'ux.baseline-source-inside-repo', `Shipped UX baseline source must remain inside the repository: ${source?.path}`)
+    collector.assert(insideRepo && fs.existsSync(sourcePath) && fs.statSync(sourcePath).isFile(), 'ux.baseline-source-path', `Shipped UX baseline source must resolve: ${source?.path}`)
+    collector.assert(/^[a-f0-9]{64}$/i.test(source?.sha256 || ''), 'ux.baseline-source-hash-format', `Shipped UX baseline source needs a SHA-256 hash: ${source?.path}`)
+    if (insideRepo && fs.existsSync(sourcePath) && fs.statSync(sourcePath).isFile() && /^[a-f0-9]{64}$/i.test(source?.sha256 || '')) {
+      collector.assert(sha256File(sourcePath) === source.sha256.toLowerCase(), 'ux.baseline-source-hash', `Shipped UX baseline source hash must match: ${source.path}`)
+    }
+  }
+
+  const objectiveContract = baseline.objectiveContract
+  collector.assert(isObject(objectiveContract), 'ux.baseline-contract', 'Shipped UX baseline must describe the current objective contract')
+  collector.assert(sourcePaths.includes(objectiveContract?.sourceRef), 'ux.baseline-contract-source', 'Objective contract sourceRef must resolve to a hashed UX source file', objectiveContract?.sourceRef)
+  collector.assert(
+    objectiveContract?.stableObjectiveIds === true &&
+      objectiveContract?.markerMatching === 'exact' &&
+      objectiveContract?.requiresActionableWorkOrder === true &&
+      objectiveContract?.feedbackPresentationOnly === true &&
+      objectiveContract?.feedbackAdvancesProgression === false &&
+      objectiveContract?.feedbackEmissionsPerEntry === 1,
+    'ux.baseline-contract-semantics',
+    'Shipped UX baseline must preserve stable IDs, exact markers, actionable work orders, and one-shot presentation-only feedback',
+  )
+  const healthStates = new Set(objectiveContract?.healthStates || [])
+  collector.assert(['idle', 'ready', 'missing-marker'].every((state) => healthStates.has(state)), 'ux.baseline-health', 'Shipped UX baseline must record idle, ready, and missing-marker health states')
+
+  const map = Array.isArray(baseline.markerAndWorkOrderMap) ? baseline.markerAndWorkOrderMap : []
+  const objectiveIds = map.map((entry) => entry?.objectiveId)
+  collector.assert(map.length > 0, 'ux.baseline-map', 'Shipped UX baseline must capture at least one objective marker and work order')
+  collector.assert(objectiveIds.every(nonEmptyString) && new Set(objectiveIds).size === objectiveIds.length, 'ux.baseline-map-ids', 'Shipped UX baseline objective IDs must be present and unique')
+  for (const entry of map) {
+    collector.assert(['travel', 'interact', 'craft', 'build', 'wait'].includes(entry?.kind), 'ux.baseline-kind', `${entry?.objectiveId || '<unnamed-objective>'} must use a supported objective kind`)
+    collector.assert(nonEmptyString(entry?.markerLabel), 'ux.baseline-marker', `${entry?.objectiveId || '<unnamed-objective>'} must capture its exact marker label`)
+    collector.assert(actionableWorkOrder(entry?.kind, entry?.workOrder), 'ux.baseline-work-order', `${entry?.objectiveId || '<unnamed-objective>'} must capture an actionable work order`)
+  }
+  collector.assert(!includesPlaceholder(baseline), 'ux.baseline-placeholders', 'Shipped UX baseline cannot contain template placeholders')
+}
+
+function validateObjectiveLifecycleEvidence(evidence, contract, contractSha256, lock, collector) {
+  if (!evidence) return
+  collector.assert(evidence.schema === 'paravoxia.objectiveLifecycleEvidence.v1', 'ux.lifecycle-schema', 'Objective lifecycle evidence must use paravoxia.objectiveLifecycleEvidence.v1')
+  collector.assert(evidence.runId === lock?.runId && evidence.sourceRevision === lock?.sourceRevision, 'ux.lifecycle-source', 'Objective lifecycle evidence must target the production-lock run and source revision')
+  collector.assert(evidence.contractVersion === contract?.contractVersion && evidence.contractSha256 === contractSha256, 'ux.lifecycle-contract', 'Objective lifecycle evidence must bind the exact signed scene contract')
+  collector.assert(nonEmptyString(evidence.capturedAt) && !Number.isNaN(Date.parse(evidence.capturedAt)), 'ux.lifecycle-time', 'Objective lifecycle evidence needs a valid capture timestamp')
+
+  const contractedObjectives = contract?.guidance?.objectives || []
+  const contractedById = new Map(contractedObjectives.map((objective) => [objective.id, objective]))
+  const objectives = Array.isArray(evidence.objectives) ? evidence.objectives : []
+  const objectiveIds = objectives.map((objective) => objective?.objectiveId)
+  collector.assert(
+    objectiveIds.length === contractedById.size &&
+      new Set(objectiveIds).size === objectiveIds.length &&
+      objectiveIds.every((id) => contractedById.has(id)),
+    'ux.lifecycle-coverage',
+    'Objective lifecycle evidence must cover every contracted guidance objective exactly once',
+    { contracted: [...contractedById.keys()], reported: objectiveIds },
+  )
+
+  const variantRefs = {
+    desktop: contract?.variants?.desktop?.id,
+    mobile: contract?.variants?.mobile?.id,
+    reducedMotion: contract?.variants?.reducedMotion?.id,
+    lowestQuality: (contract?.variants?.qualityTiers || []).find((variant) => variant?.tier === 'potato')?.id,
+  }
+  for (const objective of objectives) {
+    const contracted = contractedById.get(objective?.objectiveId)
+    if (!contracted) continue
+    const label = objective.objectiveId
+    collector.assert(objective.kind === contracted.kind && objective.enterAnchorRef === contracted.enterAnchorRef && objective.clearAnchorRef === contracted.clearAnchorRef, 'ux.lifecycle-identity', `${label} lifecycle kind and anchors must match the signed guidance contract`)
+    collector.assert(objective.markerLabel === contracted.markerLabel, 'ux.lifecycle-marker-contract', `${label} marker label must match the signed guidance contract exactly`)
+    collector.assert(JSON.stringify(objective.workOrder) === JSON.stringify(contracted.workOrder) && actionableWorkOrder(objective.kind, objective.workOrder), 'ux.lifecycle-work-order', `${label} work order must exactly match the signed actionable guidance contract`)
+    collector.assert(Number.isInteger(objective.entryCount) && objective.entryCount >= 1, 'ux.lifecycle-entry-count', `${label} must record at least one objective entry`)
+    const markerObservations = Array.isArray(objective.markerObservations) ? objective.markerObservations : []
+    collector.assert(markerObservations.length >= objective.entryCount && markerObservations.every((marker) => marker === contracted.markerLabel), 'ux.lifecycle-marker-exact', `${label} must observe the exact contracted directional marker on every entry`, markerObservations)
+    collector.assert(objective.missingMarkerFrames === 0, 'ux.lifecycle-marker-health', `${label} cannot report any missing-marker frames while active`)
+    const lifecycleStates = Array.isArray(objective.lifecycleStates) ? objective.lifecycleStates : []
+    let previousStateIndex = -1
+    const orderedStates = ['entered', 'ready', 'completed', 'cleared']
+    const orderedLifecycle = orderedStates.every((state) => {
+      const index = lifecycleStates.indexOf(state)
+      if (index <= previousStateIndex) return false
+      previousStateIndex = index
+      return true
+    })
+    collector.assert(orderedLifecycle, 'ux.lifecycle-order', `${label} lifecycle must progress entered, ready, completed, then cleared`)
+    const feedbackEmissions = Array.isArray(objective.feedbackEmissionsPerEntry) ? objective.feedbackEmissionsPerEntry : []
+    collector.assert(feedbackEmissions.length === objective.entryCount && feedbackEmissions.every((count) => count === 1), 'ux.lifecycle-feedback-count', `${label} must emit feedback exactly once per entry`)
+    collector.assert(objective.feedbackPresentationOnly === true && objective.progressionChangedByFeedback === false, 'ux.lifecycle-feedback-separation', `${label} feedback must remain presentation only and cannot change progression`)
+    collector.assert(objective.activeAfterClear === false, 'ux.lifecycle-stale-clear', `${label} must clear without leaving stale active guidance`)
+
+    const variants = isObject(objective.variants) ? objective.variants : {}
+    collector.assert(Object.keys(variants).length === UX_VARIANTS.length && UX_VARIANTS.every((variant) => isObject(variants[variant])), 'ux.lifecycle-variants', `${label} must prove desktop, mobile, reduced-motion, and lowest-quality guidance parity`)
+    for (const variant of UX_VARIANTS) {
+      const result = variants[variant]
+      collector.assert(statusPassed(result), 'ux.lifecycle-variant-status', `${label} ${variant} guidance proof must pass`)
+      collector.assert(result?.variantId === variantRefs[variant], 'ux.lifecycle-variant-ref', `${label} ${variant} proof must resolve to the contracted variant`, { reported: result?.variantId, expected: variantRefs[variant] })
+      collector.assert(result?.markerLabel === contracted.markerLabel, 'ux.lifecycle-variant-marker', `${label} ${variant} must preserve the exact marker label`)
+      collector.assert(result?.workOrderActionable === true && Array.isArray(result?.evidenceRefs) && result.evidenceRefs.length > 0, 'ux.lifecycle-variant-evidence', `${label} ${variant} must preserve an actionable work order and cite evidence`)
+    }
+
+    const resetResults = Array.isArray(objective.resetResults) ? objective.resetResults : []
+    const reportedTriggers = resetResults.map((result) => result?.trigger)
+    const contractedTriggers = contracted.resetTriggers || []
+    collector.assert(
+      resetResults.length === contractedTriggers.length &&
+        new Set(reportedTriggers).size === resetResults.length &&
+        contractedTriggers.every((trigger) => reportedTriggers.includes(trigger)),
+      'ux.lifecycle-reset-coverage',
+      `${label} reset evidence must cover every contracted guidance reset trigger exactly once`,
+      { contracted: contractedTriggers, reported: reportedTriggers },
+    )
+    for (const result of resetResults) {
+      collector.assert(statusPassed(result) && result?.activeAfterReset === false && Array.isArray(result?.evidenceRefs) && result.evidenceRefs.length > 0, 'ux.lifecycle-reset-result', `${label} ${result?.trigger || '<unnamed-trigger>'} must pass with no stale objective and cite evidence`)
+    }
+  }
+  collector.assert(!includesPlaceholder(evidence), 'ux.lifecycle-placeholders', 'Objective lifecycle evidence cannot contain template placeholders')
+}
+
+function validateUxAudit(runPath, contract, lock, individualSignoffs, collector) {
+  const auditPath = path.join(runPath, UX_AUDIT_FILE)
+  if (!fs.existsSync(auditPath)) return
+  const content = fs.readFileSync(auditPath, 'utf8')
+  const reviewer = content.match(/^Reviewer:\s*`?([^`\n]+)`?\s*$/mi)?.[1]?.trim()
+  const directorIdentities = new Set(Object.values(individualSignoffs || {}).map((signoff) => signoff?.signedBy).filter(nonEmptyString))
+  collector.assert(nonEmptyString(reviewer) && !directorIdentities.has(reviewer), 'ux.audit-separation', `${UX_AUDIT_FILE} reviewer must be identified and independent from all directors`, reviewer)
+  collector.assert(content.includes(`Run ID: \`${lock?.runId}\``), 'ux.audit-run', `${UX_AUDIT_FILE} must target the production-lock run ID`)
+  collector.assert(content.includes(`Contract revision: \`${contract?.contractVersion}\``), 'ux.audit-contract', `${UX_AUDIT_FILE} must target the frozen contract version`)
+  collector.assert(content.includes(UX_BASELINE_FILE) && content.includes(UX_LIFECYCLE_FILE), 'ux.audit-inputs', `${UX_AUDIT_FILE} must review both canonical UX evidence artifacts`)
+  collector.assert(/First report completed before reading peer conclusions:\s*`?yes`?/i.test(content), 'ux.audit-first-wave', `${UX_AUDIT_FILE} must attest its first report preceded director and peer conclusions`)
+  collector.assert(/Verdict:\s*`?pass(?:ed)?`?/i.test(content), 'ux.audit-verdict', `${UX_AUDIT_FILE} must record a passing independent verdict`)
+}
+
 function validateRawAudiovisualEvidence(manifest, contract, contractSha256, runPath, collector) {
   if (!manifest) return
   collector.assert(manifest.schema === 'paravoxia.rawAudiovisualEvidence.v1', 'raw-evidence.schema', 'Raw audiovisual manifest must use paravoxia.rawAudiovisualEvidence.v1')
@@ -770,7 +981,7 @@ function defectCounts(register) {
   return counts
 }
 
-function validateDefectRegister(register, scorecard, contract, contractSha256, lock, humanDecision, runPath, collector) {
+function validateDefectRegister(register, scorecard, contract, contractSha256, lock, humanDecision, runPath, uxMode, collector) {
   if (!register) return
   collector.assert(register.schema === 'paravoxia.creativeDefectRegister.v1', 'defects.schema', 'Defect register must use paravoxia.creativeDefectRegister.v1')
   collector.assert(register.runId === lock?.runId && register.contractVersion === contract?.contractVersion, 'defects.identity', 'Defect register must target the locked run and active contract revision')
@@ -778,10 +989,17 @@ function validateDefectRegister(register, scorecard, contract, contractSha256, l
   collector.assert(nonEmptyString(register.compiledBy) && nonEmptyString(register.compiledAt) && !Number.isNaN(Date.parse(register.compiledAt)), 'defects.compiler', 'Defect register needs an identified review moderator and timestamp')
   collector.assert(typeof register.requiresHumanTaste === 'boolean', 'defects.human-trigger', 'Defect register must explicitly state whether human taste is required')
 
-  const requiredReports = ['story-audit.md', 'score-audit.md', 'cinematography-audit.md', 'naive-audience-report.md', 'critic-report.md']
+  const requiredReports = [
+    'story-audit.md',
+    'score-audit.md',
+    'cinematography-audit.md',
+    ...(uxMode ? [UX_AUDIT_FILE] : []),
+    'naive-audience-report.md',
+    'critic-report.md',
+  ]
   const sources = Array.isArray(register.sourceReports) ? register.sourceReports : []
   const sourceMap = new Map(sources.map((source) => [source?.path, source]))
-  collector.assert(sources.length === requiredReports.length && new Set(sources.map((source) => source?.path)).size === sources.length && requiredReports.every((name) => sourceMap.has(name)), 'defects.sources', 'Canonical defects must cite exactly the four independent reports and critic synthesis')
+  collector.assert(sources.length === requiredReports.length && new Set(sources.map((source) => source?.path)).size === sources.length && requiredReports.every((name) => sourceMap.has(name)), 'defects.sources', `Canonical defects must cite exactly the ${uxMode ? 'five' : 'four'} independent reports and critic synthesis`)
   for (const name of requiredReports) {
     const source = sourceMap.get(name)
     const sourcePath = path.resolve(runPath, source?.path || '')
@@ -1009,7 +1227,7 @@ function validateMarkdownArtifacts(runPath, names, collector) {
     for (const section of MARKDOWN_SECTION_RULES[name] || []) {
       collector.assert(content.toLowerCase().includes(section), 'artifact.section', `${name} must contain its ${section} section`)
     }
-    if (['story-audit.md', 'score-audit.md', 'cinematography-audit.md', 'naive-audience-report.md'].includes(name)) {
+    if (['story-audit.md', 'score-audit.md', 'cinematography-audit.md', UX_AUDIT_FILE, 'naive-audience-report.md'].includes(name)) {
       collector.assert(/^Reviewer:\s*\S.+$/mi.test(content), 'review.identity', `${name} must identify its fresh reviewer`)
       collector.assert(/independen|isolation/i.test(content), 'review.independence', `${name} must attest independent or blind first-pass isolation`)
       const fingerprint = createHash('sha256').update(content.replace(/^#.*$/gm, '').replace(/\s+/g, ' ').trim()).digest('hex')
@@ -1040,9 +1258,16 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   const collector = makeCollector()
   collector.assert(fs.existsSync(runPath) && fs.statSync(runPath).isDirectory(), 'run.directory', 'Production run directory must exist', runPath)
   if (!fs.existsSync(runPath) || !fs.statSync(runPath).isDirectory()) return buildReport(runPath, collector.checks)
-  const markdownNames = phase === 'final' ? [...CONTRACT_MARKDOWN, ...FINAL_MARKDOWN] : CONTRACT_MARKDOWN
+  const uxMode = uxModeRequested(runPath)
+  const fullUxArtifactsRequired = uxMode && phase === 'final'
+  const markdownNames = [
+    ...(phase === 'final' ? [...CONTRACT_MARKDOWN, ...FINAL_MARKDOWN] : CONTRACT_MARKDOWN),
+    ...(fullUxArtifactsRequired ? [UX_AUDIT_FILE] : []),
+  ]
   const jsonNames = [
     ...CONTRACT_JSON,
+    ...(uxMode ? [UX_BASELINE_FILE] : []),
+    ...(fullUxArtifactsRequired ? [UX_LIFECYCLE_FILE] : []),
     ...(phase === 'implementation' || phase === 'final' ? IMPLEMENTATION_JSON : []),
     ...(phase === 'final' ? FINAL_JSON : []),
   ]
@@ -1057,6 +1282,8 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
 
   const productionLock = readJson(path.join(runPath, 'production-lock.json'), collector, 'lock')
   const shippedVisualBaseline = readJson(path.join(runPath, 'shipped-visual-baseline.json'), collector, 'baseline')
+  const shippedUxBaseline = uxMode ? readJson(path.join(runPath, UX_BASELINE_FILE), collector, 'ux-baseline') : null
+  const objectiveLifecycle = fullUxArtifactsRequired ? readJson(path.join(runPath, UX_LIFECYCLE_FILE), collector, 'ux-lifecycle') : null
   const contractPath = path.join(runPath, 'scene-contract.json')
   const contract = readJson(contractPath, collector, 'contract')
   const contractSha256 = fs.existsSync(contractPath) ? sha256File(contractPath) : null
@@ -1074,13 +1301,17 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   validateWorkflowRoleContracts(workflow, collector)
   assertSchema(contract, sceneSchema, collector, 'contract.json-schema', 'Scene contract')
   notes.forEach((note, index) => assertSchema(note, noteSchema, collector, 'notes.json-schema', `Director note line ${index + 1}`))
+  collector.assert(!uxMode || isObject(contract?.guidance), 'ux.contract-required', 'UX artifact mode requires scene-contract.guidance')
   validateSceneContract(contract, collector)
   validateProductionLock(productionLock, lockSchema, contract, runPath, collector)
   validateShippedVisualBaseline(shippedVisualBaseline, contract, productionLock, runPath, collector)
+  validateShippedUxBaseline(shippedUxBaseline, contract, productionLock, collector)
+  validateObjectiveLifecycleEvidence(objectiveLifecycle, contract, contractSha256, productionLock, collector)
   validateNotes(notes, contract, collector)
   validateDirectorAuthorship(peerNotesByDirector, reconciliationsByDirector, notes, contract, noteSchema, collector)
   validateSignoffs(signoffs, individualSignoffs, contract, contractSha256, collector)
-  validateEvidenceReferences([contract, notes, shippedVisualBaseline], runPath, collector)
+  if (fullUxArtifactsRequired) validateUxAudit(runPath, contract, productionLock, individualSignoffs, collector)
+  validateEvidenceReferences([contract, notes, shippedVisualBaseline, shippedUxBaseline, objectiveLifecycle], runPath, collector)
 
   if (phase === 'implementation' || phase === 'final') {
     validateImplementationDiff(runPath, productionLock, collector)
@@ -1101,7 +1332,7 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
     const humanPath = path.join(runPath, 'human-decision.json')
     collector.assert(!humanRequired || fs.existsSync(humanPath), 'artifact.exists', 'human-decision.json is required for flagship or headed-taste work')
     const humanDecision = fs.existsSync(humanPath) ? readJson(humanPath, collector, 'human') : null
-    for (const [label, artifact] of [['verification', verification], ['raw-audiovisual-evidence', rawEvidence], ['evidence-registry', evidenceRegistry], ['defects', defects], ['final-scorecard', scorecard], ['human-decision', humanDecision]]) {
+    for (const [label, artifact] of [['verification', verification], ['raw-audiovisual-evidence', rawEvidence], ['objective-lifecycle-evidence', objectiveLifecycle], ['evidence-registry', evidenceRegistry], ['defects', defects], ['final-scorecard', scorecard], ['human-decision', humanDecision]]) {
       if (!artifact) continue
       collector.assert(artifact.contractVersion === contract?.contractVersion, 'artifact.contract-version', `${label} must target the frozen contract version`)
       collector.assert(artifact.runId === productionLock?.runId, 'artifact.run-id', `${label} must target the production-lock run ID`)
@@ -1115,12 +1346,12 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
     validateScorecard(scorecard, rubric, contract, contractSha256, collector)
     validateReviewMetadata(runPath, contract, individualSignoffs, collector)
     if (humanDecision) validateHumanDecision(humanDecision, contract, contractSha256, collector)
-    validateDefectRegister(defects, scorecard, contract, contractSha256, productionLock, humanDecision, runPath, collector)
+    validateDefectRegister(defects, scorecard, contract, contractSha256, productionLock, humanDecision, runPath, uxMode, collector)
     const repairDirections = validateRepairDisposition(repairDisposition, defects, contract, contractSha256, signoffs, productionLock, runPath, collector)
     const defectsPath = path.join(runPath, 'defects.json')
     validateIterationLedger(iterations, defects, fs.existsSync(defectsPath) ? sha256File(defectsPath) : null, scorecard, contract, contractSha256, productionLock, repairDisposition, runPath, collector)
     const checkResults = readJson(path.join(runPath, 'check-results.json'), collector, 'check-results-final-evidence')
-    validateEvidenceReferences([contract, notes, shippedVisualBaseline, checkResults, verification, rawEvidence, defects, repairDisposition, repairDirections, iterations, scorecard, humanDecision], runPath, collector, registryMap)
+    validateEvidenceReferences([contract, notes, shippedVisualBaseline, shippedUxBaseline, checkResults, verification, rawEvidence, objectiveLifecycle, defects, repairDisposition, repairDirections, iterations, scorecard, humanDecision], runPath, collector, registryMap)
   }
   const report = buildReport(runPath, collector.checks, phase)
   if (writeReport) {
@@ -1186,6 +1417,13 @@ function makeValidFixture(runPath) {
   contract.production.frozenAt = '2026-07-13T12:00:00.000Z'
   contract.performance.maximumDrawCalls = 120
   contract.performance.maximumShaderPrograms = 30
+  const fixtureObjective = contract.guidance.objectives[0]
+  fixtureObjective.markerLabel = 'FIXTURE OBJECTIVE'
+  fixtureObjective.workOrder = ['Follow the fixture objective marker.', '[F] Confirm the fixture objective.']
+  fixtureObjective.feedback.intent = 'A single restrained presentation cue acknowledges objective entry without changing story state.'
+  fixtureObjective.variantIntent = 'Preserve the exact objective, marker, and actionable order on desktop, mobile, reduced motion, and every quality tier.'
+  fixtureObjective.resetIntent = 'Clear the active objective and marker-health state at every contracted scene reset boundary.'
+  fixtureObjective.acceptanceCriterion = 'The exact marker appears with an actionable work order, feedback emits once, and all guidance clears at completion.'
   contract.evidence.captures.forEach((capture) => { capture.status = 'passed' })
   contract.evidence.mechanicalChecks.forEach((check) => {
     check.status = 'passed'
@@ -1247,6 +1485,35 @@ function makeValidFixture(runPath) {
     paletteStates: [{ beat: contract.scope.beats[0], anchor: 'replace-anchor-start', family: 'material-dawn', sourceRefs: ['main/src/utils/planetArtDirection.ts', 'main/src/utils/planetVisualProfile.ts'] }],
     realityStage: 'alive', adjacentEntryRefs: ['frame:previous'], adjacentExitRefs: ['frame:next'], headedStatus: 'pending',
   }, null, 2)}\n`)
+  const uxSourcePaths = [
+    'main/src/story/ux/objectiveDirector.ts',
+    'main/src/story/ux/feedbackCues.ts',
+    'main/src/story/ux/StoryGuidanceHud.tsx',
+  ]
+  fs.writeFileSync(path.join(runPath, UX_BASELINE_FILE), `${JSON.stringify({
+    schema: 'paravoxia.shippedUxBaseline.v1',
+    runId: 'fixture-run',
+    sceneId: 'fixture-a3-dawn',
+    sourceRevision: 'fixture-working-tree',
+    capturedAt: '2026-07-13T11:55:00.000Z',
+    sourceFiles: uxSourcePaths.map((sourcePath) => ({ path: sourcePath, sha256: sha256File(path.join(resolveRepoRoot(), sourcePath)) })),
+    objectiveContract: {
+      sourceRef: 'main/src/story/ux/objectiveDirector.ts',
+      stableObjectiveIds: true,
+      markerMatching: 'exact',
+      requiresActionableWorkOrder: true,
+      feedbackPresentationOnly: true,
+      feedbackAdvancesProgression: false,
+      feedbackEmissionsPerEntry: 1,
+      healthStates: ['idle', 'ready', 'missing-marker'],
+    },
+    markerAndWorkOrderMap: [{
+      objectiveId: 'fixture-shipped-objective',
+      kind: 'interact',
+      markerLabel: 'SHIPPED FIXTURE OBJECTIVE',
+      workOrder: ['Follow the shipped fixture marker.', '[F] Interact with the shipped fixture.'],
+    }],
+  }, null, 2)}\n`)
   const notes = DIRECTED_PAIRS.map((pair, index) => {
     const [from, to] = pair.split('->')
     return {
@@ -1286,6 +1553,51 @@ function makeValidFixture(runPath) {
     headedGates: [{ gate: 'headed-taste', required: false, status: 'not-applicable', evidenceRefs: [] }],
     blockingDefects: [], overallStatus: 'pass',
   }, null, 2)}\n`)
+  const fixtureVariantRefs = {
+    desktop: contract.variants.desktop.id,
+    mobile: contract.variants.mobile.id,
+    reducedMotion: contract.variants.reducedMotion.id,
+    lowestQuality: contract.variants.qualityTiers.find((variant) => variant.tier === 'potato').id,
+  }
+  const objectiveLifecycle = {
+    schema: 'paravoxia.objectiveLifecycleEvidence.v1',
+    runId: 'fixture-run',
+    contractVersion: 'v1',
+    contractSha256,
+    sourceRevision: 'fixture-working-tree',
+    capturedAt: '2026-07-13T12:33:00.000Z',
+    objectives: contract.guidance.objectives.map((objective) => ({
+      objectiveId: objective.id,
+      kind: objective.kind,
+      enterAnchorRef: objective.enterAnchorRef,
+      clearAnchorRef: objective.clearAnchorRef,
+      markerLabel: objective.markerLabel,
+      workOrder: objective.workOrder,
+      entryCount: 1,
+      markerObservations: [objective.markerLabel],
+      missingMarkerFrames: 0,
+      lifecycleStates: ['entered', 'ready', 'completed', 'cleared'],
+      feedbackEmissionsPerEntry: [1],
+      feedbackPresentationOnly: true,
+      progressionChangedByFeedback: false,
+      activeAfterClear: false,
+      variants: Object.fromEntries(UX_VARIANTS.map((variant) => [variant, {
+        status: 'pass',
+        variantId: fixtureVariantRefs[variant],
+        markerLabel: objective.markerLabel,
+        workOrderActionable: true,
+        evidenceRefs: [`ux:${variant}`],
+      }])),
+      resetResults: objective.resetTriggers.map((trigger) => ({
+        trigger,
+        status: 'pass',
+        activeAfterReset: false,
+        evidenceRefs: [`ux-reset:${trigger}`],
+      })),
+      evidenceRefs: [`ux-objective:${objective.id}`],
+    })),
+  }
+  fs.writeFileSync(path.join(runPath, UX_LIFECYCLE_FILE), `${JSON.stringify(objectiveLifecycle, null, 2)}\n`)
   const mediaEntry = (name) => ({
     path: `evidence/${name}`,
     sha256: sha256File(path.join(evidenceDirectory, name)),
@@ -1298,10 +1610,53 @@ function makeValidFixture(runPath) {
     playbackMetadata: { canonicalUrl: 'http://127.0.0.1:5201/', viewport: '1440x900', qualityTier: 'high', reducedMotion: false, audioRoute: 'headphones', instructions: 'Play once continuously before frame inspection.' },
     intentFreeInstructions: 'Do not read creative intent, source, contracts, notes, bibles, or other reviews before the blind first pass.',
   }, null, 2)}\n`)
+  fs.writeFileSync(path.join(runPath, UX_AUDIT_FILE), `# UX Audit
+
+Reviewer: \`fixture-player-experience-auditor\`
+Run ID: \`fixture-run\`
+Contract revision: \`v1\`
+First report completed before reading peer conclusions: \`yes\`
+
+## Independence
+
+This player-experience review was completed independently from the chapter, score, and cinematography directors and from their peer conclusions.
+
+## Contract and baseline
+
+The review binds the signed guidance contract to \`${UX_BASELINE_FILE}\` and compares it with \`${UX_LIFECYCLE_FILE}\`.
+
+## Objective lifecycle
+
+The required objective entered once, became ready, completed through player action, and cleared without stale guidance.
+
+## Marker exactness
+
+Every observed directional marker matched the signed label exactly while the objective was active.
+
+## Feedback and progression
+
+The acknowledgement emitted once on entry, remained presentation only, and never advanced progression.
+
+## Variants and accessibility
+
+Desktop, mobile, reduced-motion, and lowest-quality evidence preserved readable guidance and an actionable work order.
+
+## Reset and stale state
+
+Every contracted reset trigger cleared the active objective, marker health, and presentation cue state.
+
+## Findings
+
+No player-experience defect was found in the fixture evidence.
+
+## Verdict
+
+Verdict: \`pass\`
+`)
   const rubric = JSON.parse(fs.readFileSync(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/rubrics/paravoxia-creative-cohesion.rubric.json'), 'utf8'))
   const categories = rubric.categories.map((category) => ({ slug: category.slug, weight: category.weight, score: 4.8, rationale: 'Independent evidence supports the score.', evidenceRefs: [`evidence:${category.slug}`], defectRefs: [] }))
   fs.writeFileSync(path.join(runPath, 'final-scorecard.json'), `${JSON.stringify({ schema: 'paravoxia.creativeScorecard.v1', runId: 'fixture-run', contractVersion: 'v1', contractSha256, mode: 'scene', rubricRef: 'paravoxia-creative-cohesion@v1', categories, weightedScore: 4.8, categoryFloor: 4.8, fullCategoryCoverage: true, thresholds: { sceneWeighted: 4.75, sceneFloor: 4.3, flagshipWeighted: 4.8, flagshipFloor: 4.5 }, openDefects: { critical: 0, high: 0, mediumUnaccepted: 0, low: 0 }, decision: 'approved', judge: 'fixture-cohesion-judge', judgedAt: '2026-07-13T12:40:00.000Z' }, null, 2)}\n`)
-  const defectSourceNames = ['story-audit.md', 'score-audit.md', 'cinematography-audit.md', 'naive-audience-report.md', 'critic-report.md']
+  const defectSourceNames = ['story-audit.md', 'score-audit.md', 'cinematography-audit.md', UX_AUDIT_FILE, 'naive-audience-report.md', 'critic-report.md']
   const defectRegister = {
     schema: 'paravoxia.creativeDefectRegister.v1', runId: 'fixture-run', contractVersion: 'v1', contractSha256,
     compiledAt: '2026-07-13T12:39:00.000Z', compiledBy: 'fixture-review-moderator',
@@ -1333,9 +1688,11 @@ function makeValidFixture(runPath) {
     contract,
     notes,
     JSON.parse(fs.readFileSync(path.join(runPath, 'shipped-visual-baseline.json'), 'utf8')),
+    JSON.parse(fs.readFileSync(path.join(runPath, UX_BASELINE_FILE), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(runPath, 'check-results.json'), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(runPath, 'verification-report.json'), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(runPath, 'raw-audiovisual-evidence.json'), 'utf8')),
+    objectiveLifecycle,
     defectRegister,
     JSON.parse(fs.readFileSync(path.join(runPath, 'repair-contract-disposition.json'), 'utf8')),
     readJsonl(path.join(runPath, 'iteration-ledger.jsonl'), makeCollector()),
@@ -1354,12 +1711,41 @@ function runSelfTest() {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'paravoxia-creative-gate-'))
   try {
     makeValidFixture(tempRoot)
+    const stagedLifecyclePath = path.join(tempRoot, UX_LIFECYCLE_FILE)
+    const stagedAuditPath = path.join(tempRoot, UX_AUDIT_FILE)
+    const stagedLifecycleSource = fs.readFileSync(stagedLifecyclePath, 'utf8')
+    const stagedAuditSource = fs.readFileSync(stagedAuditPath, 'utf8')
+    fs.rmSync(stagedLifecyclePath)
+    fs.rmSync(stagedAuditPath)
     const validContract = validateRun(tempRoot, { writeReport: false, phase: 'contract' })
-    if (!validContract.passed) throw new Error(`Completed template failed contract phase:\n${validContract.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
+    if (!validContract.passed) throw new Error(`Completed template failed staged contract phase without final UX proof:\n${validContract.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
     const validImplementation = validateRun(tempRoot, { writeReport: false, phase: 'implementation' })
-    if (!validImplementation.passed) throw new Error(`Completed template failed implementation phase:\n${validImplementation.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
+    if (!validImplementation.passed) throw new Error(`Completed template failed staged implementation phase without final UX proof:\n${validImplementation.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
+    fs.writeFileSync(stagedLifecyclePath, stagedLifecycleSource)
+    fs.writeFileSync(stagedAuditPath, stagedAuditSource)
     const valid = validateRun(tempRoot, { writeReport: false, phase: 'final' })
     if (!valid.passed) throw new Error(`Valid fixture failed:\n${valid.checks.filter((check) => !check.passed).map((check) => `${check.code}: ${check.message}`).join('\n')}`)
+
+    const uxAuditPath = path.join(tempRoot, UX_AUDIT_FILE)
+    const originalUxAuditSource = fs.readFileSync(uxAuditPath, 'utf8')
+    fs.rmSync(uxAuditPath)
+    const missingUxArtifact = validateRun(tempRoot, { writeReport: false, phase: 'final' })
+    if (missingUxArtifact.passed || !missingUxArtifact.checks.some((check) => check.code === 'artifact.exists' && !check.passed && check.message.includes(UX_AUDIT_FILE))) {
+      throw new Error(`Invalid fixture did not reject missing ${UX_AUDIT_FILE}`)
+    }
+    fs.writeFileSync(uxAuditPath, originalUxAuditSource)
+
+    const lifecyclePath = path.join(tempRoot, UX_LIFECYCLE_FILE)
+    const originalLifecycleSource = fs.readFileSync(lifecyclePath, 'utf8')
+    const mismatchedMarkerEvidence = JSON.parse(originalLifecycleSource)
+    mismatchedMarkerEvidence.objectives[0].markerObservations[0] = 'WRONG MARKER'
+    fs.writeFileSync(lifecyclePath, `${JSON.stringify(mismatchedMarkerEvidence, null, 2)}\n`)
+    const mismatchedMarker = validateRun(tempRoot, { writeReport: false, phase: 'final' })
+    if (mismatchedMarker.passed || !mismatchedMarker.checks.some((check) => check.code === 'ux.lifecycle-marker-exact' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject an inexact objective marker observation')
+    }
+    fs.writeFileSync(lifecyclePath, originalLifecycleSource)
+
     const contractPath = path.join(tempRoot, 'scene-contract.json')
     const originalContractSource = fs.readFileSync(contractPath, 'utf8')
     const invalidContract = JSON.parse(fs.readFileSync(contractPath, 'utf8'))
@@ -1455,7 +1841,7 @@ function runSelfTest() {
     if (spoofedMedia.passed || !spoofedMedia.checks.some((check) => check.code === 'media.probe-command' && !check.passed)) {
       throw new Error('Invalid fixture did not reject non-media bytes with a matching file hash')
     }
-    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus anchor, agency-fallback, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
+    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus UX missing-artifact, marker-exactness, anchor, agency-fallback, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true })
   }

@@ -3,15 +3,17 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Probe isolation (PROBE_NO_HMR=1): screening probes must watch a FROZEN app.
-  // With hmr:false Vite never calls handleHMRUpdate (verified in 6.3.5:
-  // onHMRUpdate is guarded on it), so a concurrent editing session's file
-  // saves cannot push updates/reloads into a 15-minute movie run (the
-  // 2026-07-11 full-run stall class). Normal dev keeps HMR.
-  server: process.env.PROBE_NO_HMR === '1' ? { hmr: false } : {},
+  // Probe isolation (PROBE_NO_HMR=1): screening probes serve a FROZEN app.
+  // Disable both HMR and the underlying watcher. Besides preventing a
+  // concurrent edit from mutating a 15-minute movie run, this keeps isolated
+  // probes independent of the machine-wide inotify budget used by normal dev
+  // servers. Normal development retains Vite's default watcher + HMR.
+  server: process.env.PROBE_NO_HMR === '1'
+    ? { hmr: false, watch: null }
+    : {},
   test: {
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
     exclude: ['node_modules/**', 'dist/**', '.chrome-smoke/**']
   }
 })

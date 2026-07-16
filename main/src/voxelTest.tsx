@@ -87,7 +87,7 @@ const EFFECTS = QS.get('effects');
 const SEED = Number(QS.get('seed')) || 12345;
 const REQUESTED_PROFILE = (QS.get('profile') ?? '').toUpperCase() as QualityProfile;
 const PROFILE = REQUESTED_PROFILE in QUALITY_PROFILES ? REQUESTED_PROFILE : DEFAULT_PROFILE;
-if (PROFILE !== getQualityProfile()) setQualityProfile(PROFILE);
+if (PROFILE !== getQualityProfile()) setQualityProfile(PROFILE, { persist: false });
 const EFFECT_FLORA = EFFECTS === 'flora';
 const EFFECT_FAUNA = EFFECTS === 'fauna';
 const REQUESTED_FAUNA_SPECIES = QS.get('species');

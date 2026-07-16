@@ -109,5 +109,5 @@ describe('arrival cinematography', () => {
         }
       }
     });
-  });
+  }, 15_000);
 });

@@ -1,10 +1,17 @@
 import { createPlayerPose, type PlayerPose } from './playerPose.ts';
+import { ECONOMY_CATALOG } from './data/generatedEconomyCatalog.ts';
 import { getPlayerPose, setPlayerPose } from './systems/playerPoseSystem.ts';
-import { applyInventorySnapshot, type InventorySnapshot } from './systems/inventorySystem.ts';
+import { addItem, applyInventorySnapshot, type InventorySnapshot } from './systems/inventorySystem.ts';
 import { applyVitalsSnapshot, type VitalsSnapshot } from './systems/survivalVitals.ts';
 import { applyMawSnapshot, type MawSnapshot } from './systems/mawSystem.ts';
 import { applyWaterskinSnapshot, type WaterskinSnapshot } from './systems/consumeSystem.ts';
-import { applyProgressionSnapshot, type ProgressionSnapshot } from './systems/progressionSystem.ts';
+import {
+  applyProgressionSnapshot,
+  getProgressionSnapshot,
+  hasMilestone,
+  markMilestone,
+  type ProgressionSnapshot
+} from './systems/progressionSystem.ts';
 import type { JsonObject } from './multiplayerClient.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { markTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
@@ -31,6 +38,38 @@ import {
   markMultiplayerResourceMarker,
   replaceMultiplayerResourceMarkers
 } from './systems/persistence.ts';
+import {
+  commitHabitatCorePlacement,
+  commitHabitatSafeRest,
+  commitHabitatShelterCertification,
+  getHabitatWorldState,
+  applyHabitatWorldSnapshot
+} from './systems/habitatSystem.ts';
+import {
+  applyShipRestorationSnapshot,
+  commitShipRepairStage
+} from './systems/shipRestoration.ts';
+import { WRECK_SALVAGE_MILESTONE } from './systems/shipRepairTransactions.ts';
+import { emitEmergentStoryEvent } from '../story/emergentStoryEvents.ts';
+import { commitStoryJetInstalled } from '../story/emergentCapabilities.ts';
+import {
+  applyAuthoritativeTidegardenSiteChoiceReceipt,
+  tidegardenSiteChoiceMatchesCell
+} from '../story/tidegardenSiteChoice.ts';
+import {
+  STORY_PRIMARY_WORLD_ID,
+  TIDEGARDEN_WORLD_ID
+} from '../story/tidegardenRoute.ts';
+import {
+  applyKestrelFoundingReserve,
+  KESTREL_FOUNDING_RESERVE,
+  KESTREL_FOUNDING_RESERVE_MILESTONE
+} from '../story/kestrelFoundingReserve.ts';
+import {
+  clearAuthoritativeStructureReceipts,
+  recordAuthoritativeStructureReceipt,
+  removeAuthoritativeStructureReceipt
+} from './authoritativeStructureReceipts.ts';
 
 export interface RemotePoseUpdate {
   playerId: string;
@@ -170,10 +209,65 @@ export function applyReplicatedPlayerStateSnapshot(
 
   const progression = sanitizeProgressionSnapshot(players.progression);
   if (progression) {
-    applyProgressionSnapshot(progression, { replace });
+    applyProgressionSnapshot(progression, {
+      replace,
+      // Camera/render/body receipts cannot be reconstructed by the state
+      // server. Preserve only the progression system's explicit client-owned
+      // allow-list; every economy and shared-story milestone remains replaced.
+      preserveClientOwnedMilestones: true
+    });
+    // A player delta may replace the local actor's server-owned receipts while
+    // another actor's accepted cache claim remains in the same client snapshot.
+    // Re-project the world fact so the empty cache cannot become interactable.
+    if (Object.values(getProgressionSnapshot()).some(state => (
+      state.milestones.includes(WRECK_SALVAGE_MILESTONE)
+    ))) markMilestone(WRECK_SALVAGE_MILESTONE);
     applied = true;
   }
 
+  return applied;
+}
+
+export function applyReplicatedStoryStateSnapshot(
+  snapshot: JsonObject,
+  worldId: string
+): boolean {
+  const story = readObject(snapshot.story);
+  if (!story) return false;
+  let applied = false;
+
+  const ship = readObject(story.ship);
+  if (ship && isReplicatedShipStage(ship.repairStage)) {
+    applyShipRestorationSnapshot({
+      version: 1,
+      repairStage: ship.repairStage,
+      repairHistory: Array.isArray(ship.repairHistory) ? ship.repairHistory : [],
+      currentSystemId: typeof ship.currentSystemId === 'string' ? ship.currentSystemId : worldId.split(':p')[0],
+      currentWorldId: typeof ship.currentWorldId === 'string' ? ship.currentWorldId : worldId,
+      parkedPose: null,
+      systemPose: null,
+      locationMode: ship.locationMode === 'atmosphere' || ship.locationMode === 'local_space'
+        ? ship.locationMode
+        : 'surface'
+    });
+    // Any accepted stage beyond the wreck proves the one physical cache was
+    // consumed. Project that shared fact locally without manufacturing its
+    // finite inventory outputs for a non-claiming peer.
+    if (ship.repairStage !== 'wrecked') markMilestone(WRECK_SALVAGE_MILESTONE);
+    applied = true;
+  }
+
+  applyHabitatWorldSnapshot(worldId, story.habitat);
+  if (story.habitat !== undefined) applied = true;
+
+  if (Array.isArray(story.relationshipAttendedBy)) {
+    for (const playerId of story.relationshipAttendedBy) {
+      if (typeof playerId === 'string') {
+        markMilestone('story:tidegarden:relationship-attended', playerId);
+        applied = true;
+      }
+    }
+  }
   return applied;
 }
 
@@ -195,6 +289,9 @@ export function applyReplicatedWorldSnapshotEvents(
   options: WorldSnapshotApplyOptions = {}
 ): WorldSnapshotReplayResult {
   const events = extractSnapshotWorldEvents(snapshot);
+  // A full snapshot is the authoritative structure audit log for this world.
+  // Drop stale ACK markers before replaying its accepted placement/removal order.
+  clearAuthoritativeStructureReceipts(worldId);
   if (options.replaceResourceMarkers) {
     const trees: Array<[number, number, number]> = [];
     const stones: Array<[number, number, number]> = [];
@@ -346,7 +443,16 @@ export function applyReplicatedWorldEvent(
 ): boolean {
   const parsed = parseReplicatedWorldEvent(event);
   if (!parsed) return false;
-  if (options.ignoreLocalPlayer && parsed.playerId === options.localPlayerId) return false;
+  if (parsed.type === 'structure_placed') {
+    recordReplicatedStructureReceipt(parsed, options.worldId);
+  } else if (parsed.type === 'structure_removed') {
+    removeReplicatedStructureReceipt(parsed, options.worldId);
+  }
+  if (options.ignoreLocalPlayer && parsed.playerId === options.localPlayerId) {
+    return parsed.type === 'structure_placed'
+      ? applyReplicatedTidegardenFoundationReceipt(parsed, options.worldId)
+      : false;
+  }
 
   switch (parsed.type) {
     case 'voxel_mined':
@@ -355,8 +461,11 @@ export function applyReplicatedWorldEvent(
       return applyReplicatedWaterFlooded(parsed.payload, options.water, options.worldId);
     case 'resource_taken':
       return applyReplicatedResourceTaken(parsed.payload, options.worldId);
-    case 'structure_placed':
-      return applyReplicatedStructurePlaced(parsed.payload, parsed.playerId, options.worldId);
+    case 'structure_placed': {
+      const applied = applyReplicatedStructurePlaced(parsed.payload, parsed.playerId, options.worldId);
+      const storyReceipt = applyReplicatedTidegardenFoundationReceipt(parsed, options.worldId);
+      return applied || storyReceipt;
+    }
     case 'structure_removed':
       return applyReplicatedStructureRemoved(parsed.payload, options.worldId);
     case 'door_toggled':
@@ -365,9 +474,71 @@ export function applyReplicatedWorldEvent(
       return applyReplicatedCampfirePlaced(parsed.payload, parsed.playerId);
     case 'player_respawned':
       return applyReplicatedPlayerRespawned(parsed.payload, parsed.playerId, options.worldId, parsed.seq, parsed.timeMs);
+    case 'maw_repair_begun':
+      return typeof parsed.payload.ritualBeginCommandId === 'string'
+        && parsed.payload.ritualSeconds === ECONOMY_CATALOG.storyTransactions.mawRepair.ritualSeconds;
+    case 'maw_repaired':
+      markMilestone('maw_repaired', parsed.playerId);
+      return true;
+    case 'maw_first_direction_resolved':
+      return applyReplicatedMawFirstDirection(parsed.payload, parsed.playerId);
+    case 'maw_pond_observation_begun':
+      return isReplicatedMawPondObservationBegin(parsed.payload);
+    case 'maw_pond_resonance_observed':
+      return applyReplicatedMawPondResonance(parsed.payload, parsed.playerId);
+    case 'story_item_acquired':
+      return applyReplicatedStoryItemAcquired(parsed.payload, parsed.playerId);
+    case 'story_item_banked':
+      return applyReplicatedStoryItemBanked(parsed.payload, parsed.playerId);
+    case 'wreck_salvage_claimed':
+      return applyReplicatedWreckSalvage(parsed.payload, parsed.playerId);
+    case 'kestrel_founding_reserve_claimed':
+      return applyReplicatedKestrelFoundingReserve(parsed.payload, parsed.playerId);
+    case 'ship_repair_stage':
+      return applyReplicatedShipRepairStage(parsed, options.worldId);
+    case 'tidegarden_relationship_attended':
+      return applyReplicatedTidegardenRelationship(parsed);
+    case 'tidegarden_site_chosen':
+      return applyReplicatedTidegardenSiteChoice(parsed, options.worldId);
+    case 'habitat_core_placed':
+      return applyReplicatedHabitatCore(parsed, options.worldId);
+    case 'habitat_shelter_certified':
+      return applyReplicatedHabitatShelter(parsed, options.worldId);
+    case 'habitat_safe_rest_completed':
+      return applyReplicatedHabitatRest(parsed, options.worldId);
     default:
       return false;
   }
+}
+
+function recordReplicatedStructureReceipt(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const cell = readCoord(event.payload.cell);
+  const face = readInt(event.payload.face);
+  const type = readString(event.payload.type);
+  const material = readString(event.payload.material);
+  if (!worldId || !cell || face === null || !type || !material) return false;
+  return recordAuthoritativeStructureReceipt({
+    worldId,
+    playerId: event.playerId,
+    cell,
+    face,
+    type: type as BuildPieceType,
+    material,
+    ...(event.commandId ? { commandId: event.commandId } : {})
+  });
+}
+
+function removeReplicatedStructureReceipt(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const cell = readCoord(event.payload.cell);
+  const face = readInt(event.payload.face);
+  return Boolean(worldId && cell && face !== null
+    && removeAuthoritativeStructureReceipt(worldId, cell, face));
 }
 
 export function parseReplicatedWorldEvent(event: unknown): ReplicatedWorldEvent | null {
@@ -568,6 +739,319 @@ export function applyReplicatedPlayerRespawned(
   return true;
 }
 
+export function applyReplicatedMawFirstDirection(
+  payload: JsonObject,
+  playerId: string
+): boolean {
+  const choice = payload.choice;
+  const repairCommandId = readString(payload.repairCommandId);
+  const proofCommandId = readString(payload.proofCommandId);
+  const targetKind = readString(payload.targetKind);
+  const minimumPurposeGapMs = ECONOMY_CATALOG.storyTransactions.mawRepair.purposeGapSeconds * 1000;
+  if (!repairCommandId || payload.minimumPurposeGapMs !== minimumPurposeGapMs) return false;
+  if (choice === 'lowered-and-listened') {
+    if (proofCommandId !== null || targetKind !== 'unassigned') return false;
+  } else if (choice === 'harmless-test') {
+    if (
+      !proofCommandId
+      || !targetKind
+      || !ECONOMY_CATALOG.storyTransactions.mawRepair.harmlessTestBlockIds.includes(
+        targetKind as typeof ECONOMY_CATALOG.storyTransactions.mawRepair.harmlessTestBlockIds[number]
+      )
+    ) return false;
+  } else {
+    return false;
+  }
+  markMilestone('story:maw:first-direction-resolved', playerId);
+  markMilestone(`story:maw:first-direction:${choice}`, playerId);
+  return true;
+}
+
+export function isReplicatedMawPondObservationBegin(payload: JsonObject): boolean {
+  return Boolean(
+    readString(payload.observationBeginCommandId)
+    && readString(payload.directionCommandId)
+    && readInt(payload.poseSeq) !== null
+    && payload.maximumPoseAgeMs
+      === ECONOMY_CATALOG.storyTransactions.mawRepair.maxPoseAgeSeconds * 1000
+    && payload.minimumObservationMs
+      === ECONOMY_CATALOG.storyTransactions.mawRepair.pondObservationSeconds * 1000
+    && payload.physicalProximityCertified === false
+  );
+}
+
+export function applyReplicatedMawPondResonance(
+  payload: JsonObject,
+  playerId: string
+): boolean {
+  if (
+    !readString(payload.observationBeginCommandId)
+    || !readString(payload.directionCommandId)
+    || readInt(payload.beginPoseSeq) === null
+    || readInt(payload.completionPoseSeq) === null
+    || payload.minimumObservationMs
+      !== ECONOMY_CATALOG.storyTransactions.mawRepair.pondObservationSeconds * 1000
+    || payload.physicalProximityCertified !== false
+  ) return false;
+  markMilestone('story:maw:pond-resonance-visible', playerId);
+  return true;
+}
+
+export function applyReplicatedStoryItemAcquired(payload: JsonObject, playerId: string): boolean {
+  const itemId = payload.itemId;
+  if (itemId !== 'maw_repair_kit' && itemId !== 'kestrel_keel_memory') return false;
+  const milestone = itemId === 'maw_repair_kit'
+    ? 'story:item:maw-repair-kit:acquired'
+    : 'story:item:kestrel-keel-memory:acquired';
+  if (!hasMilestone(milestone, playerId)) {
+    addItem(itemId, 1, playerId);
+    markMilestone(milestone, playerId);
+  }
+  return true;
+}
+
+export function applyReplicatedStoryItemBanked(payload: JsonObject, playerId: string): boolean {
+  if (payload.itemId !== 'kestrel_keel_memory') return false;
+  markMilestone('story:item:kestrel-keel-memory:banked', playerId);
+  return true;
+}
+
+export function applyReplicatedWreckSalvage(payload: JsonObject, playerId: string): boolean {
+  const milestone = WRECK_SALVAGE_MILESTONE;
+  if (hasMilestone(milestone, playerId)) {
+    markMilestone(milestone);
+    return true;
+  }
+  const outputs = Array.isArray(payload.outputs) ? payload.outputs : [];
+  for (const value of outputs) {
+    const stack = readObject(value);
+    const qty = readInt(stack?.qty);
+    if (!stack || typeof stack.id !== 'string' || qty === null || qty <= 0) continue;
+    addItem(stack.id as Parameters<typeof addItem>[0], qty, playerId);
+  }
+  markMilestone(milestone, playerId);
+  // Outputs remain actor-owned, but the emptied cache is a shared world fact.
+  markMilestone(milestone);
+  return true;
+}
+
+export function applyReplicatedKestrelFoundingReserve(
+  payload: JsonObject,
+  playerId: string
+): boolean {
+  if (hasMilestone(KESTREL_FOUNDING_RESERVE_MILESTONE, playerId)) return true;
+  const outputs = Array.isArray(payload.outputs) ? payload.outputs : [];
+  const stacks: Array<{ id: Parameters<typeof addItem>[0]; qty: number }> = [];
+  for (const value of outputs) {
+    const stack = readObject(value);
+    const qty = readInt(stack?.qty);
+    if (!stack || typeof stack.id !== 'string' || qty === null || qty <= 0) continue;
+    stacks.push({ id: stack.id as Parameters<typeof addItem>[0], qty });
+  }
+  const canonical = stacks.length === KESTREL_FOUNDING_RESERVE.length
+    && KESTREL_FOUNDING_RESERVE.every(expected => stacks.some(stack => (
+      stack.id === expected.id && stack.qty === expected.qty
+    )));
+  return canonical && applyKestrelFoundingReserve(KESTREL_FOUNDING_RESERVE, playerId);
+}
+
+export function applyReplicatedShipRepairStage(
+  event: ReplicatedWorldEvent,
+  _worldId?: string
+): boolean {
+  const target = event.payload.to;
+  if (
+    target !== 'bench_online'
+    && target !== 'frame_restored'
+    && target !== 'hull_sealed'
+    && target !== 'lift_online'
+    && target !== 'flight_ready'
+  ) return false;
+  const result = commitShipRepairStage(
+    event.commandId ?? `multiplayer:ship-repair:${event.seq}:${target}`,
+    target,
+    event.playerId
+  );
+  // Lift hardware belongs to the shared hull. Every local actor needs the
+  // capability immediately so their own physical hover proof remains possible.
+  if (result.ok && (target === 'lift_online' || target === 'flight_ready')) {
+    commitStoryJetInstalled();
+  }
+  return result.ok;
+}
+
+export function applyReplicatedTidegardenRelationship(event: ReplicatedWorldEvent): boolean {
+  const relationshipId = readString(event.payload.relationshipId);
+  if (relationshipId !== 'tideline-root-water-exchange') return false;
+  markMilestone('story:tidegarden:relationship-attended', event.playerId);
+  emitEmergentStoryEvent({
+    id: `server:${event.commandId ?? event.seq}:tidegarden-relationship`,
+    type: 'ecology_relationship_observed',
+    actorId: event.playerId,
+    worldId: TIDEGARDEN_WORLD_ID,
+    payload: { worldId: TIDEGARDEN_WORLD_ID, relationshipId }
+  });
+  return true;
+}
+
+export function applyReplicatedTidegardenSiteChoice(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const cell = readCoord(event.payload.cell);
+  const supportCell = readCoord(event.payload.supportCell);
+  const up = readCoord(event.payload.up);
+  const resolvedWorldId = worldId?.trim() ?? readString(event.payload.worldId) ?? '';
+  if (resolvedWorldId !== TIDEGARDEN_WORLD_ID || !cell || !supportCell || !up) return false;
+  return applyAuthoritativeTidegardenSiteChoiceReceipt({
+    worldId: resolvedWorldId,
+    cell,
+    supportCell,
+    up
+  }, `server:${event.commandId ?? event.seq}:tidegarden-site`, event.playerId).ok;
+}
+
+function applyReplicatedTidegardenFoundationReceipt(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const cell = readCoord(event.payload.cell);
+  const face = readInt(event.payload.face);
+  const material = readString(event.payload.material);
+  if (worldId !== TIDEGARDEN_WORLD_ID
+    || !cell
+    || face === null
+    || readString(event.payload.type) !== 'foundation'
+    || !material
+    || !tidegardenSiteChoiceMatchesCell(event.playerId, cell)) return false;
+  emitEmergentStoryEvent({
+    id: `server:${event.commandId ?? event.seq}:tidegarden-foundation`,
+    type: 'settlement_foundation_placed',
+    actorId: event.playerId,
+    worldId,
+    occurredAt: event.timeMs,
+    payload: {
+      transactionEventId: event.commandId ?? `world-event:${event.seq}`,
+      cell,
+      face,
+      material
+    }
+  });
+  return true;
+}
+
+export function applyReplicatedHabitatCore(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const resolvedWorldId = worldId?.trim() ?? '';
+  const shelterId = readString(event.payload.shelterId);
+  const cell = readCoord(event.payload.cell);
+  const supportCell = readCoord(event.payload.supportCell);
+  const position = readVec3(event.payload.position);
+  const up = readVec3(event.payload.up);
+  if (!resolvedWorldId || !shelterId || !cell || !supportCell || !position || !up) return false;
+  const existing = getHabitatWorldState(resolvedWorldId);
+  const committed = existing
+    ? existing.core.shelterId === shelterId
+    : commitHabitatCorePlacement({
+        actorId: event.playerId,
+        worldId: resolvedWorldId,
+        shelterId,
+        cell,
+        supportCell,
+        position,
+        up,
+        eventId: event.commandId ?? `multiplayer:habitat-core:${event.seq}`
+      });
+  if (committed) {
+    markMilestone('story:item:habitat-core:crafted', event.playerId);
+    markMilestone('story:tidegarden:habitat-core-online', event.playerId);
+    emitEmergentStoryEvent({
+      id: `server:${event.commandId ?? event.seq}:habitat-core-online`,
+      type: 'station_activated',
+      actorId: event.playerId,
+      worldId: resolvedWorldId,
+      payload: { stationId: 'habitat_core' }
+    });
+  }
+  return committed;
+}
+
+export function applyReplicatedHabitatShelter(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const resolvedWorldId = worldId?.trim() ?? '';
+  const shelterId = readString(event.payload.shelterId);
+  const cell = readCoord(event.payload.cell);
+  const insulation = readNumber(event.payload.insulation);
+  const interiorCellCount = readInt(event.payload.interiorCellCount);
+  if (!resolvedWorldId || !shelterId || !cell || insulation === null
+    || interiorCellCount === null || interiorCellCount <= 0) return false;
+  const existing = getHabitatWorldState(resolvedWorldId);
+  const committed = existing?.shelterCertification
+    ? existing.shelterCertification.shelterId === shelterId
+    : commitHabitatShelterCertification(resolvedWorldId, {
+        shelterId,
+        cell,
+        insulation,
+        interiorCellCount,
+        eventId: event.commandId ?? `multiplayer:habitat-shelter:${event.seq}`
+      });
+  if (committed) {
+    markMilestone('story:tidegarden:shelter-certified', event.playerId);
+    emitEmergentStoryEvent({
+      id: `server:${event.commandId ?? event.seq}:habitat-shelter-certified`,
+      type: 'shelter_certified',
+      actorId: event.playerId,
+      worldId: resolvedWorldId,
+      payload: { worldId: resolvedWorldId, shelterId }
+    });
+  }
+  return committed;
+}
+
+export function applyReplicatedHabitatRest(
+  event: ReplicatedWorldEvent,
+  worldId?: string
+): boolean {
+  const resolvedWorldId = worldId?.trim() ?? '';
+  const shelterId = readString(event.payload.shelterId);
+  const dayPhase = readNumber(event.payload.dayPhase);
+  if (!resolvedWorldId || !shelterId || dayPhase === null) return false;
+  const existing = getHabitatWorldState(resolvedWorldId);
+  const committed = existing?.safeRest
+    ? existing.safeRest.shelterId === shelterId
+    : commitHabitatSafeRest(resolvedWorldId, {
+        shelterId,
+        dayPhase,
+        eventId: event.commandId ?? `multiplayer:habitat-rest:${event.seq}`
+      });
+  if (committed) {
+    markMilestone('story:tidegarden:safe-rest-completed', event.playerId);
+    markMilestone('story:tidegarden:two-world-handoff', event.playerId);
+    emitEmergentStoryEvent({
+      id: `server:${event.commandId ?? event.seq}:habitat-safe-rest`,
+      type: 'safe_rest_completed',
+      actorId: event.playerId,
+      worldId: resolvedWorldId,
+      payload: { worldId: resolvedWorldId, shelterId }
+    });
+    emitEmergentStoryEvent({
+      id: `server:${event.commandId ?? event.seq}:two-world-handoff`,
+      type: 'two_world_story_handoff',
+      actorId: event.playerId,
+      worldId: resolvedWorldId,
+      payload: {
+        originWorldId: STORY_PRIMARY_WORLD_ID,
+        siblingWorldId: TIDEGARDEN_WORLD_ID
+      }
+    });
+  }
+  return committed;
+}
+
 export function readCoord(value: unknown): [number, number, number] | null {
   if (!Array.isArray(value) || value.length !== 3) return null;
   const [x, y, z] = value;
@@ -665,6 +1149,25 @@ function readInt(value: unknown): number | null {
 
 function readString(value: unknown): string | null {
   return typeof value === 'string' ? value : null;
+}
+
+function readNumber(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function isReplicatedShipStage(value: unknown): value is
+  | 'wrecked'
+  | 'bench_online'
+  | 'frame_restored'
+  | 'hull_sealed'
+  | 'lift_online'
+  | 'flight_ready' {
+  return value === 'wrecked'
+    || value === 'bench_online'
+    || value === 'frame_restored'
+    || value === 'hull_sealed'
+    || value === 'lift_online'
+    || value === 'flight_ready';
 }
 
 function readPoseSeq(pose: JsonObject): number {

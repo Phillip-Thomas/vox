@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
-import { createTerrainConfig } from './terrainConfig';
+import type { ProceduralWorldGenerator } from './proceduralWorldGenerator';
 import { GENERATION_SCHEMA_VERSION } from '../game/schema';
+import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
 import { blockToRenderMaterial } from '../game/adapters';
 import { markWarpMetric, measureWarpMetric } from './warpMetrics';
 import { voxelCoordToWorld } from './cubeGravityConstants';
@@ -16,9 +16,10 @@ import {
   validatePackedWorldPrepPayload,
   type PackedWorldPrepPayload
 } from './worldPrepProtocol.ts';
+import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
 
 /**
- * Memoized world-generation, keyed by (size, terrainSeed).
+ * Memoized world-generation, keyed by (size, terrainSeed, worldId).
  *
  * The procedural generator runs a full O(R^3) cube scan to produce its voxel
  * positions. Historically that scan happened TWICE per world arrival for the
@@ -27,11 +28,10 @@ import {
  * terrain). This module runs the construction + scan ONCE per seed and shares
  * both the generator and its voxel-position array between callers.
  *
- * Construction is preserved byte-for-byte from the previous inline call sites:
- *   planetRadius      = size / 2
- *   coreRadiusPercent = 0.15
- *   terrainConfig     = createTerrainConfig(terrainSeed, planetRadius)
- * so generator output is identical to before (this is purely caching).
+ * Generic seed-only construction remains byte-for-byte compatible with the old
+ * inline call sites. Canonical worlds occupy a separate identity-aware entry, so
+ * an authored world can never alias (or be aliased by) the seed's generic
+ * archetype, regardless of which path is constructed first.
  *
  * Safety: getAllVoxelPositions() returns a fresh array of fresh {x,y,z}
  * objects. Neither existing caller mutates the array or its elements —
@@ -41,8 +41,12 @@ import {
  */
 
 export interface CachedWorldGen {
-  /** Present for worker-prepared worlds so readiness cannot alias a seed collision. */
+  /** Present for canonical worlds so readiness cannot alias a seed collision. */
   worldId?: string;
+  profileId: string;
+  profileVersion: number;
+  /** Stable resolved-profile fingerprint; unlike payload.hash it excludes lease data. */
+  profileHash: string;
   generator: ProceduralWorldGenerator;
   voxels: Array<{ x: number; y: number; z: number }>;
   originalTerrain?: TerrainVoxel[];
@@ -81,6 +85,7 @@ export interface PreparedWorldRenderData {
 }
 
 export interface WorldPrewarmOptions {
+  worldId?: string;
   terrainData?: boolean;
   waterFaces?: boolean;
   waterVoxels?: boolean;
@@ -95,10 +100,19 @@ const scheduledPrewarms = new Set<string>();
 const meshMatrix = new THREE.Matrix4();
 const meshPosition = new THREE.Vector3();
 
-function cacheKey(size: number, terrainSeed: number): string {
+function cacheKey(size: number, terrainSeed: number, worldId?: string): string {
   // Schema version in the key so a generation change never serves stale cached
-  // terrain from an older schema within a session.
-  return `v${GENERATION_SCHEMA_VERSION}:${size}:${terrainSeed}`;
+  // terrain from an older schema within a session. The explicit seed-only token
+  // is deliberately distinct from every canonical planet identity.
+  return `v${GENERATION_SCHEMA_VERSION}:${size}:${terrainSeed}:${worldId ?? 'seed-only'}`;
+}
+
+function canonicalProfileHash(worldId: string, terrainSeed: number): string | null {
+  try {
+    return resolvePlanetProfile({ worldId, seed: terrainSeed }).profileHash;
+  } catch {
+    return null;
+  }
 }
 
 function coordKey(x: number, y: number, z: number) {
@@ -164,8 +178,12 @@ function buildInitialTerrainMeshData(
   return { count, matrices, colors, instanceData };
 }
 
-export function getWorldGen(size: number, terrainSeed: number): CachedWorldGen {
-  const key = cacheKey(size, terrainSeed);
+export function getWorldGen(
+  size: number,
+  terrainSeed: number,
+  worldId?: string
+): CachedWorldGen {
+  const key = cacheKey(size, terrainSeed, worldId);
 
   const existing = cache.get(key);
   if (existing) {
@@ -180,14 +198,16 @@ export function getWorldGen(size: number, terrainSeed: number): CachedWorldGen {
     'worldgen:cache_miss_build',
     () => {
       const planetRadius = size / 2;
-      const generator = new ProceduralWorldGenerator(
-        {
-          planetRadius,
-          coreRadiusPercent: 0.15
-        },
-        createTerrainConfig(terrainSeed, planetRadius)
-      );
+      const { generator, resolution } = createResolvedWorldGenerator({
+        worldId,
+        seed: terrainSeed,
+        planetRadius
+      });
       return {
+        worldId: resolution.worldId,
+        profileId: resolution.profileId,
+        profileVersion: resolution.profileVersion,
+        profileHash: resolution.profileHash,
         generator,
         voxels: generator.getAllVoxelPositions()
       };
@@ -217,8 +237,13 @@ export function hasWorldGenCacheEntry(
   terrainSeed: number,
   worldId?: string
 ): boolean {
-  const entry = cache.get(cacheKey(size, terrainSeed));
-  return Boolean(entry && (worldId === undefined || entry.worldId === worldId));
+  const entry = cache.get(cacheKey(size, terrainSeed, worldId));
+  if (!entry) return false;
+  if (worldId === undefined) return true;
+  const expectedProfileHash = canonicalProfileHash(worldId, terrainSeed);
+  return expectedProfileHash !== null
+    && entry.worldId === worldId
+    && entry.profileHash === expectedProfileHash;
 }
 
 /**
@@ -230,8 +255,14 @@ export function getPreparedWorldTerrainMeshData(
   terrainSeed: number,
   worldId: string
 ): InitialTerrainMeshData | null {
-  const entry = cache.get(cacheKey(size, terrainSeed));
-  if (!entry || entry.worldId !== worldId) return null;
+  const entry = cache.get(cacheKey(size, terrainSeed, worldId));
+  const expectedProfileHash = canonicalProfileHash(worldId, terrainSeed);
+  if (
+    !entry
+    || expectedProfileHash === null
+    || entry.worldId !== worldId
+    || entry.profileHash !== expectedProfileHash
+  ) return null;
   return entry.initialTerrainMeshData ?? null;
 }
 
@@ -241,10 +272,13 @@ export function getPreparedWorldRenderData(
   terrainSeed: number,
   worldId: string
 ): PreparedWorldRenderData | null {
-  const entry = cache.get(cacheKey(size, terrainSeed));
+  const entry = cache.get(cacheKey(size, terrainSeed, worldId));
+  const expectedProfileHash = canonicalProfileHash(worldId, terrainSeed);
   if (
     !entry
+    || expectedProfileHash === null
     || entry.worldId !== worldId
+    || entry.profileHash !== expectedProfileHash
     || !entry.initialTerrainMeshData
     || !entry.waterFaces
   ) return null;
@@ -256,9 +290,10 @@ export function getPreparedWorldRenderData(
 
 export function getWorldWaterVoxels(
   size: number,
-  terrainSeed: number
+  terrainSeed: number,
+  worldId?: string
 ): Array<{ x: number; y: number; z: number; isTopSurface: boolean }> {
-  const entry = getWorldGen(size, terrainSeed);
+  const entry = getWorldGen(size, terrainSeed, worldId);
   if (entry.waterVoxels) {
     markWarpMetric('water:voxels_cache_hit', { voxels: entry.waterVoxels.length });
     return entry.waterVoxels;
@@ -274,9 +309,10 @@ export function getWorldWaterVoxels(
 
 export function getWorldWaterFaces(
   size: number,
-  terrainSeed: number
+  terrainSeed: number,
+  worldId?: string
 ): Array<{ x: number; y: number; z: number; faceDir: number }> {
-  const entry = getWorldGen(size, terrainSeed);
+  const entry = getWorldGen(size, terrainSeed, worldId);
   if (entry.waterFaces) {
     markWarpMetric('water:faces_cache_hit', { faces: entry.waterFaces.length });
     return entry.waterFaces;
@@ -292,9 +328,10 @@ export function getWorldWaterFaces(
 
 export function getWorldAllWaterVoxels(
   size: number,
-  terrainSeed: number
+  terrainSeed: number,
+  worldId?: string
 ): Array<{ x: number; y: number; z: number }> {
-  const entry = getWorldGen(size, terrainSeed);
+  const entry = getWorldGen(size, terrainSeed, worldId);
   if (entry.allWaterVoxels) return entry.allWaterVoxels;
   const extent = Math.floor(size / 2) + 6;
   const water: Array<{ x: number; y: number; z: number }> = [];
@@ -311,9 +348,10 @@ export function getWorldAllWaterVoxels(
 
 export function getWorldTerrainData(
   size: number,
-  terrainSeed: number
+  terrainSeed: number,
+  worldId?: string
 ): WorldTerrainData {
-  const entry = getWorldGen(size, terrainSeed);
+  const entry = getWorldGen(size, terrainSeed, worldId);
 
   if (!entry.originalTerrain) {
     const terrainData = measureWarpMetric(
@@ -402,6 +440,14 @@ export async function hydrateWorldGenCacheFromPackedPayload(
   if (payload.planetSize <= 0 || payload.seed <= 0) {
     throw new Error('Cannot hydrate an invalid world-prep payload.');
   }
+  const resolution = resolvePlanetProfile({ worldId: payload.worldId, seed: payload.seed });
+  if (
+    payload.profileId !== resolution.profileId
+    || payload.profileVersion !== resolution.profileVersion
+    || payload.profileHash !== resolution.profileHash
+  ) {
+    throw new Error('Cannot hydrate world-prep data for a stale planet profile.');
+  }
 
   const budgetMs = Math.max(0.25, options.budgetMs ?? 2.5);
   const yieldControl = options.yieldControl ?? yieldForHydration;
@@ -415,10 +461,11 @@ export async function hydrateWorldGenCacheFromPackedPayload(
   };
 
   const planetRadius = payload.planetSize / 2;
-  const generator = new ProceduralWorldGenerator(
-    { planetRadius, coreRadiusPercent: 0.15 },
-    createTerrainConfig(payload.seed, planetRadius)
-  );
+  const { generator } = createResolvedWorldGenerator({
+    worldId: payload.worldId,
+    seed: payload.seed,
+    planetRadius
+  });
   const voxelCount = payload.counts.voxels;
   const voxels = new Array<{ x: number; y: number; z: number }>(voxelCount);
   const originalTerrain = new Array<TerrainVoxel>(voxelCount);
@@ -524,6 +571,9 @@ export async function hydrateWorldGenCacheFromPackedPayload(
 
   const entry: CachedWorldGen = {
     worldId: payload.worldId,
+    profileId: payload.profileId,
+    profileVersion: payload.profileVersion,
+    profileHash: payload.profileHash,
     generator,
     voxels,
     originalTerrain,
@@ -541,7 +591,7 @@ export async function hydrateWorldGenCacheFromPackedPayload(
   };
 
   if (options.isCancelled?.()) throw new Error('World-prep hydration was cancelled.');
-  const key = cacheKey(payload.planetSize, payload.seed);
+  const key = cacheKey(payload.planetSize, payload.seed, payload.worldId);
   cache.delete(key);
   cache.set(key, entry);
   trimWorldGenCache();
@@ -551,9 +601,10 @@ export async function hydrateWorldGenCacheFromPackedPayload(
 export function getWorldArrivalCandidate(
   size: number,
   terrainSeed: number,
-  preferred = { x: 4, z: -4 }
+  preferred = { x: 4, z: -4 },
+  worldId?: string
 ): { x: number; y: number; z: number } {
-  const entry = getWorldGen(size, terrainSeed);
+  const entry = getWorldGen(size, terrainSeed, worldId);
   const defaultPreference = preferred.x === 4 && preferred.z === -4;
   if (defaultPreference && entry.arrivalCandidate) return { ...entry.arrivalCandidate };
   const topByColumn = new Map<string, { x: number; y: number; z: number }>();
@@ -587,10 +638,10 @@ export function prewarmWorldGen(
   return measureWarpMetric(
     'worldgen:prewarm',
     () => {
-      const entry = getWorldGen(size, terrainSeed);
-      if (options.terrainData) getWorldTerrainData(size, terrainSeed);
-      if (options.waterFaces) getWorldWaterFaces(size, terrainSeed);
-      if (options.waterVoxels) getWorldWaterVoxels(size, terrainSeed);
+      const entry = getWorldGen(size, terrainSeed, options.worldId);
+      if (options.terrainData) getWorldTerrainData(size, terrainSeed, options.worldId);
+      if (options.waterFaces) getWorldWaterFaces(size, terrainSeed, options.worldId);
+      if (options.waterVoxels) getWorldWaterVoxels(size, terrainSeed, options.worldId);
       return entry;
     },
     entry => ({
@@ -606,11 +657,11 @@ export function prewarmWorldGen(
 }
 
 function prewarmKey(size: number, terrainSeed: number, options: WorldPrewarmOptions): string {
-  return `${cacheKey(size, terrainSeed)}:${options.terrainData ? 't' : '-'}:${options.waterFaces ? 'f' : '-'}:${options.waterVoxels ? 'v' : '-'}`;
+  return `${cacheKey(size, terrainSeed, options.worldId)}:${options.terrainData ? 't' : '-'}:${options.waterFaces ? 'f' : '-'}:${options.waterVoxels ? 'v' : '-'}`;
 }
 
 function hasPrewarmData(size: number, terrainSeed: number, options: WorldPrewarmOptions): boolean {
-  const entry = cache.get(cacheKey(size, terrainSeed));
+  const entry = cache.get(cacheKey(size, terrainSeed, options.worldId));
   if (!entry) return false;
   if (
     options.terrainData &&

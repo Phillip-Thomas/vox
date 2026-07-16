@@ -1,0 +1,34 @@
+{
+  "schema": "terra.defectRegister.v1",
+  "runId": "paravoxia-emergent-2026-07-13",
+  "summary": { "criticalOpen": 0, "highOpen": 0, "fixed": 14, "deferred": 3 },
+  "defects": [
+    { "severity": "critical", "category": "correctness", "description": "Movie mode stopped before the emergent arc.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "critical", "category": "correctness", "description": "Tidegarden direct boot aliased seed-only volcanic terrain.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "critical", "category": "architecture_fit", "description": "Connected co-op could neither route to p1 nor authoritatively persist the arc.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "critical", "category": "correctness", "description": "Replay could deadlock on stale Tidegarden Habitat receipts.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "correctness", "description": "Crossing reload fabricated touchdown and egress.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "operability", "description": "Ship pose persistence and completed-site return were unwired.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "architecture_fit", "description": "Signed audiovisual contract had no production consumer.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "correctness", "description": "Tidegarden habitat restore subscribed to its own revision writes and entered a React update loop after Core placement.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "correctness", "description": "Low and Potato shader policy froze the surface gameplay day/night clock and prevented safe-rest progression.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "correctness", "description": "A whole-rail Chapter 5-to-6 handoff could bounce off the pond lip because dry-ground step assist remained active during fluid entry and a camera-only readiness guard cleared fixed-step dive intent after material submersion.", "status": "fixed", "ownerRole": "system-repair-engineer" },
+    { "severity": "high", "category": "correctness", "description": "Unsupported feet-only water contact with a dry eye and exhausted jetpack produced no meaningful swim blend, deadlocking wet-bank egress; a bounded shallow unsupported swim factor now preserves physical stroke authority.", "status": "fixed", "ownerRole": "system-repair-engineer", "evidenceRef": "../../../../../captures/emergent-wet-egress-proof-2026-07-15-01/summary.json" },
+    { "severity": "high", "category": "correctness", "description": "A cached cross-face unreachable route with no waypoint survived after the body settled from unsupported to supported; material displacement and unsupported-to-supported contact now invalidate the cache while the local wet-egress leg is retained.", "status": "fixed", "ownerRole": "system-repair-engineer", "evidenceRef": "../../../../../captures/emergent-full-cold-final-2026-07-15-v3-02/timeline.jsonl" },
+    { "severity": "high", "category": "operability", "description": "High-frequency local pose publication fed new React arrays to avatar and minimap subscribers and recursed to maximum update depth; frame-coalesced external-store notifications now expose stable full and remote-only snapshots.", "status": "fixed", "ownerRole": "system-repair-engineer", "evidenceRef": "../../../../../captures/emergent-ch8-tidegarden-race-fix-2026-07-15-03/summary.json" },
+    { "severity": "high", "category": "operability", "description": "EfficientScene routed continuous frame positions through React state while render-created debug adapters crossed a passive-effect boundary, creating a second maximum-depth path; a live position mailbox and stable debug callbacks remove the scene-position passive loop.", "status": "fixed", "ownerRole": "system-repair-engineer", "evidenceRef": "../../../../../captures/emergent-full-cold-final-2026-07-15-v4-01/summary.json" },
+    { "severity": "medium", "category": "verification", "description": "The official three-run POTATO mechanical gate passes 3/3; the quality-profile matrix, reduced-motion equivalence, supported headed input, real-GPU taste, and persistence evidence remain release gates.", "status": "deferred", "ownerRole": "human-review" },
+    { "severity": "medium", "category": "safety", "description": "Server does not independently regenerate support and water voxels.", "status": "deferred", "ownerRole": "server-authority-engineer" },
+    { "severity": "medium", "category": "safety", "description": "Trusted server pose samples exist, but the server does not yet issue or validate embodied Story receipts for the physical Chapter 4-7 acts.", "status": "deferred", "ownerRole": "server-authority-engineer" }
+  ],
+  "releaseGates": [
+    "server-issued-embodied-story-receipts",
+    "quality-profile-matrix",
+    "reduced-motion-equivalence",
+    "supported-headed-input",
+    "headed-real-gpu-taste",
+    "origin-sibling-persistence-roundtrip",
+    "tidegarden-support-water-authority-disposition",
+    "human-release-decision"
+  ]
+}

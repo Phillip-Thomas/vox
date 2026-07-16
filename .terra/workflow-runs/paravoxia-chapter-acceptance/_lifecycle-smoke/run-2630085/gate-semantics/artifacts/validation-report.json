@@ -1,0 +1,6 @@
+{
+  "candidateRevisionMatches": true,
+  "everyRegisteredBeatReachable": true,
+  "everyObjectiveTargetResolvable": true,
+  "noDuplicateProgressionAuthority": true
+}

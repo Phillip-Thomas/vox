@@ -8,11 +8,16 @@
 // compressor together:
 //
 //   engine outputs → musicBus (volume · mute) → submergeFilter (lowpass)
-//                  → visibilityGain → compressor → destination
+//                  → sceneEnvelopeGain → visibilityGain → compressor → destination
+//
+// The scene envelope is deliberately independent of the player's music-volume
+// setting. Authored moments may shape the shared music bed without mutating a
+// preference or competing with hidden-tab and submergence safety rails.
 
 let ctx: AudioContext | null = null;
 let musicBus: GainNode | null = null;
 let submergeFilter: BiquadFilterNode | null = null;
+let sceneEnvelopeGain: GainNode | null = null;
 let visibilityGain: GainNode | null = null;
 
 /** Default music-bus volume (shared by the live chain and the offline mirror). */
@@ -50,6 +55,7 @@ let volume = DEFAULT_MUSIC_VOLUME;
 let muted = false;
 let submergence = 0;
 let ducked = false;
+let sceneEnvelopeValue = 1;
 
 function submergeCutoff(amount: number): number {
   const a = Math.min(1, Math.max(0, amount));
@@ -76,11 +82,15 @@ export function getAudioContext(): AudioContext | null {
   visibilityGain.gain.value = ducked ? MUSIC_VISIBILITY_DUCK_LEVEL : 1;
   visibilityGain.connect(compressor);
 
+  sceneEnvelopeGain = ctx.createGain();
+  sceneEnvelopeGain.gain.value = sceneEnvelopeValue;
+  sceneEnvelopeGain.connect(visibilityGain);
+
   submergeFilter = ctx.createBiquadFilter();
   submergeFilter.type = 'lowpass';
   submergeFilter.frequency.value = submergeCutoff(submergence); // open on land (transparent)
   submergeFilter.Q.value = MUSIC_SUBMERGE_FILTER_Q;
-  submergeFilter.connect(visibilityGain);
+  submergeFilter.connect(sceneEnvelopeGain);
 
   musicBus = ctx.createGain();
   musicBus.gain.value = 0;
@@ -149,6 +159,110 @@ export function setMusicVisibilityDucked(next: boolean): void {
   }
 }
 
+export interface MusicSceneEnvelopePoint {
+  /** Seconds after the schedule's start anchor. */
+  offsetSeconds: number;
+  /** Shared-music multiplier, clamped to 0..1. */
+  value: number;
+}
+
+/** Current audio time without constructing an AudioContext before unlock. */
+export function getMusicAudioTime(): number | null {
+  return ctx?.currentTime ?? null;
+}
+
+/**
+ * Exact, start-anchored scene automation. Unlike `rampParamAt`, this is for
+ * authored envelopes whose duration and zero-width must remain literal rather
+ * than 95%-settled. Callers supply the known value at the anchor so pause and
+ * resume cannot infer a stale AudioParam value.
+ */
+export function scheduleMusicSceneEnvelopeParam(
+  param: AudioParam,
+  atTime: number,
+  points: readonly MusicSceneEnvelopePoint[],
+  startValue = param.value
+): void {
+  const at = Math.max(0, atTime);
+  const start = clampMusicEnvelopeValue(startValue);
+  const hold = param.cancelAndHoldAtTime;
+  if (typeof hold === 'function') {
+    hold.call(param, at);
+  } else {
+    param.cancelScheduledValues(at);
+  }
+  // Explicitly anchor the ramp. Chromium otherwise may interpolate a newly
+  // scheduled endpoint from an older event in the rendered past.
+  param.setValueAtTime(start, at);
+
+  const ordered = points
+    .filter(point => Number.isFinite(point.offsetSeconds) && Number.isFinite(point.value))
+    .map(point => ({
+      offsetSeconds: Math.max(0, point.offsetSeconds),
+      value: clampMusicEnvelopeValue(point.value)
+    }))
+    .sort((a, b) => a.offsetSeconds - b.offsetSeconds);
+  for (const point of ordered) {
+    if (point.offsetSeconds === 0) {
+      param.setValueAtTime(point.value, at);
+    } else {
+      param.linearRampToValueAtTime(point.value, at + point.offsetSeconds);
+    }
+  }
+}
+
+/**
+ * Schedule the live shared-music envelope if audio is already unlocked.
+ * Returning null is intentional: story events before unlock settle immediately
+ * and are never queued to surprise the player after a later gesture.
+ */
+export function scheduleMusicSceneEnvelope(
+  points: readonly MusicSceneEnvelopePoint[],
+  atTime?: number,
+  startValue = sceneEnvelopeValue
+): number | null {
+  let finalValue = clampMusicEnvelopeValue(startValue);
+  let finalOffset = -1;
+  for (const point of points) {
+    if (!Number.isFinite(point.offsetSeconds) || !Number.isFinite(point.value)) continue;
+    const offset = Math.max(0, point.offsetSeconds);
+    if (offset >= finalOffset) {
+      finalOffset = offset;
+      finalValue = clampMusicEnvelopeValue(point.value);
+    }
+  }
+  sceneEnvelopeValue = finalValue;
+  if (!ctx || !sceneEnvelopeGain) return null;
+  const at = Math.max(0, atTime ?? ctx.currentTime);
+  scheduleMusicSceneEnvelopeParam(sceneEnvelopeGain.gain, at, points, startValue);
+  return at;
+}
+
+/** Freeze an authored envelope at its analytically known value. */
+export function holdMusicSceneEnvelope(value: number, atTime?: number): number | null {
+  sceneEnvelopeValue = clampMusicEnvelopeValue(value);
+  if (!ctx || !sceneEnvelopeGain) return null;
+  const at = Math.max(0, atTime ?? ctx.currentTime);
+  const param = sceneEnvelopeGain.gain;
+  const hold = param.cancelAndHoldAtTime;
+  if (typeof hold === 'function') {
+    hold.call(param, at);
+  } else {
+    param.cancelScheduledValues(at);
+  }
+  param.setValueAtTime(sceneEnvelopeValue, at);
+  return at;
+}
+
+/** Settle the scene rail now without changing volume/mute preferences. */
+export function setMusicSceneEnvelopeImmediate(value: number): void {
+  holdMusicSceneEnvelope(value);
+}
+
+function clampMusicEnvelopeValue(value: number): number {
+  return Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 1;
+}
+
 function applyOutput(fadeSeconds: number): void {
   if (!ctx || !musicBus) return;
   rampParam(ctx, musicBus.gain, muted ? 0 : volume, fadeSeconds);
@@ -197,6 +311,12 @@ export function rampParamAt(
 export interface OfflineMusicChainControls {
   bus: GainNode;
   setSubmergence(amount: number, atTime?: number): void;
+  setSceneEnvelope(value: number, atTime?: number, fadeSeconds?: number): void;
+  scheduleSceneEnvelope(
+    points: readonly MusicSceneEnvelopePoint[],
+    atTime?: number,
+    startValue?: number
+  ): void;
   setVisibilityDucked(next: boolean, atTime?: number): void;
 }
 
@@ -213,11 +333,15 @@ export function createOfflineMusicRuntimeChain(
   offlineVisibility.gain.value = 1;
   offlineVisibility.connect(compressor);
 
+  const offlineSceneEnvelope = context.createGain();
+  offlineSceneEnvelope.gain.value = 1;
+  offlineSceneEnvelope.connect(offlineVisibility);
+
   const offlineSubmerge = context.createBiquadFilter();
   offlineSubmerge.type = 'lowpass';
   offlineSubmerge.frequency.value = MUSIC_OPEN_CUTOFF_HZ;
   offlineSubmerge.Q.value = MUSIC_SUBMERGE_FILTER_Q;
-  offlineSubmerge.connect(offlineVisibility);
+  offlineSubmerge.connect(offlineSceneEnvelope);
 
   const bus = context.createGain();
   bus.gain.value = DEFAULT_MUSIC_VOLUME;
@@ -235,6 +359,26 @@ export function createOfflineMusicRuntimeChain(
         submergeCutoff(next),
         atTime,
         entering ? MUSIC_SUBMERGE_ENTER_SLEW_S : MUSIC_SUBMERGE_EXIT_SLEW_S
+      );
+    },
+    setSceneEnvelope(value, atTime = context.currentTime, fadeSeconds = 0.12) {
+      rampParamAt(
+        offlineSceneEnvelope.gain,
+        clampMusicEnvelopeValue(value),
+        atTime,
+        fadeSeconds
+      );
+    },
+    scheduleSceneEnvelope(
+      points,
+      atTime = context.currentTime,
+      startValue = offlineSceneEnvelope.gain.value
+    ) {
+      scheduleMusicSceneEnvelopeParam(
+        offlineSceneEnvelope.gain,
+        atTime,
+        points,
+        startValue
       );
     },
     setVisibilityDucked(next, atTime = context.currentTime) {

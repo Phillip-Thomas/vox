@@ -5,19 +5,26 @@
 // and progression tier. terrain/material/resource generation, the scanner, and
 // crafting all consume THIS — no one-off resource logic hidden in rendering.
 //
-// Phase 1 is ADDITIVE: this wraps the existing planet-wide `buildBiomeProfile`
-// (climate/vegetation anchor that grass/trees/fog already use) and ADDS the
-// archetype + economy layer alongside it. Nothing here changes terrain output yet.
-// NOTE: archetype and the wrapped BiomeProfile are rolled independently from the
-// same seed for now; Phase 2 (profile becomes authoritative) reconciles them so
-// e.g. a 'frozen' archetype also drives a cold BiomeProfile.
+// Generic planets resolve their archetype from the seed. Authored canonical
+// identities resolve the archetype first and build climate/biome from that same
+// decision, preventing a pinned surface from retaining a contradictory seed roll.
 //
 // Determinism: ONLY salted `seededUnit(seed, salt)` — no order-dependent random
 // streams, so adding fields here never reshuffles existing planets.
 
-import { buildBiomeProfile, type BiomeProfile } from '../utils/biomeProfile.ts';
+import {
+  buildBiomeProfileForArchetype,
+  type BiomeProfile,
+  type BiomeProfileOverrides
+} from '../utils/biomeProfile.ts';
 import type { TerrainProfile } from '../config/worldGeneration.ts';
+import { fnv1a32 } from '../utils/worldCoordinates.ts';
 import { GENERATION_SCHEMA_VERSION } from './schema.ts';
+import {
+  canonicalPlanetWorldId,
+  parsePlanetWorldId,
+  planetSeedForAddress
+} from './starSystem.ts';
 import {
   PLANET_ARCHETYPES, archetypeForSeed,
   type ArchetypeId, type HazardId
@@ -51,6 +58,63 @@ export interface PlanetProfile {
   traits: string[];
 }
 
+export type PlanetThermalBehavior = 'standard' | 'nonlethal';
+
+/** Canonical identity plus the fully constructed profile consumed by generation. */
+export interface ResolvedPlanetProfile {
+  worldId?: string;
+  identitySeed: number;
+  profileId: string;
+  profileVersion: number;
+  profileHash: string;
+  thermalBehavior: PlanetThermalBehavior;
+  profile: PlanetProfile;
+}
+
+export interface PlanetProfileFingerprintSource {
+  worldId?: string;
+  identitySeed: number;
+  profileId: string;
+  profileVersion: number;
+  thermalBehavior: PlanetThermalBehavior;
+  profile: PlanetProfile;
+}
+
+export const TIDEGARDEN_WORLD_ID = '-1,-1:p1';
+export const TIDEGARDEN_SEED = 1600321158;
+export const TIDEGARDEN_PROFILE_ID = 'story:tidegarden';
+export const TIDEGARDEN_PROFILE_VERSION = 1;
+export const PLANET_PROFILE_FINGERPRINT_VERSION = 1;
+
+const TIDEGARDEN_BIOME_WEIGHTS: Partial<Record<BiomeId, number>> = {
+  forest: 4,
+  grassland: 3,
+  coast: 4,
+  highland: 1
+};
+
+const TIDEGARDEN_BIOME: BiomeProfileOverrides = {
+  lushness: 0.75,
+  aridity: 0.2,
+  temperature: 0.56,
+  hue: 0.5,
+  grassHue: 0.4,
+  leafHue: 0.6,
+  saturation: 0.72,
+  alien: true
+};
+
+const TIDEGARDEN_RESOURCE_MULTIPLIERS: Partial<Record<ResourceId, number>> = {
+  stone: 1.15,
+  silica: 1.4,
+  copper_ore: 1.05,
+  iron_trace: 1.4,
+  resin: 1.2,
+  biofiber: 1.2,
+  // Tidegarden is explicitly temperate/nonlethal, not a frozen-world variant.
+  frost_crystal: 0
+};
+
 function normalizeBiomeWeights(raw: Partial<Record<BiomeId, number>>): Partial<Record<BiomeId, number>> {
   const total = Object.values(raw).reduce((s, w) => s + (w ?? 0), 0);
   if (total <= 0) return {};
@@ -68,7 +132,8 @@ function normalizeBiomeWeights(raw: Partial<Record<BiomeId, number>>): Partial<R
  */
 function computeResourceBiases(
   archetype: ArchetypeId,
-  biomeWeights: Partial<Record<BiomeId, number>>
+  biomeWeights: Partial<Record<BiomeId, number>>,
+  authoredMultipliers: Partial<Record<ResourceId, number>> = {}
 ): Partial<Record<ResourceId, number>> {
   const arch = PLANET_ARCHETYPES[archetype];
   const out: Partial<Record<ResourceId, number>> = {};
@@ -90,7 +155,8 @@ function computeResourceBiases(
     // Tier-0 resources are ubiquitous regardless of biome mix (critical path).
     if (res.tier === 0) biomeFactor = Math.max(biomeFactor, 1);
 
-    const bias = res.baseFrequency * archAff * archBias * biomeFactor;
+    const authoredMultiplier = authoredMultipliers[rid] ?? 1;
+    const bias = res.baseFrequency * archAff * archBias * biomeFactor * authoredMultiplier;
     if (bias > 0) out[rid] = bias;
   }
   return out;
@@ -100,21 +166,52 @@ function computeResourceBiases(
 export function buildPlanetProfile(seed: number): PlanetProfile {
   const s = seed | 0;
   const archetype = archetypeForSeed(s);
+  return buildPlanetProfileForArchetype(s, archetype);
+}
+
+/** Guard identity-aware visual seams against mixing one profile with another seed. */
+export function assertPlanetProfileSeed(profile: PlanetProfile, seed: number): void {
+  if ((profile.seed >>> 0) !== (seed >>> 0)) {
+    throw new Error(
+      `Planet profile seed ${profile.seed >>> 0} does not match visual seed ${seed >>> 0}`
+    );
+  }
+}
+
+interface AuthoredProfileOptions {
+  archetypeName?: string;
+  biomeOverrides?: BiomeProfileOverrides;
+  biomeWeights?: Partial<Record<BiomeId, number>>;
+  resourceMultipliers?: Partial<Record<ResourceId, number>>;
+  hazards?: HazardId[];
+  traits?: string[];
+}
+
+function buildPlanetProfileForArchetype(
+  seed: number,
+  archetype: ArchetypeId,
+  options: AuthoredProfileOptions = {}
+): PlanetProfile {
+  const s = seed | 0;
   const arch = PLANET_ARCHETYPES[archetype];
-  const biome = buildBiomeProfile(s);
-  const biomeWeights = normalizeBiomeWeights(arch.biomeWeights);
-  const resourceBiases = computeResourceBiases(archetype, biomeWeights);
+  const biome = buildBiomeProfileForArchetype(s, archetype, options.biomeOverrides);
+  const biomeWeights = normalizeBiomeWeights(options.biomeWeights ?? arch.biomeWeights);
+  const resourceBiases = computeResourceBiases(
+    archetype,
+    biomeWeights,
+    options.resourceMultipliers
+  );
 
   return {
     schemaVersion: GENERATION_SCHEMA_VERSION,
     seed: s,
     archetype,
-    archetypeName: arch.name,
+    archetypeName: options.archetypeName ?? arch.name,
     biome,
     terrainProfile: arch.terrainProfile,
     biomeWeights,
     resourceBiases,
-    hazards: arch.hazards,
+    hazards: options.hazards ?? arch.hazards,
     palette: {
       vegetationHue: biome.hue,
       saturation: biome.saturation,
@@ -122,6 +219,81 @@ export function buildPlanetProfile(seed: number): PlanetProfile {
       alien: biome.alien
     },
     progressionTier: arch.progressionTier,
-    traits: arch.traits
+    traits: options.traits ?? arch.traits
   };
+}
+
+/**
+ * Resolve the generation profile from canonical identity. The Tidegarden pin is
+ * deliberately an exact world-ID + seed match; p2 and seed-only callers always
+ * remain on the procedural path.
+ */
+export function resolvePlanetProfile(input: {
+  worldId?: string;
+  seed: number;
+}): ResolvedPlanetProfile {
+  const identitySeed = input.seed >>> 0;
+  if (input.worldId !== undefined) {
+    const address = parsePlanetWorldId(input.worldId);
+    const canonicalWorldId = canonicalPlanetWorldId(input.worldId);
+    if (!address || canonicalWorldId !== input.worldId) {
+      throw new Error(`Planet profile requires a canonical world ID: ${input.worldId}`);
+    }
+    const expectedSeed = planetSeedForAddress(address) >>> 0;
+    if (identitySeed !== expectedSeed) {
+      throw new Error(
+        `Planet profile seed ${identitySeed} does not match canonical world ${input.worldId}`
+      );
+    }
+  }
+  const isTidegarden = input.worldId === TIDEGARDEN_WORLD_ID
+    && identitySeed === TIDEGARDEN_SEED;
+  const profile = isTidegarden
+    ? buildPlanetProfileForArchetype(identitySeed, 'verdant', {
+      archetypeName: 'Tidegarden v1',
+      biomeOverrides: TIDEGARDEN_BIOME,
+      biomeWeights: TIDEGARDEN_BIOME_WEIGHTS,
+      resourceMultipliers: TIDEGARDEN_RESOURCE_MULTIPLIERS,
+      hazards: ['none'],
+      traits: ['alien wet hills', 'dense fan canopy', 'braided shallows']
+    })
+    : buildPlanetProfile(identitySeed);
+  const source: PlanetProfileFingerprintSource = {
+    worldId: input.worldId,
+    identitySeed,
+    profileId: isTidegarden ? TIDEGARDEN_PROFILE_ID : 'procedural',
+    profileVersion: isTidegarden ? TIDEGARDEN_PROFILE_VERSION : GENERATION_SCHEMA_VERSION,
+    thermalBehavior: isTidegarden ? 'nonlethal' : 'standard',
+    profile
+  };
+
+  return {
+    ...source,
+    profileHash: createPlanetProfileHash(source)
+  };
+}
+
+/** Stable, request-independent fingerprint for cache/save generation boundaries. */
+export function createPlanetProfileHash(source: PlanetProfileFingerprintSource): string {
+  const canonical = stableStringify({
+    fingerprintVersion: PLANET_PROFILE_FINGERPRINT_VERSION,
+    worldId: source.worldId ?? null,
+    identitySeed: source.identitySeed >>> 0,
+    profileId: source.profileId,
+    profileVersion: source.profileVersion,
+    thermalBehavior: source.thermalBehavior,
+    profile: source.profile
+  });
+  return `pf${PLANET_PROFILE_FINGERPRINT_VERSION}-${fnv1a32(canonical).toString(16).padStart(8, '0')}`;
+}
+
+function stableStringify(value: unknown): string {
+  if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? 'null';
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
+  const object = value as Record<string, unknown>;
+  const entries = Object.keys(object)
+    .filter(key => object[key] !== undefined)
+    .sort()
+    .map(key => `${JSON.stringify(key)}:${stableStringify(object[key])}`);
+  return `{${entries.join(',')}}`;
 }

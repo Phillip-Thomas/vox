@@ -1,0 +1,352 @@
+{
+  "generatedAt": "2026-07-16T15:05:01.575Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "graphicsProfile": "POTATO",
+  "results": [
+    {
+      "beat": "ch1-anomaly",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch1-anomaly&debug=1&profile=POTATO",
+      "elapsedMs": 27283,
+      "objectiveFirstSeenMs": 1768,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/mobile-smoke/mobile-ch1-anomaly.png",
+      "evidence": {
+        "beat": "ch1-anomaly",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch1:anomaly:calibrate-pan-tilt",
+          "markerLabel": "PAN-TILT SURVEY · CALIBRATE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "text": "CURRENT OBJECTIVEPAN-TILT SURVEY · CALIBRATESURVEY THE FULL PERIMETER.LOOK ACROSS EVERY HEADING.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch2-approach",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch2-approach&debug=1&profile=POTATO",
+      "elapsedMs": 30422,
+      "objectiveFirstSeenMs": 22,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/mobile-smoke/mobile-ch2-approach.png",
+      "evidence": {
+        "beat": "ch2-approach",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEREDACTED SUBJECT · FRUITAPPROACH THE FRUIT AT HAND HEIGHT.[F] EAT.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": -34.6015625,
+            "y": 398.4296875,
+            "width": 221.203125,
+            "height": 47.140625,
+            "right": 186.6015625,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelRect": {
+            "x": -34.6015625,
+            "y": 425.4296875,
+            "width": 221.203125,
+            "height": 20.140625,
+            "right": 186.6015625,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelInsideViewport": false
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "failed",
+      "failure": "redaction direction label leaves the viewport"
+    },
+    {
+      "beat": "ch4-audit",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch4-audit&debug=1&profile=POTATO",
+      "elapsedMs": 28083,
+      "objectiveFirstSeenMs": 23,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/mobile-smoke/mobile-ch4-audit.png",
+      "evidence": {
+        "beat": "ch4-audit",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVECAMPFIRE · ATTENDFOLLOW W-7744 TO THE CAMPFIRE.[F] ATTEND THE FIRE MISMATCH.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 130,
+            "height": 44.6875,
+            "right": 130,
+            "bottom": 44.6875,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 15,
+            "width": 130,
+            "height": 29.6875,
+            "right": 130,
+            "bottom": 44.6875,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "motionPresentation": "stable-directional"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 136,
+            "right": 228,
+            "bottom": 150,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "markerIntersectsVitals": true,
+          "markerIntersectsInventory": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "failed",
+      "failure": "directional marker intersects survival vitals"
+    }
+  ]
+}

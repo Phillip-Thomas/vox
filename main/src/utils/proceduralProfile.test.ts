@@ -4,9 +4,14 @@ import { createTerrainConfig } from './terrainConfig.ts';
 import { DEFAULT_WORLD_CONFIG } from '../config/worldGeneration.ts';
 import { MaterialType } from '../types/materials.ts';
 import { coordinateToSeed } from './worldCoordinates.ts';
-import { buildPlanetProfile } from '../game/PlanetProfile.ts';
+import {
+  TIDEGARDEN_SEED,
+  TIDEGARDEN_WORLD_ID,
+  buildPlanetProfile
+} from '../game/PlanetProfile.ts';
 import type { ArchetypeId } from '../game/data/planetArchetypes.ts';
 import { blockToRenderMaterial } from '../game/adapters.ts';
+import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
 
 const R = 24; // within floor(planetRadius=25)
 
@@ -98,6 +103,22 @@ describe('profile-driven generation determinism', () => {
 });
 
 describe('archetype drives the surface skin', () => {
+  it('injects the canonical Tidegarden profile into terrain and live generator queries', () => {
+    const { generator, resolution } = createResolvedWorldGenerator({
+      worldId: TIDEGARDEN_WORLD_ID,
+      seed: TIDEGARDEN_SEED,
+      planetRadius: DEFAULT_WORLD_CONFIG.planetRadius
+    });
+    const counts = surfaceCounts(generator);
+
+    expect(generator.getPlanetProfile()).toBe(resolution.profile);
+    expect(generator.getPlanetProfile().archetype).toBe('verdant');
+    expect(generator.getPlanetProfile().terrainProfile).toBe('hills');
+    expect(counts.get(MaterialType.GRASS) ?? 0).toBeGreaterThan(0);
+    expect(counts.get(MaterialType.BASALT) ?? 0).toBe(0);
+    expect(counts.get(MaterialType.ICE) ?? 0).toBe(0);
+  });
+
   it('arid planets are sandy, not grassy', () => {
     const counts = surfaceCounts(genForSeed(seedForArchetype('arid')));
     const sand = counts.get(MaterialType.SAND) ?? 0;

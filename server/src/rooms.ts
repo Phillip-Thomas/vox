@@ -3,8 +3,10 @@ import type { JsonObject, PlayerIdentity } from './protocol.js';
 import {
   defaultServerPlayerState,
   starterInventory,
+  TIDEGARDEN_ROUTE_MILESTONE,
   type AuthoritativePlayerStatePatch,
   type ItemStack,
+  type ServerShipRestorationStage,
   type ServerPlayerState
 } from './economyAuthority.js';
 
@@ -39,9 +41,18 @@ export interface ShardState {
   worldTimeMs: number;
   events: ShardEvent[];
   poses: Map<string, JsonObject>;
+  /** Latest pose plus the server receive time. Story authority must never use
+   * the client supplied `timeMs` field to prove an attended physical action. */
+  authoritativePoses: Map<string, AuthoritativePoseSample>;
   commandCache: Map<string, CachedCommandResponse>;
   mutationClaims: Map<string, string>;
   predictedRollbacks: Map<string, unknown>;
+}
+
+export interface AuthoritativePoseSample {
+  seq: number;
+  receivedAtMs: number;
+  pose: JsonObject;
 }
 
 export interface CommandFingerprint {
@@ -364,6 +375,7 @@ export function createShard(worldId: string): ShardState {
     worldTimeMs: 0,
     events: [],
     poses: new Map(),
+    authoritativePoses: new Map(),
     commandCache: new Map(),
     mutationClaims: new Map(),
     predictedRollbacks: new Map()
@@ -394,9 +406,107 @@ export function createWorldSnapshot(room: RoomState, worldId: string): JsonObjec
       poses: Object.fromEntries(shard.poses),
       ...playerState
     },
+    story: createStoryStateSnapshot(room, worldId),
     world: {
       events: shard.events
     }
+  };
+}
+
+const SHIP_STAGES = [
+  'bench_online',
+  'frame_restored',
+  'hull_sealed',
+  'lift_online',
+  'flight_ready'
+] as const;
+
+export function sharedShipRepairStage(room: RoomState): ServerShipRestorationStage {
+  let stageIndex = -1;
+  for (const state of room.playerStates.values()) {
+    const milestones = new Set(state.progression.milestones);
+    for (let index = 0; index < SHIP_STAGES.length; index++) {
+      if (milestones.has(`ship_repair:${SHIP_STAGES[index]}`)) {
+        stageIndex = Math.max(stageIndex, index);
+      }
+    }
+  }
+  return stageIndex < 0 ? 'wrecked' : SHIP_STAGES[stageIndex];
+}
+
+/** Compact reconnect contract for story facts that outlive one world shard.
+ * World events remain the audit log; this projection prevents a party arriving
+ * on p1 from forgetting ship work committed on p0. */
+export function createStoryStateSnapshot(room: RoomState, worldId: string): JsonObject {
+  const sharedStage = sharedShipRepairStage(room);
+  const stageIndex = sharedStage === 'wrecked' ? -1 : SHIP_STAGES.indexOf(sharedStage);
+  const repairHistory = SHIP_STAGES.slice(0, stageIndex + 1).map((to, index) => ({
+    eventId: `server-snapshot:ship-repair:${to}`,
+    from: index === 0 ? 'wrecked' : SHIP_STAGES[index - 1],
+    to
+  }));
+
+  const shard = room.shards.get(worldId) ?? createShard(worldId);
+  const relationshipAttendedBy = shard.events
+    .filter(event => event.type === 'tidegarden_relationship_attended')
+    .map(event => event.playerId);
+  const coreEvent = latestShardEvent(shard.events, 'habitat_core_placed');
+  const shelterEvent = latestShardEvent(shard.events, 'habitat_shelter_certified');
+  const restEvent = latestShardEvent(shard.events, 'habitat_safe_rest_completed');
+  const core = coreEvent ? habitatCoreFromEvent(coreEvent, worldId) : null;
+  const shelterCertification = core && shelterEvent
+    ? {
+        shelterId: shelterEvent.payload.shelterId,
+        cell: shelterEvent.payload.cell,
+        insulation: shelterEvent.payload.insulation,
+        interiorCellCount: shelterEvent.payload.interiorCellCount,
+        eventId: shelterEvent.commandId ?? shelterEvent.eventId
+      }
+    : null;
+  const safeRest = shelterCertification && restEvent
+    ? {
+        shelterId: restEvent.payload.shelterId,
+        dayPhase: restEvent.payload.dayPhase,
+        eventId: restEvent.commandId ?? restEvent.eventId
+      }
+    : null;
+
+  return {
+    ship: {
+      repairStage: stageIndex >= 0 ? SHIP_STAGES[stageIndex] : 'wrecked',
+      repairHistory,
+      currentSystemId: worldId.split(':p')[0],
+      currentWorldId: worldId,
+      locationMode: 'surface'
+    },
+    relationshipAttendedBy: [...new Set(relationshipAttendedBy)],
+    habitat: core ? {
+      schemaVersion: 1,
+      worldId,
+      core,
+      ...(shelterCertification ? { shelterCertification } : {}),
+      ...(safeRest ? { safeRest } : {})
+    } : null
+  };
+}
+
+function latestShardEvent(events: readonly ShardEvent[], type: string): ShardEvent | null {
+  for (let index = events.length - 1; index >= 0; index--) {
+    if (events[index]?.type === type) return events[index]!;
+  }
+  return null;
+}
+
+function habitatCoreFromEvent(event: ShardEvent, worldId: string): JsonObject {
+  return {
+    actorId: event.playerId,
+    worldId,
+    shelterId: event.payload.shelterId,
+    cell: event.payload.cell,
+    supportCell: event.payload.supportCell,
+    position: event.payload.position,
+    up: event.payload.up,
+    eventId: event.commandId ?? event.eventId
   };
 }
 
@@ -406,6 +516,7 @@ export function createPlayersStateSnapshot(room: RoomState, playerIds = [...room
   const maw: Record<string, number> = {};
   const waterskin: Record<string, number> = {};
   const progression: Record<string, JsonObject> = {};
+  const sharedRouteOnline = sharedShipRepairStage(room) === 'flight_ready';
 
   for (const playerId of playerIds) {
     const state = ensurePlayerState(room, playerId);
@@ -416,9 +527,14 @@ export function createPlayersStateSnapshot(room: RoomState, playerIds = [...room
     };
     maw[playerId] = state.mawCharge;
     waterskin[playerId] = state.waterskinFill;
+    const milestones = new Set(state.progression.milestones);
+    // The Kestrel is party-owned. The actor who accepted flight_ready persists
+    // this receipt; every other current member receives the same server-derived
+    // fact in snapshots and command deltas without pretending they did the work.
+    if (sharedRouteOnline) milestones.add(TIDEGARDEN_ROUTE_MILESTONE);
     progression[playerId] = {
       era: state.progression.era,
-      milestones: [...state.progression.milestones]
+      milestones: [...milestones]
     };
   }
 

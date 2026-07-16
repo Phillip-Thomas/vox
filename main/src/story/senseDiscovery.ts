@@ -3,6 +3,7 @@ import { getVitals } from '../game/systems/survivalVitals.ts';
 import { getMawChargeFraction } from '../game/systems/mawSystem.ts';
 import { getStoryStateSnapshot, STORY_MILESTONES } from './storyState.ts';
 import { showCaption } from './storyText.ts';
+import { isStoryJetInstalled, isStoryOxygenOnline } from './emergentCapabilities.ts';
 
 // --- The self-discovery arc -------------------------------------------------------
 //
@@ -48,8 +49,12 @@ export function tickSenseDiscovery(jetFuel: number): void {
   if (hasMilestone(m.a2)) {
     const v = getVitals();
     if (!hasMilestone(m.senseStamina) && !sceneOwnsStamina && v.stamina < 85) markMilestone(m.senseStamina);
-    if (!hasMilestone(m.senseOxygen) && v.oxygen < 92) markMilestone(m.senseOxygen);
-    if (!hasMilestone(m.senseJet) && jetFuel < 0.99) markMilestone(m.senseJet);
+    if (isStoryOxygenOnline() && !hasMilestone(m.senseOxygen) && v.oxygen < 92) {
+      markMilestone(m.senseOxygen);
+    }
+    if (isStoryJetInstalled() && !hasMilestone(m.senseJet) && jetFuel < 0.99) {
+      markMilestone(m.senseJet);
+    }
     if (!hasMilestone(m.senseMaw)) {
       const charge = getMawChargeFraction();
       // The Maw's readout manifests when the cell first RISES (the refuel) —

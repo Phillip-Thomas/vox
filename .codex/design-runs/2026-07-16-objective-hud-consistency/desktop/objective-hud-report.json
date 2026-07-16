@@ -1,0 +1,463 @@
+{
+  "generatedAt": "2026-07-16T14:50:46.773Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "results": [
+    {
+      "beat": "ch1-anomaly",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch1-anomaly&debug=1",
+      "elapsedMs": 2764,
+      "objectiveFirstSeenMs": 23,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch1-anomaly.png",
+      "evidence": {
+        "beat": "ch1-anomaly",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch1:anomaly:calibrate-pan-tilt",
+          "markerLabel": "PAN-TILT SURVEY · CALIBRATE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "text": "CURRENT OBJECTIVEPAN-TILT SURVEY · CALIBRATESURVEY THE FULL PERIMETER.LOOK ACROSS EVERY HEADING.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch2-approach",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch2-approach&debug=1",
+      "elapsedMs": 68343,
+      "objectiveFirstSeenMs": 21,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch2-approach.png",
+      "evidence": {
+        "beat": "ch2-approach",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEREDACTED SUBJECT · FRUITAPPROACH THE FRUIT AT HAND HEIGHT.[F] EAT.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": -34.6015625,
+            "y": 426.5,
+            "width": 221.203125,
+            "height": 47,
+            "right": 186.6015625,
+            "bottom": 473.5,
+            "visible": true
+          }
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch3-gather",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch3-gather&debug=1",
+      "elapsedMs": 5051,
+      "objectiveFirstSeenMs": 21,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch3-gather.png",
+      "evidence": {
+        "beat": "ch3-gather",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch3:gather:craft-hatchet",
+          "markerLabel": "STONE HATCHET · CRAFT",
+          "health": "ready",
+          "requiresMarker": "false",
+          "text": "CURRENT OBJECTIVESTONE HATCHET · CRAFTOPEN THE FABRICATOR.[C] CRAFT A STONE HATCHET.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": null
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch4-audit",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch4-audit&debug=1",
+      "elapsedMs": 69462,
+      "objectiveFirstSeenMs": 41,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch4-audit.png",
+      "evidence": {
+        "beat": "ch4-audit",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVECAMPFIRE · ATTENDFOLLOW W-7744 TO THE CAMPFIRE.[F] ATTEND THE FIRE MISMATCH.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": null
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch5-maw",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch5-maw&debug=1",
+      "elapsedMs": 81945,
+      "objectiveFirstSeenMs": 1818,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch5-maw.png",
+      "evidence": {
+        "beat": "ch5-maw",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "maw:recover-field-kit",
+          "markerLabel": "W-7744 FIELD PACK · RECOVER KIT",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEW-7744 FIELD PACK · RECOVER KITFOLLOW THE FIELD PACK MARKER.[F] RECOVER THE FIELD KIT.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "rect": {
+            "x": 22,
+            "y": 748.8125,
+            "width": 360,
+            "height": 123.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "motionPresentation": null
+        },
+        "redactionIndicator": {
+          "rect": null
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "failed",
+      "failure": "required marker health is missing-marker"
+    },
+    {
+      "beat": "ch6-dive",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch6-dive&debug=1",
+      "elapsedMs": 82971,
+      "objectiveFirstSeenMs": 21,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch6-dive.png",
+      "evidence": {
+        "beat": "ch6-dive",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "dive:recover-keel-memory",
+          "markerLabel": "KEEL MEMORY",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEKEEL MEMORYFOLLOW THE KEEL MEMORY MARKER BELOW.INTERACT TO RECOVER THE KEEL MEMORY.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 6.4140625,
+            "y": 435.078125,
+            "width": 127.171875,
+            "height": 29.84375,
+            "right": 133.5859375,
+            "bottom": 464.921875,
+            "visible": true
+          },
+          "motionPresentation": "projected"
+        },
+        "redactionIndicator": {
+          "rect": null
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch8-crossing",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch8-crossing&debug=1",
+      "elapsedMs": 66289,
+      "objectiveFirstSeenMs": 22,
+      "screenshot": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-16-objective-hud-consistency/desktop/desktop-ch8-crossing.png",
+      "evidence": {
+        "beat": "ch8-crossing",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVESIBLING WORLDFIND THE SIBLING WORLD.CENTER IT AND SET COURSE.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 641.453125,
+            "y": 815.078125,
+            "width": 157.09375,
+            "height": 29.84375,
+            "right": 798.546875,
+            "bottom": 844.921875,
+            "visible": true
+          },
+          "motionPresentation": "projected"
+        },
+        "redactionIndicator": {
+          "rect": null
+        },
+        "legacyMarkerCount": 0,
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    }
+  ]
+}

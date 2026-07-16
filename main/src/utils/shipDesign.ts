@@ -23,6 +23,8 @@ import { seededUnit } from './worldCoordinates';
 /** Overall dimensions (world units; player standing height is 3.6). */
 export const SHIP_LENGTH = 6.6;
 export const SHIP_WINGSPAN = 6.0;
+/** Hull-origin height above the visible touchdown surface. */
+export const SHIP_REST_CLEARANCE = 2.5;
 /** Legs reach this far below the ship origin (the flight rest height). */
 export const SHIP_LEG_REACH = 2.42;
 /** Tail-side capsule centre: clears the 1.95wu hull tail and stays boardable. */

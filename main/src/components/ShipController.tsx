@@ -1,10 +1,14 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useRapier } from '@react-three/rapier';
 import { PerspectiveCamera, useKeyboardControls } from '@react-three/drei';
 import ShipCockpit from './ShipCockpit.tsx';
-import { shipLevelOrientation, shipSurfaceUp } from '../utils/shipDesign.ts';
+import {
+  SHIP_REST_CLEARANCE,
+  shipLevelOrientation,
+  shipSurfaceUp
+} from '../utils/shipDesign.ts';
 import {
   dominantFaceForPosition,
   vectorFromRapier,
@@ -36,7 +40,7 @@ import {
   type SystemPoseWriterLease,
   type SystemVectorTuple
 } from '../state/systemFlight.ts';
-import type { SystemCoordinate } from '../game/starSystem.ts';
+import { buildStarSystemManifest, type SystemCoordinate } from '../game/starSystem.ts';
 import {
   ATMOS_ENTER_ALTITUDE,
   ATMOS_LEAVE_ALTITUDE
@@ -61,6 +65,16 @@ import {
 } from '../utils/spawnValidation.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { landingHitMatchesValidatedTerrain } from '../utils/shipLandingValidation.ts';
+import { persistShipFlightLocation } from '../state/shipFlightContinuity.ts';
+import { getAutopilotFlightDirective } from '../story/autopilot.ts';
+import { getStoryStateSnapshot } from '../story/storyState.ts';
+import {
+  VEHICLE_SCENE_AV_EVENTS,
+  activateLaunchIgnitionFromCreatedSequence,
+  activateVehicleSceneAvEvent,
+  hasLaunchPhysicallyDeparted
+} from '../story/vehicleSceneAvAnchors.ts';
+import { isPhysicalBoardingVehicleControlLocked } from '../story/physicalBoarding.ts';
 
 const MOUSE_SENSITIVITY = 0.0016;
 /** Camera orientation smoothing rate (higher = snappier). The physics `quat`
@@ -74,7 +88,7 @@ const DAMPING = 0.6;
 const MAX_SPEED = 320;
 const ROLL_SPEED = 1.6; // rad/s
 /** Rest height of the landed ship above the terrain it touched. */
-const SHIP_GROUND_CLEARANCE = 2.5;
+const SHIP_GROUND_CLEARANCE = SHIP_REST_CLEARANCE;
 /** Ship-vs-terrain collision: contact within this clearance triggers a response. */
 const CRASH_CLEARANCE = 2.0;
 /** Inward (toward-planet) speed above which contact is a CRASH, not a soft stop. */
@@ -166,10 +180,12 @@ interface ShipControllerProps {
   arrivalPose: WorldArrivalPose;
   /** Validated parked-ship rest point used when boarding on the surface. */
   boardingPosition: THREE.Vector3;
+  /** Persisted parked heading; used only when the exact pad remains valid. */
+  boardingQuaternion?: THREE.Quaternion;
   onGroundedChange?: (grounded: boolean) => void;
   onPositionChange?: (position: THREE.Vector3) => void;
   /** Reports where the ship set down so the parked ship + on-foot exit spawn THERE. */
-  onLanded?: (restPosition: THREE.Vector3) => void;
+  onLanded?: (restPosition: THREE.Vector3, quaternion: THREE.Quaternion) => void;
 }
 
 /**
@@ -197,6 +213,7 @@ export default function ShipController({
   planetSystemPosition = [0, 0, 0],
   arrivalPose,
   boardingPosition,
+  boardingQuaternion,
   onGroundedChange,
   onPositionChange,
   onLanded
@@ -207,7 +224,7 @@ export default function ShipController({
   const { phase } = useSpaceFlight();
   const spawnTerrain = useMemo(
     () => {
-      const generator = getWorldGen(planetSize, terrainSeed).generator;
+      const generator = getWorldGen(planetSize, terrainSeed, activePlanetWorldId).generator;
       return {
         shouldVoxelExist: (x: number, y: number, z: number) =>
           generator.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
@@ -217,13 +234,14 @@ export default function ShipController({
           generator.generateBlockForPosition(x, y, z)
       };
     },
-    [planetSize, terrainSeed]
+    [activePlanetWorldId, planetSize, terrainSeed]
   );
 
   // Snapshot phase + spawn inputs ONCE (the component remounts per world swap, so
   // a fresh mount re-reads phase; mid-flight prop churn must NOT reset the ship).
   const spawnPhaseRef = useRef(phase);
   const boardingRef = useRef(boardingPosition.clone());
+  const boardingQuaternionRef = useRef(boardingQuaternion?.clone() ?? null);
   const approachRef = useRef(arrivalPose.approachPosition.clone());
 
   // --- runtime state (mutated per-frame, never triggers re-render) ----------
@@ -303,7 +321,10 @@ export default function ShipController({
           triangles,
           materials: materials.size,
           transparentMaterials: [...materials].filter(material => material.transparent).length,
-          scale: cameraRef.current?.getObjectByName('ship-cockpit-rig')?.scale.x ?? 1
+          // Portrait fitting now lives on the pressure-shell child rather than
+          // the rigid camera root. Keep system-probe telemetry attached to the
+          // visible enclosure it is intended to measure.
+          scale: cameraRef.current?.getObjectByName('ship-cockpit-pressure-shell')?.scale.x ?? 1
         };
       }
     };
@@ -315,6 +336,10 @@ export default function ShipController({
 
   /** Planet surface radius in world units (planetSize = world half-extent). */
   const surfaceRadius = planetSize;
+  const movieSystemManifest = useMemo(
+    () => buildStarSystemManifest(systemCoordinate, { bodyCountOverride: 2 }),
+    [systemCoordinate.x, systemCoordinate.y]
+  );
 
   // Pick spawn position + initial orientation from the mount-time phase. Reads
   // only refs captured at mount, so per-frame prop churn never recomputes it.
@@ -380,6 +405,10 @@ export default function ShipController({
       const refUp = new THREE.Vector3(0, 0, 1); // forward∥up, so use a safe ref
       const m = new THREE.Matrix4().lookAt(new THREE.Vector3(), forward, refUp);
       quat = new THREE.Quaternion().setFromRotationMatrix(m);
+    } else if (!relocatedSurfaceSpawn && boardingQuaternionRef.current) {
+      // A valid persisted pad owns its last real touchdown heading. Never replace
+      // it with the deterministic arrival orientation on a reload/remount.
+      quat = boardingQuaternionRef.current.clone().normalize();
     } else {
       // Parked on the surface: sit level, facing the horizon (upright).
       quat = levelOrientation(pos);
@@ -409,7 +438,7 @@ export default function ShipController({
   }, [spawn]);
 
   useEffect(() => {
-    if (spawn.relocatedSurfaceSpawn) onLanded?.(spawn.pos);
+    if (spawn.relocatedSurfaceSpawn) onLanded?.(spawn.pos, spawn.quat);
   }, [onLanded, spawn]);
 
   useEffect(() => {
@@ -457,9 +486,101 @@ export default function ShipController({
     spawn
   ]);
 
+  // Flight poses are hot-path state in systemFlight, while durable ship state is
+  // deliberately checkpointed only at phase boundaries and a light interval.
+  // This keeps reloads close to the rendered craft without publishing React or
+  // localStorage writes every frame.
+  useEffect(() => {
+    const systemId = coordinateKey(systemCoordinate);
+    const capture = () => {
+      const livePhase = getSpaceFlightSnapshot().phase;
+      const locationMode = livePhase === 'surface'
+        ? 'surface'
+        : livePhase === 'deep_space'
+          ? 'local_space'
+          : 'atmosphere';
+      persistShipFlightLocation({
+        system: systemCoordinate,
+        systemId,
+        worldId: activePlanetWorldId,
+        systemPosition: planetSystemPosition,
+        layoutVersion: getSystemFlightSnapshot().layoutVersion,
+        locationMode,
+        parkedPose: locationMode === 'surface'
+          ? {
+              position: [position.current.x, position.current.y, position.current.z],
+              quaternion: [
+                orientation.current.x,
+                orientation.current.y,
+                orientation.current.z,
+                orientation.current.w
+              ]
+            }
+          : undefined
+      });
+    };
+    capture();
+    const interval = window.setInterval(capture, 10_000);
+    return () => {
+      window.clearInterval(interval);
+      capture();
+    };
+  }, [activePlanetWorldId, phase, planetSystemPosition, systemCoordinate]);
+
   useEffect(() => () => {
     setShipThrustSfx(0);
     resetShipFlightFeedback();
+  }, []);
+
+  const requestLanding = useCallback(() => {
+    const live = getSpaceFlightSnapshot();
+    if (live.controlMode !== 'flight' || live.phase !== 'descent') return;
+    if (landingSeq.current || launchSeq.current || !world) return;
+    const downDir = position.current.clone().normalize().negate();
+    const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
+    const hit = world.castRayAndGetNormal(ray, LANDING_APPROACH_DIST, true);
+    if (!hit) return;
+    const contactUp = vectorFromRapier(hit.normal).normalize();
+    const contactPoint = position.current.clone().addScaledVector(downDir, hit.timeOfImpact);
+    const contactRest = contactPoint.clone().addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
+    const site = findValidSpawnSite(spawnTerrain, planetSize, contactRest, {
+      kind: 'ship',
+      face: dominantFaceForPosition(contactUp),
+      maxSearchRadius: 0,
+      requirePlayerEgress: true
+    });
+    if (!site || !landingHitMatchesValidatedTerrain(contactPoint, contactUp, site)) return;
+    const to = site.position;
+    const dist = position.current.distanceTo(to);
+    landingSeq.current = {
+      from: position.current.clone(),
+      to,
+      fromQuat: orientation.current.clone(),
+      toQuat: levelOrientation(to, site.up),
+      t: 0,
+      duration: THREE.MathUtils.clamp(
+        dist / LANDING_DESCENT_SPEED,
+        LANDING_MIN_DURATION,
+        LANDING_MAX_DURATION
+      ),
+      crashed: false
+    };
+  }, [planetSize, rapier, spawnTerrain, world]);
+
+  const requestLaunch = useCallback(() => {
+    if (isPhysicalBoardingVehicleControlLocked()) return;
+    const live = getSpaceFlightSnapshot();
+    const parked = live.controlMode === 'flight' && live.phase === 'surface';
+    if (!parked || landingSeq.current || launchSeq.current) return;
+    const up = shipSurfaceUp(position.current);
+    playSfx('shipLaunch');
+    launchSeq.current = {
+      from: position.current.clone(),
+      to: position.current.clone().addScaledVector(up, LAUNCH_RISE),
+      t: 0,
+      duration: LAUNCH_DURATION
+    };
+    activateLaunchIgnitionFromCreatedSequence(getStoryStateSnapshot().beat);
   }, []);
 
   // --- pointer lock + mouse look (mirrors CameraControls) -------------------
@@ -501,56 +622,13 @@ export default function ShipController({
       // F begins a smooth auto-landing when flying in atmosphere over ground.
       // (Landing is never automatic — it only happens when you ask for it.)
       if (event.code === 'KeyF') {
-        const live = getSpaceFlightSnapshot();
-        if (live.controlMode !== 'flight' || live.phase !== 'descent') return;
-        if (landingSeq.current || launchSeq.current || !world) return;
-        const downDir = position.current.clone().normalize().negate();
-        const ray = new rapier.Ray(vectorToRapier(position.current), vectorToRapier(downDir));
-        const hit = world.castRayAndGetNormal(ray, LANDING_APPROACH_DIST, true);
-        if (!hit) return; // no ground within range (too high / over a gap)
-        const contactUp = vectorFromRapier(hit.normal).normalize();
-        const contactPoint = position.current.clone()
-          .addScaledVector(downDir, hit.timeOfImpact);
-        const contactRest = contactPoint.clone()
-          .addScaledVector(contactUp, SHIP_GROUND_CLEARANCE);
-        const site = findValidSpawnSite(spawnTerrain, planetSize, contactRest, {
-          kind: 'ship',
-          face: dominantFaceForPosition(contactUp),
-          // Never slide through a shoreline/cliff to a remote pad. The pilot
-          // must actually be over a valid touchdown footprint.
-          maxSearchRadius: 0,
-          requirePlayerEgress: true
-        });
-        if (!site || !landingHitMatchesValidatedTerrain(contactPoint, contactUp, site)) {
-          return; // non-terrain collider, water, slope, obstruction, or no safe pad
-        }
-        const to = site.position;
-        const dist = position.current.distanceTo(to);
-        landingSeq.current = {
-          from: position.current.clone(),
-          to,
-          fromQuat: orientation.current.clone(),
-          toQuat: levelOrientation(to, site.up), // level to the validated cube face
-          t: 0,
-          duration: THREE.MathUtils.clamp(dist / LANDING_DESCENT_SPEED, LANDING_MIN_DURATION, LANDING_MAX_DURATION),
-          crashed: false
-        };
+        requestLanding();
       }
 
       // Space LAUNCHES a parked ship: a short eased ascension off the ground into
       // atmospheric flight. You can't fly until you launch (and again after landing).
       if (event.code === 'Space') {
-        const live = getSpaceFlightSnapshot();
-        const parked = live.controlMode === 'flight' && live.phase === 'surface';
-        if (!parked || landingSeq.current || launchSeq.current) return;
-        const up = shipSurfaceUp(position.current);
-        playSfx('shipLaunch');
-        launchSeq.current = {
-          from: position.current.clone(),
-          to: position.current.clone().addScaledVector(up, LAUNCH_RISE),
-          t: 0,
-          duration: LAUNCH_DURATION
-        };
+        requestLaunch();
       }
     };
 
@@ -581,13 +659,16 @@ export default function ShipController({
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [gl.domElement, paused, planetSize, spawnTerrain, world, rapier]);
+  }, [gl.domElement, paused, requestLanding, requestLaunch]);
 
   // --- per-frame flight integration -----------------------------------------
   useFrame((_, rawDt) => {
     const cam = cameraRef.current;
     if (!cam || paused) return;
     const dt = Math.min(rawDt, 1 / 30); // clamp big frame gaps
+    const movieFlight = getAutopilotFlightDirective();
+    if (movieFlight.active && movieFlight.controls.jump) requestLaunch();
+    if (movieFlight.active && movieFlight.controls.interact) requestLanding();
 
     const syncFlightFeedback = (
       throttle: number,
@@ -645,7 +726,7 @@ export default function ShipController({
         if (!land.crashed) playSfx('shipLand');
         lookOffset.current.yaw = 0;
         lookOffset.current.pitch = 0;
-        onLanded?.(land.to.clone());
+        onLanded?.(land.to.clone(), land.toQuat.clone());
         onGroundedChange?.(true); // -> parked (surface + flight)
       }
       return;
@@ -658,6 +739,9 @@ export default function ShipController({
       launch.t = Math.min(1, launch.t + dt / launch.duration);
       const e = launch.t * launch.t * (3 - 2 * launch.t); // smoothstep
       position.current.lerpVectors(launch.from, launch.to, e);
+      if (hasLaunchPhysicallyDeparted(launch.from, position.current, launch.to)) {
+        activateVehicleSceneAvEvent(VEHICLE_SCENE_AV_EVENTS.launchLiftoff);
+      }
       velocity.current.set(0, 0, 0);
       yawInput.current = 0;
       pitchInput.current = 0;
@@ -691,7 +775,10 @@ export default function ShipController({
       return;
     }
 
-    const controls = get();
+    const keyboardControls = get();
+    const controls = movieFlight.active
+      ? { ...keyboardControls, ...movieFlight.controls }
+      : keyboardControls;
 
     const quat = orientation.current;
     const inAtmosphere = position.current.length() < surfaceRadius + ATMOS_LEAVE;
@@ -700,6 +787,36 @@ export default function ShipController({
     const localRight = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
     const localUp = new THREE.Vector3(0, 1, 0).applyQuaternion(quat);
     const localForward = new THREE.Vector3(0, 0, -1).applyQuaternion(quat);
+
+    if (movieFlight.active) {
+      const desiredDirection = new THREE.Vector3();
+      if (movieFlight.beat === 'ch8-launch') {
+        desiredDirection.copy(position.current).normalize();
+      } else if (movieFlight.beat === 'ch8-landfall') {
+        desiredDirection.copy(position.current).normalize().negate();
+      } else if (movieFlight.targetWorldId) {
+        const descriptor = movieSystemManifest.planets.find(
+          planet => planet.worldId === movieFlight.targetWorldId
+        );
+        if (descriptor) {
+          const systemPose = getSystemFlightSnapshot().pose.position;
+          desiredDirection.set(
+            descriptor.systemPosition[0] - systemPose[0],
+            descriptor.systemPosition[1] - systemPose[1],
+            descriptor.systemPosition[2] - systemPose[2]
+          ).normalize();
+        }
+      }
+      if (desiredDirection.lengthSq() > 0.5) {
+        const referenceUp = Math.abs(desiredDirection.y) < 0.88
+          ? new THREE.Vector3(0, 1, 0)
+          : new THREE.Vector3(0, 0, 1);
+        const desired = new THREE.Quaternion().setFromRotationMatrix(
+          new THREE.Matrix4().lookAt(new THREE.Vector3(), desiredDirection, referenceUp)
+        );
+        quat.slerp(desired, 1 - Math.exp(-2.4 * dt));
+      }
+    }
 
     if (yawInput.current !== 0) {
       quat.premultiply(new THREE.Quaternion().setFromAxisAngle(localUp, yawInput.current));

@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { useAppState, enterPlaying, getGameCanvas } from '../../state/appState.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
 import {
   getQualityProfile,
+  getGraphicsQuality,
   setQualityProfile,
-  QUALITY_PROFILES,
+  subscribeGraphicsQuality,
   type QualityProfile
 } from '../../config/graphicsSettings.ts';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import AudioControls from './AudioControls.tsx';
 import CoopPanel from './CoopPanel.tsx';
 import { isCoopAuthEnabled } from '../../game/multiplayerAuth.ts';
-import { unlockMusicAudio } from '../../audio/musicEngine.ts';
-import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
+import { unlockGameAudio } from '../../audio/gameAudio.ts';
 import {
   beginStory,
   canContinueStory,
@@ -20,7 +20,6 @@ import {
   hasCompletedStory,
   useStoryState
 } from '../../story/storyState.ts';
-import { unlockStoryScore } from '../../story/storyScore.ts';
 import ControlsReference from './ControlsReference.tsx';
 
 /**
@@ -37,9 +36,7 @@ import ControlsReference from './ControlsReference.tsx';
 const PROFILE_ORDER: QualityProfile[] = ['ULTRA', 'HIGH', 'MEDIUM', 'LOW', 'POTATO'];
 
 function unlockAudio(): void {
-  void unlockMusicAudio();
-  void unlockSfxAudio();
-  unlockStoryScore();
+  void unlockGameAudio();
 }
 
 interface LandingMenuProps {
@@ -59,7 +56,12 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   const story = useStoryState();
   const isTouch = isTouchDevice();
   const [panel, setPanel] = useState<null | 'controls' | 'graphics' | 'audio' | 'coop' | 'replay'>(null);
-  const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
+  const graphicsQuality = useSyncExternalStore(
+    subscribeGraphicsQuality,
+    getGraphicsQuality,
+    getGraphicsQuality
+  );
+  const profile = getQualityProfile();
   const coopEnabled = useMemo(() => isCoopAuthEnabled(), []);
   const compactMenu = useMemo(() => (typeof window === 'undefined' ? false : window.innerWidth <= 700), []);
   const storyCompleted = hasCompletedStory();
@@ -95,7 +97,6 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
   };
 
   const chooseProfile = (p: QualityProfile) => {
-    setProfile(p);
     setQualityProfile(p);
   };
 
@@ -295,7 +296,7 @@ const LandingMenu: React.FC<LandingMenuProps> = ({
               ))}
             </div>
             <div style={{ marginTop: 10, fontSize: 11, color: theme.color.textFaint, lineHeight: 1.5 }}>
-              {QUALITY_PROFILES[profile].postProcess
+              {graphicsQuality.postProcess
                 ? 'Cinematic: bloom, reflections, grass & trees at full reach.'
                 : 'Performance: lighter shading for smoother framerates.'}
             </div>

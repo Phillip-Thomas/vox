@@ -13,6 +13,7 @@ import {
   SHIP_BASE_FOV,
   getShipFlightFeedback
 } from '../state/shipFlightFeedback.ts';
+import { getShipCockpitViewportLayout } from './shipCockpitLayout.ts';
 
 interface ShipCockpitProps {
   terrainSeed: number;
@@ -55,6 +56,8 @@ const CANOPY_FRAGMENT = /* glsl */`
 /** Camera-child Kestrel flight deck: rigid at any ship velocity and one shared signal. */
 export default function ShipCockpit({ terrainSeed }: ShipCockpitProps) {
   const rootRef = useRef<THREE.Group>(null);
+  const shellRef = useRef<THREE.Group>(null);
+  const instrumentRef = useRef<THREE.Group>(null);
   const holoRef = useRef<THREE.Mesh>(null);
   const holoMatRef = useRef<THREE.MeshStandardMaterial>(null);
   const lightRailMatRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -102,14 +105,22 @@ export default function ShipCockpit({ terrainSeed }: ShipCockpitProps) {
     const boost = flight.boost;
 
     // Scale X/Y only as FOV widens: scaling Z too would cancel in perspective
-    // and fail to preserve screen anchors. Portrait compresses X further so the
-    // pressure shell and controls remain visible in the narrow horizontal FOV.
+    // and fail to preserve screen anchors. The pressure shell and instruments
+    // have separate portrait floors: the shell crops toward the viewport edges
+    // instead of collapsing its pillars into the forward flight aperture.
     const fovScale = Math.tan(THREE.MathUtils.degToRad(flight.fov * 0.5))
       / Math.tan(THREE.MathUtils.degToRad(SHIP_BASE_FOV * 0.5));
+    const layout = getShipCockpitViewportLayout(size.width, size.height);
+    if (shellRef.current) {
+      shellRef.current.scale.set(fovScale * layout.shellScaleX, fovScale, 1);
+    }
+    if (instrumentRef.current) {
+      instrumentRef.current.scale.set(fovScale * layout.instrumentScaleX, fovScale, 1);
+    }
     if (rootRef.current) {
-      const aspect = size.width / Math.max(1, size.height);
-      const portraitScaleX = Math.min(1, aspect / 1.42);
-      rootRef.current.scale.set(fovScale * portraitScaleX, fovScale, 1);
+      // The camera-child root owns rigidity/vibration only. Reasserting identity
+      // also clears a stale whole-rig portrait scale during hot replacement.
+      rootRef.current.scale.set(1, 1, 1);
       const vibration = flight.reducedMotion ? 0 : boost * 0.0035;
       rootRef.current.position.set(
         Math.sin(t * 43) * vibration,
@@ -147,7 +158,7 @@ export default function ShipCockpit({ terrainSeed }: ShipCockpitProps) {
       canopyMatRef.current.uniforms.uBoost.value = boost;
       canopyMatRef.current.uniforms.uTime.value = t;
     }
-    if (cabinLightRef.current) cabinLightRef.current.intensity = 1.15 + boost * 0.75;
+    if (cabinLightRef.current) cabinLightRef.current.intensity = 1.3 + boost * 0.65;
 
     const streakMotion = flight.reducedMotion || flight.phase !== 'deep_space' ? 0 : flight.motion;
     streakPhaseRef.current += delta * (1.5 + flight.speedRatio * 20 + boost * 38);
@@ -182,100 +193,104 @@ export default function ShipCockpit({ terrainSeed }: ShipCockpitProps) {
       </instancedMesh>
 
       <group ref={rootRef} name="ship-cockpit-rig">
-      <pointLight
-        ref={cabinLightRef}
-        position={[0, 0.35, -1.5]}
-        intensity={1.15}
-        distance={6.5}
-        decay={2}
-        color="#d8e5ef"
-      />
-
-      {/* Two static merged draws own the pressure shell and forward frame. */}
-      <mesh geometry={interiorGeometry}>
-        <meshStandardMaterial
-          vertexColors
-          flatShading
-          roughness={0.62}
-          metalness={0.34}
-          emissive="#182532"
-          emissiveIntensity={0.72}
+        <pointLight
+          ref={cabinLightRef}
+          position={[0, 0.35, -1.5]}
+          intensity={1.3}
+          distance={6.5}
+          decay={2}
+          color="#d8e5ef"
         />
-      </mesh>
-      <mesh geometry={frameGeometry}>
-        <meshStandardMaterial
-          vertexColors
-          flatShading
-          roughness={0.46}
-          metalness={0.6}
-          emissive="#0b1118"
-          emissiveIntensity={0.34}
-        />
-      </mesh>
 
-      {/* One merged emissive draw: cyan navigation rails and amber engine rails. */}
-      <mesh geometry={lightGeometry}>
-        <meshBasicMaterial ref={lightRailMatRef} vertexColors toneMapped={false} />
-      </mesh>
+        <group ref={shellRef} name="ship-cockpit-pressure-shell">
+          {/* Two static merged draws own the pressure shell and forward frame. */}
+          <mesh geometry={interiorGeometry}>
+            <meshStandardMaterial
+              vertexColors
+              flatShading
+              roughness={0.66}
+              metalness={0.3}
+              emissive="#1a2835"
+              emissiveIntensity={0.68}
+            />
+          </mesh>
+          <mesh geometry={frameGeometry}>
+            <meshStandardMaterial
+              vertexColors
+              flatShading
+              roughness={0.46}
+              metalness={0.6}
+              emissive="#0d151e"
+              emissiveIntensity={0.3}
+            />
+          </mesh>
 
-      {/* Cheap faceted glass; no transmission, refraction texture or extra pass. */}
-      <mesh position={[0, 0.02, -3.92]} renderOrder={1}>
-        <planeGeometry args={[8.4, 4.75, 1, 1]} />
-        <shaderMaterial
-          ref={canopyMatRef}
-          uniforms={canopyUniforms}
-          vertexShader={CANOPY_VERTEX}
-          fragmentShader={CANOPY_FRAGMENT}
-          transparent
-          depthWrite={false}
-          toneMapped={false}
-          blending={THREE.NormalBlending}
-        />
-      </mesh>
+          {/* One merged emissive draw: cyan navigation rails and amber engine rails. */}
+          <mesh geometry={lightGeometry}>
+            <meshBasicMaterial ref={lightRailMatRef} vertexColors toneMapped={false} />
+          </mesh>
 
-      {/* Central velocity director and boost halo. */}
-      <mesh ref={holoRef} position={[0, -0.61, -2.4]}>
-        <torusGeometry args={[0.18, 0.018, 6, 12]} />
-        <meshStandardMaterial
-          ref={holoMatRef}
-          color="#06121f"
-          emissive={accent}
-          emissiveIntensity={1}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh ref={boostRingRef} position={[0, -0.61, -2.405]}>
-        <torusGeometry args={[0.245, 0.009, 4, 12]} />
-        <meshBasicMaterial color={accent} toneMapped={false} />
-      </mesh>
+          {/* Cheap faceted glass; no transmission, refraction texture or extra pass. */}
+          <mesh position={[0, 0.02, -3.92]} renderOrder={1}>
+            <planeGeometry args={[8.4, 4.75, 1, 1]} />
+            <shaderMaterial
+              ref={canopyMatRef}
+              uniforms={canopyUniforms}
+              vertexShader={CANOPY_VERTEX}
+              fragmentShader={CANOPY_FRAGMENT}
+              transparent
+              depthWrite={false}
+              toneMapped={false}
+              blending={THREE.NormalBlending}
+            />
+          </mesh>
+        </group>
 
-      {/* Single animated throttle assembly; authored separately from static shell. */}
-      <group ref={throttleRef} position={[-1.02, -1.17, -2.12]} rotation={[-0.18, 0, 0.1]}>
-        <mesh position={[0, 0.22, 0]}>
-          <boxGeometry args={[0.09, 0.48, 0.09]} />
-          <meshStandardMaterial color="#8994a3" metalness={0.78} roughness={0.3} />
-        </mesh>
-        <mesh position={[0, 0.47, 0]}>
-          <boxGeometry args={[0.23, 0.1, 0.16]} />
-          <meshStandardMaterial color="#222b35" emissive={accent} emissiveIntensity={0.3} />
-        </mesh>
-      </group>
+        <group ref={instrumentRef} name="ship-cockpit-instruments">
+          {/* Central velocity director and boost halo. */}
+          <mesh ref={holoRef} position={[0, -0.61, -2.4]}>
+            <torusGeometry args={[0.18, 0.018, 6, 12]} />
+            <meshStandardMaterial
+              ref={holoMatRef}
+              color="#06121f"
+              emissive={accent}
+              emissiveIntensity={1}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh ref={boostRingRef} position={[0, -0.61, -2.405]}>
+            <torusGeometry args={[0.245, 0.009, 4, 12]} />
+            <meshBasicMaterial color={accent} toneMapped={false} />
+          </mesh>
 
-      {/* Starboard engine gauge and port velocity bar keep feedback peripheral. */}
-      <mesh position={[0.9, -0.91, -2.46]} rotation={[0.5, -0.12, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.05, 6]} />
-        <meshStandardMaterial
-          ref={gaugeMatRef}
-          color="#2a1208"
-          emissive={warm}
-          emissiveIntensity={1.2}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh ref={speedBarRef} position={[-0.87, -0.92, -2.47]} rotation={[0.48, 0.1, 0]}>
-        <boxGeometry args={[0.62, 0.055, 0.035]} />
-        <meshBasicMaterial color={accent} toneMapped={false} />
-      </mesh>
+          {/* Single animated throttle assembly; authored separately from static shell. */}
+          <group ref={throttleRef} position={[-1.02, -1.17, -2.12]} rotation={[-0.18, 0, 0.1]}>
+            <mesh position={[0, 0.22, 0]}>
+              <boxGeometry args={[0.09, 0.48, 0.09]} />
+              <meshStandardMaterial color="#8994a3" metalness={0.78} roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0.47, 0]}>
+              <boxGeometry args={[0.23, 0.1, 0.16]} />
+              <meshStandardMaterial color="#222b35" emissive={accent} emissiveIntensity={0.3} />
+            </mesh>
+          </group>
+
+          {/* Starboard engine gauge and port velocity bar keep feedback peripheral. */}
+          <mesh position={[0.9, -0.91, -2.46]} rotation={[0.5, -0.12, 0]}>
+            <cylinderGeometry args={[0.08, 0.08, 0.05, 6]} />
+            <meshStandardMaterial
+              ref={gaugeMatRef}
+              color="#2a1208"
+              emissive={warm}
+              emissiveIntensity={1.2}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh ref={speedBarRef} position={[-0.87, -0.92, -2.47]} rotation={[0.48, 0.1, 0]}>
+            <boxGeometry args={[0.62, 0.055, 0.035]} />
+            <meshBasicMaterial color={accent} toneMapped={false} />
+          </mesh>
+        </group>
       </group>
     </group>
   );

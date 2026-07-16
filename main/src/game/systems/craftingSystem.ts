@@ -11,6 +11,7 @@ import { getItem } from '../data/items.ts';
 import type { StationId } from '../data/stations.ts';
 import { addItem, getItemCount, hasItems, removeItem } from './inventorySystem.ts';
 import type { ActorId } from '../playerActors.ts';
+import { hasMilestone, markMilestone } from './progressionSystem.ts';
 
 export interface CraftContext {
   /** Actor whose inventory pays for and receives recipe stacks. Defaults local. */
@@ -39,6 +40,9 @@ export function recipeReady(recipe: Recipe, ctx: CraftContext): boolean {
 export function canCraft(recipe: Recipe, ctx: CraftContext): CraftCheck {
   if (!ctx.stations.includes(recipe.station)) return { ok: false, blockedBy: 'station' };
   if (recipe.requiredTech && !ctx.unlocked?.has(recipe.requiredTech)) return { ok: false, blockedBy: 'tech' };
+  if (recipe.uniqueReceipt && hasMilestone(recipe.uniqueReceipt, ctx.actorId)) {
+    return { ok: false, blockedBy: 'owned' };
+  }
   if (recipe.outputs.some(output => !getItem(output.id).stackable && getItemCount(output.id, ctx.actorId) > 0)) {
     return { ok: false, blockedBy: 'owned' };
   }
@@ -56,5 +60,6 @@ export function craft(recipe: Recipe, ctx: CraftContext): CraftCheck {
   // hasItems already guaranteed every input is fully covered, so these all succeed.
   for (const stack of recipe.inputs) removeItem(stack.id, stack.qty, ctx.actorId);
   for (const stack of recipe.outputs) addItem(stack.id, stack.qty, ctx.actorId);
+  if (recipe.uniqueReceipt) markMilestone(recipe.uniqueReceipt, ctx.actorId);
   return { ok: true };
 }

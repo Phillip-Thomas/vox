@@ -4,10 +4,14 @@ import { RECIPES, ALL_RECIPES } from '../data/recipes.ts';
 import { ALL_STATION_IDS } from '../data/stations.ts';
 import { ITEMS } from '../data/items.ts';
 import { addItem, getItemCount, resetInventory } from './inventorySystem.ts';
+import { hasMilestone, markMilestone, resetProgression } from './progressionSystem.ts';
 
 const ALL_STATIONS: CraftContext = { stations: ALL_STATION_IDS };
 
-beforeEach(() => resetInventory());
+beforeEach(() => {
+  resetInventory();
+  resetProgression();
+});
 
 describe('recipe tree integrity', () => {
   it('every recipe id, input, and output is a real item', () => {
@@ -62,9 +66,33 @@ describe('canCraft gating', () => {
     expect(craft(RECIPES.waterskin, { stations: ['hand'] }).ok).toBe(false);
     expect(getItemCount('biofiber')).toBe(4);
   });
+
+  it('keeps a placed unique device recipe closed after its durable receipt', () => {
+    addItem('strut_frame', 1);
+    addItem('logic_wafer', 1);
+    addItem('refined_alloy', 1);
+    markMilestone('story:item:habitat-core:crafted');
+    expect(canCraft(RECIPES.habitat_core, ALL_STATIONS)).toEqual({
+      ok: false,
+      blockedBy: 'owned'
+    });
+  });
 });
 
 describe('craft consumes inputs and banks outputs', () => {
+  it('commits the Habitat Core unique receipt with the canonical craft', () => {
+    addItem('strut_frame', 1);
+    addItem('logic_wafer', 1);
+    addItem('refined_alloy', 1);
+    expect(craft(RECIPES.habitat_core, ALL_STATIONS).ok).toBe(true);
+    expect(getItemCount('habitat_core')).toBe(1);
+    expect(hasMilestone('story:item:habitat-core:crafted')).toBe(true);
+    expect(canCraft(RECIPES.habitat_core, ALL_STATIONS)).toEqual({
+      ok: false,
+      blockedBy: 'owned'
+    });
+  });
+
   it('refines alloy from ore, consuming exactly the inputs', () => {
     addItem('copper_ore', 3);
     addItem('iron_trace', 2);
@@ -92,7 +120,7 @@ describe('craft consumes inputs and banks outputs', () => {
     expect(getItemCount('iron_maw')).toBe(0); // upgraded away
   });
 
-  it('full chain: raw resources -> refined -> component -> Iron Maw', () => {
+  it('keeps Iron Maw outside the generic fabrication graph', () => {
     // Smelt a strut frame's worth of refined stock.
     addItem('copper_ore', 6); addItem('iron_trace', 3); // -> 3 refined_alloy
     craft(RECIPES.refined_alloy, ALL_STATIONS);
@@ -102,16 +130,17 @@ describe('craft consumes inputs and banks outputs', () => {
     addItem('silica', 2); craft(RECIPES.silica_pane, ALL_STATIONS);
     expect(craft(RECIPES.strut_frame, ALL_STATIONS).ok).toBe(true); // uses 2 alloy + 1 biocomposite
     expect(craft(RECIPES.logic_wafer, ALL_STATIONS).ok).toBe(true); // uses 1 pane + 1 alloy
-    expect(craft(RECIPES.iron_maw, ALL_STATIONS).ok).toBe(true);
-    expect(getItemCount('iron_maw')).toBe(1);
+    expect('iron_maw' in RECIPES).toBe(false);
+    expect(getItemCount('strut_frame')).toBe(1);
+    expect(getItemCount('logic_wafer')).toBe(1);
   });
 });
 
 describe('recipeReady', () => {
   it('is true when station matches and no tech gate', () => {
-    expect(recipeReady(RECIPES.iron_maw, ALL_STATIONS)).toBe(true);
+    expect(recipeReady(RECIPES.logic_wafer, ALL_STATIONS)).toBe(true);
   });
   it('is false when the station is out of reach', () => {
-    expect(recipeReady(RECIPES.iron_maw, { stations: ['smelter'] })).toBe(false);
+    expect(recipeReady(RECIPES.logic_wafer, { stations: ['smelter'] })).toBe(false);
   });
 });

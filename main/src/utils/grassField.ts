@@ -251,18 +251,69 @@ function shouldSkipGrassVoxel(
   return false;
 }
 
+/**
+ * Exact blade demand for the live streaming window. Coverage and distance use
+ * the same predicate as `buildGrassInstances`, so capacity can be sized around
+ * the player instead of around every grass voxel on all six planet faces.
+ *
+ * Callers may pass a slightly expanded maxDistance to reserve enough slots for
+ * player movement between streaming-window recenters. With no player/distance,
+ * this deliberately falls back to the whole covered planet.
+ */
+export function countGrassInstancesForWindow(
+  density: number,
+  maxDistance = 0,
+  playerWorld: THREE.Vector3 | null = null,
+  worldSeed = 0,
+  densityMul = 1,
+  coverage = 1
+): GrassBuildResult {
+  const params: GrassInstanceParams = {
+    density,
+    maxDistance,
+    playerWorld,
+    worldSeed,
+    heightMul: 1,
+    widthMul: 1,
+    densityMul,
+    coverage
+  };
+  const bladeCount = bladesPerVoxel(density, densityMul);
+  let voxelCount = 0;
+  let visibleVoxelCount = 0;
+
+  for (const voxel of voxelSystem.getAllVoxels().values()) {
+    if (!isDecoratableGrassVoxel(voxel)) continue;
+    voxelCount++;
+    const [x, y, z] = voxel.position;
+    if (shouldSkipGrassVoxel(voxel, x, y, z, params)) continue;
+    visibleVoxelCount++;
+  }
+
+  return {
+    count: visibleVoxelCount * bladeCount,
+    voxelCount
+  };
+}
+
 export function buildGrassInstanceBuffer(
   terrainVoxels: TerrainVoxel[],
   params: GrassInstanceParams
 ): GrassInstanceBuffer {
   const bladeCount = bladesPerVoxel(params.density, params.densityMul);
   let voxelCount = 0;
+  let visibleVoxelCount = 0;
   for (const voxel of terrainVoxels) {
-    if (isDecoratableGrassVoxel(voxel)) voxelCount++;
+    if (!isDecoratableGrassVoxel(voxel)) continue;
+    voxelCount++;
+    if (!shouldSkipGrassVoxel(voxel, voxel.x, voxel.y, voxel.z, params)) {
+      visibleVoxelCount++;
+    }
   }
 
-  const maxPotentialInstances = voxelCount * bladeCount;
-  const matrices = new Float32Array(maxPotentialInstances * 16);
+  // Allocate the exact covered/windowed result. The old all-planet upper bound
+  // briefly doubled grass memory during prewarm before slicing it back down.
+  const matrices = new Float32Array(visibleVoxelCount * bladeCount * 16);
   const m = new THREE.Matrix4();
   let slot = 0;
 
@@ -281,7 +332,7 @@ export function buildGrassInstanceBuffer(
   return {
     count: slot,
     voxelCount,
-    matrices: matrices.slice(0, slot * 16)
+    matrices
   };
 }
 
@@ -318,7 +369,8 @@ export function getPrewarmedGrassInstanceBuffer(
 export function prewarmGrassInstancesForWorld(
   planetSize: number,
   terrainSeed: number,
-  playerWorld: THREE.Vector3
+  playerWorld: THREE.Vector3,
+  worldId?: string
 ): GrassInstanceBuffer | null {
   const quality = getGraphicsQuality();
   if (quality.grassDensity <= 0) return null;
@@ -343,7 +395,10 @@ export function prewarmGrassInstancesForWorld(
 
   const buffer = measureWarpMetric(
     'grass:prewarm_instances',
-    () => buildGrassInstanceBuffer(getWorldTerrainData(planetSize, terrainSeed).initialVoxels, params),
+    () => buildGrassInstanceBuffer(
+      getWorldTerrainData(planetSize, terrainSeed, worldId).initialVoxels,
+      params
+    ),
     result => ({ count: result.count, voxelCount: result.voxelCount })
   );
   rememberGrassInstanceBuffer(key, buffer);
@@ -352,7 +407,11 @@ export function prewarmGrassInstancesForWorld(
 
 const scheduledGrassPrewarms = new Set<string>();
 
-export function scheduleGrassInstancePrewarm(planetSize: number, terrainSeed: number): void {
+export function scheduleGrassInstancePrewarm(
+  planetSize: number,
+  terrainSeed: number,
+  worldId?: string
+): void {
   if (typeof window === 'undefined') return;
 
   const quality = getGraphicsQuality();
@@ -363,6 +422,7 @@ export function scheduleGrassInstancePrewarm(planetSize: number, terrainSeed: nu
     'approach',
     planetSize,
     terrainSeed,
+    worldId ?? 'seed-only',
     quality.grassDensity,
     quality.grassMaxDistance,
     profile.heightMul.toFixed(4),
@@ -375,8 +435,13 @@ export function scheduleGrassInstancePrewarm(planetSize: number, terrainSeed: nu
 
   const run = () => {
     scheduledGrassPrewarms.delete(key);
-    const arrivalPose = createWorldArrivalPose(planetSize, terrainSeed);
-    prewarmGrassInstancesForWorld(planetSize, terrainSeed, arrivalPose.approachPosition);
+    const arrivalPose = createWorldArrivalPose(planetSize, terrainSeed, worldId);
+    prewarmGrassInstancesForWorld(
+      planetSize,
+      terrainSeed,
+      arrivalPose.approachPosition,
+      worldId
+    );
   };
 
   const scheduler = window as unknown as {
@@ -411,26 +476,24 @@ export function buildGrassInstances(
   let slot = 0;
   let voxelCount = 0;
   const capacity = mesh.instanceMatrix.count;
-  const maxDistSq = maxDistance * maxDistance;
-
   const bladeCount = bladesPerVoxel(density, densityMul);
+  const params: GrassInstanceParams = {
+    density,
+    maxDistance,
+    playerWorld,
+    worldSeed,
+    heightMul,
+    widthMul,
+    densityMul,
+    coverage
+  };
   const voxels = voxelSystem.getAllVoxels();
   for (const voxel of voxels.values()) {
     if (!isDecoratableGrassVoxel(voxel)) continue;
     voxelCount++;
 
     const [x, y, z] = voxel.position;
-
-    // Bare-ground patches: on sparse/arid biomes only a fraction of voxels grow
-    // grass, so the planet shows soil between tufts instead of a full carpet.
-    if (coverage < 1 && seededVoxelUnit(x, y, z, COVERAGE_SALT, worldSeed) > coverage) {
-      continue;
-    }
-
-    if (maxDistance > 0 && playerWorld) {
-      voxelCoordToWorld(x, y, z, _world);
-      if (_world.distanceToSquared(playerWorld) > maxDistSq) continue;
-    }
+    if (shouldSkipGrassVoxel(voxel, x, y, z, params)) continue;
 
     for (let b = 0; b < bladeCount; b++) {
       if (slot >= capacity) break;

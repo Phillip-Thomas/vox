@@ -5,15 +5,19 @@ import { getSpaceFlightSnapshot, getWarp, useSpaceFlight } from '../../state/spa
 import { getPlayerUp, getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import { getCameraSubmergence } from '../../state/playerSubmersion.ts';
 import { localDaylight, localGolden } from '../../utils/dayNight.ts';
-import { buildPlanetProfile, type PlanetProfile } from '../../game/PlanetProfile.ts';
+import {
+  resolvePlanetProfile,
+  type PlanetProfile
+} from '../../game/PlanetProfile.ts';
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
 import { buildWindProfile, type WindProfile } from '../../utils/windProfile.ts';
-import { coordinateToSeed } from '../../utils/worldCoordinates.ts';
 import { seededVoxelUnit } from '../../utils/seededHash.ts';
+import { getSystemFlightSnapshot } from '../../state/systemFlight.ts';
 import { getSunDirection } from '../SkyController.tsx';
-import { useAudioSettings } from '../../audio/audioSettings.ts';
+import { getAudioSettingsSnapshot, useAudioSettings } from '../../audio/audioSettings.ts';
 import { getMusicEngine } from '../../audio/musicEngine.ts';
 import { getSfxEngine } from '../../audio/sfxEngine.ts';
+import { getVitals } from '../../game/systems/survivalVitals.ts';
 import {
   setMusicOutput,
   setMusicSubmerged,
@@ -47,24 +51,41 @@ import { isScoreMoodLeading } from '../../audio/scoreEngine.ts';
 import { SALT_REGION } from '../../audio/generative/seededMusic.ts';
 import { REGION_QUANT_BLOCKS } from '../../audio/generative/tuning.ts';
 import type { BedSignals } from '../../audio/generative/worldSignals.ts';
+import {
+  initialOxygenAudioClockState,
+  stepOxygenAudioClock
+} from '../../audio/oxygenAudio.ts';
 import { isScoreDebugEnabled, updateScoreDebug } from '../../audio/scoreDebug.ts';
 import {
   celestialMusicPrimitives,
   paletteBrightnessOf
 } from '../../audio/planetMusicSignals.ts';
+import {
+  resolveCoordinateMusicIdentity,
+  resolveSystemBodyMusicIdentity,
+  type DestinationMusicIdentity
+} from '../../audio/destinationMusicIdentity.ts';
+import { getEmergentScoreMixSnapshot } from '../../story/emergentScoreDirector.ts';
 
 interface AudioDirectorProps {
   terrainSeed: number;
+  worldId: string;
 }
 
-const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
+const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
   const app = useAppState();
   const flight = useSpaceFlight();
   const story = useStoryState();
   const audio = useAudioSettings();
-  const profile = useMemo<PlanetProfile>(() => buildPlanetProfile(terrainSeed), [terrainSeed]);
+  const profile = useMemo<PlanetProfile>(
+    () => resolvePlanetProfile({ worldId, seed: terrainSeed }).profile,
+    [terrainSeed, worldId]
+  );
   const planetMood = useMemo<PlanetMusicMood>(() => resolvePlanetMusicMood(profile), [profile]);
-  const wind = useMemo<WindProfile>(() => buildWindProfile(terrainSeed), [terrainSeed]);
+  const wind = useMemo<WindProfile>(
+    () => buildWindProfile(terrainSeed, profile),
+    [terrainSeed, profile]
+  );
   // The LO-FI story eras (prologue/ch1) duck the streamed layers to the quiet
   // transit bed — recorded music doesn't exist yet at that fidelity. From ch2 on
   // the normal scene returns and the ERA primitive fades the recorded layers in
@@ -84,7 +105,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   const archetypeRef = useRef<ArchetypeId>(profile.archetype);
   const paletteBrightnessRef = useRef(paletteBrightnessOf(profile));
   const biomeWeightsRef = useRef(profile.biomeWeights);
-  const destInfoRef = useRef<{ seed: number; archetype: ArchetypeId } | null>(null);
+  const destInfoRef = useRef<DestinationMusicIdentity | null>(null);
   const chordRootRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -132,6 +153,10 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
   useEffect(() => {
     let raf = 0;
     let lastAt = performance.now();
+    let oxygenClock = initialOxygenAudioClockState(lastAt / 1000);
+    const reducedMotionQuery = typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : null;
     const tick = () => {
       const now = performance.now();
       const dt = Math.min(0.1, (now - lastAt) / 1000);
@@ -165,6 +190,25 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
       // edge-triggered. audioCore slews the shared bus cutoff structurally.
       setMusicSubmerged(submergence);
 
+      const storySnapshot = getStoryStateSnapshot();
+      const liveOxygen = Math.min(1, Math.max(0, getVitals().oxygen / 100));
+      const audioSnapshot = getAudioSettingsSnapshot();
+      const oxygenStep = stepOxygenAudioClock(
+        oxygenClock,
+        {
+          oxygen: liveOxygen,
+          submergence,
+          enabled: storySnapshot.active && storySnapshot.beat === 'ch6-dive',
+          muted: audioSnapshot.muted || audioSnapshot.sfxVolume <= 0,
+          // The body warning remains present, but repetitive sensory pressure
+          // is softened for reduced-motion users. This lane creates no flash.
+          reducedMotion: reducedMotionQuery?.matches ?? false
+        },
+        now / 1000
+      );
+      oxygenClock = oxygenStep.state;
+      if (oxygenStep.emitPulse) getSfxEngine().playOxygenPulse(oxygenStep.plan);
+
       const daylight = sceneRef.current === 'deepSpace'
         ? 0.5
         : localDaylight(getSunDirection(), getPlayerUp());
@@ -179,7 +223,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         era: Math.min(1, reality.chroma * 0.35 + reality.detail * 0.3 + reality.organic * 0.35),
         warmth: celestial.warmth,
         wonder: celestial.wonder,
-        ...(getStoryStateSnapshot().active ? {} : { tension: warpIntensity * 0.5, energy: warpIntensity })
+        ...(storySnapshot.active ? {} : { tension: warpIntensity * 0.5, energy: warpIntensity })
       });
       tickMusicPrimitives(dt);
 
@@ -191,28 +235,53 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         getMusicPrimitives()
       );
       const engine = getMusicEngine();
+      const storyMix = getEmergentScoreMixSnapshot();
       engine.setLayerTargets(mix.layers, mix.fadeSeconds);
-      engine.setProceduralTargets(mix.procedural, mix.fadeSeconds);
+      engine.setProceduralTargets({
+        ...mix.procedural,
+        // Outside the hatch the repaired ship is seen, not yet inhabited. The
+        // procedural engine hum returns only after the pressure boundary seals.
+        ship: mix.procedural.ship * storyMix.shipHumMultiplier
+      }, mix.fadeSeconds, storyMix.shipHumSlewSeconds == null
+        ? undefined
+        : { shipGainSeconds: storyMix.shipHumSlewSeconds });
 
       // --- The generative bed (P3): rAF writes INTENT only — one world
       // snapshot per frame; the bed's own lookahead scheduler does all
       // scheduling on the audio clock.
       const prim = getMusicPrimitives();
       const currentScene = sceneRef.current;
-      let destinationSeed: number | null = null;
-      let destinationArchetype: string | null = null;
-      if (currentScene === 'approach') {
-        const flightSnap = getSpaceFlightSnapshot();
-        const dest = flightSnap.destination ?? flightSnap.target;
-        if (dest) {
-          const seed = coordinateToSeed(dest.x, dest.y);
-          if (destInfoRef.current?.seed !== seed) {
-            destInfoRef.current = { seed, archetype: buildPlanetProfile(seed).archetype };
+      const flightSnap = getSpaceFlightSnapshot();
+      const systemTarget = resolveSystemBodyMusicIdentity(getSystemFlightSnapshot().target);
+      const systemHandoffActive = warp.active && warp.kind === 'system_handoff';
+      let destinationIdentity: DestinationMusicIdentity | null = null;
+      if (systemTarget) {
+        // A legal same-system target owns the complete p1 identity bundle. The
+        // shared system coordinate can never substitute for this resolution.
+        destInfoRef.current = systemTarget;
+        destinationIdentity = systemTarget;
+      } else if (systemHandoffActive && destInfoRef.current?.worldId) {
+        // commitSystemPlanetHandoff clears the target at the covered midpoint;
+        // retain its already-authenticated bundle through the remainder only.
+        destinationIdentity = destInfoRef.current;
+      } else if (currentScene === 'approach') {
+        const coordinateDestination = flightSnap.destination ?? flightSnap.target;
+        if (coordinateDestination) {
+          const resolved = resolveCoordinateMusicIdentity(coordinateDestination);
+          if (destInfoRef.current?.worldId !== null
+            || destInfoRef.current?.seed !== resolved.seed
+            || destInfoRef.current?.profileHash !== resolved.profileHash) {
+            destInfoRef.current = resolved;
           }
-          destinationSeed = seed;
-          destinationArchetype = destInfoRef.current.archetype;
+          destinationIdentity = destInfoRef.current;
         }
+      } else {
+        destInfoRef.current = null;
       }
+      // Same-system flight remains physically deep-space until the local
+      // representation handoff. The bed nevertheless receives an approach
+      // phrase only after the authoritative system-body target exists.
+      const bedScene = destinationIdentity?.worldId ? 'approach' : currentScene;
       const pos = getPlayerWorldPosition();
       const q = REGION_QUANT_BLOCKS;
       const regionUnit = seededVoxelUnit(
@@ -240,6 +309,7 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         daylight,
         golden: inSpace ? 0 : localGolden(getSunDirection(), getPlayerUp()),
         submergence,
+        oxygen: liveOxygen,
         windStrength: windProfile.strength,
         windTurbulence: windProfile.turbulence,
         windGustSpeed: windProfile.gustSpeed,
@@ -252,13 +322,17 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed }) => {
         windOffsetY: windProfile.offset.y,
         playerX: pos.x,
         playerZ: pos.z,
-        scene: currentScene,
+        scene: bedScene,
         warpActive: warp.active,
         warpProgress: warp.active ? Math.min(1, warp.progress) : 0,
         regionUnit,
         timeSec: now / 1000,
-        destinationSeed,
-        destinationArchetype,
+        destinationWorldId: destinationIdentity?.worldId ?? null,
+        destinationSeed: destinationIdentity?.seed ?? null,
+        destinationProfileId: destinationIdentity?.profileId ?? null,
+        destinationProfileVersion: destinationIdentity?.profileVersion ?? null,
+        destinationProfileHash: destinationIdentity?.profileHash ?? null,
+        destinationArchetype: destinationIdentity?.archetype ?? null,
         storyLeads: isScoreMoodLeading()
       };
       updateBedSignals(bedSignals);

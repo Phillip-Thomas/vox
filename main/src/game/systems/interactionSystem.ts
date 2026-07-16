@@ -9,7 +9,16 @@
 export type InteractionId =
   | 'door' | 'board' | 'drink'
   // story-mode prompts (resolved by story/storyInteractions.ts, highest priority)
-  | 'story-anomaly' | 'story-eat' | 'story-rest';
+  | 'story-anomaly' | 'story-eat' | 'story-rest'
+  | 'story-field-kit' | 'story-maw-repair' | 'story-maw-pond-attend'
+  | 'story-keel-free' | 'story-keel-bank'
+  | 'story-wreck-diagnosis' | 'story-wreck-salvage' | 'story-ship-repair' | 'story-wreck-scar-attend'
+  | 'story-board-hatch' | 'story-board-cancel'
+  | 'story-audit-fire' | 'story-audit-life' | 'story-audit-tree'
+  | 'story-comply-fire' | 'story-comply-organics' | 'story-refuse-tree'
+  | 'story-tidegarden-attend' | 'story-tidegarden-record' | 'story-tidegarden-choose-site'
+  | 'story-habitat-core' | 'story-habitat-certify' | 'story-habitat-rest'
+  | 'story-tidegarden-choose-site';
 
 export interface ActiveInteraction {
   id: InteractionId;

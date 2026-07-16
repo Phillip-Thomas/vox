@@ -36,6 +36,7 @@ import {
   type TreeInstanceVariation
 } from '../utils/treePopulation';
 import { commitRaycastInstanceTransforms } from '../utils/instancedMeshPicking.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // Extra instance slots so small grass-count fluctuations don't force a realloc.
 const HEADROOM = 32;
@@ -48,6 +49,7 @@ const IMPOSTOR_FRAC = 0.5;
 interface TreeFieldProps {
   planetSize: number;
   terrainSeed: number;
+  planetProfile?: PlanetProfile;
   persistenceWorld?: WorldIdentity;
   /** Player/camera world position for far-distance culling (optional). */
   playerPosition?: THREE.Vector3;
@@ -132,18 +134,19 @@ function countTreeVoxels(
  * on re-render); count is owned imperatively in the fill + self-healed in
  * useFrame across all meshes.
  */
-export default function TreeField({ planetSize, terrainSeed, persistenceWorld, playerPosition }: TreeFieldProps) {
+export default function TreeField({ planetSize, terrainSeed, planetProfile, persistenceWorld, playerPosition }: TreeFieldProps) {
   const density = getGraphicsQuality().treeDensity;
   const variantCount = resolveTreeVariantCount(getQualityProfile(), TREE_VARIANT_COUNT);
 
-  // Per-planet species: profile from terrainSeed ONLY.
+  // Per-planet species: canonical worlds share the scene's resolved identity;
+  // seed-only tooling retains the procedural fallback.
   const profile = useMemo(
-    () => measureWarpMetric('tree:profile', () => buildTreeProfile(terrainSeed)),
-    [terrainSeed]
+    () => measureWarpMetric('tree:profile', () => buildTreeProfile(terrainSeed, planetProfile)),
+    [planetProfile, terrainSeed]
   );
   const artDirection = useMemo(
-    () => buildPlanetArtDirection(terrainSeed),
-    [terrainSeed]
+    () => buildPlanetArtDirection(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
   );
   const hasBlossom = profile.bloomAmount > 0;
 

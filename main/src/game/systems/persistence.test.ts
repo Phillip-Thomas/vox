@@ -4,6 +4,7 @@ import {
   saveGlobal, loadGlobal, restoreGlobal, saveWorld,
   restoreStructuresForWorld, restoreCampfiresForWorld, restoreTreesForWorld, restoreStonesForWorld,
   restoreFloraForWorld,
+  restoreHabitatForWorld,
   loadVoxelEditsForWorld, saveVoxelEdits, restoreVoxelEditsForWorld,
   savePlayerPose, loadPlayerPose,
   getLocalPersistenceMode,
@@ -30,6 +31,31 @@ import { restoreForageForWorld } from './persistence.ts';
 import { createWorldIdentity } from '../worldIdentity.ts';
 import { GENERATION_SCHEMA_VERSION } from '../schema.ts';
 import { createPlanetIdentity } from '../starSystem.ts';
+import {
+  getAccomplishment,
+  recordAccomplishment,
+  resetAccomplishments
+} from './accomplishmentLedger.ts';
+import {
+  attendObservation,
+  getObservation,
+  keepObservation,
+  resetObservations
+} from './observationLedger.ts';
+import {
+  commitShipRepairStage,
+  getShipRestorationSnapshot,
+  resetShipRestoration,
+  setShipRestorationLocation
+} from './shipRestoration.ts';
+import {
+  clearHabitatWorld,
+  commitHabitatCorePlacement,
+  commitHabitatSafeRest,
+  commitHabitatShelterCertification,
+  getHabitatWorldState,
+  resetHabitats
+} from './habitatSystem.ts';
 
 // localStorage isn't present in the vitest node env — stub a Map-backed one.
 class MemStorage {
@@ -55,18 +81,39 @@ beforeEach(() => {
   resetInventory(); resetMaw(); resetProgression();
   resetStructures(); resetCampfires(); resetTreeHarvest(); resetStonePickup(); resetVitals();
   resetForagePickup(); resetFloraHarvest(); resetWaterskin();
+  resetAccomplishments(); resetObservations(); resetShipRestoration(); resetHabitats();
   setFreeBuild(true); // skip build cost in the round-trip
 });
 
 describe('global save round-trip', () => {
-  it('restores inventory + maw charge + era + milestones + lastWorld', () => {
+  it('restores inventory, progression, survival, narrative ledgers, and ship state', () => {
     addItem('wood', 7); addItem('stone', 3);
     setMawCharge(40); advanceEraTo('emergent'); markMilestone('maw_repaired');
     setVitals({ health: 70, hunger: 55, thirst: 40, warmth: 88, stamina: 30 });
     fillWaterskin(55);
+    recordAccomplishment('maw_repaired', { id: 'repair:power-restored' });
+    attendObservation(
+      'maw.hum.changed',
+      { id: 'audio:maw-hum' },
+      { id: 'attend:maw-hum' }
+    );
+    keepObservation('maw.hum.changed', { id: 'keep:maw-hum' }, 'variant:protective');
+    expect(commitShipRepairStage('repair:bench-online', 'bench_online').ok).toBe(true);
+    setShipRestorationLocation({
+      currentSystemId: '5,-2',
+      currentWorldId: '5,-2',
+      parkedPose: { position: [6, 52.5, -3], quaternion: [0, 0, 0, 1] },
+      systemPose: {
+        position: [6, 52.5, -3],
+        velocity: [0, 0, 0],
+        quaternion: [0, 0, 0, 1]
+      },
+      locationMode: 'surface'
+    });
     saveGlobal({ x: 5, y: -2 });
 
-    resetInventory(); resetMaw(); resetProgression(); resetVitals(); resetWaterskin(); // wipe (simulate reload)
+    resetInventory(); resetMaw(); resetProgression(); resetVitals(); resetWaterskin();
+    resetAccomplishments(); resetObservations(); resetShipRestoration(); // wipe (simulate reload)
     const save = loadGlobal();
     expect(save).toBeTruthy();
     expect(save!.lastWorld).toEqual({ x: 5, y: -2 });
@@ -79,6 +126,37 @@ describe('global save round-trip', () => {
     expect(hasMilestone('maw_repaired')).toBe(true);
     expect(getVitals()).toEqual({ health: 70, hunger: 55, thirst: 40, warmth: 88, stamina: 30, oxygen: 100 });
     expect(getWaterskinFill()).toBe(55);
+    expect(getAccomplishment('maw_repaired')?.evidenceHistory).toHaveLength(1);
+    expect(getObservation('maw.hum.changed')).toMatchObject({
+      acknowledgement: 'kept',
+      interpretationVariantId: 'variant:protective',
+      revisionHistory: [{ kind: 'attend' }, { kind: 'keep' }]
+    });
+    expect(getShipRestorationSnapshot()).toMatchObject({
+      repairStage: 'bench_online',
+      repairHistory: [{ eventId: 'repair:bench-online', from: 'wrecked', to: 'bench_online' }],
+      currentSystemId: '5,-2',
+      currentWorldId: '5,-2',
+      locationMode: 'surface',
+      parkedPose: { position: [6, 52.5, -3], quaternion: [0, 0, 0, 1] },
+      systemPose: { position: [6, 52.5, -3], velocity: [0, 0, 0] }
+    });
+  });
+
+  it('treats legacy saves without ledger fields as empty ledgers', () => {
+    recordAccomplishment('stale_fact', { id: 'stale:evidence' });
+    attendObservation('stale.observation', { id: 'stale:evidence' }, { id: 'stale:attend' });
+
+    restoreGlobal({
+      inventory: {},
+      mawCharge: 0,
+      era: 'primitive',
+      milestones: [],
+      lastWorld: null
+    });
+
+    expect(getAccomplishment('stale_fact')).toBeUndefined();
+    expect(getObservation('stale.observation')).toBeUndefined();
   });
 
   it('stores a canonical secondary planet while retaining the legacy coordinate', () => {
@@ -93,6 +171,44 @@ describe('global save round-trip', () => {
 });
 
 describe('per-world save round-trip', () => {
+  it('persists an installed Habitat Core with its chosen world-local site', () => {
+    expect(commitHabitatCorePlacement({
+      actorId: 'terra',
+      worldId: WORLD.worldId,
+      shelterId: `habitat:${WORLD.worldId}:1,2,3`,
+      cell: [1, 2, 3],
+      supportCell: [1, 1, 3],
+      position: [2, 4.24, 6],
+      up: [0, 1, 0],
+      eventId: 'habitat:online'
+    })).toBe(true);
+    expect(commitHabitatShelterCertification(WORLD.worldId, {
+      shelterId: `habitat:${WORLD.worldId}:1,2,3`,
+      cell: [1, 2, 3],
+      insulation: 0.5,
+      interiorCellCount: 2,
+      eventId: 'habitat:certified'
+    })).toBe(true);
+    expect(commitHabitatSafeRest(WORLD.worldId, {
+      shelterId: `habitat:${WORLD.worldId}:1,2,3`,
+      dayPhase: 0.75,
+      eventId: 'habitat:rest'
+    })).toBe(true);
+    saveWorld(WORLD);
+    clearHabitatWorld(WORLD.worldId);
+
+    restoreHabitatForWorld(WORLD);
+    expect(getHabitatWorldState(WORLD.worldId)).toMatchObject({
+      core: {
+        shelterId: `habitat:${WORLD.worldId}:1,2,3`,
+        cell: [1, 2, 3],
+        eventId: 'habitat:online'
+      },
+      shelterCertification: { eventId: 'habitat:certified' },
+      safeRest: { eventId: 'habitat:rest', dayPhase: 0.75 }
+    });
+  });
+
   it('restores structures, campfires, and every harvested surface resource', () => {
     placePiece([1, 2, 3], 3, 'foundation', 'wood');
     placePiece([1, 2, 3], 0, 'wall', 'wood');

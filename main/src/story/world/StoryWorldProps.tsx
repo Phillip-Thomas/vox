@@ -1,8 +1,16 @@
-import React, { useEffect } from 'react';
-import { isStoryDeepLink, useStoryState } from '../storyState.ts';
+import React, { useEffect, useMemo } from 'react';
+import { useStoryState } from '../storyState.ts';
 import { clearSideLens, setSideLens } from '../sideLens.ts';
-import { getAuditWorkerPath, getPondPose, getStorySidePlane, storyAnchors } from './storyWorld.ts';
-import { getCampfires, placeCampfire } from '../../game/systems/campfires.ts';
+import {
+  establishFieldPackDropPose,
+  getAuditWorkerPath,
+  getFieldPackDropPoseAuthority,
+  getPondPose,
+  getStorySidePlane,
+  resetFieldPackDropPoseAuthority,
+  storyAnchors,
+  type FieldPackDropPoseSource
+} from './storyWorld.ts';
 import { getFeedRuntime } from '../feedRuntime.ts';
 import AnomalyStone from './AnomalyStone.tsx';
 import HeroAppleTree from './HeroAppleTree.tsx';
@@ -14,8 +22,16 @@ import SupplyPods from './SupplyPods.tsx';
 import NavBeacons from './NavBeacons.tsx';
 import SignalMesa from './SignalMesa.tsx';
 import WreckRelay from './WreckRelay.tsx';
-import AuditWorker, { getAuditWorkerPose } from './AuditWorker.tsx';
+import AuditWorker, { getAuditWorkerPose, hideAuditWorker } from './AuditWorker.tsx';
 import { createLiveAgentSurfaceTerrain } from '../../utils/agentSurfaceNavigationRuntime.ts';
+import type { CommandContext } from '../../game/commands.ts';
+import FieldPack from './FieldPack.tsx';
+import KeelMemory from './KeelMemory.tsx';
+import EmergentAuditSites from './EmergentAuditSites.tsx';
+import A4WorldChoreography from './A4WorldChoreography.tsx';
+import MawPondResonance from './MawPondResonance.tsx';
+import { shouldMountAuditWorker } from '../auditWorkerPresence.ts';
+import { isSceneReadyForWorld, useAppState } from '../../state/appState.ts';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
@@ -29,84 +45,148 @@ import { createLiveAgentSurfaceTerrain } from '../../utils/agentSurfaceNavigatio
  * Also registers the raster-era side lens (the plane is deterministic per seed;
  * consumers only act on it when the input policy says lookMode === 'side').
  */
-const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = ({
+const StoryWorldProps: React.FC<{
+  planetSize: number;
+  terrainSeed: number;
+  commandContext: CommandContext;
+}> = ({
   planetSize,
-  terrainSeed
+  terrainSeed,
+  commandContext
 }) => {
   const story = useStoryState();
+  const { sceneReady } = useAppState();
   // The completed story world keeps its landmarks even though the story is
   // dormant (completeStory leaves chapter 'complete' in the snapshot).
   const done = story.chapter === 'complete';
+  const liveWorldReady = sceneReady
+    && isSceneReadyForWorld(commandContext.world.worldId);
+  const liveTerrain = useMemo(
+    () => createLiveAgentSurfaceTerrain(
+      planetSize,
+      terrainSeed,
+      commandContext.world.worldId
+    ),
+    [commandContext.world.worldId, liveWorldReady, planetSize, terrainSeed]
+  );
+  const fieldPackSource: FieldPackDropPoseSource | null = story.beat === 'a4-exhale'
+    ? 'a4-planned-tear'
+    : liveWorldReady && (done || /^ch[5-9]$/.test(String(story.chapter)))
+      ? 'direct-ch5-fallback'
+      : null;
+  // Resolve before child render so FieldPack, MawPondResonance and all frame
+  // drivers observe the same authority together. Direct Ch5 reconstruction
+  // waits for sceneReady: EfficientPlanet has then populated voxelSystem and
+  // replayed this world's saved edits, so the locked fallback cannot be chosen
+  // from the pristine generator while edited terrain is still loading.
+  const fieldPack = useMemo(() => fieldPackSource
+    ? establishFieldPackDropPose({
+        planetSize,
+        terrainSeed,
+        terrain: liveTerrain,
+        worldId: commandContext.world.worldId,
+        terrainRevision: liveTerrain.revision,
+        storyRunId: story.runId,
+        source: fieldPackSource
+      })
+    : getFieldPackDropPoseAuthority(commandContext.world.worldId, story.runId), [
+      commandContext.world.worldId,
+      fieldPackSource,
+      liveTerrain,
+      planetSize,
+      story.runId,
+      terrainSeed
+    ]);
+  const auditWorkerMounted = shouldMountAuditWorker(
+    story.chapter,
+    commandContext.world.worldId
+  );
 
   useEffect(() => {
     setSideLens(getStorySidePlane(planetSize, terrainSeed));
     return clearSideLens;
-  }, [planetSize, terrainSeed]);
-
-  // Debug-jump affordance (DEV DEEP-LINKS ONLY): beats past the campfire craft
-  // need a fire standing (rest gates on it). A `?story=<beat>` jump lands there
-  // without the player having built one, so pre-place it. A real run (menu/resume)
-  // NEVER takes this path — it arrives with the player's own fire — and gating on
-  // isStoryDeepLink keeps this debug fire from ever entering (and persisting into)
-  // a normal save.
-  useEffect(() => {
-    if (!isStoryDeepLink()) return;
-    const needsFire = story.beat === 'ch3-dusk' || story.beat === 'ch3-await-rest' || story.beat === 'a3-dawn'
-      || story.beat === 'ch4-vigil';
-    if (!needsFire || getCampfires().length > 0) return;
-    const plane = getStorySidePlane(planetSize, terrainSeed);
-    placeCampfire(plane.origin.clone().addScaledVector(plane.up, 0.2), plane.up.clone());
-  }, [story.beat, planetSize, terrainSeed]);
+  }, [commandContext.world.worldId, planetSize, terrainSeed]);
 
   // Live anchors for the director/autopilot (pond + the auditor's approach) —
   // computed once per world mount; the director never learns planetSize itself.
   useEffect(() => {
     storyAnchors.pond = getPondPose(planetSize, terrainSeed);
-    storyAnchors.auditPath = getAuditWorkerPath(
-      planetSize,
-      terrainSeed,
-      createLiveAgentSurfaceTerrain(planetSize, terrainSeed)
-    );
+    storyAnchors.auditPath = getAuditWorkerPath(planetSize, terrainSeed, liveTerrain);
+    storyAnchors.fieldPack = fieldPack;
+    storyAnchors.worldId = commandContext.world.worldId;
+    storyAnchors.storyRunId = story.runId;
     storyAnchors.terrainSeed = terrainSeed;
     storyAnchors.planetSize = planetSize;
-    return () => {
-      storyAnchors.pond = null;
-      storyAnchors.auditPath = null;
-      storyAnchors.terrainSeed = null;
-      storyAnchors.planetSize = null;
-    };
-  }, [planetSize, terrainSeed]);
+  }, [
+    commandContext.world.worldId,
+    fieldPack,
+    liveTerrain,
+    planetSize,
+    story.runId,
+    terrainSeed
+  ]);
 
-  // The done world's standing facts: the wreck is landed scenery (the descent
-  // timeline is long over, so its driver scalar needs asserting on fresh
-  // boots), and W-7744 STANDS AT THE RELAY — "he stays to look." A live run
-  // leaves him there (the arrival timeline no longer hides him); a resumed or
-  // deep-linked 'done' world re-places him at his post, facing the site.
+  // Authority teardown belongs only to a world/run lifetime. Keeping it out
+  // of the live-terrain publication effect is critical: sceneReady replaces
+  // the terrain adapter after persisted edits replay, and the previous passive
+  // effect cleanup must not erase the direct-Ch5 pose established by that
+  // render before FieldPack gets its next progression-backed rerender.
   useEffect(() => {
-    if (!done) return;
-    const runtime = getFeedRuntime();
-    if (runtime.descent < 1) runtime.descent = 1.1;
+    const worldId = commandContext.world.worldId;
+    const storyRunId = story.runId;
+    return () => {
+      if (
+        storyAnchors.worldId === worldId
+        && storyAnchors.storyRunId === storyRunId
+      ) {
+        storyAnchors.pond = null;
+        storyAnchors.auditPath = null;
+        storyAnchors.fieldPack = null;
+        storyAnchors.worldId = null;
+        storyAnchors.storyRunId = null;
+        storyAnchors.terrainSeed = null;
+        storyAnchors.planetSize = null;
+        hideAuditWorker();
+      }
+      resetFieldPackDropPoseAuthority({
+        worldId,
+        storyRunId
+      });
+    };
+  }, [commandContext.world.worldId, story.runId]);
+
+  // Post-A4, W-7744 remains beside the physical tear. Continuous play keeps the
+  // live pose untouched; a direct Ch5+ entry reconstructs him at the same
+  // authoritative pack receipt instead of mounting an invisible actor.
+  useEffect(() => {
+    if (!auditWorkerMounted || story.chapter === 'ch4' || !fieldPack) return;
     const pose = getAuditWorkerPose();
     if (pose.visible) return;
-    const path = getAuditWorkerPath(
-      planetSize,
-      terrainSeed,
-      createLiveAgentSurfaceTerrain(planetSize, terrainSeed)
-    );
-    const post = path[path.length - 1];
-    if (!post) return;
-    pose.position.copy(post.position);
-    pose.up.copy(post.up);
-    // He faces the site he is auditing (the arrival strip's origin).
+    pose.position.copy(fieldPack.position).addScaledVector(fieldPack.up, -0.13);
+    pose.up.copy(fieldPack.up);
     const site = getStorySidePlane(planetSize, terrainSeed).origin;
-    pose.heading.copy(site).sub(post.position);
+    pose.heading.copy(site).sub(pose.position);
     pose.heading.addScaledVector(pose.up, -pose.heading.dot(pose.up));
     if (pose.heading.lengthSq() < 1e-6) pose.heading.set(0, 0, 1);
     pose.heading.normalize();
     pose.stride = 0;
     pose.walk = 0;
     pose.visible = true;
-  }, [done, planetSize, terrainSeed]);
+  }, [
+    auditWorkerMounted,
+    commandContext.world.worldId,
+    fieldPack,
+    planetSize,
+    story.chapter,
+    story.runId,
+    terrainSeed
+  ]);
+
+  useEffect(() => {
+    if (!done) return;
+    const runtime = getFeedRuntime();
+    if (runtime.descent < 1) runtime.descent = 1.1;
+  }, [done]);
 
   // Post-crash chapters: direct jumps can land with the descent driver still
   // at idle (-1) — assert the landed wreck (ch1 keeps its own animated driver).
@@ -120,6 +200,7 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
   if (story.chapter === 'prologue') return null;
 
   const firstDayOrLater = story.chapter === 'ch4' || done
+    || /^ch[5-9]$/.test(String(story.chapter))
     || story.beat === 'ch3-thirst' || story.beat === 'ch3-forage' || story.beat === 'ch3-signal';
 
   return (
@@ -131,13 +212,42 @@ const StoryWorldProps: React.FC<{ planetSize: number; terrainSeed: number }> = (
           same impact site. Both mounted always; each self-gates on the a3
           milestone, so a resume past the awakening loads straight into the ship. */}
       <DescentPod planetSize={planetSize} terrainSeed={terrainSeed} />
-      <HifiWreck planetSize={planetSize} terrainSeed={terrainSeed} />
+      <HifiWreck
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
       {/* The wreck relay: silent scenery from the first day; the network's
           voice from the klaxon on — and it stays up at done (carrier is up). */}
       {firstDayOrLater && <WreckRelay planetSize={planetSize} terrainSeed={terrainSeed} />}
       {/* W-7744 — hidden until the arrival timeline writes his pose; from the
           arrival on he STANDS, into the done world (the audit is in progress). */}
-      {(story.chapter === 'ch4' || done) && <AuditWorker />}
+      {auditWorkerMounted && <AuditWorker />}
+      <FieldPack
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
+      <KeelMemory
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
+      <EmergentAuditSites
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
+      <A4WorldChoreography
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
+      <MawPondResonance
+        planetSize={planetSize}
+        terrainSeed={terrainSeed}
+        commandContext={commandContext}
+      />
       {/* Hull debris scattered by the descent — the raster act's salvage. */}
       {story.chapter === 'ch1' && (
         <DebrisField planetSize={planetSize} terrainSeed={terrainSeed} />

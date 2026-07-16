@@ -1,0 +1,35 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "{{RUN_ID}}",
+  "sceneId": "{{SCENE_ID}}",
+  "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "capturedAt": "{{ISO_8601}}",
+  "contextRef": "main/src/story/ux/README.md",
+  "sourceFiles": [
+    { "path": "main/src/story/ux/README.md", "sha256": "{{SHA256}}" },
+    { "path": "main/src/story/ux/objectiveDirector.ts", "sha256": "{{SHA256}}" },
+    { "path": "main/src/story/ux/feedbackCues.ts", "sha256": "{{SHA256}}" },
+    { "path": "main/src/story/ux/StoryGuidanceHud.tsx", "sha256": "{{SHA256}}" }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "healthStates": ["idle", "ready", "missing-marker"]
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "replace-objective",
+      "kind": "interact",
+      "markerLabel": "{{REPLACE_WITH_EXACT_DIRECTIONAL_MARKER_LABEL}}",
+      "workOrder": [
+        "{{REPLACE_WITH_ROUTE_OR_CONTEXT_INSTRUCTION}}",
+        "{{REPLACE_WITH_EXACT_ACTION_AND_INPUT}}"
+      ]
+    }
+  ]
+}

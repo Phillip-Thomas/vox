@@ -6,6 +6,7 @@ import {
   getWorldTerrainData,
   getWorldWaterFaces,
   getWorldWaterVoxels,
+  hasWorldGenCacheEntry,
   prewarmWorldGen
 } from './worldGenCache';
 import { ProceduralWorldGenerator } from './proceduralWorldGenerator';
@@ -13,6 +14,12 @@ import { createTerrainConfig } from './terrainConfig';
 import { voxelCoordToWorld } from './cubeGravityConstants';
 import { MATERIALS, materialId } from '../types/materials';
 import { blockToRenderMaterial } from '../game/adapters';
+import {
+  TIDEGARDEN_PROFILE_ID,
+  TIDEGARDEN_PROFILE_VERSION,
+  TIDEGARDEN_SEED,
+  TIDEGARDEN_WORLD_ID
+} from '../game/PlanetProfile.ts';
 import type {
   InitialTerrainMeshData,
   OriginalTerrainData,
@@ -174,6 +181,46 @@ function freshTerrainData(size: number, seed: number): {
 }
 
 describe('worldGenCache', () => {
+  it('does not let a seed-only volcanic entry satisfy canonical Tidegarden readiness', () => {
+    clearWorldGenCache();
+    const generic = getWorldGen(8, TIDEGARDEN_SEED);
+
+    expect(generic.profileId).toBe('procedural');
+    expect(generic.generator.getPlanetProfile().archetype).toBe('volcanic');
+    expect(hasWorldGenCacheEntry(8, TIDEGARDEN_SEED)).toBe(true);
+    expect(hasWorldGenCacheEntry(8, TIDEGARDEN_SEED, TIDEGARDEN_WORLD_ID)).toBe(false);
+  });
+
+  it('directly builds canonical Tidegarden as a distinct verdant profile on fresh boot and reload', () => {
+    const assertCanonicalTidegarden = () => {
+      const generic = getWorldGen(24, TIDEGARDEN_SEED);
+      const tidegarden = getWorldGen(24, TIDEGARDEN_SEED, TIDEGARDEN_WORLD_ID);
+      const genericTerrain = getWorldTerrainData(24, TIDEGARDEN_SEED);
+      const terrain = getWorldTerrainData(24, TIDEGARDEN_SEED, TIDEGARDEN_WORLD_ID);
+
+      expect(tidegarden).not.toBe(generic);
+      expect(tidegarden.generator).not.toBe(generic.generator);
+      expect(tidegarden.worldId).toBe(TIDEGARDEN_WORLD_ID);
+      expect(tidegarden.profileId).toBe(TIDEGARDEN_PROFILE_ID);
+      expect(tidegarden.profileVersion).toBe(TIDEGARDEN_PROFILE_VERSION);
+      expect(tidegarden.profileHash).toBe('pf1-eeef3b78');
+      expect(tidegarden.generator.getPlanetProfile()).toMatchObject({
+        archetype: 'verdant',
+        hazards: ['none'],
+        traits: ['alien wet hills', 'dense fan canopy', 'braided shallows']
+      });
+      expect(genericTerrain.initialVoxels.map(voxel => voxel.blockId)).toContain('lava');
+      expect(terrain.initialVoxels.map(voxel => voxel.blockId)).not.toContain('lava');
+      expect(hasWorldGenCacheEntry(24, TIDEGARDEN_SEED)).toBe(true);
+      expect(hasWorldGenCacheEntry(24, TIDEGARDEN_SEED, TIDEGARDEN_WORLD_ID)).toBe(true);
+    };
+
+    clearWorldGenCache();
+    assertCanonicalTidegarden();
+    clearWorldGenCache();
+    assertCanonicalTidegarden();
+  });
+
   it('returns the SAME voxel array reference on repeat calls with the same (size, seed)', () => {
     clearWorldGenCache();
     const first = getWorldGen(50, 12345);

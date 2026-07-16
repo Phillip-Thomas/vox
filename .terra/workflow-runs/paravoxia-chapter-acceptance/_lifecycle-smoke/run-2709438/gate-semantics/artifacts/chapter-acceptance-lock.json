@@ -1,0 +1,7 @@
+{
+  "targetChapterMatchesInput": true,
+  "candidateRevisionMatchesInput": true,
+  "readOnly": true,
+  "repoWritesAllowed": false,
+  "publishAllowed": false
+}

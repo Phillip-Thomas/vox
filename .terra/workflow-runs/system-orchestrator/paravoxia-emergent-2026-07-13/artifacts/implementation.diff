@@ -1,0 +1,70 @@
+--- paravoxia-emergent-before
++++ paravoxia-emergent-working-tree
+@@ implementation scope @@
++Mixed working-tree candidate preserved in place; this manifest intentionally
++does not redistribute or normalize pre-existing user changes.
++Accepted runtime source fingerprint:
++a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262
++
++Implemented vertical slices:
++- typed post-arrival evidence and capability chain from ch4-audit through ch9-hearth
++- physical Maw repair, underwater Keel recovery, ordered wreck reconstruction
++- boarding, launch, same-system p1 travel, atmospheric landfall, persistent ship poses
++- canonical story:tidegarden@1 terrain/water/spawn identity keyed by worldId
++- player-chosen Habitat Core, physical enclosure certification, safe night rest
++- accomplishment and optional observation ledgers
++- no-input movie runtime using registered physical interactions and transactions
++- SHA-locked 66-anchor / 64-shot / 13-cue creative contract runtime
++- canonical destination score identity and Tidegarden palette/profile continuity
++- server-authoritative co-op story transactions, p1 party routing, conflicts, reconnect
++- destructive two-world Replay and completed Return-to-Tidegarden continuity
++- expanded story-authority schema/gate and client/server economy catalog parity
++
++Primary new implementation files:
++- main/src/story/emergentStoryDirector.ts
++- main/src/story/emergentMovieRuntime.ts
++- main/src/story/signedSceneAvRuntime.ts
++- main/src/story/generatedSceneAvRuntime.json
++- main/src/story/tidegardenSettlement.ts
++- main/src/state/shipFlightContinuity.ts
++- main/src/game/storyAuthorityDispatch.ts
++- main/src/utils/resolvedWorldGenerator.ts
++- main/tools/generate-scene-av-runtime.mjs
++- main/tools/emergent-story-runtime-probe.mjs
++- server/src/economyAuthority.ts
++- server/src/rooms.ts
++- shared/economy-catalog.json
++
++Final hardening retained in the same mixed worktree candidate:
++- dry-route preference across cube-face seams and latched physical handoff
++- water-aware jetpack rearm, wet-bank mantle, and believable cross-face egress
++- shallow unsupported swimming for feet-wet / eye-dry zero-fuel bank exits
++- unreachable-route cache invalidation after material movement or support regain
++- stable React external-store snapshots that ignore local-only pose churn
++- R3F scene-position mailbox and stable passive-effect debug adapters
++- settlement fabrication ordering that waits for actor authority readiness
++- overlapping rescue-free segment proofs through Chapter 8/9 completion
++- official uninterrupted rescue-free POTATO ch4-audit-to-done gate: 3 of 3
++
++Accepted full-run evidence:
++- captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json
++  (PASS, 704.18 seconds, 64/64 signed anchors)
++- captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json
++  (PASS, 883.65 seconds, 64/64 signed anchors)
++- captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json
++  (PASS, 683.92 seconds, 64/64 signed anchors)
++- all three share the accepted fingerprint, completed safe rest and the
++  two-world handoff, and recorded zero nudges, dry-route water-contact
++  violations, runtime errors, reloads, or context losses
++
++Diagnostic provenance:
++- the two direct identity/error renders, eight bounded segment proofs, the old
++  671.13-second full run, and superseded/failed-fingerprint cold-run attempts
++  remain useful for defect history but do not count toward the official triple
++
++This artifact is an orchestration manifest, not a redistributable patch: the
++checkout was already a mixed working tree and the run intentionally preserved
++all pre-existing user changes. The authoritative candidate is the in-place
++working tree verified by artifacts/check-results.json. This artifact closes
++only the three-run mechanical gate; eight release gates and all adapter
++bindings remain open, and no publish authority is granted.

@@ -17,13 +17,13 @@
       "slug": "narrative_and_player_causality",
       "label": "Narrative And Player Causality",
       "weight": 14,
-      "signals": ["story event and player verb are clear", "mystery lands at intended loudness", "camera and score preserve agency"]
+      "signals": ["story event and player verb are clear", "required objectives remain actionable and exactly targetable", "mystery lands at intended loudness", "camera score and guidance preserve agency"]
     },
     {
       "slug": "audiovisual_emotional_alignment",
       "label": "Audiovisual Emotional Alignment",
       "weight": 16,
-      "signals": ["story turn, score phrase, image, and control reinforce one event", "silence and restraint are authored", "no department merely annotates another"]
+      "signals": ["story turn, score phrase, image, guidance, and control reinforce one event", "semantic feedback acknowledges but never advances progression", "silence and restraint are authored", "no department merely annotates another"]
     },
     {
       "slug": "cinematic_composition_and_lens",
@@ -59,7 +59,7 @@
       "slug": "interaction_accessibility_and_variants",
       "label": "Interaction Accessibility And Variants",
       "weight": 6,
-      "signals": ["forced attention is bounded", "mobile and reduced motion preserve meaning", "quality tiers preserve focal parity"]
+      "signals": ["every guided objective has actionable work-order copy and an exact live marker match", "objective enter ready complete clear deep-link replay and pause lifecycles are evidenced", "HUD marker camera and score do not compete for attention", "mobile reduced motion assistive semantics and quality tiers preserve meaning and focal parity"]
     },
     {
       "slug": "performance_and_implementation_fidelity",

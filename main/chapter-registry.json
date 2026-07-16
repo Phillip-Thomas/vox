@@ -1,0 +1,1220 @@
+{
+  "schema": "paravoxia.chapterRegistry.v1",
+  "runtimeAuthorityRef": "main/story-authority.json",
+  "terminalBeat": "done",
+  "sceneContracts": [
+    {
+      "id": "distance-between-fires@intent-v1",
+      "sceneId": "distance-between-fires",
+      "contractVersion": "intent-v1",
+      "path": ".codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+      "coversBeats": [
+        "ch4-audit",
+        "ch4-comply",
+        "ch4-defy",
+        "a4-exhale",
+        "ch5-maw",
+        "ch6-dive",
+        "ch7-reconstruct",
+        "ch7-board",
+        "ch8-launch",
+        "ch8-crossing",
+        "ch8-landfall",
+        "ch9-settle",
+        "ch9-hearth"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "prologue",
+      "order": 0,
+      "beats": ["crawl", "manifest", "voyage", "deflect", "crash"],
+      "before": [],
+      "after": ["ch1"],
+      "entry": {
+        "beat": "crawl",
+        "requirements": ["milestone:story:started"],
+        "stateRefs": ["state:story/active-menu", "state:reality/bare"]
+      },
+      "exit": {
+        "beat": "crash",
+        "guarantees": [
+          "milestone:story:prologue-seen",
+          "state:chapter/ch1-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/bare",
+          "state:control/on-foot"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/bare",
+          "state:control/on-foot"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "crash",
+          "key": "prologueSeen",
+          "milestone": "story:prologue-seen",
+          "resumeBeat": "ch1-fixed",
+          "evidenceRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"],
+      "revealRefs": ["runtime:src/story/storyScript.ts#prologue"],
+      "avBoundary": {
+        "sceneContractRefs": [],
+        "entry": {
+          "anchorRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#beat:crawl"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:crawl"],
+          "cameraRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#vector-mode:crawl"],
+          "paletteRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#terminal-palette"]
+        },
+        "exit": {
+          "anchorRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:crash"],
+          "cameraRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#phase:acknowledge"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:bare"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "runtime:src/story/storyState.test.ts#prologue-resume",
+          "runtime:src/story/storyDirector.test.ts#prologue-handoff"
+        ],
+        "requiredObjectiveBeats": [],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 120000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch1",
+      "order": 1,
+      "beats": [
+        "descent",
+        "ch1-fixed",
+        "ch1-track",
+        "ch1-raster",
+        "ch1-depth",
+        "ch1-nav",
+        "ch1-iso",
+        "ch1-lift",
+        "ch1-anomaly",
+        "a1-ramp"
+      ],
+      "before": ["prologue"],
+      "after": ["ch2"],
+      "entry": {
+        "beat": "descent",
+        "requirements": ["milestone:story:prologue-seen", "state:chapter/ch1-ready"],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/bare",
+          "state:control/on-foot"
+        ]
+      },
+      "exit": {
+        "beat": "a1-ramp",
+        "guarantees": [
+          "milestone:story:a1",
+          "state:chapter/ch2-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/embodied"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/embodied"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch1-track",
+          "key": "ch1Track",
+          "milestone": "story:ch1:track",
+          "resumeBeat": "ch1-raster",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickTrackUnlock"]
+        },
+        {
+          "beat": "ch1-raster",
+          "key": "ch1Quota",
+          "milestone": "story:ch1:quota",
+          "resumeBeat": "ch1-depth",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#quotaCollected"]
+        },
+        {
+          "beat": "ch1-depth",
+          "key": "ch1Depth",
+          "milestone": "story:ch1:depth",
+          "resumeBeat": "ch1-nav",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#supplyPodsComplete"]
+        },
+        {
+          "beat": "ch1-nav",
+          "key": "ch1Nav",
+          "milestone": "story:ch1:nav",
+          "resumeBeat": "ch1-iso",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#navWaypointsComplete"]
+        },
+        {
+          "beat": "ch1-iso",
+          "key": "ch1Iso",
+          "milestone": "story:ch1:iso",
+          "resumeBeat": "ch1-anomaly",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#signal-mesa-summit"]
+        },
+        {
+          "beat": "a1-ramp",
+          "key": "a1",
+          "milestone": "story:a1",
+          "resumeBeat": "ch2-color",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickA1Ramp"]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/storyScript.ts#CH1_WORK_ORDERS",
+        "runtime:src/story/StoryDirectorDriver.tsx#surveyMarkerTarget"
+      ],
+      "revealRefs": [
+        "runtime:src/story/storyState.ts#stageForStoryPoint:bare-to-color",
+        "runtime:src/story/storyScript.ts#CH1_WORK_ORDERS"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": [],
+        "entry": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:descent"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:descent"],
+          "cameraRefs": ["runtime:src/story/storyDirector.ts#ERA_RIGS:descent"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:bare"]
+        },
+        "exit": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#tickA1Ramp"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:a1-ramp"],
+          "cameraRefs": ["runtime:src/story/storyDirector.ts#beat:a1-ramp"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "runtime:src/story/storyState.test.ts#monochrome-ladder",
+          "runtime:src/story/storyDirector.test.ts#chapter-1"
+        ],
+        "requiredObjectiveBeats": ["ch1-fixed", "ch1-track", "ch1-raster", "ch1-depth", "ch1-nav", "ch1-iso", "ch1-lift", "ch1-anomaly"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 300000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch2",
+      "order": 2,
+      "beats": ["ch2-color", "ch2-approach", "a2-awakening"],
+      "before": ["ch1"],
+      "after": ["ch3"],
+      "entry": {
+        "beat": "ch2-color",
+        "requirements": ["milestone:story:a1", "state:chapter/ch2-ready"],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/embodied"
+        ]
+      },
+      "exit": {
+        "beat": "a2-awakening",
+        "guarantees": [
+          "milestone:story:a2",
+          "state:chapter/ch3-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "a2-awakening",
+          "key": "a2",
+          "milestone": "story:a2",
+          "resumeBeat": "ch3-gather",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#a2-handoff"]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/storyDirector.ts#beat:ch2-approach"],
+      "revealRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"],
+      "avBoundary": {
+        "sceneContractRefs": [],
+        "entry": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch2-color"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch2-color"],
+          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch2-color"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+        },
+        "exit": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#a2-handoff"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:a2-awakening"],
+          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:a2-awakening"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "runtime:src/story/storyState.test.ts#awakening-adjacency",
+          "runtime:src/story/storyDirector.test.ts#a2"
+        ],
+        "requiredObjectiveBeats": ["ch2-color", "ch2-approach"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 120000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch3",
+      "order": 3,
+      "beats": [
+        "ch3-gather",
+        "ch3-dusk",
+        "ch3-await-rest",
+        "a3-dawn",
+        "ch3-thirst",
+        "ch3-forage",
+        "ch3-signal"
+      ],
+      "before": ["ch2"],
+      "after": ["ch4"],
+      "entry": {
+        "beat": "ch3-gather",
+        "requirements": ["milestone:story:a2", "state:chapter/ch3-ready"],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/color",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "exit": {
+        "beat": "ch3-signal",
+        "guarantees": [
+          "milestone:story:a3",
+          "milestone:story:ch3:signal",
+          "state:chapter/ch4-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/material",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/material",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "a3-dawn",
+          "key": "a3",
+          "milestone": "story:a3",
+          "resumeBeat": "ch3-thirst",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickA3Dawn"]
+        },
+        {
+          "beat": "ch3-thirst",
+          "key": "ch3Drank",
+          "milestone": "story:ch3:drank",
+          "resumeBeat": "ch3-forage",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickThirst"]
+        },
+        {
+          "beat": "ch3-forage",
+          "key": "ch3Ate",
+          "milestone": "story:ch3:ate",
+          "resumeBeat": "ch3-signal",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickForage"]
+        },
+        {
+          "beat": "ch3-signal",
+          "key": "ch3Signal",
+          "milestone": "story:ch3:signal",
+          "resumeBeat": "ch4-vigil",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickSignal"]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/storyDirector.ts#tickThirst",
+        "runtime:src/story/storyDirector.ts#tickForage",
+        "runtime:src/story/storyDirector.ts#tickSignal"
+      ],
+      "revealRefs": [
+        "runtime:src/story/storyState.ts#stageForStoryPoint:material",
+        "runtime:src/story/storyDirector.ts#first-day-senses"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": [],
+        "entry": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch3-gather"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch3-gather"],
+          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch3-gather"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+        },
+        "exit": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#tickSignal"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch3-signal"],
+          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch3-signal"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:material"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "runtime:src/story/storyState.test.ts#chapter-3-resume",
+          "runtime:src/story/storyDirector.test.ts#chapter-3"
+        ],
+        "requiredObjectiveBeats": ["ch3-gather", "ch3-await-rest", "ch3-thirst", "ch3-forage", "ch3-signal"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch4",
+      "order": 4,
+      "beats": ["ch4-vigil", "ch4-arrival", "ch4-audit", "ch4-comply", "ch4-defy", "a4-exhale"],
+      "before": ["ch3"],
+      "after": ["ch5"],
+      "entry": {
+        "beat": "ch4-vigil",
+        "requirements": ["milestone:story:ch3:signal", "state:chapter/ch4-ready"],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/material",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "exit": {
+        "beat": "a4-exhale",
+        "guarantees": [
+          "milestone:story:a4:handback",
+          "state:chapter/ch5-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch4-vigil",
+          "key": "ch4Vigil",
+          "milestone": "story:ch4:vigil",
+          "resumeBeat": "ch4-arrival",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickVigil"]
+        },
+        {
+          "beat": "ch4-arrival",
+          "key": "ch4Arrived",
+          "milestone": "story:ch4:arrived",
+          "resumeBeat": "ch4-audit",
+          "evidenceRefs": ["runtime:src/story/storyDirector.ts#arrival-handback"]
+        },
+        {
+          "beat": "ch4-audit",
+          "key": "ch4Audit",
+          "milestone": "story:ch4:audit-complete",
+          "resumeBeat": "ch4-comply",
+          "evidenceRefs": [
+            "milestone:story:audit:fire-mismatch",
+            "milestone:story:audit:life-mismatch",
+            "milestone:story:audit:tree-mismatch"
+          ]
+        },
+        {
+          "beat": "ch4-comply",
+          "key": "ch4Complied",
+          "milestone": "story:ch4:compliance-complete",
+          "resumeBeat": "ch4-defy",
+          "evidenceRefs": [
+            "milestone:story:comply:fire-doused",
+            "milestone:story:comply:organics-resolved",
+            "milestone:story:comply:regression-settled"
+          ]
+        },
+        {
+          "beat": "ch4-defy",
+          "key": "ch4Defied",
+          "milestone": "story:ch4:refusal-complete",
+          "resumeBeat": "a4-exhale",
+          "evidenceRefs": ["milestone:story:defy:refusal-committed"]
+        },
+        {
+          "beat": "a4-exhale",
+          "key": "a4Handback",
+          "milestone": "story:a4:handback",
+          "resumeBeat": "ch5-maw",
+          "evidenceRefs": ["milestone:story:a4", "milestone:story:a4:field-pack-dropped"]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/storyDirector.ts#tickVigil",
+        "runtime:src/story/emergentStoryDirector.ts#tickAudit",
+        "runtime:src/story/emergentStoryDirector.ts#tickCompliance",
+        "runtime:src/story/emergentStoryDirector.ts#tickDefiance"
+      ],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-w7744-limited-world",
+        "scene:distance-between-fires@intent-v1#reveal:rev-compliance-self-diminishes",
+        "scene:distance-between-fires@intent-v1#reveal:rev-will-is-an-act",
+        "scene:distance-between-fires@intent-v1#reveal:rev-a4-alive"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch4-vigil"],
+          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch4-vigil"],
+          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch4-vigil"],
+          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:material"]
+        },
+        "exit": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.a4.handback"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.a4.breath-front"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.maw.01-follow-the-tear"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#chapter-4"
+        ],
+        "requiredObjectiveBeats": ["ch4-vigil", "ch4-audit", "ch4-comply", "ch4-defy"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 360000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch5",
+      "order": 5,
+      "beats": ["ch5-maw"],
+      "before": ["ch4"],
+      "after": ["ch6"],
+      "entry": {
+        "beat": "ch5-maw",
+        "requirements": ["milestone:story:a4:handback", "state:chapter/ch5-ready"],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look"
+        ]
+      },
+      "exit": {
+        "beat": "ch5-maw",
+        "guarantees": [
+          "milestone:story:ch5:maw-repaired",
+          "milestone:maw_repaired",
+          "state:chapter/ch6-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch5-maw",
+          "key": "ch5Maw",
+          "milestone": "story:ch5:maw-repaired",
+          "resumeBeat": "ch6-dive",
+          "evidenceRefs": ["milestone:maw_repaired"]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/emergentStoryDirector.ts#tickMaw"],
+      "revealRefs": ["scene:distance-between-fires@intent-v1#reveal:rev-purpose-after-power"],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.pack-attended",
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.kit-acquired",
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.repair-begun"
+          ],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.maw.direction"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.maw.02-open-the-pack"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        },
+        "exit": {
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.repair-committed",
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.direction-handback",
+            "scene:distance-between-fires@intent-v1#anchor:anc.maw.pond-resonance"
+          ],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.maw.direction"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.dive.01-cross-the-line"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#maw"
+        ],
+        "requiredObjectiveBeats": ["ch5-maw"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 300000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch6",
+      "order": 6,
+      "beats": ["ch6-dive"],
+      "before": ["ch5"],
+      "after": ["ch7"],
+      "entry": {
+        "beat": "ch6-dive",
+        "requirements": [
+          "milestone:story:ch5:maw-repaired",
+          "state:chapter/ch6-ready",
+          "state:maw/repaired"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired"
+        ]
+      },
+      "exit": {
+        "beat": "ch6-dive",
+        "guarantees": [
+          "milestone:story:ch6:keel-banked",
+          "milestone:story:item:kestrel-keel-memory:banked",
+          "state:chapter/ch7-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired",
+          "state:item/kestrel-keel-memory-banked"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired",
+          "state:item/kestrel-keel-memory-banked"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch6-dive",
+          "key": "ch6Dive",
+          "milestone": "story:ch6:keel-banked",
+          "resumeBeat": "ch7-reconstruct",
+          "evidenceRefs": [
+            "milestone:story:dive:waterline-entered",
+            "milestone:story:sense:oxygen",
+            "milestone:story:item:kestrel-keel-memory:acquired",
+            "milestone:story:dive:surfaced-with-keel",
+            "milestone:story:item:kestrel-keel-memory:banked"
+          ]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/emergentDive.ts#getAuthoredDiveGuidance"],
+      "revealRefs": ["scene:distance-between-fires@intent-v1#reveal:rev-body-counts"],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.dive.waterline"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.dive.02-air-stays-above"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        },
+        "exit": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.dive.shore-bank"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.reconstruct.01-wreck-remembers"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#dive-guidance"
+        ],
+        "requiredObjectiveBeats": ["ch6-dive"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 300000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch7",
+      "order": 7,
+      "beats": ["ch7-reconstruct", "ch7-board"],
+      "before": ["ch6"],
+      "after": ["ch8"],
+      "entry": {
+        "beat": "ch7-reconstruct",
+        "requirements": [
+          "milestone:story:ch6:keel-banked",
+          "state:chapter/ch7-ready",
+          "state:item/kestrel-keel-memory-banked"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:camera/free-look",
+          "state:maw/repaired",
+          "state:item/kestrel-keel-memory-banked"
+        ]
+      },
+      "exit": {
+        "beat": "ch7-board",
+        "guarantees": [
+          "milestone:story:ch7:flight-ready",
+          "milestone:story:ch7:boarded",
+          "state:chapter/ch8-ready",
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/flight",
+          "state:space-flight/phase=surface"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/flight",
+          "state:space-flight/phase=surface"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch7-reconstruct",
+          "key": "ch7Reconstructed",
+          "milestone": "story:ch7:flight-ready",
+          "resumeBeat": "ch7-board",
+          "evidenceRefs": [
+            "milestone:story:reconstruct:relationships-diagnosed-physical",
+            "milestone:story:reconstruct:first-legal-hover-physical",
+            "milestone:story:reconstruct:first-hover-grounded-return",
+            "milestone:story:reconstruct:calibration-completed-physical",
+            "state:ship-restoration/flight_ready",
+            "milestone:story:route:tidegarden:online"
+          ]
+        },
+        {
+          "beat": "ch7-board",
+          "key": "ch7Boarded",
+          "milestone": "story:ch7:boarded",
+          "resumeBeat": "ch8-launch",
+          "evidenceRefs": [
+            "milestone:story:board:physical-transaction-complete",
+            "state:space-flight/control-mode=flight"
+          ]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/wreckReconstruction.ts#getWreckReconstructionGuidance",
+        "runtime:src/story/physicalBoarding.ts#getPhysicalBoardingGuidance"
+      ],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-wreck-remembers",
+        "scene:distance-between-fires@intent-v1#reveal:rev-repair-reinterprets"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.diagnosis",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.bench-online",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.frame-restored",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.hull-sealed",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.lift-online",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.first-hover",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.route-online",
+            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.calibration"
+          ],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.reconstruct.one-instrument"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.reconstruct.02-bench-wakes"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        },
+        "exit": {
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.board.hatch-enter",
+            "scene:distance-between-fires@intent-v1#anchor:anc.board.camera-transfer",
+            "scene:distance-between-fires@intent-v1#anchor:anc.board.pressure-seal",
+            "scene:distance-between-fires@intent-v1#anchor:anc.board.cockpit-handback"
+          ],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.board.one-owner"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.board.03-pressure-boundary"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#reconstruction",
+          "runtime:src/story/reconstructionEmbodiment.test.ts#physical-reconstruction",
+          "runtime:src/story/reconstructionCalibration.test.ts#physical-calibration",
+          "runtime:src/story/physicalBoarding.test.ts#physical-boarding"
+        ],
+        "requiredObjectiveBeats": ["ch7-reconstruct", "ch7-board"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch8",
+      "order": 8,
+      "beats": ["ch8-launch", "ch8-crossing", "ch8-landfall"],
+      "before": ["ch7"],
+      "after": ["ch9"],
+      "entry": {
+        "beat": "ch8-launch",
+        "requirements": [
+          "milestone:story:ch7:boarded",
+          "state:chapter/ch8-ready",
+          "state:control/flight"
+        ],
+        "stateRefs": [
+          "state:world/origin",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/flight",
+          "state:space-flight/phase=surface"
+        ]
+      },
+      "exit": {
+        "beat": "ch8-landfall",
+        "guarantees": [
+          "milestone:story:ch8:landfall",
+          "state:chapter/ch9-ready",
+          "state:world/tidegarden",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:space-flight/phase=surface",
+          "state:system-flight/active-planet=-1,-1:p1"
+        ],
+        "stateRefs": [
+          "state:world/tidegarden",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:space-flight/phase=surface",
+          "state:system-flight/active-planet=-1,-1:p1"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch8-launch",
+          "key": "ch8Launched",
+          "milestone": "story:ch8:launched",
+          "resumeBeat": "ch8-crossing",
+          "evidenceRefs": [
+            "state:space-flight/control-mode=flight",
+            "state:space-flight/phase=deep_space"
+          ]
+        },
+        {
+          "beat": "ch8-crossing",
+          "key": "ch8Crossed",
+          "milestone": "story:ch8:crossed",
+          "resumeBeat": "ch8-landfall",
+          "evidenceRefs": [
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:space-flight/phase!=deep_space"
+          ]
+        },
+        {
+          "beat": "ch8-landfall",
+          "key": "ch8Landfall",
+          "milestone": "story:ch8:landfall",
+          "resumeBeat": "ch9-settle",
+          "evidenceRefs": [
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:space-flight/phase=surface",
+            "state:space-flight/control-mode=fps"
+          ]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/emergentStoryDirector.ts#tickLaunchAndCrossing"],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-distance-enlarges-relation",
+        "scene:distance-between-fires@intent-v1#reveal:rev-a5-deferred"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.launch.ignition"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.launch.ground-relents"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.launch.01-engine-finds-weight"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        },
+        "exit": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.landfall.handback"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.landfall.world-first"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.settle.01-too-much-signal"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/storyState.test.ts#tidegarden-landfall"
+        ],
+        "requiredObjectiveBeats": ["ch8-launch", "ch8-crossing", "ch8-landfall"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch9",
+      "order": 9,
+      "beats": ["ch9-settle", "ch9-hearth"],
+      "before": ["ch8"],
+      "after": [],
+      "entry": {
+        "beat": "ch9-settle",
+        "requirements": [
+          "milestone:story:ch8:landfall",
+          "state:chapter/ch9-ready",
+          "state:system-flight/active-planet=-1,-1:p1"
+        ],
+        "stateRefs": [
+          "state:world/tidegarden",
+          "state:story/active",
+          "state:reality/alive",
+          "state:control/on-foot",
+          "state:space-flight/phase=surface",
+          "state:system-flight/active-planet=-1,-1:p1"
+        ]
+      },
+      "exit": {
+        "beat": "ch9-hearth",
+        "guarantees": [
+          "milestone:story:ch9:hearth",
+          "milestone:story:complete",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch9-settle",
+          "key": "ch9Settled",
+          "milestone": "story:ch9:settled",
+          "resumeBeat": "ch9-hearth",
+          "evidenceRefs": [
+            "milestone:story:tidegarden:relationship-attended",
+            "milestone:story:tidegarden:habitat-core-online",
+            "milestone:story:tidegarden:shelter-certified"
+          ]
+        },
+        {
+          "beat": "ch9-hearth",
+          "key": "ch9Hearth",
+          "milestone": "story:ch9:hearth",
+          "resumeBeat": "done",
+          "evidenceRefs": [
+            "milestone:story:tidegarden:safe-rest-completed",
+            "milestone:story:tidegarden:two-world-handoff"
+          ]
+        }
+      ],
+      "objectiveRefs": ["runtime:src/story/tidegardenSettlement.ts#getTidegardenSettlementGuidance"],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-abundance-is-choice",
+        "scene:distance-between-fires@intent-v1#reveal:rev-home-between-worlds",
+        "scene:distance-between-fires@intent-v1#reveal:rev-worker9-trace"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "entry": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.settle.scanner-overload"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.settle.abundance-choice"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.settle.02-see-one-relation"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        },
+        "exit": {
+          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.hearth.freeplay-handback"],
+          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.hearth.between-fires"],
+          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.hearth.04-the-line-remains-open"],
+          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:distance-between-fires@intent-v1#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#settlement-guidance"
+        ],
+        "requiredObjectiveBeats": ["ch9-settle", "ch9-hearth"],
+        "requiredVariantProfiles": [
+          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
+          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
+          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
+          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    }
+  ]
+}

@@ -150,6 +150,8 @@ export interface UnderwaterEffectOptions {
 }
 
 export class UnderwaterEffect extends Effect {
+  private readonly configuredWobble: number;
+
   constructor({
     sigma = new Color(0.24, 0.075, 0.045),
     deepTint = new Color(0.015, 0.10, 0.15),
@@ -159,6 +161,7 @@ export class UnderwaterEffect extends Effect {
     godrays = true,
     wobble = 1.0
   }: UnderwaterEffectOptions = {}) {
+    const configuredWobble = Number.isFinite(wobble) ? Math.max(0, wobble) : 1;
     super('UnderwaterEffect', fragmentShader, {
       attributes: EffectAttribute.DEPTH,
       uniforms: new Map<string, Uniform>([
@@ -171,22 +174,33 @@ export class UnderwaterEffect extends Effect {
         ['uFogDensity', new Uniform(fogDensity)],
         ['uSunScreen', new Uniform(new Vector2(-100, -100))],
         ['uGodrays', new Uniform(godrays ? 1 : 0)],
-        ['uWobble', new Uniform(wobble)],
+        ['uWobble', new Uniform(configuredWobble)],
         ['uVignette', new Uniform(0)],
         ['uWipe', new Uniform(0)]
       ])
     });
+    this.configuredWobble = configuredWobble;
     activeUnderwater = this;
   }
 
   /** Per-frame drive (PostFX useFrame). sunScreen in uv space; x<-10 = off-screen. */
-  setFrame(submergence: number, time: number, sunScreenX: number, sunScreenY: number, wipe: number, vignette: number) {
+  setFrame(
+    submergence: number,
+    time: number,
+    sunScreenX: number,
+    sunScreenY: number,
+    wipe: number,
+    vignette: number,
+    wobbleScale = 1
+  ) {
     this.uniforms.get('uSubmergence')!.value = submergence;
     this.uniforms.get('uTime')!.value = time;
     const sun = this.uniforms.get('uSunScreen')!.value as Vector2;
     sun.set(sunScreenX, sunScreenY);
     this.uniforms.get('uWipe')!.value = wipe;
     this.uniforms.get('uVignette')!.value = vignette;
+    const scale = Number.isFinite(wobbleScale) ? Math.max(0, wobbleScale) : 1;
+    this.uniforms.get('uWobble')!.value = this.configuredWobble * scale;
   }
 
   /** Per-planet colours (drive from the water profile). */

@@ -219,6 +219,7 @@ describe('gameplay command wrappers', () => {
       terrain,
       water,
       toolTier: 1,
+      toolId: 'iron_maw',
       usesCharge: true
     });
 
@@ -231,6 +232,7 @@ describe('gameplay command wrappers', () => {
     expect(events[0].payload).toMatchObject({
       coord: [0, 0, 0],
       blockId: 'copper_block',
+      toolId: 'iron_maw',
       depositIdentity: {
         worldId: ctx.world.worldId,
         coord: [0, 0, 0],
@@ -376,6 +378,7 @@ describe('gameplay command wrappers', () => {
     const ctx = context(events);
     addItem('biofuel', 1);
     addItem('faulty_maw', 1);
+    addItem('maw_repair_kit', 1);
 
     expect(refuelMawCommand(ctx).ok).toBe(true);
     expect(getMawCharge()).toBeGreaterThan(0);
@@ -385,6 +388,7 @@ describe('gameplay command wrappers', () => {
     setMawCharge(0);
     expect(repairMawCommand(ctx).ok).toBe(true);
     expect(getItemCount('iron_maw')).toBe(1);
+    expect(getItemCount('maw_repair_kit')).toBe(0);
     expect(events.map(event => event.type)).toEqual(['maw_refueled', 'maw_charge_spent', 'maw_repaired']);
   });
 

@@ -25,16 +25,7 @@ import { seededUnit } from './worldCoordinates';
  */
 export function createTerrainConfig(seed: number, planetRadius: number): TerrainGenerationConfig {
   const profile = buildPlanetProfile(seed);
-  const config = createTerrainConfigFromProfile(profile, planetRadius);
-
-  if (seed === 12345) {
-    return {
-      ...config,
-      seaLevelOffset: 1
-    };
-  }
-
-  return config;
+  return createTerrainConfigFromProfile(profile, planetRadius);
 }
 
 export function createTerrainConfigFromProfile(
@@ -51,6 +42,12 @@ export function createTerrainConfigFromProfile(
   // basins go deeper, and the waterline sits higher so land reads as islands
   // poking out of a broad ocean (vs the deep-but-not-dominant seas elsewhere).
   const isOceanic = typeof profile !== 'string' && profile.archetype === 'oceanic';
+  // Preserve the long-standing reference-world waterline on every profile-aware
+  // construction path. Keeping this here prevents the resolver seam from making
+  // seed 12345 differ from createTerrainConfig(seed, radius).
+  const compatibilityWaterline = typeof profile !== 'string' && seed === 12345
+    ? { seaLevelOffset: 1 }
+    : {};
   const oceanWorld = isOceanic
     ? { oceanCoverage: 0.16, oceanDepth: 14, oceanEdge: 0.16 }
     : {};
@@ -64,7 +61,8 @@ export function createTerrainConfigFromProfile(
       hillFrequency: 0.02 + seededUnit(seed, 229) * 0.02,
       valleyDepth: Math.max(6, Math.floor(planetRadius * (0.18 + seededUnit(seed, 233) * 0.14))),
       terrainScale: 0.052 + seededUnit(seed, 239) * 0.035,
-      seaLevelPercentile: clamp01(0.12 + waterJitter * 0.08)
+      seaLevelPercentile: clamp01(0.12 + waterJitter * 0.08),
+      ...compatibilityWaterline
     };
   }
 
@@ -77,7 +75,8 @@ export function createTerrainConfigFromProfile(
       hillFrequency: 0.06 + seededUnit(seed, 241) * 0.05,
       valleyDepth: Math.max(3, Math.floor(planetRadius * (0.08 + seededUnit(seed, 251) * 0.1))),
       terrainScale: 0.1 + seededUnit(seed, 257) * 0.07,
-      seaLevelPercentile: clamp01(0.25 + waterJitter * 0.1)
+      seaLevelPercentile: clamp01(0.25 + waterJitter * 0.1),
+      ...compatibilityWaterline
     };
   }
 
@@ -90,7 +89,8 @@ export function createTerrainConfigFromProfile(
       hillFrequency: 0.035 + seededUnit(seed, 263) * 0.035,
       valleyDepth: Math.max(10, Math.floor(planetRadius * (0.38 + seededUnit(seed, 269) * 0.24))),
       terrainScale: 0.06 + seededUnit(seed, 271) * 0.04,
-      seaLevelPercentile: clamp01(0.36 + waterJitter * 0.12)
+      seaLevelPercentile: clamp01(0.36 + waterJitter * 0.12),
+      ...compatibilityWaterline
     };
   }
 
@@ -104,7 +104,8 @@ export function createTerrainConfigFromProfile(
       valleyDepth: Math.max(5, Math.floor(planetRadius * (0.2 + seededUnit(seed, 281) * 0.2))),
       terrainScale: 0.12 + seededUnit(seed, 283) * 0.06,
       seaLevelPercentile: clamp01((isOceanic ? 0.58 : 0.42) + waterJitter * 0.12),
-      ...oceanWorld
+      ...oceanWorld,
+      ...compatibilityWaterline
     };
   }
 
@@ -116,7 +117,8 @@ export function createTerrainConfigFromProfile(
     hillFrequency: 0.035 + seededUnit(seed, 293) * 0.035,
     valleyDepth: Math.max(8, Math.floor(planetRadius * (0.24 + seededUnit(seed, 307) * 0.18))),
     terrainScale: 0.07 + seededUnit(seed, 311) * 0.045,
-    seaLevelPercentile: clamp01(DEFAULT_SEA_LEVEL_PERCENTILE + 0.08 + waterJitter * 0.12)
+    seaLevelPercentile: clamp01(DEFAULT_SEA_LEVEL_PERCENTILE + 0.08 + waterJitter * 0.12),
+    ...compatibilityWaterline
   };
 }
 

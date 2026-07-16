@@ -4,9 +4,11 @@
 
 **Owner direction recorded:** 2026-07-13  
 **Sequence status:** **CONFIRMED DIRECTION**  
-**Scene treatments and sample copy:** **PROPOSED pending council/owner lock**  
-**Runtime status:** **BLOCKED BY THE CURRENT DEMO LOCK**  
-**Council review:** **NARRATIVE + AV + SYSTEMS BLOCKERS INTEGRATED; OWNER LOCK PENDING**
+**Scene contract:** **SIGNED EXACT HASH — `3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e`**
+
+**Runtime status:** **WORKTREE-IMPLEMENTED THROUGH `ch9-hearth` — SIGNED PHYSICAL PRODUCERS PRESENT — EVIDENCE/PUBLISH GATED**
+
+**Council review:** **CHAPTER + SCORE + CINEMATOGRAPHY SIGNED; PRE-SYNC MECHANICAL GATE PASSED; COLD RUNS 3/3 ACCEPTED; OTHER RELEASE EVIDENCE + CO-OP RECEIPT AUTHORITY OPEN**
 
 **Canon:** `PARAVOXIA_STORY_BIBLE.md`  
 **Delivery authority:** `PARAVOXIA_STORY_EXECUTION_PLAN.md`  
@@ -18,10 +20,19 @@ This plan records the next owner-directed story movement:
 > building on the nearby planet**, with crafting expanding throughout and
 > free-play accomplishments and observations woven through the authored spine.
 
-It is a preproduction contract, not permission to widen the currently shipped
-runtime. The public story still ends at W-7744's arrival until the demo gate is
-closed. The already-contracted audit, compliance, refusal, and A4 Breath scenes
-remain the moral prelude. The sequence above begins after Breath.
+It is the binding production treatment for a separately gated implementation
+lane. The exact Creative-Triad contract is signed and its core runtime path is
+now present in the worktree with the signed local physical/choreographic
+producers from Chapter 4 through Chapter 9. Release acceptance remains open:
+the client explicitly preserves its actor-owned embodied milestones across
+authoritative ACK/reconnect snapshots, but the server does not yet independently
+issue or validate those physical Story receipts. All three required
+uninterrupted rescue-free cold runs now pass under one frozen source
+fingerprint; headed, profile, reduced-motion, real-GPU,
+persistence-roundtrip, and human evidence remains incomplete. The
+public story still ends at W-7744's arrival until a later release decision. Audit,
+compliance, refusal, and A4 Breath remain the moral prelude; worktree
+implementation does not authorize publication.
 
 ---
 
@@ -170,21 +181,20 @@ The story system uses two bodies:
 | Origin | `-1,-1` | `3215739679` | verdant origin | `[0, 0, 0]` |
 | Sibling | `-1,-1:p1` | `1600321158` | **Tidegarden v1 — alien verdant** authored profile | `[2180, -110, -1635]` |
 
-The generic profile resolver currently rolls that companion seed as volcanic;
-the other generated slot is arid. Neither satisfies owner direction. Production
-must therefore add one explicit, deterministic Story profile pin for
-`-1,-1:p1` / seed `1600321158` that resolves it as verdant. That contract must
-be authoritative for terrain preset, biome mix,
-resource biases, hazards, palette, vegetation, fauna, water, music, preview,
-scanner, and landing validation. A cosmetic label or renderer-only recolor is
-not acceptable.
+The generic seed-only resolver still identifies this numerical seed as volcanic,
+so the implementation pins the complete identity pair (`worldId` plus seed) to
+the explicit verdant Story profile. `story:tidegarden@1` now resolves with
+fingerprint `pf1-eeef3b78`; world generation/cache keys and live consumers carry
+the world ID so a stale seed-only volcanic cache entry cannot satisfy canonical
+Tidegarden readiness. The profile is authoritative across terrain preparation,
+biome/climate, resource biases, hazards, palette, vegetation/fauna, water,
+music, preview, scanner, landing, persistence, and travel handoff.
 
-The identity seed and world ID remain stable for saves. The data-only authored
-pin is versioned as Story content, tested against every consumer, and visually
-locked from atlas captures before world building begins. It lands before the
-sibling becomes reachable and receives a world-specific generation fingerprint.
-The fixture exposes exactly these two bodies; the arid third generated body is
-outside this batch.
+The identity seed and world ID remain stable for saves. The versioned fixture
+exposes exactly p0+p1 after `story:route:tidegarden:online`; the arid third
+generated body remains outside this batch. Headless atlas/runtime evidence is
+verdant and non-volcanic, while final real-GPU visual taste approval remains a
+release gate.
 
 Deterministic profile target:
 
@@ -192,9 +202,9 @@ Deterministic profile target:
 | --- | --- |
 | Archetype / hazard | verdant; `none` |
 | Terrain | gentle wet hills and broad clearings; height variation `8`, valley depth `7`, sea percentile about `0.277` |
-| Vegetation palette | **provisional role hierarchy:** cyan/turquoise ground, cobalt/blue-violet canopy, magenta/coral reproductive accents; exact values wait for atlas lock |
+| Vegetation palette | cyan/turquoise ground, cobalt/blue-violet canopy, magenta/coral reproductive accents; current worktree lock remains subject to real-GPU taste review |
 | Abundant early materials | resin, biofiber, stone, silica, and iron; copper remains a useful rarer find |
-| Density target | author lushness near `0.75` and aridity near `0.20` only if atlas/performance proof supports it |
+| Density target | worktree author lushness near `0.75` and aridity near `0.20`; final release values require atlas/performance and human taste approval |
 
 ### 4.1 Sibling grammar
 
@@ -204,7 +214,7 @@ diegetic proper name.
 | Grammar | Contract |
 | --- | --- |
 | Physical | terraced wet hills, ivory shelves, braided shallows, blue channels, broad clearings, immense fan-canopies and root arches |
-| Palette | **provisional role hierarchy:** lapis/turquoise water and ground, warm ivory shelves, cobalt/blue-violet canopy, magenta/coral accents, amber/cyan machinery; exact values wait for atlas lock |
+| Palette | worktree candidate: lapis/turquoise water and ground, warm ivory shelves, cobalt/blue-violet canopy, magenta/coral accents, amber/cyan machinery; final values remain subject to real-GPU taste review |
 | Ecology | abundant but spatially organized: coast, wetland, canopy, and high shelf each support different materials and behaviors |
 | Sound | layered water distances, hollow-stem wind tones, dense insect/seed rhythms, pollen waves across leaves, open lagoon reflections |
 | Proposition | abundance creates choice, not entitlement |
@@ -550,11 +560,11 @@ Only the next narratively required recipe family is shown.
 Recipe knowledge and station proximity are separate gates. Entering Emergent
 does not expose every future suit, Maw, scanner, and warp recipe.
 
-Client and server recipe authority currently diverge. Packet 0 must freeze one
-shared item/recipe/build-material catalog, consumed rather than copied by both
-runtimes, with full parity tests. The current client registry's canonical
-`iron_trace` vocabulary and component DAG are the candidate to promote; no story
-balance may depend on the server's stale `iron_ore`/quantity table.
+Packet 0 removed the former client/server recipe divergence. One generated
+item/recipe/build-material catalog now feeds both runtimes with parity and
+computed-BOM tests, using canonical `iron_trace` vocabulary and the shared
+component DAG. No Story balance depends on the former server-only
+`iron_ore`/quantity table.
 
 Under that candidate DAG, the four ship repairs require this raw-material
 equivalent before salvage:
@@ -837,7 +847,7 @@ some deposits, pollinators visit resin flora, and fauna use mineral shelves.
 Extraction can therefore disclose or interrupt relationships without awarding
 morality points.
 
-The carried assembler can fabricate one `habitat_core`. Recommended cost:
+The Kestrel-linked assembler can fabricate one `habitat_core`. Recommended cost:
 
 ```text
 strut_frame ×1 + logic_wafer ×1 + refined_alloy ×1
@@ -993,7 +1003,11 @@ interface CraftAccessContext {
 ```
 
 Placeable devices require a per-world store. Actor-global recipe knowledge and
-world-local station truth must not be conflated.
+world-local station truth must not be conflated. Once the Kestrel reaches
+`flight_ready`, its integrated Fabricator becomes a durable ship capability:
+the suit may use the Kestrel-linked Smelter/Assembler anywhere on the same world
+as the parked ship. The link does not project into a world where the Kestrel is
+absent, and recipe visibility remains limited to patterns the story has earned.
 
 ---
 
@@ -1282,7 +1296,7 @@ cadence, no repeated loop, and no A5 major/warp language.
 | Below | continuous first person; 75°→80–82° medium | turquoise→teal→indigo, amber core | underwater wipe, extinction, haze, god rays, particles, Snell window, O2 vignette | per-scene medium envelope/accessibility |
 | The Leaving | free repair long takes; one 52° exterior hero move; physical boarding occlusion | afternoon earth, oxidized hull, cyan repair, amber cockpit | AO, selective bloom, grade, flight feedback | repair-state visuals, camera ownership arbiter |
 | Between | cockpit; no external launch; continuous altitude/approach | green origin→indigo interval→lapis/turquoise sibling | flight smear/streaks, atmosphere, companion body, local handoff | story vehicle camera + bounded local-handoff cue |
-| Second Hearth | player camera; optional 50–54° rest/window composition | provisional Tidegarden hierarchy: lapis/turquoise, warm ivory, cobalt/blue-violet, magenta/coral, amber/cyan tech | grade, AO, water/vegetation/pollen surface effects; optional warm rain | abundant-layer mix, interior acoustic cues, scene FX rail |
+| Second Hearth | player camera; optional 50–54° rest/window composition | worktree Tidegarden candidate: lapis/turquoise, warm ivory, cobalt/blue-violet, magenta/coral, amber/cyan tech | grade, AO, water/vegetation/pollen surface effects; optional warm rain | abundant-layer mix, interior acoustic cues, scene FX rail |
 
 ### 13.1 Post-FX rules
 
@@ -1313,12 +1327,12 @@ cadence, no repeated loop, and no A5 major/warp language.
 
 ---
 
-## 14. Runtime architecture required
+## 14. Implemented runtime architecture
 
 ### 14.1 Coarse story beats and subscene events
 
-Final runtime IDs require an authority/council patch. Prefer coarse beats with
-checkpointed subscene events rather than one `StoryBeat` per bolt:
+The authority/council patch froze coarse beats with checkpointed subscene
+events rather than one `StoryBeat` per bolt:
 
 ```text
 ch5-maw
@@ -1340,9 +1354,9 @@ system handoff, landing, habitat core, shelter certification, rest, and handoff.
 
 - Keep `-1,-1:p1`, seed `1600321158`, and its system position as the durable
   sibling identity.
-- Add a versioned data fixture that pins this identity to the Tidegarden
-  alien-verdant profile before the body becomes reachable.
-- Add one identity-aware authority:
+- The versioned fixture pins this identity to the Tidegarden alien-verdant
+  profile before the body becomes reachable.
+- Identity-aware authority resolves:
 
 ```ts
 resolvePlanetProfile({ worldId, seed }): {
@@ -1532,7 +1546,7 @@ and unattended movie mode.
 
 ## 17. Delivery packets
 
-### Packet 0 — Authority and substrate
+### Packet 0 — Authority and substrate — WORKTREE-IMPLEMENTED
 
 - reconcile Bible/Execution Plan/legacy Chapter 4 causality;
 - freeze scene/event/capability IDs and save version;
@@ -1549,7 +1563,14 @@ and unattended movie mode.
 - add old-save migration fixtures;
 - preserve shipped output exactly before enabling future scenes.
 
-### Packet 1 — Direction and Below
+### Packet 1 — Direction and Below — WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL
+
+The dry pack drop and kit, cancel/pause-safe repair ritual, atomic capability
+commit, player-authored first direction, physically observed pond resonance,
+oxygen medium, aligned Maw sonar, Keel recovery, surfacing, and banking are
+implemented. Fresh-browser POTATO segments prove resonance into Chapter 6 and
+the complete dive into Chapter 7. Full-path, co-op receipt, supported-input,
+profile, reduced-motion, real-GPU, and human evidence remain open.
 
 - W-7744 dry-land pack placement;
 - Maw kit and atomic repair/morph;
@@ -1558,9 +1579,16 @@ and unattended movie mode.
 - bounded swim automation and shore recovery;
 - manual/movie/reload/quality/accessibility proof.
 
-### Packet 2 — The Leaving
+### Packet 2 — The Leaving — WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL
 
-- placeable/nearby station access model;
+The ordered reconstruction and capability path includes physical wreck
+diagnosis, sustained legal hover, grounded return, and staged hatch → camera →
+seal → cockpit handback before launch. Bounded POTATO browser evidence covers
+the signed diagnosis-through-calibration rail and a passing boarding-to-launch
+segment. Full-path, co-op receipt, supported-input, profile, reduced-motion,
+real-GPU, and human evidence remain open.
+
+- placeable station access plus the flight-ready Kestrel's durable same-world link;
 - bounded Emergent recipes and resource guarantees;
 - versioned repair stages and visible wreck morphs;
 - stage-indexed score-arrangement adapter, audition, and exact reload reconstruction;
@@ -1568,7 +1596,13 @@ and unattended movie mode.
 - flyable-ship promotion, pad/egress validation, boarding handoff;
 - stage-by-stage save and economy proof.
 
-### Packet 3 — Between
+### Packet 3 — Between — WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL
+
+Launch, atmosphere exit, handoff, approach, landfall, footfall, and control
+return have physical receipt sources, and boarding now has its signed physical
+producer and bounded browser proof. A complete headed origin → sibling → origin
+→ sibling proof, profile/reduced-motion matrix, and human real-GPU acceptance
+remain open.
 
 - story-system two-body fixture;
 - Tidegarden deterministic atlas/score audition and visual lock;
@@ -1578,7 +1612,14 @@ and unattended movie mode.
 - persistent ship/system/world state;
 - origin → sibling → origin proof with no interstellar warp.
 
-### Packet 4 — The Second Hearth
+### Packet 4 — The Second Hearth — WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL
+
+The relationship act, resource access, Habitat Core, player-built physical
+enclosure, night rest, and two-world handoff are implemented, including signed
+scanner overload, persisted site choice, and acknowledged foundation producers.
+The remaining items in this packet are the full acceptance/polish envelope;
+optional ecology depth and release-grade headed evidence must not be inferred
+from core-path completion.
 
 - Tidegarden surface/ecology/site content on the already-pinned profile;
 - deterministic relationship placement linking selected roots, resource nodes,
@@ -1678,8 +1719,9 @@ packet.
 These remain small and visible; they do not reopen the owner-locked sequence.
 
 1. Final diegetic name for the alien-verdant sibling; `the Tidegarden` is working only.
-2. Exact Tidegarden profile weights/palette after the deterministic atlas
-   comparison; its abundant, non-volcanic, non-frozen direction is locked.
+2. Whether real-GPU human taste evidence requires bounded Tidegarden
+   weight/palette tuning; its abundant, non-volcanic, non-frozen identity,
+   world ID, seed, profile version, and fingerprint are locked.
 3. Whether warm rain ships as a verified presentation layer; the core first rest
    uses the ecology/night cycle and does not depend on it.
 4. Exact W-7744 concealment/report language. His recurrence is confirmed; his
@@ -1687,7 +1729,8 @@ These remain small and visible; they do not reopen the owner-locked sequence.
 5. Which proposed sample lines survive the council/in-situ copy pass.
 6. Whether hunting/refraining receives one authored post-dive cue in this batch
    or remains entirely optional free play.
-7. Final scene/beat IDs after the authority candidate is hashed.
+7. Any material edit to the now-frozen scene/beat contract must produce a new
+   hash and new independent director signoffs; the current IDs are fixed.
 
 No open decision may change the sequence, spend A5 early, turn the habitat into
 colonial conquest, expose all crafting at once, or convert observations into XP.
@@ -1696,11 +1739,87 @@ colonial conquest, expose all crafting at once, or convert observations into XP.
 
 ## 20. Resume here
 
-1. Close the existing demo-foundation gate; this plan does not bypass it.
-2. Record owner decisions for the seven visible items above.
-3. Freeze the exact candidate hash and rerun Creative Council only if those
-   decisions materially change narrative, AV, gameplay, or accessibility truth.
-4. Patch machine authority/final beat IDs as one reviewed hash; Bible, Execution
-   Plan, and legacy Chapter 4 references are already reconciled at planning level.
-5. Implement Packet 0 before adding spectacle.
-6. Build Packet 1 first: Maw repair followed by the authored dive.
+**Implementation checkpoint — 2026-07-15:** Packets 0–3 and Packet 4's critical
+story path, including the signed local physical producers, are
+worktree-implemented. Release evidence and co-op embodied-receipt authority
+remain partial. The Story state machine runs from `ch4-audit` through
+`ch9-hearth`, while the independent public release ceiling remains
+`ch4-arrival`.
+
+Final mechanical evidence is green:
+
+- exact signed scene contract:
+  `3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e`;
+- Creative-Triad mechanical implementation gate: 2,353 checks, zero failures/warnings;
+- main: 202 test files / 1,437 tests, 1,035 story-authority checks, typecheck,
+  signed-AV/catalog drift checks, and production build;
+- server: 8 test files / 73 tests, catalog/typecheck/build;
+- Terra system-orchestrator run completed all seven gates;
+- older headless 1440×900 SwiftShader probes captured canonical verdant direct
+  renders at `ch8-landfall` and `ch9-settle` with no runtime errors; those
+  identity/error checks do not prove descent or settlement chronology;
+- bounded fresh-browser POTATO evidence now records observed Chapter 5 pond
+  resonance into `ch6-dive`, the full physical dive and dry Keel banking into
+  `ch7-reconstruct`, the signed diagnosis-through-calibration reconstruction
+  rail, and a passing hatch → camera → seal → cockpit handback into
+  `ch8-launch`, with launch ignition/liftoff ordered after handback;
+- later rescue-free POTATO regressions carry Chapter 5 through Keel banking,
+  Chapter 6 through physical boarding, and `ch8-crossing` through a dry
+  cross-face Tidegarden route, settlement, safe rest, two-world handoff, and
+  `done`; the latest Chapter 9 and crossing-to-`done` proofs completed in 157.70
+  and 396.77 seconds with zero nudges, errors, reloads, or context losses;
+- the accepted official rescue-free POTATO triple, frozen at source fingerprint
+  `a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262`,
+  completed `ch4-audit` → `done` in 704.18, 883.65, and 683.92 seconds. Every
+  summary reports `PASS`, with all 64/64 required anchors, safe rest, and the two-world handoff
+  with zero nudges, dry-water violations, runtime errors, reloads, or context
+  losses. The cold-run gate is **3/3 and satisfied**. Earlier v4/v5 attempts
+  and all prior full-run candidates are diagnostic or superseded and do not
+  count toward this triple.
+
+Resume by closing authority and release evidence, not by widening feature scope:
+
+1. design and implement server-issued or equivalently authoritative embodied
+   receipts for diagnosis, hover, grounded-return, boarding, ritual attendance,
+   and related physical proof; the client now preserves its explicit
+   actor-owned namespace across ACK/reconnect snapshots, but that is not
+   independent server validation;
+2. after this status reconciliation is accurate, rebaseline only its three
+   authority-document hashes in the frozen production lock and rerun the
+   Creative-Triad implementation gate without changing the signed scene-contract hash;
+3. preserve the accepted 3/3 cold-run evidence without substituting it for
+   headed, profile, persistence, authority, or human acceptance;
+4. conduct headed real-GPU human audiovisual/taste review for every pillar,
+   High/Medium/Low/Potato profile coverage, reduced-motion equivalence,
+   pointer-lock/supported-input feel, and the complete origin → sibling → origin
+   → sibling persistence journey;
+5. decide whether to harden server authority by independently regenerating
+   Tidegarden procedural support/water voxels in addition to its current
+   receipt-backed structure-history checks;
+6. resolve only evidence-backed items in §19; any material scene-contract edit
+   changes the hash and requires all three directors to sign again;
+7. obtain the explicit human release decision. Until then keep
+   `publishAllowed: false`, do not deploy/publish the new beats, and preserve the
+   public Story Demo boundary at W-7744's arrival.
+
+Evidence: `../.codex/production-runs/2026-07-13-distance-between-fires/`,
+`../.terra/workflow-runs/system-orchestrator/paravoxia-emergent-2026-07-13/`,
+`../captures/emergent-ch5-observed-resonance-2026-07-14/summary.json`,
+`../captures/emergent-ch6-swim-proof-2026-07-14-integrated2/summary.json`,
+`../captures/ch7-embodiment-2026-07-14/summary.json` (reconstruction rail only;
+the overall probe predates the boarding-pose correction), and
+`../captures/ch7-board-embodiment-2026-07-14/summary.json` (passing boarding
+segment), and
+`../captures/emergent-ch9-settlement-proof-2026-07-14-integrated3/summary.json`
+(passing physical settlement-to-`done` segment),
+`../captures/emergent-ch5-to-keel-regression2-2026-07-14/summary.json`,
+`../captures/emergent-ch6-to-board-regression4-2026-07-14/summary.json`,
+`../captures/emergent-ch9-settlement-jetpack-rearm-2026-07-14-01/summary.json`,
+`../captures/emergent-ch8-crossing-to-done-crossface-2026-07-14-11/summary.json`,
+and `../captures/emergent-full-cold-run-2026-07-14-08/summary.json` (superseded
+diagnostic evidence; not part of the accepted triple). The accepted official
+triple is recorded in
+`captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json`,
+`captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json`, and
+`captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json`. Earlier
+v4/v5 attempts and prior runs remain diagnostic or superseded and do not count.

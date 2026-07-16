@@ -7,7 +7,12 @@ import {
 } from '../game/systems/realityRenderSystem.ts';
 import { getMilestones, hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import { getItemCount, hasItems } from '../game/systems/inventorySystem.ts';
+import { isTreeHarvested } from '../game/systems/treeHarvest.ts';
+import { isFloraHarvested } from '../game/systems/floraHarvest.ts';
+import { isStoneCollected } from '../game/systems/stonePickup.ts';
+import { getPieces } from '../game/systems/structureSystem.ts';
 import { getRecipe } from '../game/data/recipes.ts';
+import type { ItemId } from '../game/data/items.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
 import { getVitals, isStaminaExhausted, setVitals } from '../game/systems/survivalVitals.ts';
 import { getWaterskinFill } from '../game/systems/consumeSystem.ts';
@@ -17,7 +22,6 @@ import { playSfx } from '../audio/sfxEngine.ts';
 import { DAY_LENGTH_SECONDS, getCurrentDayPhase, setDayPhaseOffset } from '../game/worldClock.ts';
 import {
   advanceToBeat,
-  completeStory,
   getStoryStateSnapshot,
   STORY_MILESTONES,
   subscribeStory,
@@ -43,20 +47,66 @@ import {
   type LensRig
 } from './sideLens.ts';
 import { getPlayerLook, getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { readSystemCompanionBodyTarget } from '../state/systemCompanionBodyTargets.ts';
+import { getLocalActorId } from '../game/playerActors.ts';
 import { getSunDirection } from '../components/SkyController.tsx';
+import { treeFieldHandle } from '../components/TreeField.tsx';
+import { floraFieldHandle } from '../components/FloraField.tsx';
+import { looseStoneHandle } from '../components/LooseStoneField.tsx';
+import { nearestForageNodeWorld } from '../components/ForageField.tsx';
 import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
+import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { setConstellationReveal } from './skyMeaning.ts';
 import { hifiWreckHandle } from './world/hifiWreck.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { clearLifeReveal, setLifeReveal } from '../game/lifeReveal.ts';
 import { backfillLegacyDebrisStone, debrisSalvageComplete } from './debrisSalvage.ts';
 import { supplyPodsComplete } from './supplyPods.ts';
-import { navWaypointsComplete, resetNavWaypoints } from './navWaypoints.ts';
+import {
+  currentNavWaypointIndex,
+  navWaypointsComplete,
+  NAV_WAYPOINT_COUNT,
+  resetNavWaypoints
+} from './navWaypoints.ts';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
-import { getAuditWorkerPath, storyAnchors } from './world/storyWorld.ts';
+import {
+  getAuditWorkerPath,
+  getKeelMemoryPose,
+  storyAnchors
+} from './world/storyWorld.ts';
 import { createLiveAgentSurfaceTerrain } from '../utils/agentSurfaceNavigationRuntime.ts';
+import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
+import { getAuthoredDiveGuidance } from './emergentDive.ts';
+import { getAuthoredMawGuidance } from './emergentMawRepair.ts';
+import { getWreckReconstructionGuidance } from './wreckReconstruction.ts';
+import {
+  getPhysicalBoardingGuidance,
+  getPhysicalBoardingSnapshot,
+  hasSealedPhysicalBoarding
+} from './physicalBoarding.ts';
+import {
+  createTidegardenRelationshipProof,
+  getTidegardenChosenHabitatSite,
+  getTidegardenSettlementGuidance
+} from './tidegardenSettlement.ts';
+import { findEmergentMovieHabitatGoal } from './emergentMovieRuntime.ts';
+import { getHabitatWorldState } from '../game/systems/habitatSystem.ts';
+import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import {
+  hasFirstHoverGroundedReturn,
+  hasFirstLegalHoverReceipt
+} from './reconstructionEmbodiment.ts';
+import {
+  getReconstructionCalibrationSnapshot,
+  hasReconstructionCalibrationReceipt
+} from './reconstructionCalibration.ts';
+import {
+  enterEmergentScoreBeat,
+  hydrateChapter7BoardingScore,
+  type Chapter7ReconstructionScoreFacts
+} from './emergentScoreDirector.ts';
 import {
   easedGroundedTravelProgress,
   groundedSurfaceRouteLength,
@@ -86,7 +136,15 @@ import {
   duskCinematicStateAt
 } from './duskCinematography.ts';
 import { getFeedRuntime, resetFeedRuntime } from './feedRuntime.ts';
-import { clearViolations, pushViolation, setWorkOrder, showAuditLine, showCaption, showSystemLine } from './storyText.ts';
+import {
+  clearViolations,
+  getStoryText,
+  pushViolation,
+  setWorkOrder,
+  showAuditLine,
+  showCaption,
+  showSystemLine
+} from './storyText.ts';
 import {
   A1_RAMP_SECONDS,
   A2_CAPTIONS,
@@ -123,6 +181,21 @@ import {
 } from './storyScript.ts';
 import { complianceToneLine, getArrivalCellCharge } from './voyageOutcome.ts';
 import { scoreHit, setScoreBeat, setScoreIntensity } from './storyScore.ts';
+import {
+  emergentStoryDirectorTick,
+  enterEmergentStoryBeat,
+  getEmergentStoryMarkerTarget
+} from './emergentStoryDirector.ts';
+import {
+  activateGuidedStoryObjective,
+  getActiveGuidedStoryObjective
+} from './ux/objectiveDirector.ts';
+import {
+  resolveStoryObjectiveGuidance,
+  type GatherObjectiveStage,
+  type RestObjectivePhase,
+  type VigilObjectivePhase
+} from './storyObjectiveGuidance.ts';
 
 // --- The story director -------------------------------------------------------------
 //
@@ -415,6 +488,170 @@ const EXTERNAL_CAMERA_BEATS = new Set<StoryBeat>([
   'ch1-lift'
 ]);
 
+function chapter7ReconstructionScoreFacts(): Chapter7ReconstructionScoreFacts {
+  const actorId = getLocalActorId();
+  const calibration = getReconstructionCalibrationSnapshot();
+  return {
+    repairStage: getShipRepairStage(),
+    firstHoverComplete: hasFirstLegalHoverReceipt(actorId),
+    groundedReturnComplete: hasFirstHoverGroundedReturn(actorId),
+    calibrationState: hasReconstructionCalibrationReceipt(actorId)
+      ? 'complete'
+      : calibration.phase === 'running'
+        ? 'active'
+        : 'none'
+  };
+}
+
+type GatherMarkerResource = 'wood' | 'biofiber' | 'stone' | 'flint';
+
+function firstMissingGatherInput(
+  inputs: readonly { id: ItemId; qty: number }[]
+): GatherMarkerResource | null {
+  for (const input of inputs) {
+    if (getItemCount(input.id) >= input.qty) continue;
+    if (
+      input.id === 'wood'
+      || input.id === 'biofiber'
+      || input.id === 'stone'
+      || input.id === 'flint'
+    ) return input.id;
+  }
+  return null;
+}
+
+/**
+ * The Chapter 3 card follows the real recipe graph. In particular, biofuel is
+ * not folded into a vague "campfire" instruction and the pickaxe/flint detour
+ * disappears only when the inventory genuinely makes it unnecessary.
+ */
+function currentGatherObjectiveStage(): GatherObjectiveStage {
+  const hatchet = getRecipe('stone_hatchet');
+  if (getItemCount('stone_hatchet') <= 0) {
+    return hasItems(hatchet.inputs) ? 'hatchet' : 'materials';
+  }
+
+  const campfire = getRecipe('campfire');
+  const flintNeed = campfire.inputs.find(input => input.id === 'flint')?.qty ?? 0;
+  if (getItemCount('flint') < flintNeed) {
+    const pickaxe = getRecipe('stone_pickaxe');
+    if (getItemCount('stone_pickaxe') <= 0) {
+      return hasItems(pickaxe.inputs) ? 'pickaxe' : 'materials';
+    }
+    return 'flint';
+  }
+
+  const biofuelNeed = campfire.inputs.find(input => input.id === 'biofuel')?.qty ?? 0;
+  if (getItemCount('biofuel') < biofuelNeed) {
+    return hasItems(getRecipe('biofuel').inputs) ? 'biofuel' : 'materials';
+  }
+
+  return hasItems(campfire.inputs) ? 'campfire' : 'materials';
+}
+
+function currentGatherMarkerResource(): GatherMarkerResource {
+  const hatchet = getRecipe('stone_hatchet');
+  if (getItemCount('stone_hatchet') <= 0) {
+    return firstMissingGatherInput(hatchet.inputs) ?? 'wood';
+  }
+
+  const campfire = getRecipe('campfire');
+  const flintNeed = campfire.inputs.find(input => input.id === 'flint')?.qty ?? 0;
+  if (getItemCount('flint') < flintNeed) {
+    const pickaxe = getRecipe('stone_pickaxe');
+    return getItemCount('stone_pickaxe') > 0
+      ? 'flint'
+      : firstMissingGatherInput(pickaxe.inputs) ?? 'stone';
+  }
+
+  const biofuelNeed = campfire.inputs.find(input => input.id === 'biofuel')?.qty ?? 0;
+  if (getItemCount('biofuel') < biofuelNeed) return 'biofiber';
+  return firstMissingGatherInput(campfire.inputs) ?? 'wood';
+}
+
+function currentRestObjectivePhase(): RestObjectivePhase {
+  return d.dayPhase >= DUSK.nightStart && d.dayPhase <= DUSK.nightEnd
+    ? 'rest-at-fire'
+    : 'wait-for-night';
+}
+
+function currentVigilObjectivePhase(): VigilObjectivePhase {
+  if (d.captionsFired.has('vig-rest')) return 'rest-at-fire';
+  if (d.dayPhase >= DUSK.nightStart && d.dayPhase <= DUSK.nightEnd) return 'observe-sky';
+  return 'remain-at-wreck';
+}
+
+/**
+ * Chapters 1–3 and the vigil predate the shared HUD. Publish their authored
+ * objective synchronously on entry, then re-resolve from live progression on
+ * each story tick so direct loads and stage changes cannot leave stale copy.
+ */
+function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
+  if (!beat) return;
+  const legacyFeedCopy = getStoryText().workorder;
+  const guidance = (() => {
+    switch (beat) {
+      case 'ch1-fixed':
+      case 'ch1-track':
+      case 'ch1-raster':
+      case 'ch1-depth':
+      case 'ch1-iso':
+      case 'ch1-lift':
+      case 'ch2-color':
+      case 'ch2-approach':
+      case 'ch3-thirst':
+      case 'ch3-signal':
+        return resolveStoryObjectiveGuidance(beat);
+      case 'ch1-nav':
+        return resolveStoryObjectiveGuidance(beat, {
+          navWaypointIndex: currentNavWaypointIndex(),
+          navWaypointCount: NAV_WAYPOINT_COUNT
+        });
+      case 'ch1-anomaly':
+        return resolveStoryObjectiveGuidance(beat, {
+          anomalyDesignated: d.anomalyMassStage
+        });
+      case 'ch3-gather':
+        return resolveStoryObjectiveGuidance(beat, {
+          gatherStage: currentGatherObjectiveStage()
+        });
+      case 'ch3-await-rest':
+        return resolveStoryObjectiveGuidance(beat, {
+          restPhase: currentRestObjectivePhase()
+        });
+      case 'ch3-forage':
+        return resolveStoryObjectiveGuidance(beat, {
+          forageHasEdible: getItemCount('berry') + getItemCount('root') > 0,
+          forageAte: d.forageAteAt >= 0 || hasMilestone(STORY_MILESTONES.ch3Ate)
+        });
+      case 'ch4-vigil':
+        return resolveStoryObjectiveGuidance(beat, {
+          vigilPhase: currentVigilObjectivePhase()
+        });
+      default:
+        return null;
+    }
+  })();
+  if (!guidance) return;
+  const activated = activateGuidedStoryObjective(guidance);
+  // Before embodiment, the Regulation Feed's bureaucratic voice is part of the
+  // scene (including voyage echoes). Keep that authored copy while the shared
+  // store supplies its semantic id, action, marker label, and health.
+  if (
+    activated
+    && legacyFeedCopy.length > 0
+    && (
+      beat === 'ch1-fixed'
+      || beat === 'ch1-track'
+      || beat === 'ch1-raster'
+      || beat === 'ch1-depth'
+      || beat === 'ch1-nav'
+      || beat === 'ch1-iso'
+      || beat === 'ch1-lift'
+    )
+  ) setWorkOrder(legacyFeedCopy);
+}
+
 function onBeatEntered(beat: StoryBeat | null): void {
   d.beat = beat;
   d.beatClock = 0;
@@ -434,8 +671,24 @@ function onBeatEntered(beat: StoryBeat | null): void {
   // Beat entry is the replay/deep-link authority for camera-feed ownership.
   // First-person beats never inherit CCTV treatment from an earlier rung.
   feed.externalCameraMix = beat && EXTERNAL_CAMERA_BEATS.has(beat) ? 1 : 0;
-  // The score retunes to the beat's mood (null fades it out for the sandbox).
+  // Chapter 7 derives its cumulative orchestration from the same durable
+  // repair/boarding facts that gate progression. Install that override before
+  // setScoreBeat asks the instrument for the beat mood, including deep links.
+  enterEmergentScoreBeat(
+    beat,
+    beat === 'ch7-reconstruct' ? chapter7ReconstructionScoreFacts() : undefined
+  );
+  if (beat === 'ch7-board') {
+    const actorId = getLocalActorId();
+    const boarding = getPhysicalBoardingSnapshot();
+    hydrateChapter7BoardingScore({
+      sealed: hasSealedPhysicalBoarding(actorId, STORY_PRIMARY_WORLD_ID),
+      transactionId: boarding.transactionId ?? undefined
+    });
+  }
+  // The score retunes to the beat's resolved mood (null returns to sandbox).
   setScoreBeat(beat);
+  enterEmergentStoryBeat(beat);
   // Constellation reveal persistence: the resolved sky belongs to a STORY save
   // that has earned it (milestone) and never to the sandbox — a sandbox session
   // after a story session must not inherit reveal=1. onBeatEntered only runs on
@@ -657,6 +910,10 @@ function onBeatEntered(beat: StoryBeat | null): void {
     default:
       break;
   }
+  // enterEmergentStoryBeat intentionally clears the previous chapter's
+  // contract. Republish only after this beat's reset/seed work has completed so
+  // a direct load has correct guidance before the first Canvas frame.
+  syncFoundationalStoryObjective(beat);
 }
 
 // --- rest interaction ([F] Rest at a campfire, at night) ---------------------------
@@ -733,6 +990,7 @@ function syncBeat(): void {
   // Deactivation (quit to menu / completion) drops the live rest resolver and
   // fades the score out (the sandbox owns its own music).
   if (!s.active) {
+    enterEmergentScoreBeat(null);
     setScoreBeat(null);
     if (s.chapter !== 'complete') clearLifeReveal(); // quit mid-cutscene: no stuck wave
     if (d.restUnregister) {
@@ -1615,7 +1873,11 @@ function refreshAuditWorkerRoute(): boolean {
   if (planetSize == null || terrainSeed == null) {
     return (storyAnchors.auditPath?.length ?? 0) >= 2;
   }
-  const terrain = createLiveAgentSurfaceTerrain(planetSize, terrainSeed);
+  const terrain = createLiveAgentSurfaceTerrain(
+    planetSize,
+    terrainSeed,
+    STORY_PRIMARY_WORLD_ID
+  );
   if (d.arrivalRouteRevision !== terrain.revision) {
     storyAnchors.auditPath = getAuditWorkerPath(planetSize, terrainSeed, terrain);
     d.arrivalRouteRevision = terrain.revision;
@@ -1745,8 +2007,8 @@ function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
   setScoreIntensity(0.35 + envelope(t, T.holdBlackSeconds, T.holdBlackSeconds + 6, T.endAt - 6, T.endAt) * 0.45);
 
   if (t >= T.endAt) {
-    // The driver stops ticking as soon as completeStory deactivates Story mode.
-    // Restore the actual lens, not only its policy target, before that happens.
+    // Restore the actual lens, not only its policy target, before the playable
+    // audit inherits the handback frame.
     setStoryTargetFov(SANDBOX_FOV);
     if (camera) {
       camera.fov = SANDBOX_FOV;
@@ -1757,12 +2019,12 @@ function tickArrival(dt: number, camera: THREE.PerspectiveCamera | null): void {
     clearCinematicCameraPose();
     // Hand the sun to the live clock at dawn-2's phase (the A3 grammar).
     setDayPhaseOffset(d.dayPhase - d.worldElapsedSeconds / DAY_LENGTH_SECONDS);
-    // W-7744 does NOT evaporate: "he stays to look." His pose module keeps him
-    // standing at the relay; StoryWorldProps keeps him mounted through 'done'.
-    // TEMPORARY: ch4-audit continues from here (see PARAVOXIA_CH4_PLAN.md §2 S6).
-    // Until it ships, the story banks the arrival checkpoint and hands back to
-    // the sandbox with the same guarantees the slice's completion gave.
-    completeStory();
+    setStoryForcedDayPhase(null);
+    // W-7744 does NOT evaporate: "he stays to look." Arrival is now a real
+    // checkpoint, not the old demo terminal; the audit begins in the same world
+    // on the very next frame.
+    markMilestone(STORY_MILESTONES.ch4Arrived);
+    advanceToBeat('ch4-audit');
   }
 }
 
@@ -2003,6 +2265,12 @@ export function storyDirectorTick(
       break;
   }
 
+  // A handler above may synchronously advance the beat. Re-read after the
+  // switch so the old objective can never overwrite the destination contract
+  // for one frame or emit a duplicate objective-enter cue.
+  syncFoundationalStoryObjective(getStoryStateSnapshot().beat);
+  emergentStoryDirectorTick(dt);
+
   // 2-frame full-chroma flashes (shader + DOM drop on the SAME tick — the reason
   // this runs inside the R3F frame).
   if (d.flashFramesLeft > 0) {
@@ -2036,6 +2304,63 @@ export function storyDirectorTick(
 // --- free-era survey marker ------------------------------------------------------------
 
 const _markerFire = new THREE.Vector3();
+const _markerResource = new THREE.Vector3();
+const _markerCandidate = new THREE.Vector3();
+
+function nearestCampfireMarkerTarget(): THREE.Vector3 | null {
+  const player = getPlayerWorldPosition();
+  let nearest: ReturnType<typeof getCampfires>[number] | null = null;
+  let nearestDistance = Infinity;
+  for (const fire of getCampfires()) {
+    _markerFire.set(fire.pos[0], fire.pos[1], fire.pos[2]);
+    const distance = player.distanceToSquared(_markerFire);
+    if (distance >= nearestDistance) continue;
+    nearestDistance = distance;
+    nearest = fire;
+  }
+  if (!nearest) return null;
+  return _markerFire.set(nearest.pos[0], nearest.pos[1], nearest.pos[2]);
+}
+
+function keepNearestMarkerCandidate(
+  coord: readonly [number, number, number],
+  player: THREE.Vector3,
+  nearestDistance: number
+): number {
+  voxelCoordToWorld(coord[0], coord[1], coord[2], _markerCandidate);
+  const distance = player.distanceToSquared(_markerCandidate);
+  if (distance < nearestDistance) _markerResource.copy(_markerCandidate);
+  return Math.min(nearestDistance, distance);
+}
+
+function nearestGatherResourceTarget(resource: GatherMarkerResource): THREE.Vector3 | null {
+  if (resource === 'flint') return signalMesaHandle.summit;
+  const player = getPlayerWorldPosition();
+  let nearestDistance = Infinity;
+
+  if (resource === 'wood') {
+    for (const target of treeFieldHandle.pickTargets) {
+      for (const coord of target.slotVoxel) {
+        if (isTreeHarvested(coord[0], coord[1], coord[2])) continue;
+        nearestDistance = keepNearestMarkerCandidate(coord, player, nearestDistance);
+      }
+    }
+  } else if (resource === 'biofiber') {
+    for (const target of floraFieldHandle.pickTargets) {
+      for (const coord of target.slotVoxel) {
+        if (isFloraHarvested(coord[0], coord[1], coord[2])) continue;
+        nearestDistance = keepNearestMarkerCandidate(coord, player, nearestDistance);
+      }
+    }
+  } else {
+    for (const coord of looseStoneHandle.slotVoxel) {
+      if (isStoneCollected(coord[0], coord[1], coord[2])) continue;
+      nearestDistance = keepNearestMarkerCandidate(coord, player, nearestDistance);
+    }
+  }
+
+  return Number.isFinite(nearestDistance) ? _markerResource : null;
+}
 
 /**
  * The post-feed objective designator (rendered by FreeMarker, projected by
@@ -2046,21 +2371,134 @@ const _markerFire = new THREE.Vector3();
 export function storyFreeMarkerTarget(): { position: THREE.Vector3; label: string } | null {
   const s = getStoryStateSnapshot();
   if (!s.active) return null;
+  const objective = getActiveGuidedStoryObjective();
   switch (s.beat) {
+    case 'ch3-gather': {
+      if (!objective || objective.requiresMarker === false) return null;
+      const resource = objective.id === 'ch3:gather:recover-flint'
+        ? 'flint'
+        : currentGatherMarkerResource();
+      const target = nearestGatherResourceTarget(resource);
+      return target ? { position: target, label: objective.markerLabel } : null;
+    }
+    case 'ch3-await-rest': {
+      if (!objective || objective.requiresMarker === false) return null;
+      const fire = nearestCampfireMarkerTarget();
+      return fire ? { position: fire, label: objective.markerLabel } : null;
+    }
     case 'ch3-thirst':
-      return d.beatClock >= FIRST_DAY.seekAt && storyAnchors.pond
-        ? { position: storyAnchors.pond.surface, label: 'water' }
+      return objective?.requiresMarker !== false && storyAnchors.pond
+        ? { position: storyAnchors.pond.surface, label: objective?.markerLabel ?? 'WATER · DRINK' }
         : null;
+    case 'ch3-forage': {
+      const seed = storyAnchors.terrainSeed;
+      if (!objective || objective.requiresMarker === false || seed == null) return null;
+      const target = nearestForageNodeWorld(getPlayerWorldPosition(), seed, 60);
+      return target ? { position: target, label: objective.markerLabel } : null;
+    }
     case 'ch3-signal':
-      return wreckRelayHandle.position
-        ? { position: wreckRelayHandle.position, label: 'the wreck' }
+      return objective?.requiresMarker !== false && wreckRelayHandle.position
+        ? { position: wreckRelayHandle.position, label: objective?.markerLabel ?? 'WRECK RELAY · REPORT' }
         : null;
     case 'ch4-vigil': {
-      if (d.dayPhase < DUSK.nightStart) return null;
-      const fire = getCampfires()[0];
-      if (!fire) return null;
-      _markerFire.set(fire.pos[0], fire.pos[1], fire.pos[2]);
-      return { position: _markerFire, label: 'rest' };
+      if (!objective || objective.requiresMarker === false) return null;
+      const target = objective.id.includes('rest')
+        ? nearestCampfireMarkerTarget()
+        : wreckRelayHandle.position;
+      return target ? { position: target, label: objective.markerLabel } : null;
+    }
+    case 'ch4-audit':
+    case 'ch4-comply':
+    case 'ch4-defy': {
+      if (!objective || objective.requiresMarker === false) return null;
+      const target = getEmergentStoryMarkerTarget(s.beat);
+      return target ? { position: target, label: objective.markerLabel } : null;
+    }
+    case 'ch5-maw': {
+      const size = storyAnchors.planetSize;
+      const seed = storyAnchors.terrainSeed;
+      if (size == null || seed == null) return null;
+      const guidance = getAuthoredMawGuidance(getLocalActorId());
+      if (guidance.id === 'maw:observe-pond-response'
+        || guidance.id === 'maw:resonance-settling') {
+        return storyAnchors.pond
+          ? { position: storyAnchors.pond.shore, label: guidance.markerLabel }
+          : null;
+      }
+      const pack = storyAnchors.fieldPack;
+      return pack ? { position: pack.position, label: guidance.markerLabel } : null;
+    }
+    case 'ch6-dive': {
+      const size = storyAnchors.planetSize;
+      const seed = storyAnchors.terrainSeed;
+      if (size == null || seed == null) return null;
+      const guidance = getAuthoredDiveGuidance();
+      if (guidance.requiresMarker === false) return null;
+      if (guidance.id === 'dive:surface-with-keel') {
+        return storyAnchors.pond
+          ? { position: storyAnchors.pond.surface, label: guidance.markerLabel }
+          : null;
+      }
+      if (guidance.id === 'dive:return-to-shore') {
+        return storyAnchors.pond
+          ? { position: storyAnchors.pond.shore, label: guidance.markerLabel }
+          : null;
+      }
+      const keel = getKeelMemoryPose(size, seed);
+      return keel ? { position: keel.position, label: guidance.markerLabel } : null;
+    }
+    case 'ch7-reconstruct': {
+      const wreck = hifiWreckHandle.position;
+      if (!wreck) return null;
+      const guidance = getWreckReconstructionGuidance();
+      if (guidance.requiresMarker === false) return null;
+      const target = guidance.id === 'diagnose'
+        ? hifiWreckHandle.diagnosisTarget ?? wreck
+        : guidance.id === 'lift-test'
+          ? hifiWreckHandle.hoverSocketPosition ?? wreck
+          : guidance.id === 'lift-return'
+            ? wreck
+          : hifiWreckHandle.workstationPosition ?? wreck;
+      return { position: target, label: guidance.markerLabel };
+    }
+    case 'ch7-board': {
+      const guidance = getPhysicalBoardingGuidance();
+      if (guidance.requiresMarker === false || !hifiWreckHandle.hatchTarget) return null;
+      return { position: hifiWreckHandle.hatchTarget, label: guidance.markerLabel };
+    }
+    case 'ch8-crossing': {
+      if (!objective || objective.requiresMarker === false) return null;
+      const target = readSystemCompanionBodyTarget(TIDEGARDEN_WORLD_ID);
+      return target ? { position: target, label: objective.markerLabel } : null;
+    }
+    case 'ch9-settle':
+    case 'ch9-hearth': {
+      const actorId = getLocalActorId();
+      const chosen = getTidegardenChosenHabitatSite(actorId);
+      const foundationPlaced = Boolean(chosen && getPieces().some(piece => (
+        piece.type === 'foundation'
+        && piece.cell[0] === chosen.cell[0]
+        && piece.cell[1] === chosen.cell[1]
+        && piece.cell[2] === chosen.cell[2]
+      )));
+      const guidance = getTidegardenSettlementGuidance({
+        actorId,
+        coreCarried: getItemCount('habitat_core', actorId) > 0,
+        foundationPlaced,
+        night: d.dayPhase >= 0.7 || d.dayPhase <= 0.1
+      });
+      const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+      const relationship = storyAnchors.planetSize != null && storyAnchors.terrainSeed != null
+        ? createTidegardenRelationshipProof(storyAnchors.planetSize, storyAnchors.terrainSeed)
+        : null;
+      const target = guidance.id === 'scan-waterline' || guidance.id === 'attend-waterline'
+        ? relationship?.position ?? null
+        : guidance.id === 'choose-site'
+          ? findEmergentMovieHabitatGoal(getPlayerWorldPosition())
+          : habitat
+            ? new THREE.Vector3(...habitat.core.position)
+            : chosen?.position ?? null;
+      return target ? { position: target, label: guidance.markerLabel } : null;
     }
     default:
       return null;

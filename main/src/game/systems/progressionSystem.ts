@@ -28,6 +28,70 @@ export const PROGRESSION_OWNERSHIP = {
   rationale: 'era and milestone unlocks follow the player inventory/loadout/Maw, not a planet shard'
 } as const;
 
+/**
+ * Receipts produced exclusively by local presentation or embodied simulation.
+ *
+ * Co-op snapshots own economy, inventory, route, item, and settlement commits,
+ * but the state server cannot observe camera alignment, rendered disclosures,
+ * oxygen threshold crossings, the staged boarding camera handoff, or the Story
+ * director's local beat checkpoints. Maw direction/resonance receipts are
+ * server-owned in co-op even though their final visual proof remains local.
+ * Keep this allow-list deliberately narrower
+ * than `story:*`: server-owned `story:item:*`, `story:route:*`,
+ * `story:salvage:*`, and most `story:tidegarden:*` facts must still be replaced
+ * by authority.
+ */
+export const CLIENT_OWNED_MILESTONE_POLICY = Object.freeze({
+  exact: Object.freeze([
+    'story:started',
+    'story:prologue-seen',
+    'story:a1',
+    'story:a2',
+    'story:a3',
+    'story:a4',
+    'story:complete',
+    'story:debris-stone-backfill:v2',
+    'story:tone:low',
+    'story:tone:high',
+    'story:board:pressure-boundary-sealed',
+    'story:board:physical-transaction-complete',
+    'story:tidegarden:scanner-overload'
+  ]),
+  prefixes: Object.freeze([
+    'story:ch1:',
+    'story:ch2:',
+    'story:ch3:',
+    'story:ch4:',
+    'story:ch5:',
+    'story:ch6:',
+    'story:ch7:',
+    'story:ch8:',
+    'story:ch9:',
+    'story:sense:',
+    'story:choice:',
+    'story:name:',
+    'story:musing:',
+    'story:cell:',
+    'story:debris:',
+    'story:debris-scattered:',
+    'story:pod:',
+    'story:audit:',
+    'story:comply:',
+    'story:defy:',
+    'story:a4:',
+    'story:dive:',
+    'story:capability:',
+    'story:reconstruct:'
+  ])
+} as const);
+
+const CLIENT_OWNED_MILESTONE_IDS = new Set<string>(CLIENT_OWNED_MILESTONE_POLICY.exact);
+
+export function isClientOwnedMilestoneReceipt(milestone: string): boolean {
+  return CLIENT_OWNED_MILESTONE_IDS.has(milestone)
+    || CLIENT_OWNED_MILESTONE_POLICY.prefixes.some(prefix => milestone.startsWith(prefix));
+}
+
 const progression = new Map<ActorId, MutableActorProgressionState>();
 const listeners = new Set<() => void>();
 
@@ -53,6 +117,17 @@ export function advanceEraTo(id: EraId, actorId?: ActorId): void {
   }
 }
 
+/**
+ * Exact rollback/migration seam for destructive replay and save repair.
+ * Normal gameplay must continue to use `advanceEraTo`, which is monotonic.
+ */
+export function replaceEraForRollback(id: EraId, actorId?: ActorId): void {
+  const state = stateFor(actorId);
+  if (state.era === id) return;
+  state.era = id;
+  emit();
+}
+
 export function markMilestone(id: string, actorId?: ActorId): void {
   const state = stateFor(actorId);
   if (!state.milestones.has(id)) {
@@ -63,6 +138,14 @@ export function markMilestone(id: string, actorId?: ActorId): void {
 
 export function hasMilestone(id: string, actorId?: ActorId): boolean {
   return stateFor(actorId).milestones.has(id);
+}
+
+/** Exact rollback/migration seam. Normal progression remains monotonic. */
+export function removeMilestone(id: string, actorId?: ActorId): boolean {
+  if (!id) return false;
+  const removed = stateFor(actorId).milestones.delete(id);
+  if (removed) emit();
+  return removed;
 }
 
 /** Snapshot of reached milestone ids (for persistence). */
@@ -107,12 +190,25 @@ export function getProgressionSnapshot(): ProgressionSnapshot {
   return out;
 }
 
-export function applyProgressionSnapshot(snapshot: ProgressionSnapshot, options: { replace?: boolean } = {}): void {
+export function applyProgressionSnapshot(
+  snapshot: ProgressionSnapshot,
+  options: { replace?: boolean; preserveClientOwnedMilestones?: boolean } = {}
+): void {
+  const preservedClientReceipts = options.preserveClientOwnedMilestones
+    ? new Map(
+        [...progression].map(([actorId, state]) => [
+          actorId,
+          [...state.milestones].filter(isClientOwnedMilestoneReceipt)
+        ] as const)
+      )
+    : null;
   if (options.replace ?? true) progression.clear();
   for (const [actorId, state] of Object.entries(snapshot) as [ActorId, ActorProgressionState][]) {
+    const milestones = new Set(state.milestones ?? []);
+    for (const receipt of preservedClientReceipts?.get(actorId) ?? []) milestones.add(receipt);
     progression.set(actorId, {
       era: state.era ?? 'primitive',
-      milestones: new Set(state.milestones ?? [])
+      milestones
     });
   }
   emit();

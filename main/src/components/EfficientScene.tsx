@@ -2,6 +2,7 @@ import {
   Profiler,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -19,7 +20,7 @@ import TreeField from './TreeField';
 import SurfaceEffectField from './SurfaceEffectField';
 import LooseStoneField from './LooseStoneField';
 import ForageField from './ForageField';
-import { PlayerTorch, Campfires } from './Lights';
+import { PlayerTorch, Campfires, type CampfireHydrationPrerequisite } from './Lights';
 import StructureField, { BuildGhost } from './StructureField';
 import WaterBlocks from './WaterBlocks.tsx';
 import UnderwaterDome from './UnderwaterDome.tsx';
@@ -30,7 +31,11 @@ import AgentCamera from './debug/AgentCamera.tsx';
 import SpaceshipPlaceholder from './SpaceshipPlaceholder.tsx';
 import ShipController from './ShipController.tsx';
 import PlayerAvatarPoseHarness from './PlayerAvatarPoseHarness.tsx';
-import { useSpaceFlight } from '../state/spaceFlight.ts';
+import {
+  subscribeShipExit,
+  useSpaceFlight,
+  type ShipExitReceipt
+} from '../state/spaceFlight.ts';
 import {
   FACE_NORMALS,
   dominantFaceForPosition,
@@ -50,9 +55,23 @@ import {
 } from '../game/systems/persistence.ts';
 import { setPlayerLook, setPlayerWorldPosition } from '../state/playerFrame.ts';
 import type { CommandContext } from '../game/commands.ts';
-import { isStoryWorldSeed } from '../story/world/storyWorld.ts';
+import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
+import {
+  getPodImpactPose,
+  getPondPose,
+  getStorySidePlane,
+  isStoryWorldSeed
+} from '../story/world/storyWorld.ts';
 import StoryWorldProps from '../story/world/StoryWorldProps.tsx';
-import { getStoryStateSnapshot, storyAnchoredSpawn, useStoryState } from '../story/storyState.ts';
+import TidegardenSettlementWorld from '../story/world/TidegardenSettlementWorld.tsx';
+import { TIDEGARDEN_WORLD_ID } from '../story/tidegardenRoute.ts';
+import {
+  debugBeatNeedsCampfire,
+  getStoryStateSnapshot,
+  isStoryDeepLink,
+  storyAnchoredSpawn,
+  useStoryState
+} from '../story/storyState.ts';
 import {
   getSystemFlightSnapshot,
   planetLocalPoseToSystemPose,
@@ -68,8 +87,34 @@ import { getWorldGen } from '../utils/worldGenCache.ts';
 import {
   findValidSpawnSite,
   isDryClearResumePosition,
+  resolveSafeShipBoardingPosition,
   resolveShipPlayerEgressPosition
 } from '../utils/spawnValidation.ts';
+import {
+  persistedParkedShipPose,
+  persistShipFlightLocation
+} from '../state/shipFlightContinuity.ts';
+import { shipParkedOrientation } from '../utils/shipDesign.ts';
+import {
+  INITIAL_LANDFALL_AV_STATE,
+  activateVehicleSceneAvEvent,
+  advanceLandfallAvState,
+  type LandfallAvEvidence
+} from '../story/vehicleSceneAvAnchors.ts';
+import {
+  createScenePlayerPositionMailbox,
+  type ScenePlayerPositionMailbox
+} from '../utils/scenePlayerPosition.ts';
+import type {
+  GraphicsQuality,
+  QualityProfile
+} from '../config/graphicsSettings.ts';
+import { setVitals } from '../game/systems/survivalVitals.ts';
+import { invalidateAuthoredDiveMotionContinuity } from '../story/emergentDive.ts';
+import {
+  applyAuthoredDiveReloadRecovery,
+  resolveAuthoredDiveReloadRecovery
+} from '../story/diveReloadRecovery.ts';
 
 export const planetSize = 50;
 const PRIMARY_SYSTEM_POSITION = [0, 0, 0] as const;
@@ -90,6 +135,8 @@ export interface SceneDebugState {
 
 interface EfficientSceneProps {
   commandContext: CommandContext;
+  graphicsProfile: QualityProfile;
+  graphicsQuality: GraphicsQuality;
   activePlanetSystemPosition?: SystemVectorTuple;
   terrainSeed?: number;
   debugColliders?: boolean;
@@ -111,6 +158,8 @@ interface EfficientSceneProps {
 
 export default function EfficientScene({
   commandContext,
+  graphicsProfile,
+  graphicsQuality,
   activePlanetSystemPosition = PRIMARY_SYSTEM_POSITION,
   terrainSeed = TERRAIN_SEEDS.DEFAULT,
   debugColliders = false,
@@ -125,6 +174,24 @@ export default function EfficientScene({
 }: EfficientSceneProps) {
   const { controlMode, phase } = useSpaceFlight();
   const story = useStoryState();
+  const debugCampfirePrerequisite = useMemo<CampfireHydrationPrerequisite | null>(() => {
+    if (!isStoryWorldSeed(terrainSeed)
+      || !isStoryDeepLink()
+      || !debugBeatNeedsCampfire(story.beat)) return null;
+    const plane = getStorySidePlane(planetSize, terrainSeed);
+    const pos = plane.origin.clone().addScaledVector(plane.up, 0.2);
+    return {
+      pos: [pos.x, pos.y, pos.z],
+      up: [plane.up.x, plane.up.y, plane.up.z]
+    };
+  }, [story.beat, terrainSeed]);
+  const planetProfile = useMemo(
+    () => resolvePlanetProfile({
+      worldId: commandContext.world.worldId,
+      seed: terrainSeed
+    }).profile,
+    [commandContext.world.worldId, terrainSeed]
+  );
   // Chapters before the A2 depth awakening allow no smooth props at all.
   const storyPreAwakened = story.active
     && (story.chapter === 'prologue' || story.chapter === 'ch1' || story.chapter === 'ch2');
@@ -134,7 +201,7 @@ export default function EfficientScene({
   // (active chapters AND the completed 'done' world). Non-story seeds: unchanged.
   const storyWorldShip = isStoryWorldSeed(terrainSeed) && (story.active || story.chapter === 'complete');
   const spawnTerrain = useMemo(() => {
-    const entry = getWorldGen(planetSize, terrainSeed);
+    const entry = getWorldGen(planetSize, terrainSeed, commandContext.world.worldId);
     const persisted = loadVoxelEditsForWorld(commandContext.world);
     const deleted = persisted?.fingerprint === entry.voxels.length
       ? new Set(persisted.removed.map(([x, y, z]) => `${x},${y},${z}`))
@@ -154,7 +221,11 @@ export default function EfficientScene({
     () => measureWarpMetric(
       'scene:arrival_pose',
       () => {
-        const canonical = createWorldArrivalPose(planetSize, terrainSeed);
+        const canonical = createWorldArrivalPose(
+          planetSize,
+          terrainSeed,
+          commandContext.world.worldId
+        );
         const exact = findValidSpawnSite(
           spawnTerrain,
           planetSize,
@@ -202,8 +273,13 @@ export default function EfficientScene({
         surfaceZ: pose.surfaceVoxel.z
       })
     ),
-    [spawnTerrain, storyWorldShip, terrainSeed]
+    [commandContext.world.worldId, spawnTerrain, storyWorldShip, terrainSeed]
   );
+  const storyWreckBoardingPosition = useMemo(() => {
+    if (!storyWorldShip) return null;
+    const impact = getPodImpactPose(planetSize, terrainSeed);
+    return impact.position.clone().addScaledVector(impact.up, 0.6);
+  }, [storyWorldShip, terrainSeed]);
   useEffect(() => {
     const face = dominantFaceForPosition(arrivalPose.shipPosition);
     const up = FACE_NORMALS[face];
@@ -253,10 +329,36 @@ export default function EfficientScene({
     // The monochrome ladder ANCHORS to the arrival site (strip/wreck/pods/mesa
     // are all placed off it): while those chapters run, a saved pose — off the
     // work row, in the pond, mid-map — must never override the spawn.
-    const saved = storyAnchoredSpawn(getStoryStateSnapshot())
+    const storyAtMount = getStoryStateSnapshot();
+    const saved = storyAnchoredSpawn(storyAtMount)
       ? null
       : loadPlayerPose(commandContext.world);
     if (saved) {
+      if (storyAtMount.active && storyAtMount.beat === 'ch6-dive') {
+        const pond = getPondPose(
+          planetSize,
+          terrainSeed,
+          commandContext.world.worldId
+        );
+        const recovery = resolveAuthoredDiveReloadRecovery({
+          terrain: spawnTerrain,
+          planetSize,
+          pond,
+          fallbackPosition: arrivalPose.playerSurfacePosition,
+          fallbackLookDirection: new THREE.Vector3(...saved.forward)
+        });
+        if (!recovery) {
+          throw new Error('No dry Chapter 6 reload site exists at the pond or canonical arrival.');
+        }
+        return applyAuthoredDiveReloadRecovery(recovery, {
+          invalidateMotionContinuity: () => {
+            invalidateAuthoredDiveMotionContinuity(commandContext.actorId);
+          },
+          setLook: (direction, pitch) => setPlayerLook(direction, pitch),
+          restoreOxygen: oxygen => setVitals({ oxygen }, commandContext.actorId),
+          setWorldPosition: position => setPlayerWorldPosition(position)
+        });
+      }
       setPlayerLook(new THREE.Vector3(...saved.forward), saved.pitch);
       const savedPosition = new THREE.Vector3(...saved.pos);
       const resumeIsSafe = isDryClearResumePosition(spawnTerrain, planetSize, savedPosition);
@@ -277,10 +379,14 @@ export default function EfficientScene({
     setPlayerWorldPosition(arrivalPose.playerSurfacePosition); // ditto for the arrival
     return arrivalPose.playerSurfacePosition.clone();
   });
-  const [playerPosition, setPlayerPosition] = useState(() => initialPlayerPosition.clone());
-  const [fieldPlayerPosition, setFieldPlayerPosition] = useState(
-    () => initialPlayerPosition.clone()
-  );
+  const playerPositionMailboxRef = useRef<ScenePlayerPositionMailbox | null>(null);
+  playerPositionMailboxRef.current ??= createScenePlayerPositionMailbox(initialPlayerPosition);
+  const playerPositionMailbox = playerPositionMailboxRef.current;
+  const playerPosition = playerPositionMailbox.position;
+  // Every field consumer polls this vector from useFrame and owns its own
+  // distance bucket. Sharing the live mailbox avoids an otherwise redundant
+  // second React publication stream.
+  const fieldPlayerPosition = playerPosition;
   const [systemFieldStage, setSystemFieldStage] = useState(
     restoringSameSystemRuntime ? 0 : 6
   );
@@ -355,28 +461,142 @@ export default function EfficientScene({
   // parked-ship position AND the on-foot exit spawn so you leave the ship exactly
   // where you flew it down, not back at the deterministic arrival site. Resets to
   // null on world swap (EfficientScene remounts).
-  const [landedShipPos, setLandedShipPos] = useState<THREE.Vector3 | null>(null);
-  const handleLanded = useCallback((rest: THREE.Vector3) => setLandedShipPos(rest.clone()), []);
-  const landedPlayerSpawn = useMemo(() => {
-    if (!landedShipPos) return initialPlayerPosition;
+  const persistedParked = useMemo(() => persistedParkedShipPose({
+    systemId: coordinateKey(commandContext.world.coordinate),
+    worldId: commandContext.world.worldId
+  }), [commandContext.world.coordinate, commandContext.world.worldId]);
+  const validatedPersistedParked = useMemo(() => {
+    if (!persistedParked) return null;
+    const position = new THREE.Vector3(...persistedParked.position);
+    if (!resolveSafeShipBoardingPosition(spawnTerrain, planetSize, position, 0)) return null;
+    return {
+      position,
+      quaternion: new THREE.Quaternion(...persistedParked.quaternion).normalize()
+    };
+  }, [persistedParked, spawnTerrain]);
+  const [landedShipPos, setLandedShipPos] = useState<THREE.Vector3 | null>(
+    () => validatedPersistedParked?.position.clone() ?? null
+  );
+  const [landedShipQuaternion, setLandedShipQuaternion] = useState<THREE.Quaternion | null>(
+    () => validatedPersistedParked?.quaternion.clone() ?? null
+  );
+  const handleLanded = useCallback((rest: THREE.Vector3, quaternion: THREE.Quaternion) => {
+    setLandedShipPos(rest.clone());
+    setLandedShipQuaternion(quaternion.clone().normalize());
+  }, []);
+  // The repaired Story hull boards from its one persistent impact-site exterior.
+  // Capture that as the parked pose when control transfers so exiting before
+  // launch cannot snap the player back to the generic arrival pad.
+  useEffect(() => {
+    if (!storyWreckBoardingPosition || controlMode !== 'flight' || landedShipPos) return;
+    setLandedShipPos(storyWreckBoardingPosition.clone());
+    setLandedShipQuaternion(shipParkedOrientation(storyWreckBoardingPosition));
+  }, [controlMode, landedShipPos, storyWreckBoardingPosition]);
+  const landedPlayerEgress = useMemo(() => {
+    if (!landedShipPos) return null;
     // Ship and player have different origins above the same support. Reusing the
     // lower ship rest point as the capsule center embeds the player's feet in the
     // voxel; resolve the player-specific clearance before the FPS rig remounts.
-    const playerEgress = resolveShipPlayerEgressPosition(
+    return resolveShipPlayerEgressPosition(
       spawnTerrain,
       planetSize,
       landedShipPos
     );
-    return playerEgress
-      ? playerEgress
-      : arrivalPose.playerSurfacePosition;
-  }, [arrivalPose.playerSurfacePosition, initialPlayerPosition, landedShipPos, spawnTerrain]);
+  }, [landedShipPos, spawnTerrain]);
+  const landedPlayerSpawn = landedShipPos
+    ? landedPlayerEgress ?? arrivalPose.playerSurfacePosition
+    : initialPlayerPosition;
+  const landfallAvStateRef = useRef({ ...INITIAL_LANDFALL_AV_STATE });
+  const successfulShipExitPendingRef = useRef<ShipExitReceipt | null>(null);
+  const pendingGroundedFootfallRef = useRef(false);
+  const applyLandfallAvEvidence = useCallback((evidence: LandfallAvEvidence) => {
+    const advance = advanceLandfallAvState(landfallAvStateRef.current, evidence);
+    landfallAvStateRef.current = advance.state;
+    for (const event of advance.events) activateVehicleSceneAvEvent(event);
+    return advance.events.length > 0;
+  }, []);
+
+  const commitResolvedLandfallExit = useCallback(() => {
+    if (
+      !successfulShipExitPendingRef.current
+      || commandContext.world.worldId !== TIDEGARDEN_WORLD_ID
+      || !landedShipPos
+      || !landedPlayerEgress
+    ) return;
+    const receipt = successfulShipExitPendingRef.current;
+    const activePlanetId = getSystemFlightSnapshot().activePlanetId;
+    applyLandfallAvEvidence({
+      kind: 'egress',
+      worldId: commandContext.world.worldId,
+      activePlanetId,
+      previousControlMode: receipt.previousControlMode,
+      controlMode: receipt.controlMode,
+      egressResolved: true
+    });
+    if (!landfallAvStateRef.current.egressCleared) return;
+    successfulShipExitPendingRef.current = null;
+    if (
+      pendingGroundedFootfallRef.current
+    ) {
+      pendingGroundedFootfallRef.current = false;
+      applyLandfallAvEvidence({
+        kind: 'grounded',
+        worldId: commandContext.world.worldId,
+        activePlanetId,
+        controlMode: 'fps',
+        grounded: true
+      });
+    }
+  }, [
+    applyLandfallAvEvidence,
+    commandContext.world.worldId,
+    landedPlayerEgress,
+    landedShipPos
+  ]);
+
+  // The hatch cue owns an exact successful exitShip receipt. If egress geometry
+  // is still resolving, retain that receipt and authenticate only once the dry
+  // Tidegarden player capsule position exists.
+  useLayoutEffect(() => subscribeShipExit(receipt => {
+    if (
+      commandContext.world.worldId !== TIDEGARDEN_WORLD_ID
+      || getSystemFlightSnapshot().activePlanetId !== TIDEGARDEN_WORLD_ID
+    ) return;
+    successfulShipExitPendingRef.current = receipt;
+    commitResolvedLandfallExit();
+  }), [commandContext.world.worldId, commitResolvedLandfallExit]);
+
+  useEffect(() => {
+    commitResolvedLandfallExit();
+  }, [commitResolvedLandfallExit]);
+
+  const handleControllerGroundedChange = useCallback((grounded: boolean) => {
+    onGroundedChange?.(grounded);
+    if (
+      !grounded
+      || controlMode !== 'fps'
+      || commandContext.world.worldId !== TIDEGARDEN_WORLD_ID
+    ) return;
+    if (!landfallAvStateRef.current.egressCleared) {
+      pendingGroundedFootfallRef.current = true;
+      return;
+    }
+    applyLandfallAvEvidence({
+      kind: 'grounded',
+      worldId: commandContext.world.worldId,
+      activePlanetId: getSystemFlightSnapshot().activePlanetId,
+      controlMode,
+      grounded
+    });
+  }, [
+    applyLandfallAvEvidence,
+    commandContext.world.worldId,
+    controlMode,
+    onGroundedChange
+  ]);
   const [surfaceState, setSurfaceState] = useState<SurfaceState>(
     () => getSurfaceState(dominantFaceForPosition(initialPlayerPosition))
   );
-  const lastPublishedPlayerPosition = useRef(playerPosition.clone());
-  const lastPublishedPlayerAt = useRef(0);
-  const lastPublishedFieldAt = useRef(0);
   const debugStateRef = useRef<SceneDebugState>({ player: null, planet: null });
 
   // Keep the canonical system context valid even while the ship controller is
@@ -384,10 +604,11 @@ export default function EfficientScene({
   // exclusive to ShipController; this only publishes boundary state.
   useEffect(() => {
     if (controlMode === 'flight') return;
-    const current = getSystemFlightSnapshot();
+    let current = getSystemFlightSnapshot();
     const systemId = coordinateKey(commandContext.world.coordinate);
+    const parked = landedShipPos ?? storyWreckBoardingPosition ?? arrivalPose.shipPosition;
+    const parkedQuaternion = landedShipQuaternion ?? shipParkedOrientation(parked);
     if (current.systemId !== systemId) {
-      const parked = landedShipPos ?? arrivalPose.shipPosition;
       resetSystemFlightForInterstellarArrival({
         system: commandContext.world.coordinate,
         activePlanetId: commandContext.world.worldId,
@@ -395,23 +616,47 @@ export default function EfficientScene({
         pose: planetLocalPoseToSystemPose({
           position: [parked.x, parked.y, parked.z],
           velocity: [0, 0, 0],
-          quaternion: [0, 0, 0, 1]
+          quaternion: [
+            parkedQuaternion.x,
+            parkedQuaternion.y,
+            parkedQuaternion.z,
+            parkedQuaternion.w
+          ]
         }, activePlanetSystemPosition),
         renderOrigin: activePlanetSystemPosition
       });
-      return;
+      current = getSystemFlightSnapshot();
     }
     if (current.activePlanetId !== commandContext.world.worldId) {
       setActiveSystemPlanet(commandContext.world.worldId);
     }
     setSystemLocationMode('surface');
+    persistShipFlightLocation({
+      system: commandContext.world.coordinate,
+      systemId,
+      worldId: commandContext.world.worldId,
+      systemPosition: activePlanetSystemPosition,
+      layoutVersion: getSystemFlightSnapshot().layoutVersion,
+      locationMode: 'surface',
+      parkedPose: {
+        position: [parked.x, parked.y, parked.z],
+        quaternion: [
+          parkedQuaternion.x,
+          parkedQuaternion.y,
+          parkedQuaternion.z,
+          parkedQuaternion.w
+        ]
+      }
+    });
   }, [
     activePlanetSystemPosition,
     arrivalPose.shipPosition,
     commandContext.world.coordinate,
     commandContext.world.worldId,
     controlMode,
-    landedShipPos
+    landedShipPos,
+    landedShipQuaternion,
+    storyWreckBoardingPosition
   ]);
 
   const updateDebugState = useCallback((patch: Partial<SceneDebugState>) => {
@@ -419,28 +664,24 @@ export default function EfficientScene({
     debugStateRef.current = next;
     onDebugChange?.(next);
   }, [onDebugChange]);
+  // Debug adapters cross a passive-effect boundary in the planet and a frame
+  // boundary in the player. Stable identities prevent debug state publication
+  // from recreating those subscriptions after every App render.
+  const updatePlanetDebugState = useCallback(
+    (planet: PlanetStats) => updateDebugState({ planet }),
+    [updateDebugState]
+  );
+  const updatePlayerDebugState = useCallback(
+    (player: PlayerDebugState) => updateDebugState({ player }),
+    [updateDebugState]
+  );
 
   const publishPlayerPosition = useCallback((position: THREE.Vector3) => {
-    // Deep-space culling follows the canonical system pose and does not need to
-    // rerender every surface field. In atmosphere, 15 Hz is enough for collision
-    // and ecology streaming while keeping React out of the 60 Hz flight loop.
+    // Continuous coordinates belong to the R3F loop, not React reconciliation.
+    // During deep-space flight the surface scene remains anchored to its planet.
     if (phase === 'deep_space') return;
-    if (lastPublishedPlayerPosition.current.distanceToSquared(position) <= 1) return;
-    const now = typeof performance === 'undefined' ? Date.now() : performance.now();
-    if (now - lastPublishedPlayerAt.current < 1000 / 15) return;
-    lastPublishedPlayerAt.current = now;
-    const next = position.clone();
-    lastPublishedPlayerPosition.current.copy(next);
-    setPlayerPosition(next);
-    if (
-      controlMode === 'fps'
-      || phase === 'surface'
-      || now - lastPublishedFieldAt.current >= 400
-    ) {
-      lastPublishedFieldAt.current = now;
-      setFieldPlayerPosition(next.clone());
-    }
-  }, [controlMode, phase]);
+    playerPositionMailbox.publish(position);
+  }, [phase, playerPositionMailbox]);
 
   return (
     <Physics paused={paused} gravity={[0, 0, 0]} timeStep={FIXED_PHYSICS_STEP} maxCcdSubsteps={2}>
@@ -450,9 +691,10 @@ export default function EfficientScene({
           playerPosition={playerPosition}
           surfaceUp={surfaceState.up}
           terrainSeed={terrainSeed}
+          planetProfile={planetProfile}
           persistenceWorld={commandContext.world}
           debugColliders={debugColliders}
-          onStatsChange={planet => updateDebugState({ planet })}
+          onStatsChange={updatePlanetDebugState}
         />
       </ProfiledSystemSubsystem>
       <ProfiledSystemSubsystem enabled={profileSystemTravel} id="controller">
@@ -460,6 +702,8 @@ export default function EfficientScene({
         <AgentCamera
           planetSize={planetSize}
           terrainSeed={terrainSeed}
+          worldId={commandContext.world.worldId}
+          planetProfile={planetProfile}
           worldCoordinate={commandContext.world.coordinate}
           onPositionChange={publishPlayerPosition}
         />
@@ -480,8 +724,9 @@ export default function EfficientScene({
           activePlanetWorldId={commandContext.world.worldId}
           planetSystemPosition={activePlanetSystemPosition}
           arrivalPose={arrivalPose}
-          boardingPosition={landedShipPos ?? arrivalPose.shipPosition}
-          onGroundedChange={onGroundedChange}
+          boardingPosition={landedShipPos ?? storyWreckBoardingPosition ?? arrivalPose.shipPosition}
+          boardingQuaternion={landedShipQuaternion ?? undefined}
+          onGroundedChange={handleControllerGroundedChange}
           onPositionChange={publishPlayerPosition}
           onLanded={handleLanded}
         />
@@ -496,8 +741,8 @@ export default function EfficientScene({
           resetShipPosition={storyWorldShip ? undefined : landedShipPos ?? arrivalPose.shipPosition}
           onPositionChange={publishPlayerPosition}
           onSurfaceChange={setSurfaceState}
-          onGroundedChange={onGroundedChange}
-          onDebugChange={player => updateDebugState({ player })}
+          onGroundedChange={handleControllerGroundedChange}
+          onDebugChange={updatePlayerDebugState}
         />
         )}
       </ProfiledSystemSubsystem>
@@ -508,33 +753,68 @@ export default function EfficientScene({
       {!storyPreAwakened && !storyWorldShip && (
         <SpaceshipPlaceholder
           position={landedShipPos ?? arrivalPose.shipPosition}
+          parkedQuaternion={landedShipQuaternion ?? undefined}
           planetSize={planetSize}
           terrainSeed={terrainSeed}
+          worldId={commandContext.world.worldId}
           activeApproach={arrivalMode === 'approach'}
           playerPosition={playerPosition}
         />
       )}
       {/* Story-mode bespoke props (anomaly stone, hero apple tree) — story world only. */}
-      {isStoryWorldSeed(terrainSeed) && <StoryWorldProps planetSize={planetSize} terrainSeed={terrainSeed} />}
+      {isStoryWorldSeed(terrainSeed) && (
+        <StoryWorldProps
+          planetSize={planetSize}
+          terrainSeed={terrainSeed}
+          commandContext={commandContext}
+        />
+      )}
+      {commandContext.world.worldId === TIDEGARDEN_WORLD_ID && (
+        <TidegardenSettlementWorld
+          planetSize={planetSize}
+          terrainSeed={terrainSeed}
+          commandContext={commandContext}
+          shipPosition={landedShipPos ?? arrivalPose.shipPosition}
+        />
+      )}
       <PlayerAvatarPoseHarness worldId={commandContext.world.worldId} />
-      {visibleSystemFieldStage >= 3 && (
-        <GrassField terrainSeed={terrainSeed} playerPosition={fieldPlayerPosition} />
+      {visibleSystemFieldStage >= 3 && graphicsQuality.grassDensity > 0 && (
+        <GrassField
+          key={`grass-${graphicsProfile}-${graphicsQuality.grassDensity}-${graphicsQuality.grassMaxDistance}`}
+          terrainSeed={terrainSeed}
+          planetProfile={planetProfile}
+          playerPosition={fieldPlayerPosition}
+        />
       )}
       {visibleSystemFieldStage >= 4 && (
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="vegetation">
         <FloraField
+          key={`flora-${graphicsProfile}-${graphicsQuality.floraDensity}-${graphicsQuality.floraMaxDistance}`}
           terrainSeed={terrainSeed}
+          planetProfile={planetProfile}
           persistenceWorld={commandContext.world}
           playerPosition={fieldPlayerPosition}
           progressiveMount={restoringSameSystemRuntime}
         />
-        <TreeField planetSize={planetSize} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={fieldPlayerPosition} />
+        {graphicsQuality.treeDensity > 0 && (
+          <TreeField
+            key={`trees-${graphicsProfile}-${graphicsQuality.treeDensity}-${graphicsQuality.treeMaxDistance}`}
+            planetSize={planetSize}
+            terrainSeed={terrainSeed}
+            planetProfile={planetProfile}
+            persistenceWorld={commandContext.world}
+            playerPosition={fieldPlayerPosition}
+          />
+        )}
         </ProfiledSystemSubsystem>
       )}
-      {visibleSystemFieldStage >= 5 && (
+      {visibleSystemFieldStage >= 5 && graphicsQuality.faunaDensity > 0 && (
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="fauna">
           <FaunaField
+            key={`fauna-${graphicsProfile}-${graphicsQuality.faunaDensity}-${graphicsQuality.faunaMaxDistance}`}
             terrainSeed={terrainSeed}
+            worldId={commandContext.world.worldId}
+            planetProfile={planetProfile}
             playerPosition={fieldPlayerPosition}
             planetSize={planetSize}
             progressiveMount={restoringSameSystemRuntime}
@@ -543,12 +823,20 @@ export default function EfficientScene({
       )}
       {visibleSystemFieldStage >= 6 && (
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="surface-details">
-        <SurfaceEffectField terrainSeed={terrainSeed} playerPosition={fieldPlayerPosition} />
+        {graphicsQuality.voxelEffectDensity > 0 && (
+          <SurfaceEffectField
+            key={`surface-effects-${graphicsProfile}-${graphicsQuality.voxelEffectDensity}-${graphicsQuality.voxelEffectMaxDistance}`}
+            terrainSeed={terrainSeed}
+            planetProfile={planetProfile}
+            playerPosition={fieldPlayerPosition}
+          />
+        )}
         <LooseStoneField commandContext={commandContext} terrainSeed={terrainSeed} persistenceWorld={commandContext.world} playerPosition={fieldPlayerPosition} />
         {!storyPreAwakened && (
           <ForageField
             commandContext={commandContext}
             terrainSeed={terrainSeed}
+            planetProfile={planetProfile}
             persistenceWorld={commandContext.world}
             playerPosition={fieldPlayerPosition}
             allowDeadwood={!story.active}
@@ -559,21 +847,32 @@ export default function EfficientScene({
       <PlayerTorch playerPosition={playerPosition} />
       {visibleSystemFieldStage >= 2 && (
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="structures">
-        <Campfires terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />
+        <Campfires
+          terrainSeed={terrainSeed}
+          persistenceWorld={commandContext.world}
+          hydrationPrerequisite={debugCampfirePrerequisite}
+        />
         <StructureField terrainSeed={terrainSeed} persistenceWorld={commandContext.world} />
         <BuildGhost />
         </ProfiledSystemSubsystem>
       )}
       {visibleSystemFieldStage >= 1 && (
         <ProfiledSystemSubsystem enabled={profileSystemTravel} id="water">
-          <WaterBlocks planetSize={planetSize} terrainSeed={terrainSeed} worldId={commandContext.world.worldId} />
+          <WaterBlocks
+            planetSize={planetSize}
+            terrainSeed={terrainSeed}
+            worldId={commandContext.world.worldId}
+            planetProfile={planetProfile}
+          />
         </ProfiledSystemSubsystem>
       )}
       {/* Underwater: the surface-seen-from-below dome + near-field marine snow /
           bubbles. Both self-gate on submergence (invisible above water) and on
           the underwater graphics knobs, so they're cheap to leave mounted. */}
       <UnderwaterDome />
-      <UnderwaterParticles />
+      {graphicsQuality.underwaterParticles && (
+        <UnderwaterParticles key={`underwater-particles-${graphicsProfile}`} />
+      )}
     </Physics>
   );
 }

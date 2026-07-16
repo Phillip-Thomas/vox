@@ -49,6 +49,7 @@ export type MultiplayerServerMessage =
   | { type: 'room_joined'; roomId: string; inviteCode: string; playerId: string; worldId: string }
   | { type: 'room_roster'; roomId: string; players: MultiplayerRoomPlayer[] }
   | { type: 'world_snapshot'; roomId: string; worldId: string; seq: number; snapshot: JsonObject }
+  | { type: 'resume_state'; roomId: string; worldId: string; seq: number; state: JsonObject }
   | { type: 'snapshot_chunk'; roomId: string; worldId: string; seq: number; index: number; total: number; chunk: JsonObject }
   | { type: 'party_warp'; roomId: string; worldId: string; seq: number; handoff: MultiplayerPartyWarpHandoff }
   | { type: 'world_event'; roomId: string; worldId: string; seq: number; event: unknown }
@@ -195,6 +196,11 @@ export function isMultiplayerServerMessage(value: unknown): value is Multiplayer
         && typeof value.worldId === 'string'
         && Number.isInteger(value.seq)
         && isObject(value.snapshot);
+    case 'resume_state':
+      return typeof value.roomId === 'string'
+        && typeof value.worldId === 'string'
+        && Number.isInteger(value.seq)
+        && isObject(value.state);
     case 'snapshot_chunk':
       return typeof value.roomId === 'string'
         && typeof value.worldId === 'string'

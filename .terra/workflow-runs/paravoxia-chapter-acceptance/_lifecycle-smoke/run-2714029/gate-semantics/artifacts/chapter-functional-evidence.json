@@ -1,0 +1,21 @@
+{
+  "manualPath": {
+    "status": "pass"
+  },
+  "moviePath": {
+    "status": "pass"
+  },
+  "coldRunsRequired": 3,
+  "coldRunRequirementSatisfied": true,
+  "timeoutRescues": 0,
+  "everyChildSceneReached": true,
+  "deepLinkAndResume": {
+    "status": "pass"
+  },
+  "pauseFocusQuitCompletionReset": {
+    "status": "pass"
+  },
+  "optionalAndEarlyActions": {
+    "status": "pass"
+  }
+}

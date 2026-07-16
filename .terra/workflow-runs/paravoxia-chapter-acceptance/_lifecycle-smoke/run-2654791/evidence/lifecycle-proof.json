@@ -1,0 +1,22 @@
+{
+  "schema": "terra.chapterAcceptanceLifecycleProof.v1",
+  "workflowSpecRef": "paravoxia-chapter-acceptance@v1",
+  "runId": "paravoxia-chapter-acceptance-workflow-smoke",
+  "synthetic": true,
+  "targetChapter": "ch5",
+  "realAcceptanceEvidenceGenerated": false,
+  "acceptanceArtifactsGenerated": false,
+  "reviewArtifactsGenerated": false,
+  "registryCommandExecuted": true,
+  "acceptanceCommandExecuted": false,
+  "acceptanceCommandInvocationSerialized": true,
+  "callerControlledArtifactRedirectRejected": true,
+  "callerControlledCandidateRevisionRejected": true,
+  "bindingValidation": "passed",
+  "roleInvocationMode": "dry_run",
+  "stoppedAtStep": "lock-chapter-acceptance",
+  "blockingArtifact": "chapter-acceptance-lock",
+  "blockingReason": "Real exact-revision authority, signed council and scene records, neighboring context, and chapter evidence were intentionally not supplied.",
+  "checkedGate": "acceptance-scope-read-only",
+  "checkedAt": "2026-07-15T20:04:09.710Z"
+}

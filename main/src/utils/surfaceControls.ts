@@ -58,6 +58,42 @@ export const JETPACK_THRUST = 16; // upward accel while held (u/s^2)
 export const JETPACK_MAX_FUEL = 1.4; // seconds of continuous thrust
 export const JETPACK_REFILL_RATE = 0.8; // fuel/sec refilled while grounded
 export const JETPACK_MAX_UP_SPEED = 7; // clamp climb rate so it's a hover, not a rocket
+export const JETPACK_GROUNDED_DEPARTURE_MIN_UP_SPEED = 0.5;
+
+export interface JetpackGroundingDecision {
+  allowThrust: boolean;
+  refill: boolean;
+  retainLaunchAuthorization: boolean;
+}
+
+/**
+ * A ray-based grounded probe can remain true for the first sample after a real
+ * jump, especially under a slow renderer. Preserve hold-to-thrust when the body
+ * already carries unmistakable jump-speed motion away from the surface. A
+ * stale held key on a stationary grounded body still cannot start the jetpack,
+ * and the ground impulse keeps priority on the press frame itself.
+ */
+export function resolveJetpackGrounding(
+  grounded: boolean,
+  jumpHeld: boolean,
+  launchAuthorized: boolean,
+  upSpeed: number
+): JetpackGroundingDecision {
+  const departing = grounded
+    && jumpHeld
+    && launchAuthorized
+    && Number.isFinite(upSpeed)
+    && upSpeed > JETPACK_GROUNDED_DEPARTURE_MIN_UP_SPEED;
+  return {
+    allowThrust: jumpHeld && (!grounded || departing),
+    // Water contact is not support. An unsupported swimmer must never gain an
+    // infinite refill by releasing jump; only the real ground probe can refill
+    // the tank. A dry-bank rearm still has a positive fuel margin because its
+    // release pulse is longer than the preceding bounded thrust pulse.
+    refill: grounded && !departing,
+    retainLaunchAuthorization: departing
+  };
+}
 
 // --- Swimming (underwater 6-DOF) ---------------------------------------------
 // Submerged movement is a SEPARATE model from walking: full 3D (swim toward the
@@ -69,6 +105,85 @@ export const SWIM_ACCEL = 6;            // responsiveness toward the swim wish (
 export const SWIM_BUOYANCY_RISE = 1.2;  // idle upward drift speed (u/s) — slow rise to surface
 export const SWIM_BUOYANCY_ACCEL = 1.6; // how fast idle velocity approaches the buoyant rise
 export const SWIM_MAX_RISE = 2.0;       // clamp passive upward speed so floating up is gentle, not a pop
+// Eye-only immersion reaches zero while the capsule's feet can still be floating
+// beside a raised bank. Keep enough of the ordinary swim model to make a real
+// forward + ascend stroke move the unsupported body out of that waterline pocket.
+export const SHALLOW_UNSUPPORTED_SWIM_FACTOR = 0.6;
+export const DRY_STEP_ASSIST_MAX_FLUID_IMMERSION = 0.001;
+export const FLUID_MANTLE_MIN_IMMERSION = 0.05;
+
+/**
+ * Effective water blend for the body controller. Eye immersion remains the
+ * primary 0..1 signal. Feet-only water contact extends it only while the body
+ * has no physical support and is not deliberately diving; dry/grounded movement
+ * and the normal descend stroke are therefore unchanged.
+ */
+export function resolveWaterSwimFactor(
+  waterSubmergence: number,
+  feetInWater: boolean,
+  physicallySupported: boolean,
+  descendingInWater: boolean
+): number {
+  const eyeFactor = THREE.MathUtils.clamp(
+    (Number.isFinite(waterSubmergence) ? waterSubmergence : 0) / 0.5,
+    0,
+    1
+  );
+  if (!feetInWater || physicallySupported || descendingInWater) return eyeFactor;
+  return Math.max(eyeFactor, SHALLOW_UNSUPPORTED_SWIM_FACTOR);
+}
+
+/**
+ * Dry step-up must release at the first material fluid contact. Keeping it
+ * active through the smoothed water/lava entry ramp adds an upward impulse at
+ * the exact moment a body is trying to descend into a liquid voxel.
+ */
+export function shouldApplyDryStepAssist(
+  grounded: boolean,
+  waterSubmergence: number,
+  lavaImmersion: number
+): boolean {
+  if (!grounded) return false;
+  return Math.max(
+    Number.isFinite(waterSubmergence) ? waterSubmergence : 0,
+    Number.isFinite(lavaImmersion) ? lavaImmersion : 0
+  ) <= DRY_STEP_ASSIST_MAX_FLUID_IMMERSION;
+}
+
+/**
+ * A fluid mantle is an EXIT assist. Water descent input must always win over
+ * it; otherwise a coarse/low-FPS sample can see a walkable shore lip while the
+ * player is deliberately diving and launch the capsule back out of the pond.
+ * Lava keeps its struggle-out behavior because it has no descend/swim mode.
+ */
+export function shouldApplyFluidMantle(
+  waterSubmergence: number,
+  lavaImmersion: number,
+  descendingInWater: boolean,
+  feetInWater = false
+): boolean {
+  const water = Number.isFinite(waterSubmergence) ? waterSubmergence : 0;
+  const lava = Number.isFinite(lavaImmersion) ? lavaImmersion : 0;
+  if (lava > FLUID_MANTLE_MIN_IMMERSION) return true;
+  return (water > FLUID_MANTLE_MIN_IMMERSION || feetInWater) && !descendingInWater;
+}
+
+export interface FluidMantleLandingSafety {
+  feetInWater: boolean;
+  feetOnHazard: boolean;
+}
+
+/**
+ * A mantle may only assist a transition OUT of fluid. The obstacle rays prove
+ * that a ledge is physically walkable; this semantic check separately proves
+ * that the projected lower-sphere cell is dry and non-hazardous.
+ */
+export function isFluidMantleLandingSafe({
+  feetInWater,
+  feetOnHazard
+}: FluidMantleLandingSafety): boolean {
+  return !feetInWater && !feetOnHazard;
+}
 
 export interface SwimInput {
   forward: boolean;

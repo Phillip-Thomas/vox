@@ -1,0 +1,924 @@
+{
+  "schema": "terra.workflowRun.v1",
+  "id": "paravoxia-chapter-acceptance-workflow-smoke",
+  "workflowSpecRef": "paravoxia-chapter-acceptance@v1",
+  "sourceSpec": "docs/architecture/workflow-orchestration/examples/paravoxia-chapter-acceptance.workflow.json",
+  "status": "blocked",
+  "currentStep": "lock-chapter-acceptance",
+  "createdAt": "2026-07-15T19:51:22.878Z",
+  "updatedAt": "2026-07-15T19:51:23.424Z",
+  "inputs": {
+    "user-request": "Lifecycle wiring proof only; do not perform or claim chapter acceptance.",
+    "target-repo": ".",
+    "target-chapter": "ch5",
+    "candidate-revision": "fixture-revision-without-real-evidence",
+    "production-authority": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+    "chapter-registry": "main/chapter-registry.json",
+    "signed-council-authority": "fixture://missing-signed-council-authority",
+    "signed-scene-authority": "fixture://missing-signed-scene-authority",
+    "previous-chapter-context": "fixture://missing-previous-chapter-context",
+    "next-chapter-context": "fixture://missing-next-chapter-context"
+  },
+  "steps": [
+    {
+      "id": "lock-chapter-acceptance",
+      "title": "Lock Exact Read-Only Chapter Acceptance Scope",
+      "type": "model_task",
+      "roleContractRef": "chapter-acceptance-orchestrator",
+      "status": "blocked",
+      "gatesBefore": [],
+      "gatesAfter": [
+        "acceptance-scope-read-only"
+      ],
+      "outputs": [
+        "chapter-acceptance-lock"
+      ]
+    },
+    {
+      "id": "inventory-chapter-authority",
+      "title": "Inventory Registry Candidate Council Scene And Neighbor Authority",
+      "type": "deterministic_check",
+      "roleContractRef": "story-inventory-verifier",
+      "status": "pending",
+      "gatesBefore": [
+        "acceptance-scope-read-only"
+      ],
+      "gatesAfter": [
+        "registry-and-authority-bound"
+      ],
+      "outputs": [
+        "chapter-acceptance-manifest",
+        "chapter-registry-report",
+        "council-authority-bundle",
+        "scene-authority-bundle",
+        "implementation-diff",
+        "shipped-ux-baseline"
+      ]
+    },
+    {
+      "id": "check-council-compliance",
+      "title": "Check Bidirectional Council And Scene Authority Compliance",
+      "type": "deterministic_check",
+      "roleContractRef": "story-inventory-verifier",
+      "status": "pending",
+      "gatesBefore": [
+        "registry-and-authority-bound"
+      ],
+      "gatesAfter": [
+        "council-compliance-passes"
+      ],
+      "outputs": [
+        "council-compliance-matrix"
+      ]
+    },
+    {
+      "id": "map-implementation-conformance",
+      "title": "Map Implemented Code State Progression And Tests To Signed Authority",
+      "type": "deterministic_check",
+      "roleContractRef": "mechanical-verifier",
+      "status": "pending",
+      "gatesBefore": [
+        "registry-and-authority-bound",
+        "council-compliance-passes"
+      ],
+      "gatesAfter": [
+        "implementation-correctness-proven"
+      ],
+      "outputs": [
+        "chapter-implementation-map",
+        "check-results",
+        "validation-report"
+      ]
+    },
+    {
+      "id": "run-chapter-functional-proof",
+      "title": "Run Full Manual Movie Resume Reset And Player-Behavior Chapter Proof",
+      "type": "tool_task",
+      "roleContractRef": "mechanical-verifier",
+      "status": "pending",
+      "gatesBefore": [
+        "implementation-correctness-proven"
+      ],
+      "gatesAfter": [
+        "chapter-functional-proof-complete"
+      ],
+      "outputs": [
+        "chapter-mechanical-evidence",
+        "chapter-functional-evidence",
+        "verification-report",
+        "objective-lifecycle-evidence",
+        "check-results"
+      ]
+    },
+    {
+      "id": "capture-chapter-boundary-and-av",
+      "title": "Capture Previous Target Next Boundary And Continuous Audiovisual Evidence",
+      "type": "artifact_collection",
+      "roleContractRef": "mechanical-verifier",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-functional-proof-complete"
+      ],
+      "gatesAfter": [
+        "chapter-boundary-proof-complete",
+        "chapter-audiovisual-proof-complete"
+      ],
+      "outputs": [
+        "chapter-boundary-continuity-evidence",
+        "screenshot-report",
+        "audio-report",
+        "raw-audiovisual-evidence",
+        "evidence-registry"
+      ]
+    },
+    {
+      "id": "audit-narrative",
+      "title": "Audit Narrative Council Agency And Boundary Compliance",
+      "type": "review",
+      "roleContractRef": "narrative-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-functional-proof-complete",
+        "chapter-boundary-proof-complete",
+        "chapter-audiovisual-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "story-audit"
+      ]
+    },
+    {
+      "id": "audit-score",
+      "title": "Audit Score Mix Motif Cue And Boundary Continuity",
+      "type": "review",
+      "roleContractRef": "score-continuity-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-functional-proof-complete",
+        "chapter-boundary-proof-complete",
+        "chapter-audiovisual-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "score-audit"
+      ]
+    },
+    {
+      "id": "audit-cinematography",
+      "title": "Audit Image Lens Palette Effects And Boundary Continuity",
+      "type": "review",
+      "roleContractRef": "cinematography-continuity-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-boundary-proof-complete",
+        "chapter-audiovisual-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "cinematography-audit"
+      ]
+    },
+    {
+      "id": "audit-player-experience",
+      "title": "Audit Objective Guidance Accessibility Agency And Reconstruction",
+      "type": "review",
+      "roleContractRef": "player-experience-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-functional-proof-complete",
+        "chapter-boundary-proof-complete",
+        "chapter-audiovisual-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "ux-audit"
+      ]
+    },
+    {
+      "id": "blind-chapter-review",
+      "title": "Run Blind First-Time Chapter Audiovisual Review",
+      "type": "review",
+      "roleContractRef": "blind-scene-viewer",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-audiovisual-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "naive-audience-report"
+      ]
+    },
+    {
+      "id": "audit-implementation-correctness",
+      "title": "Audit Implementation Correctness Independently From Mechanical Checks",
+      "type": "review",
+      "roleContractRef": "implementation-correctness-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "implementation-correctness-proven",
+        "chapter-functional-proof-complete"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "implementation-correctness-audit"
+      ]
+    },
+    {
+      "id": "verify-independent-review-integrity",
+      "title": "Verify Six Review Artifacts Sessions Isolation And Source Hashes",
+      "type": "deterministic_check",
+      "roleContractRef": "artifact-quality-auditor",
+      "status": "pending",
+      "gatesBefore": [],
+      "gatesAfter": [
+        "independent-chapter-reviews-complete"
+      ],
+      "outputs": [
+        "independent-review-integrity-report"
+      ]
+    },
+    {
+      "id": "moderate-independent-reviews",
+      "title": "Critique Independent Chapter Reviews And Compile Canonical Defects",
+      "type": "review",
+      "roleContractRef": "review-moderator",
+      "status": "pending",
+      "gatesBefore": [
+        "independent-chapter-reviews-complete"
+      ],
+      "gatesAfter": [
+        "canonical-defects-complete"
+      ],
+      "outputs": [
+        "critic-report",
+        "defect-register"
+      ]
+    },
+    {
+      "id": "judge-chapter-cohesion",
+      "title": "Judge Whole-Chapter Story Score Image UX Function And Boundary Cohesion",
+      "type": "review",
+      "roleContractRef": "cohesion-judge",
+      "status": "pending",
+      "gatesBefore": [
+        "canonical-defects-complete"
+      ],
+      "gatesAfter": [
+        "no-blocking-defects",
+        "cohesion-score-passes"
+      ],
+      "outputs": [
+        "cohesion-judge-report",
+        "final-scorecard"
+      ]
+    },
+    {
+      "id": "emit-bounded-repair-commission",
+      "title": "Emit Evidence-Bound Repair Commission Without Patching",
+      "type": "artifact_collection",
+      "roleContractRef": "chapter-acceptance-orchestrator",
+      "status": "pending",
+      "gatesBefore": [],
+      "gatesAfter": [],
+      "outputs": [
+        "repair-commission"
+      ]
+    },
+    {
+      "id": "record-headed-taste",
+      "title": "Record Conditional Headed Real-GPU And Audible Human Taste",
+      "type": "human_decision",
+      "roleContractRef": "human-approver",
+      "status": "pending",
+      "gatesBefore": [
+        "no-blocking-defects",
+        "cohesion-score-passes"
+      ],
+      "gatesAfter": [],
+      "outputs": [
+        "human-decision"
+      ]
+    },
+    {
+      "id": "audit-chapter-acceptance-artifacts",
+      "title": "Audit Chapter Acceptance Artifact Quality Revision Binding And Optional Human Provenance",
+      "type": "deterministic_check",
+      "roleContractRef": "artifact-quality-auditor",
+      "status": "pending",
+      "gatesBefore": [
+        "canonical-defects-complete"
+      ],
+      "gatesAfter": [
+        "human-taste-disposition-valid",
+        "acceptance-artifact-quality-passes"
+      ],
+      "outputs": [
+        "chapter-acceptance-quality-report"
+      ]
+    },
+    {
+      "id": "finalize-chapter-acceptance",
+      "title": "Bind Final Council-Owned Chapter Acceptance Repair Or Blocked Disposition",
+      "type": "artifact_collection",
+      "roleContractRef": "chapter-acceptance-orchestrator",
+      "status": "pending",
+      "gatesBefore": [
+        "canonical-defects-complete",
+        "human-taste-disposition-valid",
+        "acceptance-artifact-quality-passes"
+      ],
+      "gatesAfter": [
+        "chapter-acceptance-decision-valid"
+      ],
+      "outputs": [
+        "chapter-acceptance-report"
+      ]
+    },
+    {
+      "id": "record-lessons",
+      "title": "Record Acceptance Summary And Reusable Chapter Lessons",
+      "type": "artifact_collection",
+      "roleContractRef": "lessons-recorder",
+      "status": "pending",
+      "gatesBefore": [
+        "chapter-acceptance-decision-valid"
+      ],
+      "gatesAfter": [
+        "acceptance-lessons-recorded"
+      ],
+      "outputs": [
+        "run-summary",
+        "lessons-learned"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "slug": "chapter-acceptance-lock",
+      "format": "json",
+      "required": true,
+      "producerStep": "lock-chapter-acceptance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-acceptance-manifest",
+      "format": "json",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-registry-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "council-authority-bundle",
+      "format": "json",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "scene-authority-bundle",
+      "format": "json",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "implementation-diff",
+      "format": "diff",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "shipped-ux-baseline",
+      "format": "json",
+      "required": true,
+      "producerStep": "inventory-chapter-authority",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "council-compliance-matrix",
+      "format": "json",
+      "required": true,
+      "producerStep": "check-council-compliance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-implementation-map",
+      "format": "json",
+      "required": true,
+      "producerStep": "map-implementation-conformance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "check-results",
+      "format": "command_result",
+      "required": true,
+      "producerStep": "map-implementation-conformance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "validation-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "map-implementation-conformance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-mechanical-evidence",
+      "format": "json",
+      "required": true,
+      "producerStep": "run-chapter-functional-proof",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-functional-evidence",
+      "format": "json",
+      "required": true,
+      "producerStep": "run-chapter-functional-proof",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "verification-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "run-chapter-functional-proof",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "objective-lifecycle-evidence",
+      "format": "json",
+      "required": true,
+      "producerStep": "run-chapter-functional-proof",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-boundary-continuity-evidence",
+      "format": "json",
+      "required": true,
+      "producerStep": "capture-chapter-boundary-and-av",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "screenshot-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "capture-chapter-boundary-and-av",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "audio-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "capture-chapter-boundary-and-av",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "raw-audiovisual-evidence",
+      "format": "json",
+      "required": true,
+      "producerStep": "capture-chapter-boundary-and-av",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "evidence-registry",
+      "format": "json",
+      "required": true,
+      "producerStep": "capture-chapter-boundary-and-av",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "story-audit",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "audit-narrative",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "score-audit",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "audit-score",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "cinematography-audit",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "audit-cinematography",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "ux-audit",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "audit-player-experience",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "naive-audience-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "blind-chapter-review",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "implementation-correctness-audit",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "audit-implementation-correctness",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "independent-review-integrity-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "verify-independent-review-integrity",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "critic-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "moderate-independent-reviews",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "defect-register",
+      "format": "json",
+      "required": true,
+      "producerStep": "moderate-independent-reviews",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "cohesion-judge-report",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "judge-chapter-cohesion",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "final-scorecard",
+      "format": "json",
+      "required": true,
+      "producerStep": "judge-chapter-cohesion",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "human-decision",
+      "format": "json",
+      "required": false,
+      "producerStep": "record-headed-taste",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "repair-commission",
+      "format": "json",
+      "required": false,
+      "producerStep": "emit-bounded-repair-commission",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-acceptance-quality-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "audit-chapter-acceptance-artifacts",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "chapter-acceptance-report",
+      "format": "json",
+      "required": true,
+      "producerStep": "finalize-chapter-acceptance",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "run-summary",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "record-lessons",
+      "status": "missing",
+      "path": null
+    },
+    {
+      "slug": "lessons-learned",
+      "format": "markdown",
+      "required": true,
+      "producerStep": "record-lessons",
+      "status": "missing",
+      "path": null
+    }
+  ],
+  "evidenceBundles": [
+    {
+      "schema": "terra.evidenceBundle.v1",
+      "id": "evidence.command.chapter-registry-check.20260715T195123035Z",
+      "kind": "command_result",
+      "createdByStep": "lock-chapter-acceptance",
+      "artifactRefs": [],
+      "commandRefs": [
+        "evidence/commands/chapter-registry-check-20260715T195123035Z.json"
+      ],
+      "summary": {
+        "commandId": "chapter-registry-check",
+        "status": "passed",
+        "exitCode": 0
+      }
+    },
+    {
+      "schema": "terra.evidenceBundle.v1",
+      "id": "evidence.command.chapter-acceptance-check.dry-run",
+      "kind": "command_serialization",
+      "createdByStep": "lock-chapter-acceptance",
+      "artifactRefs": [],
+      "commandRefs": [
+        "evidence/commands/chapter-acceptance-check-dry-run.json"
+      ],
+      "summary": {
+        "commandId": "chapter-acceptance-check",
+        "targetChapter": "ch5",
+        "executed": false,
+        "acceptanceEvidenceClaimed": false
+      }
+    },
+    {
+      "schema": "terra.evidenceBundle.v1",
+      "id": "evidence.chapter-acceptance-workflow-smoke",
+      "kind": "runtime_trace",
+      "createdByStep": "lock-chapter-acceptance",
+      "artifactRefs": [],
+      "summary": {
+        "path": "evidence/lifecycle-proof.json",
+        "synthetic": true,
+        "realAcceptanceEvidenceGenerated": false,
+        "expectedBlockedDisposition": true
+      }
+    }
+  ],
+  "gateResults": [
+    {
+      "schema": "terra.gateResult.v1",
+      "gateId": "acceptance-scope-read-only",
+      "title": "Acceptance is bound to one exact revision and cannot patch or publish",
+      "type": "resource_policy_allowed",
+      "status": "failed",
+      "blocking": true,
+      "evidenceRefs": [
+        "chapter-acceptance-lock",
+        "chapter-acceptance-lock",
+        "chapter-acceptance-lock",
+        "chapter-acceptance-lock",
+        "chapter-acceptance-lock"
+      ],
+      "blockingReasons": [
+        "Artifact chapter-acceptance-lock is missing."
+      ],
+      "checkedAt": "2026-07-15T19:51:23.419Z"
+    }
+  ],
+  "humanDecisions": [],
+  "scorecards": [],
+  "defects": [],
+  "adapterBindings": [
+    {
+      "requirementId": "acceptance-reasoning-runner",
+      "family": "model_adapter",
+      "requiredCapabilities": [
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output",
+        "independent_role_sessions"
+      ],
+      "status": "bound",
+      "binding": {
+        "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+        "adapterSlug": "env-configured-chapter-acceptance-reasoner",
+        "family": "model_adapter",
+        "surface": "local_developer_runtime",
+        "capabilities": [
+          "long_context_reasoning",
+          "structured_markdown_output",
+          "structured_json_output",
+          "independent_role_sessions"
+        ]
+      }
+    },
+    {
+      "requirementId": "acceptance-tool-runner",
+      "family": "tool_adapter",
+      "requiredCapabilities": [
+        "repo_reference_scan",
+        "safe_command_run",
+        "command_result_capture",
+        "artifact_hash",
+        "browser_render",
+        "screenshot_matrix",
+        "audio_render",
+        "performance_trace"
+      ],
+      "status": "bound",
+      "binding": {
+        "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+        "adapterSlug": "paravoxia-chapter-acceptance-safe-tools",
+        "family": "tool_adapter",
+        "surface": "local_developer_runtime",
+        "capabilities": [
+          "repo_reference_scan",
+          "safe_command_run",
+          "command_result_capture",
+          "artifact_hash",
+          "browser_render",
+          "screenshot_matrix",
+          "audio_render",
+          "performance_trace"
+        ]
+      }
+    },
+    {
+      "requirementId": "acceptance-artifact-store",
+      "family": "artifact_adapter",
+      "requiredCapabilities": [
+        "artifact_read",
+        "artifact_write",
+        "binary_evidence_store",
+        "artifact_bundle_export"
+      ],
+      "status": "bound",
+      "binding": {
+        "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+        "adapterSlug": "paravoxia-chapter-acceptance-filesystem-artifacts",
+        "family": "artifact_adapter",
+        "surface": "local_developer_runtime",
+        "capabilities": [
+          "artifact_read",
+          "artifact_write",
+          "binary_evidence_store",
+          "artifact_bundle_export"
+        ]
+      }
+    },
+    {
+      "requirementId": "acceptance-review-runner",
+      "family": "review_adapter",
+      "requiredCapabilities": [
+        "independent_review",
+        "approve",
+        "reject",
+        "route_operator_taste_decision",
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output"
+      ],
+      "status": "bound",
+      "binding": {
+        "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+        "adapterSlug": "env-configured-independent-chapter-reviewer",
+        "family": "review_adapter",
+        "surface": "local_developer_runtime",
+        "capabilities": [
+          "independent_review",
+          "approve",
+          "reject",
+          "route_operator_taste_decision",
+          "long_context_reasoning",
+          "structured_markdown_output",
+          "structured_json_output"
+        ]
+      }
+    },
+    {
+      "requirementId": "acceptance-human-decision-recorder",
+      "family": "review_adapter",
+      "requiredCapabilities": [
+        "human_operator_decision",
+        "identity_attestation",
+        "headed_taste_evidence_link",
+        "audible_playback_attestation",
+        "structured_json_output"
+      ],
+      "status": "bound",
+      "binding": {
+        "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+        "adapterSlug": "operator-recorded-chapter-taste-decision",
+        "family": "review_adapter",
+        "surface": "local_developer_runtime",
+        "capabilities": [
+          "human_operator_decision",
+          "identity_attestation",
+          "headed_taste_evidence_link",
+          "audible_playback_attestation",
+          "structured_json_output"
+        ]
+      }
+    }
+  ],
+  "finalDisposition": {
+    "schema": "terra.finalDisposition.v1",
+    "decision": "blocked",
+    "actor": "paravoxia-chapter-acceptance-workflow-smoke",
+    "decidedAt": "2026-07-15T19:51:23.424Z",
+    "summary": "Spec, bindings, safe registry execution, role dry-run serialization, target-aware acceptance-command serialization, persistence, and the first gate were exercised. No acceptance or review artifact was fabricated; the run remains blocked pending real signed authority and exact-revision evidence."
+  },
+  "bindingValidation": {
+    "schema": "terra.adapterBindingValidation.v1",
+    "status": "passed",
+    "bindingSetRef": "paravoxia-chapter-acceptance-local@v1",
+    "checkedAt": "2026-07-15T19:51:22.883Z"
+  },
+  "roleInvocations": [
+    {
+      "schema": "terra.roleInvocationRecord.v1",
+      "id": "role-lock-chapter-acceptance-20260715T195122957Z",
+      "stepId": "lock-chapter-acceptance",
+      "adapterId": "acceptance-analysis",
+      "resultPath": "evidence/roles/role-lock-chapter-acceptance-20260715T195122957Z.dry-run.json",
+      "status": "dry_run",
+      "createdAt": "2026-07-15T19:51:22.957Z"
+    }
+  ],
+  "commandResults": [
+    {
+      "schema": "terra.commandResult.v1",
+      "id": "chapter-registry-check",
+      "title": "Validate the Paravoxia chapter registry",
+      "resultKey": "chapterRegistryCheck",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "chapter:registry:check"
+      ],
+      "status": "passed",
+      "exitCode": 0,
+      "timedOut": false,
+      "stdout": "\n> voxel-game@0.1.0 chapter:registry:check\n> node tools/chapter-registry-gate.mjs\n\nChapter registry gate passed: 3167 checks\n",
+      "stderr": "",
+      "evidencePath": "evidence/commands/chapter-registry-check-20260715T195123035Z.json",
+      "startedAt": "2026-07-15T19:51:23.035Z",
+      "finishedAt": "2026-07-15T19:51:23.214Z"
+    }
+  ],
+  "checkResults": {
+    "chapterRegistryCheck": true
+  },
+  "commandDryRuns": [
+    {
+      "schema": "terra.commandDryRun.v1",
+      "id": "chapter-acceptance-check",
+      "resultKey": "chapterAcceptanceCheck",
+      "status": "dry_run",
+      "targetChapter": "ch5",
+      "executed": false,
+      "callerControlledArtifactRedirectRejected": true,
+      "evidencePath": "evidence/commands/chapter-acceptance-check-dry-run.json"
+    }
+  ],
+  "lifecycleProof": {
+    "path": "evidence/lifecycle-proof.json",
+    "synthetic": true,
+    "realAcceptanceEvidenceGenerated": false,
+    "reviewArtifactsGenerated": false
+  }
+}

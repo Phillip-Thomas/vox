@@ -34,6 +34,11 @@ import {
   predictPosition,
   removeInwardVelocity,
   reprojectVelocityOntoFace,
+  isFluidMantleLandingSafe,
+  shouldApplyDryStepAssist,
+  shouldApplyFluidMantle,
+  resolveJetpackGrounding,
+  resolveWaterSwimFactor,
   transitionVelocityAcrossEdge,
   transportControlFrame,
   updateJumpState,
@@ -45,6 +50,10 @@ import { resolveSurfaceFrame } from '../utils/surfaceResolver';
 import { smoothUpForPosition } from '../utils/gravityField';
 import { getPlayerLook, getPlayerUp, setPlayerUp, setPlayerWorldPosition } from '../state/playerFrame';
 import { setPlayerSubmerged, setCameraSubmersion } from '../state/playerSubmersion';
+import {
+  resetLocalPlayerSurfaceContact,
+  setLocalPlayerSurfaceContact
+} from '../state/playerSurfaceContact.ts';
 import { setLocalLavaImmersion, resetLavaImmersion } from '../state/playerLavaImmersion';
 import {
   EDGE_HYSTERESIS,
@@ -87,7 +96,7 @@ import {
   type SurvivalEnvironment
 } from '../game/systems/survivalVitals';
 import { getWaterskinFill } from '../game/systems/consumeSystem';
-import { EDIBLE_ITEM_IDS } from '../game/data/items';
+import { EDIBLE_ITEM_IDS, type ItemId } from '../game/data/items';
 import { getItemCount } from '../game/systems/inventorySystem';
 import { getWorldGen } from '../utils/worldGenCache';
 import {
@@ -121,8 +130,9 @@ import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
 import { getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
-import { BLOCKS } from '../game/data/blocks.ts';
+import { BLOCKS, type BlockId } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
+import { commitMawHarmlessTestFromAcceptedMine } from '../story/emergentMawRepair.ts';
 import { isMapViewOpen, syncChartScreenUp, resetChartFrame } from '../game/mapView.ts';
 import { tickSenseDiscovery } from '../story/senseDiscovery.ts';
 import { consumePlayerNudge } from '../story/playerNudge.ts';
@@ -132,6 +142,21 @@ import { consumeSurvivalRecoveryRequest } from '../game/systems/survivalRecovery
 import { localDaylight } from '../utils/dayNight.ts';
 import { getSunDirection } from './SkyController.tsx';
 import { getStoryStateSnapshot } from '../story/storyState.ts';
+import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
+import {
+  isStoryJetInstalled,
+  isStoryOxygenOnline
+} from '../story/emergentCapabilities.ts';
+import {
+  invalidateAuthoredDiveMotionContinuity,
+  tickAuthoredDive
+} from '../story/emergentDive.ts';
+import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import {
+  needsAutomatedFirstHover,
+  observeFirstLegalHover
+} from '../story/reconstructionEmbodiment.ts';
+import { isPhysicalBoardingInputLocked } from '../story/physicalBoarding.ts';
 
 const _zeroVelocity = new THREE.Vector3();
 
@@ -156,6 +181,7 @@ function withAutopilot<T extends Record<string, boolean | undefined>>(controls: 
     left: controls.left || a.left,
     right: controls.right || a.right,
     jump: controls.jump || a.jump,
+    descend: controls.descend || a.descend,
     sprint: controls.sprint || a.sprint,
     delete: controls.delete || a.delete,
     interact: controls.interact || a.interact
@@ -253,9 +279,12 @@ const LAVA_OUT_RATE = 4;
 const LAVA_DEEP = 0.5;
 const _feet = new THREE.Vector3(); // per-step lava feet-cell test scratch
 const _lavaBottom = new THREE.Vector3(); // capsule bottom-tip probe (lava bed lock)
+const _fluidMantleForward = new THREE.Vector3();
+const _fluidMantleLandingFeet = new THREE.Vector3();
 const STEP_UP_HEIGHT = VOXEL_SCALE;
 const STEP_PROBE_FORWARD = PLAYER_CAPSULE_RADIUS + 1.15;
 const STEP_PROBE_LOW_OFFSET = -0.6;
+const FLUID_MANTLE_PROBE_LOW_OFFSET = -PLAYER_CAPSULE_HALF_HEIGHT;
 const STEP_ASSIST_UP_SPEED = STEP_UP_HEIGHT / 0.24;
 
 // Rotation taking oldUp -> newUp, robust for the ANTIPARALLEL case (top<->bottom
@@ -352,8 +381,15 @@ export default function EfficientPlayer({
   // Hold-to-mine accumulator: the voxel being mined (coord key), elapsed/needed
   // time, and when the last chip sound played. Reset when the key is released,
   // the crosshair leaves the voxel, or the block breaks.
-  const mineState = useRef<{ key: string | null; elapsed: number; duration: number; tickAt: number; usesCharge: boolean }>(
-    { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false }
+  const mineState = useRef<{
+    key: string | null;
+    elapsed: number;
+    duration: number;
+    tickAt: number;
+    usesCharge: boolean;
+    toolId: ItemId | null;
+  }>(
+    { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false, toolId: null }
   );
   // Build mode uses EDGE presses (place once per press), not hold.
   const prevBuildKey = useRef(false);
@@ -369,6 +405,7 @@ export default function EfficientPlayer({
   const lastGrounded = useRef(false);
   const lastGroundedNotification = useRef<boolean | null>(null);
   const lastJetpackActive = useRef(false);
+  const jetpackLaunchAuthorized = useRef(false);
   const lastOnLadder = useRef(false);
   const jumpState = useRef<JumpState>({
     isGrounded: false,
@@ -379,7 +416,10 @@ export default function EfficientPlayer({
   // Submersion: the live water classifier (same singleton WaterBlocks renders from)
   // + a smoothed 0..1 of how far the EYE is underwater. Drives the swim physics
   // branch and is published to playerSubmersion for audio / fog / post / particles.
-  const waterGen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
+  const waterGen = useMemo(
+    () => getWorldGen(planetSize, terrainSeed, commandContext.world.worldId).generator,
+    [commandContext.world.worldId, planetSize, terrainSeed]
+  );
   const liveSpawnTerrain = useMemo(() => ({
     shouldVoxelExist: (x: number, y: number, z: number) =>
       waterGen.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
@@ -404,8 +444,16 @@ export default function EfficientPlayer({
     daylight: 1,
     sheltered: false,
     nearFire: false,
-    warmthEnabled: false
+    warmthEnabled: false,
+    thermalBehavior: 'standard'
   });
+  const thermalBehavior = useMemo(
+    () => resolvePlanetProfile({
+      worldId: commandContext.world.worldId,
+      seed: terrainSeed
+    }).thermalBehavior,
+    [commandContext.world.worldId, terrainSeed]
+  );
 
   // World swaps remount the player: the settle flag must never leak between
   // worlds (the story director + autopilot hold on it).
@@ -464,6 +512,7 @@ export default function EfficientPlayer({
   useEffect(() => () => {
     setPlayerSubmerged(0, 0);
     setCameraSubmersion(0, 0);
+    resetLocalPlayerSurfaceContact();
     resetLavaImmersion();
   }, []);
 
@@ -510,15 +559,21 @@ export default function EfficientPlayer({
     return false;
   }, [rapier, world]);
 
-  const canStepUp = useCallback((position: THREE.Vector3, up: THREE.Vector3, moveDirection: THREE.Vector3) => {
+  const canStepUp = useCallback((
+    position: THREE.Vector3,
+    up: THREE.Vector3,
+    moveDirection: THREE.Vector3,
+    lowOffset = STEP_PROBE_LOW_OFFSET
+  ) => {
     const body = ref.current;
     if (!body || moveDirection.lengthSq() < 0.0001) return false;
 
     const forward = moveDirection.clone().normalize();
     const probeDistance = STEP_PROBE_FORWARD;
-    // Probe at shin height. The old center+lift ray could skim over a one-block
-    // ledge, especially while moving forward, making step-up feel asymmetric.
-    const lowOrigin = position.clone().addScaledVector(up, STEP_PROBE_LOW_OFFSET);
+    // Dry steps probe at shin height. A fluid mantle supplies the bottom-sphere
+    // offset so a capsule corner-hung at the waterline keeps seeing the bank
+    // until its inward tip has actually cleared the lip.
+    const lowOrigin = position.clone().addScaledVector(up, lowOffset);
     const highOrigin = lowOrigin.clone().addScaledVector(up, STEP_UP_HEIGHT);
     const lowRay = new rapier.Ray(vectorToRapier(lowOrigin), vectorToRapier(forward));
     const highRay = new rapier.Ray(vectorToRapier(highOrigin), vectorToRapier(forward));
@@ -649,6 +704,7 @@ export default function EfficientPlayer({
     // An impossible generation/edit state must never turn R into an unsafe
     // teleport. Leave the current body in place if no dry surface exists.
     if (!destination) return;
+    invalidateAuthoredDiveMotionContinuity(commandContext.actorId);
     const destinationSurface = getSurfaceState(dominantFaceForPosition(destination));
     if (recoverVitals) {
       const result = dispatchGameplayCommand(() => respawnCommand(commandContext, {
@@ -679,6 +735,7 @@ export default function EfficientPlayer({
   const handlePointerLockChange = useCallback((locked: boolean) => {
     controlsActive.current = locked;
     jumpState.current.previousJump = get().jump;
+    jetpackLaunchAuthorized.current = false;
   }, [get]);
 
   // Bootstrap the player's gear so the early loop is playable before crafting
@@ -848,16 +905,24 @@ export default function EfficientPlayer({
   const commitMine = useCallback((
     coord: { x: number; y: number; z: number },
     toolTier: number,
-    usesCharge: boolean
+    usesCharge: boolean,
+    toolId: ItemId | null,
+    blockId: BlockId
   ) => {
     const result = dispatchGameplayCommand(() => mineVoxelCommand(commandContext, {
       coord,
       terrain: voxelSystem,
       water: waterGen,
       toolTier,
+      toolId,
       usesCharge
     }));
     if (result.ok) {
+      commitMawHarmlessTestFromAcceptedMine(commandContext, {
+        result,
+        toolId,
+        blockId
+      });
       playSfx('mine');
     } else {
       playSfx('blocked');
@@ -871,7 +936,12 @@ export default function EfficientPlayer({
   const updateMining = useCallback((held: boolean, dt: number, camera: THREE.Camera | null) => {
     const ms = mineState.current;
     if (!held) {
-      if (ms.key !== null) { ms.key = null; ms.elapsed = 0; clearMiningProgress(); }
+      if (ms.key !== null) {
+        ms.key = null;
+        ms.elapsed = 0;
+        ms.toolId = null;
+        clearMiningProgress();
+      }
       return;
     }
 
@@ -903,6 +973,7 @@ export default function EfficientPlayer({
       if (target.kind === 'stone' || target.kind === 'flora') {
         // Loose stones are picked up by hand — quick, tool/charge independent.
         ms.usesCharge = false;
+        ms.toolId = null;
         ms.duration = target.kind === 'stone' ? STONE_PICKUP_MS : FLORA_PICKUP_MS;
       } else {
         const isTree = target.kind === 'tree';
@@ -916,6 +987,7 @@ export default function EfficientPlayer({
         const tier = tool?.toolTier ?? 0;
         const speedMul = toolSpeedFor(tool, klass) * (powered ? 1 : BARE_HAND_MUL);
         ms.usesCharge = usesCharge;
+        ms.toolId = tool?.id ?? null;
         ms.duration = isTree
           ? computeMineDuration(TREE_HARDNESS, TREE_TOOL_TIER, tier, speedMul)
           : mineDurationMs({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: tier }, { speedMul });
@@ -946,9 +1018,15 @@ export default function EfficientPlayer({
         }));
         if (result.ok) { playSfx('mine'); }
       } else {
-        commitMine(coord, getEquippedToolTier(), ms.usesCharge);
+        commitMine(
+          coord,
+          getEquippedToolTier(),
+          ms.usesCharge,
+          ms.toolId,
+          target.voxel.blockId
+        );
       }
-      ms.key = null; ms.elapsed = 0; ms.tickAt = 0;
+      ms.key = null; ms.elapsed = 0; ms.tickAt = 0; ms.toolId = null;
       clearMiningProgress();
       return;
     }
@@ -1065,11 +1143,11 @@ export default function EfficientPlayer({
 
   // True when the player's cell is flooded water (drink / fill the waterskin here).
   const isInWater = useCallback((pos: THREE.Vector3): boolean => {
-    const gen = getWorldGen(planetSize, terrainSeed).generator;
+    const gen = getWorldGen(planetSize, terrainSeed, commandContext.world.worldId).generator;
     return gen.isWaterVoxel(
       Math.round(pos.x / VOXEL_SCALE), Math.round(pos.y / VOXEL_SCALE), Math.round(pos.z / VOXEL_SCALE)
     );
-  }, [planetSize, terrainSeed]);
+  }, [commandContext.world.worldId, planetSize, terrainSeed]);
 
   // G — consume from inventory: eat the richest food you hold (if hungry), else sip
   // the waterskin (if thirsty + filled). One key, picks what helps.
@@ -1138,7 +1216,7 @@ export default function EfficientPlayer({
     if (!camera) return false;
     camera.getWorldPosition(_wO);
     camera.getWorldDirection(_wD);
-    const gen = getWorldGen(planetSize, terrainSeed).generator;
+    const gen = getWorldGen(planetSize, terrainSeed, commandContext.world.worldId).generator;
     for (let t = 0.5; t <= BLOCK_REACH; t += 0.45) {
       const vx = Math.round((_wO.x + _wD.x * t) / VOXEL_SCALE);
       const vy = Math.round((_wO.y + _wD.y * t) / VOXEL_SCALE);
@@ -1147,7 +1225,7 @@ export default function EfficientPlayer({
       if (gen.isWaterVoxel(vx, vy, vz)) return true;
     }
     return false;
-  }, [planetSize, terrainSeed]);
+  }, [commandContext.world.worldId, planetSize, terrainSeed]);
 
   // Resolve the single best available interaction (priority: story → door → board →
   // drink → consume) into { verb, perform }. Drives the HUD prompt + the primary key.
@@ -1402,7 +1480,6 @@ export default function EfficientPlayer({
     cameraSubmergence.current += ((camWet ? 1 : 0) - cameraSubmergence.current) * Math.min(1, camSubRate * FIXED_PHYSICS_STEP);
     const camDomVoxel = Math.max(Math.abs(_camEye.x), Math.abs(_camEye.y), Math.abs(_camEye.z)) / VOXEL_SCALE;
     setCameraSubmersion(cameraSubmergence.current, Math.max(0, (waterGen.getSeaLevelRadius() - camDomVoxel) * VOXEL_SCALE));
-    const swimFactor = Math.min(1, submergence.current / 0.5);
     const submerged = submergence.current > 0.5;
 
     // --- Lava: unlike water (an eye test — you can wade dry-chested), the melt
@@ -1413,6 +1490,11 @@ export default function EfficientPlayer({
     // water block above) — the camera channel, not the body — so an external
     // lens (survey chart, side rig) over a burning character stays readable.
     const feetWorld = _feet.copy(position).addScaledVector(activeUp, -PLAYER_CAPSULE_HALF_HEIGHT);
+    const feetInWater = waterGen.isWaterVoxel(
+      Math.round(feetWorld.x / VOXEL_SCALE),
+      Math.round(feetWorld.y / VOXEL_SCALE),
+      Math.round(feetWorld.z / VOXEL_SCALE)
+    );
     const feetInLava = voxelSystem.getVoxel(
       Math.round(feetWorld.x / VOXEL_SCALE),
       Math.round(feetWorld.y / VOXEL_SCALE),
@@ -1443,10 +1525,20 @@ export default function EfficientPlayer({
 
     const grounded = checkGrounded(position, activeUp);
     lastGrounded.current = grounded;
+    setLocalPlayerSurfaceContact(feetInWater, grounded);
 
     // Input is enabled by pointer lock (desktop), active touch controls (mobile),
     // OR the story autopilot's movie mode (no lock needed to screen the arc).
-    const active = controlsActive.current || isTouchActive() || isAutopilotDriving();
+    const active = (controlsActive.current || isTouchActive() || isAutopilotDriving())
+      && !isPhysicalBoardingInputLocked();
+    const descendingInWater = active
+      && (controls as Record<string, boolean>).descend === true;
+    const swimFactor = resolveWaterSwimFactor(
+      submergence.current,
+      feetInWater,
+      grounded,
+      descendingInWater
+    );
 
     // External-lens eras: movement is screen-relative under the rig basis
     // (side rig: A/D along travel, W/S dead; depthBand opens W/S — a shallow
@@ -1507,9 +1599,22 @@ export default function EfficientPlayer({
       DEFAULT_MOVE_SPEED * (sprinting ? SPRINT_MULTIPLIER : 1) * storyPolicy.moveSpeedScale
     );
 
+    const liveStory = getStoryStateSnapshot();
+    const repairStage = getShipRepairStage();
+    const automatedFirstHover = isAutopilotDriving() && needsAutomatedFirstHover({
+      actorId: commandContext.actorId,
+      worldId: commandContext.world.worldId,
+      storyBeat: liveStory.beat,
+      repairStage,
+      position: [position.x, position.y, position.z],
+      surfaceUp: [activeUp.x, activeUp.y, activeUp.z],
+      grounded,
+      verticalSpeed: currentVelocity.dot(activeUp)
+    });
+    const jumpInput = active && (controls.jump || automatedFirstHover) && storyPolicy.allowJump;
     const jump = updateJumpState(
       jumpState.current,
-      active && controls.jump && storyPolicy.allowJump,
+      jumpInput,
       grounded,
       FIXED_PHYSICS_STEP
     );
@@ -1520,29 +1625,52 @@ export default function EfficientPlayer({
     const onLadder = isOnLadder(position);
     lastOnLadder.current = onLadder;
 
-    if (jump.shouldJump && !submerged && !onLadder && !inLavaDeep) {
+    const jumpImpulseApplied = jump.shouldJump && !submerged && !onLadder && !inLavaDeep;
+    if (jumpImpulseApplied) {
       playSfx('jump');
       nextVelocity = applyJumpImpulse(nextVelocity, activeUp, DEFAULT_JUMP_SPEED);
+      jetpackLaunchAuthorized.current = true;
     }
 
     // Hold-jump jetpack: once airborne, holding jump burns limited fuel for a
     // gentle upward thrust (controlled hover/boost), capped so it's not a rocket.
     // Fuel refills while grounded. shouldJump (the ground impulse) takes priority.
-    const jumpHeld = active && controls.jump && storyPolicy.allowJump;
+    const jumpHeld = jumpInput;
     let jetpackActive = false;
-    if (grounded) {
-      refillJetpackFuel(JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP, commandContext.actorId);
-    } else if (jumpHeld && !jump.shouldJump && getJetpackFuelAmount(commandContext.actorId) > 0 && !submerged && !onLadder && !inLavaDeep) {
+    const storyJetInstalled = isStoryJetInstalled(commandContext.actorId);
+    const upSpeed = nextVelocity.dot(activeUp);
+    const jetpackGrounding = resolveJetpackGrounding(
+      grounded,
+      jumpHeld,
+      jetpackLaunchAuthorized.current,
+      upSpeed
+    );
+    jetpackLaunchAuthorized.current = jetpackGrounding.retainLaunchAuthorization;
+    if (storyJetInstalled && jetpackGrounding.allowThrust && !jump.shouldJump && getJetpackFuelAmount(commandContext.actorId) > 0 && !submerged && !onLadder && !inLavaDeep) {
       jetpackActive = consumeJetpackFuel(FIXED_PHYSICS_STEP, commandContext.actorId) > 0;
-      const upSpeed = nextVelocity.dot(activeUp);
       if (upSpeed < JETPACK_MAX_UP_SPEED) {
         const add = Math.min(JETPACK_THRUST * FIXED_PHYSICS_STEP, JETPACK_MAX_UP_SPEED - upSpeed);
         nextVelocity.addScaledVector(activeUp, add);
       }
+    } else if (storyJetInstalled && jetpackGrounding.refill) {
+      refillJetpackFuel(JETPACK_REFILL_RATE * FIXED_PHYSICS_STEP, commandContext.actorId);
     }
     const jetpackFuelDisplay = getJetpackFuelFraction(commandContext.actorId);
     lastJetpackActive.current = jetpackActive;
     setJetpackSfx(jetpackActive, Math.max(0.35, jetpackFuelDisplay));
+
+    observeFirstLegalHover({
+      actorId: commandContext.actorId,
+      worldId: commandContext.world.worldId,
+      storyBeat: liveStory.beat,
+      repairStage,
+      position: [position.x, position.y, position.z],
+      surfaceUp: [activeUp.x, activeUp.y, activeUp.z],
+      grounded,
+      jetpackActive,
+      verticalSpeed: nextVelocity.dot(activeUp),
+      dt: FIXED_PHYSICS_STEP
+    });
 
     // Ladder: cling + climb, overriding gravity, while bordering a ladder.
     // Jump = up, back/descend = down, neither = hold position.
@@ -1552,13 +1680,12 @@ export default function EfficientPlayer({
       nextVelocity.addScaledVector(activeUp, climb - nextVelocity.dot(activeUp));
     }
 
-    // Underwater: blend a full-3D buoyant swim over the walk velocity by how
-    // submerged the EYE is. At full submersion this replaces walking entirely;
-    // while wading it blends, so the waterline transition is smooth. Swim toward
-    // the camera look (incl. pitch) + jump=up / descend=down; slight positive
-    // buoyancy drifts you gently to the surface when idle. The land path above is
-    // byte-for-byte unchanged when swimFactor is 0.
-    if (submergence.current > 0.001 && cameraRef.current) {
+    // Water: blend a full-3D buoyant swim over walking, primarily from EYE
+    // immersion. Unsupported feet-only contact keeps a bounded shallow blend so
+    // a real stroke can clear the bank. Swim toward camera look (incl. pitch) +
+    // jump=up / descend=down; slight buoyancy rises when idle. The dry path is
+    // unchanged when swimFactor is 0.
+    if (swimFactor > 0.001 && cameraRef.current) {
       const look = cameraRef.current.getWorldDirection(_swimLook);
       const swimVelocity = composeSwimVelocity(currentVelocity, look, activeUp, {
         forward: movementInput.forward,
@@ -1614,13 +1741,46 @@ export default function EfficientPlayer({
       }
     }
 
-    if (moving && !onLadder && !transitionLocked && canStepUp(position, activeUp, moveDirection)) {
-      if (grounded && !submerged) {
+    const fluidMantle = shouldApplyFluidMantle(
+      submergence.current,
+      lavaImmersion.current,
+      descendingInWater,
+      feetInWater
+    );
+    const dryStepAssist = shouldApplyDryStepAssist(
+      grounded,
+      submergence.current,
+      lavaImmersion.current
+    );
+    let safeFluidMantleLanding = false;
+    if (moving && fluidMantle) {
+      _fluidMantleForward.copy(moveDirection).normalize();
+      _fluidMantleLandingFeet.copy(position)
+        .addScaledVector(_fluidMantleForward, STEP_PROBE_FORWARD)
+        .addScaledVector(activeUp, STEP_UP_HEIGHT - PLAYER_CAPSULE_HALF_HEIGHT);
+      const landingX = Math.round(_fluidMantleLandingFeet.x / VOXEL_SCALE);
+      const landingY = Math.round(_fluidMantleLandingFeet.y / VOXEL_SCALE);
+      const landingZ = Math.round(_fluidMantleLandingFeet.z / VOXEL_SCALE);
+      const liveLandingBlock = voxelSystem.getVoxel(landingX, landingY, landingZ)?.blockId;
+      safeFluidMantleLanding = isFluidMantleLandingSafe({
+        feetInWater: waterGen.isWaterVoxel(landingX, landingY, landingZ),
+        feetOnHazard: (liveLandingBlock
+          ?? waterGen.generateBlockForPosition(landingX, landingY, landingZ)) === 'lava'
+      });
+    }
+    const stepAssistAvailable = dryStepAssist || (fluidMantle && safeFluidMantleLanding);
+    if (moving && stepAssistAvailable && !onLadder && !transitionLocked && canStepUp(
+      position,
+      activeUp,
+      moveDirection,
+      fluidMantle ? FLUID_MANTLE_PROBE_LOW_OFFSET : STEP_PROBE_LOW_OFFSET
+    )) {
+      if (dryStepAssist) {
         const upSpeed = nextVelocity.dot(activeUp);
         if (upSpeed < STEP_ASSIST_UP_SPEED) {
           nextVelocity.addScaledVector(activeUp, STEP_ASSIST_UP_SPEED - upSpeed);
         }
-      } else if (submergence.current > 0.05 || lavaImmersion.current > 0.05) {
+      } else if (fluidMantle) {
         // FLUID MANTLE: swimming/wading against a one-block lip with a walkable
         // top — haul the capsule over it. Stronger than the dry assist because
         // the fluid drag opposes it; applied after the swim/lava blends so it
@@ -1684,6 +1844,7 @@ export default function EfficientPlayer({
     const environment = survivalEnvironment.current;
     environment.daylight = localDaylight(getSunDirection(), surfaceRef.current.up);
     environment.warmthEnabled = !getStoryStateSnapshot().active;
+    environment.thermalBehavior = thermalBehavior;
     // Enclosure certification is structural rather than visual. Five checks/sec
     // keeps door/build changes feeling immediate without flood-filling every frame.
     if (frameCount.current % 12 === 1) {
@@ -1692,9 +1853,23 @@ export default function EfficientPlayer({
     }
     tickVitals(vitalsDelta, decayActive, commandContext.actorId, environment);
     tickSenseDiscovery(getJetpackFuelFraction(commandContext.actorId)); // story self-discovery (no-op outside story saves)
+    const liveStoryBeat = String(getStoryStateSnapshot().beat ?? '');
+    tickAuthoredDive({
+      authored: liveStoryBeat === 'ch6-dive',
+      submergence: submergence.current,
+      oxygen: getVitals(commandContext.actorId).oxygen,
+      worldId: commandContext.world.worldId,
+      actorId: commandContext.actorId
+    });
     // Breath: drain while the eye is submerged (in normal surface play), refill
     // otherwise; drowning bleeds HP at empty (non-lethal — see tickOxygen).
-    tickOxygen(vitalsDelta, decayActive && submergence.current > 0.5);
+    tickOxygen(
+      vitalsDelta,
+      decayActive
+        && isStoryOxygenOnline(commandContext.actorId)
+        && submergence.current > 0.5,
+      commandContext.actorId
+    );
     // Molten burn: keyed on the raw feet test so even a half-second misstep
     // bites; paused with the rest of survival decay outside normal surface play.
     tickLavaDamage(vitalsDelta, decayActive && lastFeetInLava.current);

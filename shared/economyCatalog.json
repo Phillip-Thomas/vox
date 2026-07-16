@@ -1,0 +1,529 @@
+{
+  "schemaVersion": 1,
+  "itemIds": [
+    "stone",
+    "flint",
+    "silica",
+    "copper_ore",
+    "iron_trace",
+    "resin",
+    "biofiber",
+    "frost_crystal",
+    "basalt_glass",
+    "charged_crystal",
+    "gold_trace",
+    "void_glass",
+    "faulty_maw",
+    "maw_repair_kit",
+    "kestrel_keel_memory",
+    "biofuel",
+    "wood",
+    "stone_hatchet",
+    "stone_pickaxe",
+    "torch",
+    "campfire",
+    "berry",
+    "root",
+    "cactus_pulp",
+    "fan_frond",
+    "wild_bloom",
+    "seedpod",
+    "waterskin",
+    "refined_alloy",
+    "silica_pane",
+    "biocomposite",
+    "cryo_cell",
+    "thermal_ceramic",
+    "charge_cell",
+    "void_core",
+    "logic_wafer",
+    "strut_frame",
+    "iron_maw",
+    "frost_maw",
+    "arc_maw",
+    "void_maw",
+    "thermal_carapace",
+    "filter_carapace",
+    "shielded_carapace",
+    "survey_lens_2",
+    "survey_lens_3",
+    "survey_lens_4",
+    "lift_cell",
+    "range_coil",
+    "habitat_core"
+  ],
+  "stationIds": [
+    "hand",
+    "smelter",
+    "assembler",
+    "survey_console"
+  ],
+  "eraIds": [
+    "primitive",
+    "emergent",
+    "paravox_machina"
+  ],
+  "publicDemoStationIds": [
+    "hand"
+  ],
+  "publicDemoRecipeIds": [
+    "biofuel",
+    "stone_hatchet",
+    "stone_pickaxe",
+    "torch",
+    "campfire",
+    "waterskin"
+  ],
+  "storyRecipeIds": [
+    "lift_cell",
+    "logic_wafer",
+    "habitat_core"
+  ],
+  "recipes": [
+    {
+      "id": "biofuel",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [{ "id": "biofiber", "qty": 3 }],
+      "outputs": [{ "id": "biofuel", "qty": 1 }]
+    },
+    {
+      "id": "stone_hatchet",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [
+        { "id": "wood", "qty": 2 },
+        { "id": "biofiber", "qty": 2 },
+        { "id": "stone", "qty": 1 }
+      ],
+      "outputs": [{ "id": "stone_hatchet", "qty": 1 }]
+    },
+    {
+      "id": "stone_pickaxe",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [
+        { "id": "wood", "qty": 2 },
+        { "id": "biofiber", "qty": 1 },
+        { "id": "stone", "qty": 2 }
+      ],
+      "outputs": [{ "id": "stone_pickaxe", "qty": 1 }]
+    },
+    {
+      "id": "torch",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [
+        { "id": "flint", "qty": 1 },
+        { "id": "biofuel", "qty": 1 },
+        { "id": "wood", "qty": 1 }
+      ],
+      "outputs": [{ "id": "torch", "qty": 1 }]
+    },
+    {
+      "id": "campfire",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [
+        { "id": "flint", "qty": 2 },
+        { "id": "biofuel", "qty": 1 },
+        { "id": "wood", "qty": 3 }
+      ],
+      "outputs": [{ "id": "campfire", "qty": 1 }]
+    },
+    {
+      "id": "waterskin",
+      "station": "hand",
+      "era": "primitive",
+      "inputs": [
+        { "id": "biofiber", "qty": 4 },
+        { "id": "wood", "qty": 1 }
+      ],
+      "outputs": [{ "id": "waterskin", "qty": 1 }]
+    },
+    {
+      "id": "refined_alloy",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "copper_ore", "qty": 2 },
+        { "id": "iron_trace", "qty": 1 }
+      ],
+      "outputs": [{ "id": "refined_alloy", "qty": 1 }]
+    },
+    {
+      "id": "silica_pane",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [{ "id": "silica", "qty": 2 }],
+      "outputs": [{ "id": "silica_pane", "qty": 1 }]
+    },
+    {
+      "id": "biocomposite",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "biofiber", "qty": 2 },
+        { "id": "resin", "qty": 1 }
+      ],
+      "outputs": [{ "id": "biocomposite", "qty": 1 }]
+    },
+    {
+      "id": "cryo_cell",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "frost_crystal", "qty": 1 },
+        { "id": "silica_pane", "qty": 1 }
+      ],
+      "outputs": [{ "id": "cryo_cell", "qty": 1 }]
+    },
+    {
+      "id": "thermal_ceramic",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "basalt_glass", "qty": 1 },
+        { "id": "refined_alloy", "qty": 1 }
+      ],
+      "outputs": [{ "id": "thermal_ceramic", "qty": 1 }]
+    },
+    {
+      "id": "charge_cell",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "charged_crystal", "qty": 1 },
+        { "id": "refined_alloy", "qty": 1 }
+      ],
+      "outputs": [{ "id": "charge_cell", "qty": 1 }]
+    },
+    {
+      "id": "void_core",
+      "station": "smelter",
+      "era": "emergent",
+      "inputs": [
+        { "id": "void_glass", "qty": 1 },
+        { "id": "charge_cell", "qty": 1 }
+      ],
+      "outputs": [{ "id": "void_core", "qty": 1 }]
+    },
+    {
+      "id": "logic_wafer",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "silica_pane", "qty": 1 },
+        { "id": "refined_alloy", "qty": 1 }
+      ],
+      "outputs": [{ "id": "logic_wafer", "qty": 1 }]
+    },
+    {
+      "id": "strut_frame",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "refined_alloy", "qty": 2 },
+        { "id": "biocomposite", "qty": 1 }
+      ],
+      "outputs": [{ "id": "strut_frame", "qty": 1 }]
+    },
+    {
+      "id": "frost_maw",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "iron_maw", "qty": 1 },
+        { "id": "cryo_cell", "qty": 1 },
+        { "id": "logic_wafer", "qty": 1 }
+      ],
+      "outputs": [{ "id": "frost_maw", "qty": 1 }]
+    },
+    {
+      "id": "arc_maw",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "frost_maw", "qty": 1 },
+        { "id": "charge_cell", "qty": 1 },
+        { "id": "gold_trace", "qty": 1 }
+      ],
+      "outputs": [{ "id": "arc_maw", "qty": 1 }]
+    },
+    {
+      "id": "void_maw",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "arc_maw", "qty": 1 },
+        { "id": "void_core", "qty": 1 }
+      ],
+      "outputs": [{ "id": "void_maw", "qty": 1 }]
+    },
+    {
+      "id": "thermal_carapace",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "biocomposite", "qty": 1 },
+        { "id": "cryo_cell", "qty": 1 },
+        { "id": "thermal_ceramic", "qty": 1 }
+      ],
+      "outputs": [{ "id": "thermal_carapace", "qty": 1 }]
+    },
+    {
+      "id": "filter_carapace",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "biocomposite", "qty": 1 },
+        { "id": "logic_wafer", "qty": 1 }
+      ],
+      "outputs": [{ "id": "filter_carapace", "qty": 1 }]
+    },
+    {
+      "id": "shielded_carapace",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "strut_frame", "qty": 1 },
+        { "id": "charge_cell", "qty": 1 }
+      ],
+      "outputs": [{ "id": "shielded_carapace", "qty": 1 }]
+    },
+    {
+      "id": "survey_lens_2",
+      "station": "survey_console",
+      "era": "emergent",
+      "inputs": [
+        { "id": "silica_pane", "qty": 1 },
+        { "id": "logic_wafer", "qty": 1 }
+      ],
+      "outputs": [{ "id": "survey_lens_2", "qty": 1 }]
+    },
+    {
+      "id": "survey_lens_3",
+      "station": "survey_console",
+      "era": "emergent",
+      "inputs": [
+        { "id": "survey_lens_2", "qty": 1 },
+        { "id": "charge_cell", "qty": 1 }
+      ],
+      "outputs": [{ "id": "survey_lens_3", "qty": 1 }]
+    },
+    {
+      "id": "survey_lens_4",
+      "station": "survey_console",
+      "era": "emergent",
+      "inputs": [
+        { "id": "survey_lens_3", "qty": 1 },
+        { "id": "void_core", "qty": 1 }
+      ],
+      "outputs": [{ "id": "survey_lens_4", "qty": 1 }]
+    },
+    {
+      "id": "lift_cell",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "strut_frame", "qty": 1 },
+        { "id": "refined_alloy", "qty": 1 }
+      ],
+      "outputs": [{ "id": "lift_cell", "qty": 1 }]
+    },
+    {
+      "id": "range_coil",
+      "station": "assembler",
+      "era": "emergent",
+      "inputs": [
+        { "id": "charge_cell", "qty": 1 },
+        { "id": "logic_wafer", "qty": 1 }
+      ],
+      "outputs": [{ "id": "range_coil", "qty": 1 }]
+    },
+    {
+      "id": "habitat_core",
+      "station": "assembler",
+      "era": "emergent",
+      "uniqueReceipt": "story:item:habitat-core:crafted",
+      "inputs": [
+        { "id": "strut_frame", "qty": 1 },
+        { "id": "logic_wafer", "qty": 1 },
+        { "id": "refined_alloy", "qty": 1 }
+      ],
+      "outputs": [{ "id": "habitat_core", "qty": 1 }]
+    }
+  ],
+  "storyTransactions": {
+    "mawRepair": {
+      "originWorldId": "-1,-1",
+      "ritualSeconds": 8,
+      "purposeGapSeconds": 2,
+      "pondObservationSeconds": 0.55,
+      "maxPoseAgeSeconds": 5,
+      "harmlessTestBlockIds": ["stone", "copper_block", "silver_block"],
+      "inputs": [
+        { "id": "faulty_maw", "qty": 1 },
+        { "id": "maw_repair_kit", "qty": 1 }
+      ],
+      "outputs": [{ "id": "iron_maw", "qty": 1 }]
+    },
+    "wreckSalvage": [
+      { "id": "strut_frame", "qty": 2 },
+      { "id": "refined_alloy", "qty": 3 },
+      { "id": "biocomposite", "qty": 1 },
+      { "id": "silica_pane", "qty": 2 }
+    ],
+    "kestrelFoundingReserve": [
+      { "id": "strut_frame", "qty": 1 },
+      { "id": "refined_alloy", "qty": 1 },
+      { "id": "logic_wafer", "qty": 1 }
+    ],
+    "shipRepairStages": [
+      {
+        "stage": "bench_online",
+        "inputs": [{ "id": "kestrel_keel_memory", "qty": 1 }]
+      },
+      {
+        "stage": "frame_restored",
+        "inputs": [
+          { "id": "refined_alloy", "qty": 1 },
+          { "id": "strut_frame", "qty": 1 }
+        ]
+      },
+      {
+        "stage": "hull_sealed",
+        "inputs": [
+          { "id": "silica_pane", "qty": 1 },
+          { "id": "biocomposite", "qty": 1 }
+        ]
+      },
+      {
+        "stage": "lift_online",
+        "inputs": [{ "id": "lift_cell", "qty": 1 }]
+      },
+      {
+        "stage": "flight_ready",
+        "inputs": [{ "id": "logic_wafer", "qty": 1 }]
+      }
+    ]
+  },
+  "buildMaterials": [
+    {
+      "id": "wood",
+      "name": "Wood",
+      "colorHex": 9067052,
+      "resource": "wood",
+      "costMul": 1,
+      "hpMul": 1,
+      "insulationMul": 1
+    }
+  ],
+  "buildPieces": [
+    {
+      "type": "foundation",
+      "name": "Foundation",
+      "shape": "panel",
+      "family": "foundation",
+      "costUnits": 4,
+      "hp": 240,
+      "insulation": 0.35,
+      "seals": true
+    },
+    {
+      "type": "wall",
+      "name": "Wall",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 2,
+      "hp": 140,
+      "insulation": 0.5,
+      "seals": true
+    },
+    {
+      "type": "ceiling",
+      "name": "Ceiling",
+      "shape": "panel",
+      "family": "ceiling",
+      "costUnits": 3,
+      "hp": 140,
+      "insulation": 0.5,
+      "seals": true
+    },
+    {
+      "type": "doorway",
+      "name": "Doorway",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 2,
+      "hp": 130,
+      "insulation": 0.1,
+      "seals": false,
+      "passable": true
+    },
+    {
+      "type": "window",
+      "name": "Window",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 2,
+      "hp": 130,
+      "insulation": 0.2,
+      "seals": false,
+      "passable": true
+    },
+    {
+      "type": "gable",
+      "name": "Gable Wall",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 1,
+      "hp": 120,
+      "insulation": 0.5,
+      "seals": true
+    },
+    {
+      "type": "stairs",
+      "name": "Stairs",
+      "shape": "volume",
+      "family": "volume",
+      "costUnits": 4,
+      "hp": 160,
+      "insulation": 0.1,
+      "seals": false
+    },
+    {
+      "type": "sloped_roof",
+      "name": "Sloped Roof (Decorative)",
+      "shape": "volume",
+      "family": "volume",
+      "costUnits": 3,
+      "hp": 150,
+      "insulation": 0.1,
+      "seals": false
+    },
+    {
+      "type": "ladder",
+      "name": "Ladder",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 1,
+      "hp": 80,
+      "insulation": 0,
+      "seals": false,
+      "passable": true,
+      "climb": true
+    },
+    {
+      "type": "door",
+      "name": "Door",
+      "shape": "panel",
+      "family": "wall",
+      "costUnits": 2,
+      "hp": 130,
+      "insulation": 0.5,
+      "seals": true,
+      "openable": true
+    }
+  ]
+}

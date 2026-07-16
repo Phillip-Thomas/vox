@@ -267,13 +267,13 @@ describe('resource authority', () => {
     }
   });
 
-  it('rejects recipes beyond the public primitive field kit', () => {
+  it('rejects recipes outside the authoritative field economy', () => {
     expect(resolveServerAuthoritativeCommand('recipe_crafted', { recipeId: 'torch' })).toMatchObject({
       commandPayload: { recipeId: 'torch' }
     });
     expect(resolveServerAuthoritativeCommand('recipe_crafted', { recipeId: 'refined_alloy' })).toEqual({
       code: 'validation_failed',
-      reason: 'Recipe is not available in the primitive field kit.'
+      reason: 'Recipe is not available in the authoritative field economy.'
     });
   });
 });

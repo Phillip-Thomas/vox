@@ -7,6 +7,7 @@ import {
   beginVigilSleep,
   CH1_COLLECTION_TIMING,
   getStoryBeatClock,
+  storyFreeMarkerTarget,
   storyDirectorTick,
   vigilRestReady
 } from './storyDirector.ts';
@@ -47,6 +48,10 @@ import {
 import { addItem, removeItem, getItemCount } from '../game/systems/inventorySystem.ts';
 import { cameraFeedVisualState, getFeedRuntime } from './feedRuntime.ts';
 import { getStoryText } from './storyText.ts';
+import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
+import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
+import { createSystemCompanionBodyTargetHandle } from '../state/systemCompanionBodyTargets.ts';
+import { TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
 import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
 import { getLensRig } from './sideLens.ts';
@@ -215,6 +220,70 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getStoryStateSnapshot().beat).toBe('a1-ramp');
   });
 
+  it('publishes immediate shared objectives from first-person handoff through the survival arc', () => {
+    advanceToBeat('ch1-anomaly');
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'ch1:anomaly:calibrate-pan-tilt',
+      requiresMarker: false
+    });
+
+    tickSeconds(ANOMALY_SURVEY.fallbackSeconds + 0.1);
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'ch1:anomaly:classify-mass',
+      markerLabel: 'UNCHARTED MASS',
+      requiresMarker: true
+    });
+
+    advanceToBeat('ch2-approach');
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'ch2:approach:eat-fruit',
+      markerLabel: 'REDACTED SUBJECT · FRUIT'
+    });
+
+    advanceToBeat('ch3-gather');
+    expect(getActiveGuidedStoryObjective()?.id).toMatch(/^ch3:gather:/);
+    advanceToBeat('ch3-thirst');
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'ch3:thirst:drink-water',
+      markerLabel: 'DRINKABLE WATER'
+    });
+
+    advanceToBeat('ch3-dusk');
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+  });
+
+  it('does not republish a stale objective when a tick advances the beat', () => {
+    seedDebrisCollected();
+    addItem('biofiber', CH1_QUOTA.biofiber);
+    addItem('stone', CH1_QUOTA.stone);
+    storyDirectorTick(CH1_COLLECTION_TIMING.rasterMinimumSeconds, null);
+    const previousId = 'ch1:raster:recover-quota';
+    expect(getActiveGuidedStoryObjective()?.id).toBe(previousId);
+    const entered: string[] = [];
+    const unsubscribe = subscribeStoryUxFeedback(cue => entered.push(cue.objectiveId));
+
+    // The completed-ledger hold advances synchronously inside this tick.
+    storyDirectorTick(CH1_COLLECTION_TIMING.completionHoldSeconds + 0.1, null);
+    unsubscribe();
+
+    expect(getStoryStateSnapshot().beat).toBe('ch1-depth');
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:depth:recover-supply-pods');
+    expect(entered).not.toContain(previousId);
+  });
+
+  it('projects Chapter 8 pre-lock guidance from the mounted Tidegarden body', () => {
+    const targetHandle = createSystemCompanionBodyTargetHandle(TIDEGARDEN_WORLD_ID);
+    targetHandle.publish({ x: 140, y: -24, z: 680 });
+    try {
+      advanceToBeat('ch8-crossing');
+      const target = storyFreeMarkerTarget();
+      expect(target?.position.toArray()).toEqual([140, -24, 680]);
+      expect(target?.label).toBe(getActiveGuidedStoryObjective()?.markerLabel);
+    } finally {
+      targetHandle.remove();
+    }
+  });
+
   it('the A1 ramp climbs chroma and lands exactly on the color stage', () => {
     advanceToBeat('ch1-anomaly');
     tickSeconds(ANOMALY_SURVEY.fallbackSeconds + ANOMALY_SURVEY.armSeconds + 0.5); // sweep fallback designates + arms
@@ -345,7 +414,7 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(fired.length).toBeLessThanOrEqual(2); // spaced, never a feed of epiphanies
   });
 
-  it('the first day alive: thirst → forage → klaxon → vigil → arrival (temporary terminal)', () => {
+  it('the first day alive: thirst → forage → klaxon → vigil → arrival → audit', () => {
     resetCampfires();
     placeCampfire(new THREE.Vector3(0, 25, 0), new THREE.Vector3(0, 1, 0));
     markMilestone(STORY_MILESTONES.a2);
@@ -386,17 +455,19 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getVitals().warmth).toBe(100);
     expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
     expect(hasMilestone(STORY_MILESTONES.ch4Vigil)).toBe(true);
-    // The arrival plays out and TEMPORARILY completes the story (ch4-audit
-    // continues from here — see PARAVOXIA_CH4_PLAN.md §2 S6). The auditor is
-    // NOT hidden — he stays standing at the relay into the done world.
+    // Arrival banks a checkpoint and hands directly into the playable audit.
+    // The auditor is not hidden — he stays standing at the relay to begin it.
     tickSeconds(ARRIVAL.endAt + 1);
-    expect(getStoryStateSnapshot().active).toBe(false);
-    expect(getStoryStateSnapshot().chapter).toBe('complete');
+    expect(getStoryStateSnapshot().active).toBe(true);
+    expect(getStoryStateSnapshot().chapter).toBe('ch4');
+    expect(getStoryStateSnapshot().beat).toBe('ch4-audit');
     expect(getAuditWorkerPose().visible).toBe(true); // "he stays to look"
     expect(hasMilestone(STORY_MILESTONES.ch4Arrived)).toBe(true);
-    expect(hasMilestone(STORY_MILESTONES.complete)).toBe(true);
-    expect(hasMilestone(STORY_MILESTONES.senseStamina)).toBe(true); // never strand a HUD gate
-    expect(getStoryForcedDayPhase()).toBeNull(); // the sun belongs to the player now
+    expect(hasMilestone(STORY_MILESTONES.complete)).toBe(false);
+    // Stamina remains earned by actually spending it; arrival no longer uses a
+    // terminal backfill to manufacture an unproven sense receipt.
+    expect(hasMilestone(STORY_MILESTONES.senseStamina)).toBe(false);
+    expect(getStoryForcedDayPhase()).toBeNull(); // live dawn continues through the audit
     wreckRelayHandle.position = null;
   });
 
@@ -411,24 +482,22 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(order).not.toContain('TRANSIT RECORD INCOMPLETE');
   });
 
-  it('arrival preserves the last audit line, breathes, and restores the physical lens before completion', () => {
+  it('arrival breathes, restores the physical lens, and hands directly into audit', () => {
     advanceToBeat('ch4-arrival');
     const camera = new THREE.PerspectiveCamera(75, 16 / 9, 0.05, 500);
 
     tickCameraSeconds(ARRIVAL.auditAt + 0.1, camera);
     expect(getStoryStateSnapshot().active).toBe(true);
-    expect(getStoryText().audit?.text).toBe('AUDIT IN PROGRESS. RESUME NOTHING.');
-    expect(getStoryText().audit?.ttlMs).toBe(6500);
-
-    // The line's full TTL is still inside the active arrival, not under the
-    // completion surface. Half of the following silent breath is active too.
+    // The line's full TTL is inside the active arrival. Half of the following
+    // silent breath is active too.
     tickCameraSeconds(ARRIVAL.auditLineSeconds - 0.2, camera);
     expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
     tickCameraSeconds(ARRIVAL.visualBreathSeconds / 2, camera);
     expect(getStoryStateSnapshot().beat).toBe('ch4-arrival');
 
     tickCameraSeconds(ARRIVAL.visualBreathSeconds, camera);
-    expect(getStoryStateSnapshot().active).toBe(false);
+    expect(getStoryStateSnapshot()).toMatchObject({ active: true, chapter: 'ch4', beat: 'ch4-audit' });
+    expect(getStoryText().audit?.text).toBe('AUDIT IN PROGRESS. THREE DEVIATIONS REQUIRE WITNESS.');
     expect(camera.fov).toBe(75);
     expect(getCinematicCameraPose().weight).toBe(0);
     expect(getCinematicLookWeight()).toBe(0);

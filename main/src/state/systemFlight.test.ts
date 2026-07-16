@@ -14,6 +14,7 @@ import {
   resetSystemFlightStoreForTests,
   setActiveSystemPlanet,
   subscribeSystemFlight,
+  subscribeSystemPlanetHandoffCommits,
   systemPoseToPlanetLocalPose,
   updateSystemShipPose,
   updateSystemShipPoseFromPlanetLocal,
@@ -161,7 +162,16 @@ describe('system-flight ownership and targeting', () => {
     const targetEpoch = commitSystemBodyTarget({ system: { x: 7, y: -3 }, slot: 1 });
     const poseBefore = getSystemFlightSnapshot().pose;
     let notifications = 0;
+    const receipts: Array<{
+      systemId: string;
+      worldId: string;
+      previousActivationEpoch: number;
+      activationEpoch: number;
+    }> = [];
     const unsubscribe = subscribeSystemFlight(() => notifications++);
+    const unsubscribeHandoffs = subscribeSystemPlanetHandoffCommits(receipt => {
+      receipts.push(receipt);
+    });
 
     const committedEpoch = commitSystemPlanetHandoff({
       worldId: '7,-3:p1',
@@ -170,6 +180,7 @@ describe('system-flight ownership and targeting', () => {
     });
     const committed = getSystemFlightSnapshot();
     unsubscribe();
+    unsubscribeHandoffs();
 
     expect(committedEpoch).toBe(targetEpoch + 1);
     expect(notifications).toBe(1);
@@ -181,6 +192,13 @@ describe('system-flight ownership and targeting', () => {
       renderOrigin: [2_200, 40, -10]
     });
     expect(committed.pose).toBe(poseBefore);
+    expect(receipts).toEqual([{
+      systemId: '7,-3',
+      worldId: '7,-3:p1',
+      previousActivationEpoch: targetEpoch,
+      activationEpoch: committedEpoch
+    }]);
+    expect(Object.isFrozen(receipts[0])).toBe(true);
   });
 
   it('represents interstellar targets separately from same-system bodies', () => {

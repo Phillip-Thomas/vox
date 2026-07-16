@@ -1,0 +1,16 @@
+{
+  "schema": "paravoxia.chapterDefectRegister.v1",
+  "sourceReportsComplete": true,
+  "sourceHashesCurrent": true,
+  "findingCoverageComplete": true,
+  "idsUnique": true,
+  "everyMaterialDefectHasSeverityOwnerEvidenceAndRecheck": true,
+  "operatorSynchronizationPassed": true,
+  "runDefectsMirrorCurrent": true,
+  "openCritical": 0,
+  "openHigh": 0,
+  "openMediumUnaccepted": 0,
+  "countsMatchEntries": true,
+  "findings": [],
+  "openTotal": 0
+}

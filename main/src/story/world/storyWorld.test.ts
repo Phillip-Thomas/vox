@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   AUDIT_WORKER_GROUND_CLEARANCE,
+  getAnomalyStonePose,
   getAuditWorkerPath,
   getDebrisPoses,
+  getFieldPackPose,
+  getKeelMemoryPose,
   getNavWaypointPoses,
+  getPodImpactPose,
   getPondPose,
   getSignalMesaPose,
   getSignalMesaSummit,
@@ -21,10 +25,16 @@ import { SUPPLY_POD_COUNT } from '../supplyPods.ts';
 import { NAV_WAYPOINT_COUNT } from '../navWaypoints.ts';
 import { mesaBlockLayout } from './SignalMesa.tsx';
 import { findTopFaceSurfaceVoxel } from '../../utils/worldArrival.ts';
-import { getWorldGen } from '../../utils/worldGenCache.ts';
+import {
+  clearWorldGenCache,
+  getWorldGen,
+  hasWorldGenCacheEntry
+} from '../../utils/worldGenCache.ts';
 import { planAgentSurfaceRoute } from '../../utils/agentSurfaceNavigation.ts';
 import { VOXEL_SCALE } from '../../utils/cubeGravityConstants.ts';
 import { DEFAULT_MOVE_SPEED } from '../../utils/surfaceControls.ts';
+import { SHIP_REST_CLEARANCE } from '../../utils/shipDesign.ts';
+import { resolveSafeShipBoardingPosition } from '../../utils/spawnValidation.ts';
 import { ARRIVAL } from '../storyScript.ts';
 import {
   easedGroundedTravelProgress,
@@ -32,6 +42,7 @@ import {
   sampleGroundedSurfaceRoute
 } from '../../utils/groundedSurfaceMotion.ts';
 import { AUDIT_WORKER_BOOT_SOLE_Y } from './AuditWorker.tsx';
+import { STORY_PRIMARY_WORLD_ID } from '../tidegardenRoute.ts';
 
 describe('storyWorld', () => {
   it('pins a verdant planet (trees/grass/biofiber/stone, no hazards)', () => {
@@ -64,10 +75,22 @@ describe('storyWorld', () => {
     expect(isStoryWorld({ x: STORY_COORDINATE.x + 1, y: STORY_COORDINATE.y })).toBe(false);
   });
 
+  it('keeps authored pose and route queries on the one canonical cache entry', () => {
+    const size = 18;
+    clearWorldGenCache();
+
+    getStorySidePlane(size, STORY_SEED);
+    getAnomalyStonePose(size, STORY_SEED);
+    getAuditWorkerPath(size, STORY_SEED);
+
+    expect(hasWorldGenCacheEntry(size, STORY_SEED, STORY_PRIMARY_WORLD_ID)).toBe(true);
+    expect(hasWorldGenCacheEntry(size, STORY_SEED)).toBe(false);
+  });
+
   it('the pinned world keeps a pond within the first day\'s walk (ch3-thirst depends on it)', () => {
     const pond = getPondPose(50, STORY_SEED);
     expect(pond).not.toBeNull();
-    const generator = getWorldGen(50, STORY_SEED).generator;
+    const generator = getWorldGen(50, STORY_SEED, STORY_PRIMARY_WORLD_ID).generator;
     const surfaceCell = pond!.surface.clone().divideScalar(2).round();
     const shoreCell = pond!.shore.clone().divideScalar(2).round();
     expect(generator.isWaterVoxel(surfaceCell.x, surfaceCell.y, surfaceCell.z)).toBe(true);
@@ -83,6 +106,48 @@ describe('storyWorld', () => {
     // The dive (ch4, later) wants a floor below the surface where possible;
     // depth ≥ 1 is the hard floor for the drink itself.
     expect(pond!.depth).toBeGreaterThanOrEqual(1);
+  });
+
+  it('places the unique repair kit on validated dry ground and the Keel in the pond medium', () => {
+    const size = 50;
+    const generator = getWorldGen(size, STORY_SEED).generator;
+    const pack = getFieldPackPose(size, STORY_SEED);
+    const keel = getKeelMemoryPose(size, STORY_SEED);
+    expect(pack).not.toBeNull();
+    expect(keel).not.toBeNull();
+
+    const packCell = pack!.position.clone().divideScalar(VOXEL_SCALE).round();
+    const support = findTopFaceSurfaceVoxel(size, STORY_SEED, {
+      x: packCell.x,
+      z: packCell.z
+    });
+    expect(generator.isWaterVoxel(support.x, support.y, support.z)).toBe(false);
+    expect(generator.isWaterVoxel(support.x, support.y + 1, support.z)).toBe(false);
+    expect(generator.generateBlockForPosition(support.x, support.y, support.z)).not.toBe('lava');
+
+    const pond = getPondPose(size, STORY_SEED)!;
+    expect(keel!.position.distanceTo(pond.floor)).toBeLessThan(1);
+    const keelCell = keel!.position.clone().divideScalar(VOXEL_SCALE).round();
+    expect(generator.isWaterVoxel(keelCell.x, keelCell.y + 1, keelCell.z)).toBe(true);
+  });
+
+  it('keeps the canonical repaired wreck physically perched and boardable', () => {
+    const size = 50;
+    const generator = getWorldGen(size, STORY_SEED, '-1,-1').generator;
+    const impact = getPodImpactPose(size, STORY_SEED);
+    const parked = impact.position.clone().addScaledVector(impact.up, SHIP_REST_CLEARANCE);
+    const terrain = {
+      shouldVoxelExist: (x: number, y: number, z: number) =>
+        generator.shouldVoxelExist(x, y, z),
+      isWaterVoxel: (x: number, y: number, z: number) =>
+        generator.isWaterVoxel(x, y, z),
+      generateBlockForPosition: (x: number, y: number, z: number) =>
+        generator.generateBlockForPosition(x, y, z)
+    };
+
+    expect(parked.toArray()).toEqual([3, 53.5, -6]);
+    expect(resolveSafeShipBoardingPosition(terrain, size, parked, 0)?.toArray())
+      .toEqual(parked.toArray());
   });
 
   it('gives the first-day agent a fully dry route to the validated pond shore', () => {

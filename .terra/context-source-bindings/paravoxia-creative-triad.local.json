@@ -1,0 +1,91 @@
+{
+  "schema": "terra.contextSourceBindingSet.v1",
+  "identity": {
+    "slug": "paravoxia-creative-triad-local-bindings",
+    "name": "Paravoxia Creative Triad Project Context Bindings",
+    "version": "v1"
+  },
+  "contextPackRef": "paravoxia-creative-triad@v1",
+  "scope": {
+    "mode": "project-relative",
+    "targetProject": ".",
+    "portable": true,
+    "pathBase": "repository-root"
+  },
+  "sourceBindings": [
+    {
+      "sourceRef": "production-authority",
+      "bindingKey": "paravoxia.productionAuthority",
+      "kind": "file",
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "required": true
+    },
+    {
+      "sourceRef": "creative-council",
+      "bindingKey": "paravoxia.creativeCouncil",
+      "kind": "file",
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "required": true
+    },
+    {
+      "sourceRef": "story-authority-map",
+      "bindingKey": "paravoxia.storyAuthorityMap",
+      "kind": "file",
+      "path": "main/story-authority.json",
+      "required": true
+    },
+    {
+      "sourceRef": "story-bible",
+      "bindingKey": "paravoxia.storyBible",
+      "kind": "file",
+      "path": "main/PARAVOXIA_STORY_BIBLE.md",
+      "required": true
+    },
+    {
+      "sourceRef": "story-execution-plan",
+      "bindingKey": "paravoxia.storyExecutionPlan",
+      "kind": "file",
+      "path": "main/PARAVOXIA_STORY_EXECUTION_PLAN.md",
+      "required": true
+    },
+    {
+      "sourceRef": "score-bible",
+      "bindingKey": "paravoxia.scoreBible",
+      "kind": "file",
+      "path": "PARAVOXIA_SCORE.md",
+      "required": true
+    },
+    {
+      "sourceRef": "cinematography-bible",
+      "bindingKey": "paravoxia.cinematographyBible",
+      "kind": "file",
+      "path": "main/CINEMATOGRAPHY.md",
+      "required": true
+    },
+    {
+      "sourceRef": "runtime-source",
+      "bindingKey": "paravoxia.runtimeSource",
+      "kind": "directory",
+      "path": "main",
+      "required": true
+    },
+    {
+      "sourceRef": "story-ux-runtime",
+      "bindingKey": "paravoxia.storyUxRuntime",
+      "kind": "directory",
+      "path": "main/src/story/ux",
+      "required": true
+    },
+    {
+      "sourceRef": "production-run",
+      "bindingKey": "paravoxia.productionRun",
+      "kind": "directory",
+      "path": ".codex/production-runs",
+      "required": true
+    }
+  ],
+  "notes": [
+    "Resolve every path from the repository root.",
+    "This project binding is portable across checkouts and contains no operator-specific absolute paths."
+  ]
+}

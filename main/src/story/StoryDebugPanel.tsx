@@ -41,7 +41,20 @@ const BEAT_LABELS: Record<StoryBeat, string> = {
   'ch3-signal': 'ch3 · the klaxon (sprint)',
   'ch4-vigil': 'ch4 · scheduled sleep',
   'ch4-arrival': 'ch4 · THE OTHER WORKER (plays)',
-  done: 'complete  [post-arrival sandbox]'
+  'ch4-audit': 'ch4 · the audit route',
+  'ch4-comply': 'ch4 · ordered regression',
+  'ch4-defy': 'ch4 · refuse.',
+  'a4-exhale': 'A4 · Breath (plays)',
+  'ch5-maw': 'ch5 · Direction / Maw repair',
+  'ch6-dive': 'ch6 · Below / Keel dive',
+  'ch7-reconstruct': 'ch7 · restore the Kestrel',
+  'ch7-board': 'ch7 · physical boarding',
+  'ch8-launch': 'ch8 · launch',
+  'ch8-crossing': 'ch8 · local-system crossing',
+  'ch8-landfall': 'ch8 · Tidegarden landfall',
+  'ch9-settle': 'ch9 · build the second hearth',
+  'ch9-hearth': 'ch9 · safe rest / handback',
+  done: 'complete  [two-world free play]'
 };
 
 export function storyDebugEnabled(): boolean {

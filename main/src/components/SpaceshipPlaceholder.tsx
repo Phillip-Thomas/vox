@@ -13,14 +13,18 @@ import {
 import { getWorldGen } from '../utils/worldGenCache.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { resolveSafeShipBoardingPosition } from '../utils/spawnValidation.ts';
+import type { ShipRepairStage } from '../story/emergentCapabilities.ts';
 
 const BOARD_RANGE = 3.5;
 const BOARD_RANGE_SQ = BOARD_RANGE * BOARD_RANGE;
 
 interface SpaceshipPlaceholderProps {
   position: THREE.Vector3;
+  /** Exact real touchdown heading restored with the parked pose. */
+  parkedQuaternion?: THREE.Quaternion;
   planetSize?: number;
   terrainSeed: number;
+  worldId?: string;
   activeApproach: boolean;
   /** Live player position (from EfficientScene) for the boarding proximity check. */
   playerPosition?: THREE.Vector3;
@@ -32,6 +36,44 @@ interface SpaceshipPlaceholderProps {
   interactive?: boolean;
   /** Radians of settle tilt for a crashed attitude (0 = level parked, default). */
   crashedTilt?: number;
+  /**
+   * Story wreck only: reveal the existing exterior monotonically as its real
+   * repair stage advances. Omitted means the ordinary complete parked ship.
+   */
+  restorationStage?: ShipRepairStage;
+}
+
+export interface ShipExteriorVisualState {
+  hullVisible: boolean;
+  canopyVisible: boolean;
+  thrustersVisible: boolean;
+  beaconVisible: boolean;
+}
+
+const RESTORATION_ORDER: readonly ShipRepairStage[] = [
+  'wrecked',
+  'bench_online',
+  'frame_restored',
+  'hull_sealed',
+  'lift_online',
+  'flight_ready'
+];
+
+/** Pure visual contract used by headed rendering and browser-free regression tests. */
+export function resolveShipExteriorVisualState(
+  stage?: ShipRepairStage
+): ShipExteriorVisualState {
+  if (stage === undefined) {
+    return { hullVisible: true, canopyVisible: true, thrustersVisible: true, beaconVisible: true };
+  }
+  const index = RESTORATION_ORDER.indexOf(stage);
+  const atLeast = (required: ShipRepairStage) => index >= RESTORATION_ORDER.indexOf(required);
+  return {
+    hullVisible: atLeast('hull_sealed'),
+    canopyVisible: atLeast('hull_sealed'),
+    thrustersVisible: atLeast('lift_online'),
+    beaconVisible: stage === 'flight_ready'
+  };
 }
 
 /**
@@ -42,12 +84,15 @@ interface SpaceshipPlaceholderProps {
  */
 export default function SpaceshipPlaceholder({
   position,
+  parkedQuaternion,
   planetSize = 50,
   terrainSeed,
+  worldId,
   activeApproach,
   playerPosition,
   interactive = true,
-  crashedTilt = 0
+  crashedTilt = 0,
+  restorationStage
 }: SpaceshipPlaceholderProps) {
   const { phase, controlMode } = useSpaceFlight();
   const boardableRef = useRef(false);
@@ -68,7 +113,7 @@ export default function SpaceshipPlaceholder({
     [activeApproach, terrainSeed]
   );
   const spawnTerrain = useMemo(() => {
-    const generator = getWorldGen(planetSize, terrainSeed).generator;
+    const generator = getWorldGen(planetSize, terrainSeed, worldId).generator;
     return {
       shouldVoxelExist: (x: number, y: number, z: number) =>
         generator.shouldVoxelExist(x, y, z) && !voxelSystem.isDeleted(x, y, z),
@@ -77,14 +122,15 @@ export default function SpaceshipPlaceholder({
       generateBlockForPosition: (x: number, y: number, z: number) =>
         generator.generateBlockForPosition(x, y, z)
     };
-  }, [planetSize, terrainSeed]);
+  }, [planetSize, terrainSeed, worldId]);
   const hullGeometry = useMemo(() => createShipHullGeometry(shipHullColors(accent)), [accent]);
   const canopyGeometry = useMemo(() => createShipCanopyGeometry(), []);
+  const visualState = resolveShipExteriorVisualState(restorationStage);
   // Upright on the supporting CUBE FACE normal, nose along the direction the
   // cockpit faced at touchdown — never radial up (which visibly leans toward
   // cube edges) or a fixed world rotation (which fails on non-top faces).
   const parkedQuat = useMemo(() => {
-    const q = shipParkedOrientation(position);
+    const q = parkedQuaternion?.clone().normalize() ?? shipParkedOrientation(position);
     // Crashed attitude: settle the hull off level — a pitch dug into the impact
     // plus a roll skew, in the ship's local frame (post-multiplied so it reads
     // relative to the surface-normal parked orientation, on any planet face).
@@ -92,7 +138,7 @@ export default function SpaceshipPlaceholder({
       q.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(crashedTilt * 0.7, 0, crashedTilt)));
     }
     return q;
-  }, [position, crashedTilt]);
+  }, [position, parkedQuaternion, crashedTilt]);
 
   useEffect(() => {
     return () => {
@@ -169,49 +215,59 @@ export default function SpaceshipPlaceholder({
       quaternion={parkedQuat}
     >
       {/* Hull: single merged flat-shaded vertex-colored draw. */}
-      <mesh geometry={hullGeometry}>
-        <meshStandardMaterial vertexColors flatShading roughness={0.46} metalness={0.32} />
-      </mesh>
+      {visualState.hullVisible && (
+        <mesh geometry={hullGeometry}>
+          <meshStandardMaterial vertexColors flatShading roughness={0.46} metalness={0.32} />
+        </mesh>
+      )}
 
       {/* Faceted crystal canopy. */}
-      <mesh geometry={canopyGeometry}>
-        <meshStandardMaterial
-          color="#8bd3ff"
-          emissive={activeApproach ? accent : '#0b2740'}
-          emissiveIntensity={activeApproach ? 0.5 : 0.18}
-          roughness={0.16}
-          metalness={0.05}
-          flatShading
-          transparent
-          opacity={0.62}
-        />
-      </mesh>
+      {visualState.canopyVisible && (
+        <mesh geometry={canopyGeometry}>
+          <meshStandardMaterial
+            color="#8bd3ff"
+            emissive={activeApproach ? accent : '#0b2740'}
+            emissiveIntensity={activeApproach ? 0.5 : 0.18}
+            roughness={0.16}
+            metalness={0.05}
+            flatShading
+            transparent
+            opacity={0.62}
+          />
+        </mesh>
+      )}
 
       {/* Twin thruster glow discs at the nacelle exits + center engine ring. */}
-      <mesh position={[-1.08, -0.14, 1.05]} rotation={[0, Math.PI / 2, 0]}>
-        <circleGeometry args={[0.15, 6]} />
-        <meshStandardMaterial
-          ref={glowRef}
-          color="#0a1520"
-          emissive={accent}
-          emissiveIntensity={1}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      <mesh position={[-1.08, -0.14, -1.05]} rotation={[0, Math.PI / 2, 0]}>
-        <circleGeometry args={[0.15, 6]} />
-        <meshStandardMaterial color="#0a1520" emissive={accent} emissiveIntensity={1.2} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[-1.75, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <circleGeometry args={[0.32, 6]} />
-        <meshStandardMaterial color="#0a1520" emissive={accent} emissiveIntensity={1.1} side={THREE.DoubleSide} />
-      </mesh>
+      {visualState.thrustersVisible && (
+        <>
+          <mesh position={[-1.08, -0.14, 1.05]} rotation={[0, Math.PI / 2, 0]}>
+            <circleGeometry args={[0.15, 6]} />
+            <meshStandardMaterial
+              ref={glowRef}
+              color="#0a1520"
+              emissive={accent}
+              emissiveIntensity={1}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+          <mesh position={[-1.08, -0.14, -1.05]} rotation={[0, Math.PI / 2, 0]}>
+            <circleGeometry args={[0.15, 6]} />
+            <meshStandardMaterial color="#0a1520" emissive={accent} emissiveIntensity={1.2} side={THREE.DoubleSide} />
+          </mesh>
+          <mesh position={[-1.75, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+            <circleGeometry args={[0.32, 6]} />
+            <meshStandardMaterial color="#0a1520" emissive={accent} emissiveIntensity={1.1} side={THREE.DoubleSide} />
+          </mesh>
+        </>
+      )}
 
       {/* Tail-fin beacon. */}
-      <mesh position={[-1.88, 1.22, 0]}>
-        <sphereGeometry args={[0.07, 8, 6]} />
-        <meshStandardMaterial ref={beaconRef} color="#1a0d08" emissive="#ff8a3d" emissiveIntensity={1} />
-      </mesh>
+      {visualState.beaconVisible && (
+        <mesh position={[-1.88, 1.22, 0]}>
+          <sphereGeometry args={[0.07, 8, 6]} />
+          <meshStandardMaterial ref={beaconRef} color="#1a0d08" emissive="#ff8a3d" emissiveIntensity={1} />
+        </mesh>
+      )}
     </group>
   );
 }

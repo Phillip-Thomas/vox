@@ -1,0 +1,18 @@
+{
+  "schema": "terra.chapterAcceptanceGateSemanticsProof.v1",
+  "synthetic": true,
+  "assertions": {
+    "independentReviewIntegrityPasses": true,
+    "approvedDecisionCannotBypassOpenMaterialMedium": true,
+    "approvedDecisionCannotBypassInvalidHumanProvenance": true,
+    "correctedMaterialDefectRegisterPasses": true,
+    "precomputedFinalDecisionChecksPass": true,
+    "allGateExpressionsPassActualTerraEvaluator": true,
+    "canonicalDefectFindingRoutesBoundedRepair": true,
+    "resolvedCanonicalDefectClearsRepairRoute": true,
+    "materialAcceptedExceptionRejected": true,
+    "redMechanicalReportAttachedAndRouted": true,
+    "wrongRunMechanicalReportRejected": true
+  },
+  "checkedAt": "2026-07-15T20:15:56.521Z"
+}

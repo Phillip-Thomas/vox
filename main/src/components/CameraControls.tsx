@@ -28,6 +28,10 @@ import {
   steerSurfaceForwardToward
 } from '../utils/surfaceGaze.ts';
 import { getSunDirection } from './SkyController.tsx';
+import {
+  getVisualAccessibilityPreferences,
+  resolveUnderwaterAccessibilityPolicy
+} from '../utils/underwaterAccessibility.ts';
 
 const _sideForward = new THREE.Vector3();
 const _sideRight = new THREE.Vector3();
@@ -315,11 +319,17 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
     applyCinematicCameraPose(cameraRef.current);
 
     // Underwater float-sway, scaled by submergence (0 = no effect on land).
+    // Reduced-motion keeps the embodied gravity/look frame but removes the
+    // authored roll and nod completely.
     const submergence = getCameraSubmergence();
-    if (submergence > 0.01) {
+    const underwaterAccessibility = resolveUnderwaterAccessibilityPolicy(
+      getVisualAccessibilityPreferences()
+    );
+    if (submergence > 0.01 && underwaterAccessibility.cameraSwayScale > 0) {
       const t = state.clock.elapsedTime;
-      const roll = (Math.sin(t * 0.5) * 0.015 + Math.sin(t * 0.23) * 0.008) * submergence;
-      const nod = Math.sin(t * 0.43) * 0.010 * submergence;
+      const motionScale = submergence * underwaterAccessibility.cameraSwayScale;
+      const roll = (Math.sin(t * 0.5) * 0.015 + Math.sin(t * 0.23) * 0.008) * motionScale;
+      const nod = Math.sin(t * 0.43) * 0.010 * motionScale;
       cameraRef.current.quaternion.multiply(_swayQuat.setFromAxisAngle(LOCAL_ROLL_AXIS, roll));
       cameraRef.current.quaternion.multiply(_swayQuat.setFromAxisAngle(LOCAL_PITCH_AXIS, nod));
     }

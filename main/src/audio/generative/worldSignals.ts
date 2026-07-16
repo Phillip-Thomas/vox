@@ -74,6 +74,8 @@ export interface BedSignals {
   daylight: number;
   golden: number;
   submergence: number;
+  /** Live local-player survival oxygen, normalized to 0..1. */
+  oxygen: number;
   /** WindProfile prevailing direction in the local tangent plane. */
   windDirectionX: number;
   windDirectionY: number;
@@ -95,8 +97,14 @@ export interface BedSignals {
   regionUnit: number;
   /** Elapsed real seconds (macro-drift clocks). */
   timeSec: number;
+  /** Canonical body id while approaching; null for coordinate-only interstellar travel. */
+  destinationWorldId: string | null;
   /** Destination planet seed while approaching (null = no destination). */
   destinationSeed: number | null;
+  /** Canonical profile identity carried with the seed for sibling-safe routing. */
+  destinationProfileId: string | null;
+  destinationProfileVersion: number | null;
+  destinationProfileHash: string | null;
   /** Destination archetype id string when known (mode weighting of the target key). */
   destinationArchetype: string | null;
   /** A story mood leads the score — the bed yields (frozen contract). */
@@ -122,6 +130,7 @@ export function neutralBedSignals(): BedSignals {
     daylight: 0.7,
     golden: 0,
     submergence: 0,
+    oxygen: 1,
     windDirectionX: 1,
     windDirectionY: 0,
     windStrength: 0.6,
@@ -139,7 +148,11 @@ export function neutralBedSignals(): BedSignals {
     warpProgress: 0,
     regionUnit: 0,
     timeSec: 0,
+    destinationWorldId: null,
     destinationSeed: null,
+    destinationProfileId: null,
+    destinationProfileVersion: null,
+    destinationProfileHash: null,
     destinationArchetype: null,
     storyLeads: false
   };

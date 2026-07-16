@@ -29,6 +29,11 @@ export interface ProceduralMusicTargets {
   night: number;
 }
 
+export interface ProceduralMusicSlewOverrides {
+  /** Scene-owned ship-hum edge; all other procedural voices keep their floor. */
+  shipGainSeconds?: number;
+}
+
 interface RuntimeLayer {
   asset: MusicLayerAsset;
   buffer: AudioBuffer | null;
@@ -88,6 +93,8 @@ export const PROCEDURAL_MIN_SLEW_S = 0.35;
 export const PROCEDURAL_FILTER_MIN_SLEW_S = 0.5;
 const MUSIC_ENGINE_UNLOCK_SLEW_S = 0.2;
 const STREAM_LAYER_START_SLEW_S = 0.8;
+/** Targets below this are effectively silent and do not justify a decode yet. */
+export const STREAM_LAYER_LOAD_EPSILON = 0.001;
 const DRONE_FOLD_MIN_MULT = 0.75;
 const DRONE_FOLD_MAX_MULT = 4;
 const DRONE_FOLD_OCTAVE_MIN = -5;
@@ -154,13 +161,17 @@ function automateProceduralTargets(
   context: BaseAudioContext,
   procedural: ProceduralRuntime,
   targets: ProceduralMusicTargets,
-  fadeSeconds: number
+  fadeSeconds: number,
+  slewOverrides: ProceduralMusicSlewOverrides = {}
 ): void {
   const gainSlew = Math.max(PROCEDURAL_MIN_SLEW_S, fadeSeconds);
   const filterSlew = Math.max(PROCEDURAL_FILTER_MIN_SLEW_S, fadeSeconds);
+  const shipGainSlew = slewOverrides.shipGainSeconds == null
+    ? gainSlew
+    : Math.max(0, slewOverrides.shipGainSeconds);
   const { pulse, ship, warp, life, wind, glass, rumble, water, night } = targets;
   rampGain(context, procedural.pulseGain.gain, pulse, gainSlew);
-  rampGain(context, procedural.shipGain.gain, ship, gainSlew);
+  rampGain(context, procedural.shipGain.gain, ship, shipGainSlew);
   rampGain(context, procedural.warpNoiseGain.gain, warp * 0.045, gainSlew);
   rampGain(context, procedural.warpToneGain.gain, warp * 0.075, gainSlew);
   rampGain(context, procedural.lifeGain.gain, life, gainSlew);
@@ -392,6 +403,11 @@ class MusicEngine {
   private unlocked = false;
   private proceduralTargets = ZERO_PROCEDURAL;
   private readonly layers = new Map<MusicLayerId, RuntimeLayer>();
+  /** Exactly one fetch/decode may own this slot at a time. */
+  private activeLayerLoad: Promise<void> | null = null;
+  private layerLoadScheduled = false;
+  /** Explicit preload eventually visits silent layers, still through one slot. */
+  private preloadAllLayers = false;
   /** Last published chord-root pc (semitones from A) — applied when drones start. */
   private chordRootPc: number | null = null;
 
@@ -418,17 +434,23 @@ class MusicEngine {
     this.startProcedural();
     if (this.musicGain) rampGain(context, this.musicGain.gain, 1, MUSIC_ENGINE_UNLOCK_SLEW_S);
     this.setProceduralTargets(this.proceduralTargets, MUSIC_ENGINE_UNLOCK_SLEW_S);
-    this.loadAll();
+    // The score/procedural graph is audible immediately. Streamed texture stems
+    // join only when their live target is audible, one fetch/decode at a time;
+    // decoding the entire catalog inside the input gesture can starve the world
+    // mount and make both the first score and scene transition appear frozen.
+    this.scheduleNextLayerLoad();
   }
 
   preload(): void {
     if (!this.context) return;
-    this.loadAll();
+    this.preloadAllLayers = true;
+    this.scheduleNextLayerLoad();
   }
 
   setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void {
     if (this.context) {
       automateLayerTargets(this.context, this.layers.values(), targets, fadeSeconds);
+      if (this.unlocked) this.scheduleNextLayerLoad();
       return;
     }
     for (const layer of this.layers.values()) {
@@ -436,7 +458,11 @@ class MusicEngine {
     }
   }
 
-  setProceduralTargets(targets: ProceduralMusicTargets, fadeSeconds: number): void {
+  setProceduralTargets(
+    targets: ProceduralMusicTargets,
+    fadeSeconds: number,
+    slewOverrides: ProceduralMusicSlewOverrides = {}
+  ): void {
     this.proceduralTargets = normalizeProceduralTargets(targets);
 
     if (!this.context || !this.procedural) return;
@@ -444,7 +470,8 @@ class MusicEngine {
       this.context,
       this.procedural,
       this.proceduralTargets,
-      fadeSeconds
+      fadeSeconds,
+      slewOverrides
     );
   }
 
@@ -567,15 +594,45 @@ class MusicEngine {
     return context;
   }
 
-  private loadAll(): void {
+  private nextLayerToLoad(): RuntimeLayer | null {
+    let selected: RuntimeLayer | null = null;
     for (const layer of this.layers.values()) {
-      this.loadLayer(layer);
+      if (layer.buffer || layer.loading) continue;
+      if (!this.preloadAllLayers && layer.targetGain <= STREAM_LAYER_LOAD_EPSILON) continue;
+      // Highest current gain wins. Map insertion order is the stable tie-break,
+      // so identical targets remain deterministic across runs.
+      if (!selected || layer.targetGain > selected.targetGain) selected = layer;
     }
+    return selected;
   }
 
-  private loadLayer(layer: RuntimeLayer): void {
+  private scheduleNextLayerLoad(): void {
+    if (!this.context || this.activeLayerLoad || this.layerLoadScheduled) return;
+    // AudioDirector publishes targets every frame. Once all requested stems are
+    // resident (or already attempted), do not enqueue an empty microtask on
+    // every one of those updates.
+    if (!this.nextLayerToLoad()) return;
+    this.layerLoadScheduled = true;
+    queueMicrotask(() => {
+      this.layerLoadScheduled = false;
+      if (!this.context || this.activeLayerLoad) return;
+      const layer = this.nextLayerToLoad();
+      if (!layer) return;
+      const load = this.loadLayer(layer);
+      this.activeLayerLoad = load;
+      void load.then(() => {
+        if (this.activeLayerLoad === load) this.activeLayerLoad = null;
+        // Re-evaluate live targets after every decode. A scene transition may
+        // have made a different stem more valuable while this one was loading.
+        this.scheduleNextLayerLoad();
+      });
+    });
+  }
+
+  private loadLayer(layer: RuntimeLayer): Promise<void> {
     const context = this.context;
-    if (!context || layer.buffer || layer.loading) return;
+    if (!context || layer.buffer) return Promise.resolve();
+    if (layer.loading) return layer.loading;
 
     layer.loading = fetch(layer.asset.url)
       .then(response => {
@@ -590,6 +647,7 @@ class MusicEngine {
       .catch(error => {
         console.warn('[audio] music layer failed to load', layer.asset.url, error);
       });
+    return layer.loading;
   }
 
   private startLayer(layer: RuntimeLayer): void {
@@ -695,7 +753,11 @@ class MusicEngine {
 }
 
 export interface OfflineMusicEngineRuntime {
-  setProceduralTargets(targets: ProceduralMusicTargets, fadeSeconds: number): void;
+  setProceduralTargets(
+    targets: ProceduralMusicTargets,
+    fadeSeconds: number,
+    slewOverrides?: ProceduralMusicSlewOverrides
+  ): void;
   setLayerTargets(targets: Partial<Record<MusicLayerId, number>>, fadeSeconds: number): void;
   retuneDronesToChordRoot(rootSemisFromA: number): void;
 }
@@ -750,12 +812,13 @@ export function createOfflineMusicEngineRuntime(
   }
 
   return {
-    setProceduralTargets(targets, fadeSeconds) {
+    setProceduralTargets(targets, fadeSeconds, slewOverrides) {
       automateProceduralTargets(
         context,
         procedural,
         normalizeProceduralTargets(targets),
-        fadeSeconds
+        fadeSeconds,
+        slewOverrides
       );
     },
     setLayerTargets(targets, fadeSeconds) {

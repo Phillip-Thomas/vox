@@ -1,13 +1,24 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { getStoryInputPolicy, SANDBOX_POLICY, setStoryFeedBlend, setStoryMoveScale } from './storyInputPolicy.ts';
+import {
+  getStoryInputPolicy,
+  isFabricatorRecipeAllowed,
+  SANDBOX_POLICY,
+  setStoryFeedBlend,
+  setStoryMoveScale
+} from './storyInputPolicy.ts';
 import { advanceToBeat, beginStory, completeStory, deactivateStory, getStoryStateSnapshot } from './storyState.ts';
 import { resetProgression } from '../game/systems/progressionSystem.ts';
 import { resetVoxelRealityRenderState, getVoxelRealityStage } from '../game/systems/realityRenderSystem.ts';
+import {
+  applyShipRestorationSnapshot,
+  resetShipRestoration
+} from '../game/systems/shipRestoration.ts';
 
 describe('storyInputPolicy', () => {
   beforeEach(() => {
     deactivateStory();
     resetProgression();
+    resetShipRestoration();
     resetVoxelRealityRenderState();
   });
 
@@ -79,18 +90,60 @@ describe('storyInputPolicy', () => {
     expect(getStoryInputPolicy().moveSpeedScale).toBeGreaterThan(0);
   });
 
+  it('keeps chapter fabrication knowledge narrow and cumulative across the Kestrel arc', () => {
+    beginStory();
+    advanceToBeat('ch7-reconstruct');
+    expect(getStoryInputPolicy().recipeAllowed('campfire')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('lift_cell')).toBe(false);
+    expect(getStoryInputPolicy().recipeAllowed('logic_wafer')).toBe(false);
+
+    applyShipRestorationSnapshot({ repairStage: 'hull_sealed' });
+    expect(getStoryInputPolicy().recipeAllowed('lift_cell')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('logic_wafer')).toBe(false);
+
+    applyShipRestorationSnapshot({ repairStage: 'lift_online' });
+    expect(getStoryInputPolicy().recipeAllowed('logic_wafer')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('range_coil')).toBe(false);
+
+    applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
+    advanceToBeat('ch9-settle');
+    expect(getStoryInputPolicy().recipeAllowed('lift_cell')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('logic_wafer')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('habitat_core')).toBe(true);
+    expect(getStoryInputPolicy().recipeAllowed('range_coil')).toBe(false);
+    expect(getStoryInputPolicy().recipeAllowed('void_maw')).toBe(false);
+  });
+
+  it('closes fabrication during landfall and retains only earned patterns after handback', () => {
+    beginStory();
+    applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
+    advanceToBeat('ch8-landfall');
+    expect(getStoryInputPolicy().allowCraft).toBe(false);
+    expect(isFabricatorRecipeAllowed('range_coil')).toBe(false);
+
+    advanceToBeat('ch9-hearth');
+    completeStory();
+    expect(getStoryInputPolicy()).toBe(SANDBOX_POLICY);
+    expect(isFabricatorRecipeAllowed('campfire')).toBe(true);
+    expect(isFabricatorRecipeAllowed('lift_cell')).toBe(true);
+    expect(isFabricatorRecipeAllowed('logic_wafer')).toBe(true);
+    expect(isFabricatorRecipeAllowed('habitat_core')).toBe(true);
+    expect(isFabricatorRecipeAllowed('range_coil')).toBe(false);
+    expect(isFabricatorRecipeAllowed('void_maw')).toBe(false);
+  });
+
   it('sandbox policy carries the neutral lens knobs', () => {
     const p = getStoryInputPolicy();
     expect(p.targetDpr).toBeNull();
     expect(p.voxelPropsOnly).toBe(false);
   });
 
-  it('completing the story returns the sandbox policy at material stage', () => {
+  it('completing the two-world story returns the sandbox policy at the earned alive stage', () => {
     beginStory();
     advanceToBeat('a3-dawn');
     completeStory();
     expect(getStoryStateSnapshot().active).toBe(false);
     expect(getStoryInputPolicy()).toBe(SANDBOX_POLICY);
-    expect(getVoxelRealityStage()).toBe('material');
+    expect(getVoxelRealityStage()).toBe('alive');
   });
 });

@@ -22,6 +22,7 @@ import {
 } from '../game/atmosphereSpace.ts';
 import { NOMINAL_PLANET_FACE_RADIUS } from '../game/starSystem.ts';
 import { getSystemFlightSnapshot, type SystemVectorTuple } from '../state/systemFlight.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // The dome is camera-centered at every altitude and rendered as a depthless
 // background. Only atmospheric uniforms change during launch; celestial
@@ -34,9 +35,11 @@ import { getSystemFlightSnapshot, type SystemVectorTuple } from '../state/system
  */
 export default function SpaceSky({
   terrainSeed = 0,
+  planetProfile,
   activePlanetSystemPosition
 }: {
   terrainSeed?: number;
+  planetProfile?: PlanetProfile;
   activePlanetSystemPosition: SystemVectorTuple;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -47,9 +50,9 @@ export default function SpaceSky({
 
   // Per-planet daytime atmosphere tint (static per seed; night/space unaffected).
   useEffect(() => {
-    const { lowSky, highSky, sunGlow } = buildPlanetAtmosphereProfile(terrainSeed);
+    const { lowSky, highSky, sunGlow } = buildPlanetAtmosphereProfile(terrainSeed, planetProfile);
     setSpaceSkyAtmosphere(matRef.current ?? material, lowSky, highSky, sunGlow);
-  }, [material, terrainSeed]);
+  }, [material, planetProfile, terrainSeed]);
 
   // Seed the dome on mount from the LOCAL day/night (sun vs the player's up) so
   // the first frame is correct even when shader animation is disabled.

@@ -1,0 +1,24 @@
+{
+  "schema": "paravoxia.chapterDefectRegister.v1",
+  "sourceReportsComplete": true,
+  "sourceHashesCurrent": true,
+  "findingCoverageComplete": true,
+  "findings": [
+    {
+      "schema": "terra.defect.v1",
+      "id": "synthetic-canonical-medium-route",
+      "severity": "medium",
+      "category": "objective_guidance_failure",
+      "description": "Synthetic material finding proving canonical repair routing.",
+      "status": "fixed",
+      "ownerRole": "player-experience-auditor",
+      "evidenceRef": "fixture://canonical-medium-route",
+      "recheck": "Re-run the exact objective lifecycle proof."
+    }
+  ],
+  "openCritical": 0,
+  "openHigh": 0,
+  "openMediumUnaccepted": 0,
+  "openTotal": 0,
+  "countsMatchEntries": true
+}

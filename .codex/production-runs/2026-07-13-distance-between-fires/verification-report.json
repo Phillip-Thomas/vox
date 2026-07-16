@@ -1,0 +1,91 @@
+{
+  "schema": "paravoxia.sceneVerificationReport.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "generatedAt": "{{ISO_8601}}",
+  "sourceRevision": "{{GIT_SHA}}",
+  "canonicalUrl": "{{URL}}",
+  "commands": [
+    {
+      "command": "{{COMMAND}}",
+      "status": "not_run",
+      "exitCode": null,
+      "evidenceRef": "{{LOG_PATH}}"
+    }
+  ],
+  "flow": {
+    "coldRunsRequired": 3,
+    "coldRunsPassed": 0,
+    "movieCompletedWithoutRescue": false,
+    "timeoutRescues": null,
+    "evidenceRefs": ["{{FLOW_TRACE_REF}}"]
+  },
+  "exactAnchors": [
+    {
+      "anchor": "{{ANCHOR_ID}}",
+      "story": "not_run",
+      "camera": "not_run",
+      "effect": "not_run",
+      "score": "not_run",
+      "control": "not_run",
+      "evidenceRefs": []
+    }
+  ],
+  "variants": {
+    "desktop": {
+      "status": "not_run",
+      "focalParity": false,
+      "evidenceRefs": []
+    },
+    "mobile": {
+      "status": "not_run",
+      "focalParity": false,
+      "evidenceRefs": []
+    },
+    "reducedMotion": {
+      "status": "not_run",
+      "focalParity": false,
+      "evidenceRefs": []
+    },
+    "lowestQuality": {
+      "status": "not_run",
+      "focalParity": false,
+      "evidenceRefs": []
+    }
+  },
+  "resetMatrix": [
+    { "case": "replay", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "deep_link", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "pause_focus", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "quit", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "completion", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "sandbox_noop", "status": "not_run", "stateLeak": null, "evidenceRefs": [] }
+  ],
+  "performance": {
+    "status": "not_run",
+    "targetFps": 60,
+    "measuredFps": null,
+    "p95FrameTimeMs": null,
+    "drawCalls": null,
+    "shaderOrGpuNotes": "{{NOTES}}",
+    "memoryNotes": "{{NOTES}}",
+    "evidenceRefs": []
+  },
+  "audio": {
+    "authorizedToChange": false,
+    "changed": false,
+    "status": "not_run",
+    "evidenceRefs": []
+  },
+  "headedGates": [
+    {
+      "gate": "beauty_motion_exposure_pointer_lock_or_taste",
+      "required": true,
+      "status": "pending",
+      "evidenceRefs": []
+    }
+  ],
+  "blockingDefects": [],
+  "overallStatus": "template_incomplete"
+}

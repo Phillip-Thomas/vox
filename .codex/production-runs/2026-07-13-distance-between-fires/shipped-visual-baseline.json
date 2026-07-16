@@ -1,0 +1,50 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-07-13-distance-between-fires",
+  "sourceRevision": "3d68948c18c7c362abb4ec66b74ff1c685bf2d1f+working-tree-20260714T003216Z",
+  "sceneId": "distance-between-fires",
+  "capturedAt": "2026-07-11T14:39:11Z",
+  "captureAuthority": "Current shipped A0 through W-7744 arrival movie run, captured before post-arrival implementation",
+  "captures": [
+    {
+      "path": "../../../captures/paravoxia-full-run.webm",
+      "sha256": "0ee1424793c0596b3b5527dd19512cd03129a6fb2fa40dd8d574d2651d62aee9",
+      "probe": {
+        "formatName": "matroska,webm",
+        "durationSeconds": 753.28,
+        "video": { "codec": "vp8", "width": 1280, "height": 720 },
+        "audio": null
+      },
+      "beat": "ch4-arrival",
+      "anchor": "anc.audit.arrival-handback",
+      "kind": "continuous-video",
+      "viewport": "1280x720",
+      "qualityTier": "high"
+    }
+  ],
+  "cameraStates": [
+    {
+      "beat": "ch4-arrival",
+      "anchor": "anc.audit.arrival-handback",
+      "authority": "player-camera",
+      "fovDeg": 50,
+      "sourceRef": "main/src/story/storyDirector.ts:tickArrival"
+    }
+  ],
+  "paletteStates": [
+    {
+      "beat": "ch4-arrival",
+      "anchor": "anc.audit.arrival-handback",
+      "family": "origin-planet-alive",
+      "sourceRefs": [
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts",
+        "main/src/story/storyDirector.ts:tickArrival"
+      ]
+    }
+  ],
+  "realityStage": "alive",
+  "adjacentEntryRefs": ["main/src/story/storyDirector.ts:tickVigil"],
+  "adjacentExitRefs": ["main/src/story/storyDirector.ts:tickArrival"],
+  "headedStatus": "pending"
+}

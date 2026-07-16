@@ -13,6 +13,11 @@ import {
   SURFACE_SKY_EXIT_FRACTION,
   SURFACE_SKY_PREFERRED_DISTANCE
 } from './systemCompanionBodiesModel.ts';
+import {
+  TIDEGARDEN_SEED,
+  TIDEGARDEN_WORLD_ID,
+  resolvePlanetProfile
+} from '../game/PlanetProfile.ts';
 
 describe('system companion body model', () => {
   it('returns no sibling for authored one-body systems and at most two otherwise', () => {
@@ -186,5 +191,30 @@ describe('system companion body model', () => {
     expect(maxRadius / minRadius).toBeGreaterThan(1.45);
     expect(geometry.boundingSphere?.radius).toBeGreaterThan(1.6);
     geometry.dispose();
+  });
+
+  it('builds Tidegarden companion geometry from its canonical profile, not its volcanic seed', () => {
+    const profile = resolvePlanetProfile({
+      worldId: TIDEGARDEN_WORLD_ID,
+      seed: TIDEGARDEN_SEED
+    }).profile;
+    const canonical = createCompanionSurfaceGeometry(TIDEGARDEN_SEED, 8, profile);
+    const generic = createCompanionSurfaceGeometry(TIDEGARDEN_SEED, 8);
+    const canonicalColors = canonical.getAttribute('color');
+    const genericColors = generic.getAttribute('color');
+
+    expect(profile.archetype).toBe('verdant');
+    expect([
+      canonicalColors.getX(0),
+      canonicalColors.getY(0),
+      canonicalColors.getZ(0)
+    ]).not.toEqual([
+      genericColors.getX(0),
+      genericColors.getY(0),
+      genericColors.getZ(0)
+    ]);
+
+    canonical.dispose();
+    generic.dispose();
   });
 });

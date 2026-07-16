@@ -6,7 +6,18 @@ export interface PublicFabricatorSection {
   recipes: Recipe[];
 }
 
-/** The public portable kit is intentionally primitive-only for this demo. */
+export function fabricatorAccessCopy(
+  stations: readonly StationId[],
+  storyActive: boolean
+): string {
+  const kestrelLinked = stations.some(station => station !== 'hand');
+  if (kestrelLinked) return 'Kestrel-linked fabrication · earned patterns retained';
+  return storyActive
+    ? 'Primitive field assembly · none of this is regulation'
+    : 'Portable field kit · primitive patterns only';
+}
+
+/** Recipes at the stations currently reachable from the field kit/world. */
 export function getPublicFabricatorSections(
   recipeAllowed: (id: string) => boolean = () => true
 ): PublicFabricatorSection[] {
@@ -15,7 +26,6 @@ export function getPublicFabricatorSections(
       stationId,
       recipes: ALL_RECIPES.filter(recipe => (
         recipe.station === stationId
-        && recipe.era === 'primitive'
         && recipeAllowed(recipe.id)
       ))
     }))

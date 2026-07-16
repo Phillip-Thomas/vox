@@ -12,9 +12,10 @@ export interface LiveAgentSurfaceTerrain extends AgentSurfaceTerrainQuery {
 
 export function createLiveAgentSurfaceTerrain(
   planetSize: number,
-  terrainSeed: number
+  terrainSeed: number,
+  worldId?: string
 ): LiveAgentSurfaceTerrain {
-  const generator = getWorldGen(planetSize, terrainSeed).generator;
+  const generator = getWorldGen(planetSize, terrainSeed, worldId).generator;
   const liveBlock = (x: number, y: number, z: number): BlockId | null =>
     voxelSystem.getVoxel(x, y, z)?.blockId ?? null;
   return {

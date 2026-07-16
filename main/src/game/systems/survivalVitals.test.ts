@@ -90,6 +90,18 @@ describe('temperature, shelter, and recovery', () => {
     expect(getVitals().health).toBe(0);
     expect(isDowned()).toBe(true);
   });
+
+  it('keeps resolved nonlethal worlds survivable through an exposed night', () => {
+    setVitals({ warmth: 0, health: 20, hunger: 40 });
+    tickVitals(30, true, undefined, { ...exposedNight, thermalBehavior: 'nonlethal' });
+    expect(getVitals().warmth).toBe(0);
+    expect(getVitals().health).toBe(20);
+    expect(isDowned()).toBe(false);
+    expect(getSurvivalEnvironment()).toMatchObject({
+      status: 'exposed',
+      thermalBehavior: 'nonlethal'
+    });
+  });
 });
 
 describe('stamina + sprint gating', () => {

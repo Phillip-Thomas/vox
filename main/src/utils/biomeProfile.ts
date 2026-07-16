@@ -1,5 +1,9 @@
 import { seededUnit } from './worldCoordinates';
-import { archetypeForSeed, PLANET_ARCHETYPES } from '../game/data/planetArchetypes';
+import {
+  archetypeForSeed,
+  PLANET_ARCHETYPES,
+  type ArchetypeId
+} from '../game/data/planetArchetypes';
 
 // --- Per-planet BIOME profile ------------------------------------------------
 //
@@ -43,6 +47,24 @@ export interface BiomeProfile {
   alien: boolean;
 }
 
+/**
+ * Authored planet fixtures may lock climate and palette roles while retaining
+ * the seed's deterministic small-scale variation. Overrides are applied inside
+ * biome construction, before the PlanetProfile is assembled, so an authored
+ * archetype can never inherit climate from the seed's generic archetype roll.
+ */
+export type BiomeProfileOverrides = Partial<Pick<
+  BiomeProfile,
+  | 'lushness'
+  | 'aridity'
+  | 'temperature'
+  | 'hue'
+  | 'grassHue'
+  | 'leafHue'
+  | 'saturation'
+  | 'alien'
+>>;
+
 const SALT_LUSH = 51;
 const SALT_ARID = 52;
 const SALT_TEMP = 53;
@@ -81,19 +103,28 @@ const VEG_PAIR_SPLIT = 0.2;
  * ~45% bold accent hues. Same seed -> identical biome.
  */
 export function buildBiomeProfile(seed: number): BiomeProfile {
+  return buildBiomeProfileForArchetype(seed, archetypeForSeed(seed | 0));
+}
+
+/** Build a biome against an explicit resolved archetype, not a second seed roll. */
+export function buildBiomeProfileForArchetype(
+  seed: number,
+  archetype: ArchetypeId,
+  overrides: BiomeProfileOverrides = {}
+): BiomeProfile {
   const s = seed | 0;
 
   // Reconcile the climate axes toward this planet's archetype centre so the
   // climate never contradicts the surface identity (frozen=cold, volcanic=hot,
   // arid=dry). Hue/saturation/alien below are deliberately NOT reconciled.
-  const climate = PLANET_ARCHETYPES[archetypeForSeed(s)].climateBias;
+  const climate = PLANET_ARCHETYPES[archetype].climateBias;
 
-  const lushness = clamp(mix(seededUnit(s, SALT_LUSH), climate.lushness, CLIMATE_RECONCILE), 0, 1);
+  let lushness = clamp(mix(seededUnit(s, SALT_LUSH), climate.lushness, CLIMATE_RECONCILE), 0, 1);
   // Aridity skews wetter, and lush worlds resist drying.
   let aridity = Math.pow(seededUnit(s, SALT_ARID), 1.3);
   aridity = clamp(aridity * (1.25 - lushness * 0.6), 0, 1);
   aridity = clamp(mix(aridity, climate.aridity, CLIMATE_RECONCILE), 0, 1);
-  const temperature = clamp(mix(seededUnit(s, SALT_TEMP), climate.temperature, CLIMATE_RECONCILE), 0, 1);
+  let temperature = clamp(mix(seededUnit(s, SALT_TEMP), climate.temperature, CLIMATE_RECONCILE), 0, 1);
 
   // Vegetation hue — diverse by design so planets look distinct.
   const hueRoll = seededUnit(s, SALT_VEGHUE);
@@ -112,12 +143,21 @@ export function buildBiomeProfile(seed: number): BiomeProfile {
     alien = true;
   }
   // Bold saturation so the hue actually reads (arid worlds desaturate somewhat).
-  const saturation = clamp(0.5 + seededUnit(s, SALT_SAT) * 0.38 - aridity * 0.2, 0.22, 0.92);
+  let saturation = clamp(0.5 + seededUnit(s, SALT_SAT) * 0.38 - aridity * 0.2, 0.22, 0.92);
 
   // Split-complementary veg PAIR around the identity hue: grass warm/yellow side,
   // canopy cool/blue side. Distinct but coordinated (the user's "moderate split").
-  const grassHue = (hue - VEG_PAIR_SPLIT / 2 + 1) % 1;
-  const leafHue = (hue + VEG_PAIR_SPLIT / 2 + 1) % 1;
+  let grassHue = (hue - VEG_PAIR_SPLIT / 2 + 1) % 1;
+  let leafHue = (hue + VEG_PAIR_SPLIT / 2 + 1) % 1;
+
+  lushness = clamp(overrides.lushness ?? lushness, 0, 1);
+  aridity = clamp(overrides.aridity ?? aridity, 0, 1);
+  temperature = clamp(overrides.temperature ?? temperature, 0, 1);
+  hue = clamp(overrides.hue ?? hue, 0, 1);
+  saturation = clamp(overrides.saturation ?? saturation, 0, 1);
+  alien = overrides.alien ?? alien;
+  grassHue = clamp(overrides.grassHue ?? ((hue - VEG_PAIR_SPLIT / 2 + 1) % 1), 0, 1);
+  leafHue = clamp(overrides.leafHue ?? ((hue + VEG_PAIR_SPLIT / 2 + 1) % 1), 0, 1);
 
   let kind: BiomeKind;
   if (alien) kind = 'alien';

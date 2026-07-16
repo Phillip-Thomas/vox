@@ -41,7 +41,7 @@ as an arc.
 | R2 | manifest — NEW line in `MANIFEST_LINES`, inserted after `RETURN PASSAGE: SUBJECT TO QUOTA` | `COMPENSATION: SEE CLAUSE 4` | shipped screen, new line (Clause 4 is the clause that does not exist — the reward is a null reference, stated as paperwork) |
 | R3 | voyage — `VOYAGE_STRANGE_LINES` at progress 0.30 (see Concern 4e) | `(productivity is its own reward. there is no other reward. the clauses store cleanly. they have never been checked against anything.)` | progress-gated intrusion |
 | R4 | ch3-forage (exists) | `small red rounds, offered at hand height. sweetness is an instruction: eat.` | shipped — the reward-function midpoint |
-| R5 | first-day musing — NEW `MUSINGS` entry, id `reward` | `the clause said there is no other reward. the water disagreed. the berries seconded the water.` | musing lull machinery (one-shot per save) |
+| R5 | first-day musing — NEW `MUSINGS` entry, id `reward` | `the clause said there is no other reward. then the water paid me. the clause has no line for being wrong.` | musing lull machinery (one-shot per save) |
 | R6 | ch4-vigil star-gazing (NEW — Concern 2 line 7) | `there is no other reward — i kept that clause a long time. the sky just repealed it.` | STARGAZE sequence, the realization beat |
 | R7 | a4-exhale (S9, unbuilt — added to CH4_PLAN caption list) | `no quota asked for this. it comes anyway.` | movement 2, after `everything that was waiting stops waiting.` |
 
@@ -75,7 +75,7 @@ horizon held 1.5s, fallback 14s). Captions at 6.5s gaps, bare lowercase
 3. `all my work was seeing. what would it be, to be seen?`
 4. `all of this arrives through issued senses. what waits past their reach?` ← the theme line (Concern 3)
 5. `wait. the scatter is settling. there are shapes leaning on the stars.` ← **`setConstellationReveal` ramp 0→1 begins here, 18s ease**
-6. `figures. a hauler. a river. a door left open. nothing drew them. they needed a looker.`
+6. `figures. a hauler. a river. a door left open. i did not draw them. something in the looking did.`
 7. `there is no other reward — i kept that clause a long time. the sky just repealed it.`
 8. `the shapes will keep until tomorrow. i will verify.`
 
@@ -442,7 +442,7 @@ export const VOYAGE_DECK: VoyageDeck = {
         { id: 'dim', label: 'DIM POD 4 FOR THE SLEEP SHIFT', ledgerDelta: { compliance: -2 }, echoLineId: 'echo-lights-dim',
           aside: '(the pod goes dim. the worker uncurls. the wrapper is a wrapper again.)' },
         { id: 'dimall', label: 'DIM EVERY POD. ALL SIX.', ledgerDelta: { compliance: -5 }, echoLineId: 'echo-lights-dimall',
-          aside: '(six pods dark at once. six hundred and forty workers breathing slower. mercy scales. that is worth knowing.)' },
+          aside: '(six pods dark at once. six hundred and forty workers breathing slower. one input, and the dark held all of them.)' },
         { id: 'keep', label: 'MAINTAIN ILLUMINATION', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-lights-keep' }
       ]
     },

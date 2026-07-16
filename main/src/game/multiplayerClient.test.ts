@@ -63,6 +63,13 @@ describe('multiplayer server message validation', () => {
         requestedAtMs: 123
       }
     })).toBe(true);
+    expect(isMultiplayerServerMessage({
+      type: 'resume_state',
+      roomId: 'room',
+      worldId: '-1,-1:p1',
+      seq: 12,
+      state: { players: {}, story: {} }
+    })).toBe(true);
   });
 
   it('rejects malformed protocol messages', () => {

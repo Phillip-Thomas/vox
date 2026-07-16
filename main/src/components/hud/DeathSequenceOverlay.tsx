@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import {
   DEATH_TIMINGS,
   beginDeathSequence, notifyDeathRecovery, resetDeathSequence, getDeathView,
@@ -8,7 +8,7 @@ import {
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import { isFeetInLava } from '../../state/playerLavaImmersion.ts';
 import { isPlayerSubmerged } from '../../state/playerSubmersion.ts';
-import { getGraphicsQuality } from '../../config/graphicsSettings.ts';
+import { getGraphicsQuality, subscribeGraphicsQuality } from '../../config/graphicsSettings.ts';
 import { theme } from '../../ui/theme.ts';
 import DownedPanel from '../ui/DownedPanel.tsx';
 
@@ -44,7 +44,11 @@ interface DeathSequenceOverlayProps {
 
 const DeathSequenceOverlay: React.FC<DeathSequenceOverlayProps> = ({ playing, downed, onRecover, onReturnToMenu }) => {
   // Composer tiers get the real framebuffer decompile; others lean on the rain.
-  const postProcess = useMemo(() => getGraphicsQuality().postProcess, []);
+  const postProcess = useSyncExternalStore(
+    subscribeGraphicsQuality,
+    getGraphicsQuality,
+    getGraphicsQuality
+  ).postProcess;
   const [view, setView] = useState<DeathSequenceView>(() => getDeathView());
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rainCols = useRef<RainColumn[]>([]);

@@ -7,6 +7,7 @@ import {
   collectForageCommand,
   collectStoneCommand,
   consumeItemCommand,
+  craftRecipeCommand,
   craftAndPlaceCampfireCommand,
   createOfflineCommandContext,
   drinkFromWaterskinCommand,
@@ -33,6 +34,7 @@ import { isStoneCollected, resetStonePickup } from './systems/stonePickup.ts';
 import { isTreeHarvested, resetTreeHarvest } from './systems/treeHarvest.ts';
 import { isFloraHarvested, resetFloraHarvest } from './systems/floraHarvest.ts';
 import { getPieceAt, resetStructures } from './systems/structureSystem.ts';
+import { hasMilestone, resetProgression } from './systems/progressionSystem.ts';
 
 const actorId = 'alice';
 
@@ -62,6 +64,7 @@ beforeEach(() => {
   resetFloraHarvest();
   resetCampfires();
   resetStructures();
+  resetProgression();
   voxelSystem.reset();
 });
 
@@ -227,6 +230,30 @@ describe('multiplayer reconciliation rollback', () => {
     expect(getItemCount('wood', actorId)).toBe(3);
   });
 
+  it('rolls back the unique Habitat Core receipt with a rejected predicted craft', () => {
+    addItem('strut_frame', 1, actorId);
+    addItem('logic_wafer', 1, actorId);
+    addItem('refined_alloy', 1, actorId);
+    const result = craftRecipeCommand(context(), {
+      recipe: RECIPES.habitat_core,
+      craftContext: { stations: ['assembler'] }
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error('Habitat Core craft should have succeeded');
+    expect(hasMilestone('story:item:habitat-core:crafted', actorId)).toBe(true);
+
+    const applied = applyRejectedCommandRollback(result.rollback, {
+      actorId,
+      rejectCode: 'validation_failed'
+    });
+    expect(applied.removedMilestones).toBe(1);
+    expect(hasMilestone('story:item:habitat-core:crafted', actorId)).toBe(false);
+    expect(getItemCount('habitat_core', actorId)).toBe(0);
+    expect(getItemCount('strut_frame', actorId)).toBe(1);
+    expect(getItemCount('logic_wafer', actorId)).toBe(1);
+    expect(getItemCount('refined_alloy', actorId)).toBe(1);
+  });
+
   it('restores predicted vitals, waterskin, and Maw state on rejection', () => {
     setVitals({ hunger: 50, thirst: 40 }, actorId);
     addItem('berry', 1, actorId);
@@ -284,14 +311,17 @@ describe('multiplayer reconciliation rollback', () => {
     expect(getMawCharge(actorId)).toBe(50);
 
     addItem('faulty_maw', 1, actorId);
+    addItem('maw_repair_kit', 1, actorId);
     const repaired = repairMawCommand(context());
     expect(repaired.ok).toBe(true);
     if (!repaired.ok) throw new Error('repairMaw should have succeeded');
     expect(getItemCount('faulty_maw', actorId)).toBe(0);
+    expect(getItemCount('maw_repair_kit', actorId)).toBe(0);
     expect(getItemCount('iron_maw', actorId)).toBe(1);
 
     applyRejectedCommandRollback(repaired.rollback, { actorId, rejectCode: 'validation_failed' });
     expect(getItemCount('faulty_maw', actorId)).toBe(1);
+    expect(getItemCount('maw_repair_kit', actorId)).toBe(1);
     expect(getItemCount('iron_maw', actorId)).toBe(0);
   });
 });

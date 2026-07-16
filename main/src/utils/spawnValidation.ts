@@ -6,7 +6,7 @@ import {
   VOXEL_SCALE,
   voxelCoordToWorld
 } from './cubeGravityConstants.ts';
-import { shipPlayerEgressOffset } from './shipDesign.ts';
+import { SHIP_REST_CLEARANCE, shipPlayerEgressOffset } from './shipDesign.ts';
 import { FACE_NORMALS, dominantFaceForPosition } from './surfaceControls.ts';
 
 /** Static terrain queries shared by the procedural generator and focused tests. */
@@ -75,7 +75,7 @@ const SOLID_CONTACT_TOLERANCE = 0.02;
 // ShipController measures 2.5 from a Rapier contact surface. Static spawn
 // queries start at the support voxel centre, so they must include its half
 // extent or the Kestrel's 2.42wu legs are buried nearly a full unit.
-const SHIP_GROUND_CLEARANCE = VOXEL_SCALE / 2 + 2.5;
+const SHIP_GROUND_CLEARANCE = VOXEL_SCALE / 2 + SHIP_REST_CLEARANCE;
 
 const PROFILE: Record<SpawnKind, {
   footprintRadius: number;
@@ -548,7 +548,20 @@ export function resolveSafeShipBoardingPosition(
     requirePlayerEgress: true
   });
   if (!site) return null;
-  if (maxSearchRadius === 0 && site.position.distanceTo(parkedPosition) > 0.15) return null;
+  if (maxSearchRadius === 0 && site.position.distanceTo(parkedPosition) > 0.15) {
+    // A real landed/persisted craft may rest between voxel centres while still
+    // occupying the exact rounded support pad. Preserve that authored pose only
+    // when its full live hull volume and its tail-side player egress both pass;
+    // never silently relocate a zero-radius boarding check.
+    const liveSite: ValidatedSpawnSite = {
+      ...site,
+      position: parkedPosition.clone(),
+      relocated: false
+    };
+    if (!isDryClearResumePosition(terrain, planetSize, parkedPosition, 'ship')
+      || !playerEgressForShipSite(terrain, planetSize, liveSite)) return null;
+    return parkedPosition.clone();
+  }
   return site.position.clone();
 }
 

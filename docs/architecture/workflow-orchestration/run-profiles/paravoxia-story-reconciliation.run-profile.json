@@ -16,6 +16,7 @@
     "minimumDirections": 2,
     "requireCurrentAuthority": true,
     "requireRuntimeAndCopyInventory": true,
+    "requireShippedUxBaseline": true,
     "requireBlindReaderIsolation": true,
     "requireIndependentDirectorTreatments": true,
     "requireDistinctCorrectionTheses": true
@@ -40,6 +41,7 @@
     "runtime-story-inventory",
     "shipped-copy-corpus",
     "shipped-audio-baseline",
+    "shipped-ux-baseline",
     "source-of-truth-map",
     "naive-reader-report",
     "canon-audit",

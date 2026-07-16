@@ -2,12 +2,12 @@ import { blockToRenderMaterial } from '../game/adapters.ts';
 import { ALL_BLOCK_IDS, type BlockId } from '../game/data/blocks.ts';
 import { ALL_RESOURCE_IDS, type ResourceId } from '../game/data/resources.ts';
 import type { ResourceDeposit } from '../game/generation/resourceDeposits.ts';
+import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
 import { parsePlanetWorldId, planetSeedForAddress } from '../game/starSystem.ts';
 import { MATERIAL_ORDER, type MaterialType } from '../types/materials.ts';
-import { ProceduralWorldGenerator } from './proceduralWorldGenerator.ts';
-import { createTerrainConfig } from './terrainConfig.ts';
+import { createResolvedWorldGenerator } from './resolvedWorldGenerator.ts';
 
-export const WORLD_PREP_PROTOCOL_VERSION = 1;
+export const WORLD_PREP_PROTOCOL_VERSION = 2;
 export const MAX_WORLD_PREP_PLANET_SIZE = 4_096;
 
 export type PackedCoordinate = [number, number, number];
@@ -18,6 +18,9 @@ export interface WorldPrepRequest {
   requestId: string;
   worldId: string;
   seed: number;
+  profileId: string;
+  profileVersion: number;
+  profileHash: string;
   planetSize: number;
   activationEpoch: number;
 }
@@ -61,6 +64,9 @@ export interface PackedWorldPrepPayload {
   requestId: string;
   worldId: string;
   seed: number;
+  profileId: string;
+  profileVersion: number;
+  profileHash: string;
   planetSize: number;
   activationEpoch: number;
   lookups: WorldPrepLookupTables;
@@ -123,6 +129,7 @@ export interface WorldPrepSemanticData {
 export interface WorldPrepResultLease {
   worldId: string;
   activationEpoch: number;
+  profileHash: string;
 }
 
 const BLOCK_LOOKUP = Object.freeze([...ALL_BLOCK_IDS]);
@@ -150,11 +157,18 @@ const BUFFER_KEYS: ReadonlyArray<keyof PackedWorldPrepBuffers> = [
   'arrivalCandidate'
 ];
 
-export function createWorldPrepRequest(input: Omit<WorldPrepRequest, 'type' | 'protocolVersion'>): WorldPrepRequest {
+export function createWorldPrepRequest(input: Omit<
+  WorldPrepRequest,
+  'type' | 'protocolVersion' | 'profileId' | 'profileVersion' | 'profileHash'
+>): WorldPrepRequest {
+  const resolution = resolvePlanetProfile({ worldId: input.worldId, seed: input.seed });
   const request: WorldPrepRequest = {
     type: 'prepare_world',
     protocolVersion: WORLD_PREP_PROTOCOL_VERSION,
-    ...input
+    ...input,
+    profileId: resolution.profileId,
+    profileVersion: resolution.profileVersion,
+    profileHash: resolution.profileHash
   };
   validateWorldPrepRequest(request);
   return request;
@@ -181,6 +195,16 @@ export function validateWorldPrepRequest(request: WorldPrepRequest): void {
   if (request.seed !== expectedSeed) {
     throw new Error(`seed ${request.seed} does not match canonical world ${request.worldId}`);
   }
+  const resolution = resolvePlanetProfile({ worldId: request.worldId, seed: request.seed });
+  if (request.profileId !== resolution.profileId) {
+    throw new Error(`profileId differs for canonical world ${request.worldId}`);
+  }
+  if (request.profileVersion !== resolution.profileVersion) {
+    throw new Error(`profileVersion differs for canonical world ${request.worldId}`);
+  }
+  if (request.profileHash !== resolution.profileHash) {
+    throw new Error(`profileHash differs for canonical world ${request.worldId}`);
+  }
   if (
     !Number.isSafeInteger(request.planetSize)
     || request.planetSize <= 0
@@ -197,10 +221,11 @@ export function validateWorldPrepRequest(request: WorldPrepRequest): void {
 export function buildWorldPrepSemanticData(request: WorldPrepRequest): WorldPrepSemanticData {
   validateWorldPrepRequest(request);
   const planetRadius = request.planetSize / 2;
-  const generator = new ProceduralWorldGenerator(
-    { planetRadius, coreRadiusPercent: 0.15 },
-    createTerrainConfig(request.seed, planetRadius)
-  );
+  const { generator } = createResolvedWorldGenerator({
+    worldId: request.worldId,
+    seed: request.seed,
+    planetRadius
+  });
   const positions = generator.getAllVoxelPositions();
   const occupied = new Set(positions.map(position => coordinateKey(position.x, position.y, position.z)));
   const voxels = positions.map(position => {
@@ -343,6 +368,9 @@ export function packWorldPrepSemanticData(
     requestId: request.requestId,
     worldId: request.worldId,
     seed: request.seed,
+    profileId: request.profileId,
+    profileVersion: request.profileVersion,
+    profileHash: request.profileHash,
     planetSize: request.planetSize,
     activationEpoch: request.activationEpoch,
     lookups,
@@ -445,6 +473,9 @@ export function validatePackedWorldPrepPayload(payload: PackedWorldPrepPayload):
     planetSize: payload.planetSize,
     activationEpoch: payload.activationEpoch
   });
+  if (payload.profileId !== request.profileId) throw new Error('packed profileId differs');
+  if (payload.profileVersion !== request.profileVersion) throw new Error('packed profileVersion differs');
+  if (payload.profileHash !== request.profileHash) throw new Error('packed profileHash differs');
   const counts = payload.counts;
   assertBufferLength(payload.buffers.voxelPositions, counts.voxels * 3, 'voxelPositions');
   assertBufferLength(payload.buffers.blockIds, counts.voxels, 'blockIds');
@@ -479,10 +510,12 @@ export function packedTransferByteSize(buffers: PackedWorldPrepBuffers): number 
 }
 
 export function isWorldPrepResultCurrent(
-  payload: Pick<PackedWorldPrepPayload, 'worldId' | 'activationEpoch'>,
+  payload: Pick<PackedWorldPrepPayload, 'worldId' | 'activationEpoch' | 'profileHash'>,
   lease: WorldPrepResultLease
 ): boolean {
-  return payload.worldId === lease.worldId && payload.activationEpoch === lease.activationEpoch;
+  return payload.worldId === lease.worldId
+    && payload.activationEpoch === lease.activationEpoch
+    && payload.profileHash === lease.profileHash;
 }
 
 function findArrivalCandidate(
@@ -520,6 +553,9 @@ function canonicalMetadata(
     requestId: request.requestId,
     worldId: request.worldId,
     seed: request.seed,
+    profileId: request.profileId,
+    profileVersion: request.profileVersion,
+    profileHash: request.profileHash,
     planetSize: request.planetSize,
     activationEpoch: request.activationEpoch,
     lookups,

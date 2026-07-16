@@ -68,6 +68,7 @@ publishDebugSnapshot();
 // Not part of the snapshot: these mutate every frame / often and must NOT
 // trigger re-renders. We only emit when `sceneReady` actually flips.
 let terrainPopulated = false;
+let terrainWorldId: string | null = null;
 let framesPainted = 0;
 
 const listeners = new Set<() => void>();
@@ -100,6 +101,14 @@ export function getAppStateSnapshot(): AppStateSnapshot {
   return snapshot;
 }
 
+/** World-scoped readiness guard for code that reads the live voxel singleton.
+ * During a React world swap the previous world's `sceneReady` snapshot can be
+ * observed by the incoming render before EfficientPlanet's layout cleanup runs;
+ * this prevents that stale frame from being treated as the new live terrain. */
+export function isSceneReadyForWorld(worldId: string): boolean {
+  return snapshot.sceneReady && terrainPopulated && terrainWorldId === worldId;
+}
+
 /** True when launched via a debug deep-link (menu skipped). */
 export function isDebugDeepLink(): boolean {
   return DEEP_LINK;
@@ -128,9 +137,12 @@ function maybeReady(): void {
 }
 
 /** Called once the voxel mesh is populated (EfficientPlanet populate effect). */
-export function markTerrainPopulated(): void {
-  if (!terrainPopulated) framesPainted = 0;
+export function markTerrainPopulated(worldId: string | null = null): void {
+  const changedWorld = terrainPopulated && terrainWorldId !== worldId;
+  if (!terrainPopulated || changedWorld) framesPainted = 0;
   terrainPopulated = true;
+  terrainWorldId = worldId;
+  if (changedWorld && snapshot.sceneReady) setSnapshot({ sceneReady: false });
   maybeReady();
 }
 
@@ -144,6 +156,7 @@ export function markFramePainted(): void {
 /** Drop the ready signal on a world swap (EfficientPlanet effect cleanup). */
 export function resetSceneReady(): void {
   terrainPopulated = false;
+  terrainWorldId = null;
   framesPainted = 0;
   if (snapshot.sceneReady) setSnapshot({ sceneReady: false });
 }

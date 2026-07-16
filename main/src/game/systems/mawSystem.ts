@@ -11,7 +11,8 @@
 // Module-singleton, plain numeric state (persistence-ready). Charge starts at 0:
 // the cold open is "forage by hand → craft Biofuel → power the Maw".
 
-import { addItem, getItemCount, removeItem } from './inventorySystem.ts';
+import { addItem, getItemCount, hasItems, removeItem } from './inventorySystem.ts';
+import { ECONOMY_CATALOG } from '../data/generatedEconomyCatalog.ts';
 import { advanceEraTo, markMilestone } from './progressionSystem.ts';
 import { getLocalActorId, type ActorId } from '../playerActors.ts';
 
@@ -88,13 +89,15 @@ export function refuelFromInventory(actorId?: ActorId): boolean {
 
 /**
  * Repair the Faulty Maw into the charge-free tier-1 Maw and step into the Emergent
- * era. Requires owning the Faulty Maw. The MATERIAL cost (repair kit, ore, salvage)
- * is layered on by the crafting flow in a later phase; this is the canonical state
- * transition. Returns false if there is no Faulty Maw to repair.
+ * era. This is an authored, atomic ritual rather than a fabricator recipe: both
+ * the damaged tool and unique field kit must be present before either is debited.
  */
 export function repairMaw(actorId?: ActorId): boolean {
-  if (!removeItem('faulty_maw', 1, actorId)) return false;
-  addItem('iron_maw', 1, actorId);
+  const transaction = ECONOMY_CATALOG.storyTransactions.mawRepair;
+  if (!hasItems(transaction.inputs.map(input => ({ ...input })), actorId)) return false;
+  // hasItems establishes the all-or-nothing boundary in this synchronous store.
+  for (const input of transaction.inputs) removeItem(input.id, input.qty, actorId);
+  for (const output of transaction.outputs) addItem(output.id, output.qty, actorId);
   setChargeFor(actorId, 0); // the repaired Maw is self-powered; charge no longer applies
   emit();
   markMilestone('maw_repaired', actorId);

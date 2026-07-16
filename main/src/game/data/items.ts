@@ -21,6 +21,7 @@
 // Cell) — deliberately NOT borrowed from other voxel/survival games.
 
 import type { HazardId } from './planetArchetypes.ts';
+import { ECONOMY_CATALOG } from './generatedEconomyCatalog.ts';
 import { ALL_RESOURCE_IDS, RESOURCES, type ResourceDefinition, type ResourceId } from './resources.ts';
 
 export type ItemKind =
@@ -41,7 +42,8 @@ export type ItemKind =
  *  by the terrain economy". */
 export type CraftedItemId =
   // primitive — the crash-landing starter, its fuel, foraged wood, and stone tools
-  | 'faulty_maw' | 'biofuel' | 'wood' | 'stone_hatchet' | 'stone_pickaxe'
+  | 'faulty_maw' | 'maw_repair_kit' | 'kestrel_keel_memory'
+  | 'biofuel' | 'wood' | 'stone_hatchet' | 'stone_pickaxe'
   // primitive light sources
   | 'torch' | 'campfire'
   // primitive forage + survival
@@ -57,7 +59,8 @@ export type CraftedItemId =
   | 'thermal_carapace' | 'filter_carapace' | 'shielded_carapace'
   // modules — personal & ship upgrades
   | 'survey_lens_2' | 'survey_lens_3' | 'survey_lens_4'
-  | 'lift_cell' | 'range_coil';
+  | 'lift_cell' | 'range_coil'
+  | 'habitat_core';
 
 export type ItemId = ResourceId | CraftedItemId;
 
@@ -138,6 +141,14 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
     id: 'faulty_maw', name: 'Faulty Maw', kind: 'tool', tier: 0, stackable: false,
     toolTier: 0, mineSpeedMul: 1, usesCharge: true,
     description: 'Your damaged Maw. Drained and barely holding together — it cuts only soft matter, and only while fuelled. Repair it to cut stone and ore.'
+  },
+  maw_repair_kit: {
+    id: 'maw_repair_kit', name: 'Maw Repair Kit', kind: 'consumable', tier: 1, stackable: false,
+    description: 'A unique field-calibration kit recovered from W-7744’s torn pack. It fits the Faulty Maw and no general fabricator recipe.'
+  },
+  kestrel_keel_memory: {
+    id: 'kestrel_keel_memory', name: 'Kestrel Keel Memory', kind: 'component', tier: 1, stackable: false,
+    description: 'A pressure-sealed maintenance core holding the wreck’s structural memory and local-system address.'
   },
   biofuel: {
     id: 'biofuel', name: 'Biofuel', kind: 'consumable', tier: 0, stackable: true,
@@ -293,6 +304,10 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
     id: 'range_coil', name: 'Range Coil', kind: 'module', tier: 3, stackable: false,
     moduleEffect: { warpRangeAdd: 1 },
     description: 'Tuned warp coil. Extends the reach of an interstellar jump.'
+  },
+  habitat_core: {
+    id: 'habitat_core', name: 'Habitat Core', kind: 'placeable', tier: 2, stackable: false,
+    description: 'A single carried ecology-and-shelter core. Install it on a dry, level foundation to power and certify one remote working habitat.'
   }
 };
 
@@ -304,7 +319,9 @@ export const ITEMS: Record<ItemId, ItemDefinition> = {
   ...CRAFTED_ITEMS
 };
 
-export const ALL_ITEM_IDS = Object.keys(ITEMS) as ItemId[];
+// Catalog order is stable across client and server. The rich display/gameplay
+// metadata above remains client-side, while parity tests enforce exact closure.
+export const ALL_ITEM_IDS: ItemId[] = [...ECONOMY_CATALOG.itemIds];
 
 export function getItem(id: ItemId): ItemDefinition {
   return ITEMS[id];

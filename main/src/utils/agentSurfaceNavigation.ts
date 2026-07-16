@@ -47,6 +47,8 @@ export type AgentSurfaceRouteReason =
   | 'goal-resolved-to-dry-approach'
   | 'dry-route-unavailable-short-water-crossing'
   | 'dry-detour-substantially-longer'
+  | 'wet-start-egress'
+  | 'partial-water-crossing-egress'
   | 'already-at-resolved-goal'
   | 'different-face-direct-fallback'
   | 'different-face-routing-disabled'
@@ -139,6 +141,7 @@ interface SearchNode extends GridPoint {
   waterRun: number;
   waterCells: number;
   crossingComplete: boolean;
+  waterEntryGoalDistance: number;
 }
 
 interface SearchResult {
@@ -147,6 +150,9 @@ interface SearchResult {
   waterCells: number;
   visited: number;
   exhausted: boolean;
+  partialPath: SurfaceCell[] | null;
+  partialCost: number;
+  partialWaterCells: number;
 }
 
 interface CandidatePlan {
@@ -448,11 +454,29 @@ export function planAgentSurfaceRoute(
 
   const search = (goal: SurfaceCell, allowWet: boolean): SearchResult => {
     if ((!startCell.dry && !allowWet) || (startCell.wet && !startCell.jetpackSafe)) {
-      return { path: null, cost: Infinity, waterCells: 0, visited: 0, exhausted: false };
+      return {
+        path: null,
+        cost: Infinity,
+        waterCells: 0,
+        visited: 0,
+        exhausted: false,
+        partialPath: null,
+        partialCost: Infinity,
+        partialWaterCells: 0
+      };
     }
     const startWaterCells = startCell.wet ? 1 : 0;
     if (startWaterCells > config.maxJetpackWaterCells) {
-      return { path: null, cost: Infinity, waterCells: 0, visited: 0, exhausted: false };
+      return {
+        path: null,
+        cost: Infinity,
+        waterCells: 0,
+        visited: 0,
+        exhausted: false,
+        partialPath: null,
+        partialCost: Infinity,
+        partialWaterCells: 0
+      };
     }
     const startKey = stateKey(startCell, allowWet, startWaterCells, startWaterCells, false);
     const startNode: SearchNode = {
@@ -466,7 +490,8 @@ export function planAgentSurfaceRoute(
       wet: startCell.wet,
       waterRun: startWaterCells,
       waterCells: startWaterCells,
-      crossingComplete: false
+      crossingComplete: false,
+      waterEntryGoalDistance: startCell.wet ? manhattan(startCell, goal) : Infinity
     };
     const compare = (a: SearchNode, b: SearchNode) =>
       a.f - b.f
@@ -481,6 +506,29 @@ export function planAgentSurfaceRoute(
     const nodes = new Map<string, SearchNode>([[startKey, startNode]]);
     open.push(startNode);
     let visited = 0;
+    let bestPartial: SearchNode | null = null;
+
+    const pathTo = (node: SearchNode): SurfaceCell[] => {
+      const path: SurfaceCell[] = [];
+      let cursor: SearchNode | undefined = node;
+      while (cursor) {
+        path.push(cursor.cell);
+        cursor = cursor.parentKey ? nodes.get(cursor.parentKey) : undefined;
+      }
+      path.reverse();
+      return path;
+    };
+
+    const resultWithoutGoal = (exhausted: boolean): SearchResult => ({
+      path: null,
+      cost: Infinity,
+      waterCells: 0,
+      visited,
+      exhausted,
+      partialPath: bestPartial ? pathTo(bestPartial) : null,
+      partialCost: bestPartial?.g ?? Infinity,
+      partialWaterCells: bestPartial?.waterCells ?? 0
+    });
 
     while (open.size > 0) {
       const current = open.pop();
@@ -488,22 +536,29 @@ export function planAgentSurfaceRoute(
       if (best.get(current.key) !== current.g) continue;
       visited++;
       if (visited > config.maxVisitedCells) {
-        return { path: null, cost: Infinity, waterCells: 0, visited, exhausted: true };
+        return resultWithoutGoal(true);
+      }
+      if (allowWet
+        && current.cell.dry
+        && current.crossingComplete
+        && current.waterCells > 0
+        && current.h < current.waterEntryGoalDistance
+        && current.h < startNode.h
+        && (!bestPartial
+          || current.h < bestPartial.h
+          || (current.h === bestPartial.h && current.g < bestPartial.g))) {
+        bestPartial = current;
       }
       if (current.u === goal.u && current.v === goal.v) {
-        const path: SurfaceCell[] = [];
-        let cursor: SearchNode | undefined = current;
-        while (cursor) {
-          path.push(cursor.cell);
-          cursor = cursor.parentKey ? nodes.get(cursor.parentKey) : undefined;
-        }
-        path.reverse();
         return {
-          path,
+          path: pathTo(current),
           cost: current.g,
           waterCells: current.waterCells,
           visited,
-          exhausted: false
+          exhausted: false,
+          partialPath: null,
+          partialCost: Infinity,
+          partialWaterCells: 0
         };
       }
 
@@ -517,6 +572,7 @@ export function planAgentSurfaceRoute(
         let waterRun = 0;
         let waterCells = current.waterCells;
         let crossingComplete = current.crossingComplete;
+        let waterEntryGoalDistance = current.waterEntryGoalDistance;
         if (cell.wet) {
           if (crossingComplete) continue; // one deliberate contiguous crossing only
           waterRun = current.wet ? current.waterRun + 1 : 1;
@@ -531,6 +587,7 @@ export function planAgentSurfaceRoute(
         const g = current.g + stepCost + Math.abs(cell.height - current.cell.height) * 0.05;
         if (g >= (best.get(key) ?? Infinity)) continue;
         const h = manhattan(cell, goal);
+        if (cell.wet && !current.wet) waterEntryGoalDistance = h;
         const next: SearchNode = {
           ...cell,
           key,
@@ -542,64 +599,113 @@ export function planAgentSurfaceRoute(
           wet: cell.wet,
           waterRun,
           waterCells,
-          crossingComplete
+          crossingComplete,
+          waterEntryGoalDistance
         };
         best.set(key, g);
         nodes.set(key, next);
         open.push(next);
       }
     }
-    return { path: null, cost: Infinity, waterCells: 0, visited, exhausted: false };
+    return resultWithoutGoal(false);
   };
 
   let visitedCells = 0;
   let exhausted = false;
+  let wetStartEgress: CandidatePlan | null = null;
+  if (startCell.wet && config.allowJetpackCrossing) {
+    const egressCandidates = orderedOffsets(config.maxGoalApproachRadiusCells)
+      .filter(({ du, dv }) => du !== 0 || dv !== 0)
+      .map(offset => ({
+        offset,
+        cell: cellAt(startGrid.u + offset.du, startGrid.v + offset.dv)
+      }))
+      .filter((candidate): candidate is {
+        offset: { du: number; dv: number; distanceSq: number };
+        cell: SurfaceCell;
+      } => candidate.cell?.dry === true)
+      .sort((a, b) => a.offset.distanceSq - b.offset.distanceSq
+        || manhattan(a.cell, requestedGoalGrid) - manhattan(b.cell, requestedGoalGrid)
+        || a.cell.u - b.cell.u
+        || a.cell.v - b.cell.v);
+    for (const candidate of egressCandidates) {
+      const egress = search(candidate.cell, true);
+      visitedCells += egress.visited;
+      exhausted ||= egress.exhausted;
+      if (!egress.path || egress.waterCells === 0) continue;
+      wetStartEgress = {
+        goal: candidate.cell,
+        path: egress.path,
+        cost: egress.cost,
+        waterCells: egress.waterCells
+      };
+      break;
+    }
+  }
   let nearestJet: CandidatePlan | null = null;
+  let nearestPartial: CandidatePlan | null = null;
   let selectedDry: CandidatePlan | null = null;
   let selectedJet: CandidatePlan | null = null;
 
-  for (const goal of candidates) {
-    const dry = search(goal, false);
-    visitedCells += dry.visited;
-    exhausted ||= dry.exhausted;
-    if (dry.path) {
-      selectedDry = { goal, path: dry.path, cost: dry.cost, waterCells: 0 };
+  if (!wetStartEgress) {
+    for (const goal of candidates) {
+      const dry = search(goal, false);
+      visitedCells += dry.visited;
+      exhausted ||= dry.exhausted;
+      if (dry.path) {
+        selectedDry = { goal, path: dry.path, cost: dry.cost, waterCells: 0 };
+        if (config.allowJetpackCrossing) {
+          const jet = search(goal, true);
+          visitedCells += jet.visited;
+          exhausted ||= jet.exhausted;
+          if (jet.path && jet.waterCells > 0) {
+            selectedJet = { goal, path: jet.path, cost: jet.cost, waterCells: jet.waterCells };
+          }
+        }
+        break; // candidates are nearest-first: this is the nearest reachable dry approach
+      }
       if (config.allowJetpackCrossing) {
         const jet = search(goal, true);
         visitedCells += jet.visited;
         exhausted ||= jet.exhausted;
-        if (jet.path && jet.waterCells > 0) {
-          selectedJet = { goal, path: jet.path, cost: jet.cost, waterCells: jet.waterCells };
+        if (!nearestJet && jet.path && jet.waterCells > 0) {
+          nearestJet = { goal, path: jet.path, cost: jet.cost, waterCells: jet.waterCells };
         }
-      }
-      break; // candidates are nearest-first: this is the nearest reachable dry approach
-    }
-    if (config.allowJetpackCrossing) {
-      const jet = search(goal, true);
-      visitedCells += jet.visited;
-      exhausted ||= jet.exhausted;
-      if (!nearestJet && jet.path && jet.waterCells > 0) {
-        nearestJet = { goal, path: jet.path, cost: jet.cost, waterCells: jet.waterCells };
+        if (!nearestPartial && jet.partialPath && jet.partialWaterCells > 0) {
+          const partialGoal = jet.partialPath[jet.partialPath.length - 1];
+          if (partialGoal) {
+            nearestPartial = {
+              goal: partialGoal,
+              path: jet.partialPath,
+              cost: jet.partialCost,
+              waterCells: jet.partialWaterCells
+            };
+          }
+        }
       }
     }
   }
 
   const jetPlan = selectedJet ?? nearestJet;
-  let chosen: CandidatePlan | null = selectedDry;
-  let mode: AgentSurfaceRouteMode = 'walk';
-  let reason: AgentSurfaceRouteReason = requestedGoalWasWet
-    ? 'wet-goal-resolved-to-dry-approach'
-    : rawGoalCell?.dry
-      ? 'dry-surface-path'
-      : 'goal-resolved-to-dry-approach';
-  let crossingReason: AgentSurfaceWaterCrossing['reason'] | null = null;
+  let chosen: CandidatePlan | null = wetStartEgress ?? selectedDry;
+  let mode: AgentSurfaceRouteMode = wetStartEgress ? 'jetpack' : 'walk';
+  let reason: AgentSurfaceRouteReason = wetStartEgress
+    ? 'wet-start-egress'
+    : requestedGoalWasWet
+      ? 'wet-goal-resolved-to-dry-approach'
+      : rawGoalCell?.dry
+        ? 'dry-surface-path'
+        : 'goal-resolved-to-dry-approach';
+  let crossingReason: AgentSurfaceWaterCrossing['reason'] | null = wetStartEgress
+    ? 'dry-route-unavailable'
+    : null;
 
-  if (!selectedDry && jetPlan) {
+  if (!wetStartEgress && !selectedDry && jetPlan) {
     chosen = jetPlan;
     mode = 'jetpack';
     reason = 'dry-route-unavailable-short-water-crossing';
     crossingReason = 'dry-route-unavailable';
-  } else if (selectedDry && jetPlan) {
+  } else if (!wetStartEgress && selectedDry && jetPlan) {
     const extra = selectedDry.cost - jetPlan.cost;
     const ratio = selectedDry.cost / Math.max(1, jetPlan.cost);
     if (extra >= config.jetpackDetourExtraCells && ratio >= config.jetpackDetourRatio) {
@@ -608,6 +714,11 @@ export function planAgentSurfaceRoute(
       reason = 'dry-detour-substantially-longer';
       crossingReason = 'dry-detour-substantially-longer';
     }
+  } else if (!wetStartEgress && !selectedDry && !jetPlan && nearestPartial) {
+    chosen = nearestPartial;
+    mode = 'jetpack';
+    reason = 'partial-water-crossing-egress';
+    crossingReason = 'dry-route-unavailable';
   }
 
   if (!chosen) {

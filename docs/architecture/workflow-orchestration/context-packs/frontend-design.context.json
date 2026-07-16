@@ -1,0 +1,183 @@
+{
+  "schema": "terra.contextPack.v1",
+  "identity": {
+    "slug": "frontend-design",
+    "name": "Frontend Design",
+    "version": "v1"
+  },
+  "purpose": "Load a portable agentic frontend design operating system as reusable Terra context for product-quality UI workflow authoring and execution.",
+  "globalContextRef": "terra-global@v1",
+  "primaryWorkflowRef": "design-orchestrator@v1",
+  "sourceRefs": [
+    {
+      "slug": "frontend-design-system-doc",
+      "kind": "canonical-doc",
+      "bindingKey": "frontend.designSystemDoc",
+      "required": true,
+      "purpose": "The project or organization frontend design orchestration source of truth. It can be supplied by hosted Terra context, run input, or a local context-source binding."
+    },
+    {
+      "slug": "frontend-design-system-root",
+      "kind": "system-folder",
+      "bindingKey": "frontend.designSystemRoot",
+      "required": false,
+      "purpose": "Optional local or organization folder containing reusable frontend design standards, prompts, templates, workflows, and memory."
+    },
+    {
+      "slug": "frontend-design-standards",
+      "kind": "standards",
+      "bindingKey": "frontend.standardsDir",
+      "required": false,
+      "purpose": "Optional standards directory for frontend quality bars, visual rubrics, accessibility expectations, and anti-generic UI rules."
+    },
+    {
+      "slug": "frontend-design-prompts",
+      "kind": "prompts",
+      "bindingKey": "frontend.promptsDir",
+      "required": false,
+      "purpose": "Optional role prompt directory for product strategy, design direction, implementation, critique, QA, and lessons recording."
+    },
+    {
+      "slug": "frontend-design-templates",
+      "kind": "templates",
+      "bindingKey": "frontend.templatesDir",
+      "required": false,
+      "purpose": "Optional artifact template directory for briefs, handoffs, screenshot reports, critic reports, scorecards, and lessons."
+    },
+    {
+      "slug": "frontend-design-workflows",
+      "kind": "workflows",
+      "bindingKey": "frontend.workflowsDir",
+      "required": false,
+      "purpose": "Optional workflow playbook directory for single-surface, site-wide review, site-wide execution, critique, and final approval loops."
+    },
+    {
+      "slug": "frontend-design-memory",
+      "kind": "memory",
+      "bindingKey": "frontend.memoryDir",
+      "required": false,
+      "purpose": "Optional local taste, rejected-pattern, successful-pattern, and lessons memory directory. This is operator-local by default and must not be required for hosted use."
+    }
+  ],
+  "setup": {
+    "schema": "terra.contextSetup.v1",
+    "localBindingSetExample": "docs/architecture/workflow-orchestration/examples/frontend-design.context-source-bindings.example.json",
+    "localSetupCommand": "npm run workflow:frontend-context-setup -- --target <project-root>",
+    "hostedUse": "Hosted Terra deployments should serve the context pack and built-in workflow primitives without requiring the operator to clone the TerraForm repo. Optional project-specific context is supplied through run inputs, uploaded artifacts, or a generated context-source binding set.",
+    "portabilityPolicy": "Context packs must not contain machine-specific absolute paths. Concrete local paths belong only in non-production context-source binding files generated during setup."
+  },
+  "defaultRunProfileRef": "frontend-standard-depth3@v1",
+  "qualityRubricRef": "frontend-product-quality@v1",
+  "defectTaxonomyRef": "orchestration-defects@v1",
+  "requiredPrimitives": [
+    "WorkflowSpec",
+    "RunProfile",
+    "ContextPack",
+    "RoleContract",
+    "ArtifactRequirement",
+    "Gate",
+    "EvidenceBundle",
+    "QualityRubric",
+    "DefectTaxonomy",
+    "PreviewSession",
+    "IterationLedger",
+    "ReviewPolicy",
+    "TasteMemory",
+    "AdapterBindingSet",
+    "WorkflowRun",
+    "HumanDecision",
+    "ArtifactQualityReport",
+    "FinalDisposition"
+  ],
+  "fivePillarMapping": [
+    {
+      "pillar": "knowledge",
+      "orchestratorUse": "Load design standards, product framing, repo survey, brand assets, screenshots, prior lessons, and local workflow source material."
+    },
+    {
+      "pillar": "retrieval",
+      "orchestratorUse": "Select only the surface, brand, component, route, state, and evidence context needed by the active role."
+    },
+    {
+      "pillar": "judgement",
+      "orchestratorUse": "Apply frontend rubric thresholds, defect taxonomy, critique gates, screenshot evidence, human taste approval, and final disposition."
+    },
+    {
+      "pillar": "resources",
+      "orchestratorUse": "Bind model, CLI, Playwright, patch, command, filesystem, and future browser-preview tools through explicit adapter bindings."
+    },
+    {
+      "pillar": "personality",
+      "orchestratorUse": "Preserve production UI copy quality, brand tone, concise operator updates, and clear role-specific output contracts."
+    }
+  ],
+  "authoringMethod": [
+    "Survey the repo and target surface before visual direction.",
+    "Define page goal, primary action, user motivation, success proxy, and copy constraints.",
+    "Inspect brand identity, assets, routes, components, tokens, and state patterns.",
+    "Generate multiple thesis-distinct directions before implementation.",
+    "Capture selected direction and handoff before code changes.",
+    "Capture desktop and mobile screenshots before approval.",
+    "Critique with evidence, route defects to patch loops, and rescore after fixes.",
+    "Run deterministic artifact-quality validation before final approval so thin directions, weak handoffs, incomplete screenshots, permissive critics, partial scorecards, and unapproved taste decisions cannot pass.",
+    "Record lessons learned after closeout."
+  ],
+  "requiredOutputs": [
+    "product-brief",
+    "repo-survey",
+    "design-context",
+    "design-directions",
+    "selected-direction",
+    "handoff",
+    "implementation-diff",
+    "screenshot-report",
+    "critic-report",
+    "final-scorecard",
+    "artifact-quality-report",
+    "lessons-learned"
+  ],
+  "apiMcpCapabilities": [
+    "list_context_packs",
+    "get_context_pack",
+    "list_mcp_capabilities",
+    "list_run_profiles",
+    "get_run_profile",
+    "list_quality_rubrics",
+    "get_quality_rubric",
+    "list_defect_taxonomies",
+    "get_defect_taxonomy",
+    "list_workflow_templates",
+    "get_workflow_template",
+    "generate_context_source_binding",
+    "create_workflow_run",
+    "check_workflow_run",
+    "create_preview_session",
+    "capture_screenshot_matrix",
+    "record_artifact",
+    "record_defect",
+    "score_run",
+    "record_decision",
+    "export_run_bundle",
+    "export_workflow_run_bundle"
+  ],
+  "validationCommands": [
+    "npm run workflow:validate -- --spec docs/architecture/workflow-orchestration/examples/design-orchestrator.workflow.json",
+    "npm run workflow:bindings:validate -- --spec docs/architecture/workflow-orchestration/examples/design-orchestrator.workflow.json --bindings docs/architecture/workflow-orchestration/examples/local-dev.adapter-bindings.json",
+    "npm run workflow:dogfood-smoke",
+    "npm run workflow:frontend-design-quality-smoke",
+    "npm run workflow:shared-primitives-smoke",
+    "npm run workflow:mcp-capability-sync",
+    "npm run workflow:context-pack-portability"
+  ],
+  "nonNegotiables": [
+    "Do not jump from vague product intent directly to code.",
+    "Do not skip repo survey, product framing, brand and asset inspection, selected direction, handoff, screenshots, critique, scorecard, or lessons.",
+    "Do not pass work that is merely not bad.",
+    "Do not pass work that looks good but fails the page goal.",
+    "Do not accept placeholder, filler, generic, unsupported, or off-tone visible copy.",
+    "Do not accept a high-level revamp or site-wide execution where requested pages only received a shared CSS layer, representative screenshots, or pending human taste approval.",
+    "Do not treat artifact existence or summary booleans as proof of frontend design quality; the artifact-quality report must inspect the real artifact contents.",
+    "Do not let second-opinion critique replace Codex as orchestrator or implementer.",
+    "Do not allow a design workflow to depend on one model, CLI, or machine-specific local path."
+  ]
+}

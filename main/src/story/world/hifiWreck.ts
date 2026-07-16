@@ -21,8 +21,19 @@ import { STORY_MILESTONES } from '../storyState.ts';
  * player looks at the ship" caption. `position` is set while the wreck is
  * mounted (a story world), regardless of stage; `converted` flips at A3.
  */
-export const hifiWreckHandle: { position: THREE.Vector3 | null; converted: boolean } = {
+export const hifiWreckHandle: {
+  position: THREE.Vector3 | null;
+  workstationPosition: THREE.Vector3 | null;
+  diagnosisTarget: THREE.Vector3 | null;
+  hoverSocketPosition: THREE.Vector3 | null;
+  hatchTarget: THREE.Vector3 | null;
+  converted: boolean;
+} = {
   position: null,
+  workstationPosition: null,
+  diagnosisTarget: null,
+  hoverSocketPosition: null,
+  hatchTarget: null,
   converted: false
 };
 

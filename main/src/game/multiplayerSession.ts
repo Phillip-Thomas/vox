@@ -21,6 +21,7 @@ import { getLocalActorId, resetLocalActorId, setLocalActorId } from './playerAct
 import {
   applyReplicatedWorldSnapshotEvents,
   applyReplicatedPlayerStateSnapshot,
+  applyReplicatedStoryStateSnapshot,
   applyReplicatedWorldEvent,
   applyRemotePoseSnapshot,
   applyRemotePoseUpdate,
@@ -36,6 +37,8 @@ import {
 import { clearServerWorldClock, setServerWorldClock } from './worldClock.ts';
 import { applyRejectedCommandRollback } from './multiplayerReconciliation.ts';
 import { coordinateKey, normalizeCoordinate, type WorldCoordinate } from '../utils/worldCoordinates.ts';
+import { canonicalPlanetWorldId, parsePlanetWorldId } from './starSystem.ts';
+import { clearAuthoritativeStructureReceipts } from './authoritativeStructureReceipts.ts';
 
 export type MultiplayerSessionStatus =
   | 'offline'
@@ -77,6 +80,13 @@ type PoseTimer = ReturnType<typeof setInterval>;
 type ReconnectTimer = ReturnType<typeof setTimeout>;
 type WorldEventMessage = Extract<MultiplayerServerMessage, { type: 'world_event' }>;
 type PartyWarpHandler = (handoff: MultiplayerPartyWarpHandoff) => void;
+export type MultiplayerPartyWarpDestination = WorldCoordinate | string | {
+  worldId: string;
+  coordinate?: WorldCoordinate;
+};
+export interface MultiplayerPartyWarpRequestOptions {
+  onRejected?: () => void;
+}
 type CoopSessionAction =
   | { type: 'create'; startWorldId: string }
   | { type: 'join'; inviteCode: string }
@@ -117,9 +127,31 @@ let lastSentPoseSeq = 0;
 const pendingWorldEventsByWorld = new Map<string, Map<number, WorldEventMessage>>();
 const requestedWorldEventBackfill = new Map<string, number>();
 const pendingReliableCommands = new Map<string, PendingReliableCommand>();
-const pendingPartyWarpCommandIds = new Set<string>();
+// `command_accepted` is delivered before the matching `world_event`. Keep the
+// command unsettled until that event (or a full snapshot) has been projected;
+// otherwise a movie-mode retry can resend the same stable story command in the
+// acknowledgement/event gap.
+const acceptedReliableCommandsAwaitingReplay = new Map<string, string>();
+const pendingPartyWarpCommandIds = new Map<string, MultiplayerPartyWarpRequestOptions>();
 const AUTHORITATIVE_GATE_EVENT_TYPES = new Set(['voxel_mined', 'resource_taken', 'structure_placed']);
 const PREDICTED_WORLD_EVENT_TYPES = new Set(['door_toggled']);
+const AUTHORITATIVE_STORY_EVENT_TYPES = new Set([
+  'maw_repair_begun',
+  'maw_repaired',
+  'maw_first_direction_resolved',
+  'maw_pond_observation_begun',
+  'maw_pond_resonance_observed',
+  'story_item_acquired',
+  'story_item_banked',
+  'wreck_salvage_claimed',
+  'kestrel_founding_reserve_claimed',
+  'ship_repair_stage',
+  'tidegarden_relationship_attended',
+  'tidegarden_site_chosen',
+  'habitat_core_placed',
+  'habitat_shelter_certified',
+  'habitat_safe_rest_completed'
+]);
 let partyWarpHandler: PartyWarpHandler | null = null;
 let snapshot: MultiplayerSessionSnapshot = {
   status: 'offline',
@@ -143,6 +175,15 @@ export function subscribeMultiplayerSession(listener: Listener): () => void {
 
 export function getMultiplayerSessionSnapshot(): MultiplayerSessionSnapshot {
   return snapshot;
+}
+
+export function isMultiplayerAuthoritativeCommandUnsettled(
+  commandId: string,
+  worldId?: string
+): boolean {
+  const pendingWorldId = pendingReliableCommands.get(commandId)?.worldId
+    ?? acceptedReliableCommandsAwaitingReplay.get(commandId);
+  return Boolean(pendingWorldId && (!worldId || pendingWorldId === worldId));
 }
 
 export function resolveMultiplayerConfig(env: MultiplayerAuthEnv = import.meta.env): MultiplayerConfigStatus {
@@ -173,6 +214,7 @@ export function disconnectCoopRoom(): void {
   stopPoseForwarding();
   clearWorldEventBackfillState();
   clearPendingReliableCommands();
+  clearAuthoritativeStructureReceipts();
   clearServerWorldClock();
   clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
   if (snapshot.playerId) removePlayerPose(snapshot.playerId);
@@ -211,13 +253,31 @@ export function setMultiplayerPartyWarpHandler(handler: PartyWarpHandler | null)
   partyWarpHandler = handler;
 }
 
-export function requestMultiplayerPartyWarp(destination: WorldCoordinate): boolean {
+export function resolveMultiplayerPartyWarpDestination(
+  destination: MultiplayerPartyWarpDestination
+): { worldId: string; coordinate: WorldCoordinate } | null {
+  if (typeof destination === 'string' || ('worldId' in destination)) {
+    const requestedWorldId = typeof destination === 'string' ? destination : destination.worldId;
+    const worldId = canonicalPlanetWorldId(requestedWorldId);
+    const address = worldId ? parsePlanetWorldId(worldId) : null;
+    if (!worldId || !address) return null;
+    return { worldId, coordinate: { ...address.system } };
+  }
+  const coordinate = normalizeCoordinate(destination);
+  return { worldId: coordinateKey(coordinate), coordinate };
+}
+
+export function requestMultiplayerPartyWarp(
+  destination: MultiplayerPartyWarpDestination,
+  options: MultiplayerPartyWarpRequestOptions = {}
+): boolean {
   if (!connection || snapshot.status !== 'connected' || !snapshot.worldId) return false;
-  const normalized = normalizeCoordinate(destination);
-  const destinationWorldId = coordinateKey(normalized);
+  const resolved = resolveMultiplayerPartyWarpDestination(destination);
+  if (!resolved) return false;
+  const destinationWorldId = resolved.worldId;
   if (destinationWorldId === snapshot.worldId) return false;
   const commandId = `party-warp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-  pendingPartyWarpCommandIds.add(commandId);
+  pendingPartyWarpCommandIds.set(commandId, options);
   connection.send({
     type: 'command',
     commandId,
@@ -365,6 +425,7 @@ async function beginCoopSession(
   stopPoseForwarding();
   clearWorldEventBackfillState();
   clearPendingReliableCommands();
+  clearAuthoritativeStructureReceipts();
   clearServerWorldClock();
   clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
   setSnapshot({
@@ -500,6 +561,7 @@ function handleServerMessage(
       applyServerWorldClock(message.snapshot, message.worldId);
       reconcilePendingReliableCommandsFromSnapshot(message.snapshot, message.worldId);
       applyReplicatedPlayerStateSnapshot(message.snapshot, { replace: false });
+      applyReplicatedStoryStateSnapshot(message.snapshot, message.worldId);
       applyRemotePoseSnapshot(message.snapshot, message.worldId, snapshot.playerId);
       applyReplicatedWorldSnapshotEvents(message.snapshot, message.worldId, {
         localPlayerId: snapshot.playerId,
@@ -509,6 +571,11 @@ function handleServerMessage(
       setSnapshot({ ...snapshot, seq: message.seq, worldId: message.worldId });
       subscribeWorldFromCursor(message.worldId, message.seq);
       acknowledgeWorldEvents(message.worldId, message.seq);
+      return;
+    case 'resume_state':
+      applyServerWorldClock(message.state, message.worldId);
+      applyReplicatedPlayerStateSnapshot(message.state, { replace: false });
+      applyReplicatedStoryStateSnapshot(message.state, message.worldId);
       return;
     case 'party_warp':
       handlePartyWarp(message);
@@ -526,12 +593,7 @@ function handleServerMessage(
     case 'command_accepted':
       handleCommandAccepted(message);
       if (isPartyWarpAccepted(message)) return;
-      if (message.seq > snapshot.seq + 1) {
-        requestWorldEventBackfill(message.worldId, snapshot.seq);
-        return;
-      }
-      setSnapshot({ ...snapshot, seq: Math.max(snapshot.seq, message.seq), worldId: message.worldId });
-      acknowledgeWorldEvents(message.worldId, message.seq);
+      applyCommandAcceptedWorldEvents(message);
       return;
     case 'command_rejected':
       handleCommandRejected(message);
@@ -547,6 +609,8 @@ function handleServerMessage(
       return;
     case 'disconnect':
       stopPoseForwarding();
+      clearPendingReliableCommands();
+      clearAuthoritativeStructureReceipts();
       clearRemotePlayerPoses(snapshot.playerId ?? getLocalActorId());
       setSnapshot({ ...snapshot, status: 'closed', error: friendlyServerError(message.code, message.reason), players: [] });
       return;
@@ -582,18 +646,59 @@ function handleWorldEvent(message: WorldEventMessage): void {
 }
 
 function applyWorldEventMessage(message: WorldEventMessage): void {
-  reconcilePendingReliableCommandFromEvent(message.event, message.worldId);
-  const event = parseReplicatedWorldEvent(message.event);
-  applyReplicatedWorldEvent(message.event, {
+  applyAuthoritativeWorldEvent(message.event, message.worldId);
+  setSnapshot({ ...snapshot, seq: Math.max(snapshot.seq, message.seq), worldId: message.worldId });
+  acknowledgeWorldEvents(message.worldId, message.seq);
+}
+
+function applyAuthoritativeWorldEvent(eventPayload: unknown, worldId: string): void {
+  reconcilePendingReliableCommandFromEvent(eventPayload, worldId);
+  const event = parseReplicatedWorldEvent(eventPayload);
+  applyReplicatedWorldEvent(eventPayload, {
     localPlayerId: snapshot.playerId,
     // Resource markers are idempotent and must consume the authoritative local
     // echo as well: it is the reconnect-safe replacement for a lost ACK or a
     // local field reset between prediction and backfill.
-    ignoreLocalPlayer: event?.type !== 'resource_taken',
-    worldId: message.worldId
+    ignoreLocalPlayer: event?.type !== 'resource_taken'
+      && !AUTHORITATIVE_STORY_EVENT_TYPES.has(event?.type ?? ''),
+    worldId
   });
-  setSnapshot({ ...snapshot, seq: Math.max(snapshot.seq, message.seq), worldId: message.worldId });
-  acknowledgeWorldEvents(message.worldId, message.seq);
+}
+
+/**
+ * The state server sends the accepted response before broadcasting the same
+ * events. Project contiguous accepted events immediately, then let the later
+ * broadcast be discarded by cursor. This is what makes the owner's structure
+ * ACK visible without waiting for a reconnect snapshot.
+ */
+function applyCommandAcceptedWorldEvents(
+  message: Extract<MultiplayerServerMessage, { type: 'command_accepted' }>
+): void {
+  const events = message.events
+    .map(payload => ({ payload, event: parseReplicatedWorldEvent(payload) }))
+    .filter((entry): entry is { payload: unknown; event: NonNullable<ReturnType<typeof parseReplicatedWorldEvent>> } => (
+      entry.event !== null
+    ))
+    .sort((left, right) => left.event.seq - right.event.seq);
+
+  if (events.length === 0) {
+    if (message.seq > snapshot.seq) requestWorldEventBackfill(message.worldId, snapshot.seq);
+    return;
+  }
+
+  for (const entry of events) {
+    if (entry.event.seq <= snapshot.seq) {
+      acceptedReliableCommandsAwaitingReplay.delete(message.commandId);
+      continue;
+    }
+    if (entry.event.seq !== snapshot.seq + 1) {
+      requestWorldEventBackfill(message.worldId, snapshot.seq);
+      return;
+    }
+    applyAuthoritativeWorldEvent(entry.payload, message.worldId);
+    setSnapshot({ ...snapshot, seq: entry.event.seq, worldId: message.worldId });
+  }
+  acknowledgeWorldEvents(message.worldId, snapshot.seq);
 }
 
 function bufferWorldEvent(message: WorldEventMessage): void {
@@ -667,6 +772,7 @@ function clearPendingReliableCommands(): void {
     rollbackPendingReliableCommand(pending);
   }
   pendingReliableCommands.clear();
+  acceptedReliableCommandsAwaitingReplay.clear();
   pendingPartyWarpCommandIds.clear();
 }
 
@@ -674,6 +780,9 @@ function reconcilePendingReliableCommandFromEvent(event: unknown, worldId: strin
   const value = toJsonObject(event);
   const commandId = typeof value?.commandId === 'string' ? value.commandId : null;
   if (!commandId) return;
+  if (acceptedReliableCommandsAwaitingReplay.get(commandId) === worldId) {
+    acceptedReliableCommandsAwaitingReplay.delete(commandId);
+  }
   const pending = pendingReliableCommands.get(commandId);
   if (!pending || pending.worldId !== worldId) return;
   // The authoritative event is the durable acceptance when the socket dropped
@@ -702,6 +811,9 @@ function reconcilePendingReliableCommandsFromSnapshot(payload: JsonObject, world
     // absent from that history did not land; undo its optimistic tree/reward.
     rollbackPendingReliableCommand(pending);
   }
+  for (const [commandId, acceptedWorldId] of acceptedReliableCommandsAwaitingReplay) {
+    if (acceptedWorldId === worldId) acceptedReliableCommandsAwaitingReplay.delete(commandId);
+  }
 }
 
 function rollbackPendingReliableCommand(pending: PendingReliableCommand): void {
@@ -717,11 +829,16 @@ function handleCommandAccepted(message: Extract<MultiplayerServerMessage, { type
   const pending = pendingReliableCommands.get(message.commandId);
   if (!pending) return;
   pendingReliableCommands.delete(message.commandId);
+  acceptedReliableCommandsAwaitingReplay.set(message.commandId, message.worldId);
   sendDeferredMultiplayerEvents(pending);
 }
 
 function handleCommandRejected(message: Extract<MultiplayerServerMessage, { type: 'command_rejected' }>): void {
-  if (pendingPartyWarpCommandIds.delete(message.commandId)) {
+  acceptedReliableCommandsAwaitingReplay.delete(message.commandId);
+  const partyWarpRequest = pendingPartyWarpCommandIds.get(message.commandId);
+  if (partyWarpRequest) {
+    pendingPartyWarpCommandIds.delete(message.commandId);
+    partyWarpRequest.onRejected?.();
     setSnapshot({ ...snapshot, error: friendlyServerError(message.code, message.reason) });
     return;
   }

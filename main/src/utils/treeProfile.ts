@@ -4,6 +4,7 @@ import { buildBiomeProfile } from './biomeProfile';
 import { DEFAULT_TREE_PARAMS, type TreeGenParams } from './treeGen';
 import { buildWindProfile, type WindProfile } from './windProfile';
 import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // --- Per-planet tree profile -------------------------------------------------
 //
@@ -167,7 +168,10 @@ function roleColor(role: PaletteRoleColor): THREE.Color {
  * Build the deterministic per-planet tree profile for a terrain seed.
  * Same seed -> identical profile (byte-stable colours + params).
  */
-export function buildTreeProfile(terrainSeed: number): TreeProfile {
+export function buildTreeProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): TreeProfile {
   const s = terrainSeed | 0;
 
   // 1 — silhouette (read-at-a-glance shape).
@@ -182,9 +186,9 @@ export function buildTreeProfile(terrainSeed: number): TreeProfile {
   // rather than the same flat colour — plus a small per-tree signature offset so
   // two same-biome worlds still differ. Saturation/lightness and the flower
   // accent below stay the tree's OWN, so blossoms remain the independent pop.
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
-  const wind = buildWindProfile(s, biome);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
+  const wind = buildWindProfile(s, planetProfile ?? biome);
   const leafColor = roleColor(art.palette.canopyBase);
 
   // 3 — derived sun-kissed crust (brighter, slightly hue-shifted).

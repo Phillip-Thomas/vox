@@ -1,0 +1,143 @@
+{
+  "schema": "terra.runtimeReport.v1",
+  "runId": "paravoxia-emergent-2026-07-13",
+  "capturedAt": "2026-07-15T04:32:11Z",
+  "status": "passed-official-triple-headless-release-partial",
+  "acceptedSourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+  "canonicalWorld": {
+    "worldId": "-1,-1:p1",
+    "seed": 1600321158,
+    "profileId": "story:tidegarden",
+    "profileVersion": 1,
+    "profileHash": "pf1-eeef3b78",
+    "archetype": "verdant",
+    "visibleLava": 0,
+    "visibleBasalt": 0
+  },
+  "cases": [
+    {
+      "beat": "ch9-settle",
+      "status": "identity-error-only",
+      "viewport": "1440x900",
+      "evidenceRef": "../../../../../main/captures/emergent-story/runtime-report.json",
+      "screenshot": "../../../../../main/captures/emergent-story/ch9-settle.png",
+      "observed": [
+        "old direct canonical-fixture verdant render captured",
+        "zero page errors",
+        "old direct probe reported sceneReady false and does not prove settlement completion"
+      ]
+    },
+    {
+      "beat": "ch8-landfall",
+      "status": "identity-error-only",
+      "viewport": "1440x900",
+      "evidenceRef": "../../../../../main/captures/emergent-story/runtime-report.json",
+      "screenshot": "../../../../../main/captures/emergent-story/ch8-landfall.png",
+      "observed": [
+        "old direct canonical-fixture render captured",
+        "safe dry direct-spawn candidate",
+        "zero page errors",
+        "does not prove cockpit-descent chronology or footfall integrity"
+      ]
+    }
+  ],
+  "boundedBrowserEvidence": [
+    {
+      "status": "passed-segment",
+      "evidenceRef": "../../../../../captures/emergent-ch5-observed-resonance-2026-07-14/summary.json",
+      "observed": "Chapter 5 transitioned to Chapter 6; the later segment capped with zero runtime errors or reloads."
+    },
+    {
+      "status": "passed-target",
+      "evidenceRef": "../../../../../captures/emergent-ch6-swim-proof-2026-07-14-integrated2/summary.json",
+      "observed": "Keel-bank target reached and Chapter 7 entered in 367.18 seconds with zero runtime errors, reloads, or context losses."
+    },
+    {
+      "status": "passed-target",
+      "evidenceRef": "../../../../../captures/ch7-board-embodiment-2026-07-14/summary.json",
+      "observed": "All four physical boarding anchors activated and Chapter 8 was reached in 77.172 seconds with zero console errors."
+    },
+    {
+      "status": "passed-target",
+      "evidenceRef": "../../../../../captures/emergent-ch9-settlement-proof-2026-07-14-integrated3/summary.json",
+      "observed": "Physical scanner, relationship, site choice, foundation, Core, enclosure, natural nightfall, safe rest, two-world handoff, and done completed in 166.08 seconds with zero errors, reloads, or context losses."
+    },
+    {
+      "status": "passed-target",
+      "evidenceRef": "../../../../../captures/emergent-ch5-to-keel-regression2-2026-07-14/summary.json",
+      "observed": "Chapter 5 through physical Keel banking reached Chapter 7 in 268.74 seconds with zero runtime errors, reloads, or context losses."
+    },
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-ch6-to-board-regression4-2026-07-14/summary.json",
+      "observed": "Chapter 6 through physical boarding reached Chapter 8 in 249.86 seconds with zero nudges, runtime errors, reloads, or context losses."
+    },
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-ch9-settlement-jetpack-rearm-2026-07-14-01/summary.json",
+      "observed": "Jetpack rearm and settlement completed through safe rest, two-world handoff, and done in 157.70 seconds with zero nudges, runtime errors, reloads, or context losses."
+    },
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-ch8-crossing-to-done-crossface-2026-07-14-11/summary.json",
+      "observed": "Crossing, right-face landing, dry cross-face and wet-bank exit, settlement, safe rest, two-world handoff, and done completed in 396.77 seconds with zero nudges, runtime errors, reloads, or context losses."
+    }
+  ],
+  "diagnosticFullColdEvidence": [
+    {
+      "status": "passed-obsolete-fingerprint-diagnostic-only",
+      "evidenceRef": "../../../../../captures/emergent-full-cold-run-2026-07-14-08/summary.json",
+      "observed": "This earlier uninterrupted POTATO run completed in 671.13 seconds with safe rest, two-world handoff, and zero nudges, runtime errors, reloads, or context losses. It predates the accepted source fingerprint and is retained only as diagnostic provenance."
+    }
+  ],
+  "fullColdEvidence": [
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json",
+      "sourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+      "observed": "Official POTATO ch4-audit-to-done run v6-01 completed in 704.18 seconds, reached done, observed 64/64 required signed runtime anchors, completed safe rest and the two-world handoff, and recorded zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses.",
+      "acceptedOrdinal": 1,
+      "requiredCount": 3
+    },
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json",
+      "sourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+      "observed": "Official POTATO ch4-audit-to-done run v6-02 completed in 883.65 seconds, reached done, observed 64/64 required signed runtime anchors, completed safe rest and the two-world handoff, and recorded zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses.",
+      "acceptedOrdinal": 2,
+      "requiredCount": 3
+    },
+    {
+      "status": "passed-target-rescue-free",
+      "evidenceRef": "../../../../../captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json",
+      "sourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+      "observed": "Official POTATO ch4-audit-to-done run v6-03 completed in 683.92 seconds, reached done, observed 64/64 required signed runtime anchors, completed safe rest and the two-world handoff, and recorded zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses.",
+      "acceptedOrdinal": 3,
+      "requiredCount": 3
+    }
+  ],
+  "additionalEvidence": {
+    "movieMode": "Focused tests and eight bounded browser traces cover the implemented rail from Chapter 5 through done. Three uninterrupted rescue-free Chapter 4-to-done POTATO cold runs pass against one required source fingerprint; earlier runs remain diagnostic only.",
+    "coOp": "Two-actor integration proves p1 routing, authenticated same-actor relationship/site/Core/shelter/rest prerequisites, accepted enclosure, server-clock rest, and reconnect. Client movie construction waits for actor-scoped authoritative structure ACKs and preserves only its explicit actor-owned embodied milestone namespace across snapshots; the server does not independently issue or validate that namespace.",
+    "physicalRail": "Signed physical producers are worktree-implemented from the protected-tool refusal through Tidegarden safe rest and handoff. The official triple closes the headless three-run mechanical gate, not headed input, real-GPU taste, server receipt, persistence, authority-disposition, human-release, or publish gates.",
+    "diagnosticProvenance": "The two old direct renders, eight bounded proofs, the obsolete-fingerprint 671.13-second run, and superseded or failed cold-run attempts remain evidence for defect discovery only and are not counted in the accepted triple."
+  },
+  "caseCount": 14,
+  "diagnosticCaseCount": 11,
+  "boundedProofCount": 8,
+  "fullColdRunsPassed": 3,
+  "fullColdRunsRequired": 3,
+  "requiredSignedAnchorsPerRun": 64,
+  "observedSignedAnchorsPerRun": 64,
+  "zeroViolationRuns": 3,
+  "releaseGates": [
+    "server-issued-embodied-story-receipts",
+    "quality-profile-matrix",
+    "reduced-motion-equivalence",
+    "supported-headed-input",
+    "headed-real-gpu-taste",
+    "origin-sibling-persistence-roundtrip",
+    "tidegarden-support-water-authority-disposition",
+    "human-release-decision"
+  ]
+}

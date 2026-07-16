@@ -24,9 +24,12 @@ import {
   type FaunaKind,
   type FaunaProfile
 } from '../utils/faunaField';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface FaunaFieldProps {
   terrainSeed: number;
+  worldId?: string;
+  planetProfile?: PlanetProfile;
   playerPosition?: THREE.Vector3;
   /** When provided, ground fauna avoid terrain submerged below the waterline. */
   planetSize?: number;
@@ -42,16 +45,21 @@ const HEADROOM = 12;
  */
 export default function FaunaField({
   terrainSeed,
+  worldId,
+  planetProfile,
   playerPosition,
   planetSize,
   progressiveMount = false
 }: FaunaFieldProps) {
   const density = getGraphicsQuality().faunaDensity;
   const water = useMemo(
-    () => (planetSize ? getWorldGen(planetSize, terrainSeed).generator : undefined),
-    [planetSize, terrainSeed]
+    () => (planetSize ? getWorldGen(planetSize, terrainSeed, worldId).generator : undefined),
+    [planetSize, terrainSeed, worldId]
   );
-  const profile = useMemo(() => buildFaunaProfile(terrainSeed, water), [terrainSeed, water]);
+  const profile = useMemo(
+    () => buildFaunaProfile(terrainSeed, water, planetProfile),
+    [planetProfile, terrainSeed, water]
+  );
   const [visibleKindCount, setVisibleKindCount] = useState(
     progressiveMount ? 1 : FAUNA_KINDS.length
   );

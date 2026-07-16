@@ -1,8 +1,13 @@
 import { MaterialType } from '../types/materials.ts';
-import { buildBiomeProfile, type BiomeKind } from './biomeProfile.ts';
+import type { BiomeKind, BiomeProfile } from './biomeProfile.ts';
 import { seededUnit } from './worldCoordinates.ts';
-import { archetypeForSeed, type ArchetypeId } from '../game/data/planetArchetypes.ts';
+import type { ArchetypeId } from '../game/data/planetArchetypes.ts';
 import type { QualityProfile } from '../config/graphicsSettings.ts';
+import {
+  assertPlanetProfileSeed,
+  buildPlanetProfile,
+  type PlanetProfile
+} from '../game/PlanetProfile.ts';
 
 export type PaletteFamily =
   | 'analogous'
@@ -283,8 +288,12 @@ function selectPaletteFamily(seed: number, archetype: ArchetypeId): PaletteFamil
   return families[Math.min(families.length - 1, Math.floor(seededUnit(seed, SALT_FAMILY) * families.length))];
 }
 
-function paletteRoles(seed: number, archetype: ArchetypeId, family: PaletteFamily): PlanetPaletteRoles {
-  const biome = buildBiomeProfile(seed);
+function paletteRoles(
+  seed: number,
+  archetype: ArchetypeId,
+  family: PaletteFamily,
+  biome: BiomeProfile
+): PlanetPaletteRoles {
   const identity = (biome.hue + (seededUnit(seed, SALT_BASE) - 0.5) * 0.05 + 1) % 1;
   const accentRoll = seededUnit(seed, SALT_ACCENT);
   const jewel = (identity + 0.38 + accentRoll * 0.18) % 1;
@@ -472,12 +481,16 @@ function phenomena(ecology: PlanetEcology): PlanetMaterialPhenomena {
   };
 }
 
-export function buildPlanetArtDirection(seed: number): PlanetArtDirection {
+export function buildPlanetArtDirection(
+  seed: number,
+  planetProfile: PlanetProfile = buildPlanetProfile(seed)
+): PlanetArtDirection {
   const s = seed | 0;
-  const archetype = archetypeForSeed(s);
-  const biome = buildBiomeProfile(s);
+  assertPlanetProfileSeed(planetProfile, seed);
+  const archetype = planetProfile.archetype;
+  const biome = planetProfile.biome;
   const paletteFamily = selectPaletteFamily(s, archetype);
-  const palette = paletteRoles(s, archetype, paletteFamily);
+  const palette = paletteRoles(s, archetype, paletteFamily, biome);
   const richness = clamp(
     0.18 + biome.lushness * 0.58 + (1 - biome.aridity) * 0.16 +
       (archetype === 'volcanic' || archetype === 'metallic' ? -0.18 : 0) +

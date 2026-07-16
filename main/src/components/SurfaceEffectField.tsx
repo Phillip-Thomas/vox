@@ -41,9 +41,11 @@ import { buildPlanetArtDirection, type PlanetArtDirection } from '../utils/plane
 import { isMaterialEligibleForEcology, surfaceEffectWeight } from '../utils/planetEcology';
 import { paletteRoleToLinearColor } from '../utils/planetVisualProfile';
 import { MaterialType } from '../types/materials';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface SurfaceEffectFieldProps {
   terrainSeed: number;
+  planetProfile?: PlanetProfile;
   playerPosition?: THREE.Vector3;
 }
 
@@ -266,7 +268,7 @@ function buildSurfaceEffectSpecs(art: PlanetArtDirection): SurfaceEffectSpec[] {
  * is authored in `voxelMaterial`; keeping transparent geometry only for things
  * that truly leave the surface avoids carrier seams and excess overdraw.
  */
-export default function SurfaceEffectField({ terrainSeed, playerPosition }: SurfaceEffectFieldProps) {
+export default function SurfaceEffectField({ terrainSeed, planetProfile, playerPosition }: SurfaceEffectFieldProps) {
   const [realitySnapshot, setRealitySnapshot] = useState(() => getVoxelRealitySnapshot());
   // QUANTIZED subscription: the story's awakening ramps override reality every
   // frame; rebuilding the instanced layers 60×/s melts exactly the cutscenes
@@ -280,8 +282,14 @@ export default function SurfaceEffectField({ terrainSeed, playerPosition }: Surf
   }), []);
 
   const density = getGraphicsQuality().voxelEffectDensity * surfaceEffectRealityDensityScale(realitySnapshot.effects);
-  const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);
-  const art = useMemo(() => buildPlanetArtDirection(terrainSeed), [terrainSeed]);
+  const windProfile = useMemo(
+    () => buildWindProfile(terrainSeed, planetProfile ?? undefined),
+    [planetProfile, terrainSeed]
+  );
+  const art = useMemo(
+    () => buildPlanetArtDirection(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
   const specs = useMemo(() => buildSurfaceEffectSpecs(art), [art]);
   const critters = useMemo(() => buildCritterConfigs(art), [art]);
 

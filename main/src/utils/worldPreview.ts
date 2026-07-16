@@ -1,8 +1,12 @@
 import * as THREE from 'three';
 import type { TerrainGenerationConfig, TerrainProfile } from '../config/worldGeneration';
-import { createTerrainConfig } from './terrainConfig';
+import { createTerrainConfigFromProfile } from './terrainConfig';
 import { seededUnit } from './worldCoordinates';
-import { buildPlanetProfile, type PlanetProfile } from '../game/PlanetProfile';
+import {
+  assertPlanetProfileSeed,
+  buildPlanetProfile,
+  type PlanetProfile
+} from '../game/PlanetProfile';
 import type { ArchetypeId } from '../game/data/planetArchetypes';
 
 export const WORLD_PREVIEW_PLANET_RADIUS = 25;
@@ -26,10 +30,12 @@ export interface WorldPreviewTraits {
 
 export function deriveWorldPreviewTraits(
   seed: number,
-  planetRadius = WORLD_PREVIEW_PLANET_RADIUS
+  planetRadius = WORLD_PREVIEW_PLANET_RADIUS,
+  planetProfile: PlanetProfile = buildPlanetProfile(seed)
 ): WorldPreviewTraits {
-  const profile = buildPlanetProfile(seed);
-  const terrainConfig = createTerrainConfig(seed, planetRadius);
+  const profile = planetProfile;
+  assertPlanetProfileSeed(profile, seed);
+  const terrainConfig = createTerrainConfigFromProfile(profile, planetRadius);
   const terrainProfile = profile.terrainProfile;
   const relief = clamp01(terrainConfig.heightVariation / Math.max(1, planetRadius));
   const valleyStrength = clamp01(terrainConfig.valleyDepth / Math.max(1, planetRadius));

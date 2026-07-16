@@ -63,6 +63,9 @@
     "story": {
       "$ref": "#/$defs/story"
     },
+    "guidance": {
+      "$ref": "#/$defs/guidance"
+    },
     "syncAnchors": {
       "type": "array",
       "minItems": 1,
@@ -624,6 +627,154 @@
         "mandatory-action",
         "observation"
       ]
+    },
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baselineArtifact",
+        "lifecycleEvidenceArtifact",
+        "auditArtifact",
+        "objectives"
+      ],
+      "properties": {
+        "baselineArtifact": {
+          "const": "shipped-ux-baseline.json"
+        },
+        "lifecycleEvidenceArtifact": {
+          "const": "objective-lifecycle-evidence.json"
+        },
+        "auditArtifact": {
+          "const": "ux-audit.md"
+        },
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/guidanceObjective"
+          }
+        }
+      }
+    },
+    "guidanceObjective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "agencyWindowRef",
+        "kind",
+        "enterAnchorRef",
+        "clearAnchorRef",
+        "markerLabel",
+        "requiresMarker",
+        "workOrder",
+        "feedback",
+        "variantRefs",
+        "variantIntent",
+        "resetRef",
+        "resetTriggers",
+        "resetIntent",
+        "acceptanceCriterion"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "agencyWindowRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "kind": {
+          "enum": [
+            "travel",
+            "interact",
+            "craft",
+            "build",
+            "wait"
+          ]
+        },
+        "enterAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "clearAnchorRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "markerLabel": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "requiresMarker": {
+          "const": true
+        },
+        "workOrder": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "feedback": {
+          "$ref": "#/$defs/guidanceFeedback"
+        },
+        "variantRefs": {
+          "$ref": "#/$defs/refList"
+        },
+        "variantIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "resetRef": {
+          "$ref": "#/$defs/stableId"
+        },
+        "resetTriggers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "beat-exit",
+              "deep-link",
+              "replay",
+              "pause",
+              "quit",
+              "focus-loss",
+              "completion",
+              "sandbox"
+            ]
+          }
+        },
+        "resetIntent": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "acceptanceCriterion": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "guidanceFeedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventType",
+        "presentationOnly",
+        "advancesProgression",
+        "emissionsPerEntry",
+        "intent"
+      ],
+      "properties": {
+        "eventType": {
+          "const": "objective-enter"
+        },
+        "presentationOnly": {
+          "const": true
+        },
+        "advancesProgression": {
+          "const": false
+        },
+        "emissionsPerEntry": {
+          "const": 1
+        },
+        "intent": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
     },
     "controlAuthority": {
       "enum": [
@@ -1838,6 +1989,7 @@
             "lighting",
             "effect",
             "agency",
+            "guidance",
             "quality"
           ]
         },

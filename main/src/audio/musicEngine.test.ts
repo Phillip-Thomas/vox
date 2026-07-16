@@ -164,6 +164,27 @@ describe('offline legacy music audit rim', () => {
       .toBe(true);
   });
 
+  it('allows a scene-owned ship-hum edge without accelerating other procedural voices', () => {
+    const audit = fakeContext();
+    const runtime = createOfflineMusicEngineRuntime(audit.context, audit.output);
+    for (const audioParam of audit.params) audioParam.resetAutomationAudit();
+
+    runtime.setProceduralTargets(MID_PROCEDURAL_TARGETS, 1.8, {
+      shipGainSeconds: 0.12
+    });
+
+    const durations = audit.params.flatMap((audioParam) =>
+      audioParam.setTargetAtTime.mock.calls.map(
+        ([, , timeConstant]) => timeConstant * AUDIO_PARAM_SLEW_SETTLE_TAU_COUNT
+      )
+    );
+    const count = (target: number): number => durations.filter(
+      seconds => Math.abs(seconds - target) < TEST_TIME_EPSILON_S
+    ).length;
+    expect(count(0.12)).toBe(1);
+    expect(count(1.8)).toBe(13);
+  });
+
   it('defaults owner renders to silent stem lanes and opts into non-pitched audit carriers', () => {
     const ownerAudit = fakeContext();
     createOfflineMusicEngineRuntime(ownerAudit.context, ownerAudit.output);

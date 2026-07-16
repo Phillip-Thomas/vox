@@ -1,0 +1,72 @@
+{
+  "schema": "terra.checkResults.v1",
+  "runId": "paravoxia-emergent-2026-07-13",
+  "checkedAt": "2026-07-15T04:32:11Z",
+  "sourceRevision": "mixed-working-tree-preserved",
+  "build": {
+    "status": "passed",
+    "details": "Main Vite production build and server TypeScript build passed. Main bundle warning is non-fatal."
+  },
+  "lint": {
+    "status": "passed",
+    "details": "Repository equivalent gates passed: both TypeScript projects, generated catalog drift, signed AV drift, story authority, and git diff whitespace checks."
+  },
+  "client": {
+    "status": "passed",
+    "testFiles": 202,
+    "tests": 1437,
+    "storyAuthorityChecks": 1035,
+    "sceneAvAnchors": 66,
+    "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e"
+  },
+  "server": {
+    "status": "passed",
+    "testFiles": 8,
+    "tests": 73
+  },
+  "creativeContract": {
+    "status": "passed",
+    "checks": 2320,
+    "directorSignoffs": ["chapter", "score", "cinematography"]
+  },
+  "runtime": {
+    "status": "passed-official-triple-headless",
+    "cases": [
+      "direct-ch9-settle-render",
+      "direct-ch8-landfall-render",
+      "bounded-ch5-transition",
+      "bounded-ch6-keel-bank",
+      "bounded-ch7-boarding",
+      "bounded-ch9-settlement-to-done",
+      "bounded-ch5-to-keel-regression2",
+      "bounded-ch6-to-board-regression4",
+      "bounded-ch9-settlement-jetpack-rearm",
+      "bounded-ch8-crossing-to-done-crossface",
+      "diagnostic-full-ch4-audit-to-done-cold-run-08",
+      "official-full-ch4-audit-to-done-v6-01",
+      "official-full-ch4-audit-to-done-v6-02",
+      "official-full-ch4-audit-to-done-v6-03"
+    ],
+    "renderer": "ANGLE Vulkan SwiftShader",
+    "runtimeErrors": 0,
+    "screenshots": 14,
+    "boundedProofs": 8,
+    "diagnosticCases": 11,
+    "fullColdRunsPassed": 3,
+    "fullColdRunsRequired": 3,
+    "requiredSignedAnchorsPerRun": 64,
+    "observedSignedAnchorsPerRun": 64,
+    "acceptedSourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+    "releaseGateCount": 8
+  },
+  "commands": [
+    "npm --prefix main run verify",
+    "npm --prefix server run verify",
+    "npm --prefix main run creative:gate -- --run ../.codex/production-runs/2026-07-13-distance-between-fires --phase contract",
+    "PARAVOXIA_STORY_CASES=ch9-settle,ch8-landfall npm --prefix main run story:emergent:probe",
+    "START_BEAT=ch4-audit STOP_AT=DONE RUN_LABEL=emergent-full-cold-final-2026-07-15-v6-01 PROFILE=POTATO STALL_SECONDS=240 PROBE_PORT=5315 VIEWPORT_WIDTH=160 VIEWPORT_HEIGHT=90 REQUIRE_SOURCE_FINGERPRINT=1 SOURCE_FINGERPRINT=a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262 node .codex/production-runs/2026-07-14-emergent-cold-run/cold-run-probe.mjs 1800",
+    "START_BEAT=ch4-audit STOP_AT=DONE RUN_LABEL=emergent-full-cold-final-2026-07-15-v6-02 PROFILE=POTATO STALL_SECONDS=240 PROBE_PORT=5316 VIEWPORT_WIDTH=160 VIEWPORT_HEIGHT=90 REQUIRE_SOURCE_FINGERPRINT=1 SOURCE_FINGERPRINT=a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262 node .codex/production-runs/2026-07-14-emergent-cold-run/cold-run-probe.mjs 1800",
+    "START_BEAT=ch4-audit STOP_AT=DONE RUN_LABEL=emergent-full-cold-final-2026-07-15-v6-03 PROFILE=POTATO STALL_SECONDS=240 PROBE_PORT=5317 VIEWPORT_WIDTH=160 VIEWPORT_HEIGHT=90 REQUIRE_SOURCE_FINGERPRINT=1 SOURCE_FINGERPRINT=a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262 node .codex/production-runs/2026-07-14-emergent-cold-run/cold-run-probe.mjs 1800",
+    "git diff --check"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "paravoxia.chapterDefectSynchronization.v1",
+  "workflowRef": "paravoxia-chapter-acceptance@v1",
+  "runId": "paravoxia-chapter-acceptance-gate-semantics",
+  "targetChapter": "ch5",
+  "candidateRevision": "fixture-revision-without-real-evidence",
+  "defectRegisterPath": "artifacts/defect-register.json",
+  "defectRegisterSha256": "6bbe0ad11a876c3846f4dfe5012b52e985d1b309244bca2bdbd8e5c77f8a1dad",
+  "findingCount": 1,
+  "openTotal": 0,
+  "unresolvedMaterialTotal": 0,
+  "repairRequired": false,
+  "operatorReviewCoverageVerified": false,
+  "claimedReviewCoverage": {
+    "sourceReportsComplete": true,
+    "sourceHashesCurrent": true,
+    "findingCoverageComplete": true
+  },
+  "runDefectsMirrored": true,
+  "synchronizedAt": "2026-07-15T20:27:32.538Z"
+}

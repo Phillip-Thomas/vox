@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   getGameCanvas,
   getAppStateSnapshot,
+  isSceneReadyForWorld,
   markFramePainted,
   markTerrainPopulated,
   resetSceneReady,
@@ -17,7 +18,7 @@ describe('app scene readiness', () => {
 
   it('requires eight painted frames after destination terrain is populated', () => {
     for (let frame = 0; frame < 12; frame++) markFramePainted();
-    markTerrainPopulated();
+    markTerrainPopulated('origin');
     expect(getAppStateSnapshot().sceneReady).toBe(false);
 
     for (let frame = 0; frame < 7; frame++) markFramePainted();
@@ -25,6 +26,8 @@ describe('app scene readiness', () => {
 
     markFramePainted();
     expect(getAppStateSnapshot().sceneReady).toBe(true);
+    expect(isSceneReadyForWorld('origin')).toBe(true);
+    expect(isSceneReadyForWorld('tidegarden')).toBe(false);
   });
 
   it('replaces a detached renderer canvas before pointer-lock callers use it', () => {

@@ -26,6 +26,12 @@
       "description": "Camera, input, pacing, or transition steals, strands, or ambiguously returns control."
     },
     {
+      "slug": "objective_guidance_failure",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["frame-story-intent", "compose-score-treatment", "author-cinematography-treatment", "implement-signed-contract", "capture-proof", "audit-player-experience", "repair-signed-contract"],
+      "description": "A required objective lacks actionable work-order copy, an exact live marker match, accessible semantic feedback, lifecycle-clear behavior, or parity across supported variants. Route copy and player verbs to Chapter, feedback causality to Score, hierarchy and occlusion to Cinematography, and wiring or lifecycle failures to Integration."
+    },
+    {
       "slug": "focal_hierarchy_failure",
       "defaultOwnerRole": "cinematography-director",
       "routingHints": ["author-cinematography-treatment", "repair-signed-contract", "capture-proof"],

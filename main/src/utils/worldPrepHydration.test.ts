@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { createPlanetIdentity } from '../game/starSystem.ts';
+import {
+  TIDEGARDEN_SEED,
+  TIDEGARDEN_WORLD_ID,
+  resolvePlanetProfile
+} from '../game/PlanetProfile.ts';
 import { MaterialType } from '../types/materials.ts';
 import {
   clearWorldGenCache,
@@ -56,6 +61,7 @@ describe('packed world cache hydration', () => {
       validateHash: true,
       yieldControl: () => Promise.resolve()
     });
+    const resolution = resolvePlanetProfile({ worldId: identity.worldId, seed: identity.seed });
 
     expect(hasWorldGenCacheEntry(8, identity.seed, identity.worldId)).toBe(true);
     expect(hasWorldGenCacheEntry(8, identity.seed, '8,9:p2')).toBe(false);
@@ -65,9 +71,14 @@ describe('packed world cache hydration', () => {
       waterFaces: [{ x: 3, y: 4, z: -4, faceDir: 2 }]
     });
     expect(getPreparedWorldRenderData(8, identity.seed, '8,9:p2')).toBeNull();
-    const terrain = getWorldTerrainData(8, identity.seed);
+    const terrain = getWorldTerrainData(8, identity.seed, identity.worldId);
 
-    expect(getWorldGen(8, identity.seed)).toBe(hydrated);
+    expect(getWorldGen(8, identity.seed, identity.worldId)).toBe(hydrated);
+    expect(hasWorldGenCacheEntry(8, identity.seed)).toBe(false);
+    expect(hydrated.profileId).toBe(resolution.profileId);
+    expect(hydrated.profileVersion).toBe(resolution.profileVersion);
+    expect(hydrated.profileHash).toBe(resolution.profileHash);
+    expect(hydrated.generator.getPlanetProfile()).toEqual(resolution.profile);
     expect(terrain.originalTerrain).toHaveLength(2);
     expect(terrain.initialVoxels).toHaveLength(1);
     expect(terrain.initialTerrainMeshData.count).toBe(1);
@@ -87,8 +98,48 @@ describe('packed world cache hydration', () => {
     ]);
     expect(hydrated.generator.isWaterVoxel(3, 3, -4)).toBe(true);
     expect(hydrated.generator.isWaterVoxel(0, 0, 0)).toBe(false);
-    expect(getWorldArrivalCandidate(8, identity.seed)).toEqual({ x: 4, y: 5, z: -4 });
+    expect(getWorldArrivalCandidate(8, identity.seed, { x: 4, z: -4 }, identity.worldId))
+      .toEqual({ x: 4, y: 5, z: -4 });
 
+  });
+
+  it('hydrates Tidegarden with its exact resolved profile and rejects a stale hash', async () => {
+    const request = createWorldPrepRequest({
+      requestId: 'hydrate-tidegarden',
+      worldId: TIDEGARDEN_WORLD_ID,
+      seed: TIDEGARDEN_SEED,
+      planetSize: 8,
+      activationEpoch: 4
+    });
+    const payload = packWorldPrepSemanticData(request, {
+      voxels: [{
+        position: [4, 5, -4],
+        blockId: 'grass',
+        material: MaterialType.GRASS,
+        colorId: MaterialType.GRASS,
+        deposit: null
+      }],
+      exposedVoxelIndices: [0],
+      waterVoxels: [],
+      waterCells: [],
+      waterFaces: [],
+      arrivalCandidate: [4, 5, -4]
+    });
+    await expect(hydrateWorldGenCacheFromPackedPayload({
+      ...payload,
+      profileHash: 'pf1-stale'
+    })).rejects.toThrow(/stale planet profile/);
+
+    const hydrated = await hydrateWorldGenCacheFromPackedPayload(payload);
+    const resolution = resolvePlanetProfile({
+      worldId: TIDEGARDEN_WORLD_ID,
+      seed: TIDEGARDEN_SEED
+    });
+    expect(hydrated.profileHash).toBe(resolution.profileHash);
+    expect(hydrated.generator.getPlanetProfile()).toEqual(resolution.profile);
+    expect(hydrated.generator.getPlanetProfile().archetype).toBe('verdant');
+    expect(hydrated.generator.getPlanetProfile().biome.alien).toBe(true);
+    expect(hasWorldGenCacheEntry(8, TIDEGARDEN_SEED, TIDEGARDEN_WORLD_ID)).toBe(true);
   });
 
   it('does not reuse the default worker arrival for a custom preference', async () => {
@@ -113,7 +164,7 @@ describe('packed world cache hydration', () => {
     });
     await hydrateWorldGenCacheFromPackedPayload(payload);
 
-    expect(getWorldArrivalCandidate(8, identity.seed, { x: -3, z: 2 }))
+    expect(getWorldArrivalCandidate(8, identity.seed, { x: -3, z: 2 }, identity.worldId))
       .toEqual({ x: -3, y: 6, z: 2 });
   });
 });

@@ -3,6 +3,7 @@ import { commandAccepted, type CommandAccepted } from './commands.ts';
 import {
   dispatchGameplayCommandWithTransport,
   resolveMultiplayerCommandIntent,
+  subscribeFinalizedLocalGameplayCommand,
   type GameplayCommandTransport,
   type MultiplayerCommandLane
 } from './commandDispatchAdapter.ts';
@@ -105,6 +106,42 @@ describe('gameplay command dispatch adapter', () => {
     expect(result.ok).toBe(false);
     expect(result).toMatchObject({ code: 'stale' });
     expect(tx.rollbacks).toBe(1);
+  });
+
+  it('publishes final local transactions but never treats an online send as a server ACK', () => {
+    const observed: string[] = [];
+    const unsubscribe = subscribeFinalizedLocalGameplayCommand(result => {
+      observed.push(result.commandId);
+    });
+    try {
+      const offline = dispatchGameplayCommandWithTransport(
+        () => accepted('offline-accepted'),
+        {},
+        transport('offline')
+      );
+      expect(offline.ok).toBe(true);
+      expect(observed).toEqual(['offline-accepted']);
+
+      const online = dispatchGameplayCommandWithTransport(
+        () => accepted('online-sent'),
+        {},
+        transport('online')
+      );
+      expect(online.ok).toBe(true);
+      expect(observed).toEqual(['offline-accepted']);
+
+      const failedOnline = transport('online');
+      failedOnline.sendCommand = () => false;
+      const rejected = dispatchGameplayCommandWithTransport(
+        () => accepted('online-rolled-back'),
+        {},
+        failedOnline
+      );
+      expect(rejected.ok).toBe(false);
+      expect(observed).toEqual(['offline-accepted']);
+    } finally {
+      unsubscribe();
+    }
   });
 
   it('blocks shared mutations while a co-op room is not connected', () => {

@@ -928,14 +928,14 @@ without purpose."
 
 - **Pool**: 10 curated lines in `storyScript.ts` `MUSINGS`, each passing the
   both-readings test, lowercase, post-embodiment "i". Samples: "walking with nowhere
-  to be is not nothing. it is how somewhere gets chosen." · "i keep waiting for the
+  to be is not nothing. it is the map drawing itself, a step behind the foot." · "i keep waiting for the
   next order. the waiting is the last order still running." · "nobody is measuring
   me. i am still counting. old habits, or new ones — i cannot tell whose."
 - **Pool grew to 11 (2026-07-11, the shipped reward-dissonance arc's floating
   middle):** `{ id: 'reward', text: 'the clause said there is no other reward.
-  the water disagreed. the berries seconded the water.' }` [worker: doctrine vs.
-  lived good / AI: the reward function contradicted by qualia; "seconded" keeps the
-  satire bureaucratic]
+  then the water paid me. the clause has no line for being wrong.' }` [worker:
+  doctrine vs. lived good / AI: the reward function contradicted by qualia, and the
+  system has no field in which to record its own error]
 - **Trigger**: eligible in `ch3-thirst`/`ch3-forage`/`ch3-signal`/`ch4-vigil`, ≥12s
   into a beat, after **45–75s of caption silence** (seeded gap,
   `MUSING_GAP_SECONDS`; every director caption/audit line resets the lull). A player

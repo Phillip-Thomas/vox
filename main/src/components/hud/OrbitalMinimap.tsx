@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { theme } from '../../ui/theme.ts';
@@ -7,7 +7,10 @@ import { getPlayerWorldPosition, getPlayerLook, getPlayerUp } from '../../state/
 import { useSpaceFlight } from '../../state/spaceFlight.ts';
 import { getShipPosition, subscribeShipProximity } from '../../state/shipProximity.ts';
 import { getLocalActorId, subscribeLocalActorId } from '../../game/playerActors.ts';
-import { getPlayerPoses, subscribePlayerPoses } from '../../game/systems/playerPoseSystem.ts';
+import {
+  getRemotePlayerPoseReactSnapshot,
+  subscribePlayerPoseFrames
+} from '../../game/systems/playerPoseSystem.ts';
 import { getCampfires, subscribeCampfires } from '../../game/systems/campfires.ts';
 import { getPieces, subscribeStructures } from '../../game/systems/structureSystem.ts';
 import {
@@ -43,7 +46,11 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
   const touch = isTouchDevice();
   const [localFrame, setLocalFrame] = useState<LocalFrame>(() => readLocalFrame());
   const [localActorId, setLocalActorId] = useState(() => getLocalActorId());
-  const [poses, setPoses] = useState(() => getPlayerPoses());
+  const poses = useSyncExternalStore(
+    subscribePlayerPoseFrames,
+    getRemotePlayerPoseReactSnapshot,
+    getRemotePlayerPoseReactSnapshot
+  );
   const [campfires, setCampfires] = useState(() => [...getCampfires()]);
   const [structures, setStructures] = useState(() => getPieces());
   const [parkedShip, setParkedShip] = useState(() => getShipPosition());
@@ -59,7 +66,6 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
   }, []);
 
   useEffect(() => subscribeLocalActorId(() => setLocalActorId(getLocalActorId())), []);
-  useEffect(() => subscribePlayerPoses(() => setPoses(getPlayerPoses())), []);
   useEffect(() => subscribeCampfires(() => setCampfires([...getCampfires()])), []);
   useEffect(() => subscribeStructures(() => setStructures(getPieces())), []);
   useEffect(() => subscribeShipProximity(() => setParkedShip(getShipPosition())), []);

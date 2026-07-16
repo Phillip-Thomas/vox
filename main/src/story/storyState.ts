@@ -3,8 +3,16 @@ import {
   setVoxelRealityStage,
   type VoxelRealityStage
 } from '../game/systems/realityRenderSystem.ts';
-import { getMilestones, hasMilestone, markMilestone, removeMilestonesByPrefix } from '../game/systems/progressionSystem.ts';
-import { addItem, resetInventory } from '../game/systems/inventorySystem.ts';
+import {
+  advanceEraTo,
+  getMilestones,
+  hasMilestone,
+  markMilestone,
+  removeMilestone,
+  removeMilestonesByPrefix,
+  replaceEraForRollback
+} from '../game/systems/progressionSystem.ts';
+import { addItem, getItemCount, removeItem, resetInventory } from '../game/systems/inventorySystem.ts';
 import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import { seedDebrisCollected } from './debrisSalvage.ts';
 import { seedSupplyPodsCollected } from './supplyPods.ts';
@@ -22,6 +30,25 @@ import { resetWaterskin } from '../game/systems/consumeSystem.ts';
 import { resetJetpackFuel } from '../game/systems/jetpackSystem.ts';
 import { clearStoryText } from './storyText.ts';
 import { resetStoryClock } from './storyClock.ts';
+import {
+  applyShipRestorationSnapshot,
+  resetShipRestoration
+} from '../game/systems/shipRestoration.ts';
+import {
+  debugStartInDescent,
+  debugStartInSpace,
+  resetTravel
+} from '../state/spaceFlight.ts';
+import {
+  bootstrapTidegardenLandfallDebug,
+  bootstrapTidegardenSurfaceDebug,
+  resumeTidegardenLandfallFromSave
+} from './tidegardenLandfallBootstrap.ts';
+import { tidegardenIdentity } from './tidegardenRoute.ts';
+import { resetEmergentStoryEvents } from './emergentStoryEvents.ts';
+import { resetEmergentMawRepairRitual } from './emergentMawRepair.ts';
+import { AUTHORED_DIVE_MILESTONES, resetAuthoredDiveRuntime } from './emergentDive.ts';
+import { EMERGENT_CAPABILITY_MILESTONES } from './emergentCapabilities.ts';
 
 // --- Story mode state ---------------------------------------------------------
 //
@@ -35,7 +62,10 @@ import { resetStoryClock } from './storyClock.ts';
 // progression milestones (story:*), which already round-trip through the global
 // save — the store itself holds only live session state.
 
-export type StoryChapter = 'none' | 'prologue' | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'complete';
+export type StoryChapter =
+  | 'none' | 'prologue'
+  | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'ch8' | 'ch9'
+  | 'complete';
 
 export type StoryBeat =
   // prologue (terminal overlay, app phase stays 'menu')
@@ -53,8 +83,13 @@ export type StoryBeat =
   | 'ch3-gather' | 'ch3-dusk' | 'ch3-await-rest' | 'a3-dawn'
   // chapter 3's tail — the first day alive (each remaining sense gets its scene)
   | 'ch3-thirst' | 'ch3-forage' | 'ch3-signal'
-  // chapter 4 — the other worker (shipped through the arrival; ch4-audit next)
-  | 'ch4-vigil' | 'ch4-arrival'
+  // chapter 4 — the other worker, the ordered regression, and Breath
+  | 'ch4-vigil' | 'ch4-arrival' | 'ch4-audit' | 'ch4-comply' | 'ch4-defy' | 'a4-exhale'
+  // chapters 5–9 — repair the instrument, return with breath, restore and fly
+  | 'ch5-maw' | 'ch6-dive'
+  | 'ch7-reconstruct' | 'ch7-board'
+  | 'ch8-launch' | 'ch8-crossing' | 'ch8-landfall'
+  | 'ch9-settle' | 'ch9-hearth'
   | 'done';
 
 export interface StorySnapshot {
@@ -95,11 +130,24 @@ export const STORY_MILESTONES = {
   ch3Signal: 'story:ch3:signal',
   ch4Vigil: 'story:ch4:vigil',
   ch4Arrived: 'story:ch4:arrived',
+  ch4Audit: 'story:ch4:audit-complete',
+  ch4Complied: 'story:ch4:compliance-complete',
+  ch4Defied: 'story:ch4:refusal-complete',
+  a4: 'story:a4',
+  a4Handback: 'story:a4:handback',
+  ch5Maw: 'story:ch5:maw-repaired',
+  ch6Dive: 'story:ch6:keel-banked',
+  ch7Reconstructed: 'story:ch7:flight-ready',
+  ch7Boarded: 'story:ch7:boarded',
+  ch8Launched: 'story:ch8:launched',
+  ch8Crossed: 'story:ch8:crossed',
+  ch8Landfall: 'story:ch8:landfall',
+  ch9Settled: 'story:ch9:settled',
+  ch9Hearth: 'story:ch9:hearth',
   /**
    * Legacy slice terminal. Saves that finished the A0→A3 slice carry it; the
    * story now CONTINUES past it (they resume at ch3-thirst). The live terminal
-   * checkpoint is ch4Arrived until chapter 4's remaining beats ship (see
-   * PARAVOXIA_CH4_PLAN.md §2 S6+).
+   * checkpoint is retained for old saves, but it is no longer a terminal.
    */
   complete: 'story:complete'
 } as const;
@@ -156,7 +204,21 @@ export interface StoryEntryPoint {
  * state (e.g. quota progress re-reads the inventory).
  */
 export function storyEntryPoint(): StoryEntryPoint {
-  if (hasMilestone(STORY_MILESTONES.ch4Arrived)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch9Hearth)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch9Settled)) return { chapter: 'ch9', beat: 'ch9-hearth' };
+  if (hasMilestone(STORY_MILESTONES.ch8Landfall)) return { chapter: 'ch9', beat: 'ch9-settle' };
+  if (hasMilestone(STORY_MILESTONES.ch8Crossed)) return { chapter: 'ch8', beat: 'ch8-landfall' };
+  if (hasMilestone(STORY_MILESTONES.ch8Launched)) return { chapter: 'ch8', beat: 'ch8-crossing' };
+  if (hasMilestone(STORY_MILESTONES.ch7Boarded)) return { chapter: 'ch8', beat: 'ch8-launch' };
+  if (hasMilestone(STORY_MILESTONES.ch7Reconstructed)) return { chapter: 'ch7', beat: 'ch7-board' };
+  if (hasMilestone(STORY_MILESTONES.ch6Dive)) return { chapter: 'ch7', beat: 'ch7-reconstruct' };
+  if (hasMilestone(STORY_MILESTONES.ch5Maw)) return { chapter: 'ch6', beat: 'ch6-dive' };
+  if (hasMilestone(STORY_MILESTONES.a4Handback)) return { chapter: 'ch5', beat: 'ch5-maw' };
+  if (hasMilestone(STORY_MILESTONES.a4)) return { chapter: 'ch4', beat: 'a4-exhale' };
+  if (hasMilestone(STORY_MILESTONES.ch4Defied)) return { chapter: 'ch4', beat: 'a4-exhale' };
+  if (hasMilestone(STORY_MILESTONES.ch4Complied)) return { chapter: 'ch4', beat: 'ch4-defy' };
+  if (hasMilestone(STORY_MILESTONES.ch4Audit)) return { chapter: 'ch4', beat: 'ch4-comply' };
+  if (hasMilestone(STORY_MILESTONES.ch4Arrived)) return { chapter: 'ch4', beat: 'ch4-audit' };
   if (hasMilestone(STORY_MILESTONES.ch4Vigil)) return { chapter: 'ch4', beat: 'ch4-arrival' };
   if (hasMilestone(STORY_MILESTONES.ch3Signal)) return { chapter: 'ch4', beat: 'ch4-vigil' };
   if (hasMilestone(STORY_MILESTONES.ch3Ate)) return { chapter: 'ch3', beat: 'ch3-signal' };
@@ -181,8 +243,14 @@ export function storyEntryPoint(): StoryEntryPoint {
  * (which the first-day tail and chapter 4 keep — A4's `alive` comes later).
  */
 export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
-  if (entry.chapter === 'complete') return 'material';
-  if (entry.chapter === 'ch4') return 'material';
+  if (entry.chapter === 'complete') return 'alive';
+  if (entry.chapter === 'ch5' || entry.chapter === 'ch6' || entry.chapter === 'ch7'
+    || entry.chapter === 'ch8' || entry.chapter === 'ch9') return 'alive';
+  if (entry.chapter === 'ch4') {
+    return entry.beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)
+      ? 'alive'
+      : 'material';
+  }
   if (entry.chapter === 'ch3') {
     // Chapter 3 straddles A3: the tail beats (the first day alive) are post-dawn.
     return beatIndex(entry.beat) >= beatIndex('ch3-thirst') ? 'material' : 'color';
@@ -195,12 +263,12 @@ export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
  *  Keyed on the LIVE terminal (ch4Arrived), not the legacy slice terminal —
  *  finished-slice saves see "Continue Story" again and resume at ch3-thirst. */
 export function canContinueStory(): boolean {
-  return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch4Arrived);
+  return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch9Hearth);
 }
 
-/** True once the current public Story Demo boundary has been reached. */
+/** True only once the two-world arc has returned control at the second hearth. */
 export function hasCompletedStory(): boolean {
-  return hasMilestone(STORY_MILESTONES.ch4Arrived);
+  return hasMilestone(STORY_MILESTONES.ch9Hearth);
 }
 
 // --- deep links / debug jumps ---------------------------------------------------
@@ -219,7 +287,11 @@ export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
   'ch2-color', 'ch2-approach', 'a2-awakening',
   'ch3-gather', 'ch3-dusk', 'ch3-await-rest', 'a3-dawn',
   'ch3-thirst', 'ch3-forage', 'ch3-signal',
-  'ch4-vigil', 'ch4-arrival',
+  'ch4-vigil', 'ch4-arrival', 'ch4-audit', 'ch4-comply', 'ch4-defy', 'a4-exhale',
+  'ch5-maw', 'ch6-dive',
+  'ch7-reconstruct', 'ch7-board',
+  'ch8-launch', 'ch8-crossing', 'ch8-landfall',
+  'ch9-settle', 'ch9-hearth',
   'done'
 ];
 
@@ -231,7 +303,16 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
   ch3: 'ch3-gather',
   a3: 'ch3-await-rest',
   day: 'ch3-thirst',
-  ch4: 'ch4-vigil'
+  ch4: 'ch4-vigil',
+  audit: 'ch4-audit',
+  breath: 'a4-exhale',
+  maw: 'ch5-maw',
+  dive: 'ch6-dive',
+  repair: 'ch7-reconstruct',
+  launch: 'ch8-launch',
+  tidegarden: 'ch8-landfall',
+  base: 'ch9-settle',
+  hearth: 'ch9-hearth'
 };
 
 /** True ONLY for a `?story=<beat|alias>` dev jump — not `?story=1`, not the menu
@@ -240,6 +321,22 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
 export function isStoryDeepLink(): boolean {
   const p = parseStoryParam();
   return p !== null && p !== 'full';
+}
+
+/**
+ * Physical prerequisite for isolated beat rehearsals. A normal story run
+ * carries the player's own fire across these beats; a deep link reconstructs
+ * it so audit/arrival interactions exercise the same world fact instead of
+ * stalling on a milestone-only approximation.
+ */
+export function debugBeatNeedsCampfire(beat: StoryBeat | null): boolean {
+  return beat === 'ch3-dusk'
+    || beat === 'ch3-await-rest'
+    || beat === 'a3-dawn'
+    || beat === 'ch4-vigil'
+    || beat === 'ch4-arrival'
+    || beat === 'ch4-audit'
+    || beat === 'ch4-comply';
 }
 
 /**
@@ -258,7 +355,12 @@ export function chapterForBeat(beat: StoryBeat): StoryChapter {
   return beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
     : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
     : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
-    : beat.startsWith('ch4') ? 'ch4'
+    : beat.startsWith('ch4') || beat === 'a4-exhale' ? 'ch4'
+    : beat.startsWith('ch5') ? 'ch5'
+    : beat.startsWith('ch6') ? 'ch6'
+    : beat.startsWith('ch7') ? 'ch7'
+    : beat.startsWith('ch8') ? 'ch8'
+    : beat.startsWith('ch9') ? 'ch9'
     : beat === 'done' ? 'complete'
     : 'ch3';
 }
@@ -326,7 +428,67 @@ function seedForBeat(beat: StoryBeat): void {
     markMilestone(m.senseStamina);
   }
   if (at >= beatIndex('ch4-arrival')) markMilestone(m.ch4Vigil);
+  if (at >= beatIndex('ch4-audit')) markMilestone(m.ch4Arrived);
+  if (at >= beatIndex('ch4-comply')) {
+    markMilestone(m.ch4Audit);
+    markMilestone('story:audit:fire-mismatch');
+    markMilestone('story:audit:life-mismatch');
+    markMilestone('story:audit:tree-mismatch');
+  }
+  if (at >= beatIndex('ch4-defy')) {
+    markMilestone(m.ch4Complied);
+    markMilestone('story:comply:fire-doused');
+    markMilestone('story:comply:organics-resolved');
+    markMilestone('story:comply:regression-settled');
+  }
+  if (at >= beatIndex('a4-exhale')) {
+    markMilestone(m.ch4Defied);
+    markMilestone('story:defy:refusal-committed');
+  }
+  if (at >= beatIndex('ch5-maw')) {
+    markMilestone(m.a4);
+    markMilestone(m.a4Handback);
+    markMilestone('story:a4:field-pack-dropped');
+    if (getItemCount('faulty_maw') === 0 && getItemCount('iron_maw') === 0) addItem('faulty_maw', 1);
+  }
+  if (at >= beatIndex('ch6-dive')) {
+    markMilestone(m.ch5Maw);
+    markMilestone('maw_repaired');
+    // Isolated dive rehearsals reconstruct the already-lived player direction
+    // and its visible pond response; the dive itself still has to author water,
+    // oxygen, sonar, acquisition, surfacing and dry banking from scratch.
+    markMilestone('story:maw:first-direction-resolved');
+    markMilestone('story:maw:pond-resonance-visible');
+    markMilestone(m.senseMaw);
+    const faultyMawCount = getItemCount('faulty_maw');
+    if (faultyMawCount > 0) removeItem('faulty_maw', faultyMawCount);
+    const repairKitCount = getItemCount('maw_repair_kit');
+    if (repairKitCount > 0) removeItem('maw_repair_kit', repairKitCount);
+    if (getItemCount('iron_maw') === 0) addItem('iron_maw', 1);
+    advanceEraTo('emergent');
+  }
+  if (at >= beatIndex('ch7-reconstruct')) {
+    markMilestone(m.ch6Dive);
+    markMilestone(EMERGENT_CAPABILITY_MILESTONES.oxygenOnline);
+    markMilestone(m.senseOxygen);
+    markMilestone(AUTHORED_DIVE_MILESTONES.waterlineEntered);
+    markMilestone(AUTHORED_DIVE_MILESTONES.keelSonarRevealed);
+    markMilestone(AUTHORED_DIVE_MILESTONES.surfacedWithKeel);
+    markMilestone('story:item:kestrel-keel-memory:acquired');
+    markMilestone('story:item:kestrel-keel-memory:banked');
+    if (getItemCount('kestrel_keel_memory') === 0) addItem('kestrel_keel_memory', 1);
+  }
+  if (at >= beatIndex('ch7-board')) {
+    markMilestone(m.ch7Reconstructed);
+    applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
+  }
+  if (at >= beatIndex('ch8-launch')) markMilestone(m.ch7Boarded);
+  if (at >= beatIndex('ch8-crossing')) markMilestone(m.ch8Launched);
+  if (at >= beatIndex('ch8-landfall')) markMilestone(m.ch8Crossed);
+  if (at >= beatIndex('ch9-settle')) markMilestone(m.ch8Landfall);
+  if (at >= beatIndex('ch9-hearth')) markMilestone(m.ch9Settled);
   if (at >= beatIndex('done')) {
+    markMilestone(m.ch9Hearth);
     markMilestone(m.ch4Arrived);
     markMilestone(m.complete);
   }
@@ -339,15 +501,24 @@ function seedForBeat(beat: StoryBeat): void {
  */
 function resetDebugStoryRun(storyWorld: ReturnType<typeof createWorldIdentity>): void {
   removeMilestonesByPrefix('story:');
+  removeMilestone('maw_repaired');
+  replaceEraForRollback('primitive');
   resetInventory();
   resetMaw();
   resetVitals();
   resetWaterskin();
   resetJetpackFuel();
-  clearWorldStateForWorld(storyWorld);
-  clearCampfiresForWorld(storyWorld);
-  clearVoxelEditsForWorld(storyWorld);
-  clearPlayerPoseForWorld(storyWorld);
+  resetShipRestoration();
+  resetTravel();
+  resetEmergentStoryEvents();
+  resetEmergentMawRepairRitual();
+  resetAuthoredDiveRuntime();
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearWorldStateForWorld(world);
+    clearCampfiresForWorld(world);
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
   clearStoryText();
   resetStoryClock();
   setStoryForcedDayPhase(null);
@@ -377,8 +548,10 @@ export function initStoryFromSave(): void {
   // strip-mining, and a pose saved in a mined pit would resurrect INSIDE the
   // restored terrain. The menu path (beginStory, no param) keeps both.
   const storyWorld = createWorldIdentity(STORY_COORDINATE);
-  clearVoxelEditsForWorld(storyWorld);
-  clearPlayerPoseForWorld(storyWorld);
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
   if (param === 'full') {
     // A screening is a full deterministic rehearsal. Normal `?story=1` keeps
     // its Continue semantics; movie mode must never inherit completed pickups.
@@ -394,10 +567,20 @@ export function initStoryFromSave(): void {
   seedForBeat(param);
   const chapter = chapterForBeat(param);
   if (chapter === 'complete') {
-    // "After A3": the finished world — sandbox at the earned stage.
-    setVoxelRealityStage('material');
+    // The finished two-world arc returns to free play at the earned living stage.
+    setVoxelRealityStage('alive');
     setSnapshot({ active: false, chapter: 'complete', beat: 'done', runId });
     return;
+  }
+  // Reconstruct the physical location before publishing the story beat. Store
+  // subscribers (objective, score, camera) must never observe a crossing or
+  // landfall paired with the previous surface-flight snapshot for one frame.
+  if (param === 'ch8-crossing') debugStartInSpace();
+  else if (param === 'ch8-landfall') {
+    bootstrapTidegardenLandfallDebug();
+    debugStartInDescent();
+  } else if (param === 'ch9-settle' || param === 'ch9-hearth') {
+    bootstrapTidegardenSurfaceDebug();
   }
   setVoxelRealityStage(stageForStoryPoint({ chapter, beat: param }));
   setSnapshot({ active: true, chapter, beat: param, runId });
@@ -417,6 +600,11 @@ export function beginStory(): void {
     return;
   }
   clearStalePreFireCampfires(entry.beat);
+  // Crossing is a checkpoint before landing, not permission to materialize on
+  // foot. Rehydrate the real atmospheric pose (or a safe approach fallback)
+  // before publishing the landfall beat so its director can only observe future
+  // physical touchdown and egress actions.
+  if (entry.beat === 'ch8-landfall') resumeTidegardenLandfallFromSave();
   setVoxelRealityStage(stageForStoryPoint(entry));
   setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
 }
@@ -427,14 +615,26 @@ export function beginStory(): void {
 export function restartStory(): void {
   const storyWorld = createWorldIdentity(STORY_COORDINATE);
   removeMilestonesByPrefix('story:');
+  removeMilestone('maw_repaired');
+  replaceEraForRollback('primitive');
   resetInventory();
   resetMaw();
   resetVitals();
   resetWaterskin();
   resetJetpackFuel();
-  clearWorldStateForWorld(storyWorld);
-  clearVoxelEditsForWorld(storyWorld);
-  clearPlayerPoseForWorld(storyWorld);
+  resetShipRestoration();
+  resetTravel();
+  resetEmergentStoryEvents();
+  resetEmergentMawRepairRitual();
+  resetAuthoredDiveRuntime();
+  // This arc owns two authored planets. Replay must reset both or the old p1
+  // Habitat receipt survives while every `story:` actor receipt is removed,
+  // leaving the new run unable to install, certify, or rest at its second hearth.
+  for (const world of [storyWorld, tidegardenIdentity()]) {
+    clearWorldStateForWorld(world);
+    clearVoxelEditsForWorld(world);
+    clearPlayerPoseForWorld(world);
+  }
   clearStoryText();
   resetStoryClock();
   setStoryForcedDayPhase(null);
@@ -448,12 +648,11 @@ export function advanceToBeat(beat: StoryBeat): void {
   setSnapshot({ chapter: chapterForBeat(beat), beat });
 }
 
-/** The shipped arc's end: hand the world back to the sandbox at the earned stage.
- *  (Now reached AFTER the first day alive + the auditor's arrival — see the
- *  director's TEMPORARY hand-off note; ch4-audit continues from here.) */
+/** The two-world arc's end: hand the world back without erasing either world. */
 export function completeStory(): void {
   markMilestone(STORY_MILESTONES.a3);
   markMilestone(STORY_MILESTONES.ch4Arrived);
+  markMilestone(STORY_MILESTONES.ch9Hearth);
   markMilestone(STORY_MILESTONES.complete);
   // The earned senses are part of the earned world — never strand the HUD gates.
   // (Oxygen/jet/maw stay UNDISCOVERED: they arrive live, or in chapter 4's coda.)
@@ -463,7 +662,7 @@ export function completeStory(): void {
   markMilestone(STORY_MILESTONES.senseWater);
   markMilestone(STORY_MILESTONES.senseFood);
   markMilestone(STORY_MILESTONES.senseStamina);
-  setVoxelRealityStage('material');
+  setVoxelRealityStage('alive');
   setStoryForcedDayPhase(null); // the day cycle is the player's now
   setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
 }
@@ -508,6 +707,19 @@ export function getWorkerName(): string | null {
 export function storyHudTakeover(s: StorySnapshot = snapshot): boolean {
   if (!s.active || !s.beat) return false;
   return s.chapter === 'ch1' || s.chapter === 'ch2';
+}
+
+/**
+ * The persistent objective card belongs to the player's embodied view. The
+ * ch1 lift remains regulation-camera owned for its entire authored blend; its
+ * hand-off completes at `ch1-anomaly`, and every later active beat keeps the
+ * same objective/marker presentation even when the regulation feed still owns
+ * other chapter chrome.
+ */
+export function storyUsesEmbodiedGuidanceHud(s: StorySnapshot = snapshot): boolean {
+  if (!s.active || !s.beat) return false;
+  const beat = beatIndex(s.beat);
+  return beat >= beatIndex('ch1-anomaly');
 }
 
 /** Ship/star-map affordances stay hidden while any story chapter is live. */

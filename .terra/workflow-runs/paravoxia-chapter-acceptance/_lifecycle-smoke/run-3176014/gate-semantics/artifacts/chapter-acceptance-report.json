@@ -1,0 +1,13 @@
+{
+  "schema": "paravoxia.chapterAcceptanceReport.v1",
+  "candidateRevisionMatchesInput": true,
+  "targetChapterMatchesInput": true,
+  "councilAuthorityHashMatches": true,
+  "sceneAuthorityHashMatches": true,
+  "mechanicalEvidenceHashMatches": true,
+  "dispositionAllowed": true,
+  "defectPolicyPassed": true,
+  "scorePolicyPassed": true,
+  "humanTastePolicyPassed": true,
+  "repairCommissionPolicyPassed": true
+}

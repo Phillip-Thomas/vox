@@ -7,9 +7,14 @@ import {
   type QualityProfile
 } from '../config/graphicsSettings.ts';
 import type { PlanetSlot, SystemCoordinate, Vec3Tuple } from '../game/starSystem.ts';
+import { resolvePlanetProfile, type PlanetProfile } from '../game/PlanetProfile.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
 import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
+import {
+  createSystemCompanionBodyTargetHandle,
+  type SystemCompanionBodyTargetHandle
+} from '../state/systemCompanionBodyTargets.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import {
   composeWaterFaceMatrix,
@@ -17,7 +22,10 @@ import {
   WATER_QUAD_SIZE
 } from '../utils/waterFacePlacement.ts';
 import { seededUnit } from '../utils/worldCoordinates.ts';
-import { deriveWorldPreviewTraits } from '../utils/worldPreview.ts';
+import {
+  deriveWorldPreviewTraits,
+  WORLD_PREVIEW_PLANET_RADIUS
+} from '../utils/worldPreview.ts';
 import {
   getPreparedWorldRenderData,
   type PreparedWorldRenderData
@@ -93,7 +101,9 @@ interface BodyRuntime {
   key: string;
   planetSlot: PlanetSlot;
   seed: number;
+  planetProfile: PlanetProfile;
   group: THREE.Group | null;
+  targetHandle: SystemCompanionBodyTargetHandle;
   systemPosition: THREE.Vector3;
   nominalFaceRadius: number;
   surfaceBoundRadius: number;
@@ -361,6 +371,7 @@ function disposeExactShell(runtime: BodyRuntime): void {
 }
 
 function disposeRuntime(runtime: BodyRuntime): void {
+  runtime.targetHandle.remove();
   disposeExactShell(runtime);
   runtime.surfaceGeometry.dispose();
   runtime.cloudGeometry?.dispose();
@@ -396,7 +407,11 @@ function ensureExactTerrainShell(
       exactShell: true,
       exactFaceShell: true
     });
-    const traits = deriveWorldPreviewTraits(runtime.seed);
+    const traits = deriveWorldPreviewTraits(
+      runtime.seed,
+      WORLD_PREVIEW_PLANET_RADIUS,
+      runtime.planetProfile
+    );
     const waterMaterial = createUnifiedCompanionMaterial({
       layer: 'surface',
       worldId: `${runtime.key}-water`,
@@ -651,10 +666,22 @@ export default function SystemCompanionBodies({
   );
   const runtimes = useMemo<BodyRuntime[]>(() => bodyModels.map(model => {
     const descriptor = model.descriptor;
-    const traits = deriveWorldPreviewTraits(descriptor.seed);
-    const surfaceGeometry = createCompanionSurfaceGeometry(descriptor.seed, budget.surfaceSubdivisions);
+    const planetProfile = resolvePlanetProfile({
+      worldId: descriptor.worldId,
+      seed: descriptor.seed
+    }).profile;
+    const traits = deriveWorldPreviewTraits(
+      descriptor.seed,
+      WORLD_PREVIEW_PLANET_RADIUS,
+      planetProfile
+    );
+    const surfaceGeometry = createCompanionSurfaceGeometry(
+      descriptor.seed,
+      budget.surfaceSubdivisions,
+      planetProfile
+    );
     const cloudGeometry = budget.separateCloudShell
-      ? createCompanionCloudGeometry(descriptor.seed, budget.cloudSubdivisions)
+      ? createCompanionCloudGeometry(descriptor.seed, budget.cloudSubdivisions, planetProfile)
       : null;
     surfaceGeometry.name = `system-companion-surface-geometry-${descriptor.worldId}`;
     surfaceGeometry.userData = {
@@ -684,7 +711,9 @@ export default function SystemCompanionBodies({
       key: descriptor.worldId,
       planetSlot: descriptor.address.slot,
       seed: descriptor.seed,
+      planetProfile,
       group: null,
+      targetHandle: createSystemCompanionBodyTargetHandle(descriptor.worldId),
       systemPosition: new THREE.Vector3(...descriptor.systemPosition),
       nominalFaceRadius: descriptor.nominalFaceRadius,
       surfaceBoundRadius: descriptor.surfaceBoundRadius,
@@ -798,6 +827,7 @@ export default function SystemCompanionBodies({
       work.bodyRenderPosition
         .copy(runtime.systemPosition)
         .sub(work.renderOrigin);
+      runtime.targetHandle.publish(work.bodyRenderPosition);
 
       if (physicalSpace) {
         const exactShell = canOwnExactShell

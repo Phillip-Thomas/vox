@@ -1,0 +1,12 @@
+{
+  "sourceReportsComplete": true,
+  "sourceHashesCurrent": true,
+  "findingCoverageComplete": true,
+  "idsUnique": true,
+  "everyMaterialDefectHasSeverityOwnerEvidenceAndRecheck": true,
+  "runDefectsMirrorCurrent": true,
+  "openCritical": 0,
+  "openHigh": 0,
+  "openMediumUnaccepted": 0,
+  "countsMatchEntries": true
+}

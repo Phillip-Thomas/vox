@@ -213,6 +213,7 @@ export function mineVoxelCommand(
     terrain: MineVoxelTerrain;
     water?: MineVoxelWater;
     toolTier: number;
+    toolId?: ItemId | null;
     usesCharge?: boolean;
     autoRefuel?: boolean;
     chargeCost?: number;
@@ -269,6 +270,7 @@ export function mineVoxelCommand(
   const minedPayload = {
     coord: coordFromVec3(input.coord),
     blockId: voxel.blockId,
+    toolId: input.toolId ?? null,
     deposit: voxel.deposit ?? null,
     depositIdentity: mineDepositIdentity(context, input.coord, voxel.deposit),
     drops: harvest.drops,
@@ -549,7 +551,8 @@ export function craftRecipeCommand(
     deltas: input.recipe.outputs,
     rollback: {
       removeItems: rollbackStacks(input.recipe.outputs),
-      refundItems: rollbackStacks(input.recipe.inputs)
+      refundItems: rollbackStacks(input.recipe.inputs),
+      ...(input.recipe.uniqueReceipt ? { removeMilestones: [input.recipe.uniqueReceipt] } : {})
     }
   });
 }
@@ -745,7 +748,10 @@ export function repairMawCommand(context: CommandContext, input: { commandId?: s
   ], {
     rollback: {
       removeItems: [{ id: 'iron_maw', qty: 1 }],
-      refundItems: [{ id: 'faulty_maw', qty: 1 }],
+      refundItems: [
+        { id: 'faulty_maw', qty: 1 },
+        { id: 'maw_repair_kit', qty: 1 }
+      ],
       mawChargeBefore
     }
   });

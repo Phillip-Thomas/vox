@@ -10,8 +10,10 @@ three directors work through durable contracts and notes. Do not turn the user
 into a message bus.
 
 The source of truth is `PARAVOXIA_CREATIVE_COUNCIL.md`. Visual continuity is in
-`main/CINEMATOGRAPHY.md`. The portable workflow spec, run profile, rubric, and
-defect taxonomy are under `docs/architecture/workflow-orchestration/`.
+`main/CINEMATOGRAPHY.md`. The executable player-guidance context contract is
+`main/src/story/ux/README.md`; read it before designing or reviewing guided
+play. The portable workflow spec, run profile, rubric, and defect taxonomy are
+under `docs/architecture/workflow-orchestration/`.
 
 ## Route the commission before creating a scene run
 
@@ -79,11 +81,14 @@ exists. Keep one URL for probes, screenshots, and owner review.
   the session's high-reasoning creative model.
 - `scene-cohesion-judge` is taste-critical and uses the session model.
 - `story-naive-reader`, `story-canon-auditor`, `story-verifier`,
-  `scene-naive-viewer`, `cinematography-continuity-auditor`, and
-  `score-continuity-auditor` run on opus unless the owner explicitly requests
-  a final pre-ship upgrade.
+  `scene-naive-viewer`, `cinematography-continuity-auditor`,
+  `score-continuity-auditor`, and `player-experience-auditor` run on opus unless
+  the owner explicitly requests a final pre-ship upgrade.
 - Fresh independent reviewers are required. Never reuse a director as its own
   reviewer.
+- Chapter, Score, and Cinematography remain exactly three peer creative
+  directors. Reviewers, judges, verifiers, and integrators are checks on the
+  triad, not additional creative directors.
 - Mechanical searches, logs, captures, and long probes use cheaper agents and
   concise artifact summaries.
 
@@ -96,6 +101,12 @@ viewport, and quality tier in `shipped-visual-baseline.json`. This is director
 grounding, not a taste verdict. If the current cut cannot be seen, stop visual
 redesign rather than designing from the bible alone.
 
+When guided play is affected, also inventory the shipped objective, exact
+marker-label bridge, standing work order/HUD, semantic feedback seams, and
+enter/change/clear/reset behavior in `shipped-ux-baseline.json`. Hash the UX
+README and affected source/tests. A caption or treatment is not evidence that
+the player can find and perform the next action.
+
 Commission the `chapter-director` to write `story-intent.md`, not code. It must
 include:
 
@@ -104,6 +115,9 @@ include:
 - emotional before/after;
 - story information, intended ambiguity, and both-reading constraints;
 - reality-stage ceiling and tutorial/gameplay purpose;
+- for every guided segment: actionable verb/input, objective ID lifecycle,
+  exact marker label, standing work order, entry/progress/completion feedback,
+  clear/replace/reset semantics, and player-control fallback;
 - named dramatic anchors, not duplicated raw timestamps;
 - constraints and questions for Score and Cinematography;
 - explicit non-goals and protected strengths.
@@ -175,6 +189,8 @@ The contract contains:
 - score cues relative to anchors;
 - stable shots and cinematic state relative to anchors;
 - palette/effect/reality limits;
+- actionable objective/marker/work-order/feedback lifecycles for guided play,
+  including exact label parity and which lane owns each presentation seam;
 - desktop/mobile/reduced-motion/quality variants;
 - performance and reset/no-op constraints;
 - acceptance evidence.
@@ -237,6 +253,9 @@ Required when relevant:
 - FPS/frame time, shader/draw/memory budgets;
 - score pure/OfflineAudioContext soak, excerpts, and score FPS when audio is
   authorized and changed;
+- `npm --prefix main run story:ux:check` plus objective enter/change/clear
+  traces, exact marker parity, one-shot feedback, actionable standing copy,
+  progress/completion response, and no stale or targetless mandatory state;
 - replay, deep link, pause/focus, quit, completion, and sandbox reset/no-op.
 
 Hash every typed evidence reference into `evidence-registry.json`. The final
@@ -260,7 +279,11 @@ other.
 4. Blind experience: `scene-naive-viewer` receives only current audiovisual
    files and intent-free playback metadata from `raw-audiovisual-evidence.json`,
    never verifier prose, bibles, contract, treatments, notes, or other reviews.
-5. Mechanical: `story-verifier` report stays separate from taste.
+5. Guided player experience: `player-experience-auditor` receives the UX
+   context contract, signed scene contract, runtime evidence, and variants. It
+   independently judges whether the player can identify, reach, perform, and
+   understand each required action without a lifecycle or feedback lie.
+6. Mechanical: `story-verifier` report stays separate from taste.
 
 Then commission `scene-cohesion-judge` with all treatments, evidence, reports,
 notes, and dissent. It may approve, route repair, block, or declare
@@ -273,9 +296,15 @@ Convert all material findings to defects with severity, category, evidence,
 owner, anchor, requested repair, and verification route. Route:
 
 - canon/agency/copy/beat flow -> Chapter Director;
+- objective verb/lifecycle/work-order meaning -> Chapter Director;
 - harmony/motif/arrangement/mix/cue realization -> Score Director;
+- audible objective acknowledgement/masking -> Score Director;
 - blocking/lens/palette/light/effect/frame continuity -> Cinematography Director;
-- shared timing/source collision/reset/performance -> Integration Engineer;
+- marker/HUD focal competition, occlusion, safe area, and camera hand-back ->
+  Cinematography Director;
+- objective wiring, exact-label bridge, one-shot emission, stale clear,
+  reconstruction, shared timing/source collision/reset/performance ->
+  Integration Engineer;
 - taste tie/canon exception/scope expansion -> Human Approver.
 
 Patch, re-run deterministic proof, recapture, and re-run affected independent
@@ -299,7 +328,8 @@ Normal scene approval requires:
 - every category >= 4.30;
 - no critical/high defects;
 - no unaccepted medium narrative/audiovisual alignment, player-agency,
-  cinematography, score, accessibility, or implementation-fidelity defect;
+  player-experience/navigation, cinematography, score, accessibility, or
+  implementation-fidelity defect;
 - complete evidence and substantive reviewer reports;
 - director signoffs and closed blocking dissent;
 - current production authority.

@@ -1,0 +1,21 @@
+{
+  "schema": "terra.scorecard.v1",
+  "rubricRef": "system-quality.v1",
+  "weightedScore": 4.612,
+  "threshold": 4.5,
+  "categoryFloor": 4.4,
+  "categoryFloorThreshold": 4.0,
+  "categoryScores": [
+    { "slug": "correctness", "weight": 20, "score": 4.8 },
+    { "slug": "architecture_fit", "weight": 15, "score": 4.7 },
+    { "slug": "maintainability", "weight": 15, "score": 4.5 },
+    { "slug": "verification", "weight": 15, "score": 4.4 },
+    { "slug": "safety", "weight": 12, "score": 4.7 },
+    { "slug": "operability", "weight": 13, "score": 4.6 },
+    { "slug": "documentation_and_lessons", "weight": 10, "score": 4.5 }
+  ],
+  "blockingDefects": [],
+  "acceptedExceptions": [],
+  "decision": "passed-implementation-scope",
+  "evidenceRefs": ["check-results", "runtime-report", "critic-report", "defects"]
+}

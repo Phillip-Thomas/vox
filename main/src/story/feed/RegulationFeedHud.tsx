@@ -4,6 +4,7 @@ import { getItemCount, subscribeInventory } from '../../game/systems/inventorySy
 import { getInteraction, subscribeInteraction } from '../../game/systems/interactionSystem.ts';
 import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
 import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { collectedDebrisCount, getDebrisScattered } from '../debrisSalvage.ts';
 import { collectedPodCount, SUPPLY_POD_COUNT } from '../supplyPods.ts';
 import { NAV_WAYPOINT_COUNT, reachedNavWaypointCount } from '../navWaypoints.ts';
@@ -13,6 +14,17 @@ import { getStoryText, getStoryTextVersion, subscribeStoryText } from '../storyT
 import { useStoryState } from '../storyState.ts';
 import { CH1_FIXED_TUTORIAL, CH1_QUOTA } from '../storyScript.ts';
 import { fixedTutorialProgress } from '../storyDirector.ts';
+import {
+  getActiveGuidedStoryObjective,
+  getGuidedStoryObjectiveHealth,
+  getGuidedStoryObjectiveVersion,
+  subscribeGuidedStoryObjective
+} from '../ux/objectiveDirector.ts';
+import {
+  readStoryHudSafeAreaInsets,
+  solveStoryEdgeLabelPresentation,
+  solveStoryHudLayout
+} from '../ux/storyHudLayout.ts';
 
 // --- Regulation Feed HUD ----------------------------------------------------------
 //
@@ -51,10 +63,24 @@ const bracket = (pos: React.CSSProperties): React.CSSProperties => ({
   ...pos
 });
 
-const RegulationFeedHud: React.FC = () => {
+export interface RegulationFeedHudProps {
+  /** First-person guidance owns the standing objective and shared marker. */
+  embodiedGuidanceActive?: boolean;
+}
+
+const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
+  embodiedGuidanceActive = false
+}) => {
   const story = useStoryState();
   useSyncExternalStore(subscribeStoryText, getStoryTextVersion, getStoryTextVersion);
+  useSyncExternalStore(
+    subscribeGuidedStoryObjective,
+    getGuidedStoryObjectiveVersion,
+    getGuidedStoryObjectiveVersion
+  );
   const text = getStoryText();
+  const objective = getActiveGuidedStoryObjective();
+  const objectiveHealth = getGuidedStoryObjectiveHealth();
   const inventoryTick = useSyncExternalStore(subscribeInventory, inventoryVersion, inventoryVersion);
   void inventoryTick;
   const interaction = useSyncExternalStore(subscribeInteraction, getInteraction, getInteraction);
@@ -79,6 +105,23 @@ const RegulationFeedHud: React.FC = () => {
 
   useLayoutEffect(() => {
     let raf = 0;
+    let viewportWidth = window.innerWidth;
+    let viewportHeight = window.innerHeight;
+    let safeAreaInsets = readStoryHudSafeAreaInsets();
+    const currentHudLayout = () => {
+      if (viewportWidth !== window.innerWidth || viewportHeight !== window.innerHeight) {
+        viewportWidth = window.innerWidth;
+        viewportHeight = window.innerHeight;
+        safeAreaInsets = readStoryHudSafeAreaInsets();
+      }
+      return solveStoryHudLayout({
+        viewportWidth,
+        viewportHeight,
+        touch: isTouchDevice(),
+        objectivePresent: false,
+        safeAreaInsets
+      });
+    };
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const r = getFeedRuntime();
@@ -124,7 +167,7 @@ const RegulationFeedHud: React.FC = () => {
       const markerLabel = markerLabelRef.current;
       if (marker && chevron && markerLabel) {
         const m = r.marker;
-        if (m.visible && r.treatment > 0.05) {
+        if (!embodiedGuidanceActive && m.visible && r.treatment > 0.05) {
           marker.style.display = 'flex';
           marker.style.transform = `translate(${m.x}px, ${m.y}px) translate(-50%, -50%)`;
           marker.style.borderStyle = m.offscreen ? 'none' : 'solid';
@@ -165,6 +208,14 @@ const RegulationFeedHud: React.FC = () => {
           redactionIndicator.style.transform = `translate(${indicator.x}px, ${indicator.y}px) translate(-50%, -50%)`;
           redactionChevron.style.transform = `rotate(${indicator.angle}rad)`;
           redactionIndicatorLabel.textContent = indicator.label;
+          const layout = currentHudLayout();
+          redactionIndicatorLabel.style.maxWidth = `${layout.marker.labelMaxWidth}px`;
+          const labelPresentation = solveStoryEdgeLabelPresentation({
+            anchorX: indicator.x,
+            labelWidth: redactionIndicatorLabel.getBoundingClientRect().width,
+            layout
+          });
+          redactionIndicatorLabel.style.transform = `translateX(${labelPresentation.labelOffsetX}px)`;
         } else {
           redactionIndicator.style.display = 'none';
         }
@@ -174,9 +225,13 @@ const RegulationFeedHud: React.FC = () => {
     // chrome before first paint so REC/SITE framing cannot flash for one frame.
     tick();
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [embodiedGuidanceActive]);
 
-  const quotaVisible = story.beat === 'ch1-raster' || story.beat === 'ch1-anomaly';
+  // The anomaly beat used to keep the already-complete quota ledger in the
+  // bottom-left corner. Once the embodied objective card owns that space the
+  // historical ledger must yield with the old objective presentation.
+  const quotaVisible = !embodiedGuidanceActive
+    && (story.beat === 'ch1-raster' || story.beat === 'ch1-anomaly');
   const fixedVisible = story.beat === 'ch1-fixed';
   const trackVisible = story.beat === 'ch1-track';
   const podsVisible = story.beat === 'ch1-depth';
@@ -187,34 +242,60 @@ const RegulationFeedHud: React.FC = () => {
   const fixedProgress = fixedVisible ? fixedTutorialProgress() : null;
 
   return (
-    <div
-      aria-hidden
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: theme.z.hud + 2,
-        pointerEvents: 'none',
-        fontFamily: theme.font.mono,
-        color: FEED_INK,
-        letterSpacing: '0.1em'
-      }}
-    >
+    <>
+      {!embodiedGuidanceActive && text.workorder.length > 0 && (
+        <aside
+          aria-live="polite"
+          aria-atomic="true"
+          aria-label="Current story objective"
+          data-objective-id={objective?.id}
+          data-objective-marker-label={objective?.markerLabel}
+          data-objective-health={objective ? objectiveHealth : 'idle'}
+          data-objective-requires-marker={objective
+            ? String(objective.requiresMarker ?? true)
+            : undefined}
+          style={{
+            position: 'fixed',
+            top: 26,
+            left: 56,
+            zIndex: theme.z.hud + 2,
+            pointerEvents: 'none',
+            fontFamily: theme.font.mono,
+            color: FEED_INK,
+            letterSpacing: '0.1em',
+            fontSize: 11,
+            lineHeight: 1.75,
+            maxWidth: 460
+          }}
+        >
+          <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
+            CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEED
+          </div>
+          {text.workorder.map((line, i) => (
+            <div key={`${i}-${line}`}>{line}</div>
+          ))}
+        </aside>
+      )}
+
+      <div
+        aria-hidden
+        data-regulation-feed-chrome="true"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: theme.z.hud + 2,
+          pointerEvents: 'none',
+          fontFamily: theme.font.mono,
+          color: FEED_INK,
+          letterSpacing: '0.1em'
+        }}
+      >
       {/* External-camera framing dissolves as the lift enters the body. */}
       <div ref={cameraFrameRef} style={{ position: 'fixed', inset: 0, display: 'none', opacity: 0 }}>
         <div style={bracket({ top: 16, left: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
         <div style={bracket({ top: 16, right: 16, borderTop: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
         <div style={bracket({ bottom: 16, left: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderLeft: `2px solid ${FEED_INK_DIM}` })} />
         <div style={bracket({ bottom: 16, right: 16, borderBottom: `2px solid ${FEED_INK_DIM}`, borderRight: `2px solid ${FEED_INK_DIM}` })} />
-      </div>
-
-      {/* header + standing work order */}
-      <div style={{ position: 'fixed', top: 26, left: 56, fontSize: 11, lineHeight: 1.75, maxWidth: 460 }}>
-        <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
-          CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEED
-        </div>
-        {text.workorder.map((line, i) => (
-          <div key={`${i}-${line}`}>{line}</div>
-        ))}
       </div>
 
       {/* REC + frame counter */}
@@ -360,31 +441,36 @@ const RegulationFeedHud: React.FC = () => {
         </div>
       )}
 
-      {/* survey marker (ch1 objective designator, driver-projected) */}
-      <div
-        ref={markerRef}
-        style={{
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          display: 'none',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 6,
-          width: 54,
-          height: 54,
-          justifyContent: 'center',
-          border: `1px dashed ${FEED_INK_DIM}`,
-          willChange: 'transform',
-          animation: 'pvFeedRec 1.6s steps(2, jump-none) infinite'
-        }}
-      >
-        <div ref={markerChevronRef} style={{ display: 'none', fontSize: 24, color: FEED_INK, textShadow: '0 0 6px rgba(0,0,0,0.9)' }}>▶</div>
-        <div ref={markerLabelRef} style={{
-          fontSize: 10, letterSpacing: '0.14em', whiteSpace: 'nowrap', color: FEED_INK,
-          background: 'rgba(2,4,3,0.66)', padding: '3px 7px'
-        }} />
-      </div>
+      {/* survey marker (ch1 objective designator, driver-projected). It leaves
+          the DOM at embodiment so FreeMarker is the only objective marker. */}
+      {!embodiedGuidanceActive && (
+        <div
+          ref={markerRef}
+          className="pv-regulation-objective-marker"
+          data-regulation-objective-marker="true"
+          style={{
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            display: 'none',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            width: 54,
+            height: 54,
+            justifyContent: 'center',
+            border: `1px dashed ${FEED_INK_DIM}`,
+            willChange: 'transform',
+            animation: 'pvFeedRec 1.6s steps(2, jump-none) infinite'
+          }}
+        >
+          <div ref={markerChevronRef} style={{ display: 'none', fontSize: 24, color: FEED_INK, textShadow: '0 0 6px rgba(0,0,0,0.9)' }}>▶</div>
+          <div ref={markerLabelRef} style={{
+            fontSize: 10, letterSpacing: '0.14em', whiteSpace: 'nowrap', color: FEED_INK,
+            background: 'rgba(2,4,3,0.66)', padding: '3px 7px'
+          }} />
+        </div>
+      )}
 
       {/* redaction box (driven by the driver's screen-space projection) */}
       <div
@@ -410,6 +496,7 @@ const RegulationFeedHud: React.FC = () => {
           from the work-order/objective bracket. */}
       <div
         ref={redactionIndicatorRef}
+        data-redaction-indicator="true"
         style={{
           position: 'fixed',
           left: 0,
@@ -440,7 +527,12 @@ const RegulationFeedHud: React.FC = () => {
           style={{
             fontSize: 9,
             letterSpacing: '0.16em',
-            whiteSpace: 'nowrap',
+            lineHeight: 1.35,
+            maxWidth: 'min(240px, calc(100vw - 36px))',
+            whiteSpace: 'normal',
+            overflowWrap: 'anywhere',
+            textAlign: 'center',
+            boxSizing: 'border-box',
             color: 'rgba(255,210,138,0.92)',
             background: 'rgba(2,4,3,0.82)',
             border: '1px solid rgba(255,210,138,0.45)',
@@ -454,8 +546,14 @@ const RegulationFeedHud: React.FC = () => {
           0%, 49% { opacity: 1; }
           50%, 100% { opacity: 0.15; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .pv-regulation-objective-marker {
+            animation: none !important;
+          }
+        }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 };
 

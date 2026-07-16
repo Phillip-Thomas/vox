@@ -1,0 +1,295 @@
+{
+  "schema": "terra.adapterBindingSet.v1",
+  "identity": {
+    "slug": "paravoxia-chapter-acceptance-local",
+    "name": "Paravoxia Implemented Chapter Acceptance Local Bindings",
+    "version": "v1"
+  },
+  "workflowSpecRef": "paravoxia-chapter-acceptance@v1",
+  "environment": {
+    "surface": "local_developer_runtime",
+    "resultExposure": "operator_visible"
+  },
+  "operatorControls": {
+    "privilegedCommandsRequireApproval": true,
+    "repoWritesRequireReview": true,
+    "publishRequiresExplicitDecision": true
+  },
+  "bindings": [
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "acceptance-reasoning-runner",
+      "family": "model_adapter",
+      "adapter": {
+        "slug": "env-configured-chapter-acceptance-reasoner",
+        "label": "Environment-configured read-only chapter acceptance reasoner"
+      },
+      "capabilities": [
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output",
+        "independent_role_sessions"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "runnerArgvRef": "env:PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON",
+        "transport": "file_json",
+        "identityClass": "acceptance_verifier",
+        "mutationBoundary": "read_only"
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "acceptance-tool-runner",
+      "family": "tool_adapter",
+      "adapter": {
+        "slug": "paravoxia-chapter-acceptance-safe-tools",
+        "label": "Allowlisted Paravoxia chapter acceptance inspection tools"
+      },
+      "capabilities": [
+        "repo_reference_scan",
+        "safe_command_run",
+        "command_result_capture",
+        "artifact_hash",
+        "browser_render",
+        "screenshot_matrix",
+        "audio_render",
+        "performance_trace"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "executionMode": "argv_no_shell",
+        "workspaceBoundary": ".",
+        "evidenceRoot": "evidence/commands",
+        "allowlistedCommandsOnly": true
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "acceptance-artifact-store",
+      "family": "artifact_adapter",
+      "adapter": {
+        "slug": "paravoxia-chapter-acceptance-filesystem-artifacts",
+        "label": "Run-local implemented chapter acceptance artifacts"
+      },
+      "capabilities": [
+        "artifact_read",
+        "artifact_write",
+        "binary_evidence_store",
+        "artifact_bundle_export"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "root": ".terra/workflow-runs/paravoxia-chapter-acceptance",
+        "runLocalOnly": true,
+        "repoMutationAllowed": false
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "acceptance-review-runner",
+      "family": "review_adapter",
+      "adapter": {
+        "slug": "env-configured-independent-chapter-reviewer",
+        "label": "Environment-configured independent chapter acceptance reviewer"
+      },
+      "capabilities": [
+        "independent_review",
+        "approve",
+        "reject",
+        "route_operator_taste_decision",
+        "long_context_reasoning",
+        "structured_markdown_output",
+        "structured_json_output"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "runnerArgvRef": "env:PARAVOXIA_STORY_REVIEW_RUNNER_ARGV_JSON",
+        "transport": "file_json",
+        "recordFormat": "terra.humanDecision.v1",
+        "identityClass": "independent_acceptance_reviewer",
+        "mustDifferFrom": "acceptance_verifier"
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false
+      }
+    },
+    {
+      "schema": "terra.adapterBinding.v1",
+      "requirementId": "acceptance-human-decision-recorder",
+      "family": "review_adapter",
+      "adapter": {
+        "slug": "operator-recorded-chapter-taste-decision",
+        "label": "Authenticated human operator chapter taste decision"
+      },
+      "capabilities": [
+        "human_operator_decision",
+        "identity_attestation",
+        "headed_taste_evidence_link",
+        "audible_playback_attestation",
+        "structured_json_output"
+      ],
+      "surfaces": [
+        "local_developer_runtime"
+      ],
+      "configuration": {
+        "entryMode": "operator_supplied_artifact",
+        "recordFormat": "terra.humanDecision.v1",
+        "identityClass": "human_operator",
+        "requiresInteractiveConfirmation": true,
+        "modelInferenceAllowed": false
+      },
+      "limits": {
+        "repoWritesAllowed": false,
+        "publishAllowed": false,
+        "runtimeWritesAllowed": false,
+        "automatedApprovalAllowed": false
+      }
+    }
+  ],
+  "commandCatalog": [
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-registry-check",
+      "title": "Validate the Paravoxia chapter registry",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "chapter:registry:check"
+      ],
+      "resultKey": "chapterRegistryCheck",
+      "timeoutMs": 120000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-acceptance-check",
+      "title": "Run deterministic implemented chapter acceptance checks",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "node",
+        "main/tools/chapter-acceptance-workflow-command.mjs"
+      ],
+      "resultKey": "chapterAcceptanceCheck",
+      "timeoutMs": 600000,
+      "privileged": false,
+      "executionPolicy": {
+        "genericAdapterMode": "bounded_smoke_only",
+        "productionEntrypoint": "npm --prefix main run chapter:accept:workflow -- --run <run.json> --run-mechanical",
+        "productionTimeoutOwnership": "chapter_runner_per_case_and_preflight",
+        "productionResultPersistence": "terra.commandResult.v1"
+      }
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-static-typecheck",
+      "title": "Typecheck the implemented chapter candidate",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "typecheck"
+      ],
+      "resultKey": "chapterStaticTypecheck",
+      "timeoutMs": 600000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-static-tests",
+      "title": "Run the implemented chapter test suite",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "test"
+      ],
+      "resultKey": "chapterStaticTests",
+      "timeoutMs": 600000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-static-build",
+      "title": "Build the implemented chapter candidate",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "build"
+      ],
+      "resultKey": "chapterStaticBuild",
+      "timeoutMs": 600000,
+      "privileged": false
+    }
+  ],
+  "roleCatalog": [
+    {
+      "schema": "terra.roleAdapterBinding.v1",
+      "id": "acceptance-analysis",
+      "title": "Environment-configured read-only acceptance analysis",
+      "bindingRequirementId": "acceptance-reasoning-runner",
+      "argv": [
+        "node",
+        "main/tools/chapter-acceptance-role-cli-runner.mjs",
+        "creative",
+        "$INVOCATION_PATH",
+        "$RESULT_PATH"
+      ],
+      "resultTransport": "file_json",
+      "timeoutMs": 600000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.roleAdapterBinding.v1",
+      "id": "independent-review",
+      "title": "Environment-configured independent chapter review",
+      "bindingRequirementId": "acceptance-review-runner",
+      "argv": [
+        "node",
+        "main/tools/chapter-acceptance-role-cli-runner.mjs",
+        "review",
+        "$INVOCATION_PATH",
+        "$RESULT_PATH"
+      ],
+      "resultTransport": "file_json",
+      "timeoutMs": 600000,
+      "privileged": false
+    }
+  ],
+  "screenshotCatalog": [],
+  "patchCatalog": []
+}

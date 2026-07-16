@@ -29,9 +29,11 @@ import {
 } from '../game/systems/floraHarvest';
 import { restoreFloraForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface FloraFieldProps {
   terrainSeed: number;
+  planetProfile?: PlanetProfile;
   persistenceWorld?: WorldIdentity;
   playerPosition?: THREE.Vector3;
   progressiveMount?: boolean;
@@ -71,12 +73,16 @@ function unpublishFloraPickTarget(kind: FloraKind, mesh: THREE.InstancedMesh): v
  */
 export default function FloraField({
   terrainSeed,
+  planetProfile,
   persistenceWorld,
   playerPosition,
   progressiveMount = false
 }: FloraFieldProps) {
   const density = getGraphicsQuality().floraDensity;
-  const profile = useMemo(() => buildFloraProfile(terrainSeed), [terrainSeed]);
+  const profile = useMemo(
+    () => buildFloraProfile(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
   const [visibleKindCount, setVisibleKindCount] = useState(
     progressiveMount ? 1 : FLORA_KINDS.length
   );

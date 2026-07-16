@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { getGraphicsQuality } from '../config/graphicsSettings.ts';
+import { getGraphicsQuality, getQualityProfile } from '../config/graphicsSettings.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { buildWaterFaces, WaterFace } from '../utils/waterVoxels.ts';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../utils/waterFacePlacement.ts';
 import { createWaterBlocksMaterial, updateWaterBlocksMaterial, applyWaterProfileToMaterial } from '../utils/waterBlocksMaterial.ts';
 import { buildWaterProfile } from '../utils/waterProfile.ts';
+import { waterRenderBudget } from '../utils/waterRenderBudget.ts';
 import { measureWarpMetric } from '../utils/warpMetrics.ts';
 import { voxelSystem } from '../utils/efficientVoxelSystem.ts';
 import { getWorldAllWaterVoxels, getWorldGen } from '../utils/worldGenCache.ts';
@@ -24,11 +25,13 @@ import {
   setActiveReplicatedWaterWorld,
   type WaterReplicationTarget
 } from '../game/multiplayerReplication.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface WaterBlocksProps {
   planetSize: number;
   terrainSeed: number;
   worldId?: string;
+  planetProfile?: PlanetProfile;
 }
 
 interface FilledMesh extends THREE.InstancedMesh {
@@ -141,14 +144,18 @@ function createWaterEdgeCapGeometry(radius = WATER_FACE_OFFSET, arcSegments = 8,
   return geometry;
 }
 
-function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps) {
+function WaterBlocksImpl({ planetSize, terrainSeed, worldId, planetProfile }: WaterBlocksProps) {
   const meshRef = useRef<FilledMesh>(null);
   const capMeshRef = useRef<FilledMesh>(null);
   const debug = useMemo(() => isWaterDebug(), []);
+  const renderBudget = useMemo(() => waterRenderBudget(getQualityProfile()), []);
 
   // Static water CELLS (the flooded set) + a fast key lookup. Faces are derived
   // from these against the LIVE voxel state (so digging exposes side faces).
-  const gen = useMemo(() => getWorldGen(planetSize, terrainSeed).generator, [planetSize, terrainSeed]);
+  const gen = useMemo(
+    () => getWorldGen(planetSize, terrainSeed, worldId).generator,
+    [planetSize, terrainSeed, worldId]
+  );
   const replicatedWater = useMemo<WaterReplicationTarget>(() => ({
     applyWaterFlood: cells => gen.applyDynamicWaterCells(cells.map(([x, y, z]) => ({ x, y, z })))
   }), [gen]);
@@ -163,30 +170,51 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   // ALL water cells (not just the initially-exposed surface), so digging next to
   // even deep water reveals that cell's side face. One cube scan per world.
   const waterVoxels = useMemo(() => {
-    return getWorldAllWaterVoxels(planetSize, terrainSeed);
-  }, [gen, planetSize]);
+    return getWorldAllWaterVoxels(planetSize, terrainSeed, worldId);
+  }, [gen, planetSize, terrainSeed, worldId]);
   const preparedWaterFaces = useMemo(
-    () => buildWaterFaces(planetSize, terrainSeed),
-    [planetSize, terrainSeed]
-  );
-
-  // Subdivided so the vertex-shader wave displacement actually curves the surface
-  // (a 1-segment quad has only 4 corners and can't show ripples).
-  const geometry = useMemo(() => new THREE.PlaneGeometry(WATER_QUAD_SIZE, WATER_QUAD_SIZE, 6, 6), []);
-  const edgeCapGeometry = useMemo(() => createWaterEdgeCapGeometry(), []);
-  const material = useMemo(
-    () =>
-      debug
-        ? new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide })
-        : createWaterBlocksMaterial(),
-    [debug]
+    () => buildWaterFaces(planetSize, terrainSeed, worldId),
+    [planetSize, terrainSeed, worldId]
   );
 
   // Per-planet water colours (deep/shallow/sss/foam/night) derived from the shared
   // biome, so the ocean coheres with grass/trees instead of being the same teal on
   // every world. Rebuilt only when the planet seed changes; pushed into the shader
   // uniforms once it has compiled (see useFrame).
-  const profile = useMemo(() => buildWaterProfile(terrainSeed), [terrainSeed]);
+  const profile = useMemo(
+    () => buildWaterProfile(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
+  // The authored shader needs subdivisions for wave displacement. POTATO uses
+  // one opaque biome-coloured quad per canonical face: same water authority,
+  // radically cheaper geometry, shader compile, and overdraw.
+  const geometry = useMemo(
+    () => new THREE.PlaneGeometry(
+      WATER_QUAD_SIZE,
+      WATER_QUAD_SIZE,
+      renderBudget.faceSegments,
+      renderBudget.faceSegments
+    ),
+    [renderBudget]
+  );
+  const edgeCapGeometry = useMemo(
+    () => createWaterEdgeCapGeometry(
+      WATER_FACE_OFFSET,
+      renderBudget.edgeArcSegments,
+      renderBudget.edgeLengthSegments
+    ),
+    [renderBudget]
+  );
+  const material = useMemo(() => {
+    if (debug) return new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
+    if (renderBudget.material === 'authored-shader') return createWaterBlocksMaterial();
+    return new THREE.MeshBasicMaterial({
+      color: profile.deepColor.clone().lerp(profile.shallowColor, 0.58),
+      side: THREE.FrontSide,
+      transparent: false,
+      depthWrite: true
+    });
+  }, [debug, profile, renderBudget]);
   const profileAppliedRef = useRef(false);
   useEffect(() => {
     profileAppliedRef.current = false;
@@ -301,7 +329,7 @@ function WaterBlocksImpl({ planetSize, terrainSeed, worldId }: WaterBlocksProps)
   }, [geometry, edgeCapGeometry, material]);
 
   useFrame(state => {
-    if (!debug) {
+    if (!debug && renderBudget.material === 'authored-shader') {
       const waterMat = material as THREE.MeshStandardMaterial;
       // Push per-planet colours once the shader has compiled (uniforms exist).
       if (!profileAppliedRef.current && waterMat.userData.shader) {

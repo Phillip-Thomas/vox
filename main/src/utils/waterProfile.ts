@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // --- Per-planet water profile (derived from the BIOME) -----------------------
 //
@@ -41,10 +42,13 @@ function roleColor(role: PaletteRoleColor): THREE.Color {
 /**
  * Build the deterministic per-planet water profile. Same seed -> identical.
  */
-export function buildWaterProfile(terrainSeed: number): WaterProfile {
+export function buildWaterProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): WaterProfile {
   const s = terrainSeed | 0;
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
 
   // Deep body: dark + moderately saturated so depths read moody, never neon.
   const deepColor = roleColor(art.palette.waterDeep);

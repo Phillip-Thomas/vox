@@ -10,7 +10,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json --pretty false",
     "test": "vitest run --exclude='dist/**'",
-    "verify": "npm run typecheck && npm run test && npm run build",
+    "verify": "npm run catalog:check && npm run typecheck && npm run test && npm run build",
+    "catalog:check": "node ../scripts/generate-economy-catalog.mjs --check",
     "migrate": "tsx scripts/migrate.ts",
     "smoke:room": "tsx scripts/smokeRoom.ts"
   },

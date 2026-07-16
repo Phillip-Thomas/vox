@@ -13,6 +13,7 @@ import { buildWindProfile, type WindProfile } from './windProfile';
 import { buildPlanetArtDirection, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
 import { commitRaycastInstanceTransforms } from './instancedMeshPicking';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 export const FLORA_KINDS = ['cactus', 'fan', 'flower', 'seedhead', 'shrub'] as const;
 export type FloraKind = typeof FLORA_KINDS[number];
@@ -115,11 +116,14 @@ function hslColor(h: number, s: number, l: number): THREE.Color {
     .convertSRGBToLinear();
 }
 
-export function buildFloraProfile(terrainSeed: number): FloraProfile {
+export function buildFloraProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): FloraProfile {
   const s = terrainSeed | 0;
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
-  const wind = buildWindProfile(s, biome);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
+  const wind = buildWindProfile(s, planetProfile ?? biome);
   const { aridity, lushness, temperature } = biome;
 
   // Flora sits below the canopy as the accent/upholstery layer: related to the

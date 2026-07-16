@@ -64,7 +64,16 @@ export interface SystemPlanetHandoffCommit {
   expectedActivationEpoch: number;
 }
 
+/** Immutable receipt emitted only after a same-system planet handoff commits. */
+export interface SystemPlanetHandoffReceipt {
+  readonly systemId: string;
+  readonly worldId: string;
+  readonly previousActivationEpoch: number;
+  readonly activationEpoch: number;
+}
+
 type Listener = () => void;
+type SystemPlanetHandoffListener = (receipt: SystemPlanetHandoffReceipt) => void;
 
 const ZERO_VECTOR: SystemVectorTuple = Object.freeze([0, 0, 0]);
 const IDENTITY_QUATERNION: SystemQuaternionTuple = Object.freeze([0, 0, 0, 1]);
@@ -76,6 +85,7 @@ let reactSnapshot = snapshot;
 let activePoseWriter: SystemPoseWriterLease | null = null;
 let nextLeaseId = 1;
 const listeners = new Set<Listener>();
+const systemPlanetHandoffListeners = new Set<SystemPlanetHandoffListener>();
 
 export function getSystemFlightSnapshot(): SystemFlightSnapshot {
   return snapshot;
@@ -84,6 +94,17 @@ export function getSystemFlightSnapshot(): SystemFlightSnapshot {
 export function subscribeSystemFlight(listener: Listener): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
+}
+
+/**
+ * Receives accepted handoffs, not speculative targets or generic store changes.
+ * A stale/rejected commit throws before this channel can publish.
+ */
+export function subscribeSystemPlanetHandoffCommits(
+  listener: SystemPlanetHandoffListener
+): () => void {
+  systemPlanetHandoffListeners.add(listener);
+  return () => systemPlanetHandoffListeners.delete(listener);
 }
 
 export function useSystemFlight(): SystemFlightSnapshot {
@@ -160,6 +181,7 @@ export function setActiveSystemPlanet(worldId: string | null): number {
 /** Atomically transfer local render ownership without touching canonical ship pose. */
 export function commitSystemPlanetHandoff(input: SystemPlanetHandoffCommit): number {
   assertPlanetBelongsToSystem(input.worldId, snapshot.systemId);
+  const systemId = snapshot.systemId;
   const renderOrigin = freezeVector(input.renderOrigin);
   if (snapshot.activationEpoch !== input.expectedActivationEpoch) {
     throw new Error('System-planet handoff activation epoch is stale.');
@@ -167,7 +189,8 @@ export function commitSystemPlanetHandoff(input: SystemPlanetHandoffCommit): num
   if (snapshot.target?.kind !== 'system_body' || snapshot.target.worldId !== input.worldId) {
     throw new Error('System-planet handoff target is no longer current.');
   }
-  const activationEpoch = snapshot.activationEpoch + 1;
+  const previousActivationEpoch = snapshot.activationEpoch;
+  const activationEpoch = previousActivationEpoch + 1;
   publishBoundary({
     ...snapshot,
     locationMode: 'atmosphere',
@@ -177,6 +200,13 @@ export function commitSystemPlanetHandoff(input: SystemPlanetHandoffCommit): num
     renderOrigin,
     activationEpoch
   });
+  const receipt: SystemPlanetHandoffReceipt = Object.freeze({
+    systemId,
+    worldId: input.worldId,
+    previousActivationEpoch,
+    activationEpoch
+  });
+  systemPlanetHandoffListeners.forEach(listener => listener(receipt));
   return activationEpoch;
 }
 

@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import storedVantages from './vantages.json';
 import { getQualityProfile, type QualityProfile } from '../../config/graphicsSettings';
-import { buildPlanetProfile } from '../../game/PlanetProfile';
+import { buildPlanetProfile, type PlanetProfile } from '../../game/PlanetProfile';
 import { getVoxelRealitySnapshot, type VoxelRealityStage } from '../../game/systems/realityRenderSystem';
 import { setPlayerUp } from '../../state/playerFrame';
 import { setPlayerSubmerged } from '../../state/playerSubmersion';
@@ -146,6 +146,9 @@ declare global {
 interface AgentCameraProps {
   planetSize: number;
   terrainSeed: number;
+  worldId?: string;
+  /** Canonical authored profile for diagnostics and computed vantages. */
+  planetProfile: PlanetProfile;
   /** Publish the camera position so grass/trees/water stream around the vantage. */
   onPositionChange?: (position: THREE.Vector3) => void;
   worldCoordinate?: WorldCoordinate | null;
@@ -372,18 +375,18 @@ function sceneLayerReport(scene: THREE.Scene, gl: THREE.WebGLRenderer): Pick<Age
 
 function buildProfileSummary(
   terrainSeed: number,
+  planet: PlanetProfile,
   worldCoordinate: WorldCoordinate | null | undefined
 ): AgentProfileSummary {
-  const planet = buildPlanetProfile(terrainSeed);
-  const artDirection = buildPlanetArtDirection(terrainSeed);
-  const biome = buildBiomeProfile(terrainSeed);
-  const grass = buildGrassProfile(terrainSeed);
-  const tree = buildTreeProfile(terrainSeed);
-  const water = buildWaterProfile(terrainSeed);
-  const wind = buildWindProfile(terrainSeed, biome);
-  const terrain = buildTerrainProfile(terrainSeed);
-  const flora = buildFloraProfile(terrainSeed);
-  const fauna = buildFaunaProfile(terrainSeed);
+  const artDirection = buildPlanetArtDirection(terrainSeed, planet);
+  const biome = planet.biome;
+  const grass = buildGrassProfile(terrainSeed, planet);
+  const tree = buildTreeProfile(terrainSeed, planet);
+  const water = buildWaterProfile(terrainSeed, planet);
+  const wind = buildWindProfile(terrainSeed, planet);
+  const terrain = buildTerrainProfile(terrainSeed, planet);
+  const flora = buildFloraProfile(terrainSeed, planet);
+  const fauna = buildFaunaProfile(terrainSeed, undefined, planet);
   const reality = getVoxelRealitySnapshot();
 
   return {
@@ -438,11 +441,18 @@ function buildProfileSummary(
   };
 }
 
-export default function AgentCamera({ planetSize, terrainSeed, onPositionChange, worldCoordinate = null }: AgentCameraProps) {
+export default function AgentCamera({
+  planetSize,
+  terrainSeed,
+  worldId,
+  planetProfile,
+  onPositionChange,
+  worldCoordinate = null
+}: AgentCameraProps) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
   const gl = useThree(state => state.gl);
   const scene = useThree(state => state.scene);
-  const waterGen = getWorldGen(planetSize, terrainSeed).generator;
+  const waterGen = getWorldGen(planetSize, terrainSeed, worldId).generator;
 
   const frameTimes = useRef<number[]>([]);
   const lastTime = useRef(0);
@@ -699,7 +709,7 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
         };
       },
       resetMetrics,
-      profiles: () => buildProfileSummary(terrainSeed, worldCoordinate),
+      profiles: () => buildProfileSummary(terrainSeed, planetProfile, worldCoordinate),
       ready,
       vantages: [...VANTAGES, ...STORED.map(v => v.name)]
     };
@@ -711,7 +721,7 @@ export default function AgentCamera({ planetSize, terrainSeed, onPositionChange,
       setPlayerSubmerged(0, 0);
       delete window.__game;
     };
-  }, [gl, scene, planetSize, terrainSeed, waterGen, onPositionChange, worldCoordinate]);
+  }, [gl, scene, planetSize, terrainSeed, planetProfile, waterGen, onPositionChange, worldCoordinate]);
 
   useFrame(() => {
     frameCount.current++;

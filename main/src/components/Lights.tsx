@@ -2,7 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { getItemCount, subscribeInventory } from '../game/systems/inventorySystem';
-import { getCampfires, resetCampfires, subscribeCampfires, type Campfire } from '../game/systems/campfires';
+import {
+  getCampfires,
+  placeCampfire,
+  resetCampfires,
+  subscribeCampfires,
+  type Campfire
+} from '../game/systems/campfires';
 import { restoreCampfiresForWorld } from '../game/systems/persistence';
 import type { WorldIdentity } from '../game/worldIdentity.ts';
 import { getPlayerUp } from '../state/playerFrame';
@@ -43,14 +49,39 @@ export function PlayerTorch({ playerPosition }: { playerPosition: THREE.Vector3 
 }
 
 /** All placed campfires (stationary, brighter lights + a small fire mesh). */
-export function Campfires({ terrainSeed, persistenceWorld }: { terrainSeed: number; persistenceWorld?: WorldIdentity }) {
+export interface CampfireHydrationPrerequisite {
+  pos: [number, number, number];
+  up: [number, number, number];
+}
+
+export function Campfires({
+  terrainSeed,
+  persistenceWorld,
+  hydrationPrerequisite = null
+}: {
+  terrainSeed: number;
+  persistenceWorld?: WorldIdentity;
+  hydrationPrerequisite?: CampfireHydrationPrerequisite | null;
+}) {
   const [list, setList] = useState<readonly Campfire[]>(() => getCampfires());
   useEffect(() => subscribeCampfires(() => setList([...getCampfires()])), []);
-  // World-relative — clear, then load this world's saved campfires.
+  // World-relative — clear, then load this world's saved campfires. Isolated
+  // story-beat rehearsals reconstruct their carried fire only AFTER hydration;
+  // placing it in a sibling effect races this reset and leaves the audit inert.
   useEffect(() => {
     resetCampfires();
     restoreCampfiresForWorld(persistenceWorld ?? terrainSeed);
+    if (hydrationPrerequisite && getCampfires().length === 0) {
+      placeCampfire(
+        new THREE.Vector3(...hydrationPrerequisite.pos),
+        new THREE.Vector3(...hydrationPrerequisite.up)
+      );
+    }
     setList([...getCampfires()]);
+  // Intentionally keyed only to world hydration. A deep-link rehearsal may
+  // advance from audit to compliance while keeping the same prerequisite;
+  // rerunning hydration on beat changes would erase or resurrect the fire
+  // transaction that just advanced the story.
   }, [persistenceWorld, terrainSeed]);
   return (
     <>

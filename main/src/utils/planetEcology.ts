@@ -1,8 +1,9 @@
 import { MaterialType } from '../types/materials.ts';
 import { buildPlanetArtDirection, type EcologyLayer, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection.ts';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
-export function buildPlanetEcology(seed: number): PlanetEcology {
-  return buildPlanetArtDirection(seed).ecology;
+export function buildPlanetEcology(seed: number, planetProfile?: PlanetProfile): PlanetEcology {
+  return buildPlanetArtDirection(seed, planetProfile).ecology;
 }
 
 export function isMaterialEligibleForEcology(

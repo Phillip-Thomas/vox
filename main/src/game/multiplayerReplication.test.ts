@@ -4,6 +4,7 @@ import {
   applyPendingReplicatedTerrainDiff,
   applyPendingReplicatedWaterFlood,
   applyReplicatedPlayerStateSnapshot,
+  applyReplicatedStoryStateSnapshot,
   applyReplicatedWaterFlooded,
   applyReplicatedWorldEvent,
   applyReplicatedWorldSnapshotEvents,
@@ -36,10 +37,36 @@ import { getItemCount, resetAllInventories } from './systems/inventorySystem.ts'
 import { getVitals, resetAllVitals } from './systems/survivalVitals.ts';
 import { getMawCharge, resetAllMawState } from './systems/mawSystem.ts';
 import { getWaterskinFill, resetAllWaterskins } from './systems/consumeSystem.ts';
-import { getCurrentEra, hasMilestone, resetProgression } from './systems/progressionSystem.ts';
+import {
+  getCurrentEra,
+  hasMilestone,
+  markMilestone,
+  removeMilestone,
+  resetProgression
+} from './systems/progressionSystem.ts';
 import { getWorldCollisionChangeSnapshot, resetWorldCollisionChangesForTests } from './worldCollisionReconciliation.ts';
+import { getHabitatWorldState, resetHabitats } from './systems/habitatSystem.ts';
+import { getShipRepairStage, resetShipRestoration } from './systems/shipRestoration.ts';
 import { ProceduralWorldGenerator } from '../utils/proceduralWorldGenerator.ts';
 import { createTerrainConfig } from '../utils/terrainConfig.ts';
+import {
+  getEmergentStoryEvents,
+  resetEmergentStoryEvents
+} from '../story/emergentStoryEvents.ts';
+import { EMERGENT_MAW_MILESTONES } from '../story/emergentMawRepair.ts';
+import {
+  clearAuthoritativeStructureReceipts,
+  hasAuthoritativeStructureReceipt
+} from './authoritativeStructureReceipts.ts';
+import { resetLocalActorId, setLocalActorId } from './playerActors.ts';
+import {
+  EMERGENT_CAPABILITY_MILESTONES,
+  isStoryJetInstalled
+} from '../story/emergentCapabilities.ts';
+import {
+  WRECK_SALVAGE,
+  WRECK_SALVAGE_MILESTONE
+} from './systems/shipRepairTransactions.ts';
 
 const WATER_TEST_RADIUS = 25;
 const WATER_NEIGHBORS: ReadonlyArray<readonly [number, number, number]> = [
@@ -70,6 +97,7 @@ function findDryBelowSeaCellAdjacentToWater(gen: ProceduralWorldGenerator): [num
 }
 
 beforeEach(() => {
+  resetLocalActorId();
   resetPlayerPoses();
   clearPendingReplicatedTerrainDiffs();
   clearPendingReplicatedWaterFloods();
@@ -81,15 +109,316 @@ beforeEach(() => {
   resetFloraHarvest();
   resetCampfires();
   resetStructures();
+  clearAuthoritativeStructureReceipts();
   resetAllInventories();
   resetAllVitals();
   resetAllMawState();
   resetAllWaterskins();
   resetProgression();
+  resetHabitats();
+  resetShipRestoration();
   resetWorldCollisionChangesForTests();
+  resetEmergentStoryEvents();
 });
 
 describe('multiplayer replication', () => {
+  it('projects a remote wreck claim as shared consumption without copying its outputs', () => {
+    setLocalActorId('alice');
+    const outputs = WRECK_SALVAGE.map(stack => ({ ...stack }));
+
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      commandId: 'story:wreck:claimed-by-bob',
+      type: 'wreck_salvage_claimed',
+      playerId: 'bob',
+      payload: { cacheId: 'kestrel-wreck', outputs }
+    }, { worldId: '-1,-1' })).toBe(true);
+
+    expect(hasMilestone(WRECK_SALVAGE_MILESTONE, 'bob')).toBe(true);
+    expect(hasMilestone(WRECK_SALVAGE_MILESTONE, 'alice')).toBe(true);
+    for (const stack of WRECK_SALVAGE) {
+      expect(getItemCount(stack.id, 'bob')).toBe(stack.qty);
+      expect(getItemCount(stack.id, 'alice')).toBe(0);
+    }
+
+    expect(applyReplicatedPlayerStateSnapshot({
+      players: {
+        progression: {
+          alice: { era: 'emergent', milestones: ['story:started'] }
+        }
+      }
+    })).toBe(true);
+    expect(hasMilestone(WRECK_SALVAGE_MILESTONE, 'alice')).toBe(true);
+    for (const stack of WRECK_SALVAGE) expect(getItemCount(stack.id, 'alice')).toBe(0);
+  });
+
+  it('projects shared lift capability to the local peer on lift and flight-ready events', () => {
+    setLocalActorId('alice');
+    markMilestone('story:started', 'alice');
+    expect(isStoryJetInstalled('alice')).toBe(false);
+
+    const stages = ['bench_online', 'frame_restored', 'hull_sealed', 'lift_online'] as const;
+    stages.forEach((stage, index) => {
+      expect(applyReplicatedWorldEvent({
+        seq: index + 1,
+        commandId: `story:repair:${stage}:bob`,
+        type: 'ship_repair_stage',
+        playerId: 'bob',
+        payload: { to: stage }
+      }, { worldId: '-1,-1' })).toBe(true);
+    });
+    expect(isStoryJetInstalled('alice')).toBe(true);
+    expect(isStoryJetInstalled('bob')).toBe(true);
+
+    removeMilestone(EMERGENT_CAPABILITY_MILESTONES.jetInstalled, 'alice');
+    expect(isStoryJetInstalled('alice')).toBe(false);
+    expect(applyReplicatedWorldEvent({
+      seq: 5,
+      commandId: 'story:repair:flight-ready:bob',
+      type: 'ship_repair_stage',
+      playerId: 'bob',
+      payload: { to: 'flight_ready' }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(isStoryJetInstalled('alice')).toBe(true);
+  });
+
+  it('projects the two-phase authoritative Maw ritual without trusting client elapsed fields', () => {
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      commandId: 'maw:ritual-begun',
+      type: 'maw_repair_begun',
+      playerId: 'alice',
+      payload: {
+        ritualBeginCommandId: 'maw:ritual-begun',
+        ritualSeconds: 8,
+        elapsedMs: 999_999
+      }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(hasMilestone('maw_repaired', 'alice')).toBe(false);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 2,
+      commandId: 'maw:repair',
+      type: 'maw_repaired',
+      playerId: 'alice',
+      payload: {
+        ritualBeginCommandId: 'maw:ritual-begun',
+        minimumAttendanceMs: 8_000
+      }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(hasMilestone('maw_repaired', 'alice')).toBe(true);
+  });
+
+  it('projects only canonical server Maw direction and pond receipts', () => {
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      commandId: 'maw:direction',
+      type: 'maw_first_direction_resolved',
+      playerId: 'alice',
+      payload: {
+        choice: 'harmless-test',
+        repairCommandId: 'maw:repair',
+        proofCommandId: 'maw:test-mine',
+        targetKind: 'stone',
+        minimumPurposeGapMs: 2_000
+      }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(hasMilestone(EMERGENT_MAW_MILESTONES.directionResolved, 'alice')).toBe(true);
+    expect(hasMilestone('story:maw:first-direction:harmless-test', 'alice')).toBe(true);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 2,
+      commandId: 'maw:forged-direction',
+      type: 'maw_first_direction_resolved',
+      playerId: 'bob',
+      payload: {
+        choice: 'harmless-test',
+        repairCommandId: 'maw:repair',
+        proofCommandId: 'maw:test-mine',
+        targetKind: 'lava',
+        minimumPurposeGapMs: 2_000
+      }
+    }, { worldId: '-1,-1' })).toBe(false);
+    expect(hasMilestone(EMERGENT_MAW_MILESTONES.directionResolved, 'bob')).toBe(false);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 3,
+      commandId: 'maw:pond-begin',
+      type: 'maw_pond_observation_begun',
+      playerId: 'alice',
+      payload: {
+        observationBeginCommandId: 'maw:pond-begin',
+        directionCommandId: 'maw:direction',
+        poseSeq: 12,
+        maximumPoseAgeMs: 5_000,
+        minimumObservationMs: 550,
+        physicalProximityCertified: false
+      }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(hasMilestone(EMERGENT_MAW_MILESTONES.pondResonance, 'alice')).toBe(false);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 4,
+      commandId: 'maw:pond-complete',
+      type: 'maw_pond_resonance_observed',
+      playerId: 'alice',
+      payload: {
+        observationBeginCommandId: 'maw:pond-begin',
+        directionCommandId: 'maw:direction',
+        beginPoseSeq: 12,
+        completionPoseSeq: 15,
+        minimumObservationMs: 550,
+        physicalProximityCertified: false
+      }
+    }, { worldId: '-1,-1' })).toBe(true);
+    expect(hasMilestone(EMERGENT_MAW_MILESTONES.pondResonance, 'alice')).toBe(true);
+  });
+
+  it('applies the canonical Kestrel founding reserve once for a resumed Ch9 actor', () => {
+    const event = {
+      seq: 1,
+      commandId: 'founding-reserve',
+      type: 'kestrel_founding_reserve_claimed',
+      playerId: 'alice',
+      payload: {
+        reserveId: 'tidegarden-founding-loadout',
+        outputs: [
+          { id: 'strut_frame', qty: 1 },
+          { id: 'refined_alloy', qty: 1 },
+          { id: 'logic_wafer', qty: 1 }
+        ]
+      }
+    };
+    expect(applyReplicatedWorldEvent({
+      ...event,
+      seq: 0,
+      payload: { ...event.payload, outputs: [{ id: 'habitat_core', qty: 99 }] }
+    }, { worldId: '-1,-1:p1' })).toBe(false);
+    expect(getItemCount('habitat_core', 'alice')).toBe(0);
+    expect(hasMilestone('story:kestrel:founding-reserve-claimed', 'alice')).toBe(false);
+    expect(applyReplicatedWorldEvent(event, { worldId: '-1,-1:p1' })).toBe(true);
+    expect(getItemCount('strut_frame', 'alice')).toBe(1);
+    expect(getItemCount('refined_alloy', 'alice')).toBe(1);
+    expect(getItemCount('logic_wafer', 'alice')).toBe(1);
+    expect(hasMilestone('story:kestrel:founding-reserve-claimed', 'alice')).toBe(true);
+    expect(applyReplicatedWorldEvent({ ...event, seq: 2 }, { worldId: '-1,-1:p1' })).toBe(true);
+    expect(getItemCount('strut_frame', 'alice')).toBe(1);
+  });
+
+  it('turns server-accepted Tidegarden site, foundation, and Core facts into physical story receipts', () => {
+    const worldId = '-1,-1:p1';
+    const cell: [number, number, number] = [4, 25, -4];
+    const supportCell: [number, number, number] = [4, 24, -4];
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      commandId: 'relationship',
+      type: 'tidegarden_relationship_attended',
+      playerId: 'alice',
+      payload: { relationshipId: 'tideline-root-water-exchange' }
+    }, { worldId })).toBe(true);
+    expect(applyReplicatedWorldEvent({
+      seq: 2,
+      commandId: 'site',
+      type: 'tidegarden_site_chosen',
+      playerId: 'alice',
+      payload: { worldId, cell, supportCell, up: [0, 1, 0] }
+    }, { worldId })).toBe(true);
+
+    // Online placement is already predicted locally. Its ignored local echo
+    // must still become the authoritative first-foundation story receipt.
+    restorePieces([{
+      cell,
+      face: 3,
+      type: 'foundation',
+      material: 'wood',
+      ownerId: 'alice',
+      placedBy: 'alice'
+    }]);
+    expect(applyReplicatedWorldEvent({
+      seq: 3,
+      commandId: 'foundation',
+      type: 'structure_placed',
+      playerId: 'alice',
+      timeMs: 1234,
+      payload: { cell, face: 3, type: 'foundation', material: 'wood', up: 2 }
+    }, { worldId, localPlayerId: 'alice', ignoreLocalPlayer: true })).toBe(true);
+    expect(applyReplicatedWorldEvent({
+      seq: 4,
+      commandId: 'core',
+      type: 'habitat_core_placed',
+      playerId: 'alice',
+      payload: {
+        shelterId: `habitat:${worldId}:${cell.join(',')}`,
+        cell,
+        supportCell,
+        position: [8, 50.24, -8],
+        up: [0, 1, 0]
+      }
+    }, { worldId })).toBe(true);
+
+    expect(getEmergentStoryEvents().map(event => event.type)).toEqual([
+      'ecology_relationship_observed',
+      'settlement_site_chosen',
+      'settlement_foundation_placed',
+      'station_activated'
+    ]);
+    expect(hasMilestone(
+      'story:tidegarden:site-chosen:v1:4,25,-4|4,24,-4|0,1,0',
+      'alice'
+    )).toBe(true);
+    expect(getHabitatWorldState(worldId)?.core.cell).toEqual(cell);
+  });
+
+  it('replaces structure ACKs from snapshots and clears them on local removal echoes', () => {
+    const worldId = '-1,-1:p1';
+    const staleCell: [number, number, number] = [1, 20, 1];
+    const liveCell: [number, number, number] = [2, 20, 2];
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      commandId: 'stale-foundation',
+      type: 'structure_placed',
+      playerId: 'alice',
+      payload: { cell: staleCell, face: 3, type: 'foundation', material: 'wood', up: 2 }
+    }, { worldId, localPlayerId: 'alice', ignoreLocalPlayer: true })).toBe(false);
+    expect(hasAuthoritativeStructureReceipt({
+      worldId,
+      cell: staleCell,
+      face: 3,
+      type: 'foundation',
+      playerId: 'alice'
+    })).toBe(true);
+
+    applyReplicatedWorldSnapshotEvents({
+      world: {
+        events: [{
+          seq: 2,
+          commandId: 'live-foundation',
+          type: 'structure_placed',
+          playerId: 'alice',
+          payload: { cell: liveCell, face: 3, type: 'foundation', material: 'wood', up: 2 }
+        }]
+      }
+    }, worldId, { localPlayerId: 'alice' });
+
+    expect(hasAuthoritativeStructureReceipt({ worldId, cell: staleCell, face: 3 })).toBe(false);
+    expect(hasAuthoritativeStructureReceipt({
+      worldId,
+      cell: liveCell,
+      face: 3,
+      type: 'foundation',
+      playerId: 'alice'
+    })).toBe(true);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 3,
+      commandId: 'remove-live-foundation',
+      type: 'structure_removed',
+      playerId: 'alice',
+      payload: { cell: liveCell, face: 3 }
+    }, { worldId, localPlayerId: 'alice', ignoreLocalPlayer: true })).toBe(false);
+    expect(hasAuthoritativeStructureReceipt({ worldId, cell: liveCell, face: 3 })).toBe(false);
+  });
+
   it('serializes local poses as plain network payloads', () => {
     const pose = createPlayerPose({
       playerId: 'alice',
@@ -170,6 +499,9 @@ describe('multiplayer replication', () => {
     const optimisticInventory = { players: { inventory: { alice: { wood: 9 } } } };
     expect(applyReplicatedPlayerStateSnapshot(optimisticInventory)).toBe(true);
     expect(getItemCount('wood', 'alice')).toBe(9);
+    markMilestone('story:dive:oxygen-75', 'alice');
+    markMilestone('story:item:habitat-core:crafted', 'alice');
+    markMilestone(EMERGENT_MAW_MILESTONES.directionResolved, 'alice');
     const snapshot = {
       players: {
         inventory: {
@@ -210,6 +542,74 @@ describe('multiplayer replication', () => {
     expect(getWaterskinFill('alice')).toBe(15);
     expect(getCurrentEra('alice')).toBe('emergent');
     expect(hasMilestone('maw_repaired', 'alice')).toBe(true);
+    expect(hasMilestone('story:dive:oxygen-75', 'alice')).toBe(true);
+    // Server-owned receipts are replaced, never broadly unioned from optimism.
+    expect(hasMilestone('story:item:habitat-core:crafted', 'alice')).toBe(false);
+    expect(hasMilestone(EMERGENT_MAW_MILESTONES.directionResolved, 'alice')).toBe(false);
+  });
+
+  it('converges ship route and Tidegarden settlement from a reconnect snapshot', () => {
+    setLocalActorId('alice');
+    markMilestone('story:started', 'alice');
+    const worldId = '-1,-1:p1';
+    const snapshot = {
+      story: {
+        ship: {
+          repairStage: 'flight_ready',
+          repairHistory: [
+            { eventId: 's1', from: 'wrecked', to: 'bench_online' },
+            { eventId: 's2', from: 'bench_online', to: 'frame_restored' },
+            { eventId: 's3', from: 'frame_restored', to: 'hull_sealed' },
+            { eventId: 's4', from: 'hull_sealed', to: 'lift_online' },
+            { eventId: 's5', from: 'lift_online', to: 'flight_ready' }
+          ],
+          currentSystemId: '-1,-1',
+          currentWorldId: worldId,
+          locationMode: 'surface'
+        },
+        relationshipAttendedBy: ['alice', 'bob'],
+        habitat: {
+          schemaVersion: 1,
+          worldId,
+          core: {
+            actorId: 'alice',
+            worldId,
+            shelterId: `habitat:${worldId}:4,25,-4`,
+            cell: [4, 25, -4],
+            supportCell: [4, 24, -4],
+            position: [8, 50.24, -8],
+            up: [0, 1, 0],
+            eventId: 'core'
+          },
+          shelterCertification: {
+            shelterId: `habitat:${worldId}:4,25,-4`,
+            cell: [4, 25, -4],
+            insulation: 2.4,
+            interiorCellCount: 2,
+            eventId: 'shelter'
+          },
+          safeRest: {
+            shelterId: `habitat:${worldId}:4,25,-4`,
+            dayPhase: 0.72,
+            eventId: 'rest'
+          }
+        }
+      }
+    };
+
+    expect(applyReplicatedStoryStateSnapshot(snapshot, worldId)).toBe(true);
+    expect(getShipRepairStage()).toBe('flight_ready');
+    expect(isStoryJetInstalled('alice')).toBe(true);
+    expect(hasMilestone(WRECK_SALVAGE_MILESTONE, 'alice')).toBe(true);
+    for (const stack of WRECK_SALVAGE) expect(getItemCount(stack.id, 'alice')).toBe(0);
+    expect(hasMilestone('story:tidegarden:relationship-attended', 'alice')).toBe(true);
+    expect(hasMilestone('story:tidegarden:relationship-attended', 'bob')).toBe(true);
+    expect(getHabitatWorldState(worldId)).toMatchObject({
+      worldId,
+      core: { actorId: 'alice', cell: [4, 25, -4] },
+      shelterCertification: { interiorCellCount: 2 },
+      safeRest: { dayPhase: 0.72 }
+    });
   });
 
   it('validates replicated world events before applying them', () => {
@@ -446,6 +846,51 @@ describe('multiplayer replication', () => {
       payload: { pos: [1.25, 1.5, -2.75], up: [0, 0.707, 0.707] }
     })).toBe(true);
     expect(getCampfires()).toHaveLength(1);
+  });
+
+  it('records the local authoritative structure echo even when optimistic geometry is ignored', () => {
+    restorePieces([{
+      cell: [4, 25, -4],
+      face: 3,
+      type: 'foundation',
+      material: 'wood',
+      ownerId: 'alice',
+      placedBy: 'alice'
+    }]);
+    expect(applyReplicatedWorldEvent({
+      seq: 12,
+      commandId: 'story:movie:alice:habitat-foundation',
+      type: 'structure_placed',
+      playerId: 'alice',
+      payload: { cell: [4, 25, -4], face: 3, type: 'foundation', material: 'wood' }
+    }, {
+      localPlayerId: 'alice',
+      ignoreLocalPlayer: true,
+      worldId: '-1,-1:p1'
+    })).toBe(false);
+    expect(hasAuthoritativeStructureReceipt({
+      worldId: '-1,-1:p1',
+      cell: [4, 25, -4],
+      face: 3,
+      type: 'foundation',
+      playerId: 'alice'
+    })).toBe(true);
+
+    expect(applyReplicatedWorldEvent({
+      seq: 13,
+      type: 'structure_removed',
+      playerId: 'alice',
+      payload: { cell: [4, 25, -4], face: 3 }
+    }, {
+      localPlayerId: 'alice',
+      ignoreLocalPlayer: true,
+      worldId: '-1,-1:p1'
+    })).toBe(false);
+    expect(hasAuthoritativeStructureReceipt({
+      worldId: '-1,-1:p1',
+      cell: [4, 25, -4],
+      face: 3
+    })).toBe(false);
   });
 
   it('applies replicated respawns as teleport poses and ignores stale pre-respawn poses', () => {

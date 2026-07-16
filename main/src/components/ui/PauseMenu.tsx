@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useSyncExternalStore } from 'react';
 import { theme, glassPanel } from '../../ui/theme.ts';
 import {
   getQualityProfile,
+  getGraphicsQuality,
   setQualityProfile,
-  QUALITY_PROFILES,
+  subscribeGraphicsQuality,
   type QualityProfile
 } from '../../config/graphicsSettings.ts';
 import AudioControls from './AudioControls.tsx';
@@ -50,7 +51,12 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
   travelEnabled,
   controlsContext
 }) => {
-  const [profile, setProfile] = useState<QualityProfile>(() => getQualityProfile());
+  const graphicsQuality = useSyncExternalStore(
+    subscribeGraphicsQuality,
+    getGraphicsQuality,
+    getGraphicsQuality
+  );
+  const profile = getQualityProfile();
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,7 +74,6 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
   if (!open) return null;
 
   const chooseProfile = (p: QualityProfile) => {
-    setProfile(p);
     setQualityProfile(p);
   };
 
@@ -178,7 +183,7 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
             ))}
           </div>
           <div style={{ marginTop: 10, fontSize: 11, color: theme.color.textFaint, lineHeight: 1.5 }}>
-            {QUALITY_PROFILES[profile].postProcess
+            {graphicsQuality.postProcess
               ? 'Cinematic: bloom, reflections, grass & trees at full reach.'
               : 'Performance: lighter shading for smoother framerates.'}
           </div>

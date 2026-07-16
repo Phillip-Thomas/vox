@@ -1,0 +1,130 @@
+{
+  "schema": "terra.runProfile.v1",
+  "identity": {
+    "slug": "paravoxia-chapter-acceptance",
+    "name": "Paravoxia Implemented Chapter Acceptance",
+    "version": "v1"
+  },
+  "domain": "audiovisual_game_direction",
+  "mode": "read_only_implemented_chapter_acceptance",
+  "executionBudget": {
+    "tier": "deep",
+    "maxModelCalls": 24,
+    "maxPatchLoops": 0,
+    "maxIndependentReviewPasses": 2,
+    "preferDeterministicChecksBeforeModelCritique": true,
+    "spendMostModelTokensOnIndependentReviewsAndCohesionJudge": true
+  },
+  "exploration": {
+    "depth": 3,
+    "requireExactCandidateRevision": true,
+    "requireChapterRegistryEntry": true,
+    "requireSignedCouncilAuthority": true,
+    "requireSignedSceneAuthority": true,
+    "requirePreviousAndNextChapterContext": true,
+    "requireEveryRegisteredChildScene": true,
+    "requireShippedEvidence": true,
+    "requireShippedUxBaseline": true,
+    "requireIndependentStoryScoreCinemaUxBlindAndCodeReviews": true
+  },
+  "approval": {
+    "weightedScoreThreshold": 4.75,
+    "categoryFloor": 4.3,
+    "stagedGate": "final",
+    "humanTasteApproval": {
+      "requiredForAcceptedDisposition": true,
+      "requiresHeadedRealGpuEvidence": true,
+      "requiresAudiblePlayback": true,
+      "cannotBeInferredFromModelReview": true,
+      "machineReadyDispositionAllowedWithoutHuman": true
+    },
+    "publishRequiresSeparateDecision": true
+  },
+  "autonomousLoopPolicy": {
+    "enabled": false,
+    "emitRepairCommissionInsteadOfPatch": true,
+    "repairWorkflowRef": "paravoxia-creative-triad@v1",
+    "repairCommissionRequiresEvidenceRefs": true,
+    "acceptanceRunMayNotWriteRepoOrPublish": true
+  },
+  "requiredEvidence": [
+    "chapter-acceptance-lock",
+    "chapter-acceptance-manifest",
+    "chapter-registry-report",
+    "council-authority-bundle",
+    "scene-authority-bundle",
+    "implementation-diff",
+    "shipped-ux-baseline",
+    "council-compliance-matrix",
+    "chapter-implementation-map",
+    "check-results",
+    "validation-report",
+    "chapter-mechanical-evidence",
+    "chapter-functional-evidence",
+    "verification-report",
+    "objective-lifecycle-evidence",
+    "chapter-boundary-continuity-evidence",
+    "screenshot-report",
+    "audio-report",
+    "raw-audiovisual-evidence",
+    "evidence-registry",
+    "story-audit",
+    "score-audit",
+    "cinematography-audit",
+    "ux-audit",
+    "naive-audience-report",
+    "implementation-correctness-audit",
+    "independent-review-integrity-report",
+    "critic-report",
+    "defect-register",
+    "cohesion-judge-report",
+    "final-scorecard",
+    "chapter-acceptance-quality-report",
+    "chapter-acceptance-report",
+    "run-summary",
+    "lessons-learned"
+  ],
+  "conditionalEvidence": {
+    "accepted": [
+      "human-decision"
+    ],
+    "machine-ready-for-human-taste": []
+  },
+  "stateCoverage": {
+    "requiredStates": [
+      "every_registered_child_scene",
+      "manual_play",
+      "movie_mode",
+      "previous_chapter_boundary",
+      "next_chapter_boundary",
+      "chapter_entry",
+      "chapter_exit",
+      "deep_link",
+      "resume",
+      "replay",
+      "pause_focus",
+      "reset",
+      "mobile",
+      "reduced_motion",
+      "lowest_supported_quality",
+      "objective_enter",
+      "objective_marker_ready",
+      "objective_completion_clear",
+      "optional_observation",
+      "early_interaction"
+    ],
+    "stressStatesRequired": true,
+    "exactAnchorEvidenceRequired": true,
+    "scopeOutPolicy": "A registered chapter state, child scene, neighboring boundary, objective or guidance state may be omitted only by explicit production-owner scope decision recorded in the acceptance report."
+  },
+  "continuityPolicy": {
+    "previousAndNextContextRequired": true,
+    "storyScoreCinemaUxMustAgreeOnBoundaryDisposition": true,
+    "unresolvedBoundaryDefectsBlockAcceptance": true
+  },
+  "candidatePolicy": {
+    "exactRevisionRequired": true,
+    "evidenceMustRecordCandidateRevision": true,
+    "staleOrMixedRevisionEvidenceBlocksAcceptance": true
+  }
+}

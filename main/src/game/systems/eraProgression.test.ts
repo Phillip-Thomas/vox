@@ -4,6 +4,7 @@ import {
   getCurrentEra,
   isEraAtLeast,
   advanceEraTo,
+  replaceEraForRollback,
   markMilestone,
   hasMilestone,
   resetProgression
@@ -31,6 +32,12 @@ describe('progression / eras', () => {
     expect(getCurrentEra()).toBe('emergent');
     advanceEraTo('paravox_machina');
     expect(getCurrentEra()).toBe('paravox_machina');
+  });
+
+  it('allows an explicit rollback seam without weakening normal monotonic progression', () => {
+    advanceEraTo('paravox_machina');
+    replaceEraForRollback('primitive');
+    expect(getCurrentEra()).toBe('primitive');
   });
 
   it('tracks milestones', () => {
@@ -85,11 +92,13 @@ describe('maw charge', () => {
 describe('maw repair = the bridge into Emergent', () => {
   it('repairing the Faulty Maw yields the charge-free Iron Maw and advances the era', () => {
     ensureStarterLoadout(); // grants the Faulty Maw
+    addItem('maw_repair_kit', 1);
     expect(getEquippedToolTier()).toBe(0);
     expect(getCurrentEra()).toBe('primitive');
 
     expect(repairMaw()).toBe(true);
     expect(getItemCount('faulty_maw')).toBe(0);
+    expect(getItemCount('maw_repair_kit')).toBe(0);
     expect(getItemCount('iron_maw')).toBe(1);
     expect(getEquippedToolTier()).toBe(1);      // can now cut stone/ore
     expect(getCurrentEra()).toBe('emergent');
@@ -99,6 +108,7 @@ describe('maw repair = the bridge into Emergent', () => {
   it('repairing one actor\'s Maw does not advance another actor', () => {
     ensureStarterLoadout('alice');
     ensureStarterLoadout('bob');
+    addItem('maw_repair_kit', 1, 'alice');
 
     expect(repairMaw('alice')).toBe(true);
 
@@ -110,8 +120,15 @@ describe('maw repair = the bridge into Emergent', () => {
     expect(hasMilestone('maw_repaired', 'bob')).toBe(false);
   });
 
-  it('fails (and does not advance) with no Faulty Maw to repair', () => {
+  it('fails atomically when either unique repair input is absent', () => {
+    ensureStarterLoadout();
     expect(repairMaw()).toBe(false);
+    expect(getItemCount('faulty_maw')).toBe(1);
+    addItem('maw_repair_kit', 1);
+    resetAllInventories();
+    addItem('maw_repair_kit', 1);
+    expect(repairMaw()).toBe(false);
+    expect(getItemCount('maw_repair_kit')).toBe(1);
     expect(getCurrentEra()).toBe('primitive');
   });
 });

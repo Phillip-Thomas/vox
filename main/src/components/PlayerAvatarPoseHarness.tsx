@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import PlayerAvatar from './PlayerAvatar.tsx';
 import { createPlayerPose, type PlayerActionMode, type PlayerPose, type Vec3Tuple } from '../game/playerPose.ts';
 import { getLocalActorId } from '../game/playerActors.ts';
-import { getPlayerPoses, subscribePlayerPoses } from '../game/systems/playerPoseSystem.ts';
+import {
+  getPlayerPoseReactSnapshot,
+  getRemotePlayerPoseReactSnapshot,
+  subscribePlayerPoseFrames
+} from '../game/systems/playerPoseSystem.ts';
 import {
   getMultiplayerSessionSnapshot,
   shortPlayerId,
@@ -27,7 +31,7 @@ export interface PosePlaybackOptions {
 }
 
 export function selectPosePlaybackPoses(
-  poses: PlayerPose[],
+  poses: readonly PlayerPose[],
   { worldId, includeLocal = false, localActorId = getLocalActorId() }: PosePlaybackOptions = {}
 ): PlayerPose[] {
   return poses
@@ -132,12 +136,18 @@ export default function PlayerAvatarPoseHarness({
   worldId?: string;
   includeLocal?: boolean;
 }) {
-  const [poses, setPoses] = useState(() => getPlayerPoses());
-  const [players, setPlayers] = useState(() => getMultiplayerSessionSnapshot().players);
   const avatarDemo = isAvatarDemoEnabled();
+  const getPoseSnapshot = includeLocal || avatarDemo
+    ? getPlayerPoseReactSnapshot
+    : getRemotePlayerPoseReactSnapshot;
+  const poses = useSyncExternalStore(
+    subscribePlayerPoseFrames,
+    getPoseSnapshot,
+    getPoseSnapshot
+  );
+  const [players, setPlayers] = useState(() => getMultiplayerSessionSnapshot().players);
   const localActorId = getLocalActorId();
 
-  useEffect(() => subscribePlayerPoses(() => setPoses(getPlayerPoses())), []);
   useEffect(() => subscribeMultiplayerSession(() => setPlayers(getMultiplayerSessionSnapshot().players)), []);
 
   const visible = useMemo(

@@ -25,6 +25,7 @@ import {
   setCurrentDayPhase
 } from '../game/worldClock.ts';
 import SpaceSky from './SpaceSky.tsx';
+import { resolvePlanetProfile, type PlanetProfile } from '../game/PlanetProfile.ts';
 
 // Sun/moon are ~CONSTANT directional lights so the lit/dark hemispheres are a
 // permanent spatial terminator (chase-the-light); the player's LOCAL daylight
@@ -121,6 +122,26 @@ const urlForcedDayPhase: number | null = (() => {
  */
 export function getForcedDayPhase(): number | null {
   return urlForcedDayPhase ?? getStoryForcedDayPhase();
+}
+
+/**
+ * Day/night is gameplay authority, not decorative shader animation. Surface
+ * survival and the second-hearth rest must keep time on LOW/POTATO even when
+ * animated material shaders are disabled. Settled deep space may stay static;
+ * server clocks, forced story phases, and atmosphere blends still reassert it.
+ */
+export function shouldUpdateWorldDayPhase(input: {
+  inSpace: boolean;
+  animatedShaders: boolean;
+  clockOwner: 'local_client' | 'server';
+  forcedDayPhase: number | null;
+  needsGradeBlend: boolean;
+}): boolean {
+  return !input.inSpace
+    || input.animatedShaders
+    || input.clockOwner === 'server'
+    || input.forcedDayPhase != null
+    || input.needsGradeBlend;
 }
 
 // Reusable scratch / palette colors (avoid per-frame allocation in useFrame).
@@ -317,8 +338,11 @@ interface SkyControllerProps {
 // Subtle per-planet fog from the shared art direction contract. SpaceSky owns the
 // visible atmosphere; fog only nudges depth/color so the whole world grades as one.
 const FOG_BIOME_MIX = 0.16; // how far the time-of-day fog lerps toward the biome tint
-function biomeFog(terrainSeed: number): { tint: THREE.Color; densityMul: number } {
-  const atmosphere = buildPlanetAtmosphereProfile(terrainSeed);
+function biomeFog(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): { tint: THREE.Color; densityMul: number } {
+  const atmosphere = buildPlanetAtmosphereProfile(terrainSeed, planetProfile);
   return { tint: atmosphere.fogTint, densityMul: atmosphere.fogDensityMul };
 }
 
@@ -342,7 +366,16 @@ export default function SkyController({
   const { phase } = useSpaceFlight();
   const inSpace = phase === 'deep_space';
 
-  const fogBiome = useMemo(() => biomeFog(terrainSeed), [terrainSeed]);
+  const planetProfile = useMemo(
+    () => worldId
+      ? resolvePlanetProfile({ worldId, seed: terrainSeed }).profile
+      : undefined,
+    [terrainSeed, worldId]
+  );
+  const fogBiome = useMemo(
+    () => biomeFog(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
 
   const sunLightRef = useRef<THREE.DirectionalLight>(null);
   const moonLightRef = useRef<THREE.DirectionalLight>(null);
@@ -431,10 +464,13 @@ export default function SkyController({
       NOMINAL_PLANET_FACE_RADIUS
     );
     const needsGradeBlend = inSpace ? spaceBlend < 1 : spaceBlend > 0;
-    const shouldUpdateDayPhase = animated
-      || clockSource.owner === 'server'
-      || forcedDayPhase != null
-      || needsGradeBlend;
+    const shouldUpdateDayPhase = shouldUpdateWorldDayPhase({
+      inSpace,
+      animatedShaders: animated,
+      clockOwner: clockSource.owner,
+      forcedDayPhase,
+      needsGradeBlend
+    });
 
     // Settled deep space: always-on space backdrop, atmosphere/fog collapsed,
     // steady key light — held regardless of the day cycle AND regardless of
@@ -448,9 +484,9 @@ export default function SkyController({
       return;
     }
 
-    // Offline LOW/POTATO keeps the old static-midday behavior, but server-owned
-    // co-op time must still drive day/night so players on different graphics
-    // tiers stay in the same phase.
+    // Only settled deep space may stay static. Surface gameplay always advances
+    // the world clock, including LOW/POTATO, so time-gated survival and Story
+    // actions remain reachable on every supported graphics tier.
     if (!shouldUpdateDayPhase) {
       applyWaterFog(fog, baseFogColor.current, baseFogDensity.current, getCameraSubmergence(), getCameraDepthBelow());
       return;
@@ -475,6 +511,7 @@ export default function SkyController({
     <>
       <SpaceSky
         terrainSeed={terrainSeed}
+        planetProfile={planetProfile}
         activePlanetSystemPosition={activePlanetSystemPosition}
       />
       <directionalLight ref={sunLightRef} castShadow={false} intensity={1} />

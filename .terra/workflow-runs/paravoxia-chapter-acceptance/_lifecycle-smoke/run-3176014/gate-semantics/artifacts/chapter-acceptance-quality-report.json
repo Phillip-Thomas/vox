@@ -1,0 +1,10 @@
+{
+  "humanTasteDispositionValid": true,
+  "acceptedHumanApprovalValid": true,
+  "finalDispositionPolicyPassed": true,
+  "passed": true,
+  "failureCount": 0,
+  "candidateRevisionMatchesInput": true,
+  "allRequiredEvidenceCurrent": true,
+  "mechanicalEvidenceHashMatches": true
+}

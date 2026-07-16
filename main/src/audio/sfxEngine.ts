@@ -1,3 +1,5 @@
+import type { OxygenAudioPlan } from './oxygenAudio.ts';
+
 export type SfxEvent =
   | 'jump'
   | 'land'
@@ -145,6 +147,49 @@ class SfxEngine {
   }
 
   /**
+   * Render Chapter 6's physiological clock on the SFX bus. Noise-only thumps
+   * and breath avoid claiming a pitch or grid from the signed story score, and
+   * the existing SFX master low-pass keeps the body treatment inside the same
+   * underwater medium as every other diegetic sound.
+   */
+  playOxygenPulse(plan: OxygenAudioPlan): void {
+    if (!plan.active || plan.pulseGain <= 0) return;
+    const context = this.ensureContext();
+    if (!context || !this.outputGain) return;
+    void context.resume();
+
+    this.playNoise({
+      type: 'lowpass',
+      from: 185,
+      to: 72,
+      duration: 0.115,
+      gain: plan.pulseGain,
+      q: 0.55
+    });
+    this.playNoise({
+      type: 'lowpass',
+      from: 142,
+      to: 58,
+      duration: 0.095,
+      gain: plan.pulseGain * 0.62,
+      q: 0.5,
+      delay: 0.13
+    });
+
+    if (plan.criticalBreathGain > 0) {
+      this.playNoise({
+        type: 'bandpass',
+        from: 760,
+        to: 260,
+        duration: plan.criticalBreathDurationSeconds,
+        gain: plan.criticalBreathGain,
+        q: 0.7,
+        delay: 0.2
+      });
+    }
+  }
+
+  /**
    * Muffle the whole sfx bus underwater. `amount` 0 = open/dry, 1 = fully muffled.
    * Edge-driven by AudioDirector on submerge/emerge so the cutoff snaps (the
    * "clunk") on entry and releases (the "gasp") on exit.
@@ -269,9 +314,10 @@ class SfxEngine {
     duration: number;
     gain: number;
     q?: number;
+    delay?: number;
   }): void {
     if (!this.context || !this.outputGain) return;
-    const now = this.context.currentTime;
+    const now = this.context.currentTime + (options.delay ?? 0);
     const source = this.context.createBufferSource();
     const filter = this.context.createBiquadFilter();
     const gain = this.context.createGain();

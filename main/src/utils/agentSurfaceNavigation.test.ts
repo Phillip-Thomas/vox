@@ -128,12 +128,22 @@ describe('planAgentSurfaceRoute', () => {
       dryPathCost: null,
       reason: 'dry-route-unavailable'
     });
+
+    const withoutJetpack = planAgentSurfaceRoute(
+      terrainFixture({ water }),
+      PLANET_SIZE,
+      actorPosition(-4, 0),
+      actorPosition(4, 0),
+      { maxJetpackWaterCells: 1, allowJetpackCrossing: false }
+    );
+    expect(withoutJetpack.mode).toBe('unreachable');
+    expect(withoutJetpack.waterCrossing).toBeNull();
   });
 
   it('refuses a water crossing wider than the configured safe cell budget', () => {
     const water = new Set<string>();
     for (let u = -1; u <= 1; u++) {
-      for (let v = -7; v <= 7; v++) water.add(key(u, v));
+      for (let v = -12; v <= 12; v++) water.add(key(u, v));
     }
     const route = planAgentSurfaceRoute(
       terrainFixture({ water }),
@@ -145,6 +155,71 @@ describe('planAgentSurfaceRoute', () => {
 
     expect(route.mode).toBe('unreachable');
     expect(route.waterCrossing).toBeNull();
+  });
+
+  it('splits a wet start into a nearest-dry egress before budgeting later water', () => {
+    const water = new Set<string>();
+    for (let v = -7; v <= 7; v++) {
+      water.add(key(-2, v));
+      water.add(key(1, v));
+    }
+    const terrain = terrainFixture({ water });
+    const egress = planAgentSurfaceRoute(
+      terrain,
+      PLANET_SIZE,
+      actorPosition(-2, 0),
+      actorPosition(4, 0),
+      { maxJetpackWaterCells: 1 }
+    );
+
+    expect(egress.mode).toBe('jetpack');
+    expect(egress.reason).toBe('wet-start-egress');
+    expect(waypointCells(egress)).toEqual(['-2,0', '-1,0']);
+    expect(egress.waterCrossing?.waterCellCount).toBe(1);
+
+    const onward = planAgentSurfaceRoute(
+      terrain,
+      PLANET_SIZE,
+      egress.resolvedGoal!,
+      actorPosition(4, 0),
+      { maxJetpackWaterCells: 1 }
+    );
+    expect(onward.mode).toBe('jetpack');
+    expect(onward.reason).not.toBe('wet-start-egress');
+  });
+
+  it('returns a dry partial bank when the goal needs multiple water crossings', () => {
+    const water = new Set<string>();
+    for (let v = -7; v <= 7; v++) {
+      water.add(key(-2, v));
+      water.add(key(1, v));
+    }
+    const terrain = terrainFixture({ water });
+    const first = planAgentSurfaceRoute(
+      terrain,
+      PLANET_SIZE,
+      actorPosition(-4, 0),
+      actorPosition(4, 0),
+      { maxJetpackWaterCells: 1 }
+    );
+
+    expect(first.mode).toBe('jetpack');
+    expect(first.reason).toBe('partial-water-crossing-egress');
+    const firstWaypointCells = waypointCells(first);
+    expect(firstWaypointCells[firstWaypointCells.length - 1]).toBe('0,0');
+    expect(first.waterCrossing?.waterCellCount).toBe(1);
+
+    const second = planAgentSurfaceRoute(
+      terrain,
+      PLANET_SIZE,
+      first.resolvedGoal!,
+      actorPosition(4, 0),
+      { maxJetpackWaterCells: 1 }
+    );
+    expect(second.mode).toBe('jetpack');
+    expect(second.reason).not.toBe('partial-water-crossing-egress');
+    const secondWaypointCells = waypointCells(second);
+    expect(secondWaypointCells[secondWaypointCells.length - 1]).toBe('4,0');
   });
 
   it('resolves a wet goal to the deterministic nearest dry approach', () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { storyHudTakeover, useStoryState } from './storyState.ts';
+import { useStoryState } from './storyState.ts';
 import { useAppState } from '../state/appState.ts';
 import TerminalPrologue from './prologue/TerminalPrologue.tsx';
 import FeedOverlay from './feed/FeedOverlay.tsx';
@@ -7,6 +7,8 @@ import RegulationFeedHud from './feed/RegulationFeedHud.tsx';
 import StoryCaptions from './StoryCaptions.tsx';
 import AuditBand from './AuditBand.tsx';
 import FreeMarker from './FreeMarker.tsx';
+import StoryGuidanceHud from './ux/StoryGuidanceHud.tsx';
+import { getStoryGuidancePresentationOwnership } from './ux/storyGuidancePresentation.ts';
 import SleepFade from './transitions/SleepFade.tsx';
 import CinematicFrame from './transitions/CinematicFrame.tsx';
 
@@ -34,18 +36,22 @@ const StoryOverlays: React.FC = () => {
     return null;
   }
 
-  const feedLive = phase === 'playing' && storyHudTakeover(story);
+  const guidance = getStoryGuidancePresentationOwnership(story, phase);
 
   return (
     <>
       {story.chapter === 'prologue' && <TerminalPrologue />}
-      {feedLive && <FeedOverlay />}
-      {feedLive && <RegulationFeedHud />}
+      {guidance.feedEffectsMounted && <FeedOverlay />}
+      {guidance.feedEffectsMounted && (
+        <RegulationFeedHud embodiedGuidanceActive={guidance.embodiedObjectiveMounted} />
+      )}
       {phase === 'playing' && <StoryCaptions />}
-      {/* The post-feed regulation voice + the free-era objective designator
-          (ch3's tail onward; both render nothing until the director speaks). */}
-      {phase === 'playing' && !feedLive && <AuditBand />}
-      {phase === 'playing' && !feedLive && <FreeMarker />}
+      {/* The audit voice begins after the regulation feed. Objective guidance
+          has a separate perspective boundary: it enters with first person at
+          ch1-anomaly and remains mounted through every later active chapter. */}
+      {phase === 'playing' && !guidance.feedEffectsMounted && <AuditBand />}
+      {guidance.embodiedMarkerMounted && <FreeMarker />}
+      {guidance.embodiedObjectiveMounted && <StoryGuidanceHud />}
       {phase === 'playing' && (story.chapter === 'ch3' || story.chapter === 'ch4') && <SleepFade />}
       {/* Letterbox frame serves every staged moment (lift, dusk, dawn). */}
       {phase === 'playing' && <CinematicFrame />}

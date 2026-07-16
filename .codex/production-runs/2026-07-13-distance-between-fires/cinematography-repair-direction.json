@@ -1,0 +1,14 @@
+{
+  "schema": "paravoxia.directorRepairDirection.v1",
+  "director": "cinematography",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_ACTIVE_SCENE_CONTRACT}}",
+  "defectIds": ["defect-{{NN}}"],
+  "contractChangeRequired": false,
+  "boundedActions": ["{{BOUNDED_SHOT_LENS_PALETTE_OR_RENDER_REPAIR}}"],
+  "evidenceRefs": ["{{EVIDENCE_REF}}"],
+  "verificationRoute": "{{MECHANICAL_AND_INDEPENDENT_REVIEW_ROUTE}}",
+  "authoredBy": "{{CINEMATOGRAPHY_DIRECTOR}}",
+  "authoredAt": "{{ISO_8601}}"
+}

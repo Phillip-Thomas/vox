@@ -1,0 +1,9 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "score",
+  "contractVersion": "intent-v1",
+  "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+  "disposition": "approve",
+  "signedBy": "independent-score-director",
+  "signedAt": "2026-07-14T04:20:06.000Z"
+}

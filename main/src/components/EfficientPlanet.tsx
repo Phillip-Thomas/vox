@@ -32,6 +32,8 @@ import {
 } from '../utils/cubeGravityConstants';
 import { getMoonDirection, getSunDirection } from './SkyController';
 import { isLiquidBlock } from '../game/data/blocks';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
+import { preserveUnchangedCollisionBodies } from '../utils/collisionBodyState.ts';
 
 export const efficientPlanetMesh = { current: null as THREE.InstancedMesh | null };
 
@@ -50,6 +52,7 @@ interface EfficientPlanetProps {
   playerPosition?: THREE.Vector3;
   surfaceUp?: THREE.Vector3;
   terrainSeed?: number;
+  planetProfile?: PlanetProfile;
   persistenceWorld?: WorldIdentity;
   debugColliders?: boolean;
   onStatsChange?: (stats: PlanetStats) => void;
@@ -116,6 +119,7 @@ export default function EfficientPlanet({
   playerPosition,
   surfaceUp,
   terrainSeed = 12345,
+  planetProfile,
   persistenceWorld,
   debugColliders = false,
   onStatsChange
@@ -136,8 +140,14 @@ export default function EfficientPlanet({
   // Applied to the shared voxel material's uniforms once the shader has compiled
   // and re-applied when the planet seed changes (the material is a singleton, so
   // we drive uniforms rather than rebuild it).
-  const terrainProfile = useMemo(() => buildTerrainProfile(terrainSeed), [terrainSeed]);
-  const windProfile = useMemo(() => buildWindProfile(terrainSeed), [terrainSeed]);
+  const terrainProfile = useMemo(
+    () => buildTerrainProfile(terrainSeed, planetProfile),
+    [planetProfile, terrainSeed]
+  );
+  const windProfile = useMemo(
+    () => buildWindProfile(terrainSeed, planetProfile ?? undefined),
+    [planetProfile, terrainSeed]
+  );
   const terrainTintAppliedRef = useRef(false);
   useEffect(() => {
     terrainTintAppliedRef.current = false;
@@ -161,8 +171,8 @@ export default function EfficientPlanet({
   }, [surfaceUp]);
 
   const { originalTerrain, originalTerrainByCoord, initialVoxels, initialTerrainMeshData } = useMemo(
-    () => getWorldTerrainData(size, terrainSeed),
-    [size, terrainSeed]
+    () => getWorldTerrainData(size, terrainSeed, persistenceWorld?.worldId),
+    [persistenceWorld?.worldId, size, terrainSeed]
   );
 
   const dynamicBufferSize = useMemo(() => {
@@ -205,7 +215,10 @@ export default function EfficientPlanet({
     }
     rigidBodyRefs.current.delete(key);
 
-    setCollisionBodies(prev => prev.filter(body => !(body.worldId === worldId && body.x === x && body.y === y && body.z === z)));
+    setCollisionBodies(prev => preserveUnchangedCollisionBodies(
+      prev,
+      prev.filter(body => !(body.worldId === worldId && body.x === x && body.y === y && body.z === z))
+    ));
   }, []);
 
   const flushPendingCollisionBodies = useCallback(() => {
@@ -237,7 +250,7 @@ export default function EfficientPlanet({
         existing.add(identity);
       }
 
-      return next;
+      return preserveUnchangedCollisionBodies(prev, next);
     });
   }, [isWithinCollisionRange]);
 
@@ -330,7 +343,7 @@ export default function EfficientPlanet({
     );
     // The voxel mesh now has instances (count > 0); tell the app shell so the
     // loading gate / Play button can reveal once a few frames have also painted.
-    markTerrainPopulated();
+    markTerrainPopulated(persistenceWorld?.worldId ?? null);
     return () => {
       if (batchTimeout.current !== null) {
         window.clearTimeout(batchTimeout.current);
@@ -394,7 +407,7 @@ export default function EfficientPlanet({
         next.push({ x, y, z, worldId: activeWorldId, key: `collision-${activeWorldId}-${x}-${y}-${z}` });
       }
 
-      return next;
+      return preserveUnchangedCollisionBodies(prev, next);
     });
 
   }, [isWithinCollisionRange]);
@@ -411,7 +424,7 @@ export default function EfficientPlanet({
     });
   }, [collisionBodies.length, onStatsChange]);
 
-  useEffect(() => {
+  useFrame(() => {
     if (!playerPosition) return;
 
     const surfaceKey = `${latestSurfaceUp.current.x.toFixed(3)},${latestSurfaceUp.current.y.toFixed(3)},${latestSurfaceUp.current.z.toFixed(3)}`;
@@ -422,7 +435,7 @@ export default function EfficientPlanet({
     lastUpdatePosition.current = playerPosition.clone();
     lastSurfaceUpKey.current = surfaceKey;
     syncCollisionBodies();
-  }, [playerPosition, surfaceUp, syncCollisionBodies]);
+  });
 
   return (
     <>

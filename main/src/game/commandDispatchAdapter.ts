@@ -29,6 +29,19 @@ export interface GameplayCommandTransport {
 }
 
 let blockedCommandCounter = 0;
+const finalizedLocalCommandListeners = new Set<(result: CommandAccepted) => void>();
+
+/**
+ * Observes transactions that are final at the local boundary. Reliable online
+ * sends deliberately do not publish here: transport success is not a server
+ * ACK, so semantic consumers stay blocked rather than accept optimistic facts.
+ */
+export function subscribeFinalizedLocalGameplayCommand(
+  listener: (result: CommandAccepted) => void
+): () => void {
+  finalizedLocalCommandListeners.add(listener);
+  return () => finalizedLocalCommandListeners.delete(listener);
+}
 
 export function dispatchGameplayCommand(
   runLocalCommand: () => CommandResult,
@@ -53,16 +66,27 @@ export function dispatchGameplayCommandWithTransport(
   }
 
   const result = runLocalCommand();
-  if (!result.ok || lane !== 'online' || options.multiplayer === false) return result;
+  if (!result.ok) return result;
+  if (lane !== 'online' || options.multiplayer === false) {
+    publishFinalizedLocalCommand(result);
+    return result;
+  }
 
   const intent = resolveMultiplayerCommandIntent(result, options.multiplayer ?? {});
-  if (!intent) return result;
+  if (!intent) {
+    publishFinalizedLocalCommand(result);
+    return result;
+  }
 
   if (options.multiplayer?.predict) transport.sendPrediction(result);
   if (transport.sendCommand(result, intent.commandType, intent.payload)) return result;
 
   transport.rollback(result);
   return commandRejected(result, 'stale', 'Co-op command could not reach the state server.');
+}
+
+function publishFinalizedLocalCommand(result: CommandAccepted): void {
+  for (const listener of finalizedLocalCommandListeners) listener(result);
 }
 
 export function resolveMultiplayerCommandIntent(

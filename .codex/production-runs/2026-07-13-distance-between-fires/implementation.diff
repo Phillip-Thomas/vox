@@ -1,0 +1,99 @@
+# Normalized in-scope changed-path record for scene contract intent-v1.
+# The preserved mixed worktree is the executable candidate; Terra owns supporting
+# catalog/schema/orchestration changes outside this creative production lock.
+
+diff --git a/main/src/story/emergentStoryDirector.ts b/main/src/story/emergentStoryDirector.ts
+--- /dev/null
++++ b/main/src/story/emergentStoryDirector.ts
+@@ signed implementation @@
++Evidence-gated beat director from ch4-audit through the second hearth.
+
+diff --git a/main/src/story/emergentMovieRuntime.ts b/main/src/story/emergentMovieRuntime.ts
+--- /dev/null
++++ b/main/src/story/emergentMovieRuntime.ts
+@@ signed implementation @@
++Physical no-input movie bindings using the same interaction and transaction APIs.
+
+diff --git a/main/src/story/signedSceneAvRuntime.ts b/main/src/story/signedSceneAvRuntime.ts
+--- /dev/null
++++ b/main/src/story/signedSceneAvRuntime.ts
+@@ signed implementation @@
++SHA-locked semantic-anchor bridge for story, score, camera, and post effects.
+
+diff --git a/main/src/story/tidegardenSettlement.ts b/main/src/story/tidegardenSettlement.ts
+--- /dev/null
++++ b/main/src/story/tidegardenSettlement.ts
+@@ signed implementation @@
++Relationship, Habitat Core, physical enclosure, safe rest, and partial-save reconciliation.
+
+diff --git a/main/src/state/shipFlightContinuity.ts b/main/src/state/shipFlightContinuity.ts
+--- /dev/null
++++ b/main/src/state/shipFlightContinuity.ts
+@@ signed implementation @@
++Persisted surface, atmosphere, and local-space ship ownership across reloads.
+
+diff --git a/main/src/utils/worldGenCache.ts b/main/src/utils/worldGenCache.ts
+--- a/main/src/utils/worldGenCache.ts
++++ b/main/src/utils/worldGenCache.ts
+@@ signed implementation @@
++Canonical generation cache identity includes worldId and cannot alias seed-only profiles.
+
+diff --git a/main/src/components/EfficientScene.tsx b/main/src/components/EfficientScene.tsx
+--- a/main/src/components/EfficientScene.tsx
++++ b/main/src/components/EfficientScene.tsx
+@@ signed implementation @@
++Live terrain, spawn, ship, story-world, and settlement integration.
+
+diff --git a/main/src/components/effects/PostFX.tsx b/main/src/components/effects/PostFX.tsx
+--- a/main/src/components/effects/PostFX.tsx
++++ b/main/src/components/effects/PostFX.tsx
+@@ signed implementation @@
++Allocation-free signed cue sampling with low-tier physical fallbacks.
+
+diff --git a/main/src/components/audio/AudioDirector.tsx b/main/src/components/audio/AudioDirector.tsx
+--- a/main/src/components/audio/AudioDirector.tsx
++++ b/main/src/components/audio/AudioDirector.tsx
+@@ signed implementation @@
++Canonical p1 destination identity and semantic score cue consumption.
+
+diff --git a/main/src/game/storyAuthorityDispatch.ts b/main/src/game/storyAuthorityDispatch.ts
+--- /dev/null
++++ b/main/src/game/storyAuthorityDispatch.ts
+@@ signed implementation @@
++Offline and multiplayer-authoritative story transaction dispatch boundary.
+
+diff --git a/main/src/App.tsx b/main/src/App.tsx
+--- a/main/src/App.tsx
++++ b/main/src/App.tsx
+@@ signed implementation @@
++Two-world boot, travel, reload, replay, return, AV reset, and co-op routing integration.
+
+diff --git a/main/tools/generate-scene-av-runtime.mjs b/main/tools/generate-scene-av-runtime.mjs
+--- /dev/null
++++ b/main/tools/generate-scene-av-runtime.mjs
+@@ signed implementation @@
++Exact scene-contract hash and generated-output drift gate.
+
+diff --git a/main/tools/emergent-story-runtime-probe.mjs b/main/tools/emergent-story-runtime-probe.mjs
+--- /dev/null
++++ b/main/tools/emergent-story-runtime-probe.mjs
+@@ signed implementation @@
++Browser runtime, renderer, world, spawn, and screenshot evidence capture.
+
+diff --git a/server/src/economyAuthority.ts b/server/src/economyAuthority.ts
+--- a/server/src/economyAuthority.ts
++++ b/server/src/economyAuthority.ts
+@@ signed implementation @@
++Authoritative unique items, ship stages, relationship, Core, enclosure, and rest receipts.
+
+diff --git a/server/src/rooms.ts b/server/src/rooms.ts
+--- a/server/src/rooms.ts
++++ b/server/src/rooms.ts
+@@ signed implementation @@
++Canonical p1 party routing and compact reconnect convergence state.
+
+diff --git a/server/test/stateServer.test.ts b/server/test/stateServer.test.ts
+--- a/server/test/stateServer.test.ts
++++ b/server/test/stateServer.test.ts
+@@ signed implementation @@
++Two-actor Maw-to-Tidegarden conflict, shelter, rest, and reconnect acceptance path.

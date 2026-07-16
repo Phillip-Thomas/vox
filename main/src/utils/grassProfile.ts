@@ -3,6 +3,7 @@ import { seededUnit } from './worldCoordinates';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { buildWindProfile, type WindProfile } from './windProfile';
 import { buildPlanetArtDirection, type PaletteRoleColor } from './planetArtDirection';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 // --- Per-planet grass profile (derived from the BIOME) -----------------------
 //
@@ -64,11 +65,14 @@ function roleColor(role: PaletteRoleColor): THREE.Color {
 /**
  * Build the deterministic per-planet grass profile. Same seed -> identical.
  */
-export function buildGrassProfile(terrainSeed: number): GrassProfile {
+export function buildGrassProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): GrassProfile {
   const s = terrainSeed | 0;
-  const biome = buildBiomeProfile(s);
-  const art = buildPlanetArtDirection(s);
-  const wind = buildWindProfile(s, biome);
+  const biome = planetProfile?.biome ?? buildBiomeProfile(s);
+  const art = buildPlanetArtDirection(s, planetProfile);
+  const wind = buildWindProfile(s, planetProfile ?? biome);
   const { lushness, aridity } = biome;
 
   // --- Colours ---------------------------------------------------------------

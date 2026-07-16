@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { buildBiomeProfile, type BiomeProfile } from './biomeProfile';
 import { seededUnit } from './worldCoordinates';
+import {
+  assertPlanetProfileSeed,
+  type PlanetProfile
+} from '../game/PlanetProfile.ts';
 
 export interface WindProfile {
   terrainSeed: number;
@@ -42,8 +46,13 @@ function clamp(v: number, lo: number, hi: number): number {
  * renderers, audio, particles, trees, weather, and gameplay can consume the same
  * profile later without subscribing to a global runtime service.
  */
-export function buildWindProfile(terrainSeed: number, biome = buildBiomeProfile(terrainSeed)): WindProfile {
+export function buildWindProfile(
+  terrainSeed: number,
+  biomeOrPlanet: BiomeProfile | PlanetProfile = buildBiomeProfile(terrainSeed)
+): WindProfile {
   const s = terrainSeed | 0;
+  if ('biome' in biomeOrPlanet) assertPlanetProfileSeed(biomeOrPlanet, terrainSeed);
+  const biome = 'biome' in biomeOrPlanet ? biomeOrPlanet.biome : biomeOrPlanet;
   const { aridity, lushness, temperature } = biome;
   const exposure = clamp(
     0.2 +
@@ -83,4 +92,3 @@ export function buildWindProfile(terrainSeed: number, biome = buildBiomeProfile(
     offset
   };
 }
-

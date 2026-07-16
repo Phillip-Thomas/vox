@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createPlanetIdentity } from '../game/starSystem.ts';
+import { resolvePlanetProfile } from '../game/PlanetProfile.ts';
 import { MaterialType } from '../types/materials.ts';
 import {
   WORLD_PREP_PROTOCOL_VERSION,
@@ -32,7 +33,19 @@ describe('world prep protocol identity', () => {
     expect(() => validateWorldPrepRequest({ ...request, worldId: '00,0:p1' })).toThrow(/not canonical/);
     expect(() => validateWorldPrepRequest({ ...request, seed: request.seed + 1 })).toThrow(/does not match/);
     expect(() => validateWorldPrepRequest({ ...request, activationEpoch: -1 })).toThrow(/activationEpoch/);
-    expect(() => validateWorldPrepRequest({ ...request, protocolVersion: 99 as 1 })).toThrow(/protocol version/);
+    expect(() => validateWorldPrepRequest({
+      ...request,
+      protocolVersion: 99 as typeof WORLD_PREP_PROTOCOL_VERSION
+    })).toThrow(/protocol version/);
+    expect(() => validateWorldPrepRequest({ ...request, profileVersion: request.profileVersion + 1 }))
+      .toThrow(/profileVersion differs/);
+    expect(() => validateWorldPrepRequest({ ...request, profileHash: 'pf1-stale' }))
+      .toThrow(/profileHash differs/);
+
+    const resolved = resolvePlanetProfile({ worldId: request.worldId, seed: request.seed });
+    expect(request.profileId).toBe(resolved.profileId);
+    expect(request.profileVersion).toBe(resolved.profileVersion);
+    expect(request.profileHash).toBe(resolved.profileHash);
   });
 });
 
@@ -76,18 +89,47 @@ describe('packed world preparation', () => {
     const first = packWorldPrepSemanticData(request, semantic);
     const second = packWorldPrepSemanticData(request, semantic);
     expect(first.hash).toBe(second.hash);
+    expect(first.profileHash).toBe(request.profileHash);
     expect(first.byteSize).toBe(second.byteSize);
 
     second.buffers.blockIds[0] ^= 1;
     expect(() => validatePackedWorldPrepPayload(second)).toThrow(/hash differs/);
   });
 
+  it('keeps profile identity stable while lease-specific payload hashes change', () => {
+    const firstRequest = smallRequest(6, 'profile-stable-a');
+    const secondRequest = smallRequest(7, 'profile-stable-b');
+    const semantic = buildWorldPrepSemanticData(firstRequest);
+    const first = packWorldPrepSemanticData(firstRequest, semantic);
+    const second = packWorldPrepSemanticData(secondRequest, semantic);
+
+    expect(first.profileHash).toBe(second.profileHash);
+    expect(first.profileVersion).toBe(second.profileVersion);
+    expect(first.hash).not.toBe(second.hash);
+
+    const tampered = { ...second, profileHash: 'pf1-stale' };
+    expect(() => validatePackedWorldPrepPayload(tampered)).toThrow(/profileHash differs/);
+  });
+
   it('rejects results from a stale activation epoch or different canonical world', () => {
     const request = smallRequest(8);
     const payload = packWorldPrepSemanticData(request, buildWorldPrepSemanticData(request));
     expect(isWorldPrepResultCurrent(payload, request)).toBe(true);
-    expect(isWorldPrepResultCurrent(payload, { worldId: request.worldId, activationEpoch: 9 })).toBe(false);
-    expect(isWorldPrepResultCurrent(payload, { worldId: '0,0', activationEpoch: 8 })).toBe(false);
+    expect(isWorldPrepResultCurrent(payload, {
+      worldId: request.worldId,
+      activationEpoch: 9,
+      profileHash: request.profileHash
+    })).toBe(false);
+    expect(isWorldPrepResultCurrent(payload, {
+      worldId: '0,0',
+      activationEpoch: 8,
+      profileHash: request.profileHash
+    })).toBe(false);
+    expect(isWorldPrepResultCurrent(payload, {
+      worldId: request.worldId,
+      activationEpoch: request.activationEpoch,
+      profileHash: 'pf1-stale'
+    })).toBe(false);
   });
 });
 

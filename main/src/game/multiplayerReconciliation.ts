@@ -19,6 +19,7 @@ import {
   setDoorOpen,
   type StructurePiece
 } from './systems/structureSystem.ts';
+import { removeMilestone } from './systems/progressionSystem.ts';
 
 interface RollbackApplyOptions {
   actorId: ActorId;
@@ -36,6 +37,7 @@ interface RollbackApplyResult {
   restoredStructures: number;
   restoredVitals: boolean;
   restoredWaterskin: boolean;
+  removedMilestones: number;
 }
 
 export function applyRejectedCommandRollback(rollback: unknown, options: RollbackApplyOptions): RollbackApplyResult {
@@ -50,7 +52,8 @@ export function applyRejectedCommandRollback(rollback: unknown, options: Rollbac
     removedCampfires: 0,
     restoredStructures: 0,
     restoredVitals: false,
-    restoredWaterskin: false
+    restoredWaterskin: false,
+    removedMilestones: 0
   };
   if (!payload) return result;
 
@@ -67,6 +70,16 @@ export function applyRejectedCommandRollback(rollback: unknown, options: Rollbac
     addItem(stack.id, stack.qty, options.actorId);
     result.changed = true;
     result.refundedItems += stack.qty;
+  }
+
+  if (Array.isArray(payload.removeMilestones)) {
+    for (const value of payload.removeMilestones) {
+      if (typeof value !== 'string' || !value.trim()) continue;
+      if (removeMilestone(value, options.actorId)) {
+        result.changed = true;
+        result.removedMilestones++;
+      }
+    }
   }
 
   const mawChargeBefore = readFiniteNumber(payload.mawChargeBefore);

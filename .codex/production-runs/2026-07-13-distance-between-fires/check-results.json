@@ -1,0 +1,230 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-07-13-distance-between-fires",
+  "checkedAt": "2026-07-15T04:31:30Z",
+  "runStatus": "in_review",
+  "evidenceStatus": "evidence-partial",
+  "contractVersion": "intent-v1",
+  "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+  "sourceRevision": "3d68948c18c7c362abb4ec66b74ff1c685bf2d1f+working-tree-20260714T003216Z",
+  "productionScope": {
+    "status": "passed",
+    "details": "The locked Chapter 4-9 implementation scope is present: the signed physical rail and actor-scoped online structure ACK path are implemented, and three rescue-free full cold runs pass against one required source fingerprint. Remaining release evidence and authority are outside this implementation-scope result.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "implementation.diff",
+      "../../../captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json",
+      "../../../captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json",
+      "../../../captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json"
+    ]
+  },
+  "creativeContract": {
+    "status": "passed",
+    "details": "The frozen three-director contract remains signed at the unchanged 66-anchor hash; this is contract authority, not implementation or release approval.",
+    "evidenceRefs": [
+      "scene-contract.json",
+      "director-signoffs.json",
+      "creative-run-quality-report.json"
+    ]
+  },
+  "implementationGate": {
+    "status": "passed",
+    "exitCode": 0,
+    "details": "The Creative-Triad implementation phase passed 2,387 checks in non-writing check-only mode after this evidence rebaseline. The final phase was not run.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "check-results.json",
+      "../../../main/tools/creative-triad-gate.mjs"
+    ]
+  },
+  "typecheck": {
+    "status": "passed",
+    "exitCode": 0,
+    "details": "Client browser and node TypeScript checks passed inside the main verify command; the server TypeScript check passed inside the server verify command.",
+    "evidenceRefs": [
+      "../../../main/package.json",
+      "../../../server/package.json"
+    ]
+  },
+  "tests": {
+    "status": "passed",
+    "exitCode": 0,
+    "finalVerifyPending": false,
+    "details": "Main verification passed 1,035 story-authority checks and 202 test files / 1,437 tests. Server verification passed 8 test files / 73 tests.",
+    "evidenceRefs": [
+      "../../../main/story-authority.json",
+      "../../../main/tools/story-authority-gate.mjs",
+      "../../../main/package.json",
+      "../../../server/package.json",
+      "main:202-files-1437-tests",
+      "server:8-files-73-tests",
+      "story-authority:1035"
+    ]
+  },
+  "build": {
+    "status": "passed",
+    "exitCode": 0,
+    "details": "The client Vite production build and server TypeScript production build passed inside their respective verify commands.",
+    "evidenceRefs": [
+      "../../../main/dist/index.html",
+      "../../../server/dist/src/index.js"
+    ]
+  },
+  "runtime": {
+    "status": "passed",
+    "sourceFingerprint": "a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262",
+    "fullColdRunsPassed": 3,
+    "fullColdRunsRequired": 3,
+    "boundedProofs": [
+      {
+        "case": "ch9-settle-to-done-integrated3",
+        "status": "passed-target",
+        "evidenceRef": "../../../captures/emergent-ch9-settlement-proof-2026-07-14-integrated3/summary.json",
+        "details": "Fresh POTATO segment completed scanner overload, relationship attendance, player site choice, acknowledged foundation, Habitat Core, physical enclosure, natural nightfall, safe rest, two-world handoff, and done in 166.08 seconds with zero runtime errors, reloads, or context losses. This is not a full cold-run proof."
+      },
+      {
+        "case": "ch5-observed-resonance",
+        "status": "passed-segment",
+        "evidenceRef": "../../../captures/emergent-ch5-observed-resonance-2026-07-14/summary.json",
+        "details": "The observed-resonance segment entered Chapter 6 with zero runtime errors, reloads, or context losses before its later cap."
+      },
+      {
+        "case": "ch6-swim-to-keel-bank-integrated2",
+        "status": "passed-target",
+        "evidenceRef": "../../../captures/emergent-ch6-swim-proof-2026-07-14-integrated2/summary.json",
+        "details": "Physical dive and Keel banking reached Chapter 7 in 367.18 seconds with zero runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch7-board-embodiment",
+        "status": "passed-target",
+        "evidenceRef": "../../../captures/ch7-board-embodiment-2026-07-14/summary.json",
+        "details": "All four signed physical boarding anchors activated and Chapter 8 was reached in 77.172 seconds with zero console errors."
+      },
+      {
+        "case": "ch5-to-keel-regression2",
+        "status": "passed-target",
+        "evidenceRef": "../../../captures/emergent-ch5-to-keel-regression2-2026-07-14/summary.json",
+        "details": "Chapter 5 through physical Keel banking reached Chapter 7 in 268.74 seconds with zero runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch6-to-board-regression4",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-ch6-to-board-regression4-2026-07-14/summary.json",
+        "details": "Chapter 6 through physical boarding reached Chapter 8 in 249.86 seconds with zero nudges, runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch9-settlement-jetpack-rearm",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-ch9-settlement-jetpack-rearm-2026-07-14-01/summary.json",
+        "details": "Jetpack rearm and settlement completed through safe rest, two-world handoff, and done in 157.70 seconds with zero nudges, runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch8-crossing-to-done-crossface",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-ch8-crossing-to-done-crossface-2026-07-14-11/summary.json",
+        "details": "Crossing, right-face landing, dry cross-face and wet-bank exit, settlement, safe rest, two-world handoff, and done completed in 396.77 seconds with zero nudges, runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "legacy-direct-ch8-ch9-probe",
+        "status": "identity-error-only",
+        "evidenceRef": "../../../main/captures/emergent-story/runtime-report.json",
+        "details": "The old direct ch8-landfall and ch9-settle renders establish canonical world identity and absence of page errors only; they do not prove chronology, descent, settlement completion, or human visual quality."
+      }
+    ],
+    "fullColdProofs": [
+      {
+        "case": "ch4-audit-to-done-v6-01",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json",
+        "elapsedSeconds": 704.18,
+        "requiredAnchors": "64/64",
+        "details": "PASS at the required source fingerprint with done, safe rest, two-world handoff, and rescueFree true; zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch4-audit-to-done-v6-02",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json",
+        "elapsedSeconds": 883.65,
+        "requiredAnchors": "64/64",
+        "details": "PASS at the required source fingerprint with done, safe rest, two-world handoff, and rescueFree true; zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses."
+      },
+      {
+        "case": "ch4-audit-to-done-v6-03",
+        "status": "passed-target-rescue-free",
+        "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json",
+        "elapsedSeconds": 683.92,
+        "requiredAnchors": "64/64",
+        "details": "PASS at the required source fingerprint with done, safe rest, two-world handoff, and rescueFree true; zero nudges, dry-route water-contact violations, runtime errors, reloads, or context losses."
+      }
+    ]
+  },
+  "remainingReleaseGates": [
+    "server-issued-embodied-story-receipts",
+    "quality-profile-matrix",
+    "reduced-motion-equivalence",
+    "supported-headed-input",
+    "headed-real-gpu-taste",
+    "origin-sibling-persistence-roundtrip",
+    "tidegarden-support-water-authority-disposition",
+    "human-release-decision"
+  ],
+  "commands": [
+    {
+      "command": "npm --prefix main run verify",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "Passed catalog and generated-scene checks, browser and node typechecks, 1,035 story-authority checks, 202 test files / 1,437 tests, and the Vite production build.",
+      "evidenceRef": "../../../main/dist/index.html",
+      "evidenceRefs": [
+        "../../../main/package.json",
+        "../../../main/story-authority.json",
+        "../../../main/dist/index.html"
+      ]
+    },
+    {
+      "command": "npm --prefix server run verify",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "Passed catalog parity, server typecheck, 8 test files / 73 tests, and the server production build.",
+      "evidenceRef": "../../../server/dist/src/index.js",
+      "evidenceRefs": [
+        "../../../server/package.json",
+        "../../../server/dist/src/index.js"
+      ]
+    },
+    {
+      "command": "creative contract phase gate",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "creative-run-quality-report.json"
+    },
+    {
+      "command": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-07-13-distance-between-fires --phase implementation --check-only",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "Passed 2,387 implementation-phase checks without writing or claiming the final-phase report.",
+      "evidenceRef": "../../../main/tools/creative-triad-gate.mjs"
+    },
+    {
+      "command": "uninterrupted POTATO ch4-audit-to-done cold-run probe v6-01",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "PASS, target reached rescue-free with 64/64 required signed runtime anchors.",
+      "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json"
+    },
+    {
+      "command": "uninterrupted POTATO ch4-audit-to-done cold-run probe v6-02",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "PASS, target reached rescue-free with 64/64 required signed runtime anchors.",
+      "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json"
+    },
+    {
+      "command": "uninterrupted POTATO ch4-audit-to-done cold-run probe v6-03",
+      "status": "passed",
+      "exitCode": 0,
+      "details": "PASS, target reached rescue-free with 64/64 required signed runtime anchors.",
+      "evidenceRef": "../../../captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json"
+    }
+  ]
+}

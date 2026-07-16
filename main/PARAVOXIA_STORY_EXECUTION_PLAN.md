@@ -2,30 +2,37 @@
 
 **Authored:** 2026-07-13
 
-**Runtime status:** **BLOCKED BY DEMO LOCK**
+**Runtime status:** **CORE PATH REACHABLE THROUGH `ch9-hearth` — SIGNED PHYSICAL RAIL IMPLEMENTED — ACCEPTANCE EVIDENCE/PUBLISH GATED**
 
-**Documentation status:** **existing-story reconciliation — ACTIVE**
+**Documentation status:** **runtime-reality reconciliation — CURRENT THROUGH 2026-07-15**
+
+**Authorization provenance:** **OWNER-AUTHORIZED STAGED IMPLEMENTATION**
+
+**Documentation lineage:** **existing-story reconciliation**
 
 **Canon source:** `PARAVOXIA_STORY_BIBLE.md`
 
 **Owner-directed next-batch treatment:** `PARAVOXIA_EMERGENT_STORY_BATCH_PLAN.md`
 
-**Active production resume point:** `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`
+**Implementation evidence:** `../.terra/workflow-runs/system-orchestrator/paravoxia-emergent-2026-07-13/`
+
+**Public release authority:** `../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`
 
 **Machine authority contract:** `story-authority.json`
 
-This is the mutable delivery checkpoint for turning the complete story direction
-into playable systems. It inventories what exists, what is partial, what does
-not exist, the order in which it can safely be built, the decisions that must
-remain open, and the evidence required to call each packet complete.
+This is the mutable delivery checkpoint for the playable story systems and their
+remaining release evidence. It records what now exists in the worktree, what is
+still partial, the dependency order that produced it, the decisions that remain
+open, and the evidence required before any of it may be published.
 
-It does **not** authorize post-arrival story implementation. The current demo
-lane ends at W-7744's arrival and protects existing story copy, score, audio,
-controls, and later-story boundaries. Planning and canon documentation are
-allowed; later runtime work begins only after the demo gate is explicitly
-closed and the owner opens the next lane.
+It authorizes separately locked post-arrival implementation following the
+owner's 2026-07-13 instruction. The current public demo still ends at W-7744's
+arrival and protects existing story copy, score, audio, controls, and
+later-story boundaries. New runtime work must use a matching Creative-Triad
+production lock and signed scene contract; publication remains a separate
+owner/release decision.
 
-When that lane opens, the confirmed post-Breath order is **Maw repair → dive →
+The playable core-path post-Breath order is **Maw repair → dive →
 ship repair → continuous same-system travel → abundant alien-verdant
 Tidegarden base building**.
 Free-play accomplishments and observations run alongside that authored spine;
@@ -85,7 +92,9 @@ work packet, experiment, or explicit rejection guard.
 
 | Status | Meaning |
 | --- | --- |
-| SHIPPED | Present in the current worktree and reachable in the story/runtime |
+| WORKTREE-IMPLEMENTED | Present and reachable in the current worktree, but not necessarily cleared for public release |
+| SHIPPED | Included inside the current public release ceiling |
+| EVIDENCE-PARTIAL | The implementation exists, but the required uninterrupted, headed, multiplayer, or human acceptance evidence is incomplete |
 | PARTIAL | A useful substrate exists, but the story contract is not fulfilled |
 | CONTRACTED | The intended scene is already authored but not implemented |
 | CONFIRMED | Owner-approved direction future work must honor |
@@ -134,33 +143,59 @@ resolve the player identity, merger mechanism, W-7744 chapter timing, or Makers.
 
 Story work now has two deliberately separate lanes:
 
-- **Documentation and council lane — active now.** Reconcile the shipped story,
-  canon, plot direction, legacy status claims, reviewer authority, and
-  implementation-readiness contracts. This lane may patch documentation,
-  manifests, agents, workflows, templates, and non-mutating validation.
-- **Runtime lane — blocked.** The future-story lane stays blocked until the
-  current demo-foundation plan is closed and the owner explicitly opens
-  post-arrival runtime work.
+- **Implementation lane — signed physical rail present; evidence partial.** The
+  separately authorized worktree has state and gameplay transactions from
+  `ch4-audit` through `ch9-hearth`, including Maw repair, dive, ship repair,
+  local travel, Tidegarden habitat, rest, and handoff. The protected-tool
+  refusal; A4 herd/W-7744/pack choreography; Maw ritual, chosen direction,
+  pond resonance and Keel sonar; diagnosis, first hover and staged boarding;
+  and scanner/site-choice/foundation receipt producers are now physical and
+  causally ordered. Full-path and co-op-authority acceptance remain open.
+- **Public release lane — still locked at `ch4-arrival`.** Worktree reachability
+  is not publication. `story-authority.json`, the production lock, and the demo
+  authority continue to enforce the lower release ceiling.
 
-The runtime lane's live resume point remains:
+The final mechanical implementation verification passed with main
+202 test files / 1,437 tests plus 1,035 story-authority checks and a production
+build, and server 8 test files / 73 tests after the final Tidegarden authority
+and continuous-position hardening. All three
+directors signed contract SHA-256
+`3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e`;
+and the pre-sync Creative-Triad mechanical implementation gate passed 2,353 checks. Headless
+SwiftShader probes captured canonical direct renders at `ch8-landfall` and
+`ch9-settle` without runtime errors; they prove identity/error state, not
+descent or settlement chronology. Fresh bounded POTATO proofs now also cover
+observed Maw resonance into Chapter 6, the full physical dive into Chapter 7,
+staged boarding into Chapter 8, dry cross-face Tidegarden traversal, and
+complete physical settlement through safe rest, two-world handoff, and `done`.
+The latest settlement and `ch8-crossing`-to-`done` segments completed in 157.70
+and 396.77 seconds, respectively, with zero nudges, errors, reloads, or context
+losses.
 
-1. complete a headed, trusted pointer-lock journey on a clean save;
-2. prove gather → craft → shelter/fire → night → warmth/recovery → reload;
-3. resolve the fauna triangle-budget regression (`1,004 > 800` in the last
-   recorded proof);
-4. rerun the full repository verification gate;
-5. obtain the Batch 3 story-screening/owner approval named by the active plan.
+The accepted official POTATO cold-run triple now passes from the locked
+`ch4-audit` entry through `done` under frozen source fingerprint
+`a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262`.
+Runs v6-01, v6-02, and v6-03 completed in 704.18, 883.65, and 683.92 seconds;
+each summary reports `PASS`, with all 64/64 required anchors, safe rest, and the two-world handoff
+with zero nudges, dry-water violations, runtime errors, reloads, or context
+losses. The cold-run gate is satisfied at **3/3**. These remain headless
+automation proofs, not headed real-GPU human release acceptance. Earlier v4/v5
+attempts and prior full-run candidates are diagnostic or superseded and do not
+count toward the accepted triple.
 
-Until those pass:
+This 2026-07-15 reality sync necessarily changes the three canonical authority
+document hashes. These documents now state the implemented-producer/evidence
+split and the accepted 3/3 cold-run count accurately; the frozen lock still requires an
+authority-hash-only refresh and implementation-gate rerun without changing the
+signed contract.
 
-- no S6–S13 runtime implementation;
-- no post-arrival dialogue, lore, awakening, or ending;
-- no protected score/audio refactor;
-- no copy revision to the shipped story without explicit approval;
-- no exposing incomplete recipes, travel, multiplayer, or later progression.
-
-Documentation reconciliation may continue because it does not change shipped
-behavior.
+Before publication, the satisfied three-run gate must not be treated as release
+approval. The production lock still requires server-authoritative preservation
+of embodied co-op receipts, headed real-GPU human audiovisual/taste review,
+High/Medium/Low/Potato profile and reduced-motion/headed evidence, and an
+explicit human release decision. Protected score/audio ownership remains in
+force, and the public build must not expose the new beats before those gates are
+recorded.
 
 The active story-correction commission uses the Creative Council's dedicated
 story workflow. It starts from an intent-free shipped-copy inventory and a
@@ -178,59 +213,60 @@ copy or runtime changes.
 
 ## 4. Audited gap register
 
-This register is the work breakdown. “Done” means both behavior and evidence,
-not a promising subsystem hidden behind an unreachable path.
+This register began as the work breakdown and now records the implementation
+disposition. “Implemented” means the named behavior is present in the worktree;
+it does not imply that a broader row's full signed acceptance is complete.
 
 ### 4.1 Foundation and authority
 
-| ID | Current truth | Missing obligation | Done when |
+| ID | Current truth | Remaining obligation | Done when |
 | --- | --- | --- | --- |
-| F01 | Story state stops at `ch4-arrival` | S6–S13 states, transitions, captions, checkpoints, resume semantics | Every contracted scene is authoritative, replayable, and covered |
-| F02 | Existing saves can record the old completion boundary | Versioned migration from “arrival = complete” to the expanded story | Old saves resume at an honest boundary without replay loss or accidental later completion |
-| F03 | Oxygen and jet can self-discover through unscripted use | Story authority over oxygen/Maw/jet sequence | No pre-scene discovery; sandbox behavior remains correct outside story |
+| F01 | **WORKTREE-IMPLEMENTED:** typed state now continues from `ch4-audit` through `ch9-hearth` and `done` | Preserve the independent public ceiling at `ch4-arrival`; complete release evidence | Every implemented scene remains authoritative, replayable, and covered without widening release |
+| F02 | **WORKTREE-IMPLEMENTED:** versioned milestone reconstruction and old-boundary resume semantics are covered | Add any newly encountered historical/corrupt-save fixtures without weakening the boundary | Old saves resume at an honest boundary without replay loss or accidental later completion |
+| F03 | **WORKTREE-IMPLEMENTED:** oxygen, Maw, Lift Cell/jet, boarding, and travel are story-gated | Human direct-input and cold-run leakage proof remains a release gate | No capability appears early; sandbox behavior remains correct outside story |
 | F04 | Progression milestones are actor-keyed | Main reality renderer and constellation reveal remain substantially global | Two perceivers can share one truth and receive different presentation/affordances without state leakage |
-| F05 | Milestones are mostly free-form strings | Typed, versioned narrative/evidence ledger | Compiler/test rejects invalid stage, scene, actor, or migration combinations |
-| F06 | Existing story geometry is broadly playable | Assertions for rough-seed flatness, safe story space, landmark reachability, and respawn | Seed matrix proves every authored route and interaction remains reachable |
-| F07 | Narrative stages coexist with hardware settings | A formal narrative-fidelity × device-quality contract | Low quality preserves every clue; high quality never leaks a later awakening |
-| F08 | Beat/copy/effect authorship is split across scripts, director ticks, and components | Typed runtime scene registry plus stable scene/event/anchor trace | Every player-visible event has one owner, stable IDs, source refs, and cross-domain evidence without scraping inline copy |
+| F05 | **WORKTREE-IMPLEMENTED:** typed story evidence plus actor-specific accomplishment and observation ledgers persist and migrate | Continue rejecting drift as future definitions are added | Compiler/test rejects invalid stage, scene, actor, or migration combinations |
+| F06 | **WORKTREE-IMPLEMENTED for this arc:** shared placement, route, water, and landing validation protects story actors and the p1 handoff | Independently regenerate/validate Tidegarden procedural support and water truth on the server; complete headed seed/device proof | Client and server prove every authored route and interaction remains reachable |
+| F07 | **WORKTREE-IMPLEMENTED:** the signed AV rail declares quality, reduced-motion, and no-postprocess fallbacks | Headed Low/Potato and real-GPU taste capture | Low quality preserves every clue; high quality never leaks a later awakening |
+| F08 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** one SHA-locked registry defines 66 semantic anchors; physical producers, reload hydration, symbolic-entry whitelisting, causal order, authoritative fanout, and the accepted 3/3 cold-run evidence are present | Complete co-op receipt hardening and headed/human evidence without weakening acceptance | Every player-visible event has one owner, stable IDs, source refs, and physical cross-domain evidence without scraping inline copy |
 
 ### 4.2 Contracted Chapter 4 continuation
 
-| ID | Current truth | Missing obligation | Done when |
+| ID | Current truth | Remaining obligation | Done when |
 | --- | --- | --- | --- |
-| C01 | W-7744 arrival actor/relay exists | Reusable NPC state, locomotion, gaze, dialogue authority, persistence | Reload/rejoin preserves pose, phase, and perception without duplicates |
-| C02 | No S6 inspection path | Authored route, marks, pacing, and interruption recovery | W-7744 completes or safely resumes the inspection on supported seeds |
-| C03 | Fault presentation is only partial | His inability to perceive life and first contradictions | Player can infer the mismatch without explanatory dialogue |
-| C04 | Generic extraction exists | Contracted compliance interactions under W-7744 authority | Each ordered act changes world state once and is checkpoint-safe |
-| C05 | Reality-stage interpolation exists | Authored fidelity-regression sequencer tied to compliance | Chroma/detail/life/audio/prose diminish continuously, reversibly, and accessibly |
-| C06 | Hero tree is protected in current content | Sterilization order, refusal, and impossible-to-destroy contract | Bare lowercase “no.” fires once; no input path destroys or bypasses the tree |
-| C07 | Grass/trees and dormant life foundations exist | A4 life reveal for flora/fauna without pre-A4 leakage | Life was foreshadowed as traces, becomes legible only at A4, and persists |
-| C08 | Wind/water systems exist separately | Breath-front choreography across vegetation, water, atmosphere, sound, captions | One continuous front reads on every graphics tier and survives pause/reload |
-| C09 | Fauna foundations exist | One authored, budget-compliant A4 showpiece | It behaves as life rather than spawning as decoration or loot |
-| C10 | W-7744 can arrive | Flee sequence, perceptual fault, and pack/kit drop | He escapes through what he sees as empty; fault and drop persist exactly once |
-| C11 | Extraction beam exists | Fauna targeting, refusal boundaries, damage/harvest semantics | Hunt is legible, ethical framing remains intact, no pre-A4 target leak |
-| C12 | Campfire/crafting exist | Meat, cooking, and relight/rebuild contract | Raw/cooked states are distinct; fire prerequisite works after the vigil |
-| C13 | Interaction system lacks the needed story hold grammar | Cancel-safe hold interaction with progress and accessibility alternative | Keyboard/pointer/controller paths cannot double-fire or soft-lock |
-| C14 | Maw and repair vocabulary exist | Dry-land pack pickup and Maw kit acquisition after Breath | Inventory, HUD, save, and story ledger agree after pickup/reload; the kit is never placed underwater |
-| C15 | Maw is not repaired in story | Maw repair, morph, feedback, and persistent capability transition before the dive | Repair is visually continuous, saved, and not a generic menu unlock |
-| C16 | Underwater/oxygen core exists | Post-repair dive, pressure, roughly 60-second oxygen rhythm, and Kestrel Keel Memory recovery | Entry feels like another medium; depletion/recovery/death are fair and the Maw changes how the medium is read |
-| C17 | Jet substrate leaks early | Lift Cell installation during ship reconstruction and an authored first-hover scene | No earlier activation; first thrust/hover is recoverable and cannot bypass the dive |
-| C18 | The legacy S13 boundary no longer matches owner sequence | Honest handoff from dive into visible ship reconstruction | The chapter opens the Emergent settlement batch without claiming A5 or false galaxy completion |
-| C19 | Score has rich stage/story signals | Protected S6–S13 mood states and transition ownership | Added adapters preserve assets/mix architecture and have no abrupt handoff |
-| C20 | Movie mode covers current story | S6–S13 autopilot and unattended recovery | Full run completes from clean save with no teleport or skipped thematic verb |
+| C01 | **WORKTREE-IMPLEMENTED:** W-7744 audit locomotion, gaze, dialogue, checkpoints, and reconnect state exist | Headed pacing/taste proof | Reload/rejoin preserves phase and perception without duplicates |
+| C02 | **WORKTREE-IMPLEMENTED / COLD-RUN EVIDENCE-SATISFIED:** `ch4-audit` has an authored evidence route and interruption recovery; the official triple passed it at 3/3 | Preserve the proof while completing headed seed/input coverage | W-7744 completes or safely resumes the inspection on supported seeds |
+| C03 | **WORKTREE-IMPLEMENTED:** mismatched fire/life/tree evidence carries his perceptual fault | Naive-player human read | Player infers the mismatch without explanatory dialogue |
+| C04 | **WORKTREE-IMPLEMENTED:** compliance uses registered, checkpoint-safe world transactions | Headed interruption proof | Each ordered act changes world state once and is checkpoint-safe |
+| C05 | **WORKTREE-IMPLEMENTED:** signed compliance anchors drive fidelity regression | Real-GPU quality-tier review | Chroma/detail/life/audio/prose diminish continuously, reversibly, and accessibly |
+| C06 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** a physical harmless-tool attempt proves the protected tree before the bare lowercase “no.” | Run the human false-branch/readability review | No input path destroys or bypasses the tree |
+| C07 | **WORKTREE-IMPLEMENTED:** A4 reveal is gated behind refusal and persists | Quality-tier leakage review | Life becomes legible only at A4 and persists |
+| C08 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** alive authority, visible pond response, authored herd, grounded flight, branch contact, and ordered pack drop share the signed rail and hydrate on reload | Capture every tier and complete human audiovisual review | The front reads on every graphics tier and survives pause/reload |
+| C09 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** a guaranteed authored herd crests on the dry A4 route and remains visible after reload | Complete real-GPU budget/taste proof | It behaves as life rather than decoration or loot |
+| C10 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** W-7744 physically flees while grounded, contacts vegetation, then loses the dry pack in causal order | Complete human legibility review | His escape and fault remain legible without exposition |
+| C11 | The hunt/refrain grammar remains optional and outside this batch's critical path | Preserve ethical framing when expanded | No pre-A4 target leak or false moral score |
+| C12 | Fire recovery/cooking remains an optional post-Breath free-play contract | Expand only without blocking Maw/dive | Raw/cooked and relight/rebuild paths remain honest |
+| C13 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** the eight-second Maw ritual and hatch→camera→seal→handback transaction are cancel/pause/race guarded with controller/touch-compatible state | Complete headed supported-input matrix | Supported inputs cannot double-fire or soft-lock |
+| C14 | **WORKTREE-IMPLEMENTED:** the unique kit is acquired from W-7744's dry-land pack and persisted | Headed placement proof | Inventory, HUD, save, and ledger agree after reload |
+| C15 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** atomic repair follows an eight-second pause-safe ritual; the player authors first direction and must physically observe pond resonance | Complete multiplayer receipt authority and headed manual proof | Repair is continuous, saved, and not a generic menu unlock |
+| C16 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** waterline, falling oxygen, visible/aligned Maw sonar, Keel recovery, surfacing, and shore banking are physically ordered; a rescue-free POTATO segment reached Chapter 7 | Complete full-path and supported-input fairness proof | The medium and depletion/recovery remain fair on supported inputs |
+| C17 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** route calibration requires a sustained real hover inside the wreck envelope plus grounded return after Lift Cell installation | Complete co-op receipt and headed input proof | First thrust cannot activate early or bypass the dive |
+| C18 | **WORKTREE-IMPLEMENTED:** the dive hands into staged reconstruction without spending A5 | Preserve local/interstellar distinction | The chapter opens settlement without false galaxy completion |
+| C19 | **WORKTREE-IMPLEMENTED:** signed cue ownership extends through the new arc without protected mixer/asset refactors | Real-GPU listening pass | Transitions preserve score architecture and avoid abrupt handoff |
+| C20 | **COLD-RUN EVIDENCE-SATISFIED / RELEASE-PARTIAL:** movie mode has handlers through second hearth; the accepted official `ch4-audit` → `done` triple passed at 3/3 under one frozen fingerprint | Complete headed, profile, persistence, authority, and human acceptance without weakening the retained proof | Three clean unattended runs complete without teleport or skipped thematic verb |
 
 ### 4.3 Emergent and A5 bridge
 
-| ID | Current truth | Missing obligation | Done when |
+| ID | Current truth | Remaining obligation | Done when |
 | --- | --- | --- | --- |
-| E01 | Crafting has future vocabulary but client/server catalogs diverge | One shared authoritative item/recipe/build-material catalog plus bounded repair cradle, field smelter, wreck assembler, destination material bench, and Habitat Core with recipe-knowledge gates | Client/server parity and computed story BOM pass; only learned recipes surface and every station has a lasting use |
-| E02 | Ship resolves visually but remains wrecked | Four-stage reconstruction, resource logic, remembered scar, and versioned ship state | Hull, life support, lift, and navigation each visibly alter one persistent ship and unlock one capability |
-| E03 | Scanner and environmental-response foundations are partial | Authored evidence consumers, oxygen, wind/pollen/ecology/night rhythms, shelter acoustics, and recovery | Tools ask new questions; environmental changes have readable cues without turning the starter sibling into a punishment biome |
-| E04 | Same-system travel substrate exists | Exact two-body story fixture and production origin→sibling→origin continuity | Round trip preserves both worlds, landmarks, bases, ship, story authority, and inventory without interstellar warp |
-| E05 | Current generated story companions are volcanic/arid and conflict with owner direction | Pin `-1,-1:p1` / seed `1600321158` to the versioned alien-verdant Tidegarden profile; validate landing, mixed-resource economy, site choice, stewardship, and rest | Every planet consumer resolves the same hazard-free profile and any valid player-chosen site can support a functional habitat through one complete ecology/night cycle |
-| E06 | Milestones exist but attention is not represented | Separate actor-specific accomplishment and provisional-observation ledgers | Physical acts and noticed patterns persist, dedupe by meaningful context, and never become XP or critical-path gates |
-| E07 | Automation has surface helpers but no legal multi-medium contract | Surface route, 3D swim route with oxygen reserve, and ship-intent adapters | Movie mode completes every medium without key synthesis, teleport, water walking, or invalid spawns |
-| E08 | Underwater and planet profiles are mature but identity wiring is incomplete | Per-planet palette, ecology, music, perception, and climate-consumer integration | Each world keeps vibrant legibility while expressing its own medium on every quality tier |
+| E01 | **WORKTREE-IMPLEMENTED:** one generated catalog now supplies client/server items, recipes, stations, unique receipts, and computed BOM checks | Preserve parity when expanding crafting | Only learned recipes surface and every station has a lasting use |
+| E02 | **WORKTREE-IMPLEMENTED / EVIDENCE-PARTIAL:** four ordered repairs, scar diagnosis, legal hover/grounded return, and staged boarding durably promote the same wreck; a production boarding segment reached Chapter 8 | Complete co-op receipt authority and full headed journey | Hull, life support, lift, and navigation alter one persistent ship |
+| E03 | **WORKTREE-IMPLEMENTED for the critical path:** oxygen, ecology/night, relationship, enclosure, and rest have authored evidence consumers | Broader optional ecology/regrowth polish and real-GPU sensory review | Environmental cues remain readable without punishment-biome drift |
+| E04 | **WORKTREE-IMPLEMENTED:** the exact p0/p1 fixture, physical crossing, reload descent, return, and two-world handoff preserve continuity | Full headed origin→sibling→origin→sibling run | Both worlds, bases, ship, inventory, and authority persist without warp |
+| E05 | **WORKTREE-IMPLEMENTED:** `-1,-1:p1` / seed `1600321158` is pinned to hazard-free `story:tidegarden@1`, hash `pf1-eeef3b78`; seed-only volcanic cache aliasing is rejected | Real-GPU atlas/taste approval and server-side procedural support/water regeneration hardening | Every consumer resolves the same verdant profile and valid sites support a complete ecology/night cycle |
+| E06 | **WORKTREE-IMPLEMENTED:** separate actor-specific accomplishment and observation ledgers persist, dedupe, compare, and doubt without gating Story | Continue anti-grind/cosmology review as definitions grow | Physical acts and noticed patterns never become XP or critical-path gates |
+| E07 | **COLD-RUN EVIDENCE-SATISFIED / RELEASE-PARTIAL:** surface, swim/O2/sonar, ship-intent, boarding, cross-face travel, and settlement automation use registered paths; the accepted rescue-free full `ch4-audit` → `done` triple passes without nudges or dry-water violations | Preserve the accepted triple while completing headed and human release evidence | Movie mode completes every medium without key synthesis, teleport, water walking, or invalid spawns in three retained runs |
+| E08 | **WORKTREE-IMPLEMENTED for origin/Tidegarden:** identity reaches terrain, cache/prep, resources, palette, ecology, climate, music, preview, and flight handoff | Headed quality-tier comparison; extend the same contract to later worlds | Each world keeps vibrant legibility while expressing its own medium |
 | E09 | Light-stage rendering controls exist | A5 first-interstellar-warp scene and quality-independent narrative reveal after the settlement batch | Local travel spends no A5 capital; the first true warp earns Light on low and high tiers |
 | E10 | Constellation scene records a global milestone | Persistent, actor-specific constellation navigation grammar | Different perceivers can form and revisit meanings over shared seed truth |
 | E11 | W-7744 recurrence is confirmed | A5 return motive, belief state, fault concealment, evidence of greater threat | Owner approves scene contract; behavior shows change without mind-reading exposition |
@@ -579,7 +615,7 @@ exploration. The current/proposed threshold acts are:
 | A1 — Hue | player touches smooth anomaly; color ramp reorganizes existing world | SHIPPED |
 | A2 — Depth | player approaches/eats apple; feed dies and spatial agency opens | SHIPPED |
 | A3 — Grain | player builds fire and rests; dawn/material/life-trace bloom | SHIPPED |
-| A4 — Breath | W-7744 audit/compliance; player refuses tree; one continuous exhale | CONTRACTED |
+| A4 — Breath | W-7744 audit/compliance; player refuses tree; one continuous exhale | WORKTREE-IMPLEMENTED; EVIDENCE-PARTIAL; RELEASE-GATED |
 | A5 — Light | rebuilt ship completes first interstellar warp | DESIGNED; local flight is not A5 |
 | A6 — The Hand | player reads/deciphers and compares Maker evidence | DESIGNED; evidence cannot answer the Makers |
 | A7 — Paradox | player crosses a void rift and earns Lens grammar | DESIGNED |
@@ -746,7 +782,8 @@ Exit evidence:
 - `npm run story:authority` and its synthetic-drift smoke pass;
 - the Story Bible, this plan, runtime overview, council, and legacy banners
   agree on authority and current status;
-- no source claims S6 is currently playable;
+- every source distinguishes S6 worktree reachability from the public
+  `ch4-arrival` release ceiling;
 - no source calls W-7744 recurrence, Worker 9 survival, wonder, or third
   consciousness optional;
 - no source calls a proposed name/attention PCG system canon;
@@ -756,9 +793,10 @@ Exit evidence:
 
 ### WS1 — Story authority, saves, and capability gates
 
-**Blocked until demo unlock.** Target files begin with `src/story/storyState.ts`,
-`src/story/storyDirector.ts`, `src/story/storyScript.ts`, persistence modules,
-`src/story/senseDiscovery.ts`, and the capability adapters they command.
+**WORKTREE-IMPLEMENTED; RELEASE-GATED.** The delivery touched
+`src/story/storyState.ts`, the emergent story directors, persistence modules,
+capability adapters, and the corresponding client/server authority surfaces.
+The deliverables below remain the regression contract for future edits.
 
 Deliverables:
 
@@ -787,8 +825,11 @@ Exit evidence:
 
 ### WS2 — Actor-specific perception resolver
 
-**Blocked until demo unlock; build before new post-arrival content.** Start by
-extracting actor/context resolution from
+**PARTIAL / DEFERRED beyond the implemented ch9 candidate.** Actor-keyed
+milestones, evidence, co-op authority, and scene presentation exist, while the
+main reality renderer and constellation presentation remain substantially
+global. Complete this workstream before a later story depends on genuinely
+different simultaneous observer renderings. Start by extracting actor/context resolution from
 `src/game/systems/realityRenderSystem.ts`, then adapt `src/story/skyMeaning.ts`
 and `src/game/lifeReveal.ts` without changing current visible output.
 
@@ -807,8 +848,8 @@ Packets:
 
 Exit evidence:
 
-- golden snapshots for A0–A3 plus the shipped first-day and W-7744-arrival
-  states; A4 remains contracted, not shipped;
+- golden snapshots for A0–A3 plus the public first-day/W-7744-arrival states and
+  the release-gated A4 implementation;
 - two-observer side-by-side capture;
 - no global state leak after actor switch/rejoin;
 - low/high device-quality equivalence;
@@ -817,7 +858,10 @@ Exit evidence:
 
 ### WS3 — Evidence, hypotheses, horizons, and perceptual drift
 
-**Blocked until WS1–WS2 parity.**
+**PARTIAL:** typed actor/context evidence plus accomplishment/observation history
+is implemented for the current arc. The broader question graph,
+micro-awakening aggregation, and fully actor-specific rendering remain
+dependent on WS2.
 
 Deliverables:
 
@@ -881,7 +925,9 @@ Exit evidence:
 
 ### WS6 — Ontological planet grammar
 
-**Blocked until WS2 and stable `PlanetProfile` migration.** Start from
+**PARTIAL:** the stable identity-aware `PlanetProfile` path is implemented for
+the canonical origin/Tidegarden pair. The broader three-world
+philosophical/history grammar remains dependent on WS2. Continue from
 `src/game/PlanetProfile.ts`, manifest builders, scanning, world signals, biome,
 hazard, palette, score, and underwater adapters.
 
@@ -929,8 +975,10 @@ Exit evidence:
 
 ### WS8 — Contracted Chapter 4, S6–S13
 
-**Blocked by demo unlock, WS1, and the minimum WS2 parity adapter.** Implement in
-four reviewable packets:
+**WORKTREE-IMPLEMENTED; EVIDENCE-PARTIAL; RELEASE-GATED.** The
+owner-authorized lane has a reachable, physically produced path across the
+following four reviewable packets. Their physical/choreographic obligations
+remain the regression contract while release evidence is gathered:
 
 1. **S6–S8: inspection, compliance, defiance.** W-7744 route/fault, ordered
    extraction, continuous regression, protected-tree refusal.
@@ -944,14 +992,22 @@ four reviewable packets:
    shore, and hand honestly into ship reconstruction. The legacy S10–S13 IDs
    remain provenance until the authority candidate assigns final beat IDs.
 
-Every packet ships with unit/state tests, clean-save and mid-save proof,
-movie-mode proof, visual/audio capture, performance budget, accessibility pass,
-and a canon review against the bible.
+Every packet has automated state/authority coverage and its signed local
+physical producers are present in the worktree. Publication additionally
+requires server-authoritative preservation of embodied co-op receipts, the
+uninterrupted movie runs, real-GPU visual/audio capture, profile and
+reduced-motion/headed evidence, the accessibility/taste pass, and the human
+release decision recorded in §13.
 
 ### WS9A — Emergent settlement bridge: The Distance Between Fires
 
-**Blocked by WS8, the owner-approved sibling profile, and the story-specific
-travel contract.**
+**WORKTREE-IMPLEMENTED; EVIDENCE-PARTIAL; RELEASE-GATED.** Ship
+reconstruction, diagnosis/hover/boarding, local travel, canonical Tidegarden,
+relationship attention, scanner/site choice, Habitat Core, acknowledged
+foundation, physical shelter, night rest, observations, co-op world authority,
+and the two-world handoff are present. Co-op authority still needs to preserve
+and independently own the embodied receipt chain; optional ecosystem depth and
+final headed evidence remain acceptance work.
 
 Deliverables:
 
@@ -1098,25 +1154,31 @@ not been witnessed and recorded.
 This sequence is dependency-based, not calendar-based. A phase exits only on
 its evidence gate.
 
+**Current disposition:** P0 through P6A are implemented in the worktree under
+the owner-authorized production lane. The table retains the dependency and
+acceptance history; it is not a claim that runtime work is still waiting to
+begin. D0 remains the independent public-release boundary, while P6B/A5 and
+P7–P9 remain future work.
+
 | Phase | Scope | Entry gate | Exit gate |
 | --- | --- | --- | --- |
-| P0 | Canon/docs reconciliation | This plan accepted | All sources point to bible/plan and preserve status distinctions |
+| P0 | Canon/docs reconciliation | This plan accepted | **IMPLEMENTED;** all sources preserve runtime/release status distinctions |
 | D0 | Current demo foundation | Active now | Headed primitive journey approved, fauna budget fixed, full verify passes, Batch 3 screening complete |
-| G1 | Future-story authorization | D0 complete | Owner explicitly opens post-arrival runtime work and approves first packet scope |
-| P1 | Future substrate | G1 | WS1 authority/save gates and WS2 single-player parity pass with no visible regression |
-| P2 | S6–S8 | P1 | Inspection/compliance/refusal complete, checkpointed, captured, and canon-approved |
-| P3 | S9/A4 Breath | P2 | Alive reveal, W-7744 fault/flight, story:a4, budget and accessibility proof |
-| P4 | Direction + Below | P3 | Dry pack, Maw repair, authored dive/oxygen, Keel Memory shore banking, and optional appetite contract complete and honest |
+| G1 | Future-story authorization | Separate owner authorization recorded | **OPENED for the implementation candidate; publication was not authorized** |
+| P1 | Future substrate | G1 | **IMPLEMENTED;** authority/save, evidence-ledger, capability, and AV substrate gates pass mechanically |
+| P2 | S6–S8 | P1 | **IMPLEMENTED / EVIDENCE-PARTIAL;** inspection, compliance, protected-tool refusal, and “no.” are physically ordered |
+| P3 | S9/A4 Breath | P2 | **IMPLEMENTED / EVIDENCE-PARTIAL;** life front, herd, grounded W-7744 flight, contact, and pack tear/drop are physical |
+| P4 | Direction + Below | P3 | **IMPLEMENTED / EVIDENCE-PARTIAL;** repair ritual, direction, resonance, oxygen/sonar, Keel recovery and banking are physical |
 | P5 | Internal signature proofs | P4 | Lens, rift, teardown, tree, and identity representation risks measured; none ship as early canon |
-| P6A | Emergent settlement | P4 plus travel/sibling-profile gates | Ship reconstruction, local travel, Tidegarden habitat, observations, and origin→sibling→origin→sibling persistence complete; A5 remains unspent |
+| P6A | Emergent settlement | P4 plus travel/sibling-profile gates | **IMPLEMENTED / EVIDENCE-PARTIAL;** reconstruction, travel, scanner/site choice, habitat and second-hearth transactions exist; full headed round trip and release evidence remain; A5 stays unspent |
 | P6B | A5 Light | P6A plus Range Coil/constellation gates | First interstellar warp/Light and approved W-7744 return complete |
 | P7 | A6 | P6B plus planet grammar proof | Authorship evidence and world-signature arc complete; Makers remain open |
 | P8 | A7 | P7 plus greater-threat/Worker 9 owner gates | Paradox Lens, rifts, operational threat, and Worker 9 reveal complete |
 | P9 | A8 | P8 plus final identity/chooser gates | Frame teardown and ending complete; postgame preserves wonder and non-finality |
 
-### 9.1 P0 — Reconcile without widening scope
+### 9.1 P0 — Reconciliation foundation
 
-Allowed now:
+Completed or preserved by this lane:
 
 - finish the bible and this plan;
 - inventory the complete shipped beat/copy surface and run the isolated
@@ -1128,12 +1190,12 @@ Allowed now:
 - update documentation pointers/status when the relevant path is writable;
 - record the current demo resume point;
 - flag stale “S6 next” or completion language;
-- keep runtime untouched.
+- keep the public release ceiling untouched while documenting separately
+  authorized worktree implementation.
 
-P0 does not close D0, approve a copy change, or claim later story is in
-production. Story corrections that require runtime mutation remain queued as
-signed defects until D0/G1 or a narrower explicit owner authorization permits
-them.
+P0 did not close D0 or authorize publication. The later owner instruction and
+signed production lane separately authorized the runtime candidate; that
+authorization does not transfer to the public demo.
 
 ### 9.2 D0 — Protect the primitive browser journey
 
@@ -1145,9 +1207,9 @@ Its Batch 3 screening must include a blind read of the current
 fallback or rescue separately from manual player action, and refuse to credit
 future/author-only truths as already communicated.
 
-### 9.3 G1 — Explicit lane opening
+### 9.3 G1 — Recorded lane opening
 
-Before code work, record:
+The implementation lane recorded:
 
 - approved first packet (recommended: WS1/WS2 parity, then S6–S8);
 - protected files/systems;
@@ -1519,59 +1581,110 @@ A packet is rejected if it:
 
 ## 13. Resume Here
 
-**Documentation/council status: ACTIVE EXISTING-STORY RECONCILIATION.**
+**Implementation checkpoint — 2026-07-15:** the owner-authorized core path and
+its signed local physical producers are worktree-implemented through
+`ch9-hearth`; `story-authority.json` records runtime ceiling `ch9-hearth`,
+release ceiling `ch4-arrival`, and terminal beat `done`. Release evidence and
+co-op embodied-receipt authority remain incomplete and must not be inferred
+from reachability.
 
-**Runtime status: BLOCKED BY DEMO LOCK.**
+Core systems implemented and mechanically verified:
 
-Completed in this planning pass:
+- audit → compliance → refusal → A4 Breath → dry-land Maw repair → dive/Keel;
+- four-stage ship reconstruction, boarding, launch, continuous local crossing,
+  atmospheric descent, Tidegarden landfall, Habitat Core, physical enclosure,
+  night rest, and the two-world handoff;
+- generated client/server economy parity, typed story evidence, actor-specific
+  accomplishments/observations, authenticated actor-owned world transactions,
+  authoritative structure ACK settlement, and reconnect resume; the client
+  preserves only its explicit actor-owned embodied namespace across snapshots,
+  while independent server issuance/validation of that receipt chain remains a
+  release gate;
+- canonical `story:tidegarden@1` (`-1,-1:p1`, seed `1600321158`,
+  `pf1-eeef3b78`) propagated through identity-sensitive consumers;
+- a SHA-locked 66-anchor story/score/camera/PostFX registry signed by Chapter,
+  Score, and Cinematography over
+  `3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e`;
+- main verify: 202 test files / 1,437 tests, 1,035 authority checks, typecheck,
+  and production build; server verify: 8 files / 73 tests, typecheck, and build;
+  the pre-document-sync Creative-Triad implementation gate: 2,353 checks;
+  Terra system run: complete.
 
-- recovered and audited the entire shared “Game Story Review” exchange;
-- corrected the bible so third consciousness and communion are confirmed rather
-  than optional;
-- made wonder, expansion/inclusion, non-finality, micro-perceptual gradient, and
-  exploration horizons explicit;
-- preserved every assistant-generated mechanism as proposed rather than canon;
-- added the owner-originated name/attention procedural path with privacy,
-  determinism, anti-mirror, and multiplayer gates;
-- audited current runtime substrates and registered all known missing systems;
-- sequenced future work from authority/perception substrate through S6–A8;
-- established a machine story-authority contract and a dedicated three-director
-  story-council workflow so plot correction is no longer forced through a
-  scene-implementation contract;
-- changed no post-arrival runtime, protected copy, score, or audio behavior.
+Physical producer truth under that unchanged signed contract:
 
-The next **documentation/council** action is to run the existing-story
-commission against the complete shipped A0→arrival copy and current-cut
-evidence, preserve the blind first read, and turn only evidence-backed findings
-into owner-facing correction decisions. The new workflow may improve these
-documents and readiness contracts now; it may not silently revise shipped copy.
+- the protected-tree tool attempt precedes the lowercase refusal;
+- A4 owns the pond response, authored herd, grounded W-7744 flight, vegetation
+  contact, and ordered dry pack drop;
+- Maw repair is bounded, cancel/pause-safe, player-directed, and physically
+  observed at the pond before aligned oxygen/sonar/Keel recovery;
+- reconstruction owns scar diagnosis, sustained legal hover, grounded return,
+  and hatch → camera → seal → cockpit handback before launch;
+- Tidegarden owns scanner overload, persisted site choice, relationship
+  attendance, acknowledged foundation, enclosure, rest, and handoff producers.
 
-The next **runtime** action remains outside this plan: resume the headed
-primitive-loop and fauna-budget closeout in
-`../PARAVOXIA_DEMO_FOUNDATION_PLAN.md`, then run its full verification and
-existing-story screening gate.
+Bounded fresh-browser POTATO evidence now covers the implemented rail in
+overlapping segments: Chapter 5 resonance through Keel banking, Chapter 6
+through physical boarding, and Chapter 8 crossing through the dry cross-face
+Tidegarden route, settlement, safe rest, two-world handoff, and `done`. The
+latest focused Chapter 9 jetpack-rearm proof completed in 157.70 seconds and the
+crossing-to-`done` proof completed in 396.77 seconds; both recorded zero nudges,
+errors, reloads, or context losses.
 
-After that plan is explicitly closed and G1 is authorized:
+The accepted official uninterrupted POTATO triple then completed `ch4-audit`
+→ `done` under frozen source fingerprint
+`a5b7dfbfad792f461a5567939fa1f4d0b2ecee205c4393c007d9edcbc9f16262`.
+Runs v6-01, v6-02, and v6-03 took 704.18, 883.65, and 683.92 seconds,
+respectively; every summary reports `PASS`, with all 64/64 required anchors, safe rest, and the
+two-world handoff with zero nudges, dry-water violations, runtime errors,
+reloads, or context losses. This satisfies the cold-run gate at **3/3** but no
+headed/human, authority, profile, persistence, or publication gate. Earlier
+v4/v5 attempts and all prior full-run candidates are diagnostic or superseded
+and do not count toward this accepted triple.
 
-1. reconcile remaining stale parent/main status pointers under WS0;
-2. start WS1 capability/save authority and WS2 shadow/parity resolver;
-3. prove zero visible regression through A0–A3 and W-7744 arrival;
-4. only then implement S6–S8 as the first post-arrival content packet.
+Exact resume point:
 
-First files to inspect at G1:
+1. do not publish or widen story scope beyond the signed contract;
+2. design and implement server-issued or equivalently authoritative embodied
+   receipts for diagnosis, hover, grounded-return, boarding, and other physical
+   attendance; ACK/reconnect snapshots now preserve the explicit actor-owned
+   client namespace, but do not independently validate it;
+3. after the documents match runtime truth, rebaseline only their three hashes
+   in the frozen production lock and rerun the Creative-Triad implementation gate;
+4. preserve the accepted 3/3 cold-run evidence without substituting it for
+   headed, profile, persistence, authority, or human acceptance;
+5. perform the **headed real-GPU human audiovisual/taste pass** across A4, Maw,
+   dive, reconstruction, crossing, landfall, and second hearth, including
+   High/Medium/Low/Potato profile coverage, reduced-motion equivalence, and
+   supported headed input paths;
+6. harden server-side independent Tidegarden procedural support/water validation
+   if release authority requires hostile-client proof rather than receipt-backed
+   structure history;
+7. record the explicit human release decision. Until then, keep the public Story
+   ceiling at `ch4-arrival` and `publishAllowed: false`.
 
-- `src/story/storyState.ts`
-- `src/story/storyDirector.ts`
-- `src/story/storyScript.ts`
-- `src/story/senseDiscovery.ts`
-- `src/game/systems/progressionSystem.ts`
-- `src/game/systems/realityRenderSystem.ts`
-- `src/story/skyMeaning.ts`
-- `src/game/lifeReveal.ts`
-- `src/game/PlanetProfile.ts`
-- `src/audio/generative/worldSignals.ts`
-
-Do not skip directly to life-reveal spectacle, name-driven generation, A5
-travel, Worker 9's reveal, the Paradox Lens, or the ending. The systems that
-make different observers, accumulated evidence, safe persistence, and honest
-gates real must come first.
+Evidence lives in
+`../.codex/production-runs/2026-07-13-distance-between-fires/` and
+`../.terra/workflow-runs/system-orchestrator/paravoxia-emergent-2026-07-13/`.
+The bounded 2026-07-14 browser summaries are
+`../captures/emergent-ch5-observed-resonance-2026-07-14/summary.json`,
+`../captures/emergent-ch6-swim-proof-2026-07-14-integrated2/summary.json`,
+`../captures/ch7-embodiment-2026-07-14/summary.json` (reconstruction rail only;
+the overall probe predates the boarding-pose correction), and
+`../captures/ch7-board-embodiment-2026-07-14/summary.json` (passing boarding
+segment), and
+`../captures/emergent-ch9-settlement-proof-2026-07-14-integrated3/summary.json`
+(passing physical settlement-to-`done` segment),
+`../captures/emergent-ch5-to-keel-regression2-2026-07-14/summary.json`,
+`../captures/emergent-ch6-to-board-regression4-2026-07-14/summary.json`,
+`../captures/emergent-ch9-settlement-jetpack-rearm-2026-07-14-01/summary.json`,
+`../captures/emergent-ch8-crossing-to-done-crossface-2026-07-14-11/summary.json`,
+and `../captures/emergent-full-cold-run-2026-07-14-08/summary.json` (superseded
+diagnostic evidence; not part of the accepted triple). The accepted official
+triple is recorded in
+`captures/emergent-full-cold-final-2026-07-15-v6-01/summary.json`,
+`captures/emergent-full-cold-final-2026-07-15-v6-02/summary.json`, and
+`captures/emergent-full-cold-final-2026-07-15-v6-03/summary.json`. Earlier
+v4/v5 attempts and prior runs remain diagnostic or superseded and do not count.
+The previously recorded headless `ch8-landfall`/`ch9-settle` observations are
+direct identity/error evidence, not chronology proof or a substitute for the
+real-GPU human gate.

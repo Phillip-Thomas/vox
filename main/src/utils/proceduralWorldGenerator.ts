@@ -142,11 +142,21 @@ export class ProceduralWorldGenerator {
   private static readonly DIRT_SLOPE = 0.42;
   private static readonly GRASS_DEPTH = 3;
 
-  constructor(config: WorldGenerationConfig = DEFAULT_WORLD_CONFIG, terrainConfig?: Partial<TerrainGenerationConfig>) {
+  constructor(
+    config: WorldGenerationConfig = DEFAULT_WORLD_CONFIG,
+    terrainConfig?: Partial<TerrainGenerationConfig>,
+    resolvedProfile?: PlanetProfile
+  ) {
     this.config = config;
     this.terrainConfig = { ...DEFAULT_TERRAIN_CONFIG, ...terrainConfig };
     this.noise = new SimpleNoise(this.terrainConfig.seed);
-    this.profile = buildPlanetProfile(this.terrainConfig.seed);
+    if (
+      resolvedProfile
+      && (resolvedProfile.seed >>> 0) !== (this.terrainConfig.seed >>> 0)
+    ) {
+      throw new Error('Resolved planet profile seed does not match terrain config seed.');
+    }
+    this.profile = resolvedProfile ?? buildPlanetProfile(this.terrainConfig.seed);
   }
 
   /** The deterministic planet identity for this generator's seed. */

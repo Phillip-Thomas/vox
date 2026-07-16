@@ -1,14 +1,29 @@
 {
-  "schema": "paravoxia.storyAuthority.v1",
-  "snapshotDate": "2026-07-13",
+  "schema": "paravoxia.storyAuthority.v2",
+  "snapshotDate": "2026-07-15",
   "status": {
     "documentationLane": "existing-story-reconciliation",
-    "runtimeLane": "blocked-by-demo-lock",
-    "storyCeiling": "ch4-arrival",
-    "publicTerminalBeat": "done"
+    "runtimeLane": "owner-authorized-implemented-release-gated",
+    "runtimeStoryCeiling": "ch9-hearth",
+    "releaseStoryCeiling": "ch4-arrival",
+    "runtimeTerminalBeat": "done"
   },
   "sources": {
     "runtimeBeatAuthority": "src/story/storyState.ts",
+    "runtimeEvidence": [
+      "src/story/emergentStoryDirector.ts",
+      "src/story/emergentAudit.ts",
+      "src/story/emergentMawRepair.ts",
+      "src/story/emergentDive.ts",
+      "src/story/emergentUniqueItems.ts",
+      "src/story/tidegardenRoute.ts",
+      "src/story/tidegardenSettlement.ts",
+      "src/story/ux/objectiveDirector.ts",
+      "src/story/ux/feedbackCues.ts",
+      "src/story/ux/StoryGuidanceHud.tsx",
+      "src/game/systems/mawSystem.ts",
+      "src/game/systems/shipRestoration.ts"
+    ],
     "shippedOverview": "STORY.md",
     "canon": "PARAVOXIA_STORY_BIBLE.md",
     "executionPlan": "PARAVOXIA_STORY_EXECUTION_PLAN.md",
@@ -25,6 +40,7 @@
       "kind": "run-artifact",
       "schema": "paravoxia.sceneContract.v1",
       "pathPattern": ".codex/production-runs/<run-id>/scene-contract.json",
+      "activePath": "../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
       "authorityCondition": "matching-production-lock-and-explicit-owner-approval"
     }
   },
@@ -36,7 +52,15 @@
     "executionPlan",
     "designLineage"
   ],
-  "shippedBeatOrder": [
+  "activeProduction": {
+    "runId": "2026-07-13-distance-between-fires",
+    "sceneId": "distance-between-fires",
+    "contractVersion": "intent-v1",
+    "productionLockPath": "../.codex/production-runs/2026-07-13-distance-between-fires/production-lock.json",
+    "implementationStatus": "runtime-implemented",
+    "releaseStatus": "gated-unpublished"
+  },
+  "runtimeBeatOrder": [
     "crawl",
     "manifest",
     "voyage",
@@ -64,24 +88,167 @@
     "ch3-signal",
     "ch4-vigil",
     "ch4-arrival",
+    "ch4-audit",
+    "ch4-comply",
+    "ch4-defy",
+    "a4-exhale",
+    "ch5-maw",
+    "ch6-dive",
+    "ch7-reconstruct",
+    "ch7-board",
+    "ch8-launch",
+    "ch8-crossing",
+    "ch8-landfall",
+    "ch9-settle",
+    "ch9-hearth",
     "done"
   ],
-  "contractedContinuation": [
-    { "beat": "ch4-audit", "scene": "S6", "status": "CONTRACTED" },
-    { "beat": "ch4-comply", "scene": "S7", "status": "CONTRACTED" },
-    { "beat": "ch4-defy", "scene": "S8", "status": "CONTRACTED" },
-    { "beat": "a4-exhale", "scene": "S9", "awakening": "A4", "status": "CONTRACTED" },
-    { "beat": "ch4-meat", "scene": "S10", "status": "CONTRACTED" },
-    { "beat": "ch4-dive", "scene": "S11", "status": "CONTRACTED" },
-    { "beat": "ch4-repair", "scene": "S12", "status": "CONTRACTED" },
-    { "beat": "ch4-flight", "scene": "S13", "status": "CONTRACTED" }
+  "runtimeEvidenceChain": [
+    {
+      "beat": "ch4-audit",
+      "checkpointKey": "ch4Audit",
+      "checkpoint": "story:ch4:audit-complete",
+      "resumeBeat": "ch4-comply",
+      "evidence": [
+        "milestone:story:audit:fire-mismatch",
+        "milestone:story:audit:life-mismatch",
+        "milestone:story:audit:tree-mismatch"
+      ]
+    },
+    {
+      "beat": "ch4-comply",
+      "checkpointKey": "ch4Complied",
+      "checkpoint": "story:ch4:compliance-complete",
+      "resumeBeat": "ch4-defy",
+      "evidence": [
+        "milestone:story:comply:fire-doused",
+        "milestone:story:comply:organics-resolved",
+        "milestone:story:comply:regression-settled"
+      ]
+    },
+    {
+      "beat": "ch4-defy",
+      "checkpointKey": "ch4Defied",
+      "checkpoint": "story:ch4:refusal-complete",
+      "resumeBeat": "a4-exhale",
+      "evidence": [
+        "milestone:story:defy:refusal-committed"
+      ]
+    },
+    {
+      "beat": "a4-exhale",
+      "checkpointKey": "a4Handback",
+      "checkpoint": "story:a4:handback",
+      "resumeBeat": "ch5-maw",
+      "evidence": [
+        "milestone:story:a4",
+        "milestone:story:a4:field-pack-dropped"
+      ]
+    },
+    {
+      "beat": "ch5-maw",
+      "checkpointKey": "ch5Maw",
+      "checkpoint": "story:ch5:maw-repaired",
+      "resumeBeat": "ch6-dive",
+      "evidence": [
+        "milestone:maw_repaired"
+      ]
+    },
+    {
+      "beat": "ch6-dive",
+      "checkpointKey": "ch6Dive",
+      "checkpoint": "story:ch6:keel-banked",
+      "resumeBeat": "ch7-reconstruct",
+      "evidence": [
+        "milestone:story:dive:waterline-entered",
+        "milestone:story:sense:oxygen",
+        "milestone:story:item:kestrel-keel-memory:acquired",
+        "milestone:story:dive:surfaced-with-keel",
+        "milestone:story:item:kestrel-keel-memory:banked"
+      ]
+    },
+    {
+      "beat": "ch7-reconstruct",
+      "checkpointKey": "ch7Reconstructed",
+      "checkpoint": "story:ch7:flight-ready",
+      "resumeBeat": "ch7-board",
+      "evidence": [
+        "state:ship-restoration/flight_ready",
+        "milestone:story:route:tidegarden:online"
+      ]
+    },
+    {
+      "beat": "ch7-board",
+      "checkpointKey": "ch7Boarded",
+      "checkpoint": "story:ch7:boarded",
+      "resumeBeat": "ch8-launch",
+      "evidence": [
+        "state:space-flight/control-mode=flight"
+      ]
+    },
+    {
+      "beat": "ch8-launch",
+      "checkpointKey": "ch8Launched",
+      "checkpoint": "story:ch8:launched",
+      "resumeBeat": "ch8-crossing",
+      "evidence": [
+        "state:space-flight/control-mode=flight",
+        "state:space-flight/phase=deep_space"
+      ]
+    },
+    {
+      "beat": "ch8-crossing",
+      "checkpointKey": "ch8Crossed",
+      "checkpoint": "story:ch8:crossed",
+      "resumeBeat": "ch8-landfall",
+      "evidence": [
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:space-flight/phase!=deep_space"
+      ]
+    },
+    {
+      "beat": "ch8-landfall",
+      "checkpointKey": "ch8Landfall",
+      "checkpoint": "story:ch8:landfall",
+      "resumeBeat": "ch9-settle",
+      "evidence": [
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:space-flight/phase=surface",
+        "state:space-flight/control-mode=fps"
+      ]
+    },
+    {
+      "beat": "ch9-settle",
+      "checkpointKey": "ch9Settled",
+      "checkpoint": "story:ch9:settled",
+      "resumeBeat": "ch9-hearth",
+      "evidence": [
+        "milestone:story:tidegarden:relationship-attended",
+        "milestone:story:tidegarden:habitat-core-online",
+        "milestone:story:tidegarden:shelter-certified"
+      ]
+    },
+    {
+      "beat": "ch9-hearth",
+      "checkpointKey": "ch9Hearth",
+      "checkpoint": "story:ch9:hearth",
+      "resumeBeat": "done",
+      "evidence": [
+        "milestone:story:tidegarden:safe-rest-completed",
+        "milestone:story:tidegarden:two-world-handoff"
+      ]
+    }
   ],
-  "openRuntimeGates": [
-    "headed-primitive-journey",
-    "fauna-triangle-budget",
-    "full-client-verify",
-    "batch-3-existing-story-screening",
-    "owner-opens-post-arrival-lane"
+  "openReleaseGates": [
+    "server-issued-embodied-story-receipts",
+    "three-rescue-free-cold-runs",
+    "quality-profile-matrix",
+    "reduced-motion-equivalence",
+    "supported-headed-input",
+    "headed-real-gpu-taste",
+    "origin-sibling-persistence-roundtrip",
+    "tidegarden-support-water-authority-disposition",
+    "human-release-decision"
   ],
   "lockedOpenQuestions": [
     "player-third-consciousness-mapping",

@@ -146,7 +146,13 @@ function tableRows(snapshot: ScoreDebugSnapshot): Array<Record<string, string | 
     { signal: 'wind offset', value: `${rounded(s.windOffsetX)},${rounded(s.windOffsetY)}`, music: `sample @ ${rounded(s.playerX)},${rounded(s.playerZ)}` },
     { signal: 'regionUnit', value: rounded(s.regionUnit), music: `Euclidean rotation ${Math.floor(s.regionUnit * SLOTS_PER_BAR)}/${SLOTS_PER_BAR}` },
     { signal: 'timeSec', value: rounded(s.timeSec), music: `macro register ${rounded(m.macroDrift.registerShift)}, texture ${rounded(m.macroDrift.textureLean)}` },
-    { signal: 'destination', value: s.destinationSeed == null ? 'none' : `${s.destinationSeed}/${s.destinationArchetype ?? 'unknown'}`, music: s.scene === 'approach' ? 'approach modulation active' : 'latent' },
+    {
+      signal: 'destination',
+      value: s.destinationSeed == null
+        ? 'none'
+        : `${s.destinationWorldId ?? 'coordinate'} · ${s.destinationSeed} · ${s.destinationProfileId ?? 'unknown'}@${s.destinationProfileVersion ?? '?'} · ${s.destinationProfileHash ?? 'unverified'} · ${s.destinationArchetype ?? 'unknown'}`,
+      music: s.scene === 'approach' ? 'approach modulation active' : 'latent'
+    },
     { signal: 'warp', value: s.warpActive, music: `progress ${rounded(s.warpProgress)}, clock ${rounded(m.clock.presence)}` },
     { signal: 'scene', value: s.scene, music: `mix fade ${rounded(m.mixFadeSeconds)}s` },
     { signal: 'storyLeads', value: s.storyLeads, music: s.storyLeads ? 'bed yields to authored mood' : 'generative bed leads' },

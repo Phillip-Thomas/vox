@@ -4,6 +4,7 @@ import {
   type PaletteRoleColor,
   type PlanetArtDirection
 } from './planetArtDirection';
+import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 export interface PlanetAtmosphereProfile {
   artDirection: PlanetArtDirection;
@@ -47,8 +48,11 @@ export function paletteRoleToLinearColor(role: PaletteRoleColor): THREE.Color {
   return roleColor(role);
 }
 
-export function buildPlanetAtmosphereProfile(terrainSeed: number): PlanetAtmosphereProfile {
-  const artDirection = buildPlanetArtDirection(terrainSeed | 0);
+export function buildPlanetAtmosphereProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): PlanetAtmosphereProfile {
+  const artDirection = buildPlanetArtDirection(terrainSeed | 0, planetProfile);
   const { palette, ecology, windDrama, archetype } = artDirection;
 
   const lowSky = roleColor(palette.skyHigh, {
@@ -80,8 +84,11 @@ export function buildPlanetAtmosphereProfile(terrainSeed: number): PlanetAtmosph
   return { artDirection, lowSky, highSky, sunGlow, fogTint, fogDensityMul };
 }
 
-export function buildPlanetPostGradeProfile(terrainSeed: number): PlanetPostGradeProfile {
-  const artDirection = buildPlanetArtDirection(terrainSeed | 0);
+export function buildPlanetPostGradeProfile(
+  terrainSeed: number,
+  planetProfile?: PlanetProfile
+): PlanetPostGradeProfile {
+  const artDirection = buildPlanetArtDirection(terrainSeed | 0, planetProfile);
   const { palette, budgets, shape, paletteFamily, archetype } = artDirection;
   const accentFamily = paletteFamily === 'alien-iridescent' || paletteFamily === 'fungal-bioglow';
 

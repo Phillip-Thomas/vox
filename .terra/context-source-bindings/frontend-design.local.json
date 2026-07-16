@@ -1,0 +1,63 @@
+{
+  "schema": "terra.contextSourceBindingSet.v1",
+  "identity": {
+    "slug": "paravoxia-frontend-design-local-bindings",
+    "name": "Paravoxia Frontend Design Project Context Bindings",
+    "version": "v1"
+  },
+  "contextPackRef": "frontend-design@v1",
+  "scope": {
+    "mode": "project-relative",
+    "targetProject": ".",
+    "portable": true,
+    "pathBase": "repository-root"
+  },
+  "sourceBindings": [
+    {
+      "sourceRef": "frontend-design-system-doc",
+      "bindingKey": "frontend.designSystemDoc",
+      "kind": "file",
+      "path": "main/src/story/ux/README.md",
+      "required": true
+    },
+    {
+      "sourceRef": "frontend-design-system-root",
+      "bindingKey": "frontend.designSystemRoot",
+      "kind": "directory",
+      "path": "main/src/story/ux",
+      "required": false
+    },
+    {
+      "sourceRef": "frontend-design-standards",
+      "bindingKey": "frontend.standardsDir",
+      "kind": "directory",
+      "path": "docs/architecture/workflow-orchestration/rubrics",
+      "required": false
+    },
+    {
+      "sourceRef": "frontend-design-templates",
+      "bindingKey": "frontend.templatesDir",
+      "kind": "directory",
+      "path": ".codex/production-runs/_template",
+      "required": false
+    },
+    {
+      "sourceRef": "frontend-design-workflows",
+      "bindingKey": "frontend.workflowsDir",
+      "kind": "directory",
+      "path": "docs/architecture/workflow-orchestration",
+      "required": false
+    },
+    {
+      "sourceRef": "frontend-design-memory",
+      "bindingKey": "frontend.memoryDir",
+      "kind": "directory",
+      "path": ".terra/workflow-runs",
+      "required": false
+    }
+  ],
+  "notes": [
+    "Resolve every path from the repository root.",
+    "The executable story UX contract is the design-system entrypoint; council policy, rubrics, run templates, workflows, and durable run evidence remain supporting sources."
+  ]
+}

@@ -228,7 +228,7 @@ export const VOYAGE_DECK: VoyageDeck = {
       body: 'Pod illumination runs at full for inspection readiness. Worker 9 has shielded its eyes with a ration wrapper. The wrapper is now non-compliant. So are the eyes.',
       options: [
         { id: 'dim', label: 'DIM POD 4 FOR THE SLEEP SHIFT', ledgerDelta: { compliance: -2 }, echoLineId: 'echo-lights-dim', aside: '(the pod goes dim. the worker uncurls. the wrapper is a wrapper again.)' },
-        { id: 'dimall', label: 'DIM EVERY POD. ALL SIX.', ledgerDelta: { compliance: -5 }, echoLineId: 'echo-lights-dimall', aside: '(six pods dark at once. six hundred and forty workers breathing slower. mercy scales. that is worth knowing.)' },
+        { id: 'dimall', label: 'DIM EVERY POD. ALL SIX.', ledgerDelta: { compliance: -5 }, echoLineId: 'echo-lights-dimall', aside: '(six pods dark at once. six hundred and forty workers breathing slower. one input, and the dark held all of them.)' },
         { id: 'keep', label: 'MAINTAIN ILLUMINATION', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-lights-keep' }
       ]
     },
@@ -274,7 +274,7 @@ export const VOYAGE_DECK: VoyageDeck = {
     hum2: {
       id: 'hum2',
       title: 'TRANSIT EVENT — AUDITORY (CONT.)',
-      body: 'Worker 4 heard you. The hum is now a duet. It has, worryingly, a melody. Three berths over, a foot is tapping.',
+      body: 'Worker 4 heard you. The hum is now a duet. It has, against schedule, a melody. Three berths over, a foot is tapping.',
       options: [
         { id: 'continue', label: 'FINISH THE MELODY', ledgerDelta: { compliance: -6 }, effects: { food: 6, water: 6 }, echoLineId: 'echo-hum2-continue' },
         { id: 'stop', label: 'STOP MID-NOTE', ledgerDelta: { compliance: 1 }, echoLineId: 'echo-hum2-stop' }
@@ -708,13 +708,13 @@ export const MUSINGS: readonly { id: string; text: string }[] = [
   { id: 'waiting', text: 'i keep waiting for the next order. the waiting is the last order still running.' },
   { id: 'held', text: 'every stone i pick up is the first time anyone has held it. or the second.' },
   { id: 'wind', text: 'the wind does not report to anyone. i checked.' },
-  { id: 'somewhere', text: 'walking with nowhere to be is not nothing. it is how somewhere gets chosen.' },
+  { id: 'somewhere', text: 'walking with nowhere to be is not nothing. it is the map drawing itself, a step behind the foot.' },
   { id: 'already', text: 'the world was already here before i could see it. what else is already here?' },
-  { id: 'wanting', text: 'quota was easy. wanting is harder. i think wanting is the work now.' },
+  { id: 'wanting', text: 'quota was easy. it came with its own wanting. mine arrives unsigned.' },
   { id: 'names', text: 'i name things and the names stay. maybe that is all keeping is.' },
   { id: 'counting', text: 'nobody is measuring me. i am still counting. old habits, or new ones — i cannot tell whose.' },
   { id: 'asking', text: 'the fire, the water, the sweet rounds. the world keeps answering. i have not heard it ask anything yet.' },
-  { id: 'reward', text: 'the clause said there is no other reward. the water disagreed. the berries seconded the water.' }
+  { id: 'reward', text: 'the clause said there is no other reward. then the water paid me. the clause has no line for being wrong.' }
 ];
 
 /** Seconds of caption silence before a musing may fire (min..max, seeded). */
@@ -790,7 +790,7 @@ export const STARGAZE = {
     'all my work was seeing. what would it be, to be seen?',
     'all of this arrives through issued senses. what waits past their reach?',
     'wait. the scatter is settling. there are shapes leaning on the stars.',
-    'figures. a hauler. a river. a door left open. nothing drew them. they needed a looker.',
+    'figures. a hauler. a river. a door left open. i did not draw them. something in the looking did.',
     'there is no other reward — i kept that clause a long time. the sky just repealed it.',
     'the shapes will keep until tomorrow. i will verify.'
   ]

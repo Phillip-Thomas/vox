@@ -31,12 +31,14 @@ import MultiplayerStatusBadge from './components/hud/MultiplayerStatusBadge.tsx'
 import OrbitalMinimap from './components/hud/OrbitalMinimap.tsx';
 import HudCornerActions from './components/hud/HudCornerActions.tsx';
 import {
-  DEFAULT_PROFILE,
+  environmentResolutionForProfile,
   getGraphicsQuality,
   getQualityProfile,
+  isSoftwareWebGLRenderer,
   overrideGraphicsQuality,
-  QualityProfile,
-  QUALITY_PROFILES,
+  readPersistedQualityProfile,
+  resolveQualityProfileSelection,
+  subscribeGraphicsQuality,
   setQualityProfile
 } from './config/graphicsSettings.ts';
 import {
@@ -61,6 +63,7 @@ import {
 } from './game/multiplayerSession.ts';
 import { getLocalActorId, subscribeLocalActorId } from './game/playerActors.ts';
 import { worldIdentityFromCurrentWorld } from './game/worldIdentity.ts';
+import { resolvePlanetProfile } from './game/PlanetProfile.ts';
 import {
   buildStarSystemManifest,
   createPlanetIdentity,
@@ -93,6 +96,8 @@ import { subscribeTreeHarvest } from './game/systems/treeHarvest.ts';
 import { subscribeStonePickup } from './game/systems/stonePickup.ts';
 import { isDowned, subscribeVitals } from './game/systems/survivalVitals.ts';
 import { subscribeWaterskin } from './game/systems/consumeSystem.ts';
+import { subscribeShipRestoration } from './game/systems/shipRestoration.ts';
+import { installKestrelFabricatorAccess } from './story/kestrelFabricator.ts';
 import {
   hasWorldGenCacheEntry,
   hydrateWorldGenCacheFromPackedPayload,
@@ -119,10 +124,16 @@ import {
   setArrivalHandler,
   useSpaceFlight
 } from './state/spaceFlight.ts';
+import { isPhysicalBoardingVehicleControlLocked } from './story/physicalBoarding.ts';
 import {
+  commitSystemBodyTarget,
   commitSystemPlanetHandoff,
   getSystemFlightSnapshot
 } from './state/systemFlight.ts';
+import {
+  restoreShipFlightForWorld,
+  shipFlightWorldContext
+} from './state/shipFlightContinuity.ts';
 import { isWarpMetricsEnabled, markWarpMetric } from './utils/warpMetrics.ts';
 import {
   useAppState,
@@ -136,7 +147,13 @@ import {
 import LandingMenu from './components/ui/LandingMenu.tsx';
 import StoryOverlays from './story/StoryOverlays.tsx';
 import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
+import VehicleSceneAvDriver from './story/VehicleSceneAvDriver.tsx';
 import StoryDebugPanel, { storyDebugEnabled } from './story/StoryDebugPanel.tsx';
+import {
+  VEHICLE_SCENE_AV_EVENTS,
+  activateVehicleSceneAvEvent,
+  isTidegardenApproachAuthorityReady
+} from './story/vehicleSceneAvAnchors.ts';
 import {
   beginStory,
   deactivateStory,
@@ -148,21 +165,43 @@ import {
   storyHudHideInventory,
   storyHudHideVitals,
   storyHudTakeover,
+  storyUsesEmbodiedGuidanceHud,
   useStoryState
 } from './story/storyState.ts';
 import { getStoryInputPolicy } from './story/storyInputPolicy.ts';
+import { subscribeStoryUiRequests } from './story/storyUiRequests.ts';
 import { setStoryPaused } from './story/storyClock.ts';
 import { isStoryWorld, STORY_COORDINATE } from './story/world/storyWorld.ts';
+import {
+  isTidegardenRouteOnline,
+  resolveStoryBootWorldId,
+  storySystemPopulationPolicy,
+  TIDEGARDEN_WORLD_ID
+} from './story/tidegardenRoute.ts';
 import PauseMenu, { type NavApi } from './components/ui/PauseMenu.tsx';
 import StoryCompletePanel from './components/ui/StoryCompletePanel.tsx';
 import DeathSequenceOverlay from './components/hud/DeathSequenceOverlay.tsx';
 import CraftingPanel from './components/ui/CraftingPanel.tsx';
 import { requestSurvivalRecovery } from './game/systems/survivalRecovery.ts';
 import AudioDirector from './components/audio/AudioDirector.tsx';
+import { installGameAudioUnlockOnFirstTrustedGesture } from './audio/gameAudio.ts';
 import { playSfx } from './audio/sfxEngine.ts';
 import './App.css';
 
 const SUN_POSITION: [number, number, number] = [100, 20, 100];
+
+function webGLRendererName(renderer: THREE.WebGLRenderer): string | null {
+  try {
+    const context = renderer.getContext();
+    const debug = context.getExtension('WEBGL_debug_renderer_info') as {
+      UNMASKED_RENDERER_WEBGL: number;
+    } | null;
+    const value = context.getParameter(debug?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER);
+    return typeof value === 'string' ? value : null;
+  } catch {
+    return null;
+  }
+}
 
 interface SystemReactProfileSample {
   id: string;
@@ -349,6 +388,26 @@ function parseCurrentWorldId(worldId: string): CurrentWorld | null {
 }
 
 const App: React.FC = () => {
+  const [queryParams] = useState(() => new URLSearchParams(window.location.search));
+  const [graphicsBoot] = useState(() => {
+    const persisted = readPersistedQualityProfile();
+    const selection = resolveQualityProfileSelection(queryParams.get('profile'), persisted);
+    setQualityProfile(selection.profile, { persist: false });
+    if (queryParams.get('painterly') === '1') overrideGraphicsQuality({ painterly: true });
+    if (queryParams.get('ao') === '0') overrideGraphicsQuality({ contactAO: false });
+    if (queryParams.get('outline') === '0') overrideGraphicsQuality({ outline: false });
+    return {
+      allowAutomaticSoftwareFallback: selection.source === 'default'
+    };
+  });
+  const graphicsQuality = useSyncExternalStore(
+    subscribeGraphicsQuality,
+    getGraphicsQuality,
+    getGraphicsQuality
+  );
+  const profile = getQualityProfile();
+  const environmentResolution = environmentResolutionForProfile(profile);
+  const softwareFallbackAppliedRef = useRef(false);
   const totalVoxels = planetSize ** 3;
   // Load the saved game ONCE, before children mount: restores global stores
   // (inventory/maw/era) and gives us the base coordinate to spawn back at.
@@ -374,7 +433,12 @@ const App: React.FC = () => {
     // SAME world at its earned stage, not a fresh random start.
     const bootStory = getStoryStateSnapshot();
     if (bootStory.active || bootStory.chapter === 'complete') {
-      return createCurrentWorld(STORY_COORDINATE);
+      const storyResumeWorld = parseCurrentWorldId(resolveStoryBootWorldId(
+        bootSave?.lastPlanetWorldId,
+        isTidegardenRouteOnline(),
+        bootStory
+      ));
+      return storyResumeWorld ?? createCurrentWorld(STORY_COORDINATE);
     }
     // Returning player -> spawn back at your saved base (so reloads don't strand you).
     if (bootSave?.lastPlanetWorldId) {
@@ -395,8 +459,14 @@ const App: React.FC = () => {
   });
   const currentWorldRef = useRef(currentWorld);
   currentWorldRef.current = currentWorld;
+  const pendingPartyWorldHandoffRef = useRef<string | null>(null);
+  const suppressWorldCleanupSaveRef = useRef(new Set<string>());
   const [previousWorld, setPreviousWorld] = useState<CurrentWorld | null>(null);
-  const [arrivalMode, setArrivalMode] = useState<ArrivalMode>('surface');
+  const [arrivalMode, setArrivalMode] = useState<ArrivalMode>(() => {
+    const context = shipFlightWorldContext(currentWorld);
+    if (context) restoreShipFlightForWorld(context);
+    return getSpaceFlightSnapshot().phase === 'descent' ? 'approach' : 'surface';
+  });
   const [targetX, setTargetX] = useState('1');
   const [targetY, setTargetY] = useState('0');
   const [debugEnabled, setDebugEnabled] = useState(false);
@@ -410,9 +480,18 @@ const App: React.FC = () => {
   const isTouch = useMemo(() => isTouchDevice(), []);
   const flight = useSpaceFlight();
   const { phase: appPhase, sceneReady: appSceneReady } = useAppState();
+  useEffect(() => {
+    if (appPhase !== 'playing') return undefined;
+    return installGameAudioUnlockOnFirstTrustedGesture();
+  }, [appPhase]);
   const story = useStoryState();
   // Milestone-gated HUD (the ch3 sense introductions) re-renders on progression.
   useSyncExternalStore(subscribeProgression, milestoneCount, milestoneCount);
+  const tidegardenRouteOnline = isTidegardenRouteOnline();
+  const storyRuntimeWorldId = story.active
+    ? resolveStoryBootWorldId(currentWorld.worldId, tidegardenRouteOnline, story)
+    : currentWorld.worldId;
+  const storyWorldSwapPending = story.active && storyRuntimeWorldId !== currentWorld.worldId;
   const [paused, setPaused] = useState(false);
   const [storyCompleteOpen, setStoryCompleteOpen] = useState(false);
   const [pendingCompletedSiteEntry, setPendingCompletedSiteEntry] = useState(false);
@@ -421,18 +500,9 @@ const App: React.FC = () => {
     setPaused(next);
   }, []);
   useEffect(() => () => setStoryPaused(false), []);
-  const storyWasActive = useRef(story.active);
-  useEffect(() => {
-    const completedNow = storyWasActive.current
-      && !story.active
-      && story.chapter === 'complete'
-      && appPhase === 'playing';
-    storyWasActive.current = story.active;
-    if (!completedNow) return;
-    setStoryCompleteOpen(true);
-    setPauseState(true);
-    if (document.pointerLockElement) document.exitPointerLock();
-  }, [appPhase, story.active, story.chapter, setPauseState]);
+  // The second hearth is a handback, not a modal victory screen. Completion
+  // leaves pointer lock, movement, and the living world untouched; the panel is
+  // retained only for its explicit developer preview/replay surface.
   const [craftingOpen, setCraftingOpen] = useState(false);
   const [localActorId, setLocalActorIdState] = useState(() => getLocalActorId());
   const downed = useSyncExternalStore(
@@ -463,6 +533,10 @@ const App: React.FC = () => {
 
   useEffect(() => subscribeLocalActorId(() => setLocalActorIdState(getLocalActorId())), []);
   useEffect(() => subscribeBuildState(() => setBuildHudTick(n => n + 1)), []);
+  useEffect(
+    () => installKestrelFabricatorAccess(() => currentWorld.worldId),
+    [currentWorld.worldId]
+  );
 
   useEffect(() => {
     if (!downed) return;
@@ -479,11 +553,14 @@ const App: React.FC = () => {
   // 'menu', so the remount + regeneration are never visible.
   useEffect(() => {
     if (!story.active) return;
-    if (isStoryWorld(currentWorld.coordinate)) return;
+    const storyWorldId = storyRuntimeWorldId;
+    if (currentWorld.worldId === storyWorldId) return;
+    const storyWorld = parseCurrentWorldId(storyWorldId) ?? createCurrentWorld(STORY_COORDINATE);
     setPreviousWorld(currentWorld);
-    setCurrentWorld(createCurrentWorld(STORY_COORDINATE));
-    setArrivalMode('surface');
-  }, [story.active, currentWorld]);
+    resetSceneReady();
+    setCurrentWorld(storyWorld);
+    setArrivalMode(story.beat === 'ch8-landfall' ? 'approach' : 'surface');
+  }, [story, storyRuntimeWorldId, currentWorld]);
 
   // Open/close the Fabricator. Opening releases pointer lock so the cursor can
   // click recipes; the lock handler below knows to NOT treat that as a pause.
@@ -501,6 +578,15 @@ const App: React.FC = () => {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
     }
   };
+
+  // Authored transactions close the Fabricator before camera, captions, or
+  // interaction ownership changes. This is a request channel, not a story
+  // dependency on React-local UI state.
+  useEffect(() => subscribeStoryUiRequests(request => {
+    if (request.type === 'close-crafting' && craftingOpenRef.current) closeCrafting();
+  // closeCrafting intentionally follows the live touch/pointer-lock mode.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [isTouch]);
 
   // Esc (and any pointer-lock loss / focus change) opens the pause + star map
   // while playing on desktop — a raw Esc keydown is swallowed during lock, so we
@@ -626,6 +712,10 @@ const App: React.FC = () => {
     setPauseState(false);
     if (document.pointerLockElement) document.exitPointerLock();
     returnToMenu();
+    // restartStory destructively clears both authored planets. Suppress the
+    // normal old-world cleanup save once, or React's p1 unmount would write the
+    // just-cleared base back into storage from the still-mounted field stores.
+    suppressWorldCleanupSaveRef.current.add(currentWorld.worldId);
     restartStory();
     const replayWorld = createCurrentWorld(STORY_COORDINATE);
     setPreviousWorld(null);
@@ -637,7 +727,8 @@ const App: React.FC = () => {
 
   const returnToCompletedStorySite = () => {
     beginStory();
-    const siteWorld = createCurrentWorld(STORY_COORDINATE);
+    const siteWorld = parseCurrentWorldId(TIDEGARDEN_WORLD_ID)
+      ?? createCurrentWorld(STORY_COORDINATE);
     setPendingCompletedSiteEntry(true);
     if (!isTouch) {
       try { getGameCanvas()?.requestPointerLock(); } catch { /* ignore */ }
@@ -667,6 +758,13 @@ const App: React.FC = () => {
   const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
   const inventoryTopOffset = useMemo(() => getInventoryTopOffset(isTouch), [isTouch]);
   const currentWorldIdentity = useMemo(() => worldIdentityFromCurrentWorld(currentWorld), [currentWorld.worldId, currentWorld.seed]);
+  const activePlanetProfile = useMemo(
+    () => resolvePlanetProfile({
+      worldId: currentWorldIdentity.worldId,
+      seed: currentWorldIdentity.seed
+    }).profile,
+    [currentWorldIdentity.worldId, currentWorldIdentity.seed]
+  );
   useEffect(() => {
     if (!pendingCompletedSiteEntry || appPhase !== 'menu' || !appSceneReady) return;
     if (!isStoryWorld(currentWorld.coordinate)) return;
@@ -697,9 +795,12 @@ const App: React.FC = () => {
       if (session.status !== 'connected' || !session.worldId || session.worldId === currentWorldIdentity.worldId) return;
       const world = parseCurrentWorldId(session.worldId);
       if (!world) return;
+      if (pendingPartyWorldHandoffRef.current === session.worldId) return;
       const warp = getWarp();
-      const flightSnapshot = getSpaceFlightSnapshot();
-      if (warp.active && flightSnapshot.destination && coordinateKey(flightSnapshot.destination) === world.worldId) return;
+      // Party warp broadcasts arrive before their visual handoff completes.
+      // Keep rendering the source planet while either interstellar or
+      // same-system exposure owns the midpoint swap.
+      if (warp.active) return;
       setPreviousWorld(currentWorld);
       setCurrentWorld(world);
       setArrivalMode('surface');
@@ -709,18 +810,6 @@ const App: React.FC = () => {
     alignToCoopWorld();
     return subscribeMultiplayerSession(alignToCoopWorld);
   }, [currentWorld, currentWorldIdentity.worldId]);
-
-  useEffect(() => {
-    setMultiplayerPartyWarpHandler(handoff => {
-      const coordinate = handoff.destination;
-      if (coordinateKey(coordinate) === currentWorldIdentity.worldId) return;
-      const world = createCurrentWorld(coordinate);
-      scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
-      scheduleGrassInstancePrewarm(planetSize, world.seed);
-      beginTravel(coordinate);
-    });
-    return () => setMultiplayerPartyWarpHandler(null);
-  }, [currentWorldIdentity.worldId]);
 
   // Register the warp-midpoint arrival handler: the actual world swap fires while
   // the screen is fully white, so the EfficientScene remount + regen are hidden.
@@ -758,8 +847,12 @@ const App: React.FC = () => {
         };
         if (coordinatesEqual(coordinate, currentWorld.coordinate)) return;
         const world = createCurrentWorld(coordinate);
-        scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
-        scheduleGrassInstancePrewarm(planetSize, world.seed);
+        scheduleWorldPrewarm(planetSize, world.seed, {
+          worldId: world.worldId,
+          terrainData: true,
+          waterFaces: true
+        });
+        scheduleGrassInstancePrewarm(planetSize, world.seed, world.worldId);
         if (!requestMultiplayerPartyWarp(coordinate)) beginTravel(coordinate);
       }
     };
@@ -795,8 +888,12 @@ const App: React.FC = () => {
 
   const jumpToWorld = (world: CurrentWorld) => {
     if (coordinatesEqual(world.coordinate, currentWorld.coordinate)) return;
-    scheduleWorldPrewarm(planetSize, world.seed, { terrainData: true, waterFaces: true });
-    scheduleGrassInstancePrewarm(planetSize, world.seed);
+    scheduleWorldPrewarm(planetSize, world.seed, {
+      worldId: world.worldId,
+      terrainData: true,
+      waterFaces: true
+    });
+    scheduleGrassInstancePrewarm(planetSize, world.seed, world.worldId);
     // Route through the warp: beginTravel plays the warp-in and the registered
     // arrival handler performs the real world swap at the white-out midpoint.
     if (!requestMultiplayerPartyWarp(world.coordinate)) beginTravel(world.coordinate);
@@ -830,8 +927,6 @@ const App: React.FC = () => {
   // ?voxelStage=bare|color|material|alive|paradox previews plot-gated rendering.
   const {
     benchEnabled,
-    profile,
-    postProcess,
     overviewEnabled,
     agentEnabled,
     atlasCapture,
@@ -843,15 +938,9 @@ const App: React.FC = () => {
     systemBodyCountOverride,
     systemProbeEnabled
   } = useMemo(() => {
-    const params = new URLSearchParams(window.location.search);
-    const requested = (params.get('profile') ?? '').toUpperCase() as QualityProfile;
-    const valid = requested in QUALITY_PROFILES ? requested : DEFAULT_PROFILE;
-    if (valid !== getQualityProfile()) setQualityProfile(valid);
+    const params = queryParams;
     const voxelStage = parseVoxelRealityStage(params.get('voxelStage') ?? params.get('realityStage'));
     if (voxelStage) setVoxelRealityStage(voxelStage);
-    if (params.get('painterly') === '1') overrideGraphicsQuality({ painterly: true });
-    if (params.get('ao') === '0') overrideGraphicsQuality({ contactAO: false });
-    if (params.get('outline') === '0') overrideGraphicsQuality({ outline: false });
     const systemBodies = params.get('systemBodies') ?? params.get('multiplanet');
     const requestedBodyCount = Number(systemBodies);
     const systemBodyCountOverride = requestedBodyCount === 1
@@ -861,8 +950,6 @@ const App: React.FC = () => {
       : undefined;
     return {
       benchEnabled: params.get('bench') === '1',
-      profile: valid,
-      postProcess: getGraphicsQuality().postProcess,
       // ?overview=1 -> non-interactive overhead debug camera (water inspection).
       overviewEnabled: params.get('overview') === '1',
       // ?agent=1 -> verification harness: scriptable camera + window.__game bridge.
@@ -886,10 +973,16 @@ const App: React.FC = () => {
       debugUiEnabled: params.get('debug') === '1',
       storyCompletePreview: import.meta.env.DEV && params.get('storyCompletePreview') === '1'
     };
-  }, []);
+  }, [queryParams]);
 
   const currentSystemManifest = useMemo(
     () => {
+      if (isStoryWorld(currentWorld.coordinate)) {
+        const storyPopulation = storySystemPopulationPolicy(tidegardenRouteOnline);
+        return buildStarSystemManifest(currentWorld.coordinate, storyPopulation.forceSingleBody
+          ? { forceSingleBody: true }
+          : { bodyCountOverride: storyPopulation.bodyCount });
+      }
       const address = parsePlanetWorldId(currentWorld.worldId) ?? {
         system: currentWorld.coordinate,
         slot: 0 as const
@@ -899,7 +992,6 @@ const App: React.FC = () => {
         ? (minimumBodyCount > 1 ? minimumBodyCount : undefined)
         : Math.max(systemBodyCountOverride, minimumBodyCount) as 1 | 2 | 3;
       return buildStarSystemManifest(currentWorld.coordinate, {
-        forceSingleBody: isStoryWorld(currentWorld.coordinate),
         ...(bodyCountOverride === undefined ? {} : { bodyCountOverride })
       });
     },
@@ -907,7 +999,8 @@ const App: React.FC = () => {
       currentWorld.coordinate.x,
       currentWorld.coordinate.y,
       currentWorld.worldId,
-      systemBodyCountOverride
+      systemBodyCountOverride,
+      tidegardenRouteOnline
     ]
   );
   const currentPlanetAddress = useMemo(
@@ -922,14 +1015,8 @@ const App: React.FC = () => {
       ?? currentSystemManifest.planets[0],
     [currentSystemManifest, currentWorld.worldId]
   );
-  const multiplayerConnected = useSyncExternalStore(
-    subscribeMultiplayerSession,
-    () => getMultiplayerSessionSnapshot().status === 'connected',
-    () => false
-  );
   const systemTravelEnabled = systemBodiesEnabled
-    && !multiplayerConnected
-    && !isStoryWorld(currentWorld.coordinate)
+    && (!isStoryWorld(currentWorld.coordinate) || tidegardenRouteOnline)
     && currentSystemManifest.planets.length > 1;
 
   const worldPrepClientRef = useRef<WorldPrepClient | null>(null);
@@ -992,9 +1079,14 @@ const App: React.FC = () => {
     [currentSystemManifest]
   );
 
-  const activateSystemTarget = useCallback((planet: PlanetDescriptor, onAbort: () => void): boolean => {
-    if (getMultiplayerSessionSnapshot().status === 'connected') return false;
-    if (isStoryWorld(currentWorld.coordinate) || currentWorld.worldId === planet.worldId) return false;
+  const beginPreparedSystemTargetHandoff = useCallback((
+    planet: PlanetDescriptor,
+    onAbort: () => void
+  ): boolean => {
+    if (
+      (isStoryWorld(currentWorld.coordinate) && !tidegardenRouteOnline)
+      || currentWorld.worldId === planet.worldId
+    ) return false;
     if (!hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return false;
     const liveFlight = getSpaceFlightSnapshot();
     if (liveFlight.controlMode !== 'flight' || liveFlight.phase !== 'deep_space') return false;
@@ -1015,7 +1107,6 @@ const App: React.FC = () => {
           && systemFlight.target.worldId === planet.worldId
           && spaceFlight.controlMode === 'flight'
           && spaceFlight.phase === 'deep_space'
-          && getMultiplayerSessionSnapshot().status !== 'connected'
           && hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId);
       },
       onMidpoint: () => {
@@ -1031,20 +1122,105 @@ const App: React.FC = () => {
           coordinate: { ...planet.coordinate },
           seed: planet.seed
         });
+        pendingPartyWorldHandoffRef.current = null;
         setArrivalMode('approach');
         return true;
       },
       readyToReveal: () => {
         const systemFlight = getSystemFlightSnapshot();
-        return committedEpoch !== null
+        const spaceFlight = getSpaceFlightSnapshot();
+        const sceneReady = getAppStateSnapshot().sceneReady;
+        const ready = committedEpoch !== null
           && currentWorldRef.current.worldId === planet.worldId
           && systemFlight.activePlanetId === planet.worldId
           && systemFlight.activationEpoch === committedEpoch
-          && getAppStateSnapshot().sceneReady;
+          && sceneReady;
+        if (ready && isTidegardenApproachAuthorityReady({
+          targetWorldId: planet.worldId,
+          currentWorldId: currentWorldRef.current.worldId,
+          activePlanetId: systemFlight.activePlanetId,
+          committedEpoch,
+          activationEpoch: systemFlight.activationEpoch,
+          sceneReady,
+          locationMode: systemFlight.locationMode,
+          controlMode: spaceFlight.controlMode,
+          phase: spaceFlight.phase
+        })) {
+          activateVehicleSceneAvEvent(VEHICLE_SCENE_AV_EVENTS.crossingApproach);
+        }
+        return ready;
       },
       onAbort
     });
-  }, [currentWorld]);
+  }, [currentWorld, tidegardenRouteOnline]);
+
+  const activateSystemTarget = useCallback((planet: PlanetDescriptor, onAbort: () => void): boolean => {
+    if (getMultiplayerSessionSnapshot().status === 'connected') {
+      return requestMultiplayerPartyWarp(planet.worldId, { onRejected: onAbort });
+    }
+    return beginPreparedSystemTargetHandoff(planet, onAbort);
+  }, [beginPreparedSystemTargetHandoff]);
+
+  useEffect(() => {
+    setMultiplayerPartyWarpHandler(handoff => {
+      const world = parseCurrentWorldId(handoff.worldId);
+      if (!world || world.worldId === currentWorldRef.current.worldId) return;
+      const sameSystem = coordinatesEqual(world.coordinate, currentWorldRef.current.coordinate);
+      if (!sameSystem) {
+        scheduleWorldPrewarm(planetSize, world.seed, {
+          worldId: world.worldId,
+          terrainData: true,
+          waterFaces: true
+        });
+        scheduleGrassInstancePrewarm(planetSize, world.seed, world.worldId);
+        beginTravel(world.coordinate);
+        return;
+      }
+
+      const planet = currentSystemManifest.planets.find(candidate => candidate.worldId === world.worldId);
+      if (!planet) {
+        setPreviousWorld(currentWorldRef.current);
+        resetSceneReady();
+        setCurrentWorld(world);
+        setArrivalMode('approach');
+        return;
+      }
+
+      pendingPartyWorldHandoffRef.current = world.worldId;
+      void prepareSystemTarget(planet).then(ready => {
+        if (!ready || currentWorldRef.current.worldId === world.worldId) {
+          pendingPartyWorldHandoffRef.current = null;
+          return;
+        }
+        const flight = getSpaceFlightSnapshot();
+        if (flight.controlMode === 'flight' && flight.phase === 'deep_space') {
+          const target = getSystemFlightSnapshot().target;
+          if (target?.kind !== 'system_body' || target.worldId !== planet.worldId) {
+            commitSystemBodyTarget(planet.address);
+          }
+          if (beginPreparedSystemTargetHandoff(planet, () => {
+            pendingPartyWorldHandoffRef.current = null;
+          })) return;
+        }
+
+        // A party member who is not currently piloting still follows the
+        // authoritative room world. They arrive in the destination scene while
+        // the pilot keeps the full exposure-driven handoff.
+        pendingPartyWorldHandoffRef.current = null;
+        setPreviousWorld(currentWorldRef.current);
+        resetSceneReady();
+        setCurrentWorld(world);
+        setArrivalMode('approach');
+      }).catch(() => {
+        pendingPartyWorldHandoffRef.current = null;
+        setPreviousWorld(currentWorldRef.current);
+        resetSceneReady();
+        setCurrentWorld(world);
+        setArrivalMode('approach');
+      });
+    });
+    return () => setMultiplayerPartyWarpHandler(null);
+  }, [beginPreparedSystemTargetHandoff, currentSystemManifest, prepareSystemTarget]);
 
   // ?debug=1 → free building (no resource cost) so the build catalog can be tested.
   useEffect(() => { setFreeBuild(debugUiEnabled); setInstantHarvest(debugUiEnabled); }, [debugUiEnabled]);
@@ -1093,7 +1269,8 @@ const App: React.FC = () => {
       subscribeStructures(schedule), subscribeInventory(schedule), subscribeCampfires(schedule),
       subscribeMaw(schedule), subscribeProgression(schedule), subscribeTreeHarvest(schedule),
       subscribeStonePickup(schedule), voxelSystem.subscribeVoxelEdits(schedule),
-      subscribeVitals(schedule), subscribeWaterskin(schedule) // eat/drink + waterskin fill
+      subscribeVitals(schedule), subscribeWaterskin(schedule), subscribeShipRestoration(schedule)
+      // eat/drink + waterskin fill + ship flight boundary/pose checkpoints
     ];
     // Movement/time don't fire a store event, so tick a light save (pose + day) to
     // survive a server kill while just walking around.
@@ -1108,7 +1285,9 @@ const App: React.FC = () => {
       unsubs.forEach(u => u());
       document.removeEventListener('visibilitychange', onHidden);
       window.removeEventListener('beforeunload', onUnload);
-      doSave(false); // structures/global/pose of the world we're leaving (voxels: EfficientPlanet)
+      if (!suppressWorldCleanupSaveRef.current.delete(world.worldId)) {
+        doSave(false); // structures/global/pose of the world we're leaving (voxels: EfficientPlanet)
+      }
     };
   }, [currentWorld.coordinate, currentWorldIdentity]);
 
@@ -1130,6 +1309,7 @@ const App: React.FC = () => {
     const onKey = (event: KeyboardEvent) => {
       if (event.code !== 'KeyF' || event.repeat) return;
       if (paused) return;
+      if (isPhysicalBoardingVehicleControlLocked()) return;
       playSfx('exitShip');
       exitShip();
     };
@@ -1197,7 +1377,10 @@ const App: React.FC = () => {
         { name: 'descend', keys: ['ControlLeft', 'KeyZ'] },
       ]}
     >
-      <AudioDirector terrainSeed={currentWorld.seed} />
+      <AudioDirector
+        terrainSeed={currentWorld.seed}
+        worldId={currentWorldIdentity.worldId}
+      />
 
       <Canvas
         shadows={false}
@@ -1218,6 +1401,16 @@ const App: React.FC = () => {
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 0.94;
+          if (
+            graphicsBoot.allowAutomaticSoftwareFallback
+            && !softwareFallbackAppliedRef.current
+            && isSoftwareWebGLRenderer(webGLRendererName(gl))
+          ) {
+            softwareFallbackAppliedRef.current = true;
+            // A silent automatic safety rail, not a preference: explicit URL
+            // profiles and saved player choices win, and this is never persisted.
+            setQualityProfile('POTATO', { persist: false });
+          }
           // Stash the canvas so the DOM "Play Now" button can request pointer
           // lock directly inside the click gesture (see LandingMenu).
           setGameCanvas(gl.domElement);
@@ -1227,9 +1420,15 @@ const App: React.FC = () => {
         {/* IBL-only: capture a representative midday sky once into an env
             cubemap so metallic blocks have reflections. No `background`; the
             visible sky comes from SkyController's dynamic <Sky> dome. */}
-        <Environment frames={1} resolution={256}>
-          <Sky sunPosition={SUN_POSITION} />
-        </Environment>
+        {environmentResolution !== null && (
+          <Environment
+            key={`environment-${profile}-${environmentResolution}`}
+            frames={1}
+            resolution={environmentResolution}
+          >
+            <Sky sunPosition={SUN_POSITION} />
+          </Environment>
+        )}
 
         <SkyController
           terrainSeed={currentWorld.seed}
@@ -1247,7 +1446,7 @@ const App: React.FC = () => {
             planetSize={planetSize}
             activePlanetSlot={currentPlanetAddress.slot}
             activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
-            forceSingleBody={isStoryWorld(currentWorld.coordinate)}
+            forceSingleBody={isStoryWorld(currentWorld.coordinate) && !tidegardenRouteOnline}
             bodyCountOverride={currentSystemManifest.planets.length as 1 | 2 | 3}
           />
         )}
@@ -1263,6 +1462,7 @@ const App: React.FC = () => {
         {/* Persistent warp driver — lives OUTSIDE the keyed EfficientScene so it
             keeps advancing across the world swap it fires at its midpoint. */}
         <WarpDriver />
+        <VehicleSceneAvDriver />
         {/* Story director tick — same placement rationale as WarpDriver. */}
         <StoryDirectorDriver paused={paused || downed || storyCompleteOpen || storyCompletePreview} />
         <SceneReadyProbe />
@@ -1275,13 +1475,15 @@ const App: React.FC = () => {
           <EfficientScene
             key={`${currentWorldKey}:${story.runId}`}
             commandContext={commandContext}
+            graphicsProfile={profile}
+            graphicsQuality={graphicsQuality}
             activePlanetSystemPosition={activePlanetDescriptor.systemPosition}
             terrainSeed={currentWorld.seed}
             debugColliders={debugColliders}
             arrivalMode={arrivalMode}
             overview={overviewEnabled}
             agent={agentEnabled}
-            cinematic={appPhase === 'menu'}
+            cinematic={appPhase === 'menu' || storyWorldSwapPending}
             paused={paused || storyCompleteOpen || storyCompletePreview}
             profileSystemTravel={systemProbeEnabled}
             onGroundedChange={grounded => {
@@ -1308,7 +1510,13 @@ const App: React.FC = () => {
 
         {/* Phase 5: bloom (+ optional painterly) composer. Mounted only when
             the active profile enables postprocessing. */}
-        {postProcess && <PostFX terrainSeed={currentWorld.seed} />}
+        {graphicsQuality.postProcess && (
+          <PostFX
+            key={`postfx-${profile}`}
+            terrainSeed={currentWorld.seed}
+            planetProfile={activePlanetProfile}
+          />
+        )}
       </Canvas>
 
       {/* Persistent warp flash (only fires during travel, harmless otherwise). */}
@@ -1354,8 +1562,6 @@ const App: React.FC = () => {
               <MultiplayerStatusBadge />
             </>
           )}
-          {isTouch && !paused && !downed && !storyCompleteOpen && !storyCompletePreview && <TouchControls controlMode={flight.controlMode} />}
-
           <HudCornerActions
             controlMode={flight.controlMode}
             buildModeOpen={buildModeOpen}
@@ -1368,6 +1574,19 @@ const App: React.FC = () => {
           />
         </>
       )}
+
+      {/* The Regulation Feed may still own Ch1/2 chrome after the camera enters
+          the body, but embodied objectives must remain physically playable on
+          touch. Early fixed-camera acts keep their authored input takeover. */}
+      {appPhase === 'playing'
+        && !atlasCapture
+        && isTouch
+        && !paused
+        && !downed
+        && !storyCompleteOpen
+        && !storyCompletePreview
+        && (!storyHudTakeover(story) || storyUsesEmbodiedGuidanceHud(story))
+        && <TouchControls controlMode={flight.controlMode} />}
 
       {/* --- Survey chart chrome ([M] overhead view) --- */}
       <MapOverlay />

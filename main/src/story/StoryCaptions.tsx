@@ -1,7 +1,14 @@
-import React, { useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
+import { isTouchDevice } from '../utils/mobileInput.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
 import { storyNow } from './storyClock.ts';
+import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
+import {
+  getMeasuredStoryObjectiveCardHeight,
+  readStoryHudSafeAreaInsets,
+  solveStoryHudLayout
+} from './ux/storyHudLayout.ts';
 
 // --- The awakening voice -----------------------------------------------------------
 //
@@ -12,18 +19,38 @@ import { storyNow } from './storyClock.ts';
 const StoryCaptions: React.FC = () => {
   useSyncExternalStore(subscribeStoryText, getStoryTextVersion, getStoryTextVersion);
   const text = getStoryText();
+  const rootRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLDivElement>(null);
 
   const active = text.caption ?? text.system;
   const isSystem = !text.caption && !!text.system;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!active) return;
     let raf = 0;
+    let viewportWidth = window.innerWidth;
+    let viewportHeight = window.innerHeight;
+    let safeAreaInsets = readStoryHudSafeAreaInsets();
     const el = captionRef.current;
+    const refreshViewport = () => {
+      viewportWidth = window.innerWidth;
+      viewportHeight = window.innerHeight;
+      safeAreaInsets = readStoryHudSafeAreaInsets();
+    };
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      if (!el) return;
+      const root = rootRef.current;
+      if (!el || !root) return;
+      const layout = solveStoryHudLayout({
+        viewportWidth,
+        viewportHeight,
+        touch: isTouchDevice(),
+        objectivePresent: getActiveGuidedStoryObjective() !== null,
+        objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
+        safeAreaInsets
+      });
+      root.style.bottom = `${layout.caption.bottom}px`;
+      root.style.maxWidth = `${layout.caption.maxWidth}px`;
       const elapsed = storyNow() - active.shownAt;
       const revealed = Math.min(active.text.length, Math.floor(elapsed / 34));
       el.textContent = active.text.slice(0, revealed);
@@ -32,21 +59,39 @@ const StoryCaptions: React.FC = () => {
         ? String(Math.max(0, 1 - (elapsed - fadeStart) / 700))
         : '1';
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    window.addEventListener('resize', refreshViewport);
+    window.addEventListener('orientationchange', refreshViewport);
+    window.visualViewport?.addEventListener('resize', refreshViewport);
+    // Layout effects run before paint; applying the first safe-area-aware frame
+    // synchronously prevents the caption from flashing through the card.
+    tick();
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', refreshViewport);
+      window.removeEventListener('orientationchange', refreshViewport);
+      window.visualViewport?.removeEventListener('resize', refreshViewport);
+    };
   }, [active]);
 
   if (!active) return null;
   const expired = storyNow() - active.shownAt > active.ttlMs;
   if (expired) return null;
+  const initialLayout = solveStoryHudLayout({
+    viewportWidth: typeof window === 'undefined' ? 1280 : window.innerWidth,
+    viewportHeight: typeof window === 'undefined' ? 720 : window.innerHeight,
+    touch: isTouchDevice(),
+    objectivePresent: getActiveGuidedStoryObjective() !== null,
+    objectiveHeight: getMeasuredStoryObjectiveCardHeight()
+  });
 
   return (
     <div
+      ref={rootRef}
       aria-live="polite"
       style={{
         position: 'fixed',
         left: '50%',
-        bottom: '12%',
+        bottom: initialLayout.caption.bottom,
         transform: 'translateX(-50%)',
         zIndex: theme.z.hud + 4,
         pointerEvents: 'none',
@@ -55,7 +100,12 @@ const StoryCaptions: React.FC = () => {
         letterSpacing: '0.06em',
         color: isSystem ? theme.color.textDim : theme.color.text,
         textShadow: '0 1px 14px rgba(0,0,0,0.75)',
-        maxWidth: 'min(80vw, 640px)',
+        width: 'max-content',
+        maxWidth: initialLayout.caption.maxWidth,
+        boxSizing: 'border-box',
+        paddingInline: 8,
+        lineHeight: 1.55,
+        overflowWrap: 'anywhere',
         textAlign: 'center'
       }}
     >
