@@ -1,0 +1,38 @@
+{
+  "schema": "paravoxia.creativeScorecard.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "contractVersion": "intent-v1-inherited",
+  "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+  "mode": "chapter",
+  "rubricRef": "paravoxia-creative-cohesion@v1",
+  "categories": [
+    { "slug": "narrative_and_player_causality", "weight": 14, "score": null, "rationale": "Functional causality passed; continuous predecessor evidence remains open.", "evidenceRefs": ["story-audit.md"], "defectRefs": ["ch9-continuity-certification"] },
+    { "slug": "audiovisual_emotional_alignment", "weight": 16, "score": null, "rationale": "Protected score handoff and human audiovisual review remain open.", "evidenceRefs": ["score-audit.md", "cinematography-audit.md"], "defectRefs": ["ch9-score-authority-handoff", "ch9-headed-real-gpu-taste"] },
+    { "slug": "cinematic_composition_and_lens", "weight": 14, "score": null, "rationale": "Render correctness passed, but headed camera taste was not performed.", "evidenceRefs": ["cinematography-audit.md"], "defectRefs": ["ch9-headed-real-gpu-taste"] },
+    { "slug": "score_coherence_and_sync", "weight": 12, "score": null, "rationale": "Separate protected Score Director repair is required.", "evidenceRefs": ["score-audit.md"], "defectRefs": ["ch9-score-authority-handoff"] },
+    { "slug": "palette_light_and_render_cohesion", "weight": 10, "score": null, "rationale": "Dynamic-light, facing, depth, and residency defects are closed; real-GPU taste remains open.", "evidenceRefs": ["cinematography-audit.md"], "defectRefs": ["ch9-headed-real-gpu-taste"] },
+    { "slug": "transition_and_state_integrity", "weight": 10, "score": null, "rationale": "Direct Chapter 9 completion passed; continuous and reload lanes remain open.", "evidenceRefs": ["browser-evidence-summary.json"], "defectRefs": ["ch9-continuity-certification"] },
+    { "slug": "creative_ambition_and_specificity", "weight": 10, "score": null, "rationale": "The repaired visual language is clearer but still requires council taste against flagship ambition.", "evidenceRefs": ["cinematography-audit.md"], "defectRefs": ["ch9-headed-real-gpu-taste"] },
+    { "slug": "interaction_accessibility_and_variants", "weight": 6, "score": null, "rationale": "The four-case HUD matrix passed; one-frame transition-label parity remains low severity.", "evidenceRefs": ["ux-audit.md", "evidence/objective-hud-report.json"], "defectRefs": ["global-marker-transition-frame-parity"] },
+    { "slug": "performance_and_implementation_fidelity", "weight": 5, "score": null, "rationale": "Full verify and context stability pass; software rendering cannot certify performance.", "evidenceRefs": ["verification-report.json"], "defectRefs": ["ch9-headed-real-gpu-taste"] },
+    { "slug": "evidence_review_and_learning", "weight": 3, "score": null, "rationale": "Independent audits and raw browser evidence exist; final acceptance evidence is intentionally incomplete.", "evidenceRefs": ["defects.json", "browser-evidence-summary.json"], "defectRefs": ["ch9-continuity-certification"] }
+  ],
+  "weightedScore": null,
+  "categoryFloor": null,
+  "fullCategoryCoverage": false,
+  "thresholds": {
+    "sceneWeighted": 4.75,
+    "sceneFloor": 4.3,
+    "flagshipWeighted": 4.8,
+    "flagshipFloor": 4.5
+  },
+  "openDefects": {
+    "critical": 0,
+    "high": 1,
+    "mediumUnaccepted": 2,
+    "low": 1
+  },
+  "decision": "in_review",
+  "judge": "pending-independent-cohesion-and-human-taste",
+  "judgedAt": "2026-07-17T17:11:00Z"
+}

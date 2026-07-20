@@ -33,8 +33,8 @@ describe('tree harvest state', () => {
 describe('harvestTree', () => {
   it('fells a tree: banks wood and marks it gone', () => {
     const { wood } = harvestTree(7, 8, 9);
-    expect(wood).toBeGreaterThanOrEqual(2);
-    expect(wood).toBeLessThanOrEqual(4);
+    expect(wood).toBeGreaterThanOrEqual(6);
+    expect(wood).toBeLessThanOrEqual(8);
     expect(getItemCount('wood')).toBe(wood);
     expect(isTreeHarvested(7, 8, 9)).toBe(true);
   });

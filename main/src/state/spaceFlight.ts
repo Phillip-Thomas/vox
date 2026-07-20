@@ -424,6 +424,19 @@ export function debugStartInDescent(): void {
 }
 
 /**
+ * Rehydrate an already-completed boarding boundary at a parked surface ship.
+ * This restores control ownership only: the Story layer remains responsible
+ * for proving (or reconstructing) the durable physical-boarding receipts.
+ */
+export function restoreBoardedSurfaceFlight(): void {
+  discardSystemHandoff('reset');
+  warp.active = false;
+  warp.progress = 0;
+  warp.midpointFired = false;
+  setSnapshot({ phase: 'surface', controlMode: 'flight', destination: null, target: null });
+}
+
+/**
  * Rehydrate the coarse flight state that accompanies a persisted canonical ship
  * pose. Unlike the debug entry points this is a save boundary: it restores only
  * a location mode already validated by the ship-restoration layer and never

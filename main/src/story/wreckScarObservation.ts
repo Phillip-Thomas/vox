@@ -1,5 +1,8 @@
 import type { ActorId } from '../game/playerActors.ts';
-import { recordAccomplishment } from '../game/systems/accomplishmentLedger.ts';
+import {
+  getAccomplishment,
+  recordAccomplishment
+} from '../game/systems/accomplishmentLedger.ts';
 import {
   attendObservation,
   getObservation
@@ -11,6 +14,28 @@ import { STORY_PRIMARY_WORLD_ID } from './tidegardenRoute.ts';
 export const WRECK_SCAR_OBSERVATION_ID = 'wreck_scar_persistence';
 export const WRECK_SCAR_ACCOMPLISHMENT_ID = 'the_scar_remains';
 export const WRECK_SCAR_REQUIRED_STAGES = 3;
+
+/**
+ * The scar interaction is optional, so it must only occupy the shared F prompt
+ * while it can add new evidence. Without this guard, revisiting an already
+ * recorded repair stage republishes a dead interaction forever.
+ */
+export function canAttendWreckScar(
+  stage: ShipRepairStage,
+  actorId: ActorId,
+  options: {
+    worldId?: string;
+    requiredInteractionActive?: boolean;
+  } = {}
+): boolean {
+  const worldId = options.worldId ?? STORY_PRIMARY_WORLD_ID;
+  if (worldId !== STORY_PRIMARY_WORLD_ID) return false;
+  if (options.requiredInteractionActive) return false;
+  if (getAccomplishment(WRECK_SCAR_ACCOMPLISHMENT_ID, actorId)) return false;
+  return !(getObservation(WRECK_SCAR_OBSERVATION_ID, actorId)?.evidenceHistory.some(
+    evidence => evidence.id === `wreck-scar:${stage}`
+  ) ?? false);
+}
 
 /** Optional attention only: this ledger never gates reconstruction. */
 export function attendWreckScar(

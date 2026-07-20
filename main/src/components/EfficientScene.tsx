@@ -102,8 +102,8 @@ import {
   type LandfallAvEvidence
 } from '../story/vehicleSceneAvAnchors.ts';
 import {
-  createScenePlayerPositionMailbox,
-  type ScenePlayerPositionMailbox
+  createScenePlayerPositionStreams,
+  type ScenePlayerPositionStreams
 } from '../utils/scenePlayerPosition.ts';
 import type {
   GraphicsQuality,
@@ -379,14 +379,11 @@ export default function EfficientScene({
     setPlayerWorldPosition(arrivalPose.playerSurfacePosition); // ditto for the arrival
     return arrivalPose.playerSurfacePosition.clone();
   });
-  const playerPositionMailboxRef = useRef<ScenePlayerPositionMailbox | null>(null);
-  playerPositionMailboxRef.current ??= createScenePlayerPositionMailbox(initialPlayerPosition);
-  const playerPositionMailbox = playerPositionMailboxRef.current;
-  const playerPosition = playerPositionMailbox.position;
-  // Every field consumer polls this vector from useFrame and owns its own
-  // distance bucket. Sharing the live mailbox avoids an otherwise redundant
-  // second React publication stream.
-  const fieldPlayerPosition = playerPosition;
+  const playerPositionStreamsRef = useRef<ScenePlayerPositionStreams | null>(null);
+  playerPositionStreamsRef.current ??= createScenePlayerPositionStreams(initialPlayerPosition);
+  const playerPositionStreams = playerPositionStreamsRef.current;
+  const playerPosition = playerPositionStreams.collision.position;
+  const fieldPlayerPosition = playerPositionStreams.ecology.position;
   const [systemFieldStage, setSystemFieldStage] = useState(
     restoringSameSystemRuntime ? 0 : 6
   );
@@ -677,11 +674,14 @@ export default function EfficientScene({
   );
 
   const publishPlayerPosition = useCallback((position: THREE.Vector3) => {
-    // Continuous coordinates belong to the R3F loop, not React reconciliation.
-    // During deep-space flight the surface scene remains anchored to its planet.
-    if (phase === 'deep_space') return;
-    playerPositionMailbox.publish(position);
-  }, [phase, playerPositionMailbox]);
+    // Continuous coordinates remain outside React, but the expensive surface
+    // consumers retain separate collision and ecology cadences during flight.
+    playerPositionStreams.publish(position, {
+      nowMs: typeof performance === 'undefined' ? Date.now() : performance.now(),
+      phase,
+      controlMode
+    });
+  }, [controlMode, phase, playerPositionStreams]);
 
   return (
     <Physics paused={paused} gravity={[0, 0, 0]} timeStep={FIXED_PHYSICS_STEP} maxCcdSubsteps={2}>

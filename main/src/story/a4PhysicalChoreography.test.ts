@@ -4,7 +4,8 @@ import type { AgentSurfaceTerrainQuery } from '../utils/agentSurfaceNavigation.t
 import {
   a4HerdDistance,
   planA4GroundedRoute,
-  sampleA4GroundedRoute
+  sampleA4GroundedRoute,
+  shouldShowA4WorkerAfterPackDrop
 } from './a4PhysicalChoreography.ts';
 import { getWorldGen } from '../utils/worldGenCache.ts';
 import {
@@ -23,6 +24,24 @@ const flatDryTerrain: AgentSurfaceTerrainQuery = {
 };
 
 describe('A4 physical choreography route', () => {
+  it('finishes the live grounded exit but never reconstructs a receipt-backed body', () => {
+    expect(shouldShowA4WorkerAfterPackDrop({
+      reconstructedFromReceipt: false,
+      workerDistance: 8.85,
+      routeLength: 10
+    })).toBe(true);
+    expect(shouldShowA4WorkerAfterPackDrop({
+      reconstructedFromReceipt: false,
+      workerDistance: 10,
+      routeLength: 10
+    })).toBe(false);
+    expect(shouldShowA4WorkerAfterPackDrop({
+      reconstructedFromReceipt: true,
+      workerDistance: 8.85,
+      routeLength: 10
+    })).toBe(false);
+  });
+
   it('keeps herd, worker and tear on one dry grounded route', () => {
     const route = planA4GroundedRoute(
       flatDryTerrain,

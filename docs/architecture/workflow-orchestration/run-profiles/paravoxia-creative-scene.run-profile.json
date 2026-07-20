@@ -35,9 +35,9 @@
     "minimumMaterialScoreDelta": 0.05,
     "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
   },
-  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-visual-baseline", "shipped-ux-baseline", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "dissent-register", "scene-contract", "implementation-diff", "check-results", "verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "objective-lifecycle-evidence", "evidence-registry", "story-audit", "score-audit", "cinematography-audit", "ux-audit", "naive-audience-report", "critic-report", "defects", "repair-contract-disposition", "iteration-ledger", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "requiredEvidence": ["production-lock", "production-lock-machine", "shipped-visual-baseline", "shipped-ux-baseline", "shipped-reference-map", "story-intent", "score-treatment", "cinematography-treatment", "director-notes", "director-signoffs", "dissent-register", "scene-contract", "implementation-diff", "check-results", "verification-report", "screenshot-report", "audio-report", "raw-audiovisual-evidence", "objective-lifecycle-evidence", "chapter-journey-evidence", "evidence-registry", "story-audit", "score-audit", "cinematography-audit", "ux-audit", "naive-audience-report", "critic-report", "defects", "repair-contract-disposition", "iteration-ledger", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
   "stateCoverage": {
-    "requiredStates": ["desktop", "mobile", "reduced_motion", "lowest_supported_quality", "objective_enter", "objective_marker_ready", "objective_completion_clear", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
+    "requiredStates": ["desktop", "mobile", "reduced_motion", "lowest_supported_quality", "objective_enter", "objective_marker_ready", "objective_completion_clear", "focused_journey_contracts", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
     "stressStatesRequired": true,
     "exactAnchorEvidenceRequired": true,
     "scopeOutPolicy": "A state may be omitted only when mechanically impossible for the scene and explicitly accepted by the Cohesion Judge."

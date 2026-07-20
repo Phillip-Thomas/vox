@@ -3,11 +3,13 @@ import { KEY_CODES } from '../../utils/mobileInput.ts';
 import { createTouchActionGrid, createTouchActionSpecs } from './TouchControls.model.ts';
 
 describe('touch action layout model', () => {
-  it('uses exactly three normal on-foot actions and removes the mobile dive button', () => {
+  it('keeps every required on-foot story action and removes the mobile dive button', () => {
     const actions = createTouchActionSpecs('fps', false);
 
-    expect(actions.map(action => action.id)).toEqual(['use', 'mine', 'jump']);
-    expect(actions).toHaveLength(3);
+    expect(actions.map(action => action.id)).toEqual(['eat', 'use', 'mine', 'jump']);
+    expect(actions.find(action => action.id === 'eat')?.code).toBe(KEY_CODES.eat);
+    expect(actions.find(action => action.id === 'eat')?.label).toBe('CONSUME');
+    expect(actions).toHaveLength(4);
     expect(actions.some(action => action.code === KEY_CODES.descend)).toBe(false);
   });
 
@@ -15,7 +17,7 @@ describe('touch action layout model', () => {
     const grid = createTouchActionGrid('fps', false);
     const actions = createTouchActionSpecs('fps', false);
 
-    expect(grid.templateAreas).toBe('". use" "mine primary"');
+    expect(grid.templateAreas).toBe('"eat use" "mine primary"');
     expect(actions.find(action => action.id === 'jump')?.area).toBe('primary');
     expect(actions.find(action => action.id === 'mine')?.area).toBe('mine');
     expect(actions.find(action => action.id === 'use')?.area).toBe('use');

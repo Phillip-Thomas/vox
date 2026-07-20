@@ -59,6 +59,31 @@ A creative run that touches guided story play records:
   and evidence refs;
 - `ux-audit.md`: a fresh independent audit with findings, defects, ownership,
   and verdict.
+- `chapter-journey-evidence.json`: an exact-revision, contract-hashed browser
+  report for focus/typing, prompt arbitration and effects, entity absence,
+  reload/Continue seams, and any other focused journey contracts owned by the
+  target chapter.
+
+The machine authority for those journeys is
+`main/chapter-journey-contract.json`. It projects every registered mandatory
+objective exactly and carries focused regression contracts for bugs that have
+escaped unit tests. Runtime evidence is exposed only with `?journeyprobe=1` by
+`JourneyRuntimeProbeBridge`; ordinary play does not mount a visible harness or
+read probe state.
+
+Direct-entry runs are diagnostic. They may prove a local interaction or input
+contract, but never predecessor continuity. A production creative-council pass
+still requires continuous, headed evidence; headless scripted input cannot
+stand in for real pointer-lock or human taste.
+
+Two escaped-defect diagnostics also use an explicit preparation receipt. The
+bridge accepts preparation only when `journeyprobe=1`, `debug=1`,
+`journeylane=direct-entry`, the exact `journeyscenario` is present, and the live
+beat matches the URL. The Ch7 probe applies gaze assistance without moving the
+player; the Voyage input probe reconstructs the prior cards and naming lines
+but still uses the visible native field, trusted key events, real submit path,
+and persisted worker name. Those reconstructed facts are embedded in the
+report and are never accepted as timing or continuity evidence.
 
 The portable workflow and project-local bindings live under
 `docs/architecture/workflow-orchestration/` and
@@ -68,6 +93,9 @@ The portable workflow and project-local bindings live under
 
 ```bash
 npm --prefix main run story:ux:check
+npm --prefix main run chapter:journey:check
+npm --prefix main run chapter:journey:smoke
+npm --prefix main run chapter:journey:probe:smoke
 npm --prefix main run creative:workflow:check
 npm --prefix main run creative:workflow:smoke
 ```

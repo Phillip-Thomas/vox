@@ -716,7 +716,7 @@
           "maxBoundaryMs": 300000,
           "minFps": 20,
           "maxP95FrameTimeMs": 50,
-          "maxFrameGapMs": 1000,
+          "maxFrameGapMs": 250,
           "maxLongTasks": 50,
           "maxHeapBytes": 1342177280
         },
@@ -889,8 +889,6 @@
           "resumeBeat": "ch7-board",
           "evidenceRefs": [
             "milestone:story:reconstruct:relationships-diagnosed-physical",
-            "milestone:story:reconstruct:first-legal-hover-physical",
-            "milestone:story:reconstruct:first-hover-grounded-return",
             "milestone:story:reconstruct:calibration-completed-physical",
             "state:ship-restoration/flight_ready",
             "milestone:story:route:tidegarden:online"
@@ -924,7 +922,6 @@
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.frame-restored",
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.hull-sealed",
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.lift-online",
-            "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.first-hover",
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.route-online",
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.calibration"
           ],

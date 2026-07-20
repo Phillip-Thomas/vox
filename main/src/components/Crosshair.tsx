@@ -1,3 +1,5 @@
+import { theme } from '../ui/theme.ts';
+
 export function Crosshair() {
   return (
     <div style={{
@@ -6,7 +8,7 @@ export function Crosshair() {
       left: '50%',
       transform: 'translate(-50%, -50%)',
       pointerEvents: 'none',
-      zIndex: 1000,
+      zIndex: theme.z.hud + 1,
     }}>
       {/* Horizontal line */}
       <div style={{

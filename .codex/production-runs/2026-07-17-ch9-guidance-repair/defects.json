@@ -1,0 +1,81 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "contractVersion": "intent-v1-inherited",
+  "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+  "compiledAt": "2026-07-17T17:11:00Z",
+  "compiledBy": "bounded-orchestrator-review-moderator",
+  "sourceReports": [
+    { "path": "story-audit.md", "sha256": "7fcec2f4f4f18f31a0f9d5289ad11d66fc269a765f40bd54e908f1e386649358" },
+    { "path": "score-audit.md", "sha256": "651c1a9ee13d2b279bd3358bd54a029641c4ff8b3aa683ace979dc1044b94c13" },
+    { "path": "cinematography-audit.md", "sha256": "aa66cd608f5170f2dfc39c1db640e423a1ba41f8933a19387e97263c677153b0" },
+    { "path": "ux-audit.md", "sha256": "7058100c912bd6991ce2a0f1524f023c16fd4f74fb1372e3d22d0616ff7abbe5" }
+  ],
+  "requiresHumanTaste": true,
+  "defects": [
+    {
+      "id": "ch9-score-authority-handoff",
+      "severity": "high",
+      "category": "score_coherence_and_sync",
+      "status": "open",
+      "owner": "score",
+      "anchor": "ch8-landfall-to-ch9-hearth",
+      "statement": "The story score can retain mix authority after atmosphere exit, and the synchronous rest/handoff leaves insufficient space for the signed Tidegarden and two-hearth musical arc.",
+      "evidenceRefs": ["score-audit.md"],
+      "requestedRepair": "Commission a protected Score Director pass for destination-bed ownership and hearth timing without reopening the completed guidance repair.",
+      "verificationRoute": "Continuous headed Chapter 8 through Chapter 9 audiovisual capture plus independent score review.",
+      "sourceReportRefs": ["score-audit.md"],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ch9-continuity-certification",
+      "severity": "medium",
+      "category": "transition_and_state_integrity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "ch8-crossing-to-ch9-complete",
+      "statement": "The final proof begins at direct Chapter 9 entry and therefore does not certify Chapter 8 handoff or reload continuation.",
+      "evidenceRefs": ["browser-evidence-summary.json"],
+      "requestedRepair": "Run the registered continuous and reload-continue Chapter 9 lanes against the final candidate.",
+      "verificationRoute": "Contract-bound chapter acceptance runner with continuous and reload lanes.",
+      "sourceReportRefs": ["story-audit.md", "ux-audit.md"],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ch9-headed-real-gpu-taste",
+      "severity": "medium",
+      "category": "palette_light_and_render_cohesion",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "ch9-settlement-and-second-hearth",
+      "statement": "The repaired render path is correct, but SwiftShader/headless captures cannot approve exposure, motion, pointer-lock feel, or flagship visual specificity.",
+      "evidenceRefs": ["cinematography-audit.md", "browser-evidence-summary.json"],
+      "requestedRepair": "Conduct a headed real-GPU council taste pass and issue bounded art-direction notes if required.",
+      "verificationRoute": "Supported headed browser capture on real NVIDIA hardware plus independent human review.",
+      "sourceReportRefs": ["cinematography-audit.md"],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "global-marker-transition-frame-parity",
+      "severity": "low",
+      "category": "interaction_accessibility_and_variants",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "objective-change-frame",
+      "statement": "The movie trace observed the prior marker text for one render frame immediately after several objective changes, although settled-state objective and marker parity passed.",
+      "evidenceRefs": ["evidence/ch9-movie-final.json"],
+      "requestedRepair": "Synchronize the globally shared FreeMarker DOM label with the active objective on the same render frame without changing marker position authority.",
+      "verificationRoute": "Focused marker-transition DOM probe across existing chapters, then the full HUD matrix.",
+      "sourceReportRefs": ["ux-audit.md"],
+      "iterationIntroduced": 0,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null
+    }
+  ]
+}

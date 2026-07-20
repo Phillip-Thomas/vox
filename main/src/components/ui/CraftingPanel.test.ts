@@ -30,4 +30,16 @@ describe('CraftingPanel story hand-off', () => {
       runId: 2
     })).toBe(true);
   });
+
+  it('dismisses the Tidegarden fabricator when the requested Habitat Core is crafted', () => {
+    const craftCore = {
+      active: true,
+      beat: 'ch9-settle',
+      runId: 9,
+      objectiveId: 'settle:craft-core'
+    };
+    expect(craftTriggeredStoryTransition(true, craftCore, craftCore, 'habitat_core')).toBe(true);
+    expect(craftTriggeredStoryTransition(true, craftCore, craftCore, 'lift_cell')).toBe(false);
+    expect(craftTriggeredStoryTransition(false, craftCore, craftCore, 'habitat_core')).toBe(false);
+  });
 });

@@ -16,6 +16,7 @@ const bindingsPath = path.join(repoRoot, 'docs/architecture/workflow-orchestrati
 const acceptanceArtifactRoot = path.join(repoRoot, '.terra/workflow-runs/paravoxia-chapter-acceptance')
 const acceptanceWorkflowRef = 'paravoxia-chapter-acceptance@v1'
 const canonicalDefectRegisterSchema = 'paravoxia.chapterDefectRegister.v1'
+const defaultJourneyContract = 'main/chapter-journey-contract.json'
 
 const { values } = parseArgs({
   args: process.argv.slice(2),
@@ -24,6 +25,7 @@ const { values } = parseArgs({
     'candidate-revision': { type: 'string' },
     'production-authority': { type: 'string' },
     registry: { type: 'string', default: 'main/chapter-registry.json' },
+    'journey-contract': { type: 'string', default: defaultJourneyContract },
     'council-authority': { type: 'string' },
     'scene-authority': { type: 'string' },
     'previous-context': { type: 'string' },
@@ -35,6 +37,11 @@ const { values } = parseArgs({
     force: { type: 'boolean', default: false },
     'run-mechanical': { type: 'boolean', default: false },
     'attach-mechanical-evidence': { type: 'boolean', default: false },
+    'run-journey': { type: 'boolean', default: false },
+    'journey-evidence': { type: 'string' },
+    'journey-lane': { type: 'string', default: 'direct-entry' },
+    'journey-mode': { type: 'string', default: 'manual' },
+    'journey-scenario': { type: 'string' },
     continue: { type: 'boolean', default: false },
     'run-to-blocked-or-complete': { type: 'boolean', default: false },
     'max-steps': { type: 'string', default: '32' },
@@ -72,6 +79,8 @@ async function main() {
     await bindAdapters(runPath)
     if (values['run-mechanical']) await runMechanicalCommand(runPath)
     else if (values['attach-mechanical-evidence']) await attachMechanicalEvidence(runPath)
+    if (values['run-journey']) await runJourneyCommand(runPath)
+    else if (values['journey-evidence']) await attachJourneyEvidence(runPath, values['journey-evidence'])
     await synchronizeCanonicalDefectRegister(runPath)
     await checkRun(runPath)
     if (values.continue || values['run-to-blocked-or-complete']) await continueWorkflow(runPath)
@@ -95,6 +104,7 @@ async function main() {
   const candidateRevision = resolveExactCandidateRevision(values['candidate-revision'])
   const productionAuthority = await requireRepoArtifact(values['production-authority'], '--production-authority')
   const registry = await requireRepoArtifact(values.registry, '--registry')
+  const journeyContract = await requireRepoArtifact(values['journey-contract'], '--journey-contract')
   const councilAuthority = await requireRepoArtifact(values['council-authority'], '--council-authority')
   const sceneAuthority = await requireRepoArtifact(values['scene-authority'], '--scene-authority')
   const previousContext = await requireRepoArtifact(values['previous-context'], '--previous-context')
@@ -127,6 +137,8 @@ async function main() {
     '--input',
     `chapter-registry=${registry}`,
     '--input',
+    `chapter-journey-contract=${journeyContract}`,
+    '--input',
     `signed-council-authority=${councilAuthority}`,
     '--input',
     `signed-scene-authority=${sceneAuthority}`,
@@ -140,9 +152,13 @@ async function main() {
 
   const runPath = await requireCanonicalAcceptanceRunFile(path.join(outDir, 'run.json'))
   await bindAdapters(runPath)
+  await runBoundCommand(runPath, 'chapter-journey-contract-check')
+  await ensureCommandPassed(runPath, 'chapter-journey-contract-check')
   await runBoundCommand(runPath, 'chapter-registry-check')
   await ensureCommandPassed(runPath, 'chapter-registry-check')
   if (values['run-mechanical']) await runMechanicalCommand(runPath)
+  if (values['run-journey']) await runJourneyCommand(runPath)
+  else if (values['journey-evidence']) await attachJourneyEvidence(runPath, values['journey-evidence'])
   await synchronizeCanonicalDefectRegister(runPath)
   await checkRun(runPath)
   await continueWorkflow(runPath)
@@ -290,6 +306,179 @@ async function attachMechanicalEvidence(runPath) {
         schema: report.schema,
         disposition: report.disposition,
         machineReadyForCouncilReview: report.machineReadyForCouncilReview === true,
+      },
+    },
+  ]
+  run.updatedAt = now
+  await writeJson(runPath, run)
+}
+
+async function runJourneyCommand(runPath) {
+  const run = await readJson(runPath)
+  const chapter = run.inputs?.['target-chapter']
+  const contractPath = run.inputs?.['chapter-journey-contract']
+  if (!chapter || !contractPath) throw new Error('Run is missing target-chapter or chapter-journey-contract input')
+  const lane = values['journey-lane']
+  const mode = values['journey-mode']
+  if (!['continuous', 'direct-entry', 'resume'].includes(lane)) {
+    throw new Error('--journey-lane must be continuous, direct-entry, or resume')
+  }
+  if (!['manual', 'movie'].includes(mode)) throw new Error('--journey-mode must be manual or movie')
+
+  const bindingSet = await readJson(bindingsPath)
+  const command = (bindingSet.commandCatalog || []).find((candidate) => candidate.id === 'chapter-journey-probe')
+  if (!command || command.privileged !== false || !Array.isArray(command.argv)) {
+    throw new Error('Validated bindings are missing the non-privileged chapter-journey-probe command')
+  }
+  const runDir = path.dirname(runPath)
+  requireAcceptanceRunDir(runDir)
+  const evidenceDir = path.join(runDir, 'evidence/chapter-journey')
+  const reportPath = path.join(evidenceDir, 'chapter-journey-evidence.json')
+  await fs.mkdir(evidenceDir, { recursive: true })
+  const argv = [
+    ...command.argv,
+    '--chapter', chapter,
+    '--manifest', path.join(repoRoot, contractPath),
+    '--lane', lane,
+    '--mode', mode,
+    '--output', evidenceDir,
+    '--report', reportPath,
+  ]
+  if (values.headed) argv.push('--headed')
+  if (values['base-url']) argv.push('--base-url', values['base-url'])
+  if (values['journey-scenario']) argv.push('--scenario', values['journey-scenario'])
+
+  const startedAt = new Date().toISOString()
+  const execution = await spawnRecorded(argv, process.env)
+  const finishedAt = new Date().toISOString()
+  const resultPath = `evidence/commands/chapter-journey-probe-operator-${timestamp()}.json`
+  const result = {
+    schema: 'terra.commandResult.v1',
+    id: command.id,
+    title: command.title,
+    resultKey: command.resultKey,
+    argv,
+    status: execution.exitCode === 0 ? 'passed' : 'failed',
+    exitCode: execution.exitCode,
+    timedOut: false,
+    executionPolicy: 'operator_managed_browser_journey',
+    stdout: execution.stdout,
+    stderr: execution.stderr,
+    evidencePath: resultPath,
+    startedAt,
+    finishedAt,
+  }
+  await fs.mkdir(path.dirname(path.join(runDir, resultPath)), { recursive: true })
+  await writeJson(path.join(runDir, resultPath), result)
+  const latestRun = await readJson(runPath)
+  latestRun.commandResults = [...(latestRun.commandResults || []), result]
+  latestRun.checkResults = {
+    ...(latestRun.checkResults || {}),
+    [result.resultKey]: result.status === 'passed',
+  }
+  latestRun.updatedAt = finishedAt
+  await writeJson(runPath, latestRun)
+  await attachJourneyEvidence(runPath, toRepoPath(reportPath))
+  console.log(`Chapter journey evidence recorded with status: ${result.status}`)
+}
+
+async function attachJourneyEvidence(runPath, inputPath) {
+  const sourcePath = await requireRepoArtifactAbsolute(inputPath, '--journey-evidence')
+  const reportSource = await fs.readFile(sourcePath, 'utf8')
+  const report = JSON.parse(reportSource)
+  if (report.schema !== 'paravoxia.chapterJourneyEvidence.v1') {
+    throw new Error(`Journey evidence must use paravoxia.chapterJourneyEvidence.v1; got ${report.schema || 'missing schema'}`)
+  }
+
+  const run = await readJson(runPath)
+  const expectedChapter = run.inputs?.['target-chapter']
+  const expectedRevision = run.inputs?.['candidate-revision']
+  const contractRef = run.inputs?.['chapter-journey-contract']
+  if (report.chapterId !== expectedChapter) {
+    throw new Error(`Journey evidence chapter ${report.chapterId || 'missing'} does not match run target ${expectedChapter || 'missing'}`)
+  }
+  if (report.sourceRevision !== expectedRevision) {
+    throw new Error(`Journey evidence revision ${report.sourceRevision || 'missing'} does not match run candidate ${expectedRevision || 'missing'}`)
+  }
+  if (!contractRef) throw new Error('Run is missing chapter-journey-contract input')
+  const contractPath = path.join(repoRoot, contractRef)
+  const contractSource = await fs.readFile(contractPath)
+  const contract = JSON.parse(contractSource.toString('utf8'))
+  const contractHashMatchesInput = report.contract?.sha256 === sha256(contractSource)
+  if (!contractHashMatchesInput) throw new Error('Journey evidence contract hash does not match the run-bound chapter journey contract')
+
+  const chapterContract = (contract.chapters || []).find((candidate) => candidate.id === expectedChapter)
+  if (!chapterContract) throw new Error(`Run-bound journey contract does not contain ${expectedChapter}`)
+  const laneId = report.lane?.id
+  const manual = report.lane?.requestedControlMode === 'manual'
+  const expectedScenarioIds = new Set([
+    ...(manual ? chapterContract.inputContracts || [] : []).map((item) => item.id),
+    ...(chapterContract.interactionContracts || []).map((item) => item.id),
+    ...(chapterContract.lifecycleContracts || []).map((item) => item.id),
+  ])
+  const results = Array.isArray(report.scenarios) ? report.scenarios : []
+  const actualScenarioIds = new Set(results.map((result) => result.id))
+  const requiredScenarioCoverageComplete = expectedScenarioIds.size === actualScenarioIds.size
+    && [...expectedScenarioIds].every((id) => actualScenarioIds.has(id))
+  const allRequiredScenariosPassed = requiredScenarioCoverageComplete
+    && results.filter((result) => result.required !== false).every((result) => result.status === 'passed')
+    && report.status === 'passed'
+  const laneClaimConsistent = report.machineJourneyCertified === (
+    report.status === 'passed' && report.lane?.machineJourneyCertifying === true && results.length > 0
+  )
+  const nonCertifyingEvidenceNotUsedForContinuity = laneClaimConsistent
+    && (laneId !== 'direct-entry-diagnostic' || report.machineJourneyCertified === false)
+  const journeyPassed = contractHashMatchesInput
+    && requiredScenarioCoverageComplete
+    && allRequiredScenariosPassed
+    && nonCertifyingEvidenceNotUsedForContinuity
+
+  const artifact = (run.artifacts || []).find((candidate) => candidate.slug === 'chapter-journey-evidence')
+  if (!artifact) throw new Error('Workflow run does not declare chapter-journey-evidence')
+  const relativeEvidencePath = 'evidence/chapter-journey/chapter-journey-evidence.json'
+  const destination = path.join(path.dirname(runPath), relativeEvidencePath)
+  await fs.mkdir(path.dirname(destination), { recursive: true })
+  if (await fs.realpath(sourcePath).catch(() => sourcePath) !== await fs.realpath(destination).catch(() => destination)) {
+    await fs.copyFile(sourcePath, destination)
+  }
+  const now = new Date().toISOString()
+  artifact.path = relativeEvidencePath
+  artifact.status = 'present'
+  artifact.updatedAt = now
+  artifact.summary = {
+    schema: report.schema,
+    chapterId: report.chapterId,
+    candidateRevision: report.sourceRevision,
+    laneId,
+    disposition: report.disposition,
+    targetChapterMatchesInput: true,
+    candidateRevisionMatchesInput: true,
+    contractHashMatchesInput,
+    requiredScenarioCoverageComplete,
+    allRequiredScenariosPassed,
+    nonCertifyingEvidenceNotUsedForContinuity,
+    machineJourneyCertified: report.machineJourneyCertified === true,
+    requiredScenarioCount: expectedScenarioIds.size,
+    failedScenarioCount: results.filter((result) => result.status === 'failed').length,
+    blockedScenarioCount: results.filter((result) => result.status === 'blocked').length,
+  }
+  run.checkResults = { ...(run.checkResults || {}), chapterJourneyProbe: journeyPassed }
+  run.evidenceBundles = [
+    ...(run.evidenceBundles || []).filter((bundle) => bundle.id !== 'evidence.chapter-journey-evidence'),
+    {
+      schema: 'terra.evidenceBundle.v1',
+      id: 'evidence.chapter-journey-evidence',
+      kind: 'runtime_trace',
+      createdByStep: 'run-chapter-functional-proof',
+      artifactRefs: ['chapter-journey-evidence'],
+      commandRefs: [],
+      summary: {
+        path: relativeEvidencePath,
+        schema: report.schema,
+        laneId,
+        disposition: report.disposition,
+        journeyPassed,
+        machineJourneyCertified: report.machineJourneyCertified === true,
       },
     },
   ]
@@ -1125,6 +1314,8 @@ async function runSelfTest() {
       '--input',
       'chapter-registry=main/chapter-registry.json',
       '--input',
+      'chapter-journey-contract=main/chapter-journey-contract.json',
+      '--input',
       'signed-council-authority=fixture://operator-self-test',
       '--input',
       'signed-scene-authority=fixture://operator-self-test',
@@ -1136,6 +1327,46 @@ async function runSelfTest() {
     const canonical = await requireCanonicalAcceptanceRunFile(validRunPath)
     if (canonical !== await fs.realpath(validRunPath)) throw new Error('Self-test did not return the canonical valid run path')
     await bindAdapters(validRunPath)
+    const journeyContractSource = await fs.readFile(path.join(repoRoot, defaultJourneyContract))
+    const journeyFixturePath = path.join(validDir, 'journey-fixture.json')
+    const journeyFixture = {
+      schema: 'paravoxia.chapterJourneyEvidence.v1',
+      runId: 'operator-self-test-journey',
+      chapterId: 'ch5',
+      sourceRevision: 'operator-self-test-revision',
+      status: 'passed',
+      disposition: 'passed-no-focused-scenarios',
+      machineJourneyCertified: false,
+      lane: {
+        id: 'direct-entry-diagnostic',
+        entryPath: 'direct-entry',
+        requestedControlMode: 'manual',
+        machineJourneyCertifying: false,
+      },
+      contract: { sha256: sha256(journeyContractSource), scenarioIds: [] },
+      scenarios: [],
+      summary: { passed: 0, failed: 0, blocked: 0, total: 0 },
+      failures: [],
+      unavailable: [],
+    }
+    await writeJson(journeyFixturePath, journeyFixture)
+    await attachJourneyEvidence(validRunPath, toRepoPath(journeyFixturePath))
+    const journeyAttachedRun = await readJson(validRunPath)
+    const journeyArtifact = journeyAttachedRun.artifacts.find((artifact) => artifact.slug === 'chapter-journey-evidence')
+    if (journeyAttachedRun.checkResults?.chapterJourneyProbe !== true
+      || journeyArtifact?.summary?.contractHashMatchesInput !== true
+      || journeyArtifact?.summary?.nonCertifyingEvidenceNotUsedForContinuity !== true) {
+      throw new Error('Operator self-test did not bind an exact no-focused-scenario journey report honestly')
+    }
+    await writeJson(journeyFixturePath, {
+      ...journeyFixture,
+      contract: { ...journeyFixture.contract, sha256: '0'.repeat(64) },
+    })
+    await expectRejection(
+      () => attachJourneyEvidence(validRunPath, toRepoPath(journeyFixturePath)),
+      /contract hash does not match/i,
+      'stale journey contract hash',
+    )
     const creativeRunner = process.env.PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON
     const reviewRunner = process.env.PARAVOXIA_STORY_REVIEW_RUNNER_ARGV_JSON
     delete process.env.PARAVOXIA_STORY_CREATIVE_RUNNER_ARGV_JSON
@@ -1420,7 +1651,7 @@ async function runSelfTest() {
     )
     if (await fs.readFile(validRunPath, 'utf8') !== runBeforeMismatchedCount) throw new Error('Rejected defect-count mismatch modified run.json')
 
-    console.log('Paravoxia chapter-acceptance operator self-test passed: canonical new/resumed paths accepted; evidence symlink escape, arbitrary JSON, wrong identity, unproven material fixes, material accepted_exception, invalid duplicate targets/cycles, and mismatched counts rejected; review coverage failed closed; canonical findings mirrored and routed repair.')
+    console.log('Paravoxia chapter-acceptance operator self-test passed: canonical new/resumed paths and exact journey evidence accepted; stale journey hashes, evidence symlink escape, arbitrary JSON, wrong identity, unproven material fixes, material accepted_exception, invalid duplicate targets/cycles, and mismatched counts rejected; review coverage failed closed; canonical findings mirrored and routed repair.')
   } finally {
     await fs.rm(selfTestRoot, { recursive: true, force: true })
     await fs.rm(outsideRoot, { recursive: true, force: true })
@@ -1477,6 +1708,8 @@ function printUsage() {
     '',
     'Add --run-mechanical to execute and record the target-aware chapter runner.',
     'Use --attach-mechanical-evidence to bind an already-written exact-run report without rerunning the browser.',
+    'Add --run-journey to execute the contract-driven browser regression lane; select --journey-lane continuous, direct-entry, or resume.',
+    'Use --journey-evidence <repo-file> to bind an existing exact-revision journey report.',
     'Use --manual-evidence <repo-file> and --audio-evidence <repo-file> to bind external player and live-audio proof.',
     'Use --self-test to prove run-path containment, workflow identity, and canonical defect routing.',
     'New runs execute immediately; --continue resumes an existing run. Missing model/review runner env is persisted as a recoverable blocker.',

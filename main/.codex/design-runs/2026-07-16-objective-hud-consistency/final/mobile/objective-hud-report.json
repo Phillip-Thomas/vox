@@ -1,0 +1,1063 @@
+{
+  "generatedAt": "2026-07-16T15:41:53.782Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "graphicsProfile": "POTATO",
+  "results": [
+    {
+      "beat": "ch1-anomaly",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch1-anomaly&debug=1&profile=POTATO",
+      "elapsedMs": 2840,
+      "objectiveFirstSeenMs": 25,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch1-anomaly.png",
+      "evidence": {
+        "beat": "ch1-anomaly",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch1:anomaly:calibrate-pan-tilt",
+          "markerLabel": "PAN-TILT SURVEY · CALIBRATE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "text": "CURRENT OBJECTIVEPAN-TILT SURVEY · CALIBRATESURVEY THE FULL PERIMETER.LOOK ACROSS EVERY HEADING.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "",
+          "computedTransform": "none",
+          "labelTransform": "",
+          "motionPresentation": null,
+          "layoutState": "pending",
+          "topLeftOcclusion": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "",
+          "labelOffset": "",
+          "labelTransform": ""
+        },
+        "redactionBox": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        },
+        "guidance": {
+          "required": false,
+          "freeMarkerVisible": false,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": false
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "quickActionsRect": null,
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch2-approach",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch2-approach&debug=1&profile=POTATO",
+      "elapsedMs": 29280,
+      "objectiveFirstSeenMs": 18,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch2-approach.png",
+      "evidence": {
+        "beat": "ch2-approach",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch2:approach:eat-fruit",
+          "markerLabel": "REDACTED SUBJECT · FRUIT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEREDACTED SUBJECT · FRUITAPPROACH THE FRUIT AT HAND HEIGHT.[USE] EAT.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "",
+          "computedTransform": "none",
+          "labelTransform": "",
+          "motionPresentation": null,
+          "layoutState": "pending",
+          "topLeftOcclusion": null
+        },
+        "redactionIndicator": {
+          "rect": {
+            "x": -34.6015625,
+            "y": 398.4296875,
+            "width": 221.203125,
+            "height": 47.140625,
+            "right": 186.6015625,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 17.9921875,
+            "y": 425.4296875,
+            "width": 221.203125,
+            "height": 20.140625,
+            "right": 239.1953125,
+            "bottom": 445.5703125,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "translate(76px, 422px) translate(-50%, -50%)",
+          "labelOffset": "52.6016px",
+          "labelTransform": ""
+        },
+        "redactionBox": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          }
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": false,
+          "redactionIndicatorVisible": true,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "quickActionsRect": null,
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch3-gather",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch3-gather&debug=1&profile=POTATO",
+      "elapsedMs": 2740,
+      "objectiveFirstSeenMs": 24,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch3-gather.png",
+      "evidence": {
+        "beat": "ch3-gather",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch3:gather:craft-hatchet",
+          "markerLabel": "STONE HATCHET · CRAFT",
+          "health": "ready",
+          "requiresMarker": "false",
+          "text": "CURRENT OBJECTIVESTONE HATCHET · CRAFTOPEN THE FABRICATOR.[FABRICATOR] CRAFT A STONE HATCHET.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "right": 0,
+            "bottom": 0,
+            "visible": false
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "",
+          "computedTransform": "none",
+          "labelTransform": "",
+          "motionPresentation": null,
+          "layoutState": "pending",
+          "topLeftOcclusion": null
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": false,
+          "freeMarkerVisible": false,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": false
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 64,
+            "right": 228,
+            "bottom": 78,
+            "visible": true
+          },
+          "inventoryRect": null,
+          "quickActionsRect": {
+            "x": 280,
+            "y": 14,
+            "width": 96,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch4-audit",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch4-audit&debug=1&profile=POTATO",
+      "elapsedMs": 32480,
+      "objectiveFirstSeenMs": 28,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch4-audit.png",
+      "evidence": {
+        "beat": "ch4-audit",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch4:audit:attend-fire",
+          "markerLabel": "CAMPFIRE · ATTEND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVECAMPFIRE · ATTENDFOLLOW W-7744 TO THE CAMPFIRE.[USE] ATTEND THE FIRE MISMATCH.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 224.71875,
+            "y": 249,
+            "width": 130,
+            "height": 44.6875,
+            "right": 354.71875,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 224.71875,
+            "y": 264,
+            "width": 130,
+            "height": 29.6875,
+            "right": 354.71875,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "observed"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 136,
+            "right": 228,
+            "bottom": 150,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 332,
+            "y": 14,
+            "width": 44,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch5-maw",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch5-maw&debug=1&profile=POTATO",
+      "elapsedMs": 37373,
+      "objectiveFirstSeenMs": 26,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch5-maw.png",
+      "evidence": {
+        "beat": "ch5-maw",
+        "app": {
+          "phase": "playing",
+          "sceneReady": true
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "maw:recover-field-kit",
+          "markerLabel": "W-7744 FIELD PACK · RECOVER KIT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEW-7744 FIELD PACK · RECOVER KITFOLLOW THE FIELD PACK MARKER.[USE] RECOVER THE FIELD KIT.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 242,
+            "y": 249,
+            "width": 130,
+            "height": 59.53125,
+            "right": 372,
+            "bottom": 308.53125,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 242,
+            "y": 264,
+            "width": 130,
+            "height": 44.53125,
+            "right": 372,
+            "bottom": 308.53125,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "observed"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 136,
+            "right": 228,
+            "bottom": 150,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 280,
+            "y": 14,
+            "width": 96,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch6-dive",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch6-dive&debug=1&profile=POTATO",
+      "elapsedMs": 30159,
+      "objectiveFirstSeenMs": 20,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch6-dive.png",
+      "evidence": {
+        "beat": "ch6-dive",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "dive:recover-keel-memory",
+          "markerLabel": "KEEL MEMORY",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVEKEEL MEMORYFOLLOW THE KEEL MEMORY MARKER BELOW.INTERACT TO RECOVER THE KEEL MEMORY.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": {
+            "x": 18,
+            "y": 502.3125,
+            "width": 354,
+            "height": 46.5,
+            "right": 372,
+            "bottom": 548.8125,
+            "visible": true
+          },
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 247.15625,
+            "y": 249,
+            "width": 119.6875,
+            "height": 29.84375,
+            "right": 366.84375,
+            "bottom": 278.84375,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 247.15625,
+            "y": 264,
+            "width": 119.6875,
+            "height": 14.84375,
+            "right": 366.84375,
+            "bottom": 278.84375,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "observed"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 136,
+            "right": 228,
+            "bottom": 150,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 280,
+            "y": 14,
+            "width": 96,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch8-crossing",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch8-crossing&debug=1&profile=POTATO",
+      "elapsedMs": 34229,
+      "objectiveFirstSeenMs": 21,
+      "screenshot": "/home/thomasphillip/Projects/vox/main/.codex/design-runs/2026-07-16-objective-hud-consistency/final/mobile/mobile-ch8-crossing.png",
+      "evidence": {
+        "beat": "ch8-crossing",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVESIBLING WORLDFIND THE SIBLING WORLD.CENTER IT AND SET COURSE.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": {
+            "x": 18,
+            "y": 502.3125,
+            "width": 354,
+            "height": 46.5,
+            "right": 372,
+            "bottom": 548.8125,
+            "visible": true
+          },
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 116.453125,
+            "y": 34,
+            "width": 157.09375,
+            "height": 29.84375,
+            "right": 273.546875,
+            "bottom": 63.84375,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 116.453125,
+            "y": 49,
+            "width": 157.09375,
+            "height": 14.84375,
+            "right": 273.546875,
+            "bottom": 63.84375,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "none"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": null,
+          "inventoryRect": null,
+          "quickActionsRect": {
+            "x": 332,
+            "y": 14,
+            "width": 44,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    }
+  ]
+}

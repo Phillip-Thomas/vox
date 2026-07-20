@@ -1,7 +1,12 @@
 import React, { useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { theme } from '../../ui/theme.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
-import { getInteraction, subscribeInteraction } from '../../game/systems/interactionSystem.ts';
+import {
+  getInteraction,
+  getInteractionScope,
+  PRIMARY_INTERACTION_PROMPT_DOM_ID,
+  subscribeInteraction
+} from '../../game/systems/interactionSystem.ts';
 import { getMawChargeFraction, subscribeMaw } from '../../game/systems/mawSystem.ts';
 import { subscribeProgression } from '../../game/systems/progressionSystem.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
@@ -215,7 +220,10 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             labelWidth: redactionIndicatorLabel.getBoundingClientRect().width,
             layout
           });
-          redactionIndicatorLabel.style.transform = `translateX(${labelPresentation.labelOffsetX}px)`;
+          // Use relative layout offset instead of a nested transform. Chromium's
+          // transformed-parent geometry can report the unshifted child bounds,
+          // which makes collision tooling disagree with the pixels on screen.
+          redactionIndicatorLabel.style.left = `${labelPresentation.labelOffsetX}px`;
         } else {
           redactionIndicator.style.display = 'none';
         }
@@ -431,12 +439,20 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* context interaction (the sandbox prompt is hidden during the feed) */}
       {interaction && (
-        <div style={{
-          position: 'fixed', left: '50%', bottom: '18%', transform: 'translateX(-50%)',
-          fontSize: 12, letterSpacing: '0.2em',
-          border: `1px solid ${FEED_INK_DIM}`, padding: '7px 14px',
-          background: 'rgba(2,4,3,0.55)'
-        }}>
+        <div
+          id={PRIMARY_INTERACTION_PROMPT_DOM_ID}
+          data-interaction-prompt="primary"
+          data-interaction-id={interaction.id}
+          data-interaction-owner="regulation-feed"
+          data-interaction-scope={getInteractionScope(interaction.id)}
+          aria-label={`Interaction: ${interaction.verb}`}
+          style={{
+            position: 'fixed', left: '50%', bottom: '18%', transform: 'translateX(-50%)',
+            fontSize: 12, letterSpacing: '0.2em',
+            border: `1px solid ${FEED_INK_DIM}`, padding: '7px 14px',
+            background: 'rgba(2,4,3,0.55)'
+          }}
+        >
           [F] {interaction.verb.toUpperCase()}
         </div>
       )}
@@ -475,6 +491,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       {/* redaction box (driven by the driver's screen-space projection) */}
       <div
         ref={redactionRef}
+        data-redaction-box="true"
         style={{
           position: 'fixed',
           left: 0,
@@ -528,6 +545,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             fontSize: 9,
             letterSpacing: '0.16em',
             lineHeight: 1.35,
+            position: 'relative',
             maxWidth: 'min(240px, calc(100vw - 36px))',
             whiteSpace: 'normal',
             overflowWrap: 'anywhere',

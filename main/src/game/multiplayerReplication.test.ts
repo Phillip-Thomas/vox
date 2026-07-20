@@ -1127,6 +1127,38 @@ describe('multiplayer replication', () => {
     });
   });
 
+  it('applies a replicated 1x2 wall as one linked build and rejects unknown piece ids', () => {
+    expect(applyReplicatedWorldEvent({
+      seq: 1,
+      type: 'structure_placed',
+      playerId: 'bob',
+      payload: { cell: [4, 5, 6], face: 0, type: 'tall_wall', material: 'wood', up: 2 }
+    })).toBe(true);
+    expect(getPieceAt(4, 5, 6, 0)).toMatchObject({ type: 'tall_wall', tall: 'lower', partner: [4, 6, 6] });
+    expect(getPieceAt(4, 6, 6, 0)).toMatchObject({ type: 'tall_wall', tall: 'upper', partner: [4, 5, 6] });
+    expect(getWorldCollisionChangeSnapshot()).toMatchObject({
+      kind: 'structure_placed',
+      cells: [[4, 5, 6], [4, 6, 6]],
+      solidAfter: true
+    });
+
+    expect(applyReplicatedWorldEvent({
+      seq: 2,
+      type: 'structure_removed',
+      playerId: 'bob',
+      payload: { cell: [4, 6, 6], face: 0 }
+    })).toBe(true);
+    expect(getPieceAt(4, 5, 6, 0)).toBeUndefined();
+    expect(getPieceAt(4, 6, 6, 0)).toBeUndefined();
+
+    expect(applyReplicatedWorldEvent({
+      seq: 3,
+      type: 'structure_placed',
+      playerId: 'bob',
+      payload: { cell: [0, 0, 0], face: 0, type: 'future_wall', material: 'wood', up: 2 }
+    })).toBe(false);
+  });
+
   it('does not apply local echoed world events', () => {
     restorePieces([{ cell: [0, 0, 0], face: 1, type: 'foundation', material: 'wood', ownerId: 'alice', placedBy: 'alice' }]);
 

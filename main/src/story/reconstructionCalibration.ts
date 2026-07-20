@@ -36,7 +36,6 @@ export function beginReconstructionCalibration(input: {
   worldId: string;
   storyBeat: StoryBeat | null;
   repairStage: ShipRepairStage;
-  groundedReturnComplete: boolean;
 }): boolean {
   if (hasReconstructionCalibrationReceipt(input.actorId)) return false;
   if (state.phase === 'running') return false;
@@ -44,7 +43,6 @@ export function beginReconstructionCalibration(input: {
     input.worldId !== STORY_PRIMARY_WORLD_ID
     || input.storyBeat !== 'ch7-reconstruct'
     || input.repairStage !== 'flight_ready'
-    || !input.groundedReturnComplete
   ) return false;
   state = {
     phase: 'running',

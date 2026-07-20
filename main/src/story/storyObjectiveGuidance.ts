@@ -71,7 +71,7 @@ export type VigilObjectivePhase = 'remain-at-wreck' | 'observe-sky' | 'rest-at-f
 export type AuditObjectiveStage = 'fire' | 'life' | 'tree' | 'complete';
 export type ComplianceObjectiveStage = 'fire' | 'organics' | 'complete';
 export type DefianceObjectiveStage = 'test-maw' | 'refuse' | 'complete';
-export type Ch8LaunchObjectiveState = 'surface-flight' | 'launching' | 'deep-space';
+export type Ch8LaunchObjectiveState = 'surface-on-foot' | 'surface-flight' | 'launching' | 'deep-space';
 export type Ch8CrossingObjectiveState = 'acquire-sibling' | 'hold-course' | 'approach-envelope';
 export type Ch8LandfallObjectiveState = 'descent' | 'surface-flight' | 'surface-fps';
 
@@ -345,9 +345,9 @@ function forageObjective(
   }
   return objective(
     'ch3:forage:find-food',
-    'interact',
+    'travel',
     'EDIBLE FRUIT',
-    ['FOLLOW THE FOOD SOURCE MARKER.', '[F] GATHER FRUIT.']
+    ['FOLLOW THE FOOD SOURCE MARKER.', 'WALK THROUGH THE FRUIT TO GATHER IT.']
   );
 }
 
@@ -468,6 +468,13 @@ function defianceObjective(stage: DefianceObjectiveStage): GuidedStoryObjective 
 
 function launchObjective(state: Ch8LaunchObjectiveState): GuidedStoryObjective {
   switch (state) {
+    case 'surface-on-foot':
+      return objective(
+        'ch8:launch:reboard',
+        'travel',
+        'KESTREL HATCH · REBOARD',
+        ['RETURN TO THE KESTREL.', 'FOLLOW THE HATCH MARKER AND [F] BOARD.']
+      );
     case 'surface-flight':
       return objective(
         'ch8:launch:ignite',

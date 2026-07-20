@@ -8,7 +8,8 @@ import { turnGroundedHeadingToward, type GroundedSurfaceSample } from '../../uti
 import {
   a4HerdDistance,
   planA4GroundedRoute,
-  sampleA4GroundedRoute
+  sampleA4GroundedRoute,
+  shouldShowA4WorkerAfterPackDrop
 } from '../a4PhysicalChoreography.ts';
 import {
   commitA4FieldPackTear,
@@ -26,7 +27,7 @@ import {
 } from '../authoredFrameTime.ts';
 import { isStoryPaused } from '../storyClock.ts';
 import { useStoryState } from '../storyState.ts';
-import { getAuditWorkerPose } from './AuditWorker.tsx';
+import { getAuditWorkerPose, hideAuditWorker } from './AuditWorker.tsx';
 import {
   establishFieldPackDropPose,
   getHeroTreePose,
@@ -43,6 +44,7 @@ interface A4WorldChoreographyProps {
   planetSize: number;
   terrainSeed: number;
   commandContext: CommandContext;
+  onWorkerDeparted?: () => void;
 }
 
 /**
@@ -53,7 +55,8 @@ interface A4WorldChoreographyProps {
 const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
   planetSize,
   terrainSeed,
-  commandContext
+  commandContext,
+  onWorkerDeparted
 }) => {
   const story = useStoryState();
   useSyncExternalStore(
@@ -120,6 +123,7 @@ const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
   const elapsedRef = useRef(0);
   const workerDistanceRef = useRef(0);
   const reconstructedPackRef = useRef(false);
+  const workerDeparturePublishedRef = useRef(false);
   const herdSamples = useRef(createSamples(HERD_COUNT));
   const workerSample = useRef(createSample());
   const branchSample = useMemo(
@@ -132,6 +136,7 @@ const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
     elapsedRef.current = 0;
     workerDistanceRef.current = 0;
     reconstructedPackRef.current = false;
+    workerDeparturePublishedRef.current = false;
     if (story.beat !== 'a4-exhale' || !route) return;
     const worker = getAuditWorkerPose();
     const actorId = commandContext.actorId;
@@ -139,6 +144,10 @@ const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
       reconstructedPackRef.current = true;
       workerDistanceRef.current = route.length;
       elapsedRef.current = WORKER_START_SECONDS;
+      hideAuditWorker();
+      workerDeparturePublishedRef.current = true;
+      onWorkerDeparted?.();
+      return;
     } else if (hasMilestone(EMERGENT_AUDIT_MILESTONES.a4WorkerFlight, actorId)) {
       workerDistanceRef.current = 0.75;
       elapsedRef.current = WORKER_START_SECONDS;
@@ -155,7 +164,7 @@ const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
       if (start.heading.lengthSq() > 1e-6) worker.heading.copy(start.heading);
       worker.walk = 0;
     }
-  }, [commandContext.actorId, route, story.beat]);
+  }, [commandContext.actorId, onWorkerDeparted, route, story.beat]);
 
   useFrame((_state, delta) => {
     if (story.beat !== 'a4-exhale' || !route || !pack) return;
@@ -181,19 +190,33 @@ const A4WorldChoreography: React.FC<A4WorldChoreographyProps> = ({
     const worldId = commandContext.world.worldId;
     if (!hasMilestone(EMERGENT_AUDIT_MILESTONES.a4Alive, actorId)) return;
     if (hasMilestone(FIELD_PACK_DROPPED_MILESTONE, actorId)) {
-      const worker = getAuditWorkerPose();
       if (!reconstructedPackRef.current) {
         workerDistanceRef.current = Math.min(
           route.length,
           workerDistanceRef.current + dt * WORKER_SPEED
         );
       }
-      const final = sampleA4GroundedRoute(route, workerDistanceRef.current, workerSample.current);
-      worker.visible = true;
-      worker.position.copy(final.position);
-      worker.up.copy(route.up);
-      if (final.heading.lengthSq() > 1e-6) worker.heading.copy(final.heading);
-      worker.walk = workerDistanceRef.current < route.length ? 1 : 0;
+      const workerVisible = shouldShowA4WorkerAfterPackDrop({
+        reconstructedFromReceipt: reconstructedPackRef.current,
+        workerDistance: workerDistanceRef.current,
+        routeLength: route.length
+      });
+      if (workerVisible) {
+        const worker = getAuditWorkerPose();
+        const exit = sampleA4GroundedRoute(route, workerDistanceRef.current, workerSample.current);
+        worker.visible = true;
+        worker.position.copy(exit.position);
+        worker.up.copy(route.up);
+        if (exit.heading.lengthSq() > 1e-6) worker.heading.copy(exit.heading);
+        worker.walk = 1;
+        worker.stride += dt * WORKER_SPEED;
+      } else {
+        hideAuditWorker();
+        if (!workerDeparturePublishedRef.current) {
+          workerDeparturePublishedRef.current = true;
+          onWorkerDeparted?.();
+        }
+      }
       // A reload after the pack receipt reconstructs the causal scene, not
       // just its ledger. Keep the authored herd spread across the crest while
       // the handback breath finishes instead of remounting five hidden groups.

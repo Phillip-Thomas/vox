@@ -16,7 +16,10 @@ import { getAnomalyStonePose } from './storyWorld.ts';
 const TOUCH_DISTANCE = 4.5;
 
 /** Module handle for the driver's survey-marker projection (heroTreeHandle pattern). */
-export const anomalyStoneHandle: { position: THREE.Vector3 | null } = { position: null };
+export const anomalyStoneHandle: {
+  position: THREE.Vector3 | null;
+  up: THREE.Vector3 | null;
+} = { position: null, up: null };
 
 interface AnomalyStoneProps {
   planetSize: number;
@@ -53,8 +56,10 @@ const AnomalyStone: React.FC<AnomalyStoneProps> = ({ planetSize, terrainSeed }) 
 
   useEffect(() => {
     anomalyStoneHandle.position = pose.position;
+    anomalyStoneHandle.up = pose.up;
     return () => {
       anomalyStoneHandle.position = null;
+      anomalyStoneHandle.up = null;
     };
   }, [pose]);
 

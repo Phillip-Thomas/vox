@@ -174,6 +174,40 @@
   "commandCatalog": [
     {
       "schema": "terra.commandBinding.v1",
+      "id": "chapter-journey-contract-check",
+      "title": "Validate the executable Paravoxia chapter journey contract",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "npm",
+        "--prefix",
+        "main",
+        "run",
+        "chapter:journey:check"
+      ],
+      "resultKey": "chapterJourneyContractCheck",
+      "timeoutMs": 120000,
+      "privileged": false
+    },
+    {
+      "schema": "terra.commandBinding.v1",
+      "id": "chapter-journey-probe",
+      "title": "Run contract-driven Paravoxia browser journey evidence",
+      "bindingRequirementId": "acceptance-tool-runner",
+      "argv": [
+        "node",
+        "main/tools/chapter-journey-probe.mjs"
+      ],
+      "resultKey": "chapterJourneyProbe",
+      "timeoutMs": 600000,
+      "privileged": false,
+      "executionPolicy": {
+        "genericAdapterMode": "operator_arguments_required",
+        "productionEntrypoint": "npm --prefix main run chapter:accept:workflow -- --run <run.json> --run-journey --journey-lane <lane>",
+        "productionResultPersistence": "terra.commandResult.v1"
+      }
+    },
+    {
+      "schema": "terra.commandBinding.v1",
       "id": "chapter-registry-check",
       "title": "Validate the Paravoxia chapter registry",
       "bindingRequirementId": "acceptance-tool-runner",

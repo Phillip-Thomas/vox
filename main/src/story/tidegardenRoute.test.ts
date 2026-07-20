@@ -6,6 +6,7 @@ import {
   progressionHasTidegardenRoute,
   resolveStoryBootWorldId,
   resolveStoryResumeWorldId,
+  resolveStoryRuntimeWorldId,
   STORY_PRIMARY_WORLD_ID,
   storySystemPopulationPolicy,
   TIDEGARDEN_ROUTE_MILESTONE,
@@ -69,6 +70,36 @@ describe('Tidegarden route capability', () => {
       TIDEGARDEN_WORLD_ID,
       false,
       { chapter: 'ch8', beat: 'ch8-landfall' }
+    )).toBe(STORY_PRIMARY_WORLD_ID);
+  });
+
+  it('retains a physically committed Tidegarden crossing only in the live runtime', () => {
+    const crossing = { chapter: 'ch8', beat: 'ch8-crossing' };
+
+    expect(resolveStoryBootWorldId(TIDEGARDEN_WORLD_ID, true, crossing))
+      .toBe(STORY_PRIMARY_WORLD_ID);
+    expect(resolveStoryRuntimeWorldId(
+      TIDEGARDEN_WORLD_ID,
+      true,
+      crossing,
+      TIDEGARDEN_WORLD_ID
+    )).toBe(TIDEGARDEN_WORLD_ID);
+  });
+
+  it('does not treat an uncommitted destination render as live ownership', () => {
+    const crossing = { chapter: 'ch8', beat: 'ch8-crossing' };
+
+    expect(resolveStoryRuntimeWorldId(
+      TIDEGARDEN_WORLD_ID,
+      true,
+      crossing,
+      STORY_PRIMARY_WORLD_ID
+    )).toBe(STORY_PRIMARY_WORLD_ID);
+    expect(resolveStoryRuntimeWorldId(
+      STORY_PRIMARY_WORLD_ID,
+      true,
+      crossing,
+      STORY_PRIMARY_WORLD_ID
     )).toBe(STORY_PRIMARY_WORLD_ID);
   });
 

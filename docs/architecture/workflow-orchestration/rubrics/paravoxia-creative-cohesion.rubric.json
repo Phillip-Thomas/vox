@@ -17,7 +17,7 @@
       "slug": "narrative_and_player_causality",
       "label": "Narrative And Player Causality",
       "weight": 14,
-      "signals": ["story event and player verb are clear", "required objectives remain actionable and exactly targetable", "mystery lands at intended loudness", "camera score and guidance preserve agency"]
+      "signals": ["story event and player verb are clear", "required objectives remain actionable and exactly targetable", "every mandatory objective earns its causal dramatic and spatial placement", "mystery lands at intended loudness", "camera score and guidance preserve agency"]
     },
     {
       "slug": "audiovisual_emotional_alignment",
@@ -47,7 +47,7 @@
       "slug": "transition_and_state_integrity",
       "label": "Transition And State Integrity",
       "weight": 10,
-      "signals": ["cuts are declared and motivated", "camera score and effects hand off cleanly", "all persistent state resets"]
+      "signals": ["cuts are declared and motivated", "camera score and effects hand off cleanly", "actors props prompts objectives and focus clear or persist exactly as contracted", "reload and adjacent chapter paths preserve the same causal state"]
     },
     {
       "slug": "creative_ambition_and_specificity",
@@ -59,7 +59,7 @@
       "slug": "interaction_accessibility_and_variants",
       "label": "Interaction Accessibility And Variants",
       "weight": 6,
-      "signals": ["every guided objective has actionable work-order copy and an exact live marker match", "objective enter ready complete clear deep-link replay and pause lifecycles are evidenced", "HUD marker camera and score do not compete for attention", "mobile reduced motion assistive semantics and quality tiers preserve meaning and focal parity"]
+      "signals": ["every guided objective has actionable work-order copy and an exact live marker match", "objective enter ready complete clear deep-link replay and pause lifecycles are evidenced", "interaction arbitration is deterministic and every visible prompt has a declared effect", "editable focus suppresses gameplay hotkeys and submits exactly once", "HUD marker camera and score do not compete for attention", "mobile reduced motion assistive semantics and quality tiers preserve meaning and focal parity"]
     },
     {
       "slug": "performance_and_implementation_fidelity",

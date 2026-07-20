@@ -87,8 +87,10 @@ import {
   prepareEmergentMovieWreckCraft
 } from './emergentMovieRuntime.ts';
 import {
+  getTidegardenChosenHabitatSite,
   TIDEGARDEN_SETTLEMENT_MILESTONES
 } from './tidegardenSettlement.ts';
+import { resolveTidegardenSettlementTarget } from './tidegardenSettlementTargets.ts';
 import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
 import { getPlayerSubmersion } from '../state/playerSubmersion.ts';
 import { getLocalPlayerSurfaceContact } from '../state/playerSurfaceContact.ts';
@@ -101,29 +103,19 @@ import {
   type AutopilotSwimMode
 } from './autopilotSwim.ts';
 import {
-  advanceMovieWreckHoverRehearsal,
-  createMovieWreckHoverRehearsalState,
   movieWreckInteractionMotion,
-  movieWreckReconstructionMotionOwner,
-  reconcileMovieWreckHoverRehearsalRun,
   resolveMovieWreckInteractionAnnulusGoal,
   shouldApproachMovieWreck,
-  shouldApproachMovieWreckHoverSocket,
   shouldExitWaterBeforeMovieWreck,
   shouldRecoverMovieWreckWetStart
 } from './autopilotReconstruction.ts';
 import { allowsMovieTeleportRecovery } from './autopilotSafety.ts';
 import { isStoryJetInstalled } from './emergentCapabilities.ts';
-import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
-import {
-  hasFirstHoverGroundedReturn,
-  hasFirstLegalHoverReceipt,
-  hasWreckDiagnosisReceipt
-} from './reconstructionEmbodiment.ts';
 import { plannedJetpackJumpDecision } from './autopilotJetpackNavigation.ts';
 import {
   planReachableCrossFaceRoute,
   shouldExtendCrossFaceContinuation,
+  shouldReplanDryWaterContact,
   shouldReplanUnreachableRoute,
   type NavigationSurfaceContactSignature
 } from './autopilotCrossFaceNavigation.ts';
@@ -284,10 +276,8 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
 let clockBeat: StoryBeat | null = null;
 let beatClock = 0;
 let interactPulseAt = 0;
-let wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
 const _target = new THREE.Vector3();
 const _goalScratch = new THREE.Vector3();
-const _hoverApproachScratch = new THREE.Vector3();
 const _wreckInteractionScratch = new THREE.Vector3();
 const _swimLookTarget = new THREE.Vector3();
 
@@ -298,6 +288,11 @@ let nudgesOnGoal = 0;
 let teleportNudgesTotal = 0;
 let teleportNudgeRunId = -1;
 let dryCrossFaceWaterContactFramesTotal = 0;
+// Sibling shoreline signal: sustained wet feet while executing a nominally dry
+// SAME-face leg. Drives one bounded route replan out of a pond-edge local
+// minimum (see shouldReplanDryWaterContact).
+let dryWalkWaterContactFramesTotal = 0;
+const DRY_WALK_WATER_CONTACT_REPLAN_FRAMES = 8;
 
 function noteGoal(target: THREE.Vector3): void {
   if (_goalRef.distanceTo(target) > 2.5) {
@@ -592,6 +587,16 @@ function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): Navigat
     plannedContact: cached.plannedSurfaceContact,
     currentContact: currentSurfaceContact
   });
+  // Shoreline escape: a dry-claimed leg that keeps grinding the pond edge gets
+  // one bounded replan from the live wet position (the counter is consumed so a
+  // replan cannot fire every frame).
+  const shorelineWaterReplan = !!cached && shouldReplanDryWaterContact({
+    routeMode: cached.route.mode,
+    hasWaterCrossing: cached.route.waterCrossing !== null,
+    contactFrames: dryWalkWaterContactFramesTotal,
+    thresholdFrames: DRY_WALK_WATER_CONTACT_REPLAN_FRAMES
+  });
+  if (shorelineWaterReplan) dryWalkWaterContactFramesTotal = 0;
 
   if (!crossingLatched && (
     goalChanged
@@ -600,6 +605,7 @@ function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): Navigat
     || capabilityChanged
     || farOffRoute
     || staleUnreachablePlan
+    || shorelineWaterReplan
   )) {
     const crossFaceLeg = face === goalFace
       ? null
@@ -854,8 +860,11 @@ const _toTarget = new THREE.Vector3();
 
 /**
  * Screen-relative two-axis movement after NAV VIEW has made terrain depth an
- * honest part of play. Normal steering still leaves jump off; the existing
- * stuck watchdog owns the rare obstacle-recovery hop.
+ * honest part of play. Like walkToward, it plans through nextNavigationStep and
+ * holds jump on a planned 'jetpack' step so a computed water crossing actually
+ * executes (the downstream plannedJetpack controller then owns the fuel budget);
+ * ordinary dry steering leaves jump off and the stuck watchdog owns the rare
+ * obstacle-recovery hop.
  */
 function walkTowardLens(target: THREE.Vector3, stop: number): number {
   const lens = getSideLens();
@@ -1076,15 +1085,11 @@ function grantMissingCampfireMaterials(): void {
 export function autopilotTick(dt: number): void {
   if (!MOVIE) return;
   const story = getStoryStateSnapshot();
-  wreckHoverRehearsal = reconcileMovieWreckHoverRehearsalRun(
-    wreckHoverRehearsal,
-    teleportNudgeRunId,
-    story.runId
-  );
   if (story.runId !== teleportNudgeRunId) {
     teleportNudgeRunId = story.runId;
     teleportNudgesTotal = 0;
     dryCrossFaceWaterContactFramesTotal = 0;
+    dryWalkWaterContactFramesTotal = 0;
   }
   const beat = story.active ? story.beat : null;
   if (beat !== clockBeat) {
@@ -1111,7 +1116,7 @@ export function autopilotTick(dt: number): void {
     diveRecoveryActive = false;
     diveAimReady = false;
     diveColumnLocked = false;
-    wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
+    dryWalkWaterContactFramesTotal = 0;
     resetNavigationRoute();
     clearControls();
     setCinematicGazeIntent(null);
@@ -1591,48 +1596,6 @@ export function autopilotTick(dt: number): void {
         moveThroughWaterToward(target, 2.8, 'surface');
         break;
       }
-      const actorId = getLocalActorId();
-      const repairStage = getShipRepairStage();
-      const hoverSocket = hifiWreckHandle.hoverSocketPosition;
-      const liftInstalled = repairStage === 'lift_online' || repairStage === 'flight_ready';
-      const firstHoverComplete = hasFirstLegalHoverReceipt(actorId);
-      const groundedReturnComplete = hasFirstHoverGroundedReturn(actorId);
-      const motionOwner = movieWreckReconstructionMotionOwner({
-        diagnosed: hasWreckDiagnosisReceipt(actorId),
-        liftInstalled,
-        hoverSocketAvailable: hoverSocket !== null,
-        firstHoverComplete,
-        groundedReturnComplete
-      });
-      if (motionOwner === 'hover-rehearsal' && hoverSocket) {
-        const player = getPlayerWorldPosition();
-        const hoverDistance = gaitDistance(hoverSocket, player);
-        const shouldApproachHoverSocket = shouldApproachMovieWreckHoverSocket(hoverDistance);
-        wreckHoverRehearsal = advanceMovieWreckHoverRehearsal(wreckHoverRehearsal, {
-          withinApproach: !shouldApproachHoverSocket,
-          physicallySupported: getLocalPlayerSurfaceContact().physicallySupported
-        });
-        if (!wreckHoverRehearsal.active && shouldApproachHoverSocket) {
-          const up = getPlayerUp();
-          // Project the visible upper socket onto the already validated bench
-          // support plane. Navigation owns only this grounded approach; the
-          // normal jump/jet controller owns every vertical sample afterward.
-          _hoverApproachScratch.copy(hoverSocket).addScaledVector(
-            up,
-            target.dot(up) - hoverSocket.dot(up)
-          );
-          walkToward(_hoverApproachScratch, 0.8, 0, hoverSocket);
-        } else {
-          holdAt(hoverSocket, 0);
-        }
-        break;
-      }
-      wreckHoverRehearsal = createMovieWreckHoverRehearsalState();
-      if (motionOwner === 'grounded-return' && hoverSocket) {
-        // Releasing the movie controls is the real landing half of the proof.
-        holdAt(hoverSocket, 0);
-        break;
-      }
       const distance = getPlayerWorldPosition().distanceTo(target);
       const interactionMotion = movieWreckInteractionMotion(distance);
       if (shouldApproachMovieWreck(distance)) {
@@ -1669,9 +1632,7 @@ export function autopilotTick(dt: number): void {
         break;
       }
       // The live resolver has already proven physical reach. Stand and look at
-      // the bench instead of pushing into its tighter route waypoint: releasing
-      // jump before Lift Cell installation gives the normal jump controller the
-      // real false -> true edge required for the first legal hover.
+      // the bench instead of pushing into its tighter route waypoint.
       holdAt(target, 0.8);
       // Recipe fabrication is allowed only while the live wreck bench has
       // published assembler access. The next frame's registered F action then
@@ -1715,21 +1676,6 @@ export function autopilotTick(dt: number): void {
       const binding = getEmergentMovieSettlementBinding();
       if (!binding) break;
       const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
-      // The flight-ready Kestrel keeps its Fabricator linked across the active
-      // world. Build the Habitat Core before exploration for a deterministic
-      // screening cadence; manual play may craft it at the chosen site. Site
-      // placement remains gated by attending Tidegarden's relationship beat.
-      if (!habitat && !prepareEmergentMovieHabitatCore(actorId)) {
-        const ship = getShipPosition();
-        if (ship) {
-          const shipPosition = _goalScratch.set(ship[0], ship[1], ship[2]);
-          walkToward(shipPosition, 4.5, 1.1);
-          if (getPlayerWorldPosition().distanceTo(shipPosition) <= 7.5) {
-            prepareEmergentMovieHabitatCore(actorId);
-          }
-        }
-        break;
-      }
       if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, actorId)) {
         const relationship = binding.relationship;
         if (!relationship) break;
@@ -1741,22 +1687,44 @@ export function autopilotTick(dt: number): void {
       }
 
       if (!habitat) {
-        habitatGoal ??= findEmergentMovieHabitatGoal(getPlayerWorldPosition());
+        const chosen = getTidegardenChosenHabitatSite(actorId);
+        habitatGoal ??= resolveTidegardenSettlementTarget('choose-site')
+          ?? findEmergentMovieHabitatGoal(getPlayerWorldPosition());
         if (!habitatGoal) break;
-        const siteDistance = walkToward(habitatGoal, 0.45, 0.4);
-        // The spawn validator's canonical capsule center sits about one visual
-        // foot above the live Rapier center. Gait distance deliberately treats
-        // that as the same grounded cell; validation below re-proves the exact
-        // dry support before any foundation is allowed.
-        if (siteDistance <= 0.8) {
+        if (!chosen) {
+          const siteDistance = walkToward(habitatGoal, 0.45, 0.4);
+          if (siteDistance <= 2) performStoryInteraction('story-tidegarden-choose-site');
+          break;
+        }
+        // Once the site belongs to the player, the Kestrel's carried fabricator
+        // is the truthful next destination. Do not fabricate the Core before
+        // the relationship/site choices merely to simplify a screening.
+        if (!prepareEmergentMovieHabitatCore(actorId)) {
+          const ship = resolveTidegardenSettlementTarget('craft-core')
+            ?? (() => {
+              const pose = getShipPosition();
+              return pose ? _goalScratch.set(pose[0], pose[1], pose[2]) : null;
+            })();
+          if (ship) {
+            walkToward(ship, 4.5, 1.1);
+            if (getPlayerWorldPosition().distanceTo(ship) <= 7.5) {
+              prepareEmergentMovieHabitatCore(actorId);
+            }
+          }
+          break;
+        }
+        const chosenGoal = resolveTidegardenSettlementTarget('foundation') ?? habitatGoal;
+        const chosenDistance = walkToward(chosenGoal, 0.45, 0.4);
+        if (chosenDistance <= 2) {
           installEmergentMovieHabitatCore(getPlayerWorldPosition(), actorId);
         }
         break;
       }
 
-      const corePosition = _goalScratch.set(...habitat.core.position);
+      const corePosition = resolveTidegardenSettlementTarget('certify-shelter')
+        ?? _goalScratch.set(...habitat.core.position);
       const coreDistance = walkToward(corePosition, 0.35, 0.8);
-      if (coreDistance <= 0.8) {
+      if (coreDistance <= 2) {
         if (buildAndCertifyEmergentMovieShelter(getPlayerWorldPosition(), actorId)) {
           holdAt(corePosition, 0.8);
         }
@@ -1767,9 +1735,10 @@ export function autopilotTick(dt: number): void {
       const actorId = getLocalActorId();
       const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
       if (!habitat) break;
-      const corePosition = _goalScratch.set(...habitat.core.position);
+      const corePosition = resolveTidegardenSettlementTarget('rest')
+        ?? _goalScratch.set(...habitat.core.position);
       const coreDistance = walkToward(corePosition, 0.35, 0.8);
-      if (coreDistance <= 0.8) {
+      if (coreDistance <= 2) {
         completeEmergentMovieSafeRest(getPlayerWorldPosition(), getCurrentDayPhase(), actorId);
         // Rest is allowed only at real night. Hold inside the proven enclosure
         // between attempts instead of feeding the goal to the stuck watchdog.
@@ -1788,6 +1757,19 @@ export function autopilotTick(dt: number): void {
       && crossFaceContinuationExpectsDry;
   if (purportedDryCrossFaceMovement && surfaceContact.feetInWater) {
     dryCrossFaceWaterContactFramesTotal++;
+  }
+  // Same-face shoreline signal: a nominally dry walk/direct leg (no planned
+  // crossing) that keeps the feet in water. Dry ticks relax the count so only
+  // sustained pond-edge grinding — not an incidental splash — forces a replan.
+  const nominallyDrySameFaceLeg = navigationReason !== 'cross-face-edge-crossing'
+    && !navigationReason.startsWith('cross-face-forward-handoff')
+    && (navigationAction === 'walk' || navigationAction === 'direct')
+    && !!activeNavigationRoute
+    && activeNavigationRoute.route.waterCrossing === null;
+  if (nominallyDrySameFaceLeg && surfaceContact.feetInWater) {
+    dryWalkWaterContactFramesTotal++;
+  } else if (!surfaceContact.feetInWater && dryWalkWaterContactFramesTotal > 0) {
+    dryWalkWaterContactFramesTotal--;
   }
 
   // Dev affordance (movie only): capture harnesses sample the pilot's state.
@@ -1814,6 +1796,7 @@ export function autopilotTick(dt: number): void {
       nudges: nudgesOnGoal,
       teleportNudgesTotal,
       dryCrossFaceWaterContactFramesTotal,
+      dryWalkWaterContactFramesTotal,
       surfaceContact,
       lens: (() => {
         const l = getSideLens();

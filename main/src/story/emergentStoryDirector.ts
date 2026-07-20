@@ -44,12 +44,12 @@ import {
 import { getFeedRuntime } from './feedRuntime.ts';
 import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
 import {
-  getTidegardenChosenHabitatSite,
   getTidegardenSettlementGuidance,
+  hasTidegardenChosenFoundation,
+  isHabitatNight,
   tidegardenFoundationMatchesSiteChoice,
   TIDEGARDEN_SETTLEMENT_MILESTONES
 } from './tidegardenSettlement.ts';
-import { getPieces } from '../game/systems/structureSystem.ts';
 import { getItemCount } from '../game/systems/inventorySystem.ts';
 import { getCurrentDayPhase } from '../game/worldClock.ts';
 import { storyAnchors } from './world/storyWorld.ts';
@@ -153,7 +153,9 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
         const flight = getSpaceFlightSnapshot();
         return resolveStoryObjectiveGuidance(beat, {
           ch8LaunchState: flight.phase === 'surface'
-            ? 'surface-flight'
+            ? flight.controlMode === 'flight'
+              ? 'surface-flight'
+              : 'surface-on-foot'
             : flight.phase === 'deep_space'
               ? 'deep-space'
               : 'launching'
@@ -469,7 +471,14 @@ function tickA4(): void {
   if (hasMilestone(EMERGENT_AUDIT_MILESTONES.a4WorkerFlight, actorId)) once('a4-flight', () => {
     showAuditLine('FAULT: W-7744 / MODEL REFUSED BY OBSERVATION', 'AUDIT NETWORK', 5000);
   });
-  if (runtime.elapsed < 10.5 || !hasMilestone(FIELD_PACK_DROPPED_MILESTONE, actorId)) return;
+  if (
+    runtime.elapsed < 10.5
+    || !hasMilestone(FIELD_PACK_DROPPED_MILESTONE, actorId)
+    // The pack receipt begins the final grounded tail. Continuous play waits
+    // for the rendered body to clear that tail; a receipt-backed reload starts
+    // hidden and therefore preserves the same handback without replaying him.
+    || getAuditWorkerPose().visible
+  ) return;
   markMilestone(STORY_MILESTONES.a4Handback, actorId);
   clearVoxelRealityOverrides();
   feed.cinematic = 0;
@@ -540,18 +549,10 @@ function tickReconstruction(): void {
     id: `reconstruct:${guidance.id}`
   });
   reconcileReconstructionSignedAvFromReceipts(actorId, repairStage);
-  // Fail closed on restored/authoritative snapshots as well as the live UI
-  // path. A flight-ready scalar is not a substitute for the embodied scar,
-  // hover, and grounded-return receipts that make that scalar legal.
+  // The scar diagnosis remains embodied. Lift rehearsal is now optional
+  // exploration on Tidegarden, so ship repair and calibration must not wait on
+  // a local hover/landing receipt at the origin wreck.
   if (!hasWreckDiagnosisReceipt(actorId)) return;
-  const liftInstalled = repairStage === 'lift_online' || repairStage === 'flight_ready';
-  if (liftInstalled && !hasFirstLegalHoverReceipt(actorId)) {
-    once('first-hover-caption', () => showCaption('(the ground has to release you before the route will.)'));
-    return;
-  }
-  if (liftInstalled && !hasFirstHoverGroundedReturn(actorId)) {
-    return;
-  }
   if (repairStage === 'lift_online') {
     return;
   }
@@ -672,18 +673,13 @@ function tickLandfall(): void {
 }
 
 function activateSettlementGuidance(actorId: ReturnType<typeof getLocalActorId>): void {
-  const chosen = getTidegardenChosenHabitatSite(actorId);
-  const foundationPlaced = Boolean(chosen && getPieces().some(piece => (
-    piece.type === 'foundation'
-    && piece.cell[0] === chosen.cell[0]
-    && piece.cell[1] === chosen.cell[1]
-    && piece.cell[2] === chosen.cell[2]
-  )));
+  const foundationPlaced = hasTidegardenChosenFoundation(actorId);
+  const dayPhase = getCurrentDayPhase();
   const settlementGuidance = getTidegardenSettlementGuidance({
     actorId,
     coreCarried: getItemCount('habitat_core', actorId) > 0,
     foundationPlaced,
-    night: getCurrentDayPhase() >= 0.7 || getCurrentDayPhase() <= 0.1
+    night: isHabitatNight(dayPhase)
   });
   activateGuidedStoryObjective({
     ...settlementGuidance,
@@ -718,7 +714,6 @@ function tickSettlement(): void {
   once('settlement-certified', () => {
     runtime.completionObservedAt = runtime.elapsed;
     showCaption('(not a claim on the world. an address inside a relationship.)');
-    scoreHit('bloom');
   });
   if (runtime.elapsed < runtime.completionObservedAt + 2.4) return;
   markMilestone(STORY_MILESTONES.ch9Settled, actorId);
@@ -727,7 +722,6 @@ function tickSettlement(): void {
 
 function tickSecondHearth(): void {
   const actorId = getLocalActorId();
-  activateSettlementGuidance(actorId);
   const restCommitted = hasMilestone(
     TIDEGARDEN_SETTLEMENT_MILESTONES.safeRestCompleted,
     actorId
@@ -736,7 +730,20 @@ function tickSecondHearth(): void {
     TIDEGARDEN_SETTLEMENT_MILESTONES.twoWorldHandoff,
     actorId
   );
-  if (!restCommitted || !handoffCommitted) return;
+  if (!restCommitted || !handoffCommitted) {
+    activateSettlementGuidance(actorId);
+    return;
+  }
+  activateGuidedStoryObjective({
+    id: 'settle:second-hearth-settling',
+    kind: 'wait',
+    markerLabel: 'SECOND HEARTH · SETTLING',
+    workOrder: [
+      'THE SECOND HEARTH IS SAFE.',
+      'LET THE TWO-WORLD HANDOFF SETTLE.'
+    ],
+    requiresMarker: false
+  });
   once('second-hearth-rest', () => {
     runtime.completionObservedAt = runtime.elapsed;
     setWorkOrder([]);

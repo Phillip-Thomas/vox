@@ -366,7 +366,7 @@ export function reconcileReconstructionSignedAvFromReceipts(
   if (hasFirstLegalHoverReceipt(actorId)) {
     activateSignedSceneSemanticEvent('ev.reconstruct.first-legal-hover');
   }
-  if (repairStage === 'flight_ready' && hasFirstHoverGroundedReturn(actorId)) {
+  if (repairStage === 'flight_ready') {
     activateSignedSceneSemanticEvent('ev.reconstruct.flight-ready');
     if (hasReconstructionCalibrationReceipt(actorId)) {
       activateSignedSceneSemanticEvent('ev.reconstruct.calibration-completed');

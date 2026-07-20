@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getInteraction, subscribeInteraction, type ActiveInteraction } from '../../game/systems/interactionSystem';
+import {
+  getInteraction,
+  getInteractionScope,
+  PRIMARY_INTERACTION_PROMPT_DOM_ID,
+  subscribeInteraction,
+  type ActiveInteraction
+} from '../../game/systems/interactionSystem';
 import { isTouchDevice } from '../../utils/mobileInput';
 
 // Systemic context-interaction prompt: a single "[F] <verb>" pill under the crosshair
@@ -16,14 +22,22 @@ const InteractionPrompt: React.FC = () => {
 
   if (!it) return null;
   return (
-    <div style={{
-      position: 'absolute', top: 'calc(50% + 42px)', left: '50%', transform: 'translateX(-50%)',
-      display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
-      padding: '4px 10px', borderRadius: 8,
-      background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(125,211,252,0.35)',
-      fontFamily: 'monospace', fontSize: 12, color: '#dfe7ee',
-      textShadow: '0 1px 3px rgba(0,0,0,0.9)', pointerEvents: 'none', zIndex: 25
-    }}>
+    <div
+      id={PRIMARY_INTERACTION_PROMPT_DOM_ID}
+      data-interaction-prompt="primary"
+      data-interaction-id={it.id}
+      data-interaction-owner="embodied-hud"
+      data-interaction-scope={getInteractionScope(it.id)}
+      aria-label={`Interaction: ${it.verb}`}
+      style={{
+        position: 'absolute', top: 'calc(50% + 42px)', left: '50%', transform: 'translateX(-50%)',
+        display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
+        padding: '4px 10px', borderRadius: 8,
+        background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(125,211,252,0.35)',
+        fontFamily: 'monospace', fontSize: 12, color: '#dfe7ee',
+        textShadow: '0 1px 3px rgba(0,0,0,0.9)', pointerEvents: 'none', zIndex: 25
+      }}
+    >
       {!touch && (
         <span style={{
           padding: '1px 7px', borderRadius: 4, background: 'rgba(125,211,252,0.18)',

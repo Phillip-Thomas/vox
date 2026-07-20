@@ -1153,6 +1153,12 @@ function runPreflight(chapter, registryPath, skipped) {
     { timeoutMs: 120_000 }
   ));
   commands.push(commandResult(
+    'chapter-journey-contract-authority',
+    process.execPath,
+    ['tools/chapter-journey-contract-gate.mjs'],
+    { timeoutMs: 120_000 }
+  ));
+  commands.push(commandResult(
     'story-authority-gate',
     process.execPath,
     ['tools/story-authority-gate.mjs'],
@@ -1285,6 +1291,14 @@ function matchesAllowed(value, patterns) {
     }
     return value.includes(pattern);
   });
+}
+
+const GRAPHICS_DIAGNOSTIC_PATTERN = /(?:THREE\.WebGLRenderer|THREE\.WebGLProgram|WebGL[^\n]*(?:INVALID_|context|uninitiali[sz]ed|shader|error)|GL_INVALID)/i;
+
+function isUnexpectedGraphicsDiagnostic(event, allowedPatterns = []) {
+  return (event?.type === 'warning' || event?.type === 'error')
+    && GRAPHICS_DIAGNOSTIC_PATTERN.test(String(event?.text ?? ''))
+    && !matchesAllowed(String(event?.text ?? ''), allowedPatterns);
 }
 
 function quantizedTuple(value, step = 0.5) {
@@ -1644,6 +1658,7 @@ async function readRuntimeSample(page) {
       } : null,
       bootAt: window.__chapterAcceptanceBootAt ?? null,
       contextLosses: window.__chapterAcceptanceContextLosses ?? 0,
+      contextCreationErrors: [...(window.__chapterAcceptanceContextCreationErrors ?? [])],
       beatHistory: [...(window.__chapterAcceptanceBeatHistory ?? [])]
     };
   });
@@ -1653,6 +1668,7 @@ async function installPageProbe(page) {
   await page.addInitScript(() => {
     window.__chapterAcceptanceBootAt = Date.now();
     window.__chapterAcceptanceContextLosses = 0;
+    window.__chapterAcceptanceContextCreationErrors = [];
     window.__chapterAcceptanceBeatHistory = [];
     window.__chapterAcceptanceWebGlRenderer = {
       contextAvailable: false,
@@ -1726,6 +1742,12 @@ async function installPageProbe(page) {
     });
     window.addEventListener('webglcontextlost', () => {
       window.__chapterAcceptanceContextLosses += 1;
+    }, true);
+    window.addEventListener('webglcontextcreationerror', event => {
+      window.__chapterAcceptanceContextCreationErrors.push({
+        at: Date.now(),
+        statusMessage: typeof event.statusMessage === 'string' ? event.statusMessage : null
+      });
     }, true);
 
     let startedAt = performance.now();
@@ -2259,6 +2281,9 @@ async function runColdBrowserCase({
     event.type === 'error'
     && !matchesAllowed(event.text, chapter.allowedConsolePatterns)
   ));
+  const unexpectedGraphicsDiagnostics = consoleEvents.filter(event => (
+    isUnexpectedGraphicsDiagnostic(event, chapter.allowedConsolePatterns)
+  ));
   const unexpectedNetworkFailures = networkFailures.filter(event => (
     !matchesAllowed(`${event.url} ${event.detail ?? ''} ${event.status ?? ''}`, chapter.allowedNetworkPatterns)
   ));
@@ -2354,10 +2379,16 @@ async function runColdBrowserCase({
   if (reloaded) evidenceFailures.push('Page boot marker changed during the run.');
   if (crashed) evidenceFailures.push('Browser page crashed.');
   if ((finalSample?.contextLosses ?? 0) > 0) evidenceFailures.push('WebGL context loss was observed.');
+  if ((finalSample?.contextCreationErrors?.length ?? 0) > 0) {
+    evidenceFailures.push('WebGL context creation error was observed.');
+  }
   if (maxTeleportNudges > 0) evidenceFailures.push(`Movie teleport rescue count was ${maxTeleportNudges}.`);
   if (maxDryWaterFrames > 0) evidenceFailures.push(`Dry-route water contact was observed for ${maxDryWaterFrames} frames.`);
   if (timeoutRescues.length > 0) evidenceFailures.push(`Suspected timeout rescues: ${timeoutRescues.map(item => item.beat).join(', ')}.`);
   if (unexpectedConsoleErrors.length > 0) evidenceFailures.push(`${unexpectedConsoleErrors.length} unexpected console error(s).`);
+  if (unexpectedGraphicsDiagnostics.length > 0) {
+    evidenceFailures.push(`${unexpectedGraphicsDiagnostics.length} unexpected WebGL/graphics diagnostic(s).`);
+  }
   if (pageErrors.length > 0) evidenceFailures.push(`${pageErrors.length} page error(s).`);
   if (unexpectedNetworkFailures.length > 0) evidenceFailures.push(`${unexpectedNetworkFailures.length} network failure(s).`);
   if (chapter.objectiveRequired && !objectiveObserved) evidenceFailures.push('Required objective/work-order UI was never observed.');
@@ -2438,6 +2469,7 @@ async function runColdBrowserCase({
       dryCrossFaceWaterContactFrames: maxDryWaterFrames,
       reloaded,
       contextLosses: finalSample?.contextLosses ?? 0,
+      contextCreationErrors: finalSample?.contextCreationErrors ?? [],
       stalled,
       timedOut
     },
@@ -2491,6 +2523,7 @@ async function runColdBrowserCase({
     diagnostics: {
       consoleEvents,
       unexpectedConsoleErrors,
+      unexpectedGraphicsDiagnostics,
       pageErrors,
       networkFailures,
       unexpectedNetworkFailures,
@@ -2605,6 +2638,18 @@ function runSelfTest() {
   assert.equal(parseArgs([
     '--chapter', 'ch3', '--smoke', '--skip-predecessor'
   ]).skipPredecessor, true);
+  assert.equal(isUnexpectedGraphicsDiagnostic({
+    type: 'warning',
+    text: 'WebGL: INVALID_OPERATION: program used with uninitialized parameters'
+  }), true);
+  assert.equal(isUnexpectedGraphicsDiagnostic({
+    type: 'warning',
+    text: 'using deprecated parameters for the initialization function; pass a single object instead'
+  }), false);
+  assert.equal(isUnexpectedGraphicsDiagnostic({
+    type: 'warning',
+    text: 'THREE.WebGLRenderer: Error creating WebGL context.'
+  }, ['Error creating WebGL context']), false);
 
   const settledAnchorFixture = { requiredAnchorIds: ['anc.fixture.pressure', 'anc.fixture.handback'] };
   const settledAnchorIds = new Set();
@@ -3080,8 +3125,6 @@ function runSelfTest() {
   assert.ok(liveCh7, 'Live registry must contain ch7 for acceptance evidence self-tests.');
   const ch7CheckpointEvidenceRefs = [
     'milestone:story:reconstruct:relationships-diagnosed-physical',
-    'milestone:story:reconstruct:first-legal-hover-physical',
-    'milestone:story:reconstruct:first-hover-grounded-return',
     'milestone:story:reconstruct:calibration-completed-physical',
     'state:ship-restoration/flight_ready',
     'milestone:story:route:tidegarden:online',
@@ -3099,7 +3142,6 @@ function runSelfTest() {
     'anc.reconstruct.frame-restored',
     'anc.reconstruct.hull-sealed',
     'anc.reconstruct.lift-online',
-    'anc.reconstruct.first-hover',
     'anc.reconstruct.route-online',
     'anc.reconstruct.calibration',
     'anc.board.hatch-enter',
@@ -3132,8 +3174,6 @@ function runSelfTest() {
     'story:ch7:flight-ready',
     'story:ch7:boarded',
     'story:reconstruct:relationships-diagnosed-physical',
-    'story:reconstruct:first-legal-hover-physical',
-    'story:reconstruct:first-hover-grounded-return',
     'story:reconstruct:calibration-completed-physical',
     'story:route:tidegarden:online',
     'story:board:physical-transaction-complete'
@@ -3256,6 +3296,7 @@ function runSelfTest() {
       'performance budgets are normalized and enforceable',
       'software WebGL renderers cannot pass hardware-only frame budgets',
       'renderer evidence distinguishes hardware software unknown and unavailable classifications',
+      'WebGL warning diagnostics and context-creation failures fail closed without flagging unrelated warnings',
       'screenshot intervals are excluded from the authoritative runner frame probe',
       'boundary evidence settles until outgoing signed handback history is visible',
       'signed AV anchors derive from registry boundary refs',
@@ -3274,9 +3315,9 @@ function runSelfTest() {
       'chapter-ready state refs derive only from the observed beat and registry entry mapping',
       'ch6 checkpoint proof requires waterline oxygen acquire surface and bank receipts',
       'each missing ch6 waterline oxygen acquire surface or bank receipt fails formal registered evidence',
-      'ch7 checkpoint proof requires diagnosis hover grounded-return restoration route boarding and flight-control evidence',
+      'ch7 checkpoint proof requires diagnosis restoration route calibration boarding and flight-control evidence',
       'each missing ch7 physical receipt or exact state ref fails formal registered evidence',
-      'all twelve ch7 reconstruction and boarding anchors remain independently required',
+      'all eleven required ch7 reconstruction and boarding anchors remain independently required',
       'ch7 reconstruction and boarding objective sources feed the focused preflight test set',
       'unavailable or unsupported registered evidence blocks instead of being inferred',
       'supplemental headed taste cannot issue a runner disposition',

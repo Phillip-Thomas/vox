@@ -35,9 +35,9 @@
     "minimumMaterialScoreDelta": 0.05,
     "requiresHumanExceptionForUnresolvedMediumOrHigherDefects": true
   },
-  "requiredEvidence": ["parent-production-lock", "child-scene-gate-reports", "shipped-visual-baselines", "shipped-ux-baselines", "child-scene-contracts", "cross-scene-lens-palette-motif-agency-guidance-matrix", "director-notes", "director-signoffs", "implementation-diff", "check-results", "verification-report", "raw-audiovisual-evidence", "objective-lifecycle-evidence", "evidence-registry", "story-audit", "score-audit", "cinematography-audit", "ux-audit", "naive-audience-report", "critic-report", "defects", "repair-contract-disposition", "iteration-ledger", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
+  "requiredEvidence": ["parent-production-lock", "child-scene-gate-reports", "shipped-visual-baselines", "shipped-ux-baselines", "child-scene-contracts", "cross-scene-lens-palette-motif-agency-guidance-matrix", "director-notes", "director-signoffs", "implementation-diff", "check-results", "verification-report", "raw-audiovisual-evidence", "objective-lifecycle-evidence", "chapter-journey-evidence", "evidence-registry", "story-audit", "score-audit", "cinematography-audit", "ux-audit", "naive-audience-report", "critic-report", "defects", "repair-contract-disposition", "iteration-ledger", "final-scorecard", "creative-run-quality-report", "lessons-learned"],
   "stateCoverage": {
-    "requiredStates": ["every_child_scene", "desktop", "mobile", "reduced_motion", "lowest_supported_quality", "objective_enter", "objective_marker_ready", "objective_completion_clear", "chapter_entry", "chapter_exit", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
+    "requiredStates": ["every_child_scene", "desktop", "mobile", "reduced_motion", "lowest_supported_quality", "objective_enter", "objective_marker_ready", "objective_completion_clear", "focused_journey_contracts", "chapter_entry", "chapter_exit", "deep_link", "replay", "pause_focus", "quit_to_menu", "story_completion", "sandbox_inactive"],
     "stressStatesRequired": true,
     "exactAnchorEvidenceRequired": true,
     "scopeOutPolicy": "A chapter state or child scene may be omitted only by explicit owner scope decision; cross-scene continuity cannot be scoped out."

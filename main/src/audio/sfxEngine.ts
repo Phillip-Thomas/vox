@@ -1,4 +1,5 @@
 import type { OxygenAudioPlan } from './oxygenAudio.ts';
+import { installGameAudioOutputRoute, type AudioOutputRoute } from './audioCore.ts';
 
 export type SfxEvent =
   | 'jump'
@@ -36,12 +37,15 @@ class SfxEngine {
   private submergeFilter: BiquadFilterNode | null = null;
   private jetpack: ContinuousLoop | null = null;
   private shipThrust: ContinuousLoop | null = null;
+  private outputRoute: AudioOutputRoute | null = null;
   private volume = 0.78;
   private muted = false;
 
   async unlock(): Promise<void> {
     const context = this.ensureContext();
     if (!context) return;
+    // Kick the iOS media-element route inside this gesture, then resume.
+    this.outputRoute?.activateFromGesture();
     await context.resume();
     this.applyOutput(0.04);
   }
@@ -238,7 +242,10 @@ class SfxEngine {
     submergeFilter.frequency.value = 20000;
     submergeFilter.Q.value = 0.7;
     outputGain.connect(submergeFilter);
-    submergeFilter.connect(context.destination);
+    // iOS-aware terminal route (media element on iOS, direct elsewhere) so the
+    // ringer switch cannot silence SFX. SFX owns a separate AudioContext from
+    // the music chain, so it installs its own route.
+    this.outputRoute = installGameAudioOutputRoute(context, submergeFilter, 'sfx');
     this.context = context;
     this.outputGain = outputGain;
     this.submergeFilter = submergeFilter;

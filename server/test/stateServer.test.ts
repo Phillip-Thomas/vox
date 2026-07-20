@@ -1329,6 +1329,50 @@ describe('state server', () => {
     await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'refit-door-after-removal');
     expect(room.playerInventories.get('alice')?.get('wood')).toBe(1);
 
+    room.playerInventories.set('alice', new Map([
+      ['faulty_maw', 1],
+      ['wood', 8]
+    ]));
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'place-removable-tall-wall',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [14, 0, 0], face: 0, type: 'tall_wall', material: 'wood', up: 2 }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'place-removable-tall-wall');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(4);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'tall-wall-upper-occupied',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [14, 1, 0], face: 0, type: 'foundation', material: 'wood' }
+    }));
+    await expectRejected(alice.messages, 'tall-wall-upper-occupied', 'conflict');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(4);
+
+    bob.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'remove-tall-wall-upper',
+      commandType: 'structure_removed',
+      worldId: '0,0',
+      payload: { cell: [14, 1, 0], face: 0 }
+    }));
+    await waitForMessage(bob.messages, 'command_accepted', message => message.commandId === 'remove-tall-wall-upper');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(6);
+
+    alice.ws.send(JSON.stringify({
+      type: 'command',
+      commandId: 'replace-tall-wall-after-removal',
+      commandType: 'structure_placed',
+      worldId: '0,0',
+      payload: { cell: [14, 0, 0], face: 0, type: 'tall_wall', material: 'wood', up: 2 }
+    }));
+    await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'replace-tall-wall-after-removal');
+    expect(room.playerInventories.get('alice')?.get('wood')).toBe(2);
+
     alice.ws.close();
     bob.ws.close();
   });
@@ -1515,8 +1559,8 @@ describe('state server', () => {
     const tree = await waitForMessage(alice.messages, 'command_accepted', message => message.commandId === 'forged-tree-yield');
     const treeEvent = tree.events[0] as { payload: { qty: number } };
     expect(treeEvent).toMatchObject({ type: 'resource_taken', payload: { source: 'tree', coord: [21, 0, 0], id: 'wood' } });
-    expect(treeEvent.payload.qty).toBeGreaterThanOrEqual(2);
-    expect(treeEvent.payload.qty).toBeLessThanOrEqual(4);
+    expect(treeEvent.payload.qty).toBeGreaterThanOrEqual(6);
+    expect(treeEvent.payload.qty).toBeLessThanOrEqual(8);
     const afterTreeInventory = started.server.rooms.getRoom(created.roomId)?.playerInventories.get('alice');
     expect(afterTreeInventory?.has('void_glass')).toBe(false);
     expect(afterTreeInventory?.get('wood')).toBe(treeEvent.payload.qty);

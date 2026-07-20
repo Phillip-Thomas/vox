@@ -1,0 +1,85 @@
+{
+  "beat": "ch5-maw",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "screenshots": [
+    {
+      "id": "mobile-portrait-closed",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-portrait-closed.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "mobile-portrait-journal",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-portrait-journal.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "mobile-portrait-suit-open",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-portrait-suit-open.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "mobile-portrait-systems-open",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-portrait-systems-open.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "mobile-landscape-journal",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-landscape-journal.png",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "id": "mobile-320x568-journal-stress",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/mobile-320x568-journal-stress.png",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      }
+    },
+    {
+      "id": "desktop-card-preserved",
+      "path": "/home/thomasphillip/Projects/vox/.codex/design-runs/2026-07-19-mobile-hud-declutter/screenshots/iteration-1/full/desktop-card-preserved.png",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    }
+  ],
+  "assertions": {
+    "closed": {
+      "objectiveText": "JOURNAL",
+      "journalOpen": false,
+      "touchControls": true,
+      "vitalsExpanded": "false",
+      "systemButtonCount": 1
+    },
+    "journal": {
+      "touchControls": false,
+      "closeFocused": true,
+      "dialogInsideViewport": true
+    },
+    "stress": {
+      "insideViewport": true,
+      "scrollable": true
+    },
+    "desktop": {
+      "objectiveText": "CURRENT OBJECTIVEW-7744 FIELD PACK · RECOVER KITFOLLOW THE FIELD PACK MARKER.[F] RECOVER THE FIELD KIT.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+      "compactTrigger": false
+    }
+  },
+  "errors": []
+}

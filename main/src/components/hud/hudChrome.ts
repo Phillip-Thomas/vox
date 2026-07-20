@@ -83,8 +83,8 @@ export function touchActionButtonStyle(primary = false): CSSProperties {
 export function hudTopRightClusterStyle(): CSSProperties {
   return {
     position: 'absolute',
-    top: HUD_EDGE,
-    right: HUD_EDGE,
+    top: `calc(${HUD_EDGE}px + env(safe-area-inset-top, 0px))`,
+    right: `calc(${HUD_EDGE}px + env(safe-area-inset-right, 0px))`,
     zIndex: theme.z.hud + 5,
     display: 'flex',
     gap: 8,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   VITAL_BARS,
+  MOBILE_VITALS_COLLAPSED_HEIGHT,
   VITALS_PANEL_TOP,
   VITALS_PANEL_HEIGHT,
   clampVitalsPercent,
@@ -29,8 +30,8 @@ describe('vitals meter layout model', () => {
 
   it('places vitals at the top-left and offsets inventory below them', () => {
     expect(getVitalsPanelPlacement(false)).toMatchObject({ left: 14, top: 14 });
-    expect(getVitalsPanelPlacement(true)).toMatchObject({ left: 12, top: 14 });
+    expect(getVitalsPanelPlacement(true)).toMatchObject({ left: 12, top: 14, width: 136 });
     expect(getInventoryTopOffset(false)).toBeGreaterThan(VITALS_PANEL_TOP + VITALS_PANEL_HEIGHT);
-    expect(getInventoryTopOffset(true)).toBeGreaterThan(VITALS_PANEL_TOP + VITALS_PANEL_HEIGHT);
+    expect(getInventoryTopOffset(true)).toBe(VITALS_PANEL_TOP + MOBILE_VITALS_COLLAPSED_HEIGHT + 10);
   });
 });

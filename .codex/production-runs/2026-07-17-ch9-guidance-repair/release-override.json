@@ -1,0 +1,35 @@
+{
+  "schema": "paravoxia.releaseOverride.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "authorizedAt": "2026-07-17T17:51:46Z",
+  "authorityRef": "owner-message:override-and-deploy",
+  "scope": [
+    "firebase-hosting:paravox-game"
+  ],
+  "overriddenLocks": [
+    ".codex/production-runs/2026-07-17-ch9-guidance-repair/production-lock.json",
+    ".codex/production-runs/2026-07-13-distance-between-fires/production-lock.json"
+  ],
+  "creativeApprovalInferred": false,
+  "remainingCreativeGatesPreserved": true,
+  "serverDisposition": {
+    "deployed": false,
+    "reason": "No server worktree changes; local server verification and live readiness/WebSocket checks passed."
+  },
+  "hostingDisposition": {
+    "deployed": true,
+    "project": "paravox-game",
+    "url": "https://paravox-game.web.app",
+    "customDomain": "https://paravoxia.com",
+    "bundle": "assets/index-CVTXZYXZ.js"
+  },
+  "postReleaseVerification": {
+    "firebaseDomainBundleHttpStatus": 200,
+    "customDomainBundleHttpStatus": 200,
+    "readyz": {
+      "ok": true,
+      "databaseConfigured": true
+    },
+    "webSocketHelloProtocolVersion": 1
+  }
+}

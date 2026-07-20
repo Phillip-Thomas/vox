@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useStoryState } from '../storyState.ts';
 import { clearSideLens, setSideLens } from '../sideLens.ts';
 import {
@@ -22,7 +22,7 @@ import SupplyPods from './SupplyPods.tsx';
 import NavBeacons from './NavBeacons.tsx';
 import SignalMesa from './SignalMesa.tsx';
 import WreckRelay from './WreckRelay.tsx';
-import AuditWorker, { getAuditWorkerPose, hideAuditWorker } from './AuditWorker.tsx';
+import AuditWorker, { hideAuditWorker } from './AuditWorker.tsx';
 import { createLiveAgentSurfaceTerrain } from '../../utils/agentSurfaceNavigationRuntime.ts';
 import type { CommandContext } from '../../game/commands.ts';
 import FieldPack from './FieldPack.tsx';
@@ -32,13 +32,17 @@ import A4WorldChoreography from './A4WorldChoreography.tsx';
 import MawPondResonance from './MawPondResonance.tsx';
 import { shouldMountAuditWorker } from '../auditWorkerPresence.ts';
 import { isSceneReadyForWorld, useAppState } from '../../state/appState.ts';
+import { hasMilestone } from '../../game/systems/progressionSystem.ts';
+import { FIELD_PACK_DROPPED_MILESTONE } from '../emergentAudit.ts';
+import { clearJourneyEntityState } from '../journeyRuntime.ts';
 
 /**
  * In-Canvas mount for the story world's bespoke props (guarded by
  * isStoryWorldSeed at the EfficientScene call site). Chapters route what
  * exists; once a landmark is introduced it PERSISTS — through the story AND
  * into the completed ('done') world: the wreck, the mesa, the stone, the tree,
- * the relay, and the auditor are facts of the fiction, not set dressing.
+ * the relay, and the auditor's dropped pack are facts of the fiction, not set
+ * dressing. W-7744 himself remains transient and leaves after the A4 tear.
  * Pure-sandbox saves (chapter 'none') and quit-mid-story sessions (inactive,
  * chapter ch1..ch4) still get nothing — the prime directive holds.
  *
@@ -97,9 +101,33 @@ const StoryWorldProps: React.FC<{
       story.runId,
       terrainSeed
     ]);
+  const departureScope = `${commandContext.actorId}:${commandContext.world.worldId}:${story.runId}`;
+  const [departure, setDeparture] = useState(() => ({
+    scope: departureScope,
+    complete: hasMilestone(FIELD_PACK_DROPPED_MILESTONE, commandContext.actorId)
+  }));
+  // Within one live mount, the receipt starts the short grounded exit rather
+  // than popping the body. A reload/new run scope derives hidden state directly
+  // from that same durable receipt before AuditWorker can mount.
+  const departureComplete = departure.scope === departureScope
+    ? departure.complete
+    : hasMilestone(FIELD_PACK_DROPPED_MILESTONE, commandContext.actorId);
+  useEffect(() => {
+    if (departure.scope === departureScope) return;
+    setDeparture({
+      scope: departureScope,
+      complete: hasMilestone(FIELD_PACK_DROPPED_MILESTONE, commandContext.actorId)
+    });
+  }, [commandContext.actorId, departure.scope, departureScope]);
+  const completeAuditWorkerDeparture = useCallback(() => {
+    setDeparture(current => current.scope === departureScope && current.complete
+      ? current
+      : { scope: departureScope, complete: true });
+  }, [departureScope]);
   const auditWorkerMounted = shouldMountAuditWorker(
     story.chapter,
-    commandContext.world.worldId
+    commandContext.world.worldId,
+    departureComplete
   );
 
   useEffect(() => {
@@ -155,32 +183,23 @@ const StoryWorldProps: React.FC<{
     };
   }, [commandContext.world.worldId, story.runId]);
 
-  // Post-A4, W-7744 remains beside the physical tear. Continuous play keeps the
-  // live pose untouched; a direct Ch5+ entry reconstructs him at the same
-  // authoritative pack receipt instead of mounting an invisible actor.
+  // A receipt-backed reload starts with departure complete; continuous play
+  // reaches this state after the choreography's short post-tear grounded tail.
+  // Clear the module pose whenever either path unmounts the mesh.
   useEffect(() => {
-    if (!auditWorkerMounted || story.chapter === 'ch4' || !fieldPack) return;
-    const pose = getAuditWorkerPose();
-    if (pose.visible) return;
-    pose.position.copy(fieldPack.position).addScaledVector(fieldPack.up, -0.13);
-    pose.up.copy(fieldPack.up);
-    const site = getStorySidePlane(planetSize, terrainSeed).origin;
-    pose.heading.copy(site).sub(pose.position);
-    pose.heading.addScaledVector(pose.up, -pose.heading.dot(pose.up));
-    if (pose.heading.lengthSq() < 1e-6) pose.heading.set(0, 0, 1);
-    pose.heading.normalize();
-    pose.stride = 0;
-    pose.walk = 0;
-    pose.visible = true;
-  }, [
-    auditWorkerMounted,
-    commandContext.world.worldId,
-    fieldPack,
-    planetSize,
-    story.chapter,
-    story.runId,
-    terrainSeed
-  ]);
+    if (auditWorkerMounted) return;
+    hideAuditWorker();
+    // On a fresh receipt-backed reload the actor component correctly never
+    // mounts, so its unmount cleanup cannot publish absence. The story-world
+    // owner must still state that negative fact explicitly for first-frame
+    // lifecycle proof (and for future systems that distinguish absent from
+    // instrumentation-not-ready).
+    clearJourneyEntityState(
+      'actor:w7744',
+      'StoryWorldProps',
+      departureComplete ? 'departed' : 'not-mounted'
+    );
+  }, [auditWorkerMounted, departureComplete]);
 
   useEffect(() => {
     if (!done) return;
@@ -220,8 +239,8 @@ const StoryWorldProps: React.FC<{
       {/* The wreck relay: silent scenery from the first day; the network's
           voice from the klaxon on — and it stays up at done (carrier is up). */}
       {firstDayOrLater && <WreckRelay planetSize={planetSize} terrainSeed={terrainSeed} />}
-      {/* W-7744 — hidden until the arrival timeline writes his pose; from the
-          arrival on he STANDS, into the done world (the audit is in progress). */}
+      {/* W-7744 — hidden until arrival writes his pose; the A4 -> Chapter 5
+          evidence boundary removes him after his grounded flight and pack tear. */}
       {auditWorkerMounted && <AuditWorker />}
       <FieldPack
         planetSize={planetSize}
@@ -242,6 +261,7 @@ const StoryWorldProps: React.FC<{
         planetSize={planetSize}
         terrainSeed={terrainSeed}
         commandContext={commandContext}
+        onWorkerDeparted={completeAuditWorkerDeparture}
       />
       <MawPondResonance
         planetSize={planetSize}

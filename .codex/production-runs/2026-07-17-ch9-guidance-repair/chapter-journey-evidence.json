@@ -1,0 +1,55 @@
+{
+  "schema": "paravoxia.chapterJourneyEvidence.v1",
+  "runId": "{{RUN_ID}}",
+  "generatedAt": "{{ISO_TIMESTAMP}}",
+  "startedAt": "{{ISO_TIMESTAMP}}",
+  "chapterId": "{{CHAPTER_ID}}",
+  "sourceRevision": "{{SOURCE_REVISION}}",
+  "status": "template_incomplete",
+  "disposition": "{{machine-journey-passed|repair-required|blocked}}",
+  "machineJourneyCertified": false,
+  "lane": {
+    "entryPath": "continuous",
+    "requestedControlMode": "manual",
+    "observedInputDriver": "playwright-trusted-browser-events",
+    "humanOperated": false,
+    "headed": true,
+    "machineJourneyCertifying": true,
+    "nonCertificationReasons": [],
+    "doesNotCertify": ["human-usability", "creative-taste", "audiovisual-quality"],
+    "id": "continuous-manual",
+    "evaluation": {
+      "status": "template_incomplete",
+      "passed": false,
+      "checks": [],
+      "failures": [],
+      "unavailable": []
+    }
+  },
+  "contract": {
+    "schema": "paravoxia.chapterJourneyContract.v1",
+    "version": 1,
+    "path": "main/chapter-journey-contract.json",
+    "sha256": "{{CHAPTER_JOURNEY_CONTRACT_SHA256}}",
+    "requiredLaneIds": [
+      "continuous-manual",
+      "movie",
+      "reload-continue",
+      "direct-entry-diagnostic",
+      "recovery-detour",
+      "variants"
+    ],
+    "scenarioIds": ["{{SCENARIO_ID}}"]
+  },
+  "browser": {
+    "headed": true,
+    "executablePath": "{{BROWSER_PATH}}",
+    "viewport": { "width": 1280, "height": 720 },
+    "profile": "{{QUALITY_PROFILE}}",
+    "baseUrl": "{{CANONICAL_PREVIEW_URL}}"
+  },
+  "scenarios": [],
+  "summary": { "passed": 0, "failed": 0, "blocked": 0, "total": 0 },
+  "failures": [],
+  "unavailable": []
+}

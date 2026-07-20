@@ -1,6 +1,10 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import {
+  clearJourneyEntityState,
+  publishJourneyEntityState
+} from '../journeyRuntime.ts';
 
 // --- The other worker ---------------------------------------------------------------
 //
@@ -75,10 +79,33 @@ const AuditWorker: React.FC = () => {
     })
   }), []);
 
+  useEffect(() => {
+    publishJourneyEntityState('actor:w7744', {
+      mounted: true,
+      visible: pose.visible,
+      position: [pose.position.x, pose.position.y, pose.position.z],
+      phase: pose.walk > 0 ? 'grounded-motion' : 'staged',
+      source: 'AuditWorker'
+    });
+    return () => {
+      clearJourneyEntityState('actor:w7744', 'AuditWorker');
+      if (typeof window !== 'undefined') {
+        delete (window as unknown as { __auditWorker?: object }).__auditWorker;
+      }
+    };
+  }, []);
+
   useFrame(() => {
     const group = groupRef.current;
     if (!group) return;
     if (group.visible !== pose.visible) group.visible = pose.visible;
+    publishJourneyEntityState('actor:w7744', {
+      mounted: true,
+      visible: pose.visible,
+      position: [pose.position.x, pose.position.y, pose.position.z],
+      phase: pose.walk > 0 ? 'grounded-motion' : pose.visible ? 'staged' : 'hidden',
+      source: 'AuditWorker'
+    });
     if (!pose.visible) return;
 
     // Basis from up + heading (regulation gait: no lean, no sway off-axis).

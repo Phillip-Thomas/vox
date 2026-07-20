@@ -182,6 +182,7 @@ export interface AuthoritativeBuildPieceDefinition {
   costUnits: number;
   shape: 'panel' | 'volume';
   family: 'foundation' | 'wall' | 'ceiling' | 'volume';
+  heightUnits?: 1 | 2;
   hp: number;
   insulation: number;
   seals: boolean;
@@ -1830,7 +1831,7 @@ function authoritativeStructurePieces(
     const piece: AuthoritativeStructurePiece = { cell, face, type, material };
     pieces.set(key, piece);
     const up = readFaceIndex(event.payload.up);
-    if (type === 'doorway' && up !== null) {
+    if ((BUILD_PIECES[type].heightUnits ?? 1) > 1 && up !== null) {
       const direction = FACE_DIRS[up];
       const upper: [number, number, number] = [
         cell[0] + direction[0],
@@ -2016,7 +2017,9 @@ function resolveStructurePlaced(payload: JsonObject): AuthoritativeCommandResolu
   if (panelFace === null) {
     return { code: 'validation_failed', reason: 'Panel structure placement requires face 0..5.' };
   }
-  if (type === 'doorway') return resolveDoorwayPlaced(cell, panelFace, material, payload.up);
+  if ((piece.heightUnits ?? 1) > 1) {
+    return resolveTallPanelPlaced(cell, panelFace, type, material, payload.up);
+  }
 
   const up = readFaceIndex(payload.up);
   const eventPayload: JsonObject = { cell, face: panelFace, type, material };
@@ -2042,24 +2045,28 @@ function resolveStructurePlaced(payload: JsonObject): AuthoritativeCommandResolu
   };
 }
 
-function resolveDoorwayPlaced(
+function resolveTallPanelPlaced(
   cell: [number, number, number],
   face: number,
+  type: string,
   material: string,
   rawUp: unknown
 ): AuthoritativeCommandResolution | AuthoritativeCommandError {
   const up = readFaceIndex(rawUp);
-  if (up === null) return { code: 'validation_failed', reason: 'Doorway placement requires up face 0..5.' };
+  if (up === null) return { code: 'validation_failed', reason: 'Two-cell panel placement requires up face 0..5.' };
+  if (face === up || face === (up ^ 1)) {
+    return { code: 'validation_failed', reason: 'Two-cell panel build-up must be perpendicular to its wall face.' };
+  }
   const dir = FACE_DIRS[up];
   const upper: [number, number, number] = [cell[0] + dir[0], cell[1] + dir[1], cell[2] + dir[2]];
   if (!isStructureCoordPlausible(upper)) {
-    return { code: 'validation_failed', reason: 'Doorway upper cell is outside plausible build bounds.' };
+    return { code: 'validation_failed', reason: 'Two-cell panel upper cell is outside plausible build bounds.' };
   }
-  const eventPayload = { cell, face, type: 'doorway', material, up };
+  const eventPayload = { cell, face, type, material, up };
   return {
     commandPayload: eventPayload,
     events: [{ type: 'structure_placed', payload: eventPayload }],
-    debit: authoritativeBuildCost('doorway', material),
+    debit: authoritativeBuildCost(type, material),
     credit: [],
     structureClaims: [
       {
@@ -2067,7 +2074,7 @@ function resolveDoorwayPlaced(
         structureId: structureId(cell, face),
         cell,
         face,
-        structureType: 'doorway',
+        structureType: type,
         material,
         state: { up, tall: 'lower', partner: upper }
       },
@@ -2076,7 +2083,7 @@ function resolveDoorwayPlaced(
         structureId: structureId(upper, face),
         cell: upper,
         face,
-        structureType: 'doorway',
+        structureType: type,
         material,
         state: { up, tall: 'upper', partner: cell }
       }
@@ -2125,7 +2132,7 @@ function resolveResourceTakenPayload(
 
   switch (source) {
     case 'tree': {
-      const qty = deterministicRng(`resource_taken:tree:${worldId}:${coordKey(coord)}`).int(2, 4);
+      const qty = deterministicRng(`resource_taken:tree:${worldId}:${coordKey(coord)}`).int(6, 8);
       return { commandPayload: { source, coord, id: 'wood', qty } };
     }
     case 'loose_stone': {

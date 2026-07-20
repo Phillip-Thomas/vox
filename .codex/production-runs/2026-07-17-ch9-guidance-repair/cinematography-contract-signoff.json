@@ -1,0 +1,9 @@
+{
+  "schema": "paravoxia.directorSignoff.v1",
+  "director": "cinematography",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "disposition": "object",
+  "signedBy": "{{CINEMATOGRAPHY_DIRECTOR}}",
+  "signedAt": "{{ISO_8601}}"
+}

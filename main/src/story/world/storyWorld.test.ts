@@ -268,6 +268,40 @@ describe('storyWorld', () => {
     expect(Math.abs(depths[depths.length - 1] ?? 0)).toBeGreaterThan(1);
   });
 
+  it('lands every NAV triangulation beacon on validated dry ground', () => {
+    // The top-down autopilot steers straight at each fix; a beacon dropped in or
+    // just behind water would strand the pilot at the shoreline. The dry-landing
+    // guarantee must nudge each fix onto a support cell that is neither flooded
+    // nor hazardous, on the owned top face.
+    const size = 50;
+    const radiusCells = Math.floor(size / VOXEL_SCALE);
+    const generator = getWorldGen(size, STORY_SEED).generator;
+    const supportAt = (x: number, z: number) => {
+      for (let y = radiusCells; y >= 0; y--) {
+        if (generator.shouldVoxelExist(x, y, z)) return y;
+      }
+      return null;
+    };
+
+    const poses = getNavWaypointPoses(size, STORY_SEED);
+    expect(poses).toHaveLength(NAV_WAYPOINT_COUNT);
+    poses.forEach((pose, index) => {
+      const x = Math.round(pose.position.x / VOXEL_SCALE);
+      const z = Math.round(pose.position.z / VOXEL_SCALE);
+      const supportY = supportAt(x, z);
+      expect(supportY, `NAV beacon ${index} has no top-face support`).not.toBeNull();
+      expect(
+        generator.isWaterVoxel(x, supportY!, z),
+        `NAV beacon ${index} support flooded`
+      ).toBe(false);
+      expect(
+        generator.isWaterVoxel(x, supportY! + 1, z),
+        `NAV beacon ${index} stands in water`
+      ).toBe(false);
+      expect(generator.generateBlockForPosition(x, supportY!, z)).not.toBe('lava');
+    });
+  });
+
   it('the post-NAV mesa approach is a contiguous one-unit staircase', () => {
     const blocks = mesaBlockLayout();
     const topAt = (x: number) => Math.max(

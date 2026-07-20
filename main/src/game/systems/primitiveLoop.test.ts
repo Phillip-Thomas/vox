@@ -100,9 +100,7 @@ function gatherPrimitiveLoadout() {
 function buildSealedRoom() {
   placePiece(LOWER, 3, 'foundation', 'wood', 2);
   placePiece(UPPER, 2, 'ceiling', 'wood', 2);
-  for (const cell of [LOWER, UPPER] as const) {
-    for (const face of [0, 1, 4, 5]) placePiece(cell, face, 'wall', 'wood', 2);
-  }
+  for (const face of [0, 1, 4, 5]) placePiece(LOWER, face, 'tall_wall', 'wood', 2);
 }
 
 beforeEach(() => {

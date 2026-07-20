@@ -21,6 +21,7 @@ import { craftAndPlaceCampfireCommand, craftRecipeCommand } from '../../game/gam
 import { dispatchGameplayCommand } from '../../game/commandDispatchAdapter.ts';
 import { isFabricatorRecipeAllowed } from '../../story/storyInputPolicy.ts';
 import { getStoryStateSnapshot } from '../../story/storyState.ts';
+import { getActiveGuidedStoryObjective } from '../../story/ux/objectiveDirector.ts';
 import { fabricatorAccessCopy, getPublicFabricatorSections } from './Fabricator.model.ts';
 import { getPlayerSubmergence } from '../../state/playerSubmersion.ts';
 import { isFeetInLava } from '../../state/playerLavaImmersion.ts';
@@ -35,13 +36,15 @@ interface CraftStorySnapshot {
   active: boolean;
   beat: string | null;
   runId: number;
+  objectiveId?: string | null;
 }
 
 /** A successful recipe that advances story ownership must dismiss the modal. */
 export function craftTriggeredStoryTransition(
   crafted: boolean,
   before: CraftStorySnapshot,
-  after: CraftStorySnapshot
+  after: CraftStorySnapshot,
+  craftedRecipeId?: string
 ): boolean {
   return crafted
     && (before.active || after.active)
@@ -49,7 +52,19 @@ export function craftTriggeredStoryTransition(
       before.active !== after.active
       || before.beat !== after.beat
       || before.runId !== after.runId
+      || before.objectiveId !== after.objectiveId
+      || (before.objectiveId === 'settle:craft-core' && craftedRecipeId === 'habitat_core')
     );
+}
+
+function getCraftStorySnapshot(): CraftStorySnapshot {
+  const story = getStoryStateSnapshot();
+  return {
+    active: story.active,
+    beat: story.beat,
+    runId: story.runId,
+    objectiveId: getActiveGuidedStoryObjective()?.id ?? null
+  };
 }
 
 /**
@@ -265,7 +280,7 @@ const RecipeRow: React.FC<{
       <button
         onClick={() => {
           if (!affordable) return;
-          const storyBeforeCraft = getStoryStateSnapshot();
+          const storyBeforeCraft = getCraftStorySnapshot();
           let crafted = false;
           if (recipe.id === 'campfire') {
             if (getPlayerSubmergence() > 0.2 || isFeetInLava()) {
@@ -308,7 +323,12 @@ const RecipeRow: React.FC<{
           // Campfire placement emits synchronously; by the time the command
           // returns, the director has entered its fire-to-dusk sequence. Close
           // before the first cinematic frame so the modal never masks the shot.
-          if (craftTriggeredStoryTransition(crafted, storyBeforeCraft, getStoryStateSnapshot())) {
+          if (craftTriggeredStoryTransition(
+            crafted,
+            storyBeforeCraft,
+            getCraftStorySnapshot(),
+            recipe.id
+          )) {
             onStoryTriggered();
           }
         }}

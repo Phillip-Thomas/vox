@@ -19,8 +19,8 @@ export const TREE_HARDNESS = 1.2;
 /** Trees are soft organic matter — any tool (incl. the tier-0 Faulty Maw) fells them. */
 export const TREE_TOOL_TIER = 0;
 
-const WOOD_MIN = 2;
-const WOOD_MAX = 4;
+const WOOD_MIN = 6;
+const WOOD_MAX = 8;
 
 const harvested = new Set<string>();
 let version = 0;

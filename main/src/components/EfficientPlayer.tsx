@@ -151,11 +151,7 @@ import {
   invalidateAuthoredDiveMotionContinuity,
   tickAuthoredDive
 } from '../story/emergentDive.ts';
-import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
-import {
-  needsAutomatedFirstHover,
-  observeFirstLegalHover
-} from '../story/reconstructionEmbodiment.ts';
+import { observeTidegardenAerialSiteSurvey } from '../story/tidegardenSettlement.ts';
 import { isPhysicalBoardingInputLocked } from '../story/physicalBoarding.ts';
 
 const _zeroVelocity = new THREE.Vector3();
@@ -1095,7 +1091,9 @@ export default function EfficientPlayer({
     // panel, so find the cell the ray passes through (walls snap to the faced edge /
     // a wall below = stacking; ceilings cap the cell).
     if (!target || !target.valid) {
-      if (piece === 'wall') target = marchWallTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH, up) ?? target;
+      if (piece === 'tall_wall' || piece === 'wall') {
+        target = marchWallTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH, up) ?? target;
+      }
       else if (piece === 'ceiling') target = marchCeilingTarget(raycaster.ray.origin, raycaster.ray.direction, BLOCK_REACH, up) ?? target;
     }
     if (!target) {
@@ -1105,10 +1103,10 @@ export default function EfficientPlayer({
     }
     const material = getSelectedMaterial();
     const family = BUILD_PIECES[piece].family;
-    // Doorways are 2-tall: the upper cell (one step along build-up) must also be free.
+    // Two-cell panels reserve the upper slot as part of the same atomic build.
     const upIdx = faceIndexForNormal(up.x, up.y, up.z);
     const upDir = FACE_DIRS[upIdx];
-    const isTall = piece === 'doorway'; // doors fit an existing doorway (already 2-tall)
+    const isTall = (BUILD_PIECES[piece].heightUnits ?? 1) > 1;
     const upperFree = !isTall
       || !hasPanel(target.cell[0] + upDir[0], target.cell[1] + upDir[1], target.cell[2] + upDir[2], target.face);
     // Volume pieces (stairs/roof) orient to where you're looking, snapped to 4 ways.
@@ -1600,18 +1598,7 @@ export default function EfficientPlayer({
     );
 
     const liveStory = getStoryStateSnapshot();
-    const repairStage = getShipRepairStage();
-    const automatedFirstHover = isAutopilotDriving() && needsAutomatedFirstHover({
-      actorId: commandContext.actorId,
-      worldId: commandContext.world.worldId,
-      storyBeat: liveStory.beat,
-      repairStage,
-      position: [position.x, position.y, position.z],
-      surfaceUp: [activeUp.x, activeUp.y, activeUp.z],
-      grounded,
-      verticalSpeed: currentVelocity.dot(activeUp)
-    });
-    const jumpInput = active && (controls.jump || automatedFirstHover) && storyPolicy.allowJump;
+    const jumpInput = active && controls.jump && storyPolicy.allowJump;
     const jump = updateJumpState(
       jumpState.current,
       jumpInput,
@@ -1659,16 +1646,15 @@ export default function EfficientPlayer({
     lastJetpackActive.current = jetpackActive;
     setJetpackSfx(jetpackActive, Math.max(0.35, jetpackFuelDisplay));
 
-    observeFirstLegalHover({
+    observeTidegardenAerialSiteSurvey({
       actorId: commandContext.actorId,
+      runId: liveStory.runId,
       worldId: commandContext.world.worldId,
       storyBeat: liveStory.beat,
-      repairStage,
       position: [position.x, position.y, position.z],
       surfaceUp: [activeUp.x, activeUp.y, activeUp.z],
       grounded,
       jetpackActive,
-      verticalSpeed: nextVelocity.dot(activeUp),
       dt: FIXED_PHYSICS_STEP
     });
 

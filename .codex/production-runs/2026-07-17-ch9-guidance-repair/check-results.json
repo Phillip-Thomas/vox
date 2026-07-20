@@ -1,0 +1,13 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "sourceRevision": "{{GIT_SHA_OR_WORKING_TREE_SNAPSHOT}}",
+  "productionScope": { "status": "not_run", "evidenceRefs": [] },
+  "creativeContract": { "status": "not_run", "evidenceRefs": [] },
+  "typecheck": { "status": "not_run", "evidenceRefs": [] },
+  "tests": { "status": "not_run", "evidenceRefs": [] },
+  "build": { "status": "not_run", "evidenceRefs": [] },
+  "commands": []
+}

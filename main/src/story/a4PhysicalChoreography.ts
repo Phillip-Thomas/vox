@@ -75,3 +75,19 @@ export function a4HerdDistance(
   const crestDistance = Math.max(route.length * 0.25, route.length * 0.68 - trailSpacing);
   return Math.min(crestDistance, entry + travelled);
 }
+
+/**
+ * A continuous run keeps W-7744 visible for the short grounded tail beyond the
+ * branch tear. A reload that already owns the durable pack receipt must never
+ * reconstruct that transient exit body, even if its old route distance was
+ * persisted or recovered at an earlier sample.
+ */
+export function shouldShowA4WorkerAfterPackDrop(input: {
+  reconstructedFromReceipt: boolean;
+  workerDistance: number;
+  routeLength: number;
+}): boolean {
+  if (input.reconstructedFromReceipt) return false;
+  if (!Number.isFinite(input.workerDistance) || !Number.isFinite(input.routeLength)) return false;
+  return input.workerDistance < input.routeLength;
+}

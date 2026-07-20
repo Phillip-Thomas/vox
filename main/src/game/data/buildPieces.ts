@@ -15,6 +15,8 @@ export interface BuildPieceDef {
   shape: BuildShape;
   /** Placement family — wall variants snap like a wall. */
   family: BuildFamily;
+  /** Number of build-grid cells occupied along the stored build-up axis. */
+  heightUnits?: 1 | 2;
   /** Abstract build cost; material x costUnits = resource quantity. */
   costUnits: number;
   hp: number;

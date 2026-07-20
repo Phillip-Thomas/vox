@@ -1,7 +1,11 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import StoryGuidanceHud, { getStoryGuidanceHudPlacement } from './StoryGuidanceHud.tsx';
-import { STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX } from './storyHudLayout.ts';
+import StoryGuidanceHud, {
+  getStoryGuidanceHudPlacement,
+  getStoryJournalTriggerPlacement,
+  presentStoryGuidanceLine
+} from './StoryGuidanceHud.tsx';
+import * as mobileInput from '../../utils/mobileInput.ts';
 import {
   activateGuidedStoryObjective,
   clearGuidedStoryObjective,
@@ -10,7 +14,10 @@ import {
 
 vi.mock('../../audio/sfxEngine.ts', () => ({ playSfx: vi.fn() }));
 
-afterEach(() => clearGuidedStoryObjective());
+afterEach(() => {
+  clearGuidedStoryObjective();
+  vi.restoreAllMocks();
+});
 
 describe('free-era story guidance HUD', () => {
   it('keeps the current directive visible after the regulation feed is gone', () => {
@@ -67,12 +74,55 @@ describe('free-era story guidance HUD', () => {
     expect(renderToStaticMarkup(<StoryGuidanceHud />)).toBe('');
   });
 
-  it('keeps the mobile card above the movement joystick and inside device safe areas', () => {
-    const placement = getStoryGuidanceHudPlacement(true);
-    expect(placement.bottom).toContain(`${STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX}px`);
+  it('keeps the desktop card placement contract', () => {
+    const placement = getStoryGuidanceHudPlacement(false);
     expect(placement.bottom).toContain('safe-area-inset-bottom');
     expect(placement.left).toContain('safe-area-inset-left');
     expect(placement.width).toContain('safe-area-inset-right');
+  });
+
+  it('uses a safe-area-aware compact journal trigger on touch', () => {
+    vi.spyOn(mobileInput, 'isTouchDevice').mockReturnValue(true);
+    activateGuidedStoryObjective({
+      id: 'maw:recover-field-kit',
+      kind: 'interact',
+      markerLabel: 'W-7744 FIELD PACK · RECOVER KIT',
+      workOrder: ['FOLLOW THE FIELD PACK MARKER.', '[F] RECOVER THE FIELD KIT.']
+    });
+
+    const markup = renderToStaticMarkup(<StoryGuidanceHud open={false} onOpenChange={() => undefined} />);
+    const placement = getStoryJournalTriggerPlacement();
+    expect(placement.top).toContain('safe-area-inset-top');
+    expect(placement.left).toContain('safe-area-inset-left');
+    expect(markup).toContain('data-story-journal-trigger="true"');
+    expect(markup).toContain('aria-expanded="false"');
+    expect(markup).toContain('JOURNAL');
+    expect(markup).not.toContain('FOLLOW THE FIELD PACK MARKER.');
+  });
+
+  it('reveals the full touch objective in a one-level dialog', () => {
+    vi.spyOn(mobileInput, 'isTouchDevice').mockReturnValue(true);
+    activateGuidedStoryObjective({
+      id: 'maw:recover-field-kit',
+      kind: 'interact',
+      markerLabel: 'W-7744 FIELD PACK · RECOVER KIT',
+      workOrder: ['FOLLOW THE FIELD PACK MARKER.', '[F] RECOVER THE FIELD KIT.']
+    });
+    observeGuidedStoryMarker('W-7744 FIELD PACK · RECOVER KIT');
+
+    const markup = renderToStaticMarkup(<StoryGuidanceHud open onOpenChange={() => undefined} />);
+    expect(markup).toContain('role="dialog"');
+    expect(markup).toContain('aria-modal="true"');
+    expect(markup).toContain('aria-expanded="true"');
+    expect(markup).toContain('FOLLOW THE FIELD PACK MARKER.');
+    expect(markup).toContain('[USE] RECOVER THE FIELD KIT.');
+  });
+
+  it('names the actual touch actions instead of keyboard-only tokens', () => {
+    expect(presentStoryGuidanceLine('[F] EAT.', true)).toBe('[USE] EAT.');
+    expect(presentStoryGuidanceLine('[G] EAT.', true)).toBe('[CONSUME] EAT.');
+    expect(presentStoryGuidanceLine('HOLD [SPACE] TO LIFT.', true)).toBe('HOLD [THRUST] TO LIFT.');
+    expect(presentStoryGuidanceLine('[F] EAT.', false)).toBe('[F] EAT.');
   });
 
   it('does not repeat a single-line action as its own context', () => {

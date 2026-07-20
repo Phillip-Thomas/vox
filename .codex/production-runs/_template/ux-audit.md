@@ -15,6 +15,14 @@ Contract revision: `{{CONTRACT_REVISION}}`
 - Signed guidance contract: `scene-contract.json#guidance`
 - Shipped source and objective map: `shipped-ux-baseline.json`
 - Raw lifecycle proof: `objective-lifecycle-evidence.json`
+- Contract-bound focused journey proof: `chapter-journey-evidence.json`
+
+## Journey regressions
+
+- Exact journey-contract SHA and source-revision binding: `{{FINDING}}`
+- Focused scenarios complete, or an explicit no-focused-scenario disposition: `{{FINDING}}`
+- Prompt ownership, editable input, entity lifecycle, and reload/recovery seams: `{{FINDING}}`
+- Diagnostic direct-entry evidence is not represented as continuity proof: `{{FINDING}}`
 
 ## Objective lifecycle
 

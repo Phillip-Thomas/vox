@@ -7,7 +7,10 @@ export interface SystemCompanionBodyTargetPosition {
 }
 
 /**
- * Imperative render-loop bridge for a mounted companion body's physical center.
+ * Imperative render-loop bridge for a mounted companion body's guidance center.
+ * In the surface sky this follows the bounded presentation ephemeris at the
+ * canonical range so spatial markers share the visible body's ray; before
+ * deep-space targeting it converges to the exact physical center.
  *
  * The published vector is owned by the handle and keeps a stable identity, so
  * HUD consumers can read it every frame without React state or allocations.
@@ -27,7 +30,7 @@ interface PublishedSystemCompanionBodyTarget {
 const publishedTargets = new Map<string, PublishedSystemCompanionBodyTarget>();
 
 /**
- * Read the current physical render-space center for a mounted system body.
+ * Read the current guidance/render-space center for a mounted system body.
  * Consumers must treat the returned stable vector as readonly.
  */
 export function readSystemCompanionBodyTarget(worldId: string): THREE.Vector3 | null {

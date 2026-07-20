@@ -1,21 +1,30 @@
 import { useEffect, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { anomalyMassDesignated, storyDirectorTick, storyFreeMarkerTarget } from './storyDirector.ts';
+import {
+  anomalyMassDesignated,
+  storyDirectorTick,
+  storyFreeMarkerTarget,
+  type StoryMarkerTarget
+} from './storyDirector.ts';
 import { advanceToBeat, getStoryStateSnapshot } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { autopilotTick, isMovieMode } from './autopilot.ts';
 import { setScoreIntensity } from './storyScore.ts';
 import { getAppStateSnapshot } from '../state/appState.ts';
 import { getFeedRuntime } from './feedRuntime.ts';
-import { getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { getPlayerLook, getPlayerUp, getPlayerWorldPosition } from '../state/playerFrame.ts';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { REDACTION_BANDS } from './storyScript.ts';
 import { currentNavWaypointIndex, currentNavWaypointPosition, NAV_WAYPOINT_COUNT } from './navWaypoints.ts';
 import { getSupplyPodPositions, isPodCollected } from './supplyPods.ts';
-import { projectDirectionalMarker, type DirectionalMarkerProjection } from './directionalMarker.ts';
+import {
+  directionalMarkerRange,
+  projectDirectionalMarker,
+  type DirectionalMarkerProjection
+} from './directionalMarker.ts';
 import { setSignedSceneAvPaused } from './signedSceneAvRuntime.ts';
 import {
   getActiveGuidedStoryObjective,
@@ -61,11 +70,15 @@ function redactionLabelFor(distance: number): string {
   return label;
 }
 
-function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; label: string } | null {
+function surveyMarkerTarget(beat: string | null): StoryMarkerTarget | null {
   // One goal at a time: the mass is only designated AFTER the calibration
   // sweep — until then the CCTV era has exactly one task, looking.
   if (beat === 'ch1-anomaly' && anomalyStoneHandle.position && anomalyMassDesignated()) {
-    return { position: anomalyStoneHandle.position, label: 'UNCHARTED MASS' };
+    return {
+      position: anomalyStoneHandle.position,
+      label: 'UNCHARTED MASS',
+      surfaceUp: anomalyStoneHandle.up
+    };
   }
   if (beat === 'ch1-iso' && signalMesaHandle.summit) {
     // The iso era climbs the mesa; the signal source is its summit (the anomaly
@@ -100,9 +113,13 @@ function surveyMarkerTarget(beat: string | null): { position: THREE.Vector3; lab
 
 interface StoryDirectorDriverProps {
   paused?: boolean;
+  planetRadius?: number;
 }
 
-const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = false }) => {
+const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
+  paused = false,
+  planetRadius = 50
+}) => {
   const size = useThree(s => s.size);
   const setDpr = useThree(s => s.setDpr);
   const appliedDpr = useRef<number | null>(null);
@@ -162,12 +179,28 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({ paused = fals
     const markerTarget = playing ? surveyMarkerTarget(story.beat) : null;
     if (markerTarget) {
       const playerPos = getPlayerWorldPosition();
-      const range = Math.max(0, playerPos.distanceTo(markerTarget.position) - 1.5);
+      const playerUp = getPlayerUp();
+      const playerForward = getPlayerLook().forward;
+      const objectiveId = getActiveGuidedStoryObjective()?.id ?? 'unregistered';
+      const projectionSpace = markerTarget.projectionSpace ?? 'surface';
+      const range = directionalMarkerRange(
+        camera,
+        markerTarget.position,
+        playerPos,
+        projectionSpace
+      );
       const projection = projectDirectionalMarker(camera, markerTarget.position, {
         width: size.width,
         height: size.height,
         margin: 70,
-        preferredSide: 1
+        preferredSide: 1,
+        space: projectionSpace,
+        surfaceOrigin: playerPos,
+        surfaceUp: playerUp,
+        surfaceForward: playerForward,
+        targetUp: markerTarget.surfaceUp,
+        routeKey: `${story.beat ?? 'none'}:${objectiveId}:${markerTarget.label}`,
+        planetRadius
       }, _markerProjection);
       const m = r.marker;
       m.visible = true;

@@ -13,6 +13,7 @@ import { seededUnit } from './worldCoordinates';
 import { buildPlanetArtDirection, type PaletteRoleColor, type PlanetArtDirection, type PlanetEcology } from './planetArtDirection';
 import { isMaterialEligibleForEcology } from './planetEcology';
 import type { PlanetProfile } from '../game/PlanetProfile.ts';
+import type { FaunaNavigationObstacles } from './faunaNavigationObstacles.ts';
 import {
   FAUNA_JOINT_ID,
   FAUNA_KINDS,
@@ -74,6 +75,7 @@ export interface FaunaBuildResult {
 export interface FaunaBuildOptions {
   existingAgents?: FaunaAgent[];
   time?: number;
+  obstacles?: FaunaNavigationObstacles;
 }
 
 export interface FaunaAgent {
@@ -108,6 +110,8 @@ export interface FaunaAgent {
   fleeUntil: number;
   /** Smoothed 0..1 graze posture driven into the vertex shader (head down). */
   pose: number;
+  /** Last live occupancy revision for which the active route was validated. */
+  navigationRevision?: string;
 }
 
 // Feet are authored to touch local y=0, so the anchor sits just above the face
@@ -137,6 +141,7 @@ const _moveSide = new THREE.Vector3();
 const _moveUp = new THREE.Vector3();
 const _routeUp = new THREE.Vector3();
 const _agentCullPos = new THREE.Vector3();
+const _blockedRoutePos = new THREE.Vector3();
 const _desiredQuat = new THREE.Quaternion();
 const _tiltQuat = new THREE.Quaternion();
 const _finalQuat = new THREE.Quaternion();
@@ -417,7 +422,8 @@ export function countFaunaVoxels(
   kind: FaunaKind,
   density: number,
   terrainSeed: number,
-  profile = buildFaunaProfile(terrainSeed)
+  profile = buildFaunaProfile(terrainSeed),
+  obstacles?: FaunaNavigationObstacles
 ): number {
   if (density <= 0) return 0;
   let n = 0;
@@ -426,6 +432,7 @@ export function countFaunaVoxels(
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
     if (!hasFaunaBodyClearance(kind, x, y, z, profile)) continue;
+    if (obstacles?.isAnchorBlocked(kind, x, y, z)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) === kind) n++;
   }
   return n;
@@ -2197,13 +2204,22 @@ export function hasFaunaBodyClearance(
   profile: FaunaProfile
 ): boolean {
   if (kind === 'dragonfly' || kind === 'fish') return true;
-  const [, yScale] = faunaScaleForKind(kind, 0.5, profile.scaleMul);
-  const clearanceCells = Math.max(1, Math.ceil(FAUNA_SPECIES[kind].bodyClearance * yScale / VOXEL_SCALE));
+  const clearanceCells = faunaStructureClearanceCells(kind, profile);
   const [ux, uy, uz] = surfaceUpCoordStep(x, y, z);
   for (let step = 1; step <= clearanceCells; step++) {
     if (voxelSystem.getVoxel(x + ux * step, y + uy * step, z + uz * step)) return false;
   }
   return true;
+}
+
+/** Build-grid height occupied by a member of this species at the supplied size seed. */
+export function faunaStructureClearanceCells(
+  kind: FaunaKind,
+  profile: FaunaProfile,
+  scaleSeed = 0.5
+): number {
+  const [, yScale] = faunaScaleForKind(kind, scaleSeed, profile.scaleMul);
+  return Math.max(1, Math.ceil(FAUNA_SPECIES[kind].bodyClearance * yScale / VOXEL_SCALE));
 }
 
 function mod4(n: number): number {
@@ -2216,7 +2232,8 @@ function findFaunaTravelCandidate(
   y: number,
   z: number,
   directionIndex: number,
-  profile: FaunaProfile
+  profile: FaunaProfile,
+  obstacles?: FaunaNavigationObstacles
 ): [number, number, number] | null {
   const steps = surfaceNeighborSteps(x, y, z);
   const [sx, sy, sz] = steps[mod4(directionIndex)];
@@ -2231,6 +2248,8 @@ function findFaunaTravelCandidate(
     // Ground fauna never wade; fish never beach; dragonflies cross freely.
     if (!isFaunaHabitatVoxel(kind, nx, ny, nz, profile)) continue;
     if (!hasFaunaBodyClearance(kind, nx, ny, nz, profile)) continue;
+    if (obstacles?.isAnchorBlocked(kind, nx, ny, nz)) continue;
+    if (obstacles?.isRouteBlocked(kind, x, y, z, nx, ny, nz)) continue;
     return [nx, ny, nz];
   }
   return null;
@@ -2326,7 +2345,8 @@ function chooseFaunaNextVoxel(
   terrainSeed: number,
   profile: FaunaProfile,
   herdmates?: readonly FaunaAgent[],
-  fleeFrom?: THREE.Vector3 | null
+  fleeFrom?: THREE.Vector3 | null,
+  obstacles?: FaunaNavigationObstacles
 ): [number, number, number] {
   const herdDir = !fleeFrom && herdmates ? chooseHerdDirectionIndex(agent, herdmates) : null;
   if (fleeFrom) {
@@ -2344,7 +2364,7 @@ function chooseFaunaNextVoxel(
     if (turnFirst !== 0) {
       const order = [agent.directionIndex + turnFirst, agent.directionIndex, agent.directionIndex - turnFirst, agent.directionIndex + 2];
       for (const candidateDir of order) {
-        const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile);
+        const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile, obstacles);
         if (!candidate) continue;
         agent.directionIndex = mod4(candidateDir);
         return candidate;
@@ -2355,7 +2375,7 @@ function chooseFaunaNextVoxel(
   }
 
   for (const candidateDir of [agent.directionIndex, agent.directionIndex + 1, agent.directionIndex - 1, agent.directionIndex + 2]) {
-    const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile);
+    const candidate = findFaunaTravelCandidate(agent.kind, agent.x, agent.y, agent.z, candidateDir, profile, obstacles);
     if (!candidate) continue;
     agent.directionIndex = mod4(candidateDir);
     return candidate;
@@ -2370,18 +2390,20 @@ function setFaunaRoute(
   terrainSeed: number,
   profile: FaunaProfile,
   herdmates?: readonly FaunaAgent[],
-  fleeFrom?: THREE.Vector3 | null
+  fleeFrom?: THREE.Vector3 | null,
+  obstacles?: FaunaNavigationObstacles
 ): void {
   agent.stepCount += 1;
   agent.x = agent.toX;
   agent.y = agent.toY;
   agent.z = agent.toZ;
   agent.from.copy(agent.to);
-  const [nx, ny, nz] = chooseFaunaNextVoxel(agent, terrainSeed, profile, herdmates, fleeFrom);
+  const [nx, ny, nz] = chooseFaunaNextVoxel(agent, terrainSeed, profile, herdmates, fleeFrom, obstacles);
   agent.toX = nx;
   agent.toY = ny;
   agent.toZ = nz;
   computeFaunaAnchor(nx, ny, nz, agent.kind, agent.offsetU, agent.offsetV, agent.scaleSeed, agent.to);
+  agent.navigationRevision = obstacles?.revision?.();
 }
 
 function createFaunaAgent(
@@ -2390,7 +2412,8 @@ function createFaunaAgent(
   y: number,
   z: number,
   terrainSeed: number,
-  profile: FaunaProfile
+  profile: FaunaProfile,
+  obstacles?: FaunaNavigationObstacles
 ): FaunaAgent {
   const offsetU = seededVoxelUnit(x, y, z, FAUNA_OFFSET_U_SALT, terrainSeed) - 0.5;
   const offsetV = seededVoxelUnit(x, y, z, FAUNA_OFFSET_V_SALT, terrainSeed) - 0.5;
@@ -2428,7 +2451,7 @@ function createFaunaAgent(
   };
   computeFaunaAnchor(x, y, z, kind, offsetU, offsetV, scaleSeed, agent.from);
   agent.to.copy(agent.from);
-  setFaunaRoute(agent, terrainSeed, profile);
+  setFaunaRoute(agent, terrainSeed, profile, undefined, undefined, obstacles);
   return agent;
 }
 
@@ -2457,7 +2480,8 @@ function isFaunaAgentStillValid(
   agent: FaunaAgent,
   density: number,
   terrainSeed: number,
-  profile: FaunaProfile
+  profile: FaunaProfile,
+  obstacles?: FaunaNavigationObstacles
 ): boolean {
   if (agent.kind !== kind || agent.terrainSeed !== terrainSeed) return false;
   const homeVoxel = voxelSystem.getVoxel(agent.homeX, agent.homeY, agent.homeZ);
@@ -2470,6 +2494,10 @@ function isFaunaAgentStillValid(
     !isFaunaHabitatVoxel(kind, agent.toX, agent.toY, agent.toZ, profile)) return false;
   if (!hasFaunaBodyClearance(kind, agent.x, agent.y, agent.z, profile) ||
     !hasFaunaBodyClearance(kind, agent.toX, agent.toY, agent.toZ, profile)) return false;
+  if (obstacles?.isAnchorBlocked(kind, agent.x, agent.y, agent.z) ||
+    obstacles?.isAnchorBlocked(kind, agent.toX, agent.toY, agent.toZ)) return false;
+  if ((agent.x !== agent.toX || agent.y !== agent.toY || agent.z !== agent.toZ) &&
+    obstacles?.isRouteBlocked(kind, agent.x, agent.y, agent.z, agent.toX, agent.toY, agent.toZ)) return false;
   return isFaunaTravelVoxel(kind, currentVoxel, profile) && isFaunaTravelVoxel(kind, targetVoxel, profile);
 }
 
@@ -2568,6 +2596,89 @@ function maybeStartFleeing(
   }
 }
 
+function isFaunaRouteObstructed(
+  agent: FaunaAgent,
+  obstacles: FaunaNavigationObstacles
+): boolean {
+  if (obstacles.isAnchorBlocked(agent.kind, agent.x, agent.y, agent.z) ||
+    obstacles.isAnchorBlocked(agent.kind, agent.toX, agent.toY, agent.toZ)) return true;
+  if (agent.x === agent.toX && agent.y === agent.toY && agent.z === agent.toZ) return false;
+  return obstacles.isRouteBlocked(
+    agent.kind,
+    agent.x,
+    agent.y,
+    agent.z,
+    agent.toX,
+    agent.toY,
+    agent.toZ
+  );
+}
+
+/**
+ * Resolve a barrier that appeared during a stride without recreating the agent.
+ * The visible position becomes the new interpolation origin, while the nearer
+ * unblocked endpoint becomes the logical lane used to choose a deterministic
+ * side-step. Gait phase, pose, and smoothed orientation are preserved.
+ */
+function replanObstructedFaunaRoute(
+  agent: FaunaAgent,
+  terrainSeed: number,
+  profile: FaunaProfile,
+  obstacles: FaunaNavigationObstacles,
+  herdmates: readonly FaunaAgent[],
+  fleeFrom: THREE.Vector3 | null,
+  revision?: string
+): void {
+  _blockedRoutePos.copy(agent.from).lerp(agent.to, clamp(agent.progress, 0, 1));
+  // Preserve the same level-transition arc used by the renderer. Ambient
+  // dragonfly/fish oscillation remains shader-like motion and is reapplied once
+  // by computeFaunaAgentMatrix on the new route.
+  _routeUp.copy(FACE_NORMALS[dominantFaceForPosition(agent.from)]);
+  _blockedRoutePos.addScaledVector(
+    _routeUp,
+    faunaLevelTransitionLift(agent.kind, agentLevelDelta(agent), clamp(agent.progress, 0, 1))
+  );
+  const targetBlocked = obstacles.isAnchorBlocked(agent.kind, agent.toX, agent.toY, agent.toZ);
+  const currentBlocked = obstacles.isAnchorBlocked(agent.kind, agent.x, agent.y, agent.z);
+  const settleAtTarget = !targetBlocked && (currentBlocked || agent.progress >= 0.5);
+  if (settleAtTarget) {
+    agent.x = agent.toX;
+    agent.y = agent.toY;
+    agent.z = agent.toZ;
+  }
+
+  agent.toX = agent.x;
+  agent.toY = agent.y;
+  agent.toZ = agent.z;
+  computeFaunaAnchor(
+    agent.x,
+    agent.y,
+    agent.z,
+    agent.kind,
+    agent.offsetU,
+    agent.offsetV,
+    agent.scaleSeed,
+    agent.to
+  );
+  agent.stepCount += 1;
+  const [nx, ny, nz] = chooseFaunaNextVoxel(
+    agent,
+    terrainSeed,
+    profile,
+    herdmates,
+    fleeFrom,
+    obstacles
+  );
+  agent.from.copy(_blockedRoutePos);
+  agent.toX = nx;
+  agent.toY = ny;
+  agent.toZ = nz;
+  computeFaunaAnchor(nx, ny, nz, agent.kind, agent.offsetU, agent.offsetV, agent.scaleSeed, agent.to);
+  agent.progress = 0;
+  agent.grazeUntil = 0;
+  agent.navigationRevision = revision;
+}
+
 export function updateFaunaAgents(
   mesh: THREE.InstancedMesh,
   agents: FaunaAgent[],
@@ -2576,10 +2687,12 @@ export function updateFaunaAgents(
   terrainSeed: number,
   profile = buildFaunaProfile(terrainSeed),
   playerWorld: THREE.Vector3 | null = null,
-  playerVelocity: THREE.Vector3 | null = null
+  playerVelocity: THREE.Vector3 | null = null,
+  obstacles?: FaunaNavigationObstacles
 ): FaunaBuildResult {
   const dt = clamp(deltaTime, 0, 0.12);
   const count = Math.min(agents.length, mesh.instanceMatrix.count);
+  const navigationRevision = obstacles?.revision?.();
   const strideAttr = mesh.geometry.getAttribute('aFaunaStride') as THREE.InstancedBufferAttribute | undefined;
   const poseAttr = mesh.geometry.getAttribute('aFaunaPose') as THREE.InstancedBufferAttribute | undefined;
   for (let i = 0; i < count; i++) {
@@ -2589,6 +2702,24 @@ export function updateFaunaAgents(
     const grazing = !fleeing && time < agent.grazeUntil;
     const fleeFrom = fleeing ? playerWorld : null;
     const speedMul = fleeing ? FLEE_SPEED_MUL : 1;
+    const navigationChanged = obstacles !== undefined && (
+      navigationRevision === undefined || agent.navigationRevision !== navigationRevision
+    );
+    if (obstacles && navigationChanged) {
+      if (isFaunaRouteObstructed(agent, obstacles)) {
+        replanObstructedFaunaRoute(
+          agent,
+          terrainSeed,
+          profile,
+          obstacles,
+          agents,
+          fleeFrom,
+          navigationRevision
+        );
+      } else {
+        agent.navigationRevision = navigationRevision;
+      }
+    }
     agent.pose += ((grazing ? 1 : 0) - agent.pose) * (1 - Math.exp(-5 * dt));
 
     const turnRate = agent.kind === 'dragonfly' ? 4.8 : agent.kind === 'woolly' ? 3.4 : 4.2;
@@ -2605,7 +2736,7 @@ export function updateFaunaAgents(
           agent.progress = 1;
           break;
         }
-        setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom);
+        setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom, obstacles);
         if (agent.from.distanceToSquared(agent.to) < 0.0001) {
           agent.progress = 0;
           break;
@@ -2613,7 +2744,7 @@ export function updateFaunaAgents(
       }
     } else {
       agent.progress = 0;
-      setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom);
+      setFaunaRoute(agent, terrainSeed, profile, agents, fleeFrom, obstacles);
     }
     if (strideAttr) strideAttr.setX(i, agent.stridePhase);
     if (poseAttr) poseAttr.setX(i, agent.pose);
@@ -2645,6 +2776,7 @@ export function buildFaunaInstances(
   const agents: FaunaAgent[] = [];
   const includedHomes = new Set<string>();
   const time = options.time ?? 0;
+  const obstacles = options.obstacles;
 
   if (density <= 0) {
     mesh.count = 0;
@@ -2665,8 +2797,9 @@ export function buildFaunaInstances(
 
   for (const agent of options.existingAgents ?? []) {
     if (agents.length >= capacity) break;
-    if (!isFaunaAgentStillValid(kind, agent, density, terrainSeed, profile)) continue;
+    if (!isFaunaAgentStillValid(kind, agent, density, terrainSeed, profile, obstacles)) continue;
     if (!isFaunaAgentVisibleInRange(agent, maxDistance, playerWorld)) continue;
+    agent.navigationRevision = obstacles?.revision?.();
     addAgent(agent, true);
   }
 
@@ -2677,13 +2810,14 @@ export function buildFaunaInstances(
     if (!shouldPlaceFaunaVoxel(voxel, x, y, z, density, terrainSeed, profile)) continue;
     if (!isFaunaHabitatVoxel(kind, x, y, z, profile)) continue;
     if (!hasFaunaBodyClearance(kind, x, y, z, profile)) continue;
+    if (obstacles?.isAnchorBlocked(kind, x, y, z)) continue;
     if (chooseFaunaKindForVoxel(voxel, x, y, z, terrainSeed, profile) !== kind) continue;
     if (!isFaunaTravelVoxel(kind, voxel, profile)) continue;
 
     voxelCoordToWorld(x, y, z, _world);
     if (maxDistance > 0 && playerWorld && _world.distanceToSquared(playerWorld) > maxDistSq) continue;
 
-    const agent = createFaunaAgent(kind, x, y, z, terrainSeed, profile);
+    const agent = createFaunaAgent(kind, x, y, z, terrainSeed, profile, obstacles);
     addAgent(agent, false);
   }
 

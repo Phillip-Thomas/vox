@@ -63,6 +63,7 @@ const IMPLEMENTATION_JSON = ['check-results.json']
 const FINAL_JSON = [
   'verification-report.json',
   'raw-audiovisual-evidence.json',
+  'chapter-journey-evidence.json',
   'evidence-registry.json',
   'defects.json',
   'repair-contract-disposition.json',
@@ -73,6 +74,9 @@ const UX_LIFECYCLE_FILE = 'objective-lifecycle-evidence.json'
 const UX_AUDIT_FILE = 'ux-audit.md'
 const UX_ARTIFACT_FILES = [UX_BASELINE_FILE, UX_LIFECYCLE_FILE, UX_AUDIT_FILE]
 const UX_VARIANTS = ['desktop', 'mobile', 'reducedMotion', 'lowestQuality']
+const JOURNEY_CONTRACT_REPO_REF = 'main/chapter-journey-contract.json'
+const JOURNEY_CONTRACT_SCHEMA_REPO_REF = 'docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json'
+const JOURNEY_EVIDENCE_FILE = 'chapter-journey-evidence.json'
 const PLACEHOLDER_PATTERN = /\b(?:TODO|TBD|PLACEHOLDER|FILL[ -]?ME|REPLACE[ -]?ME)\b|<[^>\n]+>/i
 const MARKDOWN_SECTION_RULES = {
   'production-lock.md': ['authority', 'locked scope', 'protected paths', 'stop conditions', 'lock disposition'],
@@ -868,6 +872,91 @@ function validateObjectiveLifecycleEvidence(evidence, contract, contractSha256, 
   collector.assert(!includesPlaceholder(evidence), 'ux.lifecycle-placeholders', 'Objective lifecycle evidence cannot contain template placeholders')
 }
 
+function chapterJourneyBeats(chapter) {
+  return new Set([
+    ...(chapter?.registryProjection?.requiredObjectiveBeats || []),
+    ...(chapter?.objectives || []).map((objective) => objective?.beat),
+    ...(chapter?.lifecycleContracts || []).map((lifecycle) => lifecycle?.beat),
+    ...(chapter?.interactionContracts || []).map((interaction) => interaction?.beat),
+    ...(chapter?.inputContracts || []).map((input) => input?.beat),
+    ...(chapter?.optionalCapabilities || []).map((capability) => capability?.beat),
+    ...(chapter?.placementExceptions || []).flatMap((placement) => [placement?.formerBeat, placement?.destination?.beat]),
+  ].filter(nonEmptyString))
+}
+
+function chapterJourneyScenarioIds(chapter) {
+  return new Set([
+    ...(chapter?.scenarios || []),
+    ...(chapter?.inputContracts || []),
+    ...(chapter?.interactionContracts || []),
+    ...(chapter?.lifecycleContracts || []).filter((lifecycle) => lifecycle?.resume?.required),
+  ].map((scenario) => typeof scenario === 'string' ? scenario : scenario?.id).filter(nonEmptyString))
+}
+
+function validateChapterJourneyEvidence(evidence, journeyContract, journeyContractSha256, sceneContract, productionLock, collector) {
+  if (!evidence || !journeyContract) return
+  collector.assert(evidence.schema === 'paravoxia.chapterJourneyEvidence.v1', 'journey.schema', `${JOURNEY_EVIDENCE_FILE} must use paravoxia.chapterJourneyEvidence.v1`)
+  collector.assert(evidence.runId === productionLock?.runId, 'journey.run-id', `${JOURNEY_EVIDENCE_FILE} must target the production-lock run ID`)
+  collector.assert(evidence.sourceRevision === productionLock?.sourceRevision, 'journey.source-revision', `${JOURNEY_EVIDENCE_FILE} must bind the production-lock source revision`)
+  collector.assert(evidence.contract?.schema === journeyContract.schema, 'journey.contract-schema', 'Journey evidence must name the canonical journey-contract schema')
+  collector.assert(evidence.contract?.path === JOURNEY_CONTRACT_REPO_REF, 'journey.contract-path', `Journey evidence must bind ${JOURNEY_CONTRACT_REPO_REF}`, evidence.contract?.path)
+  collector.assert(evidence.contract?.sha256 === journeyContractSha256, 'journey.contract-hash', 'Journey evidence must bind the exact current chapter journey contract bytes', { reported: evidence.contract?.sha256, expected: journeyContractSha256 })
+
+  const chapter = (journeyContract.chapters || []).find((candidate) => candidate?.id === evidence.chapterId)
+  collector.assert(Boolean(chapter), 'journey.chapter', 'Journey evidence chapterId must resolve in the canonical journey contract', evidence.chapterId)
+  const sceneBeats = new Set([
+    ...(sceneContract?.scope?.beats || []),
+    ...(sceneContract?.shots || []).map((shot) => shot?.beat),
+    ...(sceneContract?.story?.events || []).map((event) => event?.beat),
+  ].filter(nonEmptyString))
+  const journeyBeats = chapterJourneyBeats(chapter)
+  collector.assert(Boolean(chapter) && [...sceneBeats].some((beat) => journeyBeats.has(beat)), 'journey.scene-scope', 'Journey evidence chapter must own at least one beat in the signed scene contract', { chapterId: evidence.chapterId, sceneBeats: [...sceneBeats] })
+  collector.assert(
+    Boolean(chapter) && JSON.stringify(evidence.contract?.requiredLaneIds) === JSON.stringify(chapter.requiredLaneIds),
+    'journey.required-lanes',
+    'Journey evidence must preserve the chapter required-lane contract exactly',
+    { reported: evidence.contract?.requiredLaneIds, expected: chapter?.requiredLaneIds },
+  )
+
+  const lane = evidence.lane
+  const scenarios = Array.isArray(evidence.scenarios) ? evidence.scenarios : []
+  const scenarioIds = scenarios.map((scenario) => scenario?.id)
+  const knownScenarioIds = chapterJourneyScenarioIds(chapter)
+  const focusedScenarioRequired = knownScenarioIds.size > 0
+  collector.assert(evidence.status === 'passed', 'journey.status', 'Focused journey evidence must pass, including an explicit no-focused-scenarios disposition when the chapter has no focused contract')
+  collector.assert(lane?.humanOperated === false, 'journey.input-identity', 'Automated journey proof must never claim human operation')
+  collector.assert(chapter?.requiredLaneIds?.includes(lane?.id), 'journey.lane', 'Journey evidence lane must resolve in the chapter required-lane contract', lane?.id)
+  collector.assert(lane?.evaluation?.status === 'passed' && lane?.evaluation?.passed === true && (lane?.evaluation?.checks || []).every((check) => check?.status === 'passed'), 'journey.lane-evaluation', 'Journey lane identity checks must all pass')
+  if (focusedScenarioRequired) {
+    collector.assert(['machine-journey-passed', 'diagnostic-passed-noncertifying'].includes(evidence.disposition), 'journey.disposition', 'Focused journey evidence must be either certifying or explicitly diagnostic and noncertifying')
+    collector.assert(lane?.requestedControlMode === 'manual' && lane?.observedInputDriver === 'playwright-trusted-browser-events', 'journey.focused-input', 'Focused escaped-defect journeys must use trusted manual browser events')
+    collector.assert(lane?.headed === true && evidence.browser?.headed === true, 'journey.headed', 'Focused escaped-defect journeys used for creative approval must be captured in a headed browser')
+    collector.assert(evidence.machineJourneyCertified === (lane?.machineJourneyCertifying === true), 'journey.certification-claim', 'Journey certification claim must exactly match the selected lane identity')
+  } else {
+    collector.assert(evidence.disposition === 'passed-no-focused-scenarios' && evidence.machineJourneyCertified === false, 'journey.not-applicable', 'A chapter with no focused contracts must say so explicitly and may not fabricate machine certification')
+  }
+  collector.assert(scenarioIds.every(nonEmptyString) && new Set(scenarioIds).size === scenarios.length, 'journey.scenarios', 'Journey evidence must contain unique named scenarios')
+  collector.assert(JSON.stringify(evidence.contract?.scenarioIds) === JSON.stringify(scenarioIds), 'journey.scenario-binding', 'Journey contract scenarioIds must match the executed scenario records exactly', { declared: evidence.contract?.scenarioIds, executed: scenarioIds })
+  collector.assert(
+    scenarioIds.length === knownScenarioIds.size && scenarioIds.every((id) => knownScenarioIds.has(id)),
+    'journey.scenario-known',
+    'Focused journey evidence must execute every and only canonical focused scenario for the target chapter',
+    { expected: [...knownScenarioIds], actual: scenarioIds },
+  )
+  collector.assert(!focusedScenarioRequired || scenarios.some((scenario) => scenario?.required === true), 'journey.required-scenario', 'Focused journey proof must exercise at least one required scenario')
+  for (const scenario of scenarios) {
+    const label = scenario?.id || '<unnamed-scenario>'
+    collector.assert(scenario?.required !== true || scenario?.status === 'passed', 'journey.scenario-status', `${label} required journey scenario must pass`)
+    collector.assert(Array.isArray(scenario?.checks) && scenario.checks.length > 0 && scenario.checks.every((check) => check?.status === 'passed'), 'journey.scenario-checks', `${label} must contain only passing executable checks`)
+    collector.assert((scenario?.failures || []).length === 0 && (scenario?.unavailable || []).length === 0, 'journey.scenario-errors', `${label} cannot hide failed or unavailable evidence`)
+    collector.assert(isObject(scenario?.evidence), 'journey.scenario-evidence', `${label} must retain its captured runtime evidence`)
+  }
+  const summary = evidence.summary
+  collector.assert(summary?.passed === scenarios.filter((scenario) => scenario?.status === 'passed').length && summary?.failed === 0 && summary?.blocked === 0 && summary?.total === scenarios.length, 'journey.summary', 'Journey summary must exactly describe the executed passing focused scenarios')
+  collector.assert(Array.isArray(evidence.failures) && evidence.failures.length === 0 && Array.isArray(evidence.unavailable) && evidence.unavailable.length === 0, 'journey.clean', 'Journey evidence cannot contain failures or unavailable checks')
+  collector.assert(!includesPlaceholder(evidence), 'journey.placeholders', 'Chapter journey evidence cannot contain template placeholders')
+}
+
 function validateUxAudit(runPath, contract, lock, individualSignoffs, collector) {
   const auditPath = path.join(runPath, UX_AUDIT_FILE)
   if (!fs.existsSync(auditPath)) return
@@ -877,7 +966,7 @@ function validateUxAudit(runPath, contract, lock, individualSignoffs, collector)
   collector.assert(nonEmptyString(reviewer) && !directorIdentities.has(reviewer), 'ux.audit-separation', `${UX_AUDIT_FILE} reviewer must be identified and independent from all directors`, reviewer)
   collector.assert(content.includes(`Run ID: \`${lock?.runId}\``), 'ux.audit-run', `${UX_AUDIT_FILE} must target the production-lock run ID`)
   collector.assert(content.includes(`Contract revision: \`${contract?.contractVersion}\``), 'ux.audit-contract', `${UX_AUDIT_FILE} must target the frozen contract version`)
-  collector.assert(content.includes(UX_BASELINE_FILE) && content.includes(UX_LIFECYCLE_FILE), 'ux.audit-inputs', `${UX_AUDIT_FILE} must review both canonical UX evidence artifacts`)
+  collector.assert(content.includes(UX_BASELINE_FILE) && content.includes(UX_LIFECYCLE_FILE) && content.includes(JOURNEY_EVIDENCE_FILE), 'ux.audit-inputs', `${UX_AUDIT_FILE} must review the UX baseline, objective lifecycle, and chapter journey evidence artifacts`)
   collector.assert(/First report completed before reading peer conclusions:\s*`?yes`?/i.test(content), 'ux.audit-first-wave', `${UX_AUDIT_FILE} must attest its first report preceded director and peer conclusions`)
   collector.assert(/Verdict:\s*`?pass(?:ed)?`?/i.test(content), 'ux.audit-verdict', `${UX_AUDIT_FILE} must record a passing independent verdict`)
 }
@@ -1152,6 +1241,42 @@ function validateWorkflowRoleContracts(workflow, collector) {
   collector.assert(checks.some((check) => check.includes('creativeContract.status')) && checks.some((check) => check.includes('commands.every')) && checks.every((check) => !check.includes('creativeGate') && !check.includes('allExitZero')), 'workflow.implementation-gate', 'Workflow implementation gate must use structured creativeContract and per-command results')
   const defectProducers = (workflow.steps || []).filter((step) => (step.outputs || []).includes('defects')).map((step) => step.id)
   collector.assert(JSON.stringify(defectProducers) === JSON.stringify(['critique-independent-reviews']), 'workflow.defect-producer', 'Only the independent review moderator may compile canonical defects.json', defectProducers)
+  const workflowInput = (workflow.inputs || []).find((input) => input.slug === 'chapter-journey-contract')
+  collector.assert(workflowInput?.required === true, 'workflow.journey-input', 'Creative triad must require the bound chapter-journey-contract workflow input')
+  const journeyArtifact = (workflow.artifactRequirements || []).find((artifact) => artifact.slug === 'chapter-journey-evidence')
+  const requiredJourneyConsumers = ['audit-player-experience', 'critique-independent-reviews', 'judge-cohesion', 'audit-run-quality', 'record-lessons']
+  collector.assert(journeyArtifact?.required === true && journeyArtifact?.producerStep === 'capture-proof' && requiredJourneyConsumers.every((step) => journeyArtifact?.consumerSteps?.includes(step)), 'workflow.journey-artifact', 'Creative triad must require mechanical journey evidence for PX, moderation, judging, quality, and learning')
+  const journeyStepContracts = {
+    'capture-proof': { contractInput: true, output: true },
+    'audit-player-experience': { contractInput: true, evidenceInput: true },
+    'critique-independent-reviews': { contractInput: true, evidenceInput: true },
+    'judge-cohesion': { contractInput: true, evidenceInput: true },
+    'audit-run-quality': { contractInput: true, evidenceInput: true },
+    'record-lessons': { evidenceInput: true },
+  }
+  for (const [stepId, requirements] of Object.entries(journeyStepContracts)) {
+    const step = (workflow.steps || []).find((candidate) => candidate.id === stepId)
+    collector.assert(Boolean(step), 'workflow.journey-step', `Creative triad must retain ${stepId}`)
+    if (requirements.contractInput) collector.assert(step?.inputs?.includes('chapter-journey-contract'), 'workflow.journey-step-contract-input', `${stepId} must consume chapter-journey-contract`)
+    if (requirements.evidenceInput) collector.assert(step?.inputs?.includes('chapter-journey-evidence'), 'workflow.journey-step-input', `${stepId} must consume chapter-journey-evidence`)
+    if (requirements.output) collector.assert(step?.outputs?.includes('chapter-journey-evidence'), 'workflow.journey-step-output', `${stepId} must produce chapter-journey-evidence`)
+  }
+  for (const roleSlug of ['mechanical-verifier', 'player-experience-auditor', 'review-moderator', 'cohesion-judge', 'artifact-quality-auditor']) {
+    const role = roles.get(roleSlug)
+    const ownsOutput = roleSlug === 'mechanical-verifier'
+    collector.assert(ownsOutput ? role?.requiredOutputs?.includes('chapter-journey-evidence') : role?.allowedInputs?.includes('chapter-journey-evidence'), 'workflow.journey-role', `${roleSlug} must ${ownsOutput ? 'produce' : 'consume'} chapter-journey-evidence`)
+  }
+  const proofGate = (workflow.gates || []).find((gate) => gate.id === 'proof-matrix-complete')
+  const journeyChecks = (proofGate?.checks || []).filter((check) => check.includes('chapter-journey-evidence'))
+  collector.assert(
+    journeyChecks.some((check) => check.includes('contract.sha256'))
+      && journeyChecks.some((check) => check.includes('sourceRevision'))
+      && journeyChecks.some((check) => check.includes('status'))
+      && journeyChecks.some((check) => check.includes('failures.length'))
+      && journeyChecks.some((check) => check.includes('unavailable.length')),
+    'workflow.journey-gate',
+    'Proof gate must bind exact journey authority and reject failed or unavailable focused regression evidence',
+  )
 }
 
 function collectEvidenceRefs(value, refs = []) {
@@ -1250,8 +1375,10 @@ function validateReviewMetadata(runPath, contract, individualSignoffs, collector
   collector.assert(/I did not receive[\s\S]{0,500}:\s*`?yes`?/i.test(blind), 'review.blind-isolation', 'Naive audience reviewer must attest it received no intent or peer conclusions')
   const critic = fs.readFileSync(path.join(runPath, 'critic-report.md'), 'utf8')
   collector.assert(/First-wave reviews were produced independently:\s*`?yes`?/i.test(critic) && /Blind reviewer isolation was preserved:\s*`?yes`?/i.test(critic), 'review.moderation-integrity', 'Critic must attest independent first waves and blind isolation')
+  collector.assert(critic.includes(JOURNEY_EVIDENCE_FILE), 'review.moderation-journey', `Critic must explicitly moderate ${JOURNEY_EVIDENCE_FILE}`)
   const judge = fs.readFileSync(path.join(runPath, 'cohesion-judge.md'), 'utf8')
   collector.assert(judge.includes(`Contract revision: \`${contract?.contractVersion}\``), 'review.judge-version', 'Cohesion Judge must target the frozen contract version')
+  collector.assert(judge.includes(JOURNEY_EVIDENCE_FILE), 'review.judge-journey', `Cohesion Judge must explicitly judge cohesion against ${JOURNEY_EVIDENCE_FILE}`)
 }
 
 function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
@@ -1295,11 +1422,17 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   const sceneSchema = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json'), collector, 'scene-schema')
   const lockSchema = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/schemas/paravoxia-production-lock.schema.json'), collector, 'lock-schema')
   const noteSchema = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/schemas/paravoxia-director-note.schema.json'), collector, 'note-schema')
+  const journeyContractPath = path.join(resolveRepoRoot(), JOURNEY_CONTRACT_REPO_REF)
+  const journeyContract = readJson(journeyContractPath, collector, 'journey-contract')
+  const journeyContractSha256 = fs.existsSync(journeyContractPath) ? sha256File(journeyContractPath) : null
+  const journeyContractSchema = readJson(path.join(resolveRepoRoot(), JOURNEY_CONTRACT_SCHEMA_REPO_REF), collector, 'journey-contract-schema')
   const rubric = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/rubrics/paravoxia-creative-cohesion.rubric.json'), collector, 'rubric')
   const workflow = readJson(path.join(resolveRepoRoot(), 'docs/architecture/workflow-orchestration/examples/paravoxia-creative-triad.workflow.json'), collector, 'workflow')
 
   validateWorkflowRoleContracts(workflow, collector)
   assertSchema(contract, sceneSchema, collector, 'contract.json-schema', 'Scene contract')
+  assertSchema(journeyContract, journeyContractSchema, collector, 'journey-contract.json-schema', 'Chapter journey contract')
+  collector.assert(journeyContract?.schema === 'paravoxia.chapterJourneyContract.v1' && !includesPlaceholder(journeyContract), 'journey-contract.authority', 'Canonical chapter journey contract must be complete and use paravoxia.chapterJourneyContract.v1')
   notes.forEach((note, index) => assertSchema(note, noteSchema, collector, 'notes.json-schema', `Director note line ${index + 1}`))
   collector.assert(!uxMode || isObject(contract?.guidance), 'ux.contract-required', 'UX artifact mode requires scene-contract.guidance')
   validateSceneContract(contract, collector)
@@ -1323,6 +1456,7 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
   if (phase === 'final') {
     const verification = readJson(path.join(runPath, 'verification-report.json'), collector, 'verification')
     const rawEvidence = readJson(path.join(runPath, 'raw-audiovisual-evidence.json'), collector, 'raw-evidence')
+    const journeyEvidence = readJson(path.join(runPath, JOURNEY_EVIDENCE_FILE), collector, 'journey-evidence')
     const evidenceRegistry = readJson(path.join(runPath, 'evidence-registry.json'), collector, 'evidence-registry')
     const defects = readJson(path.join(runPath, 'defects.json'), collector, 'defects')
     const repairDisposition = readJson(path.join(runPath, 'repair-contract-disposition.json'), collector, 'repair-disposition')
@@ -1342,7 +1476,11 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
     collector.assert(rawEvidence?.sourceRevision === productionLock?.sourceRevision, 'raw-evidence.source-revision', 'Raw audiovisual evidence source revision must match the production lock')
     validateVerification(verification, contract, contractSha256, collector)
     validateRawAudiovisualEvidence(rawEvidence, contract, contractSha256, runPath, collector)
+    validateChapterJourneyEvidence(journeyEvidence, journeyContract, journeyContractSha256, contract, productionLock, collector)
     const registryMap = validateEvidenceRegistry(evidenceRegistry, contract, contractSha256, productionLock, runPath, collector)
+    const journeyRegistryEntry = [...registryMap.values()].find((entry) => entry?.path === JOURNEY_EVIDENCE_FILE)
+    collector.assert(Boolean(journeyRegistryEntry), 'journey.registry-entry', `${JOURNEY_EVIDENCE_FILE} must be hashed in evidence-registry.json`)
+    if (journeyRegistryEntry) collector.assert(journeyRegistryEntry.sha256 === sha256File(path.join(runPath, JOURNEY_EVIDENCE_FILE)), 'journey.registry-hash', `${JOURNEY_EVIDENCE_FILE} registry hash must match its exact bytes`)
     validateScorecard(scorecard, rubric, contract, contractSha256, collector)
     validateReviewMetadata(runPath, contract, individualSignoffs, collector)
     if (humanDecision) validateHumanDecision(humanDecision, contract, contractSha256, collector)
@@ -1351,7 +1489,7 @@ function validateRun(runPath, { writeReport = true, phase = 'final' } = {}) {
     const defectsPath = path.join(runPath, 'defects.json')
     validateIterationLedger(iterations, defects, fs.existsSync(defectsPath) ? sha256File(defectsPath) : null, scorecard, contract, contractSha256, productionLock, repairDisposition, runPath, collector)
     const checkResults = readJson(path.join(runPath, 'check-results.json'), collector, 'check-results-final-evidence')
-    validateEvidenceReferences([contract, notes, shippedVisualBaseline, shippedUxBaseline, checkResults, verification, rawEvidence, objectiveLifecycle, defects, repairDisposition, repairDirections, iterations, scorecard, humanDecision], runPath, collector, registryMap)
+    validateEvidenceReferences([contract, notes, shippedVisualBaseline, shippedUxBaseline, checkResults, verification, rawEvidence, journeyEvidence, objectiveLifecycle, defects, repairDisposition, repairDirections, iterations, scorecard, humanDecision], runPath, collector, registryMap)
   }
   const report = buildReport(runPath, collector.checks, phase)
   if (writeReport) {
@@ -1415,6 +1553,7 @@ function makeValidFixture(runPath) {
   contract.production.allowedPaths = ['main/tools/creative-triad-gate.mjs']
   contract.production.protectedPaths = ['main/src/audio', 'main/src/components/audio', 'main/public/audio']
   contract.production.frozenAt = '2026-07-13T12:00:00.000Z'
+  contract.scope.beats = ['ch7-reconstruct']
   contract.performance.maximumDrawCalls = 120
   contract.performance.maximumShaderPrograms = 30
   const fixtureObjective = contract.guidance.objectives[0]
@@ -1610,6 +1749,67 @@ function makeValidFixture(runPath) {
     playbackMetadata: { canonicalUrl: 'http://127.0.0.1:5201/', viewport: '1440x900', qualityTier: 'high', reducedMotion: false, audioRoute: 'headphones', instructions: 'Play once continuously before frame inspection.' },
     intentFreeInstructions: 'Do not read creative intent, source, contracts, notes, bibles, or other reviews before the blind first pass.',
   }, null, 2)}\n`)
+  const journeyContractPath = path.join(resolveRepoRoot(), JOURNEY_CONTRACT_REPO_REF)
+  const journeyContract = JSON.parse(fs.readFileSync(journeyContractPath, 'utf8'))
+  const journeyChapter = journeyContract.chapters.find((chapter) => chapter.id === 'ch7')
+  const journeyEvidence = {
+    schema: 'paravoxia.chapterJourneyEvidence.v1',
+    runId: 'fixture-run',
+    generatedAt: '2026-07-13T12:36:00.000Z',
+    startedAt: '2026-07-13T12:35:00.000Z',
+    chapterId: 'ch7',
+    sourceRevision: 'fixture-working-tree',
+    status: 'passed',
+    disposition: 'machine-journey-passed',
+    machineJourneyCertified: true,
+    lane: {
+      entryPath: 'continuous',
+      requestedControlMode: 'manual',
+      observedInputDriver: 'playwright-trusted-browser-events',
+      humanOperated: false,
+      headed: true,
+      machineJourneyCertifying: true,
+      nonCertificationReasons: [],
+      doesNotCertify: ['human-usability', 'creative-taste', 'audiovisual-quality'],
+      id: 'continuous-manual',
+      evaluation: {
+        status: 'passed', passed: true,
+        checks: [{ id: 'lane.human-claim', status: 'passed', message: 'Playwright journey correctly remains machine-operated.' }],
+        failures: [], unavailable: [],
+      },
+    },
+    contract: {
+      schema: journeyContract.schema,
+      version: journeyContract.version ?? 1,
+      path: JOURNEY_CONTRACT_REPO_REF,
+      sha256: sha256File(journeyContractPath),
+      requiredLaneIds: journeyChapter.requiredLaneIds,
+      scenarioIds: ['interaction:persistent-scar-arbitration'],
+    },
+    browser: {
+      headed: true,
+      executablePath: '/usr/bin/chromium',
+      viewport: { width: 1280, height: 720 },
+      profile: 'POTATO',
+      baseUrl: 'http://127.0.0.1:5201/',
+    },
+    scenarios: [{
+      id: 'interaction:persistent-scar-arbitration',
+      type: 'interaction-effect',
+      required: true,
+      status: 'passed',
+      durationMs: 850,
+      url: 'http://127.0.0.1:5201/?story=ch7-reconstruct',
+      checks: [{ id: 'interaction.required-winner', status: 'passed', message: 'Mandatory ship repair interaction outranked the optional scar observation.' }],
+      failures: [],
+      unavailable: [],
+      evidence: { winnerId: 'story-ship-repair', promptCount: 1, effectObserved: true, stalePromptCleared: true },
+    }],
+    summary: { passed: 1, failed: 0, blocked: 0, total: 1 },
+    failures: [],
+    unavailable: [],
+  }
+  fs.writeFileSync(path.join(runPath, JOURNEY_EVIDENCE_FILE), `${JSON.stringify(journeyEvidence, null, 2)}\n`)
   fs.writeFileSync(path.join(runPath, UX_AUDIT_FILE), `# UX Audit
 
 Reviewer: \`fixture-player-experience-auditor\`
@@ -1623,7 +1823,7 @@ This player-experience review was completed independently from the chapter, scor
 
 ## Contract and baseline
 
-The review binds the signed guidance contract to \`${UX_BASELINE_FILE}\` and compares it with \`${UX_LIFECYCLE_FILE}\`.
+The review binds the signed guidance contract to \`${UX_BASELINE_FILE}\`, compares it with \`${UX_LIFECYCLE_FILE}\`, and audits the focused headed prompt-arbitration journey in \`${JOURNEY_EVIDENCE_FILE}\`.
 
 ## Objective lifecycle
 
@@ -1692,6 +1892,7 @@ Verdict: \`pass\`
     JSON.parse(fs.readFileSync(path.join(runPath, 'check-results.json'), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(runPath, 'verification-report.json'), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(runPath, 'raw-audiovisual-evidence.json'), 'utf8')),
+    journeyEvidence,
     objectiveLifecycle,
     defectRegister,
     JSON.parse(fs.readFileSync(path.join(runPath, 'repair-contract-disposition.json'), 'utf8')),
@@ -1703,7 +1904,10 @@ Verdict: \`pass\`
     .sort()
   fs.writeFileSync(path.join(runPath, 'evidence-registry.json'), `${JSON.stringify({
     schema: 'paravoxia.evidenceRegistry.v1', runId: 'fixture-run', contractVersion: 'v1', contractSha256, sourceRevision: 'fixture-working-tree', compiledAt: '2026-07-13T12:43:00.000Z',
-    entries: registryRefs.map((ref) => ({ ref, path: 'evidence/registry-proof.txt', sha256: sha256File(registryProofPath), kind: ref.split(':')[0], description: `Fixture backing evidence for ${ref}.` })),
+    entries: [
+      ...registryRefs.map((ref) => ({ ref, path: 'evidence/registry-proof.txt', sha256: sha256File(registryProofPath), kind: ref.split(':')[0], description: `Fixture backing evidence for ${ref}.` })),
+      { ref: 'journey:focused-ch7-scar-arbitration', path: JOURNEY_EVIDENCE_FILE, sha256: sha256File(path.join(runPath, JOURNEY_EVIDENCE_FILE)), kind: 'journey', description: 'Headed trusted-input focused scar-prompt arbitration proof.' },
+    ],
   }, null, 2)}\n`)
 }
 
@@ -1745,6 +1949,28 @@ function runSelfTest() {
       throw new Error('Invalid fixture did not reject an inexact objective marker observation')
     }
     fs.writeFileSync(lifecyclePath, originalLifecycleSource)
+
+    const journeyEvidencePath = path.join(tempRoot, JOURNEY_EVIDENCE_FILE)
+    const originalJourneyEvidenceSource = fs.readFileSync(journeyEvidencePath, 'utf8')
+    const failedJourneyEvidence = JSON.parse(originalJourneyEvidenceSource)
+    failedJourneyEvidence.status = 'failed'
+    failedJourneyEvidence.disposition = 'repair-required'
+    failedJourneyEvidence.failures = ['fixture focused journey failure']
+    fs.writeFileSync(journeyEvidencePath, `${JSON.stringify(failedJourneyEvidence, null, 2)}\n`)
+    const failedJourney = validateRun(tempRoot, { writeReport: false, phase: 'final' })
+    if (failedJourney.passed || !failedJourney.checks.some((check) => check.code === 'journey.status' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject failed focused journey evidence')
+    }
+    fs.writeFileSync(journeyEvidencePath, originalJourneyEvidenceSource)
+
+    const staleJourneyEvidence = JSON.parse(originalJourneyEvidenceSource)
+    staleJourneyEvidence.contract.sha256 = '0'.repeat(64)
+    fs.writeFileSync(journeyEvidencePath, `${JSON.stringify(staleJourneyEvidence, null, 2)}\n`)
+    const staleJourney = validateRun(tempRoot, { writeReport: false, phase: 'final' })
+    if (staleJourney.passed || !staleJourney.checks.some((check) => check.code === 'journey.contract-hash' && !check.passed)) {
+      throw new Error('Invalid fixture did not reject stale chapter journey authority')
+    }
+    fs.writeFileSync(journeyEvidencePath, originalJourneyEvidenceSource)
 
     const contractPath = path.join(tempRoot, 'scene-contract.json')
     const originalContractSource = fs.readFileSync(contractPath, 'utf8')
@@ -1841,7 +2067,7 @@ function runSelfTest() {
     if (spoofedMedia.passed || !spoofedMedia.checks.some((check) => check.code === 'media.probe-command' && !check.passed)) {
       throw new Error('Invalid fixture did not reject non-media bytes with a matching file hash')
     }
-    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus UX missing-artifact, marker-exactness, anchor, agency-fallback, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
+    process.stdout.write(`Creative triad gate self-test passed (${valid.checkCount} final checks; staged gates plus UX missing-artifact, marker-exactness, focused-journey failure and stale-authority, anchor, agency-fallback, authorship, hidden-defect, repair-lineage, director-override, evidence-registry, and media-authenticity rejection confirmed).\n`)
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true })
   }

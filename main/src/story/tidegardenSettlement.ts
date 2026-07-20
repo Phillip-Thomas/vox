@@ -24,11 +24,13 @@ import {
 import { analyzeShelterCell, type ShelterAnalysis } from '../game/systems/shelterSystem.ts';
 import { setVitals } from '../game/systems/survivalVitals.ts';
 import { VOXEL_SCALE, voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
+import { isNightPhase } from '../utils/nightState.ts';
 import {
   findValidSpawnSite,
   type SpawnTerrainQuery
 } from '../utils/spawnValidation.ts';
 import { emitEmergentStoryEvent } from './emergentStoryEvents.ts';
+import type { StoryBeat } from './storyState.ts';
 import {
   STORY_PRIMARY_WORLD_ID,
   TIDEGARDEN_WORLD_ID
@@ -50,12 +52,115 @@ export const TIDEGARDEN_RELATIONSHIP_OBSERVATION_ID = 'observation:tidegarden:ti
 export const TIDEGARDEN_SETTLEMENT_MILESTONES = {
   scannerOverload: 'story:tidegarden:scanner-overload',
   relationshipAttended: 'story:tidegarden:relationship-attended',
+  aerialSiteSurvey: 'story:tidegarden:aerial-site-survey',
   siteChoicePrefix: TIDEGARDEN_SITE_CHOICE_PREFIX,
   coreOnline: 'story:tidegarden:habitat-core-online',
   shelterCertified: 'story:tidegarden:shelter-certified',
   safeRestCompleted: 'story:tidegarden:safe-rest-completed',
   twoWorldHandoff: 'story:tidegarden:two-world-handoff'
 } as const;
+
+export const TIDEGARDEN_AERIAL_SURVEY_HOLD_SECONDS = 0.8;
+export const TIDEGARDEN_AERIAL_SURVEY_MIN_CLEARANCE = 2.2;
+export const TIDEGARDEN_AERIAL_SURVEY_MAX_CLEARANCE = 7;
+export const TIDEGARDEN_AERIAL_SURVEY_MAX_LATERAL_DISTANCE = 5;
+
+type Vec3Tuple = readonly [number, number, number];
+
+interface TidegardenAerialSurveyRuntime {
+  key: string;
+  holdSeconds: number;
+}
+
+let aerialSurveyRuntime: TidegardenAerialSurveyRuntime = { key: '', holdSeconds: 0 };
+
+export interface TidegardenAerialSurveySample {
+  actorId: ActorId;
+  runId: number;
+  worldId: string;
+  storyBeat: StoryBeat | null;
+  position: Vec3Tuple;
+  surfaceUp: Vec3Tuple;
+  grounded: boolean;
+  jetpackActive: boolean;
+  dt: number;
+}
+
+/**
+ * Optional second-world embodiment: after choosing a real habitat site, sustained
+ * suit thrust above that footprint records an aerial survey accomplishment. It
+ * deliberately never participates in settlement guidance or completion gates.
+ */
+export function observeTidegardenAerialSiteSurvey(
+  sample: TidegardenAerialSurveySample
+): boolean {
+  const settlementBeat = sample.storyBeat === 'ch9-settle' || sample.storyBeat === 'ch9-hearth';
+  // This runs from the fixed player-physics loop. Reject the overwhelmingly
+  // common non-settlement frames before decoding the persisted site receipt,
+  // which allocates vectors and arrays by design.
+  if (sample.worldId !== TIDEGARDEN_WORLD_ID || !settlementBeat) {
+    aerialSurveyRuntime.holdSeconds = 0;
+    return false;
+  }
+  if (hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.aerialSiteSurvey, sample.actorId)) {
+    return true;
+  }
+  if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, sample.actorId)) {
+    aerialSurveyRuntime.holdSeconds = 0;
+    return false;
+  }
+  const chosen = getTidegardenChosenHabitatSite(sample.actorId);
+  const key = chosen
+    ? `${sample.runId}\u0000${sample.actorId}\u0000${sample.worldId}\u0000${chosen.cell.join(',')}`
+    : '';
+  if (key !== aerialSurveyRuntime.key) {
+    aerialSurveyRuntime = { key, holdSeconds: 0 };
+  }
+  if (!chosen) {
+    aerialSurveyRuntime.holdSeconds = 0;
+    return false;
+  }
+
+  const dx = sample.position[0] - chosen.position.x;
+  const dy = sample.position[1] - chosen.position.y;
+  const dz = sample.position[2] - chosen.position.z;
+  const clearance = dx * chosen.up.x + dy * chosen.up.y + dz * chosen.up.z;
+  const lateralSquared = Math.max(0, dx * dx + dy * dy + dz * dz - clearance * clearance);
+  const surfaceAlignment = sample.surfaceUp[0] * chosen.up.x
+    + sample.surfaceUp[1] * chosen.up.y
+    + sample.surfaceUp[2] * chosen.up.z;
+  const eligible = !sample.grounded
+    && sample.jetpackActive
+    && surfaceAlignment >= 0.9
+    && clearance >= TIDEGARDEN_AERIAL_SURVEY_MIN_CLEARANCE
+    && clearance <= TIDEGARDEN_AERIAL_SURVEY_MAX_CLEARANCE
+    && lateralSquared <= TIDEGARDEN_AERIAL_SURVEY_MAX_LATERAL_DISTANCE ** 2;
+  aerialSurveyRuntime.holdSeconds = eligible
+    ? aerialSurveyRuntime.holdSeconds + clampFrameDt(sample.dt)
+    : 0;
+  if (aerialSurveyRuntime.holdSeconds + 1e-6 < TIDEGARDEN_AERIAL_SURVEY_HOLD_SECONDS) {
+    return false;
+  }
+
+  markMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.aerialSiteSurvey, sample.actorId);
+  const evidenceId = `story:settle:${sample.actorId}:aerial-site-survey`;
+  emitAccomplishment(
+    'tidegarden_aerial_site_survey',
+    evidenceId,
+    sample.actorId,
+    TIDEGARDEN_WORLD_ID,
+    {
+      siteCell: [...chosen.cell],
+      clearance: Number(clearance.toFixed(2)),
+      realJetpackThrust: true
+    }
+  );
+  return true;
+}
+
+export function resetTidegardenAerialSurveyRuntimeForTests(): void {
+  aerialSurveyRuntime = { key: '', holdSeconds: 0 };
+}
 
 export interface HabitatSiteProof {
   worldId: typeof TIDEGARDEN_WORLD_ID;
@@ -92,7 +197,7 @@ export type HabitatSiteFailure =
   | 'core-already-online';
 
 export type HabitatSiteValidation =
-  | { ok: true; proof: HabitatSiteProof }
+  | { ok: true; proof: HabitatSiteProof; approachPosition: THREE.Vector3 }
   | { ok: false; reason: HabitatSiteFailure };
 
 export type SettlementCommitResult =
@@ -101,11 +206,22 @@ export type SettlementCommitResult =
 
 /** Shared Ch9 objective contract for the work order and the persistent HUD marker. */
 export interface TidegardenSettlementGuidance {
-  id: string;
+  id: TidegardenSettlementGuidanceId;
   kind: GuidedStoryObjective['kind'];
   markerLabel: GuidedStoryObjective['markerLabel'];
   workOrder: GuidedStoryObjective['workOrder'];
 }
+
+export type TidegardenSettlementGuidanceId =
+  | 'scan-waterline'
+  | 'attend-waterline'
+  | 'choose-site'
+  | 'craft-core'
+  | 'foundation'
+  | 'install-core'
+  | 'certify-shelter'
+  | 'wait-night'
+  | 'rest';
 
 export function getTidegardenSettlementGuidance(input: {
   actorId: ActorId;
@@ -145,9 +261,9 @@ export function getTidegardenSettlementGuidance(input: {
       return {
         id: 'craft-core',
         kind: 'craft',
-        markerLabel: 'CHOSEN SITE · CRAFT HABITAT CORE',
+        markerLabel: 'KESTREL FABRICATOR · CRAFT HABITAT CORE',
         workOrder: [
-          'THE FLIGHT-READY KESTREL FABRICATOR REMAINS LINKED.',
+          'RETURN TO THE FLIGHT-READY KESTREL FABRICATOR.',
           '[C] CRAFT HABITAT CORE.'
         ]
       };
@@ -390,6 +506,25 @@ export interface TidegardenHabitatSiteInput {
 export function surveyTidegardenHabitatSite(
   input: TidegardenHabitatSiteInput
 ): HabitatSiteValidation {
+  return surveyTidegardenHabitatSiteWithin(input, 0, true);
+}
+
+/**
+ * Resolve one stable, truthful suggestion near a fixed world anchor. The site
+ * remains a recommendation: players may still choose any other valid patch.
+ */
+export function findTidegardenRecommendedHabitatSite(
+  input: TidegardenHabitatSiteInput,
+  maxSearchRadius = Math.min(10, Math.floor(input.planetSize / VOXEL_SCALE))
+): HabitatSiteValidation {
+  return surveyTidegardenHabitatSiteWithin(input, maxSearchRadius, false);
+}
+
+function surveyTidegardenHabitatSiteWithin(
+  input: TidegardenHabitatSiteInput,
+  maxSearchRadius: number,
+  requireExactPreferredCell: boolean
+): HabitatSiteValidation {
   if (input.worldId !== TIDEGARDEN_WORLD_ID) return { ok: false, reason: 'wrong-world' };
   if (getHabitatWorldState(input.worldId)) return { ok: false, reason: 'core-already-online' };
   if (!hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.relationshipAttended, input.actorId)) {
@@ -399,9 +534,9 @@ export function surveyTidegardenHabitatSite(
     input.terrain,
     input.planetSize,
     input.playerPosition,
-    { kind: 'player', maxSearchRadius: 0 }
+    { kind: 'player', maxSearchRadius }
   );
-  if (!site || site.searchDistanceCells > 0.001) {
+  if (!site || (requireExactPreferredCell && site.searchDistanceCells > 0.001)) {
     return { ok: false, reason: 'site-not-dry-level-clear' };
   }
   const upFace = faceIndexForNormal(site.up.x, site.up.y, site.up.z);
@@ -420,6 +555,7 @@ export function surveyTidegardenHabitatSite(
   const shelterId = `habitat:${input.worldId}:${cell.join(',')}`;
   return {
     ok: true,
+    approachPosition: site.position.clone(),
     proof: {
       worldId: TIDEGARDEN_WORLD_ID,
       cell,
@@ -488,6 +624,21 @@ export function tidegardenFoundationMatchesSiteChoice(
   cell: readonly [number, number, number]
 ): boolean {
   return tidegardenSiteChoiceMatchesCell(actorId, cell);
+}
+
+export function hasTidegardenChosenFoundation(
+  actorId: ActorId,
+  pieces: readonly StructurePiece[] = getPieces()
+): boolean {
+  const chosen = getTidegardenChosenHabitatSite(actorId);
+  if (!chosen) return false;
+  const upFace = faceIndexForNormal(chosen.up.x, chosen.up.y, chosen.up.z);
+  const floorFace = oppositeFace(upFace);
+  return pieces.some(piece => (
+    sameCell(piece.cell, chosen.cell)
+    && piece.face === floorFace
+    && piece.type === 'foundation'
+  ));
 }
 
 export function validateTidegardenHabitatSite(
@@ -715,7 +866,9 @@ export function canRestAtTidegardenHabitat(
 }
 
 export function isHabitatNight(dayPhase: number): boolean {
-  return dayPhase >= 0.55 && dayPhase <= 0.95;
+  // Shared night predicate: opens the instant the sky darkens (~phase 0.505, just
+  // after sunset) and still closes at the dawn wrap so rest ends at sunrise.
+  return isNightPhase(dayPhase);
 }
 
 function provenSharedShelter(
@@ -836,4 +989,8 @@ function sameCell(
 
 function normalizeDayPhase(value: number): number {
   return Number.isFinite(value) ? ((value % 1) + 1) % 1 : 0;
+}
+
+function clampFrameDt(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, Math.min(0.1, value)) : 0;
 }

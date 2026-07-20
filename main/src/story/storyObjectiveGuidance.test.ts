@@ -127,7 +127,8 @@ describe('story objective guidance authoring', () => {
     const settle = resolve('ch3-forage', { forageHasEdible: true, forageAte: true })!;
 
     expect(new Set([find.id, eat.id, settle.id]).size).toBe(3);
-    expect(find.requiresMarker).toBe(true);
+    expect(find).toMatchObject({ requiresMarker: true, kind: 'travel' });
+    expect(find.workOrder[find.workOrder.length - 1]).toBe('WALK THROUGH THE FRUIT TO GATHER IT.');
     expect(eat).toMatchObject({ requiresMarker: false, kind: 'interact' });
     expect(settle).toMatchObject({ requiresMarker: false, kind: 'wait' });
   });
@@ -151,7 +152,7 @@ describe('story objective guidance authoring', () => {
   });
 
   it('authors launch, crossing, and landfall from explicit flight facts', () => {
-    const launch = ['surface-flight', 'launching', 'deep-space'] as const;
+    const launch = ['surface-on-foot', 'surface-flight', 'launching', 'deep-space'] as const;
     const crossing = ['acquire-sibling', 'hold-course', 'approach-envelope'] as const;
     const landfall = ['descent', 'surface-flight', 'surface-fps'] as const;
 
@@ -162,7 +163,7 @@ describe('story objective guidance authoring', () => {
     for (const objectives of [launchObjectives, crossingObjectives, landfallObjectives]) {
       expect(new Set(objectives.map(entry => entry.id)).size).toBe(objectives.length);
     }
-    expect(launchObjectives.every(entry => entry.requiresMarker === false)).toBe(true);
+    expect(launchObjectives.map(entry => entry.requiresMarker)).toEqual([true, false, false, false]);
     expect(crossingObjectives.map(entry => entry.requiresMarker)).toEqual([true, true, false]);
     expect(landfallObjectives.map(entry => entry.requiresMarker)).toEqual([false, false, false]);
   });

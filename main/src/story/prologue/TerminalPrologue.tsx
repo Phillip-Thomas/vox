@@ -99,6 +99,13 @@ const TerminalPrologue: React.FC = () => {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       unlockStoryScore();
+      const target = e.target;
+      const editing = target instanceof HTMLElement && (
+        target.tagName === 'INPUT'
+        || target.tagName === 'TEXTAREA'
+        || target.isContentEditable
+      );
+      if (editing) return;
       if (e.code === 'Tab') {
         e.preventDefault();
         if (phase !== 'acknowledge') setPhase('corruption');

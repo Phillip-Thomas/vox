@@ -107,6 +107,7 @@ describe('storyInputPolicy', () => {
 
     applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
     advanceToBeat('ch9-settle');
+    expect(getStoryInputPolicy().allowBaseInteraction('board')).toBe(false);
     expect(getStoryInputPolicy().recipeAllowed('lift_cell')).toBe(true);
     expect(getStoryInputPolicy().recipeAllowed('logic_wafer')).toBe(true);
     expect(getStoryInputPolicy().recipeAllowed('habitat_core')).toBe(true);
@@ -122,8 +123,10 @@ describe('storyInputPolicy', () => {
     expect(isFabricatorRecipeAllowed('range_coil')).toBe(false);
 
     advanceToBeat('ch9-hearth');
+    expect(getStoryInputPolicy().allowBaseInteraction('board')).toBe(false);
     completeStory();
     expect(getStoryInputPolicy()).toBe(SANDBOX_POLICY);
+    expect(getStoryInputPolicy().allowBaseInteraction('board')).toBe(true);
     expect(isFabricatorRecipeAllowed('campfire')).toBe(true);
     expect(isFabricatorRecipeAllowed('lift_cell')).toBe(true);
     expect(isFabricatorRecipeAllowed('logic_wafer')).toBe(true);

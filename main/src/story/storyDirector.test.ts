@@ -279,6 +279,7 @@ describe('storyDirector — chapter 1 and A1', () => {
       const target = storyFreeMarkerTarget();
       expect(target?.position.toArray()).toEqual([140, -24, 680]);
       expect(target?.label).toBe(getActiveGuidedStoryObjective()?.markerLabel);
+      expect(target?.projectionSpace).toBe('spatial');
     } finally {
       targetHandle.remove();
     }

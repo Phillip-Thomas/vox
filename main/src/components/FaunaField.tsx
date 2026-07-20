@@ -17,6 +17,7 @@ import {
   countFaunaVoxels,
   createFaunaGeometry,
   createFaunaMaterial,
+  faunaStructureClearanceCells,
   prepareFaunaInstanceAttributes,
   updateFaunaAgents,
   updateFaunaMaterial,
@@ -24,6 +25,10 @@ import {
   type FaunaKind,
   type FaunaProfile
 } from '../utils/faunaField';
+import {
+  createLiveFaunaNavigationObstacles,
+  type FaunaNavigationObstacles
+} from '../utils/faunaNavigationObstacles.ts';
 import type { PlanetProfile } from '../game/PlanetProfile.ts';
 
 interface FaunaFieldProps {
@@ -51,7 +56,8 @@ export default function FaunaField({
   planetSize,
   progressiveMount = false
 }: FaunaFieldProps) {
-  const density = getGraphicsQuality().faunaDensity;
+  const quality = getGraphicsQuality();
+  const density = quality.faunaDensity;
   const water = useMemo(
     () => (planetSize ? getWorldGen(planetSize, terrainSeed, worldId).generator : undefined),
     [planetSize, terrainSeed, worldId]
@@ -59,6 +65,17 @@ export default function FaunaField({
   const profile = useMemo(
     () => buildFaunaProfile(terrainSeed, water, planetProfile),
     [planetProfile, terrainSeed, water]
+  );
+  const obstacles = useMemo(
+    () => createLiveFaunaNavigationObstacles({
+      terrainSeed,
+      treeDensity: quality.treeDensity,
+      artDirection: profile.artDirection,
+      // Use each species' largest authored body so no large phenotype clips a
+      // ceiling that a smaller member could clear.
+      clearanceCellsForKind: kind => faunaStructureClearanceCells(kind, profile, 1)
+    }),
+    [profile, quality.treeDensity, terrainSeed]
   );
   const [visibleKindCount, setVisibleKindCount] = useState(
     progressiveMount ? 1 : FAUNA_KINDS.length
@@ -83,6 +100,7 @@ export default function FaunaField({
           terrainSeed={terrainSeed}
           playerPosition={playerPosition}
           profile={profile}
+          obstacles={obstacles}
         />
       ))}
     </>
@@ -94,13 +112,15 @@ function FaunaLayer({
   density,
   terrainSeed,
   playerPosition,
-  profile
+  profile,
+  obstacles
 }: {
   kind: FaunaKind;
   density: number;
   terrainSeed: number;
   playerPosition?: THREE.Vector3;
   profile: FaunaProfile;
+  obstacles: FaunaNavigationObstacles;
 }) {
   const geometry = useMemo(() => (density > 0 ? createFaunaGeometry(kind, profile) : null), [density, kind, profile]);
   const material = useMemo(() => (density > 0 ? createFaunaMaterial(kind, profile) : null), [density, kind, profile]);
@@ -117,6 +137,9 @@ function FaunaLayer({
 
   const neededCapacity = () => measureWarpMetric(
     `fauna:${kind}_count_capacity`,
+    // Allocate against the obstacle-free deterministic population ceiling.
+    // Live trees/structures filter actual spawns below it, so harvesting or
+    // deconstruction can never leave this layer permanently under-capacity.
     () => countFaunaVoxels(kind, density, terrainSeed, profile),
     needed => ({ needed })
   );
@@ -143,7 +166,7 @@ function FaunaLayer({
         playerPosition ?? null,
         terrainSeed,
         profile,
-        { existingAgents, time }
+        { existingAgents, time, obstacles }
       ),
       result => ({ count: result.count, voxelCount: result.voxelCount, capacity: mesh.instanceMatrix.count })
     );
@@ -214,7 +237,8 @@ function FaunaLayer({
           terrainSeed,
           profile,
           playerPosition ?? null,
-          playerPosition ? playerVelocity.current : null
+          playerPosition ? playerVelocity.current : null,
+          obstacles
         );
       }
     }

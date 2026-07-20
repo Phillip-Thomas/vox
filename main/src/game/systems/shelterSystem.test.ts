@@ -37,6 +37,26 @@ beforeEach(() => {
 });
 
 describe('shelter enclosure', () => {
+  it('seals a two-cell room with one 1x2 wall placement per side', () => {
+    placePiece(LOWER, 3, 'foundation', 'wood', 2);
+    placePiece(UPPER, 2, 'ceiling', 'wood', 2);
+    for (const face of [0, 1, 4, 5]) placePiece(LOWER, face, 'tall_wall', 'wood', 2);
+
+    const result = analyzeShelterCell(LOWER);
+    expect(result.sheltered).toBe(true);
+    expect(result.interiorCells).toContainEqual(UPPER);
+  });
+
+  it('requires two stacked 1x1 half walls to cover the same full-height side', () => {
+    placePiece(LOWER, 3, 'foundation', 'wood', 2);
+    placePiece(UPPER, 2, 'ceiling', 'wood', 2);
+    for (const face of [0, 1, 4, 5]) placePiece(LOWER, face, 'wall', 'wood', 2);
+    expect(analyzeShelterCell(LOWER).sheltered).toBe(false);
+
+    for (const face of [0, 1, 4, 5]) placePiece(UPPER, face, 'wall', 'wood', 2);
+    expect(analyzeShelterCell(LOWER).sheltered).toBe(true);
+  });
+
   it('recognizes a two-cell-tall sealed room', () => {
     buildTwoCellRoom();
     const result = analyzeShelterCell(LOWER);

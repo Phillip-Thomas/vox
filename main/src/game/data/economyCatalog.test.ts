@@ -93,4 +93,19 @@ describe('shared economy catalog client binding', () => {
       }
     }
   });
+
+  it('exposes a four-wood 1x2 wall before the legacy 1x1 half-wall', () => {
+    expect(BUILD_PIECE_ORDER.slice(0, 3)).toEqual(['foundation', 'tall_wall', 'wall']);
+    expect(BUILD_PIECES.tall_wall).toMatchObject({
+      name: 'Wall (1x2)',
+      heightUnits: 2,
+      costUnits: 4,
+      seals: true
+    });
+    expect(BUILD_PIECES.wall).toMatchObject({
+      name: 'Half Wall (1x1)',
+      costUnits: 2,
+      seals: true
+    });
+  });
 });

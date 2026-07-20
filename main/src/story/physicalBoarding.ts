@@ -8,9 +8,16 @@ import type { StoryBeat } from './storyState.ts';
 import { STORY_PRIMARY_WORLD_ID } from './tidegardenRoute.ts';
 import type { GuidedStoryObjective } from './ux/objectiveDirector.ts';
 import { setChapter7BoardingPhase } from './emergentScoreDirector.ts';
+import {
+  PHYSICAL_BOARDING_MILESTONE,
+  PHYSICAL_BOARDING_SEALED_MILESTONE
+} from './physicalBoardingReceipts.ts';
 
-export const PHYSICAL_BOARDING_MILESTONE = 'story:board:physical-transaction-complete';
-export const PHYSICAL_BOARDING_SEALED_MILESTONE = 'story:board:pressure-boundary-sealed';
+export {
+  PHYSICAL_BOARDING_MILESTONE,
+  PHYSICAL_BOARDING_SEALED_MILESTONE
+} from './physicalBoardingReceipts.ts';
+
 export const PHYSICAL_BOARDING_REACH = 3.8;
 export const PHYSICAL_BOARDING_HATCH_SECONDS = 0.72;
 export const PHYSICAL_BOARDING_SEAL_SECONDS = 0.38;

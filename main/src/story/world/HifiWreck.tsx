@@ -40,7 +40,6 @@ import { registerEmergentMovieWreckBinding } from '../emergentMovieRuntime.ts';
 import { hasBankedKestrelKeelMemory } from '../emergentUniqueItems.ts';
 import {
   commitWreckDiagnosis,
-  hasFirstHoverGroundedReturn,
   hasWreckDiagnosisReceipt,
   registerPhysicalWreckBinding,
   WRECK_DIAGNOSIS_REACH
@@ -74,7 +73,7 @@ import { isBoardable } from '../../state/shipProximity.ts';
 import { clearCinematicCameraPose, setCinematicCameraPose } from '../cinematicLook.ts';
 import { isStoryPaused } from '../storyClock.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
-import { attendWreckScar } from '../wreckScarObservation.ts';
+import { attendWreckScar, canAttendWreckScar } from '../wreckScarObservation.ts';
 import {
   SANDBOX_FOV,
   setStoryMoveScale,
@@ -114,9 +113,10 @@ interface HifiWreckProps {
 
 const WORKSTATION_REACH = 4.4;
 const DIAGNOSIS_TARGET_LOCAL = new THREE.Vector3(0.34, 0.34, 1.54);
-// Directly above the live workbench approach: manual and movie-mode players
-// must use real lift to reach this physical route socket, then return to ground.
-const HOVER_SOCKET_LOCAL = new THREE.Vector3(0.12, 2.25, 2.28);
+// Compatibility coordinate for legacy saves that already contain the former
+// Origin hover receipt. It is not rendered, published, or sampled by new runs;
+// lift practice now belongs to the optional Tidegarden aerial-site survey.
+const LEGACY_HOVER_RECEIPT_LOCAL = new THREE.Vector3(0.12, 2.25, 2.28);
 const HATCH_TARGET_LOCAL = new THREE.Vector3(...BOARDING_HATCH_TARGET_LOCAL);
 const _diagnosisEye = new THREE.Vector3();
 const _diagnosisLook = new THREE.Vector3();
@@ -177,8 +177,8 @@ const HifiWreck: React.FC<HifiWreckProps> = ({ planetSize, terrainSeed, commandC
     () => DIAGNOSIS_TARGET_LOCAL.clone().applyQuaternion(wreckQuaternion).add(shipPosition),
     [shipPosition, wreckQuaternion]
   );
-  const hoverSocketPosition = useMemo(
-    () => HOVER_SOCKET_LOCAL.clone().applyQuaternion(wreckQuaternion).add(shipPosition),
+  const legacyHoverReceiptPosition = useMemo(
+    () => LEGACY_HOVER_RECEIPT_LOCAL.clone().applyQuaternion(wreckQuaternion).add(shipPosition),
     [shipPosition, wreckQuaternion]
   );
   const hatchTarget = useMemo(
@@ -271,22 +271,31 @@ const HifiWreck: React.FC<HifiWreckProps> = ({ planetSize, terrainSeed, commandC
           }
         };
       }
-      if (playerPosition.distanceToSquared(workstationPosition) <= WORKSTATION_REACH ** 2) {
-        const action = getWreckReconstructionAction(commandContext.actorId);
-        if (action) {
-          return {
-            id: action.interactionId,
-            verb: action.verb,
-            perform: () => {
-              performWreckReconstructionAction(action, commandContext.actorId, commandContext);
-            }
-          };
-        }
+      const action = getWreckReconstructionAction(commandContext.actorId);
+      if (action
+        && playerPosition.distanceToSquared(workstationPosition) <= WORKSTATION_REACH ** 2) {
+        return {
+          id: action.interactionId,
+          verb: action.verb,
+          perform: () => {
+            performWreckReconstructionAction(action, commandContext.actorId, commandContext);
+          }
+        };
       }
 
       // Optional free attention: when no required bench action owns F, the
       // player may revisit the same scar across persisted repair states. This
-      // never advances Story and never takes the camera.
+      // never advances Story and never takes the camera. Only publish it when
+      // this repair stage can add new evidence; an already-recorded scar must
+      // not become a permanent dead prompt over the reconstruction controls.
+      if (!canAttendWreckScar(
+        repairStage,
+        commandContext.actorId,
+        {
+          worldId: commandContext.world.worldId,
+          requiredInteractionActive: action !== null
+        }
+      )) return null;
       const distanceSquared = playerPosition.distanceToSquared(diagnosisTarget);
       if (distanceSquared > WRECK_DIAGNOSIS_REACH ** 2) return null;
       if (camera) {
@@ -382,14 +391,14 @@ const HifiWreck: React.FC<HifiWreckProps> = ({ planetSize, terrainSeed, commandC
     worldId: commandContext.world.worldId,
     position: [shipPosition.x, shipPosition.y, shipPosition.z],
     hoverSocketPosition: [
-      hoverSocketPosition.x,
-      hoverSocketPosition.y,
-      hoverSocketPosition.z
+      legacyHoverReceiptPosition.x,
+      legacyHoverReceiptPosition.y,
+      legacyHoverReceiptPosition.z
     ]
   }), [
     commandContext.actorId,
     commandContext.world.worldId,
-    hoverSocketPosition,
+    legacyHoverReceiptPosition,
     shipPosition
   ]);
 
@@ -399,8 +408,7 @@ const HifiWreck: React.FC<HifiWreckProps> = ({ planetSize, terrainSeed, commandC
       actorId: commandContext.actorId,
       worldId: commandContext.world.worldId,
       storyBeat: story.beat,
-      repairStage,
-      groundedReturnComplete: hasFirstHoverGroundedReturn(commandContext.actorId)
+      repairStage
     });
   }, [
     commandContext.actorId,
@@ -590,16 +598,14 @@ const HifiWreck: React.FC<HifiWreckProps> = ({ planetSize, terrainSeed, commandC
     hifiWreckHandle.position = shipPosition;
     hifiWreckHandle.workstationPosition = workstationPosition;
     hifiWreckHandle.diagnosisTarget = diagnosisTarget;
-    hifiWreckHandle.hoverSocketPosition = hoverSocketPosition;
     hifiWreckHandle.hatchTarget = hatchTarget;
     return () => {
       hifiWreckHandle.position = null;
       hifiWreckHandle.workstationPosition = null;
       hifiWreckHandle.diagnosisTarget = null;
-      hifiWreckHandle.hoverSocketPosition = null;
       hifiWreckHandle.hatchTarget = null;
     };
-  }, [diagnosisTarget, hatchTarget, hoverSocketPosition, shipPosition, workstationPosition]);
+  }, [diagnosisTarget, hatchTarget, shipPosition, workstationPosition]);
   useEffect(() => registerEmergentMovieWreckBinding({
     commandContext,
     workstationPosition
@@ -754,24 +760,6 @@ const WreckStageAdditions: React.FC<{
               </mesh>
             </group>
           ))}
-          {!ready && (
-            <group name="wreck-upper-route-socket" position={HOVER_SOCKET_LOCAL}>
-              <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[0.34, 0.055, 6, 16]} />
-                <meshStandardMaterial
-                  color="#d9fff5"
-                  emissive="#3be0d2"
-                  emissiveIntensity={1.2}
-                  roughness={0.26}
-                  metalness={0.48}
-                />
-              </mesh>
-              <mesh>
-                <octahedronGeometry args={[0.17, 0]} />
-                <meshStandardMaterial color="#ffc27a" emissive="#c7652a" emissiveIntensity={0.9} />
-              </mesh>
-            </group>
-          )}
         </>
       )}
 

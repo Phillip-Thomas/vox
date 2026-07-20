@@ -94,6 +94,7 @@ import {
   type TidegardenRelationshipProof
 } from './tidegardenSettlement.ts';
 import { STORY_SEED, storyAnchors } from './world/storyWorld.ts';
+import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
 import {
   debugStartInSpace,
   enterAtmosphere,
@@ -186,6 +187,7 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     resetSceneReady();
     resetSystemFlightStoreForTests();
     clearStoryText();
+    hideAuditWorker();
     enterEmergentStoryBeat(null);
     storyAnchors.planetSize = 50;
     storyAnchors.terrainSeed = STORY_SEED;
@@ -211,6 +213,7 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
       markerLabel: 'KESTREL HATCH · BOARD'
     });
 
+    expect(enterShip()).toBe(true);
     enterBeat('ch8-launch');
     expect(getActiveGuidedStoryObjective()).toMatchObject({
       id: 'ch8:launch:ignite',
@@ -337,10 +340,14 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     expect(commitA4PondResponse(true, WORLD_ID).ok).toBe(true);
     expect(commitA4HerdCrest(5, 2, WORLD_ID).ok).toBe(true);
     expect(commitA4WorkerFlight(true, 1, WORLD_ID).ok).toBe(true);
+    // The receipt appears at the branch, but the live body still owns the last
+    // short grounded tail. Handback cannot pop him out before that exit lands.
+    getAuditWorkerPose().visible = true;
     expect(commitA4FieldPackTear(true, true, true, WORLD_ID).ok).toBe(true);
-    tick(8.73);
+    tick(8.75);
     expectBeat('a4-exhale');
-    tick(0.02);
+    hideAuditWorker();
+    tick(0);
     expectBeat('ch5-maw');
   });
 
@@ -408,7 +415,7 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     tick(600);
     expectBeat('ch7-reconstruct');
     // A hydrated/authoritative scalar cannot skip the physical diagnosis and
-    // first-hover receipts even if it claims the ship is already flight-ready.
+    // calibration receipt even if it claims the ship is already flight-ready.
     applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
     tick(600);
     expectBeat('ch7-reconstruct');
@@ -439,9 +446,6 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
     expectBeat('ch7-reconstruct');
 
     addItem('logic_wafer', 1, ACTOR_ID);
-    expect(getWreckReconstructionAction(ACTOR_ID)).toBeNull();
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHover, ACTOR_ID);
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHoverRecovered, ACTOR_ID);
     const flight = getWreckReconstructionAction(ACTOR_ID);
     expect(flight).toMatchObject({ kind: 'repair', target: 'flight_ready' });
     if (!flight) throw new Error('Expected flight calibration action.');
@@ -683,6 +687,11 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
       actorId: ACTOR_ID
     })).toMatchObject({ ok: true });
     tick(0);
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'settle:second-hearth-settling',
+      markerLabel: 'SECOND HEARTH · SETTLING',
+      requiresMarker: false
+    });
     tick(5.49);
     expectBeat('ch9-hearth');
     tick(0.02);

@@ -1,0 +1,91 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "mode": "chapter",
+  "status": "locked",
+  "sourceRevision": "9cee8d0c650c95f49cfa1636672afeaa6d2e45fb+working-tree-ce15b8f242c9-20260717T162526Z",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner Lane Override and 9. Resume Here",
+      "sha256": "939e986b5106aee8e558178c5ba0754a4ec8bae1c1fbea12a67ad5fbbd9414bb"
+    },
+    {
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "section": "Creative Triad authority, note passing, and cohesion review",
+      "sha256": "789aaa8c05c6bae27b77a01afc888f74e3142599addbd14a9340e8f5b67579fe"
+    },
+    {
+      "path": ".codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
+      "section": "Signed A4 through Chapter 9 physical story contract",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-07-17-ch9-guidance-repair/",
+    "main/chapter-journey-contract.json",
+    "main/chapter-registry.json",
+    "main/tools/objective-hud-probe.mjs",
+    "main/src/components/ui/CraftingPanel.tsx",
+    "main/src/components/ui/CraftingPanel.test.ts",
+    "main/src/story/autopilot.ts",
+    "main/src/story/autopilot.test.ts",
+    "main/src/story/storyDirector.ts",
+    "main/src/story/storyDirector.test.ts",
+    "main/src/story/storyObjectiveGuidance.ts",
+    "main/src/story/storyObjectiveGuidance.test.ts",
+    "main/src/story/storyInputPolicy.ts",
+    "main/src/story/storyInputPolicy.test.ts",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/tidegardenSettlement.ts",
+    "main/src/story/tidegardenSettlement.test.ts",
+    "main/src/story/tidegardenSettlementTargets.ts",
+    "main/src/story/tidegardenSettlementTargets.test.ts",
+    "main/src/story/world/TidegardenSettlementWorld.tsx",
+    "main/src/story/world/tidegardenSettlementVisualPolicy.ts",
+    "main/src/story/world/tidegardenSettlementVisualPolicy.test.ts",
+    "main/src/story/ux/StoryGuidanceHud.tsx",
+    "main/src/story/ux/StoryGuidanceHud.test.tsx"
+  ],
+  "protectedPaths": [
+    "main/public/audio/",
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/src/story/emergentScoreDirector.ts",
+    "main/src/story/voyageDeck.ts",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "ch9-settle",
+    "ch9-hearth"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [
+      "owner-instruction-2026-07-17-review-and-improve-chapter-9"
+    ],
+    "protectedAudioPaths": [
+      "main/public/audio/",
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/src/story/emergentScoreDirector.ts"
+    ],
+    "openGateRefs": [
+      "chapter-9-full-objective-lifecycle",
+      "chapter-9-headed-real-browser-guidance",
+      "chapter-9-reduced-motion-equivalence",
+      "chapter-9-quality-profile-matrix",
+      "full-client-verify",
+      "human-release-decision"
+    ]
+  },
+  "canonicalPreviewUrl": null,
+  "publishAllowed": false,
+  "frozenAt": "2026-07-17T16:25:26Z"
+}

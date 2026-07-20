@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { setInteraction } from '../../game/systems/interactionSystem.ts';
 import { clearStoryText } from '../storyText.ts';
 import {
   activateGuidedStoryObjective,
@@ -13,6 +14,7 @@ vi.mock('../../audio/sfxEngine.ts', () => ({ playSfx: vi.fn() }));
 afterEach(() => {
   clearGuidedStoryObjective();
   clearStoryText();
+  setInteraction(null);
 });
 
 describe('regulation feed objective presentation', () => {
@@ -47,9 +49,21 @@ describe('regulation feed objective presentation', () => {
       <RegulationFeedHud embodiedGuidanceActive />
     );
     expect(markup).toContain('data-regulation-feed-chrome="true"');
+    expect(markup).toContain('data-redaction-box="true"');
     expect(markup).toContain('data-redaction-indicator="true"');
     expect(markup).not.toContain('aria-label="Current story objective"');
     expect(markup).not.toContain('data-regulation-objective-marker="true"');
     expect(markup).not.toContain('[F] CLASSIFY THE UNCHARTED MASS.');
+  });
+
+  it('publishes the same primary prompt contract under the regulation owner', () => {
+    setInteraction({ id: 'story-anomaly', verb: 'Touch' });
+
+    const markup = renderToStaticMarkup(<RegulationFeedHud />);
+    expect(markup).toContain('id="paravoxia-primary-interaction-prompt"');
+    expect(markup).toContain('data-interaction-prompt="primary"');
+    expect(markup).toContain('data-interaction-id="story-anomaly"');
+    expect(markup).toContain('data-interaction-owner="regulation-feed"');
+    expect(markup.match(/data-interaction-prompt=/g)).toHaveLength(1);
   });
 });

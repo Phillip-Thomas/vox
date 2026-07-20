@@ -287,6 +287,10 @@ Gate:
 
 - No cold activation task exceeds 100 ms; the target is the existing <50 ms
   per-feature travel budget.
+- Hero interaction and handback windows keep light cardinality constant, create
+  zero shader programs or GPU resources, and emit no WebGL context or graphics
+  diagnostics; glow is prewarmed additive/emissive geometry or intensity-only
+  animation on a persistent light.
 - HIGH meets the existing >=50 fps / <=24 ms p95 atlas floor on the demo route.
 - HIGH and POTATO produce materially different live work.
 - The loading shell paints within 1 second on Fast 4G and the reference scene is

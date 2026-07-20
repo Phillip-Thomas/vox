@@ -190,11 +190,40 @@ function surfacePoseOnAdjacentFace(planetSize: number, terrainSeed: number): Sto
  * strip toward the signal mesa. Offsets are (along, depth) voxel units in the
  * side plane's frame, mirroring the supply pods.
  */
-export function getNavWaypointPoses(planetSize: number, terrainSeed: number): StoryPropPose[] {
+export function getNavWaypointPoses(
+  planetSize: number,
+  terrainSeed: number,
+  terrain: AgentSurfaceTerrainQuery = proceduralAgentTerrain(planetSize, terrainSeed)
+): StoryPropPose[] {
   // The first fix steps visibly off the old work line; the remaining dogleg
   // teaches both overhead axes and ends short of the mesa's isometric climb.
   const offsets: Array<[number, number]> = [[6, 2], [11, -3], [10, -7]];
-  return offsets.map(([x, z]) => surfacePoseNear(planetSize, terrainSeed, x, z, 0.6));
+  const NAV_BEACON_LIFT = 0.6;
+  const spawnTerrain = spawnTerrainFromAgent(terrain);
+  return offsets.map(([x, z]) => {
+    const raw = surfacePoseNear(planetSize, terrainSeed, x, z, NAV_BEACON_LIFT);
+    // Dry-landing guarantee: a triangulation beacon dropped in (or just behind)
+    // water strands the top-down autopilot at the shoreline — it steers toward a
+    // fix it can never stand on. Nudge each fix to the nearest validated dry pad
+    // on the same top face, using the shared spawn/terrain sampler (isWaterVoxel
+    // aware) rather than a bespoke route planner. The A* authority then always
+    // has a dry or jetpack-reachable target. If the bounded search finds no dry
+    // pad we keep the raw pose (never worse than before the guarantee).
+    const site = findValidSpawnSite(spawnTerrain, planetSize, raw.position, {
+      kind: 'player',
+      face: 'top',
+      maxSearchRadius: 8
+    });
+    if (!site) return raw;
+    return {
+      position: voxelCoordToWorld(
+        site.supportVoxel.x,
+        site.supportVoxel.y,
+        site.supportVoxel.z
+      ).addScaledVector(site.up, NAV_BEACON_LIFT),
+      up: site.up.clone()
+    };
+  });
 }
 
 /**

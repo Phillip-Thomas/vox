@@ -191,7 +191,9 @@ export function resolveBuildTarget(hit: BuildHit, piece: BuildPieceType, up: THR
   if (family === 'wall') {
     const hitIsWall = hit.panelType !== undefined && BUILD_PIECES[hit.panelType].family === 'wall';
     if (hit.isPanel && hitIsWall && hit.panelFace !== undefined) {
-      const cell: [number, number, number] = [hit.cell[0] + u[0], hit.cell[1] + u[1], hit.cell[2] + u[2]];
+      const hitPiece = getPieceAt(hit.cell[0], hit.cell[1], hit.cell[2], hit.panelFace);
+      const top = hitPiece?.tall === 'lower' && hitPiece.partner ? hitPiece.partner : hit.cell;
+      const cell: [number, number, number] = [top[0] + u[0], top[1] + u[1], top[2] + u[2]];
       return { cell, face: hit.panelFace, valid: free(cell, hit.panelFace) }; // stack atop the wall
     }
     if (hit.isPanel && hit.panelType === 'foundation') {

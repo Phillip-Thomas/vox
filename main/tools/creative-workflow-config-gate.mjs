@@ -21,6 +21,8 @@ const FILES = {
   rubric: relative('docs/architecture/workflow-orchestration/rubrics/paravoxia-creative-cohesion.rubric.json'),
   taxonomy: relative('docs/architecture/workflow-orchestration/defect-taxonomies/paravoxia-creative.defect-taxonomy.json'),
   sceneSchema: relative('docs/architecture/workflow-orchestration/schemas/paravoxia-scene-contract.schema.json'),
+  journeySchema: relative('docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json'),
+  journeyContract: relative('main/chapter-journey-contract.json'),
   sceneTemplate: relative('.codex/production-runs/_template/scene-contract.json'),
   uxBaselineTemplate: relative('.codex/production-runs/_template/shipped-ux-baseline.json'),
   uxLifecycleTemplate: relative('.codex/production-runs/_template/objective-lifecycle-evidence.json'),
@@ -45,6 +47,7 @@ const CHAPTER_ACCEPTANCE_INPUTS = [
   'candidate-revision',
   'production-authority',
   'chapter-registry',
+  'chapter-journey-contract',
   'signed-council-authority',
   'signed-scene-authority',
   'previous-chapter-context',
@@ -90,6 +93,8 @@ function loadConfiguration() {
     rubric: readJson(FILES.rubric),
     taxonomy: readJson(FILES.taxonomy),
     sceneSchema: readJson(FILES.sceneSchema),
+    journeySchema: readJson(FILES.journeySchema),
+    journeyContract: readJson(FILES.journeyContract),
     sceneTemplate: readJson(FILES.sceneTemplate),
     uxBaselineTemplate: readJson(FILES.uxBaselineTemplate),
     uxLifecycleTemplate: readJson(FILES.uxLifecycleTemplate),
@@ -157,6 +162,12 @@ function validateContextBindings(config, audit, { checkPaths = true } = {}) {
     'context.ux-source',
     'The portable creative context pack must require the bounded story UX runtime source.',
   )
+  const journeySourceRef = (config.contextPack.sourceRefs || []).find((source) => source.slug === 'chapter-journey-contract')
+  audit.assert(
+    journeySourceRef?.bindingKey === 'paravoxia.chapterJourneyContract' && journeySourceRef?.required === true,
+    'context.journey-source',
+    'The creative context pack must require the executable chapter journey contract.',
+  )
 
   const bindings = config.paravoxiaBindings
   audit.assert(bindings.schema === 'terra.contextSourceBindingSet.v1', 'bindings.schema', 'Paravoxia context bindings must use terra.contextSourceBindingSet.v1.')
@@ -188,6 +199,15 @@ function validateWorkflow(config, audit) {
   const workflow = config.workflow
   audit.assert(includesAll(workflow.scope?.contextPackRefs, ['paravoxia-creative-triad@v1', 'frontend-design@v1']), 'workflow.context-packs', 'The creative workflow must load both Paravoxia and portable frontend-design context.')
   for (const artifact of UX_ARTIFACTS) audit.assert(Boolean(findArtifact(workflow, artifact)), 'workflow.ux-artifact', `Workflow must declare ${artifact}.`)
+  const journeyInput = (workflow.inputs || []).find((input) => input.slug === 'chapter-journey-contract')
+  const journeyArtifact = findArtifact(workflow, 'chapter-journey-evidence')
+  audit.assert(
+    journeyInput?.required === true
+      && journeyArtifact?.schemaRef === 'paravoxia.chapterJourneyEvidence.v1'
+      && journeyArtifact?.producerStep === 'capture-proof',
+    'workflow.journey-authority',
+    'The creative council must bind the executable journey contract and emit schema-bound browser evidence.',
+  )
 
   const directors = ['chapter-director', 'score-director', 'cinematography-director']
   const declaredDirectors = (workflow.roleContracts || []).map((role) => role.slug).filter((slug) => slug?.endsWith('-director'))
@@ -197,7 +217,7 @@ function validateWorkflow(config, audit) {
   }
 
   const verifier = findRole(workflow, 'mechanical-verifier')
-  audit.assert(includesAll(verifier?.requiredOutputs, ['shipped-ux-baseline', 'objective-lifecycle-evidence']), 'workflow.verifier-output', 'Mechanical verification must produce shipped UX grounding and lifecycle proof.')
+  audit.assert(includesAll(verifier?.requiredOutputs, ['shipped-ux-baseline', 'objective-lifecycle-evidence', 'chapter-journey-evidence']), 'workflow.verifier-output', 'Mechanical verification must produce shipped UX grounding, lifecycle proof, and contract-driven journey evidence.')
   const uxAuditor = findRole(workflow, 'player-experience-auditor')
   audit.assert(Boolean(uxAuditor) && includesAll(uxAuditor.allowedInputs, ['shipped-ux-baseline', 'objective-lifecycle-evidence', 'raw-audiovisual-evidence']) && (uxAuditor.requiredOutputs || []).includes('ux-audit'), 'workflow.ux-auditor', 'A fresh read-only Player Experience Auditor must review source grounding and raw lifecycle evidence.')
   audit.assert(includesAll(uxAuditor?.forbiddenActions, ['patch:write', 'publish:write']), 'workflow.ux-auditor-boundary', 'The Player Experience Auditor must remain read-only and unable to publish.')
@@ -206,6 +226,11 @@ function validateWorkflow(config, audit) {
   const judge = findRole(workflow, 'cohesion-judge')
   const quality = findRole(workflow, 'artifact-quality-auditor')
   audit.assert((moderator?.allowedInputs || []).includes('ux-audit'), 'workflow.moderator-input', 'The canonical defect moderator must consume the UX audit.')
+  audit.assert(
+    [uxAuditor, moderator, judge, quality].every((role) => (role?.allowedInputs || []).includes('chapter-journey-evidence')),
+    'workflow.journey-review-chain',
+    'Player-experience audit, moderation, cohesion judgement, and artifact-quality audit must all consume the same journey evidence.',
+  )
   audit.assert(includesAll(judge?.allowedInputs, UX_ARTIFACTS), 'workflow.judge-input', 'The cohesion judge must see UX grounding, proof, and independent audit.')
   audit.assert(includesAll(quality?.allowedInputs, UX_ARTIFACTS), 'workflow.quality-input', 'The deterministic artifact-quality lane must inspect all UX artifacts.')
 
@@ -219,6 +244,14 @@ function validateWorkflow(config, audit) {
   const proofChecks = findGate(workflow, 'proof-matrix-complete')?.checks || []
   const reviewChecks = findGate(workflow, 'independent-reviews-complete')?.checks || []
   audit.assert(proofChecks.some((check) => check.includes('objective-lifecycle-evidence')), 'workflow.proof-gate', 'Proof gate must inspect the objective lifecycle evidence.')
+  audit.assert(includesAll(proofChecks, [
+    'chapter-journey-evidence.schema == "paravoxia.chapterJourneyEvidence.v1"',
+    'chapter-journey-evidence.contract.sha256 == sha256(chapter-journey-contract)',
+    'chapter-journey-evidence.sourceRevision == production-lock-machine.sourceRevision',
+    'chapter-journey-evidence.status == "passed"',
+    'chapter-journey-evidence.failures.length == 0',
+    'chapter-journey-evidence.unavailable.length == 0',
+  ]), 'workflow.journey-proof-gate', 'The production creative gate must require exact-current, clean focused journey evidence alongside its separate continuous chapter proof.')
   audit.assert(reviewChecks.some((check) => check.includes('ux-audit')), 'workflow.review-gate', 'Independent review gate must require the UX audit.')
   audit.assert((workflow.inspection?.qualityQuestions || []).some((question) => /objective|guidance|next action/i.test(question)), 'workflow.quality-question', 'Inspection must ask whether the player can find and perform the next action.')
 }
@@ -235,6 +268,7 @@ function validateChapterAcceptance(config, audit) {
     'chapter-implementation-map',
     'chapter-mechanical-evidence',
     'chapter-functional-evidence',
+    'chapter-journey-evidence',
     'chapter-boundary-continuity-evidence',
     'raw-audiovisual-evidence',
     'objective-lifecycle-evidence',
@@ -372,6 +406,7 @@ function validateChapterAcceptance(config, audit) {
   )
 
   const mechanicalArtifact = findArtifact(workflow, 'chapter-mechanical-evidence')
+  const journeyArtifact = findArtifact(workflow, 'chapter-journey-evidence')
   const mechanicalStep = findStep(workflow, (step) => step.id === 'run-chapter-functional-proof')
   const qualityStep = findStep(workflow, (step) => step.id === 'audit-chapter-acceptance-artifacts')
   const integrityStep = findStep(workflow, (step) => step.id === 'verify-independent-review-integrity')
@@ -384,6 +419,16 @@ function validateChapterAcceptance(config, audit) {
       && (findRole(workflow, 'artifact-quality-auditor')?.allowedInputs || []).includes('chapter-mechanical-evidence'),
     'chapter-acceptance.mechanical-evidence-binding',
     'The bound browser report must be a first-class chapter-mechanical-evidence artifact consumed by review and final quality audit.',
+  )
+  audit.assert(
+    journeyArtifact?.schemaRef === 'paravoxia.chapterJourneyEvidence.v1'
+      && journeyArtifact?.producerStep === 'run-chapter-functional-proof'
+      && (mechanicalStep?.outputs || []).includes('chapter-journey-evidence')
+      && (findRole(workflow, 'mechanical-verifier')?.requiredOutputs || []).includes('chapter-journey-evidence')
+      && (findRole(workflow, 'player-experience-auditor')?.allowedInputs || []).includes('chapter-journey-evidence')
+      && (findRole(workflow, 'cohesion-judge')?.allowedInputs || []).includes('chapter-journey-evidence'),
+    'chapter-acceptance.journey-evidence-binding',
+    'Contract-driven browser journeys must be a first-class exact-revision artifact consumed by experience review and cohesion judgement.',
   )
   audit.assert(
     integrityStep?.roleContractRef === 'artifact-quality-auditor'
@@ -543,7 +588,7 @@ function validateChapterAcceptance(config, audit) {
   const implementationGateChecks = findGate(workflow, 'implementation-correctness-proven')?.checks || []
   const functionalGateChecks = findGate(workflow, 'chapter-functional-proof-complete')?.checks || []
   audit.assert(
-    includesAll(commandIds, ['chapter-registry-check', 'chapter-acceptance-check', 'chapter-static-typecheck', 'chapter-static-tests', 'chapter-static-build'])
+    includesAll(commandIds, ['chapter-journey-contract-check', 'chapter-journey-probe', 'chapter-registry-check', 'chapter-acceptance-check', 'chapter-static-typecheck', 'chapter-static-tests', 'chapter-static-build'])
       && commands.every((command) => command.privileged === false && Array.isArray(command.argv) && ['npm', 'node'].includes(command.argv[0]))
       && acceptanceCommand?.argv?.join(' ') === 'node main/tools/chapter-acceptance-workflow-command.mjs'
       && acceptanceCommand?.timeoutMs === 600000
@@ -552,22 +597,28 @@ function validateChapterAcceptance(config, audit) {
       && acceptanceCommand?.executionPolicy?.productionResultPersistence === 'terra.commandResult.v1'
       && commands.every((command) => !/(^|\s)(sh|bash|patch|publish|deploy)(\s|$)/i.test(command.argv.join(' '))),
     'chapter-acceptance.safe-commands',
-    'Bindings must expose only argv-based, non-privileged registry, acceptance, typecheck, test, and build commands.',
+    'Bindings must expose only argv-based, non-privileged journey-contract, registry, acceptance, typecheck, test, and build commands.',
   )
   audit.assert(
-    commandResultKeys['chapter-registry-check'] === 'chapterRegistryCheck'
+    commandResultKeys['chapter-journey-contract-check'] === 'chapterJourneyContractCheck'
+      && commandResultKeys['chapter-journey-probe'] === 'chapterJourneyProbe'
+      && commandResultKeys['chapter-registry-check'] === 'chapterRegistryCheck'
       && commandResultKeys['chapter-acceptance-check'] === 'chapterAcceptanceCheck'
       && commandResultKeys['chapter-static-typecheck'] === 'chapterStaticTypecheck'
       && commandResultKeys['chapter-static-tests'] === 'chapterStaticTests'
       && commandResultKeys['chapter-static-build'] === 'chapterStaticBuild'
       && includesAll(implementationGateChecks, [
         'check-results.chapterRegistryCheck == true',
+        'check-results.chapterJourneyContractCheck == true',
         'check-results.chapterStaticTypecheck == true',
         'check-results.chapterStaticTests == true',
         'check-results.chapterStaticBuild == true',
       ])
       && !implementationGateChecks.includes('check-results.chapterAcceptanceCheck == true')
-      && functionalGateChecks.includes('check-results.chapterAcceptanceCheck == true'),
+      && includesAll(functionalGateChecks, [
+        'check-results.chapterAcceptanceCheck == true',
+        'check-results.chapterJourneyProbe == true',
+      ]),
     'chapter-acceptance.command-result-keys',
     'Gate check paths must exactly match binding resultKeys, and browser acceptance may only gate the browser proof step.',
   )
@@ -636,6 +687,10 @@ function validateChapterAcceptance(config, audit) {
       && operatorSource.includes("report.chapter?.id !== expectedChapter")
       && operatorSource.includes("report.source?.revision !== expectedRevision")
       && operatorSource.includes('requireCanonicalAcceptanceRunFile(values.run)')
+      && operatorSource.includes('attachJourneyEvidence(runPath')
+      && operatorSource.includes('contractHashMatchesInput')
+      && operatorSource.includes('requiredScenarioCoverageComplete')
+      && operatorSource.includes('nonCertifyingEvidenceNotUsedForContinuity')
       && operatorSource.includes('synchronizeCanonicalDefectRegister(runPath)')
       && operatorSource.includes('canonicalRepairRequired: synchronization.repairRequired')
       && operatorSource.includes('requireSafeNewAcceptanceRunDir(requestedOutDir)')
@@ -659,9 +714,16 @@ function validateProfilesAndJudgement(config, audit) {
   for (const profile of config.profiles) {
     const evidence = profile.requiredEvidence || []
     const baseline = evidence.includes('shipped-ux-baseline') || evidence.includes('shipped-ux-baselines')
-    audit.assert(baseline && includesAll(evidence, ['objective-lifecycle-evidence', 'ux-audit']), 'profile.ux-evidence', `${profile.identity?.slug} must require baseline, lifecycle, and audit UX evidence.`)
+    audit.assert(baseline && includesAll(evidence, ['objective-lifecycle-evidence', 'chapter-journey-evidence', 'ux-audit']), 'profile.ux-evidence', `${profile.identity?.slug} must require baseline, lifecycle, focused journey, and audit UX evidence.`)
     const states = profile.stateCoverage?.requiredStates || []
     audit.assert(states.some((state) => /objective|guidance/i.test(state)), 'profile.ux-state', `${profile.identity?.slug} must cover objective lifecycle or guidance state.`)
+    audit.assert(
+      states.includes('focused_journey_contracts')
+        || (profile.identity?.slug === 'paravoxia-chapter-acceptance'
+          && includesAll(states, ['interaction_arbitration_and_no_op', 'entity_absence_and_never_reappears', 'editable_focus_and_hotkey_isolation'])),
+      'profile.journey-state',
+      `${profile.identity?.slug} must cover every focused journey contract owned by its scope.`,
+    )
   }
 
   const interaction = (config.rubric.categories || []).find((category) => category.slug === 'interaction_accessibility_and_variants')
@@ -690,6 +752,34 @@ function validateStoryAndRuntimeSetup(config, audit, { checkPaths = true } = {})
   audit.assert(overlayMount.includes('StoryGuidanceHud'), 'runtime.hud-mount', 'The persistent story guidance HUD must remain mounted in the existing overlay stack.')
   audit.assert(config.packageJson.scripts?.['story:ux:check'] && config.packageJson.scripts?.['creative:workflow:check'], 'scripts.workflow-checks', 'Package scripts must expose targeted UX and workflow checks.')
   audit.assert(config.packageJson.scripts?.verify?.includes('creative:workflow:check'), 'scripts.verify-chain', 'The standard verification chain must enforce the creative workflow configuration gate.')
+  audit.assert(
+    config.packageJson.scripts?.['chapter:journey:check'] === 'node tools/chapter-journey-contract-gate.mjs'
+      && config.packageJson.scripts?.['chapter:journey:smoke'] === 'node tools/chapter-journey-contract-gate.mjs --self-test'
+      && config.packageJson.scripts?.['chapter:journey:probe'] === 'node tools/chapter-journey-probe.mjs'
+      && config.packageJson.scripts?.['chapter:journey:probe:smoke'] === 'node tools/chapter-journey-probe.mjs --self-test'
+      && config.packageJson.scripts?.verify?.includes('chapter:journey:check'),
+    'scripts.journey-gates',
+    'Package scripts and the standard verification chain must expose the journey contract and browser probe gates.',
+  )
+  audit.assert(
+    config.journeyContract.schema === 'paravoxia.chapterJourneyContract.v1'
+      && config.journeySchema.properties?.schema?.const === 'paravoxia.chapterJourneyContract.v1'
+      && fs.existsSync(relative('main/tools/chapter-journey-contract-gate.mjs'))
+      && fs.existsSync(relative('main/tools/chapter-journey-probe.mjs')),
+    'runtime.journey-contract',
+    'The executable journey authority, schema, static gate, and real-browser probe must all be present.',
+  )
+  const journeyBridge = fs.readFileSync(relative('main/src/story/JourneyRuntimeProbeBridge.tsx'), 'utf8')
+  audit.assert(
+    journeyBridge.includes('__paravoxiaJourneyProbe')
+      && journeyBridge.includes('getJourneyInputSnapshot')
+      && journeyBridge.includes('getJourneyEntitySnapshot')
+      && journeyBridge.includes('getStoryInteractionTrace')
+      && journeyBridge.includes('getJourneyProbePreparationSnapshot')
+      && journeyBridge.includes('prepareScenario'),
+    'runtime.journey-bridge',
+    'The query-gated browser bridge must expose input, entity, interaction, objective, receipt, and explicit direct-entry preparation evidence without hard-coded result claims.',
+  )
 
   const guidance = config.sceneTemplate.guidance
   const templateObjective = guidance?.objectives?.[0]
@@ -764,6 +854,23 @@ function runSelfTest(config) {
   const sourceAudit = validateConfiguration(missingSource, { checkPaths: false })
   if (!sourceAudit.failures.some((failure) => failure.code === 'context.ux-source')) throw new Error('Self-test did not reject a missing UX context source.')
 
+  const missingJourneySource = structuredClone(config)
+  missingJourneySource.contextPack.sourceRefs = missingJourneySource.contextPack.sourceRefs.filter((source) => source.slug !== 'chapter-journey-contract')
+  const journeySourceAudit = validateConfiguration(missingJourneySource, { checkPaths: false })
+  if (!journeySourceAudit.failures.some((failure) => failure.code === 'context.journey-source')) throw new Error('Self-test did not reject a missing chapter journey context source.')
+
+  const missingCreativeJourneyArtifact = structuredClone(config)
+  missingCreativeJourneyArtifact.workflow.artifactRequirements = missingCreativeJourneyArtifact.workflow.artifactRequirements.filter((artifact) => artifact.slug !== 'chapter-journey-evidence')
+  const creativeJourneyArtifactAudit = validateConfiguration(missingCreativeJourneyArtifact, { checkPaths: false })
+  if (!creativeJourneyArtifactAudit.failures.some((failure) => failure.code === 'workflow.journey-authority')) throw new Error('Self-test did not reject creative production without journey evidence.')
+
+  const bypassedCreativeJourneyProof = structuredClone(config)
+  findGate(bypassedCreativeJourneyProof.workflow, 'proof-matrix-complete').checks = findGate(bypassedCreativeJourneyProof.workflow, 'proof-matrix-complete').checks.filter(
+    (check) => check !== 'chapter-journey-evidence.status == "passed"',
+  )
+  const creativeJourneyProofAudit = validateConfiguration(bypassedCreativeJourneyProof, { checkPaths: false })
+  if (!creativeJourneyProofAudit.failures.some((failure) => failure.code === 'workflow.journey-proof-gate')) throw new Error('Self-test did not reject a creative proof gate that bypasses focused journey evidence.')
+
   const missingAuditor = structuredClone(config)
   missingAuditor.workflow.roleContracts = missingAuditor.workflow.roleContracts.filter((role) => role.slug !== 'player-experience-auditor')
   const auditorAudit = validateConfiguration(missingAuditor, { checkPaths: false })
@@ -804,6 +911,16 @@ function runSelfTest(config) {
   )
   const missingAcceptanceEvidenceAudit = validateConfiguration(missingAcceptanceEvidence, { checkPaths: false })
   if (!missingAcceptanceEvidenceAudit.failures.some((failure) => failure.code === 'chapter-acceptance.artifacts')) throw new Error('Self-test did not reject chapter acceptance without boundary evidence.')
+
+  const missingAcceptanceJourneyInput = structuredClone(config)
+  missingAcceptanceJourneyInput.chapterAcceptanceWorkflow.inputs = missingAcceptanceJourneyInput.chapterAcceptanceWorkflow.inputs.filter((input) => input.slug !== 'chapter-journey-contract')
+  const missingAcceptanceJourneyInputAudit = validateConfiguration(missingAcceptanceJourneyInput, { checkPaths: false })
+  if (!missingAcceptanceJourneyInputAudit.failures.some((failure) => failure.code === 'chapter-acceptance.inputs')) throw new Error('Self-test did not reject chapter acceptance without the journey contract input.')
+
+  const bypassedJourneyScripts = structuredClone(config)
+  delete bypassedJourneyScripts.packageJson.scripts['chapter:journey:check']
+  const bypassedJourneyScriptsAudit = validateConfiguration(bypassedJourneyScripts, { checkPaths: false })
+  if (!bypassedJourneyScriptsAudit.failures.some((failure) => failure.code === 'scripts.journey-gates')) throw new Error('Self-test did not reject missing journey package gates.')
 
   const unsupportedRuntimeGrammar = structuredClone(config)
   findGate(unsupportedRuntimeGrammar.chapterAcceptanceWorkflow, 'chapter-boundary-proof-complete').checks[0] = 'chapter-boundary-continuity-evidence.targetToNext.status in [pass, contract-validated]'

@@ -290,6 +290,25 @@ describe('gameplay command wrappers', () => {
     ]);
   });
 
+  it('places a 1x2 wall through one command and one domain event', () => {
+    const events: DomainEvent[] = [];
+    const ctx = context(events);
+    addItem('wood', 4);
+
+    const result = placeStructureCommand(ctx, {
+      cell: [3, 4, 5], face: 0, type: 'tall_wall', material: 'wood', up: 2
+    });
+
+    expect(result.ok).toBe(true);
+    expect(getPieceAt(3, 4, 5, 0)).toMatchObject({ type: 'tall_wall', tall: 'lower' });
+    expect(getPieceAt(3, 5, 5, 0)).toMatchObject({ type: 'tall_wall', tall: 'upper' });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      type: 'structure_placed',
+      payload: { cell: [3, 4, 5], face: 0, type: 'tall_wall', material: 'wood', up: 2 }
+    });
+  });
+
   it('crafts and places a campfire atomically', () => {
     const events: DomainEvent[] = [];
     const ctx = context(events);

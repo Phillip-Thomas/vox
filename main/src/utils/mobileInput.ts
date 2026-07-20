@@ -40,6 +40,7 @@ export const KEY_CODES = {
   descend: 'ControlLeft', // swim down while submerged (mobile DIVE button)
   board: 'KeyF',
   mine: 'KeyE', // harvest/delete a block on foot (same key as roll-right in ship)
+  eat: 'KeyG', // consume food / sip the waterskin
   deconstruct: 'KeyX',
   buildRotate: 'KeyR',
   rollLeft: 'KeyQ',

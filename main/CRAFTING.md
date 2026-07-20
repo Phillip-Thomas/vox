@@ -149,7 +149,7 @@ supersedes them.
 | Torch + campfire lighting | **BUILT** (intensities un-tuned) |
 | Crafting engine (`canCraft`/`craft`) + Fabricator UI (key C / ⚒) | **BUILT** |
 | Era store + `repairMaw()` | **BUILT** (repair not yet reachable in-game) |
-| **Shelter building** — build mode (B), snap ghost, place(E)/deconstruct(X), select 1-9/0; foundation/wall/ceiling + doorway/window/gable + **stairs/sloped-roof (volume, oriented to facing) + ladder (climb) + door (toggle, V key)** — full **Batch A**; MATERIAL-parameterized (wood now; thatch/stone = data); builds wrap around cube edges (per-face foundations + player-footing up) | **BUILT** (Batch A complete; next: S3 enclosure flood-fill, S4 integrity, S5 home-base, S6 hazards) |
+| **Shelter building** — build mode (B), snap ghost, place(E)/deconstruct(X), select 1-9/0/-; foundation + **1x2 wall / 1x1 half wall** + ceiling + doorway/window/gable + **stairs/sloped-roof (volume, oriented to facing) + ladder (climb) + door (toggle, V key)** — full **Batch A**; MATERIAL-parameterized (wood now; thatch/stone = data); builds wrap around cube edges (per-face foundations + player-footing up) | **BUILT** (Batch A complete; next: S3 enclosure flood-fill, S4 integrity, S5 home-base, S6 hazards) |
 | **Survival vitals** (Primitive P1) — `survivalVitals.ts`: 5 meters (health/hunger/thirst/warmth/stamina), gentle NON-LETHAL decay, `tickVitals`/`applyStamina` + exhaustion; HUD `VitalsMeter` (bottom-left, rAF ref-mutation); persists in the GLOBAL save | **BUILT (slice 1)** — decay-only, no satisfiers/lethality yet. Next: food/water → temperature+enclosure warmth → death/respawn+corpse → night-cold+lethal. See `~/.claude/plans/primitive-era.md` |
 | **Sprint** (Shift) — 1.6× on-foot, grounded+moving, drains stamina (~8s) / regens (~6s) | **BUILT** (desktop only; no mobile touch sprint button yet) |
 | **Food + water satisfiers** (Primitive P1) — `berry`/`root` edibles (foodValue/waterValue) foraged from biome-gated `ForageField` (walk-near pickup, persists per-world); waterskin (craft: biofiber+wood), fill persists global. `feed`/`drink` on vitals | **BUILT (P1 satisfiers)** — meters refillable. Next: temperature + enclosure warmth → death/respawn+corpse → night-cold + lethal |
@@ -182,7 +182,7 @@ NOT next; shelter is.
    (foundation/wall/ceiling in wood, build mode B, snap ghost, place E / deconstruct
    X, instanced render + colliders). Next: **S2** the expanded piece catalog
    (panel + new VOLUME class: doorway/door, window, stairs, sloped roof, gable/triangle
-   wall, ladder, pillar, half-wall, railing, hatch, ramp — see the plan's §1b catalog)
+   wall, ladder, pillar, railing, hatch, ramp — see the plan's §1b catalog)
    + thatch/stone materials, **S3** enclosure flood-fill → `isSheltered()`, **S4**
    integrity, **S5** home-base persistence.
 2. **Light-Hazard survival** — an exposure/comfort meter that `archetype.hazards`

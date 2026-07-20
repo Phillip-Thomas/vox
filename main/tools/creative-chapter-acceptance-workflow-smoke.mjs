@@ -108,6 +108,8 @@ async function main() {
     '--input',
     'chapter-registry=main/chapter-registry.json',
     '--input',
+    'chapter-journey-contract=main/chapter-journey-contract.json',
+    '--input',
     'signed-council-authority=fixture://missing-signed-council-authority',
     '--input',
     'signed-scene-authority=fixture://missing-signed-scene-authority',
@@ -131,6 +133,15 @@ async function main() {
     '--adapter',
     'acceptance-analysis',
     '--dry-run',
+  ])
+  await runNode([
+    path.join(terraRoot, 'scripts/dev/workflow-command.mjs'),
+    '--run',
+    runPath,
+    '--bindings',
+    bindingsPath,
+    '--command',
+    'chapter-journey-contract-check',
   ])
   await runNode([
     path.join(terraRoot, 'scripts/dev/workflow-command.mjs'),
@@ -400,6 +411,10 @@ async function validateBlockedProof(runPath) {
   assert(
     (run.roleInvocations || []).some((item) => item.stepId === 'lock-chapter-acceptance' && item.status === 'dry_run'),
     'the first acceptance role invocation must be serialized as a dry run',
+  )
+  assert(
+    (run.commandResults || []).some((item) => item.id === 'chapter-journey-contract-check' && item.status === 'passed'),
+    'journey-contract command result must be persisted and passed',
   )
   assert(
     (run.commandResults || []).some((item) => item.id === 'chapter-registry-check' && item.status === 'passed'),

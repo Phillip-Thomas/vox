@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
+  CONSTELLATION_TUNING,
   SPACE_DOME_RADIUS,
   SPACE_DOME_RENDER_ORDER,
   createSpaceSkyMaterial,
@@ -54,6 +55,52 @@ describe('createSpaceSkyMaterial', () => {
     expect(mat.uniforms.uRealityChroma.value).toBe(1);
     expect(mat.uniforms.uRealityDetail.value).toBe(1);
     expect(mat.uniforms.uRealityAtmosphere.value).toBe(1);
+  });
+});
+
+describe('CONSTELLATION_TUNING', () => {
+  it('keeps node points crisp: core Gaussian tighter than the halo lobe', () => {
+    expect(CONSTELLATION_TUNING.nodeCoreSize).toBeGreaterThan(CONSTELLATION_TUNING.nodeHaloSize);
+    // core sigma = 1/sqrt(size) in radians; must stay under ~0.6 deg (no blobs)
+    const coreSigmaDeg = (1 / Math.sqrt(CONSTELLATION_TUNING.nodeCoreSize)) * (180 / Math.PI);
+    expect(coreSigmaDeg).toBeLessThan(0.6);
+    expect(CONSTELLATION_TUNING.nodeHaloGain).toBeGreaterThan(0);
+    expect(CONSTELLATION_TUNING.nodeHaloGain).toBeLessThan(1); // halo stays subordinate
+  });
+
+  it('gives lines a flat core inside a wider feather, at legible gain', () => {
+    expect(CONSTELLATION_TUNING.lineCore).toBeGreaterThan(0);
+    expect(CONSTELLATION_TUNING.lineCore).toBeLessThan(CONSTELLATION_TUNING.lineWidth);
+    expect(CONSTELLATION_TUNING.lineGain).toBeGreaterThan(0.2); // pronounced …
+    expect(CONSTELLATION_TUNING.lineGain).toBeLessThan(1.0);    // … but under star peaks (not HUD)
+  });
+
+  it('orders the reveal: nodes kindle first, lines complete before reveal=1', () => {
+    const t = CONSTELLATION_TUNING;
+    expect(t.lineRevealStart).toBeGreaterThan(0);
+    expect(t.lineRevealStart).toBeLessThan(t.starRevealEnd);   // stars wake before lines draw
+    expect(t.lineRevealEnd).toBeGreaterThan(t.lineRevealStart);
+    expect(t.lineRevealEnd).toBeLessThan(1);                   // legible before full reveal
+  });
+
+  it('keeps a sky-wide figure count in the authored 6..16 band', () => {
+    const cells = 6 * CONSTELLATION_TUNING.grid ** 2;
+    const figures = cells * CONSTELLATION_TUNING.figureOdds;
+    expect(figures).toBeGreaterThanOrEqual(6);
+    expect(figures).toBeLessThanOrEqual(16);
+  });
+
+  it('interpolates every constant into the shader as a GLSL float literal', () => {
+    const frag = createSpaceSkyMaterial().fragmentShader;
+    expect(frag).not.toContain('undefined');
+    expect(frag).not.toContain('NaN');
+    for (const [name, value] of Object.entries(CONSTELLATION_TUNING)) {
+      const literal = String(value).includes('.') ? String(value) : `${value}.0`;
+      expect(frag, `missing ${name}=${literal}`).toContain(literal);
+    }
+    // the seam-free cube-face lattice is in place (no volumetric floor lookup)
+    expect(frag).toContain('CONST_GRID');
+    expect(frag).not.toContain('CONST_CELLS');
   });
 });
 

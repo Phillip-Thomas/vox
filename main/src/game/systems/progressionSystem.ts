@@ -55,7 +55,8 @@ export const CLIENT_OWNED_MILESTONE_POLICY = Object.freeze({
     'story:tone:high',
     'story:board:pressure-boundary-sealed',
     'story:board:physical-transaction-complete',
-    'story:tidegarden:scanner-overload'
+    'story:tidegarden:scanner-overload',
+    'story:tidegarden:aerial-site-survey'
   ]),
   prefixes: Object.freeze([
     'story:ch1:',

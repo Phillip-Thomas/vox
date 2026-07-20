@@ -299,3 +299,4 @@ caves in some planets, so players can potentially fly straight through the cente
 2) before looking at the leaving light once we build the camfire A) when crafting triggers a story, we should automatically close the crafting window... B) before we set gaze on the leaving sun, we should gaze at the fire with a cool cinemegraphic scene, then naturally transition to the sun once we observe the fire
 3) all numbers generated during oregon trail and pong should permanently impact pcg... the amount of deflections we succesfully do, the name we give worker 9, regulation index, rations remaining.. all that... but it should either move faster, or be more engaging like a cool character creation mini game
 
+ 

@@ -816,8 +816,19 @@ export const ECONOMY_CATALOG = {
       "seals": true
     },
     {
+      "type": "tall_wall",
+      "name": "Wall (1x2)",
+      "shape": "panel",
+      "family": "wall",
+      "heightUnits": 2,
+      "costUnits": 4,
+      "hp": 280,
+      "insulation": 0.5,
+      "seals": true
+    },
+    {
       "type": "wall",
-      "name": "Wall",
+      "name": "Half Wall (1x1)",
       "shape": "panel",
       "family": "wall",
       "costUnits": 2,
@@ -840,6 +851,7 @@ export const ECONOMY_CATALOG = {
       "name": "Doorway",
       "shape": "panel",
       "family": "wall",
+      "heightUnits": 2,
       "costUnits": 2,
       "hp": 130,
       "insulation": 0.1,

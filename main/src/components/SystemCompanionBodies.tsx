@@ -6,7 +6,11 @@ import {
   subscribeGraphicsQuality,
   type QualityProfile
 } from '../config/graphicsSettings.ts';
-import type { PlanetSlot, SystemCoordinate, Vec3Tuple } from '../game/starSystem.ts';
+import {
+  type PlanetSlot,
+  type SystemCoordinate,
+  type Vec3Tuple
+} from '../game/starSystem.ts';
 import { resolvePlanetProfile, type PlanetProfile } from '../game/PlanetProfile.ts';
 import { getPlayerUp } from '../state/playerFrame.ts';
 import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
@@ -34,12 +38,18 @@ import { getSunDirection } from './SkyController.tsx';
 import { atmosphereSpaceBlend } from '../game/atmosphereSpace.ts';
 import {
   buildCompanionBodyModels,
+  companionApparentRelativePosition,
+  companionBodySpinPhase,
   companionCelestialPlacement,
+  companionCloudDriftPhase,
   companionExactShellBlend,
   companionExactTerrainFaceCount,
+  companionPresentationMotionWeight,
   companionVisualBudget,
   createCompanionCloudGeometry,
   createCompanionSurfaceGeometry,
+  type CompanionBodyMotionProfile,
+  type CompanionSystemMotionProfile,
   EXACT_TERRAIN_BATCH_SIZE,
   EXACT_WATER_BATCH_SIZE,
   SURFACE_SKY_INNER_RADIUS
@@ -103,29 +113,37 @@ interface BodyRuntime {
   seed: number;
   planetProfile: PlanetProfile;
   group: THREE.Group | null;
+  visualGroup: THREE.Group | null;
   targetHandle: SystemCompanionBodyTargetHandle;
   systemPosition: THREE.Vector3;
+  relativePosition: Vec3Tuple;
+  systemMotion: CompanionSystemMotionProfile;
+  bodyMotion: CompanionBodyMotionProfile;
   nominalFaceRadius: number;
   surfaceBoundRadius: number;
   unitSurfaceBoundRadius: number;
-  terrainQuaternion: [number, number, number, number];
+  terrainQuaternion: THREE.Quaternion;
+  obliquityQuaternion: THREE.Quaternion;
+  initialRingQuaternion: THREE.Quaternion;
   surfaceGeometry: THREE.BufferGeometry;
   cloudGeometry: THREE.BufferGeometry | null;
   surfaceMaterial: THREE.ShaderMaterial;
   cloudMaterial: THREE.ShaderMaterial | null;
   ringMaterial: THREE.ShaderMaterial | null;
-  ringRotation: THREE.Euler;
   exactShell: ExactShellRuntime | null;
 }
 
 const CLOUD_SCALE = 1.024;
-const COMPANION_PROGRAM_KEY = 'system-companion-unified-v1';
-const EXACT_COMPANION_PROGRAM_KEY = 'system-companion-exact-v1';
-const EXACT_FACE_COMPANION_PROGRAM_KEY = 'system-companion-exact-face-v1';
+const COMPANION_PROGRAM_KEY = 'system-companion-unified-v2';
+const EXACT_COMPANION_PROGRAM_KEY = 'system-companion-exact-v2';
+const EXACT_FACE_COMPANION_PROGRAM_KEY = 'system-companion-exact-face-v2';
 const EXACT_SHELL_PROMOTION_SECONDS = 0.45;
 const exactInstanceMatrix = new THREE.Matrix4();
 const exactInstancePosition = new THREE.Vector3();
 const exactWaterPlacement = createWaterFacePlacementScratch();
+const LOCAL_SPIN_AXIS = new THREE.Vector3(0, 1, 0);
+const RING_NORMAL = new THREE.Vector3(0, 0, 1);
+const RING_TO_SPIN_AXIS = new THREE.Quaternion().setFromUnitVectors(RING_NORMAL, LOCAL_SPIN_AXIS);
 
 const COMPANION_VERTEX_SHADER = /* glsl */`
   attribute vec3 color;
@@ -204,6 +222,7 @@ const COMPANION_FRAGMENT_SHADER = /* glsl */`
   uniform float uSeedPhase;
   uniform float uLayerMode;
   uniform float uCloudStrength;
+  uniform vec2 uCloudRotation;
   uniform float uAtmosphereStrength;
   uniform float uVisibility;
   uniform float uOpacity;
@@ -217,6 +236,13 @@ const COMPANION_FRAGMENT_SHADER = /* glsl */`
 
   float cloudField(vec3 p) {
     vec3 d = normalize(p);
+    float cloudCosine = uCloudRotation.x;
+    float cloudSine = uCloudRotation.y;
+    d = vec3(
+      cloudCosine * d.x + cloudSine * d.z,
+      d.y,
+      -cloudSine * d.x + cloudCosine * d.z
+    );
     float broad = sin((d.x * 2.1 + d.z * 3.7 + uSeedPhase) * 5.2);
     float broken = sin((d.y * 4.4 - d.z * 2.3 + uSeedPhase * 1.7) * 7.1);
     return broad * 0.62 + broken * 0.38;
@@ -235,7 +261,10 @@ const COMPANION_FRAGMENT_SHADER = /* glsl */`
     float nightFacing = max(-nDotL, 0.0);
     float viewFacing = max(dot(normalWorld, viewDirection), 0.0);
     float rim = pow(1.0 - viewFacing, 3.0);
-    float clouds = smoothstep(0.18, 0.72, cloudField(vPositionObject));
+    float clouds = 0.0;
+    if (uCloudStrength > 0.001 && uLayerMode < 1.5) {
+      clouds = smoothstep(0.18, 0.72, cloudField(vPositionObject));
+    }
     vec3 colorOut;
     float alphaOut;
 
@@ -293,7 +322,7 @@ function createUnifiedCompanionMaterial(options: UnifiedMaterialOptions): THREE.
     name: `system-companion-${options.exactShell ? 'exact' : options.layer}-${options.worldId}`,
     vertexShader: COMPANION_VERTEX_SHADER,
     fragmentShader: COMPANION_FRAGMENT_SHADER,
-    defines: options.exactFaceShell ? { EXACT_FACE_SHELL: 1 } : undefined,
+    defines: options.exactFaceShell ? { EXACT_FACE_SHELL: 1 } : {},
     uniforms: {
       uTint: { value: options.tint.clone() },
       uCloudColor: { value: options.cloudColor.clone() },
@@ -302,6 +331,7 @@ function createUnifiedCompanionMaterial(options: UnifiedMaterialOptions): THREE.
       uSeedPhase: { value: options.seed * 0.00017 },
       uLayerMode: { value: layerMode },
       uCloudStrength: { value: options.cloudStrength },
+      uCloudRotation: { value: new THREE.Vector2(1, 0) },
       uAtmosphereStrength: { value: options.atmosphereStrength },
       uVisibility: { value: 1 },
       uOpacity: { value: options.opacity },
@@ -340,6 +370,14 @@ function setMaterialVisibility(material: THREE.ShaderMaterial | null, visibility
 
 function setMaterialSun(material: THREE.ShaderMaterial | null, sunDirection: THREE.Vector3): void {
   if (material) (material.uniforms.uSunDirection.value as THREE.Vector3).copy(sunDirection);
+}
+
+function setMaterialCloudRotation(
+  material: THREE.ShaderMaterial | null,
+  cosine: number,
+  sine: number
+): void {
+  if (material) (material.uniforms.uCloudRotation.value as THREE.Vector2).set(cosine, sine);
 }
 
 function setMaterialLodBlend(material: THREE.ShaderMaterial | null, blend: number): void {
@@ -386,7 +424,7 @@ function ensureExactTerrainShell(
   waterGeometry: THREE.BufferGeometry
 ): ExactShellRuntime | null {
   if (!runtime.exactShell) {
-    if (!runtime.group) return null;
+    if (!runtime.visualGroup) return null;
     const prepared = getPreparedWorldRenderData(planetSize, runtime.seed, runtime.key);
     if (!prepared || prepared.terrain.count <= 0) return null;
 
@@ -434,7 +472,7 @@ function ensureExactTerrainShell(
       meshes: [],
       terrainMaterial,
       waterMaterial,
-      owner: runtime.group,
+      owner: runtime.visualGroup,
       prepared,
       terrainCount: prepared.terrain.count,
       waterCount: prepared.waterFaces.length,
@@ -628,6 +666,7 @@ export default function SystemCompanionBodies({
     direction: new THREE.Vector3(),
     effectiveUp: new THREE.Vector3(),
     surrogatePosition: new THREE.Vector3(),
+    spinQuaternion: new THREE.Quaternion(),
     // Reused per-frame in/out records for companionCelestialPlacement (no
     // per-frame allocation, matching the vector scratch above).
     placementInput: {
@@ -706,6 +745,14 @@ export default function SystemCompanionBodies({
       0.3,
       0.64
     );
+    const terrainQuaternion = new THREE.Quaternion(...descriptor.terrainQuaternion);
+    const obliquityQuaternion = new THREE.Quaternion().setFromUnitVectors(
+      LOCAL_SPIN_AXIS,
+      new THREE.Vector3(...model.bodyMotion.spinAxis)
+    );
+    const initialRingQuaternion = terrainQuaternion.clone()
+      .multiply(obliquityQuaternion)
+      .multiply(RING_TO_SPIN_AXIS);
 
     return {
       key: descriptor.worldId,
@@ -713,12 +760,18 @@ export default function SystemCompanionBodies({
       seed: descriptor.seed,
       planetProfile,
       group: null,
+      visualGroup: null,
       targetHandle: createSystemCompanionBodyTargetHandle(descriptor.worldId),
       systemPosition: new THREE.Vector3(...descriptor.systemPosition),
+      relativePosition: model.relativePosition,
+      systemMotion: model.systemMotion,
+      bodyMotion: model.bodyMotion,
       nominalFaceRadius: descriptor.nominalFaceRadius,
       surfaceBoundRadius: descriptor.surfaceBoundRadius,
       unitSurfaceBoundRadius,
-      terrainQuaternion: descriptor.terrainQuaternion,
+      terrainQuaternion,
+      obliquityQuaternion,
+      initialRingQuaternion,
       surfaceGeometry,
       cloudGeometry,
       surfaceMaterial: createUnifiedCompanionMaterial({
@@ -762,11 +815,6 @@ export default function SystemCompanionBodies({
           depthWrite: false
         })
         : null,
-      ringRotation: new THREE.Euler(
-        0.4 + seededUnit(descriptor.seed, 71) * 0.65,
-        seededUnit(descriptor.seed, 73) * Math.PI,
-        seededUnit(descriptor.seed, 79) * 0.4
-      ),
       exactShell: null
     };
   }), [bodyModels, budget, qualityProfile]);
@@ -778,8 +826,9 @@ export default function SystemCompanionBodies({
   useEffect(() => () => ringGeometry.dispose(), [ringGeometry]);
   useEffect(() => () => exactWaterGeometry.dispose(), [exactWaterGeometry]);
 
-  useFrame(({ camera, gl }) => {
-    const phase = getSpaceFlightSnapshot().phase;
+  useFrame(({ camera, gl, clock }) => {
+    const spaceFlight = getSpaceFlightSnapshot();
+    const phase = spaceFlight.phase;
     const systemFlight = getSystemFlightSnapshot();
     const systemTarget = systemFlight.target;
     const exactTargetWorldId = systemTarget?.kind === 'system_body'
@@ -787,6 +836,9 @@ export default function SystemCompanionBodies({
       : null;
     const exactOwnerWorldId = runtimes.find(runtime => runtime.exactShell)?.key ?? null;
     const nowMs = performance.now();
+    // Match SpaceSky's presentation clock. It is deliberately session-local:
+    // this motion has no authority over targeting, saves, or multiplayer state.
+    const motionSeconds = clock.elapsedTime;
     const sunDirection = getSunDirection();
     const work = scratch.current;
     camera.getWorldPosition(work.cameraPosition);
@@ -797,13 +849,17 @@ export default function SystemCompanionBodies({
     work.planetLocalCamera
       .copy(work.cameraPosition)
       .sub(work.activePlanetCenter);
-    // Continuous altitude-driven frame choice: NOT the discrete phase flag. The
-    // phase flips mid-warp while the ship is still flying, so a flag-keyed
-    // switch makes the bodies ride with the camera and snap to their physical
-    // positions at the flash midpoint. The blend converges to the physical
-    // frame BEFORE the flip, so the flip itself changes nothing visually.
+    // Altitude owns the ordinary atmosphere -> physical-frame convergence.
+    // During inbound deep-space flight, targeting remains canonical throughout;
+    // the handoff veil then hides the destination scene's surface ephemeris.
     const spaceBlend = atmosphereSpaceBlend(work.planetLocalCamera.length(), planetSize);
     const physicalSpace = spaceBlend >= 1;
+    const canonicalTargetingActive = phase === 'deep_space'
+      && spaceFlight.controlMode === 'flight';
+    const orbitMotionWeight = companionPresentationMotionWeight(
+      spaceBlend,
+      canonicalTargetingActive
+    );
     if (phase === 'surface') {
       work.effectiveUp.copy(getPlayerUp());
     } else if (work.planetLocalCamera.lengthSq() > 1e-6) {
@@ -815,6 +871,23 @@ export default function SystemCompanionBodies({
     for (const runtime of runtimes) {
       const group = runtime.group;
       if (!group) continue;
+      const spinAngle = companionBodySpinPhase(runtime.bodyMotion, motionSeconds);
+      const cloudAngle = companionCloudDriftPhase(runtime.bodyMotion, motionSeconds);
+      const visualGroup = runtime.visualGroup;
+      if (visualGroup) {
+        work.spinQuaternion.setFromAxisAngle(
+          LOCAL_SPIN_AXIS,
+          spinAngle
+        );
+        visualGroup.quaternion
+          .copy(runtime.terrainQuaternion)
+          .multiply(runtime.obliquityQuaternion)
+          .multiply(work.spinQuaternion);
+      }
+      const cloudCosine = Math.cos(cloudAngle);
+      const cloudSine = Math.sin(cloudAngle);
+      setMaterialCloudRotation(runtime.surfaceMaterial, cloudCosine, cloudSine);
+      setMaterialCloudRotation(runtime.cloudMaterial, cloudCosine, cloudSine);
       setMaterialSun(runtime.surfaceMaterial, sunDirection);
       setMaterialSun(runtime.cloudMaterial, sunDirection);
       setMaterialSun(runtime.ringMaterial, sunDirection);
@@ -824,9 +897,20 @@ export default function SystemCompanionBodies({
         && runtime.key === exactTargetWorldId;
       const canOwnExactShell = wantsExactShell
         && (exactOwnerWorldId === null || exactOwnerWorldId === runtime.key);
-      work.bodyRenderPosition
-        .copy(runtime.systemPosition)
-        .sub(work.renderOrigin);
+      if (orbitMotionWeight === 0) {
+        work.bodyRenderPosition
+          .copy(runtime.systemPosition)
+          .sub(work.renderOrigin);
+      } else {
+        companionApparentRelativePosition(
+          runtime.relativePosition,
+          runtime.systemMotion,
+          motionSeconds,
+          spaceBlend,
+          canonicalTargetingActive,
+          work.bodyRenderPosition
+        ).add(work.activePlanetCenter);
+      }
       runtime.targetHandle.publish(work.bodyRenderPosition);
 
       if (physicalSpace) {
@@ -961,47 +1045,52 @@ export default function SystemCompanionBodies({
           key={runtime.key}
           ref={node => { runtime.group = node; }}
           name={`system-companion-body-${runtime.key}`}
-          quaternion={runtime.terrainQuaternion}
           userData={{
             systemCompanion: true,
             worldId: runtime.key,
             planetSlot: runtime.planetSlot,
             seed: runtime.seed,
-            terrainOrientation: 'identity'
+            terrainOrientation: 'continuous-spin-canonical-center'
           }}
         >
-          <mesh
-            name={`system-companion-surface-${runtime.key}`}
-            geometry={runtime.surfaceGeometry}
-            material={runtime.surfaceMaterial}
-            frustumCulled
-            userData={{
-              systemCompanion: true,
-              systemCompanionLayer: 'surface',
-              worldId: runtime.key,
-              bakedAtmosphere: true
-            }}
-          />
-          {runtime.cloudGeometry && runtime.cloudMaterial && (
+          <group
+            ref={node => { runtime.visualGroup = node; }}
+            name={`system-companion-spinning-visual-${runtime.key}`}
+            quaternion={runtime.terrainQuaternion}
+          >
             <mesh
-              name={`system-companion-cloud-${runtime.key}`}
-              geometry={runtime.cloudGeometry}
-              material={runtime.cloudMaterial}
-              scale={CLOUD_SCALE}
+              name={`system-companion-surface-${runtime.key}`}
+              geometry={runtime.surfaceGeometry}
+              material={runtime.surfaceMaterial}
               frustumCulled
               userData={{
                 systemCompanion: true,
-                systemCompanionLayer: 'cloud',
-                worldId: runtime.key
+                systemCompanionLayer: 'surface',
+                worldId: runtime.key,
+                bakedAtmosphere: true
               }}
             />
-          )}
+            {runtime.cloudGeometry && runtime.cloudMaterial && (
+              <mesh
+                name={`system-companion-cloud-${runtime.key}`}
+                geometry={runtime.cloudGeometry}
+                material={runtime.cloudMaterial}
+                scale={CLOUD_SCALE}
+                frustumCulled
+                userData={{
+                  systemCompanion: true,
+                  systemCompanionLayer: 'cloud',
+                  worldId: runtime.key
+                }}
+              />
+            )}
+          </group>
           {runtime.ringMaterial && (
             <mesh
               name={`system-companion-ring-${runtime.key}`}
               geometry={ringGeometry}
               material={runtime.ringMaterial}
-              rotation={runtime.ringRotation}
+              quaternion={runtime.initialRingQuaternion}
               frustumCulled
               userData={{
                 systemCompanion: true,

@@ -32,6 +32,36 @@
       "description": "A required objective lacks actionable work-order copy, an exact live marker match, accessible semantic feedback, lifecycle-clear behavior, or parity across supported variants. Route copy and player verbs to Chapter, feedback causality to Score, hierarchy and occlusion to Cinematography, and wiring or lifecycle failures to Integration."
     },
     {
+      "slug": "journey_contract_drift",
+      "defaultOwnerRole": "creative-producer",
+      "routingHints": ["frame-story-intent", "freeze-scene-contract", "capture-proof"],
+      "description": "Registry, signed scene authority, HUD cases, runtime behavior, or acceptance vectors disagree with the executable chapter journey contract."
+    },
+    {
+      "slug": "objective_placement_failure",
+      "defaultOwnerRole": "chapter-director",
+      "routingHints": ["frame-story-intent", "audit-player-experience", "repair-signed-contract"],
+      "description": "A mandatory objective does not earn its causal, dramatic, spatial, capability, or pacing cost at this point in the story and must be moved, redesigned, or made optional."
+    },
+    {
+      "slug": "interaction_lifecycle_failure",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["implement-signed-contract", "capture-proof", "audit-player-experience"],
+      "description": "Interaction arbitration is registration-order dependent, multiple prompts compete, a visible prompt has no declared effect, or a completed or ineligible prompt remains active."
+    },
+    {
+      "slug": "entity_lifecycle_failure",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["implement-signed-contract", "capture-proof", "audit-player-experience"],
+      "description": "A story actor or prop mounts, disappears, persists, reloads, or reappears contrary to its temporal lifecycle contract."
+    },
+    {
+      "slug": "input_focus_ownership_failure",
+      "defaultOwnerRole": "integration-engineer",
+      "routingHints": ["implement-signed-contract", "capture-proof", "audit-player-experience"],
+      "description": "An editable or modal surface cannot receive real input, leaks gameplay hotkeys, loses focus incorrectly, or submits more than once."
+    },
+    {
       "slug": "focal_hierarchy_failure",
       "defaultOwnerRole": "cinematography-director",
       "routingHints": ["author-cinematography-treatment", "repair-signed-contract", "capture-proof"],

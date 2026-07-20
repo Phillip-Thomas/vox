@@ -1,4 +1,5 @@
 import type { VoyageDeck } from './voyageDeck.ts';
+import { NIGHT_START_PHASE, NIGHT_END_PHASE } from '../utils/nightState.ts';
 
 // --- The story script -----------------------------------------------------------
 //
@@ -624,9 +625,12 @@ export const DUSK = {
   /** Scripted first dusk: noon -> this phase, over lerpSeconds. */
   targetPhase: 0.5,
   lerpSeconds: 45,
-  /** Rest is offered inside this night band (phase 0.5 sunset .. 1.0 sunrise). */
-  nightStart: 0.55,
-  nightEnd: 0.95
+  /** Rest is offered inside the shared night band — it now OPENS the instant the
+   *  sky darkens (~0.505, just after the 0.5 sunset) instead of the old 0.55, and
+   *  still closes at the dawn wrap. Live gating uses nightState.isNightPhase; these
+   *  mirror its bounds for the beats/tests that reference the band directly. */
+  nightStart: NIGHT_START_PHASE,
+  nightEnd: NIGHT_END_PHASE
 } as const;
 
 export const A3_TIMELINE = {

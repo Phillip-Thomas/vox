@@ -775,10 +775,7 @@ export default function ShipController({
       return;
     }
 
-    const keyboardControls = get();
-    const controls = movieFlight.active
-      ? { ...keyboardControls, ...movieFlight.controls }
-      : keyboardControls;
+    const controls = movieFlight.active ? movieFlight.controls : get();
 
     const quat = orientation.current;
     const inAtmosphere = position.current.length() < surfaceRadius + ATMOS_LEAVE;
@@ -906,7 +903,15 @@ export default function ShipController({
     // a fast inward impact CRASHES (impact flash + forced crash-landing -> you
     // must re-launch). Colliders stream around the ship because it publishes its
     // position (step 8), so the cast hits real voxels once near the ground.
-    if (world && getSpaceFlightSnapshot().phase === 'descent' && !landingSeq.current && !launchSeq.current) {
+    if (
+      world
+      && getSpaceFlightSnapshot().phase === 'descent'
+      && !landingSeq.current
+      && !launchSeq.current
+      // A radial ground probe cannot find a new impact while the craft is
+      // gaining radius. Skip Rapier broad-phase work through the launch climb.
+      && velocity.current.dot(position.current) <= 0
+    ) {
       const radial = position.current.clone().normalize();
       const downDir = radial.clone().negate();
       const speed = velocity.current.length();
@@ -1033,7 +1038,9 @@ export default function ShipController({
     // 8) Publish position so grass/trees/water cull around the ship.
     if (lastPublished.current.distanceToSquared(position.current) > 1) {
       lastPublished.current.copy(position.current);
-      onPositionChange?.(position.current.clone());
+      // The scene mailbox copies synchronously; avoid allocating a disposable
+      // Vector3 for every high-speed atmospheric sample.
+      onPositionChange?.(position.current);
     }
   });
 

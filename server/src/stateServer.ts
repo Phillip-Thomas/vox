@@ -20,6 +20,7 @@ import {
   isServerAuthoritativeCommand,
   resolveServerCanonicalCommandPayload,
   resolveServerAuthoritativeCommand,
+  SERVER_BUILD_PIECES,
   structureRefundFor,
   type AuthoritativeStructureClaim
 } from './economyAuthority.js';
@@ -1072,7 +1073,7 @@ function activeStructuresFromEvents(events: ShardEvent[]): Map<string, ActiveStr
       };
       active.set(id, structure);
       const up = readInt(payload.up);
-      if (type === 'doorway' && up !== null && STRUCTURE_FACE_DIRS[up]) {
+      if ((SERVER_BUILD_PIECES[type]?.heightUnits ?? 1) > 1 && up !== null && STRUCTURE_FACE_DIRS[up]) {
         const dir = STRUCTURE_FACE_DIRS[up];
         const upper: [number, number, number] = [cell[0] + dir[0], cell[1] + dir[1], cell[2] + dir[2]];
         const upperId = structureSlotId(upper, face);

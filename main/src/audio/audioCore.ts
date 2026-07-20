@@ -64,6 +64,226 @@ function submergeCutoff(amount: number): number {
   return MUSIC_OPEN_CUTOFF_HZ * Math.pow(MUSIC_SUBMERGED_CUTOFF_HZ / MUSIC_OPEN_CUTOFF_HZ, a);
 }
 
+// --- iOS media-element output route ------------------------------------------
+//
+// Pure WebAudio wired straight to `ctx.destination` obeys the iOS hardware
+// ringer (silent) switch and goes mute even when the app has volume. Routing
+// the tail of the graph through a MediaStreamAudioDestinationNode into a
+// `playsinline`, un-muted <audio> element reclassifies the output as *media*
+// playback, which ignores the silent switch. This runs on iOS/iPadOS only —
+// every other platform keeps the byte-identical direct destination path. The
+// route is resilient: if the element's play() rejects it falls back to the
+// direct destination and stays armed to retry on the next gesture.
+
+export type AudioOutputRouteMode = 'direct' | 'media-element';
+
+export interface AudioOutputRoute {
+  /** Fire from inside a user gesture: (re)attempt the media-element route. */
+  activateFromGesture(): void;
+  /** Re-attempt resume/playback on tab return (visibility/focus), no gesture. */
+  revive(): void;
+  /** True once the context is running and the intended output path is live. */
+  isConfirmed(): boolean;
+  mode(): AudioOutputRouteMode;
+  /** Human-readable state for on-device diagnostics. */
+  describe(): string;
+}
+
+const outputRoutes = new Set<AudioOutputRoute>();
+let musicOutputRoute: AudioOutputRoute | null = null;
+let visibilityResumeInstalled = false;
+
+/** iOS / iPadOS detection, including iPadOS 13+ masquerading as desktop Safari. */
+function isIosLikePlatform(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  if (/iPad|iPhone|iPod/.test(ua)) return true;
+  // iPadOS 13+ reports a Macintosh UA; touch support disambiguates it from a Mac.
+  const macLike = /Mac/.test(ua) || navigator.platform === 'MacIntel';
+  const touchCapable =
+    (typeof document !== 'undefined' && 'ontouchend' in document) ||
+    navigator.maxTouchPoints > 1;
+  return macLike && touchCapable;
+}
+
+/**
+ * 'interrupted' is an iOS-only AudioContext state absent from the TS lib types;
+ * compare as a string so a phone-call/Siri interruption resumes like 'suspended'.
+ */
+function contextNeedsResume(context: AudioContext): boolean {
+  const state = context.state as string;
+  return state === 'suspended' || state === 'interrupted';
+}
+
+function installOutputRoute(
+  context: AudioContext,
+  tail: AudioNode,
+  label: string
+): AudioOutputRoute {
+  const canMediaRoute =
+    isIosLikePlatform() &&
+    typeof document !== 'undefined' &&
+    typeof context.createMediaStreamDestination === 'function';
+
+  if (!canMediaRoute) {
+    tail.connect(context.destination);
+    const route: AudioOutputRoute = {
+      activateFromGesture() {},
+      revive() {
+        if (contextNeedsResume(context)) void context.resume();
+      },
+      isConfirmed: () => context.state === 'running',
+      mode: () => 'direct',
+      describe: () => `${label}: direct (${context.state})`
+    };
+    outputRoutes.add(route);
+    return route;
+  }
+
+  let mode: AudioOutputRouteMode = 'direct';
+  let mediaDest: MediaStreamAudioDestinationNode | null = null;
+  let element: HTMLAudioElement | null = null;
+  let directConnected = false;
+
+  const setMode = (next: AudioOutputRouteMode): void => {
+    if (mode === next) return;
+    mode = next;
+    console.info(`[audio] ${label} output route -> ${next} (${context.state})`);
+  };
+  const connectDirect = (): void => {
+    if (directConnected) return;
+    tail.connect(context.destination);
+    directConnected = true;
+  };
+  const disconnectDirect = (): void => {
+    if (!directConnected) return;
+    try {
+      tail.disconnect(context.destination);
+    } catch {
+      /* already detached */
+    }
+    directConnected = false;
+  };
+
+  // Terminate the graph at the real destination until the media element is
+  // verifiably playing. Before the first gesture the context is suspended
+  // anyway, so this only matters as a fallback if the media route never takes.
+  connectDirect();
+
+  const ensureMediaNodes = (): void => {
+    if (mediaDest) return;
+    mediaDest = context.createMediaStreamDestination();
+    tail.connect(mediaDest);
+    const el = document.createElement('audio');
+    el.setAttribute('playsinline', '');
+    (el as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
+    el.autoplay = false;
+    // Deliberately NOT muted — a muted element re-silences under the switch.
+    el.srcObject = mediaDest.stream;
+    element = el;
+  };
+  const elementPlaying = (): boolean =>
+    !!element && !element.paused && !element.ended && element.readyState > 0;
+
+  const attemptPlay = (onReject: () => void): void => {
+    ensureMediaNodes();
+    const el = element;
+    if (!el) {
+      connectDirect();
+      return;
+    }
+    const played = el.play();
+    if (!played || typeof played.then !== 'function') {
+      // Legacy Safari returns undefined; assume the media route took.
+      disconnectDirect();
+      setMode('media-element');
+      return;
+    }
+    void played
+      .then(() => {
+        disconnectDirect();
+        setMode('media-element');
+      })
+      .catch(onReject);
+  };
+
+  const route: AudioOutputRoute = {
+    activateFromGesture() {
+      attemptPlay(() => {
+        // Media route rejected: keep the direct path live and stay armed so the
+        // next trusted gesture retries el.play().
+        connectDirect();
+        setMode('direct');
+      });
+    },
+    revive() {
+      if (contextNeedsResume(context)) void context.resume();
+      if (element && !elementPlaying()) {
+        attemptPlay(() => connectDirect());
+      }
+    },
+    isConfirmed: () => context.state === 'running' && elementPlaying(),
+    mode: () => mode,
+    describe: () =>
+      `${label}: ${mode} (${context.state}` +
+      `${element ? `, el ${element.paused ? 'paused' : 'playing'}` : ''})`
+  };
+  outputRoutes.add(route);
+  return route;
+}
+
+/** Re-attempt resume when returning to a tab with a non-running context. */
+function installVisibilityResume(): void {
+  if (visibilityResumeInstalled || typeof window === 'undefined') return;
+  visibilityResumeInstalled = true;
+  const revive = (): void => {
+    if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+    for (const route of outputRoutes) route.revive();
+  };
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', revive);
+  }
+  window.addEventListener('focus', revive);
+}
+
+/**
+ * True once every installed output route is confirmed live — the context is
+ * running and, on iOS, the media-element route is playing. The first-gesture
+ * unlock installer uses this to stay armed until unlock verifiably sticks.
+ */
+export function areGameAudioRoutesConfirmed(): boolean {
+  if (outputRoutes.size === 0) return false;
+  for (const route of outputRoutes) {
+    if (!route.isConfirmed()) return false;
+  }
+  return true;
+}
+
+/** One-line diagnostic of every output route's state and active path. */
+export function describeGameAudioOutputRoutes(): string {
+  if (outputRoutes.size === 0) return 'audio: no routes installed';
+  return [...outputRoutes].map(route => route.describe()).join(' | ');
+}
+
+/**
+ * Shared installer for the iOS-aware terminal output route. The music chain and
+ * the (separate-context) SFX chain both terminate through this so neither is
+ * silenced by the hardware ringer switch.
+ */
+export function installGameAudioOutputRoute(
+  context: AudioContext,
+  tail: AudioNode,
+  label: string
+): AudioOutputRoute {
+  const route = installOutputRoute(context, tail, label);
+  installVisibilityResume();
+  if (typeof window !== 'undefined') {
+    (window as unknown as { __voxAudioDiag?: () => string }).__voxAudioDiag =
+      describeGameAudioOutputRoutes;
+  }
+  return route;
+}
+
 export function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (ctx) return ctx;
@@ -76,7 +296,7 @@ export function getAudioContext(): AudioContext | null {
   const compressor = ctx.createDynamicsCompressor();
   compressor.threshold.value = COMPRESSOR_THRESHOLD_DB;
   compressor.ratio.value = COMPRESSOR_RATIO;
-  compressor.connect(ctx.destination);
+  musicOutputRoute = installGameAudioOutputRoute(ctx, compressor, 'music');
 
   visibilityGain = ctx.createGain();
   visibilityGain.gain.value = ducked ? MUSIC_VISIBILITY_DUCK_LEVEL : 1;
@@ -118,7 +338,12 @@ export function peekAudioContext(): AudioContext | null {
 /** Resume the context from a user gesture (autoplay policy). */
 export function unlockAudio(): void {
   const context = getAudioContext();
-  if (context && context.state === 'suspended') void context.resume();
+  if (!context) return;
+  // Resume from 'suspended' AND the iOS-only 'interrupted' state (see
+  // contextNeedsResume). Activating the media-element route must happen inside
+  // this gesture so el.play() is a trusted call on iOS.
+  if (contextNeedsResume(context)) void context.resume();
+  musicOutputRoute?.activateFromGesture();
 }
 
 export function setMusicOutput(nextVolume: number, nextMuted: boolean): void {

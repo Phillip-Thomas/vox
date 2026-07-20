@@ -1,0 +1,538 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://paravoxia.local/schemas/paravoxia-chapter-journey-contract.schema.json",
+  "title": "Paravoxia Chapter Journey Contract v1",
+  "description": "Executable player-journey authority projected exactly from the chapter registry. It binds mandatory objective placement, certification lanes, temporal lifecycle, prompt ownership, editable input, reload seams, and known escaped-defect replays without replacing signed scene authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "registryRef",
+    "schemaRef",
+    "requiredLaneIds",
+    "laneDefinitions",
+    "escapedDefectCoverage",
+    "chapters"
+  ],
+  "properties": {
+    "schema": { "const": "paravoxia.chapterJourneyContract.v1" },
+    "registryRef": { "const": "main/chapter-registry.json" },
+    "schemaRef": { "const": "docs/architecture/workflow-orchestration/schemas/paravoxia-chapter-journey-contract.schema.json" },
+    "requiredLaneIds": { "$ref": "#/$defs/laneIdList" },
+    "laneDefinitions": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/laneDefinition" }
+    },
+    "escapedDefectCoverage": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/escapedDefectCoverage" }
+    },
+    "chapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/chapter" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meaningfulText": {
+      "type": "string",
+      "minLength": 20,
+      "not": { "pattern": "^(?:todo|tbd|placeholder|unknown|n/?a)[.! ]*$" }
+    },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@-]*$"
+    },
+    "chapterId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "beatId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "pathRef": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "stringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "chapterIdList": {
+      "type": "array",
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/chapterId" }
+    },
+    "laneId": {
+      "type": "string",
+      "enum": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ]
+    },
+    "laneIdList": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/laneId" }
+    },
+    "laneDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "certificationRole", "execution", "policy", "assertions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/laneId" },
+        "certificationRole": { "type": "string", "enum": ["blocking", "diagnostic"] },
+        "execution": {
+          "type": "string",
+          "enum": ["headed-trusted-input", "automated-movie", "planned-reload", "direct-entry", "scripted-adversarial", "variant-matrix"]
+        },
+        "policy": { "$ref": "#/$defs/meaningfulText" },
+        "assertions": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+        }
+      }
+    },
+    "escapedDefectCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "contractRefs", "requiredLaneIds", "failureModes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "contractRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "requiredLaneIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/laneId" }
+        },
+        "failureModes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/meaningfulText" }
+        }
+      }
+    },
+    "continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before", "after"],
+      "properties": {
+        "before": { "$ref": "#/$defs/chapterIdList" },
+        "after": { "$ref": "#/$defs/chapterIdList" }
+      }
+    },
+    "registryProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requiredObjectiveBeats", "checkpointReceipts", "requiredSignedAnchorIds", "variantProfileIds"],
+      "properties": {
+        "requiredObjectiveBeats": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/beatId" }
+        },
+        "checkpointReceipts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(runtime|scene|milestone|state):.+$"
+          }
+        },
+        "requiredSignedAnchorIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^anc\\..+$" }
+        },
+        "variantProfileIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        }
+      }
+    },
+    "completionEvidenceRef": {
+      "type": "string",
+      "pattern": "^(beat|milestone|state|anchor|entity|observation):.+$"
+    },
+    "objectiveInteraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intent", "completionEvidenceRefs", "forbiddenInteractionIds", "feedbackWithinMs"],
+      "properties": {
+        "intent": { "$ref": "#/$defs/meaningfulText" },
+        "completionEvidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionEvidenceRef" }
+        },
+        "forbiddenInteractionIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "feedbackWithinMs": { "type": "integer", "minimum": 1, "maximum": 5000 }
+      }
+    },
+    "postconditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clearPromptWithinFrames", "clearMarkerWithinFrames", "mustNotReappearWithoutStateChange"],
+      "properties": {
+        "clearPromptWithinFrames": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "clearMarkerWithinFrames": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "mustNotReappearWithoutStateChange": { "const": true }
+      }
+    },
+    "expectedPlayerSeconds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "number", "minimum": 0 },
+        "max": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "placementFitness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whyNow",
+        "capability",
+        "storyFunction",
+        "expectedPlayerSeconds",
+        "spatialTolerance",
+        "recovery",
+        "blocking",
+        "reviewOwners"
+      ],
+      "properties": {
+        "whyNow": { "$ref": "#/$defs/meaningfulText" },
+        "capability": { "$ref": "#/$defs/meaningfulText" },
+        "storyFunction": { "$ref": "#/$defs/meaningfulText" },
+        "expectedPlayerSeconds": { "$ref": "#/$defs/expectedPlayerSeconds" },
+        "spatialTolerance": { "$ref": "#/$defs/meaningfulText" },
+        "recovery": { "$ref": "#/$defs/meaningfulText" },
+        "blocking": { "type": "boolean" },
+        "reviewOwners": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["story", "score", "cinematography", "ux"] }
+        }
+      }
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "criticality", "interaction", "postconditions", "placementFitness"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "criticality": { "const": "mandatory" },
+        "interaction": { "$ref": "#/$defs/objectiveInteraction" },
+        "postconditions": { "$ref": "#/$defs/postconditions" },
+        "placementFitness": { "$ref": "#/$defs/placementFitness" }
+      }
+    },
+    "temporalEventually": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["withinMs", "assertions"],
+      "properties": {
+        "withinMs": { "type": "integer", "minimum": 1, "maximum": 30000 },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^entity:.+$" }
+        }
+      }
+    },
+    "resumeContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "reloadWindow", "assertOnFirstFrame", "continueToBeat", "forbidRescue"],
+      "properties": {
+        "required": { "const": true },
+        "reloadWindow": { "$ref": "#/$defs/nonEmptyString" },
+        "assertOnFirstFrame": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^entity:.+$" }
+        },
+        "continueToBeat": { "$ref": "#/$defs/beatId" },
+        "forbidRescue": { "const": true }
+      }
+    },
+    "lifecycleContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "type", "triggerRef", "eventually", "alwaysAfter", "neverAfter", "resume"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "type": { "const": "entity-lifecycle" },
+        "triggerRef": { "$ref": "#/$defs/completionEvidenceRef" },
+        "eventually": { "$ref": "#/$defs/temporalEventually" },
+        "alwaysAfter": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^entity:.+$" }
+        },
+        "neverAfter": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^entity:.+$" }
+        },
+        "resume": { "$ref": "#/$defs/resumeContract" }
+      }
+    },
+    "promptRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requiredWins", "suppressWhenAlreadyRecorded", "maxVisiblePrompts", "noOpForbidden", "feedbackWithinMs"],
+      "properties": {
+        "requiredWins": { "const": true },
+        "suppressWhenAlreadyRecorded": { "const": true },
+        "maxVisiblePrompts": { "const": 1 },
+        "noOpForbidden": { "const": true },
+        "feedbackWithinMs": { "type": "integer", "minimum": 1, "maximum": 5000 }
+      }
+    },
+    "interactionContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "type", "requiredInteractionIds", "optionalInteractionId", "successEvidenceRefs", "rules"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "type": { "const": "prompt-arbitration" },
+        "requiredInteractionIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "optionalInteractionId": { "$ref": "#/$defs/stableId" },
+        "successEvidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionEvidenceRef" }
+        },
+        "rules": { "$ref": "#/$defs/promptRules" }
+      }
+    },
+    "inputAssertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["focusable", "keyboardChangesValue", "globalShortcutsSuppressed", "submitExactlyOnce", "valuePersistsAfterSubmit"],
+      "properties": {
+        "focusable": { "const": true },
+        "keyboardChangesValue": { "const": true },
+        "globalShortcutsSuppressed": { "const": true },
+        "submitExactlyOnce": { "const": true },
+        "valuePersistsAfterSubmit": { "const": true }
+      }
+    },
+    "inputContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "selector", "controlKind", "testValue", "submitKey", "completionEvidenceRef", "assertions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "selector": { "type": "string", "minLength": 3 },
+        "controlKind": { "const": "native-text-input" },
+        "testValue": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "submitKey": { "const": "Enter" },
+        "completionEvidenceRef": { "$ref": "#/$defs/completionEvidenceRef" },
+        "assertions": { "$ref": "#/$defs/inputAssertions" }
+      }
+    },
+    "runtimeAssertionValue": {
+      "type": ["string", "number", "boolean", "null"]
+    },
+    "runtimeAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "equals": { "$ref": "#/$defs/runtimeAssertionValue" },
+        "notEquals": { "$ref": "#/$defs/runtimeAssertionValue" },
+        "includes": { "$ref": "#/$defs/runtimeAssertionValue" },
+        "excludes": { "$ref": "#/$defs/runtimeAssertionValue" },
+        "exists": { "type": "boolean" },
+        "truthy": { "type": "boolean" }
+      },
+      "oneOf": [
+        { "required": ["equals"] },
+        { "required": ["notEquals"] },
+        { "required": ["includes"] },
+        { "required": ["excludes"] },
+        { "required": ["exists"] },
+        { "required": ["truthy"] }
+      ]
+    },
+    "entryStateContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "type", "assertions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "type": { "const": "entry-state" },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/runtimeAssertion" }
+        },
+        "actionKey": { "$ref": "#/$defs/nonEmptyString" },
+        "actionHoldMs": { "type": "integer", "minimum": 1, "maximum": 5000 },
+        "feedbackWithinMs": { "type": "integer", "minimum": 1, "maximum": 30000 },
+        "afterActionAssertions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/runtimeAssertion" }
+        }
+      },
+      "dependentRequired": {
+        "actionKey": ["afterActionAssertions"],
+        "actionHoldMs": ["actionKey"],
+        "feedbackWithinMs": ["actionKey"]
+      }
+    },
+    "optionalCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beat", "criticality", "completionEvidenceRefs", "placementFitness"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "criticality": { "const": "optional" },
+        "completionEvidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionEvidenceRef" }
+        },
+        "placementFitness": { "$ref": "#/$defs/placementFitness" }
+      }
+    },
+    "placementDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chapterId", "beat", "blocking"],
+      "properties": {
+        "chapterId": { "$ref": "#/$defs/chapterId" },
+        "beat": { "$ref": "#/$defs/beatId" },
+        "blocking": { "const": false }
+      }
+    },
+    "placementException": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "formerBeat", "capabilityId", "disposition", "forbiddenMandatoryEvidenceRefs", "destination"],
+      "properties": {
+        "id": { "$ref": "#/$defs/stableId" },
+        "formerBeat": { "$ref": "#/$defs/beatId" },
+        "capabilityId": { "$ref": "#/$defs/stableId" },
+        "disposition": { "const": "relocated-optional" },
+        "forbiddenMandatoryEvidenceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/completionEvidenceRef" }
+        },
+        "destination": { "$ref": "#/$defs/placementDestination" }
+      }
+    },
+    "chapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "continuity",
+        "registryProjection",
+        "requiredLaneIds",
+        "objectives",
+        "lifecycleContracts",
+        "interactionContracts",
+        "inputContracts",
+        "optionalCapabilities",
+        "placementExceptions"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/chapterId" },
+        "continuity": { "$ref": "#/$defs/continuity" },
+        "registryProjection": { "$ref": "#/$defs/registryProjection" },
+        "requiredLaneIds": { "$ref": "#/$defs/laneIdList" },
+        "objectives": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/objective" }
+        },
+        "lifecycleContracts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/lifecycleContract" }
+        },
+        "interactionContracts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/interactionContract" }
+        },
+        "inputContracts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputContract" }
+        },
+        "entryStateContracts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entryStateContract" }
+        },
+        "optionalCapabilities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/optionalCapability" }
+        },
+        "placementExceptions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/placementException" }
+        }
+      }
+    }
+  }
+}

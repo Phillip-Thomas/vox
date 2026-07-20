@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getInteraction, setInteraction, subscribeInteraction } from './interactionSystem.ts';
+import {
+  getInteraction,
+  getInteractionProbeSnapshot,
+  getInteractionScope,
+  setInteraction,
+  subscribeInteraction
+} from './interactionSystem.ts';
 
 beforeEach(() => setInteraction(null));
 
@@ -24,5 +30,26 @@ describe('interaction store', () => {
     setInteraction(null);
     expect(n).toBe(3);
     un();
+  });
+
+  it('exposes a serializable revision without treating equivalent frames as changes', () => {
+    const before = getInteractionProbeSnapshot();
+    setInteraction({ id: 'story-ship-repair', verb: 'Repair Hull' });
+    const published = getInteractionProbeSnapshot();
+
+    expect(published).toMatchObject({
+      revision: before.revision + 1,
+      active: { id: 'story-ship-repair', verb: 'Repair Hull' }
+    });
+    expect(published.changedAt).toEqual(expect.any(Number));
+    expect(() => JSON.stringify(published)).not.toThrow();
+
+    setInteraction({ id: 'story-ship-repair', verb: 'Repair Hull' });
+    expect(getInteractionProbeSnapshot().revision).toBe(published.revision);
+  });
+
+  it('labels story and systemic interaction scopes for prompt probes', () => {
+    expect(getInteractionScope('story-wreck-scar-attend')).toBe('story');
+    expect(getInteractionScope('drink')).toBe('systemic');
   });
 });

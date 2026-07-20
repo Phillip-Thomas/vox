@@ -38,6 +38,7 @@ export function createTouchActionSpecs(controlMode: TouchControlMode, buildActiv
   }
 
   return [
+    { id: 'eat', label: 'CONSUME', ariaLabel: 'Consume held food or waterskin', code: KEY_CODES.eat, intent: 'secondary', area: 'eat' },
     { id: 'use', label: 'USE', ariaLabel: 'Use or interact', code: KEY_CODES.board, intent: 'secondary', area: 'use' },
     { id: 'mine', label: 'MINE', ariaLabel: 'Mine', code: KEY_CODES.mine, intent: 'secondary', area: 'mine' },
     { id: 'jump', label: 'JUMP', ariaLabel: 'Jump', code: KEY_CODES.jump, intent: 'primary', area: 'primary' }
@@ -49,7 +50,7 @@ export function createTouchActionGrid(controlMode: TouchControlMode, buildActive
     return {
       templateColumns: '66px 78px',
       templateRows: '66px 78px',
-      templateAreas: '". use" "mine primary"'
+      templateAreas: '"eat use" "mine primary"'
     };
   }
 

@@ -21,8 +21,8 @@ import {
 // marker struct + driver math as the feed-era bracket — only the chrome changed:
 // the awakened world gets a whisper, not a work order. rAF-driven, zero React.
 
-const INK = 'rgba(235, 245, 240, 0.72)';
-const TOP_LEFT_HUD_SELECTOR = '[data-testid="vitals-meter"], [data-testid="inventory-panel"]';
+const INK = 'rgba(241, 255, 249, 0.92)';
+const TOP_LEFT_HUD_SELECTOR = '[data-testid="vitals-meter"], [data-testid="inventory-panel"], [data-story-journal-trigger="true"]';
 const OCCLUSION_SAMPLE_INTERVAL_MS = 200;
 
 function readVisibleTopLeftHudOcclusion(): StoryHudTopLeftOcclusion | undefined {
@@ -79,8 +79,14 @@ const FreeMarker: React.FC = () => {
       const m = getFeedRuntime().marker;
       if (!m.visible) {
         root.style.display = 'none';
+        root.style.visibility = 'hidden';
+        root.dataset.markerLayout = 'pending';
         return;
       }
+      // Never expose the root between display activation, label wrapping, and
+      // final collision-aware placement. The previous cold-start seam briefly
+      // rendered a 240px intrinsic label at 0,0 before this work completed.
+      root.style.visibility = 'hidden';
       if (viewportWidth !== window.innerWidth || viewportHeight !== window.innerHeight) {
         viewportWidth = window.innerWidth;
         viewportHeight = window.innerHeight;
@@ -88,14 +94,16 @@ const FreeMarker: React.FC = () => {
       }
       root.style.display = 'flex';
       const displayLabel = m.label.toLowerCase();
-      if (label.textContent !== displayLabel) label.textContent = displayLabel;
+      if (label.textContent !== displayLabel) {
+        label.textContent = displayLabel;
+      }
 
       const touch = isTouchDevice();
-      if (reducedMotion && touch
-        && frameTime - lastOcclusionSampleAt >= OCCLUSION_SAMPLE_INTERVAL_MS) {
-        topLeftOcclusion = readVisibleTopLeftHudOcclusion();
+      if (touch && frameTime - lastOcclusionSampleAt >= OCCLUSION_SAMPLE_INTERVAL_MS) {
+        const nextOcclusion = readVisibleTopLeftHudOcclusion();
+        topLeftOcclusion = nextOcclusion;
         lastOcclusionSampleAt = frameTime;
-      } else if (!reducedMotion || !touch) {
+      } else if (!touch) {
         topLeftOcclusion = undefined;
       }
       const layout = solveStoryHudLayout({
@@ -122,19 +130,49 @@ const FreeMarker: React.FC = () => {
         ? 'stable-directional'
         : 'projected';
       root.dataset.topLeftOcclusion = topLeftOcclusion ? 'observed' : 'none';
-      label.style.maxWidth = `${motion.stabilized
+      const labelMaxWidth = `${motion.stabilized
         ? layout.marker.stableLabelMaxWidth
         : layout.marker.labelMaxWidth}px`;
+      if (label.style.maxWidth !== labelMaxWidth) {
+        label.style.maxWidth = labelMaxWidth;
+      }
+      // display/glyph/wrapping writes above must participate in this tick's
+      // measurement. offsetWidth forces the browser to synchronously commit
+      // them even when software WebGL is starving future animation frames.
+      void root.offsetWidth;
+      const overlayBounds = root.getBoundingClientRect();
       const presentation = solveStoryMarkerPresentation({
         rawX: m.x,
         rawY: m.y,
         labelWidth: label.getBoundingClientRect().width,
-        overlayHeight: root.getBoundingClientRect().height,
+        overlayWidth: overlayBounds.width,
+        overlayHeight: overlayBounds.height,
         layout,
         stabilized: motion.stabilized
       });
-      root.style.transform = `translate(${presentation.x}px, ${presentation.y}px) translate(-50%, -50%)`;
+      if (motion.stabilized) {
+        // Stable reduced-motion placement uses real layout coordinates. This
+        // makes collision geometry deterministic without compositor lag.
+        root.style.left = `${presentation.x - overlayBounds.width / 2}px`;
+        root.style.top = `${presentation.y - overlayBounds.height / 2}px`;
+        root.style.transform = 'none';
+      } else {
+        root.style.left = '0px';
+        root.style.top = '0px';
+        root.style.transform = `translate(${presentation.x}px, ${presentation.y}px) translate(-50%, -50%)`;
+      }
       label.style.transform = `translateX(${presentation.labelOffsetX}px)`;
+      root.dataset.objectiveAvoidance = presentation.displacedForObjective
+        ? 'displaced'
+        : 'projected';
+      root.dataset.chromeAvoidance = presentation.displacedForTopChrome
+        ? 'displaced'
+        : 'projected';
+      // Force the final left/top/transform into layout before revealing. The
+      // first visible frame is therefore the positioned frame—no second rAF.
+      void root.getBoundingClientRect();
+      root.dataset.markerLayout = 'ready';
+      root.style.visibility = 'visible';
     };
     raf = requestAnimationFrame(tick);
     return () => {
@@ -148,11 +186,13 @@ const FreeMarker: React.FC = () => {
       ref={rootRef}
       aria-hidden="true"
       data-story-free-marker="true"
+      data-marker-layout="pending"
       style={{
         position: 'fixed',
         left: 0,
         top: 0,
         display: 'none',
+        visibility: 'hidden',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 5,
@@ -163,11 +203,11 @@ const FreeMarker: React.FC = () => {
       <div
         ref={diamondRef}
         style={{
-          width: 9,
-          height: 9,
-          border: `1px solid ${INK}`,
+          width: 10,
+          height: 10,
+          border: `2px solid ${INK}`,
           transform: 'rotate(45deg)',
-          boxShadow: '0 0 8px rgba(0,0,0,0.5)'
+          boxShadow: '0 0 0 1px rgba(0,0,0,0.34), 0 0 10px rgba(0,0,0,0.72)'
         }}
       />
       <div
@@ -175,9 +215,10 @@ const FreeMarker: React.FC = () => {
         style={{
           width: 0,
           height: 0,
-          borderTop: '5px solid transparent',
-          borderBottom: '5px solid transparent',
-          borderLeft: `9px solid ${INK}`
+          borderTop: '6px solid transparent',
+          borderBottom: '6px solid transparent',
+          borderLeft: `10px solid ${INK}`,
+          filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.92))'
         }}
       />
       <div
@@ -185,9 +226,13 @@ const FreeMarker: React.FC = () => {
         style={{
           fontFamily: theme.font.mono,
           fontSize: 11,
+          fontWeight: 700,
           letterSpacing: '0.08em',
           color: INK,
-          textShadow: '0 1px 8px rgba(0,0,0,0.7)',
+          textShadow: '0 1px 2px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.92)',
+          background: 'rgba(3,8,12,0.28)',
+          borderRadius: 5,
+          padding: '2px 5px',
           lineHeight: 1.35,
           maxWidth: 'min(240px, calc(100vw - 36px))',
           overflowWrap: 'anywhere',

@@ -1,0 +1,599 @@
+{
+  "generatedAt": "2026-07-17T16:51:05.983Z",
+  "baseUrl": "http://127.0.0.1:5173/",
+  "graphicsProfile": "POTATO",
+  "results": [
+    {
+      "beat": "ch9-settle",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch9-settle&debug=1&profile=POTATO",
+      "elapsedMs": 50471,
+      "objectiveFirstSeenMs": 23,
+      "screenshot": "/tmp/paravoxia-ch9-objective-hud-repair-20260717T1650Z/desktop-ch9-settle.png",
+      "evidence": {
+        "beat": "ch9-settle",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "settle:scan-waterline",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": {
+            "x": 589,
+            "y": 745.5,
+            "width": 640,
+            "height": 46.5,
+            "right": 1229,
+            "bottom": 792,
+            "visible": true
+          },
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 1051.377685546875,
+            "y": 635.0759887695312,
+            "width": 216.921875,
+            "height": 28.84375,
+            "right": 1268.299560546875,
+            "bottom": 663.9197387695312,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 1051.377685546875,
+            "y": 649.0759887695312,
+            "width": 216.921875,
+            "height": 14.84375,
+            "right": 1268.299560546875,
+            "bottom": 663.9197387695312,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "translate(1159.84px, 649.498px) translate(-50%, -50%)",
+          "computedTransform": "matrix(1, 0, 0, 1, 1051.38, 635.076)",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "projected",
+          "layoutState": "ready",
+          "topLeftOcclusion": "none"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 14,
+            "y": 14,
+            "width": 222,
+            "height": 156,
+            "right": 236,
+            "bottom": 170,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 204,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 237,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 1278,
+            "y": 14,
+            "width": 148,
+            "height": 44,
+            "right": 1426,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch9-hearth",
+      "profile": "desktop",
+      "url": "http://127.0.0.1:5173/?story=ch9-hearth&debug=1&profile=POTATO",
+      "elapsedMs": 47213,
+      "objectiveFirstSeenMs": 23,
+      "screenshot": "/tmp/paravoxia-ch9-objective-hud-repair-20260717T1650Z/desktop-ch9-hearth.png",
+      "evidence": {
+        "beat": "ch9-hearth",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "settle:scan-waterline",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.",
+          "rect": {
+            "x": 22,
+            "y": 768.8125,
+            "width": 360,
+            "height": 103.1875,
+            "right": 382,
+            "bottom": 872,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 1051.377685546875,
+            "y": 635.8953247070312,
+            "width": 216.921875,
+            "height": 28.84375,
+            "right": 1268.299560546875,
+            "bottom": 664.7390747070312,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 1051.377685546875,
+            "y": 649.8953247070312,
+            "width": 216.921875,
+            "height": 14.84375,
+            "right": 1268.299560546875,
+            "bottom": 664.7390747070312,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "translate(1159.84px, 650.317px) translate(-50%, -50%)",
+          "computedTransform": "matrix(1, 0, 0, 1, 1051.38, 635.895)",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "projected",
+          "layoutState": "ready",
+          "topLeftOcclusion": "none"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 14,
+            "y": 14,
+            "width": 222,
+            "height": 156,
+            "right": 236,
+            "bottom": 170,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 204,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 237,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 1278,
+            "y": 14,
+            "width": 148,
+            "height": 44,
+            "right": 1426,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": null,
+          "actionRect": null,
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch9-settle",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch9-settle&debug=1&profile=POTATO",
+      "elapsedMs": 33028,
+      "objectiveFirstSeenMs": 25,
+      "screenshot": "/tmp/paravoxia-ch9-objective-hud-repair-20260717T1650Z/mobile-ch9-settle.png",
+      "evidence": {
+        "beat": "ch9-settle",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "settle:scan-waterline",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": {
+            "x": 18,
+            "y": 502.3125,
+            "width": 354,
+            "height": 46.5,
+            "right": 372,
+            "bottom": 548.8125,
+            "visible": true
+          },
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 198.53125,
+            "y": 249,
+            "width": 130,
+            "height": 44.6875,
+            "right": 328.53125,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 198.53125,
+            "y": 264,
+            "width": 130,
+            "height": 29.6875,
+            "right": 328.53125,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "observed"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 154,
+            "right": 228,
+            "bottom": 168,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 228,
+            "y": 14,
+            "width": 148,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "beat": "ch9-hearth",
+      "profile": "mobile",
+      "url": "http://127.0.0.1:5173/?story=ch9-hearth&debug=1&profile=POTATO",
+      "elapsedMs": 26959,
+      "objectiveFirstSeenMs": 26,
+      "screenshot": "/tmp/paravoxia-ch9-objective-hud-repair-20260717T1650Z/mobile-ch9-hearth.png",
+      "evidence": {
+        "beat": "ch9-hearth",
+        "app": {
+          "phase": "playing",
+          "sceneReady": false
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "objectiveCount": 1,
+        "objective": {
+          "id": "settle:scan-waterline",
+          "markerLabel": "LIVING WATERLINE · SCAN",
+          "health": "ready",
+          "requiresMarker": "true",
+          "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.",
+          "rect": {
+            "x": 18,
+            "y": 566.8125,
+            "width": 354,
+            "height": 103.1875,
+            "right": 372,
+            "bottom": 670,
+            "visible": true
+          },
+          "insideViewport": true
+        },
+        "caption": {
+          "rect": null,
+          "insideViewport": true,
+          "intersectsObjective": false
+        },
+        "marker": {
+          "count": 1,
+          "rect": {
+            "x": 198.53125,
+            "y": 249,
+            "width": 130,
+            "height": 44.6875,
+            "right": 328.53125,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelRect": {
+            "x": 198.53125,
+            "y": 264,
+            "width": 130,
+            "height": 29.6875,
+            "right": 328.53125,
+            "bottom": 293.6875,
+            "visible": true
+          },
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": "none",
+          "computedTransform": "none",
+          "labelTransform": "translateX(0px)",
+          "motionPresentation": "stable-directional",
+          "layoutState": "ready",
+          "topLeftOcclusion": "observed"
+        },
+        "redactionIndicator": {
+          "rect": null,
+          "labelRect": null,
+          "labelInsideViewport": true,
+          "intersectsObjective": false,
+          "intersectsCaption": false,
+          "transform": null,
+          "labelOffset": null,
+          "labelTransform": null
+        },
+        "redactionBox": {
+          "rect": null
+        },
+        "guidance": {
+          "required": true,
+          "freeMarkerVisible": true,
+          "redactionIndicatorVisible": false,
+          "redactionBoxVisible": false,
+          "visibleOwner": true
+        },
+        "legacyMarkerCount": 0,
+        "topHud": {
+          "vitalsRect": {
+            "x": 12,
+            "y": 14,
+            "width": 216,
+            "height": 154,
+            "right": 228,
+            "bottom": 168,
+            "visible": true
+          },
+          "inventoryRect": {
+            "x": 14,
+            "y": 202,
+            "width": 90,
+            "height": 33,
+            "right": 104,
+            "bottom": 235,
+            "visible": true
+          },
+          "quickActionsRect": {
+            "x": 228,
+            "y": 14,
+            "width": 148,
+            "height": 44,
+            "right": 376,
+            "bottom": 58,
+            "visible": true
+          },
+          "markerIntersectsVitals": false,
+          "markerIntersectsInventory": false,
+          "markerIntersectsQuickActions": false,
+          "redactionIntersectsVitals": false,
+          "redactionIntersectsInventory": false
+        },
+        "touchControls": {
+          "joystickRect": {
+            "x": 24,
+            "y": 688,
+            "width": 132,
+            "height": 132,
+            "right": 156,
+            "bottom": 820,
+            "visible": true
+          },
+          "actionRect": {
+            "x": 218,
+            "y": 672,
+            "width": 152,
+            "height": 152,
+            "right": 370,
+            "bottom": 824,
+            "visible": true
+          },
+          "objectiveIntersectsJoystick": false,
+          "objectiveIntersectsActions": false
+        }
+      },
+      "errors": [],
+      "status": "passed",
+      "failure": null
+    }
+  ]
+}

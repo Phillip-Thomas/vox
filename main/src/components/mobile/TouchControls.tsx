@@ -16,7 +16,7 @@ import { createTouchActionGrid, createTouchActionSpecs } from './TouchControls.m
 // by synthesizing keyboard + mousemove events (see mobileInput.ts), so neither
 // the on-foot nor the ship controller needs input-consumption changes. Movement
 // = left joystick (-> WASD), camera = any non-control drag (-> mouse look),
-// actions = on-screen buttons (-> Space / F / Q / E).
+// actions = on-screen buttons (-> Space / F / G / Q / E).
 
 interface TouchControlsProps {
   /** 'fps' on foot, 'flight' in the ship — selects which action buttons show. */
@@ -137,7 +137,10 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
         onPointerUp={onJoyUp}
         onPointerCancel={onJoyUp}
         style={{
-          position: 'absolute', left: 24, bottom: 24, zIndex: 1,
+          position: 'absolute',
+          left: 'calc(12px + env(safe-area-inset-left, 0px))',
+          bottom: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+          zIndex: 1,
           width: JOYSTICK_SIZE, height: JOYSTICK_SIZE, borderRadius: JOYSTICK_SIZE / 2,
           background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.08), rgba(5,8,15,0.34) 70%)',
           border: '1px solid rgba(125,211,252,0.32)',
@@ -155,15 +158,14 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
         }} />
       </div>
 
-      {/* action buttons (bottom-right). Normal on-foot mode is a 3-button right
-          angle with the primary jump button in the corner; build/flight keep
-          their required fourth command in the same compact grid. */}
+      {/* action buttons (bottom-right). On-foot, build, and flight modes keep
+          their four required commands in one compact 2x2 grid. */}
       <div
         data-testid="touch-action-cluster"
         style={{
           position: 'absolute',
-          right: HUD_TOUCH_EDGE,
-          bottom: HUD_TOUCH_EDGE,
+          right: 'calc(14px + env(safe-area-inset-right, 0px))',
+          bottom: `calc(${HUD_TOUCH_EDGE}px + env(safe-area-inset-bottom, 0px))`,
           zIndex: 1,
           display: 'grid',
           gridTemplateColumns: actionGrid.templateColumns,

@@ -1,23 +1,19 @@
 import type { StoryChapter } from './storyState.ts';
 import { STORY_PRIMARY_WORLD_ID } from './tidegardenRoute.ts';
 
-const AUDITOR_PRESENT_CHAPTERS = new Set<StoryChapter>([
-  'ch4',
-  'ch5',
-  'ch6',
-  'ch7',
-  'ch8',
-  'ch9',
-  'complete'
-]);
-
 /**
- * W-7744 remains a physical fact on Origin after arriving. He is not copied to
- * Tidegarden; revisiting Origin later in the story remounts the same actor.
+ * W-7744 is embodied only for his arrival, audit, refusal and A4 flight on
+ * Origin. The physical pack tear starts a short live grounded exit; completing
+ * that exit (or loading a save that already owns the tear receipt) closes his
+ * transient render lifetime. Later Origin loads retain the pack, not a stranded
+ * copy of its former owner.
  */
 export function shouldMountAuditWorker(
   chapter: StoryChapter,
-  worldId: string
+  worldId: string,
+  departureComplete: boolean
 ): boolean {
-  return worldId === STORY_PRIMARY_WORLD_ID && AUDITOR_PRESENT_CHAPTERS.has(chapter);
+  return worldId === STORY_PRIMARY_WORLD_ID
+    && chapter === 'ch4'
+    && !departureComplete;
 }

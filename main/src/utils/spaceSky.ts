@@ -35,6 +35,43 @@ export const SPACE_DOME_RADIUS = 220;
 export const SPACE_DOME_RENDER_ORDER = -1000;
 
 /**
+ * Constellation look tuning — single source of truth, interpolated into the
+ * fragment shader below and unit-tested for internal consistency.
+ *
+ * Angular quantities are chordal distances on the unit direction sphere
+ * (radians for small angles). Gaussian "size" constants are 1/sigma^2.
+ */
+export const CONSTELLATION_TUNING = {
+  /** cells per cube-face axis (6 * grid^2 candidate cells; 3 -> 54) */
+  grid: 3,
+  /** fraction of cells hosting a figure (54 * 0.18 ~ 10 figures sky-wide) */
+  figureOdds: 0.18,
+  /** node core tightness (14000 -> sigma ~0.48 deg: a crisp star point) */
+  nodeCoreSize: 14000,
+  /** dim wide halo lobe around each node (1800 -> sigma ~1.35 deg) */
+  nodeHaloSize: 1800,
+  /** halo lobe gain relative to the core */
+  nodeHaloGain: 0.3,
+  /** full-strength line half-width (~0.2 deg core reads as a drawn stroke) */
+  lineCore: 0.0035,
+  /** outer feather half-width — the line is zero past this (~0.8 deg) */
+  lineWidth: 0.014,
+  /** line peak brightness (additive on the night sky, under star peaks) */
+  lineGain: 0.34,
+  /** reveal at which nodes reach full kindle */
+  starRevealEnd: 0.55,
+  /** reveal window over which lines draw in (legible well before reveal=1) */
+  lineRevealStart: 0.18,
+  lineRevealEnd: 0.7
+} as const;
+
+/** Format a number as a GLSL float literal (floor-safe: always has a '.'). */
+function glslFloat(n: number): string {
+  const s = String(n);
+  return s.includes('.') || s.includes('e') ? s : `${s}.0`;
+}
+
+/**
  * daylight (0 night .. 1 day) -> day factor (0..1), eased. This is the single
  * master "how much atmosphere vs how much cosmos" scalar fed to uDay. Continuous
  * (smoothstep) so dusk->night is pop-free across the uDay<0.01 early-out.
@@ -179,38 +216,72 @@ const FRAG = /* glsl */ `
   // and every non-story frame) this whole function early-outs and the sky is
   // untouched chaos noise.
   //
-  // A coarse cube-lattice over the SAME warped star sphere the field uses (fed
-  // wdir, so figures drift WITH the stars). A deterministic ~1-in-7 subset of
-  // coarse cells hosts a FIGURE: 3..5 member "nodes", each drawn as a star that
-  // FADES UP out of the field (so it reads as existing stars kindling, not new
-  // UI), joined by faint thin phosphor/amber SEGMENTS that connect a touch later
-  // as the reveal climbs ("stars wake, then the lines are drawn"). Every element
-  // of a figure is confined to the INTERIOR of its coarse cell, so a single-cell
-  // lookup — floor(dir*CELLS) — is exact and seam-free: no 27-neighbour scan.
+  // Figures live on a CUBE-FACE lattice over the warped star sphere (fed wdir,
+  // so figures drift WITH the stars): dominant-axis face id + a GRID² cell grid
+  // on that face's uv plane. Membership depends ONLY on direction — there is no
+  // radial term — so the single-cell lookup is exact: the cell a fragment
+  // computes is always the cell that authored the figure it is looking at.
+  // (The old volumetric floor(dir*CELLS) lattice re-binned normalize(node)
+  // through a radial rescale that crossed lattice planes, cutting halos and
+  // lines on straight seams and winking whole members as the warp drifted.)
+  // All figure content keeps a [0.30,0.70] interior margin per cell, several
+  // degrees clear of cell seams and cube-face edges, so no neighbour scan is
+  // needed and no figure is ever clipped.
+  //
+  // A hosting cell draws 3..5 member "nodes" — each a crisp star point (tight
+  // Gaussian core + dim wide halo) that FADES UP out of the field, so it reads
+  // as existing stars kindling, not new UI — joined by thin phosphor/amber
+  // strokes (flat core + soft feather) that draw in as the reveal climbs:
+  // "stars wake, then the lines are drawn".
   //
   // Regional "astrology" hook: a per-cell style scalar (from the cell hash)
   // shifts figure hue (amber ↔ phosphor) and node warmth, and the member count
   // varies, so different sky regions already read subtly distinct. Nothing
   // gameplay-facing yet — it just seeds future region-specific meaning.
-  #define CONST_CELLS       2.3    // coarse lattice density (fewer cells = larger, fewer figures)
-  #define CONST_FIGURE_ODDS 0.15   // fraction of shell cells that host a figure (tunes total ~8-14)
-  #define CONST_NODE_SIZE   1200.0 // node-star tightness (bigger = smaller, sharper points)
-  #define CONST_LINE_WIDTH  0.010  // segment half-width in lattice space (thin)
-  #define CONST_LINE_GAIN   0.16   // segment peak brightness (subtle, additive on the night sky)
+  #define CONST_GRID           ${glslFloat(CONSTELLATION_TUNING.grid)}
+  #define CONST_FIGURE_ODDS    ${glslFloat(CONSTELLATION_TUNING.figureOdds)}
+  #define CONST_NODE_CORE      ${glslFloat(CONSTELLATION_TUNING.nodeCoreSize)}
+  #define CONST_NODE_HALO      ${glslFloat(CONSTELLATION_TUNING.nodeHaloSize)}
+  #define CONST_NODE_HALO_GAIN ${glslFloat(CONSTELLATION_TUNING.nodeHaloGain)}
+  #define CONST_LINE_CORE      ${glslFloat(CONSTELLATION_TUNING.lineCore)}
+  #define CONST_LINE_WIDTH     ${glslFloat(CONSTELLATION_TUNING.lineWidth)}
+  #define CONST_LINE_GAIN      ${glslFloat(CONSTELLATION_TUNING.lineGain)}
+
+  // Dominant-axis cube-face split: face id + uv in [-1,1]² on that face.
+  // Dividing by the ABS of the dominant component makes one formula serve both
+  // signs (the ±1 lives in the reconstruction below).
+  void cubeFace(vec3 d, out float face, out vec2 uv) {
+    vec3 a = abs(d);
+    if (a.x >= a.y && a.x >= a.z) { face = d.x > 0.0 ? 0.0 : 1.0; uv = d.yz / a.x; }
+    else if (a.y >= a.z)          { face = d.y > 0.0 ? 2.0 : 3.0; uv = d.xz / a.y; }
+    else                          { face = d.z > 0.0 ? 4.0 : 5.0; uv = d.xy / a.z; }
+  }
+  vec3 cubeDir(float face, vec2 uv) {
+    if (face < 0.5) return normalize(vec3( 1.0, uv.x, uv.y));
+    if (face < 1.5) return normalize(vec3(-1.0, uv.x, uv.y));
+    if (face < 2.5) return normalize(vec3(uv.x,  1.0, uv.y));
+    if (face < 3.5) return normalize(vec3(uv.x, -1.0, uv.y));
+    if (face < 4.5) return normalize(vec3(uv.x, uv.y,  1.0));
+    return              normalize(vec3(uv.x, uv.y, -1.0));
+  }
 
   // Distance from unit dir to the chord segment a→b (both unit vectors). Figures
-  // span ~1 coarse cell (~15°), small enough that the chord tracks the arc.
+  // span well under a face cell (~15°), small enough that the chord tracks the arc.
   float constSegDist(vec3 dir, vec3 a, vec3 b) {
     vec3 ab = b - a;
     float t = clamp(dot(dir - a, ab) / max(dot(ab, ab), 1e-5), 0.0, 1.0);
     return length(dir - (a + t * ab));
   }
 
-  vec3 constellation(vec3 dir, float reveal) {
+  vec3 constellation(vec3 dirIn, float reveal) {
     if (reveal <= 0.001) return vec3(0.0);          // sandbox / non-story: zero ALU past here
-    vec3 pc   = dir * CONST_CELLS;
-    vec3 cell = floor(pc);
-    vec3 h    = hash33(cell);
+    vec3 dir = normalize(dirIn);                    // the star warp leaves wdir slightly non-unit
+    float face; vec2 uv;
+    cubeFace(dir, face, uv);
+    vec2 pc   = (uv + 1.0) * 0.5 * CONST_GRID;      // [0, GRID)² on this face
+    vec2 cell = floor(pc);
+    vec3 seed = vec3(cell, face * 9.7 + 1.3);
+    vec3 h    = hash33(seed);
     if (h.x > CONST_FIGURE_ODDS) return vec3(0.0);  // most cells host no figure
 
     // Regional style: warm amber ↔ cool phosphor line + node tint; member count.
@@ -219,22 +290,26 @@ const FRAG = /* glsl */ `
     vec3  nodeCol = mix(vec3(1.0, 0.92, 0.80), vec3(0.82, 0.96, 1.0), style);
     int   members = 3 + int(h.y * 2.99);            // 3..5
 
-    // Nodes kindle first (starRamp), lines connect a touch later (lineRamp), so
-    // the read is "points brighten, then pattern is drawn between them".
-    float starRamp = smoothstep(0.0,  0.55, reveal);
-    float lineRamp = smoothstep(0.20, 1.0,  reveal);
+    // Nodes kindle first (starRamp), lines draw in over the mid-reveal window,
+    // fully legible well before reveal=1 — the read is still "points brighten,
+    // then pattern is drawn between them", but the drawing lands inside the beat.
+    float starRamp = smoothstep(0.0, ${glslFloat(CONSTELLATION_TUNING.starRevealEnd)}, reveal);
+    float lineRamp = smoothstep(${glslFloat(CONSTELLATION_TUNING.lineRevealStart)}, ${glslFloat(CONSTELLATION_TUNING.lineRevealEnd)}, reveal);
 
     vec3 acc  = vec3(0.0);
     vec3 prev = vec3(0.0);
     for (int i = 0; i < 5; i++) {
       if (i >= members) break;
-      vec3 hn   = hash33(cell + 3.3 + float(i) * 1.7);
-      vec3 node = cell + 0.30 + hn * 0.40;          // interior [0.30,0.70] → seam-free margin
-      vec3 nd   = normalize(node);
-      float d2  = dot(dir - nd, dir - nd);          // ~squared chordal distance on the shell
-      acc += nodeCol * exp(-d2 * CONST_NODE_SIZE) * (0.6 + 0.9 * starRamp) * starRamp;
+      vec3 hn   = hash33(seed + 3.3 + float(i) * 1.7);
+      vec2 nuv  = (cell + 0.30 + hn.xy * 0.40) * (2.0 / CONST_GRID) - 1.0; // cell interior → seam margin
+      vec3 nd   = cubeDir(face, nuv);
+      float d2  = dot(dir - nd, dir - nd);          // squared chordal distance
+      float kindle = (0.6 + 0.9 * starRamp) * starRamp;
+      acc += nodeCol * (exp(-d2 * CONST_NODE_CORE)
+                      + CONST_NODE_HALO_GAIN * exp(-d2 * CONST_NODE_HALO)) * kindle;
       if (i > 0) {
-        float line = smoothstep(CONST_LINE_WIDTH, 0.0, constSegDist(dir, prev, nd));
+        float sd   = constSegDist(dir, prev, nd);
+        float line = 1.0 - smoothstep(CONST_LINE_CORE, CONST_LINE_WIDTH, sd);
         acc += lineCol * line * CONST_LINE_GAIN * lineRamp;
       }
       prev = nd;

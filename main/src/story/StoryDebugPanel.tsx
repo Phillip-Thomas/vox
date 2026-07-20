@@ -1,7 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { chapterForBeat, STORY_BEAT_ORDER, useStoryState, type StoryBeat } from './storyState.ts';
 import { setLocalPersistenceMode } from '../game/systems/persistence.ts';
+import { HUD_EDGE, hudIconButtonStyle, hudNoSelect } from '../components/hud/hudChrome.ts';
+import {
+  getActiveMobileHudDisclosure,
+  subscribeMobileHudDisclosure,
+  toggleMobileHudDisclosure
+} from '../components/mobile/mobileHudDisclosure.ts';
 
 // --- Story debug panel -----------------------------------------------------------
 //
@@ -87,7 +93,15 @@ function jumpTo(beat: StoryBeat | 'menu' | 'reset' | 'movie'): void {
 
 const StoryDebugPanel: React.FC = () => {
   const story = useStoryState();
-  const [open, setOpen] = useState(false);
+  // Governed disclosure state: on mobile this is mutually exclusive with the
+  // Systems / inventory / suit disclosures (one owner open at a time); on
+  // desktop it simply behaves as an independent toggle.
+  const activeDisclosure = useSyncExternalStore(
+    subscribeMobileHudDisclosure,
+    getActiveMobileHudDisclosure,
+    () => null
+  );
+  const open = activeDisclosure === 'story-debug';
   const chapters = useMemo(() => {
     const groups = new Map<string, StoryBeat[]>();
     for (const beat of STORY_BEAT_ORDER) {
@@ -98,50 +112,84 @@ const StoryDebugPanel: React.FC = () => {
     return [...groups.entries()];
   }, []);
 
-  const chip: React.CSSProperties = {
+  // Menu-row style shared with the beat/action buttons in the disclosure panel.
+  const rowStyle = (activeBeat: boolean): React.CSSProperties => ({
+    width: '100%',
+    textAlign: 'left',
+    padding: '6px 11px',
+    border: 0,
+    borderTop: '1px solid rgba(125,211,252,0.1)',
+    background: activeBeat ? theme.color.accent : 'transparent',
+    color: activeBeat ? theme.color.void : theme.color.textDim,
     fontFamily: theme.font.mono,
     fontSize: 10,
-    letterSpacing: '0.1em',
-    color: theme.color.accent,
-    background: 'rgba(8,13,24,0.85)',
-    border: `1px solid ${theme.color.accentGhost}`,
-    borderRadius: theme.radius.sm,
-    padding: '5px 9px',
-    cursor: 'pointer'
-  };
+    letterSpacing: '0.06em',
+    cursor: 'pointer',
+    touchAction: 'manipulation',
+    ...hudNoSelect
+  });
 
   return (
-    <div style={{
-      position: 'fixed',
-      left: 12,
-      top: '38%',
-      zIndex: theme.z.toast,
-      fontFamily: theme.font.mono,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 4,
-      maxHeight: '58vh',
-      overflowY: 'auto'
-    }}>
-      <button style={chip} onClick={() => setOpen(o => !o)}>
-        ⛿ STORY {open ? '▾' : '▸'} {story.beat ?? story.chapter}
+    // Anchored top-right, tucked one action-rail height below the corner
+    // actions so the two never collide, and clear of the left-edge story HUD,
+    // objective card, marker, and the bottom touch-control region.
+    <div
+      data-testid="story-debug-panel"
+      style={{
+        position: 'fixed',
+        top: `calc(${HUD_EDGE + 52}px + env(safe-area-inset-top, 0px))`,
+        right: `calc(${HUD_EDGE}px + env(safe-area-inset-right, 0px))`,
+        zIndex: theme.z.hud + 7,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        gap: 6,
+        pointerEvents: 'auto'
+      }}
+    >
+      <button
+        type="button"
+        aria-label={open ? 'Close story beat teleporter' : 'Open story beat teleporter'}
+        aria-expanded={open}
+        aria-controls="story-debug-disclosure"
+        title={`STORY · ${story.beat ?? story.chapter}`}
+        onClick={() => toggleMobileHudDisclosure('story-debug')}
+        style={{ ...hudIconButtonStyle(open), fontSize: 15 }}
+      >
+        ⛿
       </button>
+
       {open && (
-        <>
+        <div
+          id="story-debug-disclosure"
+          role="group"
+          aria-label="Story beat teleporter"
+          style={{
+            width: 216,
+            maxHeight: '62vh',
+            overflowY: 'auto',
+            border: theme.glass.border,
+            borderRadius: theme.radius.md,
+            background: 'linear-gradient(160deg, rgba(10,18,31,0.98), rgba(5,9,17,0.97))',
+            boxShadow: '0 18px 44px rgba(0,0,0,0.48)',
+            backdropFilter: theme.glass.blur,
+            WebkitBackdropFilter: theme.glass.blur,
+            fontFamily: theme.font.mono
+          }}
+        >
+          <div style={{ padding: '9px 11px 6px', color: theme.color.textFaint, fontSize: 9, letterSpacing: '0.18em' }}>
+            BEAT TELEPORTER · {story.beat ?? story.chapter}
+          </div>
           {chapters.map(([chapter, beats]) => (
             <React.Fragment key={chapter}>
-              <div style={{ fontSize: 9, color: theme.color.textFaint, letterSpacing: '0.2em', marginTop: 4 }}>
+              <div style={{ padding: '6px 11px 2px', fontSize: 9, color: theme.color.textFaint, letterSpacing: '0.2em' }}>
                 {chapter.toUpperCase()}
               </div>
               {beats.map(beat => (
                 <button
                   key={beat}
-                  style={{
-                    ...chip,
-                    textAlign: 'left',
-                    color: story.beat === beat ? theme.color.void : theme.color.textDim,
-                    background: story.beat === beat ? theme.color.accent : 'rgba(8,13,24,0.85)'
-                  }}
+                  type="button"
+                  style={rowStyle(story.beat === beat)}
                   onClick={() => jumpTo(beat)}
                 >
                   {BEAT_LABELS[beat]}
@@ -149,10 +197,16 @@ const StoryDebugPanel: React.FC = () => {
               ))}
             </React.Fragment>
           ))}
-          <button style={{ ...chip, marginTop: 6, color: theme.color.good }} onClick={() => jumpTo('movie')}>▶ movie run (autopilot)</button>
-          <button style={chip} onClick={() => jumpTo('menu')}>◦ sandbox menu</button>
-          <button style={{ ...chip, color: theme.color.danger }} onClick={() => jumpTo('reset')}>⟲ wipe save, fresh run</button>
-        </>
+          <button type="button" style={{ ...rowStyle(false), color: theme.color.good, marginTop: 4 }} onClick={() => jumpTo('movie')}>
+            ▶ movie run (autopilot)
+          </button>
+          <button type="button" style={rowStyle(false)} onClick={() => jumpTo('menu')}>
+            ◦ sandbox menu
+          </button>
+          <button type="button" style={{ ...rowStyle(false), color: theme.color.danger }} onClick={() => jumpTo('reset')}>
+            ⟲ wipe save, fresh run
+          </button>
+        </div>
       )}
     </div>
   );

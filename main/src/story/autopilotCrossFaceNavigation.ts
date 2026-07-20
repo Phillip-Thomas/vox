@@ -70,6 +70,32 @@ export function shouldReplanUnreachableRoute(input: {
         && input.currentContact.physicallySupported));
 }
 
+/**
+ * Shoreline local-minimum escape. A nominally dry same-face leg (a plain walk or
+ * direct step with no planned water crossing) that keeps dragging the capsule's
+ * feet through water has settled into a pond-edge local minimum: the planned path
+ * hugs a bank the terrain no longer honours. Once that wet contact has persisted
+ * for a bounded number of ticks, force one replan from the live wet position so
+ * the shared route authority can promote the leg to a jetpack crossing or a real
+ * dry detour instead of grinding the shoreline until the stuck watchdog hops it.
+ *
+ * Cross-face edge crossings and wet-start/partial-crossing egress routes already
+ * own their own fuel-budget replans, so they are excluded via the water-crossing
+ * and mode gates; only a route that CLAIMS to be dry yet keeps touching water
+ * qualifies.
+ */
+export function shouldReplanDryWaterContact(input: {
+  routeMode: AgentSurfaceRoute['mode'];
+  hasWaterCrossing: boolean;
+  contactFrames: number;
+  thresholdFrames: number;
+}): boolean {
+  return input.thresholdFrames > 0
+    && (input.routeMode === 'walk' || input.routeMode === 'direct')
+    && !input.hasWaterCrossing
+    && input.contactFrames >= input.thresholdFrames;
+}
+
 export type CrossFaceDestinationValidationReason =
   | 'valid'
   | 'departure-route-not-dry'

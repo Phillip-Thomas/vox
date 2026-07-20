@@ -10,7 +10,6 @@ import { getItemCount, hasItems } from '../game/systems/inventorySystem.ts';
 import { isTreeHarvested } from '../game/systems/treeHarvest.ts';
 import { isFloraHarvested } from '../game/systems/floraHarvest.ts';
 import { isStoneCollected } from '../game/systems/stonePickup.ts';
-import { getPieces } from '../game/systems/structureSystem.ts';
 import { getRecipe } from '../game/data/recipes.ts';
 import type { ItemId } from '../game/data/items.ts';
 import { getCampfires, subscribeCampfires } from '../game/systems/campfires.ts';
@@ -55,6 +54,7 @@ import { floraFieldHandle } from '../components/FloraField.tsx';
 import { looseStoneHandle } from '../components/LooseStoneField.tsx';
 import { nearestForageNodeWorld } from '../components/ForageField.tsx';
 import { dominantFaceForPosition } from '../utils/surfaceControls.ts';
+import { isNightPhase, NIGHT_START_PHASE } from '../utils/nightState.ts';
 import { voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 import { setConstellationReveal } from './skyMeaning.ts';
 import { hifiWreckHandle } from './world/hifiWreck.ts';
@@ -86,13 +86,7 @@ import {
   getPhysicalBoardingSnapshot,
   hasSealedPhysicalBoarding
 } from './physicalBoarding.ts';
-import {
-  createTidegardenRelationshipProof,
-  getTidegardenChosenHabitatSite,
-  getTidegardenSettlementGuidance
-} from './tidegardenSettlement.ts';
-import { findEmergentMovieHabitatGoal } from './emergentMovieRuntime.ts';
-import { getHabitatWorldState } from '../game/systems/habitatSystem.ts';
+import { resolveTidegardenSettlementTarget } from './tidegardenSettlementTargets.ts';
 import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
 import {
   hasFirstHoverGroundedReturn,
@@ -570,14 +564,14 @@ function currentGatherMarkerResource(): GatherMarkerResource {
 }
 
 function currentRestObjectivePhase(): RestObjectivePhase {
-  return d.dayPhase >= DUSK.nightStart && d.dayPhase <= DUSK.nightEnd
+  return isNightPhase(d.dayPhase)
     ? 'rest-at-fire'
     : 'wait-for-night';
 }
 
 function currentVigilObjectivePhase(): VigilObjectivePhase {
   if (d.captionsFired.has('vig-rest')) return 'rest-at-fire';
-  if (d.dayPhase >= DUSK.nightStart && d.dayPhase <= DUSK.nightEnd) return 'observe-sky';
+  if (isNightPhase(d.dayPhase)) return 'observe-sky';
   return 'remain-at-wreck';
 }
 
@@ -937,7 +931,7 @@ function ensureRestInteraction(): void {
     if (!s.active) return null;
     if (s.beat !== 'ch3-await-rest' && s.beat !== 'ch4-vigil') return null;
     const phase = getCurrentDayPhase();
-    if (phase < DUSK.nightStart || phase > DUSK.nightEnd) return null;
+    if (!isNightPhase(phase)) return null;
     if (!nearCampfire(position)) return null;
     return {
       id: 'story-rest',
@@ -1523,11 +1517,11 @@ function tickCh3Sun(dt: number): void {
       markMilestone(STORY_MILESTONES.senseTemp);
     }
     tickStoryChill(dt, 1.15); // night bites harder; the fire answers
-    if (!d.captionsFired.has('night') && d.dayPhase >= DUSK.nightStart) {
+    if (!d.captionsFired.has('night') && isNightPhase(d.dayPhase)) {
       fireCaptionOnce('night', CH3_CAPTIONS.night);
     }
     // A beat later, the explicit nudge — rest is the ONLY forward action left.
-    if (!d.captionsFired.has('rest-hint') && d.dayPhase >= DUSK.nightStart + 0.015) {
+    if (!d.captionsFired.has('rest-hint') && d.dayPhase >= NIGHT_START_PHASE + 0.015) {
       fireCaptionOnce('rest-hint', CH3_CAPTIONS.restPrompt);
     }
   }
@@ -1802,7 +1796,7 @@ const _vigilDir = new THREE.Vector3();
 function tickStargaze(dt: number, camera: THREE.PerspectiveCamera | null): void {
   const t = d.beatClock;
   if (d.stargazeStart < 0) {
-    if (d.dayPhase >= DUSK.nightStart && d.vigilNightAt < 0) d.vigilNightAt = t;
+    if (isNightPhase(d.dayPhase) && d.vigilNightAt < 0) d.vigilNightAt = t;
     if (d.vigilNightAt >= 0) {
       const sinceNight = t - d.vigilNightAt;
       if (sinceNight >= STARGAZE.startAfterNightSeconds) {
@@ -1836,7 +1830,7 @@ function tickStargaze(dt: number, camera: THREE.PerspectiveCamera | null): void 
   }
   // The ordered rest is offered only after the sky has finished speaking.
   const lastLineAt = d.stargazeStart + (STARGAZE.lines.length - 1) * STARGAZE.gapSeconds;
-  if (t >= lastLineAt + STARGAZE.restPromptAfterSeconds && d.dayPhase >= DUSK.nightStart) {
+  if (t >= lastLineAt + STARGAZE.restPromptAfterSeconds && isNightPhase(d.dayPhase)) {
     fireCaptionOnce('vig-rest', VIGIL_LINES.restPrompt);
   }
 }
@@ -2368,7 +2362,18 @@ function nearestGatherResourceTarget(resource: GatherMarkerResource): THREE.Vect
  * cue lands, the wreck during the summons, the fire once the scheduled dark
  * arrives. Null everywhere else; the free world is not a checklist.
  */
-export function storyFreeMarkerTarget(): { position: THREE.Vector3; label: string } | null {
+export interface StoryMarkerTarget {
+  position: THREE.Vector3;
+  label: string;
+  /** Authored ownership removes edge/corner ambiguity when position dominance
+   * alone cannot identify the target's traversable surface. */
+  surfaceUp?: THREE.Vector3 | null;
+  /** Omitted goals use cube-surface navigation; orbital goals opt into a true
+   *  3D bearing so crossing coordinate axes cannot rotate the chevron. */
+  projectionSpace?: 'surface' | 'spatial';
+}
+
+export function storyFreeMarkerTarget(): StoryMarkerTarget | null {
   const s = getStoryStateSnapshot();
   if (!s.active) return null;
   const objective = getActiveGuidedStoryObjective();
@@ -2454,11 +2459,7 @@ export function storyFreeMarkerTarget(): { position: THREE.Vector3; label: strin
       if (guidance.requiresMarker === false) return null;
       const target = guidance.id === 'diagnose'
         ? hifiWreckHandle.diagnosisTarget ?? wreck
-        : guidance.id === 'lift-test'
-          ? hifiWreckHandle.hoverSocketPosition ?? wreck
-          : guidance.id === 'lift-return'
-            ? wreck
-          : hifiWreckHandle.workstationPosition ?? wreck;
+        : hifiWreckHandle.workstationPosition ?? wreck;
       return { position: target, label: guidance.markerLabel };
     }
     case 'ch7-board': {
@@ -2466,39 +2467,25 @@ export function storyFreeMarkerTarget(): { position: THREE.Vector3; label: strin
       if (guidance.requiresMarker === false || !hifiWreckHandle.hatchTarget) return null;
       return { position: hifiWreckHandle.hatchTarget, label: guidance.markerLabel };
     }
+    case 'ch8-launch': {
+      if (!objective || objective.requiresMarker === false || !hifiWreckHandle.hatchTarget) return null;
+      return { position: hifiWreckHandle.hatchTarget, label: objective.markerLabel };
+    }
     case 'ch8-crossing': {
       if (!objective || objective.requiresMarker === false) return null;
       const target = readSystemCompanionBodyTarget(TIDEGARDEN_WORLD_ID);
-      return target ? { position: target, label: objective.markerLabel } : null;
+      return target
+        ? { position: target, label: objective.markerLabel, projectionSpace: 'spatial' }
+        : null;
     }
     case 'ch9-settle':
     case 'ch9-hearth': {
-      const actorId = getLocalActorId();
-      const chosen = getTidegardenChosenHabitatSite(actorId);
-      const foundationPlaced = Boolean(chosen && getPieces().some(piece => (
-        piece.type === 'foundation'
-        && piece.cell[0] === chosen.cell[0]
-        && piece.cell[1] === chosen.cell[1]
-        && piece.cell[2] === chosen.cell[2]
-      )));
-      const guidance = getTidegardenSettlementGuidance({
-        actorId,
-        coreCarried: getItemCount('habitat_core', actorId) > 0,
-        foundationPlaced,
-        night: d.dayPhase >= 0.7 || d.dayPhase <= 0.1
-      });
-      const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
-      const relationship = storyAnchors.planetSize != null && storyAnchors.terrainSeed != null
-        ? createTidegardenRelationshipProof(storyAnchors.planetSize, storyAnchors.terrainSeed)
-        : null;
-      const target = guidance.id === 'scan-waterline' || guidance.id === 'attend-waterline'
-        ? relationship?.position ?? null
-        : guidance.id === 'choose-site'
-          ? findEmergentMovieHabitatGoal(getPlayerWorldPosition())
-          : habitat
-            ? new THREE.Vector3(...habitat.core.position)
-            : chosen?.position ?? null;
-      return target ? { position: target, label: guidance.markerLabel } : null;
+      if (!objective || objective.requiresMarker === false) return null;
+      const guidanceId = objective.id.startsWith('settle:')
+        ? objective.id.slice('settle:'.length)
+        : objective.id;
+      const target = resolveTidegardenSettlementTarget(guidanceId);
+      return target ? { position: target, label: objective.markerLabel } : null;
     }
     default:
       return null;

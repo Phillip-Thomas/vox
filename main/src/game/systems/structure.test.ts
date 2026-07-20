@@ -12,6 +12,7 @@ beforeEach(() => { resetStructures(); resetAllInventories(); setFreeBuild(false)
 
 function stockWood(n: number) { addItem('wood', n); }
 const FOUNDATION_WOOD = pieceCost('foundation', 'wood')[0].qty;
+const TALL_WALL_WOOD = pieceCost('tall_wall', 'wood')[0].qty;
 
 describe('face helpers', () => {
   it('faceIndexForNormal picks the nearest axis face', () => {
@@ -77,6 +78,34 @@ describe('doorway (2 cells tall)', () => {
     expect(removePiece([0, 1, 0], 0)).toBe(true);
     expect(hasPanel(0, 0, 0, 0)).toBe(false);
     expect(hasPanel(0, 1, 0, 0)).toBe(false);
+  });
+});
+
+describe('wall sizing', () => {
+  it('places a 1x2 wall as a linked pair, charges once, and removes either half atomically', () => {
+    stockWood(TALL_WALL_WOOD);
+    expect(placePiece([0, 0, 0], 0, 'tall_wall', 'wood', 2)).toBe(true);
+    expect(getPieceAt(0, 0, 0, 0)).toMatchObject({ type: 'tall_wall', tall: 'lower', partner: [0, 1, 0] });
+    expect(getPieceAt(0, 1, 0, 0)).toMatchObject({ type: 'tall_wall', tall: 'upper', partner: [0, 0, 0] });
+    expect(getItemCount('wood')).toBe(0);
+
+    expect(removePiece([0, 1, 0], 0)).toBe(true);
+    expect(hasPanel(0, 0, 0, 0)).toBe(false);
+    expect(hasPanel(0, 1, 0, 0)).toBe(false);
+    expect(getItemCount('wood')).toBe(Math.floor(TALL_WALL_WOOD / 2));
+  });
+
+  it('reserves both wall cells before spending and keeps the 1x1 half wall as one panel', () => {
+    setFreeBuild(true);
+    expect(placePiece([0, 0, 0], 2, 'tall_wall', 'wood', 2)).toBe(false);
+    expect(placePiece([0, 1, 0], 0, 'wall', 'wood', 2)).toBe(true);
+    expect(placePiece([0, 0, 0], 0, 'tall_wall', 'wood', 2)).toBe(false);
+
+    resetStructures();
+    expect(placePiece([0, 0, 0], 0, 'wall', 'wood', 2)).toBe(true);
+    expect(getPieces()).toHaveLength(1);
+    expect(getPieceAt(0, 0, 0, 0)).toMatchObject({ type: 'wall' });
+    expect(getPieceAt(0, 0, 0, 0)?.partner).toBeUndefined();
   });
 });
 

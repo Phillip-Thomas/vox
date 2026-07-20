@@ -1,0 +1,154 @@
+{
+  "schema": "paravoxia.sceneVerificationReport.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "contractVersion": "intent-v1-inherited",
+  "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+  "generatedAt": "2026-07-17T17:11:00Z",
+  "sourceRevision": "9cee8d0c650c95f49cfa1636672afeaa6d2e45fb+candidate-files-641a1f453f901af6757a961a418fdc6ca5a9635a7a4c8c9e67cc4afb77e8c1d0",
+  "canonicalUrl": "http://127.0.0.1:5173/ (local server stopped after proof)",
+  "commands": [
+    {
+      "command": "npm --prefix main run verify",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "run-summary.md#verification"
+    },
+    {
+      "command": "npm --prefix main run chapter:journey:smoke",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "run-summary.md#verification"
+    },
+    {
+      "command": "npm --prefix main run chapter:accept:smoke",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "run-summary.md#verification"
+    },
+    {
+      "command": "npm --prefix main run chapter:accept:workflow:smoke",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "run-summary.md#verification"
+    },
+    {
+      "command": "PARAVOXIA_OBJECTIVE_CASES=ch9-settle,ch9-hearth PARAVOXIA_OBJECTIVE_PROFILES=desktop,mobile PARAVOXIA_OBJECTIVE_GRAPHICS_PROFILE=POTATO node main/tools/objective-hud-probe.mjs",
+      "status": "passed",
+      "exitCode": 0,
+      "evidenceRef": "evidence/objective-hud-report.json"
+    },
+    {
+      "command": "node /tmp/ch9_movie_audit.mjs",
+      "status": "passed_diagnostic",
+      "exitCode": 0,
+      "evidenceRef": "evidence/ch9-movie-final.json"
+    }
+  ],
+  "flow": {
+    "coldRunsRequired": 0,
+    "coldRunsPassed": 0,
+    "movieCompletedWithoutRescue": true,
+    "timeoutRescues": 0,
+    "evidenceRefs": ["browser-evidence-summary.json", "evidence/ch9-movie-final.json"]
+  },
+  "exactAnchors": [
+    {
+      "anchor": "settle:scan-waterline",
+      "story": "passed",
+      "camera": "passed_gaze_gate",
+      "effect": "passed_resident_unlit_field",
+      "score": "not_run_protected",
+      "control": "passed_movie",
+      "evidenceRefs": ["evidence/ch9-movie-final.json"]
+    },
+    {
+      "anchor": "settle:choose-site",
+      "story": "passed",
+      "camera": "passed",
+      "effect": "passed_outward_marker",
+      "score": "not_run_protected",
+      "control": "passed_movie",
+      "evidenceRefs": ["evidence/paravoxia-ch9-movie-final-01-ch9-settle-settle-choose-site.png"]
+    },
+    {
+      "anchor": "settle:rest",
+      "story": "passed",
+      "camera": "passed",
+      "effect": "passed_unlit_interior_tint",
+      "score": "repair_required_protected",
+      "control": "passed_movie",
+      "evidenceRefs": ["evidence/paravoxia-ch9-movie-final-02-ch9-settle-settle-rest.png"]
+    }
+  ],
+  "variants": {
+    "desktop": {
+      "status": "passed",
+      "focalParity": true,
+      "evidenceRefs": ["evidence/objective-hud-report.json"]
+    },
+    "mobile": {
+      "status": "passed",
+      "focalParity": true,
+      "evidenceRefs": ["evidence/objective-hud-report.json"]
+    },
+    "reducedMotion": {
+      "status": "passed",
+      "focalParity": true,
+      "evidenceRefs": ["evidence/objective-hud-report.json"]
+    },
+    "lowestQuality": {
+      "status": "passed",
+      "focalParity": true,
+      "evidenceRefs": ["evidence/objective-hud-report.json"]
+    }
+  },
+  "resetMatrix": [
+    { "case": "replay", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "deep_link", "status": "passed_diagnostic", "stateLeak": false, "evidenceRefs": ["evidence/objective-hud-report.json"] },
+    { "case": "pause_focus", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "quit", "status": "not_run", "stateLeak": null, "evidenceRefs": [] },
+    { "case": "completion", "status": "passed", "stateLeak": false, "evidenceRefs": ["evidence/ch9-movie-final.json"] },
+    { "case": "sandbox_noop", "status": "not_run", "stateLeak": null, "evidenceRefs": [] }
+  ],
+  "performance": {
+    "status": "not_certified_software_renderer",
+    "targetFps": 60,
+    "measuredFps": null,
+    "p95FrameTimeMs": null,
+    "drawCalls": null,
+    "shaderOrGpuNotes": "SwiftShader plus ReadPixels screenshot stalls; zero context losses or context creation errors. Dynamic Chapter 9 hero light count is zero. Three pre-existing undefined material-defines warnings remain to trace separately.",
+    "memoryNotes": "No browser crash or page error. The diagnostic cannot certify memory or real-GPU performance.",
+    "evidenceRefs": ["evidence/ch9-movie-final.json"]
+  },
+  "audio": {
+    "authorizedToChange": false,
+    "changed": false,
+    "status": "protected_score_followup_required",
+    "evidenceRefs": ["score-audit.md"]
+  },
+  "storyUx": {
+    "status": "passed_for_bounded_repair",
+    "objectiveHealthReady": true,
+    "exactMarkerParity": false,
+    "actionableWorkOrders": true,
+    "feedbackCueSingleFire": true,
+    "feedbackOwnsProgression": false,
+    "staleObjectiveAfterBeatExit": false,
+    "reportRef": "objective-lifecycle-evidence.json",
+    "evidenceRefs": ["evidence/objective-hud-report.json", "evidence/ch9-movie-final.json"]
+  },
+  "headedGates": [
+    {
+      "gate": "beauty_motion_exposure_pointer_lock_or_taste",
+      "required": true,
+      "status": "pending",
+      "evidenceRefs": []
+    }
+  ],
+  "blockingDefects": [
+    "score-authority-and-hearth-timing",
+    "continuous-ch8-to-ch9-certification",
+    "headed-real-gpu-taste"
+  ],
+  "overallStatus": "in_review"
+}

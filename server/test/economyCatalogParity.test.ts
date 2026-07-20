@@ -126,4 +126,33 @@ describe('shared economy catalog server parity', () => {
       }
     }
   });
+
+  it('canonicalizes a 1x2 wall into two linked claims with one four-wood debit', () => {
+    const resolution = resolveServerAuthoritativeCommand(
+      'structure_placed',
+      { cell: [4, 5, 6], face: 0, type: 'tall_wall', material: 'wood', up: 2 },
+      defaultServerPlayerState(),
+      { commandId: 'wall:1x2', worldId: '0,0', playerId: 'alice' }
+    );
+
+    expect(resolution).toMatchObject({
+      commandPayload: { cell: [4, 5, 6], face: 0, type: 'tall_wall', material: 'wood', up: 2 },
+      debit: [{ id: 'wood', qty: 4 }],
+      events: [{ type: 'structure_placed', payload: { type: 'tall_wall' } }],
+      structureClaims: [
+        { structureId: 'slot:4,5,6:0', state: { tall: 'lower', partner: [4, 6, 6] } },
+        { structureId: 'slot:4,6,6:0', state: { tall: 'upper', partner: [4, 5, 6] } }
+      ]
+    });
+
+    expect(resolveServerAuthoritativeCommand(
+      'structure_placed',
+      { cell: [4, 5, 6], face: 2, type: 'tall_wall', material: 'wood', up: 2 },
+      defaultServerPlayerState(),
+      { commandId: 'wall:invalid-frame', worldId: '0,0', playerId: 'alice' }
+    )).toEqual({
+      code: 'validation_failed',
+      reason: 'Two-cell panel build-up must be perpendicular to its wall face.'
+    });
+  });
 });

@@ -1,0 +1,2053 @@
+{
+  "url": "http://127.0.0.1:5173/?story=ch9-settle&debug=1&movie=1&profile=POTATO&journeyprobe=1&journeylane=direct-entry&journeymode=movie&journeyscenario=ch9-runtime-audit",
+  "elapsedMs": 226310,
+  "observations": [
+    {
+      "at": 530.9000000003725,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "health": "missing-marker",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE"
+      },
+      "marker": {
+        "layout": "pending",
+        "visible": false,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "text": ""
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": null,
+      "app": {
+        "phase": "playing",
+        "sceneReady": false
+      }
+    },
+    {
+      "at": 23661.700000001118,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD."
+      },
+      "marker": {
+        "layout": "pending",
+        "visible": false,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "text": ""
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": null,
+      "app": {
+        "phase": "playing",
+        "sceneReady": false
+      }
+    },
+    {
+      "at": 26069.60000000149,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 1051.377685546875,
+          "y": 658.4296875,
+          "width": 216.921875,
+          "height": 28.84375
+        },
+        "text": "living waterline · scan · 11m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 0.1,
+        "pos": [
+          10.5,
+          51.78,
+          -8
+        ],
+        "goal": [
+          10,
+          50.9,
+          -10
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          10,
+          50.9,
+          -10
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": true,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": false
+      }
+    },
+    {
+      "at": 37841.20000000112,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 1265.2734375,
+          "y": 410.30963134765625,
+          "width": 209.453125,
+          "height": 29.84375
+        },
+        "text": "living waterline · scan · 7m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-tidegarden-attend",
+          "verb": "Attend Waterline Relationship",
+          "interactionClass": "required",
+          "priority": 500,
+          "owner": "story:story-tidegarden-attend"
+        },
+        "candidateIds": [
+          "story-tidegarden-attend"
+        ],
+        "prompts": [
+          {
+            "id": "story-tidegarden-attend",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 588.625,
+              "top": 492,
+              "right": 851.375,
+              "bottom": 520,
+              "width": 262.75,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 0.7,
+        "pos": [
+          11.84,
+          50.79,
+          -17.88
+        ],
+        "goal": [
+          14,
+          50.9,
+          -18
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          14,
+          50.9,
+          -18
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 65686.90000000037,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:attend-waterline",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · ATTENDFOLLOW THE LIVING WATERLINE MARKER.[F] ATTEND THE RELATIONSHIP."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 1265.2734375,
+          "y": 115.71498107910156,
+          "width": 209.453125,
+          "height": 29.84375
+        },
+        "text": "living waterline · scan · 1m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-tidegarden-attend",
+          "verb": "Attend Waterline Relationship",
+          "interactionClass": "required",
+          "priority": 500,
+          "owner": "story:story-tidegarden-attend"
+        },
+        "candidateIds": [
+          "story-tidegarden-attend"
+        ],
+        "prompts": [
+          {
+            "id": "story-tidegarden-attend",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 588.625,
+              "top": 492,
+              "right": 851.375,
+              "bottom": 520,
+              "width": 262.75,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 2.3,
+        "pos": [
+          16.63,
+          50.79,
+          -18.99
+        ],
+        "goal": [
+          18,
+          49.1,
+          -18
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          16,
+          50.9,
+          -18
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 81596.20000000112,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:attend-waterline",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "text": "CURRENT OBJECTIVELIVING WATERLINE · ATTENDFOLLOW THE LIVING WATERLINE MARKER.[F] ATTEND THE RELATIONSHIP."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 968.8890380859375,
+          "y": 55.078125,
+          "width": 224.40625,
+          "height": 29.84375
+        },
+        "text": "living waterline · attend · 1m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 2.9,
+        "pos": [
+          16.63,
+          50.79,
+          -18.99
+        ],
+        "goal": [
+          18,
+          49.1,
+          -18
+        ],
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          16,
+          50.9,
+          -18
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 84792.80000000075,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "text": "CURRENT OBJECTIVERECOMMENDED HABITAT SITE · CHOOSEFOLLOW THE HABITAT SITE MARKER.[F] CHOOSE THIS DRY, LEVEL SITE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 926.9896240234375,
+          "y": 55.078125,
+          "width": 224.40625,
+          "height": 29.84375
+        },
+        "text": "living waterline · attend · 1m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-tidegarden-record",
+          "verb": "Record Observation (Optional)",
+          "interactionClass": "optional-observation",
+          "priority": 100,
+          "owner": "story:story-tidegarden-record"
+        },
+        "candidateIds": [
+          "story-tidegarden-record"
+        ],
+        "prompts": [
+          {
+            "id": "story-tidegarden-record",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 588.625,
+              "top": 492,
+              "right": 851.375,
+              "bottom": 520,
+              "width": 262.75,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 3,
+        "pos": [
+          16.63,
+          50.79,
+          -18.99
+        ],
+        "goal": [
+          14,
+          50.9,
+          -18
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          14,
+          50.9,
+          -18
+        ],
+        "controls": {
+          "forward": false,
+          "backward": true,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0.1,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 111824.80000000075,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "text": "CURRENT OBJECTIVERECOMMENDED HABITAT SITE · CHOOSEFOLLOW THE HABITAT SITE MARKER.[F] CHOOSE THIS DRY, LEVEL SITE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 632.998046875,
+          "y": 383.3993835449219,
+          "width": 291.71875,
+          "height": 28.84375
+        },
+        "text": "recommended habitat site · choose · 16m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-tidegarden-choose-site",
+          "verb": "Choose Habitat Site",
+          "interactionClass": "required",
+          "priority": 500,
+          "owner": "story:story-tidegarden-choose-site"
+        },
+        "candidateIds": [
+          "story-tidegarden-choose-site"
+        ],
+        "prompts": [
+          {
+            "id": "story-tidegarden-choose-site",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 624.7421875,
+              "top": 492,
+              "right": 815.2578125,
+              "bottom": 520,
+              "width": 190.515625,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 3.7,
+        "pos": [
+          1.85,
+          50.79,
+          -18.91
+        ],
+        "goal": [
+          0,
+          50.9,
+          -18
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          -18
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 142486.90000000037,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "text": "CURRENT OBJECTIVERECOMMENDED HABITAT SITE · CHOOSEFOLLOW THE HABITAT SITE MARKER.[F] CHOOSE THIS DRY, LEVEL SITE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 509.304931640625,
+          "y": 467.5270690917969,
+          "width": 284.25,
+          "height": 28.84375
+        },
+        "text": "recommended habitat site · choose · 2m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 4.6,
+        "pos": [
+          -0.15,
+          50.79,
+          -0.82
+        ],
+        "goal": [
+          0,
+          50.9,
+          0
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": true,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 145568.80000000075,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:craft-core",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "KESTREL FABRICATOR · CRAFT HABITAT CORE",
+        "text": "CURRENT OBJECTIVEKESTREL FABRICATOR · CRAFT HABITAT CORERETURN TO THE FLIGHT-READY KESTREL FABRICATOR.[C] CRAFT HABITAT CORE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 370.9462890625,
+          "y": 623.8987426757812,
+          "width": 284.25,
+          "height": 28.84375
+        },
+        "text": "recommended habitat site · choose · 0m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 4.7,
+        "pos": [
+          1.23,
+          50.79,
+          1.21
+        ],
+        "goal": [
+          0,
+          50.9,
+          0
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": true,
+          "left": false,
+          "right": true,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 148869.40000000037,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:foundation",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "CHOSEN SITE · PLACE FOUNDATION",
+        "text": "CURRENT OBJECTIVECHOSEN SITE · PLACE FOUNDATION[B] PLACE A FOUNDATION AT THE CHOSEN SITE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": -90,
+          "y": 453.74517822265625,
+          "width": 320,
+          "height": 44.6875
+        },
+        "text": "kestrel fabricator · craft habitat core · 10m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 4.8,
+        "pos": [
+          0.32,
+          50.79,
+          -1.06
+        ],
+        "goal": [
+          0,
+          50.9,
+          0
+        ],
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": true,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 161447.40000000037,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:certify-shelter",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "HABITAT CORE · ENCLOSE AND CERTIFY",
+        "text": "CURRENT OBJECTIVEHABITAT CORE · ENCLOSE AND CERTIFYBUILD A CLOSED SHELTER AROUND THE CORE.[F] CERTIFY THE WORKING SHELTER."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": -60.90625,
+          "y": 422.8441467285156,
+          "width": 261.8125,
+          "height": 29.84375
+        },
+        "text": "chosen site · place foundation · 0m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-habitat-rest",
+          "verb": "Rest at the Second Hearth",
+          "interactionClass": "required",
+          "priority": 520,
+          "owner": "story:story-habitat-rest"
+        },
+        "candidateIds": [
+          "story-habitat-rest"
+        ],
+        "prompts": [
+          {
+            "id": "story-habitat-rest",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 603.0703125,
+              "top": 492,
+              "right": 836.9296875,
+              "bottom": 520,
+              "width": 233.859375,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 5.2,
+        "pos": [
+          0.84,
+          50.88,
+          -0.85
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 164234.6000000015,
+      "beat": "ch9-settle",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-settle",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:rest",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "SECOND HEARTH · REST INSIDE",
+        "text": "CURRENT OBJECTIVESECOND HEARTH · REST INSIDERETURN INSIDE THE CERTIFIED SHELTER.[F] REST AT THE SECOND HEARTH."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 1113.6109619140625,
+          "y": 695.0004272460938,
+          "width": 291.71875,
+          "height": 28.84375
+        },
+        "text": "habitat core · enclose and certify · 0m"
+      },
+      "interaction": {
+        "winner": {
+          "id": "story-habitat-rest",
+          "verb": "Rest at the Second Hearth",
+          "interactionClass": "required",
+          "priority": 520,
+          "owner": "story:story-habitat-rest"
+        },
+        "candidateIds": [
+          "story-habitat-rest"
+        ],
+        "prompts": [
+          {
+            "id": "story-habitat-rest",
+            "owner": "embodied-hud",
+            "scope": "story",
+            "rect": {
+              "left": 603.0703125,
+              "top": 492,
+              "right": 836.9296875,
+              "bottom": 520,
+              "width": 233.859375,
+              "height": 28
+            }
+          }
+        ],
+        "visiblePromptCount": 1
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-settle",
+        "clock": 5.3,
+        "pos": [
+          0.85,
+          50.91,
+          -0.87
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path",
+        "routePlanMode": "walk",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 195336.1000000015,
+      "beat": "ch9-hearth",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:rest",
+        "health": "ready",
+        "requiresMarker": "true",
+        "markerLabel": "SECOND HEARTH · REST INSIDE",
+        "text": "CURRENT OBJECTIVESECOND HEARTH · REST INSIDERETURN INSIDE THE CERTIFIED SHELTER.[F] REST AT THE SECOND HEARTH."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 633.8280639648438,
+          "y": 815.078125,
+          "width": 239.359375,
+          "height": 29.84375
+        },
+        "text": "second hearth · rest inside · 0m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-hearth",
+        "clock": 0.1,
+        "pos": [
+          0.39,
+          50.91,
+          -0.39
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "already-at-resolved-goal",
+        "routePlanMode": "direct",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 195949,
+      "beat": "ch9-hearth",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "health": "ready",
+        "requiresMarker": "false",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "text": "CURRENT OBJECTIVESECOND HEARTH · SETTLINGTHE SECOND HEARTH IS SAFE.LET THE TWO-WORLD HANDOFF SETTLE."
+      },
+      "marker": {
+        "layout": "ready",
+        "visible": true,
+        "rect": {
+          "x": 629.4077758789062,
+          "y": 815.078125,
+          "width": 239.359375,
+          "height": 29.84375
+        },
+        "text": "second hearth · rest inside · 0m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-hearth",
+        "clock": 0.2,
+        "pos": [
+          0.39,
+          50.91,
+          -0.39
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "already-at-resolved-goal",
+        "routePlanMode": "direct",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 199894.90000000037,
+      "beat": "ch9-hearth",
+      "story": {
+        "active": true,
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "runId": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "health": "ready",
+        "requiresMarker": "false",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "text": "CURRENT OBJECTIVESECOND HEARTH · SETTLINGTHE SECOND HEARTH IS SAFE.LET THE TWO-WORLD HANDOFF SETTLE."
+      },
+      "marker": {
+        "layout": "pending",
+        "visible": false,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "text": "second hearth · rest inside · 0m"
+      },
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-hearth",
+        "clock": 0.9,
+        "pos": [
+          0.39,
+          50.91,
+          -0.39
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "already-at-resolved-goal",
+        "routePlanMode": "direct",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    },
+    {
+      "at": 222629.30000000075,
+      "beat": "done",
+      "story": {
+        "active": false,
+        "chapter": "complete",
+        "beat": "done",
+        "runId": 1
+      },
+      "objective": null,
+      "marker": null,
+      "interaction": {
+        "winner": null,
+        "candidateIds": [],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "receiptCount": null,
+      "autopilot": {
+        "beat": "ch9-hearth",
+        "clock": 5.7,
+        "pos": [
+          0.39,
+          50.91,
+          -0.39
+        ],
+        "goal": null,
+        "routeAction": "idle",
+        "routeOutcome": "already-at-resolved-goal",
+        "routePlanMode": "direct",
+        "routeWaterCells": 0,
+        "routeWaypoint": [
+          0,
+          50.9,
+          0
+        ],
+        "controls": {
+          "forward": false,
+          "backward": false,
+          "left": false,
+          "right": false,
+          "jump": false,
+          "descend": false,
+          "sprint": false,
+          "delete": false,
+          "interact": false
+        },
+        "stillTime": 0,
+        "nudges": 0,
+        "teleportNudgesTotal": 0,
+        "dryCrossFaceWaterContactFramesTotal": 0,
+        "surfaceContact": {
+          "feetInWater": false,
+          "physicallySupported": true
+        },
+        "lens": null,
+        "jetpackReleaseRemaining": 0
+      },
+      "app": {
+        "phase": "playing",
+        "sceneReady": true
+      }
+    }
+  ],
+  "screenshots": [
+    "/tmp/paravoxia-ch9-movie-final-00-ch9-settle-settle-scan-waterline.png",
+    "/tmp/paravoxia-ch9-movie-final-01-ch9-settle-settle-choose-site.png",
+    "/tmp/paravoxia-ch9-movie-final-02-ch9-settle-settle-rest.png",
+    "/tmp/paravoxia-ch9-movie-final-03-ch9-hearth-settle-second-hearth-settling.png",
+    "/tmp/paravoxia-ch9-movie-final-04-done-no-objective.png"
+  ],
+  "diagnostics": [
+    {
+      "type": "console-warning",
+      "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+      "at": 1784307923139
+    },
+    {
+      "type": "console-warning",
+      "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+      "at": 1784307923139
+    },
+    {
+      "type": "console-warning",
+      "text": "The AudioContext was not allowed to start. It must be resumed (or created) after a user gesture on the page. https://developer.chrome.com/blog/autoplay/#web_audio",
+      "at": 1784307923139
+    },
+    {
+      "type": "console-warning",
+      "text": "THREE.Material: parameter 'defines' has value of undefined.",
+      "at": 1784307923357
+    },
+    {
+      "type": "console-warning",
+      "text": "[.WebGL-0x4404f0a000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "at": 1784307924982
+    },
+    {
+      "type": "console-warning",
+      "text": "THREE.Material: parameter 'defines' has value of undefined.",
+      "at": 1784307924986
+    },
+    {
+      "type": "console-warning",
+      "text": "[.WebGL-0x4404f0a000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "at": 1784307924990
+    },
+    {
+      "type": "console-warning",
+      "text": "[.WebGL-0x4404f0a000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+      "at": 1784307924999
+    },
+    {
+      "type": "console-warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead",
+      "at": 1784307925028
+    },
+    {
+      "type": "console-warning",
+      "text": "[.WebGL-0x4404f0a000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+      "at": 1784307925028
+    },
+    {
+      "type": "console-warning",
+      "text": "THREE.Material: parameter 'defines' has value of undefined.",
+      "at": 1784307925040
+    }
+  ],
+  "final": {
+    "audit": {
+      "frameGaps": [
+        133.3,
+        1650,
+        316.7,
+        233.3,
+        20665.9,
+        2399.9,
+        2266.6,
+        2183.2,
+        2016.6,
+        1966.6,
+        1800,
+        1499.9,
+        1150,
+        1133.2,
+        1150,
+        1183.3,
+        1266.6,
+        1349.9,
+        1549.9,
+        1700,
+        1866.6,
+        1966.5,
+        2016.7,
+        2116.5,
+        2249.9,
+        2299.9,
+        2400,
+        2483.3,
+        2533.1,
+        2616.6,
+        2633.2,
+        2683.3,
+        2716.5,
+        2699.9,
+        3233.2,
+        3499.9,
+        3849.8,
+        3833.2,
+        4116.5,
+        4233.2,
+        3899.8,
+        3583.2,
+        3633.2,
+        3516.5,
+        3549.9,
+        3583.1,
+        3433.2,
+        3316.6,
+        3249.9,
+        3266.5,
+        3083.2,
+        3099.9,
+        3299.9,
+        3133.1,
+        3099.9,
+        3216.6,
+        3116.5,
+        2816.6,
+        2566.5,
+        2283.2,
+        2166.7,
+        2066.5,
+        1999.9,
+        1716.6,
+        1583.4,
+        1516.5,
+        1383.3,
+        1266.6,
+        1199.9,
+        1083.4,
+        1049.9,
+        983.3,
+        916.7,
+        916.6,
+        866.6,
+        800,
+        733.3,
+        699.9,
+        683.3,
+        683.4,
+        666.6,
+        633.3,
+        616.7,
+        633.3,
+        600,
+        583.2,
+        583.4,
+        616.6,
+        533.3,
+        516.7,
+        516.6,
+        500,
+        533.3,
+        499.9,
+        466.7,
+        483.3,
+        483.4,
+        466.6,
+        466.7,
+        483.2,
+        483.3,
+        483.4,
+        449.9,
+        450.1,
+        516.6,
+        466.7,
+        466.6,
+        466.7,
+        433.2,
+        500,
+        450,
+        466.7,
+        449.9,
+        433.4,
+        450,
+        450,
+        449.9,
+        450,
+        450,
+        466.7,
+        466.6,
+        433.3,
+        533.3,
+        466.7,
+        433.3,
+        433.3,
+        466.7,
+        449.9,
+        466.7,
+        449.9,
+        450,
+        466.7,
+        466.6,
+        450,
+        433.3,
+        433.4,
+        433.2,
+        450.1,
+        449.9,
+        450,
+        483.4,
+        449.9,
+        466.6,
+        800,
+        566.7,
+        433.3
+      ],
+      "contextLost": 0,
+      "contextCreationErrors": [],
+      "promptEvents": [
+        {
+          "at": 61.100000001490116,
+          "value": "none"
+        },
+        {
+          "at": 37840.800000000745,
+          "value": "story-tidegarden-attend|FAttend Waterline Relationship"
+        },
+        {
+          "at": 81596.60000000149,
+          "value": "none"
+        },
+        {
+          "at": 84793.10000000149,
+          "value": "story-tidegarden-record|FRecord Observation (Optional)"
+        },
+        {
+          "at": 92142.20000000112,
+          "value": "story-tidegarden-choose-site|FChoose Habitat Site"
+        },
+        {
+          "at": 142487.20000000112,
+          "value": "none"
+        },
+        {
+          "at": 161447.1000000015,
+          "value": "story-habitat-rest|FRest at the Second Hearth"
+        },
+        {
+          "at": 195336.30000000075,
+          "value": "none"
+        }
+      ],
+      "objectiveEvents": [
+        {
+          "at": 61.100000001490116,
+          "value": "none"
+        },
+        {
+          "at": 413.6000000014901,
+          "value": "settle:scan-waterline|missing-marker|CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE"
+        },
+        {
+          "at": 23661.400000000373,
+          "value": "settle:scan-waterline|ready|CURRENT OBJECTIVELIVING WATERLINE · SCANFOLLOW THE LIVING WATERLINE MARKER.READ THE SIGNAL FIELD."
+        },
+        {
+          "at": 65685.90000000037,
+          "value": "settle:attend-waterline|ready|CURRENT OBJECTIVELIVING WATERLINE · ATTENDFOLLOW THE LIVING WATERLINE MARKER.[F] ATTEND THE RELATIONSHIP."
+        },
+        {
+          "at": 84793.10000000149,
+          "value": "settle:choose-site|ready|CURRENT OBJECTIVERECOMMENDED HABITAT SITE · CHOOSEFOLLOW THE HABITAT SITE MARKER.[F] CHOOSE THIS DRY, LEVEL SITE."
+        },
+        {
+          "at": 148838.1000000015,
+          "value": "settle:foundation|ready|CURRENT OBJECTIVECHOSEN SITE · PLACE FOUNDATION[B] PLACE A FOUNDATION AT THE CHOSEN SITE."
+        },
+        {
+          "at": 161447.1000000015,
+          "value": "settle:certify-shelter|ready|CURRENT OBJECTIVEHABITAT CORE · ENCLOSE AND CERTIFYBUILD A CLOSED SHELTER AROUND THE CORE.[F] CERTIFY THE WORKING SHELTER."
+        },
+        {
+          "at": 166790.90000000037,
+          "value": "settle:rest|ready|CURRENT OBJECTIVESECOND HEARTH · REST INSIDERETURN INSIDE THE CERTIFIED SHELTER.[F] REST AT THE SECOND HEARTH."
+        },
+        {
+          "at": 196540.6000000015,
+          "value": "settle:second-hearth-settling|ready|CURRENT OBJECTIVESECOND HEARTH · SETTLINGTHE SECOND HEARTH IS SAFE.LET THE TWO-WORLD HANDOFF SETTLE."
+        },
+        {
+          "at": 223074.70000000112,
+          "value": "none"
+        }
+      ],
+      "lastPrompt": "none",
+      "lastObjective": "none"
+    },
+    "bridge": {
+      "schema": "paravoxia.journeyRuntimeSnapshot.v1",
+      "sampledAt": 1784308149056,
+      "story": {
+        "active": false,
+        "chapter": "complete",
+        "beat": "done",
+        "runId": 1
+      },
+      "objective": {
+        "id": null,
+        "health": "idle",
+        "revision": 20
+      },
+      "interaction": {
+        "revision": 152,
+        "resolvedAt": 1784308148554,
+        "candidates": [],
+        "winner": null,
+        "published": {
+          "revision": 17,
+          "active": null,
+          "changedAt": 1784308117453
+        },
+        "trace": {
+          "revision": 15,
+          "entries": [
+            {
+              "attemptId": 1,
+              "interactionId": "story-tidegarden-attend",
+              "verb": "Attend Waterline Relationship",
+              "owner": "story:story-tidegarden-attend",
+              "source": "resolver-perform",
+              "resolutionRevision": 9,
+              "attemptedAt": 1784307960596,
+              "performOutcome": "returned",
+              "performSettledAt": 1784307960596,
+              "detail": null,
+              "promptOutcome": "cleared",
+              "promptSettledAt": 1784307960596,
+              "clearingLatencyMs": 0,
+              "replacementInteractionId": null,
+              "activeForMs": 0
+            },
+            {
+              "attemptId": 2,
+              "interactionId": "story-tidegarden-attend",
+              "verb": "Attend Waterline Relationship",
+              "owner": "story:story-tidegarden-attend",
+              "source": "resolver-perform",
+              "resolutionRevision": 17,
+              "attemptedAt": 1784307969334,
+              "performOutcome": "returned",
+              "performSettledAt": 1784307969334,
+              "detail": null,
+              "promptOutcome": "cleared",
+              "promptSettledAt": 1784307969334,
+              "clearingLatencyMs": 0,
+              "replacementInteractionId": null,
+              "activeForMs": 0
+            },
+            {
+              "attemptId": 3,
+              "interactionId": "story-tidegarden-attend",
+              "verb": "Attend Waterline Relationship",
+              "owner": "story:story-tidegarden-attend",
+              "source": "resolver-perform",
+              "resolutionRevision": 25,
+              "attemptedAt": 1784307983553,
+              "performOutcome": "returned",
+              "performSettledAt": 1784307983553,
+              "detail": null,
+              "promptOutcome": "cleared",
+              "promptSettledAt": 1784307983553,
+              "clearingLatencyMs": 0,
+              "replacementInteractionId": null,
+              "activeForMs": 0
+            },
+            {
+              "attemptId": 4,
+              "interactionId": "story-tidegarden-attend",
+              "verb": "Attend Waterline Relationship",
+              "owner": "story:story-tidegarden-attend",
+              "source": "resolver-perform",
+              "resolutionRevision": 33,
+              "attemptedAt": 1784308001619,
+              "performOutcome": "returned",
+              "performSettledAt": 1784308001620,
+              "detail": null,
+              "promptOutcome": "cleared",
+              "promptSettledAt": 1784308001620,
+              "clearingLatencyMs": 1,
+              "replacementInteractionId": null,
+              "activeForMs": 1
+            },
+            {
+              "attemptId": 5,
+              "interactionId": "story-tidegarden-choose-site",
+              "verb": "Choose Habitat Site",
+              "owner": "story:story-tidegarden-choose-site",
+              "source": "resolver-perform",
+              "resolutionRevision": 52,
+              "attemptedAt": 1784308062141,
+              "performOutcome": "returned",
+              "performSettledAt": 1784308062141,
+              "detail": null,
+              "promptOutcome": "cleared",
+              "promptSettledAt": 1784308062141,
+              "clearingLatencyMs": 0,
+              "replacementInteractionId": null,
+              "activeForMs": 0
+            }
+          ],
+          "latest": {
+            "attemptId": 5,
+            "interactionId": "story-tidegarden-choose-site",
+            "verb": "Choose Habitat Site",
+            "owner": "story:story-tidegarden-choose-site",
+            "source": "resolver-perform",
+            "resolutionRevision": 52,
+            "attemptedAt": 1784308062141,
+            "performOutcome": "returned",
+            "performSettledAt": 1784308062141,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784308062141,
+            "clearingLatencyMs": 0,
+            "replacementInteractionId": null,
+            "activeForMs": 0
+          }
+        },
+        "effects": [
+          {
+            "attemptId": 1,
+            "interactionId": "story-tidegarden-attend",
+            "verb": "Attend Waterline Relationship",
+            "owner": "story:story-tidegarden-attend",
+            "source": "resolver-perform",
+            "resolutionRevision": 9,
+            "attemptedAt": 1784307960596,
+            "performOutcome": "returned",
+            "performSettledAt": 1784307960596,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784307960596,
+            "clearingLatencyMs": 0,
+            "replacementInteractionId": null,
+            "activeForMs": 0
+          },
+          {
+            "attemptId": 2,
+            "interactionId": "story-tidegarden-attend",
+            "verb": "Attend Waterline Relationship",
+            "owner": "story:story-tidegarden-attend",
+            "source": "resolver-perform",
+            "resolutionRevision": 17,
+            "attemptedAt": 1784307969334,
+            "performOutcome": "returned",
+            "performSettledAt": 1784307969334,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784307969334,
+            "clearingLatencyMs": 0,
+            "replacementInteractionId": null,
+            "activeForMs": 0
+          },
+          {
+            "attemptId": 3,
+            "interactionId": "story-tidegarden-attend",
+            "verb": "Attend Waterline Relationship",
+            "owner": "story:story-tidegarden-attend",
+            "source": "resolver-perform",
+            "resolutionRevision": 25,
+            "attemptedAt": 1784307983553,
+            "performOutcome": "returned",
+            "performSettledAt": 1784307983553,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784307983553,
+            "clearingLatencyMs": 0,
+            "replacementInteractionId": null,
+            "activeForMs": 0
+          },
+          {
+            "attemptId": 4,
+            "interactionId": "story-tidegarden-attend",
+            "verb": "Attend Waterline Relationship",
+            "owner": "story:story-tidegarden-attend",
+            "source": "resolver-perform",
+            "resolutionRevision": 33,
+            "attemptedAt": 1784308001619,
+            "performOutcome": "returned",
+            "performSettledAt": 1784308001620,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784308001620,
+            "clearingLatencyMs": 1,
+            "replacementInteractionId": null,
+            "activeForMs": 1
+          },
+          {
+            "attemptId": 5,
+            "interactionId": "story-tidegarden-choose-site",
+            "verb": "Choose Habitat Site",
+            "owner": "story:story-tidegarden-choose-site",
+            "source": "resolver-perform",
+            "resolutionRevision": 52,
+            "attemptedAt": 1784308062141,
+            "performOutcome": "returned",
+            "performSettledAt": 1784308062141,
+            "detail": null,
+            "promptOutcome": "cleared",
+            "promptSettledAt": 1784308062141,
+            "clearingLatencyMs": 0,
+            "replacementInteractionId": null,
+            "activeForMs": 0
+          }
+        ],
+        "prompts": [],
+        "visiblePromptCount": 0
+      },
+      "entities": {},
+      "entityEvents": [],
+      "entityRevision": 0,
+      "receipts": {
+        "local": {
+          "era": "emergent",
+          "milestones": [
+            "story:started",
+            "story:prologue-seen",
+            "story:ch1:track",
+            "story:ch1:quota",
+            "story:debris:0",
+            "story:debris:1",
+            "story:debris:2",
+            "story:debris:3",
+            "story:ch1:depth",
+            "story:pod:0",
+            "story:pod:1",
+            "story:pod:2",
+            "story:ch1:nav",
+            "story:ch1:iso",
+            "story:a1",
+            "story:a2",
+            "story:sense:health",
+            "story:sense:inventory",
+            "story:sense:temp",
+            "story:a3",
+            "story:sense:water",
+            "story:ch3:drank",
+            "story:sense:food",
+            "story:ch3:ate",
+            "story:ch3:signal",
+            "story:sense:stamina",
+            "story:ch4:vigil",
+            "story:ch4:arrived",
+            "story:ch4:audit-complete",
+            "story:audit:fire-mismatch",
+            "story:audit:life-mismatch",
+            "story:audit:tree-mismatch",
+            "story:ch4:compliance-complete",
+            "story:comply:fire-doused",
+            "story:comply:organics-resolved",
+            "story:comply:regression-settled",
+            "story:ch4:refusal-complete",
+            "story:defy:refusal-committed",
+            "story:a4",
+            "story:a4:handback",
+            "story:a4:field-pack-dropped",
+            "story:ch5:maw-repaired",
+            "maw_repaired",
+            "story:maw:first-direction-resolved",
+            "story:maw:pond-resonance-visible",
+            "story:sense:maw",
+            "story:ch6:keel-banked",
+            "story:capability:oxygen-online",
+            "story:sense:oxygen",
+            "story:dive:waterline-entered",
+            "story:dive:keel-sonar-revealed",
+            "story:dive:surfaced-with-keel",
+            "story:item:kestrel-keel-memory:acquired",
+            "story:item:kestrel-keel-memory:banked",
+            "story:ch7:flight-ready",
+            "story:capability:jet-installed",
+            "story:route:tidegarden:online",
+            "story:ch7:boarded",
+            "story:ch8:launched",
+            "story:ch8:crossed",
+            "story:ch8:landfall",
+            "story:kestrel:founding-reserve-claimed",
+            "story:tidegarden:scanner-overload",
+            "story:tidegarden:relationship-attended",
+            "story:tidegarden:site-chosen:v1:0,25,0|0,24,0|0,1,0",
+            "story:item:habitat-core:crafted",
+            "story:tidegarden:habitat-core-online",
+            "story:tidegarden:shelter-certified",
+            "story:ch9:settled",
+            "story:tidegarden:safe-rest-completed",
+            "story:tidegarden:two-world-handoff",
+            "story:ch9:hearth",
+            "story:complete"
+          ]
+        }
+      },
+      "state": {
+        "voyage": {
+          "worker-name": null
+        }
+      },
+      "input": {
+        "revision": 0,
+        "hotkeyActivations": 0,
+        "submitCount": 0,
+        "lastSubmittedValue": null,
+        "events": [],
+        "workerName": null,
+        "activeElement": {
+          "tag": "body",
+          "id": null,
+          "name": null,
+          "type": null,
+          "editable": false,
+          "voyageWorkerNameInput": false,
+          "value": null
+        }
+      },
+      "preparation": null
+    },
+    "gpu": {
+      "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "renderer": "WebKit WebGL",
+      "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)",
+      "contextLost": false
+    }
+  }
+}

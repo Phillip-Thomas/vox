@@ -32,7 +32,7 @@ import {
   type StructurePiece
 } from './systems/structureSystem.ts';
 import type { BuildMaterialId } from './data/buildMaterials.ts';
-import type { BuildPieceType } from './data/buildPieces.ts';
+import { BUILD_PIECES, type BuildPieceType } from './data/buildPieces.ts';
 import { notifyWorldCollisionChanged, type CollisionCell } from './worldCollisionReconciliation.ts';
 import {
   markMultiplayerResourceMarker,
@@ -617,12 +617,15 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
   const type = readString(payload.type);
   const material = readString(payload.material);
   if (!cell || face === null || !type || !material) return false;
+  const pieceType = type as BuildPieceType;
+  const definition = BUILD_PIECES[pieceType];
+  if (!definition) return false;
   if (type === 'door') {
     const applied = applyDoorLeaf(cell, face);
     if (applied) notifyStructureCollisionChanged('structure_placed', cell, face, worldId);
     return applied;
   }
-  if (type === 'doorway') {
+  if ((definition.heightUnits ?? 1) > 1) {
     const up = readInt(payload.up);
     if (up === null || !FACE_DIRS[up]) return false;
     const dir = FACE_DIRS[up];
@@ -631,7 +634,7 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
       {
         cell,
         face,
-        type: 'doorway',
+        type: pieceType,
         material: material as BuildMaterialId,
         up,
         tall: 'lower',
@@ -642,7 +645,7 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
       {
         cell: upper,
         face,
-        type: 'doorway',
+        type: pieceType,
         material: material as BuildMaterialId,
         up,
         tall: 'upper',
@@ -658,7 +661,7 @@ export function applyReplicatedStructurePlaced(payload: JsonObject, playerId: st
   const piece: Omit<StructurePiece, 'id'> = {
     cell,
     face,
-    type: type as BuildPieceType,
+    type: pieceType,
     material: material as BuildMaterialId,
     ownerId: playerId,
     placedBy: playerId

@@ -16,16 +16,15 @@ beforeEach(() => {
 });
 
 describe('physical reconstruction calibration', () => {
-  it('starts only after the origin flight-ready grounded-return transaction', () => {
+  it('starts from the origin flight-ready transaction without a hover prerequisite', () => {
     const base = {
       actorId: 'local',
       worldId: '-1,-1',
       storyBeat: 'ch7-reconstruct' as const,
-      repairStage: 'flight_ready' as const,
-      groundedReturnComplete: true
+      repairStage: 'flight_ready' as const
     };
     expect(beginReconstructionCalibration({ ...base, worldId: '-1,-1:p1' })).toBe(false);
-    expect(beginReconstructionCalibration({ ...base, groundedReturnComplete: false })).toBe(false);
+    expect(beginReconstructionCalibration({ ...base, repairStage: 'lift_online' })).toBe(false);
     expect(beginReconstructionCalibration(base)).toBe(true);
     expect(getReconstructionCalibrationSnapshot().phase).toBe('running');
   });
@@ -35,8 +34,7 @@ describe('physical reconstruction calibration', () => {
       actorId: 'local',
       worldId: '-1,-1',
       storyBeat: 'ch7-reconstruct',
-      repairStage: 'flight_ready',
-      groundedReturnComplete: true
+      repairStage: 'flight_ready'
     })).toBe(true);
     tickReconstructionCalibration({ dt: 1, paused: true, focused: true });
     expect(getReconstructionCalibrationSnapshot().elapsed).toBe(0);

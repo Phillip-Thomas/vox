@@ -35,6 +35,13 @@
       "required": true
     },
     {
+      "sourceRef": "chapter-journey-contract",
+      "bindingKey": "paravoxia.chapterJourneyContract",
+      "kind": "file",
+      "path": "main/chapter-journey-contract.json",
+      "required": true
+    },
+    {
       "sourceRef": "story-bible",
       "bindingKey": "paravoxia.storyBible",
       "kind": "file",

@@ -49,6 +49,11 @@ import { resetEmergentStoryEvents } from './emergentStoryEvents.ts';
 import { resetEmergentMawRepairRitual } from './emergentMawRepair.ts';
 import { AUTHORED_DIVE_MILESTONES, resetAuthoredDiveRuntime } from './emergentDive.ts';
 import { EMERGENT_CAPABILITY_MILESTONES } from './emergentCapabilities.ts';
+import {
+  PHYSICAL_BOARDING_MILESTONE,
+  PHYSICAL_BOARDING_SEALED_MILESTONE
+} from './physicalBoardingReceipts.ts';
+import { bootstrapOriginLaunchDebug } from './originLaunchBootstrap.ts';
 
 // --- Story mode state ---------------------------------------------------------
 //
@@ -482,7 +487,15 @@ function seedForBeat(beat: StoryBeat): void {
     markMilestone(m.ch7Reconstructed);
     applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
   }
-  if (at >= beatIndex('ch8-launch')) markMilestone(m.ch7Boarded);
+  if (at >= beatIndex('ch8-launch')) {
+    // Chapter 8 begins after the staged hatch transaction has completed. A
+    // direct rehearsal must reconstruct that entire predecessor boundary, not
+    // only its summary checkpoint, or the repaired hull correctly refuses to
+    // expose either an exterior hatch or cockpit ownership.
+    markMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE);
+    markMilestone(PHYSICAL_BOARDING_MILESTONE);
+    markMilestone(m.ch7Boarded);
+  }
   if (at >= beatIndex('ch8-crossing')) markMilestone(m.ch8Launched);
   if (at >= beatIndex('ch8-landfall')) markMilestone(m.ch8Crossed);
   if (at >= beatIndex('ch9-settle')) markMilestone(m.ch8Landfall);
@@ -533,6 +546,21 @@ function movieRunRequested(): boolean {
   }
 }
 
+/**
+ * Migrate durable predecessor evidence implied by a persisted Story checkpoint.
+ * Surface persistence cannot distinguish cockpit from exterior occupancy, so
+ * this intentionally does not transfer controls on Continue.
+ */
+function reconcileCompletedBoardingReceipts(entry: StoryEntryPoint): void {
+  if (entry.chapter !== 'ch8' || entry.beat !== 'ch8-launch') return;
+  if (!hasMilestone(STORY_MILESTONES.ch7Boarded)) return;
+  // ch7Boarded is only authored after both physical receipts exist. Repair
+  // early saves without guessing whether their persisted surface occupancy was
+  // inside or outside the cockpit.
+  markMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE);
+  markMilestone(PHYSICAL_BOARDING_MILESTONE);
+}
+
 // --- lifecycle ----------------------------------------------------------------
 
 /**
@@ -575,7 +603,8 @@ export function initStoryFromSave(): void {
   // Reconstruct the physical location before publishing the story beat. Store
   // subscribers (objective, score, camera) must never observe a crossing or
   // landfall paired with the previous surface-flight snapshot for one frame.
-  if (param === 'ch8-crossing') debugStartInSpace();
+  if (param === 'ch8-launch') bootstrapOriginLaunchDebug();
+  else if (param === 'ch8-crossing') debugStartInSpace();
   else if (param === 'ch8-landfall') {
     bootstrapTidegardenLandfallDebug();
     debugStartInDescent();
@@ -604,6 +633,7 @@ export function beginStory(): void {
   // foot. Rehydrate the real atmospheric pose (or a safe approach fallback)
   // before publishing the landfall beat so its director can only observe future
   // physical touchdown and egress actions.
+  reconcileCompletedBoardingReceipts(entry);
   if (entry.beat === 'ch8-landfall') resumeTidegardenLandfallFromSave();
   setVoxelRealityStage(stageForStoryPoint(entry));
   setSnapshot({ active: true, chapter: entry.chapter, beat: entry.beat });
@@ -720,6 +750,32 @@ export function storyUsesEmbodiedGuidanceHud(s: StorySnapshot = snapshot): boole
   if (!s.active || !s.beat) return false;
   const beat = beatIndex(s.beat);
   return beat >= beatIndex('ch1-anomaly');
+}
+
+/**
+ * The early monochrome-ladder beats that (a) are camera-owned takeover eras with
+ * no embodied guidance HUD yet, but (b) still accept player locomotion. These
+ * are exactly the interactive external-camera beats — the fixed-screen harvest,
+ * the raster quota, the work-line pods, top-down nav, and the isometric climb.
+ * The frozen "plays" cutscenes around them (descent, the tracking unbolt, the
+ * 2D→3D lift) hold the feet at moveSpeedScale 0 and are deliberately excluded,
+ * as are the prologue overlays (which own their own input) and every later beat
+ * (ch1-anomaly onward already mounts the embodied touch controls).
+ *
+ * On touch, these beats otherwise leave the player with no movement affordance,
+ * so a themed virtual D-PAD mounts here in place of the analog joystick.
+ */
+const EARLY_TOUCH_DPAD_BEATS = new Set<StoryBeat>([
+  'ch1-fixed',
+  'ch1-raster',
+  'ch1-depth',
+  'ch1-nav',
+  'ch1-iso'
+]);
+
+export function storyUsesEarlyTouchDpad(s: StorySnapshot = snapshot): boolean {
+  if (!s.active || !s.beat) return false;
+  return EARLY_TOUCH_DPAD_BEATS.has(s.beat);
 }
 
 /** Ship/star-map affordances stay hidden while any story chapter is live. */

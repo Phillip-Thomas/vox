@@ -212,6 +212,7 @@ describe('per-world save round-trip', () => {
   it('restores structures, campfires, and every harvested surface resource', () => {
     placePiece([1, 2, 3], 3, 'foundation', 'wood');
     placePiece([1, 2, 3], 0, 'wall', 'wood');
+    placePiece([2, 2, 3], 0, 'tall_wall', 'wood', 2);
     placeCampfire(new THREE.Vector3(1, 1, 1), new THREE.Vector3(0, 1, 0));
     markTreeHarvested(4, 5, 6);
     collectStone(7, 8, 9);
@@ -229,6 +230,8 @@ describe('per-world save round-trip', () => {
 
     expect(hasPanel(1, 2, 3, 3)).toBe(true);
     expect(hasPanel(1, 2, 3, 0)).toBe(true);
+    expect(hasPanel(2, 2, 3, 0)).toBe(true);
+    expect(hasPanel(2, 3, 3, 0)).toBe(true);
     expect(getCampfires()).toHaveLength(1);
     expect(isTreeHarvested(4, 5, 6)).toBe(true);
     expect(isStoneCollected(7, 8, 9)).toBe(true);

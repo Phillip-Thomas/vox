@@ -1,8 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { subscribeInventory, getInventory } from '../../game/systems/inventorySystem.ts';
 import { getItem, type ItemId, type ItemKind } from '../../game/data/items.ts';
 import { theme } from '../../ui/theme.ts';
 import { HUD_EDGE, hudGlassPanelStyle } from './hudChrome.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
+import {
+  getActiveMobileHudDisclosure,
+  subscribeMobileHudDisclosure,
+  toggleMobileHudDisclosure
+} from '../mobile/mobileHudDisclosure.ts';
 
 /**
  * Held-item inventory (live, subscribes to inventorySystem). It starts as a
@@ -34,7 +40,14 @@ interface InventoryPanelProps {
 
 const InventoryPanel: React.FC<InventoryPanelProps> = ({ topOffset = HUD_EDGE }) => {
   const [inv, setInv] = useState<Partial<Record<ItemId, number>>>(getInventory());
-  const [collapsed, setCollapsed] = useState(true);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(true);
+  const activeDisclosure = useSyncExternalStore(
+    subscribeMobileHudDisclosure,
+    getActiveMobileHudDisclosure,
+    () => null
+  );
+  const touch = isTouchDevice();
+  const collapsed = touch ? activeDisclosure !== 'inventory' : desktopCollapsed;
   useEffect(() => subscribeInventory(() => setInv(getInventory())), []);
 
   const entries = useMemo(
@@ -55,35 +68,49 @@ const InventoryPanel: React.FC<InventoryPanelProps> = ({ topOffset = HUD_EDGE })
   const multiGroup = groups.length > 1;
 
   return (
-    <div data-testid="inventory-panel" style={hudGlassPanelStyle({
+    <div
+      data-testid="inventory-panel"
+      className={touch ? 'pv-mobile-inventory' : undefined}
+      style={hudGlassPanelStyle({
       position: 'absolute',
       left: HUD_EDGE,
       top: topOffset,
       minWidth: collapsed ? 84 : 164,
       maxWidth: 230,
+      maxHeight: touch && !collapsed
+        ? 'min(58dvh, calc(100dvh - 126px - env(safe-area-inset-bottom, 0px)))'
+        : undefined,
       borderRadius: theme.radius.md,
       fontSize: 12,
       zIndex: theme.z.hud + 4,
-      overflow: 'hidden',
+      overflowX: 'hidden',
+      overflowY: collapsed ? 'hidden' : 'auto',
+      overscrollBehavior: 'contain',
+      display: touch && activeDisclosure === 'suit' ? 'none' : undefined,
       background: collapsed
         ? 'linear-gradient(180deg, rgba(14,22,38,0.72), rgba(5,9,17,0.58))'
         : 'linear-gradient(180deg, rgba(10,18,32,0.68), rgba(5,9,17,0.54))'
-    })}>
+    })}
+    >
       <button
         data-testid="inventory-button"
-        onClick={() => setCollapsed(c => !c)}
+        onClick={() => {
+          if (touch) toggleMobileHudDisclosure('inventory');
+          else setDesktopCollapsed(value => !value);
+        }}
         aria-expanded={!collapsed}
         aria-label={collapsed ? 'Show inventory' : 'Hide inventory'}
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-          width: '100%', padding: collapsed ? '9px 11px' : '7px 10px', cursor: 'pointer',
+          width: '100%', minHeight: 44, padding: collapsed ? '0 11px' : '7px 10px', cursor: 'pointer',
           background: 'transparent', border: 'none', color: theme.color.accent,
           fontFamily: 'inherit', fontSize: 10, letterSpacing: 0, opacity: 0.96,
           pointerEvents: 'auto', WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
           userSelect: 'none', WebkitUserSelect: 'none'
         }}
       >
-        <span>INV{total > 0 ? ` · ${total}` : ''}</span>
+        <span className="pv-mobile-inventory-copy">INV{total > 0 ? ` · ${total}` : ''}</span>
         <span style={{ opacity: 0.8 }}>{collapsed ? '+' : '−'}</span>
       </button>
       {!collapsed && (

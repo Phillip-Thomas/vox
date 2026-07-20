@@ -265,7 +265,10 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     case 'ch9-hearth':
       return {
         ...SANDBOX_POLICY,
-        recipeAllowed: ch9RecipeAllowed
+        recipeAllowed: ch9RecipeAllowed,
+        // The landed Kestrel remains a fabricator and narrative anchor, but
+        // re-boarding cannot preempt the mandatory settlement/hearth rail.
+        allowBaseInteraction: id => id !== 'board'
       };
     default:
       return { ...SANDBOX_POLICY };

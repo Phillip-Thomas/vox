@@ -12,8 +12,6 @@ import { atLeast, nextShipRepairStage, type ShipRepairStage } from './emergentCa
 import type { CommandContext } from '../game/commands.ts';
 import { dispatchStoryAuthorityCommand } from '../game/storyAuthorityDispatch.ts';
 import {
-  hasFirstLegalHoverReceipt,
-  hasFirstHoverGroundedReturn,
   hasWreckDiagnosisReceipt
 } from './reconstructionEmbodiment.ts';
 import type { GuidedStoryObjective } from './ux/objectiveDirector.ts';
@@ -82,7 +80,6 @@ export function getWreckReconstructionAction(actorId?: ActorId): WreckReconstruc
   const target = nextShipRepairStage(stage);
   if (!target || target === 'wrecked') return null;
   if (target === 'bench_online' && !hasBankedKestrelKeelMemory(actorId)) return null;
-  if (target === 'flight_ready' && !hasFirstHoverGroundedReturn(actorId)) return null;
   if (!canAffordShipRepairStage(target, actorId)) return null;
   return {
     kind: 'repair',
@@ -103,24 +100,6 @@ export function getWreckReconstructionGuidance(actorId?: ActorId): WreckReconstr
   }
 
   const stage = getShipRepairStage();
-  const liftInstalled = stage === 'lift_online' || stage === 'flight_ready';
-  if (liftInstalled && !hasFirstLegalHoverReceipt(actorId)) {
-    return {
-      id: 'lift-test',
-      kind: 'travel',
-      markerLabel: 'UPPER ROUTE SOCKET · HOLD THRUST',
-      workOrder: ['REACH THE UPPER ROUTE SOCKET.', 'HOLD JUMP / THRUST IN THE SOCKET, THEN RETURN TO GROUND.']
-    };
-  }
-  if (liftInstalled && !hasFirstHoverGroundedReturn(actorId)) {
-    return {
-      id: 'lift-return',
-      kind: 'travel',
-      markerLabel: 'WRECK · LAND HERE',
-      workOrder: ['RETURN TO GROUND AT THE WRECK.']
-    };
-  }
-
   const target = nextShipRepairStage(stage);
   if (!target || target === 'wrecked') {
     if (!hasReconstructionCalibrationReceipt(actorId)) {
@@ -163,14 +142,10 @@ export function performWreckReconstructionAction(
   actorId?: ActorId,
   commandContext?: CommandContext
 ): WreckReconstructionResult {
-  // Revalidate physical receipts at commit time. UI-resolved actions are only
-  // hints: a stale closure, scripted caller, or authority retry must not be
-  // able to turn a forged action object into salvage before diagnosis or route
-  // calibration before the grounded first-hover return.
-  if (!hasWreckDiagnosisReceipt(actorId)
-    || (action.kind === 'repair'
-      && action.target === 'flight_ready'
-      && !hasFirstHoverGroundedReturn(actorId))) {
+  // Revalidate diagnosis at commit time. UI-resolved actions are only hints: a
+  // stale closure, scripted caller, or authority retry must not be able to turn
+  // a forged action object into salvage or an ordered repair transaction.
+  if (!hasWreckDiagnosisReceipt(actorId)) {
     return {
       ok: false,
       idempotent: false,

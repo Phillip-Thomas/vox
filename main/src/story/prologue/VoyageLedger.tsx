@@ -2,7 +2,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { VOYAGE_DECK, VOYAGE_NAMING, VOYAGE_SETTINGS, VOYAGE_STRANGE_LINES, type LedgerStat } from '../storyScript.ts';
 import { applyChoice, createDeckRun, nextCard, type VoyageCard } from '../voyageDeck.ts';
 import { applyVoyageOutcome } from '../voyageOutcome.ts';
-import { getWorkerName, recordStoryChoice, recordWorkerName } from '../storyState.ts';
+import {
+  getStoryStateSnapshot,
+  getWorkerName,
+  recordStoryChoice,
+  recordWorkerName
+} from '../storyState.ts';
 import { addItem } from '../../game/systems/inventorySystem.ts';
 import { feed } from '../../game/systems/survivalVitals.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
@@ -10,6 +15,12 @@ import { isMovieMode } from '../autopilot.ts';
 import { vectorScene } from './prologueVectorState.ts';
 import { PHOSPHOR, PHOSPHOR_DIM, PHOSPHOR_FAINT, TERMINAL_BG } from './TerminalPrologue.tsx';
 import { theme } from '../../ui/theme.ts';
+import { recordJourneyInputSubmission } from '../journeyInputRuntime.ts';
+import {
+  acknowledgeJourneyProbePreparation,
+  JOURNEY_PROBE_PREPARE_EVENT,
+  type JourneyProbePrepareEventDetail
+} from '../journeyProbePreparation.ts';
 
 // --- The voyage (Oregon Trail, played straight — now a branching deck) ----------------
 //
@@ -41,7 +52,10 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const [ledger, setLedger] = useState<LedgerState>(INITIAL_LEDGER);
   const [displayLedger, setDisplayLedger] = useState<LedgerState>(INITIAL_LEDGER);
   const [card, setCard] = useState<VoyageCard | null>(null);
-  const [naming, setNaming] = useState<{ showTrue: boolean } | null>(null);
+  const [naming, setNaming] = useState<{
+    showTrue: boolean;
+    diagnosticInputReady?: boolean;
+  } | null>(null);
   const [legIndex, setLegIndex] = useState(0);
   const [progress, setProgress] = useState(0.06);
   const [strange, setStrange] = useState<{ voice: 'system' | 'watcher'; text: string } | null>(null);
@@ -65,6 +79,33 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
   const progressRef = useRef(progress);
 
   useEffect(() => () => { asideTimersRef.current.forEach(id => clearTimeout(id)); }, []);
+
+  // Direct-entry browser diagnostics may enter at the escaped naming defect
+  // instead of replaying the preceding voyage cards. This opens the real
+  // native field directly; trusted keyboard events, validation, submit path,
+  // and persisted worker name remain unchanged. The query-gated bridge records
+  // the skipped cards and naming lines explicitly, so the artifact cannot be
+  // mistaken for prologue timing or continuity proof.
+  useEffect(() => {
+    const prepareNamingDiagnostic = (event: Event) => {
+      const detail = (event as CustomEvent<JourneyProbePrepareEventDetail>).detail;
+      if (!detail || detail.scenarioId !== 'input:voyage-worker-name') return;
+      const story = getStoryStateSnapshot();
+      if (!story.active || story.beat !== 'voyage' || detail.storyBeat !== 'voyage') return;
+      setCard(null);
+      setNaming({ showTrue: false, diagnosticInputReady: true });
+      acknowledgeJourneyProbePreparation(detail, 'voyage-ledger', {
+        path: 'naming-native-input',
+        reconstructedPriorCards: true,
+        reconstructedNamingLines: true,
+        authoredLineDelayPreserved: false,
+        realInputPreserved: true,
+        realSubmitPreserved: true
+      });
+    };
+    window.addEventListener(JOURNEY_PROBE_PREPARE_EVENT, prepareNamingDiagnostic);
+    return () => window.removeEventListener(JOURNEY_PROBE_PREPARE_EVENT, prepareNamingDiagnostic);
+  }, []);
 
   // A choice's aside: a lowercase parenthetical caption ~1.2s after the pick,
   // held ~4s (the watcher's private reaction, in the graphics pane).
@@ -379,6 +420,7 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
         {naming && (
           <NamingInterstitial
             showTrue={naming.showTrue}
+            diagnosticInputReady={naming.diagnosticInputReady}
             onDone={() => { setNaming(null); setLegIndex(i => i + 1); }}
           />
         )}
@@ -389,7 +431,9 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
           from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes pvCaret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+        [data-voyage-worker-name-input="true"]:focus-visible {
+          outline-color: ${PHOSPHOR} !important;
+        }
         @keyframes pvFieldNudge { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
       `}</style>
     </div>
@@ -407,7 +451,77 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
 
 type NamePhase = 'lines' | 'input' | 'response' | 'kept';
 
-const NamingInterstitial: React.FC<{ showTrue: boolean; onDone: () => void }> = ({ showTrue, onDone }) => {
+export function normalizeVoyageWorkerName(raw: string): string {
+  return raw.trim().toLowerCase().replace(/[^a-z]/g, '').slice(0, 12);
+}
+
+interface VoyageWorkerNameInputProps {
+  value: string;
+  onValueChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+/**
+ * The terminal field is the real editable control, not a visual proxy backed by
+ * an off-screen input. Players can therefore click or tap it to recover focus,
+ * and mobile browsers have a real target from which to open the software
+ * keyboard.
+ */
+export const VoyageWorkerNameInput = React.forwardRef<
+  HTMLInputElement,
+  VoyageWorkerNameInputProps
+>(({ value, onValueChange, onSubmit }, ref) => (
+  <input
+    ref={ref}
+    type="text"
+    name="voyage-worker-name"
+    data-voyage-worker-name-input="true"
+    value={value}
+    onChange={event => onValueChange(normalizeVoyageWorkerName(event.target.value))}
+    onKeyDown={event => {
+      event.stopPropagation();
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        onSubmit();
+      }
+    }}
+    autoFocus
+    autoComplete="off"
+    autoCapitalize="none"
+    enterKeyHint="done"
+    maxLength={12}
+    spellCheck={false}
+    aria-label={VOYAGE_NAMING.prompt}
+    style={{
+      appearance: 'none',
+      display: 'inline-block',
+      width: '13ch',
+      minWidth: 0,
+      margin: 0,
+      padding: '0 0 2px',
+      border: 0,
+      borderBottom: `1px solid ${PHOSPHOR_FAINT}`,
+      borderRadius: 0,
+      background: 'transparent',
+      color: PHOSPHOR,
+      caretColor: PHOSPHOR,
+      fontFamily: 'inherit',
+      fontSize: 'inherit',
+      lineHeight: 'inherit',
+      letterSpacing: 'inherit',
+      textTransform: 'lowercase',
+      verticalAlign: 'baseline'
+    }}
+  />
+));
+
+VoyageWorkerNameInput.displayName = 'VoyageWorkerNameInput';
+
+const NamingInterstitial: React.FC<{
+  showTrue: boolean;
+  diagnosticInputReady?: boolean;
+  onDone: () => void;
+}> = ({ showTrue, diagnosticInputReady = false, onDone }) => {
   const lines = useMemo(() => {
     const l: string[] = [VOYAGE_NAMING.intro];
     if (showTrue) l.push(VOYAGE_NAMING.introTrue);
@@ -415,8 +529,8 @@ const NamingInterstitial: React.FC<{ showTrue: boolean; onDone: () => void }> = 
     return l;
   }, [showTrue]);
 
-  const [shown, setShown] = useState(1); // intro is up immediately
-  const [phase, setPhase] = useState<NamePhase>('lines');
+  const [shown, setShown] = useState(() => diagnosticInputReady ? lines.length : 1);
+  const [phase, setPhase] = useState<NamePhase>(() => diagnosticInputReady ? 'input' : 'lines');
   const [value, setValue] = useState('');
   const [nudge, setNudge] = useState(0); // empty-enter re-blink counter
   const inputRef = useRef<HTMLInputElement>(null);
@@ -437,15 +551,18 @@ const NamingInterstitial: React.FC<{ showTrue: boolean; onDone: () => void }> = 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shown, phase, lines.length]);
 
-  useEffect(() => { if (phase === 'input') inputRef.current?.focus(); }, [phase]);
+  // `nudge` remounts the field to replay the empty-submit animation, so it is
+  // also a focus dependency. A rejected empty Enter must not strand the player.
+  useEffect(() => { if (phase === 'input') inputRef.current?.focus(); }, [phase, nudge]);
 
   const submit = (raw: string) => {
     if (submittedRef.current) return;
-    const clean = raw.trim().toLowerCase().replace(/[^a-z]/g, '').slice(0, 12);
+    const clean = normalizeVoyageWorkerName(raw);
     if (!clean) { setValue(''); setNudge(n => n + 1); return; } // ENTER on empty re-blinks the field
     submittedRef.current = true;
     setValue(clean);
     recordWorkerName(clean);
+    recordJourneyInputSubmission(clean);
     playSfx('terminalAdvance');
     setPhase('response');
     after(VOYAGE_NAMING.keptDelaySeconds * 1000, () => {
@@ -482,7 +599,7 @@ const NamingInterstitial: React.FC<{ showTrue: boolean; onDone: () => void }> = 
       ))}
 
       {(phase === 'input' || phase === 'response') && (
-        <div
+        <label
           key={nudge}
           style={{
             marginTop: 8, display: 'flex', alignItems: 'baseline',
@@ -491,32 +608,15 @@ const NamingInterstitial: React.FC<{ showTrue: boolean; onDone: () => void }> = 
           }}
         >
           <span style={{ color: PHOSPHOR_DIM }}>a name for it: </span>
-          <span style={{ color: PHOSPHOR, position: 'relative' }}>
-            {value}
-            {phase === 'input' && (
-              <span style={{ display: 'inline-block', width: '0.6em', color: PHOSPHOR, animation: 'pvCaret 1s steps(1) infinite' }}>_</span>
-            )}
-          </span>
-          {/* Real keystrokes: an invisible controlled field carries the caret. */}
-          {phase === 'input' && (
-            <input
+          {phase === 'input'
+            ? <VoyageWorkerNameInput
               ref={inputRef}
               value={value}
-              onChange={e => setValue(e.target.value.toLowerCase().replace(/[^a-z]/g, '').slice(0, 12))}
-              onKeyDown={e => {
-                e.stopPropagation();
-                if (e.key === 'Enter') { e.preventDefault(); submit(value); }
-              }}
-              autoFocus
-              spellCheck={false}
-              aria-label={VOYAGE_NAMING.prompt}
-              style={{
-                position: 'absolute', opacity: 0, width: 1, height: 1,
-                pointerEvents: 'none', left: -9999
-              }}
+              onValueChange={setValue}
+              onSubmit={() => submit(value)}
             />
-          )}
-        </div>
+            : <span style={{ color: PHOSPHOR }}>{value}</span>}
+        </label>
       )}
 
       {phase === 'response' && (

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { getSurvivalEnvironment, getVitals } from '../../game/systems/survivalVitals';
 import { getMawChargeFraction } from '../../game/systems/mawSystem.ts';
 import { ownsChargeTool } from '../../game/systems/loadoutSystem.ts';
@@ -16,6 +16,11 @@ import {
   getVitalsPanelPlacement,
   VITAL_BARS
 } from './VitalsMeter.model.ts';
+import {
+  getActiveMobileHudDisclosure,
+  subscribeMobileHudDisclosure,
+  toggleMobileHudDisclosure
+} from '../mobile/mobileHudDisclosure.ts';
 
 const VitalsMeter: React.FC = () => {
   const fills = useRef<Array<HTMLDivElement | null>>([]);
@@ -28,8 +33,15 @@ const VitalsMeter: React.FC = () => {
   const mawFill = useRef<HTMLDivElement | null>(null);
   const mawValue = useRef<HTMLSpanElement | null>(null);
   const thermalStatus = useRef<HTMLDivElement | null>(null);
+  const mobileSummary = useRef<HTMLSpanElement | null>(null);
+  const activeDisclosure = useSyncExternalStore(
+    subscribeMobileHudDisclosure,
+    getActiveMobileHudDisclosure,
+    () => null
+  );
   const initial = getVitals();
   const touch = isTouchDevice();
+  const expanded = touch && activeDisclosure === 'suit';
   const placement = getVitalsPanelPlacement(touch);
 
   useEffect(() => {
@@ -71,6 +83,24 @@ const VitalsMeter: React.FC = () => {
           : 'linear-gradient(90deg, #fca5a5, rgba(255,255,255,0.72))';
       }
       if (mawValue.current) mawValue.current.textContent = formatMawChargeFraction(getMawChargeFraction());
+      if (mobileSummary.current) {
+        const visibleVitals = VITAL_BARS
+          .filter(bar => storyStatVisible(bar.key))
+          .map(bar => ({ label: bar.label, value: v[bar.key] }));
+        if (storyStatVisible('jet')) visibleVitals.push({ label: 'JET', value: jetpackPct });
+        if (mawActive) visibleVitals.push({ label: 'MAW', value: mawPct });
+        const lowest = visibleVitals.reduce<{ label: string; value: number } | null>(
+          (current, candidate) => !current || candidate.value < current.value ? candidate : current,
+          null
+        );
+        const warning = lowest && lowest.value < 70;
+        mobileSummary.current.textContent = warning
+          ? `${lowest.label} ${Math.round(lowest.value)}%`
+          : 'NOMINAL';
+        mobileSummary.current.style.color = lowest && lowest.value < 35
+          ? theme.color.danger
+          : warning ? '#ffd591' : theme.color.good;
+      }
       if (thermalStatus.current) {
         thermalStatus.current.style.display = storyStatVisible('warmth') && !getStoryStateSnapshot().active ? 'flex' : 'none';
         thermalStatus.current.textContent = environment.status === 'fire'
@@ -94,32 +124,88 @@ const VitalsMeter: React.FC = () => {
     <section
       aria-label="Survival vitals"
       data-testid="vitals-meter"
+      data-mobile-expanded={touch ? String(expanded) : undefined}
       style={hudGlassPanelStyle({
         position: 'absolute',
         left: placement.left,
         top: placement.top,
         width: placement.width,
-        zIndex: theme.z.hud + 4,
-        padding: touch ? '10px 10px 9px' : '11px 12px 10px',
+        zIndex: theme.z.hud + (expanded ? 8 : 4),
+        padding: touch ? 0 : '11px 12px 10px',
         borderRadius: theme.radius.md,
         background: 'linear-gradient(180deg, rgba(10,18,32,0.78), rgba(5,9,17,0.60))',
         boxShadow: '0 14px 40px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.05)'
       })}
     >
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 8,
-        color: theme.color.accent,
-        fontSize: 10,
-        fontWeight: 900,
-        letterSpacing: 0
-      }}>
-        <span>SUIT HUD</span>
-        <span style={{ color: theme.color.textFaint, fontSize: 9, fontWeight: 700 }}>LIVE</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      {touch ? (
+        <button
+          type="button"
+          aria-label={expanded ? 'Hide survival vitals' : 'Show survival vitals'}
+          aria-expanded={expanded}
+          aria-controls="mobile-suit-telemetry"
+          onClick={() => toggleMobileHudDisclosure('suit')}
+          style={{
+            width: '100%',
+            minHeight: 44,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 8,
+            padding: '0 10px',
+            border: 0,
+            background: 'transparent',
+            color: theme.color.accent,
+            fontFamily: theme.font.mono,
+            fontSize: 10,
+            fontWeight: 900,
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
+          }}
+        >
+          <span>SUIT</span>
+          <span ref={mobileSummary} style={{ color: theme.color.good, fontSize: 9, letterSpacing: '0.04em' }}>
+            NOMINAL
+          </span>
+          <span aria-hidden="true" style={{ color: theme.color.textFaint }}>{expanded ? '−' : '+'}</span>
+        </button>
+      ) : (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 8,
+          color: theme.color.accent,
+          fontSize: 10,
+          fontWeight: 900,
+          letterSpacing: 0
+        }}>
+          <span>SUIT HUD</span>
+          <span style={{ color: theme.color.textFaint, fontSize: 9, fontWeight: 700 }}>LIVE</span>
+        </div>
+      )}
+      <div
+        id={touch ? 'mobile-suit-telemetry' : undefined}
+        aria-hidden={touch && !expanded}
+        style={{
+          display: touch && !expanded ? 'none' : 'flex',
+          flexDirection: 'column',
+          gap: 6,
+          ...(touch ? {
+            position: 'absolute',
+            top: 52,
+            left: 0,
+            width: 216,
+            padding: '10px 10px 9px',
+            border: theme.glass.border,
+            borderRadius: theme.radius.md,
+            background: 'linear-gradient(180deg, rgba(10,18,32,0.96), rgba(5,9,17,0.92))',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.48)',
+            pointerEvents: 'auto'
+          } : { padding: 0 })
+        }}
+      >
         {VITAL_BARS.map((b, i) => (
           <div
             key={b.key}
@@ -239,12 +325,12 @@ const VitalsMeter: React.FC = () => {
             letterSpacing: '0.12em'
           }}
         >— THERMAL STABLE</div>
+        <div style={{
+          height: 1,
+          marginTop: 9,
+          background: 'linear-gradient(90deg, rgba(125,211,252,0.34), rgba(125,211,252,0))'
+        }} />
       </div>
-      <div style={{
-        height: 1,
-        marginTop: 9,
-        background: 'linear-gradient(90deg, rgba(125,211,252,0.34), rgba(125,211,252,0))'
-      }} />
     </section>
   );
 };

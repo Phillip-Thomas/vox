@@ -433,8 +433,16 @@ function activateAnchor(
   return true;
 }
 
+const RELOCATED_OPTIONAL_ANCHORS = new Set([
+  // Kept readable for legacy saves/contracts, but new runs earn their optional
+  // jetpack exploration above the chosen Tidegarden site. Route readiness may
+  // therefore advance directly from the installed Lift Cell.
+  'anc.reconstruct.first-hover'
+]);
+
 function isOptionalAnchor(anchor: SignedAnchor): boolean {
-  return anchor.event.endsWith(':optional');
+  return anchor.event.endsWith(':optional')
+    || RELOCATED_OPTIONAL_ANCHORS.has(anchor.id);
 }
 
 function progressionEntryForAnchor(anchor: SignedAnchor): ProgressionAnchor | undefined {

@@ -11,7 +11,9 @@ const STORY_HUD_DESKTOP_SIDE_PX = 22;
 const STORY_HUD_DESKTOP_BOTTOM_PX = 28;
 const STORY_HUD_CAPTION_GAP_PX = 18;
 const STORY_HUD_CAPTION_ESTIMATED_HEIGHT_PX = 72;
+const STORY_HUD_DESKTOP_CAPTION_MIN_LANE_PX = 420;
 const STORY_HUD_MARKER_GAP_PX = 14;
+const STORY_HUD_MARKER_OBJECTIVE_GAP_PX = 14;
 const STORY_HUD_MARKER_ICON_INSET_PX = 10;
 const STORY_HUD_REDUCED_MOTION_ALIGNMENT_PX = 36;
 const STORY_HUD_TOP_OCCLUSION_GAP_PX = 14;
@@ -88,10 +90,12 @@ export interface StoryHudLayout {
     top: number;
   };
   caption: {
+    left: number;
     bottom: number;
     maxWidth: number;
     top: number;
     bottomEdge: number;
+    placement: 'center' | 'right-of-objective' | 'above-objective';
   };
   marker: {
     minY: number;
@@ -103,6 +107,8 @@ export interface StoryHudLayout {
     stableLaneRight: number;
     stableTop: number;
     stableLabelMaxWidth: number;
+    topLeftOcclusionRight: number;
+    topLeftOcclusionBottom: number;
   };
 }
 
@@ -130,9 +136,9 @@ function normalizeSafeAreaInsets(
 }
 
 /**
- * Reserve a bottom-up stack on touch screens:
- * controls -> objective card -> caption -> marker field. The measured card
- * height replaces the conservative first-frame fallback without a React render.
+ * Reserve a bottom-up stack for the persistent desktop objective card. Touch
+ * uses a compact top-rail journal trigger, so captions and markers must not
+ * retain the old full-card fallback lane above the controls.
  */
 export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout {
   const viewportWidth = Math.max(1, finiteOr(input.viewportWidth, 1));
@@ -145,7 +151,7 @@ export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout 
     : STORY_HUD_DESKTOP_BOTTOM_PX;
   const objectiveBottom = objectiveBottomBase + safeAreaInsets.bottom;
   const measuredHeight = Math.max(0, finiteOr(input.objectiveHeight, 0));
-  const objectiveHeight = input.objectivePresent
+  const objectiveHeight = input.objectivePresent && !input.touch
     ? Math.max(measuredHeight, measuredHeight > 0 ? 0 : STORY_HUD_OBJECTIVE_FALLBACK_HEIGHT_PX)
     : 0;
   const objectiveLeft = side + safeAreaInsets.left;
@@ -153,18 +159,42 @@ export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout 
   const objectiveWidth = Math.max(1, Math.min(360, viewportWidth - objectiveLeft - objectiveRight));
   const objectiveTop = viewportHeight - objectiveBottom - objectiveHeight;
 
-  const captionBottom = input.touch
+  let captionBottom = input.touch
     ? objectiveBottom + objectiveHeight + STORY_HUD_CAPTION_GAP_PX
     : Math.max(32 + safeAreaInsets.bottom, viewportHeight * 0.12);
+  const captionContentLeft = objectiveLeft;
+  const captionContentRight = Math.max(captionContentLeft, viewportWidth - objectiveRight);
+  let captionLeft = (captionContentLeft + captionContentRight) / 2;
+  let captionPlacement: StoryHudLayout['caption']['placement'] = 'center';
+  let captionMaxWidth = Math.max(1, Math.min(640, narrowTouch
+    ? captionContentRight - captionContentLeft
+    : Math.min(viewportWidth * 0.8, captionContentRight - captionContentLeft)));
+
+  if (!input.touch && objectiveHeight > 0) {
+    const objectiveRightEdge = objectiveLeft + objectiveWidth;
+    const rightLaneLeft = objectiveRightEdge + STORY_HUD_CAPTION_GAP_PX;
+    const rightLaneWidth = Math.max(0, captionContentRight - rightLaneLeft);
+    if (rightLaneWidth >= STORY_HUD_DESKTOP_CAPTION_MIN_LANE_PX) {
+      captionLeft = (rightLaneLeft + captionContentRight) / 2;
+      captionMaxWidth = Math.max(1, Math.min(640, rightLaneWidth));
+      captionPlacement = 'right-of-objective';
+    } else {
+      captionBottom = Math.max(
+        captionBottom,
+        viewportHeight - objectiveTop + STORY_HUD_CAPTION_GAP_PX
+      );
+      captionPlacement = 'above-objective';
+    }
+  }
   const captionBottomEdge = viewportHeight - captionBottom;
-  const captionMaxWidth = Math.max(1, Math.min(640, narrowTouch
-    ? viewportWidth - objectiveLeft - objectiveRight
-    : Math.min(viewportWidth * 0.8, viewportWidth - objectiveLeft - objectiveRight)));
   const captionTop = captionBottomEdge - (input.touch
     ? STORY_HUD_CAPTION_ESTIMATED_HEIGHT_PX
     : 52);
 
-  const markerEdgeY = input.touch ? 34 : 44;
+  // The persistent mobile rail starts 14px from the safe-area edge and is
+  // 44px tall. A further 14px keeps projected markers clear of both the
+  // left-side rail and the independent Systems trigger in normal motion.
+  const markerEdgeY = input.touch ? 72 : 44;
   const markerMinY = markerEdgeY + safeAreaInsets.top;
   const markerBottomLimit = viewportHeight - markerEdgeY - safeAreaInsets.bottom;
   const markerMaxY = input.touch
@@ -220,10 +250,12 @@ export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout 
       top: objectiveTop
     },
     caption: {
+      left: captionLeft,
       bottom: captionBottom,
       maxWidth: captionMaxWidth,
       top: captionTop,
-      bottomEdge: captionBottomEdge
+      bottomEdge: captionBottomEdge,
+      placement: captionPlacement
     },
     marker: {
       minY: markerMinY,
@@ -237,7 +269,9 @@ export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout 
       stableLabelMaxWidth: Math.max(1, Math.min(
         labelMaxWidth,
         stableLaneRight - stableLaneLeft
-      ))
+      )),
+      topLeftOcclusionRight: occlusionRight,
+      topLeftOcclusionBottom: occlusionBottom
     }
   };
 }
@@ -296,6 +330,8 @@ export interface StoryMarkerPresentationInput {
   rawX: number;
   rawY: number;
   labelWidth: number;
+  /** Measured rendered width of the complete glyph + label overlay. */
+  overlayWidth?: number;
   overlayHeight: number;
   layout: StoryHudLayout;
   /** Pin to the collision-free safe-area lane for the reduced-motion compass. */
@@ -306,6 +342,8 @@ export interface StoryMarkerPresentation {
   x: number;
   y: number;
   labelOffsetX: number;
+  displacedForObjective: boolean;
+  displacedForTopChrome: boolean;
 }
 
 /**
@@ -322,13 +360,13 @@ export function solveStoryMarkerPresentation(
     layout.viewportWidth - layout.safeAreaInsets.right - STORY_HUD_MARKER_ICON_INSET_PX
   );
   const safeCenterX = (minX + maxX) / 2;
-  const x = input.stabilized
+  let x = input.stabilized
     ? (layout.marker.stableLaneLeft + layout.marker.stableLaneRight) / 2
     : clamp(finiteOr(input.rawX, safeCenterX), minX, maxX);
   const halfHeight = Math.max(0, finiteOr(input.overlayHeight, 0)) / 2;
   const minY = layout.marker.minY + halfHeight;
   const maxY = Math.max(minY, layout.marker.maxY - halfHeight);
-  const y = input.stabilized
+  let y = input.stabilized
     ? clamp(layout.marker.stableTop + halfHeight, minY, maxY)
     : clamp(finiteOr(input.rawY, minY), minY, maxY);
 
@@ -339,6 +377,112 @@ export function solveStoryMarkerPresentation(
     Math.max(0, finiteOr(input.labelWidth, 0)),
     labelMaxWidth
   );
+  const overlayWidth = Math.max(
+    10,
+    Math.min(
+      Math.max(labelWidth, finiteOr(input.overlayWidth, labelWidth)),
+      labelMaxWidth
+    )
+  );
+  const halfOverlayWidth = overlayWidth / 2;
+  let displacedForObjective = false;
+  let displacedForTopChrome = false;
+
+  if (!input.stabilized) {
+    const chromeAvoidance = {
+      left: layout.marker.viewportInsetLeft,
+      right: layout.marker.topLeftOcclusionRight + STORY_HUD_TOP_OCCLUSION_GAP_PX,
+      top: layout.marker.minY,
+      bottom: layout.marker.topLeftOcclusionBottom + STORY_HUD_TOP_OCCLUSION_GAP_PX
+    };
+    const hasObservedChrome = (
+      layout.marker.topLeftOcclusionRight > layout.marker.viewportInsetLeft
+      || layout.marker.topLeftOcclusionBottom > layout.marker.minY
+    );
+    const intersectsChrome = (candidateX: number, candidateY: number): boolean => (
+      candidateX - halfOverlayWidth < chromeAvoidance.right
+      && candidateX + halfOverlayWidth > chromeAvoidance.left
+      && candidateY - halfHeight < chromeAvoidance.bottom
+      && candidateY + halfHeight > chromeAvoidance.top
+    );
+
+    if (hasObservedChrome && intersectsChrome(x, y)) {
+      const contentMinX = layout.marker.viewportInsetLeft + halfOverlayWidth;
+      const contentMaxX = Math.max(
+        contentMinX,
+        layout.viewportWidth - layout.marker.viewportInsetRight - halfOverlayWidth
+      );
+      const candidates = [
+        { x: chromeAvoidance.right + halfOverlayWidth, y },
+        { x, y: chromeAvoidance.bottom + halfHeight }
+      ].filter(candidate => (
+        candidate.x >= contentMinX
+        && candidate.x <= contentMaxX
+        && candidate.y >= minY
+        && candidate.y <= maxY
+        && !intersectsChrome(candidate.x, candidate.y)
+      ));
+      candidates.sort((a, b) => (
+        (a.x - x) ** 2 + (a.y - y) ** 2
+        - ((b.x - x) ** 2 + (b.y - y) ** 2)
+      ));
+      const nearest = candidates[0];
+      if (nearest) {
+        x = nearest.x;
+        y = nearest.y;
+        displacedForTopChrome = true;
+      }
+    }
+  }
+
+  if (!input.stabilized && layout.objective.heightReserved > 0) {
+    const objectiveLeft = layout.objective.left;
+    const objectiveRight = objectiveLeft + layout.objective.width;
+    const objectiveTop = layout.objective.top;
+    const objectiveBottom = layout.viewportHeight - layout.objective.bottom;
+    const avoid = {
+      left: objectiveLeft - STORY_HUD_MARKER_OBJECTIVE_GAP_PX,
+      right: objectiveRight + STORY_HUD_MARKER_OBJECTIVE_GAP_PX,
+      top: objectiveTop - STORY_HUD_MARKER_OBJECTIVE_GAP_PX,
+      bottom: objectiveBottom + STORY_HUD_MARKER_OBJECTIVE_GAP_PX
+    };
+    const intersectsAvoidance = (candidateX: number, candidateY: number): boolean => (
+      candidateX - halfOverlayWidth < avoid.right
+      && candidateX + halfOverlayWidth > avoid.left
+      && candidateY - halfHeight < avoid.bottom
+      && candidateY + halfHeight > avoid.top
+    );
+
+    if (intersectsAvoidance(x, y)) {
+      const contentMinX = layout.marker.viewportInsetLeft + halfOverlayWidth;
+      const contentMaxX = Math.max(
+        contentMinX,
+        layout.viewportWidth - layout.marker.viewportInsetRight - halfOverlayWidth
+      );
+      const candidates = [
+        { x, y: avoid.top - halfHeight },
+        { x: avoid.right + halfOverlayWidth, y },
+        { x: avoid.left - halfOverlayWidth, y },
+        { x, y: avoid.bottom + halfHeight }
+      ].filter(candidate => (
+        candidate.x >= contentMinX
+        && candidate.x <= contentMaxX
+        && candidate.y >= minY
+        && candidate.y <= maxY
+        && !intersectsAvoidance(candidate.x, candidate.y)
+      ));
+      candidates.sort((a, b) => (
+        (a.x - x) ** 2 + (a.y - y) ** 2
+        - ((b.x - x) ** 2 + (b.y - y) ** 2)
+      ));
+      const nearest = candidates[0];
+      if (nearest) {
+        x = nearest.x;
+        y = nearest.y;
+        displacedForObjective = true;
+      }
+    }
+  }
   const halfLabel = labelWidth / 2;
   const left = x - halfLabel;
   const right = x + halfLabel;
@@ -355,7 +499,7 @@ export function solveStoryMarkerPresentation(
     labelOffsetX = labelBoundaryRight - right;
   }
 
-  return { x, y, labelOffsetX };
+  return { x, y, labelOffsetX, displacedForObjective, displacedForTopChrome };
 }
 
 export interface StoryEdgeLabelPresentationInput {

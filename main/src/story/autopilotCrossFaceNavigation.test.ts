@@ -13,6 +13,7 @@ import {
 import {
   planReachableCrossFaceRoute,
   shouldExtendCrossFaceContinuation,
+  shouldReplanDryWaterContact,
   shouldReplanUnreachableRoute,
   validateCrossFaceDestinationEntry,
   validateCrossFaceJetpackDestinationEntry
@@ -470,4 +471,65 @@ describe('reachable cross-face route selection', () => {
     expect(planned.crossFaceLeg).toBeNull();
     expect(planned.destinationEntry).toBeNull();
   }, 15_000);
+});
+
+describe('shoreline dry-leg water-contact replan', () => {
+  const THRESHOLD = 8;
+
+  it('forces a replan once a nominally dry walk grinds the shoreline past the threshold', () => {
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'walk',
+      hasWaterCrossing: false,
+      contactFrames: THRESHOLD,
+      thresholdFrames: THRESHOLD
+    })).toBe(true);
+    // A single direct step in water counts the same once sustained.
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'direct',
+      hasWaterCrossing: false,
+      contactFrames: THRESHOLD + 4,
+      thresholdFrames: THRESHOLD
+    })).toBe(true);
+  });
+
+  it('holds while contact is still incidental, below the sustained threshold', () => {
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'walk',
+      hasWaterCrossing: false,
+      contactFrames: THRESHOLD - 1,
+      thresholdFrames: THRESHOLD
+    })).toBe(false);
+  });
+
+  it('never fights a route that already owns its water crossing or is unreachable', () => {
+    // A planned jetpack crossing manages its own fuel-budget replans.
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'jetpack',
+      hasWaterCrossing: true,
+      contactFrames: THRESHOLD * 4,
+      thresholdFrames: THRESHOLD
+    })).toBe(false);
+    // A dry-mode leg that nonetheless carries a crossing descriptor is excluded.
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'walk',
+      hasWaterCrossing: true,
+      contactFrames: THRESHOLD * 4,
+      thresholdFrames: THRESHOLD
+    })).toBe(false);
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'unreachable',
+      hasWaterCrossing: false,
+      contactFrames: THRESHOLD * 4,
+      thresholdFrames: THRESHOLD
+    })).toBe(false);
+  });
+
+  it('is inert when the threshold is disabled', () => {
+    expect(shouldReplanDryWaterContact({
+      routeMode: 'walk',
+      hasWaterCrossing: false,
+      contactFrames: 999,
+      thresholdFrames: 0
+    })).toBe(false);
+  });
 });

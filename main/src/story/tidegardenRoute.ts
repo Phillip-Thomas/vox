@@ -81,6 +81,29 @@ export function resolveStoryBootWorldId(
     : STORY_PRIMARY_WORLD_ID;
 }
 
+/**
+ * Live Story routing differs from boot routing at exactly one physical seam:
+ * the Chapter 8 midpoint has already transferred system-flight ownership to
+ * Tidegarden, but the director remains on `ch8-crossing` until the destination
+ * scene proves ready. Preserve that committed world during the readiness gap.
+ * Reloads still use `resolveStoryBootWorldId` and therefore restart an
+ * unfinished crossing from the origin instead of trusting partial runtime state.
+ */
+export function resolveStoryRuntimeWorldId(
+  currentWorldId: string,
+  routeOnline: boolean,
+  point: { readonly chapter: string; readonly beat: string | null },
+  activePlanetId: string | null
+): string {
+  const committedTidegardenCrossing = routeOnline
+    && point.beat === 'ch8-crossing'
+    && currentWorldId === TIDEGARDEN_WORLD_ID
+    && activePlanetId === TIDEGARDEN_WORLD_ID;
+  return committedTidegardenCrossing
+    ? TIDEGARDEN_WORLD_ID
+    : resolveStoryBootWorldId(currentWorldId, routeOnline, point);
+}
+
 /** Pure snapshot helper for server/parity tests and future migrations. */
 export function progressionHasTidegardenRoute(
   progression: Pick<ActorProgressionState, 'milestones'> | null | undefined

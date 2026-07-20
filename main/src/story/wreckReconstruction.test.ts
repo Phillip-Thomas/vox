@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getItemCount, resetInventory } from '../game/systems/inventorySystem.ts';
-import { markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
+import { hasMilestone, markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
 import {
   WRECK_BENCH_STATIONS,
   WRECK_SALVAGE,
@@ -138,20 +138,19 @@ describe('nearby wreck reconstruction', () => {
     if (!lift) throw new Error('Expected lift action.');
     expect(performWreckReconstructionAction(lift).repairStage).toBe('lift_online');
     expect(isStoryJetInstalled()).toBe(true);
-    expect(getWreckReconstructionGuidance()).toMatchObject({
-      id: 'lift-test',
-      markerLabel: 'UPPER ROUTE SOCKET · HOLD THRUST'
-    });
-
+    // Lift is immediately useful, but rehearsal is optional exploration later
+    // on Tidegarden rather than a repair/calibration prerequisite here.
     expect(getWreckReconstructionAction()).toBeNull();
+    expect(getWreckReconstructionGuidance()).toMatchObject({
+      id: 'craft:flight_ready',
+      markerLabel: 'WRECK BENCH · CRAFT LOGIC WAFER'
+    });
     expect(performWreckReconstructionAction({
       kind: 'repair',
       interactionId: 'story-ship-repair',
       target: 'flight_ready',
       verb: 'Calibrate Flight Controls'
     })).toMatchObject({ ok: false, repairStage: 'lift_online' });
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHover);
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHoverRecovered);
     expect(craft(RECIPES.logic_wafer, { stations: [...WRECK_BENCH_STATIONS] })).toMatchObject({ ok: true });
     expect(getWreckReconstructionGuidance()).toMatchObject({
       id: 'repair:flight_ready',
@@ -161,6 +160,8 @@ describe('nearby wreck reconstruction', () => {
     if (!flight) throw new Error('Expected flight calibration action.');
     expect(performWreckReconstructionAction(flight).repairStage).toBe('flight_ready');
     expect(getShipRepairStage()).toBe('flight_ready');
+    expect(hasMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHover)).toBe(false);
+    expect(hasMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHoverRecovered)).toBe(false);
     expect(getWreckReconstructionAction()).toBeNull();
   });
 
@@ -173,19 +174,9 @@ describe('nearby wreck reconstruction', () => {
     expect(isWreckBenchStationAccessActive('bench_online', far)).toBe(false);
   });
 
-  it('keeps a restored flight-ready hull on the local hover and grounded-return guidance', () => {
+  it('hydrates a restored flight-ready hull directly into calibration guidance', () => {
     applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
 
-    expect(getWreckReconstructionGuidance()).toMatchObject({
-      id: 'lift-test',
-      markerLabel: 'UPPER ROUTE SOCKET · HOLD THRUST'
-    });
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHover);
-    expect(getWreckReconstructionGuidance()).toMatchObject({
-      id: 'lift-return',
-      markerLabel: 'WRECK · LAND HERE'
-    });
-    markMilestone(RECONSTRUCTION_EMBODIMENT_MILESTONES.firstHoverRecovered);
     expect(getWreckReconstructionGuidance()).toMatchObject({
       id: 'calibrating',
       requiresMarker: false

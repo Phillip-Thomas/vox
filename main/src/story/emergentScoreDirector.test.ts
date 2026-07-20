@@ -90,7 +90,12 @@ describe('emergent chapter 7 score director', () => {
     expect(resolveChapter7ReconstructionScoreVariant({
       ...FLIGHT_READY,
       groundedReturnComplete: false
-    })).toBe('hover');
+    })).toBe('route');
+    expect(resolveChapter7ReconstructionScoreVariant({
+      ...FLIGHT_READY,
+      firstHoverComplete: false,
+      groundedReturnComplete: false
+    })).toBe('route');
     expect(resolveChapter7ReconstructionScoreVariant(FLIGHT_READY)).toBe('route');
     expect(resolveChapter7ReconstructionScoreVariant({
       ...FLIGHT_READY,
@@ -108,9 +113,9 @@ describe('emergent chapter 7 score director', () => {
     expect(score.setStoryScoreMoodOverride).toHaveBeenCalledTimes(2);
 
     setChapter7RepairStage('flight_ready');
-    expect(lastScoreVariant()).toBe('lift');
+    expect(lastScoreVariant()).toBe('route');
     noteChapter7FirstHover();
-    expect(lastScoreVariant()).toBe('hover');
+    expect(lastScoreVariant()).toBe('route');
     noteChapter7GroundedReturn();
     expect(lastScoreVariant()).toBe('route');
     startChapter7Calibration();

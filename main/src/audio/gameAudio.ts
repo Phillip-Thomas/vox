@@ -1,6 +1,7 @@
 import { unlockMusicAudio } from './musicEngine.ts';
 import { unlockSfxAudio } from './sfxEngine.ts';
 import { unlockStoryScore } from '../story/storyScore.ts';
+import { areGameAudioRoutesConfirmed } from './audioCore.ts';
 
 const TRUSTED_GESTURE_TYPES = ['pointerdown', 'keydown', 'touchstart'] as const;
 
@@ -39,6 +40,11 @@ export function unlockGameAudio(): Promise<void> {
  * Direct/resumed story entries may already be in `playing` without ever
  * mounting LandingMenu. Their first real input is therefore also an audio
  * resume gesture. Programmatic events are intentionally ignored.
+ *
+ * The listeners are torn down only once unlock verifiably succeeded — every
+ * output route confirmed (context running and, on iOS, the media element
+ * playing). A single early gesture often fails to resume on mobile Safari, so
+ * until confirmation the installer stays armed and later trusted gestures retry.
  */
 export function installGameAudioUnlockOnFirstTrustedGesture(
   target: EventTarget = window
@@ -53,8 +59,9 @@ export function installGameAudioUnlockOnFirstTrustedGesture(
   };
   const onGesture: EventListener = event => {
     if (!event.isTrusted) return;
-    void unlockGameAudio();
-    cleanup();
+    void unlockGameAudio().then(() => {
+      if (areGameAudioRoutesConfirmed()) cleanup();
+    });
   };
 
   for (const type of TRUSTED_GESTURE_TYPES) {

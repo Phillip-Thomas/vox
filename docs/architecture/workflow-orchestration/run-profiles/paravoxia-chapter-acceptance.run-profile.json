@@ -61,6 +61,7 @@
     "validation-report",
     "chapter-mechanical-evidence",
     "chapter-functional-evidence",
+    "chapter-journey-evidence",
     "verification-report",
     "objective-lifecycle-evidence",
     "chapter-boundary-continuity-evidence",
@@ -94,6 +95,7 @@
     "requiredStates": [
       "every_registered_child_scene",
       "manual_play",
+      "continuous_predecessor_target_successor",
       "movie_mode",
       "previous_chapter_boundary",
       "next_chapter_boundary",
@@ -101,6 +103,7 @@
       "chapter_exit",
       "deep_link",
       "resume",
+      "reload_continue_after_each_durable_receipt",
       "replay",
       "pause_focus",
       "reset",
@@ -111,7 +114,10 @@
       "objective_marker_ready",
       "objective_completion_clear",
       "optional_observation",
-      "early_interaction"
+      "early_interaction",
+      "interaction_arbitration_and_no_op",
+      "entity_absence_and_never_reappears",
+      "editable_focus_and_hotkey_isolation"
     ],
     "stressStatesRequired": true,
     "exactAnchorEvidenceRequired": true,

@@ -4,6 +4,7 @@ export const VITALS_PANEL_WIDTH = 222;
 export const VITALS_PANEL_TOP = 14;
 export const VITALS_PANEL_LEFT = 14;
 export const VITALS_PANEL_HEIGHT = 178;
+export const MOBILE_VITALS_COLLAPSED_HEIGHT = 44;
 export const VITALS_INVENTORY_GAP = 12;
 
 export type VitalBarSpec = {
@@ -47,10 +48,12 @@ export function getVitalsPanelPlacement(touch: boolean) {
   return {
     left: touch ? 12 : VITALS_PANEL_LEFT,
     top: VITALS_PANEL_TOP,
-    width: touch ? 216 : VITALS_PANEL_WIDTH
+    width: touch ? 136 : VITALS_PANEL_WIDTH
   } as const;
 }
 
 export function getInventoryTopOffset(touch: boolean): number {
-  return VITALS_PANEL_TOP + VITALS_PANEL_HEIGHT + (touch ? 10 : VITALS_INVENTORY_GAP);
+  return VITALS_PANEL_TOP
+    + (touch ? MOBILE_VITALS_COLLAPSED_HEIGHT : VITALS_PANEL_HEIGHT)
+    + (touch ? 10 : VITALS_INVENTORY_GAP);
 }

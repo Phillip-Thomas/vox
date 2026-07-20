@@ -49,8 +49,10 @@ const StoryCaptions: React.FC = () => {
         objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
         safeAreaInsets
       });
+      root.style.left = `${layout.caption.left}px`;
       root.style.bottom = `${layout.caption.bottom}px`;
       root.style.maxWidth = `${layout.caption.maxWidth}px`;
+      root.dataset.captionPlacement = layout.caption.placement;
       const elapsed = storyNow() - active.shownAt;
       const revealed = Math.min(active.text.length, Math.floor(elapsed / 34));
       el.textContent = active.text.slice(0, revealed);
@@ -88,9 +90,11 @@ const StoryCaptions: React.FC = () => {
     <div
       ref={rootRef}
       aria-live="polite"
+      data-story-caption="true"
+      data-caption-placement={initialLayout.caption.placement}
       style={{
         position: 'fixed',
-        left: '50%',
+        left: initialLayout.caption.left,
         bottom: initialLayout.caption.bottom,
         transform: 'translateX(-50%)',
         zIndex: theme.z.hud + 4,

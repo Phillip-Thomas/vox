@@ -23,9 +23,16 @@ import {
   chooseTidegardenHabitatSite,
   commitTidegardenScannerOverload,
   completeTidegardenSafeRest,
+  findTidegardenRecommendedHabitatSite,
+  getTidegardenChosenHabitatSite,
   getTidegardenSettlementGuidance,
+  hasTidegardenChosenFoundation,
+  isHabitatNight,
+  observeTidegardenAerialSiteSurvey,
   reconcileTidegardenSettlementMilestones,
   recordTidegardenRelationshipObservation,
+  resetTidegardenAerialSurveyRuntimeForTests,
+  TIDEGARDEN_AERIAL_SURVEY_HOLD_SECONDS,
   TIDEGARDEN_RELATIONSHIP_ID,
   TIDEGARDEN_RELATIONSHIP_OBSERVATION_ID,
   TIDEGARDEN_SETTLEMENT_MILESTONES,
@@ -58,6 +65,7 @@ beforeEach(() => {
   resetAccomplishments();
   resetObservations();
   resetEmergentStoryEvents();
+  resetTidegardenAerialSurveyRuntimeForTests();
   resetVitals();
   setFreeBuild(true);
 });
@@ -100,7 +108,10 @@ describe('Tidegarden settlement proof chain', () => {
       coreCarried: false,
       foundationPlaced: false,
       night: false
-    }).id).toBe('craft-core');
+    })).toMatchObject({
+      id: 'craft-core',
+      markerLabel: 'KESTREL FABRICATOR · CRAFT HABITAT CORE'
+    });
 
     expect(getTidegardenSettlementGuidance({
       actorId: ACTOR,
@@ -115,6 +126,54 @@ describe('Tidegarden settlement proof chain', () => {
       foundationPlaced: true,
       night: false
     }).id).toBe('install-core');
+  });
+
+  it('keeps one stable recommended stance and requires the chosen floor face', () => {
+    primeScanner();
+    attendTidegardenRelationship(RELATIONSHIP, 'relationship:recommended-site', ACTOR);
+    const recommendation = findTidegardenRecommendedHabitatSite({
+      worldId: TIDEGARDEN_WORLD_ID,
+      planetSize: 12,
+      playerPosition: PLAYER,
+      terrain: TERRAIN,
+      actorId: ACTOR
+    });
+    expect(recommendation.ok).toBe(true);
+    if (!recommendation.ok) throw new Error('Expected recommended habitat site.');
+    const repeat = findTidegardenRecommendedHabitatSite({
+      worldId: TIDEGARDEN_WORLD_ID,
+      planetSize: 12,
+      playerPosition: PLAYER,
+      terrain: TERRAIN,
+      actorId: ACTOR
+    });
+    expect(repeat.ok).toBe(true);
+    if (!repeat.ok) throw new Error('Expected repeated habitat recommendation.');
+    expect(repeat.approachPosition.toArray()).toEqual(recommendation.approachPosition.toArray());
+
+    expect(chooseTidegardenHabitatSite({
+      worldId: TIDEGARDEN_WORLD_ID,
+      planetSize: 12,
+      playerPosition: recommendation.approachPosition,
+      terrain: TERRAIN,
+      actorId: ACTOR,
+      eventId: 'site:recommended-choice'
+    })).toEqual({ ok: true, idempotent: false });
+    placePiece(LOWER, 2, 'foundation', 'wood', 2, ACTOR);
+    expect(hasTidegardenChosenFoundation(ACTOR)).toBe(false);
+    placePiece(LOWER, 3, 'foundation', 'wood', 2, ACTOR);
+    expect(hasTidegardenChosenFoundation(ACTOR)).toBe(true);
+  });
+
+  it('uses the shared night predicate at every night boundary', () => {
+    // Night now opens the instant the sky darkens (~phase 0.505, just after the
+    // 0.5 sunset) instead of the old 0.55 lockout, and still closes at the dawn wrap.
+    expect(isHabitatNight(0.5)).toBe(false);    // sunset horizon — still dusk-lit
+    expect(isHabitatNight(0.51)).toBe(true);    // sky has gone dark
+    expect(isHabitatNight(0.75)).toBe(true);    // midnight
+    expect(isHabitatNight(0.95)).toBe(true);    // dawn wrap boundary (inclusive)
+    expect(isHabitatNight(0.9501)).toBe(false); // past the wrap — rest closes
+    expect(isHabitatNight(0.05)).toBe(false);   // morning
   });
 
   it('lets direct Attend satisfy comprehension while ledger recording remains optional', () => {
@@ -143,6 +202,48 @@ describe('Tidegarden settlement proof chain', () => {
     expect(getObservation(TIDEGARDEN_RELATIONSHIP_OBSERVATION_ID, ACTOR)).toBeDefined();
     const events = getEmergentStoryEvents();
     expect(events[events.length - 1]?.type).toBe('observation_recorded');
+  });
+
+  it('relocates lift practice into a non-blocking aerial survey above the chosen site', () => {
+    primeScanner();
+    attendTidegardenRelationship(RELATIONSHIP, 'relationship:aerial-survey', ACTOR);
+    expect(chooseTidegardenHabitatSite({
+      worldId: TIDEGARDEN_WORLD_ID,
+      planetSize: 12,
+      playerPosition: PLAYER,
+      terrain: TERRAIN,
+      actorId: ACTOR,
+      eventId: 'site:aerial-survey'
+    })).toEqual({ ok: true, idempotent: false });
+    const site = getTidegardenChosenHabitatSite(ACTOR);
+    if (!site) throw new Error('Expected a chosen Tidegarden site.');
+    const position = site.position.clone().addScaledVector(site.up, 3);
+    const sample = {
+      actorId: ACTOR,
+      runId: 7,
+      worldId: TIDEGARDEN_WORLD_ID,
+      storyBeat: 'ch9-settle' as const,
+      position: position.toArray() as [number, number, number],
+      surfaceUp: site.up.toArray() as [number, number, number],
+      grounded: false,
+      jetpackActive: true,
+      dt: 0.1
+    };
+
+    expect(observeTidegardenAerialSiteSurvey({ ...sample, grounded: true })).toBe(false);
+    expect(observeTidegardenAerialSiteSurvey({ ...sample, storyBeat: 'ch7-reconstruct' })).toBe(false);
+    for (let elapsed = 0; elapsed < TIDEGARDEN_AERIAL_SURVEY_HOLD_SECONDS; elapsed += 0.1) {
+      observeTidegardenAerialSiteSurvey(sample);
+    }
+    expect(hasMilestone(TIDEGARDEN_SETTLEMENT_MILESTONES.aerialSiteSurvey, ACTOR)).toBe(true);
+    expect(getAccomplishment('tidegarden_aerial_site_survey', ACTOR)).toBeDefined();
+    // The relocated rehearsal is exploration, never another settlement gate.
+    expect(getTidegardenSettlementGuidance({
+      actorId: ACTOR,
+      coreCarried: false,
+      foundationPlaced: false,
+      night: false
+    }).id).toBe('craft-core');
   });
 
   it('rejects wet/unprepared choices and only activates on the chosen valid foundation', () => {

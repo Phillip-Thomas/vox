@@ -25,22 +25,38 @@ describe('resolveBuildTarget', () => {
     expect(t!.valid).toBe(true);
   });
 
-  it('wall snaps to the foundation cell vertical face you point at', () => {
+  it('a full wall snaps to the foundation cell vertical face you point at', () => {
     placePiece(CELL, 3, 'foundation', 'wood');
     const point = worldOf(CELL).add(new THREE.Vector3(1, 0, 0)); // toward +X edge
     const hit: BuildHit = { cell: CELL, point, isPanel: true, panelType: 'foundation', panelFace: 3, normalIdx: -1 };
-    const t = resolveBuildTarget(hit, 'wall', UP);
+    const t = resolveBuildTarget(hit, 'tall_wall', UP);
     expect(t!.cell).toEqual(CELL);
     expect(t!.face).toBe(0); // +X
     expect(t!.valid).toBe(true);
   });
 
-  it('a wall hit STACKS a wall one cell up on the same face (the requested fix)', () => {
+  it('a 1x1 half-wall hit stacks the next panel one cell up on the same face', () => {
     const hit: BuildHit = { cell: CELL, point: worldOf(CELL), isPanel: true, panelType: 'wall', panelFace: 0, normalIdx: -1 };
     const t = resolveBuildTarget(hit, 'wall', UP);
     expect(t!.cell).toEqual([0, 31, 0]); // one cell up
     expect(t!.face).toBe(0);             // same face
     expect(t!.valid).toBe(true);
+  });
+
+  it('stacks above the upper half when either half of a 1x2 wall is targeted', () => {
+    placePiece(CELL, 0, 'tall_wall', 'wood', 2);
+    const lowerHit: BuildHit = {
+      cell: CELL, point: worldOf(CELL), isPanel: true,
+      panelType: 'tall_wall', panelFace: 0, normalIdx: -1
+    };
+    const upperCell: [number, number, number] = [0, 31, 0];
+    const upperHit: BuildHit = {
+      cell: upperCell, point: worldOf(upperCell), isPanel: true,
+      panelType: 'tall_wall', panelFace: 0, normalIdx: -1
+    };
+
+    expect(resolveBuildTarget(lowerHit, 'tall_wall', UP)?.cell).toEqual([0, 32, 0]);
+    expect(resolveBuildTarget(upperHit, 'tall_wall', UP)?.cell).toEqual([0, 32, 0]);
   });
 
   it('ceiling caps a foundation cell on its up face', () => {

@@ -166,6 +166,16 @@ cinematic frame that hitches at its emotional turn fails, even if the still is
 beautiful. Budget and measure CPU, GPU, draw calls, shader programs, memory,
 DPR, and effect fallbacks before approval.
 
+Critical anchors have a stricter invariant: the two-second window on either
+side of a player verb or story handback may reveal prewarmed objects and change
+uniforms, intensity, opacity, scale, or visibility, but it may not change scene
+light cardinality or first-use a shader program, geometry, material, texture, or
+render target. Practical glow at an anchor uses prewarmed additive/emissive
+geometry; persistent lights vary intensity without mounting or unmounting. Cold
+HIGH and lowest-tier browser evidence must show zero context loss, zero graphics
+diagnostics, no new shader programs in the anchor window, and no frame over the
+chapter's cold-activation budget.
+
 ## Lens and camera grammar
 
 Current perspective anchors:

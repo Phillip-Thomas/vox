@@ -14,13 +14,19 @@ import {
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getObservation, subscribeObservations } from '../../game/systems/observationLedger.ts';
 import { getMilestones, hasMilestone, subscribeProgression } from '../../game/systems/progressionSystem.ts';
-import { getPieces } from '../../game/systems/structureSystem.ts';
+import {
+  getPieces,
+  getStructureVersion,
+  subscribeStructures
+} from '../../game/systems/structureSystem.ts';
 import { restoreHabitatForWorld } from '../../game/systems/persistence.ts';
 import { getCurrentDayPhase } from '../../game/worldClock.ts';
 import { getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import { getSpaceFlightSnapshot } from '../../state/spaceFlight.ts';
 import { voxelSystem } from '../../utils/efficientVoxelSystem.ts';
 import { getWorldGen } from '../../utils/worldGenCache.ts';
+import { findValidSpawnSite } from '../../utils/spawnValidation.ts';
+import { dominantFaceForPosition, FACE_NORMALS } from '../../utils/surfaceControls.ts';
 import { registerStoryInteraction } from '../storyInteractions.ts';
 import {
   activateTidegardenHabitatCore,
@@ -32,6 +38,7 @@ import {
   commitTidegardenScannerOverload,
   completeTidegardenSafeRest,
   createTidegardenRelationshipProof,
+  findTidegardenRecommendedHabitatSite,
   getTidegardenChosenHabitatSite,
   reconcileTidegardenSettlementMilestones,
   recordTidegardenRelationshipObservation,
@@ -40,23 +47,28 @@ import {
   surveyTidegardenHabitatSite,
   validateTidegardenHabitatSite
 } from '../tidegardenSettlement.ts';
+import { publishTidegardenSettlementTargets } from '../tidegardenSettlementTargets.ts';
 import { TIDEGARDEN_WORLD_ID } from '../tidegardenRoute.ts';
 import { registerEmergentMovieSettlementBinding } from '../emergentMovieRuntime.ts';
 import { useStoryState } from '../storyState.ts';
+import {
+  TIDEGARDEN_SITE_RING_ROTATION_X,
+  tidegardenCoreVisualPhase,
+  tidegardenInteriorGlowOpacity
+} from './tidegardenSettlementVisualPolicy.ts';
 import {
   claimKestrelFoundingReserve,
   KESTREL_FOUNDING_RESERVE_MILESTONE
 } from '../kestrelFoundingReserve.ts';
 
 const RELATIONSHIP_DISTANCE = 5.2;
+const RECOMMENDED_SITE_DISTANCE = 3.2;
+const RECOMMENDED_SITE_OFFSET = 10;
+const SCANNER_VIEW_DISTANCE = 14;
+const SCANNER_VIEW_DOT = 0.28;
 const HABITAT_STATION_DISTANCE = 7;
 const STATION_SOURCE_ID = 'story:tidegarden:habitat-core';
 const CARRIED_ASSEMBLER_SOURCE_ID = 'story:tidegarden:carried-assembler';
-
-/** Story director target for the landed Kestrel during the settlement loop. */
-export const tidegardenSettlementHandle: { shipPosition: THREE.Vector3 | null } = {
-  shipPosition: null
-};
 
 interface TidegardenSettlementWorldProps {
   planetSize: number;
@@ -81,6 +93,11 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     subscribeHabitats,
     getHabitatRevision,
     getHabitatRevision
+  );
+  const structureRevision = useSyncExternalStore(
+    subscribeStructures,
+    getStructureVersion,
+    getStructureVersion
   );
   const relationshipAttended = useSyncExternalStore(
     subscribeProgression,
@@ -163,18 +180,87 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     () => state ? new THREE.Vector3(...state.core.up) : new THREE.Vector3(0, 1, 0),
     [state]
   );
-  const coreQuaternion = useMemo(
-    () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), coreUp),
-    [coreUp]
+  const coreApproachPosition = useMemo(() => {
+    if (!corePosition) return null;
+    return findValidSpawnSite(liveTerrain, planetSize, corePosition, {
+      kind: 'player',
+      maxSearchRadius: 0
+    })?.position ?? corePosition.clone();
+  }, [corePosition, liveTerrain, planetSize]);
+  const chosenApproachPosition = useMemo(() => {
+    if (!chosenSite) return null;
+    return findValidSpawnSite(liveTerrain, planetSize, chosenSite.position, {
+      kind: 'player',
+      maxSearchRadius: 0
+    })?.position ?? chosenSite.position.clone();
+  }, [chosenSite, liveTerrain, planetSize]);
+  const recommendedSearchOrigin = useMemo(
+    () => relationship
+      ? createRecommendedSiteSearchOrigin(relationship.position, shipPosition)
+      : null,
+    [relationship, shipPosition]
   );
-  const coreLight = useRef<THREE.PointLight>(null);
+  const recommendedSite = useMemo(() => {
+    if (!relationshipAttended || chosenSite || !recommendedSearchOrigin) return null;
+    const result = findTidegardenRecommendedHabitatSite({
+      worldId: commandContext.world.worldId,
+      planetSize,
+      playerPosition: recommendedSearchOrigin,
+      terrain: liveTerrain,
+      actorId: commandContext.actorId,
+      pieces: getPieces()
+    });
+    return result.ok ? result : null;
+  }, [
+    chosenSite,
+    commandContext.actorId,
+    commandContext.world.worldId,
+    liveTerrain,
+    planetSize,
+    recommendedSearchOrigin,
+    relationshipAttended,
+    structureRevision
+  ]);
+  const siteMarkerPosition = chosenSite?.position
+    ?? recommendedSite?.proof.position
+    ?? relationship?.position
+    ?? null;
+  const siteMarkerUp = chosenSite?.up
+    ?? recommendedSite?.proof.up
+    ?? (relationship ? FACE_NORMALS[dominantFaceForPosition(relationship.position)] : null);
+  const siteMarkerMode: HabitatSiteMarkerMode = corePosition
+    ? 'hidden'
+    : chosenSite
+      ? 'chosen'
+      : recommendedSite && relationshipAttended
+        ? 'recommended'
+        : 'hidden';
+  const coreVisualPosition = corePosition
+    ?? chosenSite?.position
+    ?? recommendedSite?.proof.position
+    ?? relationship?.position
+    ?? null;
+  const coreVisualUp = corePosition
+    ? coreUp
+    : chosenSite?.up
+      ?? recommendedSite?.proof.up
+      ?? (relationship ? FACE_NORMALS[dominantFaceForPosition(relationship.position)] : null);
   const lastStationAccess = useRef(false);
   const lastCarriedAssemblerAccess = useRef(false);
 
-  useEffect(() => {
-    tidegardenSettlementHandle.shipPosition = shipPosition ? shipPosition.clone() : null;
-    return () => { tidegardenSettlementHandle.shipPosition = null; };
-  }, [shipPosition]);
+  useEffect(() => publishTidegardenSettlementTargets({
+    shipPosition,
+    relationshipPosition: relationship?.position ?? null,
+    recommendedSitePosition: recommendedSite?.approachPosition ?? null,
+    chosenSitePosition: chosenApproachPosition,
+    corePosition: coreApproachPosition
+  }), [
+    chosenApproachPosition,
+    coreApproachPosition,
+    recommendedSite,
+    relationship,
+    shipPosition
+  ]);
 
   useEffect(() => {
     restoreHabitatForWorld(commandContext.world);
@@ -227,19 +313,6 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
             }
           };
         }
-        if (!relationshipRecorded) {
-          return {
-            id: 'story-tidegarden-record',
-            verb: 'Record Observation (Optional)',
-            perform: () => {
-              recordTidegardenRelationshipObservation(
-                relationship,
-                `story:tidegarden:${actorId}:relationship-recorded`,
-                actorId
-              );
-            }
-          };
-        }
       }
 
       if (relationshipAttended && !chosenSite) {
@@ -251,7 +324,11 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
           actorId,
           pieces: getPieces()
         });
-        if (site.ok) {
+        const nearRecommendedSite = Boolean(recommendedSite
+          && playerPosition.distanceTo(recommendedSite.approachPosition) <= RECOMMENDED_SITE_DISTANCE);
+        const clearOfOptionalRelationship = !relationship
+          || playerPosition.distanceTo(relationship.position) > RELATIONSHIP_DISTANCE;
+        if (site.ok && (nearRecommendedSite || clearOfOptionalRelationship)) {
           return {
             id: 'story-tidegarden-choose-site',
             verb: 'Choose Habitat Site',
@@ -336,6 +413,23 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
           }
         };
       }
+      // Optional interpretation never masks a required site/core/shelter/rest
+      // verb. It remains available at the waterline whenever no mandatory
+      // interaction is valid at the player's current position.
+      if (relationship && relationshipAttended && !relationshipRecorded
+        && playerPosition.distanceTo(relationship.position) <= RELATIONSHIP_DISTANCE) {
+        return {
+          id: 'story-tidegarden-record',
+          verb: 'Record Observation (Optional)',
+          perform: () => {
+            recordTidegardenRelationshipObservation(
+              relationship,
+              `story:tidegarden:${actorId}:relationship-recorded`,
+              actorId
+            );
+          }
+        };
+      }
       return null;
     });
   }, [
@@ -344,12 +438,13 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     chosenSite,
     liveTerrain,
     planetSize,
+    recommendedSite,
     relationship,
     relationshipAttended,
     relationshipRecorded
   ]);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     const playerPosition = getPlayerWorldPosition();
     const nearCore = Boolean(corePosition
       && playerPosition.distanceTo(corePosition) <= HABITAT_STATION_DISTANCE);
@@ -375,12 +470,6 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
         clearStationAccessSource(CARRIED_ASSEMBLER_SOURCE_ID);
       }
     }
-    if (coreLight.current) {
-      const pulse = 0.5 + Math.sin(clock.elapsedTime * 1.45) * 0.5;
-      coreLight.current.intensity = state?.shelterCertification
-        ? 1.1 + pulse * 0.3
-        : 0.55 + pulse * 0.35;
-    }
   });
 
   useEffect(() => () => {
@@ -396,47 +485,28 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
           attended={relationshipAttended}
         />
       )}
-      {relationship && story.active && story.beat === 'ch9-settle' && (
+      {relationship && story.active
+        && (story.beat === 'ch9-settle' || story.beat === 'ch9-hearth') && (
         <TidegardenScannerField
           relationshipPosition={relationship.position}
           observed={scannerOverloadObserved}
           actorId={commandContext.actorId}
         />
       )}
-      {chosenSite && !corePosition && (
-        <ChosenSiteMarker position={chosenSite.position} up={chosenSite.up} />
+      {siteMarkerPosition && siteMarkerUp && (
+        <HabitatSiteMarker
+          position={siteMarkerPosition}
+          up={siteMarkerUp}
+          mode={siteMarkerMode}
+        />
       )}
-      {corePosition && (
-        <group position={corePosition} quaternion={coreQuaternion}>
-          <mesh position={[0, 0.38, 0]}>
-            <cylinderGeometry args={[0.38, 0.48, 0.72, 8]} />
-            <meshStandardMaterial
-              color={state?.shelterCertification ? '#e2c37b' : '#4a8e92'}
-              emissive={state?.shelterCertification ? '#d7a84c' : '#2b9ca5'}
-              emissiveIntensity={state?.shelterCertification ? 0.72 : 0.45}
-              roughness={0.38}
-              metalness={0.62}
-            />
-          </mesh>
-          <mesh position={[0, 0.82, 0]} rotation={[0, Math.PI / 4, 0]}>
-            <octahedronGeometry args={[0.22, 0]} />
-            <meshStandardMaterial
-              color="#dff9ef"
-              emissive="#64d7cb"
-              emissiveIntensity={1.15}
-              roughness={0.16}
-              metalness={0.35}
-            />
-          </mesh>
-          <pointLight
-            ref={coreLight}
-            color={state?.shelterCertification ? '#ffd58a' : '#79e4da'}
-            intensity={0.8}
-            distance={6}
-            decay={2}
-            position={[0, 1.05, 0]}
-          />
-        </group>
+      {coreVisualPosition && coreVisualUp && (
+        <HabitatCoreVisual
+          position={coreVisualPosition}
+          up={coreVisualUp}
+          active={Boolean(corePosition)}
+          certified={Boolean(state?.shelterCertification)}
+        />
       )}
     </>
   );
@@ -455,14 +525,32 @@ const TidegardenScannerField: React.FC<{
 }> = ({ relationshipPosition, observed, actorId }) => {
   const renderedFrames = useRef(0);
   const visibleFor = useRef(0);
-  const up = useMemo(() => relationshipPosition.clone().normalize(), [relationshipPosition]);
+  const cameraPosition = useMemo(() => new THREE.Vector3(), []);
+  const cameraForward = useMemo(() => new THREE.Vector3(), []);
+  const cameraToRelationship = useMemo(() => new THREE.Vector3(), []);
+  const up = useMemo(
+    () => FACE_NORMALS[dominantFaceForPosition(relationshipPosition)].clone(),
+    [relationshipPosition]
+  );
   const quaternion = useMemo(
     () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up),
     [up]
   );
 
-  useFrame((_state, delta) => {
+  useFrame(({ camera }, delta) => {
     if (observed) return;
+    camera.getWorldPosition(cameraPosition);
+    camera.getWorldDirection(cameraForward);
+    cameraToRelationship.copy(relationshipPosition).sub(cameraPosition);
+    const distanceSquared = cameraToRelationship.lengthSq();
+    const actuallyViewingField = distanceSquared <= SCANNER_VIEW_DISTANCE ** 2
+      && distanceSquared > 1e-6
+      && cameraForward.dot(cameraToRelationship.normalize()) >= SCANNER_VIEW_DOT;
+    if (!actuallyViewingField) {
+      renderedFrames.current = 0;
+      visibleFor.current = 0;
+      return;
+    }
     renderedFrames.current += 1;
     visibleFor.current += Math.min(0.1, Math.max(0, delta));
     if (renderedFrames.current < 2 || visibleFor.current < 1.25) return;
@@ -474,17 +562,19 @@ const TidegardenScannerField: React.FC<{
     }, `story:tidegarden:${actorId}:scanner-overload`, actorId);
   });
 
-  if (observed) return null;
   return (
-    <group position={relationshipPosition} quaternion={quaternion}>
+    <group position={relationshipPosition} quaternion={quaternion} visible={!observed}>
       {SCANNER_SIGNAL_IDS.map((id, index) => (
-        <ScannerRelationshipSignal key={id} index={index} />
+        <ScannerRelationshipSignal key={id} index={index} visible={!observed} />
       ))}
     </group>
   );
 };
 
-const ScannerRelationshipSignal: React.FC<{ index: number }> = ({ index }) => {
+const ScannerRelationshipSignal: React.FC<{
+  index: number;
+  visible: boolean;
+}> = ({ index, visible }) => {
   const arm = 1.35 + (index % 3) * 0.58;
   const angle = (index / SCANNER_SIGNAL_IDS.length) * Math.PI * 2;
   const x = Math.cos(angle) * arm;
@@ -492,44 +582,196 @@ const ScannerRelationshipSignal: React.FC<{ index: number }> = ({ index }) => {
   const kind = Math.floor(index / 3);
   const color = kind === 0 ? '#62e5d0' : kind === 1 ? '#e4cd73' : '#d28df0';
   return (
-    <group position={[x, 0.22 + (index % 2) * 0.16, z]}>
+    <group position={[x, 0.3 + (index % 2) * 0.16, z]}>
       <mesh>
         {kind === 0
           ? <sphereGeometry args={[0.11, 8, 6]} />
           : kind === 1
             ? <boxGeometry args={[0.18, 0.18, 0.18]} />
             : <coneGeometry args={[0.13, 0.25, 6]} />}
-        <meshBasicMaterial color={color} transparent opacity={0.84} depthWrite={false} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={visible ? 0.84 : 0}
+          depthWrite={false}
+          toneMapped={false}
+        />
       </mesh>
-      <mesh position={[0, 0.42, 0]}>
-        <cylinderGeometry args={[0.012, 0.012, 0.72, 5]} />
-        <meshBasicMaterial color={color} transparent opacity={0.48} depthWrite={false} />
+      <mesh position={[0, 0.78, 0]}>
+        <cylinderGeometry args={[0.012, 0.024, 1.38, 5]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={visible ? 0.54 : 0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
       </mesh>
-      <mesh position={[0.22 * Math.cos(angle + 0.8), 0.76, 0.22 * Math.sin(angle + 0.8)]}>
-        <octahedronGeometry args={[0.07, 0]} />
-        <meshBasicMaterial color={color} transparent opacity={0.74} depthWrite={false} />
+      <mesh position={[0.22 * Math.cos(angle + 0.8), 1.5, 0.22 * Math.sin(angle + 0.8)]}>
+        <octahedronGeometry args={[0.095, 0]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={visible ? 0.82 : 0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
       </mesh>
     </group>
   );
 };
 
-const ChosenSiteMarker: React.FC<{
+type HabitatSiteMarkerMode = 'hidden' | 'recommended' | 'chosen';
+
+const HabitatSiteMarker: React.FC<{
   position: THREE.Vector3;
   up: THREE.Vector3;
-}> = ({ position, up }) => {
+  mode: HabitatSiteMarkerMode;
+}> = ({ position, up, mode }) => {
   const quaternion = useMemo(
     () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up),
     [up]
   );
+  const visible = mode !== 'hidden';
+  const chosen = mode === 'chosen';
   return (
     <group position={position} quaternion={quaternion}>
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.035, 0]}>
-        <ringGeometry args={[0.5, 0.62, 4]} />
-        <meshBasicMaterial color="#f0cb78" transparent opacity={0.64} depthWrite={false} />
+      <mesh
+        frustumCulled={false}
+        rotation={[TIDEGARDEN_SITE_RING_ROTATION_X, 0, 0]}
+        position={[0, 0.035, 0]}
+      >
+        <ringGeometry args={[0.62, 0.76, 12]} />
+        <meshBasicMaterial
+          color={chosen ? '#f0cb78' : '#83f0d3'}
+          transparent
+          opacity={visible ? (chosen ? 0.64 : 0.5) : 0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
       </mesh>
-      <mesh position={[0, 0.38, 0]}>
+      <mesh frustumCulled={false} position={[0, 0.38, 0]}>
         <octahedronGeometry args={[0.1, 0]} />
-        <meshBasicMaterial color="#f6dda3" transparent opacity={0.82} depthWrite={false} />
+        <meshBasicMaterial
+          color={chosen ? '#f6dda3' : '#b8fff0'}
+          transparent
+          opacity={visible ? 0.82 : 0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
+      </mesh>
+      <mesh frustumCulled={false} position={[0, 0.78, 0]}>
+        <coneGeometry args={[0.14, 1.35, 6, 1, true]} />
+        <meshBasicMaterial
+          color={chosen ? '#f6dda3' : '#83f0d3'}
+          transparent
+          opacity={visible ? (chosen ? 0.18 : 0.24) : 0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+};
+
+const HabitatCoreVisual: React.FC<{
+  position: THREE.Vector3;
+  up: THREE.Vector3;
+  active: boolean;
+  certified: boolean;
+}> = ({ position, up, active, certified }) => {
+  const group = useRef<THREE.Group>(null);
+  const glow = useRef<THREE.MeshBasicMaterial>(null);
+  const interiorGlow = useRef<THREE.MeshBasicMaterial>(null);
+  const crown = useRef<THREE.Mesh>(null);
+  const cameraPosition = useMemo(() => new THREE.Vector3(), []);
+  const coreWorldPosition = useMemo(() => new THREE.Vector3(), []);
+  const interiorWorldPosition = useMemo(() => new THREE.Vector3(), []);
+  const visualPhase = tidegardenCoreVisualPhase(active);
+  const revealed = visualPhase === 'revealed';
+  const quaternion = useMemo(
+    () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), up),
+    [up]
+  );
+  useFrame(({ camera, clock }) => {
+    const pulse = 0.5 + Math.sin(clock.elapsedTime * 1.45) * 0.5;
+    if (glow.current) glow.current.opacity = revealed
+      ? (certified ? 0.2 : 0.12) + pulse * (certified ? 0.12 : 0.08)
+      : 0;
+    if (crown.current) {
+      const scale = revealed ? 0.94 + pulse * 0.1 : 0.001;
+      crown.current.scale.setScalar(scale);
+    }
+    if (interiorGlow.current && group.current) {
+      camera.getWorldPosition(cameraPosition);
+      group.current.getWorldPosition(coreWorldPosition);
+      interiorWorldPosition.copy(coreWorldPosition).addScaledVector(up, 1.2);
+      interiorGlow.current.opacity = tidegardenInteriorGlowOpacity({
+        active: revealed,
+        certified,
+        distanceFromGlowCenter: cameraPosition.distanceTo(interiorWorldPosition),
+        pulse
+      });
+    }
+  });
+  return (
+    <group ref={group} position={position} quaternion={quaternion}>
+      <mesh frustumCulled={false} position={[0, 0.38, 0]} scale={revealed ? 1 : 0.001}>
+        <cylinderGeometry args={[0.38, 0.48, 0.72, 8]} />
+        <meshStandardMaterial
+          color={certified ? '#e2c37b' : '#4a8e92'}
+          emissive={certified ? '#d7a84c' : '#2b9ca5'}
+          emissiveIntensity={certified ? 0.72 : 0.45}
+          roughness={0.38}
+          metalness={0.62}
+        />
+      </mesh>
+      <mesh
+        ref={crown}
+        frustumCulled={false}
+        position={[0, 0.82, 0]}
+        rotation={[0, Math.PI / 4, 0]}
+      >
+        <octahedronGeometry args={[0.22, 0]} />
+        <meshStandardMaterial
+          color="#dff9ef"
+          emissive="#64d7cb"
+          emissiveIntensity={1.15}
+          roughness={0.16}
+          metalness={0.35}
+        />
+      </mesh>
+      <mesh frustumCulled={false} position={[0, 0.82, 0]} scale={revealed ? 1 : 0.001}>
+        <sphereGeometry args={[0.52, 12, 8]} />
+        <meshBasicMaterial
+          ref={glow}
+          color={certified ? '#ffd58a' : '#79e4da'}
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
+      </mesh>
+      <mesh frustumCulled={false} renderOrder={10} position={[0, 1.2, 0]}>
+        <sphereGeometry args={[3.4, 16, 10]} />
+        <meshBasicMaterial
+          ref={interiorGlow}
+          color="#f2a85e"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          depthTest={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+          side={THREE.BackSide}
+        />
       </mesh>
     </group>
   );
@@ -557,14 +799,37 @@ const RelationshipMarker: React.FC<{
       <cylinderGeometry args={[0.025, 0.055, 0.86, 7]} />
       <meshStandardMaterial color="#7dc6a0" roughness={0.82} />
     </mesh>
-    <pointLight
-      color="#60d8bc"
-      intensity={attended ? 0.12 : 0.32}
-      distance={3.4}
-      decay={2}
-      position={[0, 0.5, 0]}
-    />
+    <mesh frustumCulled={false} position={[0, 0.5, 0]}>
+      <sphereGeometry args={[0.46, 12, 8]} />
+      <meshBasicMaterial
+        color="#60d8bc"
+        transparent
+        opacity={attended ? 0.05 : 0.14}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        toneMapped={false}
+      />
+    </mesh>
   </group>
 );
+
+function createRecommendedSiteSearchOrigin(
+  relationshipPosition: THREE.Vector3,
+  shipPosition: THREE.Vector3 | null
+): THREE.Vector3 {
+  const origin = (shipPosition ?? relationshipPosition).clone();
+  const up = FACE_NORMALS[dominantFaceForPosition(origin)];
+  const away = shipPosition
+    ? shipPosition.clone().sub(relationshipPosition)
+    : new THREE.Vector3();
+  away.addScaledVector(up, -away.dot(up));
+  if (away.lengthSq() < 1e-6) {
+    const axis = Math.abs(up.y) < 0.9
+      ? new THREE.Vector3(0, 1, 0)
+      : new THREE.Vector3(1, 0, 0);
+    away.crossVectors(axis, up);
+  }
+  return origin.addScaledVector(away.normalize(), RECOMMENDED_SITE_OFFSET);
+}
 
 export default TidegardenSettlementWorld;

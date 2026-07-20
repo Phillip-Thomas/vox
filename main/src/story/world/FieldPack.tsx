@@ -32,6 +32,10 @@ import {
   fieldPackCorePulseAt,
   fieldPackSegmentHeightAt
 } from '../authoredPhysicalAnimation.ts';
+import {
+  clearJourneyEntityState,
+  publishJourneyEntityState
+} from '../journeyRuntime.ts';
 
 const INTERACT_DISTANCE = 3.8;
 
@@ -79,6 +83,24 @@ const FieldPack: React.FC<FieldPackProps> = ({
       ? new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), pose.up)
       : new THREE.Quaternion(),
     [pose]
+  );
+
+  useEffect(() => {
+    const present = Boolean(pose && dropped);
+    publishJourneyEntityState('prop:field-pack', {
+      mounted: present,
+      visible: present,
+      position: pose ? [pose.position.x, pose.position.y, pose.position.z] : null,
+      phase: !present ? 'absent' : kitAvailable ? 'kit-available' : repaired ? 'repaired' : 'kit-recovered',
+      source: 'FieldPack'
+    });
+  }, [dropped, kitAvailable, pose, repaired]);
+
+  useEffect(
+    () => () => {
+      clearJourneyEntityState('prop:field-pack', 'FieldPack');
+    },
+    []
   );
 
   useEffect(() => {

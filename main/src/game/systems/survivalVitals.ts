@@ -1,5 +1,6 @@
 import { getLocalActorId, type ActorId } from '../playerActors.ts';
 import type { PlanetThermalBehavior } from '../PlanetProfile.ts';
+import { updateNightDwell, isDarkDaylight, resetNightDwell } from '../../utils/nightState.ts';
 
 // --- Survival vitals (Primitive era) -----------------------------------------
 //
@@ -134,7 +135,13 @@ export function tickVitals(
 
   if (environment) {
     const daylight = clamp(environment.daylight);
-    const atNight = daylight < 0.2;
+    // Shared night predicate: the live LOCAL daylight sample fed through the dwell
+    // tracker (a momentary shadow can't flip the world to night). Only the local
+    // actor drives the world-night singleton; remotes read it instantaneously.
+    const isLocal = actorKey(actorId) === getLocalActorId();
+    const atNight = isLocal
+      ? updateNightDwell(daylight, dt)
+      : isDarkDaylight(daylight);
     const status: ThermalStatus = !environment.warmthEnabled
       ? 'stable'
       : environment.nearFire
@@ -262,6 +269,7 @@ export function resetVitals(actorId?: ActorId): void {
 
 export function resetAllVitals(): void {
   actors.clear();
+  resetNightDwell();
   localEnvironment = {
     daylight: 1,
     sheltered: false,

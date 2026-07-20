@@ -25,14 +25,12 @@ export const hifiWreckHandle: {
   position: THREE.Vector3 | null;
   workstationPosition: THREE.Vector3 | null;
   diagnosisTarget: THREE.Vector3 | null;
-  hoverSocketPosition: THREE.Vector3 | null;
   hatchTarget: THREE.Vector3 | null;
   converted: boolean;
 } = {
   position: null,
   workstationPosition: null,
   diagnosisTarget: null,
-  hoverSocketPosition: null,
   hatchTarget: null,
   converted: false
 };

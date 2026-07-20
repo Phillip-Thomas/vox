@@ -21,8 +21,10 @@ This directory is the durable production record; chat is not an authority.
 6. Resolve material dissent, freeze `scene-contract.json`, and collect all
    three signatures in `director-signoffs.json` for the same revision and
    exact `sha256sum scene-contract.json` value.
-7. Implement through one integrator, capture audiovisual and objective-lifecycle
-   proof in `objective-lifecycle-evidence.json`, then run independent domain,
+7. Implement through one integrator, capture continuous audiovisual and
+   objective-lifecycle proof, then execute every focused escaped-defect journey
+   contract (headed trusted input when a focused scenario exists) and preserve
+   it as `chapter-journey-evidence.json`. Run independent domain,
    Player Experience, and blind reviews before the Cohesion Judge.
 8. For flagship, release-candidate, exception, or explicitly headed work,
    record human taste separately from the publish decision. Otherwise remove
@@ -64,6 +66,7 @@ it never means automatically published.
 | `raw-audiovisual-evidence.json` and `evidence/` media | Mechanical Verifier; blind-review input |
 | domain audits, `ux-audit.md`, and blind report | Fresh independent reviewers |
 | `objective-lifecycle-evidence.json` | Mechanical Verifier; objective lifecycle, marker parity, feedback, reset, and variant evidence |
+| `chapter-journey-evidence.json` | Mechanical Verifier; focused interaction, entity, reload, or input regression proof bound to the exact `main/chapter-journey-contract.json` SHA and source revision; explicit no-focused-scenario disposition when none apply |
 | `critic-report.md`, `cohesion-judge.md` | Independent moderators/judge |
 | `human-decision.json` | Human Approver |
 | scorecard, quality report, summary, lessons | Judge, validator, recorder |
@@ -88,6 +91,9 @@ headed real-GPU human taste, a weighted score of at least 4.80/5, and no
 category below 4.50. Normal scene work requires 4.75/5 and a 4.30 floor.
 The final gate uses `ffprobe` to authenticate declared video, image, and audio
 streams; the smoke fixture also uses `ffmpeg` to generate real test media.
+It also rejects stale-contract, incomplete, failed, unavailable, or falsely
+human-labelled focused journey evidence and prevents diagnostic direct-entry
+evidence from being misrepresented as continuity proof.
 
 ## Safety
 

@@ -89,10 +89,10 @@ export function resolveChapter7ReconstructionScoreVariant(
     case 'lift_online':
       return facts.firstHoverComplete ? 'hover' : 'lift';
     case 'flight_ready':
-      // A save may contain a later repair stage but lack the embodied receipts.
-      // Reconstruct the last legal musical state instead of implying unseen acts.
-      if (!facts.firstHoverComplete) return 'lift';
-      if (!facts.groundedReturnComplete) return 'hover';
+      // Flight readiness is the ordered repair transaction. The former origin
+      // hover/grounded-return rehearsal is no longer on its critical path; an
+      // optional Tidegarden aerial survey may happen later without retarding
+      // this reconstruction phrase.
       return facts.calibrationState === 'none' ? 'route' : 'calibration';
     default:
       return 'diagnosis';

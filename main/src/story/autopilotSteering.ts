@@ -19,6 +19,7 @@ const _up = new THREE.Vector3();
 const _direction = new THREE.Vector3();
 const _forward = new THREE.Vector3();
 const _right = new THREE.Vector3();
+const _crossFaceEdgeAxis = new THREE.Vector3();
 const FACE_ORDER: readonly CubeFace[] = ['right', 'left', 'front', 'back', 'top', 'bottom'];
 
 /** The physics-owned face. Position is ambiguous at an exact cube seam; local
@@ -91,7 +92,10 @@ export interface CrossFaceSurfaceLegInput {
   lookForward: THREE.Vector3,
   planetRadius: number,
   edgeEntryRadius: number,
-  cornerInset: number
+  cornerInset: number,
+  /** Keep an already-selected intermediate face stable for an antipodal goal.
+   * Callers must clear the hint after the current or goal face changes. */
+  preferredNextFace?: CubeFace | null
 }
 
 export interface CrossFaceApproachCandidatesInput {
@@ -145,7 +149,10 @@ export function crossFaceApproachCandidates(
 }
 
 /** Plan one dry, fixed cube-edge leg above the same-face terrain A* layer. */
-export function planCrossFaceSurfaceLeg(input: CrossFaceSurfaceLegInput): CrossFaceSurfaceLeg | null {
+export function planCrossFaceSurfaceLeg(
+  input: CrossFaceSurfaceLegInput,
+  out?: CrossFaceSurfaceLeg
+): CrossFaceSurfaceLeg | null {
   const {
     player,
     goal,
@@ -163,26 +170,38 @@ export function planCrossFaceSurfaceLeg(input: CrossFaceSurfaceLegInput): CrossF
   const opposite = currentUp.dot(goalUp) < -0.5;
   let nextFace = goalFace;
   if (opposite) {
-    let bestCost = Infinity;
-    let bestLook = -Infinity;
-    for (const candidate of FACE_ORDER) {
-      const candidateUp = FACE_NORMALS[candidate];
-      if (Math.abs(currentUp.dot(candidateUp)) > 0.5) continue;
-      const edgeAxis = new THREE.Vector3().crossVectors(currentUp, candidateUp).normalize();
-      const longitudinal = 4 * planetRadius - player.dot(candidateUp) - goal.dot(candidateUp);
-      const lateral = goal.dot(edgeAxis) - player.dot(edgeAxis);
-      const cost = longitudinal * longitudinal + lateral * lateral;
-      const look = lookForward.dot(candidateUp);
-      if (cost < bestCost - 1e-6 || (Math.abs(cost - bestCost) <= 1e-6 && look > bestLook + 1e-6)) {
-        bestCost = cost;
-        bestLook = look;
-        nextFace = candidate;
+    const preferredUp = input.preferredNextFace
+      ? FACE_NORMALS[input.preferredNextFace]
+      : null;
+    const preferredIsValid = Boolean(
+      preferredUp
+      && Math.abs(currentUp.dot(preferredUp)) < 0.5
+      && Math.abs(goalUp.dot(preferredUp)) < 0.5
+    );
+    if (preferredIsValid) {
+      nextFace = input.preferredNextFace!;
+    } else {
+      let bestCost = Infinity;
+      let bestLook = -Infinity;
+      for (const candidate of FACE_ORDER) {
+        const candidateUp = FACE_NORMALS[candidate];
+        if (Math.abs(currentUp.dot(candidateUp)) > 0.5) continue;
+        const edgeAxis = _crossFaceEdgeAxis.crossVectors(currentUp, candidateUp).normalize();
+        const longitudinal = 4 * planetRadius - player.dot(candidateUp) - goal.dot(candidateUp);
+        const lateral = goal.dot(edgeAxis) - player.dot(edgeAxis);
+        const cost = longitudinal * longitudinal + lateral * lateral;
+        const look = lookForward.dot(candidateUp);
+        if (cost < bestCost - 1e-6 || (Math.abs(cost - bestCost) <= 1e-6 && look > bestLook + 1e-6)) {
+          bestCost = cost;
+          bestLook = look;
+          nextFace = candidate;
+        }
       }
     }
   }
 
   const nextUp = FACE_NORMALS[nextFace];
-  const edgeAxis = new THREE.Vector3().crossVectors(currentUp, nextUp).normalize();
+  const edgeAxis = _crossFaceEdgeAxis.crossVectors(currentUp, nextUp).normalize();
   const playerU = player.dot(nextUp);
   const targetU = opposite
     ? 4 * planetRadius - goal.dot(nextUp)
@@ -195,16 +214,23 @@ export function planCrossFaceSurfaceLeg(input: CrossFaceSurfaceLegInput): CrossF
   const seamLimit = Math.max(0, edgeEntryRadius - cornerInset);
   const seam = Math.max(-seamLimit, Math.min(seamLimit, rawSeam));
   const surfaceHeight = player.dot(currentUp);
-  const approach = currentUp.clone().multiplyScalar(surfaceHeight)
+  const approach = (out?.approach ?? new THREE.Vector3())
+    .copy(currentUp).multiplyScalar(surfaceHeight)
     .addScaledVector(nextUp, edgeEntryRadius)
     .addScaledVector(edgeAxis, seam);
-  return {
+  const result = out ?? {
     fromFace: currentFace,
     nextFace,
     remainingTransitions: opposite ? 2 : 1,
     approach,
-    continuationDirection: currentUp.clone().multiplyScalar(-1)
+    continuationDirection: new THREE.Vector3()
   };
+  result.fromFace = currentFace;
+  result.nextFace = nextFace;
+  result.remainingTransitions = opposite ? 2 : 1;
+  result.approach = approach;
+  result.continuationDirection.copy(currentUp).multiplyScalar(-1);
+  return result;
 }
 
 export const CROSS_FACE_SAFE_DOMINANCE_MARGIN = 0.25;

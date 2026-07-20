@@ -12,7 +12,14 @@ import SystemCompanionBodies from './components/SystemCompanionBodies.tsx';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
 import SystemTravelDriver from './components/SystemTravelDriver.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
-import { isTouchDevice } from './utils/mobileInput.ts';
+import TouchDPad from './components/mobile/TouchDPad.tsx';
+import CinematicHudVeil from './components/hud/CinematicHudVeil.tsx';
+import {
+  closeMobileHudDisclosure,
+  getActiveMobileHudDisclosure,
+  subscribeMobileHudDisclosure
+} from './components/mobile/mobileHudDisclosure.ts';
+import { isTouchDevice, releaseAllKeys } from './utils/mobileInput.ts';
 import PoseRecorder from './components/debug/PoseRecorder.tsx';
 import SceneReadyProbe from './components/SceneReadyProbe.tsx';
 import VantageToast from './components/hud/VantageToast.tsx';
@@ -166,6 +173,7 @@ import {
   storyHudHideVitals,
   storyHudTakeover,
   storyUsesEmbodiedGuidanceHud,
+  storyUsesEarlyTouchDpad,
   useStoryState
 } from './story/storyState.ts';
 import { getStoryInputPolicy } from './story/storyInputPolicy.ts';
@@ -175,6 +183,7 @@ import { isStoryWorld, STORY_COORDINATE } from './story/world/storyWorld.ts';
 import {
   isTidegardenRouteOnline,
   resolveStoryBootWorldId,
+  resolveStoryRuntimeWorldId,
   storySystemPopulationPolicy,
   TIDEGARDEN_WORLD_ID
 } from './story/tidegardenRoute.ts';
@@ -478,6 +487,11 @@ const App: React.FC = () => {
   const [benchSample, setBenchSample] = useState<BenchmarkSample | null>(null);
   const [hudVisible, setHudVisible] = useState(true);
   const isTouch = useMemo(() => isTouchDevice(), []);
+  const activeMobileHudDisclosure = useSyncExternalStore(
+    subscribeMobileHudDisclosure,
+    getActiveMobileHudDisclosure,
+    () => null
+  );
   const flight = useSpaceFlight();
   const { phase: appPhase, sceneReady: appSceneReady } = useAppState();
   useEffect(() => {
@@ -489,10 +503,18 @@ const App: React.FC = () => {
   useSyncExternalStore(subscribeProgression, milestoneCount, milestoneCount);
   const tidegardenRouteOnline = isTidegardenRouteOnline();
   const storyRuntimeWorldId = story.active
-    ? resolveStoryBootWorldId(currentWorld.worldId, tidegardenRouteOnline, story)
+    ? resolveStoryRuntimeWorldId(
+        currentWorld.worldId,
+        tidegardenRouteOnline,
+        story,
+        getSystemFlightSnapshot().activePlanetId
+      )
     : currentWorld.worldId;
   const storyWorldSwapPending = story.active && storyRuntimeWorldId !== currentWorld.worldId;
   const [paused, setPaused] = useState(false);
+  const [objectiveJournalOpen, setObjectiveJournalOpen] = useState(false);
+  const hudBlockingOverlayOpen = objectiveJournalOpen
+    || (isTouch && activeMobileHudDisclosure !== null);
   const [storyCompleteOpen, setStoryCompleteOpen] = useState(false);
   const [pendingCompletedSiteEntry, setPendingCompletedSiteEntry] = useState(false);
   const setPauseState = useCallback((next: boolean) => {
@@ -515,6 +537,21 @@ const App: React.FC = () => {
   // Ref mirror so the pointer-lock listener (bound once) can read the live value
   // without a stale closure — same trick the lock handler uses for app phase.
   const craftingOpenRef = useRef(false);
+
+  const setObjectiveJournalState = useCallback((open: boolean) => {
+    releaseAllKeys();
+    if (open) {
+      closeMobileHudDisclosure();
+      craftingOpenRef.current = false;
+      setCraftingOpen(false);
+      setMapViewOpen(false);
+    }
+    setObjectiveJournalOpen(open);
+  }, []);
+
+  useEffect(() => {
+    setStoryPaused(paused || hudBlockingOverlayOpen);
+  }, [paused, hudBlockingOverlayOpen]);
 
   useEffect(() => {
     let cancelled = false;
@@ -544,6 +581,8 @@ const App: React.FC = () => {
     setCraftingOpen(false);
     setMapViewOpen(false);
     setBuildEnabled(false);
+    closeMobileHudDisclosure();
+    setObjectiveJournalOpen(false);
     setPauseState(false);
     if (document.pointerLockElement) document.exitPointerLock();
   }, [downed, setPauseState]);
@@ -566,6 +605,8 @@ const App: React.FC = () => {
   // click recipes; the lock handler below knows to NOT treat that as a pause.
   const openCrafting = () => {
     if (getAppStateSnapshot().phase !== 'playing') return;
+    closeMobileHudDisclosure();
+    setObjectiveJournalOpen(false);
     craftingOpenRef.current = true;
     setCraftingOpen(true);
     setPauseState(false);
@@ -627,6 +668,8 @@ const App: React.FC = () => {
   // Any beat change closes the chart (cutscenes own the camera).
   useEffect(() => {
     setMapViewOpen(false);
+    closeMobileHudDisclosure();
+    setObjectiveJournalOpen(false);
   }, [story.beat, flight.controlMode]);
 
   // C toggles the Fabricator on foot; Esc closes it (its lock is already released,
@@ -648,7 +691,7 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, isTouch, flight.controlMode]);
 
-  // B toggles build mode (on foot); 1/2/3 select the piece while building. Build
+  // B toggles build mode (on foot); 1..9, 0, and - select build pieces. Build
   // mode keeps pointer lock — it does NOT release the cursor like the Fabricator.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -661,7 +704,7 @@ const App: React.FC = () => {
       else if (isBuildEnabled() && e.code.startsWith('Digit')) {
         const n = Number(e.code.slice(5));
         selectPieceByIndex(n === 0 ? 9 : n - 1); // 1..9 → 0..8, 0 → 10th piece
-      }
+      } else if (isBuildEnabled() && e.code === 'Minus') selectPieceByIndex(10);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -743,12 +786,16 @@ const App: React.FC = () => {
 
   const toggleBuildHud = () => {
     if (flight.controlMode !== 'fps' || getAppStateSnapshot().phase !== 'playing') return;
+    closeMobileHudDisclosure();
+    setObjectiveJournalOpen(false);
     craftingOpenRef.current = false;
     setCraftingOpen(false);
     setPauseState(false);
     toggleBuildMode();
   };
   const pauseAndOpenStarMap = () => {
+    closeMobileHudDisclosure();
+    setObjectiveJournalOpen(false);
     craftingOpenRef.current = false;
     setCraftingOpen(false);
     if (document.pointerLockElement) document.exitPointerLock();
@@ -1464,7 +1511,10 @@ const App: React.FC = () => {
         <WarpDriver />
         <VehicleSceneAvDriver />
         {/* Story director tick — same placement rationale as WarpDriver. */}
-        <StoryDirectorDriver paused={paused || downed || storyCompleteOpen || storyCompletePreview} />
+        <StoryDirectorDriver
+          paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview}
+          planetRadius={planetSize}
+        />
         <SceneReadyProbe />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
@@ -1484,7 +1534,7 @@ const App: React.FC = () => {
             overview={overviewEnabled}
             agent={agentEnabled}
             cinematic={appPhase === 'menu' || storyWorldSwapPending}
-            paused={paused || storyCompleteOpen || storyCompletePreview}
+            paused={paused || hudBlockingOverlayOpen || storyCompleteOpen || storyCompletePreview}
             profileSystemTravel={systemProbeEnabled}
             onGroundedChange={grounded => {
               if (grounded) {
@@ -1531,47 +1581,56 @@ const App: React.FC = () => {
       />
 
       {/* --- Story overlays (prologue terminal / regulation feed / captions) --- */}
-      <StoryOverlays />
+      <StoryOverlays
+        objectiveJournalOpen={objectiveJournalOpen}
+        onObjectiveJournalOpenChange={setObjectiveJournalState}
+      />
       {/* Dev: beat teleporter (any ?story= session or ?debug=1). */}
       {storyDebugEnabled() && <StoryDebugPanel />}
 
       {/* --- Minimal, diegetic in-game HUD (the story feed replaces it in Ch1-2) --- */}
       {appPhase === 'playing' && !atlasCapture && !storyHudTakeover(story) && (
         <>
-          {flight.controlMode === 'fps' && <Crosshair />}
-          <TargetReticle />
-          {flight.controlMode === 'fps' && <MiningProgress />}
-          {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
-          {flight.controlMode === 'fps' && <BuildIndicator />}
+          {/* Critical safety warnings stay IMMEDIATE — never faded by a
+              cinematic (the letterbox must not swallow crash/heat danger). */}
           {flight.controlMode === 'flight' && <CrashFlash />}
           {flight.controlMode === 'fps' && <LavaHeatVignette />}
-          {flight.controlMode === 'fps' && <LookedAtIndicator />}
-          {flight.controlMode === 'fps' && <InteractionPrompt />}
-          {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && !storyHudHideInventory() && (
-            <InventoryPanel topOffset={inventoryTopOffset} />
-          )}
-          {/* Ship / star-map affordances stay hidden while the story is live. */}
-          {!storyHudMask(story) && (
-            <>
-              <OrbitalMinimap
-                coordinateLabel={currentWorldKey}
-                worldId={currentWorldIdentity.worldId}
-                planetSize={planetSize}
-              />
-              <CockpitReadout coordinateLabel={currentWorldKey} />
-              <MultiplayerStatusBadge />
-            </>
-          )}
-          <HudCornerActions
-            controlMode={flight.controlMode}
-            buildModeOpen={buildModeOpen}
-            allowBuild={getStoryInputPolicy().allowBuild}
-            allowCraft={getStoryInputPolicy().allowCraft}
-            onToggleBuild={toggleBuildHud}
-            onOpenCrafting={openCrafting}
-            onPause={pauseAndOpenStarMap}
-            pauseLabel={story.active ? 'Pause' : 'Pause and open star map'}
-          />
+          {/* Everything else is informational chrome: it fades under a
+              letterboxed cinematic and restores on decay. */}
+          <CinematicHudVeil>
+            {flight.controlMode === 'fps' && <Crosshair />}
+            <TargetReticle />
+            {flight.controlMode === 'fps' && <MiningProgress />}
+            {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
+            {flight.controlMode === 'fps' && <BuildIndicator />}
+            {flight.controlMode === 'fps' && <LookedAtIndicator />}
+            {flight.controlMode === 'fps' && <InteractionPrompt />}
+            {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && !storyHudHideInventory() && (
+              <InventoryPanel topOffset={inventoryTopOffset} />
+            )}
+            {/* Ship / star-map affordances stay hidden while the story is live. */}
+            {!storyHudMask(story) && (
+              <>
+                <OrbitalMinimap
+                  coordinateLabel={currentWorldKey}
+                  worldId={currentWorldIdentity.worldId}
+                  planetSize={planetSize}
+                />
+                <CockpitReadout coordinateLabel={currentWorldKey} />
+                <MultiplayerStatusBadge />
+              </>
+            )}
+            <HudCornerActions
+              controlMode={flight.controlMode}
+              buildModeOpen={buildModeOpen}
+              allowBuild={getStoryInputPolicy().allowBuild}
+              allowCraft={getStoryInputPolicy().allowCraft}
+              onToggleBuild={toggleBuildHud}
+              onOpenCrafting={openCrafting}
+              onPause={pauseAndOpenStarMap}
+              pauseLabel={story.active ? 'Pause' : 'Pause and open star map'}
+            />
+          </CinematicHudVeil>
         </>
       )}
 
@@ -1582,11 +1641,20 @@ const App: React.FC = () => {
         && !atlasCapture
         && isTouch
         && !paused
+        && !hudBlockingOverlayOpen
         && !downed
         && !storyCompleteOpen
         && !storyCompletePreview
-        && (!storyHudTakeover(story) || storyUsesEmbodiedGuidanceHud(story))
-        && <TouchControls controlMode={flight.controlMode} />}
+        && (
+          <CinematicHudVeil>
+            {/* Free/embodied eras: the analog joystick + action cluster. */}
+            {(!storyHudTakeover(story) || storyUsesEmbodiedGuidanceHud(story))
+              && <TouchControls controlMode={flight.controlMode} />}
+            {/* Early monochrome-ladder beats: the themed discrete D-PAD
+                (mutually exclusive with TouchControls by beat predicate). */}
+            {storyUsesEarlyTouchDpad(story) && <TouchDPad />}
+          </CinematicHudVeil>
+        )}
 
       {/* --- Survey chart chrome ([M] overhead view) --- */}
       <MapOverlay />

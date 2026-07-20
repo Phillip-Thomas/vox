@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { createScenePlayerPositionMailbox } from './scenePlayerPosition.ts';
+import {
+  createScenePlayerPositionMailbox,
+  createScenePlayerPositionStreams
+} from './scenePlayerPosition.ts';
 
 describe('createScenePlayerPositionMailbox', () => {
   it('keeps one consumer-visible identity across recurring render-loop publications', () => {
@@ -28,5 +31,61 @@ describe('createScenePlayerPositionMailbox', () => {
     initial.set(10, 20, 30);
 
     expect(mailbox.position.toArray()).toEqual([4, 5, 6]);
+  });
+});
+
+describe('createScenePlayerPositionStreams', () => {
+  it('bounds atmospheric collision to 15 Hz and ecology to 400 ms', () => {
+    const streams = createScenePlayerPositionStreams(new THREE.Vector3());
+    const collisionIdentity = streams.collision.position;
+    const ecologyIdentity = streams.ecology.position;
+    let collisionPublications = 0;
+    let ecologyPublications = 0;
+
+    for (let frame = 0; frame < 60; frame += 1) {
+      const result = streams.publish(new THREE.Vector3(frame * 5, 0, 0), {
+        nowMs: frame * (1000 / 60),
+        phase: 'descent',
+        controlMode: 'flight'
+      });
+      if (result.collision) collisionPublications += 1;
+      if (result.ecology) ecologyPublications += 1;
+    }
+
+    expect(collisionPublications).toBeLessThanOrEqual(15);
+    expect(ecologyPublications).toBeLessThanOrEqual(3);
+    expect(streams.collision.position).toBe(collisionIdentity);
+    expect(streams.ecology.position).toBe(ecologyIdentity);
+  });
+
+  it('freezes both planet-local streams in deep space', () => {
+    const streams = createScenePlayerPositionStreams(new THREE.Vector3(1, 2, 3));
+    const result = streams.publish(new THREE.Vector3(500, 600, 700), {
+      nowMs: 1000,
+      phase: 'deep_space',
+      controlMode: 'flight'
+    });
+
+    expect(result).toEqual({ collision: false, ecology: false });
+    expect(streams.collision.position.toArray()).toEqual([1, 2, 3]);
+    expect(streams.ecology.position.toArray()).toEqual([1, 2, 3]);
+  });
+
+  it('keeps ecology current with each accepted on-foot sample', () => {
+    const streams = createScenePlayerPositionStreams(new THREE.Vector3());
+    const first = streams.publish(new THREE.Vector3(2, 0, 0), {
+      nowMs: 0,
+      phase: 'surface',
+      controlMode: 'fps'
+    });
+    const second = streams.publish(new THREE.Vector3(4, 0, 0), {
+      nowMs: 70,
+      phase: 'surface',
+      controlMode: 'fps'
+    });
+
+    expect(first).toEqual({ collision: true, ecology: true });
+    expect(second).toEqual({ collision: true, ecology: true });
+    expect(streams.ecology.position.toArray()).toEqual([4, 0, 0]);
   });
 });

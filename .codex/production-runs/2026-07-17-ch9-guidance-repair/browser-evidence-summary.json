@@ -1,0 +1,61 @@
+{
+  "schema": "paravoxia.chapter9BrowserEvidenceSummary.v1",
+  "runId": "2026-07-17-ch9-guidance-repair",
+  "generatedAt": "2026-07-17T17:11:00Z",
+  "objectiveHud": {
+    "profile": "POTATO",
+    "passed": 4,
+    "failed": 0,
+    "cases": [
+      "desktop:ch9-settle",
+      "desktop:ch9-hearth",
+      "mobile-reduced-motion:ch9-settle",
+      "mobile-reduced-motion:ch9-hearth"
+    ],
+    "claims": [
+      "one objective card",
+      "ready objective health",
+      "one visible guidance owner",
+      "marker label inside viewport",
+      "no objective, caption, vitals, quick-action, joystick, or action overlap"
+    ],
+    "rawRef": "evidence/objective-hud-report.json"
+  },
+  "movie": {
+    "entryPath": "direct-entry-diagnostic",
+    "controlMode": "movie",
+    "elapsedMs": 226310,
+    "finalStory": {
+      "active": false,
+      "chapter": "complete",
+      "beat": "done"
+    },
+    "teleportNudges": 0,
+    "dryRouteWaterContactFrames": 0,
+    "contextLost": 0,
+    "contextCreationErrors": [],
+    "crashes": 0,
+    "pageErrors": 0,
+    "requiredReceipts": [
+      "story:tidegarden:scanner-overload",
+      "story:tidegarden:relationship-attended",
+      "story:tidegarden:site-chosen",
+      "story:item:habitat-core:crafted",
+      "story:tidegarden:habitat-core-online",
+      "story:tidegarden:shelter-certified",
+      "story:ch9:settled",
+      "story:tidegarden:safe-rest-completed",
+      "story:tidegarden:two-world-handoff",
+      "story:ch9:hearth",
+      "story:complete"
+    ],
+    "renderer": "ANGLE SwiftShader",
+    "nonCertificationReasons": [
+      "direct entry does not certify Chapter 8 to Chapter 9 continuity",
+      "software rendering does not certify real-GPU performance",
+      "headless capture does not certify human visual taste or pointer-lock feel",
+      "autoplay policy prevented score listening"
+    ],
+    "rawRef": "evidence/ch9-movie-final.json"
+  }
+}

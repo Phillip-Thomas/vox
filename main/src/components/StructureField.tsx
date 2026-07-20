@@ -35,6 +35,9 @@ function panelCenter(cell: [number, number, number], face: number): [number, num
 
 // --- Geometry per piece type (built once; the flat panel is shared) ----------
 function makeFlatPanel() { return new THREE.BoxGeometry(PANEL, PANEL, THICK); }
+function makeTallWallGhost() {
+  return mergeGeometries([makeFlatPanel(), makeFlatPanel().translate(0, VOXEL_SCALE, 0)])!;
+}
 // Doorways are 2 cells tall: the lower half is open side-posts; the upper half adds
 // the lintel. Stacked, they frame a head-clearing opening.
 function makeDoorwayLower() {
@@ -163,7 +166,7 @@ export default function StructureField({ terrainSeed, persistenceWorld }: { terr
   const GEO = useMemo<Record<BuildPieceType, THREE.BufferGeometry>>(() => {
     const flat = makeFlatPanel();
     return {
-      foundation: flat, wall: flat, ceiling: flat, doorway: makeDoorwayLower(), window: makeWindow(),
+      foundation: flat, tall_wall: flat, wall: flat, ceiling: flat, doorway: makeDoorwayLower(), window: makeWindow(),
       gable: makeGable(), stairs: makeStairs(), sloped_roof: makeSlopedRoof(), ladder: makeLadder(), door: makeDoor()
     };
   }, []);
@@ -275,7 +278,7 @@ function doorLeafTransform(p: StructurePiece): { pos: [number, number, number]; 
 export function BuildGhost() {
   const flat = useMemo(() => makeFlatPanel(), []);
   const GEO = useMemo<Record<BuildPieceType, THREE.BufferGeometry>>(() => ({
-    foundation: flat, wall: flat, ceiling: flat, doorway: makeDoorwayGhost(), window: makeWindow(),
+    foundation: flat, tall_wall: makeTallWallGhost(), wall: flat, ceiling: flat, doorway: makeDoorwayGhost(), window: makeWindow(),
     gable: makeGable(), stairs: makeStairs(), sloped_roof: makeSlopedRoof(), ladder: makeLadder(), door: makeDoorGhost()
   }), [flat]);
   const material = useMemo(() => new THREE.MeshBasicMaterial({ color: 0x7dffa0, transparent: true, opacity: 0.4, depthWrite: false }), []);

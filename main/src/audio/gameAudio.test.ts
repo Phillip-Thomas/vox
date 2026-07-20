@@ -3,12 +3,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => ({
   unlockMusicAudio: vi.fn(() => Promise.resolve()),
   unlockSfxAudio: vi.fn(() => Promise.resolve()),
-  unlockStoryScore: vi.fn()
+  unlockStoryScore: vi.fn(),
+  areGameAudioRoutesConfirmed: vi.fn(() => true)
 }));
 
 vi.mock('./musicEngine.ts', () => ({ unlockMusicAudio: mocks.unlockMusicAudio }));
 vi.mock('./sfxEngine.ts', () => ({ unlockSfxAudio: mocks.unlockSfxAudio }));
 vi.mock('../story/storyScore.ts', () => ({ unlockStoryScore: mocks.unlockStoryScore }));
+vi.mock('./audioCore.ts', () => ({
+  areGameAudioRoutesConfirmed: mocks.areGameAudioRoutesConfirmed
+}));
 
 interface FakeGestureTarget {
   target: EventTarget;
@@ -33,10 +37,16 @@ function fakeGestureTarget(): FakeGestureTarget {
   };
 }
 
+/** Drain the unlock promise chain (allSettled → then → in-flight reset). */
+async function flushMicrotasks(ticks = 12): Promise<void> {
+  for (let i = 0; i < ticks; i++) await Promise.resolve();
+}
+
 describe('shared game audio unlock', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
+    mocks.areGameAudioRoutesConfirmed.mockReturnValue(true);
   });
 
   it('coalesces concurrent calls but lets a later gesture retry resume', async () => {
@@ -70,10 +80,35 @@ describe('shared game audio unlock', () => {
     expect(mocks.unlockStoryScore).toHaveBeenCalledTimes(1);
     expect(mocks.unlockMusicAudio).toHaveBeenCalledTimes(1);
     expect(mocks.unlockSfxAudio).toHaveBeenCalledTimes(1);
+    // Teardown is deferred until the unlock promise settles and the routes
+    // report confirmed. Flush microtasks, then assert the listeners are gone.
+    await flushMicrotasks();
     expect(fake.listeners.size).toBe(0);
     expect(fake.removeEventListener).toHaveBeenCalledTimes(3);
 
     cleanup();
+    expect(fake.removeEventListener).toHaveBeenCalledTimes(3);
+  });
+
+  it('stays armed across gestures until a resume verifiably sticks', async () => {
+    const { installGameAudioUnlockOnFirstTrustedGesture } = await import('./gameAudio.ts');
+    const fake = fakeGestureTarget();
+    installGameAudioUnlockOnFirstTrustedGesture(fake.target);
+
+    // First trusted gesture: resume did not stick (routes not confirmed).
+    mocks.areGameAudioRoutesConfirmed.mockReturnValue(false);
+    fake.listeners.get('pointerdown')?.({ isTrusted: true } as Event);
+    await flushMicrotasks();
+    expect(mocks.unlockMusicAudio).toHaveBeenCalledTimes(1);
+    expect(fake.listeners.size).toBe(3);
+    expect(fake.removeEventListener).not.toHaveBeenCalled();
+
+    // Second trusted gesture: routes now confirmed, so the installer tears down.
+    mocks.areGameAudioRoutesConfirmed.mockReturnValue(true);
+    fake.listeners.get('pointerdown')?.({ isTrusted: true } as Event);
+    await flushMicrotasks();
+    expect(mocks.unlockMusicAudio).toHaveBeenCalledTimes(2);
+    expect(fake.listeners.size).toBe(0);
     expect(fake.removeEventListener).toHaveBeenCalledTimes(3);
   });
 });

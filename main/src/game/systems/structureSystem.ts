@@ -40,7 +40,7 @@ export interface StructurePiece {
   face: number; // 0..5 (FACE_DIRS), or VOLUME_FACE for volume pieces
   type: BuildPieceType;
   material: BuildMaterialId;
-  /** Doorways are 2 cells tall: a 'lower' + 'upper' half, linked via `partner`. */
+  /** Two-cell panels are stored as a linked 'lower' + 'upper' pair. */
   tall?: 'lower' | 'upper';
   partner?: [number, number, number];
   /** Volume pieces: the build-up axis (0..5) + yaw step (0..3) they're oriented by. */
@@ -110,9 +110,14 @@ export function canAfford(type: BuildPieceType, material: BuildMaterialId, actor
   return freeBuild || hasItems(pieceCost(type, material), actorId);
 }
 
-/** Place a piece at (cell, face) in a material. `up` = the build-up axis (0..5) this
- *  piece was placed in, so connecting pieces can inherit its frame. Validates + spends. */
-export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType, material: BuildMaterialId, up?: number, actorId?: ActorId): boolean {
+function placeSinglePanel(
+  cell: [number, number, number],
+  face: number,
+  type: BuildPieceType,
+  material: BuildMaterialId,
+  up?: number,
+  actorId?: ActorId
+): boolean {
   const [x, y, z] = cell;
   if (hasPanel(x, y, z, face)) return false;
   const cost = pieceCost(type, material);
@@ -126,26 +131,55 @@ export function placePiece(cell: [number, number, number], face: number, type: B
   return true;
 }
 
+/** Place a two-cell panel as one atomic build: reserve both slots, charge once, and
+ *  link the halves so deconstruction, persistence, and collision updates stay atomic. */
+function placeTallPanel(
+  cell: [number, number, number],
+  face: number,
+  upIdx: number,
+  type: BuildPieceType,
+  material: BuildMaterialId,
+  actorId?: ActorId
+): boolean {
+  const u = FACE_DIRS[upIdx];
+  if (!u || face === upIdx || face === (upIdx ^ 1)) return false;
+  const upper: [number, number, number] = [cell[0] + u[0], cell[1] + u[1], cell[2] + u[2]];
+  if (hasPanel(cell[0], cell[1], cell[2], face) || hasPanel(upper[0], upper[1], upper[2], face)) return false;
+  const cost = pieceCost(type, material);
+  if (!freeBuild) {
+    if (!hasItems(cost, actorId)) return false;
+    for (const c of cost) removeItem(c.id, c.qty, actorId);
+  }
+  const owner = ownership(actorId);
+  pieces.set(panelKey(cell[0], cell[1], cell[2], face), {
+    id: nextId++, cell: [...cell] as [number, number, number], face, type, material,
+    up: upIdx, tall: 'lower', partner: upper, ...owner
+  });
+  pieces.set(panelKey(upper[0], upper[1], upper[2], face), {
+    id: nextId++, cell: upper, face, type, material,
+    up: upIdx, tall: 'upper', partner: [...cell] as [number, number, number], ...owner
+  });
+  version++;
+  emit();
+  return true;
+}
+
+/** Place a piece at (cell, face) in a material. `up` = the build-up axis (0..5) this
+ *  piece was placed in, so connecting pieces can inherit its frame. Validates + spends. */
+export function placePiece(cell: [number, number, number], face: number, type: BuildPieceType, material: BuildMaterialId, up?: number, actorId?: ActorId): boolean {
+  if ((BUILD_PIECES[type].heightUnits ?? 1) > 1) {
+    return up === undefined ? false : placeTallPanel(cell, face, up, type, material, actorId);
+  }
+  return placeSinglePanel(cell, face, type, material, up, actorId);
+}
+
 /**
  * Place a 2-cell-tall doorway (a lower + upper half on the same wall face), so the
  * opening clears the player's height. `upIdx` = the build-up face index; the upper
  * half sits in the cell one step along it. Cost is charged once for the pair.
  */
 export function placeDoorway(cell: [number, number, number], face: number, upIdx: number, material: BuildMaterialId, actorId?: ActorId): boolean {
-  const u = FACE_DIRS[upIdx];
-  const upper: [number, number, number] = [cell[0] + u[0], cell[1] + u[1], cell[2] + u[2]];
-  if (hasPanel(cell[0], cell[1], cell[2], face) || hasPanel(upper[0], upper[1], upper[2], face)) return false;
-  const cost = pieceCost('doorway', material);
-  if (!freeBuild) {
-    if (!hasItems(cost, actorId)) return false;
-    for (const c of cost) removeItem(c.id, c.qty, actorId);
-  }
-  const owner = ownership(actorId);
-  pieces.set(panelKey(cell[0], cell[1], cell[2], face), { id: nextId++, cell: [...cell] as [number, number, number], face, type: 'doorway', material, up: upIdx, tall: 'lower', partner: upper, ...owner });
-  pieces.set(panelKey(upper[0], upper[1], upper[2], face), { id: nextId++, cell: upper, face, type: 'doorway', material, up: upIdx, tall: 'upper', partner: [...cell] as [number, number, number], ...owner });
-  version++;
-  emit();
-  return true;
+  return placeTallPanel(cell, face, upIdx, 'doorway', material, actorId);
 }
 
 /** Fit a door LEAF into an existing doorway (a door only goes in a doorway, never on a

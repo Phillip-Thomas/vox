@@ -8,5 +8,7 @@ describe('free-era directional marker accessibility', () => {
 
     expect(markup).toContain('data-story-free-marker="true"');
     expect(markup).toContain('aria-hidden="true"');
+    expect(markup).toContain('data-marker-layout="pending"');
+    expect(markup).toContain('visibility:hidden');
   });
 });

@@ -710,6 +710,35 @@ describe('signed scene AV runtime', () => {
     ]);
   });
 
+  it('allows route-online to skip the relocated optional first-hover anchor', () => {
+    enterSignedSceneAvBeat('ch7-reconstruct');
+    expect(activateSignedSceneSemanticEvent('ev.reconstruct.relationships-diagnosed')).toBe(true);
+    for (const [from, to] of [
+      ['wrecked', 'bench_online'],
+      ['bench_online', 'frame_restored'],
+      ['frame_restored', 'hull_sealed'],
+      ['hull_sealed', 'lift_online'],
+      ['lift_online', 'flight_ready']
+    ] as const) {
+      emitEmergentStoryEvent({
+        id: `test:repair-without-hover:${to}`,
+        type: 'ship_repair_stage',
+        payload: { from, to }
+      });
+    }
+    expect(getSignedSceneAvDebugSnapshot()).toMatchObject({
+      anchorId: 'anc.reconstruct.route-online',
+      activatedAnchorIds: [
+        'anc.reconstruct.diagnosis',
+        'anc.reconstruct.bench-online',
+        'anc.reconstruct.frame-restored',
+        'anc.reconstruct.hull-sealed',
+        'anc.reconstruct.lift-online',
+        'anc.reconstruct.route-online'
+      ]
+    });
+  });
+
   it('wires calibration and foundation receipts after their ordered predecessor proofs', () => {
     enterSignedSceneAvBeat('ch7-reconstruct');
     expect(activateSignedSceneSemanticEvent('ev.reconstruct.relationships-diagnosed')).toBe(true);

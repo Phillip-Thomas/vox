@@ -9,7 +9,7 @@ const outputDir = path.resolve(
   process.env.PARAVOXIA_OBJECTIVE_OUTPUT ?? 'captures/objective-hud'
 );
 const cases = (process.env.PARAVOXIA_OBJECTIVE_CASES
-  ?? 'ch1-anomaly,ch2-approach,ch3-gather,ch4-audit,ch5-maw,ch6-dive,ch8-crossing')
+  ?? 'ch1-anomaly,ch2-approach,ch3-gather,ch4-audit,ch5-maw,ch6-dive,ch7-reconstruct,ch8-crossing,ch9-settle,ch9-hearth')
   .split(',')
   .map(value => value.trim())
   .filter(Boolean);
@@ -115,7 +115,50 @@ try {
           return card.dataset.objectiveRequiresMarker !== 'true'
             || card.dataset.objectiveHealth === 'ready';
         }, undefined, { timeout: 45_000 }).catch(() => undefined);
-        await page.waitForTimeout(750);
+        // Marker health can publish before its DOM presentation has sampled
+        // mobile chrome. A required objective is not ready for evidence until
+        // one of its actual guidance owners is visibly presented.
+        await page.waitForFunction(() => {
+          const card = document.querySelector('[aria-label="Current story objective"]');
+          if (!(card instanceof HTMLElement)) return false;
+          if (card.dataset.objectiveRequiresMarker !== 'true'
+            || card.dataset.objectiveHealth !== 'ready') return true;
+
+          const visibleRect = element => {
+            if (!(element instanceof HTMLElement)) return null;
+            const style = getComputedStyle(element);
+            const box = element.getBoundingClientRect();
+            return style.display !== 'none'
+              && style.visibility !== 'hidden'
+              && style.visibility !== 'collapse'
+              && Number(style.opacity || 1) > 0
+              && box.width > 0
+              && box.height > 0
+              ? box
+              : null;
+          };
+
+          const redactionBox = document.querySelector('[data-redaction-box="true"]');
+          if (visibleRect(redactionBox)) return true;
+
+          const redaction = document.querySelector('[data-redaction-indicator="true"]');
+          if (visibleRect(redaction)) {
+            const label = redaction.lastElementChild;
+            const labelRect = visibleRect(label);
+            return Boolean(labelRect && labelRect.left >= 0 && labelRect.right <= innerWidth);
+          }
+
+          const marker = document.querySelector('[data-story-free-marker="true"]');
+          const markerRect = visibleRect(marker);
+          if (marker instanceof HTMLElement && markerRect) {
+            return marker.dataset.markerLayout === 'ready'
+              && Boolean(marker.dataset.motionPresentation)
+              && (Math.abs(markerRect.left) > 0.5 || Math.abs(markerRect.top) > 0.5);
+          }
+
+          return false;
+        }, undefined, { timeout: 45_000 }).catch(() => undefined);
+        await page.waitForTimeout(250);
 
         evidence = await page.evaluate(() => {
           const rect = element => {
@@ -131,6 +174,7 @@ try {
               bottom: box.bottom,
               visible: style.display !== 'none'
                 && style.visibility !== 'hidden'
+                && style.visibility !== 'collapse'
                 && Number(style.opacity || 1) > 0
                 && box.width > 0
                 && box.height > 0
@@ -144,8 +188,10 @@ try {
           const cards = [...document.querySelectorAll('[aria-label="Current story objective"]')];
           const card = cards[0] instanceof HTMLElement ? cards[0] : null;
           const cardRect = rect(card);
+          const captionRect = rect(document.querySelector('[data-story-caption="true"]'));
           const marker = document.querySelector('[data-story-free-marker="true"]');
           const redaction = document.querySelector('[data-redaction-indicator="true"]');
+          const redactionBox = document.querySelector('[data-redaction-box="true"]');
           const markerChildren = marker instanceof HTMLElement ? [...marker.children] : [];
           const redactionChildren = redaction instanceof HTMLElement ? [...redaction.children] : [];
           const legacyMarkers = [...document.querySelectorAll('[data-regulation-objective-marker="true"]')];
@@ -153,10 +199,21 @@ try {
           const actionRect = rect(document.querySelector('[data-testid="touch-action-cluster"]'));
           const vitalsRect = rect(document.querySelector('[data-testid="vitals-meter"]'));
           const inventoryRect = rect(document.querySelector('[data-testid="inventory-panel"]'));
+          const quickActionsRect = rect(document.querySelector('[aria-label="HUD quick actions"]'));
           const markerRect = rect(marker);
           const markerLabelRect = rect(markerChildren.at(-1));
           const redactionRect = rect(redaction);
           const redactionLabelRect = rect(redactionChildren.at(-1));
+          const redactionBoxRect = rect(redactionBox);
+          const freeMarkerVisible = Boolean(
+            markerRect?.visible
+            && marker instanceof HTMLElement
+            && marker.dataset.markerLayout === 'ready'
+          );
+          const redactionIndicatorVisible = Boolean(
+            redactionRect?.visible && redactionLabelRect?.visible
+          );
+          const redactionBoxVisible = Boolean(redactionBoxRect?.visible);
           const insideViewport = box => Boolean(
             box
             && box.x >= 0
@@ -184,11 +241,20 @@ try {
                 && cardRect.bottom <= innerHeight
               )
             } : null,
+            caption: {
+              rect: captionRect,
+              insideViewport: !captionRect?.visible || insideViewport(captionRect),
+              intersectsObjective: intersects(captionRect, cardRect)
+            },
             marker: {
               count: document.querySelectorAll('[data-story-free-marker="true"]').length,
               rect: markerRect,
               labelRect: markerLabelRect,
               labelInsideViewport: !markerLabelRect?.visible || insideViewport(markerLabelRect),
+              intersectsObjective: intersects(markerRect, cardRect)
+                || intersects(markerLabelRect, cardRect),
+              intersectsCaption: intersects(markerRect, captionRect)
+                || intersects(markerLabelRect, captionRect),
               transform: marker instanceof HTMLElement ? marker.style.transform : null,
               computedTransform: marker instanceof HTMLElement ? getComputedStyle(marker).transform : null,
               labelTransform: markerChildren.at(-1) instanceof HTMLElement
@@ -196,25 +262,53 @@ try {
                 : null,
               motionPresentation: marker instanceof HTMLElement
                 ? marker.dataset.motionPresentation ?? null
+                : null,
+              layoutState: marker instanceof HTMLElement
+                ? marker.dataset.markerLayout ?? null
+                : null,
+              topLeftOcclusion: marker instanceof HTMLElement
+                ? marker.dataset.topLeftOcclusion ?? null
                 : null
             },
             redactionIndicator: {
               rect: redactionRect,
               labelRect: redactionLabelRect,
-              labelInsideViewport: !redactionLabelRect?.visible || insideViewport(redactionLabelRect)
-              ,transform: redaction instanceof HTMLElement ? redaction.style.transform : null
-              ,labelTransform: redactionChildren.at(-1) instanceof HTMLElement
+              labelInsideViewport: !redactionLabelRect?.visible || insideViewport(redactionLabelRect),
+              intersectsObjective: intersects(redactionRect, cardRect)
+                || intersects(redactionLabelRect, cardRect),
+              intersectsCaption: intersects(redactionRect, captionRect)
+                || intersects(redactionLabelRect, captionRect),
+              transform: redaction instanceof HTMLElement ? redaction.style.transform : null,
+              labelOffset: redactionChildren.at(-1) instanceof HTMLElement
+                ? redactionChildren.at(-1).style.left
+                : null,
+              labelTransform: redactionChildren.at(-1) instanceof HTMLElement
                 ? redactionChildren.at(-1).style.transform
                 : null
+            },
+            redactionBox: {
+              rect: redactionBoxRect
+            },
+            guidance: {
+              required: card?.dataset.objectiveRequiresMarker === 'true',
+              freeMarkerVisible,
+              redactionIndicatorVisible,
+              redactionBoxVisible,
+              visibleOwner: freeMarkerVisible
+                || redactionIndicatorVisible
+                || redactionBoxVisible
             },
             legacyMarkerCount: legacyMarkers.length,
             topHud: {
               vitalsRect,
               inventoryRect,
+              quickActionsRect,
               markerIntersectsVitals: intersects(markerRect, vitalsRect)
                 || intersects(markerLabelRect, vitalsRect),
               markerIntersectsInventory: intersects(markerRect, inventoryRect)
                 || intersects(markerLabelRect, inventoryRect),
+              markerIntersectsQuickActions: intersects(markerRect, quickActionsRect)
+                || intersects(markerLabelRect, quickActionsRect),
               redactionIntersectsVitals: intersects(redactionRect, vitalsRect)
                 || intersects(redactionLabelRect, vitalsRect),
               redactionIntersectsInventory: intersects(redactionRect, inventoryRect)
@@ -236,19 +330,35 @@ try {
         if (!evidence.objective?.id) failures.push('objective id is missing');
         if (!evidence.objective?.markerLabel) failures.push('objective marker label is missing');
         if (!evidence.objective?.insideViewport) failures.push('objective card leaves the viewport');
+        if (!evidence.caption.insideViewport) failures.push('story caption leaves the viewport');
+        if (evidence.caption.intersectsObjective) failures.push('story caption intersects objective card');
         if (evidence.objective?.requiresMarker === 'true' && evidence.objective.health !== 'ready') {
           failures.push(`required marker health is ${evidence.objective?.health ?? 'missing'}`);
         }
         if (evidence.objective?.requiresMarker === 'false' && evidence.objective.health !== 'ready') {
           failures.push(`markerless objective health is ${evidence.objective?.health ?? 'missing'}`);
         }
+        if (evidence.guidance.required && !evidence.guidance.visibleOwner) {
+          failures.push('required objective has no visible guidance owner');
+        }
         if (!evidence.marker.labelInsideViewport) failures.push('directional marker label leaves the viewport');
+        if (evidence.marker.intersectsObjective) failures.push('directional marker intersects objective card');
+        if (evidence.marker.intersectsCaption) failures.push('directional marker intersects story caption');
         if (!evidence.redactionIndicator.labelInsideViewport) {
           failures.push('redaction direction label leaves the viewport');
+        }
+        if (evidence.redactionIndicator.intersectsObjective) {
+          failures.push('redaction direction intersects objective card');
+        }
+        if (evidence.redactionIndicator.intersectsCaption) {
+          failures.push('redaction direction intersects story caption');
         }
         if (evidence.legacyMarkerCount !== 0) failures.push('legacy marker still owns embodied guidance');
         if (evidence.topHud.markerIntersectsVitals) failures.push('directional marker intersects survival vitals');
         if (evidence.topHud.markerIntersectsInventory) failures.push('directional marker intersects inventory');
+        if (evidence.topHud.markerIntersectsQuickActions) {
+          failures.push('directional marker intersects HUD quick actions');
+        }
         if (evidence.topHud.redactionIntersectsVitals) failures.push('redaction direction intersects survival vitals');
         if (evidence.topHud.redactionIntersectsInventory) failures.push('redaction direction intersects inventory');
         if (evidence.touchControls.objectiveIntersectsJoystick) {

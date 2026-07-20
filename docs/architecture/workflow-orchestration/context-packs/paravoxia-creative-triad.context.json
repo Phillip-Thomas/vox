@@ -35,6 +35,13 @@
       "purpose": "Machine-readable source precedence, shipped beat ceiling, contracted continuation IDs, and open gates."
     },
     {
+      "slug": "chapter-journey-contract",
+      "kind": "canonical-manifest",
+      "bindingKey": "paravoxia.chapterJourneyContract",
+      "required": true,
+      "purpose": "Executable objective semantics, placement fitness, interaction and entity lifecycle postconditions, entry modes, reload seams, recovery behavior, and exact registry projections."
+    },
+    {
       "slug": "story-bible",
       "kind": "canonical-doc",
       "bindingKey": "paravoxia.storyBible",
@@ -160,6 +167,7 @@
     "audio-report",
     "raw-audiovisual-evidence",
     "objective-lifecycle-evidence",
+    "chapter-journey-evidence",
     "evidence-registry",
     "independent-audits",
     "ux-audit",
@@ -190,6 +198,8 @@
     "Do not let directors race mutations to shared timeline or rendering files.",
     "Do not leak canon or intent to blind reviewers.",
     "Do not let a guided non-cinematic objective ship without an actionable work order, an exact marker match, lifecycle-clear evidence, and an independent player-experience audit.",
+    "Do not certify an objective from movie-mode completion alone; its journey contract must pass continuous manual, reload or Continue, direct-entry diagnostic, recovery, and declared variant lanes.",
+    "Do not accept an interaction prompt that has no declared effect, loses deterministic arbitration, survives its lifecycle, or competes with another visible prompt owner.",
     "Do not flatten material dissent into generic compromise.",
     "Do not advance beyond current production authority.",
     "Do not publish from a director, patch, verifier, or judge role.",

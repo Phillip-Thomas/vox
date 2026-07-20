@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { MaterialType } from '../types/materials.ts';
 import { voxelSystem } from './efficientVoxelSystem.ts';
 import { FAUNA_REGION_ID } from './faunaModel.ts';
+import type { FaunaNavigationObstacles } from './faunaNavigationObstacles.ts';
 import {
   FAUNA_KINDS,
   buildFaunaInstances,
@@ -16,6 +17,7 @@ import {
   faunaKindId,
   faunaLevelTransitionLift,
   faunaScaleForKind,
+  faunaStructureClearanceCells,
   hasFaunaBodyClearance,
   isFaunaEligibleVoxel,
   isFaunaHabitatVoxel,
@@ -43,6 +45,40 @@ function fullCoverageProfile(seed: number): FaunaProfile {
     ...buildFaunaProfile(seed),
     coverage: 1,
     densityMul: 10
+  };
+}
+
+function makeTopFaceAgent(
+  kind: FaunaAgent['kind'],
+  terrainSeed: number,
+  x = 0,
+  z = 0,
+  directionIndex = 0
+): FaunaAgent {
+  const anchor = new THREE.Vector3(x * 2, 51, z * 2);
+  return {
+    kind,
+    terrainSeed,
+    homeX: x, homeY: 25, homeZ: z,
+    x, y: 25, z,
+    toX: x, toY: 25, toZ: z,
+    from: anchor.clone(),
+    to: anchor.clone(),
+    progress: 0,
+    directionIndex,
+    speed: 0.7,
+    scaleSeed: 0.5,
+    tiltSeed: 0.5,
+    offsetU: 0,
+    offsetV: 0,
+    phase: 0,
+    stridePhase: 0.25,
+    stepSalt: 1,
+    stepCount: 0,
+    orientation: new THREE.Quaternion(),
+    grazeUntil: 0,
+    fleeUntil: 0,
+    pose: 0
   };
 }
 
@@ -139,6 +175,12 @@ describe('faunaField', () => {
     const [biasedX, biasedY] = faunaScaleForKind('grazer', 0.5, 1.15);
     expect(biasedX).toBeCloseTo(grazerX * 1.15);
     expect(biasedY).toBeCloseTo(grazerY * 1.15);
+  });
+
+  it('budgets ceilings against the largest phenotype rather than the median', () => {
+    const profile = { ...buildFaunaProfile(VERDANT_SEED), scaleMul: 1 };
+    expect(faunaStructureClearanceCells('woolly', profile, 0.5)).toBe(1);
+    expect(faunaStructureClearanceCells('woolly', profile, 1)).toBe(2);
   });
 
   it('herds grazers toward the nearest same-kind neighbor and separates crowds', () => {
@@ -585,6 +627,192 @@ describe('faunaField', () => {
     expect(afterPos.distanceTo(beforePos)).toBeGreaterThan(0.02);
     expect(seedAttr.getX(0)).toBe(seedBefore);
     expect((geometry.attributes.aFaunaStride as THREE.InstancedBufferAttribute).getX(0)).toBeCloseTo(result.agents[0].stridePhase);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('excludes occupied anchors from both capacity counts and spawned fauna', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (let x = 0; x < 10; x++) voxelSystem.addVoxel(x, 25, 0, MaterialType.GRASS, grass);
+    const selectedKind = FAUNA_KINDS.find(kind => countFaunaVoxels(kind, 10, seed, profile) > 0) ?? 'grazer';
+    const eligibleHomes = Array.from(voxelSystem.getAllVoxels().values())
+      .filter(voxel => {
+        const [x, y, z] = voxel.position;
+        return shouldPlaceFaunaVoxel(voxel, x, y, z, 10, seed, profile)
+          && chooseFaunaKindForVoxel(voxel, x, y, z, seed, profile) === selectedKind;
+      });
+    expect(eligibleHomes.length).toBeGreaterThan(0);
+    const blocked = eligibleHomes[0].position;
+    const obstacles: FaunaNavigationObstacles = {
+      isAnchorBlocked: (_kind, x, y, z) => x === blocked[0] && y === blocked[1] && z === blocked[2],
+      isRouteBlocked: () => false
+    };
+    const expected = countFaunaVoxels(selectedKind, 10, seed, profile, obstacles);
+    const geometry = createFaunaGeometry(selectedKind, profile);
+    prepareFaunaInstanceAttributes(geometry, 16);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 16);
+    const built = buildFaunaInstances(selectedKind, mesh, 10, 0, null, seed, profile, { obstacles });
+
+    expect(built.count).toBe(expected);
+    expect(built.count).toBeLessThan(countFaunaVoxels(selectedKind, 10, seed, profile));
+    expect(built.agents.some(agent =>
+      agent.homeX === blocked[0] && agent.homeY === blocked[1] && agent.homeZ === blocked[2]
+    )).toBe(false);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('chooses a deterministic side lane when the forward route is obstructed', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (const [x, z] of [[0, 0], [1, 0], [0, 1], [-1, 0], [0, -1]]) {
+      voxelSystem.addVoxel(x, 25, z, MaterialType.GRASS, grass);
+    }
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 1);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 1);
+    const agent = makeTopFaceAgent('grazer', seed);
+    const obstacles: FaunaNavigationObstacles = {
+      revision: () => 'wall-1',
+      isAnchorBlocked: (_kind, x, y, z) => x === 1 && y === 25 && z === 0,
+      isRouteBlocked: (_kind, fromX, fromY, fromZ, toX, toY, toZ) =>
+        fromX === 0 && fromY === 25 && fromZ === 0 && toX === 1 && toY === 25 && toZ === 0
+    };
+
+    updateFaunaAgents(mesh, [agent], 1, 1 / 60, seed, profile, null, null, obstacles);
+
+    expect([agent.toX, agent.toY, agent.toZ]).toEqual([0, 25, 1]);
+    expect(agent.navigationRevision).toBe('wall-1');
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('replans a newly blocked in-flight stride without recreating or teleporting the agent', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (const [x, z] of [[0, 0], [1, 0], [0, 1], [-1, 0], [0, -1]]) {
+      voxelSystem.addVoxel(x, 25, z, MaterialType.GRASS, grass);
+    }
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 1);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 1);
+    const agent = makeTopFaceAgent('grazer', seed);
+    agent.toX = 1;
+    agent.to.set(2, 51, 0);
+    agent.progress = 0.25;
+    agent.navigationRevision = 'open';
+    const visibleBefore = agent.from.clone().lerp(agent.to, agent.progress);
+    const orientationRef = agent.orientation;
+    const strideBefore = agent.stridePhase;
+    const obstacles: FaunaNavigationObstacles = {
+      revision: () => 'closed',
+      isAnchorBlocked: () => false,
+      isRouteBlocked: (_kind, fromX, fromY, fromZ, toX, toY, toZ) =>
+        fromY === 25 && toY === 25 && fromZ === 0 && toZ === 0
+        && ((fromX === 0 && toX === 1) || (fromX === 1 && toX === 0))
+    };
+
+    updateFaunaAgents(mesh, [agent], 2, 0.05, seed, profile, null, null, obstacles);
+    const matrix = new THREE.Matrix4();
+    const visibleAfter = new THREE.Vector3();
+    mesh.getMatrixAt(0, matrix);
+    visibleAfter.setFromMatrixPosition(matrix);
+
+    expect(agent.orientation).toBe(orientationRef);
+    expect(agent.navigationRevision).toBe('closed');
+    expect([agent.x, agent.y, agent.z]).toEqual([0, 25, 0]);
+    expect([agent.toX, agent.toY, agent.toZ]).toEqual([0, 25, 1]);
+    expect(agent.stridePhase).toBeGreaterThan(strideBefore);
+    expect(visibleAfter.distanceTo(visibleBefore)).toBeLessThan(0.12);
+    expect(visibleAfter.x).toBeLessThanOrEqual(visibleBefore.x + 1e-6);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('resolves a newly blocked stride to the physical side already occupied after its midpoint', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    for (const [x, z] of [[0, 0], [1, 0], [2, 0], [1, 1], [1, -1]]) {
+      voxelSystem.addVoxel(x, 25, z, MaterialType.GRASS, grass);
+    }
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 1);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 1);
+    const agent = makeTopFaceAgent('grazer', seed);
+    agent.toX = 1;
+    agent.to.set(2, 51, 0);
+    agent.progress = 0.75;
+    agent.navigationRevision = 'open';
+    const visibleBefore = agent.from.clone().lerp(agent.to, agent.progress);
+    const obstacles: FaunaNavigationObstacles = {
+      revision: () => 'closed',
+      isAnchorBlocked: () => false,
+      isRouteBlocked: (_kind, fromX, fromY, fromZ, toX, toY, toZ) =>
+        fromY === 25 && toY === 25 && fromZ === 0 && toZ === 0
+        && ((fromX === 0 && toX === 1) || (fromX === 1 && toX === 0))
+    };
+
+    updateFaunaAgents(mesh, [agent], 2, 0.05, seed, profile, null, null, obstacles);
+    const matrix = new THREE.Matrix4();
+    const visibleAfter = new THREE.Vector3();
+    mesh.getMatrixAt(0, matrix);
+    visibleAfter.setFromMatrixPosition(matrix);
+
+    // The wall plane is x=1wu and the animal was already at x=1.5wu when it
+    // appeared. It remains on that far side instead of crossing the new wall in
+    // either direction, then continues toward a valid lane from endpoint x=1.
+    expect(agent.x).toBe(1);
+    expect(visibleBefore.x).toBeGreaterThan(1);
+    expect(visibleAfter.x).toBeGreaterThanOrEqual(visibleBefore.x - 1e-6);
+    expect(visibleAfter.distanceTo(visibleBefore)).toBeLessThan(0.12);
+
+    geometry.dispose();
+    material.dispose();
+  });
+
+  it('preserves the rendered transition arc while rerouting a blocked climb', () => {
+    const seed = VERDANT_SEED;
+    const profile = fullCoverageProfile(seed);
+    voxelSystem.addVoxel(0, 25, 0, MaterialType.GRASS, grass);
+    voxelSystem.addVoxel(1, 26, 0, MaterialType.GRASS, grass);
+    voxelSystem.addVoxel(0, 25, 1, MaterialType.GRASS, grass);
+    const geometry = createFaunaGeometry('grazer', profile);
+    prepareFaunaInstanceAttributes(geometry, 1);
+    const material = new THREE.MeshBasicMaterial();
+    const mesh = new THREE.InstancedMesh(geometry, material, 1);
+    const agent = makeTopFaceAgent('grazer', seed);
+    agent.toX = 1;
+    agent.toY = 26;
+    agent.to.set(2, 53, 0);
+    agent.progress = 0.25;
+    agent.navigationRevision = 'open';
+    const visibleBefore = agent.from.clone().lerp(agent.to, agent.progress);
+    visibleBefore.y += faunaLevelTransitionLift('grazer', 1, agent.progress);
+    const obstacles: FaunaNavigationObstacles = {
+      revision: () => 'closed',
+      isAnchorBlocked: () => false,
+      isRouteBlocked: (_kind, fromX, fromY, fromZ, toX, toY, toZ) =>
+        fromX === 0 && fromY === 25 && fromZ === 0
+        && toX === 1 && toY === 26 && toZ === 0
+    };
+
+    updateFaunaAgents(mesh, [agent], 2, 0.05, seed, profile, null, null, obstacles);
+    const matrix = new THREE.Matrix4();
+    const visibleAfter = new THREE.Vector3();
+    mesh.getMatrixAt(0, matrix);
+    visibleAfter.setFromMatrixPosition(matrix);
+
+    expect([agent.toX, agent.toY, agent.toZ]).toEqual([0, 25, 1]);
+    expect(visibleAfter.distanceTo(visibleBefore)).toBeLessThan(0.12);
 
     geometry.dispose();
     material.dispose();

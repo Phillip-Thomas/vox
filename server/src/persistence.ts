@@ -973,6 +973,7 @@ export class MultiplayerPersistence {
                    case when target_ids.refund and target_ids.material = 'wood' then 'wood' else null end as item_id,
                    case when target_ids.refund then case target_ids.type
                      when 'foundation' then 2
+                     when 'tall_wall' then 2
                      when 'wall' then 1
                      when 'ceiling' then 1
                      when 'doorway' then 1

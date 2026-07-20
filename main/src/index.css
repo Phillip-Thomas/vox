@@ -83,3 +83,14 @@ textarea:focus-visible,
     max-height: calc(100% - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
   }
 }
+
+@media (max-width: 340px) {
+  .pv-mobile-journal-trigger {
+    width: 44px !important;
+    padding-inline: 0 !important;
+  }
+
+  .pv-mobile-journal-label {
+    display: none;
+  }
+}

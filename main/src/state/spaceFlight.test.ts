@@ -10,10 +10,12 @@ import {
   enterAtmosphere,
   enterShip,
   exitShip,
+  getSpaceFlightSnapshot,
   getWarp,
   leaveAtmosphere,
   notifyLanded,
   resetTravel,
+  restoreBoardedSurfaceFlight,
   setShipBoardingInterceptor,
   setShipExitInterceptor,
   subscribeAtmosphereExit,
@@ -31,6 +33,20 @@ beforeEach(() => {
 });
 
 describe('spaceFlight canonical player state publishing', () => {
+  it('rehydrates an already-boarded parked ship without launching it', () => {
+    debugStartInSpace();
+
+    restoreBoardedSurfaceFlight();
+
+    expect(getSpaceFlightSnapshot()).toEqual({
+      phase: 'surface',
+      controlMode: 'flight',
+      destination: null,
+      target: null
+    });
+    expect(getWarp()).toMatchObject({ active: false, progress: 0, midpointFired: false });
+  });
+
   it('lets a physical hatch interceptor hold the one-frame boarding transition', () => {
     let authorized = false;
     const unregister = setShipBoardingInterceptor(() => authorized);

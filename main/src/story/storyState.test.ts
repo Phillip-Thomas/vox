@@ -24,6 +24,7 @@ import {
   resetProgression
 } from '../game/systems/progressionSystem.ts';
 import {
+  applyShipRestorationSnapshot,
   getShipRestorationSnapshot,
   getShipRepairStage,
   resetShipRestoration,
@@ -50,9 +51,15 @@ import {
   isTidegardenRouteOnline,
   resolveStoryBootWorldId,
   resolveStoryResumeWorldId,
+  STORY_PRIMARY_WORLD_ID,
   TIDEGARDEN_ROUTE_MILESTONE,
   TIDEGARDEN_WORLD_ID
 } from './tidegardenRoute.ts';
+import {
+  PHYSICAL_BOARDING_MILESTONE,
+  PHYSICAL_BOARDING_SEALED_MILESTONE
+} from './physicalBoardingReceipts.ts';
+import { STORY_COORDINATE } from './world/storyWorld.ts';
 
 describe('storyState — beat order (drives debug jumps + seeding)', () => {
   beforeEach(() => {
@@ -308,6 +315,22 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     expect(getStoryStateSnapshot()).toMatchObject({ chapter: 'ch7', beat: 'ch7-board' });
     expect(getShipRepairStage()).toBe('flight_ready');
 
+    vi.stubGlobal('window', { location: { search: '?story=ch8-launch' } });
+    initStoryFromSave();
+    expect(getStoryStateSnapshot()).toMatchObject({ chapter: 'ch8', beat: 'ch8-launch' });
+    expect(getShipRepairStage()).toBe('flight_ready');
+    expect(hasMilestone(STORY_MILESTONES.ch7Boarded)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.ch8Launched)).toBe(false);
+    expect(hasMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE)).toBe(true);
+    expect(hasMilestone(PHYSICAL_BOARDING_MILESTONE)).toBe(true);
+    expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'surface', controlMode: 'flight' });
+    expect(getSystemFlightSnapshot()).toMatchObject({
+      systemId: `${STORY_COORDINATE.x},${STORY_COORDINATE.y}`,
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      locationMode: 'surface',
+      target: null
+    });
+
     vi.stubGlobal('window', { location: { search: '?story=ch8-crossing' } });
     initStoryFromSave();
     expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'deep_space', controlMode: 'flight' });
@@ -315,6 +338,25 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     vi.stubGlobal('window', { location: { search: '?story=ch8-landfall' } });
     initStoryFromSave();
     expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'descent', controlMode: 'flight' });
+  });
+
+  it('repairs legacy boarding receipts without overriding on-foot surface occupancy on Continue', () => {
+    markMilestone(STORY_MILESTONES.started);
+    markMilestone(STORY_MILESTONES.ch7Boarded);
+    applyShipRestorationSnapshot({ repairStage: 'flight_ready' });
+    resetTravel();
+
+    beginStory();
+
+    expect(getStoryStateSnapshot()).toMatchObject({
+      active: true,
+      chapter: 'ch8',
+      beat: 'ch8-launch'
+    });
+    expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'surface', controlMode: 'fps' });
+    expect(hasMilestone(PHYSICAL_BOARDING_SEALED_MILESTONE)).toBe(true);
+    expect(hasMilestone(PHYSICAL_BOARDING_MILESTONE)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.ch8Launched)).toBe(false);
   });
 
   it('places a landfall debug rehearsal on Tidegarden with matching system-flight active-body ownership', () => {

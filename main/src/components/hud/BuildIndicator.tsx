@@ -49,7 +49,7 @@ const BuildIndicator: React.FC = () => {
       fontFamily: 'monospace', color: '#dfe7ee', pointerEvents: 'none', zIndex: 25,
       textShadow: '0 1px 3px rgba(0,0,0,0.9)'
     }}>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, maxWidth: 'calc(100vw - 32px)' }}>
         {BUILD_PIECE_ORDER.map((type, i) => {
           const active = type === selected;
           return (
@@ -59,13 +59,13 @@ const BuildIndicator: React.FC = () => {
               border: `1px solid ${active ? 'rgba(125,255,160,0.6)' : 'rgba(125,211,252,0.25)'}`,
               color: active ? '#bfffd6' : '#aab6c2'
             }}>
-              <b style={{ opacity: 0.6 }}>{i === 9 ? 0 : i + 1}</b> {BUILD_PIECES[type].name}
+              <b style={{ opacity: 0.6 }}>{i === 9 ? '0' : i === 10 ? '-' : i + 1}</b> {BUILD_PIECES[type].name}
             </div>
           );
         })}
       </div>
       <div style={{ fontSize: 10, letterSpacing: 1, opacity: 0.7 }}>
-        BUILD MODE · [E] place · [X] remove · [1–9, 0] select · [B] exit
+        BUILD MODE · [E] place · [X] remove · [1–9, 0, -] select · [B] exit
       </div>
       <div style={{
         fontSize: 10,
