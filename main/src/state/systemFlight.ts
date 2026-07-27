@@ -8,6 +8,11 @@ import {
   type PlanetAddress,
   type SystemCoordinate
 } from '../game/starSystem.ts';
+import {
+  anchorageWorldId,
+  normalizeAnchorageAddress
+} from '../game/anchorage/anchorageAddress.ts';
+import type { AnchorageAddress } from '../game/anchorage/anchorageTypes.ts';
 import { coordinateKey, normalizeCoordinate, sameSystemCoordinate } from '../utils/worldCoordinates.ts';
 
 export type SystemLocationMode = 'surface' | 'atmosphere' | 'local_space' | 'system_cruise';
@@ -24,6 +29,21 @@ export type SystemFlightTarget =
   | {
       readonly kind: 'system_body';
       readonly address: PlanetAddress;
+      readonly worldId: string;
+    }
+  | {
+      /**
+       * A station in this system.
+       *
+       * Deliberately its own kind rather than a fourth planet slot. An anchorage
+       * has no terrain, no surface residency and no planet identity; borrowing the
+       * planet grammar would make every consumer of `system_body` — terrain
+       * preparation, surface handoff, the atmosphere envelope — start receiving a
+       * body it cannot generate. Every existing reader tests `kind ===
+       * 'system_body'` positively, so they all correctly ignore this one.
+       */
+      readonly kind: 'anchorage';
+      readonly address: AnchorageAddress;
       readonly worldId: string;
     }
   | {
@@ -232,6 +252,30 @@ export function commitSystemBodyTarget(address: PlanetAddress): number {
   return activationEpoch;
 }
 
+/**
+ * Aim at a station in this system.
+ *
+ * Same shape and same epoch discipline as a planet target, so preparation started
+ * against a stale epoch is discarded identically. What it does *not* do is claim
+ * the pose-writer lease or touch `activePlanetId` — flying to a station changes
+ * nothing about which world the player is resident on, and an anchorage that
+ * quietly evicted the active planet would strand terrain that is still loaded.
+ */
+export function commitAnchorageTarget(address: AnchorageAddress): number {
+  const normalized = normalizeAnchorageAddress(address);
+  if (coordinateKey(normalized.system) !== snapshot.systemId) {
+    throw new Error('Anchorage target must belong to the current star system.');
+  }
+  const activationEpoch = snapshot.activationEpoch + 1;
+  const target = freezeTarget({
+    kind: 'anchorage',
+    address: normalized,
+    worldId: anchorageWorldId(normalized)
+  });
+  publishBoundary({ ...snapshot, target, activationEpoch });
+  return activationEpoch;
+}
+
 export function commitInterstellarTarget(coordinate: SystemCoordinate): number {
   const normalized = normalizeCoordinate(coordinate);
   if (coordinateKey(normalized) === snapshot.systemId) {
@@ -367,6 +411,11 @@ function freezeTarget(value: SystemFlightTarget): SystemFlightTarget {
   if (value.kind === 'system_body') {
     const system = Object.freeze({ ...value.address.system });
     const address = Object.freeze({ system, slot: value.address.slot }) as PlanetAddress;
+    return Object.freeze({ ...value, address });
+  }
+  if (value.kind === 'anchorage') {
+    const system = Object.freeze({ ...value.address.system });
+    const address = Object.freeze({ system, index: value.address.index }) as AnchorageAddress;
     return Object.freeze({ ...value, address });
   }
   return Object.freeze({

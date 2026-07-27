@@ -150,9 +150,15 @@ export default function SystemTravelProbe({
           quaternion: [...flight.pose.quaternion],
           renderOrigin: [...flight.renderOrigin],
           activationEpoch: flight.activationEpoch,
-          target: flight.target?.kind === 'system_body'
-            ? flight.target.worldId
-            : flight.target?.systemId ?? null
+          // Anchorages and planets both name a world; only an interstellar target
+          // names a system. Reading `systemId` off whatever was not a planet used
+          // to be safe and is not any more.
+          target:
+            flight.target === null
+              ? null
+              : flight.target.kind === 'star_system'
+                ? flight.target.systemId
+                : flight.target.worldId
         },
         warp: {
           active: warp.active,

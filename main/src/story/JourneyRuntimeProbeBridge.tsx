@@ -209,18 +209,21 @@ function buildSnapshot(): Record<string, unknown> {
           velocity: [...systemFlight.pose.velocity],
           quaternion: [...systemFlight.pose.quaternion]
         },
+        // Deep-copied per kind. An anchorage target carries an address like a
+        // planet does but is not one, so the old "planet or else a coordinate"
+        // split would have handed the probe an undefined coordinate.
         target: systemFlight.target
-          ? systemFlight.target.kind === 'system_body'
+          ? systemFlight.target.kind === 'star_system'
             ? {
+              ...systemFlight.target,
+              coordinate: { ...systemFlight.target.coordinate }
+            }
+            : {
               ...systemFlight.target,
               address: {
                 ...systemFlight.target.address,
                 system: { ...systemFlight.target.address.system }
               }
-            }
-            : {
-              ...systemFlight.target,
-              coordinate: { ...systemFlight.target.coordinate }
             }
           : null,
         renderOrigin: [...systemFlight.renderOrigin]
