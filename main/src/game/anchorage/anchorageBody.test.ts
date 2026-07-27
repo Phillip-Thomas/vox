@@ -250,6 +250,29 @@ describe('approach corridor', () => {
     }
   });
 
+  it('clears a ship sitting exactly on the berth', () => {
+    // The apex case. A true cone apex at the berth makes `-dx` negative zero, and
+    // atan2(0, -0) is pi — so the one position a perfect approach ends at reported
+    // a hundred and eighty degrees off. It is also exactly where a ship that has
+    // just undocked is sitting.
+    const readout = evaluateApproach(body, { position: body.berth, velocity: still });
+    expect(readout.offAxis).toBeCloseTo(0, 6);
+    expect(readout.insideCorridor).toBe(true);
+    expect(readout.canDock).toBe(true);
+  });
+
+  it('clears a ship that has drifted just past the berth into the mouth', () => {
+    // Past the berth means inside the dock, which is the most aligned a ship can
+    // be — not a hundred and eighty degrees out.
+    const inside = stationLocalToSystem(body, [
+      body.berthLocal[0] + 40,
+      body.berthLocal[1],
+      body.berthLocal[2]
+    ]);
+    const readout = evaluateApproach(body, { position: inside, velocity: still });
+    expect(readout.insideCorridor).toBe(true);
+  });
+
   it('keeps the corridor tolerance usable rather than an exam', () => {
     // A ship a corridor-half-angle off at range is still inside; the speed gate is
     // the one meant to ask something of the player.

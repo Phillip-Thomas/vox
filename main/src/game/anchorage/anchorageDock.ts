@@ -1,5 +1,5 @@
 /**
- * Arriving at an anchorage.
+ * Arriving at an anchorage, and leaving it.
  *
  * The dock sequence is the only moment the station gets to introduce itself. A
  * player who materialises standing on the apron has been placed in a level; a
@@ -12,6 +12,12 @@
  * separation is why this file can be tested at all: the timeline is arithmetic, and
  * the camera, the readout and the audio are three different readers of it.
  *
+ * Departure lives here too rather than in a file of its own, and that is the whole
+ * point of the direction parameter. A departure written separately drifts: it ends
+ * up two seconds long against an arrival of six, or vents pressure it never built,
+ * and nobody notices until it feels wrong. Sharing one timeline makes "leaving is
+ * arriving backwards" a property the tests can actually assert.
+ *
  * It is also the budget for work that must not happen mid-play. Shader compilation,
  * a lighting bake, a first-frame stall — the sequence exists partly so those have
  * somewhere to hide, and lengthening it is cheaper than a hitch on arrival.
@@ -19,42 +25,76 @@
 
 import type { Vec3Tuple } from '../starSystem.ts';
 
+/** Arriving at the station, or leaving it. */
+export type DockDirection = 'arrive' | 'depart';
+
 export type DockPhase =
   | 'idle'
+  // Arrival, in order.
   | 'clamping'
   | 'pressurising'
   | 'hatch'
   | 'disembark'
+  // Departure, in order.
+  | 'boarding'
+  | 'sealing'
+  | 'depressurising'
+  | 'releasing'
   | 'complete';
 
 /**
  * Stage durations, in seconds.
  *
- * Weighted toward pressurisation because that is the stage with nothing to look at
- * — it is the wait that makes the hatch worth opening. Total is a shade under six
- * seconds, which is long enough to read as a procedure and short enough to sit
- * through on a second visit.
+ * Arrival is weighted toward pressurisation because that is the stage with nothing
+ * to look at — it is the wait that makes the hatch worth opening. Departure is
+ * weighted toward boarding, because walking back into the lock is the last look at
+ * the station you get and cutting it short throws that away.
+ *
+ * The two totals are deliberately close. A six-second arrival followed by a
+ * two-second departure reads as the game losing interest in you.
  */
 export const DOCK_TIMING: Record<Exclude<DockPhase, 'idle' | 'complete'>, number> = {
   clamping: 1.1,
   pressurising: 2.0,
   hatch: 1.0,
-  disembark: 1.6
+  disembark: 1.6,
+
+  boarding: 1.6,
+  sealing: 1.0,
+  depressurising: 1.7,
+  releasing: 1.1
 };
 
-export const DOCK_TOTAL_SECONDS =
-  DOCK_TIMING.clamping + DOCK_TIMING.pressurising + DOCK_TIMING.hatch + DOCK_TIMING.disembark;
+const ARRIVE_ORDER: DockPhase[] = ['clamping', 'pressurising', 'hatch', 'disembark', 'complete'];
+const DEPART_ORDER: DockPhase[] = ['boarding', 'sealing', 'depressurising', 'releasing', 'complete'];
 
-/** Station-normal pressure. The lock starts at hard vacuum. */
+export const DOCK_TOTAL_SECONDS = totalFor('arrive');
+export const UNDOCK_TOTAL_SECONDS = totalFor('depart');
+
+function totalFor(direction: DockDirection): number {
+  return orderFor(direction)
+    .filter(phase => phase !== 'complete')
+    .reduce((sum, phase) => sum + DOCK_TIMING[phase as keyof typeof DOCK_TIMING], 0);
+}
+
+function orderFor(direction: DockDirection): DockPhase[] {
+  return direction === 'arrive' ? ARRIVE_ORDER : DEPART_ORDER;
+}
+
+/** Station-normal pressure. The lock starts at hard vacuum, and ends there again. */
 export const STATION_PRESSURE_KPA = 101.3;
 
 export type DockEffect =
   | 'clamps-engaged'
   | 'pressure-equalised'
   | 'hatch-open'
+  | 'hatch-sealed'
+  | 'pressure-vented'
+  | 'clamps-released'
   | 'control-handback';
 
 export interface DockState {
+  direction: DockDirection;
   phase: DockPhase;
   /** Seconds inside the current phase. */
   elapsed: number;
@@ -69,23 +109,31 @@ export interface DockAdvance {
   effects: DockEffect[];
 }
 
-export function createDockState(): DockState {
-  return { phase: 'idle', elapsed: 0, total: 0, handedBack: false };
+export function createDockState(direction: DockDirection = 'arrive'): DockState {
+  return { direction, phase: 'idle', elapsed: 0, total: 0, handedBack: false };
 }
 
-export function beginDock(current: DockState): DockState {
+export function beginDock(current: DockState, direction: DockDirection = current.direction): DockState {
   if (current.phase !== 'idle') return current;
-  return { phase: 'clamping', elapsed: 0, total: 0, handedBack: false };
+  return { direction, phase: orderFor(direction)[0], elapsed: 0, total: 0, handedBack: false };
 }
 
-const ORDER: DockPhase[] = ['clamping', 'pressurising', 'hatch', 'disembark', 'complete'];
+/** Start a departure from scratch, whatever the incoming state was. */
+export function beginUndock(): DockState {
+  return beginDock(createDockState('depart'), 'depart');
+}
 
 /** The effect emitted on *leaving* each stage. */
 const EXIT_EFFECT: Partial<Record<DockPhase, DockEffect>> = {
   clamping: 'clamps-engaged',
   pressurising: 'pressure-equalised',
   hatch: 'hatch-open',
-  disembark: 'control-handback'
+  disembark: 'control-handback',
+
+  boarding: 'hatch-sealed',
+  sealing: 'pressure-vented',
+  depressurising: 'clamps-released',
+  releasing: 'control-handback'
 };
 
 /**
@@ -101,6 +149,7 @@ export function advanceDock(current: DockState, deltaSeconds: number): DockAdvan
   }
   const dt = Math.max(0, deltaSeconds);
   const effects: DockEffect[] = [];
+  const order = orderFor(current.direction);
 
   let phase: DockPhase = current.phase;
   let elapsed = current.elapsed + dt;
@@ -112,7 +161,7 @@ export function advanceDock(current: DockState, deltaSeconds: number): DockAdvan
     const effect = EXIT_EFFECT[phase];
     if (effect) effects.push(effect);
     elapsed -= duration;
-    phase = ORDER[ORDER.indexOf(phase) + 1] ?? 'complete';
+    phase = order[order.indexOf(phase) + 1] ?? 'complete';
     if (phase === 'complete') {
       elapsed = 0;
       break;
@@ -120,7 +169,13 @@ export function advanceDock(current: DockState, deltaSeconds: number): DockAdvan
   }
 
   return {
-    state: { phase, elapsed, total, handedBack: current.handedBack || phase === 'complete' },
+    state: {
+      direction: current.direction,
+      phase,
+      elapsed,
+      total,
+      handedBack: current.handedBack || phase === 'complete'
+    },
     effects
   };
 }
@@ -137,7 +192,13 @@ export function skipDock(current: DockState): DockAdvance {
     return { state: current, effects: [] };
   }
   return {
-    state: { phase: 'complete', elapsed: 0, total: DOCK_TOTAL_SECONDS, handedBack: true },
+    state: {
+      direction: current.direction,
+      phase: 'complete',
+      elapsed: 0,
+      total: totalFor(current.direction),
+      handedBack: true
+    },
     effects: ['control-handback']
   };
 }
@@ -147,39 +208,49 @@ export function dockInputLocked(state: DockState): boolean {
 }
 
 export interface DockReadout {
+  direction: DockDirection;
   phase: DockPhase;
-  /** Per-stage progress, 0..1, each reaching 1 only once its stage is done. */
+  /** 1 while the clamps hold, 0 while they do not. */
   clamp: number;
+  /** 1 at station pressure, 0 at vacuum. */
   pressure: number;
+  /** 1 with the hatch fully open. */
   hatch: number;
-  /** Lock pressure in kPa, for the gauge. */
   pressureKpa: number;
   /** 0 sealed, 1 fully open. Drives the hatch iris. */
   aperture: number;
   /** 0 dark lock, 1 full station light. Drives the reveal. */
   reveal: number;
-  /** 0 at the lock, 1 at the point control is handed over. */
+  /** Position along the lock-to-deck axis: 0 in the lock, 1 out on the deck. */
   travel: number;
-  /** Opacity for the readout panel itself, so it leaves before you do. */
+  /** Opacity for the readout panel itself. */
   panelOpacity: number;
+  /** Heading for the instrument. */
+  title: string;
 }
 
+/** Progress through one named stage, 0 before it, 1 after it. */
 function stageProgress(state: DockState, phase: keyof typeof DOCK_TIMING): number {
-  const index = ORDER.indexOf(phase);
-  const currentIndex = ORDER.indexOf(state.phase);
+  const order = orderFor(state.direction);
+  const index = order.indexOf(phase as DockPhase);
+  if (index < 0) return 0;
+  const currentIndex = order.indexOf(state.phase);
   if (state.phase === 'idle') return 0;
-  if (currentIndex > index || state.phase === 'complete') return 1;
+  if (state.phase === 'complete' || currentIndex > index) return 1;
   if (currentIndex < index) return 0;
   return clamp01(state.elapsed / DOCK_TIMING[phase]);
 }
 
 export function dockReadout(state: DockState): DockReadout {
+  if (state.direction === 'depart') return departReadout(state);
+
   const clamp = stageProgress(state, 'clamping');
   const pressure = stageProgress(state, 'pressurising');
   const hatch = stageProgress(state, 'hatch');
   const walk = stageProgress(state, 'disembark');
 
   return {
+    direction: 'arrive',
     phase: state.phase,
     clamp,
     pressure,
@@ -192,7 +263,44 @@ export function dockReadout(state: DockState): DockReadout {
     travel: easeInOut(walk),
     // The panel is a lock instrument. It belongs to the lock, so it goes as the
     // hatch opens rather than following you out onto the deck.
-    panelOpacity: state.phase === 'complete' ? 0 : 1 - clamp01(hatch * 0.7 + walk)
+    panelOpacity: state.phase === 'complete' ? 0 : 1 - clamp01(hatch * 0.7 + walk),
+    title: 'BERTH ASSIGNED · HOLD FOR CYCLE'
+  };
+}
+
+/**
+ * Leaving, which is arriving backwards.
+ *
+ * Everything that rose on the way in falls on the way out, and the walk runs from
+ * the deck back to the lock rather than the other way. Written as its own function
+ * rather than as one-minus-the-arrival because the *order* differs — you seal
+ * before you vent, and on the way in you pressurise before you open — and a
+ * mirrored timeline that also mirrored the ordering would have you opening a hatch
+ * onto vacuum.
+ */
+function departReadout(state: DockState): DockReadout {
+  const boarding = stageProgress(state, 'boarding');
+  const sealing = stageProgress(state, 'sealing');
+  const venting = stageProgress(state, 'depressurising');
+  const releasing = stageProgress(state, 'releasing');
+
+  return {
+    direction: 'depart',
+    phase: state.phase,
+    clamp: 1 - releasing,
+    pressure: 1 - venting,
+    hatch: 1 - sealing,
+    pressureKpa: STATION_PRESSURE_KPA * (1 - venting),
+    aperture: 1 - easeInOut(sealing),
+    // The light goes with the hatch. Once it is shut you are in a dark lock with
+    // an instrument panel, which is exactly where you started on the way in.
+    reveal: clamp01(1 - (sealing * 0.85 + boarding * 0.15)),
+    // Walking back in: from the deck toward the lock.
+    travel: 1 - easeInOut(boarding),
+    // The panel comes up as the hatch closes — the mirror of it leaving as the
+    // hatch opened.
+    panelOpacity: state.phase === 'complete' ? 0 : clamp01(sealing * 1.4 + boarding * 0.2),
+    title: 'DEPARTURE CLEARED · STAND BY'
   };
 }
 

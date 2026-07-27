@@ -194,8 +194,20 @@ export function offAxisAngle(body: AnchorageBody, position: Vec3Tuple): number {
   // completely different district.
   const dx = local[0] - body.berthLocal[0];
   const lateral = Math.hypot(local[1] - body.berthLocal[1], local[2] - body.berthLocal[2]);
-  // A ship correctly positioned is out along -X from the berth, i.e. dx < 0.
-  return Math.atan2(lateral, -dx);
+
+  /*
+    The cone's apex is pushed one envelope *behind* the berth rather than sitting
+    on it, which turns the last stretch into a tube instead of a point.
+
+    A true apex at the berth has two failure modes and both of them refuse a
+    perfect approach. Exactly on it, `-dx` is negative zero and `atan2(0, -0)` is
+    pi — so a ship that nails the line is reported as a hundred and eighty degrees
+    off. A centimetre past it, the ship is geometrically "behind" the apex and
+    reads the same way, even though being past the berth means being *inside the
+    dock*, which is the most aligned place a ship can be. A ship that has just
+    undocked sits at exactly that point.
+  */
+  return Math.atan2(lateral, Math.max(-dx, BERTH_ENVELOPE));
 }
 
 /**
