@@ -22,6 +22,15 @@ The synthesis, recommendation, and preserved dissent live in
 register as a physical prop; the A5 seed visible and unreachable) and from A (model-driven
 NPCs may never use the awakening voice).
 
+> **Update, same day.** Owner direction is mechanics-first: *"we don't need to overthink the
+> story connections — let's get the mechanics in place and have something cool to test."*
+> These treatments are therefore **not canon and not committed**. The feature plan borrows
+> direction C's *look and spatial program* for mechanical reasons — it is the cheapest way to
+> get scale out of procedural geometry, and its resettlement conceit doubles as the economy's
+> shock queue — while attaching no story. Nothing here forces a decision about the Makers, A5,
+> or continuity. Treat these as a well-developed option pool to return to when the mechanics
+> have shown what the place wants to be.
+
 **Preserved dissent.** A's exterior reveal is stronger than C's. B's hero image is stronger
 than C's. If owner taste runs toward spectacle over ideas, B is the better pick and the
 feature plan survives the substitution with only §4 and §6 changing.

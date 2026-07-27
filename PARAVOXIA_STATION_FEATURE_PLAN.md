@@ -1,285 +1,247 @@
-# Paravoxia — Deep-Space Station, NPCs, and the Intersystem Economy
+# Paravoxia — the Anchorage: station mechanics, NPCs, and the intersystem economy
 
-**Status: PLANNING DRAFT. Not a production lock. Nothing here is authorized for implementation.**
-Date: 2026-07-27 · Branch: `agent/paravoxia-story-audio-world-update`
+**Status: PLANNING DRAFT, mechanics-first. Not a production lock.**
+Date: 2026-07-27 · Revised same day after owner direction: *"we don't need to overthink the
+story connections — let's get the mechanics in place and have something cool to test."*
 
-This document plans a new destination type (a deep-space station), a robust NPC layer
-including live model-driven characters, and an intersystem trading economy. It is written
-to be consumed by the Terra orchestration route described in §9 — it is preproduction
-material, not a scene contract and not a signed authority.
-
----
-
-## 1. What is permitted right now
-
-`PARAVOXIA_DEMO_FOUNDATION_PLAN.md` remains the binding release gate, as amended by the
-**Owner Lane Override of 2026-07-13**. Reading it precisely:
-
-**Permitted today.** Agent definitions, production workflow, scene contracts, continuity
-docs, review artifacts, non-mutating validation, and drafting a future scene *provided it
-is not represented as shipped*. This document sits squarely inside that permission.
-
-**Gated.** Implementation of any post-arrival content requires a **new owner-signed
-production lock** with `mutationBoundary` widened past `planning-only`. Publishing requires
-that lock's gates *plus* the four open demo gates (`headed-primitive-journey`,
-`fauna-triangle-budget`, `full-client-verify`, `batch-3-existing-story-screening`) *plus* a
-separate owner publish decision.
-
-**Protected paths — exactly three.** `main/src/audio/`, `main/src/components/audio/`,
-`main/public/audio/`. Regression testing only, unless a reproducible demo-blocking bug is
-found and separately approved. **This matters more than it looks:** §7 requires positional
-audio, which does not exist anywhere in the codebase today and which lives inside a
-protected path. Treat that as a separately-negotiated carve-out, not as part of the station
-work packet.
-
-**Hard blocker for any production run.** The worktree currently carries **77 uncommitted
-files** across four green-verified waves — 29 in `main/src/story`, 21 in
-`main/src/components`, 15 in `main/src/audio`. The `lock-production-scope` step cannot
-certify a dirty worktree, and `CLAUDE_FABLE_HANDOFF_2026-07-20.md` warns that `HEAD` does
-not represent current behavior. **Commit in coherent batches before anything in this
-document begins.**
+This plans a deep-space station destination, a trading economy, and an NPC layer including
+live model-driven characters. It is deliberately **sequenced to reach a playable, testable
+loop as early as possible**, with story and canon deferred until the mechanics tell us what
+the place actually wants to be.
 
 ---
 
-## 2. What already exists (the seams worth knowing)
+## 0. The shape of this, in one paragraph
 
-The single most important finding of this survey: **this feature is far less greenfield than
-it appears.** The substrate for multi-system travel, deterministic generation, server
-authority, and NPC motion is already shipped and tested. What is missing is a market layer,
-an interior, and a conversation surface.
+Build the anchorage as a **dev-flag-gated sandbox** (`?anchorage=1`), code-split so it does
+not enter the demo bundle at all. No canon, no story beats, no named characters that anyone
+has to live with later. Get to *fly there → dock → walk around → trade → talk to someone* as
+fast as the architecture honestly allows, instrument it from the first commit, and let the
+place earn its fiction by being interesting to play. The architectural decisions that are
+expensive to retrofit — the portal graph, the order-book shape of the market, the catalog
+codegen, the material budget — get made correctly **now**; everything else can be ugly and
+provisional until the loop is fun.
 
-### Already shipped and directly reusable
+---
+
+## 1. Why the sandbox framing matters
+
+`PARAVOXIA_DEMO_FOUNDATION_PLAN.md` gates *post-arrival story content* and *publishing*. It
+does not gate an unreachable development surface. The repo already has the idiom —
+`?bench` (`BenchmarkProbe`), `?systemprobe=1` (`SystemTravelProbe`), `?movie=1` (autopilot),
+and the `?story=` dev flows — and the sandbox-no-op prime directive is established practice.
+
+So: **the anchorage is a dev surface until someone decides otherwise.** That buys three
+things.
+
+- **No story-council dependency.** The A5 decision and the Makers question leave the critical
+  path entirely. They become decisions you make later, with a playable thing in front of you,
+  which is a much better position to decide from.
+- **Much lighter governance.** You are not adding dialogue, lore, a teaser, or a canonical
+  ending to the demo. You are adding a dev route. Still keep it honest: it must be
+  genuinely unreachable from the shipped build, not merely undocumented.
+- **Bundle safety.** Batch-4 holds a **1.60 MB gzip guard**, and a station system plus an
+  economy plus an NPC layer will not fit inside the remaining headroom. **Dynamic-import the
+  entire anchorage module behind the flag** so the demo bundle is unaffected. This is not an
+  optimization to do later — it is the difference between this feature being free and being
+  a release blocker.
+
+Two constraints survive the reframing and are worth respecting anyway:
+
+- **Protected audio paths** (`main/src/audio/`, `main/src/components/audio/`,
+  `main/public/audio/`) are unchanged. Positional audio does not exist in the codebase and
+  lives inside them. **Ship the sandbox text-only**; spatial dialogue is a separate packet.
+- **The 77-file uncommitted worktree.** Downgraded from hard blocker to strong
+  recommendation, since we are not running a production-lock workflow. But four green-verified
+  waves sitting uncommitted while you start a large feature is how you lose a bisect later.
+  Commit in coherent batches first; it costs an hour.
+
+---
+
+## 2. What already exists (the seams)
+
+The most useful finding of the survey: **this is far less greenfield than it looks.** The
+substrate for multi-system travel, deterministic generation, server authority, and NPC motion
+is shipped and tested. What's missing is a market, an interior, and a conversation surface.
 
 | Need | Where it lives | Note |
 |---|---|---|
-| Multi-body system manifests, deterministic seeds | `main/src/game/starSystem.ts` | `PlanetSlot` is a hard `0\|1\|2` union — must widen or add a parallel body array |
-| Canonical system-space frame authority | `main/src/state/systemFlight.ts` | Single pose-writer lease; a station must register here |
-| Flight/landing/warp state machine | `main/src/state/spaceFlight.ts` | Has interceptable boarding/exit hooks already |
-| A physical approach-and-board choreography | `main/src/story/physicalBoarding.ts` | Near-perfect template for dock → airlock → step out |
-| Distance-driven LOD and residency | `main/src/game/planetResidency.ts` | Body-agnostic; takes a station with almost no change |
-| Deterministic worker generation + packed transfer + cache | `main/src/workers/worldPrep.worker.ts`, `utils/worldGenCache.ts` | Reusable for baking station interiors |
-| Gravity-aligned walking with arbitrary up-vector | `main/src/components/EfficientPlayer.tsx`, `utils/gravityField.ts` | Station-local "down" feeds the same struct |
-| Surface A* with an injectable terrain interface | `main/src/utils/agentSurfaceNavigation.ts` | Station interior nav implements `AgentSurfaceTerrainQuery` |
-| A working NPC (body, gait, pathfinding, dialogue) | `main/src/story/world/AuditWorker.tsx` + `emergentStoryDirector.ts:898` | Director-writes-pose / component-renders. Copy this pattern. |
-| Speaker-attributed dialogue delivery | `main/src/story/storyText.ts` (`showAuditLine(text, header, ttl)`) | Already supports a speaker header |
-| Pure, rng-injectable branching card engine | `main/src/story/voyageDeck.ts` | The correct skeleton for authored dialogue trees |
-| Single-key contextual interaction | `main/src/game/systems/interactionSystem.ts` | Add IDs + a resolver branch; no new key, no new prompt |
-| Server authority, auth, persistence schema | `server/src/stateServer.ts`, `persistence.ts`, Neon Postgres, 13 tables | Firebase-admin auth and CORS allowlist already in place |
-| Client/server contract codegen with a hard verify gate | `shared/economyCatalog.json` → `scripts/generate-economy-catalog.mjs` | Drift is structurally impossible. Extend this, never bypass it. |
+| Multi-body system manifests, deterministic seeds | `main/src/game/starSystem.ts` | `PlanetSlot` is a hard `0\|1\|2` union — widen it or add a parallel body array |
+| System-space frame authority | `main/src/state/systemFlight.ts` | Single pose-writer lease; the anchorage must register here |
+| Flight/landing/warp state machine | `main/src/state/spaceFlight.ts` | Already has interceptable boarding/exit hooks |
+| Physical approach-and-board choreography | `main/src/story/physicalBoarding.ts` | Very close to a docking sequence already — clone the phase machine |
+| Distance-driven LOD and residency | `main/src/game/planetResidency.ts` | Body-agnostic; takes an anchorage with almost no change |
+| Deterministic worker gen + packed transfer + cache | `main/src/workers/worldPrep.worker.ts`, `utils/worldGenCache.ts` | Reusable for baking interiors |
+| Gravity-aligned walking, arbitrary up-vector | `main/src/components/EfficientPlayer.tsx`, `utils/gravityField.ts` | Station-local "down" feeds the same struct |
+| Surface A* with injectable terrain interface | `main/src/utils/agentSurfaceNavigation.ts` | Interior nav implements `AgentSurfaceTerrainQuery` |
+| A working NPC (body, gait, pathfinding, speech) | `main/src/story/world/AuditWorker.tsx` + `emergentStoryDirector.ts:898` | Director-writes-pose, component-renders. Copy verbatim. |
+| Speaker-attributed dialogue delivery | `main/src/story/storyText.ts` — `showAuditLine(text, header, ttl)` | Speaker header already supported |
+| Pure, rng-injectable branching engine | `main/src/story/voyageDeck.ts` | Correct skeleton for dialogue trees |
+| Single-key contextual interaction | `main/src/game/systems/interactionSystem.ts` | Add IDs and a resolver branch; no new key, no new prompt component |
+| Server authority, auth, persistence schema | `server/src/stateServer.ts`, Neon Postgres, 13 tables | Firebase-admin auth and CORS allowlist in place |
+| Client/server contract codegen with a verify gate | `shared/economyCatalog.json` → `scripts/generate-economy-catalog.mjs` | Drift structurally impossible. Extend it; never bypass it. |
 
 ### Genuinely absent
 
-- **Any market, price, currency, or trade concept.** Zero occurrences repo-wide.
-  `server/src/economyAuthority.ts` is misnamed: it is a 2538-line *stateless command
-  validator* with no tick loop and no market state. It is excellent anti-cheat scaffolding
-  and it is not an economy.
-- **Any runtime LLM call.** Neither `package.json` has an AI dependency. Dev-time agent
-  tooling is extensive; shipped-game AI is nil.
-- **Any positional audio.** `playSfx(event)` takes no position. No `PannerNode`, no
-  `AudioListener` anywhere. Spatial dialogue is greenfield *and* inside a protected path.
+- **Any market, price, currency, or trade concept** — zero occurrences repo-wide.
+  `server/src/economyAuthority.ts` is misnamed: a 2,538-line *stateless command validator*
+  with no tick loop and no market state. Excellent anti-cheat, zero economy.
+- **Any runtime LLM call.** Neither `package.json` has an AI dependency.
+- **Any positional audio.** `playSfx(event)` takes no position; no `PannerNode` anywhere.
 - **Any 3D asset.** No GLTF loader, no `SkinnedMesh`, no model file. `main/public/` is 9.4 MB
-  of audio and nothing else. The aesthetic contract is procedural geometry only.
-- **Any conversation UI.** Closest precedent is `VoyageWorkerNameInput`
-  (`prologue/VoyageLedger.tsx:455`) — a mobile-safe, game-input-isolated text field that
-  already runs a two-turn exchange.
-- **Cross-player transfer of anything.** Rooms are isolated islands. A market needs a
-  shard-transcending ledger, which does not exist.
+  of audio and nothing else. Procedural geometry only.
+- **Any conversation UI.** Closest is `VoyageWorkerNameInput` (`prologue/VoyageLedger.tsx:455`),
+  a mobile-safe, game-input-isolated text field already running a two-turn exchange.
+- **Cross-player transfer of anything.** Rooms are isolated islands.
 
-### The binding technical constraint, and it is not what you would guess
+### The real constraint
 
-The HIGH-tier budget (`utils/proceduralAtlasReport.ts:69`) is 440 draw calls, 4.2M triangles,
-**46 shader programs**. Currently measured: 145 draws, 988,566 tris, **41 programs**.
+**High framerate at high fidelity on real target hardware.** That is the goal, and it is the
+only thing that gets to gate a decision.
 
-Draw-call and triangle headroom is comfortable (~295 draws, ~3.2M tris). **Shader program
-headroom is five.** All three creative directions independently estimated they needed
-about five new programs, which means the station consumes the entire remaining program
-budget with zero margin for the economy UI, the NPC crowd, or any later feature.
+`ATLAS_PERF_BUDGETS` in `utils/proceduralAtlasReport.ts:69` is **advisory telemetry, not a
+gate**. `procedural-atlas.mjs` is not in the `verify` chain, and when run manually it exits
+nonzero only on console/page errors — budget overruns are written into a `defects.md` report
+and nothing else. The table exists to keep contributors from being casually wasteful with
+compute. It is a smoke alarm, and a rough one. Designing the architecture around staying under
+a number in it would be optimizing the instrument instead of the system, and the numbers
+themselves should be revised upward as the engine earns it.
 
-This is the number that will actually bite. Two options, and the owner should pick one
-before the kit is designed:
+For reference rather than as a limit: HIGH currently reports 145 draws, 988,566 triangles, 41
+shader programs against advisory figures of 440 / 4.2M / 46.
 
-1. **Design to one uber-material** for the station kit, varying appearance by per-instance
-   attributes rather than by `defines` permutations (every `defines` permutation is another
-   program). Budget: 2 programs for the whole station.
-2. **Deliberately raise the HIGH program budget** as a recorded, owner-approved baseline
-   change, with a stated new ceiling.
+**What actually costs frames**, roughly in order of how much they matter here:
 
-Option 1 is strongly preferred. Option 2 without option 1 will simply defer the same wall.
+1. **Batch count** — CPU submission plus GPU state changes. The dominant cost in WebGL, and
+   the thing portal culling and `BatchedMesh` exist to attack.
+2. **Overdraw and fill rate** — transparency, volumetrics, and fullscreen post passes, priced
+   per covered pixel. This is what actually kills mobile, where tile-based deferred GPUs punish
+   render-target switches and transparent layering hard.
+3. **Fragment shader cost** on the pixels that survive — ALU and texture fetches times coverage.
+4. **Vertex throughput**, only where geometry is genuinely heavy.
+5. **Shader compilation stalls** — one-time jank on first appearance, not steady-state
+   framerate, and properly solved with `compileAsync()` during the dock sequence rather than by
+   having fewer shaders.
 
----
-
-## 3. Creative direction
-
-Three independent directors each authored one strongly-committed thesis, without sight of
-each other's work. All three are genuinely good and none is a safe default. Summaries here;
-the full treatments should be preserved as run artifacts.
-
-### A — **The Agreement** (`RECONCILIATION WORKS R-4180`)
-
-A clearing house where two star systems reconcile their books. The Regulation's voice turns
-out to be *composed* — aggregated from pooled worker telemetry and read back to the workers
-as instruction. There is no author anywhere in the building. Terra was never the audience;
-Terra is an input. Colossal exterior (a kilometres-long amber "strike cycle" of stamping
-cells) resolving to a mundane 2.4 m office corridor.
-
-*Strongest:* the exterior reveal, and the thematic gut-punch of a power with no one at the
-top. *Weakest:* commodities (`attestation`, `latency`, `variance`) are abstract and risk
-failing the legibility bar. Its dock sequence removes player control, which the
-player-experience-auditor lane would flag.
-
-### B — **The Remainder**
-
-A station physically assembled from accounting residue — the 0.4 of a container, the pallet
-written down twice. Not lawless: drowning in *handmade* law, twelve currencies because
-twelve people each decided what value was. Freedom is not the absence of the form; it is
-holding the pen. Introduces a third register: REGULATION form, AWAKENING content — caps-and-
-monospace bills of lading filled in by hand with jokes in the margin.
-
-*Strongest:* the best single image of the three (standing on the floor of a 180 m hold
-looking up through a slowly rotating cloud of suspended cargo, warm sodium light rising into
-one cold star-shaft) and the warmest emotional register. Also the best LLM cost control —
-the model fills fields in a contract template rather than speaking prose. *Weakest:* the
-"no cool light indoors" law is too absolute to survive a generator.
-
-### C — **The Stacks** ← **recommended**
-
-A city-sized structure of unknown authorship that is not a ruin or a temple but a **sorting
-apparatus**: on a published schedule, it silently re-files its own volumes. Everyone treats
-this as weather. The Regulation has stamped it as a service and built its offices, queues,
-and bonded warehouses in the gaps. Terra — a *route intelligence*, an entity whose whole
-nature is indexing and lookup — walks in and recognises what nobody else can perceive: this
-is a query being answered. The cubicle thesis carried to its endpoint: administrations all
-the way down, each moving into the last one's filing cabinet and calling it real estate.
-
-**Why it wins.**
-
-- **Its fiction natively generates the mechanic the economy needs.** The single most
-  important finding of the economy research is that equilibrium kills trading, and that
-  *event-driven shocks* — not elegant production chains — are what make a market feel alive.
-  The Stacks' resettlement events **are** the shock queue. Fiction and simulation are the
-  same object, which is rare and worth a great deal.
-- **It is the cheapest direction to render at the largest apparent scale.** The artifact is
-  a light-eating, near-zero-albedo, low-poly *absence*. The triangle budget goes entirely to
-  human clutter — crates, rails, pipes, boxes — which is precisely what procedural box
-  geometry is best at. Resettlements are transform matrices.
-- **It has the strongest containment story for model-driven NPCs.** The station's
-  information environment is *diegetically unreliable*, so model drift and confabulation
-  read as market gossip rather than as a defect. This converts the single riskiest part of
-  the whole feature from a failure mode into flavour. Nothing else on the table does that.
-- **It generalises best.** Three independent generator knobs — primitive vocabulary (stacked
-  slabs / nested shells / continuous helical void), sort key, and occupancy ratio
-  (settlement volume ÷ enclosed volume, which alone swings an instance from boomtown to
-  ghost town).
-- **Its economy is the most legible and the most thematic.** `allowances` — the tradeable
-  right to produce — is literally the buying and selling of cubicles. The player learns in
-  the wallet that value is an administrative fiction.
-
-**Graft from the runners-up** (synthesise from the winner, keep the best of the rest):
-
-- From **B**: the model-fills-a-form output surface (§7), and the third register as a
-  physical prop.
-- From **A**: the hard rule that model-driven NPCs may never use the awakening voice.
-- From **B**: an A5 seed visible from hour one and unreachable.
-
-**Reject:** A's forced loss of player control at dock. B's absolute warm-light law.
-
-**Preserved dissent.** A's exterior reveal is better than C's, and B's hero image is better
-than C's. If the owner's taste runs toward spectacle over ideas, B is the stronger pick and
-the plan below survives the substitution with only §4 and §6 changing.
+Shader *program count* barely appears on that list. It matters for compile stalls (solved
+above) and a little memory. It is a proxy for material sprawl, which is worth watching, but it
+is not a frame-time cost in itself, and optimizing it directly trades away fidelity for nothing.
 
 ---
 
-## 4. The station generator
+## 3. Art direction (borrowed, not committed)
 
-Build the generator first and ship one hand-tuned station as its first instance. Do not
-build a one-off and retrofit.
+Three directors independently authored full station theses; all three are preserved in
+`.codex/design-runs/2026-07-27-anchorage-directions/`. With story deprioritized, we are not
+choosing a *story* — we are choosing a **look and a spatial program** to build against, and
+we can change our mind later at low cost.
 
-**Naming.** `main/src/game/data/stations.ts` already exists and means *crafting* stations
+**Build against "The Stacks"** (direction C), for reasons that are mechanical rather than
+narrative:
+
+- **It is by far the cheapest to render at the largest apparent scale.** The structure is a
+  light-eating, near-zero-albedo, low-poly *absence*; everything visible is human clutter
+  bolted onto it — crates, rails, pipes, scaffold, desk lamps. That is exactly what procedural
+  box geometry is best at, and it means the triangle budget goes where it reads.
+- **Its central mechanic is free and generates the economy's drama.** The structure silently
+  re-files its own volumes on a published schedule. Those are transform matrices. They are
+  also, conveniently, the market's shock events (§5) — the thing the economy research says
+  matters more than elegant production chains.
+- **Its spatial program is a clean test harness**: `Apron` (dock) → `Counter` (trade tutorial,
+  as a corridor so it can't be skipped) → `Floor` (the market, staged as an open-plan office
+  — a grid of desk lamps on a dark plain) → `Shelves` (warehousing, in the volumes that move)
+  → `Blank` (sealed, for later). Five cells, each legible at a glance, each testing something
+  different.
+
+**No canon is being committed.** NPCs get functional placeholder identities. Nothing here
+forces a decision about the Makers, about A5, or about where this sits in the arc. If the
+mechanics later suggest a different fiction — or if you prefer direction A's exterior reveal
+or B's suspended-cargo hero image — the plan below survives the swap with only this section
+and the dressing changing.
+
+---
+
+## 4. Generator and renderer
+
+Build the generator, not the station. Ship one hand-tuned instance as its first output. But
+in the mechanics-first ordering, the generator starts *dumb* — a fixed macro layout with
+seeded dressing — and grows knobs in Phase F.
+
+**Naming:** `main/src/game/data/stations.ts` already exists and means *crafting* stations
 (`hand`, `smelter`, `assembler`, `survey_console`). Do not overload the noun. Use
-**`anchorage`** for the new destination type throughout.
-
-### The macro-graph hybrid
-
-Pure procedural layout produces topologically valid, visually monotonous mush. What ships in
-practice — Starfield's POIs, Deep Rock's carved caves — is authored macro structure with
-generated fill. Adopt that:
-
-- **Authored graph templates** define district sequence, landmark placement, and sightline
-  intent: `Apron → Counter → Floor → Shelves → Blank`.
-- **The seed chooses** which template, which modules fill each node, dressing, damage state,
-  palette, lighting mood, and occupancy ratio.
-- **Landmark rule:** every deck contains exactly one silhouette-dominant element visible from
-  at least two other cells. Enforce this as a generator assertion, not a guideline.
-- Use WFC for *surface dressing* only (panel layout, pipe runs) — never for level layout.
-- Socket-typed modular kit (`corridor-2m`, `airlock-round`, `hangar-wide`) so geometry stays
-  watertight under arbitrary assembly.
+**`anchorage`** throughout.
 
 ### The portal/cell graph is the keystone
 
-**This is the highest-leverage architectural decision in the document.** Have the generator
-emit the cell/portal adjacency graph as a first-class artifact. That single data structure
-solves four separate problems at once:
+**The single highest-leverage decision in this document, and the one thing that must be right
+in Phase A.** Have the generator emit the cell/portal adjacency graph as a first-class
+artifact. That one structure solves four problems:
 
-1. **Visibility.** Three.js has no occlusion culling and will not get it. Classic portal
-   culling — BFS from the camera's cell, clip each portal's screen-space AABB against the
-   accumulated frustum rect, stop when it degenerates — is exact, cheap, CPU-side, and free
-   of the 1–2 frame readback latency that makes GPU occlusion queries pop.
+1. **Visibility.** Three.js has no occlusion culling and won't get it. Classic portal culling
+   — BFS from the camera's cell, clip each portal's screen-space AABB against the accumulated
+   frustum rect, stop when it degenerates — is exact, cheap, CPU-side, and avoids the 1–2
+   frame readback latency that makes GPU occlusion queries pop.
 2. **Streaming.** Residency ring of 2 cells, evict beyond 3. Airlocks and elevators are
    deliberate load-hiding devices.
-3. **Light-probe placement.** One irradiance probe per cell, placed automatically.
-4. **Audio reverb zones.** One impulse per cell type.
+3. **Light-probe placement** — one per cell, automatic.
+4. **Audio reverb zones** — one impulse per cell type, when audio is eventually in scope.
 
-Procedural generation is normally a cost paid against hand-built quality. Here it is the
-reason the station can outperform a hand-built one, because the generator *knows* the
-adjacency a hand-built level would have to be annotated with.
+This is why a procedural station can *beat* a hand-built one rather than approximate it: the
+generator knows adjacency that a hand-built level would have to be annotated with.
 
-### Batching and materials
+### Materials and batching
 
-One `BatchedMesh` per cell per material class (opaque hull / emissive / glass / alpha-test).
-`BatchedMesh` — unlike `InstancedMesh` — allows different geometries in one draw call with
-per-instance visibility and frustum culling. Truly identical repeats (bolts, rails, lights)
-stay `InstancedMesh`. Target 60–150 draw calls for a 40-cell station.
+The goal is **few batches**, not few shaders. Those are different things and conflating them
+costs fidelity for no framerate.
 
-Given the five-program ceiling in §2, the material taxonomy must be decided **before any
-geometry is authored**, and it must be ≤2 programs achieved through per-instance attributes
-rather than shader variants.
+**Share one material across the repeated architectural kit** — wall panels, grates, rails,
+scaffold, crates — and drive per-piece variation through instance attributes (tint, roughness,
+wear, atlas region, emissive mask) read at runtime. The win is that the entire kit collapses
+into a handful of `BatchedMesh` draws. `BatchedMesh` allows different geometries in one draw
+call with per-instance visibility and frustum culling; identical repeats stay `InstancedMesh`.
+A 40-cell station should render its architecture in tens of batches, not hundreds.
 
-### Lighting — the central tension
+**Spend dedicated shaders freely wherever a distinct look needs one.** The light-eating hull
+with view-dependent parallax, glass, emissive strips, volumetrics, water, the post chain —
+each of these is *cheaper per pixel* as a specialized shader than as another branch in a
+mega-shader. GPUs execute in lockstep across a wave, so a branchy uber-shader makes every
+pixel pay for paths it doesn't take. Collapsing genuinely different materials into one program
+is a pessimization dressed as an optimization.
 
-Baked lighting fights procedural generation. The resolution:
+The discipline worth keeping is the ordinary one: don't let *accidental* material variants
+proliferate (a stray `transparent` flag or an inconsistent map assignment forking a program
+that didn't need to exist), and precompile everything during docking. Deliberate,
+fidelity-bearing shaders are a cost worth paying and should be paid.
 
-1. **Bake per-module, not per-level.** Each kit piece gets AO/lightmap baked in *local*
-   space. Survives arbitrary reassembly, costs nothing at runtime.
-2. **Bake-on-load for the assembled station.** After generation, render a cheap cubemap at
-   each probe point, project to SH-L2, store an irradiance volume. Budget 1–3 s during the
-   dock sequence — which is exactly what the dock choreography is for — then **cache to
-   IndexedDB keyed by seed**, so a revisited station is free.
-3. **Runtime:** 2–4 dynamic lights maximum. Everything else baked or probe-fed.
+### Lighting — build the hooks early, land the bake late
 
-This step is what makes it stop looking like real-time Three.js. It is also the step most
-likely to be cut under schedule pressure, and cutting it forfeits the entire "award-winning"
-premise. Protect it.
+Baked lighting fights procedural generation. The resolution is per-module baked AO in local
+space (survives arbitrary reassembly), plus a **bake-on-load** pass for the assembled station:
+render a cheap cubemap per probe point, project to SH-L2, store an irradiance volume, and
+**cache to IndexedDB keyed by seed** so a revisit is free. Budget 1–3 s during the dock
+sequence — which is what the dock sequence is *for*.
 
-### Scale and awe
+**This is the step that makes it stop looking like real-time Three.js, and it is the step
+most likely to be cut under schedule pressure.** In a mechanics-first ordering it lands in
+Phase E, which is fine — but the *hooks* (probe points emitted from the portal graph, a
+lighting-data slot in the cell payload, the IndexedDB cache key) must exist in Phase A or
+Phase E becomes a retrofit instead of a fill-in.
+
+### Scale and awe (Phase E, but design for it now)
 
 Per-cell exponential fog with coloured extinction; instanced dust motes with parallax;
 portal-gated god rays; three depth planes on every long sightline; human-scale referents
-everywhere (1.0 m handrails, 2.1 m doorframes, known-height warning text — a featureless
-200 m wall reads *smaller* than a 50 m wall with three doors in it); 55–65° interior FOV,
-40–50° for hero reveals, zero roll except as a deliberate beat.
+everywhere — 1.0 m handrails, 2.1 m doorframes, known-height signage. A featureless 200 m wall
+reads *smaller* than a 50 m wall with three doors in it. Interior FOV 55–65°, hero reveals
+40–50°, zero roll except as a deliberate beat.
 
-### Shader compilation
+### Two cheap decisions with long tails
 
-Use `renderer.compileAsync()` with `KHR_parallel_shader_compile` to warm every material
-variant during the dock sequence. Jank on first entry would undo the reveal.
-
-### WebGPU
-
-Do not bet the ship date on it. Global availability is ~84%, Linux Firefox still pending,
-and the WebGL2 fallback backend is not reliably as fast as the mature `WebGLRenderer`. But
-**stop writing raw GLSL now** — author new materials in TSL/NodeMaterial, ship
-`WebGLRenderer`, and keep `WebGPURenderer` behind a HIGH-tier flag. This keeps the port
-cheap without depending on it.
+- Use `renderer.compileAsync()` with `KHR_parallel_shader_compile` to warm material variants
+  during docking. First-entry jank would undo the reveal.
+- **Author new materials in TSL/NodeMaterial, not raw GLSL.** Ship `WebGLRenderer`. WebGPU is
+  ~84% available with Linux Firefox still pending and a fallback backend that isn't reliably
+  as fast, so don't bet on it — but TSL keeps the eventual port cheap for free.
 
 ---
 
@@ -287,302 +249,299 @@ cheap without depending on it.
 
 ### The model: reservoir pricing exposed as a finite-depth order book
 
-Every market holds `stock` per commodity. Price comes from a convex reservoir curve. The
-server publishes that curve as a **quantised NPC order ladder**. All trades — player-to-NPC
-now, player-to-player later — execute against **one matching engine**.
+Every market holds `stock` per commodity; price comes from a convex reservoir curve; the
+server publishes that curve as a **quantised NPC order ladder**; all trades execute against
+**one matching engine**.
 
 ```
-fill  = clamp(stock / capacity, 0, 1)
-p     = p_min + (p_max - p_min) * (1 - fill)^k        // k ≈ 1.5–2.5
+fill = clamp(stock / capacity, 0, 1)
+p    = p_min + (p_max - p_min) * (1 - fill)^k        // k ≈ 1.5–2.5
 ```
 
 Single-player is the multiplayer engine with only NPC orders in the book. **When players
-arrive, no code is deleted; you simply stop being the only participant.** That is the whole
-reason to pick this model over a simpler one, and it is exactly the "build in a way that
-enables it later" requirement.
+arrive, nothing is deleted — you just stop being the only participant.** This is the entire
+reason to pick this shape over something simpler, and it satisfies the "build so cross-player
+works later" requirement without building any of it now.
 
-### Three mechanics to build first, in this order
+### Three mechanics, in this order
 
 1. **Integral pricing with finite depth.** Never transact N units at spot — charge
-   `∫ p(s) ds` across the traded quantity. Roughly five lines of code, and it delivers price
-   impact, diminishing returns, bot resistance, and multiplayer-safety simultaneously. **Every
-   NPC quote carries a finite quantity from commit one, even in single-player.** An NPC that
-   buys unbounded quantity at a fixed price is a money printer the day players can trade, and
-   a lookup table before that.
-2. **Lazy closed-form catch-up plus an event shock queue.** Store `(stock, lastUpdatedTick)`;
-   integrate forward on read: `s = s_eq + (s - s_eq) * exp(-dt / τ)`. O(1) per commodity per
-   visit, exact, deterministic, replayable, and it gives a galaxy of live markets for
-   near-zero CPU. No continuous per-station tick, ever. **Ship the shock queue before the
-   pretty production chains** — a static chain with a war on feels alive; a perfect chain at
-   equilibrium is a lookup table. In direction C the resettlement events are the shock queue.
-3. **Stale, partial, purchasable market information.** Store `(price, observedAtTick,
-   confidence)` per player per market. A six-hour-old quote three jumps away is a bet, not a
-   fact. This converts trading from arithmetic into judgment and costs almost nothing.
+   `∫ p(s) ds` across the quantity. Roughly five lines, and it delivers price impact,
+   diminishing returns, bot resistance, and multiplayer-safety at once. **Every NPC quote
+   carries a finite quantity from commit one.** An NPC that buys unbounded quantity at a fixed
+   price is a money printer the day players can trade, and a lookup table before that.
+2. **Lazy closed-form catch-up plus an event shock queue.** Store
+   `(stock, lastUpdatedTick)`; integrate forward on read:
+   `s = s_eq + (s - s_eq) * exp(-dt / τ)`. O(1) per commodity per visit, deterministic,
+   replayable, and it gives a galaxy of live markets for near-zero CPU. **No continuous
+   per-station tick, ever.** Ship the shock queue *before* pretty production chains — a static
+   chain with a war on feels alive; a perfect chain at equilibrium is a lookup table. The
+   resettlement events are the shock queue.
+3. **Stale, partial, purchasable market information.** Store
+   `(price, observedAtTick, confidence)` per player per market. A six-hour-old quote three
+   jumps away is a bet, not a fact. Converts trading from arithmetic into judgment, and costs
+   almost nothing.
 
 ### System identity
 
-Four independent axes, combined by seed: **endowment** (what the bodies actually hold),
-**industry tier** (extraction → refining → components → assembly), **population** (the demand
-faucet that never sleeps), **regime** (tariffs, contraband, blockades, accessibility).
+Four axes combined by seed: **endowment**, **industry tier**, **population** (the demand
+faucet that never sleeps), **regime** (tariffs, contraband, accessibility).
 `main/src/game/data/planetArchetypes.ts` and `biomes.ts` already carry per-archetype resource
-affinity — the differential scarcity input already exists and simply has no price layer on it.
+affinity — the differential scarcity exists and simply has no price layer on it.
 
-Legibility is a hard requirement, not polish: one-line archetype label, two glyphs (top
-export, top shortage) on the map pin, **colour the deficit rather than the price**,
-days-of-cover as a bar rather than a number, and ship the production-chain flowchart in-game.
-If the player has to read a table, they will build the wiki and play that instead.
+Legibility is a requirement, not polish: one-line archetype label, two glyphs on the map pin
+(top export, top shortage), **colour the deficit rather than the price**, days-of-cover as a
+bar rather than a number. If the player has to read a table, they'll build the wiki and play
+that instead.
 
-### Where it lives in the code
+### Where it lives
 
-- **Commodity definitions extend `shared/economyCatalog.json`.** It is already the single
-  source of truth, codegenned into both client and server and gated by `catalog:check` in
-  both `verify` scripts. Drift is structurally impossible. Do not create a parallel registry.
-- **The market layer is new server state.** `economyAuthority.ts` is a stateless validator
-  and should stay one; add a sibling `marketAuthority.ts` rather than growing it.
-- **Persistence is a prerequisite, not a detail.** The Neon schema exists but `DATABASE_URL`
-  appears unset on Cloud Run, which means production is very likely running in-memory rooms
-  with the whole persistence layer written but unengaged. A durable economy requires that
-  actually be wired. Treat it as an infrastructure task with its own gate.
-- **Cargo capacity must become real.** `inventorySystem.ts` is a flat count map with no
-  stack limits, weight, or capacity. Profit-per-m³-per-jump-per-risk is the interesting
-  quantity, and it does not exist until capacity does.
+- **Commodities extend `shared/economyCatalog.json`** — already the single source of truth,
+  codegenned into client and server, gated by `catalog:check` in both verify scripts. Never a
+  parallel registry.
+- **The market is new server state.** Add a sibling `marketAuthority.ts`; leave
+  `economyAuthority.ts` stateless.
+- **Cargo capacity must become real.** `inventorySystem.ts` is a flat count map with no stack
+  limits, weight, or capacity. Profit-per-m³-per-jump is the interesting quantity and doesn't
+  exist until capacity does.
+- **Persistence.** The Neon schema exists but `DATABASE_URL` appears unset on Cloud Run, so
+  production is likely running in-memory rooms with the persistence layer written but
+  unengaged. For a sandbox this is fine — **run the economy client-side-authoritative or
+  in-memory in Phase B** and wire durable persistence only when it stops being a toy.
 
 ### Sinks from day one
 
 Fuel, repairs, docking fees, tariffs, and a transaction tax that is **deleted, not paid to
-anyone**. Sinks must scale with activity, not be flat. Log every faucet and sink by category
-with server timestamps from the first commit — by the time inflation is visible in play, it
-is a year of accumulated currency and the only remaining fixes are unpopular ones.
+anyone**, scaling with activity rather than flat. Log every faucet and sink by category from
+the first commit — by the time inflation is visible in play, it's a year of accumulated
+currency and the only fixes left are unpopular.
 
 ---
 
 ## 6. NPCs
 
-### Two tiers, and the split rule is a canon rule
-
 **Authored NPCs remember. Model-driven NPCs have opinions about prices.**
 
-Anything canon-bearing — history, meaning, the Paradox Machina, Terra's nature — is authored
-line by line in `storyScript.ts` and delivered through the existing typewriter path. Anything
-that is weather, haggling, rumour, or the texture of a crowd may be model-driven.
+With story deprioritized this split gets *more* attractive, not less: the model tier
+substitutes for authored content, so a sparse sandbox can feel populated without anyone
+writing a character bible. Phase C can ship with almost no authored dialogue — enough to prove
+the interaction and delivery path — and let Phase D do the heavy lifting.
 
-All three directors independently arrived at the same containment principle, which is a
-strong signal it is correct: **the existing canon rule "other workers are blind to what the
-player sees" is not just fiction — it is the prompt boundary.** A model-driven NPC is
-structurally incapable of discussing what Terra perceives, because its character genuinely
-cannot perceive it. The safety rail and the story are the same rule.
+**Bodies and motion:** extend the existing pattern rather than inventing one.
+`AuditWorker.tsx` (box humanoid, hand-written sine gait, module-level pose written by a
+director, component only renders) plus `emergentStoryDirector.ts:898` (`moveAuditor`: A* route,
+arc-length sampling, rate-limited heading) is a working NPC and is copyable verbatim. Crowd
+individuality is procedural — one silhouette varied by gait parameters and badge geometry.
+Interior navigation implements the existing `AgentSurfaceTerrainQuery` interface.
 
-### Bodies and motion
-
-Extend the existing pattern rather than inventing one. `AuditWorker.tsx` (box humanoid,
-hand-written sine gait, module-level pose written by a director, component only renders) plus
-`emergentStoryDirector.ts:898` (`moveAuditor`: A* route via `planAgentSurfaceRoute`, arc-length
-sampling, rate-limited heading) is a working NPC and is copyable verbatim. Crowd individuality
-is procedural: one stamped silhouette varied by gait parameters and badge geometry. Interior
-navigation implements the existing `AgentSurfaceTerrainQuery` interface.
-
-There is no behaviour tree or planner anywhere in the codebase — only per-beat `switch`
-directors. Extend the director pattern (`enterBeat` / `tick` / milestone receipt); do not
-import a behaviour-tree library for this.
+There is no behaviour tree or planner anywhere in the codebase, only per-beat `switch`
+directors. Extend the director pattern; don't import a BT library for this.
 
 ---
 
 ## 7. AI-powered NPCs
 
-This is the highest-risk element in the document and needs the tightest contract.
+Highest-risk element here, and the one that most needs its contract right the first time.
 
 ### Architecture
 
 Add `POST /v1/npc/converse` to `server/src/stateServer.ts`. The seam is genuinely ready: a
-versioned `/v1/*` REST namespace already exists, Firebase-admin bearer auth already exists,
-the CORS origin allowlist already exists, and Node ≥22 gives native `fetch`. This is a small
-change to a well-shaped server.
+versioned `/v1/*` REST namespace, Firebase-admin bearer auth, a CORS origin allowlist, and
+Node ≥22 with native `fetch` all already exist. This is a small change to a well-shaped server.
 
-`ANTHROPIC_API_KEY` is a Cloud Run server-side env var. **It must never be a `VITE_*`** —
-those are public by definition. The client never talks to a model provider directly.
+`ANTHROPIC_API_KEY` is a Cloud Run server-side env var. **Never a `VITE_*`** — those are
+public by definition. The client never talks to a model provider directly. Default to the
+latest Claude models.
 
-### Five containment rules
+### Four containment rules
 
 1. **Constrain the output surface, not just the prompt.** The model fills fields in a
-   structured response — an offer, a refusal, a short line of margin text — rather than
-   emitting free prose into the world. This caps cost, caps register drift, and (in direction
-   C, and especially in B) is diegetically exactly what the place is about.
-2. **Register lock.** Model-driven NPCs get the REGULATION register and trade-floor idiom
-   only. The AWAKENING voice is structurally unavailable to a model. The interior voice is
-   the story's most precious asset and no model output ever touches it.
-3. **Blindness as prompt boundary.** The system prompt describes a character who cannot
-   perceive the Paradox Machina. Canon leakage becomes character-inconsistent, not merely
-   disallowed.
-4. **Bounded context.** The model receives a local fact table — current prices, schedules,
-   resettlement times, active rumours — and its own character sheet. It does not receive the
-   story bible.
-5. **Authored fallback on every failure.** Timeout, error, rate limit, or a response failing
-   validation falls back to authored dialogue. The feature degrades to a working game, never
-   to a broken one.
+   structured response — an offer, a refusal, a short line of flavour — rather than emitting
+   free prose into the world. Caps cost, caps drift, makes validation mechanical.
+2. **Bounded context.** The model gets a local fact table (prices, schedules, recent events)
+   and its own character sheet. Not the story bible — which, conveniently, we are not writing
+   yet.
+3. **Authored fallback on every failure.** Timeout, error, rate limit, or a response failing
+   validation falls back to canned dialogue. The feature degrades to a working game, never a
+   broken one.
+4. **An in-world reason the NPCs are unreliable.** Give the sandbox a diegetically noisy
+   information environment — rumour, stale prices, gossip — so model drift reads as texture
+   rather than as a bug. This is nearly free and it is the difference between "the NPC said
+   something odd" being charming and being a defect.
+
+*(Deferred until there is canon to protect: the register lock — model NPCs get the REGULATION
+voice only, never AWAKENING — and blindness-as-prompt-boundary. All three directors converged
+independently on that pair, so adopt both the moment story work resumes. Noted here so it
+isn't rediscovered later.)*
 
 ### Determinism is a real conflict, not a theoretical one
 
 `npm run verify` chains `story:authority`, `chapter:journey:check`, `catalog:check`, and a
-full 1930-test vitest suite. The codebase treats determinism as a contract — seeded
-`mulberry32` flicker, rng-injectable deck engine, deterministic tangents. **A live model call
-will fail these gates.**
+full 1,930-test vitest suite, against a codebase that treats determinism as a contract. **A
+live model call will fail these gates.**
 
 Build a **fixture/transcript mode from day one**, following the precedent already set by
-`voyageDeck`'s injected `rng`: CI and the movie-mode autoplaythrough replay recorded
-transcripts; only live play calls the model. This is not optional and it is much cheaper to
-build first than to retrofit.
+`voyageDeck`'s injected `rng`: CI and movie-mode replay recorded transcripts; only live play
+calls the model. Cheap to build first, genuinely painful to retrofit.
 
-### Cost and latency
+### Cost, latency, and audio
 
-Per-conversation token budget, a hard turn cap, aggressive caching of the system prompt and
-fact table, and a per-session spend ceiling. Latency must be hidden diegetically — a clerk
-consulting a ledger before answering is in-character; a spinner is not.
-
-### The prose bar
-
-`storyScript.ts:4-20` explicitly calls filler language a defect and enforces two strictly
-separated registers. Raw model output will violate this. The mitigation is the structured
-output surface in rule 1 plus a validation pass — not editorial hope.
-
-### Positional audio
-
-Spatialised NPC dialogue requires an `AudioListener` bound to the camera and a `PannerNode`
-per emitter. None of this exists, and it lives in a protected path. **Recommendation: ship
-the first station with text-only dialogue.** Positional audio is a separately-scoped,
-separately-approved packet. Do not smuggle it into this one.
+Per-conversation token budget, a hard turn cap, prompt and fact-table caching, and a
+per-session spend ceiling. Hide latency diegetically — a clerk consulting a ledger before
+answering is in character; a spinner is not. **Text-only for the sandbox**; positional audio
+is greenfield *and* inside a protected path, so it is a separate packet.
 
 ---
 
 ## 8. Phasing
 
-Each phase ends in a gate. Do not begin a phase before its predecessor's gate is green.
+Reordered for "something cool to test." Each phase ends in a **playable check**, not a
+document.
 
-**Phase 0 — Unblock.** Commit the 77-file worktree in coherent batches. Confirm
-`full-client-verify` green from a clean tree. Resolve the `fauna-triangle-budget` regression
-(1,004 > 800), which is an open blocker and which NPC geometry will make worse.
-*Gate: clean tree, verify green, budgets green.*
+**Phase 0 — Housekeeping (~1 hour).** Commit the 77-file worktree in coherent batches.
+Confirm verify green from a clean tree.
+*Check: clean tree, verify green.*
 
-**Phase 1 — Canon.** Run the `story-review` skill in story-council mode (docs-only) to
-resolve the owner decisions in §10 and produce a signed canon candidate.
-*Gate: owner-signed canon decision recorded.*
+**Phase A — Get there and walk around.** The skeleton, and the phase that must be
+architecturally correct because everything else hangs off it.
+- `anchorage` addressing in `starSystem.ts`; registration in `systemFlight.ts`;
+  `beginDock()`/`undock()` cloned from `physicalBoarding.ts`; residency integration.
+  - **Done:** the dock choreography itself — `anchorageDock.ts`, a pure phase machine
+    (clamps → pressurise → hatch → disembark → handback) shaped after
+    `physicalBoarding.ts`, driving the camera dolly and the lock readout, skippable,
+    frame-rate independent, 15 tests. `&dock=0` bypasses it for captures.
+  - **Done:** prop collision — `anchorageCollision.ts`. Swept, axis-separated slide
+    against a bucketed blocker index, plus step-up, standing on props and headroom.
+    Walls and doorways stay with the cell/portal graph; furniture only narrows.
+  - **Not done:** the *fly-to*. The anchorage still has no presence in
+    `systemFlight.ts` and no exterior, so you cannot approach it from space. The dock
+    sequence is written to be the thing that flight hands off to when that lands.
+- Greybox interior: the five-cell program from §3, **emitting the portal/cell graph**, portal
+  culling, `BatchedMesh` batching, station-local gravity through the existing `SurfaceState`.
+- Dev flag + dynamic import; lighting-data hooks stubbed but empty; instrumented from the
+  first commit.
+- *Check:* **fly there, dock, walk in, walk around five distinct spaces, walk out, fly away.**
+  Draws/tris/programs/p95 measured on HIGH, an iGPU, and a mid Android device.
 
-**Phase 2 — Renderer harness, no art.** Greybox 40-cell station. Prove portal-culling
-correctness, `BatchedMesh` draw-call counts, streaming, and the ≤2-program material taxonomy.
-Instrument on an iGPU and a mid Android device **before anyone models a wall.**
-*Gate: measured draws/tris/programs/p95 inside budget on all three tiers.*
+After Phase A the work splits into **two tracks that do not block each other** and should run
+concurrently. The systems track is data and server work; the fidelity track is rendering work.
+Serializing them was an error in the previous revision — they touch different files and answer
+different questions.
 
-**Phase 3 — Bake-on-load pipeline** end to end on the greybox: probe placement, SH bake,
-IndexedDB seed cache, cold vs warm load timing.
-*Gate: warm revisit free; cold bake inside the dock-sequence budget.*
+### Track 1 — systems (is it fun?)
 
-**Phase 4 — One hero module at final quality** (the Floor, or an observation volume) to set
-the bar the generator must reach and to prove the lighting model produces the target image
-at all. *Gate: naive-viewer review says "breathtaking" without being told to.*
+**B — Make trade real.** Catalog extension, `marketAuthority.ts`, integral pricing with finite
+depth, lazy catch-up, the shock queue, cargo capacity, minimal legible UI, faucet/sink
+telemetry. In-memory or client-authoritative; durability comes later.
+- *Check:* **a route is profitable, then measurably less profitable because you traded it.**
+  A shock event visibly moves a price.
 
-**Phase 5 — Destination plumbing.** Anchorage addressing in `starSystem.ts`, `systemFlight.ts`
-registration, `beginDock()`/`undock()` modelled on `physicalBoarding.ts`, residency
-integration, interaction IDs.
-*Gate: fly there, dock, walk in, walk out, fly away — with objective/marker lifecycle proof
-from `story-verifier` and a fresh `player-experience-auditor` report.*
+**C — Populate it.** NPC bodies, interior nav, the interaction prompt, dialogue delivery
+through `showAuditLine` and the deck engine. Minimal authored content — enough to prove the
+path.
+- *Check:* **the place feels inhabited rather than empty.**
 
-**Phase 6 — Economy, single-player.** Catalog extension, `marketAuthority.ts`, integral
-pricing with finite depth, lazy catch-up, shock queue, cargo capacity, legibility UI,
-faucet/sink telemetry. *Gate: a route is profitable, then measurably less profitable because
-you traded it. Wiki-proof by construction.*
+**D — The AI tier.** Server proxy, the four containment rules, fixture mode, cost ceilings,
+fallback. With no canon to protect this is *lower* risk now than it would be later.
+- *Check:* **haggling feels alive and surprising**; `verify` green in fixture mode; every
+  failure path degrades to canned dialogue.
 
-**Phase 7 — NPCs, authored only.** Bodies, interior nav, dialogue via the deck engine and
-`showAuditLine`. *Gate: two named characters land emotionally in a blind read.*
+### Track 2 — fidelity (is it beautiful?)
 
-**Phase 8 — Model-driven tier.** Server proxy, containment rules, fixture mode, cost
-ceilings, fallback. *Gate: verify green in fixture mode; live mode never emits awakening
-register; every failure path degrades to authored dialogue.*
+**E1 — One hero cell at target quality.** Take a single space — the Floor is the obvious
+candidate — and push it to the look you actually want, with real lighting, materials,
+atmosphere, and scale referents. Do this **early, not last.** It sets the bar the kit has to
+reach, proves the aesthetic works at all, and is far cheaper to iterate on one cell than on
+forty. This is the phase that decides whether the whole thing is worth building.
+- *Check:* **a fresh viewer calls it breathtaking without being prompted**, and it holds frame
+  rate on the worst target device.
 
-**Phase 9 — Generator.** Second and third instances from different seeds, proving the knobs.
-*Gate: a naive viewer cannot tell which instance was hand-tuned.*
+**E2 — The lighting pipeline.** Bake-on-load GI with the IndexedDB seed cache, probe placement
+driven off the portal graph, reflection probes per cell. This is the difference between
+"award" and "nice Three.js demo," and it is architectural rather than cosmetic.
+- *Check:* warm revisit is free; cold bake fits inside the dock sequence; the hero cell's look
+  survives being generated rather than hand-placed.
 
-Only the generator gate justifies calling this a system rather than a level.
+**E3 — Atmosphere and scale as systems.** Per-cell fog with coloured extinction, dust,
+portal-gated god rays, the human-referent prop library. Owned and budgeted, not bolted on.
 
----
+### Converge
 
-## 9. Orchestration route
+**F — The generator.** Grow the knobs: primitive vocabulary, occupancy ratio, sort key,
+dressing. Second and third instances from different seeds.
+- *Check:* **a fresh viewer can't tell which instance was hand-tuned.**
 
-"Terra orchestrators" resolves to the TerraForm workflow system in the sibling repo
-`/home/thomasphillip/Projects/TerraForm`. Its surface in this repo is `.terra/` (context
-bindings and durable workflow runs), the npm operators, and the Claude-side skills.
+### How the perf checks actually work
 
-- **Phase 1 (canon)** → the **`story-review`** skill in story-council mode. This is whole-story
-  direction, not a bounded scene, so it needs the council rather than the triad. Produces a
-  signed canon candidate and an owner decision.
-- **Phases 4–9 (each scene/chapter)** → the **`creative-triad`** skill, which runs Chapter,
-  Score, and Cinematography as peers through independent treatments, cross-notes, a frozen
-  `scene-contract.json` signed by all three over the same hash, implementation, six
-  independent reviews, a cohesion judge, and a human taste decision. Gate with
-  `npm --prefix main run creative:gate -- --run <run> --phase contract|implementation|final`.
-- **Certification** → `npm --prefix main run chapter:accept:workflow`.
+Every check above is measured, not asserted against a table. Capture frame time on the three
+targets that matter — a discrete GPU, an integrated GPU, and a mid-range Android device — at
+the fidelity you intend to ship, using the existing harness (`BenchmarkProbe`,
+`ProfiledSystemSubsystem` spans, `React.Profiler`). Look at the p95 and the shape of the frame,
+not just the average.
 
-Note the honest limitation recorded in the workflow README: there is no evidence-backed
-deterministic step executor yet, so deterministic steps stop at `missing_deterministic_adapter`
-and human decisions stop at `human_operator_required`. The operator is executable and
-resumable but is **not** an unattended end-to-end council. Plan for a human in the loop at
-every gate.
-
----
-
-## 10. Owner decisions required
-
-These block Phase 1 and only you can make them.
-
-1. **Does this spend A5 — "Light"?** Canon is emphatic that the local Tidegarden trip must
-   *not* spend A5, and that the first interstellar warp is "the later baptism." A deep-space
-   station is either (a) in-system and pre-A5, or (b) the A5 payoff itself. This changes the
-   station's meaning, its placement in the arc, and how much of the economy can be
-   *inter*system at all. **Recommendation: in-system, pre-A5, with the wider sky visible and
-   unreachable** — it preserves A5's power, and an isolated test area is exactly what you
-   asked for.
-2. **Which direction** — A, B, or C? Recommendation in §3 is C, with grafts. This is a taste
-   call and the plan survives any of the three.
-3. **The Makers.** Direction C forces a minimum commitment: the Makers did not build the
-   station; they were *prior tenants who filed here too*. This reframes them from creators to
-   a previous administration — strengthening the cubicle thesis without touching their
-   identity, number, or motive. A and B do not force this. If you want the Makers wholly
-   untouched, that is an argument for B.
-4. **Shader program budget** — uber-material (recommended) or a recorded baseline raise? See
-   §2.
-5. **Positional audio** — confirm it is out of scope for the first station, or open a separate
-   protected-path packet.
-6. **`DATABASE_URL` on Cloud Run** — is production actually persisting? A durable economy
-   depends on it.
+When a number in `ATLAS_PERF_BUDGETS` is exceeded but the frame time is good on real hardware,
+**raise the number and note why.** That table should track what the engine has earned, not
+constrain what it's allowed to attempt.
 
 ---
 
-## 11. Top risks
+## 9. Decisions still worth making early
+
+Story decisions are deferred by your call. These are not story decisions and they get more
+expensive with every phase:
+
+1. **Kit material strategy.** One shared material with instance-attribute variation for the
+   repeated architecture (so it batches), plus dedicated shaders for the genuinely distinct
+   surfaces. Worth settling before the kit exists, because instance attributes are awkward to
+   retrofit onto geometry authored without them. Not a budget question.
+2. **Confirm the anchorage is dev-flag-gated and dynamically imported.** Blocks Phase A
+   scaffolding. Recommendation: yes to both — mostly so the demo bundle doesn't carry a
+   feature its players can't reach.
+3. **Positional audio in or out?** Recommendation: out for now — greenfield and inside a
+   protected path. Worth revisiting on its own merits, since spatialized sound is one of the
+   highest-ROI fidelity levers available and the station is the right place to want it.
+4. **Economy durability in Phase B — in-memory, or wire `DATABASE_URL` on Cloud Run?**
+   Recommendation: in-memory for the sandbox; revisit when it stops being a toy.
+5. **Target hardware.** Name the three devices the perf checks run on, once, so "high FPS"
+   means something specific and every later decision can be measured against it.
+
+Everything else — A5, the Makers, which direction becomes canon, whether this is even in the
+same continuity — can wait until there's something to play.
+
+---
+
+## 10. Top risks
 
 | Risk | Why it bites | Mitigation |
 |---|---|---|
-| **Shader program ceiling** | Five programs of headroom; each direction wants five | Uber-material with per-instance attributes, decided before geometry (§2) |
-| **Model output violates the prose bar** | Repo treats filler language as a defect; models generate filler | Structured output surface + register lock + validation pass, not editorial hope |
-| **Live model calls break determinism gates** | `verify` runs 1930 tests and three determinism gates | Fixture/transcript mode built first, per `voyageDeck` precedent |
-| **Generated mush** | Valid topology, no landmark hierarchy, no authored sightlines | Authored macro templates + one-landmark-per-deck as a generator assertion + naive-viewer review before trusting the generator |
-| **Flat lighting** | The actual difference between "award" and "nice demo" | Bake-on-load GI is load-bearing; protect it from schedule pressure |
+| **Batch count, overdraw, fill rate** | The actual frame-time costs, especially on mobile tile GPUs | Portal culling + `BatchedMesh`; watch transparent and volumetric layering; measure on device (§2) |
+| **Optimizing the instrument** | Advisory budgets get mistaken for gates and quietly cap ambition | Budgets are telemetry; raise them when real hardware says the engine earned it (§8) |
+| **Bundle bloat** | This feature is large | Dynamic-import behind the dev flag (§1) |
+| **Lighting becomes a retrofit** | Deferring the bake makes it a rewrite instead of a fill-in | Emit probe points and cache keys from the portal graph in Phase A; run track 2 concurrently |
+| **Live model calls break determinism gates** | `verify` runs 1,930 tests and three determinism gates | Fixture/transcript mode built first, per `voyageDeck` precedent |
+| **Unbounded NPC liquidity** | Money printer the day players trade | Finite depth on every quote from commit one |
+| **Economy solved and then boring** | Static optima are publishable | Shocks faster than relaxation, plus price impact from the player's own trades |
+| **Generated mush** | Valid topology, no landmark hierarchy | Authored macro layout, one silhouette-dominant landmark per deck as a generator assertion |
 | **LOW tier forks and rots** | Bar set on a good GPU, mobile hits the tile-GPU cliff | Quality tier is a data object the generator consumes; one scene graph, never two |
-| **Direction C reads as empty** | "Awe through darkness" collapses into "grey level" if sparse | Clutter density and resettlement cadence are gates, not polish |
-| **Economy solved on a wiki** | Static optima are publishable | Non-stationarity: shocks faster than relaxation, plus price impact from the player's own trades |
-| **Unbounded NPC liquidity** | Becomes a money printer the day players trade | Finite depth on every quote from commit one |
-| **Scope collision with in-flight work** | 77 uncommitted files, open fauna budget, freshly consolidated audio graph | Phase 0 |
+| **Sandbox leaks into the demo** | Dev routes have a way of shipping | Make unreachability a test, not a convention |
 
 ---
 
-## 12. One-paragraph summary
+## 11. Summary
 
-Build the generator, not the station; ship one hand-tuned instance as its first output. The
-portal/cell graph the generator already has to produce is the keystone — it solves visibility,
-streaming, light probes, and reverb in one artifact, which is what lets a procedural station
-beat a hand-built one instead of merely approximating it. Make the economy a finite-depth
-order book over reservoir pricing with lazy closed-form catch-up and an event shock queue, so
-single-player and the eventual cross-player market are one code path and shocks — not
-production chains — carry the drama. Split NPCs so that authored characters remember and
-model-driven characters only have opinions about prices, and use the existing canon rule that
-workers are blind to what Terra sees as the literal prompt boundary. The binding constraint is
-not draw calls or triangles; it is five shader programs. The binding process constraint is a
-dirty 77-file worktree. Both are fixable before anything creative starts, and both will be
-much more expensive later.
+Get to *fly there, dock, walk around, trade, talk* as fast as honestly possible, behind a dev
+flag, code-split, with no canon attached — then run the systems track and the fidelity track
+concurrently, because they answer different questions and don't block each other.
+
+Four things must be right early because they are expensive to retrofit: the portal/cell graph
+(it solves visibility, streaming, light probes, and reverb in one artifact), the order-book
+shape of the market (so the eventual cross-player economy is the same code path),
+instance-attribute variation on the kit geometry (so the architecture batches), and fixture
+mode for the model calls (so live AI doesn't fight the determinism gates). Everything else can
+be provisional.
+
+The bar is high framerate at high fidelity on named hardware, measured. Advisory budgets in
+the repo are there to keep contributors from being casually wasteful; they are not the target,
+and where the engine outgrows them the right move is to raise them and say why. Spend compute
+where it produces perceived quality — lighting, atmosphere, materiality, sound — and take it
+back from batch count and overdraw, which cost frames without buying anything.
