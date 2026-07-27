@@ -80,9 +80,32 @@ export interface AnchorageExteriorProps {
   descriptor: AnchorageDescriptor;
   /** Supply one to avoid rebuilding it; otherwise derived from the descriptor. */
   body?: AnchorageBody;
+  /**
+   * The shipped game renders system space relative to a floating origin that
+   * rebases as the player travels; the sandbox renders in absolute system
+   * coordinates. Subtracted from the station's system position, so the default of
+   * zero is the sandbox's case and the main game passes its live origin.
+   */
+  renderOrigin?: readonly [number, number, number];
+  /**
+   * Beyond this the station is not drawn at all.
+   *
+   * It is only two draw calls, but the pixel floor under its nav lights means a
+   * station forty thousand units away would still paint a permanent cluster of
+   * coloured dots on the sky — which reads as fireflies, not as a destination.
+   */
+  maxRange?: number;
 }
 
-export function AnchorageExterior({ descriptor, body: suppliedBody }: AnchorageExteriorProps) {
+const DEFAULT_MAX_RANGE = 26_000;
+const ORIGIN: readonly [number, number, number] = [0, 0, 0];
+
+export function AnchorageExterior({
+  descriptor,
+  body: suppliedBody,
+  renderOrigin = ORIGIN,
+  maxRange = DEFAULT_MAX_RANGE
+}: AnchorageExteriorProps) {
   const hullRef = useRef<THREE.InstancedMesh>(null);
   const lightRef = useRef<THREE.InstancedMesh>(null);
   const groupRef = useRef<THREE.Group>(null);
@@ -124,7 +147,6 @@ export function AnchorageExterior({ descriptor, body: suppliedBody }: AnchorageE
   useEffect(() => {
     const group = groupRef.current;
     if (!group) return;
-    group.position.set(body.systemPosition[0], body.systemPosition[1], body.systemPosition[2]);
     group.quaternion.set(
       body.quaternion[0],
       body.quaternion[1],
@@ -136,12 +158,28 @@ export function AnchorageExterior({ descriptor, body: suppliedBody }: AnchorageE
   useFrame(({ clock, camera, size }) => {
     const hullMesh = hullRef.current;
     const lightMesh = lightRef.current;
-    if (!hullMesh || !lightMesh) return;
+    const group = groupRef.current;
+    if (!hullMesh || !lightMesh || !group) return;
+
+    // Placed every frame rather than once: the shipped game rebases its render
+    // origin as the player travels, and a station pinned at mount would drift out
+    // of the world the moment it did.
+    scratch.centre.set(
+      body.systemPosition[0] - renderOrigin[0],
+      body.systemPosition[1] - renderOrigin[1],
+      body.systemPosition[2] - renderOrigin[2]
+    );
+    group.position.copy(scratch.centre);
 
     const now = anchorageFixedTime() ?? clock.getElapsedTime();
     camera.getWorldPosition(scratch.camera);
-    scratch.centre.set(body.systemPosition[0], body.systemPosition[1], body.systemPosition[2]);
     const range = scratch.camera.distanceTo(scratch.centre);
+
+    if (range > maxRange) {
+      hullMesh.count = 0;
+      lightMesh.count = 0;
+      return;
+    }
 
     // World size of one screen pixel at the station's range. A beacon smaller than
     // a pixel does not dim — it flickers in and out as the rasteriser catches it or

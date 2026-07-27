@@ -9,6 +9,9 @@ import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx
 import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
 import SystemCompanionBodies from './components/SystemCompanionBodies.tsx';
+import SystemAnchorages from './components/SystemAnchorages.tsx';
+import AnchorageApproachDriver from './components/AnchorageApproachDriver.tsx';
+import AnchorageApproachHud from './components/hud/AnchorageApproachHud.tsx';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
 import SystemTravelDriver from './components/SystemTravelDriver.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
@@ -1083,6 +1086,31 @@ const App: React.FC = () => {
     worldPrepClientRef.current = null;
   }, []);
 
+  /**
+   * Docking clearance granted: hand off from the ship to the station interior.
+   *
+   * A navigation rather than an in-place scene swap, and that is a deliberate
+   * limitation rather than a shortcut worth hiding. The interior wants a walking
+   * near plane of eight centimetres; system space wants a far plane a hundred
+   * kilometres out. They cannot share a depth buffer, so the two are separate
+   * scenes with separate cameras — and swapping between them in place means
+   * unmounting the live planet runtime and rebuilding it on undock, which is a
+   * multi-second stall and a real risk to the story runtime's state.
+   *
+   * The interior this reaches is the shipped one, not a copy. What is missing is
+   * only the seamlessness: the trip out of the station is a reload rather than a
+   * hatch. That is the next piece of integration, and it is worth doing properly
+   * rather than doing badly now.
+   */
+  const enterAnchorage = useCallback((body: { address: { system: { x: number; y: number }; index: number } }) => {
+    const { system, index } = body.address;
+    const params = new URLSearchParams(window.location.search);
+    params.set('anchorage', `${system.x},${system.y},${index}`);
+    // No approach: the ship already flew it. Arriving goes straight to the lock.
+    params.delete('approach');
+    window.location.assign(`${window.location.pathname}?${params.toString()}`);
+  }, []);
+
   const prepareSystemTarget = useCallback(async (planet: PlanetDescriptor): Promise<boolean> => {
     if (hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return true;
     const generation = ++worldPrepGenerationRef.current;
@@ -1506,6 +1534,25 @@ const App: React.FC = () => {
             bodyCountOverride={currentSystemManifest.planets.length as 1 | 2 | 3}
           />
         )}
+        {/*
+          Stations. Sibling of SystemCompanionBodies and gated by the same flag,
+          because both answer "what else is in this system" and a build with system
+          bodies switched off should not sprout a kilometre of hull. Most systems
+          have none and the component returns null for those.
+        */}
+        {systemBodiesEnabled && (
+          <>
+            <SystemAnchorages
+              currentCoordinate={currentWorld.coordinate}
+              systemSeed={currentSystemManifest.systemSeed}
+            />
+            <AnchorageApproachDriver
+              currentCoordinate={currentWorld.coordinate}
+              systemSeed={currentSystemManifest.systemSeed}
+              onDock={enterAnchorage}
+            />
+          </>
+        )}
         <SystemTravelDriver
           manifest={currentSystemManifest}
           activePlanetId={activePlanetDescriptor.worldId}
@@ -1609,6 +1656,7 @@ const App: React.FC = () => {
           <CinematicHudVeil>
             {flight.controlMode === 'fps' && <Crosshair />}
             <TargetReticle />
+            {flight.controlMode === 'flight' && <AnchorageApproachHud />}
             {flight.controlMode === 'fps' && <MiningProgress />}
             {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
             {flight.controlMode === 'fps' && <BuildIndicator />}

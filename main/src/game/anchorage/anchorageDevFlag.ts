@@ -43,6 +43,36 @@ export function anchorageApproachEnabled(): boolean {
 }
 
 /**
+ * `?stations=force` guarantees the current system has an anchorage.
+ *
+ * Roughly two systems in three have none, and the system the game starts in is one
+ * of them, so without this "fly out and look at the station" begins with a search
+ * for a system that has one. The station it forces is the same seeded station that
+ * system would have had if the roll had gone the other way.
+ */
+export function forcedAnchorageCount(): number {
+  if (typeof window === 'undefined') return 0;
+  const raw = new URLSearchParams(window.location.search).get('stations');
+  if (raw === null) return 0;
+  if (raw === 'force' || raw === '1') return 1;
+  const value = Number(raw);
+  return Number.isFinite(value) && value > 0 ? Math.min(4, Math.trunc(value)) : 0;
+}
+
+/**
+ * `&ruler=1` parks a planet-sized sphere alongside the station.
+ *
+ * The station is 830 units long against a planet's 89-unit bound radius, and the
+ * two are never within eight kilometres of each other, so no in-game view can
+ * answer "is this the right size" by comparison. This puts the comparison in one
+ * frame at one viewing distance, which is the only way to actually see it.
+ */
+export function anchorageRulerVisible(): boolean {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).get('ruler') === '1';
+}
+
+/**
  * `&dock=0` drops you straight onto the deck.
  *
  * Arriving is the default because arriving is the experience, but a capture run

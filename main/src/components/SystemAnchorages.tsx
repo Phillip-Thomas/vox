@@ -1,0 +1,96 @@
+import { useMemo } from 'react';
+import { anchorageBody } from '../game/anchorage/anchorageBody.ts';
+import { buildAnchorageDescriptor } from '../game/anchorage/anchorageDescriptor.ts';
+import { systemAnchorages } from '../game/anchorage/anchorageBody.ts';
+import { forcedAnchorageCount } from '../game/anchorage/anchorageDevFlag.ts';
+import type { SystemCoordinate } from '../game/starSystem.ts';
+import { useSystemFlight } from '../state/systemFlight.ts';
+import {
+  AnchorageExterior,
+  anchorageExteriorDiagnostics
+} from './anchorage/AnchorageExterior.tsx';
+import { useEffect } from 'react';
+
+/**
+ * Stations, in the shipped game's system space.
+ *
+ * The sibling of `SystemCompanionBodies`: that one renders the other planets in
+ * this system, this one renders the anchorages. Both read the same floating render
+ * origin, so both stay put when the player travels far enough that the origin
+ * rebases.
+ *
+ * Most systems have none, and the component costs nothing when they do — the
+ * anchorage set is derived from the system seed and comes back empty. When there
+ * is one it is two instanced draws, the same two the sandbox uses, so the station
+ * you fly past here is byte-for-byte the station you walk around in.
+ *
+ * Lit by whatever lights the scene already has. The station is hundreds of units
+ * across and thousands away, and a directional sun is infinite in extent, so it
+ * picks up `SkyController`'s key for free rather than needing a lighting rig of
+ * its own that would also spill onto the planet.
+ */
+
+export interface SystemAnchoragesProps {
+  currentCoordinate: SystemCoordinate;
+  /** The system seed the manifest was built from; anchorage population keys off it. */
+  systemSeed: number;
+  /** Off by default in the story system unless the route explicitly allows it. */
+  enabled?: boolean;
+}
+
+export default function SystemAnchorages({
+  currentCoordinate,
+  systemSeed,
+  enabled = true
+}: SystemAnchoragesProps) {
+  const systemFlight = useSystemFlight();
+
+  const forced = useMemo(() => forcedAnchorageCount(), []);
+  const stations = useMemo(() => {
+    if (!enabled) return [];
+    return systemAnchorages(currentCoordinate, systemSeed, forced).map(body => ({
+      body,
+      // The descriptor carries the cell graph the exterior is generated from —
+      // which is the same graph the interior is built from, and the reason the
+      // dock you see out here is the airlock you arrive in.
+      descriptor: buildAnchorageDescriptor(body.address)
+    }));
+  }, [currentCoordinate, enabled, forced, systemSeed]);
+
+  /*
+    Exposed so a probe can tell "the station is not rendering" from "the station is
+    rendering and you are six kilometres away from it". Those look identical in a
+    frame and have completely different causes.
+  */
+  useEffect(() => {
+    const devWindow = window as typeof window & {
+      __anchorageExterior?: () => ReturnType<typeof anchorageExteriorDiagnostics>;
+    };
+    devWindow.__anchorageExterior = () => anchorageExteriorDiagnostics();
+    return () => {
+      delete devWindow.__anchorageExterior;
+    };
+  }, []);
+
+  if (stations.length === 0) return null;
+
+  return (
+    <>
+      {stations.map(({ body, descriptor }) => (
+        <AnchorageExterior
+          key={body.worldId}
+          descriptor={descriptor}
+          body={body}
+          renderOrigin={systemFlight.renderOrigin}
+        />
+      ))}
+    </>
+  );
+}
+
+/** The stations in a system, without building any geometry. For HUD and targeting. */
+export function systemAnchorageBodies(coordinate: SystemCoordinate, systemSeed: number) {
+  return systemAnchorages(coordinate, systemSeed);
+}
+
+export { anchorageBody };

@@ -104,9 +104,21 @@ export function systemAnchorageCount(coordinate: SystemCoordinate, systemSeed: n
   return 2;
 }
 
-/** Every anchorage in a system, in index order. Empty for most systems. */
-export function systemAnchorages(coordinate: SystemCoordinate, systemSeed: number): AnchorageBody[] {
-  const count = systemAnchorageCount(coordinate, systemSeed);
+/**
+ * Every anchorage in a system, in index order. Empty for most systems.
+ *
+ * `minimum` forces at least that many regardless of the roll. It exists because
+ * most systems have none by design — including, as it happens, the one the game
+ * starts in — so without it "go and look at the station" means "first find a
+ * system that has one". A development affordance, not a generation rule: the
+ * station it conjures is the same seeded station that system would have had.
+ */
+export function systemAnchorages(
+  coordinate: SystemCoordinate,
+  systemSeed: number,
+  minimum = 0
+): AnchorageBody[] {
+  const count = Math.max(minimum, systemAnchorageCount(coordinate, systemSeed));
   const bodies: AnchorageBody[] = [];
   for (let index = 0; index < count; index++) {
     bodies.push(anchorageBody({ system: coordinate, index }));

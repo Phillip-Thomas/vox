@@ -3,6 +3,11 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { seededUnit } from '../../utils/worldCoordinates.ts';
 import {
+  NOMINAL_PLANET_FACE_RADIUS,
+  PLANET_SURFACE_BOUND_RADIUS
+} from '../../game/starSystem.ts';
+import { anchorageRulerVisible } from '../../game/anchorage/anchorageDevFlag.ts';
+import {
   approachHold,
   arrivalStandoff,
   evaluateApproach,
@@ -64,6 +69,7 @@ export function ApproachScene({
     <>
       <ApproachEnvironment body={body} />
       <AnchorageExterior descriptor={descriptor} body={body} />
+      {anchorageRulerVisible() && <PlanetRuler body={body} />}
       <ShipController
         body={body}
         readout={readout}
@@ -71,6 +77,50 @@ export function ApproachScene({
         inputCaptured={inputCaptured}
       />
     </>
+  );
+}
+
+/**
+ * A planet, to scale, parked alongside the station.
+ *
+ * The two are never within eight kilometres of each other in a real system, so
+ * "is the station the right size" cannot be answered by any view the game
+ * actually produces. This is the calibration shot: one planet at its true bound
+ * radius, one station, one viewing distance, one frame. Wireframed so it reads as
+ * an instrument rather than as a world someone forgot to texture.
+ */
+function PlanetRuler({ body }: { body: AnchorageBody }) {
+  const offset = useMemo(() => {
+    // Beside the station, clear of it, on the same plane as the spine so the two
+    // silhouettes sit at the same distance from the camera.
+    const lateral = new THREE.Vector3(...body.approachAxis)
+      .cross(new THREE.Vector3(0, 1, 0))
+      .normalize();
+    if (lateral.lengthSq() < 0.5) lateral.set(1, 0, 0);
+    return lateral.multiplyScalar(body.frame.half[2] + PLANET_SURFACE_BOUND_RADIUS + 130);
+  }, [body]);
+
+  return (
+    <group position={[
+      body.systemPosition[0] + offset.x,
+      body.systemPosition[1] + offset.y,
+      body.systemPosition[2] + offset.z
+    ]}
+    >
+      <mesh>
+        <sphereGeometry args={[PLANET_SURFACE_BOUND_RADIUS, 48, 32]} />
+        <meshStandardMaterial color="#4a5a48" roughness={0.95} metalness={0} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[PLANET_SURFACE_BOUND_RADIUS * 1.002, 24, 16]} />
+        <meshBasicMaterial color="#8fd8a0" wireframe transparent opacity={0.28} toneMapped={false} />
+      </mesh>
+      {/* The playable surface, inside the bound sphere the water bulge occupies. */}
+      <mesh>
+        <sphereGeometry args={[NOMINAL_PLANET_FACE_RADIUS, 24, 16]} />
+        <meshBasicMaterial color="#ffb45a" wireframe transparent opacity={0.34} toneMapped={false} />
+      </mesh>
+    </group>
   );
 }
 
