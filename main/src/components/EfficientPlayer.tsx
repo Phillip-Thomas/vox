@@ -76,6 +76,12 @@ import { MaterialType } from '../types/materials';
 import { canHarvestVoxel, computeMineDuration, harvestClassForBlock, isInstantHarvest, mineDurationMs, requiredToolTierForVoxel } from '../game/systems/harvestingSystem';
 import { ensureStarterLoadout, getEquippedToolTier, selectTool, toolSpeedFor } from '../game/systems/loadoutSystem';
 import { clearMiningProgress, getMiningProgress, setMiningProgress } from '../game/systems/miningProgress';
+import {
+  advanceMiningTrigger,
+  createMiningTriggerState,
+  resetMiningTriggerState,
+  type MiningTriggerState
+} from './miningTrigger.model';
 import { isMawPowered } from '../game/systems/mawSystem';
 import { isTreeHarvested, TREE_HARDNESS, TREE_TOOL_TIER } from '../game/systems/treeHarvest';
 import { isStoneCollected } from '../game/systems/stonePickup';
@@ -129,7 +135,7 @@ import {
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
-import { getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
+import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
 import { BLOCKS, type BlockId } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
 import { commitMawHarmlessTestFromAcceptedMine } from '../story/emergentMawRepair.ts';
@@ -384,8 +390,9 @@ export default function EfficientPlayer({
     tickAt: number;
     usesCharge: boolean;
     toolId: ItemId | null;
+    trigger: MiningTriggerState;
   }>(
-    { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false, toolId: null }
+    { key: null, elapsed: 0, duration: 0, tickAt: 0, usesCharge: false, toolId: null, trigger: createMiningTriggerState() }
   );
   // Build mode uses EDGE presses (place once per press), not hold.
   const prevBuildKey = useRef(false);
@@ -938,34 +945,59 @@ export default function EfficientPlayer({
         ms.toolId = null;
         clearMiningProgress();
       }
+      // A fresh press must read as a genuine acquisition, not a resumed hold.
+      resetMiningTriggerState(ms.trigger);
       return;
     }
 
     const target = pickHarvestTarget(camera);
-    if (!target) {
-      if (ms.key !== null) { ms.key = null; ms.elapsed = 0; }
+
+    // This frame's raw candidate key: null when nothing is targeted, a '!'-prefixed
+    // key for an un-harvestable voxel (blocked), else the plain harvest key. The
+    // blocked prefix keeps blocked and harvestable in ONE key space so the same
+    // debounce silences the harvestable<->blocked boundary flicker.
+    let candidate: string | null = null;
+    if (target) {
+      const c = target.coord;
+      const baseKey = `${target.kind}:${c.x},${c.y},${c.z}`;
+      const blocked = target.kind === 'voxel'
+        && !canHarvestVoxel({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: getEquippedToolTier() });
+      candidate = blocked ? `!${baseKey}` : baseKey;
+    }
+
+    // Debounced trigger/retarget decision (pure). Only a true acquisition edge
+    // (no-target -> target) chips; boundary jitter and quiet retargets do not.
+    const decision = advanceMiningTrigger(ms.trigger, candidate);
+    if (decision.chip === 'acquire') playSfx('mine');
+    else if (decision.chip === 'blocked') playSfx('blocked');
+
+    const committed = decision.committedKey;
+
+    // No committed target (genuine rest, or a confirmed loss after the debounce): stop.
+    if (committed === null) {
+      if (ms.key !== null) { ms.key = null; ms.elapsed = 0; ms.toolId = null; }
       clearMiningProgress();
       return;
     }
 
-    const { coord } = target;
-    const key = `${target.kind}:${coord.x},${coord.y},${coord.z}`;
-
-    // Capability gate (voxels only — trees are soft, tier 0). Uses the best tier
-    // OWNED; below it, one "blocked" chirp per fresh target, no progress.
-    if (target.kind === 'voxel'
-      && !canHarvestVoxel({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: getEquippedToolTier() })) {
-      if (ms.key !== `!${key}`) { playSfx('blocked'); ms.key = `!${key}`; ms.elapsed = 0; }
+    // Committed target is an un-harvestable voxel: show the blocked ring, no charge.
+    // (The one "blocked" chirp already fired on the acquisition edge above.)
+    if (committed.startsWith('!')) {
+      ms.key = committed;
+      ms.elapsed = 0;
+      ms.tickAt = 0;
       setMiningProgress(true, 0, true);
       return;
     }
 
-    // New target (or resumed after release): pick the RIGHT tool for this material
-    // (Hatchet→wood, Pickaxe→stone, …) and start a fresh charge with an immediate
-    // chip. Speed folds in that tool's per-material rate and, if it's the Faulty
-    // Maw, its charge: empty + no Biofuel → slow bare-handed rate (auto-refuels if
-    // a Biofuel is held). A non-charge tool (Hatchet/Pickaxe) never drains charge.
-    if (ms.key !== key) {
+    // A fresh commit (acquisition edge or a confirmed retarget): pick the RIGHT
+    // tool for this material (Hatchet→wood, Pickaxe→stone, …) and start a clean
+    // charge. On a commit frame this frame's `target` IS the committed target, so
+    // its coord/kind are available. Speed folds in that tool's per-material rate
+    // and, if it's the Faulty Maw, its charge: empty + no Biofuel → slow
+    // bare-handed rate (auto-refuels if a Biofuel is held). A non-charge tool
+    // (Hatchet/Pickaxe) never drains charge.
+    if (decision.commit && target) {
       if (target.kind === 'stone' || target.kind === 'flora') {
         // Loose stones are picked up by hand — quick, tool/charge independent.
         ms.usesCharge = false;
@@ -988,13 +1020,27 @@ export default function EfficientPlayer({
           ? computeMineDuration(TREE_HARDNESS, TREE_TOOL_TIER, tier, speedMul)
           : mineDurationMs({ blockId: target.voxel.blockId, deposit: target.voxel.deposit, toolTier: tier }, { speedMul });
       }
-      ms.key = key;
+      ms.key = committed;
       ms.elapsed = 0;
       ms.tickAt = 0;
-      playSfx('mine');
     }
 
     if (isInstantHarvest() && Number.isFinite(ms.duration)) ms.duration = 0; // debug: instant
+
+    // Inside the debounce window this frame's candidate differs from the committed
+    // (incumbent) key: FREEZE — preserve the charge, do NOT accumulate against or
+    // complete a jittered coord, and hold the progress ring. A 1-few-frame flicker
+    // costs ~<80 ms of paused charge (imperceptible); the charge is not reset.
+    if (candidate !== committed) {
+      setMiningProgress(true, ms.duration > 0 ? Math.min(1, ms.elapsed / ms.duration) : 1, false);
+      return;
+    }
+
+    // Past here the committed target is harvestable AND under the crosshair this
+    // frame, so `target` is live (a null/other candidate would have cleared or
+    // frozen above). Narrow it for the charge math.
+    if (!target) return;
+    const { coord } = target;
 
     ms.elapsed += dt * 1000;
 
@@ -1023,6 +1069,9 @@ export default function EfficientPlayer({
         );
       }
       ms.key = null; ms.elapsed = 0; ms.tickAt = 0; ms.toolId = null;
+      // The broken cell is gone: the next block under a continued hold is a fresh
+      // acquisition (chip + clean charge), not a debounced retarget.
+      resetMiningTriggerState(ms.trigger);
       clearMiningProgress();
       return;
     }
@@ -1800,6 +1849,18 @@ export default function EfficientPlayer({
       }
     }
 
+    // External-lens TRAVEL constraint. The pure-2D side-scroller eras wall the
+    // worker in along the travel axis (± band metres around the lens origin) so
+    // marching far enough can never reach the cube-edge escape / face traversal
+    // that resolveSurfaceFrame would otherwise trigger. Free (Infinity) for the
+    // top-down/iso eras, where crossing a face is legitimate. Same edge feel as
+    // the depth clamp above: inside the band free, cancel outward + spring back.
+    if (sideLens && lensRig && Number.isFinite(lensRig.travelBand)) {
+      const travelDrift = _sideBasisForward.copy(position).sub(sideLens.origin).dot(sideLens.travelAxis);
+      const delta = axisBandVelocityDelta(travelDrift, lensRig.travelBand, nextVelocity.dot(sideLens.travelAxis));
+      if (delta !== 0) nextVelocity.addScaledVector(sideLens.travelAxis, delta);
+    }
+
     body.setLinvel(vectorToRapier(nextVelocity), true);
   });
 
@@ -1881,11 +1942,12 @@ export default function EfficientPlayer({
     } else {
       // Hold-to-mine: progress accumulates while the key/touch is held on a voxel,
       // and the block only breaks once it has fully charged (time scales with block
-      // hardness / tool tier — see mineDurationMs).
+      // hardness / tool tier — see mineDurationMs). Beats without an extract verb
+      // (policy allowMine: false) suppress mining outright.
       clearBuildGhost();
       prevBuildKey.current = false;
       prevDeconKey.current = false;
-      updateMining(harvestHeld, delta, cameraRef.current);
+      updateMining(harvestHeld && getStoryInputPolicy().allowMine !== false, delta, cameraRef.current);
     }
 
     // Systemic context interaction (F): resolve the best action EVERY frame (cheap, and

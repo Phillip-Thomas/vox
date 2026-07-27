@@ -8,9 +8,11 @@ import {
   setTouchActive
 } from '../../utils/mobileInput';
 import { isBuildEnabled, subscribeBuildState } from '../../game/systems/buildState';
+import { getStoryInputPolicy } from '../../story/storyInputPolicy.ts';
+import { subscribeStory } from '../../story/storyState.ts';
 import { theme } from '../../ui/theme.ts';
 import { touchActionButtonStyle, HUD_TOUCH_EDGE, hudNoSelect } from '../hud/hudChrome.ts';
-import { createTouchActionGrid, createTouchActionSpecs } from './TouchControls.model.ts';
+import { createTouchActionGrid, createTouchActionSpecs, staleHeldTouchActionCodes } from './TouchControls.model.ts';
 
 // On-screen virtual controls for touch devices. Feeds the EXISTING input paths
 // by synthesizing keyboard + mousemove events (see mobileInput.ts), so neither
@@ -31,10 +33,16 @@ const LOOK_SENSITIVITY_Y = 1.38;
 export default function TouchControls({ controlMode }: TouchControlsProps) {
   const [knob, setKnob] = useState({ x: 0, y: 0 });
   const [buildActive, setBuildActive] = useState(() => isBuildEnabled());
+  // The desktop-Shift equivalent: expose SPRINT only when the live story policy
+  // allows it (embodied chapters + sandbox). Feed/side eras report allowSprint
+  // false, so the button stays hidden there.
+  const [allowSprint, setAllowSprint] = useState(() => getStoryInputPolicy().allowSprint);
   const joyId = useRef<number | null>(null);
   const joyCenter = useRef({ x: 0, y: 0 });
   const lookId = useRef<number | null>(null);
   const lookLast = useRef({ x: 0, y: 0 });
+  // Codes currently held by an action button (for the grid-reshape release seam).
+  const heldCodes = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     setTouchActive(true);
@@ -45,6 +53,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
   }, []);
 
   useEffect(() => subscribeBuildState(() => setBuildActive(isBuildEnabled())), []);
+  useEffect(() => subscribeStory(() => setAllowSprint(getStoryInputPolicy().allowSprint)), []);
 
   // --- left movement joystick ------------------------------------------------
   const onJoyDown = (e: React.PointerEvent) => {
@@ -105,18 +114,37 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
       e.preventDefault();
       beginLook(e);
       pressKey(code);
+      heldCodes.current.add(code);
     },
     onPointerMove: onLookMove,
-    onPointerUp: (e: React.PointerEvent) => { releaseKey(code); onLookUp(e); },
-    onPointerLeave: () => releaseKey(code),
-    onPointerCancel: (e: React.PointerEvent) => { releaseKey(code); onLookUp(e); }
+    onPointerUp: (e: React.PointerEvent) => { releaseKey(code); heldCodes.current.delete(code); onLookUp(e); },
+    onPointerLeave: () => { releaseKey(code); heldCodes.current.delete(code); },
+    onPointerCancel: (e: React.PointerEvent) => { releaseKey(code); heldCodes.current.delete(code); onLookUp(e); }
   });
 
   // `userSelect` alone is ignored by iOS Safari for touch — the WebkitUserSelect
   // + WebkitTouchCallout pair is what actually stops a press from selecting the
   // label text or popping the copy/paste callout mid-play.
-  const actionGrid = createTouchActionGrid(controlMode, buildActive);
-  const actionSpecs = createTouchActionSpecs(controlMode, buildActive);
+  // Sprint only joins the on-foot grid (fps, not building) where policy allows it.
+  const sprintEnabled = controlMode === 'fps' && !buildActive && allowSprint;
+  const actionGrid = createTouchActionGrid(controlMode, buildActive, sprintEnabled);
+  const actionSpecs = createTouchActionSpecs(controlMode, buildActive, sprintEnabled);
+
+  // Grid-reshape release seam. A finger can still be down on an action button when
+  // the grid changes and that button leaves it — SPRINT hidden by build mode or a
+  // story policy that revokes allowSprint, or the whole cluster swapping on a
+  // build / control-mode change. React unmounts the removed <button> WITHOUT a
+  // pointerup (the pointer was captured on it via beginLook), so its synthetic key
+  // (e.g. ShiftLeft) would latch into a non-stop sprint. On any reshape, release
+  // exactly the held codes that no longer map to a live button. (WASD from the
+  // joystick is unaffected — that surface never disappears and releases on lift.)
+  useEffect(() => {
+    const stale = staleHeldTouchActionCodes(heldCodes.current, controlMode, buildActive, sprintEnabled);
+    for (const code of stale) {
+      releaseKey(code);
+      heldCodes.current.delete(code);
+    }
+  }, [controlMode, buildActive, sprintEnabled]);
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', touchAction: 'none' }}>

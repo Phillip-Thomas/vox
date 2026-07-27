@@ -11,6 +11,10 @@ import {
   setMeasuredStoryObjectiveCardHeight,
   STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX
 } from './storyHudLayout.ts';
+import { presentStoryGuidanceLine } from './inputGlyphs.ts';
+
+// Re-exported so the awakened HUD's existing importers keep their call site.
+export { presentStoryGuidanceLine };
 
 export function getStoryGuidanceHudPlacement(touch: boolean): {
   left: string;
@@ -37,24 +41,6 @@ export function getStoryJournalTriggerPlacement(): React.CSSProperties {
     left: 'calc(160px + env(safe-area-inset-left, 0px))',
     top: 'calc(14px + env(safe-area-inset-top, 0px))'
   };
-}
-
-const TOUCH_ACTION_TOKENS: ReadonlyArray<readonly [RegExp, string]> = [
-  [/\[SPACE\]/g, '[THRUST]'],
-  [/\[F\]/g, '[USE]'],
-  [/\[G\]/g, '[CONSUME]'],
-  [/\[E\]/g, '[MINE]'],
-  [/\[C\]/g, '[FABRICATOR]'],
-  [/\[B\]/g, '[BUILD]']
-];
-
-/** Translate keyboard tokens into the labels on the mounted touch controls. */
-export function presentStoryGuidanceLine(line: string, touch: boolean): string {
-  if (!touch) return line;
-  return TOUCH_ACTION_TOKENS.reduce(
-    (presented, [token, label]) => presented.replace(token, label),
-    line
-  );
 }
 
 /**

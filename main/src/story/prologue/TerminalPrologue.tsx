@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { enterPlaying, getGameCanvas, useAppState } from '../../state/appState.ts';
 import { isTouchDevice } from '../../utils/mobileInput.ts';
+import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { hasMilestone, markMilestone } from '../../game/systems/progressionSystem.ts';
 import { setVoxelRealityStage } from '../../game/systems/realityRenderSystem.ts';
 import { advanceToBeat, getStoryStateSnapshot, STORY_MILESTONES } from '../storyState.ts';
@@ -94,6 +95,12 @@ const TerminalPrologue: React.FC = () => {
     return () => clearTimeout(timer);
   }, [phase, sceneReady, handoff]);
 
+  // Skip the transmission ahead to the acknowledge screen (Tab on desktop, the
+  // tappable skip prompt on touch).
+  const skipTransmission = useCallback(() => {
+    setPhase(current => (current === 'acknowledge' ? current : 'corruption'));
+  }, []);
+
   // Shell keyboard: Tab skips ahead to the acknowledge screen; F acknowledges.
   // Any keypress is also an audio-unlock gesture (deep links skip the menu click).
   useEffect(() => {
@@ -108,14 +115,14 @@ const TerminalPrologue: React.FC = () => {
       if (editing) return;
       if (e.code === 'Tab') {
         e.preventDefault();
-        if (phase !== 'acknowledge') setPhase('corruption');
+        skipTransmission();
       } else if (e.code === 'KeyF' && phase === 'acknowledge' && sceneReady) {
         handoff();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [phase, sceneReady, handoff]);
+  }, [phase, sceneReady, handoff, skipTransmission]);
 
   return (
     <div style={{
@@ -180,7 +187,7 @@ const TerminalPrologue: React.FC = () => {
                     border: 'none', padding: '12px 30px', cursor: 'pointer'
                   }}
                 >
-                  [F] BRACE FOR SURFACE
+                  {presentInputGlyphs('[F] BRACE FOR SURFACE', isTouch, 'prologue')}
                 </button>
               : <span style={{ color: PHOSPHOR_FAINT }}>RESOLVING SURFACE INDEX…</span>}
           </div>
@@ -198,12 +205,31 @@ const TerminalPrologue: React.FC = () => {
       }} />
 
       {skipVisible && phase !== 'acknowledge' && (
-        <div style={{
-          position: 'absolute', right: 26, bottom: 20, fontSize: 11,
-          color: PHOSPHOR_FAINT, letterSpacing: '0.18em', pointerEvents: 'none'
-        }}>
-          [TAB] SKIP TRANSMISSION
-        </div>
+        isTouch ? (
+          <button
+            type="button"
+            onClick={skipTransmission}
+            style={{
+              position: 'absolute',
+              right: 'calc(18px + env(safe-area-inset-right, 0px))',
+              bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))',
+              minHeight: 44, padding: '11px 16px',
+              fontFamily: theme.font.mono, fontSize: 11, letterSpacing: '0.18em',
+              color: PHOSPHOR_DIM, border: `1px solid ${PHOSPHOR_FAINT}`,
+              background: 'rgba(2,6,4,0.72)', cursor: 'pointer',
+              touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent'
+            }}
+          >
+            {presentInputGlyphs('[TAB] SKIP TRANSMISSION', true, 'prologue')}
+          </button>
+        ) : (
+          <div style={{
+            position: 'absolute', right: 26, bottom: 20, fontSize: 11,
+            color: PHOSPHOR_FAINT, letterSpacing: '0.18em', pointerEvents: 'none'
+          }}>
+            [TAB] SKIP TRANSMISSION
+          </div>
+        )
       )}
 
       <style>{`

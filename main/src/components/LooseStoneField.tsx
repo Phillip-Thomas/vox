@@ -195,14 +195,21 @@ export default function LooseStoneField({ commandContext, terrainSeed, persisten
     // Proximity pickup: collect any near stone the player is standing close to.
     if (playerPosition) {
       const rSq = PICKUP_RADIUS * PICKUP_RADIUS;
+      // Coalesce this frame's gathering into a single chip: every stone in reach
+      // still banks, but a dense cluster fires 'mine' at most once per frame
+      // instead of once per stone (defense-in-depth over the engine limiter).
+      let collectedAny = false;
       for (const s of nearStones.current) {
         if (isStoneCollected(s.x, s.y, s.z)) continue;
         if (s.w.distanceToSquared(playerPosition) <= rSq) {
           const result = dispatchGameplayCommand(() => collectStoneCommand(commandContext, { x: s.x, y: s.y, z: s.z }));
           if (result.ok) {
-            playSfx('mine'); // a short chip as confirmation the stone was gathered
+            collectedAny = true;
           }
         }
+      }
+      if (collectedAny) {
+        playSfx('mine'); // a short chip as confirmation the stone was gathered
       }
     }
 

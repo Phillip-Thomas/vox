@@ -406,8 +406,6 @@ class MusicEngine {
   /** Exactly one fetch/decode may own this slot at a time. */
   private activeLayerLoad: Promise<void> | null = null;
   private layerLoadScheduled = false;
-  /** Explicit preload eventually visits silent layers, still through one slot. */
-  private preloadAllLayers = false;
   /** Last published chord-root pc (semitones from A) — applied when drones start. */
   private chordRootPc: number | null = null;
 
@@ -438,12 +436,6 @@ class MusicEngine {
     // join only when their live target is audible, one fetch/decode at a time;
     // decoding the entire catalog inside the input gesture can starve the world
     // mount and make both the first score and scene transition appear frozen.
-    this.scheduleNextLayerLoad();
-  }
-
-  preload(): void {
-    if (!this.context) return;
-    this.preloadAllLayers = true;
     this.scheduleNextLayerLoad();
   }
 
@@ -598,7 +590,7 @@ class MusicEngine {
     let selected: RuntimeLayer | null = null;
     for (const layer of this.layers.values()) {
       if (layer.buffer || layer.loading) continue;
-      if (!this.preloadAllLayers && layer.targetGain <= STREAM_LAYER_LOAD_EPSILON) continue;
+      if (layer.targetGain <= STREAM_LAYER_LOAD_EPSILON) continue;
       // Highest current gain wins. Map insertion order is the stable tie-break,
       // so identical targets remain deterministic across runs.
       if (!selected || layer.targetGain > selected.targetGain) selected = layer;

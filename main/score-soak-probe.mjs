@@ -209,6 +209,44 @@ try {
       if (meta.report) printReport(meta.report);
     }
     console.log(`\nWAVs written to ${rendersDir}`);
+  } else if (mode === 'early-beats') {
+    // Owner-audition renders of the prologue/ch1/ch2 moods at their real
+    // reality eras. Optional argv[3] names an output subdirectory under
+    // renders/ (e.g. `early-beats before` / `early-beats after`).
+    const outDir = process.argv[3]
+      ? path.join(rendersDir, `early-beats-${process.argv[3]}`)
+      : rendersDir;
+    fs.mkdirSync(outDir, { recursive: true });
+    const specs = await page.evaluate(() => window.__scoreSoak.earlyBeatAuditions);
+    for (let i = 0; i < specs.length; i++) {
+      const meta = await page.evaluate((idx) => window.__scoreSoak.renderEarlyBeat(idx), i);
+      const file = path.join(outDir, `${meta.fileStem}.wav`);
+      await pullWav(page, meta.wavBytes, file);
+      const ok = meta.healthPass;
+      if (!ok) pass = false;
+      console.log(`[${ok ? 'PASS' : 'FAIL'}] ${meta.fileStem}.wav (${meta.seconds}s) — ${meta.description}`);
+      console.log(`    audio: ${fmtAnalysis(meta.analysis)}`);
+    }
+    console.log(`\nEarly-beat WAVs written to ${outDir}`);
+  } else if (mode === 'intro-combined') {
+    // Combined music-bus intro proof: the story score PLUS the legacy
+    // procedural engine at the storyTerminal mix. Optional argv[3] names an
+    // output subdirectory under renders/ (before/after evidence).
+    const outDir = process.argv[3]
+      ? path.join(rendersDir, `intro-combined-${process.argv[3]}`)
+      : rendersDir;
+    fs.mkdirSync(outDir, { recursive: true });
+    const specs = await page.evaluate(() => window.__scoreSoak.introCombinedAuditions);
+    for (let i = 0; i < specs.length; i++) {
+      const meta = await page.evaluate((idx) => window.__scoreSoak.renderIntroCombined(idx), i);
+      const file = path.join(outDir, `${meta.fileStem}.wav`);
+      await pullWav(page, meta.wavBytes, file);
+      const ok = meta.healthPass;
+      if (!ok) pass = false;
+      console.log(`[${ok ? 'PASS' : 'FAIL'}] ${meta.fileStem}.wav (${meta.seconds}s) — ${meta.description}`);
+      console.log(`    audio: ${fmtAnalysis(meta.analysis)}`);
+    }
+    console.log(`\nCombined intro WAVs written to ${outDir}`);
   } else if (mode === 'evidence') {
     fs.mkdirSync(rendersDir, { recursive: true });
     const allPairs = await page.evaluate(() => window.__scoreSoak.evidencePairNames);

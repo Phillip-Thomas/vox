@@ -1,9 +1,13 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
 import {
+  EARLY_BEAT_AUDITIONS,
   EVIDENCE_PAIR_NAMES,
   EXCERPT_NAMES,
+  INTRO_COMBINED_AUDITIONS,
+  renderEarlyBeatAudition,
   renderEvidence,
   renderExcerpt,
+  renderIntroCombinedAudition,
   runAudioSoak,
   runEraBuildSmoothnessSweep,
   runStoryHandoffSmoothnessSweep,
@@ -33,6 +37,26 @@ function toBase64(bytes: Uint8Array): string {
 export interface SoakPageApi {
   excerptNames: readonly ExcerptName[];
   evidencePairNames: readonly EvidencePairName[];
+  earlyBeatAuditions: ReadonlyArray<{ beat: string; era: number }>;
+  introCombinedAuditions: ReadonlyArray<{ beat: string; era: number }>;
+  renderIntroCombined(index: number): Promise<{
+    name: string;
+    fileStem: string;
+    description: string;
+    seconds: number;
+    analysis: Record<string, number>;
+    healthPass: boolean;
+    wavBytes: number;
+  }>;
+  renderEarlyBeat(index: number): Promise<{
+    name: string;
+    fileStem: string;
+    description: string;
+    seconds: number;
+    analysis: Record<string, number>;
+    healthPass: boolean;
+    wavBytes: number;
+  }>;
   renderExcerpt(name: ExcerptName): Promise<{
     name: string;
     fileStem: string;
@@ -69,6 +93,48 @@ function buildApi(): SoakPageApi {
   return {
     excerptNames: EXCERPT_NAMES,
     evidencePairNames: EVIDENCE_PAIR_NAMES,
+    earlyBeatAuditions: EARLY_BEAT_AUDITIONS.map(({ beat, era }) => ({ beat, era })),
+    introCombinedAuditions: INTRO_COMBINED_AUDITIONS.map(({ beat, era }) => ({ beat, era })),
+    async renderIntroCombined(index: number) {
+      const spec = INTRO_COMBINED_AUDITIONS[index];
+      console.log(`[soak-page] rendering combined intro ${spec.beat} @ era ${spec.era}…`);
+      const started = performance.now();
+      const result = await renderIntroCombinedAudition(spec);
+      lastWav = new Uint8Array(result.wav);
+      console.log(
+        `[soak-page] ${result.name} rendered in ${((performance.now() - started) / 1000).toFixed(1)}s ` +
+          `(peak ${result.analysis.peak.toFixed(3)}, rms ${result.analysis.rms.toFixed(4)})`
+      );
+      return {
+        name: result.name,
+        fileStem: result.fileStem,
+        description: result.description,
+        seconds: result.seconds,
+        analysis: { ...result.analysis },
+        healthPass: result.healthPass,
+        wavBytes: lastWav.length
+      };
+    },
+    async renderEarlyBeat(index: number) {
+      const spec = EARLY_BEAT_AUDITIONS[index];
+      console.log(`[soak-page] rendering early beat ${spec.beat} @ era ${spec.era}…`);
+      const started = performance.now();
+      const result = await renderEarlyBeatAudition(spec);
+      lastWav = new Uint8Array(result.wav);
+      console.log(
+        `[soak-page] ${result.name} rendered in ${((performance.now() - started) / 1000).toFixed(1)}s ` +
+          `(peak ${result.analysis.peak.toFixed(3)}, rms ${result.analysis.rms.toFixed(4)})`
+      );
+      return {
+        name: result.name,
+        fileStem: result.fileStem,
+        description: result.description,
+        seconds: result.seconds,
+        analysis: { ...result.analysis },
+        healthPass: result.healthPass,
+        wavBytes: lastWav.length
+      };
+    },
     async renderExcerpt(name: ExcerptName) {
       console.log(`[soak-page] rendering excerpt ${name}…`);
       const started = performance.now();

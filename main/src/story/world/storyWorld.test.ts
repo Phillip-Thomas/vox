@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
 import {
   AUDIT_WORKER_GROUND_CLEARANCE,
   getAnomalyStonePose,
@@ -19,6 +20,7 @@ import {
   STORY_SEED
 } from './storyWorld.ts';
 import { archetypeForSeed } from '../../game/data/planetArchetypes.ts';
+import { CH1_2D_TRAVEL_BAND } from '../storyDirector.ts';
 import { coordinateToSeed } from '../../utils/worldCoordinates.ts';
 import { taskRowMoveIntent, STORY_TASK_ROW_DEPTH_BAND } from '../taskRowNavigation.ts';
 import { SUPPLY_POD_COUNT } from '../supplyPods.ts';
@@ -201,6 +203,66 @@ describe('storyWorld', () => {
       const depth = target.position.clone().sub(plane.origin).dot(plane.depthAxis);
       expect(depth, `${target.kind} left the task row`).toBeCloseTo(0, 8);
     }
+  });
+
+  it('walls the pure-2D eras inside the dry plateau — bands keep both content reachable and the clamp rest dry', () => {
+    // Owner note: on the pure-2D side-scroller the worker must not be able to
+    // walk off the face (or switch faces). The travel band is a SOFT wall; it
+    // must (a) keep every authored/movie target reachable and (b) keep the
+    // RESTING clamp position on the authored dry plateau, so a beat that ends at
+    // the wall never parks the actor in the shore (the ch1-depth → ch1-nav
+    // regression: a band ~6 m past the plateau edge stranded the actor in the
+    // shallows, then wedged the cross-face planner).
+    const plane = getStorySidePlane(50, STORY_SEED);
+    const along = (p: THREE.Vector3) => Math.abs(p.clone().sub(plane.origin).dot(plane.travelAxis));
+
+    const debrisMax = Math.max(...getDebrisPoses(50, STORY_SEED).map(p => along(p.position)));
+    const podMax = Math.max(...getSupplyPodPoses(50, STORY_SEED).map(p => along(p.position)));
+    // Spawn (origin) is trivially at 0; the drift/march targets are relative to
+    // the player and therefore bounded by the same clamp — the anchored targets
+    // (debris, pods) are the only absolute ones the movie must actually reach.
+    // Every target must stay reachable, with at least ~1 m before the wall (the
+    // soft spring keeps content at the very edge reachable, but leave headroom).
+    expect(debrisMax).toBeLessThan(CH1_2D_TRAVEL_BAND.gather); // ch1-fixed + ch1-raster
+    expect(podMax).toBeLessThan(CH1_2D_TRAVEL_BAND.recovery); // ch1-depth
+    expect(CH1_2D_TRAVEL_BAND.gather - debrisMax).toBeGreaterThanOrEqual(1);
+    expect(CH1_2D_TRAVEL_BAND.recovery - podMax).toBeGreaterThanOrEqual(1);
+
+    // Derive the dry plateau edge from world-gen data (rather than hardcoding):
+    // scan outward from arrival along the travel axis until the column stops
+    // being level+dry. The clamp rest must stay on that plateau, so every band
+    // must be no farther than plateau-edge + 1 m.
+    const size = 50;
+    const arrival = findTopFaceSurfaceVoxel(size, STORY_SEED);
+    const generator = getWorldGen(size, STORY_SEED).generator;
+    const tx = Math.round(plane.travelAxis.x);
+    const tz = Math.round(plane.travelAxis.z);
+    const plateauEdgeMetres = (dir: 1 | -1): number => {
+      let lastGood = 0;
+      for (let offset = 1; offset <= 40; offset++) {
+        const x = arrival.x + tx * offset * dir;
+        const z = arrival.z + tz * offset * dir;
+        const support = findTopFaceSurfaceVoxel(size, STORY_SEED, { x, z });
+        const level = support.y === arrival.y;
+        const dry = !generator.isWaterVoxel(x, support.y + 1, z)
+          && !generator.isWaterVoxel(x, support.y + 2, z);
+        if (level && dry) lastGood = offset;
+        else break;
+      }
+      return lastGood * VOXEL_SCALE; // voxel offset → world metres
+    };
+    // The binding edge is the nearer of the two travel directions.
+    const plateauEdge = Math.min(plateauEdgeMetres(1), plateauEdgeMetres(-1));
+    expect(plateauEdge).toBeGreaterThanOrEqual(debrisMax); // content stays on the plateau
+    expect(CH1_2D_TRAVEL_BAND.gather).toBeLessThanOrEqual(plateauEdge + 1);
+    expect(CH1_2D_TRAVEL_BAND.recovery).toBeLessThanOrEqual(plateauEdge + 1);
+
+    // The +travel cube-face edge is at world radius 50; the origin sits at
+    // travel-offset |origin·travel| from it. The band must stay well short of it.
+    const originAlong = Math.abs(plane.origin.dot(plane.travelAxis));
+    const faceEdgeDistance = 50 - originAlong; // metres from origin to the +face edge
+    expect(CH1_2D_TRAVEL_BAND.gather).toBeLessThan(faceEdgeDistance - 4);
+    expect(CH1_2D_TRAVEL_BAND.recovery).toBeLessThan(faceEdgeDistance - 4);
   });
 
   it('keeps the complete pre-NAV work corridor dry and level, not merely coplanar', () => {

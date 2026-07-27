@@ -9,6 +9,7 @@ import {
   resolveScorePadLayerGains,
   resolveScorePadMembershipGain,
   resolveScorePadVoiceStates,
+  resolveScoreOstinatoFilterHz,
   resolveScoreOstinatoTiming,
   resolveScoreSubLayerGains,
   resolveScheduledScoreHitPitchPlan,
@@ -295,5 +296,38 @@ describe('scoreEngine persistent story voice state', () => {
     expect(resolveScoreOstinatoTiming(BARE_ERA).stopStepScale).toBeLessThanOrEqual(1);
     expect(resolveScoreOstinatoTiming(ERA_COLOR).stopStepScale).toBeLessThanOrEqual(1);
     expect(resolveScoreOstinatoTiming(ERA_MATERIAL).releaseStepScale).toBeGreaterThan(1);
+  });
+
+  it('rounds chip-era ostinato notes and leaves a breath between steps', () => {
+    const chip = resolveScoreOstinatoTiming(BARE_ERA);
+    const rich = resolveScoreOstinatoTiming(ERA_MATERIAL);
+    // Softer attack (no clicky beep) while the chip timbre carries the note…
+    expect(chip.attackS).toBeGreaterThan(rich.attackS);
+    // …and an early release so consecutive steps never fuse into a wall,
+    // while the stop still honors the one-voice PSG budget.
+    expect(chip.releaseStepScale).toBeLessThan(1);
+    expect(chip.stopStepScale).toBeLessThanOrEqual(1);
+    expect(resolveScoreOstinatoTiming(ERA_COLOR)).toEqual(chip);
+  });
+
+  it('keeps the chip ostinato darker without touching the realized rich curve', () => {
+    const TEST_INTENSITY = 0.4;
+    const SHIPPED_RICH_HZ = 700 + TEST_INTENSITY * 2600;
+    // From material onward the shipped main-score filter curve is bit-exact.
+    expect(resolveScoreOstinatoFilterHz(ERA_MATERIAL, TEST_INTENSITY)).toBeCloseTo(
+      SHIPPED_RICH_HZ,
+      6
+    );
+    expect(resolveScoreOstinatoFilterHz(ERA_ALIVE, TEST_INTENSITY)).toBeCloseTo(
+      SHIPPED_RICH_HZ,
+      6
+    );
+    // The chip eras sit strictly darker at the same intensity…
+    expect(resolveScoreOstinatoFilterHz(BARE_ERA, TEST_INTENSITY)).toBeLessThan(SHIPPED_RICH_HZ);
+    expect(resolveScoreOstinatoFilterHz(ERA_COLOR, TEST_INTENSITY)).toBeLessThan(SHIPPED_RICH_HZ);
+    // …while intensity still opens the filter monotonically within the era.
+    expect(resolveScoreOstinatoFilterHz(BARE_ERA, 0.8)).toBeGreaterThan(
+      resolveScoreOstinatoFilterHz(BARE_ERA, 0.2)
+    );
   });
 });

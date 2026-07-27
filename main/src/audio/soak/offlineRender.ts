@@ -16,6 +16,7 @@ import {
   beginOfflineScoreRender,
   endOfflineScoreRender,
   HIT_BUS_GAIN,
+  isScoreMoodLeading,
   renderHitInto,
   renderHitOfflineAt,
   resolveScoreHitRenderPlan,
@@ -29,11 +30,17 @@ import {
 import { deriveMotifGenome } from '../generative/motif.ts';
 import {
   getMusicChord,
+  getMusicPrimitives,
   setMusicPrimitiveTargets,
   tickMusicPrimitives
 } from '../musicPrimitives.ts';
 import { createOfflineMusicEngineRuntime } from '../musicEngine.ts';
-import { resolveMusicMix, resolvePlanetMusicMood } from '../musicDirector.ts';
+import {
+  NEUTRAL_PLANET_MOOD,
+  resolveMusicMix,
+  resolvePlanetMusicMood,
+  type MusicScene
+} from '../musicDirector.ts';
 import {
   auditSoakLog,
   createSoakCollector,
@@ -64,6 +71,8 @@ const OFFLINE_SEMITONES_PER_OCTAVE = 12;
 /** Queue story cues inside the scheduler's 180 ms horizon, never at render setup. */
 const OFFLINE_HIT_LOOKAHEAD_S = 0.12;
 const OFFLINE_STORY_DEFAULT_ERA = 1;
+/** One oversized tick snaps the slewed primitives to their targets before t=0. */
+const OFFLINE_PRIMITIVES_SNAP_S = 10;
 
 export type HitKind = 'braam' | 'bloom' | 'boom';
 
@@ -249,7 +258,8 @@ export async function renderBedOffline(opts: BedRenderOptions): Promise<BedRende
           warpIntensity,
           planetMood,
           signalsNow.daylight,
-          signalsNow
+          signalsNow,
+          signalsNow.storyLeads
         );
         legacyMusic.setLayerTargets(mix.layers, mix.fadeSeconds);
         legacyMusic.setProceduralTargets(mix.procedural, mix.fadeSeconds);
@@ -307,8 +317,20 @@ export interface StoryBeatRenderOptions {
    */
   planetSeed?: number;
   archetype?: ArchetypeId;
-  /** Era captured for onset-authentic hit palettes (a3-dawn defaults alive). */
+  /**
+   * Reality-era rail for the WHOLE render (hit palettes AND the live
+   * chip↔rich instrumentation crossfade). Omitted = the primitives' default
+   * (alive, era 1) — pass a low value to audition what the player actually
+   * hears in the early chapters.
+   */
   era?: number;
+  /**
+   * Drive the LEGACY procedural music engine (musicEngine rim) alongside the
+   * score at this scene's resolved mix — the combined music-bus picture the
+   * player actually hears (e.g. the storyTerminal transit drone under the
+   * prologue score). Omitted = score instrument only.
+   */
+  legacyScene?: MusicScene;
 }
 
 export interface StoryBeatRenderResult {
@@ -332,7 +354,21 @@ export async function renderStoryBeatOffline(
     setScorePlanetGenome(deriveMotifGenome(opts.planetSeed, opts.archetype), opts.planetSeed);
   }
   setScoreBeat(opts.beat);
+  // Era-authentic audition: snap the primitives era rail BEFORE the first
+  // scheduler pass so the render opens at the requested fidelity rung instead
+  // of slewing down from the alive-era default over the first second.
+  if (opts.era != null) {
+    setMusicPrimitiveTargets({ era: opts.era });
+    tickMusicPrimitives(OFFLINE_PRIMITIVES_SNAP_S);
+  }
   beginOfflineScoreRender(ctx, out);
+  // Combined-bus parity: the same legacy rim the live game runs every frame,
+  // fed by the same pure mix resolver (procedural voices render for real;
+  // streamed stems have no assets offline and stay silent).
+  const legacyMusic = opts.legacyScene != null
+    ? createOfflineMusicEngineRuntime(ctx, out)
+    : null;
+  let legacyChordRoot: number | null = null;
   const scoreMood = getStoryScoreMood(opts.beat);
   if (!scoreMood) throw new Error(`No score mood for story beat '${opts.beat}'`);
   const pendingHits = [...(opts.hits ?? [])]
@@ -352,6 +388,23 @@ export async function renderStoryBeatOffline(
       if (opts.intensityAt) setScoreIntensity(opts.intensityAt(now));
       tickMusicPrimitives(OFFLINE_DRIVE_STEP_S);
       stepOfflineScoreRender(ctx, now);
+      if (legacyMusic && opts.legacyScene != null) {
+        const legacyMix = resolveMusicMix(
+          opts.legacyScene,
+          0,
+          NEUTRAL_PLANET_MOOD,
+          1,
+          getMusicPrimitives(),
+          isScoreMoodLeading()
+        );
+        legacyMusic.setLayerTargets(legacyMix.layers, legacyMix.fadeSeconds);
+        legacyMusic.setProceduralTargets(legacyMix.procedural, legacyMix.fadeSeconds);
+        const chordRoot = getMusicChord().root;
+        if (chordRoot !== legacyChordRoot) {
+          legacyChordRoot = chordRoot;
+          legacyMusic.retuneDronesToChordRoot(chordRoot);
+        }
+      }
       // The score scheduler has now published the chord that owns this onset.
       // Instantiate only inside that same lookahead window, so a 54 s bloom
       // cannot be baked against the setup-time tonic.
@@ -368,5 +421,10 @@ export async function renderStoryBeatOffline(
     endOfflineScoreRender();
     setScoreBeat(null);
     if (opts.planetSeed != null) setScorePlanetGenome(null);
+    if (opts.era != null) {
+      // Restore the module-global primitives for any later render in this page.
+      setMusicPrimitiveTargets({ era: OFFLINE_STORY_DEFAULT_ERA });
+      tickMusicPrimitives(OFFLINE_PRIMITIVES_SNAP_S);
+    }
   }
 }

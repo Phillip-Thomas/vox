@@ -393,8 +393,11 @@ overrides beside the existing `?painterly`/`?ao`/`?outline` hooks (`App.tsx`).
 - **Cube vs sphere sea level** → use `isWaterVoxel` / dominant-axis, never
   `position.length()` (wrong near edges; this corrects the naive audio approach).
 - **Static water** → dug channels don't fill in v1; documented limitation.
-- **Two AudioContexts** → muffle ramps issued to each engine independently; no shared
-  master across sfx + music.
+- **Submerge muffle is split by design** → music and SFX keep separate submerge
+  filters with distinct ramp characters (music muffle vs SFX snap). Since
+  2026-07-26 both engines share ONE AudioContext and output route; the split
+  filters are intentional voicing, not a plumbing accident — keep issuing the
+  ramps to each.
 
 ---
 

@@ -257,6 +257,11 @@ export default function ForageField({
   useFrame(() => {
     if (playerPosition) {
       const rSq = PICKUP_RADIUS * PICKUP_RADIUS;
+      // Coalesce this frame's harvest into a single confirmation chip: every
+      // node in reach still banks, but a dense patch fires 'mine' at most once
+      // per frame instead of once per node (defense-in-depth over the engine
+      // rate limiter).
+      let collectedAny = false;
       for (const node of nearNodes.current) {
         if (node.kind === 'deadwood' && !allowDeadwood) continue;
         if (isForageCollected(node.x, node.y, node.z)) continue;
@@ -268,9 +273,12 @@ export default function ForageField({
             kind: node.kind
           }));
           if (result.ok) {
-            playSfx('mine'); // a soft confirmation
+            collectedAny = true;
           }
         }
+      }
+      if (collectedAny) {
+        playSfx('mine'); // a soft confirmation
       }
     }
 

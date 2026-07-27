@@ -151,27 +151,4 @@ describe('live music stem loading', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(2);
     expect(fetchSpy).toHaveBeenLastCalledWith('/audio/music/deep_space_out_there.ogg');
   });
-
-  it('keeps explicit preload serialized while eventually admitting silent layers', async () => {
-    const fetchSpy = vi.fn(async () => ({
-      ok: true,
-      arrayBuffer: async () => new ArrayBuffer(8)
-    }));
-    vi.stubGlobal('fetch', fetchSpy);
-    const { getMusicEngine, unlockMusicAudio } = await import('./musicEngine.ts');
-    const engine = getMusicEngine();
-    await unlockMusicAudio();
-    await flushTasks();
-    expect(fetchSpy).not.toHaveBeenCalled();
-
-    engine.preload();
-    await waitFor(() => (audio.harness?.decodes.length ?? 0) === 1);
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(audio.harness?.decodes).toHaveLength(1);
-
-    audio.harness?.decodes[0].resolve({} as AudioBuffer);
-    await waitFor(() => (audio.harness?.decodes.length ?? 0) === 2);
-    expect(fetchSpy).toHaveBeenCalledTimes(2);
-    expect(audio.harness?.decodes).toHaveLength(2);
-  });
 });

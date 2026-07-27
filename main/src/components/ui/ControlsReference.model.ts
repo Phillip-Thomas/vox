@@ -7,6 +7,7 @@ export interface ControlsReferenceContext {
   storyActive?: boolean;
   allowBuild?: boolean;
   allowCraft?: boolean;
+  allowChart?: boolean;
   moveSpeedScale?: number;
   allowJump?: boolean;
   allowSprint?: boolean;
@@ -64,6 +65,7 @@ const touchOnFoot: ControlReferenceAction[] = [
   { key: 'Left stick', label: 'Move' },
   { key: 'Right side', label: 'Look' },
   { key: 'JUMP', label: 'Jump / jetpack' },
+  { key: 'SPRINT', label: 'Hold to sprint' },
   { key: 'MINE', label: 'Mine / harvest' },
   { key: 'USE', label: 'Use / interact / board' }
 ];
@@ -150,15 +152,20 @@ function currentOnFootActions(context: ControlsReferenceContext): ControlReferen
   return actions;
 }
 
+// Touch has no keyboard: the screen-actions section names the on-screen corner
+// menu buttons (BUILD / FABRICATOR / CHART / PAUSE), never bare keycaps.
 function touchGlobalActions(context: ControlsReferenceContext): ControlReferenceAction[] {
   const actions: ControlReferenceAction[] = [];
   if (context.mode !== 'flight' && context.allowBuild !== false) {
-    actions.push({ key: 'B', label: context.mode === 'build' ? 'Close build editor' : 'Open build editor' });
+    actions.push({ key: 'BUILD', label: context.mode === 'build' ? 'Close build editor' : 'Open build editor' });
   }
   if (context.mode !== 'flight' && context.allowCraft !== false) {
-    actions.push({ key: 'C', label: 'Open Fabricator' });
+    actions.push({ key: 'FABRICATOR', label: 'Open Fabricator' });
   }
-  actions.push({ key: 'M', label: context.storyActive ? 'Pause / resume' : 'Pause / Star Map' });
+  if (context.allowChart) {
+    actions.push({ key: 'CHART', label: 'Survey chart' });
+  }
+  actions.push({ key: 'PAUSE', label: context.storyActive ? 'Pause / resume' : 'Pause / Star Map' });
   return actions;
 }
 
@@ -177,6 +184,9 @@ function currentTouchOnFootActions(context: ControlsReferenceContext): ControlRe
   if (context.lookMode === 'side') actions.push({ key: '—', label: 'Story camera' });
   else actions.push({ key: 'Right side', label: context.lookMode === 'feed' ? 'Constrained survey' : 'Look' });
   if (context.allowJump !== false) actions.push({ key: 'JUMP', label: 'Jump / jetpack' });
+  // Sprint is opt-in: shown only where the policy explicitly grants it (the
+  // embodied chapters + sandbox), never advertised on the feed/side eras.
+  if (context.allowSprint === true) actions.push({ key: 'SPRINT', label: 'Hold to sprint' });
   actions.push(
     { key: 'MINE', label: 'Mine / harvest' },
     { key: 'USE', label: context.storyActive ? 'Use / Story interaction' : 'Use / interact / board' }

@@ -288,6 +288,41 @@ changes), so server verify was not required.
   (cinematography); sky freezes on non-animated profiles while bodies drift
   (pre-existing asymmetry).
 
+- **Item 11 (added 2026-07-20, owner: "abrasive constant super low tone,
+  beeping way too fast — make early music a smooth creamy build") DONE
+  (owner ears open)** — Score Director recomposition of the chip era only:
+  culprits were the continuous 110 Hz square pad-chip drone, high early
+  `mood.sub` values (ch2-approach's triangle bass measured 7× ch1 RMS), and
+  all-steps-filled square 8th-note ostinato at ~4 notes/sec. Changes:
+  chip pad gain 0.08→0.05 and moved +1 octave; sub chip level 1→0.7;
+  early mood.sub trimmed to 0.07–0.10; tempos eased (nav 120→104,
+  raster 112→100, deflect 126→112); rests composed into patterns
+  (~2 notes/sec); chip attack 0.008→0.024 s; new era-crossfaded darker
+  ostinato filter curve. Awakening ramps + era ≥ material proven bit-exact
+  untouched by new tests. Evidence: A/B WAVs + levels at
+  `main/captures/score-early-rework/` (low end −6 dB where it dominated,
+  brightness −10 dB on groove beats). story-verifier regression: audition +
+  32-min soak all PASS (0 NaN/clip/silence, all handoff sweeps green);
+  full verify green. Owner audition of after/ WAVs (esp. ch1-raster,
+  ch2-approach) is the remaining gate.
+  **Second commission (same day):** owner still heard the constant low tone
+  at the intro — proven to be the LEGACY procedural music engine's authored
+  storyTerminal "transit drone" (36 Hz sawtooth `rumble` 0.05 + ~34 Hz sine
+  `pulse` 0.03, `musicDirector.ts` baseMixForScene), stacked ungated under
+  the score for all of prologue+ch1 at ~12× the score's RMS; the first
+  rework's score-only renders could not see it. Not a WebAudio bug (no
+  double-start/unramped gains). Fix: storyTerminal procedural lanes zeroed;
+  new `storyScoreLeads` duck in `resolveMusicMix` zeroes the seven ambient
+  drone lanes whenever `isScoreMoodLeading()` (symmetric with the bed's
+  duck; `ship`/`warp` exempt; sandbox/menu mixes untouched). Combined-bus
+  proof: intro low<150 Hz −32.6→−59.2 dB (crawl), −33.9→−56.7 dB (raster);
+  after-render bit-identical to score-only levels. 95/95 focused tests,
+  full verify green, audition + 32-min soak + intro-combined battery all
+  PASS, deterministic re-render bit-identical. Evidence:
+  `main/captures/score-early-rework/intro-combined-{before,after}/`.
+  Open owner taste call: keep the quiet streamed deepSpace texture at the
+  intro, or open in pure score silence.
+
 Headed/device checklist for the owner: iPhone silent-switch + deep-link +
 interruption audio tests (see audio lane steps); d-pad look/feel across the
 five beats; cinematic HUD fade during ch3-dusk/a3-dawn/ch1-lift; rehomed

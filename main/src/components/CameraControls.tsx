@@ -132,7 +132,8 @@ function CameraControls({ cameraRef, activeUp, getActiveUp, onPointerLockChange 
           surfaceForward.current,
           surfaceUp.current,
           pitch,
-          storyPolicy.feedBlend
+          storyPolicy.feedBlend,
+          storyPolicy.smoothYaw
         );
         return;
       }

@@ -1,5 +1,6 @@
 import type { OxygenAudioPlan } from './oxygenAudio.ts';
-import { installGameAudioOutputRoute, type AudioOutputRoute } from './audioCore.ts';
+import { getAudioContext, getGameAudioSfxJoinNode, unlockAudio } from './audioCore.ts';
+import { SfxRateLimiter } from './sfxRateLimiter.ts';
 
 export type SfxEvent =
   | 'jump'
@@ -37,15 +38,26 @@ class SfxEngine {
   private submergeFilter: BiquadFilterNode | null = null;
   private jetpack: ContinuousLoop | null = null;
   private shipThrust: ContinuousLoop | null = null;
-  private outputRoute: AudioOutputRoute | null = null;
   private volume = 0.78;
   private muted = false;
+  // Per-event minimum-retrigger gate at this single play() choke point. Bounds
+  // how often dense proximity/pickup cues (`mine`, `terminalKey`) may sound
+  // without altering any timbre. See sfxRateLimiter.ts.
+  private readonly rateLimiter = new SfxRateLimiter();
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __voxSfxDiag?: () => string }).__voxSfxDiag = () =>
+        this.rateLimiter.describe(nowMs());
+    }
+  }
 
   async unlock(): Promise<void> {
     const context = this.ensureContext();
     if (!context) return;
-    // Kick the iOS media-element route inside this gesture, then resume.
-    this.outputRoute?.activateFromGesture();
+    // One context, one route: audioCore owns resume + iOS media-element route
+    // activation for the whole game mix. SFX only re-settles its sub-master.
+    unlockAudio();
     await context.resume();
     this.applyOutput(0.04);
   }
@@ -61,6 +73,10 @@ class SfxEngine {
     const output = this.outputGain;
     if (!context || !output) return;
     void context.resume();
+
+    // Rate gate: drop retriggers that arrive inside this event's minimum
+    // interval so dense proximity/pickup loops cannot machine-gun the bus.
+    if (!this.rateLimiter.admit(event, nowMs())) return;
 
     switch (event) {
       case 'jump':
@@ -227,25 +243,29 @@ class SfxEngine {
     if (typeof window === 'undefined') return null;
     if (this.context) return this.context;
 
-    const ContextCtor =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!ContextCtor) return null;
+    // One shared AudioContext for the whole game — audioCore owns it, its clock,
+    // the music chain, and the single iOS-aware output route. SFX no longer
+    // constructs a second context.
+    const context = getAudioContext();
+    const master = getGameAudioSfxJoinNode();
+    if (!context || !master) return null;
 
-    const context = new ContextCtor();
     const outputGain = context.createGain();
     outputGain.gain.value = this.muted ? 0 : this.volume;
-    // Master muffle filter between the output bus and destination. Initialized
-    // fully open (20kHz) so on land the chain is acoustically transparent.
+    // SFX keeps its OWN master muffle filter — its snap-on/gasp-off is distinct
+    // from the music muffle. Initialized fully open (20kHz) so on land the chain
+    // is acoustically transparent.
     const submergeFilter = context.createBiquadFilter();
     submergeFilter.type = 'lowpass';
     submergeFilter.frequency.value = 20000;
     submergeFilter.Q.value = 0.7;
     outputGain.connect(submergeFilter);
-    // iOS-aware terminal route (media element on iOS, direct elsewhere) so the
-    // ringer switch cannot silence SFX. SFX owns a separate AudioContext from
-    // the music chain, so it installs its own route.
-    this.outputRoute = installGameAudioOutputRoute(context, submergeFilter, 'sfx');
+    // Join the shared chain at the post-compressor master, in PARALLEL with the
+    // music compressor: SFX reaches the single iOS-aware route (ringer-switch
+    // safe) without passing through the music compressor, scene envelope, or
+    // hidden-tab duck. The SFX signal path stays byte-identical to the old
+    // separate-context output — only the second context and route are gone.
+    submergeFilter.connect(master);
     this.context = context;
     this.outputGain = outputGain;
     this.submergeFilter = submergeFilter;
@@ -347,6 +367,12 @@ class SfxEngine {
       gain.disconnect();
     };
   }
+}
+
+function nowMs(): number {
+  return typeof performance !== 'undefined' && typeof performance.now === 'function'
+    ? performance.now()
+    : Date.now();
 }
 
 function clamp01(value: number): number {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAudioSettings, setMusicMuted, setMusicVolume, setSfxVolume } from '../../audio/audioSettings.ts';
-import { unlockMusicAudio } from '../../audio/musicEngine.ts';
-import { unlockSfxAudio } from '../../audio/sfxEngine.ts';
+import { unlockGameAudio } from '../../audio/gameAudio.ts';
 import { theme } from '../../ui/theme.ts';
 
 interface AudioControlsProps {
@@ -14,8 +13,9 @@ const AudioControls: React.FC<AudioControlsProps> = ({ compact = false }) => {
   const sfxPercent = Math.round(sfxVolume * 100);
 
   const unlock = () => {
-    void unlockMusicAudio();
-    void unlockSfxAudio();
+    // Single unlock authority: gameAudio collapses concurrent gestures and owns
+    // the in-flight-collapse guard (no direct per-engine unlock fan-out here).
+    void unlockGameAudio();
   };
 
   const onVolumeInput = (value: number, setter: (next: number) => void) => {

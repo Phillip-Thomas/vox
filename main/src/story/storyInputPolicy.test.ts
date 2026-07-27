@@ -66,6 +66,32 @@ describe('storyInputPolicy', () => {
     expect(p.targetFov).toBeLessThan(SANDBOX_POLICY.targetFov);
     expect(p.targetDpr).toBeNull();
     expect(p.voxelPropsOnly).toBe(true);
+    // The first playable first-person look drags on a smooth heading: the
+    // feed-era 90° yaw snap is retired here (owner decision 2026-07-21) while
+    // the pinned CCTV pitch band (feedBlend 0) stays.
+    expect(p.smoothYaw).toBe(true);
+    expect(p.feedBlend).toBe(0);
+  });
+
+  it('pod recovery (ch1-depth) forbids mining; its extract-era neighbours allow it', () => {
+    beginStory();
+    advanceToBeat('ch1-depth');
+    // No extract verb on the pod row: a held/latched harvest key must not dig.
+    expect(getStoryInputPolicy().allowMine).toBe(false);
+    advanceToBeat('ch1-raster');
+    expect(getStoryInputPolicy().allowMine).not.toBe(false);
+    advanceToBeat('ch1-fixed');
+    expect(getStoryInputPolicy().allowMine).not.toBe(false);
+  });
+
+  it('the a1 ramp keeps the embodied smooth-yaw look while it freezes the feet', () => {
+    beginStory();
+    advanceToBeat('a1-ramp');
+    const p = getStoryInputPolicy();
+    expect(p.lookMode).toBe('feed');
+    expect(p.smoothYaw).toBe(true);
+    expect(p.feedBlend).toBe(0);
+    expect(p.moveSpeedScale).toBe(0);
   });
 
   it('ch3 frees movement, whitelists the campfire chain, and keeps the ship locked', () => {

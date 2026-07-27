@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MANIFEST_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
+import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { PHOSPHOR, PHOSPHOR_DIM, PHOSPHOR_FAINT } from './TerminalPrologue.tsx';
 
 // --- The manifest (berthing/processing) ----------------------------------------------
@@ -38,17 +40,23 @@ const ManifestScreen: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleLines]);
 
+  // Enter/Space (desktop) and the tappable prompt (touch) reveal the rest, then
+  // expedite past the hold.
+  const expedite = () => {
+    if (visibleLines < MANIFEST_LINES.length) setVisibleLines(MANIFEST_LINES.length);
+    else finish();
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.code === 'Enter' || e.code === 'Space') {
-        if (visibleLines < MANIFEST_LINES.length) setVisibleLines(MANIFEST_LINES.length);
-        else finish();
-      }
+      if (e.code === 'Enter' || e.code === 'Space') expedite();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleLines]);
+
+  const touch = isTouchDevice();
 
   return (
     <div style={{
@@ -76,9 +84,24 @@ const ManifestScreen: React.FC<{ onDone: () => void }> = ({ onDone }) => {
         {visibleLines < MANIFEST_LINES.length && (
           <span style={{ color: PHOSPHOR, animation: 'pvTermFlicker 1s steps(2) infinite' }}>▮</span>
         )}
-        <div style={{ marginTop: 16, fontSize: 10, color: PHOSPHOR_FAINT, letterSpacing: '0.18em' }}>
-          [ENTER] EXPEDITE PROCESSING
-        </div>
+        {touch ? (
+          <button
+            type="button"
+            onClick={expedite}
+            style={{
+              marginTop: 14, minHeight: 44, padding: '11px 18px',
+              fontFamily: 'inherit', fontSize: 10, color: PHOSPHOR_DIM, letterSpacing: '0.18em',
+              border: `1px solid ${PHOSPHOR_FAINT}`, background: 'rgba(2,6,4,0.55)',
+              cursor: 'pointer', touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent'
+            }}
+          >
+            {presentInputGlyphs('[ENTER] EXPEDITE PROCESSING', true, 'prologue')}
+          </button>
+        ) : (
+          <div style={{ marginTop: 16, fontSize: 10, color: PHOSPHOR_FAINT, letterSpacing: '0.18em' }}>
+            [ENTER] EXPEDITE PROCESSING
+          </div>
+        )}
       </div>
     </div>
   );

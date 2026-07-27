@@ -101,10 +101,27 @@ const SCORE_MELODY_DELAY_SLEW_S = 0.5;
 const SCORE_NOTE_TIMBRE_FULL_LEVEL = 1;
 const SCORE_OST_NOTE_ATTACK_S = 0.008;
 const SCORE_OST_ENVELOPE_FLOOR = 0.001;
-const SCORE_CHIP_OST_RELEASE_STEP_SCALE = 1;
+/**
+ * Chip-era ostinato notes are ROUNDED, not clicky: a slower attack and an
+ * early release leave a breath between steps (owner brief 2026-07 — the early
+ * beeping must be pleasing and patient, lo-fi warmth over PSG harshness).
+ * The full-step stop still honors the physical one-voice PSG budget.
+ */
+const SCORE_CHIP_OST_ATTACK_S = 0.024;
+const SCORE_CHIP_OST_RELEASE_STEP_SCALE = 0.85;
 const SCORE_CHIP_OST_STOP_STEP_SCALE = 1;
 const SCORE_OST_RELEASE_STEP_SCALE = 1.7;
 const SCORE_OST_STOP_STEP_SCALE = 2;
+/**
+ * Ostinato lowpass rails. The rich formula is the shipped main-score curve
+ * (unchanged from era≥material onward); the chip curve sits darker so the
+ * early square patterns read as warm pulses instead of abrasive beeps. The
+ * two crossfade on the same era mix that crossfades the note timbres.
+ */
+const SCORE_OST_FILTER_BASE_HZ = 700;
+const SCORE_OST_FILTER_INTENSITY_HZ = 2600;
+const SCORE_CHIP_OST_FILTER_BASE_HZ = 480;
+const SCORE_CHIP_OST_FILTER_INTENSITY_HZ = 1400;
 const SCORE_CHIP_MONO_DUCK_RELEASE_S = 1.2;
 const SCORE_FALLBACK_SEED = 0x53434f52;
 const SALT_SCORE_DROP = fnv1a32('score:fallback-drop');
@@ -124,7 +141,14 @@ const SCORE_PRIMARY_CHIP_VOICE_INDEX = 0;
 const SCORE_PAD_INITIAL_OCTAVE_RATIO = 2;
 const SCORE_PAD_ACTIVE_LEVEL = 1;
 const SCORE_PAD_RICH_VOICE_GAIN = 0.5;
-const SCORE_PAD_CHIP_VOICE_GAIN = 0.08;
+/**
+ * The continuous chip pad drone (owner brief 2026-07): quieter, and voiced an
+ * octave ABOVE the saw/organ pad register. At the old root+12 (~110 Hz) a
+ * square drone read as an abrasive constant low buzz; at root+24 it is a soft
+ * distant chip hum that leaves the low end to the (era-gated) sub bus.
+ */
+const SCORE_PAD_CHIP_VOICE_GAIN = 0.05;
+const SCORE_PAD_CHIP_OCTAVE_RATIO = 2;
 const SCORE_PAD_VOICE_SLEW_S = 1.2;
 const SCORE_PAD_MEMBERSHIP_SLEW_S = 1.2;
 const SCORE_PAD_RETUNE_S = 0.9;
@@ -132,7 +156,8 @@ const SCORE_PAD_WIDTH_MAX = 0.72;
 const SCORE_PAD_WIDTH_SLEW_S = 1.2;
 const SCORE_ORGAN_SLEW_S = 1.4;
 const SCORE_SUB_RICH_LEVEL = 1;
-const SCORE_SUB_CHIP_LEVEL = 1;
+/** Color-era triangle bass sits UNDER the mix, not on top of it (owner brief 2026-07). */
+const SCORE_SUB_CHIP_LEVEL = 0.7;
 const SCORE_SUB_TIMBRE_SLEW_S = 1.2;
 const SCORE_SUB_RETUNE_S = 1;
 const SCORE_SUB_HARMONIC_LEVEL = 0.16;
@@ -647,6 +672,8 @@ export interface ScoreEraChannelBudget {
 export interface ScoreOstinatoTiming {
   releaseStepScale: number;
   stopStepScale: number;
+  /** Note-attack seconds — chip notes are rounded, rich notes keep their bite. */
+  attackS: number;
 }
 
 /** Continuous era mix shared by every story note; no sounding oscillator mutates waveform. */
@@ -695,12 +722,27 @@ export function resolveScoreOstinatoTiming(era: number): ScoreOstinatoTiming {
   return chipEra
     ? {
         releaseStepScale: SCORE_CHIP_OST_RELEASE_STEP_SCALE,
-        stopStepScale: SCORE_CHIP_OST_STOP_STEP_SCALE
+        stopStepScale: SCORE_CHIP_OST_STOP_STEP_SCALE,
+        attackS: SCORE_CHIP_OST_ATTACK_S
       }
     : {
         releaseStepScale: SCORE_OST_RELEASE_STEP_SCALE,
-        stopStepScale: SCORE_OST_STOP_STEP_SCALE
+        stopStepScale: SCORE_OST_STOP_STEP_SCALE,
+        attackS: SCORE_OST_NOTE_ATTACK_S
       };
+}
+
+/**
+ * Ostinato lowpass target: the shipped intensity curve from material onward,
+ * crossfaded toward the darker chip curve while chip timbre is present — the
+ * early patterns stay warm without touching the realized main-score sound.
+ */
+export function resolveScoreOstinatoFilterHz(era: number, intensityValue: number): number {
+  const mix = resolveScoreEraTimbreMix(era);
+  const richHz = SCORE_OST_FILTER_BASE_HZ + intensityValue * SCORE_OST_FILTER_INTENSITY_HZ;
+  const chipHz =
+    SCORE_CHIP_OST_FILTER_BASE_HZ + intensityValue * SCORE_CHIP_OST_FILTER_INTENSITY_HZ;
+  return richHz + (chipHz - richHz) * mix.chip;
 }
 
 /** Central post-timbre chord-membership gate shared by saw, chip, and organ. */
@@ -826,7 +868,8 @@ function buildScoreGraph(ctx: BaseAudioContext, out: AudioNode): void {
     };
     const chip = ctx.createOscillator();
     chip.type = 'square';
-    chip.frequency.value = ROOT_HZ * SCORE_PAD_INITIAL_OCTAVE_RATIO;
+    chip.frequency.value =
+      ROOT_HZ * SCORE_PAD_INITIAL_OCTAVE_RATIO * SCORE_PAD_CHIP_OCTAVE_RATIO;
     chip.connect(chipGain);
     chip.start();
     const organ = ctx.createOscillator();
@@ -1037,7 +1080,7 @@ function stepScoreScheduler(ctx: BaseAudioContext, now: number): void {
       const velocity = 0.78 + scoreUnit(SALT_SCORE_VELOCITY, patternStep) * 0.22;
       const env = ctx.createGain();
       env.gain.setValueAtTime(0, nextNoteAt);
-      env.gain.linearRampToValueAtTime(velocity, nextNoteAt + SCORE_OST_NOTE_ATTACK_S);
+      env.gain.linearRampToValueAtTime(velocity, nextNoteAt + ostinatoTiming.attackS);
       const releaseAt = nextNoteAt + stepSeconds * ostinatoTiming.releaseStepScale;
       env.gain.exponentialRampToValueAtTime(SCORE_OST_ENVELOPE_FLOOR, releaseAt);
       const oscillators = createEraLayeredOscillators(
@@ -1253,7 +1296,7 @@ function applyRails(_ctx: BaseAudioContext, now: number): void {
     SCORE_PAD_FILTER_SLEW_S
   );
   ostFilter?.frequency.setTargetAtTime(
-    700 + intensity * 2600,
+    resolveScoreOstinatoFilterHz(prim.era, intensity),
     now,
     SCORE_OST_FILTER_SLEW_S
   );
@@ -1292,7 +1335,11 @@ function retuneVoices(_ctx: BaseAudioContext, now: number): void {
     const hz = hzForSemis(state.semis, HIT_SEMITONES_PER_OCTAVE);
     voice.oscA.frequency.setTargetAtTime(hz, now, SCORE_PAD_RETUNE_S);
     voice.oscB.frequency.setTargetAtTime(hz, now, SCORE_PAD_RETUNE_S);
-    voice.chip.frequency.setTargetAtTime(hz, now, SCORE_PAD_RETUNE_S);
+    voice.chip.frequency.setTargetAtTime(
+      hz * SCORE_PAD_CHIP_OCTAVE_RATIO,
+      now,
+      SCORE_PAD_RETUNE_S
+    );
     voice.organ.frequency.setTargetAtTime(hz, now, SCORE_PAD_RETUNE_S);
   });
   const subHz = hzForSemis(currentChord[0] ?? 0, 0);

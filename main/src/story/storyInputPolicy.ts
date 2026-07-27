@@ -19,6 +19,12 @@ export interface StoryInputPolicy {
   moveSpeedScale: number;
   allowJump: boolean;
   allowSprint: boolean;
+  /**
+   * Undefined = mining allowed (default everywhere). False only on beats with
+   * no extract verb (ch1-depth pod recovery: pods are walk-over; digging the
+   * row self-buries the player). Gates updateMining input, not build placement.
+   */
+  allowMine?: boolean;
   allowBuild: boolean;
   allowCraft: boolean;
   /** Crafting whitelist during story chapters (sandbox: everything). */
@@ -32,6 +38,14 @@ export interface StoryInputPolicy {
   lookMode: 'free' | 'feed' | 'side';
   /** 0 = fully feed-locked look, 1 = free look. A2 lerps this open. */
   feedBlend: number;
+  /**
+   * Retires the feed-era 90° yaw snap for playable first-person look: yaw drags
+   * smoothly (continuous) while the pinned CCTV pitch band (driven by feedBlend)
+   * stays. Owner decision 2026-07-21; the snap machinery is retained for the
+   * liberation blend and any feed cutscene that leaves this unset. Undefined =
+   * snap era (feedBlend drives both yaw and pitch as before).
+   */
+  smoothYaw?: boolean;
   /** Side lens only: 0 = side camera, 1 = first person. The ch1-lift lerps it. */
   sideBlend: number;
   /** Camera FOV target; the driver eases the live camera toward it. */
@@ -123,7 +137,10 @@ function feedPolicy(): StoryInputPolicy {
  * it is the player's embodied view: no external-camera resolution treatment.
  */
 function embodiedSurveyPolicy(): StoryInputPolicy {
-  return { ...feedPolicy(), targetDpr: null };
+  // The player's own embodied first-person view: yaw drags smoothly (the feed-
+  // era 90° snap is retired here by owner decision 2026-07-21) while the pinned
+  // CCTV pitch band still holds from feedBlend 0.
+  return { ...feedPolicy(), targetDpr: null, smoothYaw: true };
 }
 
 /** The 2D side-scroller era: A/D travel, jump on, plane-locked, chunky pixels. */
@@ -179,8 +196,11 @@ function buildPolicyForBeat(beat: StoryBeat | null): StoryInputPolicy {
     // camera rigs and depth freedom come from the lens rig, not the policy.
     case 'ch1-fixed':
     case 'ch1-raster':
-    case 'ch1-depth':
       return rasterPolicy();
+    // Pod recovery has no extract verb (walk-over collection); a held/latched
+    // harvest key must not dig up the row.
+    case 'ch1-depth':
+      return { ...rasterPolicy(), allowMine: false };
     // Nav/iso read as orthographic: long lens (rig dollies out), narrow fov.
     case 'ch1-nav':
       return { ...rasterPolicy(), targetFov: 36 };

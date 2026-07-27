@@ -73,6 +73,31 @@ describe('feedCamera', () => {
     expect(state.yawAccum).toBe(0 + 0); // snap accumulator untouched at blend 1
   });
 
+  it('smoothYaw at blend 0: yaw is continuous (no snap) but the pitch band stays pinned', () => {
+    const { state, forward, up, pitch } = setup();
+    const before = forward.clone();
+    // A drag well past the snap threshold: with the snap retired it rotates
+    // smoothly by the full free amount and never quantizes.
+    const dxPixels = (FEED_SNAP_THRESHOLD / SENS) * 1.05;
+    feedAccumulateLook(state, dxPixels, 0, forward, up, pitch, 0, true);
+    expect(forward.angleTo(before)).toBeCloseTo(dxPixels * SENS, 5);
+    expect(state.yawAccum).toBe(0); // snap accumulator never charged
+
+    // Pitch still obeys the CCTV band at feedBlend 0 (owner: only yaw goes smooth).
+    feedAccumulateLook(state, 0, -100000, forward, up, pitch, 0, true);
+    expect(pitch.current).toBeCloseTo(FEED_PITCH_MAX, 5);
+    feedAccumulateLook(state, 0, 100000, forward, up, pitch, 0, true);
+    expect(pitch.current).toBeCloseTo(FEED_PITCH_MIN, 5);
+  });
+
+  it('the retained snap machinery still fires when smoothYaw is off (no regression)', () => {
+    const { state, forward, up, pitch } = setup();
+    const before = forward.clone();
+    // Explicit smoothYaw=false: the liberation-blend path must still snap 90°.
+    feedAccumulateLook(state, (FEED_SNAP_THRESHOLD / SENS) * 1.05, 0, forward, up, pitch, 0, false);
+    expect(forward.angleTo(before)).toBeCloseTo(Math.PI / 2, 5);
+  });
+
   it('mid-blend blends both components without double-counting', () => {
     const { state, forward, up, pitch } = setup();
     const before = forward.clone();

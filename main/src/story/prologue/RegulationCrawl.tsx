@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { CRAWL_LINES } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
 import { isMovieMode } from '../autopilot.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
+import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { PHOSPHOR, PHOSPHOR_DIM } from './TerminalPrologue.tsx';
 import {
   regulationCrawlDurationSeconds,
@@ -194,10 +196,11 @@ const RegulationCrawl: React.FC<{ onDone: () => void; onExitStart?: () => void }
             onClick={finish}
             style={{
               marginTop: 28, padding: '10px 18px', color: '#020604', background: PHOSPHOR,
-              border: 0, font: 'inherit', letterSpacing: '0.12em', cursor: 'pointer'
+              border: 0, font: 'inherit', letterSpacing: '0.12em', cursor: 'pointer',
+              minHeight: 44, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent'
             }}
           >
-            [ENTER] CONTINUE
+            {presentInputGlyphs('[ENTER] CONTINUE', isTouchDevice(), 'prologue')}
           </button>
         </div>
       </div>

@@ -533,3 +533,66 @@ describe('shoreline dry-leg water-contact replan', () => {
     })).toBe(false);
   });
 });
+
+describe('cross-face start-column relocation', () => {
+  // Synthetic top-face plateau: solid fill to y=25 (cells), shallow water above
+  // the support for every column at x-cell >= 5. A body standing over a wet
+  // column has a non-traversable start; the dry plateau is a couple of cells
+  // inward. planetSize 50 => radiusCells 25, VOXEL_SCALE 2 => world = cell * 2.
+  const planetSize = 50;
+  const SURFACE_CELL_Y = 25;
+  const shoreTerrain = {
+    isSolidVoxel: (x: number, y: number, z: number) =>
+      y <= SURFACE_CELL_Y && Math.abs(x) <= 25 && Math.abs(z) <= 25,
+    isWaterVoxel: (x: number, _y: number, _z: number) => _y > SURFACE_CELL_Y && x >= 5,
+    isHazardousVoxel: () => false
+  };
+  const floodedTerrain = {
+    ...shoreTerrain,
+    isWaterVoxel: (_x: number, y: number, _z: number) => y > SURFACE_CELL_Y
+  };
+  // World: cell 6 => x 12 (wet start), dry plateau at cell <= 4 => x <= 8.
+  const player = new THREE.Vector3(12, 50, 0);
+  const goal = new THREE.Vector3(4, 50, 0);
+
+  it('steps a non-traversable start onto the nearest dry column and plans on', () => {
+    // Baseline: the raw planner cannot leave the wet start tile.
+    const raw = planAgentSurfaceRoute(shoreTerrain, planetSize, player, goal, {
+      face: 'top', differentFaceFallback: 'unreachable', maxVisitedCells: 4096
+    });
+    expect(raw.reason).toBe('start-column-not-traversable');
+
+    const planned = planReachableCrossFaceRoute({
+      terrain: shoreTerrain,
+      planetSize,
+      player,
+      goal,
+      face: 'top',
+      crossFaceLeg: null,
+      jetpackAvailable: false
+    });
+    expect(planned.route.mode).not.toBe('unreachable');
+    expect(planned.route.waypoints.length).toBeGreaterThan(0);
+    // The live (wet) position is prepended so the follower walks the short dry
+    // gap onto the substitute start before the journey proper.
+    expect(planned.route.waypoints[0]!.x).toBeCloseTo(player.x);
+    expect(planned.route.waypoints[0]!.z).toBeCloseTo(player.z);
+    // The second waypoint is already back on the dry plateau (x-cell < 5 => x < 10).
+    expect(planned.route.waypoints[1]!.x).toBeLessThan(10);
+  });
+
+  it('returns unreachable when the whole neighbourhood is blocked (no infinite search)', () => {
+    const planned = planReachableCrossFaceRoute({
+      terrain: floodedTerrain,
+      planetSize,
+      player,
+      goal,
+      face: 'top',
+      crossFaceLeg: null,
+      jetpackAvailable: false
+    });
+    expect(planned.route.mode).toBe('unreachable');
+    expect(planned.route.reason).toBe('start-column-not-traversable');
+    expect(planned.route.waypoints.length).toBe(0);
+  });
+});

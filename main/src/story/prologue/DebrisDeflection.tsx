@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { DEFLECTION } from '../storyScript.ts';
 import { playSfx } from '../../audio/sfxEngine.ts';
 import { isMovieMode } from '../autopilot.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
+import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 import { PHOSPHOR, TERMINAL_BG } from './TerminalPrologue.tsx';
 
 // --- Manual debris deflection (the Pong rung, 1972) ----------------------------------
@@ -36,6 +38,11 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
+    // On touch there is no mouse and no W/S keys, so a finger drag anywhere on
+    // the scope vectors the paddle (matches the "DRAG" subtitle variant).
+    const touch = isTouchDevice();
+    const subtitle = presentInputGlyphs(DEFLECTION.subtitle, touch, 'prologue');
+
     const startedAt = performance.now();
     let lastAt = startedAt;
     let raf = 0;
@@ -55,6 +62,7 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       done = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('mousemove', onMouse);
+      window.removeEventListener('touchmove', onTouch);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('keyup', onKeyUp);
       onDone();
@@ -62,6 +70,10 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
 
     const onMouse = (e: MouseEvent) => {
       mouseY = e.clientY / window.innerHeight;
+    };
+    const onTouch = (e: TouchEvent) => {
+      const point = e.touches[0];
+      if (point) mouseY = point.clientY / window.innerHeight;
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'KeyW' || e.code === 'ArrowUp') keyDir = -1;
@@ -71,6 +83,7 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       if (e.code === 'KeyW' || e.code === 'ArrowUp' || e.code === 'KeyS' || e.code === 'ArrowDown') keyDir = 0;
     };
     window.addEventListener('mousemove', onMouse);
+    window.addEventListener('touchmove', onTouch, { passive: true });
     window.addEventListener('keydown', onKey);
     window.addEventListener('keyup', onKeyUp);
 
@@ -184,7 +197,7 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
       const efficiency = deflected + missed > 0 ? Math.round((deflected / (deflected + missed)) * 100) : 100;
       ctx.fillText(DEFLECTION.title, w * 0.06, h * 0.08);
       ctx.globalAlpha = 0.6;
-      ctx.fillText(DEFLECTION.subtitle, w * 0.06, h * 0.08 + fontSize * 1.7);
+      ctx.fillText(subtitle, w * 0.06, h * 0.08 + fontSize * 1.7);
       ctx.fillText(`${DEFLECTION.efficiencyLabel}: ${efficiency}%`, w * 0.72, h * 0.08);
       ctx.globalAlpha = 1;
 
@@ -217,6 +230,7 @@ const DebrisDeflection: React.FC<{ onDone: () => void }> = ({ onDone }) => {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('mousemove', onMouse);
+      window.removeEventListener('touchmove', onTouch);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('keyup', onKeyUp);
     };

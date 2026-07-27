@@ -16,6 +16,14 @@ a second progression system.
   milestone, dispatch a gameplay command, or advance the story.
 - `StoryDirectorDriver.tsx` remains the bridge to the existing directional
   marker renderer. Do not introduce a competing marker language here.
+- `inputGlyphs.ts` is the single presentation pass that swaps authored keyboard
+  tokens (`[F]`, `[SPACE]`, …) for the labels a touch player sees on the mounted
+  controls, per era context (`embodied` / `feed` / `prologue`). Authored copy
+  keeps the keyboard names; every surface that shows an action prompt on touch
+  (the guidance HUD, regulation feed, captions, prologue screens, map overlay,
+  deflection minigame) routes through it at render time. Add a mobile variant by
+  extending a token table here — never by forking the substitution or rewriting
+  the canonical string.
 
 ## Hard guardrails
 

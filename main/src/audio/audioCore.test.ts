@@ -72,6 +72,7 @@ function stubAudioEnv(opts: EnvOptions = {}) {
     createElement: vi.fn(() => audioEl),
     addEventListener: vi.fn(),
     visibilityState: 'visible',
+    hidden: false,
     ...(opts.ios ? { ontouchend: null } : {})
   };
   const nav = opts.ios
@@ -109,7 +110,7 @@ describe('audioCore unlock and iOS output routing', () => {
     core.unlockAudio();
     await Promise.resolve();
     await Promise.resolve();
-    expect(core.describeGameAudioOutputRoutes()).toContain('music: direct');
+    expect(core.describeGameAudioOutputRoutes()).toContain('game: direct');
     expect(core.areGameAudioRoutesConfirmed()).toBe(true);
     vi.resetModules();
   });
@@ -128,7 +129,7 @@ describe('audioCore unlock and iOS output routing', () => {
 
     expect(audioEl.setAttribute).toHaveBeenCalledWith('playsinline', '');
     expect(audioEl.play).toHaveBeenCalledTimes(1);
-    expect(core.describeGameAudioOutputRoutes()).toContain('music: media-element');
+    expect(core.describeGameAudioOutputRoutes()).toContain('game: media-element');
     expect(core.areGameAudioRoutesConfirmed()).toBe(true);
     vi.resetModules();
   });

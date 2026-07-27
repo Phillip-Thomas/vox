@@ -30,6 +30,7 @@ import {
   solveStoryEdgeLabelPresentation,
   solveStoryHudLayout
 } from '../ux/storyHudLayout.ts';
+import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 
 // --- Regulation Feed HUD ----------------------------------------------------------
 //
@@ -248,6 +249,13 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
   const fiber = Math.min(getItemCount('biofiber'), CH1_QUOTA.biofiber);
   const stone = Math.min(getItemCount('stone'), CH1_QUOTA.stone);
   const fixedProgress = fixedVisible ? fixedTutorialProgress() : null;
+  // Feed-era prompts name the d-pad arrows / EXTRACT / JUMP controls on touch;
+  // on desktop the authored keyboard tokens pass through unchanged. The survey
+  // chart is not openable during the feed era (the [M] on the ch1-nav retained-
+  // tool line is desktop keycap flavor), so it is never actionized on touch.
+  const touch = isTouchDevice();
+  const feedLine = (line: string): string =>
+    presentInputGlyphs(line, touch, 'feed', { chartActionable: false });
 
   return (
     <>
@@ -280,7 +288,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             CONSOLIDATED EXTRACTION AUTHORITY · SUIT FEED
           </div>
           {text.workorder.map((line, i) => (
-            <div key={`${i}-${line}`}>{line}</div>
+            <div key={`${i}-${line}`}>{feedLine(line)}</div>
           ))}
         </aside>
       )}
@@ -360,7 +368,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>RECOVERY</div>
           <div>SUPPLY PODS {collectedPodCount()}/{SUPPLY_POD_COUNT}</div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
-            WORK LINE LOCKED · [A]/[D]
+            {feedLine('WORK LINE LOCKED · [A]/[D]')}
           </div>
         </div>
       )}
@@ -398,7 +406,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
         <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>ELEVATION</div>
           <div>REACH THE SIGNAL SOURCE</div>
-          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>ASCEND [SPACE] · THE STAIRS FACE THE STRIP</div>
+          <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>{feedLine('ASCEND [SPACE] · THE STAIRS FACE THE STRIP')}</div>
         </div>
       )}
 
@@ -453,7 +461,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             background: 'rgba(2,4,3,0.55)'
           }}
         >
-          [F] {interaction.verb.toUpperCase()}
+          {feedLine(`[F] ${interaction.verb.toUpperCase()}`)}
         </div>
       )}
 

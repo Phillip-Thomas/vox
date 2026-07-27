@@ -15,8 +15,15 @@ interface HudCornerActionsProps {
   /** Story chapters hide the gated affordances (sandbox: always true). */
   allowBuild?: boolean;
   allowCraft?: boolean;
+  /**
+   * Whether the survey chart is openable right now. Mirrors the desktop [M]
+   * gate so touch gets the same chart affordance the keyboard has. Only wired
+   * on touch (desktop opens the chart with the M key).
+   */
+  allowChart?: boolean;
   onToggleBuild: () => void;
   onOpenCrafting: () => void;
+  onOpenChart?: () => void;
   onPause: () => void;
   pauseLabel?: string;
 }
@@ -26,8 +33,10 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
   buildModeOpen,
   allowBuild = true,
   allowCraft = true,
+  allowChart = false,
   onToggleBuild,
   onOpenCrafting,
+  onOpenChart,
   onPause,
   pauseLabel = 'Pause and open star map'
 }) => {
@@ -71,6 +80,21 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
   };
 
   if (touch) {
+    // The touch equivalent of the desktop corner cluster + [M] key. CHART sits
+    // beside PAUSE only when the chart is actually openable (mirrors the desktop
+    // gate), so a touch player is never offered a control that does nothing.
+    const menuItems: { key: string; label: string; action: () => void }[] = [];
+    if (showFootActions && allowBuild) {
+      menuItems.push({ key: 'build', label: buildModeOpen ? 'CLOSE BUILD' : 'BUILD', action: onToggleBuild });
+    }
+    if (showFootActions && allowCraft) {
+      menuItems.push({ key: 'craft', label: 'FABRICATOR', action: onOpenCrafting });
+    }
+    if (allowChart && onOpenChart) {
+      menuItems.push({ key: 'chart', label: 'CHART', action: onOpenChart });
+    }
+    menuItems.push({ key: 'pause', label: 'PAUSE', action: onPause });
+
     const menuButtonStyle: React.CSSProperties = {
       width: '100%',
       minHeight: 44,
@@ -149,37 +173,18 @@ const HudCornerActions: React.FC<HudCornerActionsProps> = ({
               <div style={{ padding: '10px 13px 8px', color: theme.color.textFaint, fontSize: 9, letterSpacing: '0.18em' }}>
                 FIELD SYSTEMS
               </div>
-              {showFootActions && allowBuild && (
+              {menuItems.map((item, index) => (
                 <button
-                  ref={firstActionRef}
+                  key={item.key}
+                  ref={index === 0 ? firstActionRef : undefined}
                   type="button"
-                  onClick={() => runMobileAction(onToggleBuild)}
+                  onClick={() => runMobileAction(item.action)}
                   style={menuButtonStyle}
                 >
-                  <span>{buildModeOpen ? 'CLOSE BUILD' : 'BUILD'}</span>
+                  <span>{item.label}</span>
                   <span aria-hidden="true">›</span>
                 </button>
-              )}
-              {showFootActions && allowCraft && (
-                <button
-                  ref={!showFootActions || !allowBuild ? firstActionRef : undefined}
-                  type="button"
-                  onClick={() => runMobileAction(onOpenCrafting)}
-                  style={menuButtonStyle}
-                >
-                  <span>FABRICATOR</span>
-                  <span aria-hidden="true">›</span>
-                </button>
-              )}
-              <button
-                ref={(!showFootActions || (!allowBuild && !allowCraft)) ? firstActionRef : undefined}
-                type="button"
-                onClick={() => runMobileAction(onPause)}
-                style={menuButtonStyle}
-              >
-                <span>PAUSE</span>
-                <span aria-hidden="true">›</span>
-              </button>
+              ))}
             </div>
           </>
         )}

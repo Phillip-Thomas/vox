@@ -445,8 +445,40 @@ const ISO_RIG: LensRig = {
   lift: 2.4,
   focusLift: 1.2,
   followQuant: 0,
-  depthBand: Infinity
+  depthBand: Infinity,
+  travelBand: Infinity
 };
+
+/**
+ * Travel walls for the pure-2D side-scroller eras (owner note: "we shouldn't be
+ * able to walk off the face of the cube (or switch faces)"). Each is ± band
+ * metres around the lens origin along the travel axis.
+ *
+ * The wall is a SOFT follow-spring, so its job is twofold and in tension:
+ *   1. keep every authored interactable reachable (content AT the band edge is
+ *      still reachable — the spring only resists overshoot past it), and
+ *   2. keep the RESTING clamp position on the authored dry plateau, so a beat
+ *      that finishes at the wall never parks the actor in the shore/water.
+ *
+ * The pinned world's dry, level plateau ends at +28 m along the +travel axis
+ * (the binding edge; the −side runs to 32 m); the shore/shallows start beyond.
+ * Content is authored right up to that edge, so the band sits just past the
+ * farthest interactable but no farther than plateau-edge + ~1 m:
+ *
+ *   ch1-fixed / ch1-raster — hull-debris strip, farthest piece at 28 m (the
+ *     plateau edge itself) ⇒ gather = 29 m (1 m clearance; clamp rest ≤ edge+1).
+ *   ch1-depth — supply-pod recovery row, farthest pod at 26 m
+ *     ⇒ recovery = 28 m (2 m clearance; clamp rest sits exactly at the dry edge).
+ *
+ * An earlier sizing added ~6 m of margin + piece extent (36/34 m); that pushed
+ * the resting clamp ~6–8 m past the plateau edge, parking the ch1-depth actor in
+ * the shore and then wedging the ch1-nav cross-face planner (see storyWorld
+ * tests). nav/iso stay free (Infinity) since crossing a face there is legitimate.
+ */
+export const CH1_2D_TRAVEL_BAND = {
+  gather: 29, // ch1-fixed + ch1-raster (debris strip; farthest piece at 28 m)
+  recovery: 28 // ch1-depth (supply-pod row; farthest pod at 26 m)
+} as const;
 
 /**
  * The monochrome ladder's camera, one era per rung. Every transition is a single
@@ -455,14 +487,15 @@ const ISO_RIG: LensRig = {
  */
 const ERA_RIGS: Partial<Record<StoryBeat, { rig: LensRig; seconds: number }>> = {
   'descent': { rig: { ...SIDE_RIG }, seconds: 0 },
-  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL }, seconds: 0 },
+  'ch1-fixed': { rig: { ...SIDE_RIG, followQuant: FIXED_SCREEN_CELL, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
   'ch1-track': { rig: { ...SIDE_RIG }, seconds: 6.5 }, // the unbolt IS the cutscene
-  'ch1-raster': { rig: { ...SIDE_RIG }, seconds: 0 },
+  'ch1-raster': { rig: { ...SIDE_RIG, travelBand: CH1_2D_TRAVEL_BAND.gather }, seconds: 0 },
   // The profile view has one real traversable task row. The camera can breathe
-  // wider here, but movement stays plane-locked until NAV VIEW reveals the map.
-  'ch1-depth': { rig: { ...SIDE_RIG, depthBand: STORY_TASK_ROW_DEPTH_BAND, distance: 18 }, seconds: 2.5 },
+  // wider here, but movement stays plane-locked (depth) AND face-walled (travel)
+  // until NAV VIEW reveals the map.
+  'ch1-depth': { rig: { ...SIDE_RIG, depthBand: STORY_TASK_ROW_DEPTH_BAND, travelBand: CH1_2D_TRAVEL_BAND.recovery, distance: 18 }, seconds: 2.5 },
   'ch1-nav': {
-    rig: { elevation: Math.PI / 2, azimuth: 0, distance: 34, lift: 0, focusLift: 0, followQuant: 0, depthBand: Infinity },
+    rig: { elevation: Math.PI / 2, azimuth: 0, distance: 34, lift: 0, focusLift: 0, followQuant: 0, depthBand: Infinity, travelBand: Infinity },
     seconds: 5
   },
   'ch1-iso': { rig: { ...ISO_RIG }, seconds: 5 },

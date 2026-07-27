@@ -40,6 +40,73 @@ const BOARDING_VARIANTS: readonly Chapter7BoardingScoreVariant[] = [
   'cockpit'
 ];
 
+/**
+ * Early-ladder calm laws (owner brief 2026-07): the prologue/ch1/ch2 moods
+ * must be pleasing, subtle, and patient — no constant low tone riding the
+ * mix, no wall of fast beeps — while the awakening ramps keep their full
+ * build energy. These are the measured invariants behind that ruling.
+ */
+const EARLY_CALM_BEATS = [
+  'crawl',
+  'manifest',
+  'voyage',
+  'deflect',
+  'crash',
+  'descent',
+  'ch1-fixed',
+  'ch1-track',
+  'ch1-raster',
+  'ch1-depth',
+  'ch1-nav',
+  'ch1-iso',
+  'ch1-lift',
+  'ch1-anomaly',
+  'ch2-color',
+  'ch2-approach'
+] as const;
+const EARLY_SUB_CAP = 0.10;
+const EARLY_CHIP_TEMPO_CAP = 112;
+const EARLY_MIN_RESTS_PER_BAR = 3;
+const EARLY_MAX_NOTES_PER_SECOND = 2.4;
+const STEPS_PER_BAR = 8;
+const AWAKENING_RISER_FLOOR = 0.3;
+
+describe('storyScore early-ladder calm laws', () => {
+  it('caps the constant low end: every pre-A2 beat keeps sub at or under the cap', () => {
+    for (const beat of EARLY_CALM_BEATS) {
+      const value = getStoryScoreMood(beat);
+      expect(value, beat).not.toBeNull();
+      expect(value!.sub, `${beat} sub`).toBeLessThanOrEqual(EARLY_SUB_CAP);
+    }
+  });
+
+  it('keeps space in every early pattern and the beeping unhurried', () => {
+    for (const beat of EARLY_CALM_BEATS) {
+      const value = getStoryScoreMood(beat)!;
+      const rests = value.pattern.filter(step => step === null).length;
+      const filled = value.pattern.length - rests;
+      expect(value.pattern.length, `${beat} bar length`).toBe(STEPS_PER_BAR);
+      expect(rests, `${beat} rests`).toBeGreaterThanOrEqual(EARLY_MIN_RESTS_PER_BAR);
+      // Notes per second on the 8th-note grid: tempo/60 quarters × 2 steps.
+      const notesPerSecond = (value.tempo / 60) * 2 * (filled / STEPS_PER_BAR);
+      expect(notesPerSecond, `${beat} notes/s`).toBeLessThanOrEqual(EARLY_MAX_NOTES_PER_SECOND);
+      if (value.wave === 'square') {
+        expect(value.tempo, `${beat} tempo`).toBeLessThanOrEqual(EARLY_CHIP_TEMPO_CAP);
+      }
+    }
+  });
+
+  it('leaves the awakening builds at full energy — the calm ladder exists to earn them', () => {
+    expect(getStoryScoreMood('a1-ramp')!.riser).toBeGreaterThanOrEqual(AWAKENING_RISER_FLOOR);
+    expect(getStoryScoreMood('a2-awakening')!.riser).toBeGreaterThanOrEqual(
+      AWAKENING_RISER_FLOOR
+    );
+    expect(
+      getStoryScoreMood('a1-ramp')!.pattern.filter(step => step !== null).length
+    ).toBe(STEPS_PER_BAR);
+  });
+});
+
 describe('storyScore chapter 7 reconstruction', () => {
   beforeEach(() => {
     resetStoryScoreRuntime();

@@ -38,7 +38,7 @@ describe('ControlsReference model', () => {
     expect(createControlsReference({ device: 'touch', mode: 'flight' })[1].actions.map(action => action.key))
       .toContain('LAND');
     expect(createControlsReference({ device: 'touch', mode: 'fps' })[0].actions.map(action => action.key))
-      .toEqual(['B', 'C', 'M']);
+      .toEqual(['BUILD', 'FABRICATOR', 'PAUSE']);
     expect(createControlsReference({ device: 'desktop', mode: 'flight' })[0].actions.map(action => action.key))
       .not.toContain('M');
     expect(createControlsReference({
@@ -54,5 +54,40 @@ describe('ControlsReference model', () => {
       device: 'touch', mode: 'fps', storyActive: true,
       moveSpeedScale: 0, allowJump: false, lookMode: 'feed'
     })[1].actions).toContainEqual({ key: 'Right side', label: 'Constrained survey' });
+  });
+
+  it('names the touch screen-actions with button words, never bare keycaps', () => {
+    // The corner-menu vocabulary: no single-letter keyboard key may leak into
+    // the touch global section in any mode.
+    const isSingleLetter = (key: string): boolean => /^[A-Za-z]$/.test(key);
+    for (const mode of ['overview', 'fps', 'build', 'flight'] as const) {
+      const global = createControlsReference({ device: 'touch', mode, allowChart: true })[0];
+      expect(global.title).toBe('Screen actions');
+      expect(global.actions.map(action => action.key).filter(isSingleLetter)).toEqual([]);
+    }
+  });
+
+  it('lists CHART in the touch screen-actions only when the chart is openable', () => {
+    const withChart = createControlsReference({ device: 'touch', mode: 'fps', allowChart: true })[0]
+      .actions.map(action => action.key);
+    expect(withChart).toEqual(['BUILD', 'FABRICATOR', 'CHART', 'PAUSE']);
+
+    const noChart = createControlsReference({ device: 'touch', mode: 'fps' })[0]
+      .actions.map(action => action.key);
+    expect(noChart).not.toContain('CHART');
+  });
+
+  it('surfaces the touch SPRINT row only where the story policy grants sprint', () => {
+    const withSprint = createControlsReference({
+      device: 'touch', mode: 'fps', storyActive: true,
+      moveSpeedScale: 1, allowJump: true, allowSprint: true, lookMode: 'free'
+    })[1].actions.map(action => action.key);
+    expect(withSprint).toContain('SPRINT');
+
+    const feedSide = createControlsReference({
+      device: 'touch', mode: 'fps', storyActive: true,
+      moveSpeedScale: 0.55, allowJump: true, allowSprint: false, lookMode: 'side'
+    })[1].actions.map(action => action.key);
+    expect(feedSide).not.toContain('SPRINT');
   });
 });

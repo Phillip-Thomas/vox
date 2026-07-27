@@ -53,6 +53,7 @@ import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
 import { createSystemCompanionBodyTargetHandle } from '../state/systemCompanionBodyTargets.ts';
 import { TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
 import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
+import { CH1_2D_TRAVEL_BAND } from './storyDirector.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
 import { getLensRig } from './sideLens.ts';
 import { getAuditWorkerPath, storyAnchors, STORY_SEED } from './world/storyWorld.ts';
@@ -103,6 +104,23 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getLensRig().depthBand).toBe(Infinity);
     advanceToBeat('ch1-iso');
     expect(getLensRig().depthBand).toBe(Infinity);
+  });
+
+  it('walls the pure-2D eras against the cube edge but frees the top-down eras', () => {
+    // The three side-scroller beats get a finite travel band (worker cannot walk
+    // off the face / switch faces); every other rig stays free (Infinity).
+    advanceToBeat('ch1-fixed');
+    expect(getLensRig().travelBand).toBe(CH1_2D_TRAVEL_BAND.gather);
+    advanceToBeat('ch1-raster');
+    expect(getLensRig().travelBand).toBe(CH1_2D_TRAVEL_BAND.gather);
+    advanceToBeat('ch1-depth');
+    expect(getLensRig().travelBand).toBe(CH1_2D_TRAVEL_BAND.recovery);
+    expect(Number.isFinite(getLensRig().travelBand)).toBe(true);
+    // Nav/iso reveal the map — face traversal is legitimate, so travel is free.
+    advanceToBeat('ch1-nav');
+    expect(getLensRig().travelBand).toBe(Infinity);
+    advanceToBeat('ch1-iso');
+    expect(getLensRig().travelBand).toBe(Infinity);
   });
 
   it('meeting the on-row quota + salvage opens pod recovery and records the milestone', () => {

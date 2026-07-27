@@ -19,6 +19,10 @@ let musicBus: GainNode | null = null;
 let submergeFilter: BiquadFilterNode | null = null;
 let sceneEnvelopeGain: GainNode | null = null;
 let visibilityGain: GainNode | null = null;
+// Post-compressor terminal master feeding the single output route. The SFX
+// sub-master joins here in parallel with the music compressor, so the whole
+// game shares one context and one route (see getGameAudioSfxJoinNode).
+let masterOutput: GainNode | null = null;
 
 /** Default music-bus volume (shared by the live chain and the offline mirror). */
 export const DEFAULT_MUSIC_VOLUME = 0.72;
@@ -90,7 +94,7 @@ export interface AudioOutputRoute {
 }
 
 const outputRoutes = new Set<AudioOutputRoute>();
-let musicOutputRoute: AudioOutputRoute | null = null;
+let masterOutputRoute: AudioOutputRoute | null = null;
 let visibilityResumeInstalled = false;
 
 /** iOS / iPadOS detection, including iPadOS 13+ masquerading as desktop Safari. */
@@ -232,18 +236,39 @@ function installOutputRoute(
   return route;
 }
 
-/** Re-attempt resume when returning to a tab with a non-running context. */
+/**
+ * Single visibility authority for the shared context. On tab-hide it ducks the
+ * music `visibilityGain` (moved here from AudioDirector so one listener owns the
+ * duck), and on tab-return it revives the output route. Duck-then-revive is safe:
+ * the two touch independent nodes (music `visibilityGain` vs. the terminal
+ * route), and on hide the revive self-skips while the duck engages; on show the
+ * duck restores while the revive resumes. SFX joins downstream of the compressor
+ * and never passes through `visibilityGain`, so this duck never touches SFX —
+ * matching the pre-consolidation separate-context behavior exactly.
+ */
 function installVisibilityResume(): void {
   if (visibilityResumeInstalled || typeof window === 'undefined') return;
   visibilityResumeInstalled = true;
-  const revive = (): void => {
+  const reviveRoutes = (): void => {
     if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
     for (const route of outputRoutes) route.revive();
   };
+  const syncMusicVisibilityDuck = (): void => {
+    if (typeof document === 'undefined') return;
+    setMusicVisibilityDucked(document.hidden);
+  };
+  const onVisibilityChange = (): void => {
+    syncMusicVisibilityDuck();
+    reviveRoutes();
+  };
+  // Settle the duck to current visibility now (AudioDirector did this on mount).
+  // The context is built inside a visible-tab gesture in every real flow, so this
+  // is a no-op there and only guards a context somehow built while hidden.
+  syncMusicVisibilityDuck();
   if (typeof document !== 'undefined') {
-    document.addEventListener('visibilitychange', revive);
+    document.addEventListener('visibilitychange', onVisibilityChange);
   }
-  window.addEventListener('focus', revive);
+  window.addEventListener('focus', reviveRoutes);
 }
 
 /**
@@ -266,8 +291,9 @@ export function describeGameAudioOutputRoutes(): string {
 }
 
 /**
- * Shared installer for the iOS-aware terminal output route. The music chain and
- * the (separate-context) SFX chain both terminate through this so neither is
+ * Installer for the single iOS-aware terminal output route. The whole game mix
+ * — the music chain through the safety compressor and the SFX sub-master joined
+ * in parallel — terminates through this one route on one context, so nothing is
  * silenced by the hardware ringer switch.
  */
 export function installGameAudioOutputRoute(
@@ -296,7 +322,17 @@ export function getAudioContext(): AudioContext | null {
   const compressor = ctx.createDynamicsCompressor();
   compressor.threshold.value = COMPRESSOR_THRESHOLD_DB;
   compressor.ratio.value = COMPRESSOR_RATIO;
-  musicOutputRoute = installGameAudioOutputRoute(ctx, compressor, 'music');
+
+  // One terminal master feeds the single iOS-aware route. Music reaches it
+  // through the safety compressor; the SFX sub-master joins it in parallel (see
+  // getGameAudioSfxJoinNode) so the whole game shares one context and one route
+  // while SFX bypasses the music compressor, scene envelope, and hidden-tab duck.
+  // A unity gain node is acoustically transparent, so the music path is
+  // byte-identical to the pre-consolidation compressor→route topology.
+  masterOutput = ctx.createGain();
+  masterOutput.gain.value = 1;
+  compressor.connect(masterOutput);
+  masterOutputRoute = installGameAudioOutputRoute(ctx, masterOutput, 'game');
 
   visibilityGain = ctx.createGain();
   visibilityGain.gain.value = ducked ? MUSIC_VISIBILITY_DUCK_LEVEL : 1;
@@ -327,6 +363,20 @@ export function getMusicBus(): GainNode | null {
 }
 
 /**
+ * The single post-compressor master node feeding the one output route. The SFX
+ * sub-master connects here — in parallel with the music safety compressor — so
+ * SFX shares the one AudioContext and the one iOS-aware route while bypassing the
+ * music compressor, scene envelope, submerge muffle, and hidden-tab duck. This
+ * reproduces the pre-consolidation separate-context SFX signal path exactly (SFX
+ * was never compressed or hidden-tab-ducked); only the second context and its
+ * duplicate route are gone.
+ */
+export function getGameAudioSfxJoinNode(): AudioNode | null {
+  getAudioContext();
+  return masterOutput;
+}
+
+/**
  * The context if one already exists — never creates one. Lets late-joining
  * engines (the generative bed) build only after an unlock path made the
  * context, so no pre-gesture AudioContext is ever constructed on their behalf.
@@ -343,7 +393,7 @@ export function unlockAudio(): void {
   // contextNeedsResume). Activating the media-element route must happen inside
   // this gesture so el.play() is a trusted call on iOS.
   if (contextNeedsResume(context)) void context.resume();
-  musicOutputRoute?.activateFromGesture();
+  masterOutputRoute?.activateFromGesture();
 }
 
 export function setMusicOutput(nextVolume: number, nextMuted: boolean): void {

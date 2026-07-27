@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
   SIDE_RIG,
+  axisBandVelocityDelta,
   applyActiveRigTransform,
   applyLiftCameraTransform,
   applyRigCameraTransform,
@@ -257,5 +258,53 @@ describe('sideLens', () => {
     sideHarvestProbePoints(position, lens, -1, out);
     expect(out[0].x).toBeLessThan(position.x); // flips with facing
     expect(out[2].y).toBeLessThan(position.y); // underfoot probe
+  });
+
+  // --- Travel-band edge clamp (the cube-face wall for the pure-2D eras) --------
+  //
+  // axisBandVelocityDelta returns the signed velocity correction to add ALONG
+  // the band axis, mirroring EfficientPlayer's depth clamp: free inside the
+  // band, cancel outward + spring back past the edge, no-op when free (Infinity).
+  describe('axisBandVelocityDelta (travel wall)', () => {
+    const BAND = 36;
+
+    it('is a no-op inside the band (free travel)', () => {
+      expect(axisBandVelocityDelta(0, BAND, 5)).toBe(0);
+      expect(axisBandVelocityDelta(10, BAND, -5)).toBe(0);
+      expect(axisBandVelocityDelta(BAND, BAND, 8)).toBe(0); // exactly at the edge is still free
+      expect(axisBandVelocityDelta(-BAND, BAND, -8)).toBe(0);
+    });
+
+    it('is always a no-op when the band is Infinity, regardless of drift/speed', () => {
+      expect(axisBandVelocityDelta(1e6, Infinity, 50)).toBe(0);
+      expect(axisBandVelocityDelta(-1e6, Infinity, -50)).toBe(0);
+    });
+
+    it('past the + edge cancels outward velocity and springs back (negative delta)', () => {
+      const drift = BAND + 2; // 2 m past the + edge
+      const speed = 5; // moving further outward (+)
+      const delta = axisBandVelocityDelta(drift, BAND, speed);
+      // cancel outward (−5) + spring overshoot 2 inward (−2*4 = −8) = −13
+      expect(delta).toBe(-13);
+      // the correction opposes the outward drift
+      expect(Math.sign(delta)).toBe(-Math.sign(drift));
+    });
+
+    it('past the − edge cancels outward velocity and springs back (positive delta)', () => {
+      const drift = -(BAND + 3); // 3 m past the − edge
+      const speed = -4; // moving further outward (−)
+      const delta = axisBandVelocityDelta(drift, BAND, speed);
+      // cancel outward (+4) + spring overshoot 3 inward (+3*4 = +12) = +16
+      expect(delta).toBe(16);
+      expect(Math.sign(delta)).toBe(-Math.sign(drift));
+    });
+
+    it('past the edge but already moving INWARD only springs (does not add outward speed)', () => {
+      const drift = BAND + 2; // past the + edge
+      const inwardSpeed = -6; // already heading back inward
+      const delta = axisBandVelocityDelta(drift, BAND, inwardSpeed);
+      // no outward component to cancel; only the spring: −2*4 = −8
+      expect(delta).toBe(-8);
+    });
   });
 });

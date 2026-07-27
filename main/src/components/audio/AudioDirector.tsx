@@ -20,8 +20,7 @@ import { getSfxEngine } from '../../audio/sfxEngine.ts';
 import { getVitals } from '../../game/systems/survivalVitals.ts';
 import {
   setMusicOutput,
-  setMusicSubmerged,
-  setMusicVisibilityDucked
+  setMusicSubmerged
 } from '../../audio/audioCore.ts';
 import {
   getVoxelRealityEffects,
@@ -141,14 +140,8 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
     if (cue) getMusicEngine().playTransitionCue(cue);
   }, [scene]);
 
-  useEffect(() => {
-    const onVisibilityChange = () => {
-      setMusicVisibilityDucked(document.hidden);
-    };
-    onVisibilityChange();
-    document.addEventListener('visibilitychange', onVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
-  }, []);
+  // The hidden-tab music duck now lives in audioCore's single visibility
+  // authority (installVisibilityResume): one listener owns duck + route-revive.
 
   useEffect(() => {
     let raf = 0;
@@ -232,7 +225,11 @@ const AudioDirector: FC<AudioDirectorProps> = ({ terrainSeed, worldId }) => {
         warp.kind === 'travel' ? warpIntensity : warpIntensity * 0.28,
         planetMoodRef.current,
         daylight,
-        getMusicPrimitives()
+        getMusicPrimitives(),
+        // Ambient procedural drones yield to a leading story score exactly the
+        // way the generative bed does (owner ruling 2026-07: no constant low
+        // tone stacked under the story ladder).
+        isScoreMoodLeading()
       );
       const engine = getMusicEngine();
       const storyMix = getEmergentScoreMixSnapshot();

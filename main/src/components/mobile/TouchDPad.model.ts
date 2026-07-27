@@ -94,3 +94,103 @@ export function dpadActionForBeat(beat: StoryBeat | null): DpadActionSpec | null
   }
   return null;
 }
+
+// --- per-beat pad configuration -----------------------------------------------
+//
+// Owner direction: the pure 2D side-scroller eras carry ONLY ◀ ▶ (one axis) plus
+// jump and extract; the top-down / isometric eras open a second axis and add
+// ▲ ▼. The arm set is declared per beat here so the component stays presentation
+// only (it renders exactly the arms the model lists, and fades the new vertical
+// arms in when they first appear).
+
+/** The eras that move on a second (vertical) axis: top-down nav + isometric. */
+const TWO_AXIS_DPAD_BEATS = new Set<StoryBeat>(['ch1-nav', 'ch1-iso']);
+
+/** The interactive monochrome-ladder beats that mount the pad at all. */
+const EARLY_DPAD_BEATS = new Set<StoryBeat>([
+  'ch1-fixed', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso'
+]);
+
+/** One-axis side-scroller arms (ch1-fixed/raster/depth). */
+export const DPAD_SIDE_ARMS: readonly DpadDirection[] = ['left', 'right'];
+/** Two-axis planar arms (ch1-nav/iso), once the new axis opens. */
+export const DPAD_PLANAR_ARMS: readonly DpadDirection[] = ['up', 'down', 'left', 'right'];
+
+/**
+ * Which direction arms this beat's pad renders. The 2D eras expose only ◀ ▶
+ * (W/S are dead there); the top-down/iso eras expose all four. Non-pad beats
+ * default to the side arms — the component only mounts on the early ladder.
+ */
+export function dpadArmsForBeat(beat: StoryBeat | null): DpadDirection[] {
+  return beat && TWO_AXIS_DPAD_BEATS.has(beat)
+    ? [...DPAD_PLANAR_ARMS]
+    : [...DPAD_SIDE_ARMS];
+}
+
+/**
+ * The JUMP button, or null off the ladder. Every interactive monochrome-ladder
+ * beat is a rasterPolicy variant with allowJump === true (storyInputPolicy):
+ * the side eras hop, and the isometric era ("isometric height") makes the hop a
+ * real traversal verb. So JUMP rides the whole ladder for a consistent thumb
+ * position rather than blinking in and out between adjacent top-down beats. It
+ * synthesizes Space — the desktop jump key (App KeyboardControls: jump→['Space']).
+ */
+export function dpadJumpForBeat(beat: StoryBeat | null): DpadActionSpec | null {
+  if (!beat || !EARLY_DPAD_BEATS.has(beat)) return null;
+  return {
+    id: 'jump',
+    label: 'JUMP',
+    ariaLabel: 'Jump',
+    code: KEY_CODES.jump // 'Space' — the desktop jump key.
+  };
+}
+
+export interface DpadBeatSpec {
+  /** Direction arms this beat renders (2 on the side eras, 4 top-down/iso). */
+  arms: DpadDirection[];
+  /** JUMP button spec (present across the ladder), or null off-ladder. */
+  jump: DpadActionSpec | null;
+  /** Contextual EXTRACT-style action, or null on pure traversal beats. */
+  action: DpadActionSpec | null;
+}
+
+/** The complete declarative pad configuration for a beat. */
+export function dpadSpecForBeat(beat: StoryBeat | null): DpadBeatSpec {
+  return {
+    arms: dpadArmsForBeat(beat),
+    jump: dpadJumpForBeat(beat),
+    action: dpadActionForBeat(beat)
+  };
+}
+
+// --- held-control reconciliation across a beat transition ---------------------
+//
+// A finger can still be down on a direction arm or an action button at the exact
+// frame the beat advances. If that control's button is no longer part of the new
+// beat's spec, React unmounts the <button> WITHOUT firing pointerup/leave/cancel
+// (the pointer was captured on the removed element), so the synthetic key it was
+// holding would latch forever. The concrete report: holding EXTRACT as
+// ch1-raster -> ch1-depth kept KeyE down (non-stop extraction) with no button
+// left on screen to release it. The component releases exactly the stale controls
+// on the beat seam; these pure predicates make the "which are stale" decision
+// deterministically testable.
+
+/** Held directions whose arm the new beat's pad no longer renders. */
+export function dpadStaleHeldDirections(
+  held: Iterable<DpadDirection>,
+  spec: DpadBeatSpec
+): DpadDirection[] {
+  const live = new Set(spec.arms);
+  return [...held].filter(dir => !live.has(dir));
+}
+
+/** Held action-button ids (JUMP / EXTRACT) whose button the new beat drops. */
+export function dpadStaleHeldActionIds(
+  heldIds: Iterable<string>,
+  spec: DpadBeatSpec
+): string[] {
+  const live = new Set<string>();
+  if (spec.jump) live.add(spec.jump.id);
+  if (spec.action) live.add(spec.action.id);
+  return [...heldIds].filter(id => !live.has(id));
+}

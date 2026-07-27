@@ -700,10 +700,23 @@ function nextNavigationStep(player: THREE.Vector3, goal: THREE.Vector3): Navigat
   }
 
   // Consume adjacent A* cells as the body reaches them. The final cell remains
-  // authoritative; route replanning owns any larger displacement.
+  // authoritative; route replanning owns any larger displacement. Like
+  // gaitDistance, consumption is measured in the surface tangent plane: raw 3D
+  // distance never consumes a waypoint the body stands directly ABOVE (e.g. the
+  // ch1-anomaly start on the signal-mesa summit, whose ground route begins at
+  // its base), which leaves steerFreeToward's horizontal dead zone with no
+  // intent at all — a frozen actor. A cell below the feet within a bounded,
+  // survivable drop is passed; a cell still to be CLIMBED stays live.
   while (active.cursor < active.route.waypoints.length - 1) {
     const candidate = active.route.waypoints[active.cursor];
-    if (!candidate || player.distanceToSquared(candidate) > 1.35 * 1.35) break;
+    if (!candidate) break;
+    _navigationDirection.copy(candidate).sub(player);
+    const up = getPlayerUp();
+    const vertical = _navigationDirection.dot(up); // + above the player, - below
+    _navigationDirection.addScaledVector(up, -vertical);
+    if (_navigationDirection.lengthSq() > 1.35 * 1.35) break;
+    if (vertical > 1.0) break; // an un-climbed rise is not yet consumed
+    if (vertical < -3.4) break; // an extreme perch is off-route, not "arrived"
     active.cursor++;
   }
   const waypoint = active.route.waypoints[active.cursor] ?? goal;

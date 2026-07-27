@@ -64,7 +64,7 @@ prove taste. Both distinctions must remain explicit.
 | `ch1-nav` | one rig moves to straight-down over 5s, distance 34 | bare/monochrome + grid/navigation chrome | authored world geometry becomes information |
 | `ch1-iso` | rig settles near 34° elevation / 45° azimuth over 5s, distance 26; DPR snap masked by glitch | bare/monochrome | height becomes legible and the signal mesa owns the frame |
 | `ch1-lift` | ~7s letterboxed physical traverse from ISO into the worker's eyes; profile-to-first-person blend; one masked DPR snap | bare feed; glitch at perspective issue | the geometry of seeing becomes embodiment |
-| `ch1-anomaly` | first-person CCTV pan/tilt; compass-snapped yaw and bounded tilt | bare feed, anomaly stone deliberately the first continuous form | calibration, then the deviation; one goal at a time |
+| `ch1-anomaly` | first-person CCTV pan/tilt; smooth continuous yaw (snap retired, see note) over the pinned regulation tilt band | bare feed, anomaly stone deliberately the first continuous form | calibration, then the deviation; one goal at a time |
 | `a1-ramp` | held first-person subject framing; no arbitrary cut | eight-second seeded chroma instability | color is acquired, unreliable, and emotionally synchronized with score |
 | `ch2-color` / `ch2-approach` | freed-neck first person inside surviving feed chrome | color but intentionally flat; hero tree is the saturated violation | the tree attracts attention without a quest-marker composition takeover |
 | `a2-awakening` | violation flood → HUD death → six-second liberation; FOV 50→75; treatment and resolution release | feed treatment dissolves into free, color reality | the cage dies around the player's own view |
@@ -188,6 +188,11 @@ Current perspective anchors:
 - the classic external side rig is distance 16, lift 3.0, focus lift 1.4;
 - ISO is elevation 0.6 rad, azimuth π/4, distance 26, lift 2.4, focus lift 1.2;
 - top-down is elevation π/2, distance 34.
+
+Feed-yaw policy (owner decision 2026-07-21): the feed-era 90° yaw snap is retired
+for playable first-person look — `ch1-anomaly`/`a1-ramp` drag on a smooth heading
+via the `smoothYaw` policy flag, keeping the pinned CCTV tilt band. The snap
+machinery in `feedCamera.ts` is retained for the liberation blend, not deleted.
 
 FOV is the current executable lens control. A scene treatment may record
 physical-lens intent—focal length character, filmback assumption, focus

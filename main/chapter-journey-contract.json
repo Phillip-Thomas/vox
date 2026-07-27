@@ -344,6 +344,28 @@
             "continueToBeat": "ch1-nav",
             "forbidRescue": true
           }
+        },
+        {
+          "id": "lifecycle:ch1-2d-face-lock",
+          "beat": "ch1-raster",
+          "type": "entity-lifecycle",
+          "triggerRef": "beat:ch1-raster",
+          "eventually": {
+            "withinMs": 30000,
+            "assertions": [
+              "entity:actor:local/on-arrival-cube-face=true",
+              "entity:actor:local/travel-offset-within-band=true"
+            ]
+          },
+          "alwaysAfter": ["entity:actor:local/on-arrival-cube-face=true"],
+          "neverAfter": ["entity:actor:local/crossed-cube-face=true"],
+          "resume": {
+            "required": true,
+            "reloadWindow": "mid ch1 pure-2D salvage traversal (ch1-fixed / ch1-raster / ch1-depth)",
+            "assertOnFirstFrame": ["entity:actor:local/on-arrival-cube-face=true"],
+            "continueToBeat": "ch1-raster",
+            "forbidRescue": true
+          }
         }
       ],
       "interactionContracts": [],

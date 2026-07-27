@@ -83,6 +83,13 @@ export interface LensRig {
   followQuant: number;
   /** Movement freedom along the plane normal: 0 = locked, >0 = ± band, Infinity = free. */
   depthBand: number;
+  /**
+   * Movement freedom ALONG the travel axis, ± band metres around the lens origin:
+   * Infinity = free (the cube-edge escape / face traversal stays reachable);
+   * finite = the pure-2D side-scroller is walled in so the worker can neither
+   * walk off the face nor switch faces. Same semantics/feel as depthBand.
+   */
+  travelBand: number;
 }
 
 export const SIDE_RIG: LensRig = {
@@ -92,7 +99,8 @@ export const SIDE_RIG: LensRig = {
   lift: SIDE_CAMERA_LIFT,
   focusLift: SIDE_CAMERA_FOCUS_LIFT,
   followQuant: 0,
-  depthBand: 0
+  depthBand: 0,
+  travelBand: Infinity
 };
 
 let rigFrom: LensRig = { ...SIDE_RIG };
@@ -132,7 +140,8 @@ function currentEffectiveRig(): LensRig {
     lift: lerp(rigFrom.lift, rigTo.lift, k),
     focusLift: lerp(rigFrom.focusLift, rigTo.focusLift, k),
     followQuant: rigTo.followQuant, // quantization never interpolates — frames blend instead
-    depthBand: rigTo.depthBand
+    depthBand: rigTo.depthBand,
+    travelBand: rigTo.travelBand // a movement wall, not a camera value — switch discretely
   };
 }
 
@@ -143,6 +152,26 @@ function lerp(a: number, b: number, k: number): number {
 function smoothstep(k: number): number {
   const t = Math.min(1, Math.max(0, k));
   return t * t * (3 - 2 * t);
+}
+
+/**
+ * Signed velocity correction to add ALONG a lens band axis, mirroring the
+ * external-lens edge clamp (see EfficientPlayer's depth constraint). Inside the
+ * band (|drift| ≤ band) the axis is free and this returns 0. Past the edge it
+ * (a) cancels any OUTWARD axial velocity and (b) springs the overshoot back
+ * toward the anchor at the same 4× stiffness as the depth clamp. `band` of
+ * Infinity is always a no-op; `axialSpeed` is the current velocity component
+ * along the (unit) band axis, `drift` the signed distance from the anchor.
+ */
+export function axisBandVelocityDelta(drift: number, band: number, axialSpeed: number): number {
+  if (!Number.isFinite(band)) return 0;
+  const overshoot = Math.abs(drift) - band;
+  if (overshoot <= 0) return 0;
+  const outward = Math.sign(drift) || 1;
+  let delta = 0;
+  if (axialSpeed * outward > 0) delta -= axialSpeed; // cancel the outward component exactly
+  delta -= overshoot * outward * 4; // spring the overshoot back onto the band
+  return delta;
 }
 
 const _rigHoriz = new THREE.Vector3();

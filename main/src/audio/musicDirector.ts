@@ -66,6 +66,17 @@ const EMPTY_PROCEDURAL: ProceduralMusicTargets = {
  */
 const STREAM_STEM_LEVEL = 0.4;
 
+/**
+ * While a STORY MOOD leads the score, the legacy procedural AMBIENT drones
+ * (pulse/rumble/life/wind/glass/water/night) yield completely — the same
+ * courtesy the generative bed already pays (bedMaster→0). Only two lanes are
+ * exempt: `ship` (diegetic hull hum, story-gated separately through
+ * shipHumMultiplier) and `warp` (a kinetic transient, not a constant tone).
+ * Sandbox/menu/free-play mixes are untouched: the duck applies only while
+ * isScoreMoodLeading() is true.
+ */
+const STORY_SCORE_AMBIENT_DRONE_DUCK = 0;
+
 function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
@@ -125,7 +136,8 @@ export function resolveMusicMix(
   warpIntensity: number,
   mood: PlanetMusicMood = NEUTRAL_PLANET_MOOD,
   daylight = 1,
-  primitives?: { era: number; warmth: number; wonder: number; tension: number }
+  primitives?: { era: number; warmth: number; wonder: number; tension: number },
+  storyScoreLeads = false
 ): MusicMix {
   const intensity = clamp01(warpIntensity);
   const day = clamp01(daylight);
@@ -155,18 +167,23 @@ export function resolveMusicMix(
 
   layers.warp = Math.max(base.layers.warp ?? 0, intensity * 0.34);
 
+  // Constant ambient drones never stack underneath a leading story score;
+  // the warp-intensity pulse kicker survives because it is kinetic, not
+  // constant.
+  const droneDuck = storyScoreLeads ? STORY_SCORE_AMBIENT_DRONE_DUCK : 1;
+
   return {
     layers,
     procedural: {
-      pulse: base.procedural.pulse * duck + intensity * 0.08,
+      pulse: base.procedural.pulse * duck * droneDuck + intensity * 0.08,
       ship: base.procedural.ship * duck,
       warp: Math.max(base.procedural.warp, intensity),
-      life: base.procedural.life * duck,
-      wind: base.procedural.wind * duck,
-      glass: base.procedural.glass * duck,
-      rumble: base.procedural.rumble * duck,
-      water: base.procedural.water * duck,
-      night: base.procedural.night * duck
+      life: base.procedural.life * duck * droneDuck,
+      wind: base.procedural.wind * duck * droneDuck,
+      glass: base.procedural.glass * duck * droneDuck,
+      rumble: base.procedural.rumble * duck * droneDuck,
+      water: base.procedural.water * duck * droneDuck,
+      night: base.procedural.night * duck * droneDuck
     },
     fadeSeconds: intensity > 0 ? 0.18 : base.fadeSeconds
   };
@@ -206,10 +223,13 @@ function baseMixForScene(scene: MusicScene, mood: PlanetMusicMood, daylight: num
         fadeSeconds: 2.8
       };
     case 'storyTerminal':
-      // The hauler: nothing to hear but the hull. A distant transit drone, no melody.
+      // The hauler: nothing to hear but the hull. Transit distance is the
+      // streamed deepSpace texture; the STORY SCORE's own patient pulses carry
+      // the era. No raw oscillator drone — the owner ruled the constant
+      // 36 Hz saw/sub tone out of the intro entirely (2026-07 follow-up).
       return {
         layers: { deepSpace: 0.1 },
-        procedural: { ...EMPTY_PROCEDURAL, pulse: 0.03, rumble: 0.05 },
+        procedural: EMPTY_PROCEDURAL,
         fadeSeconds: 2.2
       };
     case 'surface':

@@ -68,6 +68,45 @@ describe('music director mix resolver', () => {
     expect(strangeNight.procedural.glass).toBe(0);
   });
 
+  it('keeps the hauler intro free of constant procedural drone tones', () => {
+    // Owner ruling (2026-07 follow-up): the 36 Hz rumble saw / sub pulse that
+    // stacked under the whole prologue has got to go. The storyTerminal hull
+    // is the streamed deepSpace texture plus the story score's own pulses.
+    const intro = resolveMusicMix('storyTerminal', 0);
+    for (const [lane, gain] of Object.entries(intro.procedural)) {
+      expect(gain, `storyTerminal procedural ${lane}`).toBe(0);
+    }
+    expect(intro.layers.deepSpace).toBeGreaterThan(0);
+  });
+
+  it('yields ambient procedural drones to a leading story score', () => {
+    const sandbox = resolveMusicMix('approach', 0, NEUTRAL_PLANET_MOOD, 1);
+    const underScore = resolveMusicMix(
+      'approach',
+      0,
+      NEUTRAL_PLANET_MOOD,
+      1,
+      undefined,
+      true
+    );
+
+    // Shipped sandbox values are untouched when no story mood leads…
+    expect(sandbox.procedural.pulse).toBeGreaterThan(0);
+    expect(sandbox.procedural.ship).toBeGreaterThan(0);
+    // …and the constant drones are silent while the score speaks,
+    expect(underScore.procedural.pulse).toBe(0);
+    expect(underScore.procedural.rumble).toBe(0);
+    expect(underScore.procedural.life).toBe(0);
+    expect(underScore.procedural.night).toBe(0);
+    // while the diegetic/kinetic lanes keep their own gates.
+    expect(underScore.procedural.ship).toBe(sandbox.procedural.ship);
+    expect(underScore.procedural.warp).toBe(sandbox.procedural.warp);
+    // The kinetic warp pulse kicker also survives the duck.
+    expect(
+      resolveMusicMix('deepSpace', 1, NEUTRAL_PLANET_MOOD, 1, undefined, true).procedural.pulse
+    ).toBeGreaterThan(0);
+  });
+
   it('does not add persistent generated noise or tone to planet ambience', () => {
     const lushNight = resolveMusicMix('surface', 0, lushMood, 0);
 

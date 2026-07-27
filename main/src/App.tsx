@@ -23,6 +23,7 @@ import { isTouchDevice, releaseAllKeys } from './utils/mobileInput.ts';
 import PoseRecorder from './components/debug/PoseRecorder.tsx';
 import SceneReadyProbe from './components/SceneReadyProbe.tsx';
 import VantageToast from './components/hud/VantageToast.tsx';
+import ResourceGainToast from './components/hud/ResourceGainToast.tsx';
 import LookedAtIndicator from './components/hud/LookedAtIndicator.tsx';
 import InventoryPanel from './components/hud/InventoryPanel.tsx';
 import CrashFlash from './components/hud/CrashFlash.tsx';
@@ -804,6 +805,14 @@ const App: React.FC = () => {
   const currentWorldKey = currentWorld.worldId;
   const buildModeOpen = useMemo(() => isBuildEnabled(), [buildHudTick]);
   const inventoryTopOffset = useMemo(() => getInventoryTopOffset(isTouch), [isTouch]);
+  // Whether the survey chart is openable right now — the same POLICY gate the
+  // desktop [M] key applies (App.tsx onKey above). Drives the touch CHART
+  // affordance (corner menu + pause reference) so touch matches the keyboard.
+  const chartInputPolicy = getStoryInputPolicy();
+  const chartAvailable = flight.controlMode === 'fps'
+    && chartInputPolicy.lookMode === 'free'
+    && !(hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch1Nav))
+    && !(story.active && chartInputPolicy.moveSpeedScale <= 0);
   const currentWorldIdentity = useMemo(() => worldIdentityFromCurrentWorld(currentWorld), [currentWorld.worldId, currentWorld.seed]);
   const activePlanetProfile = useMemo(
     () => resolvePlanetProfile({
@@ -1605,6 +1614,7 @@ const App: React.FC = () => {
             {flight.controlMode === 'fps' && <BuildIndicator />}
             {flight.controlMode === 'fps' && <LookedAtIndicator />}
             {flight.controlMode === 'fps' && <InteractionPrompt />}
+            {flight.controlMode === 'fps' && <ResourceGainToast />}
             {flight.controlMode === 'fps' && !(isTouch && buildModeOpen) && !storyHudHideInventory() && (
               <InventoryPanel topOffset={inventoryTopOffset} />
             )}
@@ -1625,8 +1635,10 @@ const App: React.FC = () => {
               buildModeOpen={buildModeOpen}
               allowBuild={getStoryInputPolicy().allowBuild}
               allowCraft={getStoryInputPolicy().allowCraft}
+              allowChart={chartAvailable}
               onToggleBuild={toggleBuildHud}
               onOpenCrafting={openCrafting}
+              onOpenChart={() => setMapViewOpen(true)}
               onPause={pauseAndOpenStarMap}
               pauseLabel={story.active ? 'Pause' : 'Pause and open star map'}
             />
@@ -1675,6 +1687,7 @@ const App: React.FC = () => {
           storyActive: story.active,
           allowBuild: getStoryInputPolicy().allowBuild,
           allowCraft: getStoryInputPolicy().allowCraft,
+          allowChart: chartAvailable,
           moveSpeedScale: getStoryInputPolicy().moveSpeedScale,
           allowJump: getStoryInputPolicy().allowJump,
           allowSprint: getStoryInputPolicy().allowSprint,

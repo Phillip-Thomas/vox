@@ -100,6 +100,12 @@ import {
   clearGuidedStoryObjective
 } from './ux/objectiveDirector.ts';
 import { resolveStoryObjectiveGuidance } from './storyObjectiveGuidance.ts';
+import {
+  advanceFlightGuidanceDwell,
+  CH8_FLIGHT_GUIDANCE_DWELL_SECONDS,
+  createFlightGuidanceDwell,
+  resetFlightGuidanceDwell
+} from './flightGuidanceDwell.model.ts';
 
 const ORIGIN_WORLD_ID = STORY_PRIMARY_WORLD_ID;
 
@@ -117,6 +123,13 @@ const runtime: EmergentDirectorRuntime = {
   completionObservedAt: -1
 };
 let finalizedLocalCommandStoryAdapterInstalled = false;
+
+// Dwell for the Chapter 8 flight-derived guidance states. Reset at every beat
+// entry (so a fresh beat latches its first sample immediately); thereafter it
+// holds a stable objective id through an envelope/surface boundary oscillation
+// so `activateGuidedStoryObjective` cannot re-pop the card / re-chirp per frame.
+// `runtime.elapsed` is the monotonic time source (0 at entry, growing per tick).
+const ch8FlightGuidanceDwell = createFlightGuidanceDwell();
 
 function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
   if (!beat) return;
@@ -151,40 +164,53 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
         });
       case 'ch8-launch': {
         const flight = getSpaceFlightSnapshot();
+        // Dwell the flight-derived id: an atmosphere boundary can flip phase
+        // frame-to-frame; hysteresis stops the objective card re-popping/chirping.
+        const rawLaunchState = flight.phase === 'surface'
+          ? flight.controlMode === 'flight'
+            ? 'surface-flight'
+            : 'surface-on-foot'
+          : flight.phase === 'deep_space'
+            ? 'deep-space'
+            : 'launching';
         return resolveStoryObjectiveGuidance(beat, {
-          ch8LaunchState: flight.phase === 'surface'
-            ? flight.controlMode === 'flight'
-              ? 'surface-flight'
-              : 'surface-on-foot'
-            : flight.phase === 'deep_space'
-              ? 'deep-space'
-              : 'launching'
+          ch8LaunchState: advanceFlightGuidanceDwell(
+            ch8FlightGuidanceDwell, rawLaunchState, runtime.elapsed, CH8_FLIGHT_GUIDANCE_DWELL_SECONDS
+          ) as typeof rawLaunchState
         });
       }
       case 'ch8-crossing': {
         const system = getSystemFlightSnapshot();
         const tidegardenTargeted = system.target?.kind === 'system_body'
           && system.target.worldId === TIDEGARDEN_WORLD_ID;
+        // A surface/descent flight snapshot by itself is not evidence that
+        // Tidegarden's approach envelope has been reached. During boot the
+        // story snapshot can publish before flight continuity hydrates; only
+        // system-body ownership may advance this objective to approach. Dwelled
+        // so a boundary oscillation of activePlanetId cannot flap the id.
+        const rawCrossingState = system.activePlanetId === TIDEGARDEN_WORLD_ID
+          ? 'approach-envelope'
+          : tidegardenTargeted
+            ? 'hold-course'
+            : 'acquire-sibling';
         return resolveStoryObjectiveGuidance(beat, {
-          // A surface/descent flight snapshot by itself is not evidence that
-          // Tidegarden's approach envelope has been reached. During boot the
-          // story snapshot can publish before flight continuity hydrates; only
-          // system-body ownership may advance this objective to approach.
-          ch8CrossingState: system.activePlanetId === TIDEGARDEN_WORLD_ID
-            ? 'approach-envelope'
-            : tidegardenTargeted
-              ? 'hold-course'
-              : 'acquire-sibling'
+          ch8CrossingState: advanceFlightGuidanceDwell(
+            ch8FlightGuidanceDwell, rawCrossingState, runtime.elapsed, CH8_FLIGHT_GUIDANCE_DWELL_SECONDS
+          ) as typeof rawCrossingState
         });
       }
       case 'ch8-landfall': {
         const flight = getSpaceFlightSnapshot();
+        // Dwelled: the surface/flight boundary can oscillate phase/controlMode.
+        const rawLandfallState = flight.phase !== 'surface'
+          ? 'descent'
+          : flight.controlMode === 'flight'
+            ? 'surface-flight'
+            : 'surface-fps';
         return resolveStoryObjectiveGuidance(beat, {
-          ch8LandfallState: flight.phase !== 'surface'
-            ? 'descent'
-            : flight.controlMode === 'flight'
-              ? 'surface-flight'
-              : 'surface-fps'
+          ch8LandfallState: advanceFlightGuidanceDwell(
+            ch8FlightGuidanceDwell, rawLandfallState, runtime.elapsed, CH8_FLIGHT_GUIDANCE_DWELL_SECONDS
+          ) as typeof rawLandfallState
         });
       }
       default:
@@ -235,6 +261,7 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   runtime.elapsed = 0;
   runtime.latches.clear();
   runtime.completionObservedAt = -1;
+  resetFlightGuidanceDwell(ch8FlightGuidanceDwell);
   clearGuidedStoryObjective();
   resetAuditRoute();
   if (beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)) {

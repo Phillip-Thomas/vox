@@ -135,7 +135,12 @@ const VoyageLedger: React.FC<{ onDone: () => void }> = ({ onDone }) => {
           const n2 = { ...next };
           let ticked = false;
           for (const k of ['rations', 'hull', 'compliance'] as const) {
-            if (n2[k] !== ledger[k]) { n2[k] += Math.sign(ledger[k] - n2[k]); ticked = true; }
+            // Round the target so the integer display converges EXACTLY and stops.
+            // Today every ledger value is an integer (Math.round is identity, no
+            // visual change); a future fractional target would otherwise make the
+            // integer display step ±1 forever and metronome `terminalKey`.
+            const targetK = Math.round(ledger[k]);
+            if (n2[k] !== targetK) { n2[k] += Math.sign(targetK - n2[k]); ticked = true; }
           }
           if (ticked) { playSfx('terminalKey'); next = n2; }
         }

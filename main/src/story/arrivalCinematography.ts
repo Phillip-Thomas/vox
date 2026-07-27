@@ -97,6 +97,7 @@ export function resolveArrivalRig(t: number, out: LensRig): LensRig {
   out.focusLift = 1.9;
   out.followQuant = 0;
   out.depthBand = SIDE_RIG.depthBand;
+  out.travelBand = SIDE_RIG.travelBand; // arrival is a held-feet cutscene — no travel wall
   return out;
 }
 

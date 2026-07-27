@@ -1,4 +1,5 @@
 import type { ArchetypeId } from '../../game/data/planetArchetypes.ts';
+import type { StoryBeat } from '../../story/storyState.ts';
 import { buildPlanetProfile } from '../../game/PlanetProfile.ts';
 import { daylightFromElevation, goldenFromElevation } from '../../utils/dayNight.ts';
 import { celestialMusicPrimitives, paletteBrightnessOf } from '../planetMusicSignals.ts';
@@ -189,6 +190,95 @@ async function bedExcerpt(
         : audioHealthPass(result.analysis)),
     continuousControlAnalysis: continuousControlResult?.analysis,
     report: result.report,
+    wav: encodeWavPcm16(channels, result.buffer.sampleRate)
+  };
+}
+
+/**
+ * Early-chapter audition set (owner brief 2026-07: the prologue/ch1/ch2 music
+ * must be pleasing, subtle, and a smooth build toward the main score). Each
+ * beat renders at the reality era the PLAYER actually hears there (the
+ * AudioDirector chroma/detail/organic map keeps the monochrome ladder at
+ * era≈0; ch2's color approach sits just past ERA_COLOR), held at the mood's
+ * own resting baseline — no synthetic intensity ramp, no planet genome.
+ */
+export const EARLY_BEAT_SECONDS = 48;
+export interface EarlyBeatAudition {
+  beat: StoryBeat;
+  era: number;
+}
+export const EARLY_BEAT_AUDITIONS: readonly EarlyBeatAudition[] = [
+  { beat: 'crawl', era: 0 },
+  { beat: 'ch1-raster', era: 0 },
+  { beat: 'ch1-nav', era: 0 },
+  { beat: 'descent', era: 0.05 },
+  { beat: 'ch2-approach', era: 0.3 }
+];
+
+/**
+ * Render one early beat exactly as shipped. Health here is finite/unclipped
+ * only: composed near-silence is LEGAL at the bottom of the fidelity ladder,
+ * so the sandbox silence-floor audit does not apply. Peak/RMS are reported so
+ * the low end is provably tamed across before/after evidence runs.
+ */
+export async function renderEarlyBeatAudition(
+  spec: EarlyBeatAudition,
+  seconds = EARLY_BEAT_SECONDS
+): Promise<ExcerptResult> {
+  const result = await renderStoryBeatOffline({
+    beat: spec.beat,
+    seconds,
+    era: spec.era
+  });
+  const channels = Array.from({ length: result.buffer.numberOfChannels }, (_, c) =>
+    result.buffer.getChannelData(c)
+  );
+  return {
+    name: `early-${spec.beat}`,
+    fileStem: `early-beat_${spec.beat}_era${spec.era.toFixed(2)}`,
+    description: `Story mood '${spec.beat}' at reality era ${spec.era} (baseline intensity, no genome).`,
+    seconds,
+    analysis: result.analysis,
+    healthPass: result.analysis.nanCount === 0 && result.analysis.clipCount === 0,
+    report: null,
+    wav: encodeWavPcm16(channels, result.buffer.sampleRate)
+  };
+}
+
+/**
+ * Combined-intro auditions (owner brief follow-up): the prologue score PLUS
+ * the legacy procedural engine at the storyTerminal scene mix — the whole
+ * music bus the player hears at the very beginning, so a constant transit
+ * drone can never again hide underneath a score-only render.
+ */
+export const INTRO_COMBINED_AUDITIONS: readonly EarlyBeatAudition[] = [
+  { beat: 'crawl', era: 0 },
+  { beat: 'ch1-raster', era: 0 }
+];
+const INTRO_COMBINED_SCENE = 'storyTerminal';
+
+export async function renderIntroCombinedAudition(
+  spec: EarlyBeatAudition,
+  seconds = EARLY_BEAT_SECONDS
+): Promise<ExcerptResult> {
+  const result = await renderStoryBeatOffline({
+    beat: spec.beat,
+    seconds,
+    era: spec.era,
+    legacyScene: INTRO_COMBINED_SCENE
+  });
+  const channels = Array.from({ length: result.buffer.numberOfChannels }, (_, c) =>
+    result.buffer.getChannelData(c)
+  );
+  return {
+    name: `intro-combined-${spec.beat}`,
+    fileStem: `intro-combined_${spec.beat}_${INTRO_COMBINED_SCENE}_era${spec.era.toFixed(2)}`,
+    description:
+      `Story mood '${spec.beat}' plus the legacy procedural engine at the '${INTRO_COMBINED_SCENE}' scene mix (combined music bus).`,
+    seconds,
+    analysis: result.analysis,
+    healthPass: result.analysis.nanCount === 0 && result.analysis.clipCount === 0,
+    report: null,
     wav: encodeWavPcm16(channels, result.buffer.sampleRate)
   };
 }

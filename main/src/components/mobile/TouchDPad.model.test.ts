@@ -3,8 +3,13 @@ import { KEY_CODES } from '../../utils/mobileInput.ts';
 import {
   dpadActionForBeat,
   dpadActiveKeys,
+  dpadArmsForBeat,
   dpadDirectionKey,
   dpadEraTheme,
+  dpadJumpForBeat,
+  dpadSpecForBeat,
+  dpadStaleHeldActionIds,
+  dpadStaleHeldDirections,
   FEED_DPAD_INK
 } from './TouchDPad.model.ts';
 import { storyUsesEarlyTouchDpad, type StorySnapshot } from '../../story/storyState.ts';
@@ -69,6 +74,63 @@ describe('D-PAD discrete direction → WASD synthesis', () => {
   });
 });
 
+describe('D-PAD per-beat arm sets', () => {
+  it('exposes ONLY left/right on the pure 2D side-scroller eras', () => {
+    for (const beat of ['ch1-fixed', 'ch1-raster', 'ch1-depth'] as const) {
+      expect(dpadArmsForBeat(beat)).toEqual(['left', 'right']);
+    }
+  });
+
+  it('opens the second axis (all four arms) on the top-down / iso eras', () => {
+    for (const beat of ['ch1-nav', 'ch1-iso'] as const) {
+      const arms = dpadArmsForBeat(beat);
+      expect(new Set(arms)).toEqual(new Set(['up', 'down', 'left', 'right']));
+      expect(arms).toHaveLength(4);
+    }
+  });
+});
+
+describe('D-PAD jump button', () => {
+  it('rides every interactive monochrome-ladder beat and synthesizes Space', () => {
+    for (const beat of ['ch1-fixed', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso'] as const) {
+      const jump = dpadJumpForBeat(beat);
+      expect(jump?.id).toBe('jump');
+      expect(jump?.label).toBe('JUMP');
+      expect(jump?.code).toBe(KEY_CODES.jump);
+      expect(jump?.code).toBe('Space'); // the desktop jump key.
+    }
+  });
+
+  it('offers no jump off the early ladder', () => {
+    for (const beat of ['ch1-anomaly', 'ch2-color', null] as const) {
+      expect(dpadJumpForBeat(beat)).toBeNull();
+    }
+  });
+});
+
+describe('D-PAD combined per-beat spec', () => {
+  it('2D beats: left/right + JUMP, and EXTRACT only on the harvest/quota beats', () => {
+    const fixed = dpadSpecForBeat('ch1-fixed');
+    expect(fixed.arms).toEqual(['left', 'right']);
+    expect(fixed.jump?.label).toBe('JUMP');
+    expect(fixed.action?.id).toBe('extract');
+
+    const depth = dpadSpecForBeat('ch1-depth');
+    expect(depth.arms).toEqual(['left', 'right']);
+    expect(depth.jump?.label).toBe('JUMP');
+    expect(depth.action).toBeNull(); // no invented verb on ch1-depth.
+  });
+
+  it('top-down/iso beats: four arms + JUMP, no extract verb', () => {
+    for (const beat of ['ch1-nav', 'ch1-iso'] as const) {
+      const spec = dpadSpecForBeat(beat);
+      expect(spec.arms).toHaveLength(4);
+      expect(spec.jump?.code).toBe(KEY_CODES.jump);
+      expect(spec.action).toBeNull();
+    }
+  });
+});
+
 describe('D-PAD contextual action', () => {
   it('offers an EXTRACT button wired to the desktop harvest key on the harvest/quota beats', () => {
     for (const beat of ['ch1-fixed', 'ch1-raster'] as const) {
@@ -82,6 +144,36 @@ describe('D-PAD contextual action', () => {
     for (const beat of ['ch1-depth', 'ch1-nav', 'ch1-iso'] as const) {
       expect(dpadActionForBeat(beat)).toBeNull();
     }
+  });
+});
+
+describe('D-PAD held-control reconciliation (disappear-while-held)', () => {
+  it('releases a held EXTRACT when the beat drops the verb (ch1-raster → ch1-depth)', () => {
+    // The reported bug: EXTRACT (KeyE) held as the beat advances to ch1-depth,
+    // where the button no longer exists — JUMP survives, EXTRACT is stale.
+    const stale = dpadStaleHeldActionIds(['extract', 'jump'], dpadSpecForBeat('ch1-depth'));
+    expect(stale).toEqual(['extract']);
+  });
+
+  it('keeps a held JUMP across a side-scroller beat change (it rides the ladder)', () => {
+    expect(dpadStaleHeldActionIds(['jump'], dpadSpecForBeat('ch1-depth'))).toEqual([]);
+    expect(dpadStaleHeldActionIds(['jump', 'extract'], dpadSpecForBeat('ch1-raster'))).toEqual([]);
+  });
+
+  it('releases a held vertical arm when the pad closes the second axis', () => {
+    // Holding ▲ (up) into a one-axis side beat: up is gone, right stays.
+    const stale = dpadStaleHeldDirections(['up', 'right'], dpadSpecForBeat('ch1-depth'));
+    expect(stale).toEqual(['up']);
+  });
+
+  it('keeps held arms that the new beat still renders', () => {
+    expect(dpadStaleHeldDirections(['left', 'right'], dpadSpecForBeat('ch1-depth'))).toEqual([]);
+    expect(dpadStaleHeldDirections(['up', 'left'], dpadSpecForBeat('ch1-nav'))).toEqual([]);
+  });
+
+  it('is a no-op when nothing is held', () => {
+    expect(dpadStaleHeldDirections([], dpadSpecForBeat('ch1-depth'))).toEqual([]);
+    expect(dpadStaleHeldActionIds([], dpadSpecForBeat('ch1-depth'))).toEqual([]);
   });
 });
 

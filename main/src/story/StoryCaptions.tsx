@@ -4,6 +4,7 @@ import { isTouchDevice } from '../utils/mobileInput.ts';
 import { getStoryText, getStoryTextVersion, subscribeStoryText } from './storyText.ts';
 import { storyNow } from './storyClock.ts';
 import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
+import { presentInputGlyphs } from './ux/inputGlyphs.ts';
 import {
   getMeasuredStoryObjectiveCardHeight,
   readStoryHudSafeAreaInsets,
@@ -32,6 +33,10 @@ const StoryCaptions: React.FC = () => {
     let viewportHeight = window.innerHeight;
     let safeAreaInsets = readStoryHudSafeAreaInsets();
     const el = captionRef.current;
+    // Awakened captions carry key hints ([SHIFT] run, [M] chart, hold [E] …).
+    // On touch they must name the mounted controls, so present the line once and
+    // typewriter-reveal the presented text.
+    const shownText = presentInputGlyphs(active.text, isTouchDevice());
     const refreshViewport = () => {
       viewportWidth = window.innerWidth;
       viewportHeight = window.innerHeight;
@@ -54,8 +59,8 @@ const StoryCaptions: React.FC = () => {
       root.style.maxWidth = `${layout.caption.maxWidth}px`;
       root.dataset.captionPlacement = layout.caption.placement;
       const elapsed = storyNow() - active.shownAt;
-      const revealed = Math.min(active.text.length, Math.floor(elapsed / 34));
-      el.textContent = active.text.slice(0, revealed);
+      const revealed = Math.min(shownText.length, Math.floor(elapsed / 34));
+      el.textContent = shownText.slice(0, revealed);
       const fadeStart = active.ttlMs - 700;
       el.style.opacity = elapsed > fadeStart
         ? String(Math.max(0, 1 - (elapsed - fadeStart) / 700))

@@ -376,12 +376,90 @@ export function shouldExtendCrossFaceContinuation(route: AgentSurfaceRoute): boo
 }
 
 /**
+ * Bounded nearest-traversable-start search radius. VOXEL_SCALE is 2 m, so three
+ * cells reaches ~6 m — far enough to step back onto the dry plateau after the
+ * actor has settled a metre or two into the shore, short enough that a fully
+ * blocked neighbourhood fails fast instead of scanning the whole face.
+ */
+const MAX_START_RELOCATION_CELLS = 3;
+
+/** Two in-face tangent axes derived from a cube-face normal (grid-aligned). */
+function faceTangentBasis(face: CubeFace): { tanU: THREE.Vector3; tanV: THREE.Vector3 } {
+  const up = FACE_NORMALS[face];
+  const helper = Math.abs(up.y) < 0.9
+    ? new THREE.Vector3(0, 1, 0)
+    : new THREE.Vector3(1, 0, 0);
+  const tanU = new THREE.Vector3().crossVectors(helper, up).normalize();
+  const tanV = new THREE.Vector3().crossVectors(up, tanU).normalize();
+  return { tanU, tanV };
+}
+
+/** Distance-ordered (du,dv) cell offsets within a bounded radius, nearest first. */
+function nearestFirstOffsets(maxCells: number): Array<{ du: number; dv: number }> {
+  const out: Array<{ du: number; dv: number }> = [];
+  for (let du = -maxCells; du <= maxCells; du++) {
+    for (let dv = -maxCells; dv <= maxCells; dv++) {
+      out.push({ du, dv });
+    }
+  }
+  out.sort((a, b) => (a.du * a.du + a.dv * a.dv) - (b.du * b.du + b.dv * b.dv));
+  return out;
+}
+
+/**
+ * The actor's own column is not traversable — it settled just off the dry
+ * plateau into shallow shore, so the ordinary planner returns
+ * `start-column-not-traversable` and never yields a waypoint. Probe outward on
+ * the same face for the nearest column the runtime A* itself would accept
+ * (a self-route is the same exact ownership probe the destination-entry check
+ * uses), and return its snapped support. The caller then plans from there and
+ * has the follower walk the short dry gap first — the start-side mirror of the
+ * goal-side dry-landing nudge. Bounded, so a fully wet/blocked neighbourhood
+ * returns null instead of searching forever.
+ */
+function findNearestTraversableStart(
+  input: ReachableCrossFaceRouteInput
+): THREE.Vector3 | null {
+  const { tanU, tanV } = faceTangentBasis(input.face);
+  const probe = new THREE.Vector3();
+  for (const { du, dv } of nearestFirstOffsets(MAX_START_RELOCATION_CELLS)) {
+    if (du === 0 && dv === 0) continue; // the caller already proved this fails
+    probe.copy(input.player)
+      .addScaledVector(tanU, du * VOXEL_SCALE)
+      .addScaledVector(tanV, dv * VOXEL_SCALE);
+    const selfRoute = planAgentSurfaceRoute(
+      input.terrain,
+      input.planetSize,
+      probe,
+      probe,
+      {
+        face: input.face,
+        differentFaceFallback: 'unreachable',
+        allowJetpackCrossing: false,
+        maxVisitedCells: 1
+      }
+    );
+    if (selfRoute.mode !== 'unreachable' && selfRoute.resolvedGoal) {
+      return selfRoute.resolvedGoal.clone();
+    }
+  }
+  return null;
+}
+
+/**
  * Find a reachable dry inset for a cross-face leg. Terrain may isolate the
  * geometrically shortest seam; bounded alternatives stay on the same physical
  * edge and still use the ordinary dry/water-aware A* planner.
  */
 export function planReachableCrossFaceRoute(
   input: ReachableCrossFaceRouteInput
+): ReachableCrossFaceRoutePlan {
+  return planReachableCrossFaceRouteImpl(input, true);
+}
+
+function planReachableCrossFaceRouteImpl(
+  input: ReachableCrossFaceRouteInput,
+  allowStartRelocation: boolean
 ): ReachableCrossFaceRoutePlan {
   const approaches = input.crossFaceLeg
     ? crossFaceApproachCandidates({
@@ -512,6 +590,34 @@ export function planReachableCrossFaceRoute(
   }
 
   if (localEgressPlan) return localEgressPlan;
+
+  // Start-column rescue. A non-traversable start column defeats every approach
+  // before the planner can emit a waypoint (the actor cannot even walk off its
+  // own tile), so there is no route to invalidate and the follower freezes.
+  // When the failure is specifically that the actor's tile is unwalkable, step
+  // to the nearest column the planner accepts, replan from there, and prepend
+  // the live position so the follower walks the short dry gap first.
+  if (allowStartRelocation
+    && firstRoute
+    && firstRoute.reason === 'start-column-not-traversable') {
+    const substitute = findNearestTraversableStart(input);
+    if (substitute) {
+      const relocated = planReachableCrossFaceRouteImpl(
+        { ...input, player: substitute },
+        false // the substitute start is proven traversable — never recurse again
+      );
+      if (relocated.route.mode !== 'unreachable'
+        && relocated.route.waypoints.length > 0) {
+        return {
+          ...relocated,
+          route: {
+            ...relocated.route,
+            waypoints: [input.player.clone(), ...relocated.route.waypoints]
+          }
+        };
+      }
+    }
+  }
 
   if (!firstRoute) {
     throw new Error('cross-face route planning produced no candidate');

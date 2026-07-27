@@ -37,8 +37,13 @@ One AudioContext, one output chain, one instrument. Layout:
 
 Wins baked in: one clock for all scheduling; the score now ducks/muffles/
 compresses with the rest of the mix; one unlock/volume path; shared ramp and
-noise helpers. `sfxEngine.ts` still owns a separate context — adopting
-audioCore is future work (low priority, note when touching sfx).
+noise helpers. (2026-07-26: `sfxEngine.ts` adopted audioCore's shared context
+too — it joins at a post-compressor unity master with its own sub-master and
+submerge filter, deliberately outside the music compressor/scene envelope so
+SFX stays byte-identical. Its local ramp/noise helpers are intentionally NOT
+shared: different curve shapes/noise generators; deduping would change SFX
+timbre. One context, one `game:` output route, one unlock authority; the
+visibility duck now lives in audioCore, not AudioDirector.)
 
 ## 2. Inventory — what's good, what's a defect (be honest about the floor)
 
