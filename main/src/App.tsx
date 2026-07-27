@@ -10,6 +10,10 @@ import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
 import SystemCompanionBodies from './components/SystemCompanionBodies.tsx';
 import SystemAnchorages from './components/SystemAnchorages.tsx';
+import {
+  requestedUndockAddress,
+  undockedShipPose
+} from './game/anchorage/anchorageUndock.ts';
 import AnchorageApproachDriver from './components/AnchorageApproachDriver.tsx';
 import AnchorageApproachHud from './components/hud/AnchorageApproachHud.tsx';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
@@ -79,6 +83,7 @@ import {
   buildStarSystemManifest,
   createPlanetIdentity,
   parsePlanetWorldId,
+  planetWorldId,
   type PlanetDescriptor
 } from './game/starSystem.ts';
 import { getCurrentDayPhase, setDayPhaseOffset } from './game/worldClock.ts';
@@ -139,7 +144,8 @@ import { isPhysicalBoardingVehicleControlLocked } from './story/physicalBoarding
 import {
   commitSystemBodyTarget,
   commitSystemPlanetHandoff,
-  getSystemFlightSnapshot
+  getSystemFlightSnapshot,
+  resetSystemFlightForInterstellarArrival
 } from './state/systemFlight.ts';
 import {
   restoreShipFlightForWorld,
@@ -1108,6 +1114,10 @@ const App: React.FC = () => {
     params.set('anchorage', `${system.x},${system.y},${index}`);
     // No approach: the ship already flew it. Arriving goes straight to the lock.
     params.delete('approach');
+    // Recorded so the way out knows to come back here rather than to the sandbox's
+    // own approach scene. Without it, leaving the station strands the player in a
+    // development harness they never asked for.
+    params.set('from', 'game');
     window.location.assign(`${window.location.pathname}?${params.toString()}`);
   }, []);
 
@@ -1374,6 +1384,36 @@ const App: React.FC = () => {
       }
     };
   }, [currentWorld.coordinate, currentWorldIdentity]);
+
+  /*
+    ?undock=<x>,<y>,<i>: the player has just left a station.
+
+    Seeds the flight store with the ship sitting at that station's berth before
+    anything mounts, which is what ShipController's `restoringSameSystemFlight`
+    path reads to decide where to spawn. Nothing had to be persisted across the
+    navigation: the berth is derived from the station's address, and the ship was
+    clamped to the berth, so the pose is computable rather than remembered — which
+    means it cannot go stale and a hand-typed URL still arrives correctly.
+
+    Runs before the ?fly=1 branch below because both write flight state and this
+    one is the more specific claim.
+  */
+  useEffect(() => {
+    const undockedFrom = requestedUndockAddress();
+    if (!undockedFrom) return;
+    const system = undockedFrom.system;
+    setCurrentWorld(createCurrentWorld(system));
+    resetSystemFlightForInterstellarArrival({
+      system,
+      // Local space rather than surface: this is a ship in the open, and the
+      // spawn path refuses to restore a pose that claims to be on a planet.
+      locationMode: 'local_space',
+      activePlanetId: planetWorldId({ system, slot: 0 }),
+      pose: undockedShipPose(undockedFrom)
+    });
+    debugStartInSpace();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ?fly=1: drop straight into deep-space flight (once, on mount).
   useEffect(() => {

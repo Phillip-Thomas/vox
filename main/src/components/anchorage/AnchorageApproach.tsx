@@ -56,6 +56,14 @@ export interface ApproachSceneProps {
   onDock: () => void;
   /** True while something else owns the keyboard. */
   inputCaptured: boolean;
+  /**
+   * Where the ship starts, in system space.
+   *
+   * Omitted for a fresh arrival, which drops in off the beam. Supplied when the
+   * player has just undocked, because a ship that pushes back from a berth and
+   * reappears a kilometre and a half away has not left — it has teleported.
+   */
+  startAt?: readonly [number, number, number];
 }
 
 export function ApproachScene({
@@ -63,7 +71,8 @@ export function ApproachScene({
   body,
   readout,
   onDock,
-  inputCaptured
+  inputCaptured,
+  startAt
 }: ApproachSceneProps) {
   return (
     <>
@@ -75,6 +84,7 @@ export function ApproachScene({
         readout={readout}
         onDock={onDock}
         inputCaptured={inputCaptured}
+        startAt={startAt}
       />
     </>
   );
@@ -221,12 +231,14 @@ function ShipController({
   body,
   readout,
   onDock,
-  inputCaptured
+  inputCaptured,
+  startAt
 }: {
   body: AnchorageBody;
   readout: React.MutableRefObject<ApproachReadout | null>;
   onDock: () => void;
   inputCaptured: boolean;
+  startAt?: readonly [number, number, number];
 }): null {
   const { camera, gl } = useThree();
   const keys = useRef(new Set<string>());
@@ -250,11 +262,18 @@ function ShipController({
   // the player hunting for the destination has wasted its establishing shot, and one
   // that begins already lined up has skipped the manoeuvre entirely.
   useEffect(() => {
-    flight.current = createFlightState(arrivalStandoff(body, APPROACH_START_DISTANCE));
-    lookAt(euler.current, flight.current.position, body.systemPosition);
+    if (startAt) {
+      // Just undocked: sitting at the berth, nose still pointed at the station you
+      // came out of. Turning around to leave is the player's move to make.
+      flight.current = createFlightState([startAt[0], startAt[1], startAt[2]]);
+      lookAt(euler.current, flight.current.position, body.systemPosition);
+    } else {
+      flight.current = createFlightState(arrivalStandoff(body, APPROACH_START_DISTANCE));
+      lookAt(euler.current, flight.current.position, body.systemPosition);
+    }
     camera.quaternion.setFromEuler(euler.current);
     applyPose();
-  }, [applyPose, body, camera]);
+  }, [applyPose, body, camera, startAt]);
 
   useEffect(() => {
     const canvas = gl.domElement;

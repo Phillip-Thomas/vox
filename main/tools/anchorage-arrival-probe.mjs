@@ -7,7 +7,8 @@
  *  1. the approach reads at range and the corridor gates actually gate,
  *  2. the dock sequence plays in a browser and hands control back,
  *  3. props are solid at runtime — a hard push into a stall counter goes nowhere,
- *  4. a trader is standing at every stall you can trade at.
+ *  4. a trader is standing at every stall you can trade at,
+ *  5. and the way back out works: walk to the lock, undock, ship at the berth.
  *
  * Writes frames through the arrival so the choreography can be judged as images
  * rather than as timings.
@@ -167,6 +168,45 @@ check(
 await page.evaluate(() => window.__anchorageTeleportToVendor?.(2));
 await page.waitForTimeout(2_000);
 await page.screenshot({ path: resolve(OUT, 'trader-at-counter.png') });
+
+// ------------------------------------------------------------- the way out
+// Walk back to the airlock and leave. The round trip is the claim: where you park
+// is where you find the ship.
+await page.evaluate(() => window.__anchorageTeleport?.('apron', 0.02, 0.5));
+await page.waitForTimeout(2_500);
+const atLock = await page.evaluate(() => window.__anchorageState?.() ?? null);
+check('can walk back to the dock end of the apron', atLock?.cellId === 'apron', JSON.stringify(atLock));
+
+const lockPrompt = await page
+  .waitForSelector('[data-testid="anchorage-airlock-prompt"]', { timeout: 30_000 })
+  .then(() => true)
+  .catch(() => false);
+check('the airlock offers the way out', lockPrompt);
+await page.screenshot({ path: resolve(OUT, 'undock-00-at-lock.png') });
+
+await page.keyboard.press('KeyF');
+const undockOverlay = await page
+  .waitForSelector('[data-testid="anchorage-dock-overlay"]', { timeout: 30_000 })
+  .then(() => true)
+  .catch(() => false);
+check('requesting departure starts the undock sequence', undockOverlay);
+for (const [i, wait] of [1_200, 3_500, 4_000, 4_000].entries()) {
+  await page.screenshot({ path: resolve(OUT, `undock-0${i + 1}.png`) });
+  await page.waitForTimeout(wait);
+}
+
+const backOutside = await page
+  .waitForSelector('[data-testid="anchorage-approach-hud"]', { timeout: 120_000 })
+  .then(() => true)
+  .catch(() => false);
+check('undocking hands the ship back outside', backOutside);
+
+const parked = await page.evaluate(() => window.__anchorageApproach?.() ?? null);
+check('the ship is sitting at the berth it was clamped to',
+  parked !== null && parked.distance < 5,
+  parked ? `${parked.distance.toFixed(1)} from the berth, ${parked.phase}` : 'no readout');
+check('and is immediately cleared to dock again', parked?.canDock === true, parked?.advisory ?? '');
+await page.screenshot({ path: resolve(OUT, 'undock-05-back-at-berth.png') });
 
 if (problems.length > 0) {
   console.log(`\n${problems.length} runtime problem(s):`);

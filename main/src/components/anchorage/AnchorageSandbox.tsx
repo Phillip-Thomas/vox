@@ -14,6 +14,7 @@ import {
 import {
   advanceDock,
   beginDock,
+  beginUndock,
   createDockState,
   dockEyeAt,
   dockInputLocked,
@@ -151,6 +152,61 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
     setDocking(dockInputLocked(dock.current));
   }, []);
 
+  const [nearAirlock, setNearAirlock] = useState(false);
+  /*
+    The dolly a departure runs along.
+
+    Built at the moment the player asks to leave rather than fixed like the arrival
+    route, with `deck` set to wherever they happen to be standing. Departure runs
+    the same interpolation backwards, so this makes the walk back into the lock
+    start from the player's actual position instead of snapping them to the spot
+    they originally arrived on.
+  */
+  const [departRoute, setDepartRoute] = useState<DockRoute | null>(null);
+  /** Set when the player has just left, so the ship reappears where it was parked. */
+  const [undockedAt, setUndockedAt] = useState<readonly [number, number, number] | null>(null);
+
+  const leaveStation = useCallback(
+    (from: [number, number, number]) => {
+      setDepartRoute({ lock: dockRoute.lock, deck: from });
+      dock.current = beginUndock();
+      setDocking(true);
+      setNearAirlock(false);
+    },
+    [dockRoute]
+  );
+
+  /**
+   * The sequence finished. Where that leads depends on how the player got here.
+   *
+   * Arriving hands control to the walk controller and nothing else happens. A
+   * departure has to put them back in a ship — either the sandbox's own approach
+   * scene, or, when the shipped game handed off to this page, back to the game
+   * with the berth recorded so the ship spawns where it was parked.
+   */
+  const onSequenceComplete = useCallback(() => {
+    setDocking(false);
+    if (dock.current.direction !== 'depart') return;
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('from') === 'game') {
+      const { system, index } = descriptor.address;
+      const next = new URLSearchParams(params);
+      next.delete('anchorage');
+      next.delete('from');
+      next.set('undock', `${system.x},${system.y},${index}`);
+      next.set('fly', '1');
+      window.location.assign(`${window.location.pathname}?${next.toString()}`);
+      return;
+    }
+    // Standalone sandbox: hand the ship back without a reload, sitting at the
+    // berth it was clamped to.
+    setDepartRoute(null);
+    dock.current = createDockState();
+    setUndockedAt(body.berth);
+    setScene('approach');
+  }, [body, descriptor]);
+
   const nearVendor = vendors.find(entry => entry.id === nearVendorId) ?? null;
   const openVendor = vendors.find(entry => entry.id === openVendorId) ?? null;
 
@@ -197,6 +253,7 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
             readout={approach}
             onDock={enterStation}
             inputCaptured={false}
+            startAt={undockedAt ?? undefined}
           />
         ) : (
           <>
@@ -222,7 +279,10 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
               onOpenVendor={setOpenVendorId}
               inputCaptured={openVendorId !== null}
               dock={dock}
-              dockRoute={dockRoute}
+              dockRoute={departRoute ?? dockRoute}
+              airlock={dockRoute.lock}
+              onNearAirlock={setNearAirlock}
+              onLeave={leaveStation}
             />
           </>
         )}
@@ -234,7 +294,7 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
         */}
         <PostFX terrainSeed={descriptor.seed} />
       </Canvas>
-      {docking && <DockOverlay dock={dock} onArrived={() => setDocking(false)} />}
+      {docking && <DockOverlay dock={dock} onArrived={onSequenceComplete} />}
       {scene === 'approach' && !docking && <ApproachHud readout={approach} />}
       {anchorageHudVisible() && !openVendor && !docking && scene === 'interior' && (
         <>
@@ -243,6 +303,9 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
         </>
       )}
       {nearVendor && !openVendor && !docking && <InteractionPrompt vendor={nearVendor} />}
+      {nearAirlock && !openVendor && !docking && scene === 'interior' && (
+        <AirlockPrompt />
+      )}
       {openVendor && (
         <VendorPanel
           vendor={openVendor}
@@ -270,7 +333,10 @@ function WalkController({
   onOpenVendor,
   inputCaptured,
   dock,
-  dockRoute
+  dockRoute,
+  airlock,
+  onNearAirlock,
+  onLeave
 }: {
   descriptor: ReturnType<typeof buildAnchorageDescriptor>;
   spawn: [number, number, number];
@@ -285,6 +351,10 @@ function WalkController({
   /** The arrival, advanced here because this is the only place with a delta. */
   dock: React.MutableRefObject<DockState>;
   dockRoute: DockRoute;
+  /** Where the ship is docked. Standing near it offers the way out. */
+  airlock: [number, number, number];
+  onNearAirlock: (near: boolean) => void;
+  onLeave: (from: [number, number, number]) => void;
 }): null {
   const { camera, gl } = useThree();
   const graph = descriptor.graph;
@@ -304,6 +374,11 @@ function WalkController({
   vendorsRef.current = vendors;
   const capturedRef = useRef(inputCaptured);
   capturedRef.current = inputCaptured;
+  const nearAirlockRef = useRef(false);
+  const leaveRef = useRef(onLeave);
+  leaveRef.current = onLeave;
+  const airlockRef = useRef(airlock);
+  airlockRef.current = airlock;
 
   const applyEye = useCallback(() => {
     const eye = eyePosition(walk.current);
@@ -335,6 +410,17 @@ function WalkController({
       if (event.code === 'KeyF' && nearRef.current) {
         onOpenVendor(nearRef.current);
         keys.current.clear();
+        return;
+      }
+      // F opens a counter in the market and the airlock at the dock. They are four
+      // hundred metres apart, so there is nothing to disambiguate.
+      if (event.code === 'KeyF' && nearAirlockRef.current) {
+        keys.current.clear();
+        leaveRef.current([
+          walk.current.position[0],
+          walk.current.position[1],
+          walk.current.position[2]
+        ]);
       }
     };
     const onKeyUp = (event: KeyboardEvent) => keys.current.delete(event.code);
@@ -536,6 +622,19 @@ function WalkController({
       nearRef.current = nextNear;
       onNearVendor(nextNear);
     }
+
+    // Standing near where the ship is clamped on. Generous, because the way out of
+    // a place should not require finding a pixel.
+    const lock = airlockRef.current;
+    const toAirlock = Math.hypot(
+      walk.current.position[0] - lock[0],
+      walk.current.position[2] - lock[2]
+    );
+    const nextAirlock = walk.current.cellId === 'apron' && toAirlock <= AIRLOCK_REACH;
+    if (nextAirlock !== nearAirlockRef.current) {
+      nearAirlockRef.current = nextAirlock;
+      onNearAirlock(nextAirlock);
+    }
   });
 
   return null;
@@ -729,6 +828,7 @@ function DockOverlay({
   // Leaves part from the centre line. Half the viewport each, so aperture 1 clears
   // the frame exactly.
   const leaf = `${50 * (1 - readout.aperture)}vh`;
+  const departing = readout.direction === 'depart';
 
   return (
     <div style={dockLayer} data-testid="anchorage-dock-overlay">
@@ -737,15 +837,29 @@ function DockOverlay({
       <div style={{ ...dockLeaf, bottom: 0, height: leaf }} />
       <div style={{ ...dockPanel, opacity: readout.panelOpacity }}>
         <div style={{ color: WARM_INK, letterSpacing: '0.1em', marginBottom: 8 }}>
-          BERTH ASSIGNED · HOLD FOR CYCLE
+          {readout.title}
         </div>
-        <DockLine label="clamps" value={readout.clamp} detail={readout.clamp >= 1 ? 'engaged' : 'driving'} />
+        {/*
+          Same three gauges either way, because they are the same three mechanisms.
+          Only the words for their end states change, and they come from the
+          readout's direction rather than from a second overlay that would have to
+          be kept in step with this one.
+        */}
+        <DockLine
+          label="clamps"
+          value={readout.clamp}
+          detail={departing ? (readout.clamp <= 0 ? 'released' : 'holding') : (readout.clamp >= 1 ? 'engaged' : 'driving')}
+        />
         <DockLine
           label="lock pressure"
           value={readout.pressure}
           detail={`${readout.pressureKpa.toFixed(1)} / ${STATION_PRESSURE_KPA.toFixed(1)} kPa`}
         />
-        <DockLine label="hatch" value={readout.hatch} detail={readout.hatch >= 1 ? 'open' : 'cycling'} />
+        <DockLine
+          label="hatch"
+          value={readout.hatch}
+          detail={departing ? (readout.hatch <= 0 ? 'sealed' : 'cycling') : (readout.hatch >= 1 ? 'open' : 'cycling')}
+        />
         <div style={{ color: DIM_INK, marginTop: 10, fontSize: 11 }}>any key to skip</div>
       </div>
     </div>
@@ -811,6 +925,33 @@ const dockPanel: React.CSSProperties = {
   border: '1px solid rgba(228,236,231,0.16)',
   whiteSpace: 'nowrap'
 };
+
+/** How near the lock you must stand before the way out is offered. */
+const AIRLOCK_REACH = 9;
+
+/** The way out. Same idiom as the counter prompt, because it is the same verb. */
+function AirlockPrompt() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '58%',
+        transform: 'translateX(-50%)',
+        padding: '5px 11px',
+        font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
+        color: 'rgba(228,236,231,0.92)',
+        background: 'rgba(6,8,10,0.72)',
+        border: '1px solid rgba(228,236,231,0.16)',
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap'
+      }}
+      data-testid="anchorage-airlock-prompt"
+    >
+      [F] return to ship
+    </div>
+  );
+}
 
 /** The contextual prompt. One key, one verb, matching the shipped HUD idiom. */
 function InteractionPrompt({ vendor }: { vendor: Vendor }) {
