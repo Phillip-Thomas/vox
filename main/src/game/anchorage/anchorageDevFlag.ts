@@ -1,0 +1,78 @@
+import type { AnchorageAddress } from './anchorageTypes.ts';
+
+/**
+ * The anchorage is a development surface, not shipped content.
+ *
+ * `?anchorage=1` opens it; `?anchorage=<x>,<y>,<index>` opens a specific one so a
+ * seed can be reproduced from a URL. Nothing in the shipped build routes here, and
+ * the module that renders it is dynamically imported behind this flag so it never
+ * enters the demo bundle.
+ */
+
+const DEFAULT_ADDRESS: AnchorageAddress = { system: { x: -19, y: -17 }, index: 0 };
+
+const RAW = typeof window !== 'undefined'
+  ? new URLSearchParams(window.location.search).get('anchorage')
+  : null;
+
+export function isAnchorageSandbox(): boolean {
+  return RAW !== null && RAW !== '' && RAW !== '0';
+}
+
+/**
+ * `&hud=0` hides the diagnostic overlay so a capture shows only the scene. The
+ * refinement loop leans on this constantly — judging a look through a debug panel
+ * is how you end up shipping a debug panel.
+ */
+export function anchorageHudVisible(): boolean {
+  if (typeof window === 'undefined') return true;
+  return new URLSearchParams(window.location.search).get('hud') !== '0';
+}
+
+/**
+ * `&dock=0` drops you straight onto the deck.
+ *
+ * Arriving is the default because arriving is the experience, but a capture run
+ * and a twenty-second iteration loop both want the station, not the six seconds of
+ * ceremony in front of it.
+ */
+export function anchorageDockEnabled(): boolean {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).get('dock') !== '0';
+}
+
+/** `&t=<seconds>` pins the crowd clock so captures are byte-comparable run to run. */
+export function anchorageFixedTime(): number | null {
+  if (typeof window === 'undefined') return null;
+  const raw = new URLSearchParams(window.location.search).get('t');
+  if (raw === null) return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : null;
+}
+
+/**
+ * The address requested by the URL, or the default when the flag is bare.
+ * Returns null when the sandbox is off, so callers cannot accidentally build one.
+ */
+export function requestedAnchorageAddress(): AnchorageAddress | null {
+  if (!isAnchorageSandbox()) return null;
+  return parseAnchorageFlag(RAW);
+}
+
+/** Exported for tests: the flag grammar without touching `window`. */
+export function parseAnchorageFlag(raw: string | null): AnchorageAddress | null {
+  if (raw === null || raw === '' || raw === '0') return null;
+  if (raw === '1') return DEFAULT_ADDRESS;
+
+  const parts = raw.split(',').map(part => part.trim());
+  if (parts.length < 2 || parts.length > 3) return DEFAULT_ADDRESS;
+
+  const x = Number(parts[0]);
+  const y = Number(parts[1]);
+  const index = parts.length === 3 ? Number(parts[2]) : 0;
+  if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(index)) return DEFAULT_ADDRESS;
+
+  return { system: { x: Math.trunc(x), y: Math.trunc(y) }, index: Math.max(0, Math.trunc(index)) };
+}
+
+export { DEFAULT_ADDRESS as DEFAULT_ANCHORAGE_ADDRESS };
