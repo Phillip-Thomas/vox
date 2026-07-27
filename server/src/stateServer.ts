@@ -4,6 +4,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import type { ServerConfig } from './config.js';
 import type { TokenVerifier } from './auth.js';
 import { createDatabase, type Database } from './neon.js';
+import { handleNpcConverse, npcConversationEnabled } from './npcConverse.js';
 import {
   isClaimedSharedMutationType,
   sharedMutationClaimForCommand,
@@ -210,6 +211,18 @@ async function routeHttp(
         return;
       }
       sendJson(res, 200, rooms.summarize(room));
+      return;
+    }
+
+    if (req.method === 'POST' && url.pathname === '/v1/npc/converse') {
+      // Authenticated above with every other /v1 route — this is a model proxy,
+      // and an unauthenticated one is an open relay billed to us.
+      if (!npcConversationEnabled()) {
+        sendJson(res, 503, { ok: false, reason: 'disabled' });
+        return;
+      }
+      const result = await handleNpcConverse(await readJsonBody(req));
+      sendJson(res, result.ok ? 200 : 502, result);
       return;
     }
 

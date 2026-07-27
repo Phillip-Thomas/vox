@@ -21,6 +21,7 @@
   "dependencies": {
     "@neondatabase/serverless": "latest",
     "firebase-admin": "latest",
+    "openai": "^6.9.0",
     "ws": "latest"
   },
   "devDependencies": {
