@@ -35,7 +35,11 @@ import {
   type WalkState
 } from '../../game/anchorage/anchorageLocomotion.ts';
 import { validateAnchorageShell } from '../../game/anchorage/anchorageShell.ts';
-import { anchorageDockEnabled, anchorageHudVisible } from '../../game/anchorage/anchorageDevFlag.ts';
+import {
+  anchorageApproachEnabled,
+  anchorageDockEnabled,
+  anchorageHudVisible
+} from '../../game/anchorage/anchorageDevFlag.ts';
 import type { AnchorageAddress, CellId } from '../../game/anchorage/anchorageTypes.ts';
 import { AnchorageInterior, anchorageInteriorDiagnostics } from './AnchorageInterior.tsx';
 import { AnchorageCrowd, crowdSize } from './AnchorageCrowd.tsx';
@@ -52,6 +56,13 @@ import {
   type TraderState
 } from '../../game/anchorage/anchorageTrade.ts';
 import { AnchorageLighting } from './AnchorageLighting.tsx';
+import { ApproachScene } from './AnchorageApproach.tsx';
+import { anchorageBody } from '../../game/anchorage/anchorageBody.ts';
+import {
+  DOCK_SPEED_LIMIT,
+  SCAN_RANGE,
+  type ApproachReadout
+} from '../../game/anchorage/anchorageApproach.ts';
 import PostFX from '../effects/PostFX.tsx';
 
 /**
@@ -61,7 +72,24 @@ import PostFX from '../effects/PostFX.tsx';
  * shared scene graph. Isolation is the point: it answers "does the interior read,
  * does it hold frame rate, and is it worth walking around" without entangling any of
  * those questions with the shipped game.
+ *
+ * Two scenes live here, and only ever one at a time: the approach, where you fly a
+ * ship to a station a kilometre long, and the interior, where you walk around
+ * inside it. They are exclusive rather than nested because they cannot share a
+ * depth buffer — a walking near plane of eight centimetres and a hundred-kilometre
+ * far plane is a ratio no depth precision survives. Docking clearance is the hinge
+ * between them, and the dock sequence opens on a black frame, so the cut is hidden
+ * inside the choreography rather than papered over with a fade.
  */
+
+type SandboxScene = 'approach' | 'interior';
+
+/** Terminal ink, shared by every overlay in this file. Declared before the
+ *  style objects that read it — a module-level const in the temporal dead zone
+ *  is a runtime crash, not a lint warning. */
+const INK = 'rgba(228,236,231,0.92)';
+const DIM_INK = 'rgba(228,236,231,0.5)';
+const WARM_INK = '#ffb45a';
 
 const WALK_SPEED = 4.4;
 const SPRINT_SPEED = 11;
@@ -96,12 +124,32 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
     times a second for the six seconds of the arrival — a hitch during the one
     moment the station is trying to make an impression.
   */
+  const startInApproach = useMemo(() => anchorageApproachEnabled(), []);
+  const [scene, setScene] = useState<SandboxScene>(startInApproach ? 'approach' : 'interior');
+  const body = useMemo(() => anchorageBody(address, descriptor.graph), [address, descriptor]);
+  // Written every frame by the ship controller, read by the HUD's own loop. Never
+  // React state: a readout in state would re-render the scene tree at frame rate
+  // through the entire approach.
+  const approach = useRef<ApproachReadout | null>(null);
+
+  // Arriving with the choreography is the default; starting in the approach defers
+  // it until clearance is granted, because the sequence *is* the handoff.
   const initialDock = useMemo(
-    () => (anchorageDockEnabled() ? beginDock(createDockState()) : createDockState()),
-    []
+    () =>
+      anchorageDockEnabled() && !startInApproach
+        ? beginDock(createDockState())
+        : createDockState(),
+    [startInApproach]
   );
   const dock = useRef<DockState>(initialDock);
   const [docking, setDocking] = useState(() => dockInputLocked(initialDock));
+
+  /** Clearance granted: leave the ship outside and pick up inside the lock. */
+  const enterStation = useCallback(() => {
+    dock.current = anchorageDockEnabled() ? beginDock(createDockState()) : createDockState();
+    setScene('interior');
+    setDocking(dockInputLocked(dock.current));
+  }, []);
 
   const nearVendor = vendors.find(entry => entry.id === nearVendorId) ?? null;
   const openVendor = vendors.find(entry => entry.id === openVendorId) ?? null;
@@ -141,29 +189,43 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
         }}
       >
         <color attach="background" args={['#05070a']} />
-        {/*
-          FogExp2 to match the shipped atmosphere model. The bible requires that
-          light, fog and grade describe one atmosphere; linear fog with a hand-picked
-          near plane described a different one. Density is well below the surface
-          value (0.005) because an interior's longest sightline is ~250m, not a
-          horizon.
-        */}
-        <fogExp2 attach="fog" args={['#0a0f16', 0.0016]} />
-        <AnchorageLighting descriptor={descriptor} occupiedCellId={occupiedCellId} />
-        <AnchorageInterior descriptor={descriptor} occupiedCellId={occupiedCellId} />
-        <AnchorageCrowd descriptor={descriptor} />
-        <WalkController
-          descriptor={descriptor}
-          spawn={spawn}
-          props={props}
-          onCellChange={setOccupiedCellId}
-          vendors={vendors}
-          onNearVendor={setNearVendorId}
-          onOpenVendor={setOpenVendorId}
-          inputCaptured={openVendorId !== null}
-          dock={dock}
-          dockRoute={dockRoute}
-        />
+        <SceneDepthRange scene={scene} />
+        {scene === 'approach' ? (
+          <ApproachScene
+            descriptor={descriptor}
+            body={body}
+            readout={approach}
+            onDock={enterStation}
+            inputCaptured={false}
+          />
+        ) : (
+          <>
+            {/*
+              FogExp2 to match the shipped atmosphere model. The bible requires that
+              light, fog and grade describe one atmosphere; linear fog with a hand-picked
+              near plane described a different one. Density is well below the surface
+              value (0.005) because an interior's longest sightline is ~250m, not a
+              horizon. Vacuum gets none of it, which is why this lives inside the
+              interior branch rather than on the canvas.
+            */}
+            <fogExp2 attach="fog" args={['#0a0f16', 0.0016]} />
+            <AnchorageLighting descriptor={descriptor} occupiedCellId={occupiedCellId} />
+            <AnchorageInterior descriptor={descriptor} occupiedCellId={occupiedCellId} />
+            <AnchorageCrowd descriptor={descriptor} />
+            <WalkController
+              descriptor={descriptor}
+              spawn={spawn}
+              props={props}
+              onCellChange={setOccupiedCellId}
+              vendors={vendors}
+              onNearVendor={setNearVendorId}
+              onOpenVendor={setOpenVendorId}
+              inputCaptured={openVendorId !== null}
+              dock={dock}
+              dockRoute={dockRoute}
+            />
+          </>
+        )}
         {/*
           The shipped post chain, unmodified and in its canonical order. This is what
           the game's look actually is: colour grade, Sobel outline, N8AO contact
@@ -173,7 +235,8 @@ export default function AnchorageSandbox({ address }: { address: AnchorageAddres
         <PostFX terrainSeed={descriptor.seed} />
       </Canvas>
       {docking && <DockOverlay dock={dock} onArrived={() => setDocking(false)} />}
-      {anchorageHudVisible() && !openVendor && !docking && (
+      {scene === 'approach' && !docking && <ApproachHud readout={approach} />}
+      {anchorageHudVisible() && !openVendor && !docking && scene === 'interior' && (
         <>
           <SandboxHud descriptor={descriptor} problems={problems} population={population} />
           <Crosshair />
@@ -479,6 +542,153 @@ function WalkController({
 }
 
 /**
+ * Depth range, per scene.
+ *
+ * A walking near plane of eight centimetres and a hundred-kilometre far plane is a
+ * ratio no depth buffer survives — the whole station would z-fight against itself.
+ * The two scenes never coexist, so the camera simply retunes when it crosses over.
+ */
+function SceneDepthRange({ scene }: { scene: SandboxScene }): null {
+  const { camera } = useThree();
+  useEffect(() => {
+    const perspective = camera as THREE.PerspectiveCamera;
+    if (scene === 'approach') {
+      perspective.near = 1;
+      perspective.far = 140_000;
+    } else {
+      perspective.near = 0.08;
+      perspective.far = 4_000;
+    }
+    perspective.updateProjectionMatrix();
+  }, [camera, scene]);
+  return null;
+}
+
+/**
+ * The approach instrument panel.
+ *
+ * Reads the shared readout on its own animation frame rather than through React
+ * state, so a HUD that updates continuously does not re-render the scene.
+ *
+ * Everything on it is a gate the player can act on: range closes by flying, the
+ * bearing bar centres by turning, and the closing-speed number is the one that
+ * actually refuses clearance. An instrument showing a value nobody can change is
+ * decoration.
+ */
+function ApproachHud({ readout }: { readout: React.MutableRefObject<ApproachReadout | null> }) {
+  const [current, setCurrent] = useState<ApproachReadout | null>(null);
+
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      setCurrent(readout.current);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [readout]);
+
+  if (!current) return null;
+
+  const rangeFraction = Math.max(0, Math.min(1, 1 - current.distance / SCAN_RANGE));
+  // Off-axis maps to a bar that centres as you line up. Beyond the corridor the
+  // needle pins rather than running off the instrument.
+  const bearing = Math.max(-1, Math.min(1, current.offAxis / 0.9));
+  const hot = current.closingSpeed > DOCK_SPEED_LIMIT;
+
+  return (
+    <>
+      <div style={approachPanel} data-testid="anchorage-approach-hud">
+        <div style={{ color: current.canDock ? '#46ff8c' : WARM_INK, letterSpacing: '0.1em' }}>
+          {current.advisory.toUpperCase()}
+        </div>
+        <div style={{ height: 10 }} />
+        <ApproachLine label="range" value={`${Math.round(current.distance)}`} fill={rangeFraction} />
+        <ApproachLine
+          label="bearing"
+          value={current.insideCorridor ? 'on corridor' : `${(current.offAxis * 57.3).toFixed(0)}° off`}
+          fill={1 - Math.abs(bearing)}
+          warn={!current.insideCorridor}
+        />
+        <ApproachLine
+          label="closing"
+          value={`${current.closingSpeed.toFixed(0)} / ${DOCK_SPEED_LIMIT}`}
+          fill={Math.max(0, Math.min(1, 1 - current.closingSpeed / (DOCK_SPEED_LIMIT * 3)))}
+          warn={hot}
+        />
+        <div style={{ color: DIM_INK, marginTop: 10, fontSize: 11 }}>
+          WASD thrust · space/C up-down · shift boost · X hold station · mouse look
+        </div>
+      </div>
+      {current.canDock && (
+        <div style={clearancePrompt} data-testid="anchorage-dock-prompt">
+          [F] request docking clearance
+        </div>
+      )}
+      <Crosshair />
+    </>
+  );
+}
+
+function ApproachLine({
+  label,
+  value,
+  fill,
+  warn = false
+}: {
+  label: string;
+  value: string;
+  fill: number;
+  warn?: boolean;
+}) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 5 }}>
+      <span style={{ width: 66, color: DIM_INK }}>{label}</span>
+      <span style={{ width: 150, height: 4, background: 'rgba(228,236,231,0.14)' }}>
+        <span
+          style={{
+            display: 'block',
+            height: '100%',
+            width: `${Math.round(Math.max(0, Math.min(1, fill)) * 100)}%`,
+            background: warn ? '#ff5a3c' : WARM_INK
+          }}
+        />
+      </span>
+      <span style={{ color: warn ? '#ff5a3c' : INK, fontSize: 11 }}>{value}</span>
+    </div>
+  );
+}
+
+/* Bottom-left, not centred: a dev instrument must not sit on top of the thing it
+   is reporting on, and the station is dead centre for the whole approach. */
+const approachPanel: React.CSSProperties = {
+  position: 'absolute',
+  left: 16,
+  bottom: 16,
+  padding: '12px 16px',
+  font: '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace',
+  color: INK,
+  background: 'rgba(6,8,10,0.68)',
+  border: '1px solid rgba(228,236,231,0.14)',
+  pointerEvents: 'none',
+  whiteSpace: 'nowrap'
+};
+
+const clearancePrompt: React.CSSProperties = {
+  position: 'absolute',
+  left: '50%',
+  top: '58%',
+  transform: 'translateX(-50%)',
+  padding: '6px 13px',
+  font: '13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
+  color: '#46ff8c',
+  background: 'rgba(6,8,10,0.76)',
+  border: '1px solid rgba(70,255,140,0.34)',
+  pointerEvents: 'none',
+  whiteSpace: 'nowrap'
+};
+
+/**
  * The arrival, as the player sees it.
  *
  * Three layers over the live scene: a blackout that lifts as the lock lights, two
@@ -563,9 +773,6 @@ function DockLine({ label, value, detail }: { label: string; value: number; deta
   );
 }
 
-const INK = 'rgba(228,236,231,0.92)';
-const DIM_INK = 'rgba(228,236,231,0.5)';
-const WARM_INK = '#ffb45a';
 
 const dockLayer: React.CSSProperties = {
   position: 'absolute',

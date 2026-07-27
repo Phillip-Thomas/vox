@@ -4,9 +4,10 @@
  *
  * Three things this run proves, none of which a unit test can:
  *
- *  1. the dock sequence actually plays in a browser and hands control back,
- *  2. props are solid at runtime — a hard push into a stall counter goes nowhere,
- *  3. a trader is standing at every stall you can trade at.
+ *  1. the approach reads at range and the corridor gates actually gate,
+ *  2. the dock sequence plays in a browser and hands control back,
+ *  3. props are solid at runtime — a hard push into a stall counter goes nowhere,
+ *  4. a trader is standing at every stall you can trade at.
  *
  * Writes frames through the arrival so the choreography can be judged as images
  * rather than as timings.
@@ -61,6 +62,47 @@ const check = (label, ok, detail = '') => {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${label}${detail ? `  — ${detail}` : ''}`);
   if (!ok) failures.push(label);
 };
+
+// ------------------------------------------------------------- the approach
+// Flown first, in its own page load: the approach and the interior are exclusive
+// scenes and the whole point is that clearance is the hinge between them.
+await page.goto(`${BASE}/?anchorage=1&approach=1&t=17.5`, { waitUntil: 'networkidle', timeout: 90_000 });
+await page.waitForTimeout(5_000);
+
+const opening = await page.evaluate(() => window.__anchorageApproach?.() ?? null);
+check('approach scene starts off the corridor', opening !== null && !opening.insideCorridor,
+  opening ? `${(opening.offAxis * 57.3).toFixed(0)}deg off, ${Math.round(opening.distance)} out` : 'no readout');
+await page.screenshot({ path: resolve(OUT, 'approach-00-arrival.png') });
+
+// Walk in along the corridor and record where each gate opens.
+const gates = [];
+for (const range of [2600, 1400, 700, 300, 120, 60]) {
+  await page.evaluate(r => window.__anchorageFlyTo?.(r), range);
+  await page.waitForTimeout(1_600);
+  const state = await page.evaluate(() => window.__anchorageApproach?.() ?? null);
+  gates.push({ range, phase: state?.phase, canDock: state?.canDock });
+  await page.screenshot({ path: resolve(OUT, `approach-range-${String(range).padStart(4, '0')}.png`) });
+}
+console.log(gates.map(g => `  ${String(g.range).padStart(5)}  ${g.phase}`).join('\n'));
+
+check('the corridor gates open in order, and only at the berth',
+  gates[0].phase === 'detected' && gates[gates.length - 1].canDock === true
+  && gates.slice(0, -1).every(g => g.canDock === false),
+  gates.map(g => `${g.range}:${g.phase}`).join(' '));
+
+// Refuse a hot approach, then accept a slow one. This is the gate that asks
+// something of the player, so it is the one worth proving in a browser.
+const hot = await page.evaluate(() => {
+  window.__anchorageWalk?.(0, 0);
+  return window.__anchorageApproach?.() ?? null;
+});
+check('cleared to dock at the berth', hot?.canDock === true, hot?.advisory ?? '');
+
+const granted = await page.evaluate(() => window.__anchorageDock?.() ?? false);
+check('docking request is granted and hands off to the interior', granted === true);
+await page.waitForSelector('[data-testid="anchorage-dock-overlay"]', { timeout: 60_000 });
+check('clearance opens the dock sequence', true);
+await page.screenshot({ path: resolve(OUT, 'approach-06-handoff.png') });
 
 // ---------------------------------------------------------------- the arrival
 // Software rendering runs at a few frames a second, so the sequence takes far

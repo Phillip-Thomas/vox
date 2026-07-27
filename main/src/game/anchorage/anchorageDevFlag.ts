@@ -30,6 +30,19 @@ export function anchorageHudVisible(): boolean {
 }
 
 /**
+ * `&approach=1` starts you in a ship a few kilometres out instead of inside.
+ *
+ * Not the default, because every existing capture and probe drives the interior
+ * directly and a mode switch that silently relocates the camera would invalidate
+ * all of them. Opt in to fly the whole thing: approach, clearance, dock, walk out.
+ */
+export function anchorageApproachEnabled(): boolean {
+  if (typeof window === 'undefined') return false;
+  const raw = new URLSearchParams(window.location.search).get('approach');
+  return raw !== null && raw !== '' && raw !== '0';
+}
+
+/**
  * `&dock=0` drops you straight onto the deck.
  *
  * Arriving is the default because arriving is the experience, but a capture run
