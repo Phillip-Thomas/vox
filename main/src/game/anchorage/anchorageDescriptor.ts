@@ -1,6 +1,6 @@
-import { seededUnit } from '../../utils/worldCoordinates.ts';
 import type { Vec3Tuple } from '../starSystem.ts';
 import { createAnchorageIdentity } from './anchorageAddress.ts';
+import { anchorageBody } from './anchorageBody.ts';
 import type { DockRoute } from './anchorageDock.ts';
 import { anchorageBoundRadius, buildAnchorageGraph, validateAnchorageGraph } from './anchorageLayout.ts';
 import type { AnchorageAddress, AnchorageCell, AnchorageDescriptor } from './anchorageTypes.ts';
@@ -25,7 +25,10 @@ export function buildAnchorageDescriptor(address: AnchorageAddress): AnchorageDe
 
   return {
     ...identity,
-    systemPosition: systemPositionForAnchorage(identity.seed),
+    // Placement comes from the body descriptor, which is also what the exterior
+    // and the approach model read. Deriving it twice is how a station ends up
+    // rendered in one place and flown to in another.
+    systemPosition: anchorageBody(address, graph).systemPosition,
     boundRadius: anchorageBoundRadius(graph),
     graph
   };
@@ -76,19 +79,3 @@ export function cellSize(cell: AnchorageCell): Vec3Tuple {
   ];
 }
 
-/**
- * Anchorages sit well outside the planet shells so approach reads as deep space
- * rather than as orbit. The distance band is deliberately beyond
- * MAX_COMPANION_DISTANCE_FROM_PRIMARY so it never crowds a planet.
- */
-function systemPositionForAnchorage(seed: number): Vec3Tuple {
-  const azimuth = seededUnit(seed, 307) * Math.PI * 2;
-  const elevation = (seededUnit(seed, 311) - 0.5) * 0.5;
-  const radius = 6_200 + seededUnit(seed, 313) * 2_400;
-  const horizontal = Math.cos(elevation);
-  return [
-    Math.round(Math.cos(azimuth) * horizontal * radius),
-    Math.round(Math.sin(elevation) * radius),
-    Math.round(Math.sin(azimuth) * horizontal * radius)
-  ];
-}
