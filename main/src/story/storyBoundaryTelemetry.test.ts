@@ -12,7 +12,7 @@ function runtime(
   const base: StoryBoundaryRuntimeSnapshot = {
     story: { active: true, chapter: 'ch6', beat: 'ch6-dive', runId: 4 },
     app: { phase: 'playing', sceneReady: true },
-    world: { systemId: '-1,-1', activePlanetId: STORY_PRIMARY_WORLD_ID },
+    world: { systemId: '-1,-1', activePlanetId: STORY_PRIMARY_WORLD_ID , spaceStationTargetId: null},
     reality: { stage: 'alive' },
     control: { mode: 'fps', phase: 'surface' },
     shipRestoration: { repairStage: 'wrecked' },
@@ -70,7 +70,7 @@ describe('story boundary telemetry', () => {
 
   it('cannot echo a desired boundary when the actual world, camera, control, and Maw disagree', () => {
     const telemetry = deriveStoryBoundaryState(runtime({
-      world: { systemId: '-1,-1', activePlanetId: TIDEGARDEN_WORLD_ID },
+      world: { systemId: '-1,-1', activePlanetId: TIDEGARDEN_WORLD_ID , spaceStationTargetId: null},
       reality: { stage: 'material' },
       control: { mode: 'flight', phase: 'deep_space' },
       camera: {
@@ -118,7 +118,7 @@ describe('story boundary telemetry', () => {
   it('derives the final free-play handoff only from durable completion receipts', () => {
     const telemetry = deriveStoryBoundaryState(runtime({
       story: { active: false, chapter: 'complete', beat: 'done', runId: 7 },
-      world: { systemId: '-1,-1', activePlanetId: TIDEGARDEN_WORLD_ID },
+      world: { systemId: '-1,-1', activePlanetId: TIDEGARDEN_WORLD_ID , spaceStationTargetId: null},
       durable: { storyComplete: true, keelMemoryBanked: true, twoWorldHandoff: true }
     }));
 
@@ -156,5 +156,31 @@ describe('story boundary telemetry', () => {
       __paravoxiaBoundaryState?: unknown;
     }).__paravoxiaBoundaryState).toBe(telemetry);
     expect(telemetry.runtime.camera).toMatchObject({ perspective: true, fov: 75 });
+  });
+});
+
+describe('space station boundary claims', () => {
+  /*
+    A station is not a planet and never becomes the resident world. Without a
+    claim of its own, a chapter cannot say "the player is on final at a station"
+    at all — `active-planet` goes on naming the planet they left.
+  */
+  it('says nothing about stations when none is targeted', () => {
+    const refs = deriveStoryBoundaryState(runtime()).stateRefs;
+    expect(refs.some(ref => ref.startsWith('state:space-station/'))).toBe(false);
+  });
+
+  it('claims the station without disturbing the resident planet', () => {
+    const refs = deriveStoryBoundaryState(runtime({
+      world: {
+        systemId: '-1,-1',
+        activePlanetId: STORY_PRIMARY_WORLD_ID,
+        spaceStationTargetId: '-1,-1:a0'
+      }
+    })).stateRefs;
+    expect(refs).toContain('state:space-station/targeted');
+    expect(refs).toContain('state:space-station/target=-1,-1:a0');
+    // The planet the player left is still the world that is loaded.
+    expect(refs).toContain(`state:system-flight/active-planet=${STORY_PRIMARY_WORLD_ID}`);
   });
 });

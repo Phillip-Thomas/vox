@@ -43,6 +43,16 @@ export interface StoryBoundaryRuntimeSnapshot {
   readonly world: {
     readonly systemId: string;
     readonly activePlanetId: string | null;
+    /**
+     * The space station the ship is currently aimed at, if any.
+     *
+     * Separate from `activePlanetId` because a station is not a planet and never
+     * becomes the resident world — flying to one changes nothing about which
+     * terrain is loaded. Without its own claim, station approach is invisible to
+     * the registry gate: `active-planet` keeps naming the planet you left, so a
+     * chapter cannot say "the player is on final at a station" at all.
+     */
+    readonly spaceStationTargetId: string | null;
   };
   readonly reality: {
     readonly stage: VoxelRealityStage;
@@ -111,6 +121,10 @@ export function deriveStoryBoundaryState(
   if (runtime.world.activePlanetId === TIDEGARDEN_WORLD_ID) refs.add('state:world/tidegarden');
   if (runtime.world.activePlanetId) {
     refs.add(`state:system-flight/active-planet=${runtime.world.activePlanetId}`);
+  }
+  if (runtime.world.spaceStationTargetId) {
+    refs.add(`state:space-station/target=${runtime.world.spaceStationTargetId}`);
+    refs.add('state:space-station/targeted');
   }
 
   refs.add(`state:reality/${runtime.reality.stage}`);
@@ -195,7 +209,12 @@ export function readStoryBoundaryRuntime(
       runId: story.runId
     }),
     app: Object.freeze({ phase: app.phase, sceneReady: app.sceneReady }),
-    world: Object.freeze({ systemId: system.systemId, activePlanetId: system.activePlanetId }),
+    world: Object.freeze({
+      systemId: system.systemId,
+      activePlanetId: system.activePlanetId,
+      spaceStationTargetId:
+        system.target?.kind === 'space_station' ? system.target.worldId : null
+    }),
     reality: Object.freeze({ stage: reality.stage }),
     control: Object.freeze({ mode: flight.controlMode, phase: flight.phase }),
     shipRestoration: Object.freeze({ repairStage: getShipRepairStage() }),

@@ -34,6 +34,10 @@ const SUPPORTED_STATE_REF_PATTERNS = Object.freeze([
   /^state:space-flight\/phase=(?:surface|launch|deep_space|approach|descent)$/,
   /^state:space-flight\/phase!=deep_space$/,
   /^state:system-flight\/active-planet=\S+$/,
+  // A space station is not a planet and never becomes the resident world, so it
+  // needs its own claim: `active-planet` keeps naming the planet you left.
+  /^state:space-station\/targeted$/,
+  /^state:space-station\/target=\S+$/,
   /^state:ship-restoration\/(?:wrecked|bench_online|frame_restored|hull_sealed|lift_online|flight_ready)$/,
   /^state:camera\/(?:embodied|free-look)$/,
   /^state:maw\/repaired$/,
