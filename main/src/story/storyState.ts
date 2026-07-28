@@ -568,8 +568,24 @@ function reconcileCompletedBoardingReceipts(entry: StoryEntryPoint): void {
  * the `?story=` deep links; the menu Story button drives the normal path via
  * beginStory(). Does nothing on a plain sandbox boot.
  */
+/**
+ * `?keep=1` — boot into whatever state is already in storage.
+ *
+ * Every other dev entry deliberately starts pristine, which is right for a beat
+ * jump and exactly wrong after restoring a snapshot: the reset would wipe the
+ * moment the snapshot exists to preserve. This flag is set by the snapshot
+ * restore path and by nothing else.
+ */
+function keepExistingStateRequested(): boolean {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).get('keep') === '1';
+}
+
 export function initStoryFromSave(): void {
   const param = parseStoryParam();
+  // A restored snapshot already IS the state to boot into — terrain, poses,
+  // milestones and all. Leave every one of them alone.
+  if (keepExistingStateRequested()) return;
   if (!param) return;
   // Dev flows (`?story=` jumps, movie runs) start from PRISTINE terrain AND a
   // pristine spawn — debug sessions used to accumulate each other's

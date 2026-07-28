@@ -1,7 +1,16 @@
-import React, { useMemo, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { theme } from '../ui/theme.ts';
 import { chapterForBeat, STORY_BEAT_ORDER, useStoryState, type StoryBeat } from './storyState.ts';
 import { setLocalPersistenceMode } from '../game/systems/persistence.ts';
+import {
+  captureSnapshot,
+  deleteSnapshot,
+  listSnapshots,
+  normaliseSnapshotName,
+  restoreSnapshotByName,
+  writeSnapshot,
+  type SnapshotSummary
+} from '../game/systems/storySnapshot.ts';
 import { HUD_EDGE, hudIconButtonStyle, hudNoSelect } from '../components/hud/hudChrome.ts';
 import {
   getActiveMobileHudDisclosure,
@@ -63,6 +72,24 @@ const BEAT_LABELS: Record<StoryBeat, string> = {
   done: 'complete  [two-world free play]'
 };
 
+/**
+ * Take the world back to a saved slot.
+ *
+ * Restore then reload, and `keep=1` on the way back so the boot path does not
+ * immediately wipe what was just restored — `?story=<beat>` normally calls
+ * `resetDebugStoryRun()`, which is exactly the behaviour a snapshot exists to
+ * escape. Persistence is suppressed first for the same reason the wipe path does
+ * it: the beforeunload autosave would otherwise write the live state back over
+ * the restored one during this very navigation.
+ */
+function restoreTo(name: string): void {
+  setLocalPersistenceMode('multiplayer');
+  if (!restoreSnapshotByName(localStorage, name)) return;
+  const params = new URLSearchParams(window.location.search);
+  params.set('keep', '1');
+  window.location.search = params.toString();
+}
+
 export function storyDebugEnabled(): boolean {
   if (typeof window === 'undefined') return false;
   const p = new URLSearchParams(window.location.search);
@@ -93,6 +120,16 @@ function jumpTo(beat: StoryBeat | 'menu' | 'reset' | 'movie'): void {
 
 const StoryDebugPanel: React.FC = () => {
   const story = useStoryState();
+  // Re-read on every open rather than subscribing: slots change only when this
+  // panel changes them, and a storage listener for that would be ceremony.
+  const [slots, setSlots] = useState<SnapshotSummary[]>([]);
+  const refreshSlots = useCallback(() => {
+    try {
+      setSlots(listSnapshots(localStorage));
+    } catch {
+      setSlots([]);
+    }
+  }, []);
   // Governed disclosure state: on mobile this is mutually exclusive with the
   // Systems / inventory / suit disclosures (one owner open at a time); on
   // desktop it simply behaves as an independent toggle.
@@ -102,6 +139,9 @@ const StoryDebugPanel: React.FC = () => {
     () => null
   );
   const open = activeDisclosure === 'story-debug';
+  useEffect(() => {
+    if (open) refreshSlots();
+  }, [open, refreshSlots]);
   const chapters = useMemo(() => {
     const groups = new Map<string, StoryBeat[]>();
     for (const beat of STORY_BEAT_ORDER) {
@@ -180,6 +220,61 @@ const StoryDebugPanel: React.FC = () => {
           <div style={{ padding: '9px 11px 6px', color: theme.color.textFaint, fontSize: 9, letterSpacing: '0.18em' }}>
             BEAT TELEPORTER · {story.beat ?? story.chapter}
           </div>
+
+          {/*
+            Snapshots. A beat jump reconstructs the *prerequisites* of a beat and
+            never a point partway through one, so iterating on the last twenty
+            seconds of a beat used to mean replaying the whole chain. Reach the
+            moment once, keep it, and it is a reload away from then on.
+          */}
+          <div style={{ padding: '6px 11px 2px', fontSize: 9, color: theme.color.textFaint, letterSpacing: '0.2em' }}>
+            SNAPSHOTS
+          </div>
+          <button
+            type="button"
+            style={{ ...rowStyle(false), color: theme.color.good }}
+            onClick={() => {
+              const raw = window.prompt('snapshot name', story.beat ?? 'slot');
+              if (raw === null) return;
+              const name = normaliseSnapshotName(raw);
+              writeSnapshot(
+                localStorage,
+                captureSnapshot(localStorage, name, { now: Date.now(), beat: story.beat ?? null })
+              );
+              refreshSlots();
+            }}
+          >
+            ⭓ keep this moment
+          </button>
+          {slots.length === 0 && (
+            <div style={{ padding: '4px 11px 6px', fontSize: 9, color: theme.color.textFaint }}>
+              none yet
+            </div>
+          )}
+          {slots.map(slot => (
+            <div key={slot.name} style={{ display: 'flex', alignItems: 'stretch' }}>
+              <button
+                type="button"
+                style={{ ...rowStyle(false), flex: 1 }}
+                onClick={() => restoreTo(slot.name)}
+                title={`${slot.keyCount} keys · ${Math.round(slot.bytes / 1024)}kB`}
+              >
+                ⤺ {slot.name}
+                {slot.beat ? ` · ${slot.beat}` : ''}
+              </button>
+              <button
+                type="button"
+                style={{ ...rowStyle(false), width: 30, textAlign: 'center', color: theme.color.danger }}
+                onClick={() => {
+                  deleteSnapshot(localStorage, slot.name);
+                  refreshSlots();
+                }}
+                title={`delete ${slot.name}`}
+              >
+                ×
+              </button>
+            </div>
+          ))}
           {chapters.map(([chapter, beats]) => (
             <React.Fragment key={chapter}>
               <div style={{ padding: '6px 11px 2px', fontSize: 9, color: theme.color.textFaint, letterSpacing: '0.2em' }}>
