@@ -45,10 +45,14 @@ export function anchorageApproachEnabled(): boolean {
 /**
  * `?stations=force` guarantees the current system has an anchorage.
  *
- * Roughly two systems in three have none, and the system the game starts in is one
- * of them, so without this "fly out and look at the station" begins with a search
- * for a system that has one. The station it forces is the same seeded station that
- * system would have had if the roll had gone the other way.
+ * Roughly two systems in three have none, so without this, exploring for a station
+ * begins with a search for a system that has one. The station it forces is the same
+ * seeded station that system would have had if the roll had gone the other way.
+ *
+ * Note for anyone reasoning about where a station is: the **story** system at
+ * (-1,-1) does have one, at 6,976 from the primary, so story-mode flights need no
+ * flag. `?fly=1` on its own drops into an arbitrary non-story system, which is why
+ * it usually looks like there is nothing out there.
  */
 export function forcedAnchorageCount(): number {
   if (typeof window === 'undefined') return 0;

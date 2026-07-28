@@ -34,7 +34,15 @@ export interface SystemAnchoragesProps {
   currentCoordinate: SystemCoordinate;
   /** The system seed the manifest was built from; anchorage population keys off it. */
   systemSeed: number;
-  /** Off by default in the story system unless the route explicitly allows it. */
+  /**
+   * Render stations at all. Defaults to on, and App gates it behind the same
+   * `systemBodies` flag that governs companion planets.
+   *
+   * This previously claimed to default off in the story system. It never did —
+   * there was no story check anywhere — and the story system at (-1,-1) does in
+   * fact have an anchorage, at 6,976 from the primary. Left as a plain switch
+   * rather than growing the fiction the comment invented.
+   */
   enabled?: boolean;
 }
 
