@@ -2,6 +2,20 @@
 
 Owner direction: 2026-07-12
 
+**OWNER GATE LIFT — 2026-07-28:** the owner has lifted the post-arrival story
+gate. Story work beyond `ch9-hearth` is authorized to be designed, built, and
+registered, including the space-station chapter direction produced by the
+2026-07-27 story council. The demo's own release surface is unchanged — it still
+stops at `ch4-arrival`, and publishing remains a separate decision — but the
+Creative-Triad and registry gates are now the only thing standing between a new
+chapter and the runtime, rather than an owner lock on top of them.
+
+Owner direction recorded with it, and binding on sequencing:
+
+- **Do not rush to the station.** Making the existing story enjoyable comes
+  first; the need to leave must emerge from play, not from a new content hook.
+- **"Anchorage" is retired as a name.** The location is the **space station**.
+
 **OWNER LANE OVERRIDE — 2026-07-13:** this document remains the release gate for
 the existing public demo, but it no longer freezes separately contracted
 post-arrival implementation. The owner has authorized staged construction of

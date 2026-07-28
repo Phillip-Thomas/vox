@@ -9,13 +9,13 @@ import BenchmarkProbe, { BenchmarkSample } from './components/BenchmarkProbe.tsx
 import PostFX from './components/effects/PostFX.tsx';
 import GalaxyImpostors from './components/GalaxyImpostors.tsx';
 import SystemCompanionBodies from './components/SystemCompanionBodies.tsx';
-import SystemAnchorages from './components/SystemAnchorages.tsx';
+import SystemSpaceStations from './components/SystemSpaceStations.tsx';
 import {
   requestedUndockAddress,
   undockedShipPose
-} from './game/anchorage/anchorageUndock.ts';
-import AnchorageApproachDriver from './components/AnchorageApproachDriver.tsx';
-import AnchorageApproachHud from './components/hud/AnchorageApproachHud.tsx';
+} from './game/spaceStation/spaceStationUndock.ts';
+import SpaceStationApproachDriver from './components/SpaceStationApproachDriver.tsx';
+import SpaceStationApproachHud from './components/hud/SpaceStationApproachHud.tsx';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
 import SystemTravelDriver from './components/SystemTravelDriver.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
@@ -1108,10 +1108,10 @@ const App: React.FC = () => {
    * hatch. That is the next piece of integration, and it is worth doing properly
    * rather than doing badly now.
    */
-  const enterAnchorage = useCallback((body: { address: { system: { x: number; y: number }; index: number } }) => {
+  const enterSpaceStation = useCallback((body: { address: { system: { x: number; y: number }; index: number } }) => {
     const { system, index } = body.address;
     const params = new URLSearchParams(window.location.search);
-    params.set('anchorage', `${system.x},${system.y},${index}`);
+    params.set('spacestation', `${system.x},${system.y},${index}`);
     // No approach: the ship already flew it. Arriving goes straight to the lock.
     params.delete('approach');
     // Recorded so the way out knows to come back here rather than to the sandbox's
@@ -1582,14 +1582,14 @@ const App: React.FC = () => {
         */}
         {systemBodiesEnabled && (
           <>
-            <SystemAnchorages
+            <SystemSpaceStations
               currentCoordinate={currentWorld.coordinate}
               systemSeed={currentSystemManifest.systemSeed}
             />
-            <AnchorageApproachDriver
+            <SpaceStationApproachDriver
               currentCoordinate={currentWorld.coordinate}
               systemSeed={currentSystemManifest.systemSeed}
-              onDock={enterAnchorage}
+              onDock={enterSpaceStation}
             />
           </>
         )}
@@ -1696,7 +1696,7 @@ const App: React.FC = () => {
           <CinematicHudVeil>
             {flight.controlMode === 'fps' && <Crosshair />}
             <TargetReticle />
-            {flight.controlMode === 'flight' && <AnchorageApproachHud />}
+            {flight.controlMode === 'flight' && <SpaceStationApproachHud />}
             {flight.controlMode === 'fps' && <MiningProgress />}
             {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
             {flight.controlMode === 'fps' && <BuildIndicator />}

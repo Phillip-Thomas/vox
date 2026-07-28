@@ -9,10 +9,10 @@ import {
   type SystemCoordinate
 } from '../game/starSystem.ts';
 import {
-  anchorageWorldId,
-  normalizeAnchorageAddress
-} from '../game/anchorage/anchorageAddress.ts';
-import type { AnchorageAddress } from '../game/anchorage/anchorageTypes.ts';
+  spaceStationWorldId,
+  normalizeSpaceStationAddress
+} from '../game/spaceStation/spaceStationAddress.ts';
+import type { SpaceStationAddress } from '../game/spaceStation/spaceStationTypes.ts';
 import { coordinateKey, normalizeCoordinate, sameSystemCoordinate } from '../utils/worldCoordinates.ts';
 
 export type SystemLocationMode = 'surface' | 'atmosphere' | 'local_space' | 'system_cruise';
@@ -35,15 +35,15 @@ export type SystemFlightTarget =
       /**
        * A station in this system.
        *
-       * Deliberately its own kind rather than a fourth planet slot. An anchorage
+       * Deliberately its own kind rather than a fourth planet slot. An spaceStation
        * has no terrain, no surface residency and no planet identity; borrowing the
        * planet grammar would make every consumer of `system_body` — terrain
        * preparation, surface handoff, the atmosphere envelope — start receiving a
        * body it cannot generate. Every existing reader tests `kind ===
        * 'system_body'` positively, so they all correctly ignore this one.
        */
-      readonly kind: 'anchorage';
-      readonly address: AnchorageAddress;
+      readonly kind: 'space_station';
+      readonly address: SpaceStationAddress;
       readonly worldId: string;
     }
   | {
@@ -258,19 +258,19 @@ export function commitSystemBodyTarget(address: PlanetAddress): number {
  * Same shape and same epoch discipline as a planet target, so preparation started
  * against a stale epoch is discarded identically. What it does *not* do is claim
  * the pose-writer lease or touch `activePlanetId` — flying to a station changes
- * nothing about which world the player is resident on, and an anchorage that
+ * nothing about which world the player is resident on, and an spaceStation that
  * quietly evicted the active planet would strand terrain that is still loaded.
  */
-export function commitAnchorageTarget(address: AnchorageAddress): number {
-  const normalized = normalizeAnchorageAddress(address);
+export function commitSpaceStationTarget(address: SpaceStationAddress): number {
+  const normalized = normalizeSpaceStationAddress(address);
   if (coordinateKey(normalized.system) !== snapshot.systemId) {
-    throw new Error('Anchorage target must belong to the current star system.');
+    throw new Error('SpaceStation target must belong to the current star system.');
   }
   const activationEpoch = snapshot.activationEpoch + 1;
   const target = freezeTarget({
-    kind: 'anchorage',
+    kind: 'space_station',
     address: normalized,
-    worldId: anchorageWorldId(normalized)
+    worldId: spaceStationWorldId(normalized)
   });
   publishBoundary({ ...snapshot, target, activationEpoch });
   return activationEpoch;
@@ -413,9 +413,9 @@ function freezeTarget(value: SystemFlightTarget): SystemFlightTarget {
     const address = Object.freeze({ system, slot: value.address.slot }) as PlanetAddress;
     return Object.freeze({ ...value, address });
   }
-  if (value.kind === 'anchorage') {
+  if (value.kind === 'space_station') {
     const system = Object.freeze({ ...value.address.system });
-    const address = Object.freeze({ system, index: value.address.index }) as AnchorageAddress;
+    const address = Object.freeze({ system, index: value.address.index }) as SpaceStationAddress;
     return Object.freeze({ ...value, address });
   }
   return Object.freeze({

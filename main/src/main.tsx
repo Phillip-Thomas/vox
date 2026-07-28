@@ -1,29 +1,29 @@
 import { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { requestedAnchorageAddress } from './game/anchorage/anchorageDevFlag.ts';
+import { requestedSpaceStationAddress } from './game/spaceStation/spaceStationDevFlag.ts';
 import './index.css';
 
 /**
- * `?anchorage=...` swaps the whole app for the anchorage development sandbox.
+ * `?spacestation=...` swaps the whole app for the spaceStation development sandbox.
  *
  * The sandbox is lazily imported so it becomes its own chunk and never enters the
  * shipped bundle; `App` stays a static import so the normal load path is byte-for-byte
  * unchanged. Only the flag parser — a few lines with no dependencies — is always present.
  */
-const AnchorageSandbox = lazy(() => import('./components/anchorage/AnchorageSandbox.tsx'));
+const SpaceStationSandbox = lazy(() => import('./components/spaceStation/SpaceStationSandbox.tsx'));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const anchorageAddress = requestedAnchorageAddress();
+const spaceStationAddress = requestedSpaceStationAddress();
 
 root.render(
-  anchorageAddress
+  spaceStationAddress
     ? (
       <Suspense fallback={null}>
-        <AnchorageSandbox address={anchorageAddress} />
+        <SpaceStationSandbox address={spaceStationAddress} />
       </Suspense>
     )
     : <App />

@@ -209,7 +209,7 @@ function buildSnapshot(): Record<string, unknown> {
           velocity: [...systemFlight.pose.velocity],
           quaternion: [...systemFlight.pose.quaternion]
         },
-        // Deep-copied per kind. An anchorage target carries an address like a
+        // Deep-copied per kind. An spaceStation target carries an address like a
         // planet does but is not one, so the old "planet or else a coordinate"
         // split would have handed the probe an undefined coordinate.
         target: systemFlight.target
