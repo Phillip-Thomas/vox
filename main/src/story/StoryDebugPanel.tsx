@@ -90,6 +90,20 @@ function restoreTo(name: string): void {
   window.location.search = params.toString();
 }
 
+/**
+ * Backquote toggles the panel.
+ *
+ * A corner chip is unreachable on desktop, in both states. In play the pointer is
+ * locked, so a click never lands on it; paused, `PauseMenu` is a full-screen
+ * overlay at `theme.z.menu` (60) and the panel sat at `theme.z.hud + 7` (27), so
+ * the menu covered it. The panel was effectively mouse-only on a device that
+ * never has a free mouse.
+ *
+ * Backquote because it is the conventional debug key and collides with nothing:
+ * movement is WASD, interact is F, brake is X, HUD is H, pause is Escape.
+ */
+const TOGGLE_KEY = 'Backquote';
+
 export function storyDebugEnabled(): boolean {
   if (typeof window === 'undefined') return false;
   const p = new URLSearchParams(window.location.search);
@@ -142,6 +156,22 @@ const StoryDebugPanel: React.FC = () => {
   useEffect(() => {
     if (open) refreshSlots();
   }, [open, refreshSlots]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.code !== TOGGLE_KEY) return;
+      const el = document.activeElement;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
+      event.preventDefault();
+      // Opening has to hand the mouse back, or the panel appears and every
+      // button under it is still unclickable — which is the bug this replaces,
+      // moved one step later.
+      if (!open) document.exitPointerLock?.();
+      toggleMobileHudDisclosure('story-debug');
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
   const chapters = useMemo(() => {
     const groups = new Map<string, StoryBeat[]>();
     for (const beat of STORY_BEAT_ORDER) {
@@ -179,7 +209,10 @@ const StoryDebugPanel: React.FC = () => {
         position: 'fixed',
         top: `calc(${HUD_EDGE + 52}px + env(safe-area-inset-top, 0px))`,
         right: `calc(${HUD_EDGE}px + env(safe-area-inset-right, 0px))`,
-        zIndex: theme.z.hud + 7,
+        // Above PauseMenu (theme.z.menu) and the downed/complete panels that sit
+        // just over it, below the loading veil. A debug tool that a pause overlay
+        // can bury is a debug tool you cannot reach at the moment you want it.
+        zIndex: theme.z.menu + 10,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end',
@@ -219,6 +252,9 @@ const StoryDebugPanel: React.FC = () => {
         >
           <div style={{ padding: '9px 11px 6px', color: theme.color.textFaint, fontSize: 9, letterSpacing: '0.18em' }}>
             BEAT TELEPORTER · {story.beat ?? story.chapter}
+          </div>
+          <div style={{ padding: '0 11px 6px', color: theme.color.textFaint, fontSize: 9 }}>
+            ` toggles this panel
           </div>
 
           {/*
