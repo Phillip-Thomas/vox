@@ -1,0 +1,714 @@
+{
+  "mode": "landfall",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:02:12.137Z",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "defectRef": "CIN-10 (cap.seam-continuity partially delivered)",
+  "seams": [
+    {
+      "id": "ch8-landfall -> ch9 entry",
+      "url": "http://localhost:5176/?story=ch8-landfall&movie=1&profile=LOW",
+      "originStoryClock": 851.1000001430511,
+      "contractWindow": "landfall entry +0.0 to +20.0 s at 1000 ms, then ch9 entry +0.0 to +2.0 s at 500 ms",
+      "ch9Observed": {
+        "beat": "ch9-settle",
+        "storyClock": 21043.10000014305
+      },
+      "note": null,
+      "frameDir": "evidence/verification-final/seams/ch8-landfall-to-ch9",
+      "frames": [
+        {
+          "file": "seam_t1p93s_ch8-landfall.png",
+          "targetOffsetSeconds": 0,
+          "measuredOffsetSeconds": 1.932,
+          "shutterSpanMs": 1214.2,
+          "hostShutterMs": 1214,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t3p15s_ch8-landfall.png",
+          "targetOffsetSeconds": 1,
+          "measuredOffsetSeconds": 3.149,
+          "shutterSpanMs": 228.4,
+          "hostShutterMs": 226,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t3p50s_ch8-landfall.png",
+          "targetOffsetSeconds": 2,
+          "measuredOffsetSeconds": 3.496,
+          "shutterSpanMs": 308.1,
+          "hostShutterMs": 307,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t3p81s_ch8-landfall.png",
+          "targetOffsetSeconds": 3,
+          "measuredOffsetSeconds": 3.808,
+          "shutterSpanMs": 102.4,
+          "hostShutterMs": 102,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t4p00s_ch8-landfall.png",
+          "targetOffsetSeconds": 4,
+          "measuredOffsetSeconds": 3.998,
+          "shutterSpanMs": 94.9,
+          "hostShutterMs": 94,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t5p02s_ch8-landfall.png",
+          "targetOffsetSeconds": 5,
+          "measuredOffsetSeconds": 5.017,
+          "shutterSpanMs": 80.9,
+          "hostShutterMs": 80,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t5p99s_ch8-landfall.png",
+          "targetOffsetSeconds": 6,
+          "measuredOffsetSeconds": 5.995,
+          "shutterSpanMs": 95.4,
+          "hostShutterMs": 95,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t7p01s_ch8-landfall.png",
+          "targetOffsetSeconds": 7,
+          "measuredOffsetSeconds": 7.011,
+          "shutterSpanMs": 198.1,
+          "hostShutterMs": 198,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(a world does not begin when you see it. it begins when it holds your weight.)",
+          "domCaption": "(a world does not",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t8p00s_ch8-landfall.png",
+          "targetOffsetSeconds": 8,
+          "measuredOffsetSeconds": 7.997,
+          "shutterSpanMs": 199.9,
+          "hostShutterMs": 200,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(a world does not begin when you see it. it begins when it holds your weight.)",
+          "domCaption": "(a world does not begin when you see it. it beg",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t8p99s_ch8-landfall.png",
+          "targetOffsetSeconds": 9,
+          "measuredOffsetSeconds": 8.994,
+          "shutterSpanMs": 204,
+          "hostShutterMs": 204,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-landfall",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(a world does not begin when you see it. it begins when it holds your weight.)",
+          "domCaption": "(a world does not begin when you see it. it begins when it holds your weight",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD · FIRST FOOTFALL | STAND ON THE SIBLING WORLD. | LET IT HOLD YOUR WEIGHT.",
+          "av": {
+            "beat": "ch8-landfall",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t9p99s_ch9-settle.png",
+          "targetOffsetSeconds": 10,
+          "measuredOffsetSeconds": 9.995,
+          "shutterSpanMs": 182.8,
+          "hostShutterMs": 182,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": "(abundance",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t11p00s_ch9-settle.png",
+          "targetOffsetSeconds": 11,
+          "measuredOffsetSeconds": 10.997,
+          "shutterSpanMs": 164.7,
+          "hostShutterMs": 164,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": "(abundance is not permission. it is a que",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t12p02s_ch9-settle.png",
+          "targetOffsetSeconds": 12,
+          "measuredOffsetSeconds": 12.022,
+          "shutterSpanMs": 210.1,
+          "hostShutterMs": 209,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": "(abundance is not permission. it is a question with many answers.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t13p00s_ch9-settle.png",
+          "targetOffsetSeconds": 13,
+          "measuredOffsetSeconds": 12.997,
+          "shutterSpanMs": 183.4,
+          "hostShutterMs": 183,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": "(abundance is not permission. it is a question with many answers.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t14p00s_ch9-settle.png",
+          "targetOffsetSeconds": 14,
+          "measuredOffsetSeconds": 13.998,
+          "shutterSpanMs": 167.6,
+          "hostShutterMs": 167,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": "(abundance is not permission. it is a question with many answers.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.landfall.handback",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.01-too-much-signal"
+            ]
+          }
+        },
+        {
+          "file": "seam_t15p00s_ch9-settle.png",
+          "targetOffsetSeconds": 15,
+          "measuredOffsetSeconds": 14.998,
+          "shutterSpanMs": 219.2,
+          "hostShutterMs": 219,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(abundance is not permission. it is a question with many answers.)",
+          "domCaption": null,
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.scanner-overload",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.02-see-one-relation"
+            ]
+          }
+        },
+        {
+          "file": "seam_t16p00s_ch9-settle.png",
+          "targetOffsetSeconds": 16,
+          "measuredOffsetSeconds": 15.999,
+          "shutterSpanMs": 207,
+          "hostShutterMs": 206,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "seam_t17p01s_ch9-settle.png",
+          "targetOffsetSeconds": 17,
+          "measuredOffsetSeconds": 17.012,
+          "shutterSpanMs": 172.1,
+          "hostShutterMs": 171,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the wate",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "seam_t18p00s_ch9-settle.png",
+          "targetOffsetSeconds": 18,
+          "measuredOffsetSeconds": 17.995,
+          "shutterSpanMs": 184.1,
+          "hostShutterMs": 184,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "seam_t19p00s_ch9-settle.png",
+          "targetOffsetSeconds": 19,
+          "measuredOffsetSeconds": 18.996,
+          "shutterSpanMs": 180.2,
+          "hostShutterMs": 180,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "seam_t19p99s_ch9-settle.png",
+          "targetOffsetSeconds": 20,
+          "measuredOffsetSeconds": 19.993,
+          "shutterSpanMs": 190.2,
+          "hostShutterMs": 190,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        }
+      ],
+      "ch9Frames": [
+        {
+          "file": "ch9entry_t0p00s_ch9-settle.png",
+          "targetOffsetSeconds": 0,
+          "measuredOffsetSeconds": 0.002,
+          "shutterSpanMs": 167.6,
+          "hostShutterMs": 167,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "ch9entry_t0p50s_ch9-settle.png",
+          "targetOffsetSeconds": 0.5,
+          "measuredOffsetSeconds": 0.499,
+          "shutterSpanMs": 191.4,
+          "hostShutterMs": 191,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "ch9entry_t1p01s_ch9-settle.png",
+          "targetOffsetSeconds": 1,
+          "measuredOffsetSeconds": 1.006,
+          "shutterSpanMs": 212.4,
+          "hostShutterMs": 212,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "ch9entry_t1p50s_ch9-settle.png",
+          "targetOffsetSeconds": 1.5,
+          "measuredOffsetSeconds": 1.498,
+          "shutterSpanMs": 170.5,
+          "hostShutterMs": 170,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        },
+        {
+          "file": "ch9entry_t2p00s_ch9-settle.png",
+          "targetOffsetSeconds": 2,
+          "measuredOffsetSeconds": 2,
+          "shutterSpanMs": 167.5,
+          "hostShutterMs": 167,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch9-settle",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "domCaption": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+          "av": {
+            "beat": "ch9-settle",
+            "anchorId": "anc.settle.relationship-attended",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "occlusion",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.settle.03-three-kinds-of-neighbor"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

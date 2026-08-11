@@ -1,0 +1,825 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "sceneId": "distance-between-fires",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "capturedAt": "2026-08-10T00:00:00Z",
+  "contextRef": "main/src/story/ux/README.md",
+  "capturedBy": "story-verifier (mechanical); read-only. No runtime source was modified.",
+  "evidenceRefs": [
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/baseline-trace.json",
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence-hires/hires-trace.json",
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence-hires/av-state-trace.json"
+  ],
+  "checks": {
+    "story:ux:check": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "pass",
+      "files": 6,
+      "tests": 54,
+      "ranAt": "2026-08-10 (baseline, pre-mutation)"
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "84851ca01ab09bae0210eaf8ff898e04d5f42a997067237d9115feb79dd3f477"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "ab1d968f5929ec1c3ab7e56a207afe15ab6d6e221855e75d8273b6e3649e4a1a"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "e162310b61b059a8a93b00c5db9646b0a2b1a958d3e67cadc59b20e8f392d71b"
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.tsx",
+      "sha256": "e4db40a7b0252ef6a84652541aafbdbf38241ebb8e4d0a3c5cd5c5efd5918999"
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "sha256": "2824b82b7af7acb95326916ec88cf212f2f2a76c1fe63c17b1a6c628bcc2efac"
+    },
+    {
+      "path": "main/src/story/wreckReconstruction.ts",
+      "sha256": "f9b79e9378f8cd7fd852a847b64313fe8495e838dc950cb68c78b777fcdd2807"
+    },
+    {
+      "path": "main/src/story/storyObjectiveGuidance.ts",
+      "sha256": "37272cf5ca274d64017fbac747ba5f5eaface17b47e43bcf15a929290c5590eb"
+    },
+    {
+      "path": "main/src/story/flightGuidanceDwell.model.ts",
+      "sha256": "b7733b0c34164ce908417576bb5917b5aca4592b64ae3b5839156802dfb8b435",
+      "note": "CH8_FLIGHT_GUIDANCE_DWELL_SECONDS = 1.75"
+    },
+    {
+      "path": "main/src/story/reconstructionCalibration.ts",
+      "sha256": "dbb3edb4977e877974714113e15564c99d0badb3949f0740c7afacfbc2178d4f"
+    },
+    {
+      "path": "main/src/story/reconstructionEmbodiment.ts",
+      "sha256": "0f24c05cc502c4e110216e88c4e8475e597fc6953ebefd6a55df344ae37d6261"
+    },
+    {
+      "path": "main/src/story/physicalBoarding.ts",
+      "sha256": "efe066e7e1c0048f2e177877d8663a4e6fb1d08df70c628036579cb5e9ab96e6"
+    },
+    {
+      "path": "main/src/story/signedSceneAvRuntime.ts",
+      "sha256": "a843a84c9363d98711fa80b54ceb0f4a325783b38ba72a5dc5e07b412bd6e0d5"
+    },
+    {
+      "path": "main/src/story/generatedSceneAvRuntime.json",
+      "sha256": "6a17608a1bf77cbad984f19cd1c3aadf534e617d5aabc47a129c3b7e10cdf68f"
+    },
+    {
+      "path": "main/src/story/vehicleSceneAvAnchors.ts",
+      "sha256": "53072355efb43a0600887949cda71672c169e788e03fc30c4b484fa1a4228ddc"
+    },
+    {
+      "path": "main/src/story/emergentScoreDirector.ts",
+      "sha256": "1b82158c1329c3f59469cc136d096785d4fd59d7ec4a25d12e7a5daeb23664e0"
+    },
+    {
+      "path": "main/src/game/systems/shipRestoration.ts",
+      "sha256": "91768857ae553719bb26dc3174c9bfc585e8457d0175740f2a808214deb24390"
+    },
+    {
+      "path": "main/src/story/storyState.ts",
+      "sha256": "29d64b8c01b85594d472439746207c1c7d430631719a16b89cba05d7f9bb07c7"
+    },
+    {
+      "path": "main/src/story/StoryCaptions.tsx",
+      "sha256": "5cf9988e30644562016f403b9c66b84e567472aac9b52b18966a3a6000494578"
+    },
+    {
+      "path": "main/src/story/AuditBand.tsx",
+      "sha256": "2f67365a39411f014076d09136c91744eb6ec1c67ce847913c358821fbfd8f15"
+    },
+    {
+      "path": "main/chapter-journey-contract.json",
+      "sha256": "96a456b461993878e99af0e1a91c4be4073c345e6cf5ed65a7005ffa6722a1ea"
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackEmissionsPerEntry": 1,
+    "feedbackCue": "emitStoryUxFeedbackCue({type:'objective-enter'}) -> playSfx('terminalAdvance')",
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ],
+    "publishGate": "activateGuidedStoryObjective returns false and changes NOTHING when objective.id is unchanged, even if markerLabel/workOrder changed",
+    "markerMatchingNote": "observeGuidedStoryMarker compares markerLabel === objective.markerLabel, so the world marker must reproduce the published label byte for byte."
+  },
+  "textChannelContract": {
+    "sourceRef": "main/src/story/storyText.ts",
+    "channels": [
+      "workorder",
+      "violation",
+      "caption",
+      "system",
+      "audit"
+    ],
+    "captionSlot": "SINGLE slot. showCaption(text, ttlMs=5200) overwrites state.caption immediately; there is no queue.",
+    "auditSlot": "SINGLE slot. showAuditLine(text, header?, ttlMs=6500) overwrites state.audit immediately; there is no queue.",
+    "systemSlot": "SINGLE slot. showSystemLine(text, ttlMs=4000).",
+    "workOrderSlot": "setWorkOrder(lines) replaces the standing block wholesale.",
+    "renderers": {
+      "caption": "main/src/story/StoryCaptions.tsx \u2014 fixed bottom-centre, aria-live=polite, data-story-caption, per-character typewriter reveal in the renderer's own rAF",
+      "audit": "main/src/story/AuditBand.tsx \u2014 fixed top 13.5%, aria-live=polite, optional header line above the body line",
+      "workorder": "routed to the guidance HUD card in the emergent era (objectiveDirector.setWorkOrder) and to the regulation feed pre-A2"
+    },
+    "noSchedulerNote": "Neither storyText.ts nor emergentStoryDirector.ts contains any line queue, sequencer, or delayed-emission facility. Consecutive showAuditLine calls in one frame display only the last one."
+  },
+  "ch7ReconstructLifecycle": {
+    "beat": "ch7-reconstruct",
+    "guidanceSource": "main/src/story/wreckReconstruction.ts getWreckReconstructionGuidance()",
+    "objectiveIdPrefix": "reconstruct: (emergentStoryDirector wraps guidance.id as `reconstruct:${guidance.id}`)",
+    "entry": {
+      "site": "emergentStoryDirector.ts:301-310 enterEmergentStoryBeat case 'ch7-reconstruct'",
+      "activatesObjective": "reconstruct:diagnose",
+      "caption": "(repair is not return.)",
+      "workOrderSetDirectly": false
+    },
+    "tick": {
+      "site": "emergentStoryDirector.ts:559-595 tickReconstruction()",
+      "readsPerFrame": [
+        "getShipRepairStage()",
+        "getReconstructionCalibrationSnapshot()",
+        "hasWreckDiagnosisReceipt()",
+        "hasReconstructionCalibrationReceipt()"
+      ],
+      "latchesInScope": [
+        "calibration-complete"
+      ],
+      "perStageCaptionOrAuditLine": "NONE. tickReconstruction emits exactly one caption in the whole beat.",
+      "auditBandUsage": "NONE anywhere in ch7 or ch8 (auditText observed null in every sample of every scenario)"
+    },
+    "steps": [
+      {
+        "order": 0,
+        "stage": "wrecked (pre-diagnosis)",
+        "objectiveId": "reconstruct:diagnose",
+        "markerLabel": "WRECK SCAR \u00b7 TRACE RELATIONSHIPS",
+        "workOrder": [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ],
+        "requiresMarker": true,
+        "observedHealth": "missing-marker for the first ~3.0 s after beat entry, then ready",
+        "emittedCopy": null
+      },
+      {
+        "order": 1,
+        "stage": "wrecked (salvage not yet claimed)",
+        "objectiveId": "reconstruct:repair:bench_online",
+        "markerLabel": "WRECK BENCH \u00b7 RECOVER WRECK SALVAGE",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ],
+        "requiresMarker": true,
+        "emittedCopy": null,
+        "observedDefect": "This objective ID also covers the NEXT action. After salvage is claimed the guidance recomputes to markerLabel 'WRECK BENCH \u00b7 INSTALL KEEL WORKBENCH' / '[F] INSTALL KEEL WORKBENCH.' but keeps id 'repair:bench_online', so activateGuidedStoryObjective's id-equality guard suppresses the republish and the HUD keeps showing RECOVER WRECK SALVAGE. 'INSTALL KEEL WORKBENCH' never appeared in any trace. If the salvage did not cover the bench cost the guidance falls to 'craft:bench_online' (a different ID) and the HUD does update, so the stale label lands exactly on the common path where the install is affordable immediately."
+      },
+      {
+        "order": 2,
+        "stage": "bench_online -> frame_restored",
+        "objectiveId": "reconstruct:repair:frame_restored",
+        "markerLabel": "WRECK BENCH \u00b7 RESTORE STRUT FRAME",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ],
+        "craftVariant": {
+          "objectiveId": "reconstruct:craft:frame_restored",
+          "markerLabel": "WRECK BENCH \u00b7 CRAFT RESTORE STRUT FRAME",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT RESTORE STRUT FRAME."
+          ]
+        },
+        "signedAnchor": "anc.reconstruct.frame-restored",
+        "emittedCopy": null
+      },
+      {
+        "order": 3,
+        "stage": "frame_restored -> hull_sealed",
+        "objectiveId": "reconstruct:repair:hull_sealed",
+        "markerLabel": "WRECK BENCH \u00b7 SEAL SCARRED HULL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ],
+        "signedAnchor": "anc.reconstruct.hull-sealed",
+        "emittedCopy": null
+      },
+      {
+        "order": 4,
+        "stage": "hull_sealed -> lift_online",
+        "objectiveId": "reconstruct:repair:lift_online",
+        "markerLabel": "WRECK BENCH \u00b7 INSTALL LIFT CELL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ],
+        "craftVariant": {
+          "objectiveId": "reconstruct:craft:lift_online",
+          "markerLabel": "WRECK BENCH \u00b7 CRAFT LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ]
+        },
+        "signedAnchor": "anc.reconstruct.lift-online",
+        "capabilityGain": "commitStoryJetInstalled() \u2014 the suit hover capability",
+        "emittedCopy": null
+      },
+      {
+        "order": 5,
+        "stage": "lift_online -> flight_ready",
+        "objectiveId": "reconstruct:repair:flight_ready",
+        "markerLabel": "WRECK BENCH \u00b7 CALIBRATE FLIGHT CONTROLS",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ],
+        "craftVariant": {
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH \u00b7 CRAFT LOGIC WAFER",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ],
+          "observed": true
+        },
+        "signedAnchor": "anc.reconstruct.route-online",
+        "sideEffect": "commitTidegardenRouteOnline()",
+        "emittedCopy": null
+      },
+      {
+        "order": 6,
+        "stage": "flight_ready, calibration running",
+        "objectiveId": "reconstruct:calibrating",
+        "markerLabel": "KESTREL \u00b7 CALIBRATING",
+        "workOrder": [
+          "FLIGHT CALIBRATION IN PROGRESS."
+        ],
+        "requiresMarker": false,
+        "durationSeconds": 8,
+        "durationSource": "main/src/story/reconstructionCalibration.ts RECONSTRUCTION_CALIBRATION_SECONDS = 8 (pauses when unfocused/paused)",
+        "observedDuration": "7.88 s -> 15.71 s in the hi-res trace",
+        "emittedCopy": null,
+        "workOrderActionability": "NO input or verb; the only standing line is a status sentence."
+      },
+      {
+        "order": 7,
+        "stage": "flight_ready, calibration receipt held",
+        "objectiveId": "reconstruct:ready",
+        "markerLabel": "WRECK \u00b7 FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "signedAnchor": "anc.reconstruct.calibration",
+        "emittedCopy": "(the scar remains. now it can carry you.)",
+        "workOrderActionability": "NO input or verb; displayed for ~0.65 s before the beat advances."
+      }
+    ],
+    "exit": {
+      "predicate": "hasWreckDiagnosisReceipt && repairStage === 'flight_ready' && hasReconstructionCalibrationReceipt, then a 0.65 s hold",
+      "latchId": "calibration-complete",
+      "emissionSite": "main/src/story/emergentStoryDirector.ts:588-591",
+      "shippedString": "(the scar remains. now it can carry you.)",
+      "parenthetical": true,
+      "ttlMs": 5200,
+      "milestone": "STORY_MILESTONES.ch7Reconstructed",
+      "next": "ch7-board",
+      "observedVisibleFor": "~0.8 s (typewriter reached '(the scar remains' before the beat changed and ch7-board's entry caption replaced it)"
+    }
+  },
+  "ch8LaunchLifecycle": {
+    "beat": "ch8-launch",
+    "guidanceSource": "main/src/story/storyObjectiveGuidance.ts launchObjective(Ch8LaunchObjectiveState)",
+    "stateDerivation": "emergentStoryDirector.syncEmergentObjectiveGuidance from getSpaceFlightSnapshot(), dwelled through advanceFlightGuidanceDwell (1.75 s hysteresis; the first sample after beat entry latches immediately)",
+    "entry": {
+      "site": "emergentStoryDirector.ts:315-317 enterEmergentStoryBeat case 'ch8-launch'",
+      "setWorkOrder": [
+        "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+      ],
+      "caption": null,
+      "auditLine": null,
+      "observedDefect": "This work order is never rendered. enterEmergentStoryBeat() calls syncEmergentObjectiveGuidance(beat) immediately after the switch, which activates the launch objective and calls setWorkOrder(objective.workOrder) in the same synchronous call, replacing the block before React paints. Every trace shows 'BRING THE KESTREL ONLINE. / HOLD [SPACE] TO IGNITE AND LIFT.' at t=0."
+    },
+    "tick": {
+      "site": "emergentStoryDirector.ts:627-640 tickLaunch()",
+      "predicate": "flight.controlMode === 'flight' && flight.phase === 'deep_space' -> emit ship_launched, markMilestone(ch8Launched), advanceToBeat('ch8-crossing')",
+      "captions": "NONE. ch8-launch emits zero captions, zero audit lines and zero system lines in the shipped build."
+    },
+    "variants": [
+      {
+        "variantLetter": "A",
+        "state": "surface-on-foot",
+        "objectiveId": "ch8:launch:reboard",
+        "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "requiresMarker": true,
+        "reachable": "recovery only (player exits the cockpit after the beat opens)",
+        "observed": false,
+        "emittedCopy": null
+      },
+      {
+        "variantLetter": "B",
+        "state": "surface-flight",
+        "objectiveId": "ch8:launch:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ],
+        "requiresMarker": false,
+        "reachable": "yes \u2014 this is the normal entry state from ch7-board",
+        "observed": true,
+        "observedWindow": "t=0 to 6.78 s (standalone deep link) / 18.24 to 21.43 s (continuous chain)",
+        "emittedCopy": null
+      },
+      {
+        "variantLetter": "C",
+        "state": "launching",
+        "objectiveId": "ch8:launch:climb",
+        "markerLabel": "ATMOSPHERIC EXIT \u00b7 CLIMB",
+        "workOrder": [
+          "KEEP THE KESTREL ASCENDING.",
+          "HOLD COURSE THROUGH THE ATMOSPHERE."
+        ],
+        "requiresMarker": false,
+        "reachable": "yes, but only after the raw state has held 1.75 s",
+        "observed": "once, for 0.2 s in the continuous chain; NOT observed at all in the standalone ch8-launch deep link (the ascent finished before the dwell elapsed)",
+        "emittedCopy": null
+      },
+      {
+        "variantLetter": "D",
+        "state": "deep-space",
+        "objectiveId": "ch8:launch:orbital-handoff",
+        "markerLabel": "DEEP SPACE \u00b7 HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "reachable": "NO \u2014 unreachable in shipped play",
+        "observed": false,
+        "unreachabilityProof": "Publishing 'deep-space' requires advanceFlightGuidanceDwell to see the raw state for 1.75 continuous seconds, but tickLaunch() advances the beat to ch8-crossing on the FIRST tick where phase === 'deep_space', and enterEmergentStoryBeat then calls clearGuidedStoryObjective() + resetFlightGuidanceDwell(). Never observed in any trace."
+      }
+    ],
+    "signedAnchors": [
+      {
+        "id": "anc.launch.ignition",
+        "trigger": "semantic event 'ship_launched' \u2014 activateLaunchIgnitionFromCreatedSequence() from ShipController when the launch sequence is created; ALSO the emergentStoryEvent 'ship_launched' emitted at the end of tickLaunch()",
+        "shot": "cin.launch.01-engine-finds-weight",
+        "shippedCopy": null,
+        "observed": true
+      },
+      {
+        "id": "anc.launch.liftoff",
+        "trigger": "semantic event 'ev.launch.legal-liftoff' \u2014 ShipController.tsx:742 when hasLaunchPhysicallyDeparted(launch.from, position, launch.to)",
+        "shot": "cin.launch.02-world-below",
+        "shippedCopy": null,
+        "observed": true
+      },
+      {
+        "id": "anc.launch.atmosphere-exit",
+        "trigger": "semantic event 'ev.launch.origin-atmosphere-exited' \u2014 VehicleSceneAvDriver subscribeAtmosphereExit, fired synchronously by spaceFlight.leaveAtmosphere() IMMEDIATELY AFTER it has already set phase='deep_space'",
+        "shot": "cin.launch.03-boundary-without-warp (and it is also the start anchor of the ch8-crossing shot cin.crossing.01-room-to-look-back)",
+        "shippedCopy": null,
+        "observed": true,
+        "timingNote": "This anchor fires in the same synchronous call that makes tickLaunch()'s advance predicate true. In both traces the anchor appears in activationHistoryAnchorIds only in the first sample where __storyBeat is already 'ch8-crossing'. Any ch8-launch-scoped latch reacting to it has at most one director tick."
+      }
+    ],
+    "exit": {
+      "milestone": "STORY_MILESTONES.ch8Launched",
+      "next": "ch8-crossing",
+      "emittedCopy": null
+    }
+  },
+  "currentCaptionInventory": {
+    "scope": "every emergent caption / audit line / system line that ch7 and ch8 currently emit, verbatim",
+    "authoritativeSource": "main/src/story/emergentStoryDirector.ts (the only emitter for these beats; storyDirector.ts's musings are gated to ch3-thirst / ch3-forage / ch4-vigil only)",
+    "ch7": [
+      {
+        "beat": "ch7-reconstruct",
+        "trigger": "beat entry (enterEmergentStoryBeat)",
+        "channel": "caption",
+        "text": "(repair is not return.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:309",
+        "ttlMs": 5200
+      },
+      {
+        "beat": "ch7-reconstruct",
+        "trigger": "once('calibration-complete') \u2014 diagnosis receipt + repairStage flight_ready + calibration receipt",
+        "channel": "caption",
+        "text": "(the scar remains. now it can carry you.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:590",
+        "ttlMs": 5200,
+        "ownerDecision": "owner-decision-2026-08-10-ch7-exit-line approves changing this to 'the scar remains. now it can carry me.'"
+      },
+      {
+        "beat": "ch7-board",
+        "trigger": "beat entry",
+        "channel": "caption",
+        "text": "(the wreck is waiting for an owner.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:313",
+        "ttlMs": 5200,
+        "scopeNote": "ch7-board is NOT in this run's lockedBeats."
+      }
+    ],
+    "ch8": [
+      {
+        "beat": "ch8-launch",
+        "trigger": "beat entry",
+        "channel": "workorder",
+        "text": "IGNITE. LIFT. LEAVE THE ATMOSPHERE.",
+        "parenthetical": false,
+        "site": "main/src/story/emergentStoryDirector.ts:316",
+        "renderedInPractice": false
+      },
+      {
+        "beat": "ch8-launch",
+        "trigger": "n/a",
+        "channel": "caption",
+        "text": null,
+        "note": "ch8-launch emits NO caption, NO audit line and NO system line at any point."
+      },
+      {
+        "beat": "ch8-crossing",
+        "trigger": "beat entry",
+        "channel": "caption",
+        "text": "(there is another world here. it was always here.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:320",
+        "ttlMs": 5200,
+        "scopeNote": "out of this run's locked scope"
+      },
+      {
+        "beat": "ch8-crossing",
+        "trigger": "beat entry",
+        "channel": "workorder",
+        "text": "FIND THE SIBLING WORLD. / HOLD COURSE INTO ITS APPROACH ENVELOPE.",
+        "parenthetical": false,
+        "site": "main/src/story/emergentStoryDirector.ts:319",
+        "renderedInPractice": false,
+        "note": "same immediate objective-driven replacement as ch8-launch"
+      },
+      {
+        "beat": "ch8-landfall",
+        "trigger": "beat entry",
+        "channel": "workorder",
+        "text": "LAND ON DRY, LEVEL GROUND. / EXIT THE KESTREL.",
+        "parenthetical": false,
+        "site": "main/src/story/emergentStoryDirector.ts:323",
+        "renderedInPractice": false
+      },
+      {
+        "beat": "ch8-landfall",
+        "trigger": "once('first-footfall') \u2014 activePlanetId Tidegarden, phase surface, controlMode fps",
+        "channel": "caption",
+        "text": "(a world does not begin when you see it. it begins when it holds your weight.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:695",
+        "ttlMs": 5200,
+        "scopeNote": "out of this run's locked scope"
+      }
+    ],
+    "adjacentForContinuity": [
+      {
+        "beat": "ch6-dive",
+        "trigger": "once('dive-banked') \u2014 hasBankedKestrelKeelMemory",
+        "channel": "caption",
+        "text": "(returned with breath. returned with a way to leave.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:552",
+        "role": "the line immediately preceding ch7-reconstruct entry"
+      },
+      {
+        "beat": "ch9-settle",
+        "trigger": "beat entry",
+        "channel": "caption",
+        "text": "(abundance is not permission. it is a question with many answers.)",
+        "parenthetical": true,
+        "site": "main/src/story/emergentStoryDirector.ts:327",
+        "role": "the line immediately following the ch8 chain"
+      }
+    ],
+    "conditionalNonEmergentCaptions": [
+      {
+        "source": "main/src/story/senseDiscovery.ts:40,44",
+        "texts": [
+          "so that is thirst. how strange, to need.",
+          "hunger. the body burns something to keep being a body."
+        ],
+        "parenthetical": false,
+        "condition": "fires in ANY post-a3 beat, including ch7/ch8, if the senseWater / senseFood milestone is somehow still unset. seedForBeat() marks both for any jump at or beyond ch3-forage / ch3-signal, so they are not expected in a normal ch7/ch8 run.",
+        "observed": false
+      }
+    ],
+    "auditBandUsageInCh7Ch8": "NONE. The last shipped audit line before ch7 is 'FAULT: W-7744 / MODEL REFUSED BY OBSERVATION' (header AUDIT NETWORK) at a4-exhale, emergentStoryDirector.ts:499. No showAuditLine call exists for any ch5-ch9 beat.",
+    "headerTokensInUse": [
+      "W-7744",
+      "AUDIT NETWORK"
+    ],
+    "wreckRelayHeaderToken": "not in use anywhere in src at 03e975a"
+  },
+  "semanticFeedbackSeams": [
+    {
+      "seam": "objective-enter",
+      "site": "main/src/story/ux/feedbackCues.ts emitStoryUxFeedbackCue",
+      "sound": "playSfx('terminalAdvance')",
+      "onceGuarantee": "one emission per objective ID change, enforced by objectiveDirector's id-equality guard",
+      "advancesProgression": false
+    },
+    {
+      "seam": "signed AV anchor activation",
+      "site": "main/src/story/signedSceneAvRuntime.ts activateAnchor",
+      "scoreIntensity": "suppressed for ch7-reconstruct and ch7-board (scoreIntensityFor returns null by beat name); active for ch8-launch",
+      "scoreHit": "only anc.maw.repair-committed produces a 'bloom' hit"
+    },
+    {
+      "seam": "chapter 7 gameplay-derived score mood",
+      "site": "main/src/story/emergentScoreDirector.ts syncChapter7ReconstructionScore + setStoryScoreMoodOverride",
+      "variants": [
+        "diagnosis",
+        "bench",
+        "frame",
+        "hull",
+        "lift",
+        "hover",
+        "route",
+        "calibration"
+      ],
+      "note": "protected path for this run \u2014 ruling-only score lane"
+    }
+  ],
+  "enterChangeClearResetBehavior": {
+    "beatEntry": "enterEmergentStoryBeat: runtime.latches.clear(), runtime.elapsed = 0, resetFlightGuidanceDwell(), clearGuidedStoryObjective(), resetAuditRoute(), then the per-beat switch, then syncEmergentObjectiveGuidance(), then enterSignedSceneAvBeat().",
+    "objectiveChange": "only when the derived objective ID changes; marker label / work-order changes under an unchanged ID are silently dropped.",
+    "objectiveClear": "clearGuidedStoryObjective() at every beat boundary. HUD text is beat-owned afterwards.",
+    "signedAvReset": "reset triggers beat-exit, deep-link, replay, pause, quit, focus-loss, completion, sandbox; ch7/ch8 shots reference reset-camera, reset-grade, reset-lighting, reset-effects, reset-score. lastResetReason observed as 'beat-exit' after each ch7/ch8 boundary.",
+    "deepLink": "?story= plus a beat id resets the debug story run, seeds prerequisites (storyState.seedForBeat), clears both worlds' voxel edits and poses, sets reality stage, then publishes the beat. ?story=ch8-launch additionally runs bootstrapOriginLaunchDebug().",
+    "snapshotRestore": "?keep=1 (set only by the snapshot restore path, main/src/game/systems/storySnapshot.ts) skips the pristine reset so a restored durable snapshot boots as-is.",
+    "captionOnBeatChange": "captions are NOT cleared at a beat boundary; the previous caption keeps counting down its ttl until the next showCaption overwrites it. Observed: ch7-reconstruct's exit caption was replaced mid-typewriter by ch7-board's entry caption 0.2 s later.",
+    "replayReset": "restartStory() calls clearStoryText(), which nulls caption/system/audit and empties workorder/violation."
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "reconstruct:diagnose",
+      "kind": "interact",
+      "markerLabel": "WRECK SCAR \u00b7 TRACE RELATIONSHIPS",
+      "workOrder": [
+        "FOLLOW THE WRECK MARKER.",
+        "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact"
+    },
+    {
+      "objectiveId": "reconstruct:repair:bench_online",
+      "kind": "interact",
+      "markerLabel": "WRECK BENCH \u00b7 RECOVER WRECK SALVAGE",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RECOVER WRECK SALVAGE."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact to the published objective, but stale versus the required action after salvage is claimed"
+    },
+    {
+      "objectiveId": "reconstruct:repair:frame_restored",
+      "kind": "interact",
+      "markerLabel": "WRECK BENCH \u00b7 RESTORE STRUT FRAME",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RESTORE STRUT FRAME."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact"
+    },
+    {
+      "objectiveId": "reconstruct:repair:hull_sealed",
+      "kind": "interact",
+      "markerLabel": "WRECK BENCH \u00b7 SEAL SCARRED HULL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] SEAL SCARRED HULL."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact"
+    },
+    {
+      "objectiveId": "reconstruct:craft:lift_online",
+      "kind": "craft",
+      "markerLabel": "WRECK BENCH \u00b7 CRAFT LIFT CELL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "not observed (movie path had the parts)"
+    },
+    {
+      "objectiveId": "reconstruct:repair:lift_online",
+      "kind": "interact",
+      "markerLabel": "WRECK BENCH \u00b7 INSTALL LIFT CELL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] INSTALL LIFT CELL."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact (frame evidence: evidence-hires/ch7-reconstruct/003_007s_ch7-reconstruct.png shows world marker 'wreck bench \u00b7 install lift cell \u00b7 3m')"
+    },
+    {
+      "objectiveId": "reconstruct:craft:flight_ready",
+      "kind": "craft",
+      "markerLabel": "WRECK BENCH \u00b7 CRAFT LOGIC WAFER",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "observed, health missing-marker for 0.25 s"
+    },
+    {
+      "objectiveId": "reconstruct:repair:flight_ready",
+      "kind": "interact",
+      "markerLabel": "WRECK BENCH \u00b7 CALIBRATE FLIGHT CONTROLS",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] CALIBRATE FLIGHT CONTROLS."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "exact"
+    },
+    {
+      "objectiveId": "ch8:launch:reboard",
+      "kind": "travel",
+      "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+      "workOrder": [
+        "RETURN TO THE KESTREL.",
+        "FOLLOW THE HATCH MARKER AND [F] BOARD."
+      ],
+      "requiresMarker": true,
+      "observedMarkerParity": "not observed"
+    }
+  ],
+  "journeyContractProjection": {
+    "sourceRef": "main/chapter-journey-contract.json",
+    "ch7": {
+      "requiredObjectiveBeats": [
+        "ch7-reconstruct",
+        "ch7-board"
+      ],
+      "requiredSignedAnchorIds": [
+        "anc.reconstruct.diagnosis",
+        "anc.reconstruct.bench-online",
+        "anc.reconstruct.frame-restored",
+        "anc.reconstruct.hull-sealed",
+        "anc.reconstruct.lift-online",
+        "anc.reconstruct.route-online",
+        "anc.reconstruct.calibration",
+        "anc.board.hatch-enter",
+        "anc.board.camera-transfer",
+        "anc.board.pressure-seal",
+        "anc.board.cockpit-handback"
+      ],
+      "variantProfileIds": [
+        "desktop-high",
+        "desktop-medium-reduced-motion",
+        "desktop-low",
+        "mobile-potato"
+      ]
+    },
+    "ch8": {
+      "requiredObjectiveBeats": [
+        "ch8-launch",
+        "ch8-crossing",
+        "ch8-landfall"
+      ],
+      "requiredSignedAnchorIds": [
+        "anc.launch.ignition",
+        "anc.landfall.handback"
+      ],
+      "variantProfileIds": [
+        "desktop-high",
+        "desktop-medium-reduced-motion",
+        "desktop-low",
+        "mobile-potato"
+      ]
+    }
+  },
+  "openBaselineGaps": [
+    "Manual-play (non-movie) ch7 lifecycle was not traced: headless cannot drive the [F]/[C] repair transactions.",
+    "Reduced-motion, mobile and POTATO variants of the objective lifecycle were not traced in this pass.",
+    "ch8-launch variant A (surface-on-foot / reboard) was never entered; its marker parity is unverified.",
+    "Marker parity was verified by the objective card's data attributes plus one legible LOW-tier frame; a full per-step marker-vs-card diff at every stage is not in this baseline."
+  ],
+  "excludedSourceFiles": [
+    {
+      "path": "main/src/story/storyText.test.ts",
+      "status": "absent-at-baseline-revision",
+      "sha256": null,
+      "note": "DOES NOT EXIST at 03e975a. production-lock.json lists it in allowedPaths; it would be a new file.",
+      "lockDisposition": "production-lock.json lists this path in allowedPaths, so implementation is permitted to create it. It is held out of the hashed sourceFiles list because there are no baseline bytes to hash."
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.ts",
+      "sha256": "2fcaf081b0fddde80fc01d10bc5bf53c9be8ad9576e7e0f7f0bda2bf86c9c1b1",
+      "lockDisposition": "Mutated by this run under production-lock.json allowedPaths (orchestrator ruling R5): the recorded sha256 is the SHIPPED baseline hash at source revision 03e975a, preserved for provenance; the working tree intentionally differs by the signed implementation (see implementation.diff)."
+    },
+    {
+      "path": "main/src/story/emergentStoryDirector.test.ts",
+      "sha256": "f77b6ee0c4b1ce29be8fe094e7e118a9e443fd55349f55667c890021660b1bf7",
+      "lockDisposition": "Mutated by this run under production-lock.json allowedPaths (orchestrator ruling R5): the recorded sha256 is the SHIPPED baseline hash at source revision 03e975a, preserved for provenance; the working tree intentionally differs by the signed implementation (see implementation.diff)."
+    }
+  ],
+  "sourceFileScope": "sourceFiles hashes every UX-relevant file that exists at sourceRevision. excludedSourceFiles records paths the production lock permits implementation to create but which have no baseline bytes.",
+  "markerAndWorkOrderMapScope": "markerAndWorkOrderMap holds every shipped objective that requires an exact directional marker. Objectives with requiresMarker false are preserved with the same fields in markerlessObjectives.",
+  "markerlessObjectives": [
+    {
+      "objectiveId": "reconstruct:calibrating",
+      "kind": "wait",
+      "markerLabel": "KESTREL \u00b7 CALIBRATING",
+      "workOrder": [
+        "FLIGHT CALIBRATION IN PROGRESS."
+      ],
+      "requiresMarker": false,
+      "observedMarkerParity": "n/a (requiresMarker false)",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped final work-order line for this objective states a status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded."
+    },
+    {
+      "objectiveId": "reconstruct:ready",
+      "kind": "wait",
+      "markerLabel": "WRECK \u00b7 FLIGHT READY",
+      "workOrder": [
+        "FLIGHT CONTROLS CALIBRATED."
+      ],
+      "requiresMarker": false,
+      "observedMarkerParity": "n/a",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped final work-order line for this objective states a status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded."
+    },
+    {
+      "objectiveId": "ch8:launch:ignite",
+      "kind": "interact",
+      "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+      "workOrder": [
+        "BRING THE KESTREL ONLINE.",
+        "HOLD [SPACE] TO IGNITE AND LIFT."
+      ],
+      "requiresMarker": false,
+      "observedMarkerParity": "n/a",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped final work-order line for this objective states a status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded."
+    },
+    {
+      "objectiveId": "ch8:launch:climb",
+      "kind": "travel",
+      "markerLabel": "ATMOSPHERIC EXIT \u00b7 CLIMB",
+      "workOrder": [
+        "KEEP THE KESTREL ASCENDING.",
+        "HOLD COURSE THROUGH THE ATMOSPHERE."
+      ],
+      "requiresMarker": false,
+      "observedMarkerParity": "n/a",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped final work-order line for this objective states a status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded."
+    },
+    {
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "kind": "wait",
+      "markerLabel": "DEEP SPACE \u00b7 HANDOFF",
+      "workOrder": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ],
+      "requiresMarker": false,
+      "observedMarkerParity": "UNREACHABLE \u2014 never published",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped final work-order line for this objective states a status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded."
+    }
+  ]
+}

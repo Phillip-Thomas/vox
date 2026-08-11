@@ -1,0 +1,32 @@
+{
+  "mode": "seeded-frame",
+  "url": "http://localhost:5176/?story=ch8-launch&fly=1&profile=LOW",
+  "capturedAt": "2026-08-11T01:41:26.421Z",
+  "entryObserver": "window.__storyBeat poll (raw DOM shutter)",
+  "shots": [
+    {
+      "file": "entry+0.5s_ch8-launch.png",
+      "targetOffsetSeconds": 0.5,
+      "measuredOffsetSeconds": 1.919,
+      "beat": "ch8-launch",
+      "domCaption": null,
+      "captionSlotEmpty": true
+    },
+    {
+      "file": "entry+1.5s_ch8-launch.png",
+      "targetOffsetSeconds": 1.5,
+      "measuredOffsetSeconds": 2.442,
+      "beat": "ch8-launch",
+      "domCaption": null,
+      "captionSlotEmpty": true
+    },
+    {
+      "file": "entry+3.0s_ch8-launch.png",
+      "targetOffsetSeconds": 3,
+      "measuredOffsetSeconds": 3.573,
+      "beat": "ch8-launch",
+      "domCaption": "i came down this lin",
+      "captionSlotEmpty": false
+    }
+  ]
+}

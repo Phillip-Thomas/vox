@@ -1,0 +1,1334 @@
+{
+  "generatedAt": "2026-08-10T21:08:53.606Z",
+  "toleranceSeconds": 0.2,
+  "namedConstants": {
+    "CH7_M7_AUDIT_SECONDS": 0,
+    "CH7_M7_CAPTION_SECONDS": 0.6,
+    "CH7_EXIT_CAPTION_SECONDS": 3,
+    "CH7_EXIT_HOLD_SECONDS": 5,
+    "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS": 0,
+    "CH8_STACK_ONE_SECONDS": 2,
+    "CH8_STACK_TWO_SECONDS": 4,
+    "CH8_STACK_THREE_SECONDS": 6,
+    "CH8_CONTACT_LOGGED_SECONDS": 8.5,
+    "CH8_DESIGNATION_CAPTION_SECONDS": 11.5,
+    "CH8_OPEN_QUERY_SECONDS": 14,
+    "CH8_EXIT_HOLD_SECONDS": 17
+  },
+  "ch7": [
+    {
+      "run": 1,
+      "durationSeconds": 25.71,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "entry": {
+          "count": 1,
+          "storyMs": [
+            380.2999999523163
+          ]
+        },
+        "m1Audit": {
+          "count": 1,
+          "storyMs": [
+            5562.700000047684
+          ]
+        },
+        "m1Caption": {
+          "count": 1,
+          "storyMs": [
+            5562.700000047684
+          ]
+        },
+        "m2": {
+          "count": 1,
+          "storyMs": [
+            6856.899999856949
+          ]
+        },
+        "m3": {
+          "count": 1,
+          "storyMs": [
+            7523.700000047684
+          ]
+        },
+        "m4Audit": {
+          "count": 1,
+          "storyMs": [
+            8190.700000047684
+          ]
+        },
+        "m4Caption": {
+          "count": 1,
+          "storyMs": [
+            8190.700000047684
+          ]
+        },
+        "m5Audit": {
+          "count": 1,
+          "storyMs": [
+            8908
+          ]
+        },
+        "m5Caption": {
+          "count": 1,
+          "storyMs": [
+            8908
+          ]
+        },
+        "m6": {
+          "count": 1,
+          "storyMs": [
+            9563.799999952316
+          ]
+        },
+        "m7Audit": {
+          "count": 1,
+          "storyMs": [
+            17628.099999904633
+          ]
+        },
+        "m7Caption": {
+          "count": 1,
+          "storyMs": [
+            18238.599999904633
+          ]
+        },
+        "exit": {
+          "count": 1,
+          "storyMs": [
+            20638.5
+          ]
+        }
+      },
+      "order": [
+        {
+          "key": "entry",
+          "storyMs": 380.2999999523163
+        },
+        {
+          "key": "m1Audit",
+          "storyMs": 5562.700000047684
+        },
+        {
+          "key": "m1Caption",
+          "storyMs": 5562.700000047684
+        },
+        {
+          "key": "m2",
+          "storyMs": 6856.899999856949
+        },
+        {
+          "key": "m3",
+          "storyMs": 7523.700000047684
+        },
+        {
+          "key": "m4Audit",
+          "storyMs": 8190.700000047684
+        },
+        {
+          "key": "m4Caption",
+          "storyMs": 8190.700000047684
+        },
+        {
+          "key": "m5Audit",
+          "storyMs": 8908
+        },
+        {
+          "key": "m5Caption",
+          "storyMs": 8908
+        },
+        {
+          "key": "m6",
+          "storyMs": 9563.799999952316
+        },
+        {
+          "key": "m7Audit",
+          "storyMs": 17628.099999904633
+        },
+        {
+          "key": "m7Caption",
+          "storyMs": 18238.599999904633
+        },
+        {
+          "key": "exit",
+          "storyMs": 20638.5
+        }
+      ],
+      "defects": [],
+      "origin": 17628.099999904633,
+      "cadence": [
+        {
+          "anchor": "anchor.ch7.m7-audit",
+          "constant": "CH7_M7_AUDIT_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.m7-caption",
+          "constant": "CH7_M7_CAPTION_SECONDS",
+          "expected": 0.6,
+          "actual": 0.611,
+          "delta": 0.011,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.exit-line",
+          "constant": "CH7_EXIT_CAPTION_SECONDS",
+          "expected": 3,
+          "actual": 3.01,
+          "delta": 0.01,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.advance",
+          "constant": "CH7_EXIT_HOLD_SECONDS",
+          "expected": 5,
+          "actual": 5.027,
+          "delta": 0.027,
+          "pass": true
+        }
+      ],
+      "stageEdgeGapsSeconds": [
+        1.294,
+        0.667,
+        0.667,
+        0.717,
+        0.656
+      ],
+      "boardOverwrite": {
+        "boardEntryOffsetSeconds": 5.027,
+        "captionText": "(the wreck is waiting for an owner.)",
+        "offsetSeconds": 5.028
+      }
+    },
+    {
+      "run": 2,
+      "durationSeconds": 24.01,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "entry": {
+          "count": 1,
+          "storyMs": [
+            360.7000000476837
+          ]
+        },
+        "m1Audit": {
+          "count": 1,
+          "storyMs": [
+            3789.2000000476837
+          ]
+        },
+        "m1Caption": {
+          "count": 1,
+          "storyMs": [
+            3789.2000000476837
+          ]
+        },
+        "m2": {
+          "count": 1,
+          "storyMs": [
+            5089.400000095367
+          ]
+        },
+        "m3": {
+          "count": 1,
+          "storyMs": [
+            5757.200000047684
+          ]
+        },
+        "m4Audit": {
+          "count": 1,
+          "storyMs": [
+            6422.700000047684
+          ]
+        },
+        "m4Caption": {
+          "count": 1,
+          "storyMs": [
+            6422.700000047684
+          ]
+        },
+        "m5Audit": {
+          "count": 1,
+          "storyMs": [
+            7138.799999952316
+          ]
+        },
+        "m5Caption": {
+          "count": 1,
+          "storyMs": [
+            7138.900000095367
+          ]
+        },
+        "m6": {
+          "count": 1,
+          "storyMs": [
+            7795.799999952316
+          ]
+        },
+        "m7Audit": {
+          "count": 1,
+          "storyMs": [
+            15861.400000095367
+          ]
+        },
+        "m7Caption": {
+          "count": 1,
+          "storyMs": [
+            16471.299999952316
+          ]
+        },
+        "exit": {
+          "count": 1,
+          "storyMs": [
+            18871.900000095367
+          ]
+        }
+      },
+      "order": [
+        {
+          "key": "entry",
+          "storyMs": 360.7000000476837
+        },
+        {
+          "key": "m1Audit",
+          "storyMs": 3789.2000000476837
+        },
+        {
+          "key": "m1Caption",
+          "storyMs": 3789.2000000476837
+        },
+        {
+          "key": "m2",
+          "storyMs": 5089.400000095367
+        },
+        {
+          "key": "m3",
+          "storyMs": 5757.200000047684
+        },
+        {
+          "key": "m4Audit",
+          "storyMs": 6422.700000047684
+        },
+        {
+          "key": "m4Caption",
+          "storyMs": 6422.700000047684
+        },
+        {
+          "key": "m5Audit",
+          "storyMs": 7138.799999952316
+        },
+        {
+          "key": "m5Caption",
+          "storyMs": 7138.900000095367
+        },
+        {
+          "key": "m6",
+          "storyMs": 7795.799999952316
+        },
+        {
+          "key": "m7Audit",
+          "storyMs": 15861.400000095367
+        },
+        {
+          "key": "m7Caption",
+          "storyMs": 16471.299999952316
+        },
+        {
+          "key": "exit",
+          "storyMs": 18871.900000095367
+        }
+      ],
+      "defects": [],
+      "origin": 15861.400000095367,
+      "cadence": [
+        {
+          "anchor": "anchor.ch7.m7-audit",
+          "constant": "CH7_M7_AUDIT_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.m7-caption",
+          "constant": "CH7_M7_CAPTION_SECONDS",
+          "expected": 0.6,
+          "actual": 0.61,
+          "delta": 0.01,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.exit-line",
+          "constant": "CH7_EXIT_CAPTION_SECONDS",
+          "expected": 3,
+          "actual": 3.01,
+          "delta": 0.01,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.advance",
+          "constant": "CH7_EXIT_HOLD_SECONDS",
+          "expected": 5,
+          "actual": 5.027,
+          "delta": 0.027,
+          "pass": true
+        }
+      ],
+      "stageEdgeGapsSeconds": [
+        1.3,
+        0.668,
+        0.665,
+        0.716,
+        0.657
+      ],
+      "boardOverwrite": {
+        "boardEntryOffsetSeconds": 5.027,
+        "captionText": "(the wreck is waiting for an owner.)",
+        "offsetSeconds": 5.028
+      }
+    },
+    {
+      "run": 3,
+      "durationSeconds": 23.88,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "entry": {
+          "count": 1,
+          "storyMs": [
+            331.2000000476837
+          ]
+        },
+        "m1Audit": {
+          "count": 1,
+          "storyMs": [
+            3747.9000000953674
+          ]
+        },
+        "m1Caption": {
+          "count": 1,
+          "storyMs": [
+            3747.9000000953674
+          ]
+        },
+        "m2": {
+          "count": 1,
+          "storyMs": [
+            5042.600000143051
+          ]
+        },
+        "m3": {
+          "count": 1,
+          "storyMs": [
+            5709.400000095367
+          ]
+        },
+        "m4Audit": {
+          "count": 1,
+          "storyMs": [
+            6375.299999952316
+          ]
+        },
+        "m4Caption": {
+          "count": 1,
+          "storyMs": [
+            6375.299999952316
+          ]
+        },
+        "m5Audit": {
+          "count": 1,
+          "storyMs": [
+            7072
+          ]
+        },
+        "m5Caption": {
+          "count": 1,
+          "storyMs": [
+            7072
+          ]
+        },
+        "m6": {
+          "count": 1,
+          "storyMs": [
+            7748.299999952316
+          ]
+        },
+        "m7Audit": {
+          "count": 1,
+          "storyMs": [
+            15789
+          ]
+        },
+        "m7Caption": {
+          "count": 1,
+          "storyMs": [
+            16408
+          ]
+        },
+        "exit": {
+          "count": 1,
+          "storyMs": [
+            18807.900000095367
+          ]
+        }
+      },
+      "order": [
+        {
+          "key": "entry",
+          "storyMs": 331.2000000476837
+        },
+        {
+          "key": "m1Audit",
+          "storyMs": 3747.9000000953674
+        },
+        {
+          "key": "m1Caption",
+          "storyMs": 3747.9000000953674
+        },
+        {
+          "key": "m2",
+          "storyMs": 5042.600000143051
+        },
+        {
+          "key": "m3",
+          "storyMs": 5709.400000095367
+        },
+        {
+          "key": "m4Audit",
+          "storyMs": 6375.299999952316
+        },
+        {
+          "key": "m4Caption",
+          "storyMs": 6375.299999952316
+        },
+        {
+          "key": "m5Audit",
+          "storyMs": 7072
+        },
+        {
+          "key": "m5Caption",
+          "storyMs": 7072
+        },
+        {
+          "key": "m6",
+          "storyMs": 7748.299999952316
+        },
+        {
+          "key": "m7Audit",
+          "storyMs": 15789
+        },
+        {
+          "key": "m7Caption",
+          "storyMs": 16408
+        },
+        {
+          "key": "exit",
+          "storyMs": 18807.900000095367
+        }
+      ],
+      "defects": [],
+      "origin": 15789,
+      "cadence": [
+        {
+          "anchor": "anchor.ch7.m7-audit",
+          "constant": "CH7_M7_AUDIT_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.m7-caption",
+          "constant": "CH7_M7_CAPTION_SECONDS",
+          "expected": 0.6,
+          "actual": 0.619,
+          "delta": 0.019,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.exit-line",
+          "constant": "CH7_EXIT_CAPTION_SECONDS",
+          "expected": 3,
+          "actual": 3.019,
+          "delta": 0.019,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch7.advance",
+          "constant": "CH7_EXIT_HOLD_SECONDS",
+          "expected": 5,
+          "actual": 5.019,
+          "delta": 0.019,
+          "pass": true
+        }
+      ],
+      "stageEdgeGapsSeconds": [
+        1.295,
+        0.667,
+        0.666,
+        0.697,
+        0.676
+      ],
+      "boardOverwrite": {
+        "boardEntryOffsetSeconds": 5.019,
+        "captionText": "(the wreck is waiting for an owner.)",
+        "offsetSeconds": 5.019
+      }
+    }
+  ],
+  "ch8": [
+    {
+      "run": 1,
+      "durationSeconds": 27.33,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "l1": {
+          "count": 1,
+          "storyMs": [
+            4016.399999856949
+          ]
+        },
+        "l2": {
+          "count": 1,
+          "storyMs": [
+            4016.399999856949
+          ]
+        },
+        "l3": {
+          "count": 1,
+          "storyMs": [
+            4016.5
+          ]
+        },
+        "l4": {
+          "count": 1,
+          "storyMs": [
+            7194.799999952316
+          ]
+        },
+        "s1": {
+          "count": 1,
+          "storyMs": [
+            9211.099999904633
+          ]
+        },
+        "s2": {
+          "count": 1,
+          "storyMs": [
+            11211.299999952316
+          ]
+        },
+        "s3": {
+          "count": 1,
+          "storyMs": [
+            13227.899999856949
+          ]
+        },
+        "contact": {
+          "count": 1,
+          "storyMs": [
+            15744
+          ]
+        },
+        "designation": {
+          "count": 1,
+          "storyMs": [
+            18744.200000047684
+          ]
+        },
+        "l6": {
+          "count": 1,
+          "storyMs": [
+            21244
+          ]
+        }
+      },
+      "defects": [],
+      "origin": 7194.799999952316,
+      "cadence": [
+        {
+          "anchor": "anc.launch.atmosphere-exit",
+          "constant": "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-one",
+          "constant": "CH8_STACK_ONE_SECONDS",
+          "expected": 2,
+          "actual": 2.016,
+          "delta": 0.016,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-two",
+          "constant": "CH8_STACK_TWO_SECONDS",
+          "expected": 4,
+          "actual": 4.016,
+          "delta": 0.016,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-three",
+          "constant": "CH8_STACK_THREE_SECONDS",
+          "expected": 6,
+          "actual": 6.033,
+          "delta": 0.033,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.contact-logged",
+          "constant": "CH8_CONTACT_LOGGED_SECONDS",
+          "expected": 8.5,
+          "actual": 8.549,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.designation",
+          "constant": "CH8_DESIGNATION_CAPTION_SECONDS",
+          "expected": 11.5,
+          "actual": 11.549,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.open-query",
+          "constant": "CH8_OPEN_QUERY_SECONDS",
+          "expected": 14,
+          "actual": 14.049,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.advance",
+          "constant": "CH8_EXIT_HOLD_SECONDS",
+          "expected": 17,
+          "actual": 17.066,
+          "delta": 0.066,
+          "pass": true
+        }
+      ],
+      "variantD": {
+        "objectiveId": "ch8:launch:orbital-handoff",
+        "publishOffsetSeconds": 1.767,
+        "stackOneOffsetSeconds": 2.016,
+        "marginSeconds": 0.249,
+        "publishedBeforeStackOne": true,
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "l1l2l3SpreadMs": 0.1,
+      "postAdvance": [
+        {
+          "ch": "beat",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "feedback",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        }
+      ],
+      "finalResetReason": "beat-exit",
+      "finalActivatedAnchorIds": [
+        "anc.crossing.sibling-targeted"
+      ]
+    },
+    {
+      "run": 2,
+      "durationSeconds": 27.13,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "l1": {
+          "count": 1,
+          "storyMs": [
+            3712.5
+          ]
+        },
+        "l2": {
+          "count": 1,
+          "storyMs": [
+            3712.5999999046326
+          ]
+        },
+        "l3": {
+          "count": 1,
+          "storyMs": [
+            3712.5999999046326
+          ]
+        },
+        "l4": {
+          "count": 1,
+          "storyMs": [
+            7016.899999856949
+          ]
+        },
+        "s1": {
+          "count": 1,
+          "storyMs": [
+            9033.399999856949
+          ]
+        },
+        "s2": {
+          "count": 1,
+          "storyMs": [
+            11034
+          ]
+        },
+        "s3": {
+          "count": 1,
+          "storyMs": [
+            13050.399999856949
+          ]
+        },
+        "contact": {
+          "count": 1,
+          "storyMs": [
+            15549.700000047684
+          ]
+        },
+        "designation": {
+          "count": 1,
+          "storyMs": [
+            18566.599999904633
+          ]
+        },
+        "l6": {
+          "count": 1,
+          "storyMs": [
+            21066
+          ]
+        }
+      },
+      "defects": [],
+      "origin": 7016.899999856949,
+      "cadence": [
+        {
+          "anchor": "anc.launch.atmosphere-exit",
+          "constant": "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-one",
+          "constant": "CH8_STACK_ONE_SECONDS",
+          "expected": 2,
+          "actual": 2.017,
+          "delta": 0.017,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-two",
+          "constant": "CH8_STACK_TWO_SECONDS",
+          "expected": 4,
+          "actual": 4.017,
+          "delta": 0.017,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-three",
+          "constant": "CH8_STACK_THREE_SECONDS",
+          "expected": 6,
+          "actual": 6.034,
+          "delta": 0.034,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.contact-logged",
+          "constant": "CH8_CONTACT_LOGGED_SECONDS",
+          "expected": 8.5,
+          "actual": 8.533,
+          "delta": 0.033,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.designation",
+          "constant": "CH8_DESIGNATION_CAPTION_SECONDS",
+          "expected": 11.5,
+          "actual": 11.55,
+          "delta": 0.05,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.open-query",
+          "constant": "CH8_OPEN_QUERY_SECONDS",
+          "expected": 14,
+          "actual": 14.049,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.advance",
+          "constant": "CH8_EXIT_HOLD_SECONDS",
+          "expected": 17,
+          "actual": 17.066,
+          "delta": 0.066,
+          "pass": true
+        }
+      ],
+      "variantD": {
+        "objectiveId": "ch8:launch:orbital-handoff",
+        "publishOffsetSeconds": 1.767,
+        "stackOneOffsetSeconds": 2.017,
+        "marginSeconds": 0.25,
+        "publishedBeforeStackOne": true,
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "l1l2l3SpreadMs": 0.1,
+      "postAdvance": [
+        {
+          "ch": "beat",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "feedback",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        }
+      ],
+      "finalResetReason": "beat-exit",
+      "finalActivatedAnchorIds": [
+        "anc.crossing.sibling-targeted"
+      ]
+    },
+    {
+      "run": 3,
+      "durationSeconds": 26.79,
+      "reachedStopBeat": true,
+      "pageErrors": 0,
+      "lines": {
+        "l1": {
+          "count": 1,
+          "storyMs": [
+            3491.5
+          ]
+        },
+        "l2": {
+          "count": 1,
+          "storyMs": [
+            3491.5
+          ]
+        },
+        "l3": {
+          "count": 1,
+          "storyMs": [
+            3491.5
+          ]
+        },
+        "l4": {
+          "count": 1,
+          "storyMs": [
+            6674
+          ]
+        },
+        "s1": {
+          "count": 1,
+          "storyMs": [
+            8690.799999952316
+          ]
+        },
+        "s2": {
+          "count": 1,
+          "storyMs": [
+            10707
+          ]
+        },
+        "s3": {
+          "count": 1,
+          "storyMs": [
+            12706.700000047684
+          ]
+        },
+        "contact": {
+          "count": 1,
+          "storyMs": [
+            15223.399999856949
+          ]
+        },
+        "designation": {
+          "count": 1,
+          "storyMs": [
+            18223.299999952316
+          ]
+        },
+        "l6": {
+          "count": 1,
+          "storyMs": [
+            20740.39999985695
+          ]
+        }
+      },
+      "defects": [],
+      "origin": 6674,
+      "cadence": [
+        {
+          "anchor": "anc.launch.atmosphere-exit",
+          "constant": "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS",
+          "expected": 0,
+          "actual": 0,
+          "delta": 0,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-one",
+          "constant": "CH8_STACK_ONE_SECONDS",
+          "expected": 2,
+          "actual": 2.017,
+          "delta": 0.017,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-two",
+          "constant": "CH8_STACK_TWO_SECONDS",
+          "expected": 4,
+          "actual": 4.033,
+          "delta": 0.033,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.stack-three",
+          "constant": "CH8_STACK_THREE_SECONDS",
+          "expected": 6,
+          "actual": 6.033,
+          "delta": 0.033,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.contact-logged",
+          "constant": "CH8_CONTACT_LOGGED_SECONDS",
+          "expected": 8.5,
+          "actual": 8.549,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.designation",
+          "constant": "CH8_DESIGNATION_CAPTION_SECONDS",
+          "expected": 11.5,
+          "actual": 11.549,
+          "delta": 0.049,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.open-query",
+          "constant": "CH8_OPEN_QUERY_SECONDS",
+          "expected": 14,
+          "actual": 14.066,
+          "delta": 0.066,
+          "pass": true
+        },
+        {
+          "anchor": "anchor.ch8.advance",
+          "constant": "CH8_EXIT_HOLD_SECONDS",
+          "expected": 17,
+          "actual": 17.066,
+          "delta": 0.066,
+          "pass": true
+        }
+      ],
+      "variantD": {
+        "objectiveId": "ch8:launch:orbital-handoff",
+        "publishOffsetSeconds": 1.767,
+        "stackOneOffsetSeconds": 2.017,
+        "marginSeconds": 0.25,
+        "publishedBeforeStackOne": true,
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "l1l2l3SpreadMs": 0,
+      "postAdvance": [
+        {
+          "ch": "beat",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "id": null
+        },
+        {
+          "ch": "workorder",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "feedback",
+          "text": null,
+          "id": null
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        },
+        {
+          "ch": "objective",
+          "text": null,
+          "id": "ch8:crossing:acquire-sibling"
+        }
+      ],
+      "finalResetReason": "beat-exit",
+      "finalActivatedAnchorIds": [
+        "anc.crossing.sibling-targeted"
+      ]
+    }
+  ],
+  "defects": [],
+  "ch7Variance": [
+    {
+      "anchor": "anchor.ch7.m7-audit",
+      "actuals": [
+        0,
+        0,
+        0
+      ],
+      "spreadSeconds": 0
+    },
+    {
+      "anchor": "anchor.ch7.m7-caption",
+      "actuals": [
+        0.611,
+        0.61,
+        0.619
+      ],
+      "spreadSeconds": 0.009
+    },
+    {
+      "anchor": "anchor.ch7.exit-line",
+      "actuals": [
+        3.01,
+        3.01,
+        3.019
+      ],
+      "spreadSeconds": 0.009
+    },
+    {
+      "anchor": "anchor.ch7.advance",
+      "actuals": [
+        5.027,
+        5.027,
+        5.019
+      ],
+      "spreadSeconds": 0.008
+    }
+  ],
+  "ch8Variance": [
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "actuals": [
+        0,
+        0,
+        0
+      ],
+      "spreadSeconds": 0
+    },
+    {
+      "anchor": "anchor.ch8.stack-one",
+      "actuals": [
+        2.016,
+        2.017,
+        2.017
+      ],
+      "spreadSeconds": 0.001
+    },
+    {
+      "anchor": "anchor.ch8.stack-two",
+      "actuals": [
+        4.016,
+        4.017,
+        4.033
+      ],
+      "spreadSeconds": 0.017
+    },
+    {
+      "anchor": "anchor.ch8.stack-three",
+      "actuals": [
+        6.033,
+        6.034,
+        6.033
+      ],
+      "spreadSeconds": 0.001
+    },
+    {
+      "anchor": "anchor.ch8.contact-logged",
+      "actuals": [
+        8.549,
+        8.533,
+        8.549
+      ],
+      "spreadSeconds": 0.016
+    },
+    {
+      "anchor": "anchor.ch8.designation",
+      "actuals": [
+        11.549,
+        11.55,
+        11.549
+      ],
+      "spreadSeconds": 0.001
+    },
+    {
+      "anchor": "anchor.ch8.open-query",
+      "actuals": [
+        14.049,
+        14.049,
+        14.066
+      ],
+      "spreadSeconds": 0.017
+    },
+    {
+      "anchor": "anchor.ch8.advance",
+      "actuals": [
+        17.066,
+        17.066,
+        17.066
+      ],
+      "spreadSeconds": 0
+    }
+  ],
+  "variantDAcrossRuns": [
+    {
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "publishOffsetSeconds": 1.767,
+      "stackOneOffsetSeconds": 2.016,
+      "marginSeconds": 0.249,
+      "publishedBeforeStackOne": true,
+      "workOrder": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ],
+      "markerLabel": "DEEP SPACE · HANDOFF",
+      "requiresMarker": false,
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "publishOffsetSeconds": 1.767,
+      "stackOneOffsetSeconds": 2.017,
+      "marginSeconds": 0.25,
+      "publishedBeforeStackOne": true,
+      "workOrder": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ],
+      "markerLabel": "DEEP SPACE · HANDOFF",
+      "requiresMarker": false,
+      "health": "ready"
+    },
+    {
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "publishOffsetSeconds": 1.767,
+      "stackOneOffsetSeconds": 2.017,
+      "marginSeconds": 0.25,
+      "publishedBeforeStackOne": true,
+      "workOrder": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ],
+      "markerLabel": "DEEP SPACE · HANDOFF",
+      "requiresMarker": false,
+      "health": "ready"
+    }
+  ]
+}

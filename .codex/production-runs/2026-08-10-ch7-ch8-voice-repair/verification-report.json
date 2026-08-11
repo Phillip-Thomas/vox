@@ -1,0 +1,4354 @@
+{
+  "schema": "paravoxia.sceneVerificationReport.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "phase": "implementation",
+  "recordedBy": "story-verifier",
+  "recordedAt": "2026-08-11T15:19:54.226Z",
+  "canonicalPreviewUrl": "http://localhost:5176",
+  "environment": {
+    "browser": "playwright-core chromium (~/.cache/ms-playwright), headless",
+    "flags": [
+      "--enable-unsafe-swiftshader",
+      "--use-gl=angle"
+    ],
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "qualityTier": "LOW for every strip and every timing trace; POTATO for the lowest-tier variant",
+    "viewport": "1280x720 desktop; 390x844 mobile portrait; 844x390 mobile landscape",
+    "clockSource": "storyNow() — the game's own pause-aware story clock, read at emit time through subscribeStoryText; every offset in this report is a beat-runtime offset, not a probe wall clock"
+  },
+  "overallStatus": "pass-with-recorded-exceptions",
+  "overallSummary": "Every cadence, string, ordering, variant, reset, performance and audio term this run implemented verifies clean across three cold runs with sub-20 ms variance, including the variant-D ordering assertion at a 0.249-0.250 s margin. Two contracted ch8 strings fail on rendering: L2 and L3 never reach the screen on any headless-drivable path, and the chained ch6->ch9 movie flow cannot be completed because it stalls at ch8-landfall — a stall reproduced from ch8-crossing, a beat outside this run's changed code.",
+  "flow": {
+    "coldRunsRequired": 3,
+    "coldRunsPassed": 3,
+    "movieCompletedWithoutRescue": false,
+    "timeoutRescues": 0,
+    "timeoutRescueNote": "BEAT_TIMEOUT in main/src/story/autopilot.ts:252 lists no emergent beat, so no timeout rescue is reachable in ch6-dive..ch9-settle; zero rescues is structural, and honest completion is what was measured.",
+    "beats": [
+      {
+        "beat": "ch7-reconstruct",
+        "route": "?story=ch7-reconstruct&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "completionSeconds": [
+          25.71,
+          24.01,
+          23.88
+        ],
+        "beatTimeoutSeconds": null,
+        "varianceSeconds": 1.83,
+        "cadenceVarianceSeconds": 0.009,
+        "status": "pass"
+      },
+      {
+        "beat": "ch8-launch",
+        "route": "?story=ch8-launch&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "completionSeconds": [
+          27.33,
+          27.13,
+          26.79
+        ],
+        "beatTimeoutSeconds": null,
+        "varianceSeconds": 0.54,
+        "cadenceVarianceSeconds": 0.017,
+        "status": "pass"
+      },
+      {
+        "beat": "ch8-landfall",
+        "route": "?story=ch6-dive&movie=1&profile=LOW (continuous chain)",
+        "coldRuns": 2,
+        "completionSeconds": null,
+        "beatTimeoutSeconds": null,
+        "status": "fail",
+        "detail": "Both chained runs entered ch8-landfall (at 94.8 s and 92.1 s) on objective ch8:landfall:land-dry-level, health ready, autopilot nudges 0, no keys asserted, and never advanced within the 505 s and 208 s remaining. Reproduced from ?story=ch8-crossing&movie=1 (reaches ch8-landfall at 16.7 s, then stalls), while ?story=ch8-landfall&movie=1 reaches ch9-settle in 10.5 s. Not attributable to this run's changed code."
+      }
+    ],
+    "evidenceRefs": [
+      "evidence/verification/ch7-flow-trace.json",
+      "evidence/verification/ch8-flow-trace.json",
+      "evidence/verification/cadence-assertions.json",
+      "evidence/verification/full-flow-trace.json",
+      "evidence/verification/chain-landfall-from-crossing.json",
+      "evidence/verification/chain-landfall-deeplink.json"
+    ],
+    "boundaryProof": {
+      "note": "The gate field movieCompletedWithoutRescue asks for a rescue-free movie completion of the affected flow. It is false because the CHAINED ch6-dive -> ch9 movie stalls at ch8-landfall (vd-02), which is pre-existing, escalated, and DOWNSTREAM of the span this run mutated. The span itself completes; the two halves of the boundary are each proven, and the stall is isolated to the join.",
+      "mutatedSpan": "ch7-reconstruct -> ch8-crossing",
+      "mutatedSpanCompletions": {
+        "chainedCh7BoardToCh8Crossing": {
+          "coldRuns": 3,
+          "rescues": 0,
+          "ref": "evidence/verification-final/routeB-desktop.json"
+        },
+        "ch7ReconstructToCh7Board": {
+          "coldRuns": 3,
+          "rescues": 0,
+          "ref": "evidence/verification-final/ch7queue-desktop.json"
+        },
+        "ch8LaunchToCh8Crossing": {
+          "coldRuns": 3,
+          "rescues": 0,
+          "ref": "evidence/verification-final/routeA-ordered/routeA-ordered.json"
+        },
+        "ch8LaunchToCh8CrossingVariants": {
+          "coldRuns": 10,
+          "rescues": 0,
+          "refs": [
+            "evidence/verification-final/routeC-desktop.json",
+            "evidence/verification-final/routeC-potato.json",
+            "evidence/verification-final/routeC-mobile.json",
+            "evidence/verification-final/routeC-reduced-motion.json"
+          ]
+        }
+      },
+      "downstreamHalfInIsolation": {
+        "ch8LandfallToCh9Settle": "reached ch9-settle from ?story=ch8-landfall&movie=1 in the closing pass",
+        "ref": "evidence/verification-final/seams/seams-landfall.json"
+      },
+      "timeoutRescues": 0,
+      "isolation": "vd-02 records the ch8-landfall stall reached FROM ch8-crossing. Both halves complete in isolation; only the chained join does not."
+    }
+  },
+  "frozenStrings": {
+    "status": "fail",
+    "totalContractedStrings": 22,
+    "retiredCh7ExitStringObserved": false,
+    "approvedCh7ExitStringObserved": true,
+    "failures": [
+      "evt.ch8.l2-ignition — 'hold it. this is the only order left, and i am the one giving it.' never renders",
+      "evt.ch8.l3-liftoff — 'the site gets small. the tree does not. i keep finding it.' never renders on the chained path"
+    ],
+    "evidenceRefs": [
+      "evidence/verification/cadence-assertions.json",
+      "evidence/verification/l23-captures.json",
+      "evidence/verification/chain-launch-anchor-fine-trace.json"
+    ],
+    "emissionResult": "All 22 contracted strings emit exactly once per beat entry on the deep-link routes (13 ch7 across three cold runs, 10 ch8 across three cold runs and all three variants, with the ch7 entry caption counted once). On the chained ch7-board -> ch8-launch route, 8 of the 10 ch8 strings emit: L2 and L3 emit zero times.",
+    "renderResult": "20 of 22 strings reach the screen on any single path. Deep-link ch8: L1 and L2 are overwritten inside the emitting tick, so only L3 renders of the three. Chained ch8: L2 and L3 never emit, so only L1 renders of the three. L2 renders on no path this environment can drive."
+  },
+  "exactAnchors": [
+    {
+      "anchor": "anc.dive.shore-bank",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "ch7 entry caption '(repair is not return.)' emits once at beat publish +0.03 s on all three cold runs and on the ch7-reconstruct deep link; no string introduced by this run precedes it.",
+      "evidenceRefs": [
+        "evidence/verification/ch7-flow-trace.json",
+        "evidence/verification/resets-trace.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.diagnosis",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M1 audit then M1 caption in that order inside one director tick, once per beat entry, at beat-clock 5.563/3.789/3.748 s on the three cold runs (the diagnosis is player-driven, so its absolute time varies with the autopilot walk; the ordering and once-only properties do not).",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.brackets-fall",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "Header WRECK RELAY, body 'HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED', byte-identical, audit before caption.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch7-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.bench-online",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M2 caption once on the live bench_online transition; never on a seeded resume (deep links replay no ch7 line).",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/resets-trace.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.frame-restored",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M3 caption once, in stage order, on all three cold runs and all three variants.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/variant-parity.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.hull-sealed",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M4 audit 'PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED' then M4 caption, in order, once.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.lift-online",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M5 audit 'POWER BUS LIVE · TRANSPONDER ARMED' then M5 caption, in order, once.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.first-hover",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "Authored withholding held: no string introduced by this run emitted at this anchor on any traced path; the anchor did not activate on the movie path, matching the shipped baseline.",
+      "evidenceRefs": [
+        "evidence/verification/ch7-flow-trace.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.route-online",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "flight_ready stage edge reached and latched once per beat entry on every run.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.anyway",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "M6 caption 'the last part is the part that thinks. i am being watched now. i put it in anyway.' once, bare and unbracketed, on the live flight_ready transition.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch7-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "not-applicable",
+      "measurement": "M7 audit at window +0.000 s (origin) and M7 caption at +0.611/+0.610/+0.619 s across three cold runs; constant CH7_M7_CAPTION_SECONDS = 0.6, deltas +0.011/+0.010/+0.019 s. Camera and effect state measured across the window and constant throughout: shot cin.reconstruct.09-one-exterior-reveal, cameraAuthority cinematic-look, appliedFovDeg 52, fx.reconstruct.09-one-exterior-reveal active, score cueRef sc.reconstruct.one-instrument, signed intensity null (ch7 is excluded from signed score intensity by name and runs its own gameplay-derived moods), score.hit null.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch7-captures-desktop.json",
+        "evidence/verification/ch7-window-av-score-trace.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.m7-caption",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "not-applicable",
+      "measurement": "62 characters at the shipped 34 ms/char caption reveal = 2.11 s, fully revealed inside its 2.4 s slot; frames at +0.8/+1.5/+2.4/+2.8 s carry it. Camera and effect state measured across the window and constant throughout: shot cin.reconstruct.09-one-exterior-reveal, cameraAuthority cinematic-look, appliedFovDeg 52, fx.reconstruct.09-one-exterior-reveal active, score cueRef sc.reconstruct.one-instrument, signed intensity null (ch7 is excluded from signed score intensity by name and runs its own gameplay-derived moods), score.hit null.",
+      "evidenceRefs": [
+        "evidence/verification/ch7-captures-desktop.json",
+        "evidence/verification/ch7-window-av-score-trace.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.exit-line",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "not-applicable",
+      "measurement": "'the scar remains. now it can carry me.' at +3.010/+3.010/+3.019 s (constant 3.0). 38 characters = 1.29 s reveal, fully revealed by +4.3 s, ahead of the +5.0 s advance; frames at +3.5 and +4.8 s show it complete. The retired parenthetical string emitted nowhere in any trace and is absent from dist. Camera and effect state measured across the window and constant throughout: shot cin.reconstruct.09-one-exterior-reveal, cameraAuthority cinematic-look, appliedFovDeg 52, fx.reconstruct.09-one-exterior-reveal active, score cueRef sc.reconstruct.one-instrument, signed intensity null (ch7 is excluded from signed score intensity by name and runs its own gameplay-derived moods), score.hit null.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch7-captures-desktop.json",
+        "evidence/verification/ch7-window-av-score-trace.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.advance",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "Advance to ch7-board at +5.027/+5.027/+5.019 s (constant CH7_EXIT_HOLD_SECONDS = 5.0). ch7-board's entry caption '(the wreck is waiting for an owner.)' overwrites at +5.028 s — after the advance, per the contract. The M7 audit pill persists across the seam (visible in the +5.2 and +6.5 s frames). Camera and effect state measured across the window and constant throughout: shot cin.reconstruct.09-one-exterior-reveal, cameraAuthority cinematic-look, appliedFovDeg 52, fx.reconstruct.09-one-exterior-reveal active, score cueRef sc.reconstruct.one-instrument, signed intensity null (ch7 is excluded from signed score intensity by name and runs its own gameplay-derived moods), score.hit null.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch7-captures-desktop.json",
+        "evidence/verification/ch7-window-av-score-trace.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.beat-entry",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "No new string renders at ch8-launch entry; the authored work-order string 'IGNITE. LIFT. LEAVE THE ATMOSPHERE.' is written and overwritten by the objective work order within the same tick (delta D8, unchanged shipped behaviour), observed at 0.398 s in every run.",
+      "evidenceRefs": [
+        "evidence/verification/ch8-flow-trace.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.at-the-controls",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "L1 renders once, fully revealed, in ladder order on the canonical ordered-ignition route at t=3.441/3.425/3.425 s across three cold runs. The iteration-1 measurement recorded above was taken before the draft-v5 paced ladder existed and is the vd-01 defect this run repaired; it is retained verbatim in supersededMeasurement.",
+      "evidenceRefs": [
+        "evidence/verification/l23-captures.json",
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+        "evidence/verification-final/routeA-ordered/run1",
+        "evidence/verification-final/routeA-ordered/run2",
+        "evidence/verification-final/routeA-ordered/run3"
+      ],
+      "supersededMeasurement": "L1 emits once on both paths. On the ch8-launch deep link it emits in the SAME director tick as L2 and L3 (spread 0.0-0.1 ms across three cold runs) into the single caption slot, so only L3 renders. On the chained ch7-board -> ch8-launch path L1 is the only one of the three that renders. L1 therefore reaches the screen on the chained path only.",
+      "supersededStatus": {
+        "story": "fail"
+      }
+    },
+    {
+      "anchor": "anc.launch.ignition",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "L2 renders once, fully revealed, in ladder order on the canonical ordered-ignition route at t=7.982/7.958/7.967 s across three cold runs. The iteration-1 measurement recorded above was taken before the draft-v5 paced ladder existed and is the vd-01 defect this run repaired; it is retained verbatim in supersededMeasurement.",
+      "evidenceRefs": [
+        "evidence/verification/l23-captures.json",
+        "evidence/verification/chain-launch-anchor-fine-trace.json",
+        "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+        "evidence/verification-final/routeA-ordered/run1",
+        "evidence/verification-final/routeA-ordered/run2",
+        "evidence/verification-final/routeA-ordered/run3"
+      ],
+      "supersededMeasurement": "L2 'hold it. this is the only order left, and i am the one giving it.' never renders on any headless-drivable path. Deep link: emits in the same tick as L1 and L3 and is overwritten within the frame (DOM shows only L3 from the first post-ignition frame). Chained: both anc.launch.ignition and anc.launch.liftoff are already in activatedAnchorIds on the FIRST ch8-launch frame (per-frame in-page sampler, 5.041 s, same sample as the beat change, flight phase still 'surface'), so tickLaunchVoice's seeding pass latches both and L2 never emits at all. No protected file is written; the anchor is observed read-only.",
+      "supersededStatus": {
+        "story": "fail"
+      }
+    },
+    {
+      "anchor": "anc.launch.liftoff",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "L3 renders once, fully revealed, in ladder order on the canonical ordered-ignition route at t=11.486/11.514/11.507 s across three cold runs. The iteration-1 measurement recorded above was taken before the draft-v5 paced ladder existed and is the vd-01 defect this run repaired; it is retained verbatim in supersededMeasurement.",
+      "evidenceRefs": [
+        "evidence/verification/l23-deep-link",
+        "evidence/verification/l23-chained",
+        "evidence/verification/l23-captures.json",
+        "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+        "evidence/verification-final/routeA-ordered/run1",
+        "evidence/verification-final/routeA-ordered/run2",
+        "evidence/verification-final/routeA-ordered/run3"
+      ],
+      "supersededMeasurement": "L3 'the site gets small. the tree does not. i keep finding it.' renders on the ch8-launch deep link (fully revealed, held ~3.2 s until L4) and never emits on the chained path, for the same seeding reason as L2. The liftoff frames are retained as the tree-findability record.",
+      "supersededStatus": {
+        "story": "fail"
+      }
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "L4 fires at window +0.000 s on the first tick that observes deep_space, opening the R2 hold. Across the whole 17 s hold the signed AV state is constant: anchorId anc.launch.atmosphere-exit, shot cin.launch.03-boundary-without-warp, cameraAuthority lens-rig, appliedFovDeg null, postFx fx.launch.03-boundary-without-warp active, score cueRefs ['sc.launch.ground-relents'], intensity 0.5, hit null. 77 samples, zero state changes.",
+      "evidenceRefs": [
+        "evidence/verification/ch8-window-av-score-trace.json",
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.stack-one",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED' under AUDIT NETWORK at +2.016/+2.017/+2.017 s (constant 2.0; max delta +0.017 s, cross-run spread 0.001 s), always after ch8:launch:orbital-handoff has published.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.stack-two",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'REGISTRY QUERY · STATE DESIGNATION.' at +4.016/+4.017/+4.033 s (constant 4.0; spread 0.017 s).",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.stack-three",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'NO DESIGNATION RETURNED.' at +6.033/+6.034/+6.033 s (constant 6.0; spread 0.001 s).",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.contact-logged",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'CONTACT LOGGED.' at +8.549/+8.533/+8.549 s (constant 8.5; spread 0.016 s). 15 characters at the 22 ms/char audit reveal = 0.33 s, then it holds its full slot: no further audit emission until the beat ends, and the band's own fade takes it to zero opacity at +15.0 s. No score event stamps it — the AV trace holds score.hit null and an unchanged cueRef set across the entire window, and this run adds none.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-window-av-score-trace.json",
+        "evidence/verification/audio-window-census.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.designation",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'they asked for a designation. what i have is not one.' at +11.549/+11.550/+11.549 s (constant 11.5; spread 0.001 s). 53 characters = 1.80 s reveal, fully revealed inside the 2.5 s slot; the +12.7 s frame shows it complete.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.open-query",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "'nothing answers. the query does not close.' at +14.049/+14.049/+14.066 s (constant 14.0; spread 0.017 s), 3.0 s tail to the advance. The regulation band is visibly empty from +15.0 s: the +15.2 s frame shows the audit pill fully faded while the caption reveals.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop/off_15p2s_ch8-launch.png"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.advance",
+      "story": "pass",
+      "camera": "pass",
+      "effect": "pass",
+      "score": "pass",
+      "control": "pass",
+      "measurement": "Advance to ch8-crossing at +17.066 s on all three cold runs (constant CH8_EXIT_HOLD_SECONDS = 17.0; cross-run spread 0.000 s), zero timeout rescues, on the unchanged durable deep_space fact. lastResetReason 'beat-exit', activatedAnchorIds emptied, signed intensity 0.5 -> 0.42 -> 0.35. The +18.0 s frame proves the seam: ch8-crossing entry caption revealing, objective SIBLING WORLD, marker resolved, no blank or black frame.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-window-av-score-trace.json",
+        "evidence/verification/ch8-captures-desktop/off_18p0s_ch8-crossing.png"
+      ]
+    },
+    {
+      "anchor": "anchor.ch7.beat-entry",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "ch7-reconstruct entry caption '(repair is not return.)' emits exactly once at beat publish +0.000 s (run 1 carries an exact store-subscription publish stamp; runs 2 and 3 won only the boot snapshot, so their offsets are page-load relative and do not contradict it). Once-only on 3 cold desktop runs plus mobile portrait and mobile landscape. No camera, effect, score or control event is declared at this anchor and none was observed; shipped state continues.",
+      "evidenceRefs": [
+        "evidence/verification-final/ch7queue-desktop.json",
+        "evidence/verification-final/ch7mobile-mobile-portrait.json",
+        "evidence/verification-final/ch7mobile-mobile-landscape.json"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.self-order",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "L2 'hold it. this is the only order left, and i am the one giving it.' renders once, fully revealed, in ladder order on the canonical ordered-ignition route at t=7.982/7.958/7.967 s across three cold runs, with l2Cause 'timer' on every run and L1's reveal never cut (margin 1.308-1.319 s). Per acceptance criterion [26] no score cue is added at this anchor: the score domain records that there is no score event and shipped state continues, which is what was observed (no cue ref fired at the anchor). No camera or control change is declared here either.",
+      "evidenceRefs": [
+        "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+        "evidence/verification-final/routeA-ordered/run1",
+        "evidence/verification-final/routeA-ordered/run2",
+        "evidence/verification-final/routeA-ordered/run3"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.site-recedes",
+      "story": "pass",
+      "camera": "not-applicable",
+      "effect": "not-applicable",
+      "score": "not-applicable",
+      "control": "not-applicable",
+      "measurement": "L3 'the site gets small. the tree does not. i keep finding it.' renders once, fully revealed, at the phase edge on the canonical ordered-ignition route at t=11.486/11.514/11.507 s across three cold runs, with a measured post-reveal margin to the exit fact of 1.853/1.856/1.850 s against the 0.3 s floor. Per acceptance criterion [26] no score cue is added at this anchor: the score domain records that there is no score event and shipped state continues, which is what was observed. No camera or control change is declared here.",
+      "evidenceRefs": [
+        "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+        "evidence/verification-final/routeA-ordered/run1",
+        "evidence/verification-final/routeA-ordered/run2",
+        "evidence/verification-final/routeA-ordered/run3"
+      ]
+    }
+  ],
+  "variants": {
+    "desktop": {
+      "status": "pass",
+      "variantId": "variant-desktop",
+      "focalParity": true,
+      "measurement": "1280x720 LOW is the reference path for every cadence assertion in this report.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-captures-desktop.json",
+        "evidence/verification/ch7-captures-desktop.json"
+      ]
+    },
+    "mobile": {
+      "status": "pass",
+      "variantId": "variant-mobile",
+      "focalParity": true,
+      "measurement": "390x844 portrait: identical string set, identical order, cadence offsets within 0.2 s of every constant, advance at the constant. Layout at stack row 1: audit pill y 114-160, caption y 606-653 (data-caption-placement 'center', wrapping to two lines), touch controls below y 660 — no band, card or control overlap. 844x390 landscape captured as well: audit y 53-99, caption y 152-199, no collision. On mobile the objective card is collapsed behind the shipped JOURNAL disclosure, so 'DEEP SPACE · HANDOFF' is not on screen — shipped mobile HUD behaviour, unchanged by this run.",
+      "evidenceRefs": [
+        "evidence/verification/variant-parity.json",
+        "evidence/verification/ch8-captures-mobile-portrait.json",
+        "evidence/verification/ch8-captures-mobile-landscape.json",
+        "evidence/verification/ch7-captures-mobile-portrait.json"
+      ]
+    },
+    "reducedMotion": {
+      "status": "pass",
+      "variantId": "variant-reduced-motion",
+      "focalParity": true,
+      "measurement": "prefers-reduced-motion: reduce. Full ch7 and full ch8 passes: identical line sequence, identical offsets within 0.2 s, identical advance. Signed AV reports lens reducedMotion false at the launch shot because those shots are lens-rig and hold no numeric lens authority — shipped behaviour, not a variant regression.",
+      "evidenceRefs": [
+        "evidence/verification/variant-parity.json",
+        "evidence/verification/ch8-captures-reduced-motion.json",
+        "evidence/verification/ch7-captures-reduced-motion.json"
+      ]
+    },
+    "lowestQuality": {
+      "status": "pass",
+      "variantId": "quality-potato",
+      "focalParity": true,
+      "measurement": "POTATO tier, 1280x720: identical string set, order and cadence for both beats; caption and audit typography unchanged and legible over the bright-terrain ch7 moments and the ch8 hold. One shipped objective difference recorded and not attributable to this run's copy surface: on POTATO the ch8:launch:climb objective never published (ignite -> orbital-handoff directly). No POTATO baseline exists to compare against.",
+      "evidenceRefs": [
+        "evidence/verification/variant-parity.json",
+        "evidence/verification/ch8-captures-potato.json",
+        "evidence/verification/ch7-captures-potato.json"
+      ]
+    }
+  },
+  "resetMatrix": [
+    {
+      "case": "replay",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "Reload mid-ch8-window: a fresh ch8-launch beat publishes and no window line replays. Only the fresh L1/L2/L3 sequence emits; no stack row, no CONTACT LOGGED., no designation, no L6.",
+      "evidenceRefs": [
+        "evidence/verification/quit-replay-trace.json"
+      ]
+    },
+    {
+      "case": "deep_link",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "?story=ch7-reconstruct, ?story=ch7-board and ?story=ch8-crossing each publish only their own entry caption and objective at t+0.4 s. No ch7 M1-M7 line, no ch7 exit line and no ch8 window line replays on any of them; the seeding pass is doing its job.",
+      "evidenceRefs": [
+        "evidence/verification/resets-trace.json"
+      ]
+    },
+    {
+      "case": "pause_focus",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "Real pause engaged through the app's own path (pointerlockchange while phase is 'playing'): isStoryPaused() true and the story clock froze for 0.0 ms across a 5006 ms wall hold applied at window +3.0 s. Beat-runtime offsets survived exactly: 2.016/4.022/6.039/8.539/11.555/14.055/advance 17.072 s, every one inside 0.2 s of its constant, while the wall-clock offsets shifted by the full 5.21 s pause. Focus loss simulated by spoofing document.visibilityState produced no offset skew (the ch7/ch8 director path uses min(rawDt, 0.1) and never consults documentIsHidden()).",
+      "evidenceRefs": [
+        "evidence/verification/pause-window-trace.json",
+        "evidence/verification/resets-trace.json"
+      ]
+    },
+    {
+      "case": "quit",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "Navigating from mid-ch8-window to the sandbox route: beat null, caption null, audit null, work order empty, objective null, zero emissions over the following 20 s. Recorded limitation: this is a route-level quit, not the in-game menu button, which headless could not reach.",
+      "evidenceRefs": [
+        "evidence/verification/quit-replay-trace.json"
+      ]
+    },
+    {
+      "case": "completion",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "At each beat completion the signed AV runtime reports lastResetReason 'beat-exit' with activatedAnchorIds emptied, the guided objective cleared and republished within one sample, and the caption/audit slots handed to the destination beat. Measured at ch7-reconstruct -> ch7-board (+5.027 s) and ch8-launch -> ch8-crossing (+17.066 s).",
+      "evidenceRefs": [
+        "evidence/verification/ch8-flow-trace.json",
+        "evidence/verification/ch8-window-av-score-trace.json"
+      ]
+    },
+    {
+      "case": "sandbox_noop",
+      "status": "pass",
+      "stateLeak": false,
+      "measurement": "Story-inactive sandbox held for 45 s: __storyBeat null, signed AV active false, caption/audit/system/work-order all null or empty, and zero story-text or objective emissions recorded. No string introduced by this run renders.",
+      "evidenceRefs": [
+        "evidence/verification/resets-trace.json"
+      ]
+    }
+  ],
+  "performance": {
+    "status": "pass",
+    "measurement": "LOW, 1280x720, same probe shape as the baseline. Medians: ch7-reconstruct 60.09 (baseline 60.12, delta -0.03), ch7-board 60.09 (baseline 60.11, delta -0.02), ch8-launch 60.06 (baseline 60.08, delta -0.02). All three deltas are inside the run-to-run spread of the samples themselves, so this is no measurable regression. Frame times 16.64/16.64/16.65 ms against the 18.2 ms ceiling; every median clears the 55 fps floor. The implemented ch8 exit-hold window itself holds a median of 60.06 fps over five 3 s samples (60.21/60.03/60.08/60.03/60.06), minimum 60.03.",
+    "evidenceRefs": [
+      "evidence/verification/fps-verification.json",
+      "evidence-hires/fps-baseline.json"
+    ]
+  },
+  "audio": {
+    "status": "pass",
+    "measurement": "No audio code changed this run. The combined music-bus offline render was repeated post-implementation and reproduces the Stage 2 measurement to within 1e-8 dB at every case (hold -19.928312 dBFS, liftoff -20.110469, crossing seam -20.916565, ch4-defy yardstick -23.831419; the hold sits 3.90 dB above the yardstick). WAV byte hashes differ because the offline render is not bit-deterministic; provenance here is by measurement, not by hash. A live census across the implemented window shows the new text emissions add and remove no audio events: showCaption and showAuditLine emit nothing on the bus, score.hit stays null for the whole hold, and the only SFX inside the window is the single shipped objective-enter cue (terminalAdvance, 1 triggered / 0 suppressed) at +1.765 s for the restored ch8:launch:orbital-handoff objective. From +2.0 s to the +17.0 s advance the SFX census is quiet.",
+    "evidenceRefs": [
+      "evidence/verification/score-ch8-window-verify-analysis.json",
+      "evidence/verification/audio-window-census.json",
+      "evidence/verification/ch8-window-av-score-trace.json",
+      "evidence/score-ch8-window-analysis.json",
+      "audio-report.md"
+    ]
+  },
+  "variantDOrdering": {
+    "status": "pass",
+    "objectiveId": "ch8:launch:orbital-handoff",
+    "coldRuns": 3,
+    "publishOffsetSeconds": [
+      1.767,
+      1.767,
+      1.767
+    ],
+    "stackOneOffsetSeconds": [
+      2.016,
+      2.017,
+      2.017
+    ],
+    "marginSeconds": [
+      0.249,
+      0.25,
+      0.25
+    ],
+    "publishedBeforeStackOneEveryRun": true,
+    "measurement": "Published on all three cold runs and on all three variant runs, 1.767 s into the hold, with a 0.249-0.250 s margin ahead of stack row 1. Restored screen life 15.30 s (publish to the +17.066 s advance). Marker label 'DEEP SPACE · HANDOFF', requiresMarker false, health ready, work order unchanged ['ATMOSPHERIC EXIT IS COMPLETE.', 'LET THE SYSTEM RESOLVE.']. The shipped baseline trace never sampled this objective at all, consistent with its recorded unreachability.",
+    "evidenceRefs": [
+      "evidence/verification/cadence-assertions.json",
+      "evidence/verification/variant-parity.json",
+      "evidence/baseline-trace.json"
+    ]
+  },
+  "namedConstantsVerified": {
+    "source": "main/src/story/emergentStoryDirector.ts exported constants, read by the assertion script rather than retyped",
+    "CH7_M7_AUDIT_SECONDS": 0,
+    "CH7_M7_CAPTION_SECONDS": 0.6,
+    "CH7_EXIT_CAPTION_SECONDS": 3,
+    "CH7_EXIT_HOLD_SECONDS": 5,
+    "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS": 0,
+    "CH8_STACK_ONE_SECONDS": 2,
+    "CH8_STACK_TWO_SECONDS": 4,
+    "CH8_STACK_THREE_SECONDS": 6,
+    "CH8_CONTACT_LOGGED_SECONDS": 8.5,
+    "CH8_DESIGNATION_CAPTION_SECONDS": 11.5,
+    "CH8_OPEN_QUERY_SECONDS": 14,
+    "CH8_EXIT_HOLD_SECONDS": 17,
+    "evidenceRefs": [
+      "cadence-assert.mjs",
+      "evidence/verification/cadence-assertions.json"
+    ]
+  },
+  "mechanicalChecks": [
+    {
+      "id": "check.verify",
+      "status": "pass",
+      "command": "npm --prefix main run verify",
+      "result": "277 test files, 2199 tests passed; typecheck clean; vite build succeeded in 5.21 s.",
+      "evidenceRefs": [
+        "evidence/verification/full-client-verify.log"
+      ]
+    },
+    {
+      "id": "check.story-ux",
+      "status": "pass",
+      "command": "npm --prefix main run story:ux:check",
+      "result": "6 files, 54 tests passed. Re-run for the record post-implementation.",
+      "evidenceRefs": [
+        "evidence/verification/story-ux-check-verification.log"
+      ]
+    },
+    {
+      "id": "check.latch-once-only",
+      "status": "pass",
+      "result": "Every frozen string emitted exactly once per beat entry on all three ch7 cold runs, all three ch8 cold runs and all six variant runs; no deep link replayed a past line; both cadence tables were asserted against the exported named constants.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/variant-parity.json",
+        "evidence/verification/resets-trace.json"
+      ]
+    },
+    {
+      "id": "check.creative-gate-contract",
+      "status": "fail",
+      "command": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-08-10-ch7-ch8-voice-repair --phase implementation",
+      "result": "One failure, the accepted out-of-scope journey-contract.json-schema failure under ruling R3. No other failure.",
+      "evidenceRefs": [
+        "creative-run-quality-report.json",
+        "production-lock.md"
+      ]
+    }
+  ],
+  "defects": [
+    {
+      "id": "vd-01",
+      "severity": "high",
+      "title": "ch8 L2 never renders on any drivable path; L3 never renders on the chained path",
+      "contractRefs": [
+        "evt.ch8.l2-ignition",
+        "evt.ch8.l3-liftoff",
+        "evt.ch8.l1-controls"
+      ],
+      "measurement": "Chained ch7-board -> ch8-launch: a per-frame in-page sampler shows anc.launch.ignition and anc.launch.liftoff already present in activatedAnchorIds on the first ch8-launch frame (5.041 s, the same sample as the beat change, flight phase still 'surface'). tickLaunchVoice's un-seeded first pass therefore adds both latches and returns, so L2 and L3 never emit; only L1 renders. Deep-link ch8-launch: L1, L2 and L3 all emit inside one director tick (spread 0.0-0.1 ms on three cold runs) into the single caption slot, so only L3 renders. Across both paths exactly one of the three lines reaches the screen.",
+      "evidenceRefs": [
+        "evidence/verification/chain-launch-anchor-fine-trace.json",
+        "evidence/verification/l23-captures.json",
+        "evidence/verification/cadence-assertions.json"
+      ],
+      "status": "open",
+      "note": "Movie mode compresses the launch; manual flight is not drivable headless, so the manual-play behaviour of these two anchors is unverified. The measured fact is that on every path this environment can drive, two of the three L-lines do not reach the screen. Routing and disposition belong to the directors."
+    },
+    {
+      "id": "vd-02",
+      "severity": "medium",
+      "title": "Chained ch6 -> ch9 movie flow stalls at ch8-landfall",
+      "contractRefs": [],
+      "measurement": "Two chained runs from ?story=ch6-dive&movie=1 entered ch8-landfall at 94.8 s and 92.1 s and never advanced (505 s and 208 s of further observation) on objective ch8:landfall:land-dry-level, health ready, autopilot nudges 0 and no keys asserted. Reproduced from ?story=ch8-crossing&movie=1 — a beat this run does not touch — which reaches ch8-landfall at 16.7 s and then stalls identically. ?story=ch8-landfall&movie=1 reaches ch9-settle in 10.5 s.",
+      "evidenceRefs": [
+        "evidence/verification/full-flow-trace.json",
+        "evidence/verification/chain-landfall-from-crossing.json",
+        "evidence/verification/chain-landfall-deeplink.json"
+      ],
+      "status": "open",
+      "note": "Not attributable to this run's changed code: reproduced from a start beat downstream of every mutated code path. Escalate as a separate chain-entry packet."
+    },
+    {
+      "id": "vd-03",
+      "severity": "low",
+      "title": "POTATO tier skips the shipped ch8:launch:climb objective",
+      "contractRefs": [],
+      "measurement": "On POTATO the ch8-launch objective sequence is ignite -> orbital-handoff; ch8:launch:climb never publishes. On LOW desktop, mobile and reduced motion it publishes normally.",
+      "evidenceRefs": [
+        "evidence/verification/variant-parity.json",
+        "evidence/verification/variants-trace.json"
+      ],
+      "status": "open",
+      "note": "No POTATO baseline exists, so this cannot be classed as a regression; recorded as a measured variant difference outside this run's copy surface."
+    }
+  ],
+  "capturedGaps": [
+    "Manual (non-movie) ch7 build-step lifecycle: headless cannot drive the [F]/[C] transactions. Unchanged from the shipped baseline's recorded assumption.",
+    "Manual ch8 ignition and liftoff: headless cannot fly the ship, so the manual behaviour of L2 and L3 is unverified. This is the environment limit behind defect vd-01.",
+    "A deep link into ch7-reconstruct with repair stages already banked is not reachable through the shipped dev routes, so the runtime seeded-resume path for M2-M6 is proven only by the unit test plus the ch7-board deep link.",
+    "True background rAF throttling could not be reproduced headless. The visibilitychange spoof produced no offset skew, but rAF continued at 60 Hz throughout, so a genuinely backgrounded tab is untested.",
+    "Guidance objective ch8-launch-reboard (KESTREL HATCH · REBOARD) never became active on any traced path; its lifecycle is unobserved.",
+    "quit was exercised as a route-level navigation to the sandbox, not through the in-game menu button."
+  ],
+  "headedGates": [],
+  "evidenceRefs": [
+    "evidence/verification/",
+    "voice-repair-probe.mjs",
+    "cadence-assert.mjs",
+    "variant-parity-assert.mjs",
+    "fps-verify-probe.mjs",
+    "audio-window-probe.mjs",
+    "score-ch8-window-verify-probe.mjs",
+    "pause-window-probe.mjs",
+    "quit-replay-probe.mjs",
+    "ch8-window-av-probe.mjs"
+  ],
+  "repairIteration": {
+    "iteration": 3,
+    "route": "repair-verification",
+    "contractVersion": "draft-v3",
+    "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+    "supersedesContractVersion": "draft-v2",
+    "repairsDefectIds": [
+      "vd-01"
+    ],
+    "recordedBy": "story-verifier",
+    "recordedAt": "2026-08-11T01:47:13.219Z",
+    "status": "fail",
+    "scope": "Targeted delta re-proof of the vd-01 repair in main/src/story/emergentStoryDirector.ts (tickLaunchVoice only). Every iteration-1 result in the sections above — ch7, the frozen exit-window table, frame rate, variants, audio and the reset matrix — stands and is retained verbatim; the exit-window cadence was nonetheless re-measured here because tickLaunchVoice changed, and it is clean.",
+    "summary": "The paced ladder implements its contracted formulas exactly: t_L2 = min(t_L1 + 4.5, t_phaseEdge) and t_L3 = max(t_phaseEdge, t_L2 + 3.0) hold within 0.066 s worst case across 24 cold runs, with both branches of both formulas exercised; order, once-only, the drop rule, seeded-consumed entry, variant parity and the frozen exit-window table all verify clean. One contracted term fails: acceptance criterion [21], the measured-margin guarantee. On the only scripted paced route that actually reaches deep_space, t_L3 + 1.98 s lands AFTER t_deepSpace by 1.211 s on average (-1.239 to -1.173 across three cold runs), so L3 is truncated at roughly a third of its reveal rather than completing strictly before the exit. On the literal contract script (hold [SPACE] at entry +6.0 s and nothing further) the ship never reaches deep_space at all inside a 22 s observation, so no margin exists to measure on that variant; the full three-line experience with completed reveals was observed only on routes that never leave the atmosphere.",
+    "environment": {
+      "browser": "Chromium (playwright-core, ~/.cache/ms-playwright)",
+      "flags": [
+        "--enable-unsafe-swiftshader",
+        "--use-gl=angle",
+        "--window-size=1280,720"
+      ],
+      "renderer": "SwiftShader (headless)",
+      "qualityTier": "LOW (POTATO where labelled)",
+      "viewport": "1280x720 (390x844 for the mobile-portrait variant)",
+      "clockSource": "the game's own pause-aware storyNow(); beat entry taken from the store subscription where it won the boot race and from the app's window.__storyBeat mirror converted onto the same clock otherwise, with the conversion offset recorded per run",
+      "canonicalPreviewUrl": "http://localhost:5176"
+    },
+    "namedConstantsVerified": {
+      "source": "main/src/story/emergentStoryDirector.ts",
+      "CH8_L1_MIN_SLOT_SECONDS": 4.5,
+      "CH8_L2_MIN_SLOT_SECONDS": 3,
+      "l3RevealSeconds": 1.972,
+      "revealRateMsPerChar": 34,
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "routes": [
+      {
+        "id": "routeA.space-only",
+        "label": "Route A, paced scripted deep link, contract script exactly (?story=ch8-launch&profile=LOW, hold [SPACE] at entry +6.0 s, no further pilot input)",
+        "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.462,
+            "tL2": 7.466,
+            "tL3": 10.492,
+            "tL4": null,
+            "tPhaseEdge": 7.466,
+            "tDeepSpace": null,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.269,
+            "tL2": 7.489,
+            "tL3": 10.52,
+            "tL4": null,
+            "tPhaseEdge": 7.488,
+            "tDeepSpace": null,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 3.209,
+            "tL2": 7.486,
+            "tL3": 10.516,
+            "tL4": null,
+            "tPhaseEdge": 7.486,
+            "tDeepSpace": null,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.253,
+          "tL2": 0.023,
+          "tL3": 0.028,
+          "tPhaseEdge": 0.022,
+          "tDeepSpace": null
+        },
+        "maxFormulaDeltaSeconds": 0.031,
+        "l3RenderedEveryRun": true,
+        "l3DroppedEveryRun": false,
+        "status": "partial",
+        "measurement": "Full three-line ladder, all three captions once and in order, L3 reveal complete at +2.0 s (58/58 characters imaged). L2 was edge-accelerated in 3/3 runs because ignition at +6.0 s puts the phase edge (7.466-7.488 s) 0.22-0.50 s ahead of the timer slot t_L1+4.5; L1 had already completed its reveal, so nothing was interrupted. The ship never reached deep_space within the 22 s observation, so acceptance criterion [21] has no t_deepSpace to measure against on this variant."
+      },
+      {
+        "id": "routeA.space-then-w",
+        "label": "Route A variant that actually exits: same ignition, then hold [W] through the climb as the shipped climb objective instructs",
+        "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.381,
+            "tL2": 7.587,
+            "tL3": 10.653,
+            "tL4": 11.369,
+            "tPhaseEdge": 7.586,
+            "tDeepSpace": 11.386,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": -1.239,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.277,
+            "tL2": 7.45,
+            "tL3": 10.509,
+            "tL4": 11.292,
+            "tPhaseEdge": 7.45,
+            "tDeepSpace": 11.308,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": -1.173,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 3.118,
+            "tL2": 7.584,
+            "tL3": 10.646,
+            "tL4": 11.38,
+            "tPhaseEdge": 7.583,
+            "tDeepSpace": 11.396,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": -1.222,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.263,
+          "tL2": 0.137,
+          "tL3": 0.144,
+          "tPhaseEdge": 0.136,
+          "tDeepSpace": 0.088
+        },
+        "maxFormulaDeltaSeconds": 0.066,
+        "l3RenderedEveryRun": true,
+        "l3DroppedEveryRun": false,
+        "status": "fail",
+        "measurement": "Ladder and formulas identical, but t_deepSpace lands 1.211 s (mean) BEFORE t_L3 + 1.98 s, so L3 is truncated by the frozen exit-window table. Measured C3 margin -1.239 / -1.173 / -1.222 s. Criterion [21] requires the margin strictly positive and flags anything under 0.3 s."
+      },
+      {
+        "id": "routeA.space-late-ignite",
+        "label": "Route A timer-branch control: identical route with ignition at entry +10.0 s",
+        "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.45,
+            "tL2": 7.978,
+            "tL3": 11.472,
+            "tL4": null,
+            "tPhaseEdge": 11.471,
+            "tDeepSpace": null,
+            "l2Cause": "timer",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.37,
+            "tL2": 7.907,
+            "tL3": 11.466,
+            "tL4": null,
+            "tPhaseEdge": 11.465,
+            "tDeepSpace": null,
+            "l2Cause": "timer",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 3.091,
+            "tL2": 7.613,
+            "tL3": 11.582,
+            "tL4": null,
+            "tPhaseEdge": 11.582,
+            "tDeepSpace": null,
+            "l2Cause": "timer",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 1
+            },
+            "order": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.359,
+          "tL2": 0.365,
+          "tL3": 0.116,
+          "tPhaseEdge": 0.117,
+          "tDeepSpace": null
+        },
+        "maxFormulaDeltaSeconds": 0.037,
+        "l3RenderedEveryRun": true,
+        "l3DroppedEveryRun": false,
+        "status": "pass",
+        "measurement": "Exercises the branches the +6.0 s script cannot: L2 fires on the timer at exactly t_L1 + 4.5 s in 3/3 runs (7.613-7.978 s against L1 at 3.091-3.450 s) and L3 fires on the phase edge as max(t_phaseEdge, t_L2+3.0) = t_phaseEdge. Worst formula delta 0.037 s."
+      },
+      {
+        "id": "routeB.chained-movie",
+        "label": "Route B, chained movie entry from the ch7 flow (?story=ch7-board&movie=1&profile=LOW)",
+        "url": "http://localhost:5176/?story=ch7-board&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 0.023,
+            "tL2": 1.462,
+            "tL3": null,
+            "tL4": 3.39,
+            "tPhaseEdge": 1.462,
+            "tDeepSpace": 3.406,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 0.024,
+            "tL2": 1.434,
+            "tL3": null,
+            "tL4": 3.374,
+            "tPhaseEdge": 1.434,
+            "tDeepSpace": 3.39,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 0.024,
+            "tL2": 1.433,
+            "tL3": null,
+            "tL4": 3.374,
+            "tPhaseEdge": 1.433,
+            "tDeepSpace": 3.39,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.001,
+          "tL2": 0.029,
+          "tL3": null,
+          "tPhaseEdge": 0.029,
+          "tDeepSpace": 0.016
+        },
+        "maxFormulaDeltaSeconds": 0,
+        "l3RenderedEveryRun": false,
+        "l3DroppedEveryRun": true,
+        "status": "pass",
+        "measurement": "L1 renders at entry +0.023 s; L2 fires exactly on the phase edge (1.433-1.462 s), 3.06-3.09 s ahead of its timer slot, and interrupts L1 at 37-39 of 94 revealed characters — the authored player-caused exception, imaged as a pair at edge -0.081/-0.062 s and edge +0.237/+0.239 s. L3 is DROPPED in 3/3 runs: its due time (t_L2+3.0 = 4.43-4.46 s) is after the first deep_space observation at 3.390-3.406 s, and no L3 caption appears in the trace or in any frame. Exit window unaffected."
+      },
+      {
+        "id": "routeC.deeplink-movie",
+        "label": "Route C, plain deep-link movie (?story=ch8-launch&movie=1&profile=LOW)",
+        "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.277,
+            "tL2": 4.72,
+            "tL3": null,
+            "tL4": 6.551,
+            "tPhaseEdge": 4.72,
+            "tDeepSpace": 6.567,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.056,
+            "tL2": 4.456,
+            "tL3": null,
+            "tL4": 6.315,
+            "tPhaseEdge": 4.455,
+            "tDeepSpace": 6.33,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 2.986,
+            "tL2": 4.39,
+            "tL3": null,
+            "tL4": 6.251,
+            "tPhaseEdge": 4.389,
+            "tDeepSpace": 6.266,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.291,
+          "tL2": 0.33,
+          "tL3": null,
+          "tPhaseEdge": 0.331,
+          "tDeepSpace": 0.301
+        },
+        "maxFormulaDeltaSeconds": 0.001,
+        "l3RenderedEveryRun": false,
+        "l3DroppedEveryRun": true,
+        "status": "pass",
+        "measurement": "L1 at 2.986-3.277 s, L2 edge-accelerated at 4.390-4.720 s interrupting L1 mid-reveal, L3 DROPPED in 3/3 runs (due 7.39-7.72 s against deep_space at 6.266-6.567 s). Frames at deep_space -0.5/+0.0/+0.5 s record the state: at the exit the caption slot still holds L2 at 53 of 65 characters, so on this route it is L2, not L3, that the frozen exit-window table truncates."
+      },
+      {
+        "id": "routeD.potato",
+        "label": "Route D, POTATO tier deep-link movie",
+        "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=POTATO",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 2.983,
+            "tL2": 4.388,
+            "tL3": null,
+            "tL4": 6.032,
+            "tPhaseEdge": 4.387,
+            "tDeepSpace": 6.048,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.273,
+            "tL2": 4.718,
+            "tL3": null,
+            "tL4": 6.367,
+            "tPhaseEdge": 4.717,
+            "tDeepSpace": 6.386,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 2.935,
+            "tL2": 4.37,
+            "tL3": null,
+            "tL4": 6.029,
+            "tPhaseEdge": 4.37,
+            "tDeepSpace": 6.048,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.338,
+          "tL2": 0.348,
+          "tL3": null,
+          "tPhaseEdge": 0.347,
+          "tDeepSpace": 0.338
+        },
+        "maxFormulaDeltaSeconds": 0.001,
+        "l3RenderedEveryRun": false,
+        "l3DroppedEveryRun": true,
+        "status": "pass",
+        "measurement": "Asserted as the drop, not the render: L3 dropped in 3/3 runs, order and once-only intact, exit-window table unaffected. No L3 caption in any trace or frame."
+      },
+      {
+        "id": "routeD.mobile-portrait",
+        "label": "Route D parity, 390x844 mobile portrait",
+        "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.375,
+            "tL2": 4.779,
+            "tL3": null,
+            "tL4": 6.67,
+            "tPhaseEdge": 4.779,
+            "tDeepSpace": 6.69,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.423,
+            "tL2": 4.851,
+            "tL3": null,
+            "tL4": 6.726,
+            "tPhaseEdge": 4.851,
+            "tDeepSpace": 6.742,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 3.034,
+            "tL2": 4.462,
+            "tL3": null,
+            "tL4": 6.345,
+            "tPhaseEdge": 4.462,
+            "tDeepSpace": 6.364,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.389,
+          "tL2": 0.389,
+          "tL3": null,
+          "tPhaseEdge": 0.389,
+          "tDeepSpace": 0.378
+        },
+        "maxFormulaDeltaSeconds": 0,
+        "l3RenderedEveryRun": false,
+        "l3DroppedEveryRun": true,
+        "status": "pass",
+        "measurement": "Same string set and order (L1 then L2), same drop behaviour, L2 offset from L1 within 0.004 s of the desktop reference."
+      },
+      {
+        "id": "routeD.reduced-motion",
+        "label": "Route D parity, prefers-reduced-motion reduce",
+        "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+        "coldRuns": 3,
+        "validRuns": 3,
+        "perRun": [
+          {
+            "run": 1,
+            "tL1": 3.257,
+            "tL2": 4.67,
+            "tL3": null,
+            "tL4": 6.628,
+            "tPhaseEdge": 4.669,
+            "tDeepSpace": 6.644,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 2,
+            "tL1": 3.121,
+            "tL2": 4.553,
+            "tL3": null,
+            "tL4": 6.451,
+            "tPhaseEdge": 4.553,
+            "tDeepSpace": 6.466,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          },
+          {
+            "run": 3,
+            "tL1": 3.183,
+            "tL2": 4.621,
+            "tL3": null,
+            "tL4": 6.472,
+            "tPhaseEdge": 4.621,
+            "tDeepSpace": 6.598,
+            "l2Cause": "phase-edge",
+            "c3MarginSeconds": null,
+            "onceOnlyCounts": {
+              "l1": 1,
+              "l2": 1,
+              "l3": 0
+            },
+            "order": [
+              "L1",
+              "L2"
+            ],
+            "pageErrors": 0
+          }
+        ],
+        "crossRunSpreadSeconds": {
+          "tL1": 0.136,
+          "tL2": 0.117,
+          "tL3": null,
+          "tPhaseEdge": 0.116,
+          "tDeepSpace": 0.178
+        },
+        "maxFormulaDeltaSeconds": 0.001,
+        "l3RenderedEveryRun": false,
+        "l3DroppedEveryRun": true,
+        "status": "pass",
+        "measurement": "Same string set and order, same drop behaviour, L2 offset from L1 within 0.012 s of the desktop reference."
+      }
+    ],
+    "c3MarginGuarantee": {
+      "contractRef": "evidence.acceptanceCriteria[21]",
+      "formula": "t_deepSpace - (t_L3 + 1.98 s)",
+      "l3RevealSeconds": 1.972,
+      "status": "fail",
+      "measuredOnRoute": "routeA.space-then-w (the only scripted paced route observed to reach deep_space)",
+      "perRunMarginSeconds": [
+        -1.239,
+        -1.173,
+        -1.222
+      ],
+      "meanMarginSeconds": -1.211,
+      "minMarginSeconds": -1.239,
+      "maxMarginSeconds": -1.173,
+      "crossRunSpreadSeconds": 0.066,
+      "underTriadFlagThreshold": true,
+      "triadFlagRaised": true,
+      "contractLiteralRouteResult": "On hold-[SPACE]-only the ship stays in atmosphere; no deep_space observation occurred within 22 s of beat entry in 3/3 runs, so the guarantee is unmeasurable rather than met on that variant.",
+      "physicalCause": "Measured air time from the phase edge to the first deep_space observation is 3.80-3.86 s with the shipped climb input, while L3 is scheduled at t_phaseEdge + 3.0 s and needs 1.972 s of reveal after that — 4.97 s of air time. The ladder needs about 1.2 s more climb than the shipped flight physics give a player who follows the climb objective.",
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json",
+        "evidence/verification-v3/routeA-space-then-w.json",
+        "evidence/verification-v3/routeA-space.json"
+      ]
+    },
+    "formulaConformance": {
+      "status": "pass",
+      "l2": {
+        "timerBranchObserved": "routeA.space-late-ignite, 3/3 runs",
+        "edgeBranchObserved": "routeA.space-only, routeA.space-then-w, routeB, routeC and all three Route D variants, 3/3 runs each",
+        "maxAbsoluteDeltaSeconds": 0.066
+      },
+      "l3": {
+        "edgeBranchObserved": "routeA.space-late-ignite, 3/3 runs (t_L3 = t_phaseEdge)",
+        "spacingBranchObserved": "routeA.space-only and routeA.space-then-w, 3/3 runs each (t_L3 = t_L2 + 3.0)",
+        "maxAbsoluteDeltaSeconds": 0.066,
+        "note": "The largest residuals sit on the capture-heavy space-then-w runs; the same route measured without screenshots resolves to 0.026 s, so the residual is shutter load on the director tick, not scheduling drift."
+      },
+      "orderAndOnceOnly": "L1 then L2 then L3 with exactly one emission each on every route where a line fires; zero repeats across 24 cold runs.",
+      "protectedState": "No signed-anchor read remains in the ladder path; every trigger observed here reads getSpaceFlightSnapshot() and the shipped dwell state only.",
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "authoredInterruption": {
+      "status": "pass",
+      "rule": "Acceptance criterion [20]: a phase-edge acceleration may interrupt L1 mid-reveal to deliver L2; the timer path may never interrupt.",
+      "edgeCausedInterruptionImaged": true,
+      "framePairs": [
+        {
+          "run": "routeB run 2",
+          "before": "evidence/verification-v3/routeB-desktop-run2/005_burst_t1p35s_ch8-launch_surface.png",
+          "beforeOffsetFromEdgeSeconds": -0.081,
+          "beforeRevealedChars": "37/94",
+          "after": "evidence/verification-v3/routeB-desktop-run2/007_burst_t1p67s_ch8-launch_descent.png",
+          "afterOffsetFromEdgeSeconds": 0.237,
+          "afterRevealedChars": "6/65"
+        },
+        {
+          "run": "routeB run 3",
+          "before": "evidence/verification-v3/routeB-desktop-run3/005_burst_t1p37s_ch8-launch_surface.png",
+          "beforeOffsetFromEdgeSeconds": -0.062,
+          "beforeRevealedChars": "39/94",
+          "after": "evidence/verification-v3/routeB-desktop-run3/007_burst_t1p67s_ch8-launch_descent.png",
+          "afterOffsetFromEdgeSeconds": 0.239,
+          "afterRevealedChars": "6/65"
+        }
+      ],
+      "timerPathNeverInterrupted": "In the timer-branch control (late ignition) L1 completed all 94 characters 1.326-1.341 s before L2 fired.",
+      "evidenceRefs": [
+        "evidence/verification-v3/routeB-desktop.json",
+        "evidence/verification-v3/routeA-space-late-ignite.json"
+      ]
+    },
+    "dropRule": {
+      "status": "pass",
+      "droppedEveryRunOn": [
+        "routeB.chained-movie",
+        "routeC.deeplink-movie",
+        "routeD.potato",
+        "routeD.mobile-portrait",
+        "routeD.reduced-motion"
+      ],
+      "dropAssertedInTraceNotJustAbsentFromFrames": "The caption store subscription records every emission; L3 appears in zero of the 15 movie-route traces, and the exit-window origin (L4) is the next caption after L2 on every one.",
+      "nothingDeferredIntoExitWindow": "L4 fires at +0.000 s of the exit window in 15/15 movie runs and no L-line appears anywhere inside the window.",
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "exitWindowRegression": {
+      "status": "pass",
+      "origin": "L4 atmosphere-exit caption",
+      "observations": 15,
+      "rows": {
+        "L4 atmosphere-exit caption": {
+          "contractOffsetSeconds": 0,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0,
+            "max": 0,
+            "spread": 0,
+            "mean": 0
+          },
+          "withinTolerance": true
+        },
+        "stack row 1": {
+          "contractOffsetSeconds": 2,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.009,
+            "max": 0.049,
+            "spread": 0.04,
+            "mean": 0.018
+          },
+          "withinTolerance": true
+        },
+        "stack row 2": {
+          "contractOffsetSeconds": 4,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.016,
+            "max": 0.049,
+            "spread": 0.033,
+            "mean": 0.028
+          },
+          "withinTolerance": true
+        },
+        "stack row 3": {
+          "contractOffsetSeconds": 6,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.032,
+            "max": 0.065,
+            "spread": 0.033,
+            "mean": 0.035
+          },
+          "withinTolerance": true
+        },
+        "contact logged": {
+          "contractOffsetSeconds": 8.5,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.032,
+            "max": 0.065,
+            "spread": 0.033,
+            "mean": 0.043
+          },
+          "withinTolerance": true
+        },
+        "designation caption": {
+          "contractOffsetSeconds": 11.5,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.048,
+            "max": 0.081,
+            "spread": 0.033,
+            "mean": 0.052
+          },
+          "withinTolerance": true
+        },
+        "L6 open query": {
+          "contractOffsetSeconds": 14,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.048,
+            "max": 0.081,
+            "spread": 0.033,
+            "mean": 0.062
+          },
+          "withinTolerance": true
+        },
+        "advance to ch8-crossing": {
+          "contractOffsetSeconds": 17,
+          "observations": 15,
+          "deltaSeconds": {
+            "n": 15,
+            "min": 0.065,
+            "max": 0.098,
+            "spread": 0.033,
+            "mean": 0.069
+          },
+          "withinTolerance": true
+        }
+      },
+      "worstDeltaSeconds": 0.098,
+      "toleranceSeconds": 0.2,
+      "measurement": "All eight frozen rows land within +0.098 s of their named constants across 15 cold movie runs on five route/variant combinations. tickLaunchVoice changing did not disturb the frozen ch8 exit-window table.",
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "variantDOrdering": {
+      "status": "pass",
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "chainedColdRuns": 3,
+      "publishOffsetSeconds": [
+        1.766,
+        1.767,
+        1.766
+      ],
+      "stackOneOffsetSeconds": [
+        2.017,
+        2.017,
+        2.016
+      ],
+      "marginSeconds": [
+        0.251,
+        0.25,
+        0.25
+      ],
+      "marginSpreadSeconds": 0.001,
+      "publishedBeforeStackOneEveryRun": true,
+      "measurement": "On the chained route the handoff objective publishes at +1.766-1.767 s of the exit window and stack row 1 at +2.016-2.017 s: margin 0.250-0.251 s in 3/3 runs. The same ordering holds on all 12 movie runs measured here (margin 0.249-0.251 s). Unchanged from the iteration-1 measurement of 0.249-0.250 s.",
+      "evidenceRefs": [
+        "evidence/verification-v3/routeB-desktop.json",
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "seededConsumedEntry": {
+      "status": "pass",
+      "cases": [
+        {
+          "case": "non-surface entry, shipped debug route",
+          "url": "http://localhost:5176/?story=ch8-launch&fly=1&profile=LOW",
+          "phaseAtEntry": "deep_space at entry +0.108 s",
+          "laddersFired": "none — zero L1/L2/L3 emissions in the trace",
+          "firstCaptionAfterEntry": "the L4 exit-window caption at +3.189 s",
+          "emptySlotFrames": [
+            {
+              "file": "evidence/verification-v3/seeded-fly-entry/entry+0.5s_ch8-launch.png",
+              "targetOffsetSeconds": 0.5,
+              "measuredOffsetSeconds": 1.919,
+              "captionSlotEmpty": true
+            },
+            {
+              "file": "evidence/verification-v3/seeded-fly-entry/entry+1.5s_ch8-launch.png",
+              "targetOffsetSeconds": 1.5,
+              "measuredOffsetSeconds": 2.442,
+              "captionSlotEmpty": true
+            },
+            {
+              "file": "evidence/verification-v3/seeded-fly-entry/entry+3.0s_ch8-launch.png",
+              "targetOffsetSeconds": 3,
+              "measuredOffsetSeconds": 3.573,
+              "captionSlotEmpty": false
+            }
+          ],
+          "replayOrBurst": "none"
+        },
+        {
+          "case": "mid-flight beat re-entry at a non-surface, non-deep_space phase",
+          "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+          "mutationDisclosure": "The probe called the exported enterEmergentStoryBeat seam mid-climb. This is a probe-side mutation and is disclosed as such: the shipped snapshot tool cannot reproduce a mid-flight restore because flight phase is not durable state (main/src/game/systems/persistence.ts captures no spaceFlight fields), so a real snapshot restore always resumes on the pad.",
+          "phaseAtReentry": "descent",
+          "laddersFired": "none — the only caption after re-entry is L4 at +1.702 s",
+          "replayOrBurst": "none",
+          "frame": "evidence/verification-v3/seeded-midflight-reentry/reentry+0.5s_ch8-launch_descent.png"
+        }
+      ],
+      "measurement": "Both non-surface entries seed all three ladder latches consumed. No line replays, no catch-up burst, and the caption slot is empty at entry +0.5 s and +1.5 s on the fresh non-surface load.",
+      "evidenceRefs": [
+        "evidence/verification-v3/seeded-entries.json",
+        "evidence/verification-v3/seeded-entry-frames.json"
+      ]
+    },
+    "variantParity": {
+      "status": "pass",
+      "reference": "routeC.deeplink-movie (desktop 1280x720 LOW)",
+      "variants": {
+        "routeD.potato": {
+          "sameStringSetAndOrder": true,
+          "observedOrder": [
+            "L1>L2"
+          ],
+          "referenceOrder": [
+            "L1>L2"
+          ],
+          "sameDropBehaviour": true,
+          "l3DroppedEveryRun": true,
+          "l2CauseSet": [
+            "phase-edge"
+          ],
+          "exitWindowPassEveryRun": true,
+          "l1MinusReferenceSeconds": -0.042,
+          "l2OffsetFromL1Seconds": {
+            "variant": 1.428,
+            "reference": 1.416
+          }
+        },
+        "routeD.mobile-portrait": {
+          "sameStringSetAndOrder": true,
+          "observedOrder": [
+            "L1>L2"
+          ],
+          "referenceOrder": [
+            "L1>L2"
+          ],
+          "sameDropBehaviour": true,
+          "l3DroppedEveryRun": true,
+          "l2CauseSet": [
+            "phase-edge"
+          ],
+          "exitWindowPassEveryRun": true,
+          "l1MinusReferenceSeconds": 0.171,
+          "l2OffsetFromL1Seconds": {
+            "variant": 1.42,
+            "reference": 1.416
+          }
+        },
+        "routeD.reduced-motion": {
+          "sameStringSetAndOrder": true,
+          "observedOrder": [
+            "L1>L2"
+          ],
+          "referenceOrder": [
+            "L1>L2"
+          ],
+          "sameDropBehaviour": true,
+          "l3DroppedEveryRun": true,
+          "l2CauseSet": [
+            "phase-edge"
+          ],
+          "exitWindowPassEveryRun": true,
+          "l1MinusReferenceSeconds": 0.081,
+          "l2OffsetFromL1Seconds": {
+            "variant": 1.428,
+            "reference": 1.416
+          }
+        }
+      },
+      "measurement": "POTATO, 390x844 mobile portrait and prefers-reduced-motion all reproduce the same string set and order, the same edge-caused L2, the same L3 drop and the same exit-window table; the L2-minus-L1 interval differs from the desktop reference by at most 0.012 s.",
+      "evidenceRefs": [
+        "evidence/verification-v3/ladder-analysis.json"
+      ]
+    },
+    "frameDefectScan": {
+      "status": "pass",
+      "tool": "frame-defect-scan.mjs",
+      "framesScanned": 1585,
+      "directoriesScanned": 26,
+      "blankFrames": 0,
+      "luminanceJumpsOverThreshold": 1,
+      "note": "The single flagged luminance jump is in evidence/verification-v3/seeded-fly-entry, which is not a temporal strip: it holds four independently triggered entry frames, so consecutive-frame comparison is not meaningful there. Every temporal strip is clean.",
+      "evidenceRefs": [
+        "evidence/verification-v3/frame-defect-scan.json"
+      ]
+    },
+    "treeFindabilityRecord": {
+      "status": "recorded",
+      "contractRef": "evidence.acceptanceCriteria[24] and cap.ch8.paced-ladder",
+      "purpose": "Standing record for the routed cin.launch.02-world-below camera packet: physical departure through L3 firing and full reveal.",
+      "strips": [
+        "evidence/verification-v3/routeA-space-run1",
+        "evidence/verification-v3/routeA-space-run2",
+        "evidence/verification-v3/routeA-space-run3",
+        "evidence/verification-v3/routeA-space-late-ignite-run1",
+        "evidence/verification-v3/routeA-space-late-ignite-run2",
+        "evidence/verification-v3/routeA-space-late-ignite-run3"
+      ],
+      "cadence": "about 220 ms between strip frames, denser inside the scheduled anchor bursts",
+      "frameCount": 625,
+      "objectiveObservation": "At L3 firing and at L3 +2.0 s (reveal complete) the cockpit view frames sky only: no ground, site or tree geometry is inside the frame in any of the six Route A runs. This is a measurement, not a ruling; whether the site and hero tree must be findable there is the Cinematography Director's call.",
+      "evidenceRefs": [
+        "evidence/verification-v3/routeA-space.json",
+        "evidence/verification-v3/routeA-space-late-ignite.json"
+      ]
+    },
+    "defects": [
+      {
+        "proposedId": "vd-04",
+        "severity": "high",
+        "category": "contract-acceptance",
+        "beat": "ch8-launch",
+        "anchor": "anchor.ch8.site-recedes",
+        "contractRefs": [
+          "evidence.acceptanceCriteria[21]",
+          "evt.ch8.l3-liftoff"
+        ],
+        "status": "open-flagged-to-triad",
+        "summary": "Acceptance criterion [21], the measured-margin guarantee, fails on the paced route. On the only scripted paced route observed to reach deep_space (ignite at entry +6.0 s, then hold the climb as the shipped climb objective instructs), t_L3 + 1.98 s lands after t_deepSpace by 1.211 s on average (-1.239 / -1.222 / -1.173 across three cold runs), so L3 shows about 22 of its 58 characters before the frozen exit-window table overwrites the slot. On the literal contract script (hold [SPACE] only) the ship never reaches deep_space within 22 s, so the guarantee is unmeasurable rather than met there. The full-reveal-before-exit experience was observed only on routes that never leave the atmosphere.",
+        "measurement": "Phase edge to first deep_space observation is 3.80-3.86 s of air time with the shipped climb input; L3 is scheduled at t_phaseEdge + 3.0 s and needs 1.972 s of reveal, i.e. 4.97 s of air time.",
+        "likelyCause": "CH8_L2_MIN_SLOT_SECONDS = 3.0 plus the L3 reveal exceeds the shipped climb duration from the phase edge on every route where the player actually ascends. The ladder arithmetic is implemented exactly as contracted; it is the contracted spacing against the measured flight physics that does not fit.",
+        "owner": "chapter (with cinematography and score as peers on any retiming)",
+        "verificationRoute": "Re-run routeA --shape space-then-w --runs 3 with ladder-verify-probe.mjs and assert the C3 margin at or above +0.3 s.",
+        "evidenceRefs": [
+          "evidence/verification-v3/routeA-space-then-w.json",
+          "evidence/verification-v3/routeA-space.json",
+          "evidence/verification-v3/ladder-analysis.json"
+        ]
+      }
+    ],
+    "capturedGaps": [
+      "Route A is defined in the contract only as \"hold [SPACE] at entry +6.0 s\"; it does not say what the pilot holds afterwards, and the measured exit time depends entirely on that. Three input shapes were measured and all three are reported rather than one being chosen as canonical: hold [SPACE] only (never exits), [SPACE] then [W] as the shipped climb objective instructs (exits at 11.28-11.40 s), and the ignition-plus-boost shape the movie autopilot uses (exits at about 9.7 s, L3 dropped, observed in the pre-flight survey and not carried as a cold-run route).",
+      "The genuine \"mid-flight snapshot restore\" of acceptance criterion [19] cannot be produced by the shipped snapshot tool: flight phase is not durable state, so a restore always resumes on the pad. The seeding branch is proven instead by a fresh non-surface load and by a disclosed probe-side call to the exported beat-entry seam.",
+      "Anchor frames are the nearest frame to each contracted offset; residuals are recorded per frame. All Route A and Route B anchors landed within 0.11 s of target; two Route C deep_space -0.5 s frames landed at -0.215 s and -0.110 s because that anchor cannot be predicted before the fact and was covered by burst capture.",
+      "The empty-slot frame for the non-surface entry was captured by a second pass (seeded-entry-frames.json) because the first pass could not open its shutter until the page-side instrumentation had finished importing; the first-pass frame sits at entry +2.113 s and is retained.",
+      "Frame rate was not re-measured this iteration. The iteration-1 medians stand; nothing in this patch changes render work."
+    ],
+    "probes": [
+      {
+        "path": "ladder-verify-probe.mjs",
+        "role": "paced-ladder route driver and capture session (modes routeA, routeB, routeC, seeded, seeded-frame)"
+      },
+      {
+        "path": "ladder-analysis.mjs",
+        "role": "aggregates every route trace into evidence/verification-v3/ladder-analysis.json"
+      },
+      {
+        "path": "frame-defect-scan.mjs",
+        "role": "blank-frame and luminance-pop scan over every captured strip"
+      },
+      {
+        "path": "repair-verification-report-build.mjs",
+        "role": "writes this section, the check-results block and the ledger row from the measured bytes"
+      }
+    ],
+    "evidenceRefs": [
+      "evidence/verification-v3/",
+      "evidence/verification-v3/ladder-analysis.json",
+      "evidence/verification-v3/routeA-space.json",
+      "evidence/verification-v3/routeA-space-then-w.json",
+      "evidence/verification-v3/routeA-space-late-ignite.json",
+      "evidence/verification-v3/routeB-desktop.json",
+      "evidence/verification-v3/routeC-desktop.json",
+      "evidence/verification-v3/routeC-potato.json",
+      "evidence/verification-v3/routeC-mobile-portrait.json",
+      "evidence/verification-v3/routeC-reduced-motion.json",
+      "evidence/verification-v3/seeded-entries.json",
+      "evidence/verification-v3/seeded-entry-frames.json",
+      "evidence/verification-v3/frame-defect-scan.json"
+    ],
+    "treeFindabilityRecordSupersededBy": "currentRollUp.standingTreeFindabilityRecord (iteration 6); the iteration-3 routeA-space* strips are no longer the standing record"
+  },
+  "iterationNote": "Every field outside repairIteration is the iteration-1 (draft-v2) record, retained verbatim. repairIteration holds the iteration-3 targeted delta re-proof of the draft-v3 vd-01 repair.",
+  "dischargeMeasurement": {
+    "note": "Iteration-4 section. Added after the fields above; every field outside this section is unchanged from the record it belonged to. This section binds the draft-v4 contract, not the draft-v2 contract named at the top of this file.",
+    "condition": "CC1",
+    "contractVersion": "draft-v4",
+    "contractSha256": "df544b130773c3ba9ab4f0132f0223616db5767bbda7e9e6dd59bf8ab3a1f1e3",
+    "acceptanceCriteriaRefs": [
+      "[21] canonical route and measured-margin guarantee (ordered-ignition)",
+      "[26] discharge rule for the canonical-route criterion (condition CC1)",
+      "[18] drop rule",
+      "[27] standing tree-findability record (condition CC4)",
+      "cap.ch8.paced-ladder Route A"
+    ],
+    "recordedBy": "story-verifier",
+    "recordedAt": "2026-08-11T02:25:54Z",
+    "canonicalPreviewUrl": "http://localhost:5176",
+    "route": "canonical-ordered-ignition",
+    "routeScript": [
+      "enter ch8-launch seated via pristine deep link (?story=ch8-launch&profile=LOW, no movie flag) at LOW, 1280x720",
+      "focus click on the canvas at beat entry (focus only; no control binding)",
+      "no control input until after L2 timer-fires at t_L1 + 4.5; standing control ignites at entry +10.0 s",
+      "hold [SPACE] 0.6 s to ignite, then sustain [W] climb through the atmosphere boundary",
+      "hold steady state through deep_space and the frozen exit window"
+    ],
+    "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+    "environment": {
+      "browser": "headless Chromium (playwright-core, ~/.cache/ms-playwright)",
+      "flags": [
+        "--enable-unsafe-swiftshader",
+        "--use-gl=angle",
+        "--window-size=1280,720"
+      ],
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "movieMode": false,
+      "probeRef": "discharge-measure-probe.mjs",
+      "coldRuns": 3,
+      "oneScript": true
+    },
+    "constants": {
+      "CH8_L1_MIN_SLOT_SECONDS": 4.5,
+      "CH8_L2_MIN_SLOT_SECONDS": 3,
+      "l3RevealContractSeconds": 1.98,
+      "l3RevealMeasuredSeconds": 1.972,
+      "marginFloorSeconds": 0.3
+    },
+    "runs": [
+      {
+        "run": 1,
+        "frameDir": "evidence/verification-v3/routeA-ordered/run1",
+        "frameCount": 97,
+        "pageErrors": 0,
+        "ignitedAtEntryOffsetSeconds": 10.009,
+        "climbHeldAtEntryOffsetSeconds": 10.64,
+        "tL1Seconds": 3.399,
+        "tL2Seconds": 7.929,
+        "tL3Seconds": 11.485,
+        "tL4Seconds": 15.313,
+        "tPhaseEdgeSeconds": 11.485,
+        "tDeepSpaceSeconds": 15.328,
+        "l2Cause": "timer",
+        "l2ExpectedSeconds": 7.899,
+        "l2FormulaDeltaSeconds": 0.03,
+        "l3ExpectedSeconds": 11.485,
+        "l3FormulaDeltaSeconds": 0,
+        "l3FiredAtPhaseEdge": true,
+        "l3EdgeDeltaSeconds": 0,
+        "marginSeconds": 1.863,
+        "marginFloorSeconds": 0.3,
+        "marginUnderFloor": false,
+        "ladderOrder": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "allThreeRendered": true,
+        "onceOnlyCounts": {
+          "l1": 1,
+          "l2": 1,
+          "l3": 1,
+          "l4": 1
+        },
+        "exitWindowPass": true,
+        "exitWindowRows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.016,
+            "deltaSeconds": 0.016,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.033,
+            "deltaSeconds": 0.033,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.033,
+            "deltaSeconds": 0.033,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.566,
+            "deltaSeconds": 0.066,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.065,
+            "deltaSeconds": 0.065,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.083,
+            "deltaSeconds": 0.083,
+            "pass": true
+          }
+        ],
+        "advancedToCh8Crossing": true,
+        "orbitalHandoffPublishOffsetSeconds": 1.766,
+        "stackRowOneOffsetSeconds": 2.016,
+        "variantDMarginSeconds": 0.25,
+        "unmetCaptureTargets": []
+      },
+      {
+        "run": 2,
+        "frameDir": "evidence/verification-v3/routeA-ordered/run2",
+        "frameCount": 98,
+        "pageErrors": 0,
+        "ignitedAtEntryOffsetSeconds": 10.092,
+        "climbHeldAtEntryOffsetSeconds": 10.696,
+        "tL1Seconds": 3.421,
+        "tL2Seconds": 7.949,
+        "tL3Seconds": 11.567,
+        "tL4Seconds": 15.333,
+        "tPhaseEdgeSeconds": 11.566,
+        "tDeepSpaceSeconds": 15.352,
+        "l2Cause": "timer",
+        "l2ExpectedSeconds": 7.921,
+        "l2FormulaDeltaSeconds": 0.028,
+        "l3ExpectedSeconds": 11.566,
+        "l3FormulaDeltaSeconds": 0.001,
+        "l3FiredAtPhaseEdge": true,
+        "l3EdgeDeltaSeconds": 0.001,
+        "marginSeconds": 1.805,
+        "marginFloorSeconds": 0.3,
+        "marginUnderFloor": false,
+        "ladderOrder": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "allThreeRendered": true,
+        "onceOnlyCounts": {
+          "l1": 1,
+          "l2": 1,
+          "l3": 1,
+          "l4": 1
+        },
+        "exitWindowPass": true,
+        "exitWindowRows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.016,
+            "deltaSeconds": 0.016,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.032,
+            "deltaSeconds": 0.032,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.032,
+            "deltaSeconds": 0.032,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.065,
+            "deltaSeconds": 0.065,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.082,
+            "deltaSeconds": 0.082,
+            "pass": true
+          }
+        ],
+        "advancedToCh8Crossing": true,
+        "orbitalHandoffPublishOffsetSeconds": 1.766,
+        "stackRowOneOffsetSeconds": 2.016,
+        "variantDMarginSeconds": 0.25,
+        "unmetCaptureTargets": []
+      },
+      {
+        "run": 3,
+        "frameDir": "evidence/verification-v3/routeA-ordered/run3",
+        "frameCount": 95,
+        "pageErrors": 0,
+        "ignitedAtEntryOffsetSeconds": 10.031,
+        "climbHeldAtEntryOffsetSeconds": 10.681,
+        "tL1Seconds": 3.213,
+        "tL2Seconds": 7.737,
+        "tL3Seconds": 11.479,
+        "tL4Seconds": 15.254,
+        "tPhaseEdgeSeconds": 11.479,
+        "tDeepSpaceSeconds": 15.27,
+        "l2Cause": "timer",
+        "l2ExpectedSeconds": 7.713,
+        "l2FormulaDeltaSeconds": 0.024,
+        "l3ExpectedSeconds": 11.479,
+        "l3FormulaDeltaSeconds": 0,
+        "l3FiredAtPhaseEdge": true,
+        "l3EdgeDeltaSeconds": 0,
+        "marginSeconds": 1.811,
+        "marginFloorSeconds": 0.3,
+        "marginUnderFloor": false,
+        "ladderOrder": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "allThreeRendered": true,
+        "onceOnlyCounts": {
+          "l1": 1,
+          "l2": 1,
+          "l3": 1,
+          "l4": 1
+        },
+        "exitWindowPass": true,
+        "exitWindowRows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.016,
+            "deltaSeconds": 0.016,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.033,
+            "deltaSeconds": 0.033,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.032,
+            "deltaSeconds": 0.032,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.066,
+            "deltaSeconds": 0.066,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.066,
+            "deltaSeconds": 0.066,
+            "pass": true
+          }
+        ],
+        "advancedToCh8Crossing": true,
+        "orbitalHandoffPublishOffsetSeconds": 1.766,
+        "stackRowOneOffsetSeconds": 2.016,
+        "variantDMarginSeconds": 0.25,
+        "unmetCaptureTargets": []
+      }
+    ],
+    "variance": {
+      "tL1Seconds": {
+        "n": 3,
+        "min": 3.213,
+        "max": 3.421,
+        "spread": 0.208,
+        "mean": 3.344
+      },
+      "tL2Seconds": {
+        "n": 3,
+        "min": 7.737,
+        "max": 7.949,
+        "spread": 0.212,
+        "mean": 7.872
+      },
+      "tL3Seconds": {
+        "n": 3,
+        "min": 11.479,
+        "max": 11.567,
+        "spread": 0.088,
+        "mean": 11.51
+      },
+      "tPhaseEdgeSeconds": {
+        "n": 3,
+        "min": 11.479,
+        "max": 11.566,
+        "spread": 0.087,
+        "mean": 11.51
+      },
+      "tDeepSpaceSeconds": {
+        "n": 3,
+        "min": 15.27,
+        "max": 15.352,
+        "spread": 0.082,
+        "mean": 15.317
+      },
+      "marginSeconds": {
+        "n": 3,
+        "min": 1.805,
+        "max": 1.863,
+        "spread": 0.058,
+        "mean": 1.826
+      },
+      "variantDMarginSeconds": {
+        "n": 3,
+        "min": 0.25,
+        "max": 0.25,
+        "spread": 0,
+        "mean": 0.25
+      }
+    },
+    "assertions": {
+      "l2CauseTimerEveryRun": true,
+      "l2CauseSet": [
+        "timer"
+      ],
+      "l3FiredAtPhaseEdgeEveryRun": true,
+      "formulaMaxAbsDeltaSeconds": 0.03,
+      "allThreeLinesRenderedEveryRun": true,
+      "orderL1L2L3EveryRun": true,
+      "onceOnlyEveryRun": true,
+      "marginAboveFloorEveryRun": true,
+      "exitWindowFullCadenceEveryRun": true,
+      "zeroPageErrors": true,
+      "zeroUnmetCaptureTargets": true
+    },
+    "fullRevealProof": [
+      {
+        "run": 1,
+        "l1FirstFullRevealFrame": {
+          "frame": "017_strip_t6p65s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 6.651,
+          "chars": 94
+        },
+        "l2FirstFullRevealFrame": {
+          "frame": "043_ignition+0.2_t10p22s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 10.22,
+          "chars": 65
+        },
+        "l3FirstFullRevealFrame": {
+          "frame": "070_burst_t13p53s_ch8-launch_descent.png",
+          "entryOffsetSeconds": 13.528,
+          "chars": 58
+        },
+        "l3FullRevealLeadOverDeepSpaceSeconds": 1.8
+      },
+      {
+        "run": 2,
+        "l1FirstFullRevealFrame": {
+          "frame": "017_strip_t6p64s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 6.638,
+          "chars": 94
+        },
+        "l2FirstFullRevealFrame": {
+          "frame": "043_burst_t10p19s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 10.188,
+          "chars": 65
+        },
+        "l3FirstFullRevealFrame": {
+          "frame": "072_burst_t13p60s_ch8-launch_descent.png",
+          "entryOffsetSeconds": 13.596,
+          "chars": 58
+        },
+        "l3FullRevealLeadOverDeepSpaceSeconds": 1.756
+      },
+      {
+        "run": 3,
+        "l1FirstFullRevealFrame": {
+          "frame": "017_strip_t6p49s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 6.489,
+          "chars": 94
+        },
+        "l2FirstFullRevealFrame": {
+          "frame": "042_burst_t10p03s_ch8-launch_surface.png",
+          "entryOffsetSeconds": 10.026,
+          "chars": 65
+        },
+        "l3FirstFullRevealFrame": {
+          "frame": "069_burst_t13p46s_ch8-launch_descent.png",
+          "entryOffsetSeconds": 13.465,
+          "chars": 58
+        },
+        "l3FullRevealLeadOverDeepSpaceSeconds": 1.805
+      }
+    ],
+    "captureManifestRef": "evidence/verification-v3/routeA-ordered/routeA-ordered-captures.json",
+    "traceRef": "evidence/verification-v3/routeA-ordered/routeA-ordered.json",
+    "treeFindabilityObservation": {
+      "condition": "CC4",
+      "kind": "measurement, not ruling",
+      "method": "Direct read of the Route A frames in all three runs at the named anchors plus the dense climb burst (~100 ms cadence from ignition to 1.5 s past deep_space).",
+      "observations": [
+        "Seated pre-ignition (beat entry through ignition): the site is in frame in every run — two palms, the berry tree at frame left, the pond, grass, rocks and the deer, seen through the Kestrel canopy.",
+        "ignition +0.2 s (all three runs): ground, palms, berry tree and pond are still in frame; the craft has just begun to rise.",
+        "ignition +0.5 s to +0.65 s (run 1: last ground frame 10.53 s, first ground-free frame 10.64 s; runs 2 and 3 match within one burst interval): ground and tree geometry leave the frame bottom.",
+        "phase edge -0.3 s and +0.2 s (all three runs): no ground, site or tree geometry in frame; sky plus cockpit interior only.",
+        "L3 firing through L3 +3.0 s (all three runs), i.e. the whole window in which \"the site gets small. the tree does not. i keep finding it.\" is on screen: no ground, site or tree geometry appears in any frame; sky plus cockpit interior only.",
+        "deep_space -0.3 s and +0.0 s (all three runs): star field plus cockpit interior; no ground, site or tree geometry."
+      ],
+      "summary": "Across the canonical route, ground/site/tree geometry is present in frame from beat entry to approximately ignition +0.6 s and is absent from every frame thereafter, including the entire L3 firing and reveal window and the deep_space frames."
+    },
+    "captureGaps": [
+      {
+        "id": "cold-deep-link-boot-frames",
+        "observation": "The first two frames of every run (approximately entry +0.15 s and +2.5 s) render the world black with the guidance HUD drawn; the world appears by entry +2.67 to +2.87 s. Byte-identical 25753-byte PNGs in all three runs, and identical to the iteration-3 routeA and routeC strips at the same source revision.",
+        "scope": "Precedes L1 (3.21-3.42 s) in every run, so no ladder anchor is affected.",
+        "classification": "headless cold-boot characteristic of this capture environment, unchanged from iteration 3"
+      },
+      {
+        "id": "anchor-frame-deviation",
+        "observation": "Every one of the eleven contract anchor offsets was captured in all three runs. The largest deviation between an anchor's target story-clock offset and the frame recorded for it is 0.099 s, set by the ~110 ms headless shutter.",
+        "classification": "measured shutter latency, recorded per capture"
+      },
+      {
+        "id": "no-audio-or-video-track",
+        "observation": "This route produced frame strips and state traces only; headless Chromium cannot mux the WebAudio bus and no continuous video was captured. No score or SFX behaviour is claimed from these captures.",
+        "classification": "known environment limit, carried from iteration 3"
+      }
+    ],
+    "status": "pass",
+    "summary": "CC1 discharged on the canonical ordered-ignition route itself: one script, three cold runs, l2Cause 'timer' on every run, L3 firing at the phase edge on every run, and per-run margins of 1.863 / 1.805 / 1.811 s against the 0.3 s floor. All three ladder lines rendered in order, once each, with complete reveals, and the frozen exit window ran its full +0.0 to +17.0 s cadence with the advance to ch8-crossing on all three runs.",
+    "supersededBy": "closingVerification.routeA (iteration 6, draft-v5, l2Cause asserted through getEmergentStoryVoiceDiag rather than inferred from emission timing)"
+  },
+  "overallStatusNote": "CIN-09 repair. The top-level roll-up previously read overallStatus \"fail\" and contractVersion \"draft-v2\" from iteration 1 while four later iterations sat in the same file. It now reports the CURRENT state of the run: the three draft-v5 runtime laws verify clean across every route, and the recorded exceptions are the mobile portrait caption/touch-control collision (CIN-01, measured fail, owner scope decision open), the 34 unattributed headless world-black cold-boot frames (CIN-06), and the reconstruct:repair:bench_online post-acquisition marker gap (pre-existing, criterion [35]).",
+  "currentRollUp": {
+    "iteration": 6,
+    "route": "final-verification",
+    "contractVersion": "draft-v5",
+    "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+    "authoritativeSection": "closingVerification",
+    "supersededSections": [
+      "flow",
+      "frozenStrings",
+      "exactAnchors",
+      "variants",
+      "resetMatrix",
+      "performance",
+      "variantDOrdering",
+      "capturedGaps",
+      "repairIteration",
+      "dischargeMeasurement"
+    ],
+    "supersessionNote": "Sections above this field are iteration-1 to iteration-4 records kept verbatim for lineage. Where a claim is restated in closingVerification, the closingVerification number is authoritative.",
+    "standingTreeFindabilityRecord": {
+      "record": "evidence/verification-final/routeA-ordered/run{1,2,3}",
+      "supersedes": [
+        "repairIteration.treeFindabilityRecord (iteration 3, routeA-space* strips)",
+        "dischargeMeasurement.treeFindabilityObservation (iteration 4, evidence/verification-v3/routeA-ordered)"
+      ],
+      "note": "CIN-09 repair: the file previously carried two conflicting standing records with no supersession field. Condition CC4 binds the record to the canonical ordered-ignition route; the closing pass re-captured it against draft-v5 with the diag bridge live."
+    }
+  },
+  "closingVerification": {
+    "iteration": 6,
+    "route": "final-verification",
+    "contractVersion": "draft-v5",
+    "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+    "recordedBy": "story-verifier",
+    "recordedAt": "2026-08-11T15:19:32.022Z",
+    "canonicalPreviewUrl": "http://localhost:5176",
+    "environment": {
+      "note": "The 5176 dev server had been up 19.6 h and predated the loop-3 patch, so Vite served the app a timestamped module URL while a plain probe import resolved to a SECOND emergentStoryDirector instance and getEmergentStoryVoiceDiag() read an empty runtime. The server was restarted (node_modules/.vite cleared) before any measurement below; the diag bridge was re-proved live first.",
+      "chromium": "playwright-core chromium from ~/.cache/ms-playwright, --enable-unsafe-swiftshader --use-gl=angle",
+      "viewport": "1280x720 LOW unless a variant says otherwise"
+    },
+    "diagBridge": {
+      "export": "getEmergentStoryVoiceDiag() from main/src/story/emergentStoryDirector.ts",
+      "method": "bridged exactly like getSignedSceneAvDebugSnapshot: dynamic import of /src/story/emergentStoryDirector.ts inside the addInitScript instrumentation, exposed read-only as window.__voxDiag; sampled per strip frame and on every caption/audit/objective emission",
+      "resetCaveat": "enterEmergentStoryBeat clears the whole beat runtime, so a diag read after the advance is zeroed; every assertion below uses the richest beat-scoped snapshot observed while the beat was live"
+    },
+    "routeA": {
+      "id": "cap.ch8.paced-ladder Route A — canonical ordered-ignition (conditions CC1/CC3/CC4)",
+      "probe": "discharge-measure-probe.mjs --runs 3 --out verification-final",
+      "coldRuns": 3,
+      "perRun": [
+        {
+          "run": 1,
+          "tL1": 3.441,
+          "tL2": 7.982,
+          "tL3": 11.486,
+          "tPhaseEdge": 11.485,
+          "tDeepSpace": 15.398,
+          "tL4": 15.365,
+          "l2Cause": "timer",
+          "l2CauseAssertedTimer": true,
+          "l2DueAtSeconds": 4.7,
+          "dueTimeFormulaExact": true,
+          "l2FiresAtDueTimeSeconds": 0.0146,
+          "l1RevealNeverCutMarginSeconds": 1.319,
+          "marginSecondsFromDiag": 1.853,
+          "marginAboveFloor": true,
+          "exitWindowAllRowsPass": true,
+          "advancedToCh8Crossing": true,
+          "contractFramesCaptured": [
+            "L1+0.2",
+            "L2-0.5",
+            "L2+0.2",
+            "L2+0.7",
+            "ignition+0.2",
+            "edge-0.3",
+            "edge+0.2",
+            "L3+1.0",
+            "L3+2.0",
+            "L3+3.0",
+            "deepSpace-0.3",
+            "deepSpace+0.0"
+          ],
+          "unmetTargets": [],
+          "frameCount": 97,
+          "frameDir": "evidence/verification-final/routeA-ordered/run1"
+        },
+        {
+          "run": 2,
+          "tL1": 3.425,
+          "tL2": 7.958,
+          "tL3": 11.514,
+          "tPhaseEdge": 11.513,
+          "tDeepSpace": 15.407,
+          "tL4": 15.392,
+          "l2Cause": "timer",
+          "l2CauseAssertedTimer": true,
+          "l2DueAtSeconds": 4.7,
+          "dueTimeFormulaExact": true,
+          "l2FiresAtDueTimeSeconds": 0.0039,
+          "l1RevealNeverCutMarginSeconds": 1.308,
+          "marginSecondsFromDiag": 1.856,
+          "marginAboveFloor": true,
+          "exitWindowAllRowsPass": true,
+          "advancedToCh8Crossing": true,
+          "contractFramesCaptured": [
+            "L1+0.2",
+            "L2-0.5",
+            "L2+0.2",
+            "L2+0.7",
+            "ignition+0.2",
+            "edge-0.3",
+            "edge+0.2",
+            "L3+1.0",
+            "L3+2.0",
+            "L3+3.0",
+            "deepSpace-0.3",
+            "deepSpace+0.0"
+          ],
+          "unmetTargets": [],
+          "frameCount": 97,
+          "frameDir": "evidence/verification-final/routeA-ordered/run2"
+        },
+        {
+          "run": 3,
+          "tL1": 3.425,
+          "tL2": 7.967,
+          "tL3": 11.507,
+          "tPhaseEdge": 11.506,
+          "tDeepSpace": 15.496,
+          "tL4": 15.4,
+          "l2Cause": "timer",
+          "l2CauseAssertedTimer": true,
+          "l2DueAtSeconds": 4.7,
+          "dueTimeFormulaExact": true,
+          "l2FiresAtDueTimeSeconds": 0.013,
+          "l1RevealNeverCutMarginSeconds": 1.317,
+          "marginSecondsFromDiag": 1.85,
+          "marginAboveFloor": true,
+          "exitWindowAllRowsPass": true,
+          "advancedToCh8Crossing": true,
+          "contractFramesCaptured": [
+            "L1+0.2",
+            "L2-0.5",
+            "L2+0.2",
+            "L2+0.7",
+            "ignition+0.2",
+            "edge-0.3",
+            "edge+0.2",
+            "L3+1.0",
+            "L3+2.0",
+            "L3+3.0",
+            "deepSpace-0.3",
+            "deepSpace+0.0"
+          ],
+          "unmetTargets": [],
+          "frameCount": 98,
+          "frameDir": "evidence/verification-final/routeA-ordered/run3"
+        }
+      ],
+      "marginVarianceSeconds": 0.006,
+      "marginFloorSeconds": 0.3,
+      "flagBackToTriad": false,
+      "status": "pass"
+    },
+    "routeB": {
+      "id": "cap.ch8.paced-ladder Route B — chained movie, reveal-guard clamp",
+      "probe": "ladder-verify-probe.mjs routeB --runs 3 --out verification-final --cause reveal-guard",
+      "coldRuns": 3,
+      "perRun": [
+        {
+          "run": 1,
+          "tL1": 0.052,
+          "tL2": 3.339,
+          "tL3": null,
+          "tPhaseEdge": 1.476,
+          "tDeepSpace": 3.454,
+          "l2Cause": "reveal-guard",
+          "l2CauseAssertedRevealGuard": true,
+          "l2DueAtSeconds": 3.249,
+          "dueTimeFormulaDeltaSeconds": 0,
+          "l2EqualsDueAtDiffSeconds": 0.0523,
+          "l1RevealCompleteAtSwapMarginSeconds": 0.052,
+          "authoredL3Drop": true,
+          "exitWindowAllRowsWithin0p2": true,
+          "exitWindowMaxAbsDeltaSeconds": 0.05,
+          "variantDOrderingPass": true,
+          "frameDir": "evidence/verification-final/routeB-desktop-run1"
+        },
+        {
+          "run": 2,
+          "tL1": 0.023,
+          "tL2": 3.26,
+          "tL3": null,
+          "tPhaseEdge": 1.42,
+          "tDeepSpace": 3.376,
+          "l2Cause": "reveal-guard",
+          "l2CauseAssertedRevealGuard": true,
+          "l2DueAtSeconds": 3.22,
+          "dueTimeFormulaDeltaSeconds": 0,
+          "l2EqualsDueAtDiffSeconds": 0.0159,
+          "l1RevealCompleteAtSwapMarginSeconds": 0.016,
+          "authoredL3Drop": true,
+          "exitWindowAllRowsWithin0p2": true,
+          "exitWindowMaxAbsDeltaSeconds": 0.049,
+          "variantDOrderingPass": true,
+          "frameDir": "evidence/verification-final/routeB-desktop-run2"
+        },
+        {
+          "run": 3,
+          "tL1": 0.024,
+          "tL2": 3.24,
+          "tL3": null,
+          "tPhaseEdge": 1.434,
+          "tDeepSpace": 3.39,
+          "l2Cause": "reveal-guard",
+          "l2CauseAssertedRevealGuard": true,
+          "l2DueAtSeconds": 3.22,
+          "dueTimeFormulaDeltaSeconds": 0,
+          "l2EqualsDueAtDiffSeconds": 0.0026,
+          "l1RevealCompleteAtSwapMarginSeconds": 0.003,
+          "authoredL3Drop": true,
+          "exitWindowAllRowsWithin0p2": true,
+          "exitWindowMaxAbsDeltaSeconds": 0.05,
+          "variantDOrderingPass": true,
+          "frameDir": "evidence/verification-final/routeB-desktop-run3"
+        }
+      ],
+      "clampPairFrameEvidence": {
+        "requiredByContract": "t_L2 -0.1 s with L1 FULLY revealed; t_L2 +0.2 s with L2 replacing it",
+        "delivered": "run 3 frame L2-0.1 landed at t_L2 -0.005 s with the L1 caption at 94/94 characters (revealComplete true); run 1 frame L2-0.1 landed at t_L2 +0.012 s with L2 on the slot",
+        "gap": "The t_L2 -0.1 s frame with L1 fully revealed is not obtainable because the reveal guard makes L1 reveal completion COINCIDE with t_L2, so 0.1 s earlier L1 still owes about 3 characters; the nearest obtainable frame (run 3, t_L2 -0.005 s) does show 94/94. The t_L2 +0.2 s frame showing L2 replacing L1 is unobtainable BECAUSE OF THE MEASURED SLOT COLLAPSE recorded in closingVerification.routeCandD.measuredBehaviourChange: l2DueAt now lands 0.06-0.19 s before the exit fact, so the L4 caption takes the single caption slot before +0.2 s is reached. This is a consequence of the shipped draft-v5 laws acting on this route, not a self-contradictory capture spec. A frame with L2 on the slot exists at t_L2 +0.012 s (run 1)."
+      },
+      "status": "pass"
+    },
+    "routeCandD": {
+      "id": "cap.ch8.paced-ladder Routes C and D",
+      "probe": "ladder-verify-probe.mjs routeC ... --out verification-final",
+      "variants": [
+        {
+          "variant": "desktop deep-link movie",
+          "coldRuns": 3,
+          "perRun": [
+            {
+              "run": 1,
+              "tL1": 3.3,
+              "tL2": 6.583,
+              "tL3": null,
+              "tPhaseEdge": 4.726,
+              "tDeepSpace": 6.683,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.1,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.066,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-desktop-run1"
+            },
+            {
+              "run": 2,
+              "tL1": 3.326,
+              "tL2": 6.574,
+              "tL3": null,
+              "tPhaseEdge": 4.777,
+              "tDeepSpace": 6.734,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.16,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.049,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-desktop-run2"
+            },
+            {
+              "run": 3,
+              "tL1": 3.429,
+              "tL2": 6.657,
+              "tL3": null,
+              "tPhaseEdge": 4.849,
+              "tDeepSpace": 6.821,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.164,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.079,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-desktop-run3"
+            }
+          ]
+        },
+        {
+          "variant": "quality-potato",
+          "coldRuns": 3,
+          "perRun": [
+            {
+              "run": 1,
+              "tL1": 2.98,
+              "tL2": null,
+              "tL3": null,
+              "tPhaseEdge": 4.447,
+              "tDeepSpace": 6.126,
+              "l2Cause": null,
+              "l2OnScreenSecondsBeforeExit": null,
+              "l2Dropped": true,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.066,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-potato-run1"
+            },
+            {
+              "run": 2,
+              "tL1": 3.2,
+              "tL2": null,
+              "tL3": null,
+              "tPhaseEdge": 4.658,
+              "tDeepSpace": 6.358,
+              "l2Cause": null,
+              "l2OnScreenSecondsBeforeExit": null,
+              "l2Dropped": true,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.066,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-potato-run2"
+            },
+            {
+              "run": 3,
+              "tL1": 2.894,
+              "tL2": null,
+              "tL3": null,
+              "tPhaseEdge": 4.348,
+              "tDeepSpace": 6.031,
+              "l2Cause": null,
+              "l2OnScreenSecondsBeforeExit": null,
+              "l2Dropped": true,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.069,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-potato-run3"
+            }
+          ]
+        },
+        {
+          "variant": "mobile 390x844",
+          "coldRuns": 2,
+          "perRun": [
+            {
+              "run": 1,
+              "tL1": 3.437,
+              "tL2": 6.751,
+              "tL3": null,
+              "tPhaseEdge": 4.888,
+              "tDeepSpace": 6.872,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.121,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.066,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-mobile-run1"
+            },
+            {
+              "run": 2,
+              "tL1": 3.437,
+              "tL2": 6.738,
+              "tL3": null,
+              "tPhaseEdge": 4.871,
+              "tDeepSpace": 6.863,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.125,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.067,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-mobile-run2"
+            }
+          ]
+        },
+        {
+          "variant": "reduced-motion",
+          "coldRuns": 2,
+          "perRun": [
+            {
+              "run": 1,
+              "tL1": 3.26,
+              "tL2": 6.516,
+              "tL3": null,
+              "tPhaseEdge": 4.673,
+              "tDeepSpace": 6.671,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.155,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.065,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-reduced-motion-run1"
+            },
+            {
+              "run": 2,
+              "tL1": 3.455,
+              "tL2": 6.758,
+              "tL3": null,
+              "tPhaseEdge": 4.889,
+              "tDeepSpace": 6.847,
+              "l2Cause": "reveal-guard",
+              "l2OnScreenSecondsBeforeExit": 0.089,
+              "l2Dropped": false,
+              "l3Dropped": true,
+              "exitWindowAllRowsWithin0p2": true,
+              "exitWindowMaxAbsDeltaSeconds": 0.066,
+              "variantDOrderingPass": true,
+              "frameDir": "evidence/verification-final/routeC-reduced-motion-run2"
+            }
+          ]
+        }
+      ],
+      "measuredBehaviourChange": {
+        "finding": "On every movie route the reveal guard moves l2DueAt from the phase edge to t_L1 + revealSeconds(L1), which lands within ~0.1-0.2 s of the exit fact. Pre-patch (draft-v3 bare min form, evidence/verification-v3) L2 fired AT the edge and held the slot 1.32-1.71 s. Post-patch L2 holds the slot 0.06-0.19 s on desktop/mobile/reduced-motion and is DROPPED entirely on quality-potato in all three cold runs.",
+        "contractPosition": "conformant — criterion [23] retires the mid-reveal exception and the drop rule in criterion [22] explicitly governs the movie-path drop. Recorded because it is material and reproducible, not because it fails a term.",
+        "preChangeReference": "evidence/verification-v3/routeC-desktop.json, evidence/verification-v3/routeC-potato.json"
+      },
+      "status": "pass"
+    },
+    "diveAndClimb": {
+      "id": "ruling R4 / acceptance criterion [31] — held exit-window clock",
+      "probe": "ladder-verify-probe.mjs dive --runs 3 --out verification-final",
+      "coldRuns": 3,
+      "routeShape": "pristine deep link at LOW, [SPACE] ignition at entry +3 s, [W] climb to deep_space, accrue, then physical reverse throttle [S] to cross back under the boundary, hold, then [W] again to re-exit. No fallback mutation was needed on any run.",
+      "perRun": [
+        {
+          "run": 1,
+          "diveMethod": "physical reverse throttle [S]",
+          "reexitMethod": "physical forward throttle [W]",
+          "firstDeepSpaceAtSeconds": 8.749,
+          "heldAtDiveCommand": 5.1727,
+          "dipPhase": "descent",
+          "heldAtDipStart": 14.9644,
+          "heldAtDipEnd": 14.9644,
+          "dipWallSeconds": 10.9,
+          "dipSampleCount": 148,
+          "clockDriftDuringDipSeconds": 0,
+          "clockFrozenPass": true,
+          "rowsEmittedDuringDip": 0,
+          "heldAtResume": 14.981,
+          "resumeRegressionSeconds": 0.0166,
+          "noRowReFired": true,
+          "minInterRowHeldGapSeconds": 1.988,
+          "noBurstPass": true,
+          "windowRowsAllWithin0p2OfHeldClock": true,
+          "heldAtAdvance": 16.9898,
+          "phaseAtAdvance": "deep_space",
+          "advancePass": true,
+          "advancedAtEntryOffsetSeconds": 36.818,
+          "frameDir": "evidence/verification-final/dive-run1"
+        },
+        {
+          "run": 2,
+          "diveMethod": "physical reverse throttle [S]",
+          "reexitMethod": "physical forward throttle [W]",
+          "firstDeepSpaceAtSeconds": 8.912,
+          "heldAtDiveCommand": 5.1559,
+          "dipPhase": "descent",
+          "heldAtDipStart": 14.8665,
+          "heldAtDipEnd": 14.8665,
+          "dipWallSeconds": 10.832,
+          "dipSampleCount": 148,
+          "clockDriftDuringDipSeconds": 0,
+          "clockFrozenPass": true,
+          "rowsEmittedDuringDip": 0,
+          "heldAtResume": 14.883,
+          "resumeRegressionSeconds": 0.0165,
+          "noRowReFired": true,
+          "minInterRowHeldGapSeconds": 1.989,
+          "noBurstPass": true,
+          "windowRowsAllWithin0p2OfHeldClock": true,
+          "heldAtAdvance": 16.9586,
+          "phaseAtAdvance": "deep_space",
+          "advancePass": true,
+          "advancedAtEntryOffsetSeconds": 36.795,
+          "frameDir": "evidence/verification-final/dive-run2"
+        },
+        {
+          "run": 3,
+          "diveMethod": "physical reverse throttle [S]",
+          "reexitMethod": "physical forward throttle [W]",
+          "firstDeepSpaceAtSeconds": 8.953,
+          "heldAtDiveCommand": 5.1404,
+          "dipPhase": "descent",
+          "heldAtDipStart": 14.8665,
+          "heldAtDipEnd": 14.8665,
+          "dipWallSeconds": 10.603,
+          "dipSampleCount": 149,
+          "clockDriftDuringDipSeconds": 0,
+          "clockFrozenPass": true,
+          "rowsEmittedDuringDip": 0,
+          "heldAtResume": 14.983,
+          "resumeRegressionSeconds": 0.1165,
+          "noRowReFired": true,
+          "minInterRowHeldGapSeconds": 1.928,
+          "noBurstPass": true,
+          "windowRowsAllWithin0p2OfHeldClock": true,
+          "heldAtAdvance": 16.9915,
+          "phaseAtAdvance": "deep_space",
+          "advancePass": true,
+          "advancedAtEntryOffsetSeconds": 36.415,
+          "frameDir": "evidence/verification-final/dive-run3"
+        }
+      ],
+      "honestDeviation": "The dive was COMMANDED at held 5.17/5.15/5.15 s (L4 + stack rows 1 and 2 stamped, exactly the \"~2 rows\" shape). Reverse throttle is 0.34 of forward, so the physical boundary crossing did not complete until held 14.87-14.96 s. The clock accrued correctly through that descent because the phase was still deep_space. The freeze, resume, no-refire, no-burst and advance assertions are all measured across the real dip; only the \"2 rows then immediately under the boundary\" framing is not achievable with the shipped flight model.",
+      "status": "pass"
+    },
+    "ch7QueueGuard": {
+      "id": "ruling R3 / acceptance criterion [3] plus cap.ch7.exit-window",
+      "movieProbe": "ladder-verify-probe.mjs ch7queue --runs 3 --out verification-final --variant desktop",
+      "manualProbe": "ladder-verify-probe.mjs ch7manual --runs 1 --out verification-final --gap 6.0",
+      "movieRuns": [
+        {
+          "run": 1,
+          "lines": [
+            {
+              "id": "M1",
+              "fired": true,
+              "atSeconds": 3.65,
+              "chars": 73,
+              "revealSeconds": 2.482,
+              "requiredScreenLifeSeconds": 2.882,
+              "screenLifeSeconds": 2.9,
+              "slackSeconds": 0.018,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M2"
+            },
+            {
+              "id": "M2",
+              "fired": true,
+              "atSeconds": 6.55,
+              "chars": 78,
+              "revealSeconds": 2.652,
+              "requiredScreenLifeSeconds": 3.052,
+              "screenLifeSeconds": 3.083,
+              "slackSeconds": 0.031,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M3"
+            },
+            {
+              "id": "M3",
+              "fired": true,
+              "atSeconds": 9.632,
+              "chars": 90,
+              "revealSeconds": 3.06,
+              "requiredScreenLifeSeconds": 3.46,
+              "screenLifeSeconds": 3.483,
+              "slackSeconds": 0.023,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M4"
+            },
+            {
+              "id": "M4",
+              "fired": true,
+              "atSeconds": 13.115,
+              "chars": 74,
+              "revealSeconds": 2.516,
+              "requiredScreenLifeSeconds": 2.916,
+              "screenLifeSeconds": 2.933,
+              "slackSeconds": 0.017,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M6"
+            },
+            {
+              "id": "M5",
+              "fired": false
+            },
+            {
+              "id": "M6",
+              "fired": true,
+              "atSeconds": 16.049,
+              "chars": 82,
+              "revealSeconds": 2.788,
+              "requiredScreenLifeSeconds": 3.188,
+              "screenLifeSeconds": 3.417,
+              "slackSeconds": 0.229,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M7-caption"
+            }
+          ],
+          "droppedAtReceipt": [
+            "M5"
+          ],
+          "m6Fired": true,
+          "onceOnly": true,
+          "stageOrderPreserved": true,
+          "orderObserved": [
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M6"
+          ],
+          "tM6": 12.748,
+          "tCalibrationReceipt": 12.396,
+          "tM7Anchor": 15.536,
+          "anchorFormulaExact": true,
+          "anchorShiftSeconds": 3.14,
+          "anchorEqualsReceipt": false,
+          "exitCadence": [
+            {
+              "id": "M7 audit",
+              "contractOffsetSeconds": 0,
+              "measuredAtSeconds": 18.849,
+              "measuredOffsetSeconds": 0,
+              "deltaSeconds": 0,
+              "pass": true
+            },
+            {
+              "id": "M7 caption",
+              "contractOffsetSeconds": 0.6,
+              "measuredAtSeconds": 19.465,
+              "measuredOffsetSeconds": 0.616,
+              "deltaSeconds": 0.016,
+              "pass": true
+            },
+            {
+              "id": "exit line",
+              "contractOffsetSeconds": 3,
+              "measuredAtSeconds": 21.865,
+              "measuredOffsetSeconds": 3.016,
+              "deltaSeconds": 0.016,
+              "pass": true
+            },
+            {
+              "id": "advance to ch7-board",
+              "contractOffsetSeconds": 5,
+              "measuredAtSeconds": 23.866,
+              "measuredOffsetSeconds": 5.017,
+              "deltaSeconds": 0.017,
+              "pass": true
+            }
+          ],
+          "frameDir": "evidence/verification-final/ch7queue-desktop-run1"
+        },
+        {
+          "run": 2,
+          "lines": [
+            {
+              "id": "M1",
+              "fired": true,
+              "atSeconds": 3.447,
+              "chars": 73,
+              "revealSeconds": 2.482,
+              "requiredScreenLifeSeconds": 2.882,
+              "screenLifeSeconds": 2.901,
+              "slackSeconds": 0.019,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M2"
+            },
+            {
+              "id": "M2",
+              "fired": true,
+              "atSeconds": 6.348,
+              "chars": 78,
+              "revealSeconds": 2.652,
+              "requiredScreenLifeSeconds": 3.052,
+              "screenLifeSeconds": 3.084,
+              "slackSeconds": 0.032,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M3"
+            },
+            {
+              "id": "M3",
+              "fired": true,
+              "atSeconds": 9.431,
+              "chars": 90,
+              "revealSeconds": 3.06,
+              "requiredScreenLifeSeconds": 3.46,
+              "screenLifeSeconds": 3.483,
+              "slackSeconds": 0.023,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M4"
+            },
+            {
+              "id": "M4",
+              "fired": true,
+              "atSeconds": 12.914,
+              "chars": 74,
+              "revealSeconds": 2.516,
+              "requiredScreenLifeSeconds": 2.916,
+              "screenLifeSeconds": 2.933,
+              "slackSeconds": 0.017,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M6"
+            },
+            {
+              "id": "M5",
+              "fired": false
+            },
+            {
+              "id": "M6",
+              "fired": true,
+              "atSeconds": 15.847,
+              "chars": 82,
+              "revealSeconds": 2.788,
+              "requiredScreenLifeSeconds": 3.188,
+              "screenLifeSeconds": 3.417,
+              "slackSeconds": 0.229,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M7-caption"
+            }
+          ],
+          "droppedAtReceipt": [
+            "M5"
+          ],
+          "m6Fired": true,
+          "onceOnly": true,
+          "stageOrderPreserved": true,
+          "orderObserved": [
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M6"
+          ],
+          "tM6": 12.696,
+          "tCalibrationReceipt": 12.373,
+          "tM7Anchor": 15.484,
+          "anchorFormulaExact": true,
+          "anchorShiftSeconds": 3.111,
+          "anchorEqualsReceipt": false,
+          "exitCadence": [
+            {
+              "id": "M7 audit",
+              "contractOffsetSeconds": 0,
+              "measuredAtSeconds": 18.648,
+              "measuredOffsetSeconds": 0,
+              "deltaSeconds": 0,
+              "pass": true
+            },
+            {
+              "id": "M7 caption",
+              "contractOffsetSeconds": 0.6,
+              "measuredAtSeconds": 19.264,
+              "measuredOffsetSeconds": 0.616,
+              "deltaSeconds": 0.016,
+              "pass": true
+            },
+            {
+              "id": "exit line",
+              "contractOffsetSeconds": 3,
+              "measuredAtSeconds": 21.664,
+              "measuredOffsetSeconds": 3.016,
+              "deltaSeconds": 0.016,
+              "pass": true
+            },
+            {
+              "id": "advance to ch7-board",
+              "contractOffsetSeconds": 5,
+              "measuredAtSeconds": 23.681,
+              "measuredOffsetSeconds": 5.033,
+              "deltaSeconds": 0.033,
+              "pass": true
+            }
+          ],
+          "frameDir": "evidence/verification-final/ch7queue-desktop-run2"
+        },
+        {
+          "run": 3,
+          "lines": [
+            {
+              "id": "M1",
+              "fired": true,
+              "atSeconds": 3.336,
+              "chars": 73,
+              "revealSeconds": 2.482,
+              "requiredScreenLifeSeconds": 2.882,
+              "screenLifeSeconds": 2.901,
+              "slackSeconds": 0.019,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M2"
+            },
+            {
+              "id": "M2",
+              "fired": true,
+              "atSeconds": 6.237,
+              "chars": 78,
+              "revealSeconds": 2.652,
+              "requiredScreenLifeSeconds": 3.052,
+              "screenLifeSeconds": 3.083,
+              "slackSeconds": 0.03,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M3"
+            },
+            {
+              "id": "M3",
+              "fired": true,
+              "atSeconds": 9.32,
+              "chars": 90,
+              "revealSeconds": 3.06,
+              "requiredScreenLifeSeconds": 3.46,
+              "screenLifeSeconds": 3.483,
+              "slackSeconds": 0.023,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M4"
+            },
+            {
+              "id": "M4",
+              "fired": true,
+              "atSeconds": 12.803,
+              "chars": 74,
+              "revealSeconds": 2.516,
+              "requiredScreenLifeSeconds": 2.916,
+              "screenLifeSeconds": 2.933,
+              "slackSeconds": 0.017,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M6"
+            },
+            {
+              "id": "M5",
+              "fired": false
+            },
+            {
+              "id": "M6",
+              "fired": true,
+              "atSeconds": 15.736,
+              "chars": 82,
+              "revealSeconds": 2.788,
+              "requiredScreenLifeSeconds": 3.188,
+              "screenLifeSeconds": 3.4,
+              "slackSeconds": 0.212,
+              "meetsRevealPlusDwell": true,
+              "replacedBy": "M7-caption"
+            }
+          ],
+          "droppedAtReceipt": [
+            "M5"
+          ],
+          "m6Fired": true,
+          "onceOnly": true,
+          "stageOrderPreserved": true,
+          "orderObserved": [
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M6"
+          ],
+          "tM6": 12.753,
+          "tCalibrationReceipt": 12.445,
+          "tM7Anchor": 15.541,
+          "anchorFormulaExact": true,
+          "anchorShiftSeconds": 3.095,
+          "anchorEqualsReceipt": false,
+          "exitCadence": [
+            {
+              "id": "M7 audit",
+              "contractOffsetSeconds": 0,
+              "measuredAtSeconds": 18.536,
+              "measuredOffsetSeconds": 0,
+              "deltaSeconds": 0,
+              "pass": true
+            },
+            {
+              "id": "M7 caption",
+              "contractOffsetSeconds": 0.6,
+              "measuredAtSeconds": 19.136,
+              "measuredOffsetSeconds": 0.6,
+              "deltaSeconds": 0,
+              "pass": true
+            },
+            {
+              "id": "exit line",
+              "contractOffsetSeconds": 3,
+              "measuredAtSeconds": 21.552,
+              "measuredOffsetSeconds": 3.016,
+              "deltaSeconds": 0.016,
+              "pass": true
+            },
+            {
+              "id": "advance to ch7-board",
+              "contractOffsetSeconds": 5,
+              "measuredAtSeconds": 23.571,
+              "measuredOffsetSeconds": 5.035,
+              "deltaSeconds": 0.035,
+              "pass": true
+            }
+          ],
+          "frameDir": "evidence/verification-final/ch7queue-desktop-run3"
+        }
+      ],
+      "manualRun": {
+        "mutationDeclaration": "SCRIPTED, NOT MOVIE, NOT PLAYER-EMBODIED. The probe (a) commits the shipped commitWreckDiagnosis with a proof built from the live registered wreck binding at zero distance and full gaze alignment, (b) grants each stage's canonical BOM through the shipped addItem so affordability matches a player who gathered it, and (c) calls the shipped performWreckReconstructionAction once per stage at >= gapSeconds spacing. No director, caption, queue or cadence code is touched; every emission below is the runtime's own.",
+        "commitSpacingSeconds": 6,
+        "commits": [
+          {
+            "atEntryOffsetSeconds": 9.349,
+            "kind": "salvage",
+            "target": null,
+            "ok": true,
+            "stage": "wrecked",
+            "granted": []
+          },
+          {
+            "atEntryOffsetSeconds": 15.354,
+            "kind": "repair",
+            "target": "bench_online",
+            "ok": true,
+            "stage": "bench_online",
+            "granted": []
+          },
+          {
+            "atEntryOffsetSeconds": 21.428,
+            "kind": "repair",
+            "target": "frame_restored",
+            "ok": true,
+            "stage": "frame_restored",
+            "granted": []
+          },
+          {
+            "atEntryOffsetSeconds": 27.446,
+            "kind": "repair",
+            "target": "hull_sealed",
+            "ok": true,
+            "stage": "hull_sealed",
+            "granted": []
+          },
+          {
+            "atEntryOffsetSeconds": 33.58,
+            "kind": "repair",
+            "target": "lift_online",
+            "ok": true,
+            "stage": "lift_online",
+            "granted": [
+              "lift_cellx1"
+            ]
+          },
+          {
+            "atEntryOffsetSeconds": 39.589,
+            "kind": "repair",
+            "target": "flight_ready",
+            "ok": true,
+            "stage": "flight_ready",
+            "granted": [
+              "logic_waferx1"
+            ]
+          }
+        ],
+        "lines": [
+          {
+            "id": "M1",
+            "fired": true,
+            "atSeconds": 3.318,
+            "requiredScreenLifeSeconds": 2.882,
+            "screenLifeSeconds": 12.049,
+            "slackSeconds": 9.167,
+            "meetsRevealPlusDwell": true
+          },
+          {
+            "id": "M2",
+            "fired": true,
+            "atSeconds": 15.367,
+            "requiredScreenLifeSeconds": 3.052,
+            "screenLifeSeconds": 6.07,
+            "slackSeconds": 3.018,
+            "meetsRevealPlusDwell": true
+          },
+          {
+            "id": "M3",
+            "fired": true,
+            "atSeconds": 21.438,
+            "requiredScreenLifeSeconds": 3.46,
+            "screenLifeSeconds": 6.029,
+            "slackSeconds": 2.569,
+            "meetsRevealPlusDwell": true
+          },
+          {
+            "id": "M4",
+            "fired": true,
+            "atSeconds": 27.467,
+            "requiredScreenLifeSeconds": 2.916,
+            "screenLifeSeconds": 6.162,
+            "slackSeconds": 3.246,
+            "meetsRevealPlusDwell": true
+          },
+          {
+            "id": "M5",
+            "fired": true,
+            "atSeconds": 33.629,
+            "requiredScreenLifeSeconds": 1.76,
+            "screenLifeSeconds": 6.037,
+            "slackSeconds": 4.277,
+            "meetsRevealPlusDwell": true
+          },
+          {
+            "id": "M6",
+            "fired": true,
+            "atSeconds": 39.666,
+            "requiredScreenLifeSeconds": 3.188,
+            "screenLifeSeconds": 8.616,
+            "slackSeconds": 5.428,
+            "meetsRevealPlusDwell": true
+          }
+        ],
+        "zeroDrops": true,
+        "minSlackSeconds": 2.569,
+        "tM6": 36.432,
+        "tCalibrationReceipt": 44.408,
+        "tM7Anchor": 44.408,
+        "anchorEqualsReceipt": true,
+        "exitCadence": [
+          {
+            "id": "M7 audit",
+            "contractOffsetSeconds": 0,
+            "measuredAtSeconds": 47.677,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "M7 caption",
+            "contractOffsetSeconds": 0.6,
+            "measuredAtSeconds": 48.282,
+            "measuredOffsetSeconds": 0.605,
+            "deltaSeconds": 0.005,
+            "pass": true
+          },
+          {
+            "id": "exit line",
+            "contractOffsetSeconds": 3,
+            "measuredAtSeconds": 50.698,
+            "measuredOffsetSeconds": 3.021,
+            "deltaSeconds": 0.021,
+            "pass": true
+          },
+          {
+            "id": "advance to ch7-board",
+            "contractOffsetSeconds": 5,
+            "measuredAtSeconds": 52.699,
+            "measuredOffsetSeconds": 5.022,
+            "deltaSeconds": 0.022,
+            "pass": true
+          }
+        ],
+        "frameDir": "evidence/verification-final/ch7manual-run1"
+      },
+      "exitWindowFrameState": [
+        {
+          "target": 0,
+          "measuredEntryOffsetSeconds": 18.998,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "revealComplete": true,
+          "file": "041_anchor+0.0_t19p00s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 0.4,
+          "measuredEntryOffsetSeconds": 19.41,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "revealComplete": true,
+          "file": "043_anchor+0.4_t19p41s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 0.8,
+          "measuredEntryOffsetSeconds": 19.793,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "nothing h",
+          "revealComplete": false,
+          "file": "045_anchor+0.8_t19p79s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 1.5,
+          "measuredEntryOffsetSeconds": 20.354,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "nothing has asked yet. som",
+          "revealComplete": false,
+          "file": "047_anchor+1.5_t20p35s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 2.4,
+          "measuredEntryOffsetSeconds": 21.258,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "nothing has asked yet. something has started paying",
+          "revealComplete": false,
+          "file": "050_anchor+2.4_t21p26s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 2.8,
+          "measuredEntryOffsetSeconds": 21.664,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "nothing has asked yet. something has started paying attention.",
+          "revealComplete": true,
+          "file": "052_anchor+2.8_t21p66s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 3.5,
+          "measuredEntryOffsetSeconds": 22.411,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "the scar remain",
+          "revealComplete": false,
+          "file": "055_anchor+3.5_t22p41s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 4.8,
+          "measuredEntryOffsetSeconds": 23.679,
+          "beat": "ch7-reconstruct",
+          "appliedFovDeg": 52,
+          "cameraAuthority": "cinematic-look",
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "domCaption": "the scar remains. now it can carry me.",
+          "revealComplete": true,
+          "file": "059_anchor+4.8_t23p68s_ch7-reconstruct_surface.png"
+        },
+        {
+          "target": 5.2,
+          "measuredEntryOffsetSeconds": 24.121,
+          "beat": "ch7-board",
+          "appliedFovDeg": null,
+          "cameraAuthority": null,
+          "activeEffectIds": [],
+          "domCaption": "(the wr",
+          "revealComplete": false,
+          "file": "061_anchor+5.2_t24p12s_ch7-board_surface.png"
+        },
+        {
+          "target": 6.5,
+          "measuredEntryOffsetSeconds": 25.374,
+          "beat": "ch7-board",
+          "appliedFovDeg": null,
+          "cameraAuthority": "lens-rig",
+          "activeEffectIds": [
+            "fx.board.03-pressure-boundary"
+          ],
+          "domCaption": "(the wreck is waiting for an owner.)",
+          "revealComplete": true,
+          "file": "065_anchor+6.5_t25p37s_ch7-board_surface.png"
+        }
+      ],
+      "status": "pass"
+    },
+    "mobileRecapture": {
+      "id": "CIN-01 — ch7 exit window at mobile portrait and landscape with measured touch-control rects",
+      "method": "every frame records the caption bounding rect and every laid-out on-screen control rect, sampled before the shutter; a collision is a measured rect intersection in CSS px, not a pixel reading",
+      "portrait": {
+        "viewport": "390x844",
+        "framesWithCaption": 76,
+        "collidingFrames": 59,
+        "worstOverlapPx": 3224,
+        "anchorRows": [
+          {
+            "label": "anchor+0.0",
+            "captionRect": {
+              "x": 18,
+              "y": 582,
+              "w": 354,
+              "h": 70
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 3224
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 3224
+              }
+            ]
+          },
+          {
+            "label": "anchor+0.4",
+            "captionRect": {
+              "x": 18,
+              "y": 582,
+              "w": 354,
+              "h": 70
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 3224
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 3224
+              }
+            ]
+          },
+          {
+            "label": "anchor+0.8",
+            "captionRect": {
+              "x": 167,
+              "y": 629,
+              "w": 56,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+1.5",
+            "captionRect": {
+              "x": 58,
+              "y": 629,
+              "w": 273,
+              "h": 23
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 1426
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 575
+              }
+            ]
+          },
+          {
+            "label": "anchor+2.4",
+            "captionRect": {
+              "x": 18,
+              "y": 606,
+              "w": 354,
+              "h": 47
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              }
+            ]
+          },
+          {
+            "label": "anchor+2.8",
+            "captionRect": {
+              "x": 18,
+              "y": 606,
+              "w": 354,
+              "h": 47
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              }
+            ]
+          },
+          {
+            "label": "anchor+3.5",
+            "captionRect": {
+              "x": 123,
+              "y": 629,
+              "w": 145,
+              "h": 23
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 966
+              }
+            ]
+          },
+          {
+            "label": "anchor+4.8",
+            "captionRect": {
+              "x": 18,
+              "y": 606,
+              "w": 354,
+              "h": 47
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              },
+              {
+                "label": "USE",
+                "y": 600,
+                "h": 62,
+                "overlapPx": 2914
+              }
+            ]
+          },
+          {
+            "label": "anchor+5.2",
+            "captionRect": {
+              "x": 167,
+              "y": 629,
+              "w": 56,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+6.5",
+            "captionRect": {
+              "x": 18,
+              "y": 606,
+              "w": 354,
+              "h": 47
+            },
+            "collides": false,
+            "collidingControls": []
+          }
+        ],
+        "status": "fail",
+        "measuredStatement": "RECORDED AS MEASURED. The ch7 caption band collides with the CONSUME and USE touch controls in 59 of 76 caption-bearing frames, worst overlap 3224 px^2. At the M7 anchor +2.4 s frame the owner-approved M7 caption renders with its final word occluded by the CONSUME control. The mobile portrait variant does not pass and is not softened.",
+        "frameDir": "evidence/verification-final/ch7mobile-mobile-portrait-run1"
+      },
+      "landscape": {
+        "viewport": "844x390",
+        "framesWithCaption": 76,
+        "collidingFrames": 23,
+        "worstOverlapPx": 2914,
+        "anchorRows": [
+          {
+            "label": "anchor+0.0",
+            "captionRect": {
+              "x": 102,
+              "y": 152,
+              "w": 640,
+              "h": 47
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 146,
+                "h": 62,
+                "overlapPx": 2914
+              }
+            ]
+          },
+          {
+            "label": "anchor+0.4",
+            "captionRect": {
+              "x": 102,
+              "y": 152,
+              "w": 640,
+              "h": 47
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 146,
+                "h": 62,
+                "overlapPx": 2914
+              }
+            ]
+          },
+          {
+            "label": "anchor+0.8",
+            "captionRect": {
+              "x": 389,
+              "y": 175,
+              "w": 66,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+1.5",
+            "captionRect": {
+              "x": 285,
+              "y": 175,
+              "w": 273,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+2.4",
+            "captionRect": {
+              "x": 152,
+              "y": 175,
+              "w": 541,
+              "h": 23
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 146,
+                "h": 62,
+                "overlapPx": 299
+              }
+            ]
+          },
+          {
+            "label": "anchor+2.8",
+            "captionRect": {
+              "x": 107,
+              "y": 175,
+              "w": 630,
+              "h": 23
+            },
+            "collides": true,
+            "collidingControls": [
+              {
+                "label": "CONSUME",
+                "y": 146,
+                "h": 62,
+                "overlapPx": 1311
+              }
+            ]
+          },
+          {
+            "label": "anchor+3.5",
+            "captionRect": {
+              "x": 335,
+              "y": 175,
+              "w": 174,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+4.8",
+            "captionRect": {
+              "x": 226,
+              "y": 175,
+              "w": 392,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+5.2",
+            "captionRect": {
+              "x": 384,
+              "y": 175,
+              "w": 75,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          },
+          {
+            "label": "anchor+6.5",
+            "captionRect": {
+              "x": 236,
+              "y": 175,
+              "w": 372,
+              "h": 23
+            },
+            "collides": false,
+            "collidingControls": []
+          }
+        ],
+        "frameDir": "evidence/verification-final/ch7mobile-mobile-landscape-run1",
+        "note": "the previously missing landscape set is now captured"
+      },
+      "queueGuardOnMobile": {
+        "portraitMinSlackSeconds": null,
+        "landscapeMinSlackSeconds": 0.018,
+        "portraitM6Fired": true,
+        "landscapeM6Fired": true
+      }
+    },
+    "fps": {
+      "probe": "fps-verify-probe.mjs --out verification-final",
+      "beats": [
+        {
+          "beat": "ch7-reconstruct",
+          "median": 60.06,
+          "baselineMedian": 60.12,
+          "deltaVsBaseline": -0.06,
+          "frameTimeMs": 16.65,
+          "passFloor": true
+        },
+        {
+          "beat": "ch7-board",
+          "median": 60.08,
+          "baselineMedian": 60.11,
+          "deltaVsBaseline": -0.03,
+          "frameTimeMs": 16.64,
+          "passFloor": true
+        },
+        {
+          "beat": "ch8-launch",
+          "median": 60.1,
+          "baselineMedian": 60.08,
+          "deltaVsBaseline": 0.02,
+          "frameTimeMs": 16.64,
+          "passFloor": true
+        }
+      ],
+      "holdWindow": {
+        "label": "ch8-launch exit hold (+0.0 to ~+15 s off the L4 caption)",
+        "beatAtEnd": "ch8-launch",
+        "fps": [
+          60.12,
+          60.04,
+          60.06,
+          60.03,
+          60.04
+        ],
+        "median": 60.04,
+        "frameTimeMs": 16.66,
+        "passFloor": true
+      },
+      "status": "pass"
+    },
+    "worldRegionBlankScan": {
+      "id": "CIN-06 — HUD-excluded world-region blank test",
+      "probe": "world-region-blank-scan.mjs evidence/verification-final",
+      "frameCount": 2456,
+      "worldBlankCount": 34,
+      "wholeFrameBlankCount": 0,
+      "worldCropFractions": {
+        "x0": 0.1,
+        "x1": 0.9,
+        "y0": 0.16,
+        "y1": 0.7
+      },
+      "medianWorldStd": 34.839,
+      "frames": [
+        "evidence/verification-final/replay-replay-deep-link/000_post_t1p68s_ch8-launch_surface.png",
+        "evidence/verification-final/replay-replay-deep-link/001_post_t2p24s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run1/000_strip_t0p15s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run1/001_strip_t2p64s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run2/000_strip_t0p15s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run2/001_strip_t2p61s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run3/000_strip_t0p14s_ch8-launch_surface.png",
+        "evidence/verification-final/routeA-ordered/run3/001_strip_t2p55s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run1/000_strip_t0p03s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run1/001_strip_t2p01s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run1/002_strip_t2p56s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run2/000_strip_t0p03s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run2/001_strip_t2p07s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run2/002_strip_t2p63s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run3/000_strip_t0p02s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run3/001_strip_t2p04s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-desktop-run3/002_strip_t2p57s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-mobile-run1/000_strip_t2p05s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-mobile-run1/001_strip_t2p62s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-mobile-run2/000_strip_t2p03s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-mobile-run2/001_strip_t2p58s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run1/000_strip_t0p03s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run1/001_strip_t1p92s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run1/002_strip_t2p43s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run2/000_strip_t2p04s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run2/001_strip_t2p66s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run3/000_strip_t1p79s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-potato-run3/001_strip_t2p36s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-reduced-motion-run1/000_strip_t2p00s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-reduced-motion-run1/001_strip_t2p54s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-reduced-motion-run2/000_strip_t0p02s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-reduced-motion-run2/001_strip_t2p06s_ch8-launch_surface.png",
+        "evidence/verification-final/routeC-reduced-motion-run2/002_strip_t2p63s_ch8-launch_surface.png",
+        "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t1p93s_ch8-landfall.png"
+      ],
+      "attribution": "UNATTRIBUTED, HEADLESS-ONLY EVIDENCE. No headed or real-GPU cold deep link was captured in this run, so the earlier \"headless cold-boot characteristic of this capture environment\" classification is withdrawn and not replaced.",
+      "signature": "all 34 sit on cold deep-link entries between +0.02 s and +2.66 s, worldStd exactly 0 with HUD chrome present (fullStd 4.4-11.9); the whole-frame scan that made the original zero-blank claim finds 0 of the same frames"
+    },
+    "replayRemeasure": {
+      "id": "ux-07 — replay/reload seam re-measured with frames",
+      "probe": "ladder-verify-probe.mjs replay --out verification-final",
+      "method": "instrumentation installed via context.addInitScript (pre-boot), not page.evaluate after load; the iteration-1 single-timestamp artefact is a measurement bug in the old probe, reproduced and superseded here",
+      "cases": [
+        {
+          "case": "replay-deep-link",
+          "distinctCaptionTimestamps": 6,
+          "singleTimestampArtefactReproduced": false,
+          "ladderSpreadSeconds": 20.449,
+          "frameCount": 103,
+          "postCaptions": [
+            {
+              "atSecondsAfterReload": 2.975,
+              "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+            },
+            {
+              "atSecondsAfterReload": 6.191,
+              "text": "hold it. this is the only order left, and i am the one giving it."
+            },
+            {
+              "atSecondsAfterReload": 6.358,
+              "text": "i came down this line without being asked. i am going back up it on purpose."
+            },
+            {
+              "atSecondsAfterReload": 17.908,
+              "text": "they asked for a designation. what i have is not one."
+            },
+            {
+              "atSecondsAfterReload": 20.408,
+              "text": "nothing answers. the query does not close."
+            },
+            {
+              "atSecondsAfterReload": 23.424,
+              "text": "(there is another world here. it was always here.)"
+            }
+          ],
+          "frameDir": "evidence/verification-final/replay-replay-deep-link"
+        },
+        {
+          "case": "quit-to-menu",
+          "distinctCaptionTimestamps": 0,
+          "singleTimestampArtefactReproduced": false,
+          "ladderSpreadSeconds": null,
+          "frameCount": 108,
+          "postCaptions": [],
+          "frameDir": "evidence/verification-final/replay-quit-to-menu"
+        }
+      ],
+      "finding": "The iteration-1 record (L1+L2+L3 at one identical story-clock stamp, only L3 surviving) is NOT reproduced. With instrumentation installed pre-boot the reloaded deep link plays six captions at six distinct stamps spread over 20.449 s, and the ladder degrades through the ordinary reveal guard plus drop rule (L2 at +6.191 s, L3 dropped, L4 at +6.358 s). The original figure was an artefact of installing the subscription after the reload. Quit-to-menu emits zero captions after the interrupt, i.e. no stale story voice survives the return to sandbox.",
+      "status": "pass"
+    },
+    "seamStrips": {
+      "id": "CIN-10 — cap.seam-continuity completion",
+      "probe": "seam-strip-probe.mjs {ch8|ch6|landfall} --out verification-final",
+      "ch8HoldToCrossing": {
+        "contractWindow": "+16.5 to +18.5 s at 500 ms",
+        "frames": [
+          {
+            "file": "seam_t16p50s_ch8-launch.png",
+            "offset": 16.497,
+            "beat": "ch8-launch",
+            "domCaption": "nothing answers. the query does not close.",
+            "anchorId": "anc.launch.atmosphere-exit",
+            "effects": [
+              "fx.launch.03-boundary-without-warp"
+            ]
+          },
+          {
+            "file": "seam_t17p00s_ch8-crossing.png",
+            "offset": 17.002,
+            "beat": "ch8-crossing",
+            "domCaption": "",
+            "anchorId": null,
+            "effects": []
+          },
+          {
+            "file": "seam_t17p51s_ch8-crossing.png",
+            "offset": 17.509,
+            "beat": "ch8-crossing",
+            "domCaption": "(there is anoth",
+            "anchorId": null,
+            "effects": []
+          },
+          {
+            "file": "seam_t18p00s_ch8-crossing.png",
+            "offset": 17.998,
+            "beat": "ch8-crossing",
+            "domCaption": "(there is another world here.",
+            "anchorId": null,
+            "effects": []
+          },
+          {
+            "file": "seam_t18p50s_ch8-crossing.png",
+            "offset": 18.499,
+            "beat": "ch8-crossing",
+            "domCaption": "(there is another world here. it was always",
+            "anchorId": "anc.crossing.sibling-targeted",
+            "effects": [
+              "fx.crossing.03-another-world-ahead"
+            ]
+          }
+        ],
+        "emptyRegulationBandUnderL6": "PROVEN BY PIXEL at +16.497 s: the audit pill is not rendered. The aria-live DOM node still carries \"CONTACT LOGGED.\" for assistive tech, so the DOM text field is not the authority here and the frame is.",
+        "frameDir": "evidence/verification-final/seams/ch8-hold-to-crossing"
+      },
+      "ch6DiveToCh7": {
+        "frames": [
+          {
+            "file": "seam_t0p01s_ch7-reconstruct.png",
+            "offset": 0.013,
+            "beat": "ch7-reconstruct",
+            "domCaption": "(r"
+          },
+          {
+            "file": "seam_t0p50s_ch7-reconstruct.png",
+            "offset": 0.496,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the"
+          },
+          {
+            "file": "seam_t1p05s_ch7-reconstruct.png",
+            "offset": 1.047,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the wreck that broug"
+          },
+          {
+            "file": "seam_t1p49s_ch7-reconstruct.png",
+            "offset": 1.495,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the wreck that brought me here wi"
+          },
+          {
+            "file": "seam_t2p00s_ch7-reconstruct.png",
+            "offset": 1.996,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the wreck that brought me here will leave here."
+          },
+          {
+            "file": "seam_t2p50s_ch7-reconstruct.png",
+            "offset": 2.496,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the wreck that brought me here will leave here. i will build t"
+          },
+          {
+            "file": "seam_t3p03s_ch7-reconstruct.png",
+            "offset": 3.029,
+            "beat": "ch7-reconstruct",
+            "domCaption": "the wreck that brought me here will leave here. i will build the leaving."
+          }
+        ],
+        "frameDir": "evidence/verification-final/seams/ch6-dive-to-ch7",
+        "note": null
+      },
+      "ch8LandfallToCh9": {
+        "ch9Observed": {
+          "beat": "ch9-settle",
+          "storyClock": 21043.10000014305
+        },
+        "landfallFrameCount": 21,
+        "ch9FrameCount": 5,
+        "frameDir": "evidence/verification-final/seams/ch8-landfall-to-ch9",
+        "note": null
+      },
+      "status": "pass"
+    },
+    "objectiveLifecycle": {
+      "id": "guided-player lifecycle over the closing traces (ux-04 rebind)",
+      "measurementsRef": "evidence/verification-final/objective-lifecycle-measurements.json",
+      "storyUxCheck": "npm --prefix main run story:ux:check — 6 files, 54 tests, all passing",
+      "objectiveCount": 19,
+      "allOneShotEntryFeedback": true,
+      "allSingleMarkerLabel": true,
+      "markerHealthException": {
+        "criterion": "[35] — no missing-marker frame while the objective is ACTIVE AND ACQUIRED; the reconstruct:diagnose entry acquisition transient is the single recorded accepted exception",
+        "measuredExitTransients": "every marker-requiring objective except one shows post-acquisition missing-marker only as an exit transient of 0.009-0.076 s that ends in replacement by the next objective",
+        "unaccepted": {
+          "objectiveId": "reconstruct:repair:bench_online",
+          "finding": "holds missing-marker for 0.681-0.683 s after acquisition on all five movie/variant runs and for 5.948 s on the paced manual run, while the objective is still active. The flip coincides exactly with the wreck-salvage claim (manual run: salvage committed 9.416 s, health flips 9.419 s, cleared 15.367 s).",
+          "preExisting": true,
+          "introducedByLoop3Patch": false,
+          "note": "the loop-3 patch touched only caption queueing, the L2 due time and the exit-window clock; this is a marker-resolution gap in the salvage-to-bench window"
+        }
+      }
+    },
+    "mod02Remeasure": {
+      "id": "MOD-02 — dissent-03 board-caption timing re-measured with state read before the shutter",
+      "method": "emission stamps from the pre-boot subscription plus anchor frames whose state is sampled before page.screenshot()",
+      "runs": [
+        {
+          "run": 1,
+          "exitLineAtSeconds": 21.865,
+          "advanceAtSeconds": 23.866,
+          "parentheticalOnsetSeconds": 23.866,
+          "parentheticalMinusAdvanceSeconds": 0
+        },
+        {
+          "run": 2,
+          "exitLineAtSeconds": 21.664,
+          "advanceAtSeconds": 23.681,
+          "parentheticalOnsetSeconds": 23.681,
+          "parentheticalMinusAdvanceSeconds": 0
+        },
+        {
+          "run": 3,
+          "exitLineAtSeconds": 21.552,
+          "advanceAtSeconds": 23.571,
+          "parentheticalOnsetSeconds": 23.57,
+          "parentheticalMinusAdvanceSeconds": -0.001
+        }
+      ],
+      "finding": "The ch7-board parenthetical begins AT the advance, not before it: delta = 0.0000 s on all three cold runs. The dissent-03 clause’s \"+4.85 s, roughly 0.15 s BEFORE the +5.0 s advance\" is not reproduced and is a post-shutter-bias artefact. The pixel half of CIN-11 stands: the anchor +4.8 s frame shows the exit string at full reveal with the beat still ch7-reconstruct.",
+      "status": "resolved-against-the-dissent-clause"
+    },
+    "cin05": {
+      "id": "CIN-05 — post-shutter sidecar bias",
+      "disposition": "re-emitted, not annotated",
+      "detail": "every sidecar under evidence/verification-final/ carries stateReadOrder:\"state-before-shutter\" plus its own shutterSpanMs; the biased sets remain under evidence/verification/ and are superseded for every claim restated here. The bias source is voice-repair-probe.mjs lines ~285-315, which read __voxText/__voxObjective/DOM after page.screenshot()."
+    }
+  },
+  "exactAnchorsVocabularyNote": "Domain statuses were spelled not_applicable (underscore); the gate vocabulary is not-applicable (hyphen). 51 domain values were normalised. This is a spelling normalisation only: no claim, measurement or evidence reference changed.",
+  "overallStatusVocabularyNote": "The gate accepts true | pass | passed | not-applicable. This run has an unrepaired measured FAIL (CIN-01, the mobile-portrait caption/touch-control collision, 59 of 76 caption frames, worst overlap 3224 px^2) carrying an open owner scope decision. Recording pass here would be false, so overallStatus stays non-passing and verification.overall is reported as an honest irreducible gate failure rather than laundered.",
+  "exactAnchorsCoverageNote": "Three contracted anchors (anchor.ch7.beat-entry, anchor.ch8.self-order, anchor.ch8.site-recedes) had no exact-anchor row at all before the closing pass. Their rows are added from closing-pass measurements. The two ch8 rows record only that there is no score event and that shipped state continues, exactly as acceptance criterion [26] requires of them."
+}

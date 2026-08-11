@@ -1,0 +1,1273 @@
+{
+  "schema": "paravoxia.pacedLadderAnalysis.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v3",
+  "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+  "compiledAt": "2026-08-11T01:42:04.294Z",
+  "constants": {
+    "CH8_L1_MIN_SLOT_SECONDS": 4.5,
+    "CH8_L2_MIN_SLOT_SECONDS": 3,
+    "l3RevealSeconds": 1.972
+  },
+  "routes": {
+    "routeA.space-only": {
+      "source": "evidence/verification-v3/routeA-space.json",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space",
+      "igniteAtEntryOffsetSeconds": 6,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.462,
+          "tL2": 7.466,
+          "tL3": 10.492,
+          "tL4": null,
+          "tPhaseEdge": 7.466,
+          "tDeepSpace": null,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": 0.026,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.269,
+          "tL2": 7.489,
+          "tL3": 10.52,
+          "tL4": null,
+          "tPhaseEdge": 7.488,
+          "tDeepSpace": null,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": 0.031,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 3.209,
+          "tL2": 7.486,
+          "tL3": 10.516,
+          "tL4": null,
+          "tPhaseEdge": 7.486,
+          "tDeepSpace": null,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": 0.03,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 3.209,
+          "max": 3.462,
+          "spread": 0.253,
+          "mean": 3.313
+        },
+        "tL2": {
+          "n": 3,
+          "min": 7.466,
+          "max": 7.489,
+          "spread": 0.023,
+          "mean": 7.48
+        },
+        "tL3": {
+          "n": 3,
+          "min": 10.492,
+          "max": 10.52,
+          "spread": 0.028,
+          "mean": 10.509
+        },
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 7.466,
+          "max": 7.488,
+          "spread": 0.022,
+          "mean": 7.48
+        },
+        "tDeepSpace": null,
+        "c3Margin": null,
+        "variantDMargin": null
+      },
+      "l3RenderedEveryRun": true,
+      "l3DroppedEveryRun": false,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0.031
+    },
+    "routeA.space-then-w": {
+      "source": "evidence/verification-v3/routeA-space-then-w.json",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space-then-w",
+      "igniteAtEntryOffsetSeconds": 6,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.381,
+          "tL2": 7.587,
+          "tL3": 10.653,
+          "tL4": 11.369,
+          "tPhaseEdge": 7.586,
+          "tDeepSpace": 11.386,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": 0.066,
+          "l3Rendered": true,
+          "c3MarginSeconds": -1.239,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.277,
+          "tL2": 7.45,
+          "tL3": 10.509,
+          "tL4": 11.292,
+          "tPhaseEdge": 7.45,
+          "tDeepSpace": 11.308,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": 0.059,
+          "l3Rendered": true,
+          "c3MarginSeconds": -1.173,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 3.118,
+          "tL2": 7.584,
+          "tL3": 10.646,
+          "tL4": 11.38,
+          "tPhaseEdge": 7.583,
+          "tDeepSpace": 11.396,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": 0.062,
+          "l3Rendered": true,
+          "c3MarginSeconds": -1.222,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 3.118,
+          "max": 3.381,
+          "spread": 0.263,
+          "mean": 3.259
+        },
+        "tL2": {
+          "n": 3,
+          "min": 7.45,
+          "max": 7.587,
+          "spread": 0.137,
+          "mean": 7.54
+        },
+        "tL3": {
+          "n": 3,
+          "min": 10.509,
+          "max": 10.653,
+          "spread": 0.144,
+          "mean": 10.603
+        },
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 7.45,
+          "max": 7.586,
+          "spread": 0.136,
+          "mean": 7.54
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 11.308,
+          "max": 11.396,
+          "spread": 0.088,
+          "mean": 11.363
+        },
+        "c3Margin": {
+          "n": 3,
+          "min": -1.239,
+          "max": -1.173,
+          "spread": 0.066,
+          "mean": -1.211
+        },
+        "variantDMargin": null
+      },
+      "l3RenderedEveryRun": true,
+      "l3DroppedEveryRun": false,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0.066
+    },
+    "routeA.space-late-ignite": {
+      "source": "evidence/verification-v3/routeA-space-late-ignite.json",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space",
+      "igniteAtEntryOffsetSeconds": 10,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.45,
+          "tL2": 7.978,
+          "tL3": 11.472,
+          "tL4": null,
+          "tPhaseEdge": 11.471,
+          "tDeepSpace": null,
+          "l2Cause": "timer",
+          "l2FormulaDelta": 0.028,
+          "l3FormulaDelta": 0.001,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.37,
+          "tL2": 7.907,
+          "tL3": 11.466,
+          "tL4": null,
+          "tPhaseEdge": 11.465,
+          "tDeepSpace": null,
+          "l2Cause": "timer",
+          "l2FormulaDelta": 0.037,
+          "l3FormulaDelta": 0.001,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 3.091,
+          "tL2": 7.613,
+          "tL3": 11.582,
+          "tL4": null,
+          "tPhaseEdge": 11.582,
+          "tDeepSpace": null,
+          "l2Cause": "timer",
+          "l2FormulaDelta": 0.022,
+          "l3FormulaDelta": 0,
+          "l3Rendered": true,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          },
+          "order": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "exitWindowPass": null,
+          "variantDMarginSeconds": null,
+          "variantDPass": null,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 3.091,
+          "max": 3.45,
+          "spread": 0.359,
+          "mean": 3.304
+        },
+        "tL2": {
+          "n": 3,
+          "min": 7.613,
+          "max": 7.978,
+          "spread": 0.365,
+          "mean": 7.833
+        },
+        "tL3": {
+          "n": 3,
+          "min": 11.466,
+          "max": 11.582,
+          "spread": 0.116,
+          "mean": 11.507
+        },
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 11.465,
+          "max": 11.582,
+          "spread": 0.117,
+          "mean": 11.506
+        },
+        "tDeepSpace": null,
+        "c3Margin": null,
+        "variantDMargin": null
+      },
+      "l3RenderedEveryRun": true,
+      "l3DroppedEveryRun": false,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "timer"
+      ],
+      "formulaMaxDeltaSeconds": 0.037
+    },
+    "routeB.chained-movie": {
+      "source": "evidence/verification-v3/routeB-desktop.json",
+      "url": "http://localhost:5176/?story=ch7-board&movie=1&profile=LOW",
+      "shape": null,
+      "igniteAtEntryOffsetSeconds": null,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 0.023,
+          "tL2": 1.462,
+          "tL3": null,
+          "tL4": 3.39,
+          "tPhaseEdge": 1.462,
+          "tDeepSpace": 3.406,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.251,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 0.024,
+          "tL2": 1.434,
+          "tL3": null,
+          "tL4": 3.374,
+          "tPhaseEdge": 1.434,
+          "tDeepSpace": 3.39,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 0.024,
+          "tL2": 1.433,
+          "tL3": null,
+          "tL4": 3.374,
+          "tPhaseEdge": 1.433,
+          "tDeepSpace": 3.39,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 0.023,
+          "max": 0.024,
+          "spread": 0.001,
+          "mean": 0.024
+        },
+        "tL2": {
+          "n": 3,
+          "min": 1.433,
+          "max": 1.462,
+          "spread": 0.029,
+          "mean": 1.443
+        },
+        "tL3": null,
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 1.433,
+          "max": 1.462,
+          "spread": 0.029,
+          "mean": 1.443
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 3.39,
+          "max": 3.406,
+          "spread": 0.016,
+          "mean": 3.395
+        },
+        "c3Margin": null,
+        "variantDMargin": {
+          "n": 3,
+          "min": 0.25,
+          "max": 0.251,
+          "spread": 0.001,
+          "mean": 0.25
+        }
+      },
+      "l3RenderedEveryRun": false,
+      "l3DroppedEveryRun": true,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0
+    },
+    "routeC.deeplink-movie": {
+      "source": "evidence/verification-v3/routeC-desktop.json",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "shape": null,
+      "igniteAtEntryOffsetSeconds": null,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.277,
+          "tL2": 4.72,
+          "tL3": null,
+          "tL4": 6.551,
+          "tPhaseEdge": 4.72,
+          "tDeepSpace": 6.567,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.249,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.056,
+          "tL2": 4.456,
+          "tL3": null,
+          "tL4": 6.315,
+          "tPhaseEdge": 4.455,
+          "tDeepSpace": 6.33,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.249,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 2.986,
+          "tL2": 4.39,
+          "tL3": null,
+          "tL4": 6.251,
+          "tPhaseEdge": 4.389,
+          "tDeepSpace": 6.266,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 2.986,
+          "max": 3.277,
+          "spread": 0.291,
+          "mean": 3.106
+        },
+        "tL2": {
+          "n": 3,
+          "min": 4.39,
+          "max": 4.72,
+          "spread": 0.33,
+          "mean": 4.522
+        },
+        "tL3": null,
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 4.389,
+          "max": 4.72,
+          "spread": 0.331,
+          "mean": 4.521
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 6.266,
+          "max": 6.567,
+          "spread": 0.301,
+          "mean": 6.388
+        },
+        "c3Margin": null,
+        "variantDMargin": {
+          "n": 3,
+          "min": 0.249,
+          "max": 0.25,
+          "spread": 0.001,
+          "mean": 0.249
+        }
+      },
+      "l3RenderedEveryRun": false,
+      "l3DroppedEveryRun": true,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0.001
+    },
+    "routeD.potato": {
+      "source": "evidence/verification-v3/routeC-potato.json",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=POTATO",
+      "shape": null,
+      "igniteAtEntryOffsetSeconds": null,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 2.983,
+          "tL2": 4.388,
+          "tL3": null,
+          "tL4": 6.032,
+          "tPhaseEdge": 4.387,
+          "tDeepSpace": 6.048,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.273,
+          "tL2": 4.718,
+          "tL3": null,
+          "tL4": 6.367,
+          "tPhaseEdge": 4.717,
+          "tDeepSpace": 6.386,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 2.935,
+          "tL2": 4.37,
+          "tL3": null,
+          "tL4": 6.029,
+          "tPhaseEdge": 4.37,
+          "tDeepSpace": 6.048,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 2.935,
+          "max": 3.273,
+          "spread": 0.338,
+          "mean": 3.064
+        },
+        "tL2": {
+          "n": 3,
+          "min": 4.37,
+          "max": 4.718,
+          "spread": 0.348,
+          "mean": 4.492
+        },
+        "tL3": null,
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 4.37,
+          "max": 4.717,
+          "spread": 0.347,
+          "mean": 4.491
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 6.048,
+          "max": 6.386,
+          "spread": 0.338,
+          "mean": 6.161
+        },
+        "c3Margin": null,
+        "variantDMargin": {
+          "n": 3,
+          "min": 0.25,
+          "max": 0.25,
+          "spread": 0,
+          "mean": 0.25
+        }
+      },
+      "l3RenderedEveryRun": false,
+      "l3DroppedEveryRun": true,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0.001
+    },
+    "routeD.mobile-portrait": {
+      "source": "evidence/verification-v3/routeC-mobile-portrait.json",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "shape": null,
+      "igniteAtEntryOffsetSeconds": null,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.375,
+          "tL2": 4.779,
+          "tL3": null,
+          "tL4": 6.67,
+          "tPhaseEdge": 4.779,
+          "tDeepSpace": 6.69,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.423,
+          "tL2": 4.851,
+          "tL3": null,
+          "tL4": 6.726,
+          "tPhaseEdge": 4.851,
+          "tDeepSpace": 6.742,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 3.034,
+          "tL2": 4.462,
+          "tL3": null,
+          "tL4": 6.345,
+          "tPhaseEdge": 4.462,
+          "tDeepSpace": 6.364,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.251,
+          "variantDPass": true,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 3.034,
+          "max": 3.423,
+          "spread": 0.389,
+          "mean": 3.277
+        },
+        "tL2": {
+          "n": 3,
+          "min": 4.462,
+          "max": 4.851,
+          "spread": 0.389,
+          "mean": 4.697
+        },
+        "tL3": null,
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 4.462,
+          "max": 4.851,
+          "spread": 0.389,
+          "mean": 4.697
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 6.364,
+          "max": 6.742,
+          "spread": 0.378,
+          "mean": 6.599
+        },
+        "c3Margin": null,
+        "variantDMargin": {
+          "n": 3,
+          "min": 0.25,
+          "max": 0.251,
+          "spread": 0.001,
+          "mean": 0.25
+        }
+      },
+      "l3RenderedEveryRun": false,
+      "l3DroppedEveryRun": true,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0
+    },
+    "routeD.reduced-motion": {
+      "source": "evidence/verification-v3/routeC-reduced-motion.json",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "shape": null,
+      "igniteAtEntryOffsetSeconds": null,
+      "coldRuns": 3,
+      "validRuns": 3,
+      "rows": [
+        {
+          "run": 1,
+          "tL1": 3.257,
+          "tL2": 4.67,
+          "tL3": null,
+          "tL4": 6.628,
+          "tPhaseEdge": 4.669,
+          "tDeepSpace": 6.644,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0.001,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.249,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 2,
+          "tL1": 3.121,
+          "tL2": 4.553,
+          "tL3": null,
+          "tL4": 6.451,
+          "tPhaseEdge": 4.553,
+          "tDeepSpace": 6.466,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.249,
+          "variantDPass": true,
+          "pageErrors": 0
+        },
+        {
+          "run": 3,
+          "tL1": 3.183,
+          "tL2": 4.621,
+          "tL3": null,
+          "tL4": 6.472,
+          "tPhaseEdge": 4.621,
+          "tDeepSpace": 6.598,
+          "l2Cause": "phase-edge",
+          "l2FormulaDelta": 0,
+          "l3FormulaDelta": null,
+          "l3Rendered": false,
+          "c3MarginSeconds": null,
+          "onceOnly": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          },
+          "order": [
+            "L1",
+            "L2"
+          ],
+          "exitWindowPass": true,
+          "variantDMarginSeconds": 0.25,
+          "variantDPass": true,
+          "pageErrors": 0
+        }
+      ],
+      "variance": {
+        "tL1": {
+          "n": 3,
+          "min": 3.121,
+          "max": 3.257,
+          "spread": 0.136,
+          "mean": 3.187
+        },
+        "tL2": {
+          "n": 3,
+          "min": 4.553,
+          "max": 4.67,
+          "spread": 0.117,
+          "mean": 4.615
+        },
+        "tL3": null,
+        "tPhaseEdge": {
+          "n": 3,
+          "min": 4.553,
+          "max": 4.669,
+          "spread": 0.116,
+          "mean": 4.614
+        },
+        "tDeepSpace": {
+          "n": 3,
+          "min": 6.466,
+          "max": 6.644,
+          "spread": 0.178,
+          "mean": 6.569
+        },
+        "c3Margin": null,
+        "variantDMargin": {
+          "n": 3,
+          "min": 0.249,
+          "max": 0.25,
+          "spread": 0.001,
+          "mean": 0.249
+        }
+      },
+      "l3RenderedEveryRun": false,
+      "l3DroppedEveryRun": true,
+      "exitWindowPassEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "formulaMaxDeltaSeconds": 0.001
+    }
+  },
+  "variantParity": {
+    "routeD.potato": {
+      "sameStringSetAndOrder": true,
+      "observedOrder": [
+        "L1>L2"
+      ],
+      "referenceOrder": [
+        "L1>L2"
+      ],
+      "sameDropBehaviour": true,
+      "l3DroppedEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "exitWindowPassEveryRun": true,
+      "l1MinusReferenceSeconds": -0.042,
+      "l2OffsetFromL1Seconds": {
+        "variant": 1.428,
+        "reference": 1.416
+      }
+    },
+    "routeD.mobile-portrait": {
+      "sameStringSetAndOrder": true,
+      "observedOrder": [
+        "L1>L2"
+      ],
+      "referenceOrder": [
+        "L1>L2"
+      ],
+      "sameDropBehaviour": true,
+      "l3DroppedEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "exitWindowPassEveryRun": true,
+      "l1MinusReferenceSeconds": 0.171,
+      "l2OffsetFromL1Seconds": {
+        "variant": 1.42,
+        "reference": 1.416
+      }
+    },
+    "routeD.reduced-motion": {
+      "sameStringSetAndOrder": true,
+      "observedOrder": [
+        "L1>L2"
+      ],
+      "referenceOrder": [
+        "L1>L2"
+      ],
+      "sameDropBehaviour": true,
+      "l3DroppedEveryRun": true,
+      "l2CauseSet": [
+        "phase-edge"
+      ],
+      "exitWindowPassEveryRun": true,
+      "l1MinusReferenceSeconds": 0.081,
+      "l2OffsetFromL1Seconds": {
+        "variant": 1.428,
+        "reference": 1.416
+      }
+    }
+  },
+  "exitWindowPooled": {
+    "L4 atmosphere-exit caption": {
+      "contractOffsetSeconds": 0,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0,
+        "max": 0,
+        "spread": 0,
+        "mean": 0
+      },
+      "withinTolerance": true
+    },
+    "stack row 1": {
+      "contractOffsetSeconds": 2,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.009,
+        "max": 0.049,
+        "spread": 0.04,
+        "mean": 0.018
+      },
+      "withinTolerance": true
+    },
+    "stack row 2": {
+      "contractOffsetSeconds": 4,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.016,
+        "max": 0.049,
+        "spread": 0.033,
+        "mean": 0.028
+      },
+      "withinTolerance": true
+    },
+    "stack row 3": {
+      "contractOffsetSeconds": 6,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.032,
+        "max": 0.065,
+        "spread": 0.033,
+        "mean": 0.035
+      },
+      "withinTolerance": true
+    },
+    "contact logged": {
+      "contractOffsetSeconds": 8.5,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.032,
+        "max": 0.065,
+        "spread": 0.033,
+        "mean": 0.043
+      },
+      "withinTolerance": true
+    },
+    "designation caption": {
+      "contractOffsetSeconds": 11.5,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.048,
+        "max": 0.081,
+        "spread": 0.033,
+        "mean": 0.052
+      },
+      "withinTolerance": true
+    },
+    "L6 open query": {
+      "contractOffsetSeconds": 14,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.048,
+        "max": 0.081,
+        "spread": 0.033,
+        "mean": 0.062
+      },
+      "withinTolerance": true
+    },
+    "advance to ch8-crossing": {
+      "contractOffsetSeconds": 17,
+      "observations": 15,
+      "deltaSeconds": {
+        "n": 15,
+        "min": 0.065,
+        "max": 0.098,
+        "spread": 0.033,
+        "mean": 0.069
+      },
+      "withinTolerance": true
+    }
+  }
+}

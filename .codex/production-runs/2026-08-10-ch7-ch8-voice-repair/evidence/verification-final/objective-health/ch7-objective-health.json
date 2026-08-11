@@ -1,0 +1,2610 @@
+{
+  "mode": "ch7",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:49:31.791Z",
+  "method": "objective + getGuidedStoryObjectiveHealth() sampled once per requestAnimationFrame; missing-marker frames split by whether the marker had ever resolved for that activation",
+  "runs": [
+    {
+      "variant": "desktop",
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "totalFrames": 1451,
+      "rows": [
+        {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 438.7999999523163,
+          "frames": 30,
+          "acquired": true,
+          "firstAcquiredAt": 3855.2000000476837,
+          "preAcquisitionMissingMarkerFrames": 25,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 25,
+              "fromStoryClock": 438.7999999523163
+            },
+            {
+              "health": "ready",
+              "frames": 4,
+              "fromStoryClock": 3855.2000000476837
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 3991.399999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK SCAR · TRACE RELATIONSHIPS"
+          ],
+          "clearedAt": 4002.399999856949,
+          "replacedBy": "reconstruct:repair:bench_online"
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 4002.399999856949,
+          "frames": 76,
+          "acquired": true,
+          "firstAcquiredAt": 4002.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 40,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 36,
+              "fromStoryClock": 4002.399999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 40,
+              "fromStoryClock": 4644.599999904633
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RECOVER WRECK SALVAGE"
+          ],
+          "clearedAt": 5299.799999952316,
+          "replacedBy": "reconstruct:repair:frame_restored"
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5299.799999952316,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5299.799999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5299.799999952316
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 5949.899999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RESTORE STRUT FRAME"
+          ],
+          "clearedAt": 5968.299999952316,
+          "replacedBy": "reconstruct:repair:hull_sealed"
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5968.299999952316,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5968.299999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5968.299999952316
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6617
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · SEAL SCARRED HULL"
+          ],
+          "clearedAt": 6639.899999856949,
+          "replacedBy": "reconstruct:craft:lift_online"
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6639.899999856949,
+          "frames": 1,
+          "acquired": false,
+          "firstAcquiredAt": null,
+          "preAcquisitionMissingMarkerFrames": 1,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6639.899999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LIFT CELL"
+          ],
+          "clearedAt": 6649.899999856949,
+          "replacedBy": "reconstruct:repair:lift_online"
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6649.899999856949,
+          "frames": 39,
+          "acquired": true,
+          "firstAcquiredAt": 6649.899999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 6649.899999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7311.299999952316
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · INSTALL LIFT CELL"
+          ],
+          "clearedAt": 7328.299999952316,
+          "replacedBy": "reconstruct:craft:flight_ready"
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7328.299999952316,
+          "frames": 2,
+          "acquired": true,
+          "firstAcquiredAt": 7328.299999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 1,
+              "fromStoryClock": 7328.299999952316
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7333.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LOGIC WAFER"
+          ],
+          "clearedAt": 7349.799999952316,
+          "replacedBy": "reconstruct:repair:flight_ready"
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7349.799999952316,
+          "frames": 37,
+          "acquired": true,
+          "firstAcquiredAt": 7349.799999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 36,
+              "fromStoryClock": 7349.799999952316
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7986.099999904633
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+          ],
+          "clearedAt": 7992,
+          "replacedBy": "reconstruct:calibrating"
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "kind": "wait",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 7992,
+          "frames": 482,
+          "acquired": true,
+          "firstAcquiredAt": 7992,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 482,
+              "fromStoryClock": 7992
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · CALIBRATING"
+          ],
+          "clearedAt": 16033.399999856949,
+          "replacedBy": "reconstruct:ready"
+        },
+        {
+          "id": "reconstruct:ready",
+          "kind": "wait",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 16033.399999856949,
+          "frames": 491,
+          "acquired": true,
+          "firstAcquiredAt": 16033.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 491,
+              "fromStoryClock": 16033.399999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK · FLIGHT READY"
+          ],
+          "clearedAt": 24247.700000047684,
+          "replacedBy": "board:enter-hatch"
+        },
+        {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 24247.700000047684,
+          "frames": 3,
+          "acquired": true,
+          "firstAcquiredAt": 24247.700000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 2,
+              "fromStoryClock": 24247.700000047684
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 24265.799999952316
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · BOARD"
+          ],
+          "clearedAt": 24282.700000047684,
+          "replacedBy": "board:hatch-in-progress"
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "kind": "wait",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 24282.700000047684,
+          "frames": 45,
+          "acquired": true,
+          "firstAcquiredAt": 24282.700000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 45,
+              "fromStoryClock": 24282.700000047684
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · ENTERING"
+          ],
+          "clearedAt": 25315.599999904633,
+          "replacedBy": "board:pressure-seal"
+        },
+        {
+          "id": "board:pressure-seal",
+          "kind": "wait",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 25315.599999904633,
+          "frames": 38,
+          "acquired": true,
+          "firstAcquiredAt": 25315.599999904633,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 25315.599999904633
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · PRESSURE SEAL"
+          ],
+          "clearedAt": 26005.39999985695,
+          "replacedBy": "ch8:launch:ignite"
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 26005.39999985695,
+          "frames": 126,
+          "acquired": true,
+          "firstAcquiredAt": 26005.39999985695,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 126,
+              "fromStoryClock": 26005.39999985695
+            }
+          ],
+          "markerLabels": [
+            "KESTREL FLIGHT CONTROLS · IGNITE"
+          ],
+          "clearedAt": null,
+          "replacedBy": null
+        }
+      ],
+      "feedback": [
+        {
+          "t": 421.7000000476837,
+          "objectiveId": "reconstruct:diagnose",
+          "kind": null
+        },
+        {
+          "t": 3992.7000000476837,
+          "objectiveId": "reconstruct:repair:bench_online",
+          "kind": null
+        },
+        {
+          "t": 5284.200000047684,
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "kind": null
+        },
+        {
+          "t": 5950.700000047684,
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "kind": null
+        },
+        {
+          "t": 6617.700000047684,
+          "objectiveId": "reconstruct:craft:lift_online",
+          "kind": null
+        },
+        {
+          "t": 6640.700000047684,
+          "objectiveId": "reconstruct:repair:lift_online",
+          "kind": null
+        },
+        {
+          "t": 7312.399999856949,
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7334,
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7986.799999952316,
+          "objectiveId": "reconstruct:calibrating",
+          "kind": null
+        },
+        {
+          "t": 16029.399999856949,
+          "objectiveId": "reconstruct:ready",
+          "kind": null
+        },
+        {
+          "t": 24200.200000047684,
+          "objectiveId": "board:enter-hatch",
+          "kind": null
+        },
+        {
+          "t": 24266.299999952316,
+          "objectiveId": "board:hatch-in-progress",
+          "kind": null
+        },
+        {
+          "t": 25307.099999904633,
+          "objectiveId": "board:pressure-seal",
+          "kind": null
+        },
+        {
+          "t": 25960,
+          "objectiveId": "board:cockpit-secured",
+          "kind": null
+        },
+        {
+          "t": 25960.39999985695,
+          "objectiveId": "ch8:launch:ignite",
+          "kind": null
+        }
+      ],
+      "transitions": [
+        {
+          "t": 374.09999990463257,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 438.7999999523163,
+          "id": "reconstruct:diagnose",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 4002.399999856949,
+          "id": "reconstruct:repair:bench_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5299.799999952316,
+          "id": "reconstruct:repair:frame_restored",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5968.299999952316,
+          "id": "reconstruct:repair:hull_sealed",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6639.899999856949,
+          "id": "reconstruct:craft:lift_online",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6649.899999856949,
+          "id": "reconstruct:repair:lift_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7328.299999952316,
+          "id": "reconstruct:craft:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7349.799999952316,
+          "id": "reconstruct:repair:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7992,
+          "id": "reconstruct:calibrating",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 16033.399999856949,
+          "id": "reconstruct:ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24247.700000047684,
+          "id": "board:enter-hatch",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24282.700000047684,
+          "id": "board:hatch-in-progress",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 25315.599999904633,
+          "id": "board:pressure-seal",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "t": 26005.39999985695,
+          "id": "ch8:launch:ignite",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        }
+      ]
+    },
+    {
+      "variant": "mobile",
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "totalFrames": 1465,
+      "rows": [
+        {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 405.89999985694885,
+          "frames": 34,
+          "acquired": true,
+          "firstAcquiredAt": 3786.899999856949,
+          "preAcquisitionMissingMarkerFrames": 26,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 26,
+              "fromStoryClock": 405.89999985694885
+            },
+            {
+              "health": "ready",
+              "frames": 7,
+              "fromStoryClock": 3786.899999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 3952
+            }
+          ],
+          "markerLabels": [
+            "WRECK SCAR · TRACE RELATIONSHIPS"
+          ],
+          "clearedAt": 3962.399999856949,
+          "replacedBy": "reconstruct:repair:bench_online"
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 3962.399999856949,
+          "frames": 78,
+          "acquired": true,
+          "firstAcquiredAt": 3962.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 40,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 3962.399999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 40,
+              "fromStoryClock": 4612.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RECOVER WRECK SALVAGE"
+          ],
+          "clearedAt": 5266.5,
+          "replacedBy": "reconstruct:repair:frame_restored"
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5266.5,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5266.5,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5266.5
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 5916.799999952316
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RESTORE STRUT FRAME"
+          ],
+          "clearedAt": 5933.399999856949,
+          "replacedBy": "reconstruct:repair:hull_sealed"
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5933.399999856949,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5933.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5933.399999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6583.399999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · SEAL SCARRED HULL"
+          ],
+          "clearedAt": 6600,
+          "replacedBy": "reconstruct:craft:lift_online"
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6600,
+          "frames": 2,
+          "acquired": true,
+          "firstAcquiredAt": 6600,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 1,
+              "fromStoryClock": 6600
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6616.799999952316
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LIFT CELL"
+          ],
+          "clearedAt": 6633.399999856949,
+          "replacedBy": "reconstruct:repair:lift_online"
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6633.399999856949,
+          "frames": 38,
+          "acquired": true,
+          "firstAcquiredAt": 6633.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 37,
+              "fromStoryClock": 6633.399999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7280.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · INSTALL LIFT CELL"
+          ],
+          "clearedAt": 7290.599999904633,
+          "replacedBy": "reconstruct:craft:flight_ready"
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7290.599999904633,
+          "frames": 1,
+          "acquired": false,
+          "firstAcquiredAt": null,
+          "preAcquisitionMissingMarkerFrames": 1,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7290.599999904633
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LOGIC WAFER"
+          ],
+          "clearedAt": 7299.899999856949,
+          "replacedBy": "reconstruct:repair:flight_ready"
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7299.899999856949,
+          "frames": 38,
+          "acquired": true,
+          "firstAcquiredAt": 7299.899999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 37,
+              "fromStoryClock": 7299.899999856949
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7955.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+          ],
+          "clearedAt": 7961.899999856949,
+          "replacedBy": "reconstruct:calibrating"
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "kind": "wait",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 7961.899999856949,
+          "frames": 482,
+          "acquired": true,
+          "firstAcquiredAt": 7961.899999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 482,
+              "fromStoryClock": 7961.899999856949
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · CALIBRATING"
+          ],
+          "clearedAt": 16001.399999856949,
+          "replacedBy": "reconstruct:ready"
+        },
+        {
+          "id": "reconstruct:ready",
+          "kind": "wait",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 16001.399999856949,
+          "frames": 492,
+          "acquired": true,
+          "firstAcquiredAt": 16001.399999856949,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 492,
+              "fromStoryClock": 16001.399999856949
+            }
+          ],
+          "markerLabels": [
+            "WRECK · FLIGHT READY"
+          ],
+          "clearedAt": 24254.799999952316,
+          "replacedBy": "board:enter-hatch"
+        },
+        {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "USE · ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 24254.799999952316,
+          "frames": 3,
+          "acquired": true,
+          "firstAcquiredAt": 24254.799999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 2,
+              "fromStoryClock": 24254.799999952316
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 24302.299999952316
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · BOARD"
+          ],
+          "clearedAt": 24309.199999809265,
+          "replacedBy": "board:hatch-in-progress"
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "kind": "wait",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · USE TO STEP BACK."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 24309.199999809265,
+          "frames": 44,
+          "acquired": true,
+          "firstAcquiredAt": 24309.199999809265,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 44,
+              "fromStoryClock": 24309.199999809265
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · ENTERING"
+          ],
+          "clearedAt": 25184.799999952316,
+          "replacedBy": "board:pressure-seal"
+        },
+        {
+          "id": "board:pressure-seal",
+          "kind": "wait",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 25184.799999952316,
+          "frames": 36,
+          "acquired": true,
+          "firstAcquiredAt": 25184.799999952316,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 36,
+              "fromStoryClock": 25184.799999952316
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · PRESSURE SEAL"
+          ],
+          "clearedAt": 25860.699999809265,
+          "replacedBy": "ch8:launch:ignite"
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 25860.699999809265,
+          "frames": 134,
+          "acquired": true,
+          "firstAcquiredAt": 25860.699999809265,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 134,
+              "fromStoryClock": 25860.699999809265
+            }
+          ],
+          "markerLabels": [
+            "KESTREL FLIGHT CONTROLS · IGNITE"
+          ],
+          "clearedAt": null,
+          "replacedBy": null
+        }
+      ],
+      "feedback": [
+        {
+          "t": 364.39999985694885,
+          "objectiveId": "reconstruct:diagnose",
+          "kind": null
+        },
+        {
+          "t": 3953,
+          "objectiveId": "reconstruct:repair:bench_online",
+          "kind": null
+        },
+        {
+          "t": 5250.799999952316,
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "kind": null
+        },
+        {
+          "t": 5917.599999904633,
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "kind": null
+        },
+        {
+          "t": 6584.199999809265,
+          "objectiveId": "reconstruct:craft:lift_online",
+          "kind": null
+        },
+        {
+          "t": 6617.5,
+          "objectiveId": "reconstruct:repair:lift_online",
+          "kind": null
+        },
+        {
+          "t": 7281.299999952316,
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7291.199999809265,
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7956.199999809265,
+          "objectiveId": "reconstruct:calibrating",
+          "kind": null
+        },
+        {
+          "t": 15997.399999856949,
+          "objectiveId": "reconstruct:ready",
+          "kind": null
+        },
+        {
+          "t": 24183.599999904633,
+          "objectiveId": "board:enter-hatch",
+          "kind": null
+        },
+        {
+          "t": 24302.599999904633,
+          "objectiveId": "board:hatch-in-progress",
+          "kind": null
+        },
+        {
+          "t": 25180.39999985695,
+          "objectiveId": "board:pressure-seal",
+          "kind": null
+        },
+        {
+          "t": 25813.599999904633,
+          "objectiveId": "board:cockpit-secured",
+          "kind": null
+        },
+        {
+          "t": 25813.799999952316,
+          "objectiveId": "ch8:launch:ignite",
+          "kind": null
+        }
+      ],
+      "transitions": [
+        {
+          "t": 227.39999985694885,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 233.5,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 349.7999999523163,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 405.89999985694885,
+          "id": "reconstruct:diagnose",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 3962.399999856949,
+          "id": "reconstruct:repair:bench_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5266.5,
+          "id": "reconstruct:repair:frame_restored",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5933.399999856949,
+          "id": "reconstruct:repair:hull_sealed",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6600,
+          "id": "reconstruct:craft:lift_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6633.399999856949,
+          "id": "reconstruct:repair:lift_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7290.599999904633,
+          "id": "reconstruct:craft:flight_ready",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7299.899999856949,
+          "id": "reconstruct:repair:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7961.899999856949,
+          "id": "reconstruct:calibrating",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 16001.399999856949,
+          "id": "reconstruct:ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24254.799999952316,
+          "id": "board:enter-hatch",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24309.199999809265,
+          "id": "board:hatch-in-progress",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 25184.799999952316,
+          "id": "board:pressure-seal",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "t": 25860.699999809265,
+          "id": "ch8:launch:ignite",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        }
+      ]
+    },
+    {
+      "variant": "reducedMotion",
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "totalFrames": 1460,
+      "rows": [
+        {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 380.10000014305115,
+          "frames": 36,
+          "acquired": true,
+          "firstAcquiredAt": 3900.600000143051,
+          "preAcquisitionMissingMarkerFrames": 27,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 27,
+              "fromStoryClock": 380.10000014305115
+            },
+            {
+              "health": "ready",
+              "frames": 8,
+              "fromStoryClock": 3900.600000143051
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 4120.700000047684
+            }
+          ],
+          "markerLabels": [
+            "WRECK SCAR · TRACE RELATIONSHIPS"
+          ],
+          "clearedAt": 4131.200000047684,
+          "replacedBy": "reconstruct:repair:bench_online"
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 4131.200000047684,
+          "frames": 77,
+          "acquired": true,
+          "firstAcquiredAt": 4131.200000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 40,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 37,
+              "fromStoryClock": 4131.200000047684
+            },
+            {
+              "health": "missing-marker",
+              "frames": 40,
+              "fromStoryClock": 4775.800000190735
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RECOVER WRECK SALVAGE"
+          ],
+          "clearedAt": 5431.800000190735,
+          "replacedBy": "reconstruct:repair:frame_restored"
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5431.800000190735,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5431.900000095367,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5431.900000095367
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6081.800000190735
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RESTORE STRUT FRAME"
+          ],
+          "clearedAt": 6098.300000190735,
+          "replacedBy": "reconstruct:repair:hull_sealed"
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6098.300000190735,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 6098.300000190735,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 6098.300000190735
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6748.600000143051
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · SEAL SCARRED HULL"
+          ],
+          "clearedAt": 6772.400000095367,
+          "replacedBy": "reconstruct:craft:lift_online"
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6772.400000095367,
+          "frames": 1,
+          "acquired": false,
+          "firstAcquiredAt": null,
+          "preAcquisitionMissingMarkerFrames": 1,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6772.400000095367
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LIFT CELL"
+          ],
+          "clearedAt": 6781.800000190735,
+          "replacedBy": "reconstruct:repair:lift_online"
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6781.800000190735,
+          "frames": 39,
+          "acquired": true,
+          "firstAcquiredAt": 6781.800000190735,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 6781.800000190735
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7467
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · INSTALL LIFT CELL"
+          ],
+          "clearedAt": 7482.200000047684,
+          "replacedBy": "reconstruct:craft:flight_ready"
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7482.200000047684,
+          "frames": 2,
+          "acquired": true,
+          "firstAcquiredAt": 7482.200000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 1,
+              "fromStoryClock": 7482.200000047684
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7498.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LOGIC WAFER"
+          ],
+          "clearedAt": 7515,
+          "replacedBy": "reconstruct:repair:flight_ready"
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7515,
+          "frames": 35,
+          "acquired": true,
+          "firstAcquiredAt": 7515,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 34,
+              "fromStoryClock": 7515
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 8119.5
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+          ],
+          "clearedAt": 8126.100000143051,
+          "replacedBy": "reconstruct:calibrating"
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "kind": "wait",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 8126.100000143051,
+          "frames": 482,
+          "acquired": true,
+          "firstAcquiredAt": 8126.100000143051,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 482,
+              "fromStoryClock": 8126.100000143051
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · CALIBRATING"
+          ],
+          "clearedAt": 16199.100000143051,
+          "replacedBy": "reconstruct:ready"
+        },
+        {
+          "id": "reconstruct:ready",
+          "kind": "wait",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 16199.100000143051,
+          "frames": 489,
+          "acquired": true,
+          "firstAcquiredAt": 16199.100000143051,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 489,
+              "fromStoryClock": 16199.100000143051
+            }
+          ],
+          "markerLabels": [
+            "WRECK · FLIGHT READY"
+          ],
+          "clearedAt": 24446,
+          "replacedBy": "board:enter-hatch"
+        },
+        {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 24446,
+          "frames": 3,
+          "acquired": true,
+          "firstAcquiredAt": 24446,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 2,
+              "fromStoryClock": 24446
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 24506
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · BOARD"
+          ],
+          "clearedAt": 24513,
+          "replacedBy": "board:hatch-in-progress"
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "kind": "wait",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 24513,
+          "frames": 44,
+          "acquired": true,
+          "firstAcquiredAt": 24513,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 44,
+              "fromStoryClock": 24513
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · ENTERING"
+          ],
+          "clearedAt": 25431.200000047684,
+          "replacedBy": "board:pressure-seal"
+        },
+        {
+          "id": "board:pressure-seal",
+          "kind": "wait",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 25431.200000047684,
+          "frames": 37,
+          "acquired": true,
+          "firstAcquiredAt": 25431.200000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 37,
+              "fromStoryClock": 25431.200000047684
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · PRESSURE SEAL"
+          ],
+          "clearedAt": 26127.60000014305,
+          "replacedBy": "ch8:launch:ignite"
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 26127.60000014305,
+          "frames": 132,
+          "acquired": true,
+          "firstAcquiredAt": 26127.60000014305,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 132,
+              "fromStoryClock": 26127.60000014305
+            }
+          ],
+          "markerLabels": [
+            "KESTREL FLIGHT CONTROLS · IGNITE"
+          ],
+          "clearedAt": null,
+          "replacedBy": null
+        }
+      ],
+      "feedback": [
+        {
+          "t": 363.5,
+          "objectiveId": "reconstruct:diagnose",
+          "kind": null
+        },
+        {
+          "t": 4122,
+          "objectiveId": "reconstruct:repair:bench_online",
+          "kind": null
+        },
+        {
+          "t": 5416.900000095367,
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "kind": null
+        },
+        {
+          "t": 6083.200000047684,
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "kind": null
+        },
+        {
+          "t": 6750.100000143051,
+          "objectiveId": "reconstruct:craft:lift_online",
+          "kind": null
+        },
+        {
+          "t": 6773.400000095367,
+          "objectiveId": "reconstruct:repair:lift_online",
+          "kind": null
+        },
+        {
+          "t": 7468.100000143051,
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7499.5,
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 8120.200000047684,
+          "objectiveId": "reconstruct:calibrating",
+          "kind": null
+        },
+        {
+          "t": 16194.300000190735,
+          "objectiveId": "reconstruct:ready",
+          "kind": null
+        },
+        {
+          "t": 24334.5,
+          "objectiveId": "board:enter-hatch",
+          "kind": null
+        },
+        {
+          "t": 24506.5,
+          "objectiveId": "board:hatch-in-progress",
+          "kind": null
+        },
+        {
+          "t": 25420.5,
+          "objectiveId": "board:pressure-seal",
+          "kind": null
+        },
+        {
+          "t": 26076,
+          "objectiveId": "board:cockpit-secured",
+          "kind": null
+        },
+        {
+          "t": 26076.400000095367,
+          "objectiveId": "ch8:launch:ignite",
+          "kind": null
+        }
+      ],
+      "transitions": [
+        {
+          "t": 230.20000004768372,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 232.10000014305115,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 348.40000009536743,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 380.10000014305115,
+          "id": "reconstruct:diagnose",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 4131.200000047684,
+          "id": "reconstruct:repair:bench_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5431.900000095367,
+          "id": "reconstruct:repair:frame_restored",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6098.300000190735,
+          "id": "reconstruct:repair:hull_sealed",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6772.400000095367,
+          "id": "reconstruct:craft:lift_online",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6781.800000190735,
+          "id": "reconstruct:repair:lift_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7482.200000047684,
+          "id": "reconstruct:craft:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7515,
+          "id": "reconstruct:repair:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 8126.100000143051,
+          "id": "reconstruct:calibrating",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 16199.100000143051,
+          "id": "reconstruct:ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24446,
+          "id": "board:enter-hatch",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24513,
+          "id": "board:hatch-in-progress",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 25431.200000047684,
+          "id": "board:pressure-seal",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "t": 26127.60000014305,
+          "id": "ch8:launch:ignite",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        }
+      ]
+    },
+    {
+      "variant": "lowestQuality",
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=POTATO",
+      "totalFrames": 1477,
+      "rows": [
+        {
+          "id": "reconstruct:diagnose",
+          "kind": "interact",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 367.2000000476837,
+          "frames": 37,
+          "acquired": true,
+          "firstAcquiredAt": 3352.2000000476837,
+          "preAcquisitionMissingMarkerFrames": 25,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 25,
+              "fromStoryClock": 367.30000019073486
+            },
+            {
+              "health": "ready",
+              "frames": 11,
+              "fromStoryClock": 3352.2000000476837
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 3606.7000000476837
+            }
+          ],
+          "markerLabels": [
+            "WRECK SCAR · TRACE RELATIONSHIPS"
+          ],
+          "clearedAt": 3616.800000190735,
+          "replacedBy": "reconstruct:repair:bench_online"
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 3616.800000190735,
+          "frames": 78,
+          "acquired": true,
+          "firstAcquiredAt": 3616.800000190735,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 40,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 3616.800000190735
+            },
+            {
+              "health": "missing-marker",
+              "frames": 40,
+              "fromStoryClock": 4281.100000143051
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RECOVER WRECK SALVAGE"
+          ],
+          "clearedAt": 4928.600000143051,
+          "replacedBy": "reconstruct:repair:frame_restored"
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 4928.600000143051,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 4928.600000143051,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 4928.600000143051
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 5578.400000095367
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · RESTORE STRUT FRAME"
+          ],
+          "clearedAt": 5595,
+          "replacedBy": "reconstruct:repair:hull_sealed"
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 5595,
+          "frames": 40,
+          "acquired": true,
+          "firstAcquiredAt": 5595,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 5595
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6245
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · SEAL SCARRED HULL"
+          ],
+          "clearedAt": 6266.400000095367,
+          "replacedBy": "reconstruct:craft:lift_online"
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6266.400000095367,
+          "frames": 1,
+          "acquired": false,
+          "firstAcquiredAt": null,
+          "preAcquisitionMissingMarkerFrames": 1,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6266.400000095367
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LIFT CELL"
+          ],
+          "clearedAt": 6278.200000047684,
+          "replacedBy": "reconstruct:repair:lift_online"
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6278.200000047684,
+          "frames": 39,
+          "acquired": true,
+          "firstAcquiredAt": 6278.200000047684,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 38,
+              "fromStoryClock": 6278.200000047684
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 6964.700000047684
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · INSTALL LIFT CELL"
+          ],
+          "clearedAt": 6976.600000143051,
+          "replacedBy": "reconstruct:craft:flight_ready"
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "kind": "craft",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 6976.600000143051,
+          "frames": 2,
+          "acquired": true,
+          "firstAcquiredAt": 6976.600000143051,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 1,
+              "fromStoryClock": 6976.600000143051
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7016.700000047684
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CRAFT LOGIC WAFER"
+          ],
+          "clearedAt": 7022.300000190735,
+          "replacedBy": "reconstruct:repair:flight_ready"
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "kind": "interact",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 7022.300000190735,
+          "frames": 35,
+          "acquired": true,
+          "firstAcquiredAt": 7022.300000190735,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 34,
+              "fromStoryClock": 7022.300000190735
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 7615.600000143051
+            }
+          ],
+          "markerLabels": [
+            "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+          ],
+          "clearedAt": 7622.400000095367,
+          "replacedBy": "reconstruct:calibrating"
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "kind": "wait",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 7622.400000095367,
+          "frames": 482,
+          "acquired": true,
+          "firstAcquiredAt": 7622.400000095367,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 482,
+              "fromStoryClock": 7622.400000095367
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · CALIBRATING"
+          ],
+          "clearedAt": 15662.100000143051,
+          "replacedBy": "reconstruct:ready"
+        },
+        {
+          "id": "reconstruct:ready",
+          "kind": "wait",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 15662.100000143051,
+          "frames": 492,
+          "acquired": true,
+          "firstAcquiredAt": 15662.100000143051,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 492,
+              "fromStoryClock": 15662.100000143051
+            }
+          ],
+          "markerLabels": [
+            "WRECK · FLIGHT READY"
+          ],
+          "clearedAt": 23915.400000095367,
+          "replacedBy": "board:enter-hatch"
+        },
+        {
+          "id": "board:enter-hatch",
+          "kind": "interact",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ],
+          "requiresMarker": true,
+          "enteredAt": 23915.400000095367,
+          "frames": 3,
+          "acquired": true,
+          "firstAcquiredAt": 23915.400000095367,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 1,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 2,
+              "fromStoryClock": 23915.400000095367
+            },
+            {
+              "health": "missing-marker",
+              "frames": 1,
+              "fromStoryClock": 23927.400000095367
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · BOARD"
+          ],
+          "clearedAt": 23944.400000095367,
+          "replacedBy": "board:hatch-in-progress"
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "kind": "wait",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 23944.400000095367,
+          "frames": 45,
+          "acquired": true,
+          "firstAcquiredAt": 23944.400000095367,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 45,
+              "fromStoryClock": 23944.400000095367
+            }
+          ],
+          "markerLabels": [
+            "KESTREL HATCH · ENTERING"
+          ],
+          "clearedAt": 24829.10000014305,
+          "replacedBy": "board:pressure-seal"
+        },
+        {
+          "id": "board:pressure-seal",
+          "kind": "wait",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 24829.10000014305,
+          "frames": 39,
+          "acquired": true,
+          "firstAcquiredAt": 24829.10000014305,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 39,
+              "fromStoryClock": 24829.10000014305
+            }
+          ],
+          "markerLabels": [
+            "KESTREL · PRESSURE SEAL"
+          ],
+          "clearedAt": 25530.400000095367,
+          "replacedBy": "ch8:launch:ignite"
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "kind": "interact",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "requiresMarker": false,
+          "enteredAt": 25530.400000095367,
+          "frames": 141,
+          "acquired": true,
+          "firstAcquiredAt": 25530.400000095367,
+          "preAcquisitionMissingMarkerFrames": 0,
+          "acquiredWindowMissingMarkerFrames": 0,
+          "postCompletionMissingMarkerFrames": 0,
+          "healthRuns": [
+            {
+              "health": "ready",
+              "frames": 141,
+              "fromStoryClock": 25530.400000095367
+            }
+          ],
+          "markerLabels": [
+            "KESTREL FLIGHT CONTROLS · IGNITE"
+          ],
+          "clearedAt": null,
+          "replacedBy": null
+        }
+      ],
+      "feedback": [
+        {
+          "t": 350.7000000476837,
+          "objectiveId": "reconstruct:diagnose",
+          "kind": null
+        },
+        {
+          "t": 3607.9000000953674,
+          "objectiveId": "reconstruct:repair:bench_online",
+          "kind": null
+        },
+        {
+          "t": 4912.400000095367,
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "kind": null
+        },
+        {
+          "t": 5579.300000190735,
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "kind": null
+        },
+        {
+          "t": 6246.300000190735,
+          "objectiveId": "reconstruct:craft:lift_online",
+          "kind": null
+        },
+        {
+          "t": 6267.100000143051,
+          "objectiveId": "reconstruct:repair:lift_online",
+          "kind": null
+        },
+        {
+          "t": 6965.700000047684,
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7017.400000095367,
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "kind": null
+        },
+        {
+          "t": 7616.400000095367,
+          "objectiveId": "reconstruct:calibrating",
+          "kind": null
+        },
+        {
+          "t": 15658.100000143051,
+          "objectiveId": "reconstruct:ready",
+          "kind": null
+        },
+        {
+          "t": 23845.900000095367,
+          "objectiveId": "board:enter-hatch",
+          "kind": null
+        },
+        {
+          "t": 23927.800000190735,
+          "objectiveId": "board:hatch-in-progress",
+          "kind": null
+        },
+        {
+          "t": 24824.800000190735,
+          "objectiveId": "board:pressure-seal",
+          "kind": null
+        },
+        {
+          "t": 25486.400000095367,
+          "objectiveId": "board:cockpit-secured",
+          "kind": null
+        },
+        {
+          "t": 25486.700000047684,
+          "objectiveId": "ch8:launch:ignite",
+          "kind": null
+        }
+      ],
+      "transitions": [
+        {
+          "t": 221,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 229.40000009536743,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 336.10000014305115,
+          "id": null,
+          "health": null,
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 367.30000019073486,
+          "id": "reconstruct:diagnose",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 3616.800000190735,
+          "id": "reconstruct:repair:bench_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 4928.600000143051,
+          "id": "reconstruct:repair:frame_restored",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 5595,
+          "id": "reconstruct:repair:hull_sealed",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6266.400000095367,
+          "id": "reconstruct:craft:lift_online",
+          "health": "missing-marker",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6278.200000047684,
+          "id": "reconstruct:repair:lift_online",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 6976.600000143051,
+          "id": "reconstruct:craft:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7022.300000190735,
+          "id": "reconstruct:repair:flight_ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 7622.400000095367,
+          "id": "reconstruct:calibrating",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 15662.100000143051,
+          "id": "reconstruct:ready",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 23915.400000095367,
+          "id": "board:enter-hatch",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 23944.400000095367,
+          "id": "board:hatch-in-progress",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "fps"
+        },
+        {
+          "t": 24829.10000014305,
+          "id": "board:pressure-seal",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "t": 25530.400000095367,
+          "id": "ch8:launch:ignite",
+          "health": "ready",
+          "phase": "surface",
+          "controlMode": "flight"
+        }
+      ]
+    }
+  ]
+}

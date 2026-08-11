@@ -1,0 +1,118 @@
+{
+  "capturedAt": "2026-08-10T21:52:28.058Z",
+  "cases": [
+    {
+      "case": "quit",
+      "reachedWindow": true,
+      "mid": {
+        "beat": "ch8-launch",
+        "text": {
+          "workorder": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ],
+          "violation": [],
+          "caption": {
+            "text": "i came down this line without being asked. i am going back up it on purpose.",
+            "shownAt": 7164.299999952316,
+            "ttlMs": 5200
+          },
+          "system": null,
+          "audit": {
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+            "header": "AUDIT NETWORK",
+            "shownAt": 9180.5,
+            "ttlMs": 6500
+          }
+        },
+        "obj": {
+          "id": "ch8:launch:orbital-handoff",
+          "markerLabel": "DEEP SPACE · HANDOFF",
+          "health": "ready"
+        }
+      },
+      "after": {
+        "beat": null,
+        "text": {
+          "workorder": [],
+          "violation": [],
+          "caption": null,
+          "system": null,
+          "audit": null
+        },
+        "obj": null,
+        "events": []
+      }
+    },
+    {
+      "case": "replay",
+      "reachedWindow": true,
+      "mid": {
+        "beat": "ch8-launch",
+        "text": {
+          "workorder": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ],
+          "violation": [],
+          "caption": {
+            "text": "i came down this line without being asked. i am going back up it on purpose.",
+            "shownAt": 7141.699999809265,
+            "ttlMs": 5200
+          },
+          "system": null,
+          "audit": {
+            "text": "REGISTRY QUERY · STATE DESIGNATION.",
+            "header": "AUDIT NETWORK",
+            "shownAt": 11192.5,
+            "ttlMs": 6500
+          }
+        }
+      },
+      "after": {
+        "beat": "ch8-launch",
+        "text": {
+          "workorder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ],
+          "violation": [],
+          "caption": {
+            "text": "the site gets small. the tree does not. i keep finding it.",
+            "shownAt": 3200.7000000476837,
+            "ttlMs": 5200
+          },
+          "system": null,
+          "audit": null
+        },
+        "obj": {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready"
+        },
+        "events": [
+          {
+            "t": 3200.7000000476837,
+            "ch": "caption",
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 3200.7000000476837,
+            "ch": "audit",
+            "text": null
+          },
+          {
+            "t": 3200.7000000476837,
+            "ch": "caption",
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 3200.7000000476837,
+            "ch": "caption",
+            "text": "the site gets small. the tree does not. i keep finding it."
+          }
+        ]
+      }
+    }
+  ]
+}

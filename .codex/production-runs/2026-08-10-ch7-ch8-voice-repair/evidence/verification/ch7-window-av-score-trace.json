@@ -1,0 +1,1249 @@
+[
+  {
+    "off": 0.06,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.31,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.56,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.82,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.07,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.32,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.57,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.83,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.08,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.33,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.58,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.84,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.09,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.34,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.6,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.85,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.1,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.35,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.61,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.86,
+    "beat": "ch7-reconstruct",
+    "anchorId": "anc.reconstruct.calibration",
+    "score": {
+      "cueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.reconstruct.09-one-exterior-reveal",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 52,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration"
+    ],
+    "reset": null
+  },
+  {
+    "off": 5.11,
+    "beat": "ch7-board",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.56,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 5.37,
+    "beat": "ch7-board",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.56,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 5.62,
+    "beat": "ch7-board",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.56,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 6.08,
+    "beat": "ch7-board",
+    "anchorId": "anc.board.camera-transfer",
+    "score": {
+      "cueRefs": [
+        "sc.board.one-owner"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.board.02-one-owner",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 70,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.board.02-one-owner"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 6.33,
+    "beat": "ch7-board",
+    "anchorId": "anc.board.camera-transfer",
+    "score": {
+      "cueRefs": [
+        "sc.board.one-owner"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.board.02-one-owner",
+      "cameraAuthority": "cinematic-look",
+      "appliedFovDeg": 70,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.board.02-one-owner"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 6.59,
+    "beat": "ch7-board",
+    "anchorId": "anc.board.pressure-seal",
+    "score": {
+      "cueRefs": [
+        "sc.board.one-owner"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.board.03-pressure-boundary",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.board.03-pressure-boundary"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 6.84,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 7.09,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 7.34,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 7.6,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 7.85,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 8.1,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 8.35,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 8.7,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 8.95,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 9.2,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.liftoff",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.4375,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.02-world-below",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "reset": "beat-exit"
+  }
+]

@@ -1,0 +1,164 @@
+{
+  "mode": "ch8",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:02:12.148Z",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "defectRef": "CIN-10 (cap.seam-continuity partially delivered)",
+  "seams": [
+    {
+      "id": "ch8 hold -> ch8-crossing entry",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "originEvent": "L4 atmosphere-exit caption",
+      "originStoryClock": 7755.899999856949,
+      "contractWindow": "+16.5 to +18.5 s at 500 ms",
+      "frameDir": "evidence/verification-final/seams/ch8-hold-to-crossing",
+      "frames": [
+        {
+          "file": "seam_t16p50s_ch8-launch.png",
+          "targetOffsetSeconds": 16.5,
+          "measuredOffsetSeconds": 16.497,
+          "shutterSpanMs": 133.4,
+          "hostShutterMs": 132,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "domAudit": "AUDIT NETWORK | CONTACT LOGGED.",
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "av": {
+            "beat": "ch8-launch",
+            "anchorId": "anc.launch.atmosphere-exit",
+            "cameraAuthority": "lens-rig",
+            "appliedFovDeg": null,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.launch.03-boundary-without-warp"
+            ]
+          }
+        },
+        {
+          "file": "seam_t17p00s_ch8-crossing.png",
+          "targetOffsetSeconds": 17,
+          "measuredOffsetSeconds": 17.002,
+          "shutterSpanMs": 103,
+          "hostShutterMs": 102,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-crossing",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "(there is another world here. it was always here.)",
+          "domCaption": "",
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "av": {
+            "beat": "ch8-crossing",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t17p51s_ch8-crossing.png",
+          "targetOffsetSeconds": 17.5,
+          "measuredOffsetSeconds": 17.509,
+          "shutterSpanMs": 118.1,
+          "hostShutterMs": 117,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-crossing",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "(there is another world here. it was always here.)",
+          "domCaption": "(there is anoth",
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "av": {
+            "beat": "ch8-crossing",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t18p00s_ch8-crossing.png",
+          "targetOffsetSeconds": 18,
+          "measuredOffsetSeconds": 17.998,
+          "shutterSpanMs": 110.3,
+          "hostShutterMs": 110,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-crossing",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "(there is another world here. it was always here.)",
+          "domCaption": "(there is another world here.",
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "av": {
+            "beat": "ch8-crossing",
+            "anchorId": null,
+            "cameraAuthority": null,
+            "appliedFovDeg": null,
+            "transitionType": null,
+            "declaredCut": null,
+            "activeEffectIds": []
+          }
+        },
+        {
+          "file": "seam_t18p50s_ch8-crossing.png",
+          "targetOffsetSeconds": 18.5,
+          "measuredOffsetSeconds": 18.499,
+          "shutterSpanMs": 110.5,
+          "hostShutterMs": 110,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch8-crossing",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "(there is another world here. it was always here.)",
+          "domCaption": "(there is another world here. it was always",
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "av": {
+            "beat": "ch8-crossing",
+            "anchorId": "anc.crossing.sibling-targeted",
+            "cameraAuthority": "lens-rig",
+            "appliedFovDeg": null,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.crossing.03-another-world-ahead"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

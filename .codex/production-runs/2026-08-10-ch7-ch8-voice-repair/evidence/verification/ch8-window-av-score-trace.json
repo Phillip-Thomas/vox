@@ -1,0 +1,2537 @@
+[
+  {
+    "off": 0.01,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.27,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.52,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 0.77,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.02,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.28,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.53,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 1.78,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.04,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.29,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.54,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 2.79,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.05,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.3,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.55,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 3.8,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.06,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.31,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.56,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 4.82,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 5.07,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 5.32,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 5.57,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 5.83,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 6.08,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 6.33,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 6.58,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 6.84,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 7.09,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 7.34,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 7.59,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 7.85,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 8.1,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 8.35,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 8.6,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 8.86,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 9.11,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 9.36,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 9.62,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 9.87,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 10.12,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 10.38,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 10.63,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 10.88,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 11.13,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 11.39,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 11.64,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 11.89,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 12.14,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 12.4,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 12.65,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 12.9,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 13.15,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 13.41,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 13.66,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 13.91,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 14.17,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 14.42,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 14.67,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 14.92,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 15.18,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 15.43,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 15.68,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 15.93,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 16.19,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 16.44,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 16.69,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 16.95,
+    "beat": "ch8-launch",
+    "anchorId": "anc.launch.atmosphere-exit",
+    "score": {
+      "cueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "intensity": 0.5,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.launch.03-boundary-without-warp",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "reset": null
+  },
+  {
+    "off": 17.2,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 17.45,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 17.71,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 17.96,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 18.21,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "shot": null,
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "activated": [],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 18.46,
+    "beat": "ch8-crossing",
+    "anchorId": "anc.crossing.sibling-targeted",
+    "score": {
+      "cueRefs": [
+        "sc.crossing.distance"
+      ],
+      "intensity": 0.35,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.crossing.03-another-world-ahead",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.crossing.03-another-world-ahead"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.crossing.sibling-targeted"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 18.71,
+    "beat": "ch8-crossing",
+    "anchorId": "anc.crossing.sibling-targeted",
+    "score": {
+      "cueRefs": [
+        "sc.crossing.distance"
+      ],
+      "intensity": 0.35,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.crossing.03-another-world-ahead",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.crossing.03-another-world-ahead"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.crossing.sibling-targeted"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 18.97,
+    "beat": "ch8-crossing",
+    "anchorId": "anc.crossing.sibling-targeted",
+    "score": {
+      "cueRefs": [
+        "sc.crossing.distance"
+      ],
+      "intensity": 0.35,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.crossing.03-another-world-ahead",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.crossing.03-another-world-ahead"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.crossing.sibling-targeted"
+    ],
+    "reset": "beat-exit"
+  },
+  {
+    "off": 19.22,
+    "beat": "ch8-crossing",
+    "anchorId": "anc.crossing.sibling-targeted",
+    "score": {
+      "cueRefs": [
+        "sc.crossing.distance"
+      ],
+      "intensity": 0.35,
+      "hit": null
+    },
+    "shot": {
+      "id": "cin.crossing.03-another-world-ahead",
+      "cameraAuthority": "lens-rig",
+      "appliedFovDeg": null,
+      "reducedMotion": false
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.crossing.03-another-world-ahead"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "activated": [
+      "anc.crossing.sibling-targeted"
+    ],
+    "reset": "beat-exit"
+  }
+]

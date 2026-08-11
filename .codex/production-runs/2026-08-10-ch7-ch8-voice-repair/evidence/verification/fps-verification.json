@@ -1,0 +1,76 @@
+{
+  "capturedAt": "2026-08-10T21:39:10.122Z",
+  "viewport": "1280x720",
+  "qualityTier": "LOW",
+  "baselineMedians": {
+    "ch7-reconstruct": 60.12,
+    "ch7-board": 60.11,
+    "ch8-launch": 60.08
+  },
+  "floorFps": 55,
+  "ceilingFrameTimeMs": 18.2,
+  "beats": [
+    {
+      "beat": "ch7-reconstruct",
+      "liveBeat": "ch7-reconstruct",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.42,
+        60.08,
+        60.09
+      ],
+      "median": 60.09,
+      "baselineMedian": 60.12,
+      "deltaVsBaseline": -0.03,
+      "frameTimeMs": 16.64,
+      "passFloor": true,
+      "passCeiling": true
+    },
+    {
+      "beat": "ch7-board",
+      "liveBeat": "ch7-board",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.43,
+        60,
+        60.09
+      ],
+      "median": 60.09,
+      "baselineMedian": 60.11,
+      "deltaVsBaseline": -0.02,
+      "frameTimeMs": 16.64,
+      "passFloor": true,
+      "passCeiling": true
+    },
+    {
+      "beat": "ch8-launch",
+      "liveBeat": "ch8-launch",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.33,
+        60.06,
+        60.06
+      ],
+      "median": 60.06,
+      "baselineMedian": 60.08,
+      "deltaVsBaseline": -0.02,
+      "frameTimeMs": 16.65,
+      "passFloor": true,
+      "passCeiling": true
+    }
+  ],
+  "holdWindow": {
+    "label": "ch8-launch exit hold (+0.0 to ~+15 s off the L4 caption)",
+    "beatAtEnd": "ch8-launch",
+    "fps": [
+      60.21,
+      60.03,
+      60.08,
+      60.03,
+      60.06
+    ],
+    "median": 60.06,
+    "frameTimeMs": 16.65,
+    "passFloor": true
+  }
+}

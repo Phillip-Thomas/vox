@@ -125,3 +125,12 @@ vite.config.ts.timestamp-*
 # game. Ignored here so the game repo commits cleanly; commit it on its own (or
 # convert to a submodule later if you want it linked).
 shadegent/
+
+# Paravoxia creative-run harness debug captures — regenerable probe output
+# (frame strips / videos from verification passes). Per-file digests are
+# recorded in each run's evidence-registry.json and raw-audiovisual manifest,
+# so provenance survives without committing ~GBs of PNGs. JSON traces, audition
+# WAVs, baseline strips and curated hires stills remain trackable.
+.codex/production-runs/*/evidence/verification*/**/*.png
+.codex/production-runs/*/evidence/verification*/**/*.webm
+.codex/production-runs/*/logs-final/

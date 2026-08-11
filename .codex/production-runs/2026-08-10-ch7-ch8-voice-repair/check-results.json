@@ -1,0 +1,1046 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "phase": "implementation",
+  "iteration": 6,
+  "route": "final-verification",
+  "supersedesContractVersion": "draft-v4",
+  "implementsRulings": [
+    "R1/F1a",
+    "R3 (ux-01)",
+    "R4 (ux-03)"
+  ],
+  "recordedBy": "story-verifier",
+  "recordedAt": "2026-08-11T15:21:56.316Z",
+  "productionScope": {
+    "status": "pass",
+    "summary": "Loop-3 patch stays inside the same four locked allowed paths; storyText.ts still unchanged. All eleven protected paths clean. Note for the record: .codex/design-runs/2026-07-28-story-enjoyability/ch7-ch8-repair.md carries an orchestrator canon annotation authored by another stage; it is outside integration's allowed paths and was left untouched.",
+    "changedPaths": [
+      "main/src/story/emergentStoryDirector.ts",
+      "main/src/story/emergentStoryDirector.test.ts",
+      "main/src/story/storyText.test.ts"
+    ],
+    "evidenceRefs": [
+      "evidence/implementation/production-scope.log",
+      "implementation.diff"
+    ]
+  },
+  "creativeContract": {
+    "status": "pass",
+    "summary": "All three draft-v5 laws implemented exactly. R1/F1a: l2DueAt = max(t_L1 + revealSeconds(L1), min(t_L1 + CH8_L1_MIN_SLOT_SECONDS, t_phaseEdge)), with revealSeconds DERIVED at runtime from each frozen string's own character length times the 34 ms/char reveal rate — never hardcoded — and the three-valued cause taxonomy timer | edge | reveal-guard recorded per firing. The draft-v3 mid-reveal exception is retired: no reveal is cut by any cause. R3: ch7 stage CAPTIONS queue behind a reveal-complete guard of revealSeconds(line) + CH7_STAGE_DWELL_SECONDS while stage commits, WRECK RELAY receipts, score variants, anchors and objectives all stay real-time; the queue drops at the calibration receipt except M6, and when M6 is unfired or mid-reveal the mini-cadence anchor becomes t_M7Anchor = max(t_calibrationReceipt, t_M6 + revealSeconds(M6)) so the whole four-row exit table shifts with it. R4: the exit-window clock accumulates only on deep_space frames, freezes on a dip, resumes on re-exit, and the advance requires held clock >= 17.0 AND a live deep_space phase. Beat-entry seeding law unchanged. All 21 frozen strings and the owner-approved changed string re-verified byte-identical against draft-v5; both cadence tables untouched.",
+    "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+    "evidenceRefs": [
+      "evidence/implementation/built-client-string-audit.log",
+      "evidence/implementation/story-tests.log",
+      "implementation.diff"
+    ]
+  },
+  "typecheck": {
+    "status": "pass",
+    "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json, TypeScript 5.9.3, inside a memory-capped systemd scope (MemoryMax=12G). Zero diagnostics.",
+    "evidenceRefs": [
+      "evidence/implementation/typecheck.log"
+    ]
+  },
+  "tests": {
+    "status": "pass",
+    "summary": "74 story test files, 568 tests, all passing; 23 cases now in emergentStoryDirector.test.ts. New and retargeted coverage: the reveal-guard clamp (an edge one second into L1 holds L2 to reveal completion, cause reveal-guard, L1 never cut); all three causes asserted through the diag — timer on the untouched route, edge for an edge inside [reveal, 4.5], reveal-guard for an early edge; the ch7 queue guard (a one-frame ladder queues instead of cutting, drains in stage order, each line holding reveal + 0.4); M6 never dropping at the receipt while M2..M5 do, with the M7 anchor shifted to M6 reveal-end and the exit table carried in full; and the held clock (freeze on dip with 600 s of wall time adding nothing, resume from the held value with no re-fire and no burst, and the advance held under the boundary until phase returns to deep_space). Two existing ladder tests that asserted the old bare-min() law were retargeted to the v5 clamp, citing the criterion. story:ux:check 54/54.",
+    "evidenceRefs": [
+      "evidence/implementation/story-tests.log",
+      "evidence/implementation/story-ux-check.log"
+    ]
+  },
+  "build": {
+    "status": "pass",
+    "summary": "vite build succeeds. Built-client audit confirms the retired ch7 exit parenthetical is absent from dist and every frozen ch7/ch8 string ships.",
+    "evidenceRefs": [
+      "evidence/implementation/build.log",
+      "evidence/implementation/built-client-string-audit.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm --prefix main run story:ux:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-ux-check.log",
+      "summary": "6 files, 54 tests passed."
+    },
+    {
+      "command": "npx vitest run src/story",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-tests.log",
+      "summary": "74 files, 568 tests passed."
+    },
+    {
+      "command": "npm --prefix main run typecheck",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/typecheck.log",
+      "summary": "Both projects clean under a memory-capped scope."
+    },
+    {
+      "command": "npm --prefix main run build",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/build.log",
+      "summary": "Production bundle built under a memory-capped scope."
+    },
+    {
+      "command": "git status --porcelain and protected-path audit",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/production-scope.log",
+      "summary": "Mutation inside the locked allowed paths; protected paths clean."
+    },
+    {
+      "command": "built-client string audit",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/built-client-string-audit.log",
+      "summary": "Retired string absent from dist; every frozen string present."
+    }
+  ],
+  "namedConstants": {
+    "summary": "All cadence, pacing and guard constants are exported from main/src/story/emergentStoryDirector.ts and asserted by the tests through those exports. draft-v5 adds the ch7 stage dwell; the reveal times that pair with it are derived, never constant.",
+    "ch7ExitCadenceSeconds": {
+      "CH7_M7_AUDIT_SECONDS": 0,
+      "CH7_M7_CAPTION_SECONDS": 0.6,
+      "CH7_EXIT_CAPTION_SECONDS": 3,
+      "CH7_EXIT_HOLD_SECONDS": 5
+    },
+    "ch8WindowCadenceSeconds": {
+      "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS": 0,
+      "CH8_STACK_ONE_SECONDS": 2,
+      "CH8_STACK_TWO_SECONDS": 4,
+      "CH8_STACK_THREE_SECONDS": 6,
+      "CH8_CONTACT_LOGGED_SECONDS": 8.5,
+      "CH8_DESIGNATION_CAPTION_SECONDS": 11.5,
+      "CH8_OPEN_QUERY_SECONDS": 14,
+      "CH8_EXIT_HOLD_SECONDS": 17
+    },
+    "evidenceRefs": [
+      "implementation.diff"
+    ],
+    "ch8PacedLadderSeconds": {
+      "CH8_L1_MIN_SLOT_SECONDS": 4.5,
+      "CH8_L2_MIN_SLOT_SECONDS": 3
+    },
+    "revealMath": "StoryCaptions.tsx reveals one character per 34 ms. L1 is 94 chars = 3.196 s, so the 4.5 s slot is reveal plus read and the timer path provably cannot interrupt. L2 is 66 chars = 2.244 s, inside the 3.0 s slot, so L3 never interrupts L2. L3 is 58 chars = 1.972 s.",
+    "ch7StageQueueSeconds": {
+      "CH7_STAGE_DWELL_SECONDS": 0.4
+    },
+    "derivedRevealRule": "revealSeconds(line) = line.length * 34 ms, computed from the frozen string constant at runtime. Nothing in the guards is a hardcoded reveal figure, so editing a frozen string can never let a slot silently outrun the line it protects."
+  },
+  "knownGateFailures": [
+    {
+      "id": "journey-contract.json-schema",
+      "disposition": "accepted-out-of-scope",
+      "rulingRef": "production-lock.md ruling R3",
+      "summary": "main/chapter-journey-contract.json holds arrays where its schema allows scalars. Locked protected path; the drift predates the run at source revision 03e975a.",
+      "evidenceRefs": [
+        "production-lock.md"
+      ]
+    }
+  ],
+  "contractInterpretation": [
+    {
+      "id": "seeding-condition-phase-only",
+      "summary": "The repair commission paraphrased the seeding condition as \"phase already non-surface OR anchors already active\". Implemented per frozen acceptance criterion [20], which is phase-only. The disjunctive reading would reintroduce vd-01 exactly: chain-launch-anchor-fine-trace.json shows the chained route entering ch8-launch at t=5641 ms with anc.launch.ignition and anc.launch.liftoff ALREADY in activatedAnchorIds while the raw phase is still surface, so seeding on active anchors would consume the whole ladder on the very route the repair exists to fix. On a genuine mid-flight restore both conditions hold anyway, so phase-only is the only reading that is both contract-faithful and defect-free.",
+      "evidenceRefs": [
+        "evidence/verification/chain-launch-anchor-fine-trace.json",
+        "scene-contract.json"
+      ]
+    },
+    {
+      "id": "l2-cause-trace-surface",
+      "summary": "The commission described extending \"an existing emission-trace mechanism the verifier consumes\". No such mechanism exists in runtime code: the verification probes bridge modules directly through the Vite ESM graph (storyText, objectiveDirector, spaceFlight, signedSceneAvRuntime) and stamp their own events. l2Cause, l2DueAt, t_calibrationReceipt and t_M7Anchor are derived scheduling facts that no store exposes. Implemented as a new read-only snapshot getter, getEmergentStoryVoiceDiag(), in the allowed director file — the same shape the probes already bridge for getSignedSceneAvDebugSnapshot. It creates no state, drives nothing, and adds no persistence. Recorded as a created rather than extended surface so the verifier knows to bridge it.",
+      "evidenceRefs": [
+        "implementation.diff",
+        "ladder-verify-probe.mjs"
+      ]
+    }
+  ],
+  "verification": {
+    "status": "fail",
+    "recordedBy": "story-verifier",
+    "recordedAt": "2026-08-10T18:20:00Z",
+    "summary": "Stage 6 mechanical proof. Every cadence, string, ordering, variant, reset, performance and audio term implemented by this run verifies clean across three cold runs per beat with cross-run cadence variance at or below 0.017 s, including the variant-D ordering assertion (ch8:launch:orbital-handoff at +1.767 s, stack row 1 at +2.016-2.017 s, margin 0.249-0.250 s, all three runs). Two contract acceptance criteria fail on rendering: ch8 L2 renders on no headless-drivable path and L3 renders only on the ch8-launch deep link. The chained ch6->ch9 movie flow could not be completed because it stalls at ch8-landfall, a stall reproduced from ch8-crossing and therefore not attributable to this run's changed code.",
+    "commands": [
+      {
+        "command": "npm --prefix main run verify",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/full-client-verify.log",
+        "summary": "277 test files, 2199 tests passed; typecheck clean; vite build in 5.21 s."
+      },
+      {
+        "command": "npm --prefix main run story:ux:check",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/story-ux-check-verification.log",
+        "summary": "6 files, 54 tests passed post-implementation."
+      },
+      {
+        "command": "node voice-repair-probe.mjs ch7-flow --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/ch7-flow-trace.json",
+        "summary": "Three cold ch7 movie runs, honest completion at 25.71/24.01/23.88 s, zero page errors."
+      },
+      {
+        "command": "node voice-repair-probe.mjs ch8-flow --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/ch8-flow-trace.json",
+        "summary": "Three cold ch8 movie runs, honest completion at 27.33/27.13/26.79 s, zero page errors."
+      },
+      {
+        "command": "node cadence-assert.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/cadence-assertions.json",
+        "summary": "Zero cadence, ordering or once-only defects across all six cold runs; both tables asserted against the exported named constants."
+      },
+      {
+        "command": "node variant-parity-assert.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/variant-parity.json",
+        "summary": "Mobile portrait, reduced motion and POTATO all reproduce the exact string set, order and offsets for both beats."
+      },
+      {
+        "command": "node fps-verify-probe.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/fps-verification.json",
+        "summary": "Medians 60.09/60.09/60.06 against baseline 60.12/60.11/60.08; hold-window median 60.06."
+      },
+      {
+        "command": "node voice-repair-probe.mjs full-flow",
+        "status": "fail",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/full-flow-trace.json",
+        "summary": "Chained ch6-dive movie run reached ch8-landfall at 94.8 s and never advanced to ch9-settle within 600 s."
+      },
+      {
+        "command": "node score-ch8-window-verify-probe.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/score-ch8-window-verify-analysis.json",
+        "summary": "Combined music-bus renders reproduce the Stage 2 measurement to within 1e-8 dB."
+      },
+      {
+        "command": "node audio-window-probe.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/audio-window-census.json",
+        "summary": "Zero SFX and zero score events added by the new text emissions; one shipped objective-enter cue at +1.765 s."
+      },
+      {
+        "command": "node pause-window-probe.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/pause-window-trace.json",
+        "summary": "Real pause froze the story clock with 0.0 ms drift over a 5006 ms hold; every beat-runtime offset preserved."
+      },
+      {
+        "command": "node quit-replay-probe.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification/quit-replay-trace.json",
+        "summary": "Quit clears every channel; replay publishes a fresh beat with no window line replayed."
+      }
+    ],
+    "defects": [
+      {
+        "id": "vd-01",
+        "severity": "high",
+        "summary": "ch8 L2 never renders on any headless-drivable path; L3 renders only on the deep link. Chained entry pre-activates both signed launch anchors on the first ch8-launch frame, so the voice seeding pass latches them; the deep link emits all three L-lines in one director tick into a single caption slot.",
+        "evidenceRefs": [
+          "evidence/verification/chain-launch-anchor-fine-trace.json",
+          "evidence/verification/l23-captures.json"
+        ]
+      },
+      {
+        "id": "vd-02",
+        "severity": "medium",
+        "summary": "Chained ch6->ch9 movie flow stalls at ch8-landfall. Reproduced from ch8-crossing; the ch8-landfall deep link reaches ch9-settle in 10.5 s. Not attributable to this run's changed code.",
+        "evidenceRefs": [
+          "evidence/verification/full-flow-trace.json",
+          "evidence/verification/chain-landfall-from-crossing.json",
+          "evidence/verification/chain-landfall-deeplink.json"
+        ]
+      },
+      {
+        "id": "vd-03",
+        "severity": "low",
+        "summary": "POTATO tier skips the shipped ch8:launch:climb objective. No POTATO baseline exists for comparison.",
+        "evidenceRefs": [
+          "evidence/verification/variant-parity.json"
+        ]
+      }
+    ],
+    "evidenceRefs": [
+      "verification-report.json",
+      "screenshot-report.md",
+      "audio-report.md",
+      "objective-lifecycle-evidence.json",
+      "chapter-journey-evidence.json",
+      "raw-audiovisual-evidence.json",
+      "evidence-registry.json"
+    ],
+    "supersededBy": "closingVerification (iteration 6)"
+  },
+  "verificationNote": "The verification section above was recorded by Stage 6 against the draft-v2 build and is retained unaltered. It is what found vd-01; it does not describe this repair patch. The three-route re-verification named in chapter-repair-direction.json is owed after this patch.",
+  "repairVerification": {
+    "iteration": 3,
+    "route": "repair-verification",
+    "status": "fail",
+    "recordedBy": "story-verifier",
+    "recordedAt": "2026-08-11T01:47:13.219Z",
+    "contractVersion": "draft-v3",
+    "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+    "summary": "The paced ladder implements its contracted formulas exactly: t_L2 = min(t_L1 + 4.5, t_phaseEdge) and t_L3 = max(t_phaseEdge, t_L2 + 3.0) hold within 0.066 s worst case across 24 cold runs, with both branches of both formulas exercised; order, once-only, the drop rule, seeded-consumed entry, variant parity and the frozen exit-window table all verify clean. One contracted term fails: acceptance criterion [21], the measured-margin guarantee. On the only scripted paced route that actually reaches deep_space, t_L3 + 1.98 s lands AFTER t_deepSpace by 1.211 s on average (-1.239 to -1.173 across three cold runs), so L3 is truncated at roughly a third of its reveal rather than completing strictly before the exit. On the literal contract script (hold [SPACE] at entry +6.0 s and nothing further) the ship never reaches deep_space at all inside a 22 s observation, so no margin exists to measure on that variant; the full three-line experience with completed reveals was observed only on routes that never leave the atmosphere.",
+    "failingContractTerms": [
+      "evidence.acceptanceCriteria[21] measured-margin guarantee (proposed defect vd-04)"
+    ],
+    "passingContractTerms": [
+      "evidence.acceptanceCriteria[16] paced-ladder named constants and formulas",
+      "evidence.acceptanceCriteria[17] phase-edge accelerator is caption-only",
+      "evidence.acceptanceCriteria[18] drop rule with nothing deferred into the exit window",
+      "evidence.acceptanceCriteria[19] seeded-consumed non-surface entry",
+      "evidence.acceptanceCriteria[20] single authored player-caused mid-reveal interruption",
+      "evidence.acceptanceCriteria[22] POTATO asserts the drop, not the render",
+      "evidence.acceptanceCriteria[2] frozen ch8 exit-window table, re-proved after the tickLaunchVoice change",
+      "evidence.acceptanceCriteria[8] ch8:launch:orbital-handoff publishes before stack row 1"
+    ],
+    "commands": [
+      {
+        "command": "node ladder-verify-probe.mjs routeA --shape space --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeA-space.json",
+        "summary": "Three cold paced-ladder runs on the literal contract script; full ladder, no deep_space reached."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeA --shape space-then-w --runs 3",
+        "status": "fail",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeA-space-then-w.json",
+        "summary": "Three cold runs of the exiting paced route; C3 margin -1.239 / -1.222 / -1.173 s."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeA --shape space --ignite 10 --tag space-late-ignite --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeA-space-late-ignite.json",
+        "summary": "Timer-branch control: L2 at exactly t_L1 + 4.5 s in 3/3 runs."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeB --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeB-desktop.json",
+        "summary": "Chained movie: edge-caused L2 interrupting L1 mid-reveal, L3 dropped, exit window clean."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeC --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeC-desktop.json",
+        "summary": "Deep-link movie: L3 dropped in 3/3, deep_space -0.5/+0.0/+0.5 frames captured."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeC --profile POTATO --label potato --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeC-potato.json",
+        "summary": "POTATO tier: drop asserted, not the render."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeC --variant mobile --label mobile-portrait --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeC-mobile-portrait.json",
+        "summary": "390x844 parity."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs routeC --variant reduced-motion --label reduced-motion --runs 3",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/routeC-reduced-motion.json",
+        "summary": "Reduced-motion parity."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs seeded",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/seeded-entries.json",
+        "summary": "Both non-surface entries seed all three latches consumed."
+      },
+      {
+        "command": "node ladder-verify-probe.mjs seeded-frame",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/seeded-entry-frames.json",
+        "summary": "Empty caption slot imaged at entry +0.5 s and +1.5 s."
+      },
+      {
+        "command": "node ladder-analysis.mjs",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/ladder-analysis.json",
+        "summary": "Aggregated assertion sheet across all 24 cold runs."
+      },
+      {
+        "command": "node frame-defect-scan.mjs evidence/verification-v3/*/",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/frame-defect-scan.json",
+        "summary": "1585 frames, zero blank, zero temporal luminance pops."
+      },
+      {
+        "command": "npx vitest run src/story",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/story-tests-v3.log",
+        "summary": "Working-tree re-run of the story suite after the draft-v3 patch: 74 files, 564 tests passed."
+      },
+      {
+        "command": "npm --prefix main run story:ux:check",
+        "status": "pass",
+        "exitCode": 0,
+        "evidenceRef": "evidence/verification-v3/story-ux-check-v3.log",
+        "summary": "Guided-play lifecycle undisturbed: 6 files, 54 tests passed."
+      }
+    ],
+    "note": "These are verification commands, recorded here for traceability. The gate-scored implementation command list above is unchanged and remains the integration engineer's record.",
+    "evidenceRefs": [
+      "evidence/verification-v3/",
+      "evidence/verification-v3/ladder-analysis.json",
+      "evidence/verification-v3/routeA-space.json",
+      "evidence/verification-v3/routeA-space-then-w.json",
+      "evidence/verification-v3/routeA-space-late-ignite.json",
+      "evidence/verification-v3/routeB-desktop.json",
+      "evidence/verification-v3/routeC-desktop.json",
+      "evidence/verification-v3/routeC-potato.json",
+      "evidence/verification-v3/routeC-mobile-portrait.json",
+      "evidence/verification-v3/routeC-reduced-motion.json",
+      "evidence/verification-v3/seeded-entries.json",
+      "evidence/verification-v3/seeded-entry-frames.json",
+      "evidence/verification-v3/frame-defect-scan.json",
+      "evidence/verification-v3/story-tests-v3.log",
+      "evidence/verification-v3/story-ux-check-v3.log"
+    ]
+  },
+  "dischargeMeasurement": {
+    "condition": "CC1",
+    "status": "pass",
+    "summary": "CC1 discharged on the canonical ordered-ignition route itself: one script, three cold runs, l2Cause 'timer' on every run, L3 firing at the phase edge on every run, and per-run margins of 1.863 / 1.805 / 1.811 s against the 0.3 s floor. All three ladder lines rendered in order, once each, with complete reveals, and the frozen exit window ran its full +0.0 to +17.0 s cadence with the advance to ch8-crossing on all three runs.",
+    "evidenceRefs": [
+      "evidence/verification-v3/routeA-ordered/routeA-ordered.json",
+      "evidence/verification-v3/routeA-ordered/routeA-ordered-captures.json",
+      "verification-report.json"
+    ]
+  },
+  "priorStageNote": "The verification, repairVerification and dischargeMeasurement sections above were recorded by earlier stages against the draft-v3/draft-v4 build and are retained unaltered. They do not describe this loop-3 patch; re-verification of the three new laws is owed.",
+  "iterationHistory": [
+    {
+      "iteration": 4,
+      "route": "discharge-measurement",
+      "contractVersion": "draft-v4",
+      "contractSha256": "df544b130773c3ba9ab4f0132f0223616db5767bbda7e9e6dd59bf8ab3a1f1e3",
+      "recordedAt": "2026-08-11T02:25:54Z",
+      "note": "Loop-2 discharge-measurement records, retained unaltered. Superseded for the three draft-v5 runtime laws only (L2 reveal guard, ch7 stage-caption queue guard, held exit-window clock); every frozen string, both cadence tables and all ch7/ch8 offsets carry forward unchanged.",
+      "productionScope": {
+        "status": "pass",
+        "summary": "Repair patch stays inside the same four locked allowed paths; storyText.ts remains unchanged. The patch REMOVES the only read of a protected module the run had introduced: getSignedSceneAvDebugSnapshot is no longer imported, because L2/L3 no longer latch on anc.launch.ignition / anc.launch.liftoff. All eleven protected paths clean; no registry, journey-contract, score, audio, camera or signed-AV file written. The two signed launch anchors keep their score cues and shots and are untouched.",
+        "changedPaths": [
+          "main/src/story/emergentStoryDirector.ts",
+          "main/src/story/emergentStoryDirector.test.ts",
+          "main/src/story/storyText.test.ts"
+        ],
+        "evidenceRefs": [
+          "evidence/implementation/production-scope.log",
+          "implementation.diff"
+        ]
+      },
+      "creativeContract": {
+        "status": "pass",
+        "summary": "draft-v3 delta implemented exactly. L1 binding unchanged (first stable dwelled 'surface-flight'). L2 fires at min(t_L1 + CH8_L1_MIN_SLOT_SECONDS, t_phaseEdge); L3 at max(t_phaseEdge, t_L2 + CH8_L2_MIN_SLOT_SECONDS), where t_phaseEdge is the raw spaceFlight surface-to-non-surface transition with controlMode 'flight' observed across consecutive director ticks. Every trigger reads unprotected state only. Drop rule implemented: any L-line unfired when deep_space is observed is marked consumed for the run, so nothing queues, defers or spills into the frozen exit window; L4 still fires at +0.0 unconditionally. Seeding is edge-triggered and entry-seeded per acceptance criterion [20]: an entry whose raw phase is already non-surface seeds all three consumed. All 21 frozen strings and the owner-approved changed string re-verified byte-identical against draft-v3; both ch7 tables and the ch8 exit-window table untouched.",
+        "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+        "evidenceRefs": [
+          "evidence/implementation/built-client-string-audit.log",
+          "evidence/implementation/story-tests.log",
+          "implementation.diff"
+        ]
+      },
+      "typecheck": {
+        "status": "pass",
+        "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json, TypeScript 5.9.3, inside a memory-capped systemd scope (MemoryMax=12G). Zero diagnostics.",
+        "evidenceRefs": [
+          "evidence/implementation/typecheck.log"
+        ]
+      },
+      "tests": {
+        "status": "pass",
+        "summary": "74 story test files, 564 tests, all passing (six added by this repair patch, 19 cases now in emergentStoryDirector.test.ts). New coverage: slot constants proven longer than the reveals they protect so no timer path can interrupt; timer-path L2 at exactly t_L1 + 4.5 s; edge-accelerated L2 asserted player-caused (fired at the edge, far short of the timer slot, inside L1 reveal) and non-cascading; L3 max() proven on both branches; the drop rule at the measured chained-route timing; a POTATO-shaped one-frame double boundary asserting the drop rather than the render; and a mid-flight restore seeding all three consumed. story:ux:check 54/54 unchanged.",
+        "evidenceRefs": [
+          "evidence/implementation/story-tests.log",
+          "evidence/implementation/story-ux-check.log"
+        ]
+      },
+      "build": {
+        "status": "pass",
+        "summary": "vite build succeeds. Built-client audit confirms the retired ch7 exit parenthetical is absent from dist, the owner-approved replacement is present, and all three ch8 ladder strings plus the exit-window strings ship.",
+        "evidenceRefs": [
+          "evidence/implementation/build.log",
+          "evidence/implementation/built-client-string-audit.log"
+        ]
+      },
+      "commands": [
+        {
+          "command": "npm --prefix main run story:ux:check",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/story-ux-check.log",
+          "summary": "6 files, 54 tests passed; guided-play lifecycle undisturbed by the repair patch."
+        },
+        {
+          "command": "npx vitest run src/story",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/story-tests.log",
+          "summary": "74 files, 564 tests passed after the vd-01 repair patch."
+        },
+        {
+          "command": "npm --prefix main run typecheck",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/typecheck.log",
+          "summary": "Both TypeScript projects clean under a memory-capped scope."
+        },
+        {
+          "command": "npm --prefix main run build",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/build.log",
+          "summary": "Production bundle built under a memory-capped scope."
+        },
+        {
+          "command": "git status --porcelain and protected-path audit",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/production-scope.log",
+          "summary": "Mutation stays inside the locked allowed paths; every protected path clean."
+        },
+        {
+          "command": "built-client string audit for the retired string and the ch8 ladder strings",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/built-client-string-audit.log",
+          "summary": "Retired string absent from dist; approved string and all three ladder strings present."
+        }
+      ],
+      "namedConstants": {
+        "summary": "All cadence and pacing constants are exported from main/src/story/emergentStoryDirector.ts and asserted by the tests through those exports. draft-v3 adds the paced-ladder pair.",
+        "ch7ExitCadenceSeconds": {
+          "CH7_M7_AUDIT_SECONDS": 0,
+          "CH7_M7_CAPTION_SECONDS": 0.6,
+          "CH7_EXIT_CAPTION_SECONDS": 3,
+          "CH7_EXIT_HOLD_SECONDS": 5
+        },
+        "ch8WindowCadenceSeconds": {
+          "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS": 0,
+          "CH8_STACK_ONE_SECONDS": 2,
+          "CH8_STACK_TWO_SECONDS": 4,
+          "CH8_STACK_THREE_SECONDS": 6,
+          "CH8_CONTACT_LOGGED_SECONDS": 8.5,
+          "CH8_DESIGNATION_CAPTION_SECONDS": 11.5,
+          "CH8_OPEN_QUERY_SECONDS": 14,
+          "CH8_EXIT_HOLD_SECONDS": 17
+        },
+        "evidenceRefs": [
+          "implementation.diff"
+        ],
+        "ch8PacedLadderSeconds": {
+          "CH8_L1_MIN_SLOT_SECONDS": 4.5,
+          "CH8_L2_MIN_SLOT_SECONDS": 3
+        },
+        "revealMath": "StoryCaptions.tsx reveals one character per 34 ms. L1 is 94 chars = 3.196 s, so the 4.5 s slot is reveal plus read and the timer path provably cannot interrupt. L2 is 66 chars = 2.244 s, inside the 3.0 s slot, so L3 never interrupts L2. L3 is 58 chars = 1.972 s."
+      }
+    },
+    {
+      "iteration": 0,
+      "route": "implementation",
+      "contractVersion": "draft-v2",
+      "contractSha256": "aa7ea1ac3f60ad2c130e3eaa07c45b204be4a27f6ab2897e2035aeb9552aca8a",
+      "recordedAt": "2026-08-10T18:20:00Z",
+      "note": "Original draft-v2 implementation results, retained unaltered. Superseded for the ch8 L2/L3 trigger bindings only by the draft-v3 repair patch below; every ch7 result, the ch8 exit-window table and all 21+1 frozen strings carry forward unchanged.",
+      "productionScope": {
+        "status": "pass",
+        "summary": "Only the four locked allowed paths are touched. emergentStoryDirector.ts and emergentStoryDirector.test.ts are modified, storyText.test.ts is created, storyText.ts is unchanged (permitted but not required). All eleven locked protected paths are clean, and no registry, journey-contract, score, audio, camera or signed-AV file is written. The three signed launch anchors are observed read-only through getSignedSceneAvDebugSnapshot.",
+        "changedPaths": [
+          "main/src/story/emergentStoryDirector.ts",
+          "main/src/story/emergentStoryDirector.test.ts",
+          "main/src/story/storyText.test.ts"
+        ],
+        "evidenceRefs": [
+          "evidence/implementation/production-scope.log",
+          "implementation.diff"
+        ]
+      },
+      "creativeContract": {
+        "status": "pass",
+        "summary": "All twenty-one new strings and the one owner-approved changed string render byte-identical to the frozen contract text, verified by direct comparison against scene-contract.json story.events. Both cadence tables are implemented as exported named constants and asserted against those constants, not literals: ch7 M7 audit +0.0 / M7 caption +0.6 / exit caption +3.0 / advance +5.0 (D9), ch8 L4 +0.0 / stack +2.0 / +4.0 / +6.0 / CONTACT LOGGED. +8.5 / designation +11.5 / L6 +14.0 / advance +17.0 (R2). No new stateRef, milestone, persistence, objective, marker, work-order copy or {name} substitution. The M7/exit same-tick hazard is resolved by cadence offsets alone; latch-check order was never used as the separator.",
+        "contractSha256": "aa7ea1ac3f60ad2c130e3eaa07c45b204be4a27f6ab2897e2035aeb9552aca8a",
+        "evidenceRefs": [
+          "evidence/implementation/built-client-string-audit.log",
+          "evidence/implementation/story-tests.log",
+          "implementation.diff"
+        ]
+      },
+      "typecheck": {
+        "status": "pass",
+        "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json, TypeScript 5.9.3, run inside a memory-capped systemd scope (MemoryMax=12G) per the machine's TS OOM history. Zero diagnostics.",
+        "evidenceRefs": [
+          "evidence/implementation/typecheck.log"
+        ]
+      },
+      "tests": {
+        "status": "pass",
+        "summary": "74 story test files, 558 tests, all passing, including the six new cases: per-stage latch-once behaviour, the frozen ch7 exit cadence, seeded re-entry with no replayed line, movie-compressed edges firing once and in order, the frozen ch8 exit window ordering, and the story-inactive sandbox no-op. story:ux:check (54 tests) proves the guided-play lifecycle undisturbed.",
+        "evidenceRefs": [
+          "evidence/implementation/story-tests.log",
+          "evidence/implementation/story-ux-check.log"
+        ]
+      },
+      "build": {
+        "status": "pass",
+        "summary": "vite build succeeds. String audit of the built client confirms the retired ch7 exit parenthetical appears nowhere in dist, the owner-approved replacement is present, and the new WRECK RELAY / AUDIT NETWORK and awakening strings ship.",
+        "evidenceRefs": [
+          "evidence/implementation/build.log",
+          "evidence/implementation/built-client-string-audit.log"
+        ]
+      },
+      "commands": [
+        {
+          "command": "npm --prefix main run story:ux:check",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/story-ux-check.log",
+          "summary": "6 files, 54 tests passed; shipped guided-play lifecycle undisturbed."
+        },
+        {
+          "command": "npx vitest run src/story",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/story-tests.log",
+          "summary": "74 files, 558 tests passed, covering both mutated runtime files and the new storyText.test.ts."
+        },
+        {
+          "command": "npm --prefix main run typecheck",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/typecheck.log",
+          "summary": "Both TypeScript projects clean under a memory-capped scope."
+        },
+        {
+          "command": "npm --prefix main run build",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/build.log",
+          "summary": "Production bundle built under a memory-capped scope."
+        },
+        {
+          "command": "git status --porcelain and protected-path audit",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/production-scope.log",
+          "summary": "Mutation stays inside the locked allowed paths; every protected path clean."
+        },
+        {
+          "command": "built-client string audit for the retired and approved ch7 exit strings",
+          "status": "pass",
+          "exitCode": 0,
+          "evidenceRef": "evidence/implementation/built-client-string-audit.log",
+          "summary": "Retired string absent from dist; approved string and every new run string present."
+        }
+      ],
+      "namedConstants": {
+        "summary": "Both frozen cadence tables are exported from main/src/story/emergentStoryDirector.ts and asserted by the tests through those exports.",
+        "ch7ExitCadenceSeconds": {
+          "CH7_M7_AUDIT_SECONDS": 0,
+          "CH7_M7_CAPTION_SECONDS": 0.6,
+          "CH7_EXIT_CAPTION_SECONDS": 3,
+          "CH7_EXIT_HOLD_SECONDS": 5
+        },
+        "ch8WindowCadenceSeconds": {
+          "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS": 0,
+          "CH8_STACK_ONE_SECONDS": 2,
+          "CH8_STACK_TWO_SECONDS": 4,
+          "CH8_STACK_THREE_SECONDS": 6,
+          "CH8_CONTACT_LOGGED_SECONDS": 8.5,
+          "CH8_DESIGNATION_CAPTION_SECONDS": 11.5,
+          "CH8_OPEN_QUERY_SECONDS": 14,
+          "CH8_EXIT_HOLD_SECONDS": 17
+        },
+        "evidenceRefs": [
+          "implementation.diff"
+        ]
+      }
+    },
+    {
+      "iteration": 3,
+      "route": "repair-verification",
+      "contractVersion": "draft-v3",
+      "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+      "recordedAt": "2026-08-11T01:47:13.219Z",
+      "note": "Stage 6 targeted delta re-proof of the vd-01 repair. See check-results.repairVerification and verification-report.repairIteration. One contracted term fails: the acceptance criterion [21] measured-margin guarantee, raised as proposed defect vd-04."
+    },
+    {
+      "iteration": 2,
+      "route": "repair-patch",
+      "contractVersion": "draft-v3",
+      "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+      "recordedAt": "2026-08-10T19:00:00Z",
+      "note": "Iteration-2 (draft-v3) repair-patch results, retained unaltered. The implementation is unchanged by iteration 4; only the contract binding and the discharge evidence below are added.",
+      "productionScope": {
+        "status": "pass",
+        "summary": "Repair patch stays inside the same four locked allowed paths; storyText.ts remains unchanged. The patch REMOVES the only read of a protected module the run had introduced: getSignedSceneAvDebugSnapshot is no longer imported, because L2/L3 no longer latch on anc.launch.ignition / anc.launch.liftoff. All eleven protected paths clean; no registry, journey-contract, score, audio, camera or signed-AV file written. The two signed launch anchors keep their score cues and shots and are untouched.",
+        "changedPaths": [
+          "main/src/story/emergentStoryDirector.ts",
+          "main/src/story/emergentStoryDirector.test.ts",
+          "main/src/story/storyText.test.ts"
+        ],
+        "evidenceRefs": [
+          "evidence/implementation/production-scope.log",
+          "implementation.diff"
+        ]
+      },
+      "creativeContract": {
+        "status": "pass",
+        "summary": "draft-v3 delta implemented exactly. L1 binding unchanged (first stable dwelled 'surface-flight'). L2 fires at min(t_L1 + CH8_L1_MIN_SLOT_SECONDS, t_phaseEdge); L3 at max(t_phaseEdge, t_L2 + CH8_L2_MIN_SLOT_SECONDS), where t_phaseEdge is the raw spaceFlight surface-to-non-surface transition with controlMode 'flight' observed across consecutive director ticks. Every trigger reads unprotected state only. Drop rule implemented: any L-line unfired when deep_space is observed is marked consumed for the run, so nothing queues, defers or spills into the frozen exit window; L4 still fires at +0.0 unconditionally. Seeding is edge-triggered and entry-seeded per acceptance criterion [20]: an entry whose raw phase is already non-surface seeds all three consumed. All 21 frozen strings and the owner-approved changed string re-verified byte-identical against draft-v3; both ch7 tables and the ch8 exit-window table untouched.",
+        "contractSha256": "1e36818230e7f48649c040b0e6574cad51c67dd5ba405fa00661307f0e0b4737",
+        "evidenceRefs": [
+          "evidence/implementation/built-client-string-audit.log",
+          "evidence/implementation/story-tests.log",
+          "implementation.diff"
+        ]
+      },
+      "typecheck": {
+        "status": "pass",
+        "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json, TypeScript 5.9.3, inside a memory-capped systemd scope (MemoryMax=12G). Zero diagnostics.",
+        "evidenceRefs": [
+          "evidence/implementation/typecheck.log"
+        ]
+      },
+      "tests": {
+        "status": "pass",
+        "summary": "74 story test files, 564 tests, all passing (six added by this repair patch, 19 cases now in emergentStoryDirector.test.ts). New coverage: slot constants proven longer than the reveals they protect so no timer path can interrupt; timer-path L2 at exactly t_L1 + 4.5 s; edge-accelerated L2 asserted player-caused (fired at the edge, far short of the timer slot, inside L1 reveal) and non-cascading; L3 max() proven on both branches; the drop rule at the measured chained-route timing; a POTATO-shaped one-frame double boundary asserting the drop rather than the render; and a mid-flight restore seeding all three consumed. story:ux:check 54/54 unchanged.",
+        "evidenceRefs": [
+          "evidence/implementation/story-tests.log",
+          "evidence/implementation/story-ux-check.log"
+        ]
+      },
+      "build": {
+        "status": "pass",
+        "summary": "vite build succeeds. Built-client audit confirms the retired ch7 exit parenthetical is absent from dist, the owner-approved replacement is present, and all three ch8 ladder strings plus the exit-window strings ship.",
+        "evidenceRefs": [
+          "evidence/implementation/build.log",
+          "evidence/implementation/built-client-string-audit.log"
+        ]
+      }
+    }
+  ],
+  "closingVerification": {
+    "iteration": 6,
+    "route": "final-verification",
+    "recordedAt": "2026-08-11T15:21:56.316Z",
+    "recordedBy": "story-verifier",
+    "contractVersion": "draft-v5",
+    "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+    "status": "pass-with-recorded-exceptions",
+    "environmentCorrection": "The 5176 dev server had been up 19.6 h and predated the loop-3 patch, so Vite served the app a timestamped module URL while a plain probe import resolved to a SECOND emergentStoryDirector instance and getEmergentStoryVoiceDiag() read an empty runtime. The server was restarted (node_modules/.vite cleared) before any measurement below; the diag bridge was re-proved live first.",
+    "laws": [
+      {
+        "id": "R1 / criteria [17][23] — l2DueAt reveal guard + three-value l2Cause taxonomy",
+        "status": "pass",
+        "evidence": "Route A: l2Cause \"timer\" on 3/3 cold runs, l2DueAt formula exact to 0 s, L2 fires 0.000-0.020 s after its due time, L1 reveal margin 1.308-1.319 s. Route B/C/mobile/reduced-motion: l2Cause \"reveal-guard\" on 10/10 runs, formula delta 0.000 s, L1 reveal complete at the swap with margin 0.000-0.052 s. No run cut a character of L1.",
+        "evidenceRefs": [
+          "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+          "evidence/verification-final/routeB-desktop.json",
+          "evidence/verification-final/routeC-desktop.json",
+          "evidence/verification-final/routeC-mobile.json",
+          "evidence/verification-final/routeC-reduced-motion.json"
+        ]
+      },
+      {
+        "id": "R3 / criterion [3] — ch7 caption queue guard",
+        "status": "pass",
+        "evidence": "Movie route, 3 cold runs plus mobile portrait and landscape: every rendered ch7 stage line met revealSeconds(line)+0.4 s with slack 0.017-0.229 s; stage order preserved; once-only; M6 never dropped; M5 dropped at the calibration receipt exactly as the exception permits; t_M7Anchor = max(receipt, t_M6+revealSeconds(M6)) exact on every run, movie-route shift 3.095-3.140 s. Paced manual-shape run at 6 s commit spacing: zero drops, all six lines, slack 2.569-9.167 s, t_M7Anchor = t_calibrationReceipt = 44.408 s, and the frozen exit cadence measured at +0.000/+0.605/+3.021/+5.022 s.",
+        "evidenceRefs": [
+          "evidence/verification-final/ch7queue-desktop.json",
+          "evidence/verification-final/ch7manual.json",
+          "evidence/verification-final/ch7mobile-mobile-portrait.json",
+          "evidence/verification-final/ch7mobile-mobile-landscape.json"
+        ]
+      },
+      {
+        "id": "R4 / criterion [31] — ch8 held exit-window clock",
+        "status": "pass",
+        "evidence": "3 cold runs on the shipped physical flight controls, no fallback mutation. Clock drift during the dip 0.0000 s on all three runs over 10.6-10.9 s and 148-149 samples; zero rows emitted during the dip; resume regression forward-only at 0.0165-0.1165 s; no row re-fired; tightest inter-row held gap 1.928-1.989 s against a 2.0 s frozen-table minimum; every window row within 0.078 s of its held-clock offset; advance at held 16.959-16.992 s with a live deep_space phase.",
+        "evidenceRefs": [
+          "evidence/verification-final/dive.json"
+        ]
+      }
+    ],
+    "fps": {
+      "beats": [
+        {
+          "beat": "ch7-reconstruct",
+          "median": 60.06,
+          "baselineMedian": 60.12,
+          "deltaVsBaseline": -0.06,
+          "frameTimeMs": 16.65,
+          "passFloor": true
+        },
+        {
+          "beat": "ch7-board",
+          "median": 60.08,
+          "baselineMedian": 60.11,
+          "deltaVsBaseline": -0.03,
+          "frameTimeMs": 16.64,
+          "passFloor": true
+        },
+        {
+          "beat": "ch8-launch",
+          "median": 60.1,
+          "baselineMedian": 60.08,
+          "deltaVsBaseline": 0.02,
+          "frameTimeMs": 16.64,
+          "passFloor": true
+        }
+      ],
+      "holdWindow": {
+        "median": 60.04,
+        "passFloor": true
+      },
+      "status": "pass"
+    },
+    "storyUxCheck": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "6 files, 54 tests, all passing",
+      "status": "pass"
+    },
+    "repairedEvidenceRecords": [
+      {
+        "defect": "ux-04",
+        "action": "objective-lifecycle-evidence.json and chapter-journey-evidence.json re-bound to draft-v5 / 36a7cb4f… with fresh lifecycle traces from the closing pass",
+        "status": "repaired"
+      },
+      {
+        "defect": "CIN-09",
+        "action": "verification-report.json top-level overallStatus and contractVersion corrected; a currentRollUp field names the authoritative section and resolves the two conflicting standing tree-findability records",
+        "status": "repaired"
+      },
+      {
+        "defect": "CIN-05",
+        "action": "re-emitted rather than annotated: every closing-pass sidecar carries stateReadOrder \"state-before-shutter\" and its own shutterSpanMs",
+        "status": "repaired"
+      },
+      {
+        "defect": "CIN-06",
+        "action": "HUD-excluded world-region blank scan added and run over 2456 closing-pass frames; 34 world-black frames found, 0 whole-frame blanks; the boot-black frames are re-attributed as unattributed headless-only evidence and the earlier environment attribution is withdrawn",
+        "status": "repaired"
+      },
+      {
+        "defect": "CIN-10",
+        "action": "ch8 hold->crossing 500 ms strip at +16.5/+17.0/+17.5/+18.0/+18.5 s plus post-change ch6-dive->ch7 and ch8-landfall->ch9 strips captured",
+        "status": "repaired"
+      },
+      {
+        "defect": "ux-07",
+        "action": "replay/reload re-measured with pre-boot instrumentation and 103 frames; the single-timestamp artefact is not reproduced (6 captions, 6 distinct stamps, 20.449 s spread)",
+        "status": "repaired"
+      },
+      {
+        "defect": "MOD-02",
+        "action": "dissent-03 board-caption timing re-measured state-before-shutter; the parenthetical begins AT the advance (delta 0.0000 s on 3/3 cold runs), so the -0.15 s clause is not reproduced",
+        "status": "repaired"
+      },
+      {
+        "defect": "MOD-05",
+        "action": "evidence-registry.json and raw-audiovisual-evidence.json re-bound from draft-v4 to draft-v5 / 36a7cb4f…",
+        "status": "repaired"
+      },
+      {
+        "defect": "CIN-01",
+        "action": "mobile portrait recaptured WITH per-frame touch-control rects and the missing 844x390 landscape set captured",
+        "status": "measured-fail-recorded-not-repaired"
+      }
+    ],
+    "recordedExceptions": [
+      {
+        "id": "CIN-01 mobile portrait caption/touch-control collision",
+        "measurement": "59 of 76 caption-bearing frames collide; worst overlap 3224 px^2; the M7 caption renders with its final word under the CONSUME control at 390x844",
+        "disposition": "recorded as measured; the scope decision is the open owner item from cohesion-judge section 9.4"
+      },
+      {
+        "id": "CIN-06 world-black cold-boot frames",
+        "measurement": "34 of 2456 closing-pass frames, all on cold deep-link entries between +0.02 s and +2.66 s, worldStd exactly 0 with HUD chrome present",
+        "disposition": "unattributed, headless-only evidence"
+      },
+      {
+        "id": "criterion [35] marker health — reconstruct:repair:bench_online",
+        "measurement": "post-acquisition missing-marker for 0.683 s on all movie/variant runs and 5.948 s on the paced manual run, coincident with the wreck-salvage claim",
+        "disposition": "pre-existing, not introduced by the loop-3 patch, outside the single recorded accepted exception"
+      },
+      {
+        "id": "movie-path L2 behaviour change",
+        "measurement": "the reveal guard moves l2DueAt from the phase edge to t_L1+revealSeconds(L1); L2 now holds the slot 0.06-0.19 s on desktop/mobile/reduced-motion and drops entirely on quality-potato (3/3), against 1.32-1.71 s pre-patch",
+        "disposition": "contract-conformant under criteria [22]/[23]; recorded because it is material and reproducible"
+      }
+    ],
+    "captureGaps": [
+      {
+        "item": "cap.ch8.paced-ladder Route B — the t_L2 -0.1 s frame with L1 fully revealed",
+        "reason": "not physically obtainable: the reveal guard makes L1 reveal completion COINCIDE with t_L2, so 0.1 s earlier L1 still owes about 3 characters. The nearest obtainable frame (run 3, t_L2 -0.005 s) does show 94/94 characters.",
+        "bestAvailable": "evidence/verification-final/routeB-desktop-run3"
+      },
+      {
+        "item": "cap.ch8.paced-ladder Route B — the t_L2 +0.2 s frame with L2 replacing L1",
+        "reason": "not obtainable on this route: deep_space lands 0.06-0.19 s after L2 and the L4 caption takes the slot. A frame with L2 on the slot exists at t_L2 +0.012 s (run 1).",
+        "bestAvailable": "evidence/verification-final/routeB-desktop-run1"
+      },
+      {
+        "item": "dive-and-climb — dipping immediately after two stack rows",
+        "reason": "reverse throttle is 0.34 of forward, so the physical boundary crossing completes at held ~14.9 s even when the dive is commanded at held ~5.17 s. The freeze/resume/no-refire/no-burst/advance assertions are all measured across the real dip.",
+        "bestAvailable": "evidence/verification-final/dive.json"
+      },
+      {
+        "item": "CIN-06 headed or real-GPU cold deep link",
+        "reason": "not available on this Linux box; the environment attribution is therefore withdrawn rather than supported",
+        "bestAvailable": null
+      }
+    ],
+    "gate": {
+      "command": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-08-10-ch7-ch8-voice-repair --phase implementation",
+      "failures": 1,
+      "failureIds": [
+        "journey-contract.json-schema"
+      ],
+      "disposition": "the single failure is the accepted R3 known gate failure recorded in knownGateFailures: main/chapter-journey-contract.json holds arrays where its schema allows scalars, on a locked protected path, predating the run at source revision 03e975a.",
+      "status": "expected — exactly one failure, the accepted R3",
+      "finalPhaseNote": "creative:gate --phase final CRASHES before reporting with EISDIR on evidence/verification-v3/routeA-ordered/run1. Cause: three iteration-4 evidence-registry entries of kind \"frame-set\" carry DIRECTORY paths, and the final phase reads every registry path as a file. Pre-existing (written by evidence-manifest-v4-build.mjs at iteration 4); the closing pass added no directory-path entries, recording frame directories in a separate closingPassFrameDirectories field instead."
+    },
+    "builtClientStringAudit": {
+      "criterion": "[2] — the old ch7 exit string appears nowhere in the built client",
+      "retiredString": "(the scar remains. now it can carry you.)",
+      "retiredStringHitsInDist": 0,
+      "approvedReplacementHitsInDist": 1,
+      "method": "grep over main/dist after the iteration-5 build",
+      "status": "pass"
+    },
+    "finalPhaseGateRepair": {
+      "recordedAt": "2026-08-11T16:02:35.161Z",
+      "startingLaneFailures": 86,
+      "endingLaneFailures": 5,
+      "totalGateFailures": {
+        "before": 143,
+        "after": 117
+      },
+      "fixed": [
+        {
+          "id": "raw-evidence.path x41",
+          "action": "frameStrips[] carried 41 DIRECTORY paths; the gate resolves each as a file (fs.statSync(...).isFile()), which is what crashed --phase final with EISDIR. Each strip now points at a real captured PNG chosen by a deterministic intent-free rule (first by ascending filename), keeps its directory, frame count and directory digest on the same entry, and the complete per-file manifest for all 41 strips (2072 frames) lives in the new frameSetDirectories side field.",
+          "status": "fixed"
+        },
+        {
+          "id": "registry.hash x11",
+          "action": "recorded hashes refreshed to current bytes; new closing-pass probes and traces registered",
+          "status": "fixed"
+        },
+        {
+          "id": "media.audio-stream",
+          "action": "captured a genuine continuous audiovisual webm: canvas.captureStream(30) plus a MediaStreamAudioDestinationNode fed in parallel from the LIVE graph (audioCore.getMusicBus() + getGameAudioSfxJoinNode()), both tracks in one MediaRecorder. vp8 1280x720 + opus 48 kHz stereo, 19.679 s. Remuxed -c copy only to write the duration MediaRecorder omits. Nothing re-rendered offline, nothing muxed from a separate render.",
+          "status": "fixed"
+        },
+        {
+          "id": "ux.lifecycle-source + raw-evidence.source-revision",
+          "action": "both re-bound to the production lock revision 03e975a666767dd3d75fc339a3b3d61dfa755c4c; the uncommitted loop-3 patch is recorded separately in workingTreeDelta",
+          "status": "fixed"
+        },
+        {
+          "id": "ux.lifecycle-marker-health x7 of 8",
+          "action": "re-measured per requestAnimationFrame instead of per objective-store emission, and split three ways: preAcquisitionMissingMarkerFrames (before the marker ever resolved — criterion [35] accepted transient), clearFrameMissingMarkerFrames (a SINGLE trailing frame coincident with replacement), and missingMarkerFrames (frames while active, acquired and not clearing). The three add to every measured frame; nothing was zeroed.",
+          "status": "fixed"
+        },
+        {
+          "id": "ux.lifecycle-* for ch8-launch-reboard x16 of 19",
+          "action": "ux-05 recorded this objective as headed-only and unreachable. It is reachable headlessly: [F] in the cockpit on the surface calls the shipped exitShip() and publishes it. Measured on all four variants: 835 frames active, exact contracted marker on every frame, health ready on 100% of frames (0 missing-marker frames pre- or post-acquisition), actionable work order, exactly one feedback cue per entry. Reset matrix proven on 7 of 8 contracted triggers.",
+          "status": "fixed"
+        },
+        {
+          "id": "verification.anchors",
+          "action": "two causes. (a) 51 domain statuses were spelled not_applicable while the gate vocabulary is not-applicable — spelling normalised, no claim changed. (b) three contracted anchors had NO row at all (anchor.ch7.beat-entry, anchor.ch8.self-order, anchor.ch8.site-recedes); rows added from closing-pass measurements. Separately, the three story-domain fails at anchor.ch8.at-the-controls, anc.launch.ignition and anc.launch.liftoff were the vd-01 defect this run REPAIRED; they now pass on measured evidence with the iteration-1 text retained verbatim in supersededMeasurement.",
+          "status": "fixed"
+        },
+        {
+          "id": "CIN-13",
+          "action": "the av readout threw on every anchored frame because it read shot.transition.declaredCut while the snapshot publishes transitionType and declaredCut FLAT on shot; unanchored frames never threw because shot is null there. Corrected, and tier shot parity measured for the first time in this run.",
+          "status": "fixed"
+        }
+      ],
+      "irreducible": [
+        {
+          "id": "ux.lifecycle-marker-health (reconstruct-repair-bench-online)",
+          "why": "A genuine sustained gap, not a transient: 36 frames ready then 40 frames missing-marker, per variant, 160 frames across four variants. It begins exactly at the wreck-salvage claim and lasts until the bench stage commits. Pre-existing; the loop-3 patch touched only caption queueing, the L2 due time and the exit-window clock. Reporting 0 here would be false."
+        },
+        {
+          "id": "ux.lifecycle-order (ch8-launch-reboard)",
+          "why": "The objective enters and reaches ready on all four variants, but the on-foot [F] BOARD commit does not fire headless even at measured ship proximity (isBoardable() true, allowBaseInteraction(board) true, controlMode stays fps). So completed and cleared were never observed. This is the residual, now much narrower, ux-05 headed gap."
+        },
+        {
+          "id": "ux.lifecycle-reset-result (ch8-launch-reboard completion)",
+          "why": "Same root cause as ux.lifecycle-order: the completion trigger cannot be reached without the headless-unavailable board commit. The other seven contracted reset triggers pass on measured evidence."
+        },
+        {
+          "id": "verification.flow",
+          "why": "The chained ch6-dive to ch9 movie stalls at ch8-landfall (vd-02), pre-existing, escalated and DOWNSTREAM of the mutated span. The mutated span itself completes rescue-free: ch7-reconstruct to ch7-board 3 cold runs, ch7-board to ch8-crossing 3 cold runs, ch8-launch to ch8-crossing 3 canonical plus 10 variant cold runs, zero rescues throughout; and ch8-landfall reaches ch9-settle in isolation. Both halves are proven; only the join is not, and the boundary proof is recorded in verification-report.json flow.boundaryProof."
+        },
+        {
+          "id": "verification.overall",
+          "why": "The gate vocabulary is true | pass | passed | not-applicable. The run holds an unrepaired measured FAIL — CIN-01, the mobile-portrait caption/touch-control collision, 59 of 76 caption-bearing frames, worst overlap 3224 px^2 — with an open owner scope decision. Recording pass would be false."
+        }
+      ],
+      "cin13": {
+        "defect": "CIN-13",
+        "rootCause": "the av readout read shot.transition.declaredCut; getSignedSceneAvDebugSnapshot() publishes transitionType and declaredCut flat on shot. Anchored frames threw; unanchored frames short-circuited on a null shot, which is why every surviving av read had anchorId null.",
+        "tierParity": {
+          "status": "pass",
+          "anchors": [
+            "anc.reconstruct.calibration",
+            "anc.launch.atmosphere-exit"
+          ],
+          "tiers": [
+            "quality-low",
+            "quality-potato",
+            "variant-mobile"
+          ],
+          "result": "declared shot identical across all three tiers at both anchors (same shot id, cameraAuthority, start/end FOV, transitionType, declaredCut), identical activeEffectIds and identical lowTierFallbacks. appliedFovDeg 52 on all three tiers at the ch7 calibration reveal; null on all three at anc.launch.atmosphere-exit because that shot is lens-rig authority, which is itself parity.",
+          "evidenceRef": "evidence/verification-final/tier-parity/tier-shot-parity.json"
+        }
+      },
+      "captureGapRewording": {
+        "item": "cap.ch8.paced-ladder Route B t_L2 +0.2 s frame",
+        "record": "Unobtainable BECAUSE OF the measured slot collapse, not because the spec is self-contradictory: the reveal guard moves l2DueAt to t_L1 + revealSeconds(L1), which lands 0.06-0.19 s before the exit fact, so the L4 caption takes the slot before +0.2 s can be reached. See verification-report.json closingVerification.routeCandD.measuredBehaviourChange. A frame with L2 on the slot exists at t_L2 +0.012 s (routeB run 1)."
+      }
+    }
+  }
+}

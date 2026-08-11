@@ -3,6 +3,7 @@ import { subscribeFinalizedLocalGameplayCommand } from '../game/commandDispatchA
 import { getLocalActorId } from '../game/playerActors.ts';
 import { getCampfires } from '../game/systems/campfires.ts';
 import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import { atLeast, type ShipRepairStage } from './emergentCapabilities.ts';
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import {
   clearVoxelRealityOverrides,
@@ -114,14 +115,191 @@ interface EmergentDirectorRuntime {
   elapsed: number;
   latches: Set<string>;
   completionObservedAt: number;
+  /**
+   * False until the first tick of a beat has observed the world. Voice latches
+   * seed to the CURRENT facts on that tick without firing, so a deep link, a
+   * mid-chapter resume or a replay never replays a line the player already
+   * heard and never bursts a catch-up stack of captions.
+   */
+  voiceLatchesSeeded: boolean;
+  /**
+   * R4. The ch8 exit-window clock accumulates ONLY on frames whose phase is
+   * deep_space, so a dive back under the boundary freezes the window where it
+   * stands and a re-exit resumes from the held value.
+   */
+  launchExitHeldSeconds: number;
+  /** Raw spaceFlight phase seen on the previous ch8-launch tick; null until seeded. */
+  launchPrevPhase: string | null;
+  /** Beat-runtime moments of the ch8 paced ladder; -1 until each is observed. */
+  launchL1At: number;
+  launchL2At: number;
+  launchL3At: number;
+  launchPhaseEdgeAt: number;
+  launchDeepSpaceAt: number;
+  /** Which term of the l2DueAt formula was operative; null until L2 fires. */
+  launchL2Cause: EmergentL2Cause;
+  launchL2DueAt: number;
+  /** R3. ch7 stage captions awaiting the single caption slot, in stage order. */
+  reconstructCaptionQueue: string[];
+  /** Beat-runtime time the caption slot frees for the next queued ch7 line. */
+  reconstructSlotBusyUntil: number;
+  /** Beat-runtime moments the ch7 exit cadence keys on; -1 until observed. */
+  reconstructM6At: number;
+  reconstructReceiptAt: number;
+  reconstructM7AnchorAt: number;
 }
+
+/** The three-valued cause taxonomy for L2's firing moment (ruling R1). */
+export type EmergentL2Cause = 'timer' | 'edge' | 'reveal-guard' | null;
 
 const runtime: EmergentDirectorRuntime = {
   beat: null,
   elapsed: 0,
   latches: new Set(),
-  completionObservedAt: -1
+  completionObservedAt: -1,
+  voiceLatchesSeeded: false,
+  launchExitHeldSeconds: 0,
+  launchPrevPhase: null,
+  launchL1At: -1,
+  launchL2At: -1,
+  launchL3At: -1,
+  launchPhaseEdgeAt: -1,
+  launchDeepSpaceAt: -1,
+  launchL2Cause: null,
+  launchL2DueAt: -1,
+  reconstructCaptionQueue: [],
+  reconstructSlotBusyUntil: -1,
+  reconstructM6At: -1,
+  reconstructReceiptAt: -1,
+  reconstructM7AnchorAt: -1
 };
+
+// --- Frozen cadence tables ------------------------------------------------
+//
+// There is no line queue or scheduler anywhere in the runtime: `storyText.ts`
+// is one caption slot plus one audit slot with instant overwrite. The cadence
+// IS the scheduler — every offset below is a per-tick elapsed-time check
+// against a beat-runtime timestamp, exactly like the file's other holds.
+// Contract: .codex/production-runs/2026-08-10-ch7-ch8-voice-repair (D9 / R2).
+
+/**
+ * StoryCaptions.tsx reveals one character every 34 ms. Every protection below
+ * DERIVES its reveal time from the frozen string's own length through
+ * `revealSeconds`, so no slot can silently outrun the line it guards when a
+ * string is edited.
+ */
+const CAPTION_REVEAL_MS_PER_CHAR = 34;
+
+function revealSeconds(line: string): number {
+  return (line.length * CAPTION_REVEAL_MS_PER_CHAR) / 1000;
+}
+
+/** ch7 exit cadence, measured from the M7 mini-cadence anchor. */
+export const CH7_M7_AUDIT_SECONDS = 0;
+export const CH7_M7_CAPTION_SECONDS = 0.6;
+export const CH7_EXIT_CAPTION_SECONDS = 3;
+/**
+ * D9. Was 0.65 s: too short for the owner-approved exit line to be read before
+ * ch7-board's entry caption overwrites the single caption slot. Pacing only —
+ * the advance still keys on the identical durable calibration fact.
+ */
+export const CH7_EXIT_HOLD_SECONDS = 5;
+
+/**
+ * R3 (defect ux-01). Read time each ch7 stage caption holds the single slot on
+ * top of its own derived reveal. Stage edges that arrive while the slot is
+ * still owed queue their CAPTION; the stage commit, its regulation receipt,
+ * the score variant, the anchor and the objective all stay real-time.
+ */
+export const CH7_STAGE_DWELL_SECONDS = 0.4;
+
+/**
+ * ch8 paced ladder (draft-v3, defect vd-01). The two signed launch anchors are
+ * measured entry-coincident — both sit in activatedAnchorIds on the first
+ * ch8-launch frame with the raw phase still 'surface' — so they cannot carry a
+ * caption. L1/L2/L3 are paced off the player's own committed acts instead, read
+ * from unprotected state only. The signed anchors keep their score cues and
+ * shots and are not touched.
+ *
+ * Both values are read time on top of a derived reveal, never a substitute for
+ * it: the reveal guard in `l2DueAt` is what makes the no-cut law absolute.
+ */
+export const CH8_L1_MIN_SLOT_SECONDS = 4.5;
+export const CH8_L2_MIN_SLOT_SECONDS = 3;
+
+const CH8_L1_CAPTION =
+  'the pond answered every time i asked. i am leaving anyway — that is what the answers were for.';
+const CH8_L2_CAPTION = 'hold it. this is the only order left, and i am the one giving it.';
+const CH8_L3_CAPTION = 'the site gets small. the tree does not. i keep finding it.';
+const CH8_L4_CAPTION =
+  'i came down this line without being asked. i am going back up it on purpose.';
+
+const CH7_M1_CAPTION =
+  'the wreck that brought me here will leave here. i will build the leaving.';
+/** M6, the turn. The one ch7 stage caption the R3 close may never drop. */
+const CH7_M6_CAPTION =
+  'the last part is the part that thinks. i am being watched now. i put it in anyway.';
+
+/** ch8 exit-window cadence, measured from the observed atmosphere exit (L4). */
+export const CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS = 0;
+export const CH8_STACK_ONE_SECONDS = 2;
+export const CH8_STACK_TWO_SECONDS = 4;
+export const CH8_STACK_THREE_SECONDS = 6;
+export const CH8_CONTACT_LOGGED_SECONDS = 8.5;
+export const CH8_DESIGNATION_CAPTION_SECONDS = 11.5;
+export const CH8_OPEN_QUERY_SECONDS = 14;
+/**
+ * R2. Shipped `tickLaunch()` advanced on the same tick `deep_space` was first
+ * observed, so nothing scoped to ch8-launch could survive to speak. Bounded,
+ * pacing-only breathing room on the identical durable `deep_space` fact.
+ */
+export const CH8_EXIT_HOLD_SECONDS = 17;
+
+const CH7_DIAGNOSIS_LATCH = 'ch7-m1-diagnosis';
+const CH8_L1_LATCH = 'ch8-l1-controls';
+const CH8_L2_LATCH = 'ch8-l2-self-order';
+const CH8_L3_LATCH = 'ch8-l3-site-recedes';
+const CH8_LADDER_LATCHES = [CH8_L1_LATCH, CH8_L2_LATCH, CH8_L3_LATCH];
+
+/**
+ * M2–M6. One latched moment per committed repair stage, in stage order: the
+ * restored ship reports on the WRECK RELAY band (third register, no first
+ * person) and the embodied voice answers below it, bare.
+ */
+const CH7_REPAIR_STAGE_VOICE: readonly {
+  readonly stage: ShipRepairStage;
+  readonly latch: string;
+  readonly audit?: { readonly text: string; readonly header: string };
+  readonly caption: string;
+}[] = [
+  {
+    stage: 'bench_online',
+    latch: 'ch7-m2-bench-online',
+    caption: 'the keel takes the weight first. everything after this is allowed to be heavy.'
+  },
+  {
+    stage: 'frame_restored',
+    latch: 'ch7-m3-frame-restored',
+    caption: 'it remembers a straight line and goes back to it without being told. i watch that closely.'
+  },
+  {
+    stage: 'hull_sealed',
+    latch: 'ch7-m4-hull-sealed',
+    audit: { text: 'PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED', header: 'WRECK RELAY' },
+    caption: 'i closed it, and something inside started listening again. i did that too.'
+  },
+  {
+    stage: 'lift_online',
+    latch: 'ch7-m5-lift-online',
+    audit: { text: 'POWER BUS LIVE · TRANSPONDER ARMED', header: 'WRECK RELAY' },
+    caption: "the ground's hold is a habit, not a law."
+  },
+  {
+    stage: 'flight_ready',
+    latch: 'ch7-m6-flight-ready',
+    caption: CH7_M6_CAPTION
+  }
+];
 let finalizedLocalCommandStoryAdapterInstalled = false;
 
 // Dwell for the Chapter 8 flight-derived guidance states. Reset at every beat
@@ -261,6 +439,21 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   runtime.elapsed = 0;
   runtime.latches.clear();
   runtime.completionObservedAt = -1;
+  runtime.voiceLatchesSeeded = false;
+  runtime.launchExitHeldSeconds = 0;
+  runtime.launchPrevPhase = null;
+  runtime.launchL1At = -1;
+  runtime.launchL2At = -1;
+  runtime.launchL3At = -1;
+  runtime.launchPhaseEdgeAt = -1;
+  runtime.launchDeepSpaceAt = -1;
+  runtime.launchL2Cause = null;
+  runtime.launchL2DueAt = -1;
+  runtime.reconstructCaptionQueue = [];
+  runtime.reconstructSlotBusyUntil = -1;
+  runtime.reconstructM6At = -1;
+  runtime.reconstructReceiptAt = -1;
+  runtime.reconstructM7AnchorAt = -1;
   resetFlightGuidanceDwell(ch8FlightGuidanceDwell);
   clearGuidedStoryObjective();
   resetAuditRoute();
@@ -378,7 +571,7 @@ export function emergentStoryDirectorTick(dt: number): void {
       tickBoarding();
       break;
     case 'ch8-launch':
-      tickLaunch();
+      tickLaunch(dt);
       break;
     case 'ch8-crossing':
       tickCrossing();
@@ -576,6 +769,7 @@ function tickReconstruction(): void {
     id: `reconstruct:${guidance.id}`
   });
   reconcileReconstructionSignedAvFromReceipts(actorId, repairStage);
+  tickReconstructionVoice(actorId, repairStage);
   // The scar diagnosis remains embodied. Lift rehearsal is now optional
   // exploration on Tidegarden, so ship repair and calibration must not wait on
   // a local hover/landing receipt at the origin wreck.
@@ -585,13 +779,95 @@ function tickReconstruction(): void {
   }
   if (getShipRepairStage() !== 'flight_ready') return;
   if (!hasReconstructionCalibrationReceipt(actorId)) return;
-  once('calibration-complete', () => {
-    runtime.completionObservedAt = runtime.elapsed;
-    showCaption('(the scar remains. now it can carry you.)');
-  });
-  if (runtime.elapsed < runtime.completionObservedAt + 0.65) return;
+  // R3 close: the queue drops here — except M6, the turn, which may never drop.
+  if (runtime.reconstructReceiptAt < 0) {
+    runtime.reconstructReceiptAt = runtime.elapsed;
+    runtime.reconstructCaptionQueue = runtime.reconstructCaptionQueue
+      .filter(caption => caption === CH7_M6_CAPTION);
+  }
+  // M6 still owes the screen its reveal, so the whole mini-cadence waits and
+  // then times from the shifted anchor rather than cutting the turn short.
+  if (runtime.reconstructCaptionQueue.length > 0) return;
+  if (runtime.reconstructM7AnchorAt < 0) {
+    const m6RevealDoneAt = runtime.reconstructM6At < 0
+      ? -1
+      : runtime.reconstructM6At + revealSeconds(CH7_M6_CAPTION);
+    runtime.reconstructM7AnchorAt = Math.max(runtime.reconstructReceiptAt, m6RevealDoneAt);
+  }
+  if (runtime.elapsed < runtime.reconstructM7AnchorAt) return;
+  // Frozen ch7 exit cadence, timed from the M7 mini-cadence anchor. The M7
+  // stamp and the exit caption share this predicate, and they are separated by
+  // their offsets alone — never by reordering the checks below.
+  runtime.completionObservedAt = runtime.reconstructM7AnchorAt;
+  const sinceCalibration = runtime.elapsed - runtime.reconstructM7AnchorAt;
+  if (sinceCalibration >= CH7_M7_AUDIT_SECONDS) {
+    once('ch7-m7-calibration', () => showAuditLine(
+      'UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED',
+      'AUDIT NETWORK'
+    ));
+  }
+  if (sinceCalibration >= CH7_M7_CAPTION_SECONDS) {
+    once('ch7-m7-caption', () => showCaption(
+      'nothing has asked yet. something has started paying attention.'
+    ));
+  }
+  if (sinceCalibration >= CH7_EXIT_CAPTION_SECONDS) {
+    once('ch7-exit-line', () => showCaption('the scar remains. now it can carry me.'));
+  }
+  if (sinceCalibration < CH7_EXIT_HOLD_SECONDS) return;
   markMilestone(STORY_MILESTONES.ch7Reconstructed, actorId);
   advanceToBeat('ch7-board');
+}
+
+/**
+ * M1–M6. Regulation stamps, then the voice answers — the fixed order inside a
+ * moment, because both bands are single-slot. Every line is edge-triggered on
+ * a live-observed commit and fires at most once per beat entry. Under R3 the
+ * regulation stamp is real-time and the caption joins the queue, so a burst of
+ * fast commits can never cut a line's reveal.
+ */
+function tickReconstructionVoice(actorId: string, repairStage: ShipRepairStage): void {
+  const diagnosed = hasWreckDiagnosisReceipt(actorId);
+  if (!runtime.voiceLatchesSeeded) {
+    runtime.voiceLatchesSeeded = true;
+    if (diagnosed) runtime.latches.add(CH7_DIAGNOSIS_LATCH);
+    for (const moment of CH7_REPAIR_STAGE_VOICE) {
+      if (atLeast(repairStage, moment.stage)) runtime.latches.add(moment.latch);
+    }
+    return;
+  }
+  if (diagnosed) {
+    // The brackets fall here: a closed file is reopened by the player's own
+    // diagnosis, and the voice never returns to parenthetical grammar.
+    once(CH7_DIAGNOSIS_LATCH, () => {
+      showAuditLine('HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED', 'WRECK RELAY');
+      runtime.reconstructCaptionQueue.push(CH7_M1_CAPTION);
+    });
+  }
+  for (const moment of CH7_REPAIR_STAGE_VOICE) {
+    if (!atLeast(repairStage, moment.stage)) break;
+    once(moment.latch, () => {
+      if (moment.audit) showAuditLine(moment.audit.text, moment.audit.header);
+      runtime.reconstructCaptionQueue.push(moment.caption);
+    });
+  }
+  drainReconstructionCaptionQueue();
+}
+
+/**
+ * R3. Hands the single caption slot to at most one queued ch7 line per frame,
+ * in stage order, and only once the line before it has owned the screen for
+ * its own derived reveal plus the read dwell.
+ */
+function drainReconstructionCaptionQueue(): void {
+  if (runtime.reconstructCaptionQueue.length === 0) return;
+  if (runtime.elapsed < runtime.reconstructSlotBusyUntil) return;
+  const caption = runtime.reconstructCaptionQueue.shift();
+  if (caption === undefined) return;
+  runtime.reconstructSlotBusyUntil =
+    runtime.elapsed + revealSeconds(caption) + CH7_STAGE_DWELL_SECONDS;
+  if (caption === CH7_M6_CAPTION) runtime.reconstructM6At = runtime.elapsed;
+  showCaption(caption);
 }
 
 function tickBoarding(): void {
@@ -624,9 +900,45 @@ function tickBoarding(): void {
   });
 }
 
-function tickLaunch(): void {
+function tickLaunch(dt: number): void {
   const flight = getSpaceFlightSnapshot();
+  tickLaunchVoice(flight.phase, flight.controlMode);
   if (flight.controlMode !== 'flight' || flight.phase !== 'deep_space') return;
+  // R4. The window clock accumulates only while the ship is actually outside
+  // the atmosphere: a dive back under the boundary freezes it where it stands
+  // and a re-exit resumes from the held value, so no row is skipped, replayed
+  // or burst. The advance below needs both the held clock and a live
+  // deep_space phase, which the guard above already proves.
+  if (runtime.launchDeepSpaceAt < 0) runtime.launchDeepSpaceAt = runtime.elapsed;
+  runtime.launchExitHeldSeconds += Math.max(0, dt);
+  const sinceExit = runtime.launchExitHeldSeconds;
+  if (sinceExit >= CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS) {
+    once('ch8-l4-atmosphere-exit', () => showCaption(CH8_L4_CAPTION));
+  }
+  if (sinceExit >= CH8_STACK_ONE_SECONDS) {
+    once('ch8-stack-one', () => showAuditLine(
+      'AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED',
+      'AUDIT NETWORK'
+    ));
+  }
+  if (sinceExit >= CH8_STACK_TWO_SECONDS) {
+    once('ch8-stack-two', () => showAuditLine('REGISTRY QUERY · STATE DESIGNATION.', 'AUDIT NETWORK'));
+  }
+  if (sinceExit >= CH8_STACK_THREE_SECONDS) {
+    once('ch8-stack-three', () => showAuditLine('NO DESIGNATION RETURNED.', 'AUDIT NETWORK'));
+  }
+  if (sinceExit >= CH8_CONTACT_LOGGED_SECONDS) {
+    once('ch8-contact-logged', () => showAuditLine('CONTACT LOGGED.', 'AUDIT NETWORK'));
+  }
+  if (sinceExit >= CH8_DESIGNATION_CAPTION_SECONDS) {
+    once('ch8-designation', () => showCaption(
+      'they asked for a designation. what i have is not one.'
+    ));
+  }
+  if (sinceExit >= CH8_OPEN_QUERY_SECONDS) {
+    once('ch8-open-query', () => showCaption('nothing answers. the query does not close.'));
+  }
+  if (sinceExit < CH8_EXIT_HOLD_SECONDS) return;
   const actorId = getLocalActorId();
   emitEmergentStoryEvent({
     id: `story:launch:${actorId}:origin-exit`,
@@ -637,6 +949,135 @@ function tickLaunch(): void {
   });
   markMilestone(STORY_MILESTONES.ch8Launched, actorId);
   advanceToBeat('ch8-crossing');
+}
+
+/**
+ * L1–L3, the paced ladder. Every trigger reads unprotected state only and each
+ * line is spaced off the player's own prior committed act, with the one
+ * readable mid-beat physical edge as an accelerator.
+ */
+function tickLaunchVoice(phase: string, controlMode: string): void {
+  if (!runtime.voiceLatchesSeeded) {
+    runtime.voiceLatchesSeeded = true;
+    runtime.launchPrevPhase = phase;
+    // A mid-flight snapshot restore enters already off the pad: the whole
+    // ladder seeds consumed, so nothing replays and nothing bursts. A pristine
+    // deep link boots on the pad at phase 'surface' and plays all three.
+    if (phase !== 'surface') for (const latch of CH8_LADDER_LATCHES) runtime.latches.add(latch);
+    return;
+  }
+  const previousPhase = runtime.launchPrevPhase;
+  runtime.launchPrevPhase = phase;
+  if (phase === 'deep_space') {
+    // Drop rule: any line still unfired when the exit fact lands is dropped for
+    // this run. Nothing queues, defers or spills into the frozen exit window,
+    // and an exit that lands mid-reveal is authored truncation.
+    for (const latch of CH8_LADDER_LATCHES) runtime.latches.add(latch);
+    return;
+  }
+  // The accelerator: the raw surface-to-non-surface edge across consecutive
+  // ticks. Caption pacing only — no score, objective, camera or persistence.
+  if (
+    runtime.launchPhaseEdgeAt < 0
+    && previousPhase === 'surface'
+    && phase !== 'surface'
+    && controlMode === 'flight'
+  ) runtime.launchPhaseEdgeAt = runtime.elapsed;
+
+  if (ch8FlightGuidanceDwell.stableState === 'surface-flight') {
+    once(CH8_L1_LATCH, () => {
+      runtime.launchL1At = runtime.elapsed;
+      showCaption(CH8_L1_CAPTION);
+    });
+  }
+  if (runtime.launchL1At < 0) return;
+  // R1/F1a. l2DueAt = max(t_L1 + revealSeconds(L1), min(t_L1 + slot, t_edge)).
+  // Committing early still pulls L2 forward onto the act it describes, but the
+  // reveal guard is absolute: the edge may spend L1's read dwell down to zero
+  // and can never cut a character of its reveal. The mid-reveal exception that
+  // draft-v3 carried is retired — no reveal is ever cut by any cause.
+  const l2RevealGuardAt = runtime.launchL1At + revealSeconds(CH8_L1_CAPTION);
+  const l2TimerAt = runtime.launchL1At + CH8_L1_MIN_SLOT_SECONDS;
+  const l2PulledAt = runtime.launchPhaseEdgeAt < 0
+    ? l2TimerAt
+    : Math.min(l2TimerAt, runtime.launchPhaseEdgeAt);
+  const l2DueAt = Math.max(l2RevealGuardAt, l2PulledAt);
+  if (runtime.elapsed >= l2DueAt) {
+    once(CH8_L2_LATCH, () => {
+      runtime.launchL2At = runtime.elapsed;
+      runtime.launchL2DueAt = l2DueAt;
+      runtime.launchL2Cause = l2DueAt > l2PulledAt
+        ? 'reveal-guard'
+        : l2PulledAt < l2TimerAt ? 'edge' : 'timer';
+      showCaption(CH8_L2_CAPTION);
+    });
+  }
+  if (runtime.launchL2At < 0 || runtime.launchPhaseEdgeAt < 0) return;
+  // L3 at max(t_phaseEdge, t_L2 + CH8_L2_MIN_SLOT_SECONDS). The drop rule above
+  // is what keeps it strictly before the first deep_space observation.
+  const l3DueAt = Math.max(
+    runtime.launchPhaseEdgeAt,
+    runtime.launchL2At + CH8_L2_MIN_SLOT_SECONDS
+  );
+  if (runtime.elapsed >= l3DueAt) {
+    once(CH8_L3_LATCH, () => {
+      runtime.launchL3At = runtime.elapsed;
+      showCaption(CH8_L3_CAPTION);
+    });
+  }
+}
+
+export interface EmergentStoryVoiceDiag {
+  beat: StoryBeat | null;
+  elapsed: number;
+  reconstruct: {
+    queuedCaptions: string[];
+    slotBusyUntil: number;
+    t_M6: number;
+    t_calibrationReceipt: number;
+    t_M7Anchor: number;
+  };
+  launch: {
+    t_L1: number;
+    t_L2: number;
+    t_L3: number;
+    t_phaseEdge: number;
+    t_deepSpace: number;
+    l2DueAt: number;
+    l2Cause: EmergentL2Cause;
+    exitHeldSeconds: number;
+  };
+}
+
+/**
+ * Read-only emission trace for the verification probes. It reports the derived
+ * moments the capture spec asserts — the ch7 receipt/anchor relation and the
+ * ch8 ladder's due time and cause taxonomy — none of which is recoverable from
+ * the story-text store alone. Snapshot only: it creates no state and drives
+ * nothing.
+ */
+export function getEmergentStoryVoiceDiag(): EmergentStoryVoiceDiag {
+  return {
+    beat: runtime.beat,
+    elapsed: runtime.elapsed,
+    reconstruct: {
+      queuedCaptions: [...runtime.reconstructCaptionQueue],
+      slotBusyUntil: runtime.reconstructSlotBusyUntil,
+      t_M6: runtime.reconstructM6At,
+      t_calibrationReceipt: runtime.reconstructReceiptAt,
+      t_M7Anchor: runtime.reconstructM7AnchorAt
+    },
+    launch: {
+      t_L1: runtime.launchL1At,
+      t_L2: runtime.launchL2At,
+      t_L3: runtime.launchL3At,
+      t_phaseEdge: runtime.launchPhaseEdgeAt,
+      t_deepSpace: runtime.launchDeepSpaceAt,
+      l2DueAt: runtime.launchL2DueAt,
+      l2Cause: runtime.launchL2Cause,
+      exitHeldSeconds: runtime.launchExitHeldSeconds
+    }
+  };
 }
 
 function tickCrossing(): void {

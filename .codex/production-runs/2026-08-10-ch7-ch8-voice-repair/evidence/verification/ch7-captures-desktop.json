@@ -1,0 +1,1906 @@
+{
+  "mode": "ch7-captures",
+  "variant": "desktop",
+  "label": "desktop",
+  "profile": "LOW",
+  "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+  "capturedAt": "2026-08-10T21:29:19.894Z",
+  "captures": [
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_000_0.61s_ch7-reconstruct.png",
+      "storyClockSeconds": 0.609,
+      "beat": "ch7-reconstruct",
+      "caption": "(repair is not return.)",
+      "audit": null
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_001_3.03s_ch7-reconstruct.png",
+      "storyClockSeconds": 3.025,
+      "beat": "ch7-reconstruct",
+      "caption": "(repair is not return.)",
+      "audit": null
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_002_3.95s_ch7-reconstruct.png",
+      "storyClockSeconds": 3.946,
+      "beat": "ch7-reconstruct",
+      "caption": "the wreck that brought me here will leave here. i will build the leaving.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_003_4.25s_ch7-reconstruct.png",
+      "storyClockSeconds": 4.252,
+      "beat": "ch7-reconstruct",
+      "caption": "the wreck that brought me here will leave here. i will build the leaving.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_004_4.72s_ch7-reconstruct.png",
+      "storyClockSeconds": 4.719,
+      "beat": "ch7-reconstruct",
+      "caption": "the wreck that brought me here will leave here. i will build the leaving.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_005_5.13s_ch7-reconstruct.png",
+      "storyClockSeconds": 5.125,
+      "beat": "ch7-reconstruct",
+      "caption": "the wreck that brought me here will leave here. i will build the leaving.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_006_5.54s_ch7-reconstruct.png",
+      "storyClockSeconds": 5.543,
+      "beat": "ch7-reconstruct",
+      "caption": "the keel takes the weight first. everything after this is allowed to be heavy.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_007_5.97s_ch7-reconstruct.png",
+      "storyClockSeconds": 5.974,
+      "beat": "ch7-reconstruct",
+      "caption": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_008_6.41s_ch7-reconstruct.png",
+      "storyClockSeconds": 6.408,
+      "beat": "ch7-reconstruct",
+      "caption": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_009_6.82s_ch7-reconstruct.png",
+      "storyClockSeconds": 6.824,
+      "beat": "ch7-reconstruct",
+      "caption": "i closed it, and something inside started listening again. i did that too.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_010_7.23s_ch7-reconstruct.png",
+      "storyClockSeconds": 7.234,
+      "beat": "ch7-reconstruct",
+      "caption": "the ground's hold is a habit, not a law.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_011_7.66s_ch7-reconstruct.png",
+      "storyClockSeconds": 7.658,
+      "beat": "ch7-reconstruct",
+      "caption": "the ground's hold is a habit, not a law.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_012_8.07s_ch7-reconstruct.png",
+      "storyClockSeconds": 8.069,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_013_8.49s_ch7-reconstruct.png",
+      "storyClockSeconds": 8.491,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_014_8.92s_ch7-reconstruct.png",
+      "storyClockSeconds": 8.923,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_015_9.33s_ch7-reconstruct.png",
+      "storyClockSeconds": 9.325,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_016_9.74s_ch7-reconstruct.png",
+      "storyClockSeconds": 9.742,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_017_10.16s_ch7-reconstruct.png",
+      "storyClockSeconds": 10.156,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_018_10.57s_ch7-reconstruct.png",
+      "storyClockSeconds": 10.574,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_019_10.99s_ch7-reconstruct.png",
+      "storyClockSeconds": 10.99,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_020_11.39s_ch7-reconstruct.png",
+      "storyClockSeconds": 11.39,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_021_11.79s_ch7-reconstruct.png",
+      "storyClockSeconds": 11.791,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_022_12.19s_ch7-reconstruct.png",
+      "storyClockSeconds": 12.19,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_023_12.62s_ch7-reconstruct.png",
+      "storyClockSeconds": 12.623,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_024_13.02s_ch7-reconstruct.png",
+      "storyClockSeconds": 13.023,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_025_13.47s_ch7-reconstruct.png",
+      "storyClockSeconds": 13.474,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_026_13.89s_ch7-reconstruct.png",
+      "storyClockSeconds": 13.892,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_027_14.31s_ch7-reconstruct.png",
+      "storyClockSeconds": 14.31,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_028_14.74s_ch7-reconstruct.png",
+      "storyClockSeconds": 14.742,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_029_15.14s_ch7-reconstruct.png",
+      "storyClockSeconds": 15.141,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_030_15.57s_ch7-reconstruct.png",
+      "storyClockSeconds": 15.568,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "WRECK RELAY",
+        "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+      }
+    },
+    {
+      "phase": "pre-origin",
+      "file": "pre-origin/pre_031_15.99s_ch7-reconstruct.png",
+      "storyClockSeconds": 15.989,
+      "beat": "ch7-reconstruct",
+      "caption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "audit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 0,
+      "contractOffset": true,
+      "file": "off_0p0s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 0.116,
+      "shutterSpanMs": 165.9,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": null,
+        "captionRect": null,
+        "captionPlacement": null,
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED H",
+        "auditRect": {
+          "x": 563,
+          "y": 97,
+          "w": 153,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 0.4,
+      "contractOffset": true,
+      "file": "off_0p4s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 0.523,
+      "shutterSpanMs": 158.3,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "nothing has asked yet. something has started paying attention.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "no",
+        "captionRect": {
+          "x": 811,
+          "y": 610,
+          "w": 36,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ ·",
+        "auditRect": {
+          "x": 482,
+          "y": 97,
+          "w": 317,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 0.8,
+      "contractOffset": true,
+      "file": "off_0p8s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 0.916,
+      "shutterSpanMs": 162.9,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "nothing has asked yet. something has started paying attention.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "nothing has a",
+        "captionRect": {
+          "x": 757,
+          "y": 610,
+          "w": 145,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 1.5,
+      "contractOffset": true,
+      "file": "off_1p5s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 1.623,
+      "shutterSpanMs": 175.7,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "nothing has asked yet. something has started paying attention.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "nothing has asked yet. something h",
+        "captionRect": {
+          "x": 653,
+          "y": 610,
+          "w": 353,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 2.4,
+      "contractOffset": true,
+      "file": "off_2p4s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 2.525,
+      "shutterSpanMs": 155.3,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "nothing has asked yet. something has started paying attention.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "nothing has asked yet. something has started paying attentio",
+        "captionRect": {
+          "x": 524,
+          "y": 610,
+          "w": 610,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 2.8,
+      "contractOffset": true,
+      "file": "off_2p8s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 2.918,
+      "shutterSpanMs": 162.6,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "the scar remains. now it can carry me.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "t",
+        "captionRect": {
+          "x": 816,
+          "y": 610,
+          "w": 26,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 3.5,
+      "contractOffset": true,
+      "file": "off_3p5s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 3.623,
+      "shutterSpanMs": 154.9,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "the scar remains. now it can carry me.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "the scar remains. now",
+        "captionRect": {
+          "x": 717,
+          "y": 610,
+          "w": 224,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 4.8,
+      "contractOffset": true,
+      "file": "off_4p8s_ch7-reconstruct.png",
+      "actualOffsetSeconds": 4.916,
+      "shutterSpanMs": 201.6,
+      "beat": "ch7-reconstruct",
+      "storeCaption": "(the wreck is waiting for an owner.)",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "board:hatch-in-progress",
+        "kind": "wait",
+        "markerLabel": "KESTREL HATCH · ENTERING",
+        "workOrder": [
+          "HATCH TRANSFER IN PROGRESS.",
+          "HOLD POSITION · ESC TO STEP BACK."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "(the",
+        "captionRect": {
+          "x": 801,
+          "y": 610,
+          "w": 56,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 5.2,
+      "contractOffset": true,
+      "file": "off_5p2s_ch7-board.png",
+      "actualOffsetSeconds": 5.324,
+      "shutterSpanMs": 134.8,
+      "beat": "ch7-board",
+      "storeCaption": "(the wreck is waiting for an owner.)",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "board:hatch-in-progress",
+        "kind": "wait",
+        "markerLabel": "KESTREL HATCH · ENTERING",
+        "workOrder": [
+          "HATCH TRANSFER IN PROGRESS.",
+          "HOLD POSITION · ESC TO STEP BACK."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "(the wreck i",
+        "captionRect": {
+          "x": 762,
+          "y": 610,
+          "w": 135,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+        "auditRect": {
+          "x": 405,
+          "y": 97,
+          "w": 471,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 6.5,
+      "contractOffset": true,
+      "file": "off_6p5s_ch7-board.png",
+      "actualOffsetSeconds": 6.623,
+      "shutterSpanMs": 122.4,
+      "beat": "ch7-board",
+      "storeCaption": "(the wreck is waiting for an owner.)",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+      },
+      "objective": {
+        "id": "board:pressure-seal",
+        "kind": "wait",
+        "markerLabel": "KESTREL · PRESSURE SEAL",
+        "workOrder": [
+          "PRESSURE BOUNDARY CLOSING."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "(the wreck is waiting for an owner.)",
+        "captionRect": {
+          "x": 643,
+          "y": 610,
+          "w": 372,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": null,
+        "auditRect": null,
+        "hudDom": "CURRENT OBJECTIVE | KESTREL · PRESSURE SEAL | PRESSURE BOUNDARY CLOSING.",
+        "hudRect": {
+          "x": 22,
+          "y": 612,
+          "w": 360,
+          "h": 80
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "contractOffsets": [
+    0,
+    0.4,
+    0.8,
+    1.5,
+    2.4,
+    2.8,
+    3.5,
+    4.8,
+    5.2,
+    6.5
+  ],
+  "origin": {
+    "wallPage": 16092,
+    "story": 16092,
+    "detectedAtHostMs": 1786397376092
+  },
+  "shutterBiasSeconds": 0.12,
+  "events": [
+    {
+      "wall": 419.09999990463257,
+      "story": 419.09999990463257,
+      "beat": null,
+      "ch": "caption",
+      "text": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 419.09999990463257,
+      "story": 419.09999990463257,
+      "beat": null,
+      "ch": "audit",
+      "text": null,
+      "header": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 419.19999980926514,
+      "story": 419.19999980926514,
+      "beat": null,
+      "ch": "workorder",
+      "lines": []
+    },
+    {
+      "wall": 419.5,
+      "story": 419.5,
+      "beat": "ch7-reconstruct",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 419.89999985694885,
+      "story": 419.89999985694885,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "FOLLOW THE WRECK MARKER.",
+        "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+      ]
+    },
+    {
+      "wall": 449.7999999523163,
+      "story": 449.7999999523163,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:diagnose",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 449.7999999523163,
+      "story": 449.7999999523163,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:diagnose",
+        "kind": "interact",
+        "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+        "workOrder": [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 449.89999985694885,
+      "story": 449.89999985694885,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "(repair is not return.)",
+      "shownAt": 449.7999999523163,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 3588.199999809265,
+      "story": 3588.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:diagnose",
+        "kind": "interact",
+        "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+        "workOrder": [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 4003.2999999523163,
+      "story": 4003.2999999523163,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:diagnose",
+        "kind": "interact",
+        "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+        "workOrder": [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 4051,
+      "story": 4051,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RECOVER WRECK SALVAGE."
+      ]
+    },
+    {
+      "wall": 4051.199999809265,
+      "story": 4051.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:repair:bench_online",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 4051.199999809265,
+      "story": 4051.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:bench_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 4051.2999999523163,
+      "story": 4051.2999999523163,
+      "beat": "ch7-reconstruct",
+      "ch": "audit",
+      "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+      "header": "WRECK RELAY",
+      "shownAt": 4051.2999999523163,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 4051.2999999523163,
+      "story": 4051.2999999523163,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "the wreck that brought me here will leave here. i will build the leaving.",
+      "shownAt": 4051.2999999523163,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 4051.5,
+      "story": 4051.5,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:bench_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 4663.699999809265,
+      "story": 4663.699999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:bench_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 5345.599999904633,
+      "story": 5345.599999904633,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RESTORE STRUT FRAME."
+      ]
+    },
+    {
+      "wall": 5345.799999952316,
+      "story": 5345.799999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:repair:frame_restored",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 5345.799999952316,
+      "story": 5345.799999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:frame_restored",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 5346,
+      "story": 5346,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "the keel takes the weight first. everything after this is allowed to be heavy.",
+      "shownAt": 5345.899999856949,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 5346,
+      "story": 5346,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:frame_restored",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 5996.699999809265,
+      "story": 5996.699999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:frame_restored",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6012.799999952316,
+      "story": 6012.799999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] SEAL SCARRED HULL."
+      ]
+    },
+    {
+      "wall": 6013.099999904633,
+      "story": 6013.099999904633,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:repair:hull_sealed",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 6013.199999809265,
+      "story": 6013.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:hull_sealed",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6013.199999809265,
+      "story": 6013.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+      "shownAt": 6013.199999809265,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 6013.399999856949,
+      "story": 6013.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:hull_sealed",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 6663.399999856949,
+      "story": 6663.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:hull_sealed",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6679.199999809265,
+      "story": 6679.199999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+      ]
+    },
+    {
+      "wall": 6679.5,
+      "story": 6679.5,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:craft:lift_online",
+        "action": "craft"
+      }
+    },
+    {
+      "wall": 6679.5,
+      "story": 6679.5,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:craft:lift_online",
+        "kind": "craft",
+        "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6679.5,
+      "story": 6679.5,
+      "beat": "ch7-reconstruct",
+      "ch": "audit",
+      "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED",
+      "header": "WRECK RELAY",
+      "shownAt": 6679.5,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 6679.5,
+      "story": 6679.5,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "i closed it, and something inside started listening again. i did that too.",
+      "shownAt": 6679.5,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 6714.299999952316,
+      "story": 6714.299999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] INSTALL LIFT CELL."
+      ]
+    },
+    {
+      "wall": 6714.299999952316,
+      "story": 6714.299999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:repair:lift_online",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 6714.399999856949,
+      "story": 6714.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:lift_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6714.5,
+      "story": 6714.5,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:lift_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 7329.799999952316,
+      "story": 7329.799999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:lift_online",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 7408.299999952316,
+      "story": 7408.299999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+      ]
+    },
+    {
+      "wall": 7408.399999856949,
+      "story": 7408.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:craft:flight_ready",
+        "action": "craft"
+      }
+    },
+    {
+      "wall": 7408.399999856949,
+      "story": 7408.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:craft:flight_ready",
+        "kind": "craft",
+        "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 7408.399999856949,
+      "story": 7408.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "audit",
+      "text": "POWER BUS LIVE · TRANSPONDER ARMED",
+      "header": "WRECK RELAY",
+      "shownAt": 7408.399999856949,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 7408.399999856949,
+      "story": 7408.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "the ground's hold is a habit, not a law.",
+      "shownAt": 7408.399999856949,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 7408.699999809265,
+      "story": 7408.699999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:craft:flight_ready",
+        "kind": "craft",
+        "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 7423.699999809265,
+      "story": 7423.699999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:craft:flight_ready",
+        "kind": "craft",
+        "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 7429.299999952316,
+      "story": 7429.299999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] CALIBRATE FLIGHT CONTROLS."
+      ]
+    },
+    {
+      "wall": 7429.399999856949,
+      "story": 7429.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:repair:flight_ready",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 7429.399999856949,
+      "story": 7429.399999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:flight_ready",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 7429.5,
+      "story": 7429.5,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:flight_ready",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 8000.299999952316,
+      "story": 8000.299999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:repair:flight_ready",
+        "kind": "interact",
+        "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "workOrder": [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 8051.599999904633,
+      "story": 8051.599999904633,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "FLIGHT CALIBRATION IN PROGRESS."
+      ]
+    },
+    {
+      "wall": 8051.899999856949,
+      "story": 8051.899999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:calibrating",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 8051.899999856949,
+      "story": 8051.899999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:calibrating",
+        "kind": "wait",
+        "markerLabel": "KESTREL · CALIBRATING",
+        "workOrder": [
+          "FLIGHT CALIBRATION IN PROGRESS."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 8051.899999856949,
+      "story": 8051.899999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+      "shownAt": 8051.899999856949,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 16091.699999809265,
+      "story": 16091.699999809265,
+      "beat": "ch7-reconstruct",
+      "ch": "workorder",
+      "lines": [
+        "FLIGHT CONTROLS CALIBRATED."
+      ]
+    },
+    {
+      "wall": 16091.899999856949,
+      "story": 16091.899999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "reconstruct:ready",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 16091.899999856949,
+      "story": 16091.899999856949,
+      "beat": "ch7-reconstruct",
+      "ch": "objective",
+      "objective": {
+        "id": "reconstruct:ready",
+        "kind": "wait",
+        "markerLabel": "WRECK · FLIGHT READY",
+        "workOrder": [
+          "FLIGHT CONTROLS CALIBRATED."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 16092,
+      "story": 16092,
+      "beat": "ch7-reconstruct",
+      "ch": "audit",
+      "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+      "header": "AUDIT NETWORK",
+      "shownAt": 16092,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 16694.799999952316,
+      "story": 16694.799999952316,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "nothing has asked yet. something has started paying attention.",
+      "shownAt": 16694.799999952316,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 19111.599999904633,
+      "story": 19111.599999904633,
+      "beat": "ch7-reconstruct",
+      "ch": "caption",
+      "text": "the scar remains. now it can carry me.",
+      "shownAt": 19111.599999904633,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 21111.5,
+      "story": 21111.5,
+      "beat": "ch7-board",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 21111.799999952316,
+      "story": 21111.799999952316,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": null
+    },
+    {
+      "wall": 21111.89999985695,
+      "story": 21111.89999985695,
+      "beat": "ch7-board",
+      "ch": "workorder",
+      "lines": [
+        "APPROACH THE KESTREL HATCH.",
+        "[F] ENTER THROUGH THE HATCH."
+      ]
+    },
+    {
+      "wall": 21112.199999809265,
+      "story": 21112.199999809265,
+      "beat": "ch7-board",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "board:enter-hatch",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 21112.199999809265,
+      "story": 21112.199999809265,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": {
+        "id": "board:enter-hatch",
+        "kind": "interact",
+        "markerLabel": "KESTREL HATCH · BOARD",
+        "workOrder": [
+          "APPROACH THE KESTREL HATCH.",
+          "[F] ENTER THROUGH THE HATCH."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 21112.199999809265,
+      "story": 21112.199999809265,
+      "beat": "ch7-board",
+      "ch": "caption",
+      "text": "(the wreck is waiting for an owner.)",
+      "shownAt": 21112.199999809265,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 21112.599999904633,
+      "story": 21112.599999904633,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": {
+        "id": "board:enter-hatch",
+        "kind": "interact",
+        "markerLabel": "KESTREL HATCH · BOARD",
+        "workOrder": [
+          "APPROACH THE KESTREL HATCH.",
+          "[F] ENTER THROUGH THE HATCH."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 21199.299999952316,
+      "story": 21199.299999952316,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": {
+        "id": "board:enter-hatch",
+        "kind": "interact",
+        "markerLabel": "KESTREL HATCH · BOARD",
+        "workOrder": [
+          "APPROACH THE KESTREL HATCH.",
+          "[F] ENTER THROUGH THE HATCH."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 21240.299999952316,
+      "story": 21240.299999952316,
+      "beat": "ch7-board",
+      "ch": "workorder",
+      "lines": [
+        "HATCH TRANSFER IN PROGRESS.",
+        "HOLD POSITION · ESC TO STEP BACK."
+      ]
+    },
+    {
+      "wall": 21240.299999952316,
+      "story": 21240.299999952316,
+      "beat": "ch7-board",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "board:hatch-in-progress",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 21240.299999952316,
+      "story": 21240.299999952316,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": {
+        "id": "board:hatch-in-progress",
+        "kind": "wait",
+        "markerLabel": "KESTREL HATCH · ENTERING",
+        "workOrder": [
+          "HATCH TRANSFER IN PROGRESS.",
+          "HOLD POSITION · ESC TO STEP BACK."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 22298.099999904633,
+      "story": 22298.099999904633,
+      "beat": "ch7-board",
+      "ch": "workorder",
+      "lines": [
+        "PRESSURE BOUNDARY CLOSING."
+      ]
+    },
+    {
+      "wall": 22298.199999809265,
+      "story": 22298.199999809265,
+      "beat": "ch7-board",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "board:pressure-seal",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 22298.199999809265,
+      "story": 22298.199999809265,
+      "beat": "ch7-board",
+      "ch": "objective",
+      "objective": {
+        "id": "board:pressure-seal",
+        "kind": "wait",
+        "markerLabel": "KESTREL · PRESSURE SEAL",
+        "workOrder": [
+          "PRESSURE BOUNDARY CLOSING."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    }
+  ],
+  "finalAv": {
+    "sceneId": "distance-between-fires",
+    "contractRevision": "intent-v1",
+    "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+    "contractAnchorCount": 66,
+    "active": true,
+    "suspended": false,
+    "beat": "ch7-board",
+    "anchorId": "anc.board.pressure-seal",
+    "anchorEvent": "ev.board.cockpit-sealed",
+    "activationSource": "semantic-event",
+    "activationSequence": 10,
+    "activationHistoryAnchorIds": [
+      "anc.reconstruct.diagnosis",
+      "anc.reconstruct.bench-online",
+      "anc.reconstruct.frame-restored",
+      "anc.reconstruct.hull-sealed",
+      "anc.reconstruct.lift-online",
+      "anc.reconstruct.route-online",
+      "anc.reconstruct.calibration",
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal"
+    ],
+    "activatedAnchorIds": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal"
+    ],
+    "shot": {
+      "id": "cin.board.03-pressure-boundary",
+      "cameraAuthority": "lens-rig",
+      "transitionType": "occlusion",
+      "declaredCut": false,
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "elapsedMs": 0,
+        "appliedFovDeg": null,
+        "reducedMotion": false
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "blended",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.board.cockpit-handback"
+      }
+    },
+    "score": {
+      "cueRefs": [
+        "sc.board.one-owner"
+      ],
+      "intensity": null,
+      "hit": null
+    },
+    "postFx": {
+      "activeEffectIds": [
+        "fx.board.03-pressure-boundary"
+      ],
+      "supportMix": 1,
+      "lowTierFallbacks": [
+        "physical-state"
+      ],
+      "reducedMotion": false
+    },
+    "lastResetReason": "beat-exit"
+  }
+}

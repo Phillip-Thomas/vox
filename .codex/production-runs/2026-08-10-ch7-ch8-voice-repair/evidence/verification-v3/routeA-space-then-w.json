@@ -1,0 +1,5224 @@
+{
+  "mode": "routeA",
+  "shape": "space-then-w",
+  "tag": "space-then-w",
+  "igniteAtEntryOffsetSeconds": 6,
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T01:30:10.676Z",
+  "runs": [
+    {
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space-then-w",
+      "pageErrors": [],
+      "entryStoryClock": 506.69999980926514,
+      "entryObserver": "window.__storyBeat poll",
+      "entryClockOffsetMs": 0,
+      "probeReady": true,
+      "ignitedAtEntryOffsetSeconds": 6.107,
+      "frameDir": "evidence/verification-v3/routeA-space-then-w-run1",
+      "frames": [
+        {
+          "file": "000_strip_t0p05s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 557.1,
+          "shutterSpanMs": 2474.9,
+          "hostShutterMs": 2475,
+          "entryOffsetSeconds": 0.05,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t2p54s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3043.4,
+          "shutterSpanMs": 126.1,
+          "hostShutterMs": 126,
+          "entryOffsetSeconds": 2.537,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t2p79s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3301,
+          "shutterSpanMs": 735.4,
+          "hostShutterMs": 735,
+          "entryOffsetSeconds": 2.794,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p53s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4037.4,
+          "shutterSpanMs": 104.4,
+          "hostShutterMs": 104,
+          "entryOffsetSeconds": 3.531,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_L1+0.2_t3p75s_ch8-launch_surface.png",
+          "label": "L1+0.2",
+          "shutterOpenStoryClock": 4258,
+          "shutterSpanMs": 125.5,
+          "hostShutterMs": 125,
+          "entryOffsetSeconds": 3.751,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond a",
+          "domCaptionChars": 10,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_strip_t3p88s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4384.5,
+          "shutterSpanMs": 95.4,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 3.878,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answe",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_strip_t4p12s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4624.2,
+          "shutterSpanMs": 123.3,
+          "hostShutterMs": 123,
+          "entryOffsetSeconds": 4.117,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered eve",
+          "domCaptionChars": 21,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_strip_t4p35s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4857.2,
+          "shutterSpanMs": 125.3,
+          "hostShutterMs": 125,
+          "entryOffsetSeconds": 4.351,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time",
+          "domCaptionChars": 28,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_strip_t4p59s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5095.7,
+          "shutterSpanMs": 120.5,
+          "hostShutterMs": 120,
+          "entryOffsetSeconds": 4.589,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i aske",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_strip_t4p82s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5330.3,
+          "shutterSpanMs": 100.7,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 4.824,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_strip_t5p07s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5572.4,
+          "shutterSpanMs": 108.8,
+          "hostShutterMs": 109,
+          "entryOffsetSeconds": 5.066,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leavin",
+          "domCaptionChars": 49,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_strip_t5p29s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5796,
+          "shutterSpanMs": 122.6,
+          "hostShutterMs": 122,
+          "entryOffsetSeconds": 5.289,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anywa",
+          "domCaptionChars": 56,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_strip_t5p52s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6028.2,
+          "shutterSpanMs": 101.4,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 5.521,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — th",
+          "domCaptionChars": 62,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_strip_t5p76s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6266.9,
+          "shutterSpanMs": 97.7,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 5.76,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is w",
+          "domCaptionChars": 69,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t6p00s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6506.3,
+          "shutterSpanMs": 106.1,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 6,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_strip_t6p74s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7247,
+          "shutterSpanMs": 109,
+          "hostShutterMs": 109,
+          "entryOffsetSeconds": 6.74,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_strip_t6p99s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7495.5,
+          "shutterSpanMs": 108.8,
+          "hostShutterMs": 109,
+          "entryOffsetSeconds": 6.989,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_strip_t7p21s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7717,
+          "shutterSpanMs": 104.3,
+          "hostShutterMs": 104,
+          "entryOffsetSeconds": 7.21,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_burst_t7p32s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7822.4,
+          "shutterSpanMs": 115.1,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 7.316,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_burst_t7p43s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7938.5,
+          "shutterSpanMs": 246.9,
+          "hostShutterMs": 249,
+          "entryOffsetSeconds": 7.432,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_burst_t7p69s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8194.1,
+          "shutterSpanMs": 108.5,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 7.687,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "ho",
+          "domCaptionChars": 2,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_burst_t7p80s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8303.7,
+          "shutterSpanMs": 107.4,
+          "hostShutterMs": 107,
+          "entryOffsetSeconds": 7.797,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold",
+          "domCaptionChars": 4,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_edge+0.2_t7p91s_ch8-launch_descent.png",
+          "label": "edge+0.2",
+          "shutterOpenStoryClock": 8413.4,
+          "shutterSpanMs": 106.3,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 7.907,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it.",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_L2+0.2_t8p01s_ch8-launch_descent.png",
+          "label": "L2+0.2",
+          "shutterOpenStoryClock": 8520.7,
+          "shutterSpanMs": 99.3,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 8.014,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. thi",
+          "domCaptionChars": 12,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_burst_t8p11s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8621,
+          "shutterSpanMs": 98.9,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 8.114,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this i",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_burst_t8p21s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8721.1,
+          "shutterSpanMs": 98.2,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 8.214,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is t",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_burst_t8p31s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8820.4,
+          "shutterSpanMs": 248.2,
+          "hostShutterMs": 248,
+          "entryOffsetSeconds": 8.314,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_L2+0.7_t8p57s_ch8-launch_descent.png",
+          "label": "L2+0.7",
+          "shutterOpenStoryClock": 9076,
+          "shutterSpanMs": 134.5,
+          "hostShutterMs": 134,
+          "entryOffsetSeconds": 8.569,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only or",
+          "domCaptionChars": 28,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_burst_t8p71s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 9211.7,
+          "shutterSpanMs": 109.8,
+          "hostShutterMs": 110,
+          "entryOffsetSeconds": 8.705,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order",
+          "domCaptionChars": 31,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_burst_t8p82s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 9322.5,
+          "shutterSpanMs": 180.5,
+          "hostShutterMs": 180,
+          "entryOffsetSeconds": 8.816,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order lef",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_strip_t9p05s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9558.1,
+          "shutterSpanMs": 131.2,
+          "hostShutterMs": 131,
+          "entryOffsetSeconds": 9.051,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and",
+          "domCaptionChars": 41,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_strip_t9p33s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9839,
+          "shutterSpanMs": 115.5,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 9.332,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the",
+          "domCaptionChars": 50,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t9p56s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10065.1,
+          "shutterSpanMs": 209.2,
+          "hostShutterMs": 209,
+          "entryOffsetSeconds": 9.558,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one gi",
+          "domCaptionChars": 57,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t9p80s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10310.6,
+          "shutterSpanMs": 143.4,
+          "hostShutterMs": 144,
+          "entryOffsetSeconds": 9.804,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t10p03s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10537.8,
+          "shutterSpanMs": 143.5,
+          "hostShutterMs": 144,
+          "entryOffsetSeconds": 10.031,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_L3-0.5_t10p20s_ch8-launch_descent.png",
+          "label": "L3-0.5",
+          "shutterOpenStoryClock": 10710.1,
+          "shutterSpanMs": 112.9,
+          "hostShutterMs": 112,
+          "entryOffsetSeconds": 10.203,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_strip_t10p32s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10824,
+          "shutterSpanMs": 114.4,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 10.317,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t10p60s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11109,
+          "shutterSpanMs": 113,
+          "hostShutterMs": 112,
+          "entryOffsetSeconds": 10.602,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_strip_t10p85s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11355.3,
+          "shutterSpanMs": 193.8,
+          "hostShutterMs": 193,
+          "entryOffsetSeconds": 10.849,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the s",
+          "domCaptionChars": 5,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_L3+0.2_t11p04s_ch8-launch_descent.png",
+          "label": "L3+0.2",
+          "shutterOpenStoryClock": 11550.9,
+          "shutterSpanMs": 143.3,
+          "hostShutterMs": 143,
+          "entryOffsetSeconds": 11.044,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site ge",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_strip_t11p19s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11695.9,
+          "shutterSpanMs": 161.2,
+          "hostShutterMs": 162,
+          "entryOffsetSeconds": 11.189,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site gets s",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_deepSpace+0.0_t11p39s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 11892.4,
+          "shutterSpanMs": 171.1,
+          "hostShutterMs": 171,
+          "entryOffsetSeconds": 11.386,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "",
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_strip_t11p56s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12064.5,
+          "shutterSpanMs": 160.2,
+          "hostShutterMs": 160,
+          "entryOffsetSeconds": 11.558,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i cam",
+          "domCaptionChars": 5,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_L3+1.0_t11p72s_ch8-launch_deep_space.png",
+          "label": "L3+1.0",
+          "shutterOpenStoryClock": 12227.8,
+          "shutterSpanMs": 141.9,
+          "hostShutterMs": 141,
+          "entryOffsetSeconds": 11.721,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came dow",
+          "domCaptionChars": 10,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_strip_t11p86s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12371.2,
+          "shutterSpanMs": 114.7,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 11.864,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down th",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "045_deepSpace+0.5_t11p98s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 12487,
+          "shutterSpanMs": 96.1,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 11.98,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this",
+          "domCaptionChars": 16,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "046_strip_t12p10s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12610.9,
+          "shutterSpanMs": 105.6,
+          "hostShutterMs": 105,
+          "entryOffsetSeconds": 12.104,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line",
+          "domCaptionChars": 21,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "047_strip_t12p35s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12854,
+          "shutterSpanMs": 113.8,
+          "hostShutterMs": 113,
+          "entryOffsetSeconds": 12.347,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line withou",
+          "domCaptionChars": 28,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "048_strip_t12p57s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13076.6,
+          "shutterSpanMs": 108,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 12.57,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "049_L3+2.0_t12p71s_ch8-launch_deep_space.png",
+          "label": "L3+2.0",
+          "shutterOpenStoryClock": 13212.5,
+          "shutterSpanMs": 102.9,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 12.706,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being ask",
+          "domCaptionChars": 39,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "050_strip_t12p81s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13316.5,
+          "shutterSpanMs": 101,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 12.81,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "051_strip_t13p05s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13554.1,
+          "shutterSpanMs": 115.6,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 13.047,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am g",
+          "domCaptionChars": 49,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "052_L3+2.5_t13p19s_ch8-launch_deep_space.png",
+          "label": "L3+2.5",
+          "shutterOpenStoryClock": 13698.3,
+          "shutterSpanMs": 118.2,
+          "hostShutterMs": 118,
+          "entryOffsetSeconds": 13.192,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "053_strip_t13p31s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13817.7,
+          "shutterSpanMs": 101.2,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 13.311,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going ba",
+          "domCaptionChars": 56,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "054_strip_t13p55s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14057.7,
+          "shutterSpanMs": 131.2,
+          "hostShutterMs": 130,
+          "entryOffsetSeconds": 13.551,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up i",
+          "domCaptionChars": 63,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "055_strip_t13p79s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14299.4,
+          "shutterSpanMs": 103.6,
+          "hostShutterMs": 104,
+          "entryOffsetSeconds": 13.793,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on pur",
+          "domCaptionChars": 71,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        }
+      ],
+      "unmetTargets": [],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.381,
+        "tL2": 7.587,
+        "tL3": 10.653,
+        "tL4": 11.369,
+        "tPhaseEdge": 7.586,
+        "tDeepSpace": 11.386,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 1,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.381,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 7.587,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 10.653,
+            "text": "the site gets small. the tree does not. i keep finding it."
+          },
+          {
+            "t": 11.369,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 13.385,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          }
+        ],
+        "objectives": [
+          {
+            "t": 3.104,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 9.402,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 13.136,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.089,
+            "beat": "ch8-launch"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": -0.013,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 7.586,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 11.386,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 7.586,
+          "measuredSeconds": 7.587,
+          "deltaSeconds": 0.001,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "expectedSeconds": 10.587,
+          "measuredSeconds": 10.653,
+          "deltaSeconds": 0.066,
+          "pass": false
+        },
+        "c3Margin": {
+          "l3RevealSeconds": 1.972,
+          "marginSeconds": -1.239,
+          "strictlyBefore": false,
+          "underTriadFlagThreshold": true
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "pass": true
+        }
+      },
+      "events": [
+        {
+          "wall": 417.2999999523163,
+          "story": 417.2999999523163,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "initial": true
+        },
+        {
+          "wall": 493.59999990463257,
+          "story": 493.59999990463257,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3610.399999856949,
+          "story": 3610.399999856949,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3887.699999809265,
+          "story": 3887.699999809265,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3887.5999999046326,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3887.699999809265,
+          "story": 3887.699999809265,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 3887.699999809265,
+          "story": 3887.699999809265,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 8093,
+          "story": 8093,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 8093.5,
+          "story": 8093.5,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 8093.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 9909,
+          "story": 9909,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 9909.199999809265,
+          "story": 9909.199999809265,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 9909.199999809265,
+          "story": 9909.199999809265,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 11159.5,
+          "story": 11159.399999856949,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 11159.399999856949,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11876,
+          "story": 11876,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 11876,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11892.799999952316,
+          "story": 11892.799999952316,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 13642.199999809265,
+          "story": 13642.199999809265,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 13642.299999952316,
+          "story": 13642.299999952316,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 13642.299999952316,
+          "story": 13642.299999952316,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 13892.099999904633,
+          "story": 13892.099999904633,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13892.099999904633
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space-then-w",
+      "pageErrors": [],
+      "entryStoryClock": 402.59999990463257,
+      "entryObserver": "store-subscription",
+      "entryClockOffsetMs": null,
+      "probeReady": true,
+      "ignitedAtEntryOffsetSeconds": 6.002,
+      "frameDir": "evidence/verification-v3/routeA-space-then-w-run2",
+      "frames": [
+        {
+          "file": "000_strip_t0p15s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 551.8,
+          "shutterSpanMs": 2367.4,
+          "hostShutterMs": 2367,
+          "entryOffsetSeconds": 0.149,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t2p53s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 2927.8,
+          "shutterSpanMs": 81.4,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 2.525,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t2p77s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3172.3,
+          "shutterSpanMs": 649.2,
+          "hostShutterMs": 648,
+          "entryOffsetSeconds": 2.77,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p42s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3822.5,
+          "shutterSpanMs": 87.2,
+          "hostShutterMs": 87,
+          "entryOffsetSeconds": 3.42,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_L1+0.2_t3p65s_ch8-launch_surface.png",
+          "label": "L1+0.2",
+          "shutterOpenStoryClock": 4048.1,
+          "shutterSpanMs": 95.2,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 3.646,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond a",
+          "domCaptionChars": 10,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_strip_t3p74s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4144.2,
+          "shutterSpanMs": 103.5,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 3.742,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answ",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_strip_t3p98s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4384.9,
+          "shutterSpanMs": 116.1,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 3.982,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered ev",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_strip_t4p21s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4614.2,
+          "shutterSpanMs": 100.3,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 4.212,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every tim",
+          "domCaptionChars": 27,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_strip_t4p45s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4851.9,
+          "shutterSpanMs": 96.4,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 4.449,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i ask",
+          "domCaptionChars": 34,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_strip_t4p68s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5084.7,
+          "shutterSpanMs": 114.8,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 4.682,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i a",
+          "domCaptionChars": 41,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_strip_t4p91s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5308.6,
+          "shutterSpanMs": 127.8,
+          "hostShutterMs": 128,
+          "entryOffsetSeconds": 4.906,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leav",
+          "domCaptionChars": 47,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_strip_t5p14s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5547.2,
+          "shutterSpanMs": 120.2,
+          "hostShutterMs": 120,
+          "entryOffsetSeconds": 5.145,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving any",
+          "domCaptionChars": 54,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_strip_t5p38s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5779.7,
+          "shutterSpanMs": 123,
+          "hostShutterMs": 122,
+          "entryOffsetSeconds": 5.377,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — t",
+          "domCaptionChars": 61,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_strip_t5p61s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6014.2,
+          "shutterSpanMs": 100.3,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 5.612,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is",
+          "domCaptionChars": 67,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t5p85s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6251.8,
+          "shutterSpanMs": 97,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 5.849,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what th",
+          "domCaptionChars": 75,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_strip_t6p64s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7041.6,
+          "shutterSpanMs": 116.9,
+          "hostShutterMs": 116,
+          "entryOffsetSeconds": 6.639,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_strip_t6p87s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7270.6,
+          "shutterSpanMs": 103.7,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 6.868,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_strip_t7p11s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7514.2,
+          "shutterSpanMs": 132.2,
+          "hostShutterMs": 132,
+          "entryOffsetSeconds": 7.112,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_burst_t7p24s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7647.2,
+          "shutterSpanMs": 126,
+          "hostShutterMs": 126,
+          "entryOffsetSeconds": 7.245,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_burst_t7p37s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7774.5,
+          "shutterSpanMs": 171.7,
+          "hostShutterMs": 172,
+          "entryOffsetSeconds": 7.372,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_burst_t7p55s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7954.2,
+          "shutterSpanMs": 102.9,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 7.552,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "ho",
+          "domCaptionChars": 2,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_burst_t7p66s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8058.4,
+          "shutterSpanMs": 116.7,
+          "hostShutterMs": 116,
+          "entryOffsetSeconds": 7.656,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold",
+          "domCaptionChars": 4,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_edge+0.2_t7p77s_ch8-launch_descent.png",
+          "label": "edge+0.2",
+          "shutterOpenStoryClock": 8175.8,
+          "shutterSpanMs": 114,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 7.773,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it.",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_L2+0.2_t7p89s_ch8-launch_descent.png",
+          "label": "L2+0.2",
+          "shutterOpenStoryClock": 8290.8,
+          "shutterSpanMs": 98.8,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 7.888,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. thi",
+          "domCaptionChars": 12,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_burst_t7p99s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8390.6,
+          "shutterSpanMs": 97.1,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 7.988,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this i",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_burst_t8p09s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8488.5,
+          "shutterSpanMs": 95.9,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 8.086,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is t",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_burst_t8p18s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8585.2,
+          "shutterSpanMs": 102.5,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 8.183,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_L2+0.7_t8p29s_ch8-launch_descent.png",
+          "label": "L2+0.7",
+          "shutterOpenStoryClock": 8688.7,
+          "shutterSpanMs": 221.1,
+          "hostShutterMs": 221,
+          "entryOffsetSeconds": 8.286,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the onl",
+          "domCaptionChars": 24,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_burst_t8p51s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8916.6,
+          "shutterSpanMs": 124.5,
+          "hostShutterMs": 123,
+          "entryOffsetSeconds": 8.514,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order",
+          "domCaptionChars": 31,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_burst_t8p64s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 9042,
+          "shutterSpanMs": 114.1,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 8.639,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order le",
+          "domCaptionChars": 34,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_burst_t8p75s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 9157.3,
+          "shutterSpanMs": 153.1,
+          "hostShutterMs": 153,
+          "entryOffsetSeconds": 8.755,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left,",
+          "domCaptionChars": 37,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_strip_t9p00s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9401.3,
+          "shutterSpanMs": 122.8,
+          "hostShutterMs": 122,
+          "entryOffsetSeconds": 8.999,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i a",
+          "domCaptionChars": 45,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t9p24s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9640.5,
+          "shutterSpanMs": 148,
+          "hostShutterMs": 147,
+          "entryOffsetSeconds": 9.238,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the o",
+          "domCaptionChars": 52,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t9p47s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9874,
+          "shutterSpanMs": 141.8,
+          "hostShutterMs": 141,
+          "entryOffsetSeconds": 9.471,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one givi",
+          "domCaptionChars": 59,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t9p78s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10178.4,
+          "shutterSpanMs": 108.6,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 9.776,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_strip_t10p02s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10425.2,
+          "shutterSpanMs": 113.7,
+          "hostShutterMs": 113,
+          "entryOffsetSeconds": 10.023,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_L3-0.5_t10p14s_ch8-launch_descent.png",
+          "label": "L3-0.5",
+          "shutterOpenStoryClock": 10539.7,
+          "shutterSpanMs": 108.2,
+          "hostShutterMs": 109,
+          "entryOffsetSeconds": 10.137,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t10p25s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10655.2,
+          "shutterSpanMs": 101,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 10.253,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_strip_t10p50s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10900.8,
+          "shutterSpanMs": 125.9,
+          "hostShutterMs": 125,
+          "entryOffsetSeconds": 10.498,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_strip_t10p73s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11130.1,
+          "shutterSpanMs": 124.8,
+          "hostShutterMs": 123,
+          "entryOffsetSeconds": 10.727,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the si",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_L3+0.2_t10p85s_ch8-launch_descent.png",
+          "label": "L3+0.2",
+          "shutterOpenStoryClock": 11256,
+          "shutterSpanMs": 130.6,
+          "hostShutterMs": 130,
+          "entryOffsetSeconds": 10.853,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_strip_t10p98s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11386.9,
+          "shutterSpanMs": 152.4,
+          "hostShutterMs": 153,
+          "entryOffsetSeconds": 10.984,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site gets",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_strip_t11p22s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11623.7,
+          "shutterSpanMs": 179,
+          "hostShutterMs": 179,
+          "entryOffsetSeconds": 11.221,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site gets small.",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_deepSpace+0.0_t11p40s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 11804.6,
+          "shutterSpanMs": 162.4,
+          "hostShutterMs": 162,
+          "entryOffsetSeconds": 11.402,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i c",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_L3+1.0_t11p57s_ch8-launch_deep_space.png",
+          "label": "L3+1.0",
+          "shutterOpenStoryClock": 11968.7,
+          "shutterSpanMs": 149.1,
+          "hostShutterMs": 148,
+          "entryOffsetSeconds": 11.566,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "045_strip_t11p72s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12118.7,
+          "shutterSpanMs": 100.9,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 11.716,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "046_deepSpace+0.5_t11p93s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 12329.7,
+          "shutterSpanMs": 127.2,
+          "hostShutterMs": 126,
+          "entryOffsetSeconds": 11.927,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this l",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "047_strip_t12p06s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12458,
+          "shutterSpanMs": 112,
+          "hostShutterMs": 112,
+          "entryOffsetSeconds": 12.055,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line",
+          "domCaptionChars": 21,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "048_strip_t12p28s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12679.6,
+          "shutterSpanMs": 133.3,
+          "hostShutterMs": 134,
+          "entryOffsetSeconds": 12.277,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line withou",
+          "domCaptionChars": 28,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "049_strip_t12p52s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12922.5,
+          "shutterSpanMs": 96.8,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 12.52,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "050_L3+2.0_t12p62s_ch8-launch_deep_space.png",
+          "label": "L3+2.0",
+          "shutterOpenStoryClock": 13020.3,
+          "shutterSpanMs": 100.1,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 12.618,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being as",
+          "domCaptionChars": 38,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "051_strip_t12p75s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13148,
+          "shutterSpanMs": 103.1,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 12.745,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "052_strip_t12p99s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13390,
+          "shutterSpanMs": 112.6,
+          "hostShutterMs": 112,
+          "entryOffsetSeconds": 12.987,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am g",
+          "domCaptionChars": 49,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "053_L3+2.5_t13p10s_ch8-launch_deep_space.png",
+          "label": "L3+2.5",
+          "shutterOpenStoryClock": 13503.5,
+          "shutterSpanMs": 98.8,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 13.101,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am goin",
+          "domCaptionChars": 52,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "054_strip_t13p23s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13630.7,
+          "shutterSpanMs": 105.1,
+          "hostShutterMs": 104,
+          "entryOffsetSeconds": 13.228,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going ba",
+          "domCaptionChars": 56,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "055_strip_t13p47s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13873.7,
+          "shutterSpanMs": 110.3,
+          "hostShutterMs": 110,
+          "entryOffsetSeconds": 13.471,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up i",
+          "domCaptionChars": 63,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "056_strip_t13p69s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14097.2,
+          "shutterSpanMs": 107.7,
+          "hostShutterMs": 107,
+          "entryOffsetSeconds": 13.695,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on pu",
+          "domCaptionChars": 70,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        }
+      ],
+      "unmetTargets": [],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.277,
+        "tL2": 7.45,
+        "tL3": 10.509,
+        "tL4": 11.292,
+        "tPhaseEdge": 7.45,
+        "tDeepSpace": 11.308,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 1,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.277,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 7.45,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 10.509,
+            "text": "the site gets small. the tree does not. i keep finding it."
+          },
+          {
+            "t": 11.292,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 13.309,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          }
+        ],
+        "objectives": [
+          {
+            "t": 0,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 9.259,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 13.059,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.016,
+            "beat": null
+          },
+          {
+            "t": 0,
+            "beat": "ch8-launch"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": 0.019,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 7.45,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 11.308,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 7.45,
+          "measuredSeconds": 7.45,
+          "deltaSeconds": 0,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "expectedSeconds": 10.45,
+          "measuredSeconds": 10.509,
+          "deltaSeconds": 0.059,
+          "pass": false
+        },
+        "c3Margin": {
+          "l3RevealSeconds": 1.972,
+          "marginSeconds": -1.173,
+          "strictlyBefore": false,
+          "underTriadFlagThreshold": true
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "pass": true
+        }
+      },
+      "events": [
+        {
+          "wall": 386.90000009536743,
+          "story": 386.90000009536743,
+          "beat": null,
+          "ch": "beat",
+          "active": false,
+          "initial": true
+        },
+        {
+          "wall": 394.7000000476837,
+          "story": 394.7000000476837,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 394.7000000476837,
+          "story": 394.7000000476837,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 394.7000000476837,
+          "story": 394.7000000476837,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 395.7999999523163,
+          "story": 395.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 396,
+          "story": 396,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 402.2000000476837,
+          "story": 402.2000000476837,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 402.2999999523163,
+          "story": 402.2999999523163,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 402.59999990463257,
+          "story": 402.59999990463257,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 421.90000009536743,
+          "story": 421.90000009536743,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3679.2000000476837,
+          "story": 3679.2000000476837,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3679.2000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7852.400000095367,
+          "story": 7852.400000095367,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 7852.900000095367,
+          "story": 7852.900000095367,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 7852.900000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 9661.700000047684,
+          "story": 9661.700000047684,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 9661.900000095367,
+          "story": 9661.900000095367,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 9661.900000095367,
+          "story": 9661.900000095367,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 10911.400000095367,
+          "story": 10911.400000095367,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 10911.400000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11694.799999952316,
+          "story": 11694.799999952316,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 11694.799999952316,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11710.900000095367,
+          "story": 11710.900000095367,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 13461,
+          "story": 13461,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 13461.200000047684,
+          "story": 13461.200000047684,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 13461.200000047684,
+          "story": 13461.200000047684,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 13711.200000047684,
+          "story": 13711.200000047684,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13711.200000047684
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "shape": "space-then-w",
+      "pageErrors": [],
+      "entryStoryClock": 478.59999990463257,
+      "entryObserver": "window.__storyBeat poll",
+      "entryClockOffsetMs": 0,
+      "probeReady": true,
+      "ignitedAtEntryOffsetSeconds": 6.089,
+      "frameDir": "evidence/verification-v3/routeA-space-then-w-run3",
+      "frames": [
+        {
+          "file": "000_strip_t0p05s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 528.9,
+          "shutterSpanMs": 2327.6,
+          "hostShutterMs": 2328,
+          "entryOffsetSeconds": 0.05,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t2p39s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 2867.3,
+          "shutterSpanMs": 119.3,
+          "hostShutterMs": 119,
+          "entryOffsetSeconds": 2.389,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t2p61s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3088.7,
+          "shutterSpanMs": 686.5,
+          "hostShutterMs": 686,
+          "entryOffsetSeconds": 2.61,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p30s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3778.4,
+          "shutterSpanMs": 91.6,
+          "hostShutterMs": 91,
+          "entryOffsetSeconds": 3.3,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the p",
+          "domCaptionChars": 5,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_L1+0.2_t3p50s_ch8-launch_surface.png",
+          "label": "L1+0.2",
+          "shutterOpenStoryClock": 3980.8,
+          "shutterSpanMs": 92,
+          "hostShutterMs": 91,
+          "entryOffsetSeconds": 3.502,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond an",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_strip_t3p60s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4073.6,
+          "shutterSpanMs": 99.8,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 3.595,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answ",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_strip_t3p84s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4315,
+          "shutterSpanMs": 114.9,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 3.836,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered ev",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_strip_t4p07s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4543.9,
+          "shutterSpanMs": 119.1,
+          "hostShutterMs": 119,
+          "entryOffsetSeconds": 4.065,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every tim",
+          "domCaptionChars": 27,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_strip_t4p29s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4773.3,
+          "shutterSpanMs": 123.2,
+          "hostShutterMs": 122,
+          "entryOffsetSeconds": 4.295,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i ask",
+          "domCaptionChars": 34,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_strip_t4p53s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5010.8,
+          "shutterSpanMs": 102.1,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 4.532,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i a",
+          "domCaptionChars": 41,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_strip_t4p78s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5254.3,
+          "shutterSpanMs": 128.8,
+          "hostShutterMs": 129,
+          "entryOffsetSeconds": 4.776,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leavi",
+          "domCaptionChars": 48,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_strip_t5p02s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5494.1,
+          "shutterSpanMs": 120.8,
+          "hostShutterMs": 120,
+          "entryOffsetSeconds": 5.016,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyw",
+          "domCaptionChars": 55,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_strip_t5p25s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5728.9,
+          "shutterSpanMs": 101.6,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 5.25,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — th",
+          "domCaptionChars": 62,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_strip_t5p49s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5971.3,
+          "shutterSpanMs": 107.7,
+          "hostShutterMs": 107,
+          "entryOffsetSeconds": 5.493,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is w",
+          "domCaptionChars": 69,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t5p74s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6214.9,
+          "shutterSpanMs": 97.8,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 5.736,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_strip_t5p97s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6449.6,
+          "shutterSpanMs": 117.4,
+          "hostShutterMs": 117,
+          "entryOffsetSeconds": 5.971,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answer",
+          "domCaptionChars": 83,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_strip_t6p73s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7204.6,
+          "shutterSpanMs": 115.9,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 6.726,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_strip_t6p95s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7430.7,
+          "shutterSpanMs": 106.6,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 6.952,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_burst_t7p06s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7538,
+          "shutterSpanMs": 96.2,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 7.059,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_burst_t7p16s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7635.5,
+          "shutterSpanMs": 98.8,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 7.157,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_burst_t7p26s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7735.7,
+          "shutterSpanMs": 99.8,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 7.257,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_burst_t7p36s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7836.8,
+          "shutterSpanMs": 116.6,
+          "hostShutterMs": 116,
+          "entryOffsetSeconds": 7.358,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_burst_t7p48s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7954.7,
+          "shutterSpanMs": 219.7,
+          "hostShutterMs": 219,
+          "entryOffsetSeconds": 7.476,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaptionChars": 94,
+          "storeCaptionChars": 94,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_burst_t7p70s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8183.3,
+          "shutterSpanMs": 102.6,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 7.705,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hol",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_burst_t7p81s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8286.6,
+          "shutterSpanMs": 99.9,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 7.808,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold i",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_edge+0.2_t7p91s_ch8-launch_descent.png",
+          "label": "edge+0.2",
+          "shutterOpenStoryClock": 8387.6,
+          "shutterSpanMs": 113.4,
+          "hostShutterMs": 113,
+          "entryOffsetSeconds": 7.909,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it.",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_L2+0.2_t8p02s_ch8-launch_descent.png",
+          "label": "L2+0.2",
+          "shutterOpenStoryClock": 8501.9,
+          "shutterSpanMs": 102.2,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 8.023,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. thi",
+          "domCaptionChars": 12,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_burst_t8p13s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8605.1,
+          "shutterSpanMs": 114.8,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 8.127,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this i",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_burst_t8p24s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8720.9,
+          "shutterSpanMs": 114.7,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 8.242,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is th",
+          "domCaptionChars": 19,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_burst_t8p36s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 8836.2,
+          "shutterSpanMs": 97.5,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 8.358,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the o",
+          "domCaptionChars": 22,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_L2+0.7_t8p46s_ch8-launch_descent.png",
+          "label": "L2+0.7",
+          "shutterOpenStoryClock": 8935.1,
+          "shutterSpanMs": 174.8,
+          "hostShutterMs": 175,
+          "entryOffsetSeconds": 8.457,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only",
+          "domCaptionChars": 25,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_burst_t8p64s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 9117.3,
+          "shutterSpanMs": 101.5,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 8.639,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order",
+          "domCaptionChars": 31,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t8p89s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9364,
+          "shutterSpanMs": 141.4,
+          "hostShutterMs": 142,
+          "entryOffsetSeconds": 8.885,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left,",
+          "domCaptionChars": 37,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t9p11s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9592.2,
+          "shutterSpanMs": 131.9,
+          "hostShutterMs": 132,
+          "entryOffsetSeconds": 9.114,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i",
+          "domCaptionChars": 43,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t9p36s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9836.7,
+          "shutterSpanMs": 124.7,
+          "hostShutterMs": 125,
+          "entryOffsetSeconds": 9.358,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the o",
+          "domCaptionChars": 52,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_strip_t9p60s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10076.5,
+          "shutterSpanMs": 110.2,
+          "hostShutterMs": 110,
+          "entryOffsetSeconds": 9.598,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one givi",
+          "domCaptionChars": 59,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_strip_t9p82s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10303.6,
+          "shutterSpanMs": 161.1,
+          "hostShutterMs": 161,
+          "entryOffsetSeconds": 9.825,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t10p05s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10527.1,
+          "shutterSpanMs": 109.8,
+          "hostShutterMs": 110,
+          "entryOffsetSeconds": 10.049,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_L3-0.5_t10p21s_ch8-launch_descent.png",
+          "label": "L3-0.5",
+          "shutterOpenStoryClock": 10692.7,
+          "shutterSpanMs": 169.9,
+          "hostShutterMs": 170,
+          "entryOffsetSeconds": 10.214,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_strip_t10p39s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10868.8,
+          "shutterSpanMs": 101.2,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 10.39,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_strip_t10p63s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11106.7,
+          "shutterSpanMs": 111.5,
+          "hostShutterMs": 111,
+          "entryOffsetSeconds": 10.628,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaptionChars": 65,
+          "storeCaptionChars": 65,
+          "revealComplete": true,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_strip_t10p85s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11332.7,
+          "shutterSpanMs": 99.7,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 10.854,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the s",
+          "domCaptionChars": 5,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_L3+0.2_t10p95s_ch8-launch_descent.png",
+          "label": "L3+0.2",
+          "shutterOpenStoryClock": 11433.3,
+          "shutterSpanMs": 136.7,
+          "hostShutterMs": 136,
+          "entryOffsetSeconds": 10.955,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_strip_t11p09s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11571.2,
+          "shutterSpanMs": 211.9,
+          "hostShutterMs": 212,
+          "entryOffsetSeconds": 11.093,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site gets",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_strip_t11p33s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11811.3,
+          "shutterSpanMs": 167.4,
+          "hostShutterMs": 167,
+          "entryOffsetSeconds": 11.333,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it.",
+          "domCaption": "the site gets small.",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 58,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "045_deepSpace+0.0_t11p50s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 11980.2,
+          "shutterSpanMs": 164,
+          "hostShutterMs": 164,
+          "entryOffsetSeconds": 11.502,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i c",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "046_strip_t11p67s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12145.6,
+          "shutterSpanMs": 151.5,
+          "hostShutterMs": 151,
+          "entryOffsetSeconds": 11.667,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came d",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "047_L3+1.0_t11p82s_ch8-launch_deep_space.png",
+          "label": "L3+1.0",
+          "shutterOpenStoryClock": 12298.5,
+          "shutterSpanMs": 101.8,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 11.82,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "048_strip_t11p92s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12401.1,
+          "shutterSpanMs": 98.1,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 11.922,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down thi",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "049_deepSpace+0.5_t12p02s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 12500.1,
+          "shutterSpanMs": 98.9,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 12.021,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this l",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "050_strip_t12p15s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12627.5,
+          "shutterSpanMs": 107.8,
+          "hostShutterMs": 107,
+          "entryOffsetSeconds": 12.149,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line",
+          "domCaptionChars": 21,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "051_strip_t12p39s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12872.7,
+          "shutterSpanMs": 112.3,
+          "hostShutterMs": 112,
+          "entryOffsetSeconds": 12.394,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without",
+          "domCaptionChars": 29,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "052_strip_t12p62s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13095.9,
+          "shutterSpanMs": 106,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 12.617,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "053_L3+2.0_t12p72s_ch8-launch_deep_space.png",
+          "label": "L3+2.0",
+          "shutterOpenStoryClock": 13203.3,
+          "shutterSpanMs": 115.2,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 12.725,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being ask",
+          "domCaptionChars": 39,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "054_strip_t12p84s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13319,
+          "shutterSpanMs": 98.7,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 12.84,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "055_strip_t13p08s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13553.8,
+          "shutterSpanMs": 114.8,
+          "hostShutterMs": 115,
+          "entryOffsetSeconds": 13.075,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am g",
+          "domCaptionChars": 49,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "056_L3+2.5_t13p22s_ch8-launch_deep_space.png",
+          "label": "L3+2.5",
+          "shutterOpenStoryClock": 13697,
+          "shutterSpanMs": 103.4,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 13.218,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "057_strip_t13p32s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13801.4,
+          "shutterSpanMs": 97.5,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 13.323,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going ba",
+          "domCaptionChars": 56,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "058_strip_t13p56s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14033.9,
+          "shutterSpanMs": 121.4,
+          "hostShutterMs": 121,
+          "entryOffsetSeconds": 13.555,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up i",
+          "domCaptionChars": 63,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "059_strip_t13p79s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14264.7,
+          "shutterSpanMs": 121.7,
+          "hostShutterMs": 122,
+          "entryOffsetSeconds": 13.786,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on pu",
+          "domCaptionChars": 70,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "060_strip_t14p02s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14498.2,
+          "shutterSpanMs": 124.4,
+          "hostShutterMs": 125,
+          "entryOffsetSeconds": 14.02,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 1280,
+            "h": 720,
+            "dpr": 1
+          }
+        }
+      ],
+      "unmetTargets": [],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.118,
+        "tL2": 7.584,
+        "tL3": 10.646,
+        "tL4": 11.38,
+        "tPhaseEdge": 7.583,
+        "tDeepSpace": 11.396,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 1,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.118,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 7.584,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 10.646,
+            "text": "the site gets small. the tree does not. i keep finding it."
+          },
+          {
+            "t": 11.38,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 13.396,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          }
+        ],
+        "objectives": [
+          {
+            "t": 2.882,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 9.396,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 13.146,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.086,
+            "beat": "ch8-launch"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": -0.012,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 7.583,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 11.396,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 7.583,
+          "measuredSeconds": 7.584,
+          "deltaSeconds": 0.001,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "expectedSeconds": 10.584,
+          "measuredSeconds": 10.646,
+          "deltaSeconds": 0.062,
+          "pass": false
+        },
+        "c3Margin": {
+          "l3RevealSeconds": 1.972,
+          "marginSeconds": -1.222,
+          "strictlyBefore": false,
+          "underTriadFlagThreshold": true
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 1
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2",
+            "L3"
+          ],
+          "pass": true
+        }
+      },
+      "events": [
+        {
+          "wall": 392.7999999523163,
+          "story": 392.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "initial": true
+        },
+        {
+          "wall": 466.19999980926514,
+          "story": 466.19999980926514,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3360.7999999523163,
+          "story": 3360.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3596.5,
+          "story": 3596.5,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3596.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3596.5,
+          "story": 3596.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 3596.5,
+          "story": 3596.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 8061.599999904633,
+          "story": 8061.599999904633,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 8062.199999809265,
+          "story": 8062.199999809265,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 8062.199999809265,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 9874.5,
+          "story": 9874.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 9874.599999904633,
+          "story": 9874.599999904633,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 9874.599999904633,
+          "story": 9874.599999904633,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 11124.599999904633,
+          "story": 11124.599999904633,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 11124.599999904633,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11858.399999856949,
+          "story": 11858.399999856949,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 11858.399999856949,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 11874.099999904633,
+          "story": 11874.099999904633,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 13624.5,
+          "story": 13624.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 13624.599999904633,
+          "story": 13624.599999904633,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 13624.599999904633,
+          "story": 13624.599999904633,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 13874.599999904633,
+          "story": 13874.599999904633,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13874.5
+        }
+      ]
+    }
+  ]
+}

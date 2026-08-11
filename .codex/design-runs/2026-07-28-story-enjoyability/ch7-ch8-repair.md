@@ -187,3 +187,13 @@ altitude or `i keep finding it.` is a lie. Raised, not answered.
 **Status:** nothing here is approved by this document. Enters the triad cycle
 with `contractChangeRequired: true` — beat causality, voice grammar, and agency
 framing all change at ch7.
+
+---
+
+**Post-production annotation (orchestrator, 2026-08-10, run 2026-08-10-ch7-ch8-voice-repair, canon-audit finding F11):**
+The device premise above — "The wreck hosts the relay used in `ch4-comply`" — is
+false against world code: the relay is a separate console planted *beside* the
+pod impact (`main/src/story/world/storyWorld.ts:589-605`), not hosted by the
+hull. The production run re-based the device to hull attribution (story-intent
+D12: the ship's own restored systems report in; the relay prop is adjacent,
+double-referential). Do not re-derive the device from the hosted-relay premise.

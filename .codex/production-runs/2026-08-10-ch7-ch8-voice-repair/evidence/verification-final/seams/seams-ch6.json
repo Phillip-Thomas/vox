@@ -1,0 +1,228 @@
+{
+  "mode": "ch6",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:03:00.779Z",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "defectRef": "CIN-10 (cap.seam-continuity partially delivered)",
+  "seams": [
+    {
+      "id": "ch6-dive exit -> ch7-reconstruct entry",
+      "url": "http://localhost:5176/?story=ch6-dive&movie=1&profile=LOW",
+      "originEvent": "first host observation of beat ch7-reconstruct",
+      "originStoryClock": 24201.10000014305,
+      "contractWindow": "entry +0.0 to +3.0 s at 500 ms",
+      "note": null,
+      "frameDir": "evidence/verification-final/seams/ch6-dive-to-ch7",
+      "frames": [
+        {
+          "file": "seam_t0p01s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 0,
+          "measuredOffsetSeconds": 0.013,
+          "shutterSpanMs": 109,
+          "hostShutterMs": 108,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "(repair is not return.)",
+          "domCaption": "(r",
+          "storeAudit": null,
+          "domAudit": null,
+          "hudDom": "CURRENT OBJECTIVE | WRECK SCAR · TRACE RELATIONSHIPS | FOLLOW THE WRECK MARKER. | AIM AT THE SCAR. [F] TRACE RELATIONSHIPS.",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.dive.shore-bank",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.01-wreck-remembers"
+            ]
+          }
+        },
+        {
+          "file": "seam_t0p50s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 0.5,
+          "measuredOffsetSeconds": 0.496,
+          "shutterSpanMs": 137.3,
+          "hostShutterMs": 137,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+          },
+          "domAudit": "WRECK RELAY | HULL A",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · RECOVER WRECK SALVAGE | RETURN TO THE WRECK BENCH. | [F] RECOVER WRECK SALVAGE.",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.diagnosis",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.02-bench-wakes"
+            ]
+          }
+        },
+        {
+          "file": "seam_t1p05s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 1,
+          "measuredOffsetSeconds": 1.047,
+          "shutterSpanMs": 204.9,
+          "hostShutterMs": 205,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the wreck that broug",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+          },
+          "domAudit": "WRECK RELAY | HULL AT SITE 7C-θ · FILED: TOTA",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · RECOVER WRECK SALVAGE | RETURN TO THE WRECK BENCH. | [F] RECOVER WRECK SALVAGE. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.diagnosis",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.02-bench-wakes"
+            ]
+          }
+        },
+        {
+          "file": "seam_t1p49s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 1.5,
+          "measuredOffsetSeconds": 1.495,
+          "shutterSpanMs": 188.4,
+          "hostShutterMs": 188,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the wreck that brought me here wi",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+          },
+          "domAudit": "WRECK RELAY | HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · RECOVER WRECK SALVAGE | RETURN TO THE WRECK BENCH. | [F] RECOVER WRECK SALVAGE. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.diagnosis",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.02-bench-wakes"
+            ]
+          }
+        },
+        {
+          "file": "seam_t2p00s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 2,
+          "measuredOffsetSeconds": 1.996,
+          "shutterSpanMs": 166.6,
+          "hostShutterMs": 167,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the wreck that brought me here will leave here.",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+          },
+          "domAudit": "WRECK RELAY | HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · RESTORE STRUT FRAME | RETURN TO THE WRECK BENCH. | [F] RESTORE STRUT FRAME.",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.bench-online",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.03-bearing-weight"
+            ]
+          }
+        },
+        {
+          "file": "seam_t2p50s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 2.5,
+          "measuredOffsetSeconds": 2.496,
+          "shutterSpanMs": 186.2,
+          "hostShutterMs": 185,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the wreck that brought me here will leave here. i will build t",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+          },
+          "domAudit": "WRECK RELAY | HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · SEAL SCARRED HULL | RETURN TO THE WRECK BENCH. | [F] SEAL SCARRED HULL.",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.frame-restored",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.04-boundary-seals"
+            ]
+          }
+        },
+        {
+          "file": "seam_t3p03s_ch7-reconstruct.png",
+          "targetOffsetSeconds": 3,
+          "measuredOffsetSeconds": 3.029,
+          "shutterSpanMs": 168.1,
+          "hostShutterMs": 168,
+          "stateReadOrder": "state-before-shutter",
+          "beat": "ch7-reconstruct",
+          "phase": "surface",
+          "controlMode": "fps",
+          "storeCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "domCaption": "the wreck that brought me here will leave here. i will build the leaving.",
+          "storeAudit": {
+            "header": "WRECK RELAY",
+            "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED"
+          },
+          "domAudit": "WRECK RELAY | P",
+          "hudDom": "CURRENT OBJECTIVE | WRECK BENCH · INSTALL LIFT CELL | RETURN TO THE WRECK BENCH. | [F] INSTALL LIFT CELL.",
+          "av": {
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.hull-sealed",
+            "cameraAuthority": "player-camera",
+            "appliedFovDeg": 75,
+            "transitionType": "continuous",
+            "declaredCut": false,
+            "activeEffectIds": [
+              "fx.reconstruct.05-pulse-enters"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

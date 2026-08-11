@@ -1,0 +1,1202 @@
+{
+  "capturedAt": "2026-08-10T18:51:41.965Z",
+  "base": "http://localhost:5176",
+  "scenarios": [
+    {
+      "id": "ch7-reconstruct",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "startedAt": "2026-08-10T18:51:42.027Z",
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SCAR · TRACE RELATIONSHIPS | FOLLOW THE WRECK MARKER. | AIM AT THE SCAR. [F] TRACE RELATIONSHIPS. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "captionText": "",
+          "auditText": null,
+          "autopilot": null,
+          "changed": true
+        },
+        {
+          "t": 0.6,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SCAR · TRACE RELATIONSHIPS | FOLLOW THE WRECK MARKER. | AIM AT THE SCAR. [F] TRACE RELATIONSHIPS. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "captionText": "(repair is not return.)",
+          "auditText": null,
+          "autopilot": null,
+          "changed": true
+        },
+        {
+          "t": 2.96,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SCAR · TRACE RELATIONSHIPS | FOLLOW THE WRECK MARKER. | AIM AT THE SCAR. [F] TRACE RELATIONSHIPS.",
+          "captionText": "(repair is not return.)",
+          "auditText": null,
+          "autopilot": null,
+          "changed": true
+        },
+        {
+          "t": 3.73,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · RECOVER WRECK SALVAGE | RETURN TO THE WRECK BENCH. | [F] RECOVER WRECK SALVAGE.",
+          "captionText": "(repair is not return.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.94,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 4.34,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · RECOVER WRECK SALVAGE | RETURN TO THE WRECK BENCH. | [F] RECOVER WRECK SALVAGE. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "captionText": "(repair is not return.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 5.15,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · RESTORE STRUT FRAME | RETURN TO THE WRECK BENCH. | [F] RESTORE STRUT FRAME.",
+          "captionText": "(repair is not return.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 5.76,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · SEAL SCARRED HULL | RETURN TO THE WRECK BENCH. | [F] SEAL SCARRED HULL.",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 6.38,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · INSTALL LIFT CELL | RETURN TO THE WRECK BENCH. | [F] INSTALL LIFT CELL.",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 6.95,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · CRAFT LOGIC WAFER | RETURN TO THE WRECK BENCH. | [C] OPEN FABRICATOR. CRAFT LOGIC WAFER. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.2,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · CALIBRATE FLIGHT CONTROLS | RETURN TO THE WRECK BENCH. | [F] CALIBRATE FLIGHT CONTROLS.",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.61,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK BENCH · CALIBRATE FLIGHT CONTROLS | RETURN TO THE WRECK BENCH. | [F] CALIBRATE FLIGHT CONTROLS. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.88,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:calibrating",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL · CALIBRATING | FLIGHT CALIBRATION IN PROGRESS.",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 15.71,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+          "captionText": "",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 15.93,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+          "captionText": "(the",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 16.13,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+          "captionText": "(the scar r",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 16.33,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | WRECK · FLIGHT READY | FLIGHT CONTROLS CALIBRATED.",
+          "captionText": "(the scar remains",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              6.06,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 16.53,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+          "captionText": "(the",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 0.1,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 16.74,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+          "captionText": "(the wreck",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 0.3,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 16.94,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+          "captionText": "(the wreck is wa",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 0.5,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 17.14,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+          "captionText": "(the wreck is waiting",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 0.7,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 17.34,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · ENTERING | HATCH TRANSFER IN PROGRESS. | HOLD POSITION · ESC TO STEP BACK.",
+          "captionText": "(the wreck is waiting for an own",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 0.8,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 17.83,
+          "beat": "ch7-board",
+          "objectiveId": "board:pressure-seal",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL · PRESSURE SEAL | PRESSURE BOUNDARY CLOSING.",
+          "captionText": "(the wreck is waiting for an owner.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": [
+              4,
+              52.9,
+              -6
+            ],
+            "keys": null,
+            "stillTime": 1.3,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 18.24,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "captionText": "(the wreck is waiting for an owner.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 21.43,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:climb",
+          "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+          "captionText": "(the wreck is waiting for an owner.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.9,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 21.63,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(t",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.1,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 22,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is anot",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.5,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 22.22,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another wo",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.7,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 22.42,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world he",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.9,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 22.62,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. i",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.1,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 22.82,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.3,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 23.03,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was always",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.5,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 23.23,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was always here.",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.7,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 23.43,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was always here.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.9,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 24.57,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "markerLabel": "SIBLING WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD · COURSE | FOLLOW THE SIBLING WORLD MARKER. | HOLD COURSE INTO ITS APPROACH ENVELOPE.",
+          "captionText": "(there is another world here. it was always here.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.8,
+            "nudges": 0,
+            "pos": [
+              5.8,
+              52.79,
+              -5.95
+            ]
+          },
+          "changed": true
+        }
+      ],
+      "shots": [
+        {
+          "file": "evidence-hires/ch7-reconstruct/000_000s_ch7-reconstruct.png",
+          "t": 0,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:diagnose",
+          "caption": ""
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/001_002s_ch7-reconstruct.png",
+          "t": 2,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:diagnose",
+          "caption": "(repair is not return.)"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/002_005s_ch7-reconstruct.png",
+          "t": 5,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:bench_online",
+          "caption": "(repair is not return.)"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/003_007s_ch7-reconstruct.png",
+          "t": 7,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:repair:lift_online",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/004_009s_ch7-reconstruct.png",
+          "t": 9,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:calibrating",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/005_011s_ch7-reconstruct.png",
+          "t": 11,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:calibrating",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/006_013s_ch7-reconstruct.png",
+          "t": 13,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:calibrating",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/007_015s_ch7-reconstruct.png",
+          "t": 15,
+          "beat": "ch7-reconstruct",
+          "objectiveId": "reconstruct:calibrating",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/008_017s_ch7-board.png",
+          "t": 17,
+          "beat": "ch7-board",
+          "objectiveId": "board:hatch-in-progress",
+          "caption": "(the wreck is waiting for an own"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/009_019s_ch8-launch.png",
+          "t": 19,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "caption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/010_022s_ch8-crossing.png",
+          "t": 22,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "caption": "(t"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/011_024s_ch8-crossing.png",
+          "t": 24,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "caption": "(there is another world here. it was always here.)"
+        },
+        {
+          "file": "evidence-hires/ch7-reconstruct/012_026s_ch8-crossing.png",
+          "t": 26,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "caption": "(there is another world here. it was always here.)"
+        }
+      ],
+      "reachedStopBeat": true,
+      "timedOut": false,
+      "pageErrors": [],
+      "stopBeatAtSeconds": 17,
+      "endedAt": "2026-08-10T18:52:09.211Z",
+      "durationSeconds": 27
+    },
+    {
+      "id": "ch8-launch",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "startedAt": "2026-08-10T18:52:09.277Z",
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "captionText": null,
+          "auditText": null,
+          "autopilot": null,
+          "changed": true
+        },
+        {
+          "t": 6.78,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 6.98,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.2,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.37,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.6,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.57,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.8,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.77,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here.",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 7.97,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it wa",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.2,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 8.18,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was alwa",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.4,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 8.38,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was always her",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.6,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 8.58,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+          "captionText": "(there is another world here. it was always here.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 1.8,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        },
+        {
+          "t": 9.91,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "markerLabel": "SIBLING WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | SIBLING WORLD · COURSE | FOLLOW THE SIBLING WORLD MARKER. | HOLD COURSE INTO ITS APPROACH ENVELOPE.",
+          "captionText": "(there is another world here. it was always here.)",
+          "auditText": null,
+          "autopilot": {
+            "goal": null,
+            "keys": null,
+            "stillTime": 0.9,
+            "nudges": 0,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ]
+          },
+          "changed": true
+        }
+      ],
+      "shots": [
+        {
+          "file": "evidence-hires/ch8-launch/000_000s_ch8-launch.png",
+          "t": 0,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch8-launch/001_003s_ch8-launch.png",
+          "t": 3,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch8-launch/002_005s_ch8-launch.png",
+          "t": 5,
+          "beat": "ch8-launch",
+          "objectiveId": "ch8:launch:ignite",
+          "caption": null
+        },
+        {
+          "file": "evidence-hires/ch8-launch/003_007s_ch8-crossing.png",
+          "t": 7,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "caption": "(there"
+        },
+        {
+          "file": "evidence-hires/ch8-launch/004_009s_ch8-crossing.png",
+          "t": 9,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "caption": "(there is another world here. it was always here.)"
+        },
+        {
+          "file": "evidence-hires/ch8-launch/005_011s_ch8-crossing.png",
+          "t": 11,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "caption": "(there is another world here. it was always here.)"
+        },
+        {
+          "file": "evidence-hires/ch8-launch/006_013s_ch8-crossing.png",
+          "t": 13,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "caption": "(there is another world here. it was always here.)"
+        },
+        {
+          "file": "evidence-hires/ch8-launch/007_015s_ch8-crossing.png",
+          "t": 15,
+          "beat": "ch8-crossing",
+          "objectiveId": "ch8:crossing:hold-course",
+          "caption": "(there is another world here. it was always here.)"
+        }
+      ],
+      "reachedStopBeat": true,
+      "timedOut": false,
+      "pageErrors": [],
+      "stopBeatAtSeconds": 7,
+      "endedAt": "2026-08-10T18:52:26.648Z",
+      "durationSeconds": 17
+    }
+  ]
+}

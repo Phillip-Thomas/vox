@@ -1,0 +1,43 @@
+{
+  "scannedAt": "2026-08-11T02:27:33.602Z",
+  "roots": [
+    "evidence/verification-v3/routeA-ordered/run1",
+    "evidence/verification-v3/routeA-ordered/run2",
+    "evidence/verification-v3/routeA-ordered/run3"
+  ],
+  "directories": [
+    {
+      "dir": "evidence/verification-v3/routeA-ordered/run1",
+      "frameCount": 97,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.624
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-ordered/run2",
+      "frameCount": 98,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.605
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-ordered/run3",
+      "frameCount": 95,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.601
+      ]
+    }
+  ]
+}

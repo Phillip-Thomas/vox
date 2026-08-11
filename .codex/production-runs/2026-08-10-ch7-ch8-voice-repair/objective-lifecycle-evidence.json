@@ -1,0 +1,1581 @@
+{
+  "schema": "paravoxia.objectiveLifecycleEvidence.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "capturedAt": "2026-08-11T15:58:00.536Z",
+  "capturedBy": "story-verifier (closing verification pass, iteration 6)",
+  "method": "Subscribed to the live guided-objective store and UX feedback bus through the Vite ESM graph, so every publish, marker-health change and objective-enter cue is counted at emit time. Counts aggregate three ch7 cold movie runs, three ch8 cold movie runs, six variant runs (mobile portrait, reduced motion, POTATO across both beats) and the reset traces.",
+  "runtimeIdMapping": "The scene contract uses hyphenated guidance IDs; the runtime publishes colon-separated IDs. reconstruct-diagnose = reconstruct:diagnose, reconstruct-repair-bench-online = reconstruct:repair:bench_online, reconstruct-repair-frame-restored = reconstruct:repair:frame_restored, reconstruct-repair-hull-sealed = reconstruct:repair:hull_sealed, reconstruct-craft-lift-online = reconstruct:craft:lift_online, reconstruct-repair-lift-online = reconstruct:repair:lift_online, reconstruct-craft-flight-ready = reconstruct:craft:flight_ready, reconstruct-repair-flight-ready = reconstruct:repair:flight_ready, ch8-launch-reboard = ch8:launch:reboard.",
+  "markerHealthDefinition": "missingMarkerFrames below counts store observations in which the objective was active with health 'missing-marker'. Each entry produces two such observations by construction: one at publish (before the marker driver has run) and one at replacement (after the driver drops the outgoing target). The measured duration of that transient is 0.000-0.001 s for every objective except reconstruct:diagnose at beat entry, where it is the shipped 2.956-3.137 s marker-resolution window recorded as baseline limitation 5. No new missing-marker state is introduced by this run.",
+  "undisturbedSummary": "No objective was added, renamed, re-copied or re-marked by this run. Every observed marker label, work order, kind and requiresMarker value is byte-identical to the signed guidance contract and to the shipped baseline trace, and objective-enter feedback fired exactly once per entry on every path and every variant. npm --prefix main run story:ux:check re-ran green post-implementation (6 files, 54 tests).",
+  "knownPreExistingDefectUnchanged": {
+    "id": "dissent-06",
+    "objectiveId": "reconstruct-repair-bench-online",
+    "observation": "The objective covers two player actions (claim salvage, then install the keel workbench) under one ID, so the HUD keeps showing 'WRECK BENCH · RECOVER WRECK SALVAGE' / '[F] RECOVER WRECK SALVAGE.' while the required action becomes '[F] INSTALL KEEL WORKBENCH'. Measured unchanged after implementation: the label observed on all six entries is exactly 'WRECK BENCH · RECOVER WRECK SALVAGE' and the work order is exactly the two shipped lines. This run neither repaired nor worsened it.",
+    "evidenceRefs": [
+      "evidence/verification/objective-lifecycle-measurements.json",
+      "evidence/baseline-trace.json"
+    ]
+  },
+  "restoredScreenLife": {
+    "objectiveId": "ch8:launch:orbital-handoff",
+    "note": "Not a guidance.objectives entry (requiresMarker false, so the contract carries it as an acceptance term). Recorded here because variant D's restored screen life is a contract obligation.",
+    "publishOffsetSecondsIntoHold": [
+      1.767,
+      1.767,
+      1.767
+    ],
+    "screenLifeSeconds": 15.299,
+    "markerLabel": "DEEP SPACE · HANDOFF",
+    "requiresMarker": false,
+    "health": "ready",
+    "workOrder": [
+      "ATMOSPHERIC EXIT IS COMPLETE.",
+      "LET THE SYSTEM RESOLVE."
+    ],
+    "feedbackCuesPerEntry": 1,
+    "publishedBeforeStackOneEveryRun": true,
+    "marginSeconds": [
+      0.249,
+      0.25,
+      0.25
+    ],
+    "variantsObserved": [
+      "variant-desktop",
+      "variant-mobile",
+      "variant-reduced-motion",
+      "quality-potato"
+    ],
+    "baselineComparison": "The shipped baseline trace never sampled this objective at all, consistent with its recorded unreachability (shipped-reference-map defect 3).",
+    "evidenceRefs": [
+      "evidence/verification/cadence-assertions.json",
+      "evidence/verification/variant-parity.json"
+    ]
+  },
+  "nonMarkerObjectivesUndisturbed": [
+    {
+      "objectiveId": "reconstruct:calibrating",
+      "requiresMarker": false,
+      "markerLabel": "KESTREL · CALIBRATING",
+      "workOrder": [
+        "FLIGHT CALIBRATION IN PROGRESS."
+      ],
+      "observed": true,
+      "unchanged": true
+    },
+    {
+      "objectiveId": "reconstruct:ready",
+      "requiresMarker": false,
+      "markerLabel": "WRECK · FLIGHT READY",
+      "workOrder": [
+        "FLIGHT CONTROLS CALIBRATED."
+      ],
+      "observed": true,
+      "unchanged": true
+    },
+    {
+      "objectiveId": "ch8:launch:ignite",
+      "requiresMarker": false,
+      "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+      "workOrder": [
+        "BRING THE KESTREL ONLINE.",
+        "HOLD [SPACE] TO IGNITE AND LIFT."
+      ],
+      "observed": true,
+      "unchanged": true
+    },
+    {
+      "objectiveId": "ch8:launch:climb",
+      "requiresMarker": false,
+      "markerLabel": "KESTREL · CLIMB",
+      "workOrder": [
+        "KEEP THE KESTREL ASCENDING.",
+        "HOLD COURSE THROUGH THE ATMOSPHERE."
+      ],
+      "observed": true,
+      "unchanged": true,
+      "note": "Did not publish on the POTATO tier run (ignite went straight to orbital-handoff). No POTATO baseline exists for comparison."
+    },
+    {
+      "objectiveId": "ch8:launch:orbital-handoff",
+      "requiresMarker": false,
+      "markerLabel": "DEEP SPACE · HANDOFF",
+      "workOrder": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ],
+      "observed": true,
+      "unchanged": true,
+      "note": "Publish restored by the R2 hold; ID, work order and requiresMarker value all unchanged."
+    }
+  ],
+  "objectives": [
+    {
+      "objectiveId": "reconstruct-diagnose",
+      "runtimeObjectiveId": "reconstruct:diagnose",
+      "kind": "interact",
+      "enterAnchorRef": "anc.dive.shore-bank",
+      "clearAnchorRef": "anc.reconstruct.diagnosis",
+      "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+      "workOrder": [
+        "FOLLOW THE WRECK MARKER.",
+        "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK SCAR · TRACE RELATIONSHIPS",
+        "WRECK SCAR · TRACE RELATIONSHIPS",
+        "WRECK SCAR · TRACE RELATIONSHIPS",
+        "WRECK SCAR · TRACE RELATIONSHIPS"
+      ],
+      "totalActiveFrames": 137,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 103,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrderActionable": true,
+          "framesObserved": 30,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrderActionable": true,
+          "framesObserved": 34,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrderActionable": true,
+          "framesObserved": 36,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "workOrderActionable": true,
+          "framesObserved": 37,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-repair-bench-online",
+      "runtimeObjectiveId": "reconstruct:repair:bench_online",
+      "kind": "interact",
+      "enterAnchorRef": "anc.reconstruct.diagnosis",
+      "clearAnchorRef": "anc.reconstruct.bench-online",
+      "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RECOVER WRECK SALVAGE."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "WRECK BENCH · RECOVER WRECK SALVAGE",
+        "WRECK BENCH · RECOVER WRECK SALVAGE"
+      ],
+      "totalActiveFrames": 309,
+      "missingMarkerFrames": 160,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 0,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrderActionable": true,
+          "framesObserved": 76,
+          "missingMarkerFramesWhileActiveAndAcquired": 40,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrderActionable": true,
+          "framesObserved": 78,
+          "missingMarkerFramesWhileActiveAndAcquired": 40,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrderActionable": true,
+          "framesObserved": 77,
+          "missingMarkerFramesWhileActiveAndAcquired": 40,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "workOrderActionable": true,
+          "framesObserved": 78,
+          "missingMarkerFramesWhileActiveAndAcquired": 40,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-repair-frame-restored",
+      "runtimeObjectiveId": "reconstruct:repair:frame_restored",
+      "kind": "interact",
+      "enterAnchorRef": "anc.reconstruct.bench-online",
+      "clearAnchorRef": "anc.reconstruct.frame-restored",
+      "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] RESTORE STRUT FRAME."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · RESTORE STRUT FRAME",
+        "WRECK BENCH · RESTORE STRUT FRAME",
+        "WRECK BENCH · RESTORE STRUT FRAME",
+        "WRECK BENCH · RESTORE STRUT FRAME"
+      ],
+      "totalActiveFrames": 160,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-repair-hull-sealed",
+      "runtimeObjectiveId": "reconstruct:repair:hull_sealed",
+      "kind": "interact",
+      "enterAnchorRef": "anc.reconstruct.frame-restored",
+      "clearAnchorRef": "anc.reconstruct.hull-sealed",
+      "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] SEAL SCARRED HULL."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · SEAL SCARRED HULL",
+        "WRECK BENCH · SEAL SCARRED HULL",
+        "WRECK BENCH · SEAL SCARRED HULL",
+        "WRECK BENCH · SEAL SCARRED HULL"
+      ],
+      "totalActiveFrames": 160,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "workOrderActionable": true,
+          "framesObserved": 40,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-craft-lift-online",
+      "runtimeObjectiveId": "reconstruct:craft:lift_online",
+      "kind": "craft",
+      "enterAnchorRef": "anc.reconstruct.hull-sealed",
+      "clearAnchorRef": "anc.reconstruct.lift-online",
+      "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · CRAFT LIFT CELL",
+        "WRECK BENCH · CRAFT LIFT CELL",
+        "WRECK BENCH · CRAFT LIFT CELL",
+        "WRECK BENCH · CRAFT LIFT CELL"
+      ],
+      "totalActiveFrames": 5,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 3,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 1,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 2,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 1,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 1,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-repair-lift-online",
+      "runtimeObjectiveId": "reconstruct:repair:lift_online",
+      "kind": "interact",
+      "enterAnchorRef": "anc.reconstruct.hull-sealed",
+      "clearAnchorRef": "anc.reconstruct.lift-online",
+      "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] INSTALL LIFT CELL."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · INSTALL LIFT CELL",
+        "WRECK BENCH · INSTALL LIFT CELL",
+        "WRECK BENCH · INSTALL LIFT CELL",
+        "WRECK BENCH · INSTALL LIFT CELL"
+      ],
+      "totalActiveFrames": 155,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 39,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 38,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 39,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "workOrderActionable": true,
+          "framesObserved": 39,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-craft-flight-ready",
+      "runtimeObjectiveId": "reconstruct:craft:flight_ready",
+      "kind": "craft",
+      "enterAnchorRef": "anc.reconstruct.lift-online",
+      "clearAnchorRef": "anc.reconstruct.route-online",
+      "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · CRAFT LOGIC WAFER",
+        "WRECK BENCH · CRAFT LOGIC WAFER",
+        "WRECK BENCH · CRAFT LOGIC WAFER",
+        "WRECK BENCH · CRAFT LOGIC WAFER"
+      ],
+      "totalActiveFrames": 7,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 1,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrderActionable": true,
+          "framesObserved": 2,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrderActionable": true,
+          "framesObserved": 1,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrderActionable": true,
+          "framesObserved": 2,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "workOrderActionable": true,
+          "framesObserved": 2,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "reconstruct-repair-flight-ready",
+      "runtimeObjectiveId": "reconstruct:repair:flight_ready",
+      "kind": "interact",
+      "enterAnchorRef": "anc.reconstruct.lift-online",
+      "clearAnchorRef": "anc.reconstruct.route-online",
+      "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+      "workOrder": [
+        "RETURN TO THE WRECK BENCH.",
+        "[F] CALIBRATE FLIGHT CONTROLS."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+      ],
+      "totalActiveFrames": 145,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 4,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready",
+        "completed",
+        "cleared"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": true,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrderActionable": true,
+          "framesObserved": 37,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrderActionable": true,
+          "framesObserved": 38,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrderActionable": true,
+          "framesObserved": 35,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "workOrderActionable": true,
+          "framesObserved": 35,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/ch7-objective-health.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/pause-window-trace.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/quit-replay-trace.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/ch7-flow-trace.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "evidenceRefs": [
+            "evidence/verification/resets-trace.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/ch7-objective-health.json"
+      ]
+    },
+    {
+      "objectiveId": "ch8-launch-reboard",
+      "runtimeObjectiveId": "ch8:launch:reboard",
+      "kind": "travel",
+      "enterAnchorRef": "anchor.ch8.beat-entry",
+      "clearAnchorRef": "anchor.ch8.at-the-controls",
+      "markerLabel": "KESTREL HATCH · REBOARD",
+      "workOrder": [
+        "RETURN TO THE KESTREL.",
+        "FOLLOW THE HATCH MARKER AND [F] BOARD."
+      ],
+      "entryCount": 4,
+      "markerObservations": [
+        "KESTREL HATCH · REBOARD",
+        "KESTREL HATCH · REBOARD",
+        "KESTREL HATCH · REBOARD",
+        "KESTREL HATCH · REBOARD"
+      ],
+      "totalActiveFrames": 3316,
+      "missingMarkerFrames": 0,
+      "preAcquisitionMissingMarkerFrames": 0,
+      "clearFrameMissingMarkerFrames": 0,
+      "markerHealthAccounting": "Per-requestAnimationFrame sample of getGuidedStoryObjectiveHealth() alongside the active objective. preAcquisitionMissingMarkerFrames are frames before the marker ever resolved for that activation (acceptance criterion [35] records this entry acquisition transient as an accepted measured exception). clearFrameMissingMarkerFrames is the single trailing frame on which the marker target is consumed and the objective is replaced in the same tick. missingMarkerFrames is what remains: frames while the objective was active, already acquired, and not yet clearing. The three add up to every measured missing-marker frame; nothing is discarded.",
+      "lifecycleStates": [
+        "entered",
+        "ready"
+      ],
+      "feedbackEmissionsPerEntry": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "feedbackPresentationOnly": true,
+      "progressionChangedByFeedback": false,
+      "activeAfterClear": false,
+      "clearObservedOnEveryEntry": false,
+      "variants": {
+        "desktop": {
+          "status": "passed",
+          "variantId": "variant-desktop",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrderActionable": true,
+          "framesObserved": 835,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-lifecycle.json"
+          ]
+        },
+        "mobile": {
+          "status": "passed",
+          "variantId": "variant-mobile",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrderActionable": true,
+          "framesObserved": 820,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-lifecycle.json"
+          ]
+        },
+        "reducedMotion": {
+          "status": "passed",
+          "variantId": "variant-reduced-motion",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrderActionable": true,
+          "framesObserved": 834,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-lifecycle.json"
+          ]
+        },
+        "lowestQuality": {
+          "status": "passed",
+          "variantId": "quality-potato",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrderActionable": true,
+          "framesObserved": 827,
+          "missingMarkerFramesWhileActiveAndAcquired": 0,
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-lifecycle.json"
+          ]
+        }
+      },
+      "resetResults": [
+        {
+          "trigger": "beat-exit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": false,
+          "observedObjectiveAfter": "ch8:crossing:acquire-sibling",
+          "observedBeatAfter": "ch8-launch",
+          "note": "The reboard objective did not survive this trigger; the objective observed afterwards is the correct successor.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "deep-link",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": false,
+          "observedObjectiveAfter": "ch8:crossing:acquire-sibling",
+          "observedBeatAfter": "ch8-crossing",
+          "note": "The reboard objective did not survive this trigger; the objective observed afterwards is the correct successor.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "replay",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": false,
+          "observedObjectiveAfter": "ch8:launch:ignite",
+          "observedBeatAfter": "ch8-launch",
+          "note": "The reboard objective did not survive this trigger; the objective observed afterwards is the correct successor.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "pause",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": true,
+          "observedObjectiveAfter": "ch8:launch:reboard",
+          "observedBeatAfter": "ch8-launch",
+          "note": "Standing guidance must survive this trigger; the reboard objective was correctly still active and still marker-healthy afterwards.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "quit",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": false,
+          "observedObjectiveAfter": null,
+          "observedBeatAfter": null,
+          "note": "The reboard objective did not survive this trigger; the objective observed afterwards is the correct successor.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "focus-loss",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": true,
+          "observedObjectiveAfter": "ch8:launch:reboard",
+          "observedBeatAfter": "ch8-launch",
+          "note": "Standing guidance must survive this trigger; the reboard objective was correctly still active and still marker-healthy afterwards.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "completion",
+          "status": "not-observed",
+          "activeAfterReset": true,
+          "retentionExpected": false,
+          "observedObjectiveAfter": "ch8:launch:reboard",
+          "observedBeatAfter": "ch8-launch",
+          "note": "Not proven headless: the on-foot [F] BOARD commit does not fire in this environment even at measured ship proximity, so the objective never reached its completion clear. Residual ux-05 headed gap.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        },
+        {
+          "trigger": "sandbox",
+          "status": "passed",
+          "activeAfterReset": false,
+          "retentionExpected": false,
+          "observedObjectiveAfter": "ch8:launch:ignite",
+          "observedBeatAfter": "ch8-launch",
+          "note": "The reboard objective did not survive this trigger; the objective observed afterwards is the correct successor.",
+          "evidenceRefs": [
+            "evidence/verification-final/objective-health/reboard-resets.json"
+          ]
+        }
+      ],
+      "evidenceRefs": [
+        "evidence/verification-final/objective-health/reboard-lifecycle.json"
+      ]
+    }
+  ],
+  "supersedesBinding": {
+    "contractVersion": "draft-v2",
+    "contractSha256": "aa7ea1ac3f60ad2c130e3eaa07c45b204be4a27f6ab2897e2035aeb9552aca8a",
+    "capturedAt": "2026-08-10T18:05:00Z",
+    "defectRef": "ux-04"
+  },
+  "rebind": {
+    "defectRef": "ux-04",
+    "action": "re-bound to the frozen draft-v5 contract and hash, and re-measured from the closing pass traces rather than re-stamped",
+    "freshMeasurementsRef": "evidence/verification-final/objective-lifecycle-measurements.json",
+    "traceSourceCount": 26,
+    "objectiveCount": 19,
+    "storyUxCheck": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "6 test files, 54 tests, all passing"
+    },
+    "freshFindings": {
+      "allOneShotEntryFeedback": true,
+      "allSingleMarkerLabelPerObjective": true,
+      "markerHealthCriterion": "[35] — no missing-marker frame while ACTIVE AND ACQUIRED",
+      "postAcquisitionExitTransientsSeconds": "0.009 to 0.076, each ending in replacement by the next objective",
+      "unacceptedException": {
+        "objectiveId": "reconstruct:repair:bench_online",
+        "sustainedMissingMarkerSeconds": {
+          "movieAndVariantRuns": 0.683,
+          "pacedManualRun": 5.948
+        },
+        "trigger": "the wreck-salvage claim; the objective id stays repair:bench_online and still requiresMarker while the salvage marker is gone",
+        "preExisting": true,
+        "introducedByThisRunsPatch": false
+      }
+    }
+  },
+  "workingTreeDelta": "Uncommitted loop-3 patch to main/src/story/emergentStoryDirector.ts on top of the locked revision; the production lock is the binding authority for sourceRevision.",
+  "measurementMethod": "Per-requestAnimationFrame objective + marker-health sampling (objective-health-probe.mjs). The earlier rows counted objective-store EMISSIONS, which overstates a frame count whenever an emission is superseded inside a frame; these are rendered-frame counts.",
+  "probeRefs": [
+    "objective-health-probe.mjs",
+    "evidence/verification-final/objective-health/ch7-objective-health.json",
+    "evidence/verification-final/objective-health/reboard-lifecycle.json"
+  ]
+}

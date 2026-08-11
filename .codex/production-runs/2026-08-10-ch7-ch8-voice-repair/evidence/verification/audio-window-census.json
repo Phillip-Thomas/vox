@@ -1,0 +1,1052 @@
+{
+  "capturedAt": "2026-08-10T21:40:41.218Z",
+  "base": "http://localhost:5176",
+  "cases": [
+    {
+      "id": "ch8-launch-window",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "windowOriginText": "i came down this line without being asked. i am going back up it on purpose.",
+      "windowOriginStoryMs": 7594.600000143051,
+      "feedbackCues": [
+        {
+          "windowOffsetSeconds": -0.118,
+          "type": "objective-enter",
+          "objectiveId": "ch8:launch:climb",
+          "action": "travel"
+        },
+        {
+          "windowOffsetSeconds": 1.765,
+          "type": "objective-enter",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 17.081,
+          "type": "objective-enter",
+          "objectiveId": "ch8:crossing:acquire-sibling",
+          "action": "travel"
+        },
+        {
+          "windowOffsetSeconds": 20.248,
+          "type": "objective-enter",
+          "objectiveId": "ch8:crossing:hold-course",
+          "action": "travel"
+        }
+      ],
+      "emissions": [
+        {
+          "windowOffsetSeconds": -3.298,
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "windowOffsetSeconds": -3.298,
+          "ch": "audit",
+          "text": null
+        },
+        {
+          "windowOffsetSeconds": -3.298,
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it."
+        },
+        {
+          "windowOffsetSeconds": -3.297,
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "windowOffsetSeconds": 0,
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose."
+        },
+        {
+          "windowOffsetSeconds": 2.015,
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+        },
+        {
+          "windowOffsetSeconds": 4.032,
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION."
+        },
+        {
+          "windowOffsetSeconds": 6.032,
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED."
+        },
+        {
+          "windowOffsetSeconds": 8.548,
+          "ch": "audit",
+          "text": "CONTACT LOGGED."
+        },
+        {
+          "windowOffsetSeconds": 11.565,
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one."
+        },
+        {
+          "windowOffsetSeconds": 14.064,
+          "ch": "caption",
+          "text": "nothing answers. the query does not close."
+        },
+        {
+          "windowOffsetSeconds": 17.081,
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)"
+        }
+      ],
+      "sfxRateCensus": [
+        {
+          "windowOffsetSeconds": -5.01,
+          "tSeconds": 2.58,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -4.5,
+          "tSeconds": 3.09,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -3.3,
+          "tSeconds": 4.29,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -2.8,
+          "tSeconds": 4.79,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -2.29,
+          "tSeconds": 5.3,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -1.77,
+          "tSeconds": 5.82,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipLaunch 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -1.27,
+          "tSeconds": 6.32,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipLaunch 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -0.77,
+          "tSeconds": 6.82,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -0.26,
+          "tSeconds": 7.33,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 0.24,
+          "tSeconds": 7.83,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 0.74,
+          "tSeconds": 8.33,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 1.24,
+          "tSeconds": 8.83,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 1.75,
+          "tSeconds": 9.34,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 2.25,
+          "tSeconds": 9.84,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 2.75,
+          "tSeconds": 10.34,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 3.25,
+          "tSeconds": 10.84,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 3.76,
+          "tSeconds": 11.35,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 4.26,
+          "tSeconds": 11.85,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 4.76,
+          "tSeconds": 12.35,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 5.26,
+          "tSeconds": 12.85,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 5.76,
+          "tSeconds": 13.35,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 6.27,
+          "tSeconds": 13.86,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 6.77,
+          "tSeconds": 14.36,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 7.27,
+          "tSeconds": 14.86,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 7.78,
+          "tSeconds": 15.37,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 8.28,
+          "tSeconds": 15.87,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 8.78,
+          "tSeconds": 16.37,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 9.28,
+          "tSeconds": 16.87,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 9.79,
+          "tSeconds": 17.38,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 10.29,
+          "tSeconds": 17.88,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 10.79,
+          "tSeconds": 18.38,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 11.29,
+          "tSeconds": 18.88,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 11.8,
+          "tSeconds": 19.39,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 12.3,
+          "tSeconds": 19.89,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 12.8,
+          "tSeconds": 20.39,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 13.3,
+          "tSeconds": 20.89,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 13.81,
+          "tSeconds": 21.4,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 14.31,
+          "tSeconds": 21.9,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 14.81,
+          "tSeconds": 22.4,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 15.32,
+          "tSeconds": 22.91,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 15.82,
+          "tSeconds": 23.41,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 16.32,
+          "tSeconds": 23.91,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 16.82,
+          "tSeconds": 24.41,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 17.32,
+          "tSeconds": 24.91,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 17.83,
+          "tSeconds": 25.42,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 18.33,
+          "tSeconds": 25.92,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 18.83,
+          "tSeconds": 26.42,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 19.33,
+          "tSeconds": 26.92,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 19.84,
+          "tSeconds": 27.43,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 20.34,
+          "tSeconds": 27.93,
+          "beat": "ch8-crossing",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        }
+      ],
+      "sfxCensusDistinct": [
+        "sfx-rate (last 3s): terminalAdvance 1✓/0✗",
+        "sfx-rate: quiet (last 3s)",
+        "sfx-rate (last 3s): shipLaunch 1✓/0✗",
+        "sfx-rate (last 3s): shipLaunch 1✓/0✗ | shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/0✗"
+      ]
+    },
+    {
+      "id": "ch7-exit-window",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "windowOriginText": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+      "windowOriginStoryMs": 15972.099999904633,
+      "feedbackCues": [
+        {
+          "windowOffsetSeconds": -12.078,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:repair:bench_online",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": -10.777,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:repair:frame_restored",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": -10.111,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:repair:hull_sealed",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": -9.444,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:craft:lift_online",
+          "action": "craft"
+        },
+        {
+          "windowOffsetSeconds": -9.408,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:repair:lift_online",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": -8.724,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:craft:flight_ready",
+          "action": "craft"
+        },
+        {
+          "windowOffsetSeconds": -8.695,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:repair:flight_ready",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": -8.07,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:calibrating",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 0,
+          "type": "objective-enter",
+          "objectiveId": "reconstruct:ready",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 5.021,
+          "type": "objective-enter",
+          "objectiveId": "board:enter-hatch",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": 5.088,
+          "type": "objective-enter",
+          "objectiveId": "board:hatch-in-progress",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 6.033,
+          "type": "objective-enter",
+          "objectiveId": "board:pressure-seal",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 6.682,
+          "type": "objective-enter",
+          "objectiveId": "board:cockpit-secured",
+          "action": "wait"
+        },
+        {
+          "windowOffsetSeconds": 6.682,
+          "type": "objective-enter",
+          "objectiveId": "ch8:launch:ignite",
+          "action": "interact"
+        },
+        {
+          "windowOffsetSeconds": 9.921,
+          "type": "objective-enter",
+          "objectiveId": "ch8:launch:climb",
+          "action": "travel"
+        },
+        {
+          "windowOffsetSeconds": 11.855,
+          "type": "objective-enter",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "action": "wait"
+        }
+      ],
+      "emissions": [
+        {
+          "windowOffsetSeconds": -12.078,
+          "ch": "caption",
+          "text": "(repair is not return.)"
+        },
+        {
+          "windowOffsetSeconds": -12.078,
+          "ch": "audit",
+          "text": null
+        },
+        {
+          "windowOffsetSeconds": -12.077,
+          "ch": "audit",
+          "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED"
+        },
+        {
+          "windowOffsetSeconds": -12.077,
+          "ch": "caption",
+          "text": "the wreck that brought me here will leave here. i will build the leaving."
+        },
+        {
+          "windowOffsetSeconds": -10.777,
+          "ch": "caption",
+          "text": "the keel takes the weight first. everything after this is allowed to be heavy."
+        },
+        {
+          "windowOffsetSeconds": -10.111,
+          "ch": "caption",
+          "text": "it remembers a straight line and goes back to it without being told. i watch that closely."
+        },
+        {
+          "windowOffsetSeconds": -9.444,
+          "ch": "audit",
+          "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED"
+        },
+        {
+          "windowOffsetSeconds": -9.444,
+          "ch": "caption",
+          "text": "i closed it, and something inside started listening again. i did that too."
+        },
+        {
+          "windowOffsetSeconds": -8.724,
+          "ch": "audit",
+          "text": "POWER BUS LIVE · TRANSPONDER ARMED"
+        },
+        {
+          "windowOffsetSeconds": -8.724,
+          "ch": "caption",
+          "text": "the ground's hold is a habit, not a law."
+        },
+        {
+          "windowOffsetSeconds": -8.07,
+          "ch": "caption",
+          "text": "the last part is the part that thinks. i am being watched now. i put it in anyway."
+        },
+        {
+          "windowOffsetSeconds": 0,
+          "ch": "audit",
+          "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED"
+        },
+        {
+          "windowOffsetSeconds": 0.604,
+          "ch": "caption",
+          "text": "nothing has asked yet. something has started paying attention."
+        },
+        {
+          "windowOffsetSeconds": 3.021,
+          "ch": "caption",
+          "text": "the scar remains. now it can carry me."
+        },
+        {
+          "windowOffsetSeconds": 5.021,
+          "ch": "caption",
+          "text": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "windowOffsetSeconds": 6.732,
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "windowOffsetSeconds": 10.088,
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose."
+        },
+        {
+          "windowOffsetSeconds": 12.104,
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+        },
+        {
+          "windowOffsetSeconds": 14.104,
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION."
+        },
+        {
+          "windowOffsetSeconds": 16.12,
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED."
+        },
+        {
+          "windowOffsetSeconds": 18.637,
+          "ch": "audit",
+          "text": "CONTACT LOGGED."
+        }
+      ],
+      "sfxRateCensus": [
+        {
+          "windowOffsetSeconds": -15.47,
+          "tSeconds": 0.5,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -13.56,
+          "tSeconds": 2.41,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -13.04,
+          "tSeconds": 2.93,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -12.21,
+          "tSeconds": 3.76,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -11.71,
+          "tSeconds": 4.26,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -11.2,
+          "tSeconds": 4.77,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -10.7,
+          "tSeconds": 5.27,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -10.2,
+          "tSeconds": 5.77,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -9.7,
+          "tSeconds": 6.27,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 3✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -9.19,
+          "tSeconds": 6.78,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 3✓/1✗"
+        },
+        {
+          "windowOffsetSeconds": -8.68,
+          "tSeconds": 7.29,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 4✓/2✗"
+        },
+        {
+          "windowOffsetSeconds": -8.18,
+          "tSeconds": 7.79,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 4✓/2✗"
+        },
+        {
+          "windowOffsetSeconds": -7.68,
+          "tSeconds": 8.29,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 4✓/2✗"
+        },
+        {
+          "windowOffsetSeconds": -7.18,
+          "tSeconds": 8.79,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 3✓/2✗"
+        },
+        {
+          "windowOffsetSeconds": -6.67,
+          "tSeconds": 9.3,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 3✓/2✗"
+        },
+        {
+          "windowOffsetSeconds": -6.17,
+          "tSeconds": 9.8,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/1✗"
+        },
+        {
+          "windowOffsetSeconds": -5.67,
+          "tSeconds": 10.3,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": -5.17,
+          "tSeconds": 10.8,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -4.66,
+          "tSeconds": 11.31,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -4.16,
+          "tSeconds": 11.81,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -3.66,
+          "tSeconds": 12.31,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -3.16,
+          "tSeconds": 12.81,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -2.65,
+          "tSeconds": 13.32,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -2.15,
+          "tSeconds": 13.82,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -1.65,
+          "tSeconds": 14.32,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -1.14,
+          "tSeconds": 14.83,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -0.64,
+          "tSeconds": 15.33,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": -0.14,
+          "tSeconds": 15.83,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 0.36,
+          "tSeconds": 16.33,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 0.87,
+          "tSeconds": 16.84,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 1.37,
+          "tSeconds": 17.34,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 1.88,
+          "tSeconds": 17.85,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 2.38,
+          "tSeconds": 18.35,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 2.88,
+          "tSeconds": 18.85,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 3.38,
+          "tSeconds": 19.35,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 3.89,
+          "tSeconds": 19.86,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 4.39,
+          "tSeconds": 20.36,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 4.9,
+          "tSeconds": 20.87,
+          "beat": "ch7-reconstruct",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 5.4,
+          "tSeconds": 21.37,
+          "beat": "ch7-board",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/1✗"
+        },
+        {
+          "windowOffsetSeconds": 6.03,
+          "tSeconds": 22,
+          "beat": "ch7-board",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/1✗ | boardShip 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 6.54,
+          "tSeconds": 22.51,
+          "beat": "ch7-board",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | boardShip 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 7.04,
+          "tSeconds": 23.01,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 3✓/2✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 7.54,
+          "tSeconds": 23.51,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/2✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 8.05,
+          "tSeconds": 24.02,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 8.55,
+          "tSeconds": 24.52,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | shipLaunch 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 9.05,
+          "tSeconds": 25.02,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/1✗ | shipLaunch 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 9.61,
+          "tSeconds": 25.58,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 10.12,
+          "tSeconds": 26.09,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 10.62,
+          "tSeconds": 26.59,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 11.12,
+          "tSeconds": 27.09,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 11.62,
+          "tSeconds": 27.59,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 12.13,
+          "tSeconds": 28.1,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 2✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 12.63,
+          "tSeconds": 28.6,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 13.13,
+          "tSeconds": 29.1,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 13.63,
+          "tSeconds": 29.6,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 14.14,
+          "tSeconds": 30.11,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 14.64,
+          "tSeconds": 30.61,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 15.14,
+          "tSeconds": 31.11,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate (last 3s): shipBoost 1✓/0✗"
+        },
+        {
+          "windowOffsetSeconds": 15.65,
+          "tSeconds": 31.62,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 16.15,
+          "tSeconds": 32.12,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 16.65,
+          "tSeconds": 32.62,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 17.16,
+          "tSeconds": 33.13,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 17.66,
+          "tSeconds": 33.63,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 18.16,
+          "tSeconds": 34.13,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 18.66,
+          "tSeconds": 34.63,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 19.17,
+          "tSeconds": 35.14,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 19.67,
+          "tSeconds": 35.64,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        },
+        {
+          "windowOffsetSeconds": 20.17,
+          "tSeconds": 36.14,
+          "beat": "ch8-launch",
+          "diag": "sfx-rate: quiet (last 3s)"
+        }
+      ],
+      "sfxCensusDistinct": [
+        "sfx-rate (last 3s): terminalAdvance 1✓/0✗",
+        "sfx-rate: quiet (last 3s)",
+        "sfx-rate (last 3s): terminalAdvance 2✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 3✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 3✓/1✗",
+        "sfx-rate (last 3s): terminalAdvance 4✓/2✗",
+        "sfx-rate (last 3s): terminalAdvance 3✓/2✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/1✗",
+        "sfx-rate (last 3s): terminalAdvance 1✓/1✗",
+        "sfx-rate (last 3s): terminalAdvance 1✓/1✗ | boardShip 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | boardShip 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 3✓/2✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/2✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | boardShip 1✓/0✗ | shipLaunch 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 2✓/1✗ | shipLaunch 1✓/0✗ | shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 1✓/1✗ | shipLaunch 1✓/0✗ | shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): shipBoost 1✓/0✗",
+        "sfx-rate (last 3s): terminalAdvance 1✓/0✗ | shipBoost 1✓/0✗"
+      ]
+    }
+  ]
+}

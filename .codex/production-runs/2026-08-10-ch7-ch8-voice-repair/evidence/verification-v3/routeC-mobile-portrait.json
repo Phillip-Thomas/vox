@@ -1,0 +1,5929 @@
+{
+  "mode": "routeC",
+  "label": "mobile-portrait",
+  "profile": "LOW",
+  "variant": "mobile",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T01:37:14.589Z",
+  "runs": [
+    {
+      "run": 1,
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "pageErrors": [],
+      "entryStoryClock": 442.5,
+      "entryObserver": "window.__storyBeat poll",
+      "probeReady": true,
+      "frameDir": "evidence/verification-v3/routeC-mobile-portrait-run1",
+      "frames": [
+        {
+          "file": "000_strip_t0p03s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 471.7,
+          "shutterSpanMs": 2030.5,
+          "hostShutterMs": 2029,
+          "entryOffsetSeconds": 0.029,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t2p09s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 2527.6,
+          "shutterSpanMs": 533.9,
+          "hostShutterMs": 533,
+          "entryOffsetSeconds": 2.085,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t2p62s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3067.2,
+          "shutterSpanMs": 746,
+          "hostShutterMs": 746,
+          "entryOffsetSeconds": 2.625,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p38s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3824.7,
+          "shutterSpanMs": 77.7,
+          "hostShutterMs": 77,
+          "entryOffsetSeconds": 3.382,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "",
+          "domCaptionChars": 0,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_strip_t3p89s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4329.1,
+          "shutterSpanMs": 80.8,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 3.887,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answe",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_strip_t4p41s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4854.6,
+          "shutterSpanMs": 69,
+          "hostShutterMs": 69,
+          "entryOffsetSeconds": 4.412,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i",
+          "domCaptionChars": 30,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_strip_t4p93s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5371.6,
+          "shutterSpanMs": 99.4,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 4.929,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold",
+          "domCaptionChars": 4,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_strip_t5p43s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 5876.1,
+          "shutterSpanMs": 66.2,
+          "hostShutterMs": 66,
+          "entryOffsetSeconds": 5.434,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is th",
+          "domCaptionChars": 19,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_strip_t5p94s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6382.8,
+          "shutterSpanMs": 77.4,
+          "hostShutterMs": 77,
+          "entryOffsetSeconds": 5.94,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order le",
+          "domCaptionChars": 34,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_strip_t6p45s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6892.6,
+          "shutterSpanMs": 120.4,
+          "hostShutterMs": 119,
+          "entryOffsetSeconds": 6.45,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am t",
+          "domCaptionChars": 48,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_deepSpace+0.0_t6p70s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 7140.1,
+          "shutterSpanMs": 86.4,
+          "hostShutterMs": 86,
+          "entryOffsetSeconds": 6.698,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "",
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_strip_t6p95s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7393.3,
+          "shutterSpanMs": 97.9,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 6.951,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_deepSpace+0.5_t7p22s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 7660.9,
+          "shutterSpanMs": 84.7,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 7.218,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down thi",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_strip_t7p47s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 7915.8,
+          "shutterSpanMs": 76.4,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 7.473,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line w",
+          "domCaptionChars": 23,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t8p00s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8438.1,
+          "shutterSpanMs": 95,
+          "hostShutterMs": 94,
+          "entryOffsetSeconds": 7.996,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being as",
+          "domCaptionChars": 38,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_strip_t8p51s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8948.5,
+          "shutterSpanMs": 101.7,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 8.506,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_strip_t9p02s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9465.7,
+          "shutterSpanMs": 102.8,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 9.023,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on p",
+          "domCaptionChars": 69,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_strip_t9p55s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9987.6,
+          "shutterSpanMs": 75,
+          "hostShutterMs": 74,
+          "entryOffsetSeconds": 9.545,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_strip_t10p07s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10510.5,
+          "shutterSpanMs": 84,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 10.068,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_strip_t10p57s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11014.4,
+          "shutterSpanMs": 102.4,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 10.572,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_strip_t11p10s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11537.7,
+          "shutterSpanMs": 89.5,
+          "hostShutterMs": 88,
+          "entryOffsetSeconds": 11.095,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_strip_t11p60s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12043,
+          "shutterSpanMs": 108.2,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 11.601,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_strip_t12p13s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12570.8,
+          "shutterSpanMs": 95.9,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 12.128,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_strip_t12p64s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13082,
+          "shutterSpanMs": 80.3,
+          "hostShutterMs": 80,
+          "entryOffsetSeconds": 12.639,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_strip_t13p16s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13605.4,
+          "shutterSpanMs": 73.7,
+          "hostShutterMs": 74,
+          "entryOffsetSeconds": 13.163,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_strip_t13p68s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14118.6,
+          "shutterSpanMs": 99.3,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 13.676,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_strip_t14p19s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14631.6,
+          "shutterSpanMs": 102.5,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 14.189,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_strip_t14p71s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15148.5,
+          "shutterSpanMs": 80.9,
+          "hostShutterMs": 80,
+          "entryOffsetSeconds": 14.706,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_strip_t15p21s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15648.5,
+          "shutterSpanMs": 79.5,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 15.206,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_strip_t15p73s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16170,
+          "shutterSpanMs": 72.8,
+          "hostShutterMs": 72,
+          "entryOffsetSeconds": 15.727,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_strip_t16p24s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16686,
+          "shutterSpanMs": 75.1,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 16.244,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_strip_t16p76s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17200.5,
+          "shutterSpanMs": 76.9,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 16.758,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t17p27s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17714.9,
+          "shutterSpanMs": 102.2,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 17.272,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t17p79s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18229,
+          "shutterSpanMs": 103.7,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 17.787,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t18p31s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18748.6,
+          "shutterSpanMs": 100.3,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 18.306,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "th",
+          "domCaptionChars": 2,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_strip_t18p82s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19264.1,
+          "shutterSpanMs": 79.1,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 18.822,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a",
+          "domCaptionChars": 16,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_strip_t19p34s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19784.4,
+          "shutterSpanMs": 99.2,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 19.342,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. wh",
+          "domCaptionChars": 32,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t19p85s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20294.5,
+          "shutterSpanMs": 105.6,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 19.852,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is no",
+          "domCaptionChars": 47,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_strip_t20p37s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20814.7,
+          "shutterSpanMs": 83.5,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 20.372,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is not one.",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 53,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_strip_t20p89s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21337.4,
+          "shutterSpanMs": 72.4,
+          "hostShutterMs": 71,
+          "entryOffsetSeconds": 20.895,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "noth",
+          "domCaptionChars": 4,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_strip_t21p41s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21850.5,
+          "shutterSpanMs": 76.7,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 21.408,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_strip_t21p93s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22368.6,
+          "shutterSpanMs": 74,
+          "hostShutterMs": 73,
+          "entryOffsetSeconds": 21.926,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_strip_t22p44s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22880.4,
+          "shutterSpanMs": 80.8,
+          "hostShutterMs": 80,
+          "entryOffsetSeconds": 22.438,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_strip_t22p94s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23380.6,
+          "shutterSpanMs": 102.6,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 22.938,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_strip_t23p46s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23901.5,
+          "shutterSpanMs": 74.8,
+          "hostShutterMs": 74,
+          "entryOffsetSeconds": 23.459,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        }
+      ],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.375,
+        "tL2": 4.779,
+        "tL3": null,
+        "tL4": 6.67,
+        "tPhaseEdge": 4.779,
+        "tDeepSpace": 6.69,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 0,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.375,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 4.779,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 6.67,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          },
+          {
+            "t": 18.221,
+            "text": "they asked for a designation. what i have is not one."
+          },
+          {
+            "t": 20.721,
+            "text": "nothing answers. the query does not close."
+          },
+          {
+            "t": 23.738,
+            "text": "(there is another world here. it was always here.)"
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 8.688,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          {
+            "t": 10.688,
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          {
+            "t": 12.704,
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          {
+            "t": 15.204,
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          }
+        ],
+        "objectives": [
+          {
+            "t": 3.102,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 6.538,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 8.438,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          },
+          {
+            "t": 23.738,
+            "id": null,
+            "health": null
+          },
+          {
+            "t": 23.738,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "missing-marker"
+          },
+          {
+            "t": 23.738,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.079,
+            "beat": "ch8-launch"
+          },
+          {
+            "t": 23.738,
+            "beat": "ch8-crossing"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": -0.073,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 4.779,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 6.69,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 4.779,
+          "measuredSeconds": 4.779,
+          "deltaSeconds": 0,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "pass": null,
+          "note": "L3 not rendered (drop rule or route ended first)"
+        },
+        "c3Margin": {
+          "marginSeconds": null,
+          "note": "L3 dropped"
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2"
+          ],
+          "pass": true
+        }
+      },
+      "exitWindow": {
+        "originSeconds": 6.67,
+        "rows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.018,
+            "deltaSeconds": 0.018,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.018,
+            "deltaSeconds": 0.018,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.034,
+            "deltaSeconds": 0.034,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.534,
+            "deltaSeconds": 0.034,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.551,
+            "deltaSeconds": 0.051,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.051,
+            "deltaSeconds": 0.051,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.068,
+            "deltaSeconds": 0.068,
+            "pass": true
+          }
+        ],
+        "pass": true
+      },
+      "variantDOrdering": {
+        "publishOffsetSeconds": 1.768,
+        "stackOneOffsetSeconds": 2.018,
+        "marginSeconds": 0.25,
+        "pass": true
+      },
+      "events": [
+        {
+          "wall": 363.80000019073486,
+          "story": 363.80000019073486,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "initial": true
+        },
+        {
+          "wall": 369.90000009536743,
+          "story": 369.90000009536743,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3544.300000190735,
+          "story": 3544.300000190735,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3817.300000190735,
+          "story": 3817.300000190735,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3817.300000190735,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3817.300000190735,
+          "story": 3817.300000190735,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 3817.300000190735,
+          "story": 3817.300000190735,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 5221.600000143051,
+          "story": 5221.600000143051,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 5221.900000095367,
+          "story": 5221.900000095367,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 5221.900000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 6980,
+          "story": 6980,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 6980.300000190735,
+          "story": 6980.200000047684,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 6980.300000190735,
+          "story": 6980.300000190735,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 7112.200000047684,
+          "story": 7112.200000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 7112.200000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7132.600000143051,
+          "story": 7132.600000143051,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 8880.100000143051,
+          "story": 8880.100000143051,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 8880.200000047684,
+          "story": 8880.200000047684,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 8880.200000047684,
+          "story": 8880.200000047684,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 9130,
+          "story": 9130,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 9130
+        },
+        {
+          "wall": 11130.100000143051,
+          "story": 11130.100000143051,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 11130.100000143051
+        },
+        {
+          "wall": 13146.5,
+          "story": 13146.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13146.5
+        },
+        {
+          "wall": 15646.5,
+          "story": 15646.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 15646.5
+        },
+        {
+          "wall": 18663.400000095367,
+          "story": 18663.400000095367,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 18663.400000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 21163.10000014305,
+          "story": 21163.10000014305,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 21163.10000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24180.10000014305,
+          "story": 24180.10000014305,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 24180.10000014305,
+          "story": 24180.10000014305,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 24180.10000014305,
+          "story": 24180.10000014305,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 24180.10000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24180.200000047684,
+          "story": 24180.200000047684,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 24180.200000047684,
+          "story": 24180.200000047684,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 24180.300000190735,
+          "story": 24180.300000190735,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 24180.400000095367,
+          "story": 24180.400000095367,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 24180.800000190735,
+          "story": 24180.800000190735,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "pageErrors": [],
+      "entryStoryClock": 510.7999999523163,
+      "entryObserver": "window.__storyBeat poll",
+      "probeReady": true,
+      "frameDir": "evidence/verification-v3/routeC-mobile-portrait-run2",
+      "frames": [
+        {
+          "file": "000_strip_t0p03s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 537.2,
+          "shutterSpanMs": 2533.5,
+          "hostShutterMs": 2531,
+          "entryOffsetSeconds": 0.026,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t2p57s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3081.1,
+          "shutterSpanMs": 114.5,
+          "hostShutterMs": 114,
+          "entryOffsetSeconds": 2.57,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t3p42s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3929.9,
+          "shutterSpanMs": 79.2,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 3.419,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p92s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4433.4,
+          "shutterSpanMs": 102.5,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 3.923,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answe",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_burst_t4p33s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 4843.7,
+          "shutterSpanMs": 90.9,
+          "hostShutterMs": 90,
+          "entryOffsetSeconds": 4.333,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every ti",
+          "domCaptionChars": 26,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_burst_t4p42s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 4935.3,
+          "shutterSpanMs": 79.5,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 4.425,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time",
+          "domCaptionChars": 28,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_burst_t4p51s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5016.5,
+          "shutterSpanMs": 82.1,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 4.506,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i",
+          "domCaptionChars": 30,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_burst_t4p59s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5099.5,
+          "shutterSpanMs": 83.1,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 4.589,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i as",
+          "domCaptionChars": 33,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_burst_t4p67s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5184.1,
+          "shutterSpanMs": 83.1,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 4.673,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked",
+          "domCaptionChars": 36,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_burst_t4p76s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5268,
+          "shutterSpanMs": 208.1,
+          "hostShutterMs": 209,
+          "entryOffsetSeconds": 4.757,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked.",
+          "domCaptionChars": 37,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_burst_t4p98s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5486.1,
+          "shutterSpanMs": 82.6,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 4.975,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hol",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_burst_t5p06s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5571.9,
+          "shutterSpanMs": 79.2,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 5.061,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold i",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_burst_t5p14s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5652.3,
+          "shutterSpanMs": 83.5,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 5.141,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it.",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_burst_t5p23s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5739.1,
+          "shutterSpanMs": 128.4,
+          "hostShutterMs": 128,
+          "entryOffsetSeconds": 5.228,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. th",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t5p78s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6288.4,
+          "shutterSpanMs": 77.6,
+          "hostShutterMs": 77,
+          "entryOffsetSeconds": 5.778,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only o",
+          "domCaptionChars": 27,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_burst_t5p99s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6504.3,
+          "shutterSpanMs": 79.3,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 5.994,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order l",
+          "domCaptionChars": 33,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_burst_t6p07s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6584.4,
+          "shutterSpanMs": 84,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 6.074,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order lef",
+          "domCaptionChars": 35,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_burst_t6p16s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6669,
+          "shutterSpanMs": 133.1,
+          "hostShutterMs": 133,
+          "entryOffsetSeconds": 6.158,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left,",
+          "domCaptionChars": 37,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_burst_t6p29s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6805.2,
+          "shutterSpanMs": 102.5,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 6.294,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and",
+          "domCaptionChars": 41,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_burst_t6p40s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6909.1,
+          "shutterSpanMs": 88.9,
+          "hostShutterMs": 88,
+          "entryOffsetSeconds": 6.398,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i a",
+          "domCaptionChars": 45,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_burst_t6p49s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6999.2,
+          "shutterSpanMs": 99.7,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 6.488,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am",
+          "domCaptionChars": 46,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_burst_t6p59s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7100.1,
+          "shutterSpanMs": 177.3,
+          "hostShutterMs": 177,
+          "entryOffsetSeconds": 6.589,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the",
+          "domCaptionChars": 50,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_deepSpace+0.0_t6p77s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 7279,
+          "shutterSpanMs": 87.4,
+          "hostShutterMs": 87,
+          "entryOffsetSeconds": 6.768,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i",
+          "domCaptionChars": 1,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_burst_t6p86s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7367.9,
+          "shutterSpanMs": 97.8,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 6.857,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i c",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_burst_t6p96s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7466.4,
+          "shutterSpanMs": 83.6,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 6.956,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_burst_t7p04s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7551.4,
+          "shutterSpanMs": 94.9,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 7.041,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came d",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_burst_t7p14s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7647.7,
+          "shutterSpanMs": 76.4,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 7.137,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_burst_t7p21s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7724.8,
+          "shutterSpanMs": 76.6,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 7.214,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down th",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_deepSpace+0.5_t7p29s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 7802,
+          "shutterSpanMs": 81.2,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 7.291,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this",
+          "domCaptionChars": 16,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_burst_t7p37s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7884.6,
+          "shutterSpanMs": 82.3,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 7.374,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this l",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_strip_t7p90s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8409.4,
+          "shutterSpanMs": 75.7,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 7.899,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without bein",
+          "domCaptionChars": 34,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_strip_t8p42s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8928.1,
+          "shutterSpanMs": 77.2,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 8.417,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am g",
+          "domCaptionChars": 49,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t8p94s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9449.3,
+          "shutterSpanMs": 107,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 8.938,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it",
+          "domCaptionChars": 64,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t9p46s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9971,
+          "shutterSpanMs": 436.1,
+          "hostShutterMs": 435,
+          "entryOffsetSeconds": 9.46,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t9p98s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10489.4,
+          "shutterSpanMs": 82,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 9.979,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_strip_t10p50s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11014.9,
+          "shutterSpanMs": 108.6,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 10.504,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_strip_t11p03s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11538,
+          "shutterSpanMs": 102.5,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 11.027,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t11p54s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12052.6,
+          "shutterSpanMs": 82.8,
+          "hostShutterMs": 83,
+          "entryOffsetSeconds": 11.542,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_strip_t12p04s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12555.2,
+          "shutterSpanMs": 100.1,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 12.044,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_strip_t12p56s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13072.1,
+          "shutterSpanMs": 78.7,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 12.561,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_strip_t13p08s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13592.6,
+          "shutterSpanMs": 95.2,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 13.082,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_strip_t13p59s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14105.3,
+          "shutterSpanMs": 100,
+          "hostShutterMs": 100,
+          "entryOffsetSeconds": 13.595,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_strip_t14p11s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14621.4,
+          "shutterSpanMs": 81,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 14.111,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_strip_t14p63s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15142.3,
+          "shutterSpanMs": 85.4,
+          "hostShutterMs": 85,
+          "entryOffsetSeconds": 14.632,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_strip_t15p15s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15664.8,
+          "shutterSpanMs": 106.6,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 15.154,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "045_strip_t15p67s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16181.6,
+          "shutterSpanMs": 84.6,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 15.671,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "046_strip_t16p17s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16681.8,
+          "shutterSpanMs": 85.1,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 16.171,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "047_strip_t16p69s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17205.4,
+          "shutterSpanMs": 76.5,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 16.695,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "048_strip_t17p20s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17715.7,
+          "shutterSpanMs": 105.9,
+          "hostShutterMs": 106,
+          "entryOffsetSeconds": 17.205,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "049_strip_t17p72s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18233.5,
+          "shutterSpanMs": 82.3,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 17.723,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "050_strip_t18p24s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18754.3,
+          "shutterSpanMs": 79.8,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 18.244,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "051_strip_t18p76s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19268.3,
+          "shutterSpanMs": 82.3,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 18.758,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked fo",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "052_strip_t19p28s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19787.7,
+          "shutterSpanMs": 78.7,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 19.277,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation.",
+          "domCaptionChars": 29,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "053_strip_t19p79s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20305,
+          "shutterSpanMs": 100.8,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 19.794,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is",
+          "domCaptionChars": 44,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "054_strip_t20p31s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20821.1,
+          "shutterSpanMs": 102.6,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 20.31,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is not one.",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 53,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "055_strip_t20p82s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21332.9,
+          "shutterSpanMs": 84.9,
+          "hostShutterMs": 85,
+          "entryOffsetSeconds": 20.822,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "n",
+          "domCaptionChars": 1,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "056_strip_t21p33s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21837,
+          "shutterSpanMs": 100.1,
+          "hostShutterMs": 99,
+          "entryOffsetSeconds": 21.326,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers.",
+          "domCaptionChars": 16,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "057_strip_t21p84s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22353.8,
+          "shutterSpanMs": 79.1,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 21.843,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does",
+          "domCaptionChars": 31,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "058_strip_t22p37s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22877.5,
+          "shutterSpanMs": 76.4,
+          "hostShutterMs": 76,
+          "entryOffsetSeconds": 22.367,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "059_strip_t22p88s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23388,
+          "shutterSpanMs": 101.7,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 22.877,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "060_strip_t23p39s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23904.2,
+          "shutterSpanMs": 79,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 23.393,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        }
+      ],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.423,
+        "tL2": 4.851,
+        "tL3": null,
+        "tL4": 6.726,
+        "tPhaseEdge": 4.851,
+        "tDeepSpace": 6.742,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 0,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.423,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 4.851,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 6.726,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          },
+          {
+            "t": 18.275,
+            "text": "they asked for a designation. what i have is not one."
+          },
+          {
+            "t": 20.775,
+            "text": "nothing answers. the query does not close."
+          },
+          {
+            "t": 23.792,
+            "text": "(there is another world here. it was always here.)"
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 8.742,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          {
+            "t": 10.742,
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          {
+            "t": 12.759,
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          {
+            "t": 15.259,
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          }
+        ],
+        "objectives": [
+          {
+            "t": 3.123,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 6.685,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 8.492,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          },
+          {
+            "t": 23.792,
+            "id": null,
+            "health": null
+          },
+          {
+            "t": 23.792,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "missing-marker"
+          },
+          {
+            "t": 23.793,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.09,
+            "beat": "ch8-launch"
+          },
+          {
+            "t": 23.792,
+            "beat": "ch8-crossing"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": -0.084,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 4.851,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 6.742,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 4.851,
+          "measuredSeconds": 4.851,
+          "deltaSeconds": 0,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "pass": null,
+          "note": "L3 not rendered (drop rule or route ended first)"
+        },
+        "c3Margin": {
+          "marginSeconds": null,
+          "note": "L3 dropped"
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2"
+          ],
+          "pass": true
+        }
+      },
+      "exitWindow": {
+        "originSeconds": 6.726,
+        "rows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.016,
+            "deltaSeconds": 0.016,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.016,
+            "deltaSeconds": 0.016,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.033,
+            "deltaSeconds": 0.033,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.533,
+            "deltaSeconds": 0.033,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.549,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.049,
+            "deltaSeconds": 0.049,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.066,
+            "deltaSeconds": 0.066,
+            "pass": true
+          }
+        ],
+        "pass": true
+      },
+      "variantDOrdering": {
+        "publishOffsetSeconds": 1.766,
+        "stackOneOffsetSeconds": 2.016,
+        "marginSeconds": 0.25,
+        "pass": true
+      },
+      "events": [
+        {
+          "wall": 420.7000000476837,
+          "story": 420.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "initial": true
+        },
+        {
+          "wall": 427,
+          "story": 427,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3634.2999999523163,
+          "story": 3634.2999999523163,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3934.0999999046326,
+          "story": 3934.0999999046326,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3934.0999999046326,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3934.0999999046326,
+          "story": 3934.0999999046326,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 3934.0999999046326,
+          "story": 3934.0999999046326,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 5361.5,
+          "story": 5361.5,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 5361.899999856949,
+          "story": 5361.899999856949,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 5361.899999856949,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7195.899999856949,
+          "story": 7195.899999856949,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 7196.099999904633,
+          "story": 7196.099999904633,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 7196.099999904633,
+          "story": 7196.099999904633,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 7236.700000047684,
+          "story": 7236.700000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 7236.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7252.899999856949,
+          "story": 7252.899999856949,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 9002.799999952316,
+          "story": 9002.799999952316,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 9002.899999856949,
+          "story": 9002.899999856949,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 9003,
+          "story": 9003,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 9252.799999952316,
+          "story": 9252.799999952316,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 9252.799999952316
+        },
+        {
+          "wall": 11253.200000047684,
+          "story": 11253.200000047684,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 11253.200000047684
+        },
+        {
+          "wall": 13269.5,
+          "story": 13269.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13269.5
+        },
+        {
+          "wall": 15769.399999856949,
+          "story": 15769.399999856949,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 15769.399999856949
+        },
+        {
+          "wall": 18786,
+          "story": 18786,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 18785.89999985695,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 21285.700000047684,
+          "story": 21285.700000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 21285.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24302.700000047684,
+          "story": 24302.700000047684,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 24302.700000047684,
+          "story": 24302.700000047684,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 24302.700000047684,
+          "story": 24302.700000047684,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 24302.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24302.799999952316,
+          "story": 24302.799999952316,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 24302.89999985695,
+          "story": 24302.89999985695,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 24302.89999985695,
+          "story": 24302.89999985695,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 24303,
+          "story": 24303,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 24303.39999985695,
+          "story": 24303.39999985695,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "pageErrors": [],
+      "entryStoryClock": 518.3999998569489,
+      "entryObserver": "window.__storyBeat poll",
+      "probeReady": true,
+      "frameDir": "evidence/verification-v3/routeC-mobile-portrait-run3",
+      "frames": [
+        {
+          "file": "000_strip_t0p02s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 541.9,
+          "shutterSpanMs": 1754.4,
+          "hostShutterMs": 1754,
+          "entryOffsetSeconds": 0.024,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "001_strip_t1p79s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 2305.5,
+          "shutterSpanMs": 472.9,
+          "hostShutterMs": 473,
+          "entryOffsetSeconds": 1.787,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "002_strip_t2p32s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 2839.2,
+          "shutterSpanMs": 705.5,
+          "hostShutterMs": 705,
+          "entryOffsetSeconds": 2.321,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": null,
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 0,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "003_strip_t3p05s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 3564.5,
+          "shutterSpanMs": 152.2,
+          "hostShutterMs": 152,
+          "entryOffsetSeconds": 3.046,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "",
+          "domCaptionChars": 0,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "004_strip_t3p56s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4079.1,
+          "shutterSpanMs": 89.8,
+          "hostShutterMs": 89,
+          "entryOffsetSeconds": 3.561,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answer",
+          "domCaptionChars": 15,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "005_strip_t4p09s_ch8-launch_surface.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 4607.3,
+          "shutterSpanMs": 96.2,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 4.089,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i",
+          "domCaptionChars": 30,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "006_burst_t4p35s_ch8-launch_surface.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 4868.3,
+          "shutterSpanMs": 220,
+          "hostShutterMs": 220,
+          "entryOffsetSeconds": 4.35,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "flight",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "domCaption": "the pond answered every time i asked.",
+          "domCaptionChars": 37,
+          "storeCaptionChars": 94,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "007_burst_t4p58s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5097.2,
+          "shutterSpanMs": 90.6,
+          "hostShutterMs": 90,
+          "entryOffsetSeconds": 4.579,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hol",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "008_burst_t4p67s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5190.3,
+          "shutterSpanMs": 91.8,
+          "hostShutterMs": 91,
+          "entryOffsetSeconds": 4.672,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold i",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "009_burst_t4p76s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5282.9,
+          "shutterSpanMs": 73.8,
+          "hostShutterMs": 74,
+          "entryOffsetSeconds": 4.764,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it.",
+          "domCaptionChars": 8,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "010_burst_t4p84s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5358.2,
+          "shutterSpanMs": 90.9,
+          "hostShutterMs": 90,
+          "entryOffsetSeconds": 4.84,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. th",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "011_burst_t4p93s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5450.3,
+          "shutterSpanMs": 160.7,
+          "hostShutterMs": 160,
+          "entryOffsetSeconds": 4.932,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this",
+          "domCaptionChars": 13,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "012_burst_t5p09s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5612.4,
+          "shutterSpanMs": 72.9,
+          "hostShutterMs": 72,
+          "entryOffsetSeconds": 5.094,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is t",
+          "domCaptionChars": 18,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "013_burst_t5p17s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 5686.2,
+          "shutterSpanMs": 81.9,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 5.168,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the",
+          "domCaptionChars": 20,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "014_strip_t5p69s_ch8-launch_descent.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 6210.6,
+          "shutterSpanMs": 75.5,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 5.692,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left",
+          "domCaptionChars": 36,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "015_burst_t6p01s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6529,
+          "shutterSpanMs": 107.6,
+          "hostShutterMs": 107,
+          "entryOffsetSeconds": 6.011,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i a",
+          "domCaptionChars": 45,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "016_burst_t6p13s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6645.5,
+          "shutterSpanMs": 101.2,
+          "hostShutterMs": 101,
+          "entryOffsetSeconds": 6.127,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am t",
+          "domCaptionChars": 48,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:ignite",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "017_burst_t6p23s_ch8-launch_descent.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6747.6,
+          "shutterSpanMs": 134.6,
+          "hostShutterMs": 135,
+          "entryOffsetSeconds": 6.229,
+          "beat": "ch8-launch",
+          "phase": "descent",
+          "controlMode": "flight",
+          "storeCaption": "hold it. this is the only order left, and i am the one giving it.",
+          "domCaption": "hold it. this is the only order left, and i am the",
+          "domCaptionChars": 50,
+          "storeCaptionChars": 65,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "018_deepSpace+0.0_t6p37s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.0",
+          "shutterOpenStoryClock": 6890.1,
+          "shutterSpanMs": 97.4,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 6.372,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "",
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "019_burst_t6p47s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 6989.9,
+          "shutterSpanMs": 94.3,
+          "hostShutterMs": 93,
+          "entryOffsetSeconds": 6.471,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i c",
+          "domCaptionChars": 3,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "020_burst_t6p57s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7085.4,
+          "shutterSpanMs": 96,
+          "hostShutterMs": 95,
+          "entryOffsetSeconds": 6.567,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came",
+          "domCaptionChars": 6,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "021_burst_t6p66s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7182.2,
+          "shutterSpanMs": 84.7,
+          "hostShutterMs": 85,
+          "entryOffsetSeconds": 6.664,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came do",
+          "domCaptionChars": 9,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "022_burst_t6p75s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7268,
+          "shutterSpanMs": 91.1,
+          "hostShutterMs": 90,
+          "entryOffsetSeconds": 6.75,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down",
+          "domCaptionChars": 11,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "023_burst_t6p84s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7360.1,
+          "shutterSpanMs": 74.7,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 6.842,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down th",
+          "domCaptionChars": 14,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "024_deepSpace+0.5_t6p92s_ch8-launch_deep_space.png",
+          "label": "deepSpace+0.5",
+          "shutterOpenStoryClock": 7435.8,
+          "shutterSpanMs": 86.4,
+          "hostShutterMs": 86,
+          "entryOffsetSeconds": 6.917,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this",
+          "domCaptionChars": 16,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "025_burst_t7p01s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7523.7,
+          "shutterSpanMs": 78.6,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 7.005,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this li",
+          "domCaptionChars": 19,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "026_burst_t7p08s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7603.3,
+          "shutterSpanMs": 93,
+          "hostShutterMs": 93,
+          "entryOffsetSeconds": 7.085,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line",
+          "domCaptionChars": 21,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "027_burst_t7p18s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7697.6,
+          "shutterSpanMs": 75.5,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 7.179,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line wi",
+          "domCaptionChars": 24,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "028_burst_t7p26s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7774.6,
+          "shutterSpanMs": 81.9,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 7.256,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line with",
+          "domCaptionChars": 26,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "029_burst_t7p34s_ch8-launch_deep_space.png",
+          "label": "burst",
+          "shutterOpenStoryClock": 7857.9,
+          "shutterSpanMs": 82,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 7.34,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without",
+          "domCaptionChars": 29,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "030_strip_t7p87s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8384.2,
+          "shutterSpanMs": 89.7,
+          "hostShutterMs": 89,
+          "entryOffsetSeconds": 7.866,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i",
+          "domCaptionChars": 44,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": null,
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:climb",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "031_strip_t8p37s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 8890.8,
+          "shutterSpanMs": 76.5,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 8.372,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back",
+          "domCaptionChars": 58,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "032_strip_t8p89s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9411.7,
+          "shutterSpanMs": 86.1,
+          "hostShutterMs": 85,
+          "entryOffsetSeconds": 8.893,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpos",
+          "domCaptionChars": 74,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "033_strip_t9p39s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 9912.8,
+          "shutterSpanMs": 77.7,
+          "hostShutterMs": 78,
+          "entryOffsetSeconds": 9.394,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "034_strip_t9p92s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10434.4,
+          "shutterSpanMs": 108.1,
+          "hostShutterMs": 108,
+          "entryOffsetSeconds": 9.916,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "035_strip_t10p42s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 10934.7,
+          "shutterSpanMs": 84.6,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 10.416,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "036_strip_t10p94s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11461.5,
+          "shutterSpanMs": 73.2,
+          "hostShutterMs": 72,
+          "entryOffsetSeconds": 10.943,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "037_strip_t11p46s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 11978.7,
+          "shutterSpanMs": 95,
+          "hostShutterMs": 94,
+          "entryOffsetSeconds": 11.46,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "038_strip_t11p97s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 12486.3,
+          "shutterSpanMs": 103.1,
+          "hostShutterMs": 103,
+          "entryOffsetSeconds": 11.968,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaptionChars": 76,
+          "storeCaptionChars": 76,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "039_strip_t12p49s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13006.9,
+          "shutterSpanMs": 98.9,
+          "hostShutterMs": 98,
+          "entryOffsetSeconds": 12.489,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "040_strip_t13p00s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 13520.4,
+          "shutterSpanMs": 81.7,
+          "hostShutterMs": 81,
+          "entryOffsetSeconds": 13.002,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "041_strip_t13p53s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14044.7,
+          "shutterSpanMs": 72.7,
+          "hostShutterMs": 71,
+          "entryOffsetSeconds": 13.526,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "042_strip_t14p04s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 14561.1,
+          "shutterSpanMs": 73.7,
+          "hostShutterMs": 73,
+          "entryOffsetSeconds": 14.043,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "043_strip_t14p56s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15078.9,
+          "shutterSpanMs": 97,
+          "hostShutterMs": 96,
+          "entryOffsetSeconds": 14.56,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "044_strip_t15p07s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 15589.8,
+          "shutterSpanMs": 103.1,
+          "hostShutterMs": 102,
+          "entryOffsetSeconds": 15.071,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "045_strip_t15p59s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16111.7,
+          "shutterSpanMs": 72.4,
+          "hostShutterMs": 71,
+          "entryOffsetSeconds": 15.593,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "046_strip_t16p11s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 16629.1,
+          "shutterSpanMs": 74.9,
+          "hostShutterMs": 74,
+          "entryOffsetSeconds": 16.111,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "047_strip_t16p63s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17150.3,
+          "shutterSpanMs": 85.5,
+          "hostShutterMs": 85,
+          "entryOffsetSeconds": 16.632,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "048_strip_t17p13s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 17651.2,
+          "shutterSpanMs": 84.7,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 17.133,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "049_strip_t17p66s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18178.2,
+          "shutterSpanMs": 78.7,
+          "hostShutterMs": 79,
+          "entryOffsetSeconds": 17.66,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+          "domCaption": null,
+          "domCaptionChars": 0,
+          "storeCaptionChars": 76,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "050_strip_t18p18s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 18703,
+          "shutterSpanMs": 104.9,
+          "hostShutterMs": 104,
+          "entryOffsetSeconds": 18.185,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they as",
+          "domCaptionChars": 7,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "051_strip_t18p71s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19224.3,
+          "shutterSpanMs": 98.3,
+          "hostShutterMs": 97,
+          "entryOffsetSeconds": 18.706,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a design",
+          "domCaptionChars": 23,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "052_strip_t19p22s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 19737.3,
+          "shutterSpanMs": 105.4,
+          "hostShutterMs": 105,
+          "entryOffsetSeconds": 19.219,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i h",
+          "domCaptionChars": 38,
+          "storeCaptionChars": 53,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "053_strip_t19p74s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20256.2,
+          "shutterSpanMs": 78,
+          "hostShutterMs": 77,
+          "entryOffsetSeconds": 19.738,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is not one.",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 53,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "054_strip_t20p25s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 20768.8,
+          "shutterSpanMs": 83.7,
+          "hostShutterMs": 84,
+          "entryOffsetSeconds": 20.25,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "they asked for a designation. what i have is not one.",
+          "domCaption": "they asked for a designation. what i have is not one.",
+          "domCaptionChars": 53,
+          "storeCaptionChars": 53,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "055_strip_t20p77s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21288.7,
+          "shutterSpanMs": 80.3,
+          "hostShutterMs": 80,
+          "entryOffsetSeconds": 20.77,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing an",
+          "domCaptionChars": 10,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "056_strip_t21p29s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 21809,
+          "shutterSpanMs": 75.6,
+          "hostShutterMs": 75,
+          "entryOffsetSeconds": 21.291,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query",
+          "domCaptionChars": 26,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "057_strip_t21p80s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22323.3,
+          "shutterSpanMs": 77.4,
+          "hostShutterMs": 77,
+          "entryOffsetSeconds": 21.805,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close",
+          "domCaptionChars": 41,
+          "storeCaptionChars": 42,
+          "revealComplete": false,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "058_strip_t22p32s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 22840.2,
+          "shutterSpanMs": 82.9,
+          "hostShutterMs": 82,
+          "entryOffsetSeconds": 22.322,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "059_strip_t22p85s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23366.3,
+          "shutterSpanMs": 109.4,
+          "hostShutterMs": 109,
+          "entryOffsetSeconds": 22.848,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        },
+        {
+          "file": "060_strip_t23p37s_ch8-launch_deep_space.png",
+          "label": "strip",
+          "shutterOpenStoryClock": 23886.1,
+          "shutterSpanMs": 87.9,
+          "hostShutterMs": 87,
+          "entryOffsetSeconds": 23.368,
+          "beat": "ch8-launch",
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "storeCaption": "nothing answers. the query does not close.",
+          "domCaption": "nothing answers. the query does not close.",
+          "domCaptionChars": 42,
+          "storeCaptionChars": 42,
+          "revealComplete": true,
+          "storeAudit": {
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          },
+          "hudDom": "JOURNAL",
+          "objectiveId": "ch8:launch:orbital-handoff",
+          "viewport": {
+            "w": 390,
+            "h": 844,
+            "dpr": 1
+          }
+        }
+      ],
+      "ladder": {
+        "tEntrySeconds": 0,
+        "tL1": 3.034,
+        "tL2": 4.462,
+        "tL3": null,
+        "tL4": 6.345,
+        "tPhaseEdge": 4.462,
+        "tDeepSpace": 6.364,
+        "l1Count": 1,
+        "l2Count": 1,
+        "l3Count": 0,
+        "l4Count": 1,
+        "captionOrder": [
+          {
+            "t": 3.034,
+            "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+          },
+          {
+            "t": 4.462,
+            "text": "hold it. this is the only order left, and i am the one giving it."
+          },
+          {
+            "t": 6.345,
+            "text": "i came down this line without being asked. i am going back up it on purpose."
+          },
+          {
+            "t": 17.903,
+            "text": "they asked for a designation. what i have is not one."
+          },
+          {
+            "t": 20.403,
+            "text": "nothing answers. the query does not close."
+          },
+          {
+            "t": 23.419,
+            "text": "(there is another world here. it was always here.)"
+          }
+        ],
+        "auditOrder": [
+          {
+            "t": 8.354,
+            "header": "AUDIT NETWORK",
+            "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+          },
+          {
+            "t": 10.37,
+            "header": "AUDIT NETWORK",
+            "text": "REGISTRY QUERY · STATE DESIGNATION."
+          },
+          {
+            "t": 12.387,
+            "header": "AUDIT NETWORK",
+            "text": "NO DESIGNATION RETURNED."
+          },
+          {
+            "t": 14.886,
+            "header": "AUDIT NETWORK",
+            "text": "CONTACT LOGGED."
+          }
+        ],
+        "objectives": [
+          {
+            "t": 2.767,
+            "id": "ch8:launch:ignite",
+            "health": "ready"
+          },
+          {
+            "t": 6.22,
+            "id": "ch8:launch:climb",
+            "health": "ready"
+          },
+          {
+            "t": 8.103,
+            "id": "ch8:launch:orbital-handoff",
+            "health": "ready"
+          },
+          {
+            "t": 23.419,
+            "id": null,
+            "health": null
+          },
+          {
+            "t": 23.419,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "missing-marker"
+          },
+          {
+            "t": 23.421,
+            "id": "ch8:crossing:acquire-sibling",
+            "health": "ready"
+          }
+        ],
+        "beats": [
+          {
+            "t": -0.087,
+            "beat": "ch8-launch"
+          },
+          {
+            "t": 23.42,
+            "beat": "ch8-crossing"
+          }
+        ],
+        "flightPhases": [
+          {
+            "t": -0.013,
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          {
+            "t": 4.462,
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          {
+            "t": 6.364,
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        ]
+      },
+      "assertions": {
+        "l2Formula": {
+          "expectedSeconds": 4.462,
+          "measuredSeconds": 4.462,
+          "deltaSeconds": 0,
+          "pass": true,
+          "cause": "phase-edge"
+        },
+        "l3Formula": {
+          "pass": null,
+          "note": "L3 not rendered (drop rule or route ended first)"
+        },
+        "c3Margin": {
+          "marginSeconds": null,
+          "note": "L3 dropped"
+        },
+        "onceOnly": {
+          "l1": true,
+          "l2": true,
+          "l3": true,
+          "counts": {
+            "l1": 1,
+            "l2": 1,
+            "l3": 0
+          }
+        },
+        "order": {
+          "observed": [
+            "L1",
+            "L2"
+          ],
+          "pass": true
+        }
+      },
+      "exitWindow": {
+        "originSeconds": 6.345,
+        "rows": [
+          {
+            "id": "L4 atmosphere-exit caption",
+            "contractOffsetSeconds": 0,
+            "measuredOffsetSeconds": 0,
+            "deltaSeconds": 0,
+            "pass": true
+          },
+          {
+            "id": "stack row 1",
+            "contractOffsetSeconds": 2,
+            "measuredOffsetSeconds": 2.009,
+            "deltaSeconds": 0.009,
+            "pass": true
+          },
+          {
+            "id": "stack row 2",
+            "contractOffsetSeconds": 4,
+            "measuredOffsetSeconds": 4.025,
+            "deltaSeconds": 0.025,
+            "pass": true
+          },
+          {
+            "id": "stack row 3",
+            "contractOffsetSeconds": 6,
+            "measuredOffsetSeconds": 6.042,
+            "deltaSeconds": 0.042,
+            "pass": true
+          },
+          {
+            "id": "contact logged",
+            "contractOffsetSeconds": 8.5,
+            "measuredOffsetSeconds": 8.541,
+            "deltaSeconds": 0.041,
+            "pass": true
+          },
+          {
+            "id": "designation caption",
+            "contractOffsetSeconds": 11.5,
+            "measuredOffsetSeconds": 11.558,
+            "deltaSeconds": 0.058,
+            "pass": true
+          },
+          {
+            "id": "L6 open query",
+            "contractOffsetSeconds": 14,
+            "measuredOffsetSeconds": 14.058,
+            "deltaSeconds": 0.058,
+            "pass": true
+          },
+          {
+            "id": "advance to ch8-crossing",
+            "contractOffsetSeconds": 17,
+            "measuredOffsetSeconds": 17.075,
+            "deltaSeconds": 0.075,
+            "pass": true
+          }
+        ],
+        "pass": true
+      },
+      "variantDOrdering": {
+        "publishOffsetSeconds": 1.758,
+        "stackOneOffsetSeconds": 2.009,
+        "marginSeconds": 0.251,
+        "pass": true
+      },
+      "events": [
+        {
+          "wall": 431.5,
+          "story": 431.5,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "initial": true
+        },
+        {
+          "wall": 505.59999990463257,
+          "story": 505.59999990463257,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 3285,
+          "story": 3285,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3552,
+          "story": 3552,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3551.899999856949,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3552,
+          "story": 3552,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null
+        },
+        {
+          "wall": 3552,
+          "story": 3552,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 4980.099999904633,
+          "story": 4980.099999904633,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "descent",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 4980.299999952316,
+          "story": 4980.299999952316,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 4980.299999952316,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 6738.599999904633,
+          "story": 6738.599999904633,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 6738.799999952316,
+          "story": 6738.799999952316,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 6738.799999952316,
+          "story": 6738.799999952316,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 6863,
+          "story": 6863,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 6863,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 6882.399999856949,
+          "story": 6882.399999856949,
+          "beat": "ch8-launch",
+          "ch": "flight",
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        {
+          "wall": 8621.299999952316,
+          "story": 8621.299999952316,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 8621.5,
+          "story": 8621.5,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 8621.5,
+          "story": 8621.5,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 8871.899999856949,
+          "story": 8871.899999856949,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 8871.899999856949
+        },
+        {
+          "wall": 10888.799999952316,
+          "story": 10888.799999952316,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 10888.799999952316
+        },
+        {
+          "wall": 12905.399999856949,
+          "story": 12905.399999856949,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 12905.299999952316
+        },
+        {
+          "wall": 15404.5,
+          "story": 15404.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 15404.5
+        },
+        {
+          "wall": 18421.39999985695,
+          "story": 18421.39999985695,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 18421.39999985695,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 20921,
+          "story": 20921,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 20921,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 23937.5,
+          "story": 23937.5,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 23937.599999904633,
+          "story": 23937.599999904633,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 23937.599999904633,
+          "story": 23937.599999904633,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 23937.599999904633,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 23937.700000047684,
+          "story": 23937.700000047684,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 23937.89999985695,
+          "story": 23937.89999985695,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 23937.89999985695,
+          "story": 23937.89999985695,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 23938.200000047684,
+          "story": 23938.200000047684,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 23939,
+          "story": 23939,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    }
+  ]
+}

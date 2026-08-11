@@ -1,0 +1,1337 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "compiledAt": "2026-08-11T00:00:00Z",
+  "compiledBy": "Claude orchestrator compiler (creative-triad skill), closing compile",
+  "requiresHumanTaste": true,
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "3d2621f46125b45a122f4f30fcd09cf3fbdc26d89e4d68fc5a44b5b9d44f1672"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "f8d10735047678e5b4a23a7b55b2464bae925a87b069030c39c120c9e31ae6b4"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "731173bfd2bcb1e8f489930fa8e6f4ca6411a54db9c76f8c5424a6dc277999e1"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "9346d034e70de3800c986c984899d4ef8d38ea89d80bcef7a9c59c049034a56b"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "56ead8c7889fe75ebd48725f8a6016f7585bd88b39ff90d97177c2aa6d0860e4"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "bd7491cfcffa547f3aac4e31e7aafc5138e3385aaee0d4209c9939a7ddce1822"
+    }
+  ],
+  "defects": [
+    {
+      "id": "vd-01",
+      "severity": "high",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.launch.ignition",
+      "statement": "Contracted strings L2 and L3 never rendered on any drivable route: both signed launch anchors are active on the first ch8-launch frame, so the un-seeded first pass latched both silently and only one L-line reached the screen.",
+      "requestedRepair": "Rule the correct trigger bindings for L2 and L3 and the minimum inter-line spacing needed to protect the single caption slot.",
+      "verificationRoute": "Re-run the ch8 emission trace on chained, deep-link and variant routes, 3 cold runs each.",
+      "evidenceRefs": [
+        "evidence/verification/chain-launch-anchor-fine-trace.json"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 1,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "vd-02",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "Chained ch6 to ch9 movie flow stalls at ch8-landfall, reproduced from a ch8-crossing deep link entirely downstream of every path this run mutated, at source revision 03e975a and outside the allowed paths.",
+      "requestedRepair": "None inside this run. Escalate to repo maintenance with the isolation proof.",
+      "verificationRoute": "n/a this run; a follow-on run proves chained completion.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 1,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/vd-02"
+    },
+    {
+      "id": "vd-03",
+      "severity": "low",
+      "status": "accepted-exception",
+      "owner": "integration",
+      "anchor": "anchor.ch8.site-recedes",
+      "statement": "On the POTATO tier the shipped climb objective is skipped. No POTATO baseline exists, so pre-existence rests on an absence of contrary evidence plus a mechanism argument rather than a measured comparison.",
+      "requestedRepair": "None inside this run. Escalate with the ch5/ch6/ch9 follow-on list.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 1,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/vd-03"
+    },
+    {
+      "id": "vd-04",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.site-recedes",
+      "statement": "The measured-margin criterion's own floor fired on the draft-v3 route, flagging itself back to the triad exactly as designed and raising the canonical-route re-scope.",
+      "requestedRepair": "Re-scope the canonical verification route to ordered ignition and replace the measured-margin criterion.",
+      "verificationRoute": "Route A ordered-ignition script, three cold runs, l2Cause asserted timer per run.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 3,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F1",
+      "severity": "high",
+      "status": "accepted-exception",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.at-the-controls",
+      "statement": "ch8's two callbacks are its only fragile lines: L1 is truncated by an early phase edge and L3 is dropped outright on fast, POTATO and movie routes, while L4, the designation caption and the open query are guaranteed.",
+      "requestedRepair": "Split per the judge: the L1 half is repaired by the reveal guard; the tree-clause guaranteed slot is not in-loop and rides to the owner with the dissent-02 packet.",
+      "verificationRoute": "Three cold runs per route family asserting L1 and L2 full reveals and the exit window byte-unchanged.",
+      "evidenceRefs": [
+        "dissent-register.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/F1"
+    },
+    {
+      "id": "F2",
+      "severity": "high",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch7.brackets-fall",
+      "statement": "The brackets-come-off turn is not player-legible: the shipped caption corpus is already bare, so the player's experience is bare then parenthetical then bare, and the ledger level was over-claimed.",
+      "requestedRepair": "Downgrade the ledger entry to a shipped-regression repair not legible as a turn until the follow-on lands.",
+      "verificationRoute": "Contract and ledger text change only.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F3",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.open-query",
+      "statement": "Content collision at the seam: the open-query line fires at +14.0 s, the advance at +17.0 s, and ch8-crossing posts its own entry parenthetical about 3 s later, so the seam carries a content defect and not only the ruled grammar one.",
+      "requestedRepair": "Record as a new item on the R1 follow-on rather than as a new dissent.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/F3"
+    },
+    {
+      "id": "F4",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.reconstruct.first-hover",
+      "statement": "The lift-cell thesis line was authored as the first-hover line but ships on the install edge, leaving the first-hover anchor silent, so the thesis precedes the physical experience it names.",
+      "requestedRepair": "Record the trade in the reveal ledger with the owner-gated restoration option.",
+      "verificationRoute": "Contract text only; recorded verbatim at draft-v5.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F5",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "chapter",
+      "anchor": "anc.reconstruct.hull-sealed",
+      "statement": "The relay is a named diegetic prop metres from the player, and under that header the beacon-restored line predicts a light the prop never shows; the intent legislates the contradiction away by fiat.",
+      "requestedRepair": "No change this run. Follow-on option to retitle the header to the ship; contract reopen and owner copy decision required.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/F5"
+    },
+    {
+      "id": "F6",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.designation",
+      "statement": "Over-credit in the reveal ledger: it stated the designation caption proves retention. It does not; it makes retention available as an inference, and the more available reading is that the worker has no valid registration.",
+      "requestedRepair": "Reword the evidence to supports, without confirming, that something name-like was kept. No copy change.",
+      "verificationRoute": "Contract text only; discharged at draft-v5.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F7",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.contact-logged",
+      "statement": "The advertised reconstructable causal chain is not durable: latches seed consumed on re-entry and nothing persists, so a mid-ch7 quit and resume can reach the ch8 stack having seen none of the relay chain.",
+      "requestedRepair": "Record in the agency ledger as a known resume consequence. No fix in scope.",
+      "verificationRoute": "Contract text only; recorded verbatim at draft-v5.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F8",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.stack-two",
+      "statement": "Timelessness watch: the registry-query and designation pairing is protected from a misreading only by the hull framing, and addressing a person would flip the reading.",
+      "requestedRepair": "Add to the non-negotiable canon that the registry query addresses a hull, never a person.",
+      "verificationRoute": "Contract text only; discharged at draft-v5 in stronger form.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F9",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.beat-entry",
+      "statement": "Arithmetic drift in the intent: the header and delta D4 say ch8 ships eight new strings; it ships six captions plus four regulation lines, and D4's totals give 19 against the implementation's 21.",
+      "requestedRepair": "Correct D4 and the section header.",
+      "verificationRoute": "Record only; discharged in the run record.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F10",
+      "severity": "low",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.at-the-controls",
+      "statement": "L1 introduces the first em dash in the awakening-caption register, where the shipped corpus is period-delimited short clauses; it is also the mechanism by which truncation costs the whole payoff clause.",
+      "requestedRepair": "Note only, or fold into the L1 rewrite if that line is reopened.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "F11",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.dive.shore-bank",
+      "statement": "The lineage document's premise that the wreck hosts the ch4 relay is false: the relay is a separate console planted beside the pod impact, and the file is a machine authority path in the production lock.",
+      "requestedRepair": "Annotate the design-run treatment with the corrected world fact.",
+      "verificationRoute": "Record only; discharged with the lock hash re-recorded.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-01",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.reconstruct.bench-online",
+      "statement": "Five of the six per-repair voice lines were cut mid-word on every traced route and variant; ch8 received arithmetic slot protection and ch7's stage ladder received none.",
+      "requestedRepair": "Rule the intended per-stage slot behaviour: protect, shorten, or declare truncation authored.",
+      "verificationRoute": "Re-measure ch7 caption screen-life against reveal time, 3 cold runs per variant plus one manual-play run.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-02",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "cinematography",
+      "anchor": "anchor.ch7.m7-caption",
+      "statement": "New ch7 caption traffic renders into the embodied action-button lane; the touch-control clearance does not clear the mounted control row and most portrait frames collide.",
+      "requestedRepair": "Rule the embodied-era touch caption lane against the mounted control cluster.",
+      "verificationRoute": "One portrait frame per ch7 stage caption at the widest and narrowest in-scope viewport.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/ux-02"
+    },
+    {
+      "id": "ux-03",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.launch.atmosphere-exit",
+      "statement": "The exit hold plays over live flight controls; leaving deep space suspended the advance without resetting the observed-at mark, so re-entry fired every remaining row in one frame and advanced instantly.",
+      "requestedRepair": "Decide and wire the intended behaviour when the exit fact is lost mid-window.",
+      "verificationRoute": "Scripted dive-and-climb probe inside the window, 3 cold runs, asserting no row is emitted twice and the beat still advances.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-04",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "The lifecycle artifact declared a superseded contract version and hash against the frozen revision, and the journey artifact carried null contract identity fields.",
+      "requestedRepair": "Re-bind both artifacts to the frozen revision and hash, or state the supersession inline.",
+      "verificationRoute": "Hash comparison only, no replay needed.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-05",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "human",
+      "anchor": "anchor.ch8.beat-entry",
+      "statement": "No headed, human-operated evidence exists. The ch7 mandatory objectives have no manual-play lifecycle trace and the ch8 reboard objective has zero lifecycle evidence.",
+      "requestedRepair": "Record an explicit scoped exception for a non-release draft-surface pacing change, or close the gap with one headed manual pass.",
+      "verificationRoute": "A single headed manual run covering the ch7 bench sequence and the ch8 reboard objective.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/ux-05"
+    },
+    {
+      "id": "ux-06",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.site-recedes",
+      "statement": "On the chained and deep-link movie routes L3 never renders, L1 is cut by phase-edge acceleration and L2 is cut by the exit fact.",
+      "requestedRepair": "No new work requested; confirm the owner has seen that the canonical ordered-ignition route is not the route a chapter-select or movie playthrough produces.",
+      "verificationRoute": "Already ruled as authored degradation under the drop rule.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/ux-06"
+    },
+    {
+      "id": "ux-07",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch8.at-the-controls",
+      "statement": "All three L-lines were recorded at one identical story-clock timestamp after reload, contradicting the same URL's spread elsewhere; only L3 survived and no frame evidence exists for the post-replay ladder.",
+      "requestedRepair": "Re-measure the reload path with frame capture; reconcile or explain.",
+      "verificationRoute": "Re-run the quit-replay probe with per-emission frame capture.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-08",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch7.exit-line",
+      "statement": "The owner-approved exit line gets about two seconds of screen life, most of it reveal, before the next beat's entry parenthetical takes the slot; captions are not cleared at a beat boundary.",
+      "requestedRepair": "Rule whether the measured dwell satisfies the owner decision.",
+      "verificationRoute": "Closed by ruling; the re-measurement gives a beat-coincident overwrite on three cold runs.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-09",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch7.advance",
+      "statement": "Two waits with no named next action are extended or created, and the ch7 hold supplies no perceived progress affordance.",
+      "requestedRepair": "Confirm the embodied wait needs no progress affordance.",
+      "verificationRoute": "Accepted with rider; on the manual-shape run the hold carries the stamp, caption and exit line.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-10",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch7.brackets-fall",
+      "statement": "Both text renderers rewrite content every animation frame inside polite live regions, this run roughly quadruples the traffic, and neither renderer consults the reduced-motion preference.",
+      "requestedRepair": "Rule the live-region strategy for revealed text.",
+      "verificationRoute": "Static assertion only.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-11",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.reconstruct.diagnosis",
+      "statement": "The signed criterion asserted zero missing-marker frames while raw evidence records an acquisition transient on the mandatory diagnosis objective at beat entry.",
+      "requestedRepair": "Align the criterion with the measured definition, or record the transient as an accepted exception.",
+      "verificationRoute": "Resolved as contract wording; the criterion restates marker health to the measured definition.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-12",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.reconstruct.lift-online",
+      "statement": "The two craft objectives fire a full acknowledgement cue and are replaced milliseconds later on the movie path; harmless under manual play but previously unproven.",
+      "requestedRepair": "Covered by the manual pass.",
+      "verificationRoute": "Resolved in substance: the paced run gives full lifetimes, both reaching ready with one cue each.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-13",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "The POTATO pre-existence claim rested on an absence of contrary evidence rather than evidence of pre-existence; the mechanism is plausible but the wording overstated it.",
+      "requestedRepair": "Wording only.",
+      "verificationRoute": "Resolved: the criterion now states the attribution as an absence of contrary evidence plus a mechanism argument.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-14",
+      "severity": "high",
+      "status": "accepted-exception",
+      "owner": "chapter",
+      "anchor": "anc.reconstruct.bench-online",
+      "statement": "The bench objective holds missing-marker while active and acquired on every measured run, and the HUD names a verb already performed while the required act is the keel install. Pre-existing, in the dissent-06 family. Accepted by the cohesion judge for this run's gate arithmetic only: the acceptance covers the pre-existing attribution, not the defect, which stays an open high on the dissent-06 family follow-on.",
+      "requestedRepair": "Split or re-publish the objective at the salvage receipt so verb and marker both track the required act. Do not score against this run.",
+      "verificationRoute": "Headed manual session observing the salvage-to-keel window directly; the fix is outside the lock's allowed paths.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/ux-14"
+    },
+    {
+      "id": "ux-15",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch8.self-order",
+      "statement": "The reveal guard moved the L2 due time close to the exit fact, collapsing L2's slot and dropping it entirely on POTATO in all three cold runs; no frame caught L2.",
+      "requestedRepair": "Rule the drop-versus-flash threshold for the ch8 ladder and whether the lowest tier may carry a different line set. Do not repair by weakening the reveal guard.",
+      "verificationRoute": "Route C desktop and POTATO, 3 cold runs, reporting L2's slot seconds and the characters actually rendered.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-16",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch8.open-query",
+      "statement": "Post-dip dwell hysteresis returns the correct objective card only shortly before the beat ends, so the card lags the held-clock advance.",
+      "requestedRepair": "Reconcile the dwell with the held-clock advance. Must not be fixed by removing the dwell, which is what prevents flicker.",
+      "verificationRoute": "Mechanism named; the late-dip case is unmeasured.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-17",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.reconstruct.diagnosis",
+      "statement": "Entry-cue counts per entry are below one for several objectives while the one-shot assertion only proves never-more-than-one, so the at-least-once direction is unproven.",
+      "requestedRepair": "Install the subscription before beat entry on one deep link per beat and re-report both directions.",
+      "verificationRoute": "One deep link per beat with the objective subscription installed pre-boot.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-18",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.reconstruct.calibration",
+      "statement": "The criterion asks three cold runs per variant; three were delivered on desktop and fewer or none on the remaining variants. De-risked by source because the reveal is time-based and tier-independent.",
+      "requestedRepair": "Two ch7 queue runs at reduced motion and POTATO.",
+      "verificationRoute": "Two ch7 queue runs asserting screen life at least reveal per fired line and the protected line never dropped.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "ux-19",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anchor.ch7.m7-caption",
+      "statement": "On fast paths the voice trails the world by up to about three seconds, so a stage caption can speak while the objective card already reads the next state.",
+      "requestedRepair": "No work requested. Confirm the trailing voice is the intended shape.",
+      "verificationRoute": "Confirmed intended; the bound is the re-anchor plus drop-at-close, and a capture exceeding the anchor is a defect.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-01",
+      "severity": "high",
+      "status": "accepted-exception",
+      "owner": "score",
+      "anchor": "anchor.ch8.contact-logged",
+      "statement": "The routed score packet cannot execute as scoped: the intensity resolver excludes ch7 by beat name but has no ch8 exclusion, so an exit-decay mood entered on the durable fact races the atmosphere-exit anchor's value in the same tick.",
+      "requestedRepair": "Amend the packet scope to name the intensity resolver, flag the protected-path authority, and state the ordering guarantee.",
+      "verificationRoute": "Record only this run; adopted into the packet commission at draft-v5.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/sa-01"
+    },
+    {
+      "id": "sa-02",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch8.advance",
+      "statement": "The seam cue was doubly mis-specified: the cue reference did not exist in the shipped vocabulary, and the measured value belongs to a different crossing anchor than the one named.",
+      "requestedRepair": "Repair the cue reference and restate the seam route-dependently across both crossing branches.",
+      "verificationRoute": "Re-verify against the shipped cue vocabulary rather than prior contract bytes.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-03",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch7.beat-entry",
+      "statement": "A ch7 cue was bound to a ch6 anchor: the contract asserted a reconstruct cue at the dive shore-bank anchor, which ships in the previous beat carrying a different cue, and ch7 had no symbolic boundary anchor.",
+      "requestedRepair": "Express the ch7 entry relation as the beat-entry mood application rather than as a cue on a ch6 anchor.",
+      "verificationRoute": "Add a mechanical check that every contracted cue and anchor reference resolves in the signed AV runtime.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-04",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "score",
+      "anchor": "anc.reconstruct.calibration",
+      "statement": "The chapter's signature harmonic claim survives on an undocumented sub-second margin with no test, because the calibration field opens only slightly before the receipt under the current calibration duration.",
+      "requestedRepair": "Record the coupling as a named invariant and add a unit assertion.",
+      "verificationRoute": "Read-only this run; the unit test routes to the follow-on with the score files.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/sa-04"
+    },
+    {
+      "id": "sa-05",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch7.advance",
+      "statement": "The no-phrase-is-cut claim was false as written, because the mood change resets the pattern position per variant change and both frozen advances fall partway through a progression field.",
+      "requestedRepair": "Replace with the corrected statement about lengthening rather than truncating the calibration statement.",
+      "verificationRoute": "Repaired and verified at draft-v5; the cue carries the corrected sentence verbatim.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-06",
+      "severity": "low",
+      "status": "open",
+      "owner": "score",
+      "anchor": "anchor.ch8.stack-one",
+      "statement": "The flat-by-mechanism argument is right about intensity and silent about harmony: the progression still steps through the held window, so chord changes land under the text events at a route-random phase.",
+      "requestedRepair": "Record in the packet's problem statement. No repair owed this run.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-07",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch8.contact-logged",
+      "statement": "Three precision claims in the evidence prose were wrong by up to two orders of magnitude, and one case exceeded the stated peak tolerance.",
+      "requestedRepair": "Restate the tolerances at the measured values and cite the windowed measure.",
+      "verificationRoute": "Recomputation over the two analysis files only; the conclusion is untouched.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-08",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch8.contact-logged",
+      "statement": "A health-pass was asserted for all four renders; by the repo's own health rule two fail, each carrying one marginal pre-existing smoothness violation.",
+      "requestedRepair": "Correct the claim and hand the packet the constraint to implement any decay as a slewed ramp rather than a mood swap.",
+      "verificationRoute": "Audition the packet decay against the smoothness law.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-09",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch8.stack-one",
+      "statement": "Two census claims were contradicted by the census itself: a player-driven ship effect also fires inside the window, and quiet begins later than stated.",
+      "requestedRepair": "Restate the census honestly: the run's copy adds zero audio events, one shipped entry cue plus player ship effects, and quiet from the measured point to the advance.",
+      "verificationRoute": "Census recomputation only; the load-bearing conclusions survive.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-10",
+      "severity": "low",
+      "status": "open",
+      "owner": "score",
+      "anchor": "anchor.ch7.anyway",
+      "statement": "Evidence asymmetry against risk: the ch8 ruling carries four hashed combined-bus renders while every ch7 ruling, including the taste question routed to the owner, rests on source reading with zero ch7 renders in the run.",
+      "requestedRepair": "Render the two ch7 variants through the existing probe as audition material before the owner question ships.",
+      "verificationRoute": "Read-only, additive evidence via the existing probe.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-11",
+      "severity": "low",
+      "status": "open",
+      "owner": "score",
+      "anchor": "anc.launch.ignition",
+      "statement": "Of the three contracted ramp values only two have live traces; the third is derivation-only. Latent hazard: the values scale with the signed anchor count, so promoting any window anchor re-scales them all.",
+      "requestedRepair": "Record the anchor-count dependency as a packet constraint and re-point the citation to the ch7 trace.",
+      "verificationRoute": "Completeness, not doubt; the derivation is airtight.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-12",
+      "severity": "low",
+      "status": "open",
+      "owner": "score",
+      "anchor": "anchor.ch8.stack-one",
+      "statement": "Score-block hygiene: the mix intent carries governance text rather than a mix hierarchy, the performance plan carries a lane statement, and one cue is typed music with a null reference while identical shipped conditions are typed silence.",
+      "requestedRepair": "Optional cleanup at the next schema revision. No action this run.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "sa-13",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anchor.ch8.contact-logged",
+      "statement": "The score treatment referenced by the frozen contract is a superseded-revision document still printing the superseded cadence, plus smaller prose slips.",
+      "requestedRepair": "Add a dated amendment note rather than rewriting the ruling.",
+      "verificationRoute": "Drift verified harmless; the cue application runs only on anchor activation.",
+      "evidenceRefs": [
+        "score-audit.md"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-01",
+      "severity": "high",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anchor.ch7.exit-line",
+      "statement": "On mobile portrait the ch7 exit-window caption collides with the touch-control cluster, and the mobile pass was measured only at a ch8 frame, so the recorded mobile pass did not cover the colliding window.",
+      "requestedRepair": "Set the mobile variant status to fail, recapture the ch7 exit window in portrait with per-frame control rects, and capture the missing landscape set. The renderer fix is outside the lock and rides to the owner.",
+      "verificationRoute": "Recapture in portrait with per-frame control rects plus the landscape set.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-02",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "cinematography",
+      "anchor": "anchor.ch7.advance",
+      "statement": "The black boarding frame described by the dissent, the treatment and the signed condition is a cold deep-link boot-black frame, not an authored boarding occlusion; on the continuous chain the next beat opens on a bright daylight exterior.",
+      "requestedRepair": "Amend the dissent and the treatment to describe the actual seam image and restate the accept as persistence over daylight.",
+      "verificationRoute": "No recapture needed; the frames already exist.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-03",
+      "severity": "medium",
+      "status": "accepted-exception",
+      "owner": "cinematography",
+      "anchor": "anc.reconstruct.calibration",
+      "statement": "Half-delivered capture: all ch7 sets are movie-path only with no deep-link or player-vantage frames, and the delivered reveal is largely sky with the declared primary subject not legible as a restored ship.",
+      "requestedRepair": "Capture the reveal on one non-movie route from a player-chosen vantage, then a headed screening of both.",
+      "verificationRoute": "Headed screening; a degenerate movie-path frame routes as a separate shot-defect packet.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions/CIN-03"
+    },
+    {
+      "id": "CIN-04",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "cinematography",
+      "anchor": "anchor.ch8.at-the-controls",
+      "statement": "On both movie routes the launch beat never shows the departure site: the canopy is empty sky while still on the pad, so two callback lines play over a worldless frame.",
+      "requestedRepair": "Attach the two movie-route establishing frames to the camera packet's problem statement as the movie-path case.",
+      "verificationRoute": "No recapture required; satisfied at draft-v5 by the packet attachment.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-05",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch7.advance",
+      "statement": "The capture probe read state after the screenshot, so every sidecar's caption, objective and DOM values describe state later than the pixels of the same file.",
+      "requestedRepair": "Re-emit the sidecars with state sampled before the shutter, or annotate every sidecar and the report with the measured bias.",
+      "verificationRoute": "Resolved; the closing sidecars carry an explicit state-read order and per-frame shutter span.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-06",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.launch.atmosphere-exit",
+      "statement": "The zero-blank-frame claim was unsupported by the tool that made it, because the scan flagged only whole-frame darkness and world-black frames carrying HUD chrome passed.",
+      "requestedRepair": "Add a world-region blank test and re-run; obtain a headed cold deep link or downgrade the attribution.",
+      "verificationRoute": "Resolved; the world-region scan reports the corrected count and the attribution is withdrawn.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-07",
+      "severity": "low",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.reconstruct.calibration",
+      "statement": "The lowest tier removes vegetation and water detail, not only ambient occlusion and sampling, so the most legible mid-ground element of the reveal is absent there while focal parity is asserted without measurement.",
+      "requestedRepair": "One seated pre-ignition frame on the ordered route imaging the site through the canopy; restate focal parity as measured or withdraw it.",
+      "verificationRoute": "Capture still owed; the ordered route is captured at one tier only.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-08",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "cinematography",
+      "anchor": "anc.launch.ignition",
+      "statement": "Contract drift from the anchor rebinds: a launch shot still named a caption as its secondary focal element after that caption was rebound elsewhere, and all three launch shots carried ch7-specific exit-composition boilerplate.",
+      "requestedRepair": "Contract-text repair at the next revision; no capture owed.",
+      "verificationRoute": "Repaired at draft-v5; the residual schema-only intents fold into the documentation item.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-09",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "The verification record carried two conflicting standing findability records with no supersession note, a stale top-level status and a superseded contract version.",
+      "requestedRepair": "Add an explicit supersession field and a current top-level roll-up.",
+      "verificationRoute": "Resolved; the current roll-up is authoritative.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-10",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "Seam continuity was partially delivered: the contracted interval was captured at half density and two adjacent seams had no post-implementation strip.",
+      "requestedRepair": "Capture the contracted interval plus one post-change strip for each adjacent seam.",
+      "verificationRoute": "Resolved; all contracted frames and both adjacent seams are on disk.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-11",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "cinematography",
+      "anchor": "anchor.ch7.advance",
+      "statement": "A measured seam clause was reported as contradicted, then withdrawn in the second pass as the auditor's own post-shutter-bias artefact.",
+      "requestedRepair": "Restate the measured clause. No recapture owed.",
+      "verificationRoute": "Withdrawn by its author; the re-measurement shows the overwrite is beat-coincident.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-12",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "cinematography",
+      "anchor": "anchor.ch8.self-order",
+      "statement": "On the movie path the self-order line renders zero glyphs across every captured variant, because the slot empties across the atmosphere-exit flip.",
+      "requestedRepair": "Withdraw the capture item citing a rendered frame, attach the deep-space frame to the pacing packet, and record the observed sequence in the dissent register.",
+      "verificationRoute": "No new runtime work authorized this run; the behaviour is conformant under the frozen criteria.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-13",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.launch.atmosphere-exit",
+      "statement": "Variant camera and shot state was never captured: the sidecar AV field carried an error on most AV-bearing frames, failing precisely on the anchored frames, and the failure was undisclosed.",
+      "requestedRepair": "Null-guard the AV bridge and re-run the variant routes recording AV state, or state that variant AV state is uncaptured.",
+      "verificationRoute": "Resolved by the probe fix plus the tier-parity measurement.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-14",
+      "severity": "low",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anchor.ch7.exit-line",
+      "statement": "Six residual documentation-drift items survive after the amendment, including a superseded capture term, an enshrined wrong number, pre-patch numbers in the packet, and schema-only occupancy and horizon intents.",
+      "requestedRepair": "Text-only repair at the next revision. No recapture owed.",
+      "verificationRoute": "Two items must land before the owner packet goes out so the owner does not read pre-patch numbers.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "CIN-15",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch7.m7-caption",
+      "statement": "The closing record names the wrong exemplar frame for the portrait collision, and the caption named there is not the owner-approved string.",
+      "requestedRepair": "One-sentence correction in the closing measured statement.",
+      "verificationRoute": "The verdict, the frame count and the worst overlap all reproduce.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "iterationIntroduced": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-01",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.reconstruct.diagnosis",
+      "statement": "An entry-count figure asserted in one report and propagated into the judgement does not appear in either measurement file, which record a different total across the measured objectives.",
+      "requestedRepair": "Wording only: restate at the measured total across the measured objectives. No re-measurement.",
+      "verificationRoute": "The judge corrects the propagated text at the compile.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-02",
+      "severity": "medium",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch7.advance",
+      "statement": "A correction cited sidecars that the same report proves are post-shutter, so the corrected number inherited the very bias it was correcting.",
+      "requestedRepair": "Re-measure the seam with state sampled before the shutter, then restate the clause as a bounded interval rather than a point estimate.",
+      "verificationRoute": "Resolved by re-measurement; the overwrite is beat-coincident on three cold runs.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "ux-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-03",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.designation",
+      "statement": "A sign-off ground named a single remaining consumer of the worker-name accessor; a second diagnostic consumer exists with no player-facing surface.",
+      "requestedRepair": "Wording correction noting the probe-bridge read as non-player-facing.",
+      "verificationRoute": "The sign-off conclusion is unaffected; corrected in the addendum.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md",
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-04",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch8.beat-entry",
+      "statement": "The orchestrator ruling numbering skips a value, and the same label is reused by a different chapter-internal sequence in another artifact.",
+      "requestedRepair": "Record the withdrawn or absorbed ruling explicitly, or add a one-line gap note. No re-review.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-05",
+      "severity": "low",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anchor.ch8.beat-entry",
+      "statement": "The implementation diff header binds the patch to a superseded contract revision while the frozen contract has advanced; no reviewer flagged this third stale-binding instance.",
+      "requestedRepair": "Fold into the re-binding batch at closeout; hash comparison only.",
+      "verificationRoute": "Hash comparison only.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "iterationResolved": 6,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "MOD-06",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.launch.atmosphere-exit",
+      "statement": "The reported pixel-scan scope is smaller than the run's actual frame population, so several capture directories sat outside the scan.",
+      "requestedRepair": "None required; state the scan boundary when the re-run lands so the new count is comparable.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "critic-report.md"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 5,
+      "acceptedExceptionRef": null
+    }
+  ],
+  "notes": "Canonical register for the closing compile. Every finding on the record across the five independent reports and the critic synthesis is carried with its final disposition. Statuses use the gate vocabulary open|resolved|accepted-exception; the run's own narrative dispositions (repaired-verified, escalated, routed, withdrawn, disposed-by-ruling) are expressed through that vocabulary plus the statement and repair text. Accepted exceptions name the human decision that must list them; until human-decision.json records those ids the exception checks and the blocking check cannot pass, which is expected at this stage.",
+  "computedOpenCounts": {
+    "critical": 0,
+    "high": 1,
+    "mediumUnaccepted": 0,
+    "low": 15
+  }
+}

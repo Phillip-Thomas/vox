@@ -1,0 +1,432 @@
+{
+  "mode": "resets",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:55:35.246Z",
+  "cases": [
+    {
+      "case": "beat-exit",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5654.700000047684,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 131,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 7162.799999952316,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 221,
+        "objectiveId": "ch8:crossing:acquire-sibling",
+        "health": "ready",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ]
+      },
+      "reboardRow": {
+        "id": "ch8:launch:reboard",
+        "kind": "travel",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "requiresMarker": true,
+        "enteredAt": 5631.400000095367,
+        "frames": 2,
+        "acquired": true,
+        "firstAcquiredAt": 5631.5,
+        "preAcquisitionMissingMarkerFrames": 0,
+        "acquiredWindowMissingMarkerFrames": 0,
+        "postCompletionMissingMarkerFrames": 0,
+        "healthRuns": [
+          {
+            "health": "ready",
+            "frames": 2,
+            "fromStoryClock": 5631.5
+          }
+        ],
+        "markerLabels": [
+          "KESTREL HATCH · REBOARD"
+        ],
+        "clearedAt": 5664.700000047684,
+        "replacedBy": "ch8:crossing:acquire-sibling"
+      },
+      "staleObjectiveAfter": false,
+      "totalFrames": 222
+    },
+    {
+      "case": "deep-link",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5606.800000190735,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 134,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 12217.400000095367,
+        "beat": "ch8-crossing",
+        "phase": "deep_space",
+        "controlMode": "flight",
+        "frames": 564,
+        "objectiveId": "ch8:crossing:acquire-sibling",
+        "health": "ready",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ]
+      },
+      "reboardRow": null,
+      "staleObjectiveAfter": false,
+      "totalFrames": 564
+    },
+    {
+      "case": "replay",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5543.5,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 132,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 12212.199999809265,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "flight",
+        "frames": 566,
+        "objectiveId": "ch8:launch:ignite",
+        "health": "ready",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ]
+      },
+      "reboardRow": null,
+      "staleObjectiveAfter": false,
+      "totalFrames": 566
+    },
+    {
+      "case": "pause",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5389.099999904633,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 133,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 9404.400000095367,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 374,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "midPause": {
+          "t": 6899.5,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "fps",
+          "frames": 224,
+          "objectiveId": "ch8:launch:reboard",
+          "health": "ready",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrder": [
+            "RETURN TO THE KESTREL.",
+            "FOLLOW THE HATCH MARKER AND [F] BOARD."
+          ]
+        }
+      },
+      "reboardRow": {
+        "id": "ch8:launch:reboard",
+        "kind": "travel",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "requiresMarker": true,
+        "enteredAt": 5379.700000047684,
+        "frames": 242,
+        "acquired": true,
+        "firstAcquiredAt": 5379.700000047684,
+        "preAcquisitionMissingMarkerFrames": 0,
+        "acquiredWindowMissingMarkerFrames": 0,
+        "postCompletionMissingMarkerFrames": 0,
+        "healthRuns": [
+          {
+            "health": "ready",
+            "frames": 242,
+            "fromStoryClock": 5379.700000047684
+          }
+        ],
+        "markerLabels": [
+          "KESTREL HATCH · REBOARD"
+        ],
+        "clearedAt": null,
+        "replacedBy": null
+      },
+      "staleObjectiveAfter": true,
+      "totalFrames": 374
+    },
+    {
+      "case": "quit",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5622.600000143051,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 128,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 15233.299999952316,
+        "beat": null,
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 632,
+        "objectiveId": null,
+        "health": null,
+        "markerLabel": null,
+        "workOrder": null
+      },
+      "reboardRow": null,
+      "staleObjectiveAfter": false,
+      "totalFrames": 632
+    },
+    {
+      "case": "focus-loss",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5756.700000047684,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 130,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 9769.399999856949,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 371,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "midPause": {
+          "t": 7262.099999904633,
+          "beat": "ch8-launch",
+          "phase": "surface",
+          "controlMode": "fps",
+          "frames": 220,
+          "objectiveId": "ch8:launch:reboard",
+          "health": "ready",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "workOrder": [
+            "RETURN TO THE KESTREL.",
+            "FOLLOW THE HATCH MARKER AND [F] BOARD."
+          ]
+        }
+      },
+      "reboardRow": {
+        "id": "ch8:launch:reboard",
+        "kind": "travel",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "requiresMarker": true,
+        "enteredAt": 5763.200000047684,
+        "frames": 241,
+        "acquired": true,
+        "firstAcquiredAt": 5763.299999952316,
+        "preAcquisitionMissingMarkerFrames": 0,
+        "acquiredWindowMissingMarkerFrames": 0,
+        "postCompletionMissingMarkerFrames": 0,
+        "healthRuns": [
+          {
+            "health": "ready",
+            "frames": 241,
+            "fromStoryClock": 5763.299999952316
+          }
+        ],
+        "markerLabels": [
+          "KESTREL HATCH · REBOARD"
+        ],
+        "clearedAt": null,
+        "replacedBy": null
+      },
+      "staleObjectiveAfter": true,
+      "totalFrames": 371
+    },
+    {
+      "case": "completion",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": true,
+      "before": {
+        "t": 5552.599999904633,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 134,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "after": {
+        "t": 14825.700000047684,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "fps",
+        "frames": 690,
+        "objectiveId": "ch8:launch:reboard",
+        "health": "ready",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ]
+      },
+      "reboardRow": {
+        "id": "ch8:launch:reboard",
+        "kind": "travel",
+        "markerLabel": "KESTREL HATCH · REBOARD",
+        "workOrder": [
+          "RETURN TO THE KESTREL.",
+          "FOLLOW THE HATCH MARKER AND [F] BOARD."
+        ],
+        "requiresMarker": true,
+        "enteredAt": 5514.5,
+        "frames": 559,
+        "acquired": true,
+        "firstAcquiredAt": 5514.5,
+        "preAcquisitionMissingMarkerFrames": 0,
+        "acquiredWindowMissingMarkerFrames": 0,
+        "postCompletionMissingMarkerFrames": 0,
+        "healthRuns": [
+          {
+            "health": "ready",
+            "frames": 559,
+            "fromStoryClock": 5514.5
+          }
+        ],
+        "markerLabels": [
+          "KESTREL HATCH · REBOARD"
+        ],
+        "clearedAt": null,
+        "replacedBy": null
+      },
+      "staleObjectiveAfter": false,
+      "totalFrames": 690
+    },
+    {
+      "case": "sandbox",
+      "url": "http://localhost:5176/?story=ch8-launch&profile=LOW",
+      "reachedReboard": false,
+      "before": {
+        "t": 450.2999999523163,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "flight",
+        "frames": 7,
+        "objectiveId": "ch8:launch:ignite",
+        "health": "ready",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ]
+      },
+      "after": {
+        "t": 15452.700000047684,
+        "beat": "ch8-launch",
+        "phase": "surface",
+        "controlMode": "flight",
+        "frames": 754,
+        "objectiveId": "ch8:launch:ignite",
+        "health": "ready",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ]
+      },
+      "reboardRow": null,
+      "staleObjectiveAfter": false,
+      "totalFrames": 754
+    }
+  ]
+}

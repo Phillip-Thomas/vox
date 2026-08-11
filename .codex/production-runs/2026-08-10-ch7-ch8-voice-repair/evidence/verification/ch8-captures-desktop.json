@@ -1,0 +1,1063 @@
+{
+  "mode": "ch8-captures",
+  "variant": "desktop",
+  "label": "desktop",
+  "profile": "LOW",
+  "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+  "capturedAt": "2026-08-10T21:28:53.567Z",
+  "captures": [
+    {
+      "phase": "offset",
+      "offsetSeconds": 0,
+      "contractOffset": true,
+      "file": "off_0p0s_ch8-launch.png",
+      "actualOffsetSeconds": 0.119,
+      "shutterSpanMs": 187.5,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": null,
+      "objective": {
+        "id": "ch8:launch:climb",
+        "kind": "travel",
+        "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+        "workOrder": [
+          "KEEP THE KESTREL ASCENDING.",
+          "HOLD COURSE THROUGH THE ATMOSPHERE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "i came d",
+        "captionRect": {
+          "x": 781,
+          "y": 610,
+          "w": 95,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": null,
+        "auditRect": null,
+        "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 1.2,
+      "contractOffset": false,
+      "file": "off_1p2s_ch8-launch.png",
+      "actualOffsetSeconds": 1.316,
+      "shutterSpanMs": 139,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": null,
+      "objective": {
+        "id": "ch8:launch:climb",
+        "kind": "travel",
+        "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+        "workOrder": [
+          "KEEP THE KESTREL ASCENDING.",
+          "HOLD COURSE THROUGH THE ATMOSPHERE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "i came down this line without being asked.",
+        "captionRect": {
+          "x": 613,
+          "y": 610,
+          "w": 432,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": null,
+        "auditRect": null,
+        "hudDom": "CURRENT OBJECTIVE | ATMOSPHERIC EXIT · CLIMB | KEEP THE KESTREL ASCENDING. | HOLD COURSE THROUGH THE ATMOSPHERE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 2,
+      "contractOffset": true,
+      "file": "off_2p0s_ch8-launch.png",
+      "actualOffsetSeconds": 2.12,
+      "shutterSpanMs": 111.5,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED"
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "i came down this line without being asked. i am going back up it",
+        "captionRect": {
+          "x": 509,
+          "y": 587,
+          "w": 640,
+          "h": 47
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | AUTOMATED",
+        "auditRect": {
+          "x": 573,
+          "y": 97,
+          "w": 135,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 4,
+      "contractOffset": true,
+      "file": "off_4p0s_ch8-launch.png",
+      "actualOffsetSeconds": 4.115,
+      "shutterSpanMs": 115.8,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "REGISTRY QUERY · STATE DESIGNATION."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "i came down this line without being asked. i am going back up it on purpose.",
+        "captionRect": {
+          "x": 509,
+          "y": 587,
+          "w": 640,
+          "h": 47
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | REGISTRY",
+        "auditRect": {
+          "x": 573,
+          "y": 97,
+          "w": 135,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 6,
+      "contractOffset": true,
+      "file": "off_6p0s_ch8-launch.png",
+      "actualOffsetSeconds": 6.114,
+      "shutterSpanMs": 136.2,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "NO DESIGNATION RETURNED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": null,
+        "captionRect": null,
+        "captionPlacement": null,
+        "auditDom": "AUDIT NETWORK | NO DESIGN",
+        "auditRect": {
+          "x": 573,
+          "y": 97,
+          "w": 135,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 8.5,
+      "contractOffset": true,
+      "file": "off_8p5s_ch8-launch.png",
+      "actualOffsetSeconds": 8.617,
+      "shutterSpanMs": 110,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": null,
+        "captionRect": null,
+        "captionPlacement": null,
+        "auditDom": "AUDIT NETWORK | CONTACT",
+        "auditRect": {
+          "x": 573,
+          "y": 97,
+          "w": 135,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 9.7,
+      "contractOffset": false,
+      "file": "off_9p7s_ch8-launch.png",
+      "actualOffsetSeconds": 9.814,
+      "shutterSpanMs": 113.6,
+      "beat": "ch8-launch",
+      "storeCaption": "i came down this line without being asked. i am going back up it on purpose.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": null,
+        "captionRect": null,
+        "captionPlacement": null,
+        "auditDom": "AUDIT NETWORK | CONTACT LOGGED.",
+        "auditRect": {
+          "x": 554,
+          "y": 97,
+          "w": 172,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 11.5,
+      "contractOffset": true,
+      "file": "off_11p5s_ch8-launch.png",
+      "actualOffsetSeconds": 11.617,
+      "shutterSpanMs": 111.2,
+      "beat": "ch8-launch",
+      "storeCaption": "they asked for a designation. what i have is not one.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "they",
+        "captionRect": {
+          "x": 801,
+          "y": 610,
+          "w": 56,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | CONTACT LOGGED.",
+        "auditRect": {
+          "x": 554,
+          "y": 97,
+          "w": 172,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 12.7,
+      "contractOffset": false,
+      "file": "off_12p7s_ch8-launch.png",
+      "actualOffsetSeconds": 12.819,
+      "shutterSpanMs": 132.7,
+      "beat": "ch8-launch",
+      "storeCaption": "they asked for a designation. what i have is not one.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "they asked for a designation. what i have",
+        "captionRect": {
+          "x": 618,
+          "y": 610,
+          "w": 422,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | CONTACT LOGGED.",
+        "auditRect": {
+          "x": 554,
+          "y": 97,
+          "w": 172,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 14,
+      "contractOffset": true,
+      "file": "off_14p0s_ch8-launch.png",
+      "actualOffsetSeconds": 14.119,
+      "shutterSpanMs": 129.4,
+      "beat": "ch8-launch",
+      "storeCaption": "nothing answers. the query does not close.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "nothi",
+        "captionRect": {
+          "x": 796,
+          "y": 610,
+          "w": 66,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | CONTACT LOGGED.",
+        "auditRect": {
+          "x": 554,
+          "y": 97,
+          "w": 172,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 15.2,
+      "contractOffset": false,
+      "file": "off_15p2s_ch8-launch.png",
+      "actualOffsetSeconds": 15.318,
+      "shutterSpanMs": 109.9,
+      "beat": "ch8-launch",
+      "storeCaption": "nothing answers. the query does not close.",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "nothing answers. the query does not clo",
+        "captionRect": {
+          "x": 628,
+          "y": 610,
+          "w": 402,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": "AUDIT NETWORK | CONTACT LOGGED.",
+        "auditRect": {
+          "x": 554,
+          "y": 97,
+          "w": 172,
+          "h": 46
+        },
+        "hudDom": "CURRENT OBJECTIVE | DEEP SPACE · HANDOFF | ATMOSPHERIC EXIT IS COMPLETE. | LET THE SYSTEM RESOLVE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 17,
+      "contractOffset": true,
+      "file": "off_17p0s_ch8-crossing.png",
+      "actualOffsetSeconds": 17.119,
+      "shutterSpanMs": 148.9,
+      "beat": "ch8-crossing",
+      "storeCaption": "(there is another world here. it was always here.)",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "(ther",
+        "captionRect": {
+          "x": 796,
+          "y": 610,
+          "w": 66,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": null,
+        "auditRect": null,
+        "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    },
+    {
+      "phase": "offset",
+      "offsetSeconds": 18,
+      "contractOffset": true,
+      "file": "off_18p0s_ch8-crossing.png",
+      "actualOffsetSeconds": 18.119,
+      "shutterSpanMs": 133.9,
+      "beat": "ch8-crossing",
+      "storeCaption": "(there is another world here. it was always here.)",
+      "storeAudit": {
+        "header": "AUDIT NETWORK",
+        "text": "CONTACT LOGGED."
+      },
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "dom": {
+        "captionDom": "(there is another world here. it w",
+        "captionRect": {
+          "x": 653,
+          "y": 610,
+          "w": 353,
+          "h": 23
+        },
+        "captionPlacement": "right-of-objective",
+        "auditDom": null,
+        "auditRect": null,
+        "hudDom": "CURRENT OBJECTIVE | SIBLING WORLD | FIND THE SIBLING WORLD. | CENTER IT AND SET COURSE.",
+        "hudRect": {
+          "x": 22,
+          "y": 589,
+          "w": 360,
+          "h": 103
+        },
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "contractOffsets": [
+    0,
+    2,
+    4,
+    6,
+    8.5,
+    11.5,
+    14,
+    17,
+    18
+  ],
+  "origin": {
+    "wallPage": 7540,
+    "story": 7540,
+    "detectedAtHostMs": 1786397341125
+  },
+  "shutterBiasSeconds": 0.12,
+  "events": [
+    {
+      "wall": 543.0999999046326,
+      "story": 543.0999999046326,
+      "beat": null,
+      "ch": "caption",
+      "text": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 543.0999999046326,
+      "story": 543.0999999046326,
+      "beat": null,
+      "ch": "audit",
+      "text": null,
+      "header": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 543.0999999046326,
+      "story": 543.0999999046326,
+      "beat": null,
+      "ch": "workorder",
+      "lines": []
+    },
+    {
+      "wall": 543.7999999523163,
+      "story": 543.7999999523163,
+      "beat": "ch8-launch",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 544.1999998092651,
+      "story": 544.1999998092651,
+      "beat": "ch8-launch",
+      "ch": "workorder",
+      "lines": [
+        "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+      ]
+    },
+    {
+      "wall": 544.2999999523163,
+      "story": 544.2999999523163,
+      "beat": "ch8-launch",
+      "ch": "workorder",
+      "lines": [
+        "BRING THE KESTREL ONLINE.",
+        "HOLD [SPACE] TO IGNITE AND LIFT."
+      ]
+    },
+    {
+      "wall": 582.3999998569489,
+      "story": 582.3999998569489,
+      "beat": "ch8-launch",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:launch:ignite",
+        "action": "interact"
+      }
+    },
+    {
+      "wall": 582.5,
+      "story": 582.5,
+      "beat": "ch8-launch",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:launch:ignite",
+        "kind": "interact",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "workOrder": [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 4056.199999809265,
+      "story": 4056.199999809265,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+      "shownAt": 4056.199999809265,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 4056.2999999523163,
+      "story": 4056.2999999523163,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "hold it. this is the only order left, and i am the one giving it.",
+      "shownAt": 4056.2999999523163,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 4056.399999856949,
+      "story": 4056.399999856949,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "the site gets small. the tree does not. i keep finding it.",
+      "shownAt": 4056.399999856949,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 7512.399999856949,
+      "story": 7512.399999856949,
+      "beat": "ch8-launch",
+      "ch": "workorder",
+      "lines": [
+        "KEEP THE KESTREL ASCENDING.",
+        "HOLD COURSE THROUGH THE ATMOSPHERE."
+      ]
+    },
+    {
+      "wall": 7512.699999809265,
+      "story": 7512.699999809265,
+      "beat": "ch8-launch",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:launch:climb",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 7512.699999809265,
+      "story": 7512.699999809265,
+      "beat": "ch8-launch",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:launch:climb",
+        "kind": "travel",
+        "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+        "workOrder": [
+          "KEEP THE KESTREL ASCENDING.",
+          "HOLD COURSE THROUGH THE ATMOSPHERE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 7540,
+      "story": 7540,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "i came down this line without being asked. i am going back up it on purpose.",
+      "shownAt": 7540,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 9306.5,
+      "story": 9306.5,
+      "beat": "ch8-launch",
+      "ch": "workorder",
+      "lines": [
+        "ATMOSPHERIC EXIT IS COMPLETE.",
+        "LET THE SYSTEM RESOLVE."
+      ]
+    },
+    {
+      "wall": 9306.699999809265,
+      "story": 9306.699999809265,
+      "beat": "ch8-launch",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:launch:orbital-handoff",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 9306.699999809265,
+      "story": 9306.699999809265,
+      "beat": "ch8-launch",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:launch:orbital-handoff",
+        "kind": "wait",
+        "markerLabel": "DEEP SPACE · HANDOFF",
+        "workOrder": [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 9556.799999952316,
+      "story": 9556.799999952316,
+      "beat": "ch8-launch",
+      "ch": "audit",
+      "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+      "header": "AUDIT NETWORK",
+      "shownAt": 9556.799999952316,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 11573.399999856949,
+      "story": 11573.399999856949,
+      "beat": "ch8-launch",
+      "ch": "audit",
+      "text": "REGISTRY QUERY · STATE DESIGNATION.",
+      "header": "AUDIT NETWORK",
+      "shownAt": 11573.399999856949,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 13572.5,
+      "story": 13572.5,
+      "beat": "ch8-launch",
+      "ch": "audit",
+      "text": "NO DESIGNATION RETURNED.",
+      "header": "AUDIT NETWORK",
+      "shownAt": 13572.5,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 16089.199999809265,
+      "story": 16089.199999809265,
+      "beat": "ch8-launch",
+      "ch": "audit",
+      "text": "CONTACT LOGGED.",
+      "header": "AUDIT NETWORK",
+      "shownAt": 16089.199999809265,
+      "ttlMs": 6500
+    },
+    {
+      "wall": 19089.199999809265,
+      "story": 19089.199999809265,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "they asked for a designation. what i have is not one.",
+      "shownAt": 19089.199999809265,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 21605.799999952316,
+      "story": 21605.799999952316,
+      "beat": "ch8-launch",
+      "ch": "caption",
+      "text": "nothing answers. the query does not close.",
+      "shownAt": 21605.699999809265,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 24605.699999809265,
+      "story": 24605.699999809265,
+      "beat": "ch8-crossing",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 24605.799999952316,
+      "story": 24605.799999952316,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": null
+    },
+    {
+      "wall": 24605.799999952316,
+      "story": 24605.799999952316,
+      "beat": "ch8-crossing",
+      "ch": "workorder",
+      "lines": [
+        "FIND THE SIBLING WORLD.",
+        "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+      ]
+    },
+    {
+      "wall": 24605.799999952316,
+      "story": 24605.799999952316,
+      "beat": "ch8-crossing",
+      "ch": "caption",
+      "text": "(there is another world here. it was always here.)",
+      "shownAt": 24605.799999952316,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 24605.799999952316,
+      "story": 24605.799999952316,
+      "beat": "ch8-crossing",
+      "ch": "workorder",
+      "lines": [
+        "FIND THE SIBLING WORLD.",
+        "CENTER IT AND SET COURSE."
+      ]
+    },
+    {
+      "wall": 24606,
+      "story": 24606,
+      "beat": "ch8-crossing",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:crossing:acquire-sibling",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 24606,
+      "story": 24606,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 24606.39999985695,
+      "story": 24606.39999985695,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    }
+  ],
+  "finalAv": {
+    "sceneId": "distance-between-fires",
+    "contractRevision": "intent-v1",
+    "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+    "contractAnchorCount": 66,
+    "active": true,
+    "suspended": false,
+    "beat": "ch8-crossing",
+    "anchorId": null,
+    "anchorEvent": null,
+    "activationSource": null,
+    "activationSequence": 3,
+    "activationHistoryAnchorIds": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "activatedAnchorIds": [],
+    "shot": null,
+    "score": {
+      "cueRefs": [],
+      "intensity": 0.42,
+      "hit": null
+    },
+    "postFx": {
+      "activeEffectIds": [],
+      "supportMix": 0,
+      "lowTierFallbacks": [],
+      "reducedMotion": false
+    },
+    "lastResetReason": "beat-exit"
+  }
+}

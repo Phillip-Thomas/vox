@@ -1,0 +1,94 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v2",
+  "contractSha256": "aa7ea1ac3f60ad2c130e3eaa07c45b204be4a27f6ab2897e2035aeb9552aca8a",
+  "compiledAt": "2026-08-11T00:00:00Z",
+  "compiledBy": "Claude orchestrator compiler — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@286f9bf9c3bf10883d638d2edae86040d721c60fa8adf0d80c7b6f3160b4f3ca",
+  "reconstructionNote": "Derived 2026-08-11 from the canonical register's iterationIntroduced and iterationResolved fields. NOT a contemporaneous record: no defect-register bytes were captured at this iteration during the run, so this file states the register as it is now known to have stood, not as it was written then. The open-defect counts are honest — they follow directly from the recorded introduction and resolution iterations — but every statement, repair and route text is the closing-compile wording, and acceptance decisions taken at closeout are shown here as open because they had not yet been taken.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "40d1f016bbeead86b9f1da329c25259a2b0ec76ee76576819fdf787fd3115e21"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "f8d10735047678e5b4a23a7b55b2464bae925a87b069030c39c120c9e31ae6b4"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "96808d5041b52da736326f4431384ff91bade93bb7dc633035bc9988aa205979"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "8411405d2ee00babf2c79fcff7711f8986c8260e9ce9ef2b676bbcd3fa7985d6"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "56ead8c7889fe75ebd48725f8a6016f7585bd88b39ff90d97177c2aa6d0860e4"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "bd7491cfcffa547f3aac4e31e7aafc5138e3385aaee0d4209c9939a7ddce1822"
+    }
+  ],
+  "defects": [
+    {
+      "id": "vd-01",
+      "severity": "high",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.launch.ignition",
+      "statement": "Contracted strings L2 and L3 never rendered on any drivable route: both signed launch anchors are active on the first ch8-launch frame, so the un-seeded first pass latched both silently and only one L-line reached the screen.",
+      "requestedRepair": "Rule the correct trigger bindings for L2 and L3 and the minimum inter-line spacing needed to protect the single caption slot.",
+      "verificationRoute": "Re-run the ch8 emission trace on chained, deep-link and variant routes, 3 cold runs each.",
+      "evidenceRefs": [
+        "evidence/verification/chain-launch-anchor-fine-trace.json"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "iterationIntroduced": 1,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "vd-02",
+      "severity": "medium",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch8.advance",
+      "statement": "Chained ch6 to ch9 movie flow stalls at ch8-landfall, reproduced from a ch8-crossing deep link entirely downstream of every path this run mutated, at source revision 03e975a and outside the allowed paths.",
+      "requestedRepair": "None inside this run. Escalate to repo maintenance with the isolation proof.",
+      "verificationRoute": "n/a this run; a follow-on run proves chained completion.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md",
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 1,
+      "acceptedExceptionRef": null
+    },
+    {
+      "id": "vd-03",
+      "severity": "low",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anchor.ch8.site-recedes",
+      "statement": "On the POTATO tier the shipped climb objective is skipped. No POTATO baseline exists, so pre-existence rests on an absence of contrary evidence plus a mechanism argument rather than a measured comparison.",
+      "requestedRepair": "None inside this run. Escalate with the ch5/ch6/ch9 follow-on list.",
+      "verificationRoute": "n/a this run.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "iterationIntroduced": 1,
+      "acceptedExceptionRef": null
+    }
+  ]
+}

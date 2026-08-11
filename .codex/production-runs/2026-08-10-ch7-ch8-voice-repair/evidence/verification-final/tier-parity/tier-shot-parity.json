@@ -1,0 +1,475 @@
+{
+  "probe": "tier-shot-parity-probe.mjs",
+  "defectRef": "CIN-13",
+  "base": "http://localhost:5176",
+  "capturedAt": "2026-08-11T15:52:46.322Z",
+  "bugFixed": "shot.transition.declaredCut -> shot.declaredCut / shot.transitionType (flat on the shot object)",
+  "results": [
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "anchorLabel": "ch7 calibration reveal",
+      "tier": "quality-low",
+      "profile": "LOW",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 16234.599999904633,
+        "beat": "ch7-reconstruct",
+        "anchorId": "anc.reconstruct.calibration",
+        "anchorEvent": "ev.reconstruct.calibration-completed",
+        "activatedAnchorIds": [
+          "anc.reconstruct.diagnosis",
+          "anc.reconstruct.bench-online",
+          "anc.reconstruct.frame-restored",
+          "anc.reconstruct.hull-sealed",
+          "anc.reconstruct.lift-online",
+          "anc.reconstruct.route-online",
+          "anc.reconstruct.calibration"
+        ],
+        "shot": {
+          "id": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "transitionType": "occlusion",
+          "declaredCut": false,
+          "startFovDeg": 52,
+          "endFovDeg": 52,
+          "appliedFovDeg": 52,
+          "lensDurationMs": 350,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.reconstruct.calibration"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.reconstruct.one-instrument"
+          ],
+          "intensity": null
+        },
+        "caption": "i closed it, and something inside started listening again. i did that too.",
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        },
+        "file": "anchor_anc.reconstruct.calibration_quality-low.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.reconstruct.calibration__quality-low"
+    },
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "anchorLabel": "ch7 calibration reveal",
+      "tier": "quality-potato",
+      "profile": "POTATO",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=POTATO",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 15855.900000095367,
+        "beat": "ch7-reconstruct",
+        "anchorId": "anc.reconstruct.calibration",
+        "anchorEvent": "ev.reconstruct.calibration-completed",
+        "activatedAnchorIds": [
+          "anc.reconstruct.diagnosis",
+          "anc.reconstruct.bench-online",
+          "anc.reconstruct.frame-restored",
+          "anc.reconstruct.hull-sealed",
+          "anc.reconstruct.lift-online",
+          "anc.reconstruct.route-online",
+          "anc.reconstruct.calibration"
+        ],
+        "shot": {
+          "id": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "transitionType": "occlusion",
+          "declaredCut": false,
+          "startFovDeg": 52,
+          "endFovDeg": 52,
+          "appliedFovDeg": 52,
+          "lensDurationMs": 350,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.reconstruct.calibration"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.reconstruct.one-instrument"
+          ],
+          "intensity": null
+        },
+        "caption": "i closed it, and something inside started listening again. i did that too.",
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        },
+        "file": "anchor_anc.reconstruct.calibration_quality-potato.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.reconstruct.calibration__quality-potato"
+    },
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "anchorLabel": "ch7 calibration reveal",
+      "tier": "variant-mobile",
+      "profile": "LOW",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 16046.400000095367,
+        "beat": "ch7-reconstruct",
+        "anchorId": "anc.reconstruct.calibration",
+        "anchorEvent": "ev.reconstruct.calibration-completed",
+        "activatedAnchorIds": [
+          "anc.reconstruct.diagnosis",
+          "anc.reconstruct.bench-online",
+          "anc.reconstruct.frame-restored",
+          "anc.reconstruct.hull-sealed",
+          "anc.reconstruct.lift-online",
+          "anc.reconstruct.route-online",
+          "anc.reconstruct.calibration"
+        ],
+        "shot": {
+          "id": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "transitionType": "occlusion",
+          "declaredCut": false,
+          "startFovDeg": 52,
+          "endFovDeg": 52,
+          "appliedFovDeg": 52,
+          "lensDurationMs": 350,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.reconstruct.calibration"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.reconstruct.one-instrument"
+          ],
+          "intensity": null
+        },
+        "caption": "i closed it, and something inside started listening again. i did that too.",
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 1
+        },
+        "file": "anchor_anc.reconstruct.calibration_variant-mobile.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.reconstruct.calibration__variant-mobile"
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "anchorLabel": "ch8 window atmosphere-exit",
+      "tier": "quality-low",
+      "profile": "LOW",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 6978.099999904633,
+        "beat": "ch8-launch",
+        "anchorId": "anc.launch.atmosphere-exit",
+        "anchorEvent": "ev.launch.origin-atmosphere-exited",
+        "activatedAnchorIds": [
+          "anc.launch.ignition",
+          "anc.launch.liftoff",
+          "anc.launch.atmosphere-exit"
+        ],
+        "shot": {
+          "id": "cin.launch.03-boundary-without-warp",
+          "cameraAuthority": "lens-rig",
+          "transitionType": "continuous",
+          "declaredCut": false,
+          "startFovDeg": 70,
+          "endFovDeg": 70,
+          "appliedFovDeg": null,
+          "lensDurationMs": 0,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.launch.atmosphere-exit"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.launch.03-boundary-without-warp"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.launch.ground-relents"
+          ],
+          "intensity": 0.5
+        },
+        "caption": "i came down this line without being asked. i am going back up it on purpose.",
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        },
+        "file": "anchor_anc.launch.atmosphere-exit_quality-low.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.launch.atmosphere-exit__quality-low"
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "anchorLabel": "ch8 window atmosphere-exit",
+      "tier": "quality-potato",
+      "profile": "POTATO",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=POTATO",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 6394.300000190735,
+        "beat": "ch8-launch",
+        "anchorId": "anc.launch.atmosphere-exit",
+        "anchorEvent": "ev.launch.origin-atmosphere-exited",
+        "activatedAnchorIds": [
+          "anc.launch.ignition",
+          "anc.launch.liftoff",
+          "anc.launch.atmosphere-exit"
+        ],
+        "shot": {
+          "id": "cin.launch.03-boundary-without-warp",
+          "cameraAuthority": "lens-rig",
+          "transitionType": "continuous",
+          "declaredCut": false,
+          "startFovDeg": 70,
+          "endFovDeg": 70,
+          "appliedFovDeg": null,
+          "lensDurationMs": 0,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.launch.atmosphere-exit"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.launch.03-boundary-without-warp"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.launch.ground-relents"
+          ],
+          "intensity": 0.5
+        },
+        "caption": "i came down this line without being asked. i am going back up it on purpose.",
+        "viewport": {
+          "w": 1280,
+          "h": 720,
+          "dpr": 1
+        },
+        "file": "anchor_anc.launch.atmosphere-exit_quality-potato.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.launch.atmosphere-exit__quality-potato"
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "anchorLabel": "ch8 window atmosphere-exit",
+      "tier": "variant-mobile",
+      "profile": "LOW",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "avReadErrors": 0,
+      "observedAtAnchor": {
+        "storyClock": 6961.899999856949,
+        "beat": "ch8-launch",
+        "anchorId": "anc.launch.atmosphere-exit",
+        "anchorEvent": "ev.launch.origin-atmosphere-exited",
+        "activatedAnchorIds": [
+          "anc.launch.ignition",
+          "anc.launch.liftoff",
+          "anc.launch.atmosphere-exit"
+        ],
+        "shot": {
+          "id": "cin.launch.03-boundary-without-warp",
+          "cameraAuthority": "lens-rig",
+          "transitionType": "continuous",
+          "declaredCut": false,
+          "startFovDeg": 70,
+          "endFovDeg": 70,
+          "appliedFovDeg": null,
+          "lensDurationMs": 0,
+          "reducedMotion": false,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.launch.atmosphere-exit"
+          }
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.launch.03-boundary-without-warp"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ]
+        },
+        "score": {
+          "cueRefs": [
+            "sc.launch.ground-relents"
+          ],
+          "intensity": 0.5
+        },
+        "caption": "i came down this line without being asked. i am going back up it on purpose.",
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 1
+        },
+        "file": "anchor_anc.launch.atmosphere-exit_variant-mobile.png",
+        "stateReadOrder": "state-before-shutter"
+      },
+      "frameDir": "evidence/verification-final/tier-parity/anc.launch.atmosphere-exit__variant-mobile"
+    }
+  ],
+  "parity": [
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "tiersObserved": [
+        "quality-low",
+        "quality-potato",
+        "variant-mobile"
+      ],
+      "declaredShotIdentical": true,
+      "distinctShotDeclarations": [
+        {
+          "shotId": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "startFovDeg": 52,
+          "endFovDeg": 52,
+          "transitionType": "occlusion",
+          "declaredCut": false
+        }
+      ],
+      "appliedFovDegByTier": {
+        "quality-low": 52,
+        "quality-potato": 52,
+        "variant-mobile": 52
+      },
+      "activeEffectIdsByTier": {
+        "quality-low": [
+          "fx.reconstruct.09-one-exterior-reveal"
+        ],
+        "quality-potato": [
+          "fx.reconstruct.09-one-exterior-reveal"
+        ],
+        "variant-mobile": [
+          "fx.reconstruct.09-one-exterior-reveal"
+        ]
+      },
+      "lowTierFallbacksByTier": {
+        "quality-low": [
+          "physical-state"
+        ],
+        "quality-potato": [
+          "physical-state"
+        ],
+        "variant-mobile": [
+          "physical-state"
+        ]
+      }
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "tiersObserved": [
+        "quality-low",
+        "quality-potato",
+        "variant-mobile"
+      ],
+      "declaredShotIdentical": true,
+      "distinctShotDeclarations": [
+        {
+          "shotId": "cin.launch.03-boundary-without-warp",
+          "cameraAuthority": "lens-rig",
+          "startFovDeg": 70,
+          "endFovDeg": 70,
+          "transitionType": "continuous",
+          "declaredCut": false
+        }
+      ],
+      "appliedFovDegByTier": {
+        "quality-low": null,
+        "quality-potato": null,
+        "variant-mobile": null
+      },
+      "activeEffectIdsByTier": {
+        "quality-low": [
+          "fx.launch.03-boundary-without-warp"
+        ],
+        "quality-potato": [
+          "fx.launch.03-boundary-without-warp"
+        ],
+        "variant-mobile": [
+          "fx.launch.03-boundary-without-warp"
+        ]
+      },
+      "lowTierFallbacksByTier": {
+        "quality-low": [
+          "physical-state"
+        ],
+        "quality-potato": [
+          "physical-state"
+        ],
+        "variant-mobile": [
+          "physical-state"
+        ]
+      }
+    }
+  ]
+}

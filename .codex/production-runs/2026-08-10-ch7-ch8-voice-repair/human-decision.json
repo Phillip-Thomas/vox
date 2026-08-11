@@ -1,0 +1,152 @@
+{
+  "schema": "paravoxia.humanDecision.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "reviewer": "owner (Phillip Thomas) — decision pending",
+  "reviewedAt": "2026-08-11T00:00:00Z",
+  "decision": "pending",
+  "headedRealGpuEvidence": false,
+  "scopeMatchesProductionLock": true,
+  "evidenceRefs": [
+    "cohesion-judge.md",
+    "final-scorecard.json",
+    "dissent-register.md",
+    "naive-audience-report.md",
+    "evidence/score-ch7-variant_route.wav",
+    "evidence/score-ch7-variant_calibration.wav",
+    "evidence/verification-final/video/ch8-launch-window-av.webm",
+    "evidence/verification-v3/routeA-ordered/routeA-ordered-captures.json",
+    "evidence/verification-final/ch7mobile-mobile-portrait-run1"
+  ],
+  "tasteRationale": "PENDING OWNER SESSION. The cohesion judge's final disposition is ready-for-human-taste (weighted 4.66 fixture / 4.62 judge, floor cleared at 4.35, zero unaccepted protected-category mediums). The machine record is complete; what remains is constitutionally the owner's: taste question 1 (autopilot exterior-reveal composition, CIN-03/CIN-04 frames attached), taste question 2 (caption scrim vs unplated ink — load-bearing for the open CIN-01 mobile-portrait collision), the dissent-01 score packet (executable as scoped), the dissent-02/C6 camera-and-pacing packet (CIN-12 arithmetic attached), the CIN-01 scope decision, the ux-14 follow-on commissioning, the R1 de-bracketing option, and one headed session (ch7 bench at player pace; on-foot reboard [F] commit; the dive window; the bench_online gap) or a recorded scoped exception for the non-release draft surface — which only the owner may record.",
+  "dissentDisposition": "pending — the preserved-dissent register (cohesion-judge.md section 3, ten entries) ships to the owner un-averaged, including the naive viewer's verdict verbatim and both co-signed packet dissents",
+  "acceptedExceptions": [
+    "ux-14",
+    "vd-02",
+    "vd-03",
+    "F1",
+    "F3",
+    "F5",
+    "ux-02",
+    "ux-05",
+    "ux-06",
+    "sa-01",
+    "sa-04",
+    "CIN-03"
+  ],
+  "acceptedExceptionDetails": [
+    {
+      "id": "ux-14",
+      "acceptedBy": "scene-cohesion-judge",
+      "scope": "gate arithmetic only — acceptance of the pre-existing attribution, not of the defect; stays an open high on the dissent-06 family follow-on",
+      "conditions": [
+        "exception covers this run's gate arithmetic only",
+        "the owner's headed session must observe the ~6 s salvage-to-bench marker gap at player pace",
+        "the work-order mitigant is recorded and does not downgrade severity"
+      ]
+    },
+    {
+      "id": "vd-02",
+      "acceptedBy": "story-verifier + orchestrator (defect register)",
+      "scope": "pre-existing chained-movie landfall stall, reproduced outside the mutation surface; escalated with isolation proof",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "vd-03",
+      "acceptedBy": "story-verifier + orchestrator (defect register)",
+      "scope": "pre-existing POTATO climb-objective skip; no baseline to call regression; escalated",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "F1",
+      "acceptedBy": "scene-cohesion-judge (split ruling)",
+      "scope": "L1 half repaired by the reveal guard; tree-clause half rides the dissent-02 packet decision as the Chapter's recorded fallback",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "F3",
+      "acceptedBy": "story-canon-auditor + chapter (routing)",
+      "scope": "seam content collision recorded on the R1 follow-on, beyond this run's locked beats",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "F5",
+      "acceptedBy": "story-canon-auditor (routing)",
+      "scope": "WRECK RELAY prop double-reference; retitle option is an owner copy decision on the follow-on",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "ux-02",
+      "acceptedBy": "player-experience-auditor + scene-cohesion-judge",
+      "scope": "mobile caption/control collision = the UX face of CIN-01; fix outside the lock, rides owner taste question 2",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "ux-05",
+      "acceptedBy": "scene-cohesion-judge",
+      "scope": "headed-evidence gap narrowed to one input (on-foot board commit); owner session or scoped exception required",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "ux-06",
+      "acceptedBy": "chapter ruling vd-04 + judge",
+      "scope": "canonical ordered-ignition route is not the chapter-select route; authored degradation, owner-notified caveat",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "sa-01",
+      "acceptedBy": "score-director (packet amendment)",
+      "scope": "packet scope amended to name scoreIntensityFor and protected-path authority; adopted into commission",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "sa-04",
+      "acceptedBy": "score-continuity-auditor (routing)",
+      "scope": "calibration-length 0.5 s coupling recorded as invariant; unit test routed to follow-on",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    },
+    {
+      "id": "CIN-03",
+      "acceptedBy": "cinematography-director (open by design)",
+      "scope": "exterior-reveal composition ruling reserved for the owner's headed screening; taste question 1",
+      "conditions": [
+        "machine-accepted routing/disposition exception recorded by the run's own authority; owner review pending — the owner's decision field remains 'pending' and may override any of these"
+      ]
+    }
+  ],
+  "acceptedExceptionShapeNote": "acceptedExceptions carries plain IDs because the gate builds a Set from this array and tests membership by defect ID; the full per-exception records — acceptedBy, scope and conditions — are preserved byte-identical in acceptedExceptionDetails. Nothing about any acceptance changed.",
+  "remainingGates": [
+    "owner-taste-question-1-autopilot-reveal-composition",
+    "owner-taste-question-2-caption-scrim-vs-unplated-ink",
+    "owner-decision-score-packet-ch8-launch-window-authority",
+    "owner-decision-camera-pacing-packet-cin-launch-02-plus-c6",
+    "owner-scope-decision-cin-01-mobile-caption-clearance",
+    "owner-followon-commission-ux-14-bench-online",
+    "owner-option-r1-debracketing-ch7-board-ch8-crossing",
+    "headed-human-operated-session-or-recorded-scoped-exception",
+    "human-release-decision"
+  ],
+  "publishDecision": "not_requested",
+  "publishAuthorityRef": null
+}

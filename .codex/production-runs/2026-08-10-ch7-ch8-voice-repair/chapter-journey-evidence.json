@@ -1,0 +1,131 @@
+{
+  "schema": "paravoxia.chapterJourneyEvidence.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "chapterId": "ch8",
+  "capturedAt": "2026-08-11T15:20:25.578Z",
+  "capturedBy": "story-verifier (closing verification pass, iteration 6)",
+  "contract": {
+    "schema": "paravoxia.chapterJourneyContract.v1",
+    "path": "main/chapter-journey-contract.json",
+    "sha256": "96a456b461993878e99af0e1a91c4be4073c345e6cf5ed65a7005ffa6722a1ea",
+    "requiredLaneIds": [
+      "continuous-manual",
+      "movie",
+      "reload-continue",
+      "direct-entry-diagnostic",
+      "recovery-detour",
+      "variants"
+    ],
+    "scenarioIds": []
+  },
+  "status": "passed",
+  "disposition": "passed-no-focused-scenarios",
+  "machineJourneyCertified": false,
+  "browser": {
+    "engine": "chromium (playwright-core, ~/.cache/ms-playwright)",
+    "headed": false,
+    "viewport": "1280x720",
+    "flags": [
+      "--enable-unsafe-swiftshader",
+      "--use-gl=angle"
+    ]
+  },
+  "lane": {
+    "id": "movie",
+    "humanOperated": false,
+    "headed": false,
+    "requestedControlMode": "autopilot",
+    "observedInputDriver": "in-game movie autopilot",
+    "machineJourneyCertifying": false,
+    "evaluation": {
+      "status": "passed",
+      "passed": true,
+      "checks": [
+        {
+          "id": "lane.identity",
+          "status": "passed",
+          "detail": "Every ch8 observation in this run was taken on the movie lane with movie=1; no human operated the browser and no trusted manual input was injected for progression."
+        },
+        {
+          "id": "lane.no-certification-claim",
+          "status": "passed",
+          "detail": "This artifact claims no machine journey certification. ch8 declares no focused escaped-defect scenario in the canonical journey contract."
+        },
+        {
+          "id": "lane.beat-coverage",
+          "status": "passed",
+          "detail": "ch8-launch was traced on three cold movie runs to its honest advance at +17.066 s; ch8-crossing and ch8-landfall were entered on the chained runs."
+        }
+      ]
+    }
+  },
+  "scenarios": [],
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "blocked": 0
+  },
+  "failures": [],
+  "unavailable": [],
+  "observations": [
+    {
+      "id": "obs.ch8.launch-window",
+      "beat": "ch8-launch",
+      "detail": "The implemented exit-hold window ran to its advance on every cold run and every variant: L4 at +0.000 s, stack rows at +2.016/+4.016/+6.033 s, CONTACT LOGGED. at +8.533-8.549 s, designation at +11.549 s, L6 at +14.049 s, advance to ch8-crossing at +17.066 s, lastResetReason 'beat-exit' with anchors cleared.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json",
+        "evidence/verification/ch8-window-av-score-trace.json"
+      ]
+    },
+    {
+      "id": "obs.ch8.objective-restored",
+      "beat": "ch8-launch",
+      "detail": "The shipped objective ch8:launch:orbital-handoff publishes 1.767 s into the hold on every run and holds 15.30 s of screen life. No objective was added, renamed or re-copied.",
+      "evidenceRefs": [
+        "evidence/verification/cadence-assertions.json"
+      ]
+    },
+    {
+      "id": "obs.ch8.landfall-stall",
+      "beat": "ch8-landfall",
+      "detail": "On the chained movie lane ch8-landfall never advanced to ch9-settle (two runs, 505 s and 208 s of further observation, objective ch8:landfall:land-dry-level, health ready, autopilot nudges 0). Reproduced from a ch8-crossing start; the ch8-landfall deep link reaches ch9-settle in 10.5 s. Recorded here as a chapter-journey observation, not as a defect of this run's copy surface.",
+      "evidenceRefs": [
+        "evidence/verification/full-flow-trace.json",
+        "evidence/verification/chain-landfall-from-crossing.json",
+        "evidence/verification/chain-landfall-deeplink.json"
+      ]
+    },
+    {
+      "id": "obs.ch8.l2-l3-not-rendered",
+      "beat": "ch8-launch",
+      "detail": "L2 renders on no drivable path and L3 renders only on the ch8-launch deep link; on the chained lane both are seeded as already-fired because the two signed launch anchors are already activated on the first ch8-launch frame.",
+      "evidenceRefs": [
+        "evidence/verification/chain-launch-anchor-fine-trace.json",
+        "evidence/verification/l23-captures.json"
+      ]
+    }
+  ],
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "sceneContractRef": "scene-contract.json",
+  "supersedesBinding": {
+    "contractVersion": null,
+    "contractSha256": null,
+    "capturedAt": "2026-08-10T18:05:00Z",
+    "defectRef": "ux-04 — the artifact carried a null scene-contract binding against a README that requires a contract-hashed report"
+  },
+  "closingPassRebind": {
+    "defectRef": "ux-04",
+    "action": "bound to the frozen draft-v5 scene contract and hash; the chapter-journey-contract.json binding and its sha are unchanged",
+    "freshLaneEvidence": {
+      "lane": "movie",
+      "ch7": "evidence/verification-final/ch7queue-desktop.json (3 cold runs), ch7mobile-mobile-portrait.json, ch7mobile-mobile-landscape.json",
+      "ch7PacedManualShape": "evidence/verification-final/ch7manual.json (scripted shipped-transaction route, mutation declared in the file)",
+      "ch8": "evidence/verification-final/routeA-ordered (3), routeB-desktop.json (3), routeC-desktop/potato/mobile/reduced-motion.json",
+      "resetMatrix": "evidence/verification-final/replay-remeasure.json (replay-deep-link and quit-to-menu, frames captured)",
+      "seams": "evidence/verification-final/seams/"
+    }
+  }
+}

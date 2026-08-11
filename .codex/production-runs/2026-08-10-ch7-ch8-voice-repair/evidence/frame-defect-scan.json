@@ -1,0 +1,90 @@
+{
+  "scannedAt": "2026-08-11T15:23:55.752Z",
+  "roots": [
+    "evidence/verification-final"
+  ],
+  "directories": [
+    {
+      "dir": "evidence/verification-final",
+      "frameCount": 2456,
+      "blankFrames": [],
+      "luminanceJumps": [
+        {
+          "from": "evidence/verification-final/ch7mobile-mobile-landscape-run1/002_strip_t2p62s_ch7-reconstruct_surface.png",
+          "to": "evidence/verification-final/ch7mobile-mobile-landscape-run1/003_strip_t3p42s_ch7-reconstruct_surface.png",
+          "meanJump": 44.9
+        },
+        {
+          "from": "evidence/verification-final/ch7mobile-mobile-portrait-run1/001_strip_t2p59s_ch7-reconstruct_surface.png",
+          "to": "evidence/verification-final/ch7mobile-mobile-portrait-run1/002_strip_t3p36s_ch7-reconstruct_surface.png",
+          "meanJump": 50.18
+        },
+        {
+          "from": "evidence/verification-final/ch7queue-desktop-run1/002_strip_t2p73s_ch7-reconstruct_surface.png",
+          "to": "evidence/verification-final/ch7queue-desktop-run1/002_strip_t4p30s_ch7-reconstruct_surface.png",
+          "meanJump": 60.49
+        },
+        {
+          "from": "evidence/verification-final/ch7queue-desktop-run2/002_strip_t2p51s_ch7-reconstruct_surface.png",
+          "to": "evidence/verification-final/ch7queue-desktop-run2/002_strip_t3p28s_ch7-reconstruct_surface.png",
+          "meanJump": 44.92
+        },
+        {
+          "from": "evidence/verification-final/ch7queue-desktop-run3/002_strip_t2p39s_ch7-reconstruct_surface.png",
+          "to": "evidence/verification-final/ch7queue-desktop-run3/002_strip_t2p97s_ch7-reconstruct_surface.png",
+          "meanJump": 42.75
+        },
+        {
+          "from": "evidence/verification-final/dive-run1/01_pre-dive_deep_space.png",
+          "to": "evidence/verification-final/dive-run1/02_dip-start_descent.png",
+          "meanJump": 67.03
+        },
+        {
+          "from": "evidence/verification-final/dive-run2/01_pre-dive_deep_space.png",
+          "to": "evidence/verification-final/dive-run2/02_dip-start_descent.png",
+          "meanJump": 67.14
+        },
+        {
+          "from": "evidence/verification-final/dive-run3/01_pre-dive_deep_space.png",
+          "to": "evidence/verification-final/dive-run3/02_dip-start_descent.png",
+          "meanJump": 67.1
+        },
+        {
+          "from": "evidence/verification-final/replay-replay-deep-link/001_post_t2p24s_ch8-launch_surface.png",
+          "to": "evidence/verification-final/replay-replay-deep-link/002_post_t2p99s_ch8-launch_surface.png",
+          "meanJump": 47.8
+        },
+        {
+          "from": "evidence/verification-final/routeC-reduced-motion-run2/057_strip_t23p83s_ch8-launch_deep_space.png",
+          "to": "evidence/verification-final/seams/ch6-dive-to-ch7/seam_t0p01s_ch7-reconstruct.png",
+          "meanJump": 52.16
+        },
+        {
+          "from": "evidence/verification-final/seams/ch6-dive-to-ch7/seam_t3p03s_ch7-reconstruct.png",
+          "to": "evidence/verification-final/seams/ch8-hold-to-crossing/seam_t16p50s_ch8-launch.png",
+          "meanJump": 86.15
+        },
+        {
+          "from": "evidence/verification-final/seams/ch8-hold-to-crossing/seam_t18p50s_ch8-crossing.png",
+          "to": "evidence/verification-final/seams/ch8-landfall-to-ch9/ch9entry_t0p00s_ch9-settle.png",
+          "meanJump": 66.25
+        },
+        {
+          "from": "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t19p99s_ch9-settle.png",
+          "to": "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t1p93s_ch8-landfall.png",
+          "meanJump": 81.36
+        },
+        {
+          "from": "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t5p99s_ch8-landfall.png",
+          "to": "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t7p01s_ch8-landfall.png",
+          "meanJump": 40.19
+        }
+      ],
+      "minStd": 4.403,
+      "meanRange": [
+        0.731,
+        115.403
+      ]
+    }
+  ]
+}

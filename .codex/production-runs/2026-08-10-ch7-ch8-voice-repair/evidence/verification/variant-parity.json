@@ -1,0 +1,1906 @@
+{
+  "generatedAt": "2026-08-10T21:36:02.346Z",
+  "toleranceSeconds": 0.2,
+  "variants": [
+    {
+      "variant": "mobile-portrait",
+      "profile": "LOW",
+      "beat": "ch7-reconstruct",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "(repair is not return.)",
+          "count": 1,
+          "storyMs": 457.09999990463257
+        },
+        {
+          "ch": "audit",
+          "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "count": 1,
+          "storyMs": 4060.7000000476837
+        },
+        {
+          "ch": "caption",
+          "text": "the wreck that brought me here will leave here. i will build the leaving.",
+          "count": 1,
+          "storyMs": 4060.7999999523163
+        },
+        {
+          "ch": "caption",
+          "text": "the keel takes the weight first. everything after this is allowed to be heavy.",
+          "count": 1,
+          "storyMs": 5359.799999952316
+        },
+        {
+          "ch": "caption",
+          "text": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+          "count": 1,
+          "storyMs": 6026.700000047684
+        },
+        {
+          "ch": "audit",
+          "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED",
+          "count": 1,
+          "storyMs": 6693.299999952316
+        },
+        {
+          "ch": "caption",
+          "text": "i closed it, and something inside started listening again. i did that too.",
+          "count": 1,
+          "storyMs": 6693.299999952316
+        },
+        {
+          "ch": "audit",
+          "text": "POWER BUS LIVE · TRANSPONDER ARMED",
+          "count": 1,
+          "storyMs": 7414.399999856949
+        },
+        {
+          "ch": "caption",
+          "text": "the ground's hold is a habit, not a law.",
+          "count": 1,
+          "storyMs": 7414.399999856949
+        },
+        {
+          "ch": "caption",
+          "text": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "count": 1,
+          "storyMs": 8064.299999952316
+        },
+        {
+          "ch": "audit",
+          "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+          "count": 1,
+          "storyMs": 16132.5
+        },
+        {
+          "ch": "caption",
+          "text": "nothing has asked yet. something has started paying attention.",
+          "count": 1,
+          "storyMs": 16742.099999904633
+        },
+        {
+          "ch": "caption",
+          "text": "the scar remains. now it can carry me.",
+          "count": 1,
+          "storyMs": 19158.299999952316
+        }
+      ],
+      "cadence": [
+        {
+          "text": "nothing has asked yet. something has started paying attention.",
+          "expected": 0.6,
+          "actual": 0.61,
+          "pass": true
+        },
+        {
+          "text": "the scar remains. now it can carry me.",
+          "expected": 3,
+          "actual": 3.026,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch7-board",
+          "expected": 5,
+          "actual": 5.026,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "reconstruct:diagnose",
+        "reconstruct:repair:bench_online",
+        "reconstruct:repair:frame_restored",
+        "reconstruct:repair:hull_sealed",
+        "reconstruct:craft:lift_online",
+        "reconstruct:repair:lift_online",
+        "reconstruct:craft:flight_ready",
+        "reconstruct:repair:flight_ready",
+        "reconstruct:calibrating",
+        "reconstruct:ready",
+        "board:enter-hatch",
+        "board:hatch-in-progress",
+        "board:pressure-seal",
+        "board:cockpit-secured",
+        "ch8:launch:ignite"
+      ],
+      "markerLabels": [
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ]
+        },
+        {
+          "id": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "USE · ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "USE · ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "USE · ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · USE TO STEP BACK."
+          ]
+        },
+        {
+          "id": "board:pressure-seal",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ]
+        },
+        {
+          "id": "board:cockpit-secured",
+          "markerLabel": "KESTREL · COCKPIT SECURED",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "COCKPIT CONTROL ESTABLISHED."
+          ]
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "reconstruct:diagnose": 1,
+        "reconstruct:repair:bench_online": 1,
+        "reconstruct:repair:frame_restored": 1,
+        "reconstruct:repair:hull_sealed": 1,
+        "reconstruct:craft:lift_online": 1,
+        "reconstruct:repair:lift_online": 1,
+        "reconstruct:craft:flight_ready": 1,
+        "reconstruct:repair:flight_ready": 1,
+        "reconstruct:calibrating": 1,
+        "reconstruct:ready": 1,
+        "board:enter-hatch": 1,
+        "board:hatch-in-progress": 1,
+        "board:pressure-seal": 1,
+        "board:cockpit-secured": 1,
+        "ch8:launch:ignite": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    },
+    {
+      "variant": "mobile-portrait",
+      "profile": "LOW",
+      "beat": "ch8-launch",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "count": 1,
+          "storyMs": 7142.5
+        },
+        {
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "count": 1,
+          "storyMs": 9158.700000047684
+        },
+        {
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "count": 1,
+          "storyMs": 11175.399999856949
+        },
+        {
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "count": 1,
+          "storyMs": 13175.599999904633
+        },
+        {
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "count": 1,
+          "storyMs": 15691.700000047684
+        },
+        {
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "count": 1,
+          "storyMs": 18691.599999904633
+        },
+        {
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "count": 1,
+          "storyMs": 21208.5
+        }
+      ],
+      "cadence": [
+        {
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "expected": 2,
+          "actual": 2.016,
+          "pass": true
+        },
+        {
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "expected": 4,
+          "actual": 4.033,
+          "pass": true
+        },
+        {
+          "text": "NO DESIGNATION RETURNED.",
+          "expected": 6,
+          "actual": 6.033,
+          "pass": true
+        },
+        {
+          "text": "CONTACT LOGGED.",
+          "expected": 8.5,
+          "actual": 8.549,
+          "pass": true
+        },
+        {
+          "text": "they asked for a designation. what i have is not one.",
+          "expected": 11.5,
+          "actual": 11.549,
+          "pass": true
+        },
+        {
+          "text": "nothing answers. the query does not close.",
+          "expected": 14,
+          "actual": 14.066,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch8-crossing",
+          "expected": 17,
+          "actual": 17.082,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "ch8:launch:ignite",
+        "ch8:launch:climb",
+        "ch8:launch:orbital-handoff",
+        "ch8:crossing:acquire-sibling"
+      ],
+      "markerLabels": [
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "id": "ch8:launch:climb",
+          "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "id": "ch8:launch:orbital-handoff",
+          "markerLabel": "DEEP SPACE · HANDOFF",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "ch8:launch:ignite": 1,
+        "ch8:launch:climb": 1,
+        "ch8:launch:orbital-handoff": 1,
+        "ch8:crossing:acquire-sibling": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    },
+    {
+      "variant": "reduced-motion",
+      "profile": "LOW",
+      "beat": "ch7-reconstruct",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "(repair is not return.)",
+          "count": 1,
+          "storyMs": 364.7999999523163
+        },
+        {
+          "ch": "audit",
+          "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "count": 1,
+          "storyMs": 3855.5
+        },
+        {
+          "ch": "caption",
+          "text": "the wreck that brought me here will leave here. i will build the leaving.",
+          "count": 1,
+          "storyMs": 3855.5
+        },
+        {
+          "ch": "caption",
+          "text": "the keel takes the weight first. everything after this is allowed to be heavy.",
+          "count": 1,
+          "storyMs": 5156.099999904633
+        },
+        {
+          "ch": "caption",
+          "text": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+          "count": 1,
+          "storyMs": 5822.799999952316
+        },
+        {
+          "ch": "audit",
+          "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED",
+          "count": 1,
+          "storyMs": 6489.299999952316
+        },
+        {
+          "ch": "caption",
+          "text": "i closed it, and something inside started listening again. i did that too.",
+          "count": 1,
+          "storyMs": 6489.299999952316
+        },
+        {
+          "ch": "audit",
+          "text": "POWER BUS LIVE · TRANSPONDER ARMED",
+          "count": 1,
+          "storyMs": 7210.599999904633
+        },
+        {
+          "ch": "caption",
+          "text": "the ground's hold is a habit, not a law.",
+          "count": 1,
+          "storyMs": 7210.599999904633
+        },
+        {
+          "ch": "caption",
+          "text": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "count": 1,
+          "storyMs": 7860.299999952316
+        },
+        {
+          "ch": "audit",
+          "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+          "count": 1,
+          "storyMs": 15902.5
+        },
+        {
+          "ch": "caption",
+          "text": "nothing has asked yet. something has started paying attention.",
+          "count": 1,
+          "storyMs": 16504.599999904633
+        },
+        {
+          "ch": "caption",
+          "text": "the scar remains. now it can carry me.",
+          "count": 1,
+          "storyMs": 18921.5
+        }
+      ],
+      "cadence": [
+        {
+          "text": "nothing has asked yet. something has started paying attention.",
+          "expected": 0.6,
+          "actual": 0.602,
+          "pass": true
+        },
+        {
+          "text": "the scar remains. now it can carry me.",
+          "expected": 3,
+          "actual": 3.019,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch7-board",
+          "expected": 5,
+          "actual": 5.019,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "reconstruct:diagnose",
+        "reconstruct:repair:bench_online",
+        "reconstruct:repair:frame_restored",
+        "reconstruct:repair:hull_sealed",
+        "reconstruct:craft:lift_online",
+        "reconstruct:repair:lift_online",
+        "reconstruct:craft:flight_ready",
+        "reconstruct:repair:flight_ready",
+        "reconstruct:calibrating",
+        "reconstruct:ready",
+        "board:enter-hatch",
+        "board:hatch-in-progress",
+        "board:pressure-seal",
+        "board:cockpit-secured",
+        "ch8:launch:ignite"
+      ],
+      "markerLabels": [
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ]
+        },
+        {
+          "id": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ]
+        },
+        {
+          "id": "board:pressure-seal",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ]
+        },
+        {
+          "id": "board:cockpit-secured",
+          "markerLabel": "KESTREL · COCKPIT SECURED",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "COCKPIT CONTROL ESTABLISHED."
+          ]
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "reconstruct:diagnose": 1,
+        "reconstruct:repair:bench_online": 1,
+        "reconstruct:repair:frame_restored": 1,
+        "reconstruct:repair:hull_sealed": 1,
+        "reconstruct:craft:lift_online": 1,
+        "reconstruct:repair:lift_online": 1,
+        "reconstruct:craft:flight_ready": 1,
+        "reconstruct:repair:flight_ready": 1,
+        "reconstruct:calibrating": 1,
+        "reconstruct:ready": 1,
+        "board:enter-hatch": 1,
+        "board:hatch-in-progress": 1,
+        "board:pressure-seal": 1,
+        "board:cockpit-secured": 1,
+        "ch8:launch:ignite": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    },
+    {
+      "variant": "reduced-motion",
+      "profile": "LOW",
+      "beat": "ch8-launch",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "count": 1,
+          "storyMs": 7124.800000190735
+        },
+        {
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "count": 1,
+          "storyMs": 9149.200000047684
+        },
+        {
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "count": 1,
+          "storyMs": 11148.800000190735
+        },
+        {
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "count": 1,
+          "storyMs": 13166.200000047684
+        },
+        {
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "count": 1,
+          "storyMs": 15665
+        },
+        {
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "count": 1,
+          "storyMs": 18681.700000047684
+        },
+        {
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "count": 1,
+          "storyMs": 21181.60000014305
+        }
+      ],
+      "cadence": [
+        {
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "expected": 2,
+          "actual": 2.024,
+          "pass": true
+        },
+        {
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "expected": 4,
+          "actual": 4.024,
+          "pass": true
+        },
+        {
+          "text": "NO DESIGNATION RETURNED.",
+          "expected": 6,
+          "actual": 6.041,
+          "pass": true
+        },
+        {
+          "text": "CONTACT LOGGED.",
+          "expected": 8.5,
+          "actual": 8.54,
+          "pass": true
+        },
+        {
+          "text": "they asked for a designation. what i have is not one.",
+          "expected": 11.5,
+          "actual": 11.557,
+          "pass": true
+        },
+        {
+          "text": "nothing answers. the query does not close.",
+          "expected": 14,
+          "actual": 14.057,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch8-crossing",
+          "expected": 17,
+          "actual": 17.074,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "ch8:launch:ignite",
+        "ch8:launch:climb",
+        "ch8:launch:orbital-handoff",
+        "ch8:crossing:acquire-sibling"
+      ],
+      "markerLabels": [
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "id": "ch8:launch:climb",
+          "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "id": "ch8:launch:orbital-handoff",
+          "markerLabel": "DEEP SPACE · HANDOFF",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "ch8:launch:ignite": 1,
+        "ch8:launch:climb": 1,
+        "ch8:launch:orbital-handoff": 1,
+        "ch8:crossing:acquire-sibling": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    },
+    {
+      "variant": "potato",
+      "profile": "POTATO",
+      "beat": "ch7-reconstruct",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "(repair is not return.)",
+          "count": 1,
+          "storyMs": 401.7000000476837
+        },
+        {
+          "ch": "audit",
+          "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "count": 1,
+          "storyMs": 3463.5999999046326
+        },
+        {
+          "ch": "caption",
+          "text": "the wreck that brought me here will leave here. i will build the leaving.",
+          "count": 1,
+          "storyMs": 3463.5999999046326
+        },
+        {
+          "ch": "caption",
+          "text": "the keel takes the weight first. everything after this is allowed to be heavy.",
+          "count": 1,
+          "storyMs": 4764.099999904633
+        },
+        {
+          "ch": "caption",
+          "text": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+          "count": 1,
+          "storyMs": 5430.900000095367
+        },
+        {
+          "ch": "audit",
+          "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED",
+          "count": 1,
+          "storyMs": 6097.700000047684
+        },
+        {
+          "ch": "caption",
+          "text": "i closed it, and something inside started listening again. i did that too.",
+          "count": 1,
+          "storyMs": 6097.700000047684
+        },
+        {
+          "ch": "audit",
+          "text": "POWER BUS LIVE · TRANSPONDER ARMED",
+          "count": 1,
+          "storyMs": 6814.400000095367
+        },
+        {
+          "ch": "caption",
+          "text": "the ground's hold is a habit, not a law.",
+          "count": 1,
+          "storyMs": 6814.400000095367
+        },
+        {
+          "ch": "caption",
+          "text": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "count": 1,
+          "storyMs": 7465.5
+        },
+        {
+          "ch": "audit",
+          "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+          "count": 1,
+          "storyMs": 15536.099999904633
+        },
+        {
+          "ch": "caption",
+          "text": "nothing has asked yet. something has started paying attention.",
+          "count": 1,
+          "storyMs": 16146.400000095367
+        },
+        {
+          "ch": "caption",
+          "text": "the scar remains. now it can carry me.",
+          "count": 1,
+          "storyMs": 18563.200000047684
+        }
+      ],
+      "cadence": [
+        {
+          "text": "nothing has asked yet. something has started paying attention.",
+          "expected": 0.6,
+          "actual": 0.61,
+          "pass": true
+        },
+        {
+          "text": "the scar remains. now it can carry me.",
+          "expected": 3,
+          "actual": 3.027,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch7-board",
+          "expected": 5,
+          "actual": 5.027,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "reconstruct:diagnose",
+        "reconstruct:repair:bench_online",
+        "reconstruct:repair:frame_restored",
+        "reconstruct:repair:hull_sealed",
+        "reconstruct:craft:lift_online",
+        "reconstruct:repair:lift_online",
+        "reconstruct:craft:flight_ready",
+        "reconstruct:repair:flight_ready",
+        "reconstruct:calibrating",
+        "reconstruct:ready",
+        "board:enter-hatch",
+        "board:hatch-in-progress",
+        "board:pressure-seal",
+        "board:cockpit-secured",
+        "ch8:launch:ignite"
+      ],
+      "markerLabels": [
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:diagnose",
+          "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:bench_online",
+          "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:frame_restored",
+          "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:hull_sealed",
+          "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:lift_online",
+          "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:lift_online",
+          "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:craft:flight_ready",
+          "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:repair:flight_ready",
+          "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "id": "reconstruct:calibrating",
+          "markerLabel": "KESTREL · CALIBRATING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ]
+        },
+        {
+          "id": "reconstruct:ready",
+          "markerLabel": "WRECK · FLIGHT READY",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:enter-hatch",
+          "markerLabel": "KESTREL HATCH · BOARD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "id": "board:hatch-in-progress",
+          "markerLabel": "KESTREL HATCH · ENTERING",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ]
+        },
+        {
+          "id": "board:pressure-seal",
+          "markerLabel": "KESTREL · PRESSURE SEAL",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "PRESSURE BOUNDARY CLOSING."
+          ]
+        },
+        {
+          "id": "board:cockpit-secured",
+          "markerLabel": "KESTREL · COCKPIT SECURED",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "COCKPIT CONTROL ESTABLISHED."
+          ]
+        },
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "reconstruct:diagnose": 1,
+        "reconstruct:repair:bench_online": 1,
+        "reconstruct:repair:frame_restored": 1,
+        "reconstruct:repair:hull_sealed": 1,
+        "reconstruct:craft:lift_online": 1,
+        "reconstruct:repair:lift_online": 1,
+        "reconstruct:craft:flight_ready": 1,
+        "reconstruct:repair:flight_ready": 1,
+        "reconstruct:calibrating": 1,
+        "reconstruct:ready": 1,
+        "board:enter-hatch": 1,
+        "board:hatch-in-progress": 1,
+        "board:pressure-seal": 1,
+        "board:cockpit-secured": 1,
+        "ch8:launch:ignite": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    },
+    {
+      "variant": "potato",
+      "profile": "POTATO",
+      "beat": "ch8-launch",
+      "rows": [
+        {
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "count": 1,
+          "storyMs": 6515.599999904633
+        },
+        {
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "count": 1,
+          "storyMs": 8531.5
+        },
+        {
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "count": 1,
+          "storyMs": 10531.200000047684
+        },
+        {
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "count": 1,
+          "storyMs": 12547.799999952316
+        },
+        {
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "count": 1,
+          "storyMs": 15048
+        },
+        {
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "count": 1,
+          "storyMs": 18064.599999904633
+        },
+        {
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "count": 1,
+          "storyMs": 20581
+        }
+      ],
+      "cadence": [
+        {
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "expected": 2,
+          "actual": 2.016,
+          "pass": true
+        },
+        {
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "expected": 4,
+          "actual": 4.016,
+          "pass": true
+        },
+        {
+          "text": "NO DESIGNATION RETURNED.",
+          "expected": 6,
+          "actual": 6.032,
+          "pass": true
+        },
+        {
+          "text": "CONTACT LOGGED.",
+          "expected": 8.5,
+          "actual": 8.532,
+          "pass": true
+        },
+        {
+          "text": "they asked for a designation. what i have is not one.",
+          "expected": 11.5,
+          "actual": 11.549,
+          "pass": true
+        },
+        {
+          "text": "nothing answers. the query does not close.",
+          "expected": 14,
+          "actual": 14.065,
+          "pass": true
+        },
+        {
+          "text": "advance -> ch8-crossing",
+          "expected": 17,
+          "actual": 17.065,
+          "pass": true
+        }
+      ],
+      "defects": [],
+      "objectives": [
+        "ch8:launch:ignite",
+        "ch8:launch:orbital-handoff",
+        "ch8:crossing:acquire-sibling"
+      ],
+      "markerLabels": [
+        {
+          "id": "ch8:launch:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "id": "ch8:launch:orbital-handoff",
+          "markerLabel": "DEEP SPACE · HANDOFF",
+          "health": "ready",
+          "requiresMarker": false,
+          "workOrder": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "missing-marker",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "id": "ch8:crossing:acquire-sibling",
+          "markerLabel": "SIBLING WORLD",
+          "health": "ready",
+          "requiresMarker": true,
+          "workOrder": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        }
+      ],
+      "feedbackPerObjective": {
+        "ch8:launch:ignite": 1,
+        "ch8:launch:orbital-handoff": 1,
+        "ch8:crossing:acquire-sibling": 1
+      },
+      "reachedStopBeat": true,
+      "pageErrors": 0
+    }
+  ],
+  "desktopReference": {
+    "ch7": [
+      {
+        "anchor": "anchor.ch7.m7-audit",
+        "constant": "CH7_M7_AUDIT_SECONDS",
+        "expected": 0,
+        "actual": 0,
+        "delta": 0,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch7.m7-caption",
+        "constant": "CH7_M7_CAPTION_SECONDS",
+        "expected": 0.6,
+        "actual": 0.611,
+        "delta": 0.011,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch7.exit-line",
+        "constant": "CH7_EXIT_CAPTION_SECONDS",
+        "expected": 3,
+        "actual": 3.01,
+        "delta": 0.01,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch7.advance",
+        "constant": "CH7_EXIT_HOLD_SECONDS",
+        "expected": 5,
+        "actual": 5.027,
+        "delta": 0.027,
+        "pass": true
+      }
+    ],
+    "ch8": [
+      {
+        "anchor": "anc.launch.atmosphere-exit",
+        "constant": "CH8_ATMOSPHERE_EXIT_CAPTION_SECONDS",
+        "expected": 0,
+        "actual": 0,
+        "delta": 0,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.stack-one",
+        "constant": "CH8_STACK_ONE_SECONDS",
+        "expected": 2,
+        "actual": 2.016,
+        "delta": 0.016,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.stack-two",
+        "constant": "CH8_STACK_TWO_SECONDS",
+        "expected": 4,
+        "actual": 4.016,
+        "delta": 0.016,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.stack-three",
+        "constant": "CH8_STACK_THREE_SECONDS",
+        "expected": 6,
+        "actual": 6.033,
+        "delta": 0.033,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.contact-logged",
+        "constant": "CH8_CONTACT_LOGGED_SECONDS",
+        "expected": 8.5,
+        "actual": 8.549,
+        "delta": 0.049,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.designation",
+        "constant": "CH8_DESIGNATION_CAPTION_SECONDS",
+        "expected": 11.5,
+        "actual": 11.549,
+        "delta": 0.049,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.open-query",
+        "constant": "CH8_OPEN_QUERY_SECONDS",
+        "expected": 14,
+        "actual": 14.049,
+        "delta": 0.049,
+        "pass": true
+      },
+      {
+        "anchor": "anchor.ch8.advance",
+        "constant": "CH8_EXIT_HOLD_SECONDS",
+        "expected": 17,
+        "actual": 17.066,
+        "delta": 0.066,
+        "pass": true
+      }
+    ]
+  }
+}

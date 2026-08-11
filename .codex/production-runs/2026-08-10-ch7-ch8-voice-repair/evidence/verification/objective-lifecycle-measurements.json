@@ -1,0 +1,1243 @@
+{
+  "generatedAt": "2026-08-10T21:57:52.964Z",
+  "objectives": [
+    {
+      "contractObjectiveId": "reconstruct-diagnose",
+      "runtimeObjectiveId": "reconstruct:diagnose",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            5.182
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.429
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.417
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.604
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.491
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.062
+          ]
+        },
+        {
+          "source": "reset/deep_link:ch7-reconstruct",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 7,
+      "totalFeedbackCues": 7,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK SCAR · TRACE RELATIONSHIPS"
+      ],
+      "workOrdersObserved": [
+        [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 7,
+      "missingMarkerObservations": 13,
+      "activeAfterClear": true
+    },
+    {
+      "contractObjectiveId": "reconstruct-repair-bench-online",
+      "runtimeObjectiveId": "reconstruct:repair:bench_online",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.294
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.3
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.295
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.299
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.301
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.301
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · RECOVER WRECK SALVAGE"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-repair-frame-restored",
+      "runtimeObjectiveId": "reconstruct:repair:frame_restored",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.668
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · RESTORE STRUT FRAME"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-repair-hull-sealed",
+      "runtimeObjectiveId": "reconstruct:repair:hull_sealed",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.665
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.666
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.666
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · SEAL SCARRED HULL"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-craft-lift-online",
+      "runtimeObjectiveId": "reconstruct:craft:lift_online",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.084
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.023
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.033
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.026
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.023
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.023
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · CRAFT LIFT CELL"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "craft"
+      ],
+      "readyReachedCount": 1,
+      "missingMarkerObservations": 7,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-repair-lift-online",
+      "runtimeObjectiveId": "reconstruct:repair:lift_online",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.634
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.693
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.663
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.695
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.698
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.694
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · INSTALL LIFT CELL"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-craft-flight-ready",
+      "runtimeObjectiveId": "reconstruct:craft:flight_ready",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.034
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.057
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.014
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.019
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.052
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.051
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · CRAFT LOGIC WAFER"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "craft"
+      ],
+      "readyReachedCount": 3,
+      "missingMarkerObservations": 9,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "reconstruct-repair-flight-ready",
+      "runtimeObjectiveId": "reconstruct:repair:flight_ready",
+      "observations": [
+        {
+          "source": "ch7-cold-run-1",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.622
+          ]
+        },
+        {
+          "source": "ch7-cold-run-2",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.6
+          ]
+        },
+        {
+          "source": "ch7-cold-run-3",
+          "variant": "desktop",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.662
+          ]
+        },
+        {
+          "source": "mobile-portrait/ch7-reconstruct",
+          "variant": "mobile-portrait",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.631
+          ]
+        },
+        {
+          "source": "reduced-motion/ch7-reconstruct",
+          "variant": "reduced-motion",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.598
+          ]
+        },
+        {
+          "source": "potato/ch7-reconstruct",
+          "variant": "potato",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.601
+          ]
+        }
+      ],
+      "observed": true,
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackPerEntry": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "markerLabelsObserved": [
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+      ],
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ]
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "kindsObserved": [
+        "interact"
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAfterClear": false
+    },
+    {
+      "contractObjectiveId": "ch8-launch-reboard",
+      "runtimeObjectiveId": null,
+      "observations": [],
+      "observed": false,
+      "note": "Never became the active objective on any traced path; the reboard route requires leaving the ship in flight, which headless cannot drive."
+    }
+  ],
+  "resetEvidence": {
+    "deep-link": [
+      {
+        "case": "deep_link:ch7-board",
+        "objectiveAfter": "board:enter-hatch"
+      },
+      {
+        "case": "deep_link:ch8-crossing",
+        "objectiveAfter": "ch8:crossing:acquire-sibling"
+      },
+      {
+        "case": "deep_link:ch7-reconstruct",
+        "objectiveAfter": "reconstruct:diagnose"
+      }
+    ],
+    "sandbox": [
+      {
+        "case": "sandbox_noop",
+        "objectiveAfter": null,
+        "events": 0
+      }
+    ],
+    "quit": [
+      {
+        "objectiveAfter": null,
+        "auditAfter": null,
+        "captionAfter": null
+      }
+    ],
+    "replay": [
+      {
+        "beatAfter": "ch8-launch",
+        "objectiveAfter": "ch8:launch:ignite"
+      }
+    ]
+  }
+}

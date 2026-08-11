@@ -1,0 +1,270 @@
+{
+  "scannedAt": "2026-08-11T15:15:53.236Z",
+  "method": "per-frame luminance std over the HUD-excluded world crop, alongside the whole-frame std that frame-defect-scan.mjs uses",
+  "worldCropFractions": {
+    "x0": 0.1,
+    "x1": 0.9,
+    "y0": 0.16,
+    "y1": 0.7
+  },
+  "worldBlankStdThreshold": 2,
+  "attributionNote": "A world-black frame here is recorded as UNATTRIBUTED, HEADLESS-ONLY EVIDENCE. No headed or real-GPU cold deep link was captured in this run, so the earlier \"headless cold-boot characteristic\" classification is not supported and is withdrawn (CIN-06).",
+  "roots": [
+    "evidence/verification-final",
+    "evidence/verification-final/world-region-blank-scan.json"
+  ],
+  "directories": [
+    {
+      "dir": "evidence/verification-final",
+      "frameCount": 2456,
+      "worldBlankCount": 34,
+      "wholeFrameBlankCount": 0,
+      "worldBlankFrames": [
+        {
+          "path": "evidence/verification-final/replay-replay-deep-link/000_post_t1p68s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/replay-replay-deep-link/001_post_t2p24s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run1/000_strip_t0p15s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run1/001_strip_t2p64s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run2/000_strip_t0p15s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run2/001_strip_t2p61s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run3/000_strip_t0p14s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeA-ordered/run3/001_strip_t2p55s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run1/000_strip_t0p03s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 8,
+          "fullStd": 4.403,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run1/001_strip_t2p01s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run1/002_strip_t2p56s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run2/000_strip_t0p03s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 8,
+          "fullStd": 4.403,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run2/001_strip_t2p07s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run2/002_strip_t2p63s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run3/000_strip_t0p02s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 8,
+          "fullStd": 4.403,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run3/001_strip_t2p04s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-desktop-run3/002_strip_t2p57s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-mobile-run1/000_strip_t2p05s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 11.906,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-mobile-run1/001_strip_t2p62s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 11.906,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-mobile-run2/000_strip_t2p03s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 11.906,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-mobile-run2/001_strip_t2p58s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 11.906,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run1/000_strip_t0p03s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 8,
+          "fullStd": 4.403,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run1/001_strip_t1p92s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run1/002_strip_t2p43s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run2/000_strip_t2p04s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run2/001_strip_t2p66s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run3/000_strip_t1p79s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-potato-run3/001_strip_t2p36s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-reduced-motion-run1/000_strip_t2p00s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-reduced-motion-run1/001_strip_t2p54s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-reduced-motion-run2/000_strip_t0p02s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 8,
+          "fullStd": 4.403,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-reduced-motion-run2/001_strip_t2p06s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/routeC-reduced-motion-run2/002_strip_t2p63s_ch8-launch_surface.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 5.075,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        },
+        {
+          "path": "evidence/verification-final/seams/ch8-landfall-to-ch9/seam_t1p93s_ch8-landfall.png",
+          "worldStd": 0,
+          "worldMean": 0,
+          "fullStd": 4.86,
+          "classification": "world-black frame — unattributed, headless-only evidence"
+        }
+      ],
+      "minWorldStd": 0,
+      "medianWorldStd": 34.839
+    },
+    {
+      "dir": "evidence/verification-final/world-region-blank-scan.json",
+      "missing": true
+    }
+  ]
+}

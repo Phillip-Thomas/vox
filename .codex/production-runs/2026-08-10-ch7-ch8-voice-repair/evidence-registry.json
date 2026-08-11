@@ -1,0 +1,1414 @@
+{
+  "schema": "paravoxia.evidenceRegistry.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "compiledAt": "2026-08-11T16:03:13.736Z",
+  "entries": [
+    {
+      "ref": "trace:audio-report-md",
+      "path": "audio-report.md",
+      "sha256": "0b1e42506066ac2245ae12510ea7387c6e6976c1f87cc251036f08f5c082baa2",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: audio-report.md. Re-hashed 2026-08-11 after the Score Director appended the sa-10 M6/M7 audition section (append-only change)."
+    },
+    {
+      "ref": "trace:chapter-journey-evidence-json",
+      "path": "chapter-journey-evidence.json",
+      "sha256": "d9b993f1cac474fc102f7abfd3a1a03c84aed4724710cb9cc06280fc1e7789a7",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: chapter-journey-evidence.json."
+    },
+    {
+      "ref": "trace:check-results-json",
+      "path": "check-results.json",
+      "sha256": "a7f12a70d45c7bdc97454ce351119dff3dc3cd3f365e37c17e9666d78ca480c0",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: check-results.json."
+    },
+    {
+      "ref": "trace:discharge-evidence-build-mjs",
+      "path": "discharge-evidence-build.mjs",
+      "sha256": "7f26ac627e4ddee336827026bc1d22521390ec3a79cc9f6a9683ea6f283baa0c",
+      "kind": "trace",
+      "description": "Compiles the CC1 discharge measurement into the gate capture manifest, verification-report.json dischargeMeasurement, check-results.json and the iteration ledger."
+    },
+    {
+      "ref": "trace:discharge-measure-probe-mjs",
+      "path": "discharge-measure-probe.mjs",
+      "sha256": "e6e95ce4c8f321837214c2184f9fc247b9b1eb5fbe926a2ab5610e4f47ac5ed4",
+      "kind": "trace",
+      "description": "Stage 6 probe that drives and measures the canonical ordered-ignition route in one script (acceptance criteria [21] and [26])."
+    },
+    {
+      "ref": "trace:evidence-manifest-v3-build-mjs",
+      "path": "evidence-manifest-v3-build.mjs",
+      "sha256": "04c5d0ac163cf2115c7122751b8745cb37eb22592d44a9b3bfce73de50f3a83f",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: evidence-manifest-v3-build.mjs."
+    },
+    {
+      "ref": "trace:evidence-manifest-v4-build-mjs",
+      "path": "evidence-manifest-v4-build.mjs",
+      "sha256": "0402f3dc374f5fcb7be94654bbe230d998f32bbca47a8d732c644710cf275dce",
+      "kind": "trace",
+      "description": "Extends the evidence registry and raw audiovisual evidence with the iteration-4 discharge artifacts."
+    },
+    {
+      "ref": "trace:verification-v3-frame-defect-scan-json",
+      "path": "evidence/verification-v3/frame-defect-scan.json",
+      "sha256": "d87ea723689b1653b4b584587db03c198b607e9e1f794634f8a006e8aeaab4bf",
+      "kind": "trace",
+      "description": "Blank-frame and luminance-pop scan over every iteration-3 capture directory."
+    },
+    {
+      "ref": "trace:verification-v3-ladder-analysis-json",
+      "path": "evidence/verification-v3/ladder-analysis.json",
+      "sha256": "dfe9aa707fe79cfc5fb12f517b5272b79c545cdf20cf19eb7fc6f9ca63c5928f",
+      "kind": "trace",
+      "description": "Aggregated paced-ladder assertion sheet: formula conformance, C3 margin, drop behaviour, cross-run variance, pooled exit-window rows, variant-D ordering and variant parity across all 24 cold runs."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-ordered-frame-defect-scan-json",
+      "path": "evidence/verification-v3/routeA-ordered/frame-defect-scan.json",
+      "sha256": "42688874fee8611d1ed78d1af9c452d4ee37f5195308c08834ab46fa05590a29",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: frame-defect-scan.json."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-ordered-routeA-ordered-captures-json",
+      "path": "evidence/verification-v3/routeA-ordered/routeA-ordered-captures.json",
+      "sha256": "a59df80c4409e2210190e52ab6e2d58116fded8caea64a188116da351b706b9d",
+      "kind": "trace",
+      "description": "Gate capture manifest for the twelve Route A anchor offsets across three cold runs: per-frame hash, bound scene-contract anchor, binding basis with the measured deviation, ffprobe block, live beat, flight phase, caption reveal state and standing objective."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-ordered-routeA-ordered-json",
+      "path": "evidence/verification-v3/routeA-ordered/routeA-ordered.json",
+      "sha256": "6198a08bd736e542d1e23e6aa2f9da511a97ba674a9b3d3528e6228990185c0a",
+      "kind": "trace",
+      "description": "Canonical ordered-ignition route (condition CC1): one script, three cold runs on a pristine ch8-launch deep link at LOW with no input until after the L2 timer fires, then [SPACE] ignition and a sustained [W] climb to deep_space and through the frozen exit window. Carries the per-run l2Cause, the L2/L3 formula deltas, the measured discharge margin and every frame's capture metadata."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-space-late-ignite-json",
+      "path": "evidence/verification-v3/routeA-space-late-ignite.json",
+      "sha256": "12acc971323466e6a5323d4c891f3d86ce6dfe930ae80acba575c648a6e76cef",
+      "kind": "trace",
+      "description": "Route A timer-branch control with ignition at entry +10.0 s; three cold runs proving L2 on the timer path and L3 on the phase edge."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-space-then-w-json",
+      "path": "evidence/verification-v3/routeA-space-then-w.json",
+      "sha256": "b99d46c18d7d78f7987c98fc37e0a4dd7e5ef6539a89752f5fe7c0a3a59d32cf",
+      "kind": "trace",
+      "description": "Route A variant that reaches deep_space (ignition then held climb thrust); three cold runs; carries the C3 margin measurement."
+    },
+    {
+      "ref": "trace:verification-v3-routeA-space-json",
+      "path": "evidence/verification-v3/routeA-space.json",
+      "sha256": "6cabc3f755a2f6ae81d3369cce902930d0a7ece65b715179ac2fd5416f1ee112",
+      "kind": "trace",
+      "description": "Route A, paced scripted deep link driven exactly as the contract scripts it (hold [SPACE] at entry +6.0 s, no further pilot input); three cold runs with per-frame capture metadata."
+    },
+    {
+      "ref": "trace:verification-v3-routeB-desktop-json",
+      "path": "evidence/verification-v3/routeB-desktop.json",
+      "sha256": "b1d49122131a68e1eca82b47741bfe74b682127c66e337c406ef85a699f01045",
+      "kind": "trace",
+      "description": "Route B, chained movie from ch7-board; three cold runs with the edge-caused L2 interruption pair, the L3 drop and the full frozen exit-window cadence."
+    },
+    {
+      "ref": "trace:verification-v3-routeC-desktop-json",
+      "path": "evidence/verification-v3/routeC-desktop.json",
+      "sha256": "896055392c1cff942e325d986e1e1e7346390a56f3c536b0a3b812daa00db895",
+      "kind": "trace",
+      "description": "Route C, plain ch8-launch deep-link movie; three cold runs with deep_space -0.5/+0.0/+0.5 frames."
+    },
+    {
+      "ref": "trace:verification-v3-routeC-mobile-portrait-json",
+      "path": "evidence/verification-v3/routeC-mobile-portrait.json",
+      "sha256": "6611a9d42e6fda7d2837cf436250703986f7485a769f9e8994705dd0161304bf",
+      "kind": "trace",
+      "description": "Route D parity at 390x844 mobile portrait; three cold runs."
+    },
+    {
+      "ref": "trace:verification-v3-routeC-potato-json",
+      "path": "evidence/verification-v3/routeC-potato.json",
+      "sha256": "8853e8b049bd0dc56f3dcdcfbe9300ba767a67766f9d85bafe5c06140a446e09",
+      "kind": "trace",
+      "description": "Route D POTATO tier: three cold runs asserting the L3 drop rather than the render."
+    },
+    {
+      "ref": "trace:verification-v3-routeC-reduced-motion-json",
+      "path": "evidence/verification-v3/routeC-reduced-motion.json",
+      "sha256": "af813749355fabda812fcfdb04fb7c7cc06fe86d862f460604b94ad1883beb25",
+      "kind": "trace",
+      "description": "Route D parity under prefers-reduced-motion reduce; three cold runs."
+    },
+    {
+      "ref": "trace:verification-v3-seeded-entries-json",
+      "path": "evidence/verification-v3/seeded-entries.json",
+      "sha256": "35c54ecf09ecac308b4bb43d37f2363e5120e1e6a33efa136ea0f7c3ca20a1f9",
+      "kind": "trace",
+      "description": "Two entries whose phase is already non-surface: a fresh non-surface load and a disclosed mid-flight beat re-entry; both seed the ladder consumed."
+    },
+    {
+      "ref": "trace:verification-v3-seeded-entry-frames-json",
+      "path": "evidence/verification-v3/seeded-entry-frames.json",
+      "sha256": "870efc6968165623164dbf874eb640055b6611b057ae0157b05d453efc2505a9",
+      "kind": "trace",
+      "description": "Empty-caption-slot frames at entry +0.5 s, +1.5 s and +3.0 s on the non-surface entry, shuttered off the app beat mirror."
+    },
+    {
+      "ref": "log:verification-v3-story-tests-v3-log",
+      "path": "evidence/verification-v3/story-tests-v3.log",
+      "sha256": "fce07e1c38a363087a40c5142fe12251439e43e8b2df6894ff48bad006a1c34d",
+      "kind": "log",
+      "description": "Stage 6 mechanical-proof artifact: story-tests-v3.log."
+    },
+    {
+      "ref": "log:verification-v3-story-ux-check-v3-log",
+      "path": "evidence/verification-v3/story-ux-check-v3.log",
+      "sha256": "db33a6c4690cd5b47d2f78a399cbcea525882884dfa0a778a1beb8fffb83e566",
+      "kind": "log",
+      "description": "Stage 6 mechanical-proof artifact: story-ux-check-v3.log."
+    },
+    {
+      "ref": "trace:verification-audio-window-census-json",
+      "path": "evidence/verification/audio-window-census.json",
+      "sha256": "55e678a39d04d06948b06f2b0cdb379264abae16022862b9544a0fec502cd65d",
+      "kind": "trace",
+      "description": "Story UX feedback cues and SFX rate-limiter census sampled twice a second across the ch8 and ch7 windows."
+    },
+    {
+      "ref": "trace:verification-cadence-assertions-json",
+      "path": "evidence/verification/cadence-assertions.json",
+      "sha256": "d91e799d2af9023c09f4a48f03babc077f9b3abdbcd5c202c26efdb70bb8d6b9",
+      "kind": "trace",
+      "description": "Per-run assertion of every frozen string against the exported cadence constants, with cross-run variance and the variant-D ordering margin."
+    },
+    {
+      "ref": "trace:verification-ch7-captures-desktop-json",
+      "path": "evidence/verification/ch7-captures-desktop.json",
+      "sha256": "92e42f18a36d79b0bb0424b770d16222a157b1479aa4b928e134ecd14f245b2f",
+      "kind": "trace",
+      "description": "Sidecar for the ch7 exit-cadence strip and the pre-origin stage ladder at 1280x720 LOW."
+    },
+    {
+      "ref": "trace:verification-ch7-captures-mobile-portrait-json",
+      "path": "evidence/verification/ch7-captures-mobile-portrait.json",
+      "sha256": "ef2cfb8f22c4875d56e193f2e32afc0fc19d25cd529ba1a16f408a4227e5f134",
+      "kind": "trace",
+      "description": "Sidecar for the ch7 exit-cadence strip at 390x844."
+    },
+    {
+      "ref": "trace:verification-ch7-captures-potato-json",
+      "path": "evidence/verification/ch7-captures-potato.json",
+      "sha256": "e555ca113846c987bac08f6a7de0ac12d2f31f2f14ad5387633c0d3327eed63b",
+      "kind": "trace",
+      "description": "Sidecar for the ch7 exit-cadence strip at the POTATO tier."
+    },
+    {
+      "ref": "trace:verification-ch7-captures-reduced-motion-json",
+      "path": "evidence/verification/ch7-captures-reduced-motion.json",
+      "sha256": "de738224362267a3c61fa2b732022dfc2fa99774d0bf486efeb4002760ccaee1",
+      "kind": "trace",
+      "description": "Sidecar for the ch7 exit-cadence strip under prefers-reduced-motion."
+    },
+    {
+      "ref": "trace:verification-ch7-flow-trace-json",
+      "path": "evidence/verification/ch7-flow-trace.json",
+      "sha256": "ece64db92e9bd24a43d07500a12df2813857455baf42742c0d1f000bdd028fed",
+      "kind": "trace",
+      "description": "Three cold ch7-reconstruct movie runs; every story-text, objective, feedback and beat emission stamped with the game story clock."
+    },
+    {
+      "ref": "trace:verification-ch7-window-av-score-trace-json",
+      "path": "evidence/verification/ch7-window-av-score-trace.json",
+      "sha256": "c3fbbe95c4edc5c06ba7e623b3730a34cd32e08b66d3fe5566d5356833304410",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: ch7-window-av-score-trace.json."
+    },
+    {
+      "ref": "trace:verification-ch8-captures-desktop-json",
+      "path": "evidence/verification/ch8-captures-desktop.json",
+      "sha256": "62d928a0eaf9add0e6aaa1296a3020b8cf99443e43727885eea34ba5156cd597",
+      "kind": "trace",
+      "description": "Sidecar for the ch8 hold-cadence strip at 1280x720 LOW."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-desktop-off_15p2s_ch8-launch-png",
+      "path": "evidence/verification/ch8-captures-desktop/off_15p2s_ch8-launch.png",
+      "sha256": "1df259f5cd4bd191bafc11f77a100897efd9c3550351e7e19ac92af85eb8b817",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_15p2s_ch8-launch.png."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-desktop-off_18p0s_ch8-crossing-png",
+      "path": "evidence/verification/ch8-captures-desktop/off_18p0s_ch8-crossing.png",
+      "sha256": "c4ad14983ba99c8ab53202f58ec7a27972cba583fc098981ff0f3bd2ff6a8105",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_18p0s_ch8-crossing.png."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-desktop-off_2p0s_ch8-launch-png",
+      "path": "evidence/verification/ch8-captures-desktop/off_2p0s_ch8-launch.png",
+      "sha256": "ef52bc141eaaaace7f6a72fb604732296fba298eb8cb54d64f85445576add556",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_2p0s_ch8-launch.png."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-desktop-off_8p5s_ch8-launch-png",
+      "path": "evidence/verification/ch8-captures-desktop/off_8p5s_ch8-launch.png",
+      "sha256": "b82b5583add1cb98ed26e4e09a1236ca3c7cb6eb55ae084efd563dee3536cfac",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_8p5s_ch8-launch.png."
+    },
+    {
+      "ref": "trace:verification-ch8-captures-mobile-landscape-json",
+      "path": "evidence/verification/ch8-captures-mobile-landscape.json",
+      "sha256": "a4be950a4a66a96501941e4ff2fcde2156ec2df25377f46b358f7f10d0cdf24d",
+      "kind": "trace",
+      "description": "Sidecar for the ch8 hold-cadence strip at 844x390."
+    },
+    {
+      "ref": "trace:verification-ch8-captures-mobile-portrait-json",
+      "path": "evidence/verification/ch8-captures-mobile-portrait.json",
+      "sha256": "0cc25127b9ed304ddd510e7f60e1e226cfde8f4f87742fd8a56680ed9e620999",
+      "kind": "trace",
+      "description": "Sidecar for the ch8 hold-cadence strip at 390x844."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-mobile-portrait-off_2p0s_ch8-launch-png",
+      "path": "evidence/verification/ch8-captures-mobile-portrait/off_2p0s_ch8-launch.png",
+      "sha256": "ed834a733550503c534adb1a91933ceade203464d443e09e3222e4dc3f7f3636",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_2p0s_ch8-launch.png."
+    },
+    {
+      "ref": "trace:verification-ch8-captures-potato-json",
+      "path": "evidence/verification/ch8-captures-potato.json",
+      "sha256": "e9a0dea04fdc716fb2b09a02683ef7a696246f4c73b670d07d3e363ff3d4c601",
+      "kind": "trace",
+      "description": "Sidecar for the ch8 hold-cadence strip at the POTATO tier."
+    },
+    {
+      "ref": "frame:verification-ch8-captures-potato-off_9p7s_ch8-launch-png",
+      "path": "evidence/verification/ch8-captures-potato/off_9p7s_ch8-launch.png",
+      "sha256": "6ee66f3d15501ef95dd1642da5aaf03a6b9a0118e15b72e7f0cfe6724f9805ba",
+      "kind": "frame",
+      "description": "Stage 6 mechanical-proof artifact: off_9p7s_ch8-launch.png."
+    },
+    {
+      "ref": "trace:verification-ch8-captures-reduced-motion-json",
+      "path": "evidence/verification/ch8-captures-reduced-motion.json",
+      "sha256": "6794835e836f082bada504ae52dd6d1f741760c2e36a21a922569f861467d2dc",
+      "kind": "trace",
+      "description": "Sidecar for the ch8 hold-cadence strip under prefers-reduced-motion."
+    },
+    {
+      "ref": "trace:verification-ch8-flow-trace-json",
+      "path": "evidence/verification/ch8-flow-trace.json",
+      "sha256": "0cc83474527e171bf1dd79fdabeed6bb236e9499d709dded2f941a918971a980",
+      "kind": "trace",
+      "description": "Three cold ch8-launch movie runs; every emission stamped with the game story clock."
+    },
+    {
+      "ref": "trace:verification-ch8-window-av-score-trace-json",
+      "path": "evidence/verification/ch8-window-av-score-trace.json",
+      "sha256": "3957a24bc8576b9c633b383c546a0a2dff76f647c83ea7baed0b88888f5a3c0b",
+      "kind": "trace",
+      "description": "Signed AV snapshot sampled every 250 ms across the implemented ch8 hold: anchor, shot, camera authority, applied FOV, postFx, score cueRefs, intensity and hit."
+    },
+    {
+      "ref": "trace:verification-chain-landfall-deeplink-json",
+      "path": "evidence/verification/chain-landfall-deeplink.json",
+      "sha256": "ac59aee3e1d1013997ae34b60910907f0ef11231b3f10c327fd46a79093d50fc",
+      "kind": "trace",
+      "description": "Movie run started at the ch8-landfall deep link, autopilot state sampled per second."
+    },
+    {
+      "ref": "trace:verification-chain-landfall-from-crossing-json",
+      "path": "evidence/verification/chain-landfall-from-crossing.json",
+      "sha256": "8bf847e4de69923360be078ee4862d6aa1b7c477dfc4300c145fb3dc394ebc71",
+      "kind": "trace",
+      "description": "Continuous movie chain started at ch8-crossing, autopilot state sampled per second."
+    },
+    {
+      "ref": "trace:verification-chain-launch-anchor-fine-trace-json",
+      "path": "evidence/verification/chain-launch-anchor-fine-trace.json",
+      "sha256": "4c708c6046079a8c1e8239b1fe63d900cb946b4167450659636fd1797033af27",
+      "kind": "trace",
+      "description": "Per-frame in-page sampler of activatedAnchorIds, activation history, flight phase and control mode across the ch7-board to ch8-launch handoff."
+    },
+    {
+      "ref": "perf:verification-fps-verification-json",
+      "path": "evidence/verification/fps-verification.json",
+      "sha256": "0e1d9c4a46af8119174a3c2523de6b1cc32b105826e242ea31fc5462ec430c30",
+      "kind": "perf",
+      "description": "rAF frame counts at the three baseline beats and inside the implemented ch8 hold window, 1280x720 LOW."
+    },
+    {
+      "ref": "log:verification-full-client-verify-log",
+      "path": "evidence/verification/full-client-verify.log",
+      "sha256": "4900226b6663e2ab2c30b7b533fbfe390d087fb857d06ea8eda002b6c18c84e2",
+      "kind": "log",
+      "description": "npm --prefix main run verify output: 277 test files, 2199 tests, build."
+    },
+    {
+      "ref": "trace:verification-full-flow-trace-json",
+      "path": "evidence/verification/full-flow-trace.json",
+      "sha256": "3ab940524920b8be25396207f7fd4e5ad5aa8a062d745c79cff479aec12fb420",
+      "kind": "trace",
+      "description": "Continuous ch6-dive movie chain, capped at 600 s."
+    },
+    {
+      "ref": "trace:verification-l23-captures-json",
+      "path": "evidence/verification/l23-captures.json",
+      "sha256": "49a361f391c99987ac4ae3b00117c36833b01ccfc98c204437cb2ab139853399",
+      "kind": "trace",
+      "description": "Sidecar for the ignition/liftoff strips on both the deep-link and the chained route, each frame stamped with the live anchor set and DOM caption."
+    },
+    {
+      "ref": "trace:verification-objective-lifecycle-measurements-json",
+      "path": "evidence/verification/objective-lifecycle-measurements.json",
+      "sha256": "16255b32279463a59a8474b63275de64ea0425d7ad17bc3ffb36166235f4533c",
+      "kind": "trace",
+      "description": "Counted objective entries, marker labels, health transitions and feedback cues across every traced run."
+    },
+    {
+      "ref": "trace:verification-pause-window-trace-json",
+      "path": "evidence/verification/pause-window-trace.json",
+      "sha256": "ef5476b34b9b1fb779fb09fad74fdab4070eb9e382dd683403252763c744dd2e",
+      "kind": "trace",
+      "description": "Real pause engaged through the app pointer-lock path mid-ch8-window; story-clock freeze and beat-runtime offsets."
+    },
+    {
+      "ref": "trace:verification-quit-replay-trace-json",
+      "path": "evidence/verification/quit-replay-trace.json",
+      "sha256": "229ba6c5656f3aee9dadcede381b4d4d57d471df3e2a5a1b2db2b80fa0da9a95",
+      "kind": "trace",
+      "description": "Quit-to-sandbox and reload-replay from mid-ch8-window."
+    },
+    {
+      "ref": "trace:verification-resets-trace-json",
+      "path": "evidence/verification/resets-trace.json",
+      "sha256": "6c082e2460500cfca42dcd35abb0eee629935d0413ec9088e9d7456ee5bcba3f",
+      "kind": "trace",
+      "description": "Sandbox no-op, three deep links, and two mid-window interruption traces."
+    },
+    {
+      "ref": "audio:verification-score-ch8-window-verify_ch8-crossing-seam-wav",
+      "path": "evidence/verification/score-ch8-window-verify_ch8-crossing-seam.wav",
+      "sha256": "f30fe9d06373e2b668133d46560147853db2e500c1ad3528eae5dcc2f8dbf99c",
+      "kind": "audio",
+      "description": "Stage 6 mechanical-proof artifact: score-ch8-window-verify_ch8-crossing-seam.wav."
+    },
+    {
+      "ref": "audio:verification-score-ch8-window-verify_ch8-hold-contact-logged-wav",
+      "path": "evidence/verification/score-ch8-window-verify_ch8-hold-contact-logged.wav",
+      "sha256": "04d94f20c11ea7882bd9673ce42f1d3030690c0aef8e7d021a8022f4dfc847ff",
+      "kind": "audio",
+      "description": "Stage 6 mechanical-proof artifact: score-ch8-window-verify_ch8-hold-contact-logged.wav."
+    },
+    {
+      "ref": "audio:verification-score-ch8-window-verify_ch8-liftoff-state-wav",
+      "path": "evidence/verification/score-ch8-window-verify_ch8-liftoff-state.wav",
+      "sha256": "c6d447742ff8ce5b042d6894ae7504533c567b4c048968c4cae2ede450dfd6f5",
+      "kind": "audio",
+      "description": "Stage 6 mechanical-proof artifact: score-ch8-window-verify_ch8-liftoff-state.wav."
+    },
+    {
+      "ref": "audio:verification-score-ch8-window-verify_near-silence-ref-defy-wav",
+      "path": "evidence/verification/score-ch8-window-verify_near-silence-ref-defy.wav",
+      "sha256": "77954b9885d9c32bbcb51d61a8ac453f0d6b96bbdb5e1a5eeef302a250e4860c",
+      "kind": "audio",
+      "description": "Stage 6 mechanical-proof artifact: score-ch8-window-verify_near-silence-ref-defy.wav."
+    },
+    {
+      "ref": "trace:verification-score-ch8-window-verify-analysis-json",
+      "path": "evidence/verification/score-ch8-window-verify-analysis.json",
+      "sha256": "06a6f3c18d79496ba1dfe1fbd306ed5a698f2ed82c7976eaf9c8420fe5525100",
+      "kind": "trace",
+      "description": "Post-implementation combined music-bus offline renders and windowed RMS analysis."
+    },
+    {
+      "ref": "log:verification-story-ux-check-verification-log",
+      "path": "evidence/verification/story-ux-check-verification.log",
+      "sha256": "ded15e458d15f56a98ef0fbd13d857319d8f783012a92b06131ad5bf5e91238f",
+      "kind": "log",
+      "description": "npm --prefix main run story:ux:check output re-run post-implementation."
+    },
+    {
+      "ref": "trace:verification-variant-parity-json",
+      "path": "evidence/verification/variant-parity.json",
+      "sha256": "4632bf78a50808fe4c29d743e67df04add74623031f052602ea3b2119fca5536",
+      "kind": "trace",
+      "description": "String, order and cadence parity assertion for every variant against the desktop reference."
+    },
+    {
+      "ref": "trace:verification-variants-trace-json",
+      "path": "evidence/verification/variants-trace.json",
+      "sha256": "950e4a468ef9e4c192c6b5cf00e97d06604e5040c41ab5b21a4500f43dbea978",
+      "kind": "trace",
+      "description": "Full ch7 and ch8 movie runs at mobile portrait, reduced motion and POTATO."
+    },
+    {
+      "ref": "video:verification-video-ch7-exit-window-webm",
+      "path": "evidence/verification/video/ch7-exit-window.webm",
+      "sha256": "5b1cd3385d5c984c9a64e7d8f1fa977148f3decacb0ec5cd98e109d36d167281",
+      "kind": "video",
+      "description": "Stage 6 mechanical-proof artifact: ch7-exit-window.webm."
+    },
+    {
+      "ref": "video:verification-video-ch8-launch-window-webm",
+      "path": "evidence/verification/video/ch8-launch-window.webm",
+      "sha256": "a4a27c325593f91631aef72d8d9b8880aa93dcfe13b47c3509345a0836779445",
+      "kind": "video",
+      "description": "Stage 6 mechanical-proof artifact: ch8-launch-window.webm."
+    },
+    {
+      "ref": "trace:frame-defect-scan-mjs",
+      "path": "frame-defect-scan.mjs",
+      "sha256": "b85df34ec30d3748f1250d87731b7872f03ef788bd53b0cba3a1daf6376a5553",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: frame-defect-scan.mjs."
+    },
+    {
+      "ref": "trace:iteration-ledger-jsonl",
+      "path": "iteration-ledger.jsonl",
+      "sha256": "2206c4a9ef0fc8e3deb1d02cfe6ecfb7a57cd1bb7ff88217dfe99626e8e558c4",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: iteration-ledger.jsonl."
+    },
+    {
+      "ref": "trace:ladder-analysis-mjs",
+      "path": "ladder-analysis.mjs",
+      "sha256": "894d7ddc57137f256445d68ea8b6cbec59532f98d1c5b39c0e72f41c4a968fec",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: ladder-analysis.mjs."
+    },
+    {
+      "ref": "trace:ladder-verify-probe-mjs",
+      "path": "ladder-verify-probe.mjs",
+      "sha256": "a7c32d75b28d1567c5879d82f5271f4e06c0938f6326ff22b7a3f1ccaa3961ff",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: ladder-verify-probe.mjs."
+    },
+    {
+      "ref": "trace:objective-lifecycle-evidence-json",
+      "path": "objective-lifecycle-evidence.json",
+      "sha256": "d6c6c13b67986067c18123aa5c64986d4bde15a22e6bb5595d08866f81e53ca6",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: objective-lifecycle-evidence.json."
+    },
+    {
+      "ref": "trace:raw-audiovisual-evidence-json",
+      "path": "raw-audiovisual-evidence.json",
+      "sha256": "d1c29ed83ae3e2c38dd3a57b2b70c113cf365bdaa8701fb23db56d1d3869ffd4",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: raw-audiovisual-evidence.json."
+    },
+    {
+      "ref": "trace:repair-verification-report-build-mjs",
+      "path": "repair-verification-report-build.mjs",
+      "sha256": "9feb7879cee6c1110a5952aa0565495573c1b29348e4dd13cede795588ab6591",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: repair-verification-report-build.mjs."
+    },
+    {
+      "ref": "trace:screenshot-report-md",
+      "path": "screenshot-report.md",
+      "sha256": "f7596b97adb6d020716b2c929bf9e3de64e0119ce573d2d54c7b39f9a7980ec3",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: screenshot-report.md."
+    },
+    {
+      "ref": "trace:verification-report-json",
+      "path": "verification-report.json",
+      "sha256": "c988990a0b56c80f4feb524d76b28fa5b84d0459ad2b56f5c7be95fc7a91bbc5",
+      "kind": "trace",
+      "description": "Stage 6 mechanical-proof artifact: verification-report.json."
+    },
+    {
+      "ref": "audio:score-ch7-variant_diagnosis-wav",
+      "path": "evidence/score-ch7-variant_diagnosis.wav",
+      "sha256": "6cf9fcffebc2b309ff5a4957e350e8c9effe5c1c3de05fee6b807611b3a68566",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'diagnosis' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_bench-wav",
+      "path": "evidence/score-ch7-variant_bench.wav",
+      "sha256": "b4b4f91fd605307463023857c80a0964b51658a75d2fb9affe600a12f5733038",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'bench' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_frame-wav",
+      "path": "evidence/score-ch7-variant_frame.wav",
+      "sha256": "fa7d00d5052cfb95101fc9aa971010f9ddaac25f305b898d406d13ce5ef1c4a4",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'frame' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_hull-wav",
+      "path": "evidence/score-ch7-variant_hull.wav",
+      "sha256": "b8d80716a56933541cc9216e92a058bf26339640418df06b4b6f630ed91f3b96",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'hull' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_lift-wav",
+      "path": "evidence/score-ch7-variant_lift.wav",
+      "sha256": "80066574acae8bd16e4bb667dc60e99da003b8fa2be71f54f42d1f223d75abb0",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'lift' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_hover-wav",
+      "path": "evidence/score-ch7-variant_hover.wav",
+      "sha256": "5962821d44e5d6d9df71ed938692d1adac7e2c7c626d0fde5822a2c5bd704984",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'hover' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_route-wav",
+      "path": "evidence/score-ch7-variant_route.wav",
+      "sha256": "ee04579e533d33e2607f6085fa4a78f1ae344c3d474af94826ddbe792ef07a11",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'route' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "audio:score-ch7-variant_calibration-wav",
+      "path": "evidence/score-ch7-variant_calibration.wav",
+      "sha256": "d6f93c85c5147bd7b08fc5cf03528089180705e356488973975d7f62cbcc24ce",
+      "kind": "audio",
+      "description": "sa-10 owner-audition render: shipped ch7 reconstruction score variant 'calibration' (combined bus, surface legacy scene, era 1, resting gameplay-derived baseline, 24 s). M6/M7 taste material."
+    },
+    {
+      "ref": "trace:score-ch7-variants-analysis-json",
+      "path": "evidence/score-ch7-variants-analysis.json",
+      "sha256": "a335735a3ad181c44ee124656731805a06af892693491fb18a42f31309977feb",
+      "kind": "trace",
+      "description": "sa-10 audition set analysis: per-variant RMS/peak/health for the eight ch7 reconstruction renders (all clip 0, nan 0; monotonic accretion -32.41 to -21.98 dBFS diagnosis to route; route/calibration level-matched at -21.98/-21.99)."
+    },
+    {
+      "ref": "probe:ladder-verify",
+      "path": "ladder-verify-probe.mjs",
+      "sha256": "a7c32d75b28d1567c5879d82f5271f4e06c0938f6326ff22b7a3f1ccaa3961ff",
+      "kind": "probe",
+      "description": "Extended for the closing pass: getEmergentStoryVoiceDiag bridge, --out, and the dive / ch7queue / ch7manual / ch7mobile / replay modes."
+    },
+    {
+      "ref": "probe:discharge-measure",
+      "path": "discharge-measure-probe.mjs",
+      "sha256": "e6e95ce4c8f321837214c2184f9fc247b9b1eb5fbe926a2ab5610e4f47ac5ed4",
+      "kind": "probe",
+      "description": "Canonical ordered-ignition route; extended for the closing pass with the diag bridge, --out and the l2Cause/l2DueAt assertions."
+    },
+    {
+      "ref": "probe:world-region-blank-scan",
+      "path": "world-region-blank-scan.mjs",
+      "sha256": "b0eefcc9f528f736f4dd61c27faf366ac0b049951c470002f90185f3e3a857d7",
+      "kind": "probe",
+      "description": "CIN-06: HUD-excluded world-region blank test alongside the whole-frame std the original scan used."
+    },
+    {
+      "ref": "probe:seam-strip",
+      "path": "seam-strip-probe.mjs",
+      "sha256": "4ab88f339282aec42c1f31be8a9f9dc9b2230ed649963df3fb7990e3d9074c2b",
+      "kind": "probe",
+      "description": "CIN-10: ch8 hold->crossing 500 ms strip, ch6-dive->ch7 and ch8-landfall->ch9 seams, state read before the shutter."
+    },
+    {
+      "ref": "probe:lifecycle-rebind",
+      "path": "lifecycle-rebind.mjs",
+      "sha256": "50dbda1814aa3988e23503d0e0378d885afc20202af90709fa2cb53fe974c14a",
+      "kind": "probe",
+      "description": "ux-04: rebuilds the objective-lifecycle rows from the closing pass traces and re-binds them to draft-v5."
+    },
+    {
+      "ref": "probe:fps-verify",
+      "path": "fps-verify-probe.mjs",
+      "sha256": "835a5444a1159b13ecd6336c6e2e6fdc7150e28f362ee017d18add8ba1093a37",
+      "kind": "probe",
+      "description": "LOW-tier rAF frame-rate probe; --out added for the closing pass."
+    },
+    {
+      "ref": "trace:closing-routeA",
+      "path": "evidence/verification-final/routeA-ordered/routeA-ordered.json",
+      "sha256": "afd996aecd325cedbc426b8f883d28d435f9076f6c8a15526eab9d9f4741cf76",
+      "kind": "trace",
+      "description": "Route A canonical ordered-ignition, 3 cold runs, l2Cause asserted through the diag."
+    },
+    {
+      "ref": "trace:closing-routeB",
+      "path": "evidence/verification-final/routeB-desktop.json",
+      "sha256": "16e0685e9b70ecc0bdcfdb456918433fc5a93ba735ef2f549e071640ff2bfbff",
+      "kind": "trace",
+      "description": "Route B chained movie, 3 cold runs, reveal-guard clamp pair."
+    },
+    {
+      "ref": "trace:closing-routeC-desktop",
+      "path": "evidence/verification-final/routeC-desktop.json",
+      "sha256": "b4187711ac3da9f9ed84bd44b6a0e1a1ac53eceb076c390dba33b17cae98ed15",
+      "kind": "trace",
+      "description": "Route C plain deep-link movie, 3 cold runs."
+    },
+    {
+      "ref": "trace:closing-routeC-potato",
+      "path": "evidence/verification-final/routeC-potato.json",
+      "sha256": "41f84145486fee96e6e2fbb0c9f92c4e132e549d9b1a549797bfa3a8d6d87ab0",
+      "kind": "trace",
+      "description": "Route D POTATO, 3 cold runs."
+    },
+    {
+      "ref": "trace:closing-routeC-mobile",
+      "path": "evidence/verification-final/routeC-mobile.json",
+      "sha256": "1617680e6cdc2be4e2e0fe871fee01cb942b5cad3e0bb7c8284f9addc0725c18",
+      "kind": "trace",
+      "description": "Route D mobile 390x844, 2 cold runs."
+    },
+    {
+      "ref": "trace:closing-routeC-reduced",
+      "path": "evidence/verification-final/routeC-reduced-motion.json",
+      "sha256": "8e62eca61af547ccfa361121dbfa899d8fd0c6149f3d4362d27a456725f3a3e7",
+      "kind": "trace",
+      "description": "Route D reduced-motion, 2 cold runs."
+    },
+    {
+      "ref": "trace:closing-dive",
+      "path": "evidence/verification-final/dive.json",
+      "sha256": "eeeee9672290ae45c3753d075cd33669769b47239f8014092a2872435ced348f",
+      "kind": "trace",
+      "description": "Dive-and-climb held-clock probe, 3 cold runs."
+    },
+    {
+      "ref": "trace:closing-ch7queue",
+      "path": "evidence/verification-final/ch7queue-desktop.json",
+      "sha256": "54c072a9e0ae4140a860fcfa7d4653dc7cbc8b77231a9f2e842d7669033e2a45",
+      "kind": "trace",
+      "description": "ch7 queue guard, movie route, 3 cold runs."
+    },
+    {
+      "ref": "trace:closing-ch7manual",
+      "path": "evidence/verification-final/ch7manual.json",
+      "sha256": "ad4e06183cc8f52dda5fde2dcf76fd3386db15dffe3d2c5b80fe49c2292bcf50",
+      "kind": "trace",
+      "description": "ch7 paced manual-shape run; the scripted mutation is declared inside the file."
+    },
+    {
+      "ref": "trace:closing-ch7mobile-portrait",
+      "path": "evidence/verification-final/ch7mobile-mobile-portrait.json",
+      "sha256": "1e89c06621900072ce76c68c592c66b943ad70897bf10ad47f1d74b5aa3acb55",
+      "kind": "trace",
+      "description": "ch7 exit window at 390x844 with per-frame touch-control rects (CIN-01)."
+    },
+    {
+      "ref": "trace:closing-ch7mobile-landscape",
+      "path": "evidence/verification-final/ch7mobile-mobile-landscape.json",
+      "sha256": "8673eb0ba64013433622049e88364f409aaa617014555e69a4a6689b32b3a8ea",
+      "kind": "trace",
+      "description": "ch7 exit window at 844x390, the previously missing landscape set (CIN-01)."
+    },
+    {
+      "ref": "trace:closing-replay",
+      "path": "evidence/verification-final/replay-remeasure.json",
+      "sha256": "45c0869fa1530488af14c89e63302d320905391e0b9112b63daca9a4ac88c824",
+      "kind": "trace",
+      "description": "ux-07 replay/reload re-measure with frames."
+    },
+    {
+      "ref": "trace:closing-fps",
+      "path": "evidence/verification-final/fps-verification.json",
+      "sha256": "6b2413c57d03647021563baa0affef72843d9347942b077c8e9dc643316d611a",
+      "kind": "trace",
+      "description": "FPS spot check at ch7-reconstruct, ch7-board, ch8-launch and the exit-hold window."
+    },
+    {
+      "ref": "trace:closing-world-blank-scan",
+      "path": "evidence/verification-final/world-region-blank-scan.json",
+      "sha256": "0a91b3a34f36d4293bc10d4ee7d74203170639297aadb637e91d1c55d59637b3",
+      "kind": "trace",
+      "description": "CIN-06 world-region blank scan over 2456 closing-pass frames."
+    },
+    {
+      "ref": "trace:closing-objective-lifecycle",
+      "path": "evidence/verification-final/objective-lifecycle-measurements.json",
+      "sha256": "61735866a9842fa1b6ec17c60db9b38686f96a51b626dce059e803312a6bb2f4",
+      "kind": "trace",
+      "description": "ux-04 fresh objective lifecycle rows bound to draft-v5."
+    },
+    {
+      "ref": "trace:closing-seam-ch8",
+      "path": "evidence/verification-final/seams/seams-ch8.json",
+      "sha256": "3fb7832c75a31d81eddbe312d8d563a513dd8ef282039a8521a1f0ee010fe5ce",
+      "kind": "trace",
+      "description": "CIN-10 ch8 hold->crossing 500 ms seam strip."
+    },
+    {
+      "ref": "trace:closing-seam-ch6",
+      "path": "evidence/verification-final/seams/seams-ch6.json",
+      "sha256": "36cc7d29489802d635a46b2d9096ffa633a80e7b55101abf5f92fe6255975d89",
+      "kind": "trace",
+      "description": "CIN-10 ch6-dive->ch7 entry seam strip."
+    },
+    {
+      "ref": "trace:closing-seam-landfall",
+      "path": "evidence/verification-final/seams/seams-landfall.json",
+      "sha256": "1c4edd04897ac1d6e3d015efc8c7f8b2efb6856453f1854de451d432798189e1",
+      "kind": "trace",
+      "description": "CIN-10 ch8-landfall->ch9 entry seam strip."
+    },
+    {
+      "ref": "record:verification-report",
+      "path": "verification-report.json",
+      "sha256": "c988990a0b56c80f4feb524d76b28fa5b84d0459ad2b56f5c7be95fc7a91bbc5",
+      "kind": "record",
+      "description": "Adds the closingVerification section and the corrected top-level roll-up (CIN-09)."
+    },
+    {
+      "ref": "record:objective-lifecycle-evidence",
+      "path": "objective-lifecycle-evidence.json",
+      "sha256": "d6c6c13b67986067c18123aa5c64986d4bde15a22e6bb5595d08866f81e53ca6",
+      "kind": "record",
+      "description": "Re-bound to draft-v5 with fresh lifecycle traces (ux-04)."
+    },
+    {
+      "ref": "record:chapter-journey-evidence",
+      "path": "chapter-journey-evidence.json",
+      "sha256": "d9b993f1cac474fc102f7abfd3a1a03c84aed4724710cb9cc06280fc1e7789a7",
+      "kind": "record",
+      "description": "Re-bound to draft-v5 (ux-04)."
+    },
+    {
+      "ref": "record:check-results",
+      "path": "check-results.json",
+      "sha256": "a7f12a70d45c7bdc97454ce351119dff3dc3cd3f365e37c17e9666d78ca480c0",
+      "kind": "record",
+      "description": "Iteration-6 closing verification block."
+    },
+    {
+      "ref": "record:iteration-ledger",
+      "path": "iteration-ledger.jsonl",
+      "sha256": "2206c4a9ef0fc8e3deb1d02cfe6ecfb7a57cd1bb7ff88217dfe99626e8e558c4",
+      "kind": "record",
+      "description": "Iteration 6 appended."
+    },
+    {
+      "ref": "record:raw-audiovisual-evidence",
+      "path": "raw-audiovisual-evidence.json",
+      "sha256": "d1c29ed83ae3e2c38dd3a57b2b70c113cf365bdaa8701fb23db56d1d3869ffd4",
+      "kind": "record",
+      "description": "Re-bound to draft-v5 with the closing pass frame strips."
+    },
+    {
+      "ref": "probe:objective-health",
+      "path": "objective-health-probe.mjs",
+      "sha256": "0dd366d1b4e72b3dce9acccaaa3cbedec50d7e7187b38279603fbeff2257f84a",
+      "kind": "probe",
+      "description": "Per-rAF objective marker-health sampler; also drives ch8:launch:reboard, previously recorded as a headed-only gap."
+    },
+    {
+      "ref": "probe:tier-shot-parity",
+      "path": "tier-shot-parity-probe.mjs",
+      "sha256": "1c7b2c9f5a1ff2ab8c2a71ee0c2b8fdebaf6fb34a95e762e46a3dcce501dc66e",
+      "kind": "probe",
+      "description": "CIN-13: corrected av field access (shot.declaredCut / shot.transitionType are flat) plus the tier shot-parity capture."
+    },
+    {
+      "ref": "probe:audiovisual-capture",
+      "path": "audiovisual-capture-probe.mjs",
+      "sha256": "88342bd40f341eb013a492393da98371455a84b4ade8971ae96f9a2729d2a122",
+      "kind": "probe",
+      "description": "Continuous audiovisual capture: canvas.captureStream plus a parallel tap of the live music bus and sfx join node in one MediaRecorder."
+    },
+    {
+      "ref": "trace:ch7-objective-health",
+      "path": "evidence/verification-final/objective-health/ch7-objective-health.json",
+      "sha256": "36361ecb681b5f79b193db108b9fd7e20ad153fc9f2725b9b730e666f2ff1279",
+      "kind": "trace",
+      "description": "Per-rAF marker health for the ch7 ladder across four variants."
+    },
+    {
+      "ref": "trace:reboard-lifecycle",
+      "path": "evidence/verification-final/objective-health/reboard-lifecycle.json",
+      "sha256": "df377e811850a9c9ad579b9638f14bbf33e0b8d6b198be64967c2be8b6dda65e",
+      "kind": "trace",
+      "description": "ch8:launch:reboard lifecycle across four variants."
+    },
+    {
+      "ref": "trace:reboard-resets",
+      "path": "evidence/verification-final/objective-health/reboard-resets.json",
+      "sha256": "638a843e76559810a4a1ecc39b16eab42dd7820377a1b64d2de310dcea1a6986",
+      "kind": "trace",
+      "description": "ch8:launch:reboard reset matrix over all eight contracted triggers."
+    },
+    {
+      "ref": "trace:tier-shot-parity",
+      "path": "evidence/verification-final/tier-parity/tier-shot-parity.json",
+      "sha256": "04eb60207afec91f3d10a94c7d6b1c86beb95376dce5858d2c81a9658a2cf325",
+      "kind": "trace",
+      "description": "CIN-13 tier shot parity at the ch7 calibration and ch8 atmosphere-exit anchors."
+    },
+    {
+      "ref": "video:ch8-launch-window-av",
+      "path": "evidence/verification-final/video/ch8-launch-window-av.webm",
+      "sha256": "26353fb96500f1e470d4aa270e0c70246b17d9c633d2ec24d9acecb875dbc484",
+      "kind": "video",
+      "description": "Continuous ch8-launch audiovisual capture with a decodable Opus audio stream."
+    }
+  ],
+  "rebindNote": "defects MOD-05 / CIN-09 / ux-04: the registry was bound to draft-v4 (df544b13\u2026) while the frozen contract is draft-v5 (36a7cb4f\u2026). Re-bound and extended with the closing verification pass (iteration 6) artifacts. Mechanical fix, closing pass: 44 frame-set entries carried directory paths and were moved to frameSetDirectories so the final phase can read every entries[].path as a file.",
+  "closingPassFrameDirectories": [
+    {
+      "dir": "evidence/verification-final/ch7manual-run1",
+      "frameCount": 413
+    },
+    {
+      "dir": "evidence/verification-final/ch7mobile-mobile-landscape-run1",
+      "frameCount": 76
+    },
+    {
+      "dir": "evidence/verification-final/ch7mobile-mobile-portrait-run1",
+      "frameCount": 76
+    },
+    {
+      "dir": "evidence/verification-final/ch7queue-desktop-run1",
+      "frameCount": 224
+    },
+    {
+      "dir": "evidence/verification-final/ch7queue-desktop-run2",
+      "frameCount": 153
+    },
+    {
+      "dir": "evidence/verification-final/ch7queue-desktop-run3",
+      "frameCount": 153
+    },
+    {
+      "dir": "evidence/verification-final/dive-run1",
+      "frameCount": 6
+    },
+    {
+      "dir": "evidence/verification-final/dive-run2",
+      "frameCount": 6
+    },
+    {
+      "dir": "evidence/verification-final/dive-run3",
+      "frameCount": 6
+    },
+    {
+      "dir": "evidence/verification-final/replay-quit-to-menu",
+      "frameCount": 109
+    },
+    {
+      "dir": "evidence/verification-final/replay-replay-deep-link",
+      "frameCount": 104
+    },
+    {
+      "dir": "evidence/verification-final/routeA-ordered",
+      "frameCount": 292
+    },
+    {
+      "dir": "evidence/verification-final/routeB-desktop-run1",
+      "frameCount": 84
+    },
+    {
+      "dir": "evidence/verification-final/routeB-desktop-run2",
+      "frameCount": 98
+    },
+    {
+      "dir": "evidence/verification-final/routeB-desktop-run3",
+      "frameCount": 100
+    },
+    {
+      "dir": "evidence/verification-final/routeC-desktop-run1",
+      "frameCount": 45
+    },
+    {
+      "dir": "evidence/verification-final/routeC-desktop-run2",
+      "frameCount": 55
+    },
+    {
+      "dir": "evidence/verification-final/routeC-desktop-run3",
+      "frameCount": 56
+    },
+    {
+      "dir": "evidence/verification-final/routeC-mobile-run1",
+      "frameCount": 44
+    },
+    {
+      "dir": "evidence/verification-final/routeC-mobile-run2",
+      "frameCount": 60
+    },
+    {
+      "dir": "evidence/verification-final/routeC-potato-run1",
+      "frameCount": 45
+    },
+    {
+      "dir": "evidence/verification-final/routeC-potato-run2",
+      "frameCount": 56
+    },
+    {
+      "dir": "evidence/verification-final/routeC-potato-run3",
+      "frameCount": 55
+    },
+    {
+      "dir": "evidence/verification-final/routeC-reduced-motion-run1",
+      "frameCount": 44
+    },
+    {
+      "dir": "evidence/verification-final/routeC-reduced-motion-run2",
+      "frameCount": 58
+    },
+    {
+      "dir": "evidence/verification-final/seams",
+      "frameCount": 38
+    }
+  ],
+  "frameSetDirectories": [
+    {
+      "ref": "frame:verification-v3-routeA-ordered-run1",
+      "path": "evidence/verification-v3/routeA-ordered/run1",
+      "sha256": "79699f5e0954bdc3a766e183b03943e3e0f1f3368305d14498caa6ab7d74da51",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 97 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 97,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-ordered-run2",
+      "path": "evidence/verification-v3/routeA-ordered/run2",
+      "sha256": "92fd63deaced8ef38c0b550566be5addd91a706db06ff8efdd0de6eec997bd54",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 98 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 98,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-ordered-run3",
+      "path": "evidence/verification-v3/routeA-ordered/run3",
+      "sha256": "12bba3b4bc4b839c4b2f90fa6c90f59129fc4fd7e2b943b3a898208ace30f402",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 95 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 95,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-late-ignite-run1",
+      "path": "evidence/verification-v3/routeA-space-late-ignite-run1",
+      "sha256": "6aff6f4c353754ceab98f03e4c520f032ca5c3b108b46a6807de1a41beb75a5d",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 114 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 114,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-late-ignite-run2",
+      "path": "evidence/verification-v3/routeA-space-late-ignite-run2",
+      "sha256": "88ad3f493822bdabe923d5e8bbccf30489c7231048dd4f098a951385e0b01e77",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 114 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 114,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-late-ignite-run3",
+      "path": "evidence/verification-v3/routeA-space-late-ignite-run3",
+      "sha256": "45d69ca8f8816fce6f850ec4fddc2234f06e4c3fe6261c02f6b14f0078ccb647",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 116 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 116,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-run1",
+      "path": "evidence/verification-v3/routeA-space-run1",
+      "sha256": "bc33e6efc6bdcafd6dec9cce5fbb74e8f7f21c73506f5a3b3c80e4a41e6ffcb7",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 93 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 93,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-run2",
+      "path": "evidence/verification-v3/routeA-space-run2",
+      "sha256": "142b48114d058f84792d06dde303ec64fe7fd6d8a8ff16e2c51a301815547585",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 94 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 94,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-run3",
+      "path": "evidence/verification-v3/routeA-space-run3",
+      "sha256": "f5bc694c324dd8c715a61f374e5a9c21f5cdb0ee2057bab3628714788a6ff924",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 94 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 94,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-then-w-run1",
+      "path": "evidence/verification-v3/routeA-space-then-w-run1",
+      "sha256": "e2fa2d26ffef100883c86b604e77494e72efc650e044b7d86b757a77f7e887c0",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 56 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 56,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-then-w-run2",
+      "path": "evidence/verification-v3/routeA-space-then-w-run2",
+      "sha256": "3bd0f47d9bcec679d6fdec94f6c04f0dab115d243f946478427c838481d2e4bc",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 57 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 57,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeA-space-then-w-run3",
+      "path": "evidence/verification-v3/routeA-space-then-w-run3",
+      "sha256": "f1b94a51618f68e459b1d1f068fc928a85d2649fa750d48f1a28bb737f49bdca",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 61 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 61,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeB-desktop-run1",
+      "path": "evidence/verification-v3/routeB-desktop-run1",
+      "sha256": "616cf002b1a26b8870e651c87c71b54b18e9668a80d1625d1d43a44ef6b1bfa1",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 42 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 42,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeB-desktop-run2",
+      "path": "evidence/verification-v3/routeB-desktop-run2",
+      "sha256": "37b38b8227622be3944a27a7b61d562b8b1df0c0a5a51e612863d943b6ef5168",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 52 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 52,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeB-desktop-run3",
+      "path": "evidence/verification-v3/routeB-desktop-run3",
+      "sha256": "cc5bfcc436829d09eb3cab7b614c68b79afb9804e1530d14bcd59ac8ed96add3",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 52 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 52,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-desktop-run1",
+      "path": "evidence/verification-v3/routeC-desktop-run1",
+      "sha256": "95a3a535dc804f44e022a4c8cccbc59695e37ed8f7a8efe55f7da87acb0c0a60",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 45 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 45,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-desktop-run2",
+      "path": "evidence/verification-v3/routeC-desktop-run2",
+      "sha256": "aa0728ae11f1ac223a43f7f51fde8aa37d919e6815cbffacd6a00485fb59e9be",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 56 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 56,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-desktop-run3",
+      "path": "evidence/verification-v3/routeC-desktop-run3",
+      "sha256": "4ab254c4a7abfeb7bfe530e038c327f4014ec86bd1c02e4bb766842f06a20f57",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 56 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 56,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-mobile-portrait-run1",
+      "path": "evidence/verification-v3/routeC-mobile-portrait-run1",
+      "sha256": "9d6e343f86754d42d28969f64406048069ee27c8b5f15b959a14535feb94b0ea",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 45 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 45,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-mobile-portrait-run2",
+      "path": "evidence/verification-v3/routeC-mobile-portrait-run2",
+      "sha256": "948e1bcbcd3679ce2231381dab787709c1ca97e802bd9df51a1260ce65dbc49a",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 61 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 61,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-mobile-portrait-run3",
+      "path": "evidence/verification-v3/routeC-mobile-portrait-run3",
+      "sha256": "8ae36a74603d9c1d1d2344d59f8007be2372472918934588492ec1fe168079b8",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 61 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 61,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-potato-run1",
+      "path": "evidence/verification-v3/routeC-potato-run1",
+      "sha256": "e8e3997b5a2857830e14a2833feaf85806c0e6c6a028e6c9a9ae01944f4a3969",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 44 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 44,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-potato-run2",
+      "path": "evidence/verification-v3/routeC-potato-run2",
+      "sha256": "9a410961ad157d8fc25a71b378b6959a718477b287493211fe411fde900d7726",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 57 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 57,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-potato-run3",
+      "path": "evidence/verification-v3/routeC-potato-run3",
+      "sha256": "414d08ccb93bd47f8d93327eae76d194f2d8c409a32d9bb589cac82b27020057",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 57 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 57,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-reduced-motion-run1",
+      "path": "evidence/verification-v3/routeC-reduced-motion-run1",
+      "sha256": "a5e8f1e9f33cdaa0e56eeb9ec9e148430d84e64cc6e9b1bd433ef630688e5174",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 45 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 45,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-reduced-motion-run2",
+      "path": "evidence/verification-v3/routeC-reduced-motion-run2",
+      "sha256": "c21a59bdd45944a815d2901b9a73915094ef96eaae2795916cfa0494529c3e64",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 54 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 54,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-routeC-reduced-motion-run3",
+      "path": "evidence/verification-v3/routeC-reduced-motion-run3",
+      "sha256": "f2b5ba1108eca21b18209b00bb103b78448b08a08dd8ba8214deacbe15485c06",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 54 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 54,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-seeded-fly-entry",
+      "path": "evidence/verification-v3/seeded-fly-entry",
+      "sha256": "c729aec2d48329f5de01658b3686039275a54253790a437922cb04cfdcf04084",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 4 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 4,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-v3-seeded-midflight-reentry",
+      "path": "evidence/verification-v3/seeded-midflight-reentry",
+      "sha256": "370ef8e776800603dfc7a96631d26ad8721b809a574c8f93f1fc6690366f9011",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 1 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 1,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-desktop",
+      "path": "evidence/verification/ch7-captures-desktop",
+      "sha256": "ef378c0f8c8218c34661b156b55c10862a2f46f96456ce83e7ec2650f771d8cf",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 10 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 10,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-desktop-pre-origin",
+      "path": "evidence/verification/ch7-captures-desktop/pre-origin",
+      "sha256": "663a7da64549646ee9a15537653daa26fd391227dd05a3e6cb16009bd1e223d9",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 63 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 63,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-mobile-portrait",
+      "path": "evidence/verification/ch7-captures-mobile-portrait",
+      "sha256": "6dccdf6238d4e73201393f69a699bfd768eb47211d813eaf9cd93f055ebdad72",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 10 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 10,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-mobile-portrait-pre-origin",
+      "path": "evidence/verification/ch7-captures-mobile-portrait/pre-origin",
+      "sha256": "1bb60ff0b8bd7f4ddde4a4cfb40a77a3b1fa8d0a7120292f227be67639f07082",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 31 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 31,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-potato",
+      "path": "evidence/verification/ch7-captures-potato",
+      "sha256": "1fcfc9c5e4624245e3b694d564b24af6ebdcc67696d32de4b296c7822ed05cb2",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 10 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 10,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-potato-pre-origin",
+      "path": "evidence/verification/ch7-captures-potato/pre-origin",
+      "sha256": "28763a2eb2c34342723bdf0d341a2801c183f7d6734bcd37d669a346e0460c80",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 32 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 32,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-reduced-motion",
+      "path": "evidence/verification/ch7-captures-reduced-motion",
+      "sha256": "d9ba42f0ba07754c8c820c314a8d2279747df6c13984ce2c42b088e5677f1d27",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 10 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 10,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch7-captures-reduced-motion-pre-origin",
+      "path": "evidence/verification/ch7-captures-reduced-motion/pre-origin",
+      "sha256": "cd1aa6b18d65b4ad197ed75848fcf334dd0dc425f508506b03c76f4d63ee1f22",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 32 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 32,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch8-captures-desktop",
+      "path": "evidence/verification/ch8-captures-desktop",
+      "sha256": "43bd161e5d955122828edb6d01792985cdb5b9223889790059a3aab04b406542",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 14 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 14,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch8-captures-mobile-landscape",
+      "path": "evidence/verification/ch8-captures-mobile-landscape",
+      "sha256": "4bbc51e7f5cc7f59812905ac180c5068e11376dca9eb164742660592490dfd96",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 13 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 13,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch8-captures-mobile-portrait",
+      "path": "evidence/verification/ch8-captures-mobile-portrait",
+      "sha256": "7c233710e0d333cdb88aac9a0393379ed28da4048fb7f312c0bf115fe66e642f",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 13 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 13,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch8-captures-potato",
+      "path": "evidence/verification/ch8-captures-potato",
+      "sha256": "2da4a91b5073b37cd1b14f25593d6ad267982c509179ff36f86321aee61ded4e",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 13 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 13,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-ch8-captures-reduced-motion",
+      "path": "evidence/verification/ch8-captures-reduced-motion",
+      "sha256": "4adf0eb038d05d31a3d9bcb630fd4888afe0110365454da8d4d504fa24a804df",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 13 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 13,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-l23-chained",
+      "path": "evidence/verification/l23-chained",
+      "sha256": "6ef7fdea0425209635e8ac365e8136fd1a10294803f1fb32f5e83a36aee77264",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 16 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 16,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    },
+    {
+      "ref": "frame:verification-l23-deep-link",
+      "path": "evidence/verification/l23-deep-link",
+      "sha256": "b005d565392057434e5ecb0aa58766b125a517ba87b45bf8376d64aa965841d6",
+      "kind": "frame-set",
+      "description": "Frame strip directory with 12 PNG frames; the sha256 is over the sorted per-file name:hash manifest of the directory.",
+      "frameCount": 12,
+      "digestAlgorithm": "sha256 over the newline-joined, name-sorted 'filename:sha256' manifest of the directory's files \u2014 reproduced and verified at the time of this move",
+      "digestVerified": true
+    }
+  ],
+  "frameSetDirectoryNote": "Frame-set directories are recorded here rather than in entries. The gate's evidence-registry contract requires every entries[].path to resolve to a FILE \u2014 it stats the path and then hashes it \u2014 so a directory path makes the final phase throw EISDIR before any check can report. These records are byte-identical to the entries they replace, with the per-directory frame count and the digest algorithm made explicit, and every digest was recomputed and verified against the directory's current bytes at the time of the move. No frame provenance is lost: the sha256 still covers every file in the directory by name and content, and the directories themselves are untouched. This mirrors the pattern the closing verification pass had already used for its own frame directories in closingPassFrameDirectories. None of these references was cited by any other artifact in the run, so nothing that resolves typed evidence references through this registry is affected."
+}

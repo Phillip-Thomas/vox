@@ -1,0 +1,325 @@
+{
+  "scannedAt": "2026-08-11T01:42:40.068Z",
+  "roots": [
+    "evidence/verification-v3/routeA-space-late-ignite-run1/",
+    "evidence/verification-v3/routeA-space-late-ignite-run2/",
+    "evidence/verification-v3/routeA-space-late-ignite-run3/",
+    "evidence/verification-v3/routeA-space-run1/",
+    "evidence/verification-v3/routeA-space-run2/",
+    "evidence/verification-v3/routeA-space-run3/",
+    "evidence/verification-v3/routeA-space-then-w-run1/",
+    "evidence/verification-v3/routeA-space-then-w-run2/",
+    "evidence/verification-v3/routeA-space-then-w-run3/",
+    "evidence/verification-v3/routeB-desktop-run1/",
+    "evidence/verification-v3/routeB-desktop-run2/",
+    "evidence/verification-v3/routeB-desktop-run3/",
+    "evidence/verification-v3/routeC-desktop-run1/",
+    "evidence/verification-v3/routeC-desktop-run2/",
+    "evidence/verification-v3/routeC-desktop-run3/",
+    "evidence/verification-v3/routeC-mobile-portrait-run1/",
+    "evidence/verification-v3/routeC-mobile-portrait-run2/",
+    "evidence/verification-v3/routeC-mobile-portrait-run3/",
+    "evidence/verification-v3/routeC-potato-run1/",
+    "evidence/verification-v3/routeC-potato-run2/",
+    "evidence/verification-v3/routeC-potato-run3/",
+    "evidence/verification-v3/routeC-reduced-motion-run1/",
+    "evidence/verification-v3/routeC-reduced-motion-run2/",
+    "evidence/verification-v3/routeC-reduced-motion-run3/",
+    "evidence/verification-v3/seeded-fly-entry/",
+    "evidence/verification-v3/seeded-midflight-reentry/"
+  ],
+  "directories": [
+    {
+      "dir": "evidence/verification-v3/routeA-space-late-ignite-run1/",
+      "frameCount": 114,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.608
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-late-ignite-run2/",
+      "frameCount": 114,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.594
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-late-ignite-run3/",
+      "frameCount": 116,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.578
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-run1/",
+      "frameCount": 93,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.378
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-run2/",
+      "frameCount": 94,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.363
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-run3/",
+      "frameCount": 94,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.339
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-then-w-run1/",
+      "frameCount": 56,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.745
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-then-w-run2/",
+      "frameCount": 57,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.755
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeA-space-then-w-run3/",
+      "frameCount": 61,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        67.732
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeB-desktop-run1/",
+      "frameCount": 42,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 12.123,
+      "meanRange": [
+        12.667,
+        56.029
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeB-desktop-run2/",
+      "frameCount": 52,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 12.016,
+      "meanRange": [
+        12.66,
+        56.885
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeB-desktop-run3/",
+      "frameCount": 52,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 12.361,
+      "meanRange": [
+        12.648,
+        57.33
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-desktop-run1/",
+      "frameCount": 45,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        47.822
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-desktop-run2/",
+      "frameCount": 56,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        48.412
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-desktop-run3/",
+      "frameCount": 56,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        48.39
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-mobile-portrait-run1/",
+      "frameCount": 45,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 11.06,
+      "meanRange": [
+        3.02,
+        63.605
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-mobile-portrait-run2/",
+      "frameCount": 61,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 11.664,
+      "meanRange": [
+        2.984,
+        67.386
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-mobile-portrait-run3/",
+      "frameCount": 61,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 11.056,
+      "meanRange": [
+        3.02,
+        66.207
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-potato-run1/",
+      "frameCount": 44,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        44.41
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-potato-run2/",
+      "frameCount": 57,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        47.958
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-potato-run3/",
+      "frameCount": 57,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        47.266
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-reduced-motion-run1/",
+      "frameCount": 45,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        46.486
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-reduced-motion-run2/",
+      "frameCount": 54,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        48.472
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/routeC-reduced-motion-run3/",
+      "frameCount": 54,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 4.403,
+      "meanRange": [
+        0.768,
+        49.52
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/seeded-fly-entry/",
+      "frameCount": 4,
+      "blankFrames": [],
+      "luminanceJumps": [
+        {
+          "from": "evidence/verification-v3/seeded-fly-entry/entry+1.5s_ch8-launch.png",
+          "to": "evidence/verification-v3/seeded-fly-entry/entry+3.0s_ch8-launch.png",
+          "meanJump": 50.68
+        }
+      ],
+      "minStd": 5.075,
+      "meanRange": [
+        0.768,
+        51.448
+      ]
+    },
+    {
+      "dir": "evidence/verification-v3/seeded-midflight-reentry/",
+      "frameCount": 1,
+      "blankFrames": [],
+      "luminanceJumps": [],
+      "minStd": 26.061,
+      "meanRange": [
+        25.996,
+        25.996
+      ]
+    }
+  ]
+}

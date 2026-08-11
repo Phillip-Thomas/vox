@@ -1,0 +1,869 @@
+{
+  "mode": "l23-captures",
+  "capturedAt": "2026-08-10T21:29:43.196Z",
+  "base": "http://localhost:5176",
+  "paths": [
+    {
+      "id": "deep-link",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "frames": [
+        {
+          "file": "l23_000_0.59s_ch8-launch.png",
+          "storyClockSeconds": 0.588,
+          "t": 587.9000000953674,
+          "beat": "ch8-launch",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": null,
+          "storeCaption": null
+        },
+        {
+          "file": "l23_001_2.56s_ch8-launch.png",
+          "storyClockSeconds": 2.559,
+          "t": 2558.9000000953674,
+          "beat": "ch8-launch",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": null,
+          "storeCaption": null
+        },
+        {
+          "file": "l23_002_3.32s_ch8-launch.png",
+          "storyClockSeconds": 3.318,
+          "t": 3318.2000000476837,
+          "beat": "ch8-launch",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": null,
+          "storeCaption": null
+        },
+        {
+          "file": "l23_003_4.40s_ch8-launch.png",
+          "storyClockSeconds": 4.398,
+          "t": 4397.700000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site ge",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_004_4.75s_ch8-launch.png",
+          "storyClockSeconds": 4.75,
+          "t": 4749.600000143051,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small.",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_005_5.12s_ch8-launch.png",
+          "storyClockSeconds": 5.119,
+          "t": 5118.700000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree do",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_006_5.55s_ch8-launch.png",
+          "storyClockSeconds": 5.552,
+          "t": 5551.800000190735,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree does not. i kee",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_007_5.96s_ch8-launch.png",
+          "storyClockSeconds": 5.962,
+          "t": 5962,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree does not. i keep finding it",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_008_6.38s_ch8-launch.png",
+          "storyClockSeconds": 6.376,
+          "t": 6376.100000143051,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree does not. i keep finding it.",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_009_6.78s_ch8-launch.png",
+          "storyClockSeconds": 6.777,
+          "t": 6776.700000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree does not. i keep finding it.",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_010_7.14s_ch8-launch.png",
+          "storyClockSeconds": 7.136,
+          "t": 7136,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the site gets small. the tree does not. i keep finding it.",
+          "storeCaption": "the site gets small. the tree does not. i keep finding it."
+        },
+        {
+          "file": "l23_011_7.64s_ch8-launch.png",
+          "storyClockSeconds": 7.636,
+          "t": 7636.200000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff",
+            "anc.launch.atmosphere-exit"
+          ],
+          "anchorId": "anc.launch.atmosphere-exit",
+          "captionDom": "i came",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose."
+        }
+      ],
+      "anchorTimeline": [],
+      "events": [
+        {
+          "wall": 433.40000009536743,
+          "story": 433.40000009536743,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 433.40000009536743,
+          "story": 433.40000009536743,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 433.40000009536743,
+          "story": 433.40000009536743,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 434.2000000476837,
+          "story": 434.2000000476837,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 434.5,
+          "story": 434.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 434.7000000476837,
+          "story": 434.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 468.2000000476837,
+          "story": 468.2000000476837,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 468.40000009536743,
+          "story": 468.40000009536743,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 4006.7000000476837,
+          "story": 4006.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 4006.7000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 4006.7000000476837,
+          "story": 4006.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 4006.7000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 4006.7000000476837,
+          "story": 4006.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 4006.7000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7245.200000047684,
+          "story": 7245.200000047684,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 7245.400000095367,
+          "story": 7245.400000095367,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 7245.400000095367,
+          "story": 7245.400000095367,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 7372.800000190735,
+          "story": 7372.800000190735,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 7372.800000190735,
+          "ttlMs": 5200
+        }
+      ]
+    },
+    {
+      "id": "chained",
+      "url": "http://localhost:5176/?story=ch7-board&movie=1&profile=LOW",
+      "frames": [
+        {
+          "file": "l23_000_0.52s_ch7-board.png",
+          "storyClockSeconds": 0.518,
+          "t": 517.6000001430511,
+          "beat": "ch7-board",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": "",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_001_2.31s_ch7-board.png",
+          "storyClockSeconds": 2.307,
+          "t": 2307.4000000953674,
+          "beat": "ch7-board",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": "(the wreck is waiting for an owner.)",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_002_3.05s_ch7-board.png",
+          "storyClockSeconds": 3.048,
+          "t": 3047.800000190735,
+          "beat": "ch7-board",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": "(the wreck is waiting for an owner.)",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_003_4.19s_ch7-board.png",
+          "storyClockSeconds": 4.191,
+          "t": 4191,
+          "beat": "ch7-board",
+          "activated": [],
+          "anchorId": null,
+          "captionDom": "(the wreck is waiting for an owner.)",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_004_4.67s_ch7-board.png",
+          "storyClockSeconds": 4.669,
+          "t": 4668.900000095367,
+          "beat": "ch7-board",
+          "activated": [
+            "anc.board.hatch-enter",
+            "anc.board.camera-transfer"
+          ],
+          "anchorId": "anc.board.camera-transfer",
+          "captionDom": "(the wreck is waiting for an owner.)",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_005_5.06s_ch7-board.png",
+          "storyClockSeconds": 5.055,
+          "t": 5055.300000190735,
+          "beat": "ch7-board",
+          "activated": [
+            "anc.board.hatch-enter",
+            "anc.board.camera-transfer",
+            "anc.board.pressure-seal"
+          ],
+          "anchorId": "anc.board.pressure-seal",
+          "captionDom": "(the wreck is waiting for an owner.)",
+          "storeCaption": "(the wreck is waiting for an owner.)"
+        },
+        {
+          "file": "l23_006_5.42s_ch8-launch.png",
+          "storyClockSeconds": 5.421,
+          "t": 5420.800000190735,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "th",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_007_5.79s_ch8-launch.png",
+          "storyClockSeconds": 5.793,
+          "t": 5792.600000143051,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answ",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_008_6.14s_ch8-launch.png",
+          "storyClockSeconds": 6.145,
+          "t": 6144.600000143051,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_009_6.51s_ch8-launch.png",
+          "storyClockSeconds": 6.511,
+          "t": 6511,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i ask",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_010_6.88s_ch8-launch.png",
+          "storyClockSeconds": 6.876,
+          "t": 6876.200000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i asked. i am le",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_011_7.27s_ch8-launch.png",
+          "storyClockSeconds": 7.267,
+          "t": 7266.800000190735,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i asked. i am leaving anywa",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_012_7.64s_ch8-launch.png",
+          "storyClockSeconds": 7.638,
+          "t": 7638,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i asked. i am leaving anyway — that is",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_013_8.06s_ch8-launch.png",
+          "storyClockSeconds": 8.059,
+          "t": 8059.200000047684,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i asked. i am leaving anyway — that is what the an",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_014_8.54s_ch8-launch.png",
+          "storyClockSeconds": 8.538,
+          "t": 8538,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff"
+          ],
+          "anchorId": "anc.launch.liftoff",
+          "captionDom": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "storeCaption": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for."
+        },
+        {
+          "file": "l23_015_8.97s_ch8-launch.png",
+          "storyClockSeconds": 8.971,
+          "t": 8970.900000095367,
+          "beat": "ch8-launch",
+          "activated": [
+            "anc.launch.ignition",
+            "anc.launch.liftoff",
+            "anc.launch.atmosphere-exit"
+          ],
+          "anchorId": "anc.launch.atmosphere-exit",
+          "captionDom": "i came do",
+          "storeCaption": "i came down this line without being asked. i am going back up it on purpose."
+        }
+      ],
+      "anchorTimeline": [],
+      "events": [
+        {
+          "wall": 390.30000019073486,
+          "story": 390.30000019073486,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 390.40000009536743,
+          "story": 390.40000009536743,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 390.40000009536743,
+          "story": 390.40000009536743,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 390.90000009536743,
+          "story": 390.90000009536743,
+          "beat": "ch7-board",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 391.40000009536743,
+          "story": 391.40000009536743,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "wall": 397.5,
+          "story": 397.5,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:enter-hatch",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 397.60000014305115,
+          "story": 397.60000014305115,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 397.60000014305115,
+          "story": 397.60000014305115,
+          "beat": "ch7-board",
+          "ch": "caption",
+          "text": "(the wreck is waiting for an owner.)",
+          "shownAt": 397.60000014305115,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3347.9000000953674,
+          "story": 3347.9000000953674,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3751.2000000476837,
+          "story": 3751.2000000476837,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 3761.800000190735,
+          "story": 3761.800000190735,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ]
+        },
+        {
+          "wall": 3762,
+          "story": 3762,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:hatch-in-progress",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 3762,
+          "story": 3762,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:hatch-in-progress",
+            "kind": "wait",
+            "markerLabel": "KESTREL HATCH · ENTERING",
+            "workOrder": [
+              "HATCH TRANSFER IN PROGRESS.",
+              "HOLD POSITION · ESC TO STEP BACK."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 4669.800000190735,
+          "story": 4669.800000190735,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "PRESSURE BOUNDARY CLOSING."
+          ]
+        },
+        {
+          "wall": 4670,
+          "story": 4670,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:pressure-seal",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 4670,
+          "story": 4670,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:pressure-seal",
+            "kind": "wait",
+            "markerLabel": "KESTREL · PRESSURE SEAL",
+            "workOrder": [
+              "PRESSURE BOUNDARY CLOSING."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 5307.800000190735,
+          "story": 5307.800000190735,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "COCKPIT CONTROL ESTABLISHED."
+          ]
+        },
+        {
+          "wall": 5308,
+          "story": 5308,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:cockpit-secured",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 5308,
+          "story": 5308,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:cockpit-secured",
+            "kind": "wait",
+            "markerLabel": "KESTREL · COCKPIT SECURED",
+            "workOrder": [
+              "COCKPIT CONTROL ESTABLISHED."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 5308.100000143051,
+          "story": 5308.100000143051,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 5308.200000047684,
+          "story": 5308.200000047684,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 5308.200000047684,
+          "story": 5308.200000047684,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 5308.200000047684,
+          "story": 5308.200000047684,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 5308.300000190735,
+          "story": 5308.300000190735,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 5308.300000190735,
+          "story": 5308.300000190735,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 5333.700000047684,
+          "story": 5333.700000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 5333.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 8538.400000095367,
+          "story": 8538.400000095367,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 8538.600000143051,
+          "story": 8538.600000143051,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 8538.600000143051,
+          "story": 8538.600000143051,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 8648.400000095367,
+          "story": 8648.400000095367,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 8648.400000095367,
+          "ttlMs": 5200
+        }
+      ]
+    }
+  ]
+}

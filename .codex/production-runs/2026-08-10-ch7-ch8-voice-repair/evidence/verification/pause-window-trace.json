@@ -1,0 +1,86 @@
+{
+  "capturedAt": "2026-08-10T21:49:07.154Z",
+  "cases": [
+    {
+      "holdSeconds": 5,
+      "origin": 7141.199999809265,
+      "before": {
+        "clk": 10146.699999809265,
+        "raw": 10146.699999809265,
+        "paused": false,
+        "phase": "playing"
+      },
+      "during": {
+        "clk": 10149.099999904633,
+        "raw": 10352,
+        "paused": true
+      },
+      "afterHold": {
+        "clk": 10149.099999904633,
+        "raw": 15358.199999809265,
+        "paused": true
+      },
+      "resumed": {
+        "clk": 10351.399999856949,
+        "raw": 15562.099999904633,
+        "paused": false
+      },
+      "offsets": [
+        {
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "storyOffset": 0,
+          "wallOffset": 0
+        },
+        {
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "storyOffset": 2.016,
+          "wallOffset": 2.016
+        },
+        {
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "storyOffset": 4.022,
+          "wallOffset": 9.233
+        },
+        {
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "storyOffset": 6.039,
+          "wallOffset": 11.249
+        },
+        {
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "storyOffset": 8.539,
+          "wallOffset": 13.749
+        },
+        {
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "storyOffset": 11.555,
+          "wallOffset": 16.766
+        },
+        {
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "storyOffset": 14.055,
+          "wallOffset": 19.266
+        },
+        {
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "storyOffset": 17.072,
+          "wallOffset": 22.282
+        },
+        {
+          "ch": "beat",
+          "text": "ch8-crossing",
+          "storyOffset": 17.072,
+          "wallOffset": 22.283
+        }
+      ]
+    }
+  ]
+}

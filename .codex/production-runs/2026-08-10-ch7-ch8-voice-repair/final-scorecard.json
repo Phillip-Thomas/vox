@@ -1,0 +1,169 @@
+{
+  "schema": "paravoxia.creativeScorecard.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "mode": "scene",
+  "rubricRef": "paravoxia-creative-cohesion@v1",
+  "categories": [
+    {
+      "slug": "narrative_and_player_causality",
+      "weight": 14,
+      "score": 4.7,
+      "rationale": "Byte-exact both-readings copy on committed player facts; \u00a74 condition discharged into the contract; agency proven three ways (0.0 ms held-clock drift, dual-condition advance, once-only latches). Debits: F3 open; tree clause open by design.",
+      "evidenceRefs": [
+        "story-audit.md#addendum",
+        "verification-report.json#closingVerification.diveAndClimb",
+        "chapter-journey-evidence.json#observations"
+      ],
+      "defectRefs": [
+        "F3",
+        "dissent-02"
+      ]
+    },
+    {
+      "slug": "audiovisual_emotional_alignment",
+      "weight": 16,
+      "score": 4.5,
+      "rationale": "ch7 voice now lands pixel-proven; movie-route ch8 ladder delivers L1 -> drop -> L4 with the best world reveal under an empty band (ruled, recorded); climactic image/score support rides two owner packets; CONTACT LOGGED. still mid-anthem by design (dissent-01).",
+      "evidenceRefs": [
+        "verification-report.json#closingVerification.ch7QueueGuard",
+        "cinematography-audit.md#CIN-12",
+        "evidence/verification-final/video/ch8-launch-window-av.webm"
+      ],
+      "defectRefs": [
+        "CIN-12",
+        "ux-15",
+        "dissent-01"
+      ]
+    },
+    {
+      "slug": "cinematic_composition_and_lens",
+      "weight": 14,
+      "score": 4.5,
+      "rationale": "Zero camera/shot/render mutation re-proven in frame state; tier shot parity measured for the first time and passing; ordered-route seated frames protected. Debits: CIN-03 reveal composition open for headed screening; movie routes worldless (CIN-04, packet).",
+      "evidenceRefs": [
+        "evidence/verification-final/tier-parity/tier-shot-parity.json",
+        "cinematography-audit.md#delta-verdict"
+      ],
+      "defectRefs": [
+        "CIN-03",
+        "CIN-04"
+      ]
+    },
+    {
+      "slug": "score_coherence_and_sync",
+      "weight": 12,
+      "score": 4.7,
+      "rationale": "Cue table repaired to shipped truth (sa-02/03/05 repaired-verified at v5); silence law held; packet executable as scoped; audition WAVs on disk. dissent-01 open by design; sa-04 coupling untested.",
+      "evidenceRefs": [
+        "score-audit.md#addendum",
+        "evidence/score-ch7-variant_calibration.wav"
+      ],
+      "defectRefs": [
+        "dissent-01",
+        "sa-04"
+      ]
+    },
+    {
+      "slug": "palette_light_and_render_cohesion",
+      "weight": 10,
+      "score": 4.7,
+      "rationale": "Palette/stage continuity clean across all five seams including ch9 entry proven by pixel; 34 world-black cold-boot frames honestly unattributed, headless-only evidence.",
+      "evidenceRefs": [
+        "verification-report.json#closingVerification.worldRegionBlankScan",
+        "evidence/verification-final/seams/"
+      ],
+      "defectRefs": [
+        "CIN-06-residual"
+      ]
+    },
+    {
+      "slug": "transition_and_state_integrity",
+      "weight": 10,
+      "score": 4.8,
+      "rationale": "Held exit clock frozen to 0.0 ms over 10.9 s dips; once-only latches; resets 7/8 + full replay matrix with frames; both sides of two seams proven; vd-02 join stall pre-existing, downstream, boundary-proven.",
+      "evidenceRefs": [
+        "verification-report.json#closingVerification.diveAndClimb",
+        "chapter-journey-evidence.json#obs.ch8.landfall-stall"
+      ],
+      "defectRefs": [
+        "vd-02",
+        "ux-16"
+      ]
+    },
+    {
+      "slug": "creative_ambition_and_specificity",
+      "weight": 10,
+      "score": 4.85,
+      "rationale": "The strongest copy this project has produced, legible to a blind viewer on first contact; the drop-not-flash and tier-parity rulings turn a measured cost into coherent law; dense protected-strengths record.",
+      "evidenceRefs": [
+        "naive-audience-report.md#verdict",
+        "ux-audit.md#chapter-director-closeout-rulings"
+      ],
+      "defectRefs": []
+    },
+    {
+      "slug": "interaction_accessibility_and_variants",
+      "weight": 6,
+      "score": 4.35,
+      "rationale": "Guidance parity exact on all variants; cadence parity <=0.07 s; tier parity measured. Debits: mobile portrait caption/control collision (measured fail, owner-routed); reduced-motion parity by absence; ch7 queue unmeasured at RM/POTATO.",
+      "evidenceRefs": [
+        "verification-report.json#closingVerification.mobileRecapture",
+        "ux-audit.md#accessibility-and-variant-parity-delta"
+      ],
+      "defectRefs": [
+        "CIN-01",
+        "ux-02",
+        "ux-10",
+        "ux-18"
+      ]
+    },
+    {
+      "slug": "performance_and_implementation_fidelity",
+      "weight": 5,
+      "score": 4.8,
+      "rationale": "Patch bounded to emergentStoryDirector.ts(+tests); three v5 laws verified across route families; FPS at baseline; frozen strings untouched; lock discipline verified to the file.",
+      "evidenceRefs": [
+        "implementation.diff",
+        "verification-report.json#closingVerification.fps"
+      ],
+      "defectRefs": [
+        "ux-17"
+      ]
+    },
+    {
+      "slug": "evidence_review_and_learning",
+      "weight": 3,
+      "score": 4.9,
+      "rationale": "Five honest irreducibles enumerated instead of laundered; false pass corrected against the run's own record; an auditor withdrew its own finding on better evidence; a genuine A/V capture replaced a muxed one; lessons-learned filed.",
+      "evidenceRefs": [
+        "check-results.json#closingVerification.finalPhaseGateRepair",
+        "critic-report.md",
+        "lessons-learned.md"
+      ],
+      "defectRefs": [
+        "CIN-14"
+      ]
+    }
+  ],
+  "weightedScore": 4.66,
+  "categoryFloor": 4.35,
+  "fullCategoryCoverage": true,
+  "thresholds": {
+    "sceneWeighted": 4.75,
+    "sceneFloor": 4.3,
+    "flagshipWeighted": 4.8,
+    "flagshipFloor": 4.5
+  },
+  "openDefects": {
+    "critical": 0,
+    "high": 1,
+    "mediumUnaccepted": 0,
+    "low": 15
+  },
+  "decision": "ready-for-human-taste",
+  "judge": "scene-cohesion-judge (Claude Fable 5)",
+  "judgedAt": "2026-08-11T00:00:00Z",
+  "openDefectsNote": "Mechanical mirror of defects.json current counts (2026-08-11): ux-14 moved to accepted-exception per human-decision.json (the judge's exception, attribution-only scope preserved); CIN-01 is the sole open medium-or-higher. The judge's prose section 4 records the same state."
+}

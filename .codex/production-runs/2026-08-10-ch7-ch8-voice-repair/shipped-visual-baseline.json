@@ -1,0 +1,2816 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "sceneId": "distance-between-fires",
+  "capturedAt": "2026-08-10T18:59:00.650Z",
+  "captureAuthority": "current shipped runtime before this run implementation",
+  "captureEnvironment": {
+    "host": "linux headless chromium (playwright-core, ~/.cache/ms-playwright)",
+    "flags": [
+      "--enable-unsafe-swiftshader",
+      "--use-gl=angle",
+      "--window-size=1280,720"
+    ],
+    "devServer": "http://localhost:5176 (vite --port 5176 --strictPort, started by the verifier for this capture; 5173/5174 are held by the sibling Paraform project)",
+    "reportedRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+    "viewport": "1280x720",
+    "qualityTier": "LOW",
+    "devicePixelRatio": 1,
+    "reducedMotion": "not forced in this pass — recorded as an open capture gap"
+  },
+  "affectedBeats": [
+    "ch7-reconstruct",
+    "ch8-launch"
+  ],
+  "adjacentBeatsCaptured": [
+    "ch6-dive",
+    "ch7-board",
+    "ch8-crossing",
+    "ch8-landfall",
+    "ch9-settle"
+  ],
+  "probes": [
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/baseline-probe.mjs",
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/av-state-probe.mjs",
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/fps-baseline-probe.mjs"
+  ],
+  "signedAvAnchorsInScope": [
+    {
+      "id": "anc.launch.ignition",
+      "beat": "ch8-launch",
+      "order": 45,
+      "event": "ship_launched",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.ignition",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.01-engine-finds-weight"
+      ],
+      "shippedCopy": null
+    },
+    {
+      "id": "anc.launch.liftoff",
+      "beat": "ch8-launch",
+      "order": 46,
+      "event": "ev.launch.legal-liftoff",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.liftoff",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.02-world-below"
+      ],
+      "shippedCopy": null
+    },
+    {
+      "id": "anc.launch.atmosphere-exit",
+      "beat": "ch8-launch",
+      "order": 47,
+      "event": "ev.launch.origin-atmosphere-exited",
+      "source": "runtime-event",
+      "storyEventRef": "evt.launch.atmosphere-exit",
+      "scoreCueRefs": [
+        "sc.launch.ground-relents"
+      ],
+      "shotRefs": [
+        "cin.launch.03-boundary-without-warp"
+      ],
+      "shippedCopy": null
+    }
+  ],
+  "reconstructionAnchors": [
+    {
+      "id": "anc.reconstruct.diagnosis",
+      "order": 33,
+      "event": "ev.reconstruct.relationships-diagnosed",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.02-bench-wakes"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.bench-online",
+      "order": 34,
+      "event": "ship_repair_stage:bench_online",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.03-bearing-weight"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.frame-restored",
+      "order": 35,
+      "event": "ship_repair_stage:frame_restored",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.04-boundary-seals"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.hull-sealed",
+      "order": 36,
+      "event": "ship_repair_stage:hull_sealed",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.05-pulse-enters"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.lift-online",
+      "order": 37,
+      "event": "ship_repair_stage:lift_online",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.06-ground-relents"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.first-hover",
+      "order": 38,
+      "event": "ev.reconstruct.first-legal-hover",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.07-route-becomes-intention"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.route-online",
+      "order": 39,
+      "event": "ev.reconstruct.flight-ready",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.08-ready-is-not-departed"
+      ]
+    },
+    {
+      "id": "anc.reconstruct.calibration",
+      "order": 40,
+      "event": "ev.reconstruct.calibration-completed",
+      "scoreCueRefs": [
+        "sc.reconstruct.one-instrument"
+      ],
+      "shotRefs": [
+        "cin.reconstruct.09-one-exterior-reveal"
+      ]
+    }
+  ],
+  "anchorBindingMethod": {
+    "summary": "Every capture is bound to one scene-contract syncAnchor id. ch7-reconstruct frames are bound from the standing objective recorded for that exact frame in the run trace beside it, mapped to the most recently activated anchor via the repair-stage to anchor map. ch8-launch frames are bound from the launch state visible in the frame plus the anchor activation times in evidence-hires/av-state-trace.json. Frames whose live beat carries no anchor in this contract are bound to the nearest in-scope boundary anchor and marked beat-level-approximate.",
+    "exactCount": 22,
+    "approximateCount": 45,
+    "approximateCaptures": [
+      "evidence-hires/ch7-reconstruct/008_017s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence-hires/ch7-reconstruct/010_022s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch7-reconstruct/011_024s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch7-reconstruct/012_026s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch8-launch/003_007s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch8-launch/004_009s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch8-launch/005_011s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch8-launch/006_013s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence-hires/ch8-launch/007_015s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch6-dive/000_000s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/001_004s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/002_008s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/003_012s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/004_017s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/005_021s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch6-dive/006_025s_ch6-dive.png (beat ch6-dive) -> anc.dive.shore-bank",
+      "evidence/ch7-board-entry/000_000s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/001_004s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/001_007s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/002_008s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/002_011s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/003_013s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/003_015s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/004_017s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/004_019s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/005_021s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-board-entry/005_024s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-reconstruct/004_017s_ch7-board.png (beat ch7-board) -> anchor.ch7.advance",
+      "evidence/ch7-reconstruct/006_026s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/000_000s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/001_004s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/002_008s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/003_013s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/004_017s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/005_021s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-crossing-entry/006_025s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/000_000s_ch8-landfall.png (beat ch8-landfall) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/001_004s_ch8-landfall.png (beat ch8-landfall) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/002_008s_ch8-landfall.png (beat ch8-landfall) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/003_013s_ch9-settle.png (beat ch9-settle) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/004_017s_ch9-settle.png (beat ch9-settle) -> anchor.ch8.advance",
+      "evidence/ch8-landfall/005_021s_ch9-settle.png (beat ch9-settle) -> anchor.ch8.advance",
+      "evidence/ch8-launch/002_009s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-launch/003_013s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance",
+      "evidence/ch8-launch/004_017s_ch8-crossing.png (beat ch8-crossing) -> anchor.ch8.advance"
+    ],
+    "beatsWithoutContractAnchors": [
+      "ch7-board",
+      "ch8-crossing",
+      "ch8-landfall",
+      "ch9-settle"
+    ]
+  },
+  "cameraStates": [
+    {
+      "anchor": "anc.dive.shore-bank",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.diagnosis",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.01-wreck-remembers",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "persistent wreck silhouette and chosen scar",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.01-wreck-remembers"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.diagnosis"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.diagnosis",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.bench-online",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.02-bench-wakes",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "physical Keel socket/bench",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.02-bench-wakes"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.bench-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.bench-online",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.frame-restored",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.03-bearing-weight",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "landing gear taking weight and straightening spine",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.03-bearing-weight"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.frame-restored"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.frame-restored",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.hull-sealed",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.04-boundary-seals",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "panes/biocomposite enclosing pressure volume",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.04-boundary-seals"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.hull-sealed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.hull-sealed",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.lift-online",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.05-pulse-enters",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "lift-cell seat and low engine pulse",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.05-pulse-enters"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.lift-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.lift-online",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.first-hover",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.06-ground-relents",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "real first-person rise toward upper socket",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.06-ground-relents"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.first-hover"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.first-hover",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.route-online",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.07-route-becomes-intention",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "upper route/logic socket reached by the earned hover",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.07-route-becomes-intention"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.route-online"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.route-online",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "endAnchor": "anc.reconstruct.calibration",
+      "endFovDeg": 75,
+      "fovDurationMs": 0,
+      "shotId": "cin.reconstruct.08-ready-is-not-departed",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "complete scarred ship under ordinary world light",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.08-ready-is-not-departed"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.calibration"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "authority": "cinematic-look",
+      "fovDeg": 52,
+      "endAnchor": "anc.reconstruct.calibration",
+      "endFovDeg": 52,
+      "fovDurationMs": 350,
+      "shotId": "cin.reconstruct.09-one-exterior-reveal",
+      "beat": "ch7-reconstruct",
+      "focusTarget": "restored spine and surviving scar",
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 350
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.reconstruct.09-one-exterior-reveal"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.reconstruct.calibration"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.launch.ignition",
+      "authority": "lens-rig",
+      "fovDeg": 70,
+      "endAnchor": "anc.launch.liftoff",
+      "endFovDeg": 72,
+      "fovDurationMs": 0,
+      "shotId": "cin.launch.01-engine-finds-weight",
+      "beat": "ch8-launch",
+      "focusTarget": "horizon/landing reference through canopy",
+      "transition": {
+        "type": "occlusion",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.launch.01-engine-finds-weight"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.liftoff"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.launch.liftoff",
+      "authority": "lens-rig",
+      "fovDeg": 74,
+      "endAnchor": "anc.launch.atmosphere-exit",
+      "endFovDeg": 74,
+      "fovDurationMs": 0,
+      "shotId": "cin.launch.02-world-below",
+      "beat": "ch8-launch",
+      "focusTarget": "ground physically receding",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.launch.02-world-below"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.atmosphere-exit"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "anchor": "anc.launch.atmosphere-exit",
+      "authority": "lens-rig",
+      "fovDeg": 70,
+      "endAnchor": "anc.launch.atmosphere-exit",
+      "endFovDeg": 70,
+      "fovDurationMs": 0,
+      "shotId": "cin.launch.03-boundary-without-warp",
+      "beat": "ch8-launch",
+      "focusTarget": "origin limb and black interval in one frame when player permits",
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "realityStage": "alive",
+      "postEffectIds": [
+        "fx.launch.03-boundary-without-warp"
+      ],
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.launch.atmosphere-exit"
+      },
+      "resetRef": "reset-camera"
+    }
+  ],
+  "cameraStateAppliedRuntimeRule": "signedSceneAvRuntime.numericLensAuthorized() refuses numeric FOV for any lens-rig shot (vehicle FOV stays owned by the flight feedback controller) and for cin.audit.01-inherited-world. All three ch8-launch shots are lens-rig, so their declared 70/72/74 degrees are contract description only and appliedFovDeg is null in the live trace. ch7-reconstruct shots 01-08 are player-camera with durationMs 0, so they apply their end value 75 (= SANDBOX_FOV); shot 09 is cinematic-look and applies 52.",
+  "cameraStateRuntimeObservations": [
+    {
+      "scenario": "ch7-reconstruct",
+      "samples": [
+        {
+          "t": 0,
+          "beat": "ch7-reconstruct",
+          "repairStage": "wrecked",
+          "anchorId": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": 0.26,
+          "activePostFx": []
+        },
+        {
+          "t": 3.83,
+          "beat": "ch7-reconstruct",
+          "repairStage": "wrecked",
+          "anchorId": "anc.reconstruct.diagnosis",
+          "shotId": "cin.reconstruct.02-bench-wakes",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.02-bench-wakes"
+          ]
+        },
+        {
+          "t": 5.09,
+          "beat": "ch7-reconstruct",
+          "repairStage": "bench_online",
+          "anchorId": "anc.reconstruct.bench-online",
+          "shotId": "cin.reconstruct.03-bearing-weight",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.03-bearing-weight"
+          ]
+        },
+        {
+          "t": 5.72,
+          "beat": "ch7-reconstruct",
+          "repairStage": "frame_restored",
+          "anchorId": "anc.reconstruct.frame-restored",
+          "shotId": "cin.reconstruct.04-boundary-seals",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.04-boundary-seals"
+          ]
+        },
+        {
+          "t": 6.57,
+          "beat": "ch7-reconstruct",
+          "repairStage": "hull_sealed",
+          "anchorId": "anc.reconstruct.hull-sealed",
+          "shotId": "cin.reconstruct.05-pulse-enters",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.05-pulse-enters"
+          ]
+        },
+        {
+          "t": 7.19,
+          "beat": "ch7-reconstruct",
+          "repairStage": "lift_online",
+          "anchorId": "anc.reconstruct.lift-online",
+          "shotId": "cin.reconstruct.06-ground-relents",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.06-ground-relents"
+          ]
+        },
+        {
+          "t": 7.81,
+          "beat": "ch7-reconstruct",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.reconstruct.route-online",
+          "shotId": "cin.reconstruct.08-ready-is-not-departed",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "storyInputPolicyTargetFov": 52,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.08-ready-is-not-departed"
+          ]
+        },
+        {
+          "t": 15.87,
+          "beat": "ch7-reconstruct",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.reconstruct.calibration",
+          "shotId": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "appliedFovDeg": 52,
+          "storyInputPolicyTargetFov": 52,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ]
+        },
+        {
+          "t": 16.07,
+          "beat": "ch7-reconstruct",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.reconstruct.calibration",
+          "shotId": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "appliedFovDeg": 52,
+          "storyInputPolicyTargetFov": 52,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ]
+        },
+        {
+          "t": 16.28,
+          "beat": "ch7-reconstruct",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.reconstruct.calibration",
+          "shotId": "cin.reconstruct.09-one-exterior-reveal",
+          "cameraAuthority": "cinematic-look",
+          "appliedFovDeg": 52,
+          "storyInputPolicyTargetFov": 52,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.reconstruct.09-one-exterior-reveal"
+          ]
+        },
+        {
+          "t": 16.69,
+          "beat": "ch7-board",
+          "repairStage": "flight_ready",
+          "anchorId": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "signedScoreIntensity": 0.56,
+          "activePostFx": []
+        },
+        {
+          "t": 17.3,
+          "beat": "ch7-board",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.board.camera-transfer",
+          "shotId": "cin.board.02-one-owner",
+          "cameraAuthority": "cinematic-look",
+          "appliedFovDeg": 70,
+          "storyInputPolicyTargetFov": 70,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.board.02-one-owner"
+          ]
+        },
+        {
+          "t": 17.96,
+          "beat": "ch7-board",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.board.pressure-seal",
+          "shotId": "cin.board.03-pressure-boundary",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 70,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": null,
+          "activePostFx": [
+            "fx.board.03-pressure-boundary"
+          ]
+        },
+        {
+          "t": 18.17,
+          "beat": "ch8-launch",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.launch.liftoff",
+          "shotId": "cin.launch.02-world-below",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.4375,
+          "activePostFx": [
+            "fx.launch.02-world-below"
+          ]
+        },
+        {
+          "t": 19.67,
+          "beat": "ch8-launch",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.launch.liftoff",
+          "shotId": "cin.launch.02-world-below",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.4375,
+          "activePostFx": [
+            "fx.launch.02-world-below"
+          ]
+        },
+        {
+          "t": 21.66,
+          "beat": "ch8-crossing",
+          "repairStage": "flight_ready",
+          "anchorId": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.42,
+          "activePostFx": []
+        },
+        {
+          "t": 22.89,
+          "beat": "ch8-crossing",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.crossing.sibling-targeted",
+          "shotId": "cin.crossing.03-another-world-ahead",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.35,
+          "activePostFx": [
+            "fx.crossing.03-another-world-ahead"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "ch8-launch",
+      "samples": [
+        {
+          "t": 0,
+          "beat": "ch8-launch",
+          "repairStage": "flight_ready",
+          "anchorId": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.5,
+          "activePostFx": []
+        },
+        {
+          "t": 3.56,
+          "beat": "ch8-launch",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.launch.liftoff",
+          "shotId": "cin.launch.02-world-below",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.4375,
+          "activePostFx": [
+            "fx.launch.02-world-below"
+          ]
+        },
+        {
+          "t": 4.79,
+          "beat": "ch8-launch",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.launch.liftoff",
+          "shotId": "cin.launch.02-world-below",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.4375,
+          "activePostFx": [
+            "fx.launch.02-world-below"
+          ]
+        },
+        {
+          "t": 6.63,
+          "beat": "ch8-crossing",
+          "repairStage": "flight_ready",
+          "anchorId": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.42,
+          "activePostFx": []
+        },
+        {
+          "t": 7.87,
+          "beat": "ch8-crossing",
+          "repairStage": "flight_ready",
+          "anchorId": "anc.crossing.sibling-targeted",
+          "shotId": "cin.crossing.03-another-world-ahead",
+          "cameraAuthority": "lens-rig",
+          "appliedFovDeg": null,
+          "storyInputPolicyTargetFov": 75,
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "signedScoreIntensity": 0.35,
+          "activePostFx": [
+            "fx.crossing.03-another-world-ahead"
+          ]
+        }
+      ]
+    }
+  ],
+  "paletteStates": [
+    {
+      "anchor": "anc.dive.shore-bank",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "ch7-reconstruct entry sample, pre-diagnosis (t=0 of the ch7-reconstruct movie scenario).",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.diagnosis",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=3.83.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.bench-online",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=5.09.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.frame-restored",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=5.72.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.hull-sealed",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=6.57.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.lift-online",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=7.19.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.route-online",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=7.81.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.reconstruct.calibration",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch7-reconstruct t=15.87 through t=16.28.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anchor.ch8.beat-entry",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch8-launch t=0, deep-link beat entry before any launch anchor.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.launch.liftoff",
+      "family": "planet-derived",
+      "paletteRef": "palette.ch7-ch8-planet-derived",
+      "realityStage": "alive",
+      "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+      "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override",
+      "observedAt": "av-state-trace ch8-launch t=3.56 and t=4.79, and ch7-reconstruct t=18.17 and t=19.67.",
+      "sourceRefs": [
+        "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    }
+  ],
+  "paletteAndRealityState": {
+    "realityStage": "alive",
+    "sourceRefs": [
+      "main/src/story/storyState.ts stageForStoryPoint (ch5-ch9 => alive)",
+      "main/src/game/systems/realityRenderSystem.ts"
+    ],
+    "observed": "getVoxelRealityStage() === alive at every ch7-reconstruct / ch7-board / ch8-launch / ch8-crossing sample",
+    "gradeOwner": "no Story grade preset is declared on any ch7/ch8 shot (effects.grade.presetRef === null); all reset through reset-grade",
+    "lighting": "reset-lighting; no ch7/ch8 shot declares a lighting override"
+  },
+  "scoreState": {
+    "signedRailIntensity": "null for every ch7-reconstruct and ch7-board anchor (signedSceneAvRuntime.scoreIntensityFor returns null for those two beats by name); ch8-launch anchors DO drive signed intensity (observed 0.4375)",
+    "chapter7Variants": [
+      "diagnosis",
+      "bench",
+      "frame",
+      "hull",
+      "lift",
+      "hover",
+      "route",
+      "calibration"
+    ],
+    "chapter7VariantSource": "main/src/story/emergentScoreDirector.ts resolveChapter7ReconstructionScoreVariant",
+    "ownedBeats": [
+      "ch7-reconstruct",
+      "ch7-board"
+    ],
+    "note": "ch8-launch is not in emergentScoreDirector OWNED_BEATS; it runs the generic signed ramp"
+  },
+  "frameRateBaseline": {
+    "capturedAt": "2026-08-10T18:56:27.032Z",
+    "viewport": "1280x720",
+    "qualityTier": "LOW",
+    "beats": [
+      {
+        "beat": "ch7-reconstruct",
+        "liveBeat": "ch7-reconstruct",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+        "fps": [
+          60.29,
+          59.99,
+          60.12
+        ],
+        "median": 60.12
+      },
+      {
+        "beat": "ch7-board",
+        "liveBeat": "ch7-board",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+        "fps": [
+          60.54,
+          60.11,
+          60.07
+        ],
+        "median": 60.11
+      },
+      {
+        "beat": "ch8-launch",
+        "liveBeat": "ch8-launch",
+        "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+        "fps": [
+          60.35,
+          60.08,
+          60.08
+        ],
+        "median": 60.08
+      }
+    ]
+  },
+  "captures": [
+    {
+      "path": "evidence-hires/ch7-reconstruct/000_000s_ch7-reconstruct.png",
+      "sha256": "a1af4e87465cf9454def91321bdabd0ce77eb45b20247f1b48c95ef0def07a49",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:diagnose at t=0s: the diagnosis anchor had not fired, so the frame sits inside cin.reconstruct.01-wreck-remembers whose startAnchorRef is anc.dive.shore-bank.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "reconstruct:diagnose"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/001_002s_ch7-reconstruct.png",
+      "sha256": "6df4a17f0fef89d7984763f342a71611ab9884edfa001d10490ef632848a2242",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:diagnose at t=2s: the diagnosis anchor had not fired, so the frame sits inside cin.reconstruct.01-wreck-remembers whose startAnchorRef is anc.dive.shore-bank.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 2,
+      "observedObjectiveId": "reconstruct:diagnose"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/002_005s_ch7-reconstruct.png",
+      "sha256": "d4be1fe749a6a00ec47c632acdf1c5d882caec1cf6766b176f491d9fa78dea06",
+      "anchor": "anc.reconstruct.diagnosis",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:repair:bench_online at t=5s fixes anc.reconstruct.diagnosis as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 5,
+      "observedObjectiveId": "reconstruct:repair:bench_online"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/003_007s_ch7-reconstruct.png",
+      "sha256": "df25d94a0ae4a3a09baae145f0dfe802337a36d5136525c03e72a03d5caab6b0",
+      "anchor": "anc.reconstruct.hull-sealed",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:repair:lift_online at t=7s fixes anc.reconstruct.hull-sealed as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 7,
+      "observedObjectiveId": "reconstruct:repair:lift_online"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/004_009s_ch7-reconstruct.png",
+      "sha256": "22cf70773d25781c70411436fb756f644e6094fd486b9ce41113f10ff371d40d",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=9s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 9,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/005_011s_ch7-reconstruct.png",
+      "sha256": "1b1d819df9ccc06c3955285a51455f920316ffdadc5ae505fb1716b8a49c253f",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=11s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 11,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/006_013s_ch7-reconstruct.png",
+      "sha256": "e6490815578cf48537f84f1f3822788b41d06e5da416fbc51c5ca70ddc37567a",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=13s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/007_015s_ch7-reconstruct.png",
+      "sha256": "4eadd62cb4aaf37f9eb410064b4708c6a7d5bda4098ea8872ed9e63d5070f123",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=15s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 15,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/008_017s_ch7-board.png",
+      "sha256": "8d5fd200600d93067cea1438a031e8a3c66d7512e9e0a69c6630a43ba2a98a10",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "board:hatch-in-progress"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/009_019s_ch8-launch.png",
+      "sha256": "4a677cc84d340c08c75684bc8de5a8fe736f89f22b776a725f623200901c4188",
+      "anchor": "anc.launch.liftoff",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Frame shows ground gone and starfield through the canopy; av-state-trace had anc.launch.liftoff active from the first ch8-launch sample of this scenario.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 19,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/010_022s_ch8-crossing.png",
+      "sha256": "72be19bbec8bd8278fa184736814663ee226db4e00f1e30e217df75324ca7b45",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 22,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/011_024s_ch8-crossing.png",
+      "sha256": "6fe4c4f085547ac925501e14c6a0adf1501ece5cd5d1572c56fb0fda6e34a6a9",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 24,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence-hires/ch7-reconstruct/012_026s_ch8-crossing.png",
+      "sha256": "43c7aeda5c7e58e6bb5adb08d4ad0f3e00ecd49e5e25eac11d9918f3dbc8308f",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 26,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/000_000s_ch8-launch.png",
+      "sha256": "a85216c2f167b5d842fdf7ee7b4d4e458db0552742051b559f21d439029bc894",
+      "anchor": "anchor.ch8.beat-entry",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Deep-link beat entry sample at t=0; no launch anchor had activated (av-state-trace ch8-launch t=0 anchorId null).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/001_003s_ch8-launch.png",
+      "sha256": "26987f94ae7e3b6401d70d4ee2162ad0e8dce8cede32db4b240158e98cc0967f",
+      "anchor": "anchor.ch8.at-the-controls",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Frame shows the Kestrel still on the ground at the flight controls with the standing IGNITE objective; pre-ignition (av-state-trace ch8-launch first liftoff sample was t=3.56).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 3,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/002_005s_ch8-launch.png",
+      "sha256": "ddbbf1306785dac8ad8f8f008dfef04c6b3780048e82726a447825d2e04448ec",
+      "anchor": "anc.launch.liftoff",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Frame shows ground gone and starfield through the canopy; liftoff had fired.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 5,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/003_007s_ch8-crossing.png",
+      "sha256": "8679172a3ceda520387adc54b7ad98d5558710efd0ded18895494ba6e5a47bfb",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 7,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/004_009s_ch8-crossing.png",
+      "sha256": "9a57e05e53fe8044bba6458153f6c72e20b1dbd7c909d5c39a861ef8c679bab0",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 9,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/005_011s_ch8-crossing.png",
+      "sha256": "f5d89019892984f100bb7d02577b6f2ee43e4c87d5e6dd2edc62f855a26b6ce8",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 11,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/006_013s_ch8-crossing.png",
+      "sha256": "94e93524094c8fd993cf6be250f8288933696042f3facaf9a6c012448738a43d",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    },
+    {
+      "path": "evidence-hires/ch8-launch/007_015s_ch8-crossing.png",
+      "sha256": "c2a0e4ed08ab3fe410b9074ae2408b8be0cb3ec3c27e1c4c43d5cafed7d7c2f4",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 15,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    },
+    {
+      "path": "evidence/ch6-dive/000_000s_ch6-dive.png",
+      "sha256": "bff24919603abc3c667d72ca0edb7521b256d340a05123ac0571ecca6f0c05ad",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "dive:recover-keel-memory"
+    },
+    {
+      "path": "evidence/ch6-dive/001_004s_ch6-dive.png",
+      "sha256": "011ae4c23a5cbf2935d062477c4308b2859730119e1937ee46358b158fd1e955",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 4,
+      "observedObjectiveId": "dive:recover-keel-memory"
+    },
+    {
+      "path": "evidence/ch6-dive/002_008s_ch6-dive.png",
+      "sha256": "2c3c24837a5a6d45f4429c8c51c79a8b5100ef1e64e633ab446c9ebfab4d4989",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 8,
+      "observedObjectiveId": "dive:recover-keel-memory"
+    },
+    {
+      "path": "evidence/ch6-dive/003_012s_ch6-dive.png",
+      "sha256": "162caba8450cab03ceb4546acdbbf2eb2f0fbc1753f2503846ef6cae8008c116",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 12,
+      "observedObjectiveId": "dive:recover-keel-memory"
+    },
+    {
+      "path": "evidence/ch6-dive/004_017s_ch6-dive.png",
+      "sha256": "0447a801bbce47885d857778cd365ac4ec2f4e2236a1806e95e07ffe724d39d4",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "dive:recover-keel-memory"
+    },
+    {
+      "path": "evidence/ch6-dive/005_021s_ch6-dive.png",
+      "sha256": "889374181eb1bfb4a4cc6888f2cf64cb5fbc9b4554b68e692bb130206dab8bd6",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 21,
+      "observedObjectiveId": "dive:surface-with-keel"
+    },
+    {
+      "path": "evidence/ch6-dive/006_025s_ch6-dive.png",
+      "sha256": "64ce888450afe9e10c6383a2ae8604c74406e23cdcfe77abd2e78ada49cfa2e9",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch6-dive contributes exactly one anchor to this contract (anc.dive.shore-bank, the shore handoff that is also the ch7 entry). This dive-phase frame precedes that anchor and is bound to it as the only beat-level anchor available.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch6-dive",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 25,
+      "observedObjectiveId": "dive:shore-handoff"
+    },
+    {
+      "path": "evidence/ch6-dive/007_029s_ch7-reconstruct.png",
+      "sha256": "9129bd980a38d3c83672364af3928a562602002c100aa8495889760209a8c155",
+      "anchor": "anc.reconstruct.bench-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:repair:frame_restored at t=29s fixes anc.reconstruct.bench-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 29,
+      "observedObjectiveId": "reconstruct:repair:frame_restored"
+    },
+    {
+      "path": "evidence/ch6-dive/008_033s_ch7-reconstruct.png",
+      "sha256": "23273fefdc6d2e489f7e44db711b47ac864d8d6a4c3222a88786def176ea315e",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=33s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 33,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence/ch6-dive/009_037s_ch7-reconstruct.png",
+      "sha256": "91b14de9c93b70445e700868ac15da3600df2cf64d50e8e4bbb8183619033513",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=37s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch6-dive",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 37,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence/ch7-board-entry/000_000s_ch7-board.png",
+      "sha256": "fdc1a14f3685dea9392954615a82c2a1b545984597b6883fae6e63983cb55565",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/001_004s_ch7-board.png",
+      "sha256": "afd661136b0330b54d1780499dfb5f469393bcc2b70d012b418f71fdb6d205eb",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 4,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/001_007s_ch7-board.png",
+      "sha256": "d1d8f435fdbe09e3d15294c8ae3da325bcc248b13dbeb407f7b0fd37e5922c82",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW"
+    },
+    {
+      "path": "evidence/ch7-board-entry/002_008s_ch7-board.png",
+      "sha256": "68f8d5aaba5f4010afde8cf2dadf662b3e1741dd48f34361a9ba13cc78aeda2b",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 8,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/002_011s_ch7-board.png",
+      "sha256": "987f90d8a2dc719a0415ca6fa65d9c4828100e43bb2ae7d9e901736be3d240d2",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW"
+    },
+    {
+      "path": "evidence/ch7-board-entry/003_013s_ch7-board.png",
+      "sha256": "533202ef866d776edc705d81f86630bc6be93ef15b123962c4548180fa764dff",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/003_015s_ch7-board.png",
+      "sha256": "153c129fd582d0c57f8e43b3832c77d002dbcc4c734975d9e6b0b71190acbbe7",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW"
+    },
+    {
+      "path": "evidence/ch7-board-entry/004_017s_ch7-board.png",
+      "sha256": "b01d78b834543de9da46ceadd98b3ff80e17dd517a5a2d82d3474ab217ac7df2",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/004_019s_ch7-board.png",
+      "sha256": "dfc3f191245950af109e5b5b855e4b76f17b46422a5caaf0e43592c4100dbb30",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW"
+    },
+    {
+      "path": "evidence/ch7-board-entry/005_021s_ch7-board.png",
+      "sha256": "33908acd7f054e9f68efda84076c3f9bb1a9cb14551d590ee17c5c3d1e4b82f8",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 21,
+      "observedObjectiveId": "board:enter-hatch"
+    },
+    {
+      "path": "evidence/ch7-board-entry/005_024s_ch7-board.png",
+      "sha256": "c1db5b9a38de5bdfceb1a30158742103de63fe23940a1d130178fa56a7e147c2",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-board-entry",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/000_000s_ch7-reconstruct.png",
+      "sha256": "a1af4e87465cf9454def91321bdabd0ce77eb45b20247f1b48c95ef0def07a49",
+      "anchor": "anc.dive.shore-bank",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:diagnose at t=0s: the diagnosis anchor had not fired, so the frame sits inside cin.reconstruct.01-wreck-remembers whose startAnchorRef is anc.dive.shore-bank.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "reconstruct:diagnose"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/001_005s_ch7-reconstruct.png",
+      "sha256": "6ec0d414b37023dcc57bc47ec8e0f9869a566e80991c6cbaba3dd635848d45ed",
+      "anchor": "anc.reconstruct.diagnosis",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:repair:bench_online at t=5s fixes anc.reconstruct.diagnosis as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 5,
+      "observedObjectiveId": "reconstruct:repair:bench_online"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/002_009s_ch7-reconstruct.png",
+      "sha256": "a27143be9697ba54d5a1884496395396479cefa307a304708a156525481fab5f",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=9s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 9,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/003_013s_ch7-reconstruct.png",
+      "sha256": "52933bd34247449c2e5f148ff57a916265ef1a0db925ddaa4616b2257276c271",
+      "anchor": "anc.reconstruct.route-online",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Standing objective reconstruct:calibrating at t=13s fixes anc.reconstruct.route-online as the most recently activated anchor (repair-stage to anchor map in shipped-reference-map.md section 1; corroborated by evidence-hires/av-state-trace.json).",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-reconstruct",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "reconstruct:calibrating"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/004_017s_ch7-board.png",
+      "sha256": "8fc516eea264073571859df7954924978c409fdac89b903e30c501184214c2c4",
+      "anchor": "anchor.ch7.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch7-board carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch7-reconstruct advance that produces this beat. Runtime anchors observed in this window (anc.board.hatch-enter, anc.board.camera-transfer, anc.board.pressure-seal) are outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch7-board",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "board:hatch-in-progress"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/005_021s_ch8-launch.png",
+      "sha256": "063ea4c3b0063f0515c9a56315f2fb4f3542cb546870917f3e7c35dbe8dd162f",
+      "anchor": "anc.launch.liftoff",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Frame is inside the same post-liftoff climb window; av-state-trace had anc.launch.liftoff active from the first ch8-launch sample of this scenario.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 21,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence/ch7-reconstruct/006_026s_ch8-crossing.png",
+      "sha256": "713163c73575f8e069e77fcbd0bbd1453bb8c2bca66f5a2cd661347c3cc6b5dd",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch7-reconstruct",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 26,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/000_000s_ch8-crossing.png",
+      "sha256": "c2305a81329cf6f342c9c77095d86f8b5d77d0a75622e265fe178e1a50c009f0",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/001_004s_ch8-crossing.png",
+      "sha256": "7c5f44d7101eafd5cd96d0970411f0772c8ca3b9a18060bddb8a89b594ffd6ce",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 4,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/002_008s_ch8-crossing.png",
+      "sha256": "b96c3faf646d5285a99aab3ac3df409c887d5c9d88013c1bfc2d508b4e469d7a",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 8,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/003_013s_ch8-crossing.png",
+      "sha256": "1d4de16ff50ec47d52bfc4902f92d54d10550cb7545dd822971f369cbed8e03a",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/004_017s_ch8-crossing.png",
+      "sha256": "ffd5afb8c67730e4416129588cb0da8b28581c7a697ae0ac8c6278c3daf98dae",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/005_021s_ch8-crossing.png",
+      "sha256": "f561d1f1aad87bafa3f435f795ff21e2d7b7d97d3955c79f52031cca6d31bd10",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 21,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-crossing-entry/006_025s_ch8-crossing.png",
+      "sha256": "4256024b02f299771d3008eb560484c8bf227cf95d019376a69e1d2c0a3187bf",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-crossing-entry",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 25,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-landfall/000_000s_ch8-landfall.png",
+      "sha256": "70f3ec4d11c545bffadbb253b05e9f86fa0d69a4a701d387a7ce95ce0c603447",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-landfall is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch8-landfall",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "ch8:landfall:land-dry-level"
+    },
+    {
+      "path": "evidence/ch8-landfall/001_004s_ch8-landfall.png",
+      "sha256": "53f804253ab64ec165a06683b9d3f6179861219850d20142465c690e64a24638",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-landfall is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch8-landfall",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 4,
+      "observedObjectiveId": "ch8:landfall:land-dry-level"
+    },
+    {
+      "path": "evidence/ch8-landfall/002_008s_ch8-landfall.png",
+      "sha256": "a7e67578995e7683fa95b54c4dc21b787cfee9d6bb6fdc4f4482893d0481b6db",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-landfall is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch8-landfall",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 8,
+      "observedObjectiveId": "ch8:landfall:first-footfall"
+    },
+    {
+      "path": "evidence/ch8-landfall/003_013s_ch9-settle.png",
+      "sha256": "fb57ee8f5371e3d3ee95486f2d8adb8ef350cc4b8667620157f38f0f37d89b18",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch9-settle is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch9-settle",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "settle:scan-waterline"
+    },
+    {
+      "path": "evidence/ch8-landfall/004_017s_ch9-settle.png",
+      "sha256": "c7a095afa06c952028924fa259a9f06d1bc8b57def28ed1b6ea36314375c3349",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch9-settle is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch9-settle",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "settle:choose-site"
+    },
+    {
+      "path": "evidence/ch8-landfall/005_021s_ch9-settle.png",
+      "sha256": "d994f84c3cd904766ad47115d3944c9a250dc8894ecc38466507052255310877",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch9-settle is downstream of the contracted span and carries no anchor in this scene contract. Bound to the last in-scope anchor, the ch8-launch advance.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-landfall",
+      "beat": "ch9-settle",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 21,
+      "observedObjectiveId": "settle:choose-site"
+    },
+    {
+      "path": "evidence/ch8-launch/000_000s_ch8-launch.png",
+      "sha256": "1944a8c165f7157eb2a14caba948b117f06866a4ec026534591325dcb44aa2b3",
+      "anchor": "anchor.ch8.beat-entry",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Deep-link beat entry sample at t=0; no launch anchor had activated.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 0,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence/ch8-launch/001_004s_ch8-launch.png",
+      "sha256": "386454d2f97ac7afe247117427c4c4354f22ffc0f36b3e3fc88f0cd738f5cf85",
+      "anchor": "anc.launch.liftoff",
+      "anchorBinding": "exact",
+      "anchorBindingBasis": "Frame shows ground gone and starfield through the canopy; liftoff had fired.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-launch",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 4,
+      "observedObjectiveId": "ch8:launch:ignite"
+    },
+    {
+      "path": "evidence/ch8-launch/002_009s_ch8-crossing.png",
+      "sha256": "06e435f15ee074d36734a2166564357ac160921f0f7952ef1d0d03130a3bbcde",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 9,
+      "observedObjectiveId": "ch8:crossing:acquire-sibling"
+    },
+    {
+      "path": "evidence/ch8-launch/003_013s_ch8-crossing.png",
+      "sha256": "d17efda5409dee2bce68bc8f8c0efce9355492e8705ca97ee2ff3fbada45a7f5",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 13,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    },
+    {
+      "path": "evidence/ch8-launch/004_017s_ch8-crossing.png",
+      "sha256": "1513d1a5611fc6eca41a8deac1c5ec8b5ed27e925e449a4c872ecd103d51902d",
+      "anchor": "anchor.ch8.advance",
+      "anchorBinding": "beat-level-approximate",
+      "anchorBindingBasis": "ch8-crossing carries no anchor in this scene contract. Bound to the nearest in-scope boundary anchor, the ch8-launch advance that produces this beat. The runtime anchor observed in this window (anc.crossing.sibling-targeted) is outside the contract anchor set.",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame",
+      "scenario": "ch8-launch",
+      "beat": "ch8-crossing",
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "captureSeconds": 17,
+      "observedObjectiveId": "ch8:crossing:hold-course"
+    }
+  ],
+  "stateTraces": [
+    {
+      "path": "evidence-hires/av-state-trace.json",
+      "sha256": "b00d25654d79e6e32a81dc3534580085ebadc519b8beccd34f98860753447575",
+      "kind": "state-trace-json",
+      "scenario": "av-state-trace.json",
+      "beat": null,
+      "viewport": null,
+      "qualityTier": "LOW",
+      "role": "non-media state trace: JSON produced by the probe scripts, not a decodable media stream, so it is held outside the ffprobe-verified captures array."
+    },
+    {
+      "path": "evidence-hires/fps-baseline.json",
+      "sha256": "dfc30a4fa83be283e5a8e927d5c345a524bbb3ba280f78771a93668d61eedfdf",
+      "kind": "state-trace-json",
+      "scenario": "fps-baseline.json",
+      "beat": null,
+      "viewport": null,
+      "qualityTier": "LOW",
+      "role": "non-media state trace: JSON produced by the probe scripts, not a decodable media stream, so it is held outside the ffprobe-verified captures array."
+    },
+    {
+      "path": "evidence-hires/hires-trace.json",
+      "sha256": "0e9fa6c2794cd20e70f6c49095214cfd13e6289c3325c9a00d66e7d59eacc964",
+      "kind": "state-trace-json",
+      "scenario": "hires-trace.json",
+      "beat": null,
+      "viewport": null,
+      "qualityTier": "LOW",
+      "role": "non-media state trace: JSON produced by the probe scripts, not a decodable media stream, so it is held outside the ffprobe-verified captures array."
+    },
+    {
+      "path": "evidence/baseline-trace.json",
+      "sha256": "16f300e2fdb1c2b116087fc620317cc34a877aa986f8b10fdf330287a2c76e30",
+      "kind": "state-trace-json",
+      "scenario": "baseline-trace.json",
+      "beat": null,
+      "viewport": null,
+      "qualityTier": "LOW",
+      "role": "non-media state trace: JSON produced by the probe scripts, not a decodable media stream, so it is held outside the ffprobe-verified captures array."
+    }
+  ],
+  "openCaptureGaps": [
+    "Manual (non-movie) ch7 build-step play cannot be driven headless: the five repair transactions need real [F]/[C] interaction. Every per-step capture here is movie-mode autopilot, which compresses diagnose to flight_ready into about 4 seconds.",
+    "anc.launch.ignition was never the sole active anchor in a 200 ms sample: in movie mode ignition and liftoff are both activated by the first post-ignition sample, so cin.launch.01-engine-finds-weight has no isolated before/at/after frame.",
+    "anc.reconstruct.first-hover and cin.reconstruct.07-route-becomes-intention never activated: the first-hover rehearsal is optional exploration and did not occur in the movie path.",
+    "Reduced-motion, mobile viewport, and POTATO-tier variants were not captured in this baseline pass.",
+    "No headed / real-pointer-lock capture. Per main/src/story/ux/README.md, headless scripted input is diagnostic only and cannot stand in for continuity or taste evidence."
+  ],
+  "headedStatus": "pending"
+}

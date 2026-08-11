@@ -1,0 +1,3939 @@
+{
+  "schema": "paravoxia.objectiveLifecycleMeasurements.v2",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v5",
+  "contractSha256": "36a7cb4f2bf9cc8d24d2413579225dcb50a4436b37a20fb762d79fec6cb4ecdb",
+  "generatedAt": "2026-08-11T15:05:21.870Z",
+  "generatedBy": "lifecycle-rebind.mjs over evidence/verification-final (closing verification pass, iteration 6)",
+  "supersedes": {
+    "file": "evidence/verification/objective-lifecycle-measurements.json",
+    "reason": "defect ux-04 — the prior rows were bound to draft-v2 / aa7ea1ac…; these are re-measured against draft-v5 / 36a7cb4f… from the closing pass traces"
+  },
+  "markerHealthDefinition": "acceptance criterion [35]: no missing-marker frame while the objective is ACTIVE AND ACQUIRED. The 2.96-3.14 s entry acquisition transient on reconstruct:diagnose is a recorded, accepted measured exception.",
+  "traceSources": [
+    {
+      "label": "ch7queue-desktop/run1",
+      "variant": "desktop",
+      "route": "ch7 movie",
+      "eventCount": 94
+    },
+    {
+      "label": "ch7queue-desktop/run2",
+      "variant": "desktop",
+      "route": "ch7 movie",
+      "eventCount": 88
+    },
+    {
+      "label": "ch7queue-desktop/run3",
+      "variant": "desktop",
+      "route": "ch7 movie",
+      "eventCount": 88
+    },
+    {
+      "label": "ch7manual/run1",
+      "variant": "desktop",
+      "route": "ch7 paced manual-shape",
+      "eventCount": 51
+    },
+    {
+      "label": "ch7mobile-mobile-portrait/run1",
+      "variant": "mobile-portrait",
+      "route": "ch7 movie",
+      "eventCount": 86
+    },
+    {
+      "label": "ch7mobile-mobile-landscape/run1",
+      "variant": "mobile-landscape",
+      "route": "ch7 movie",
+      "eventCount": 88
+    },
+    {
+      "label": "routeB-desktop/run1",
+      "variant": "desktop",
+      "route": "ch8 chained movie",
+      "eventCount": 47
+    },
+    {
+      "label": "routeB-desktop/run2",
+      "variant": "desktop",
+      "route": "ch8 chained movie",
+      "eventCount": 47
+    },
+    {
+      "label": "routeC-desktop/run1",
+      "variant": "desktop",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-desktop/run2",
+      "variant": "desktop",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-desktop/run3",
+      "variant": "desktop",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-potato/run1",
+      "variant": "quality-potato",
+      "route": "ch8 deep-link movie",
+      "eventCount": 26
+    },
+    {
+      "label": "routeC-potato/run2",
+      "variant": "quality-potato",
+      "route": "ch8 deep-link movie",
+      "eventCount": 26
+    },
+    {
+      "label": "routeC-potato/run3",
+      "variant": "quality-potato",
+      "route": "ch8 deep-link movie",
+      "eventCount": 26
+    },
+    {
+      "label": "routeC-mobile/run1",
+      "variant": "mobile",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-mobile/run2",
+      "variant": "mobile",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-reduced-motion/run1",
+      "variant": "reduced-motion",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "routeC-reduced-motion/run2",
+      "variant": "reduced-motion",
+      "route": "ch8 deep-link movie",
+      "eventCount": 30
+    },
+    {
+      "label": "dive/run1",
+      "variant": "desktop",
+      "route": "ch8 dive-and-climb",
+      "eventCount": 38
+    },
+    {
+      "label": "dive/run2",
+      "variant": "desktop",
+      "route": "ch8 dive-and-climb",
+      "eventCount": 38
+    },
+    {
+      "label": "dive/run3",
+      "variant": "desktop",
+      "route": "ch8 dive-and-climb",
+      "eventCount": 38
+    },
+    {
+      "label": "routeA-ordered/run1",
+      "variant": "desktop",
+      "route": "ch8 canonical ordered-ignition",
+      "eventCount": 37
+    },
+    {
+      "label": "routeA-ordered/run2",
+      "variant": "desktop",
+      "route": "ch8 canonical ordered-ignition",
+      "eventCount": 37
+    },
+    {
+      "label": "routeA-ordered/run3",
+      "variant": "desktop",
+      "route": "ch8 canonical ordered-ignition",
+      "eventCount": 37
+    },
+    {
+      "label": "replay/replay-deep-link",
+      "variant": "desktop",
+      "route": "reset matrix",
+      "eventCount": 34
+    },
+    {
+      "label": "replay/quit-to-menu",
+      "variant": "desktop",
+      "route": "reset matrix",
+      "eventCount": 2
+    }
+  ],
+  "objectives": [
+    {
+      "runtimeObjectiveId": "board:cockpit-secured",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            0
+          ]
+        }
+      ],
+      "totalEntries": 7,
+      "totalFeedbackCues": 7,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL · COCKPIT SECURED"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "COCKPIT CONTROL ESTABLISHED."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 7,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "board:enter-hatch",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.099
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.096
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.124
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.123
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.124
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.358
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "board:hatch-in-progress"
+          ],
+          "screenLifeSeconds": [
+            0.363
+          ]
+        }
+      ],
+      "totalEntries": 8,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 0.75,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL HATCH · BOARD"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "APPROACH THE KESTREL HATCH.",
+          "[F] ENTER THROUGH THE HATCH."
+        ],
+        [
+          "APPROACH THE KESTREL HATCH.",
+          "USE · ENTER THROUGH THE HATCH."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 8,
+      "missingMarkerObservations": 13,
+      "activeAtTraceEndCount": 1
+    },
+    {
+      "runtimeObjectiveId": "board:hatch-in-progress",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            0.966
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            0.918
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            0.85
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            0.926
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            1.018
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            1.091
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:pressure-seal"
+          ],
+          "screenLifeSeconds": [
+            0.905
+          ]
+        }
+      ],
+      "totalEntries": 7,
+      "totalFeedbackCues": 7,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL HATCH · ENTERING"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "HATCH TRANSFER IN PROGRESS.",
+          "HOLD POSITION · ESC TO STEP BACK."
+        ],
+        [
+          "HATCH TRANSFER IN PROGRESS.",
+          "HOLD POSITION · USE TO STEP BACK."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 7,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "board:pressure-seal",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.674
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.67
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.681
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.644
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.676
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.653
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "board:cockpit-secured"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        }
+      ],
+      "totalEntries": 7,
+      "totalFeedbackCues": 7,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL · PRESSURE SEAL"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "PRESSURE BOUNDARY CLOSING."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 7,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "ch8:crossing:acquire-sibling",
+      "observations": [
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-desktop/run3",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-potato/run1",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-potato/run2",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-potato/run3",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-mobile/run1",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-mobile/run2",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run1",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run2",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "dive/run1",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "dive/run2",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "dive/run3",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeA-ordered/run1",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeA-ordered/run2",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeA-ordered/run3",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "replay/replay-deep-link",
+          "variant": "desktop",
+          "route": "reset matrix",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:crossing:hold-course"
+          ],
+          "screenLifeSeconds": [
+            3.167
+          ]
+        }
+      ],
+      "totalEntries": 19,
+      "totalFeedbackCues": 19,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "SIBLING WORLD"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "travel"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 19,
+      "missingMarkerObservations": 19,
+      "activeAtTraceEndCount": 18
+    },
+    {
+      "runtimeObjectiveId": "ch8:crossing:hold-course",
+      "observations": [
+        {
+          "source": "replay/replay-deep-link",
+          "variant": "desktop",
+          "route": "reset matrix",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        }
+      ],
+      "totalEntries": 1,
+      "totalFeedbackCues": 1,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "SIBLING WORLD · COURSE"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "FOLLOW THE SIBLING WORLD MARKER.",
+          "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "travel"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 1,
+      "missingMarkerObservations": 1,
+      "activeAtTraceEndCount": 1
+    },
+    {
+      "runtimeObjectiveId": "ch8:launch:climb",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            null
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.866
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.933
+          ]
+        },
+        {
+          "source": "routeC-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.85
+          ]
+        },
+        {
+          "source": "routeC-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.91
+          ]
+        },
+        {
+          "source": "routeC-desktop/run3",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.95
+          ]
+        },
+        {
+          "source": "routeC-mobile/run1",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.869
+          ]
+        },
+        {
+          "source": "routeC-mobile/run2",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.875
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run1",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.933
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run2",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.917
+          ]
+        },
+        {
+          "source": "dive/run1",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff",
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.9,
+            10.927
+          ]
+        },
+        {
+          "source": "dive/run2",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff",
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.9,
+            10.849
+          ]
+        },
+        {
+          "source": "dive/run3",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff",
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.9,
+            10.479
+          ]
+        },
+        {
+          "source": "routeA-ordered/run1",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.85
+          ]
+        },
+        {
+          "source": "routeA-ordered/run2",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.884
+          ]
+        },
+        {
+          "source": "routeA-ordered/run3",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            3.848
+          ]
+        },
+        {
+          "source": "replay/replay-deep-link",
+          "variant": "desktop",
+          "route": "reset matrix",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            1.949
+          ]
+        }
+      ],
+      "totalEntries": 24,
+      "totalFeedbackCues": 24,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "ATMOSPHERIC EXIT · CLIMB"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "KEEP THE KESTREL ASCENDING.",
+          "HOLD COURSE THROUGH THE ATMOSPHERE."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "travel"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 24,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 5
+    },
+    {
+      "runtimeObjectiveId": "ch8:launch:ignite",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.28
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.252
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.277
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.312
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.333
+          ]
+        },
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.339
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.193
+          ]
+        },
+        {
+          "source": "routeC-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.537
+          ]
+        },
+        {
+          "source": "routeC-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.482
+          ]
+        },
+        {
+          "source": "routeC-desktop/run3",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.454
+          ]
+        },
+        {
+          "source": "routeC-potato/run1",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            5.04
+          ]
+        },
+        {
+          "source": "routeC-potato/run2",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            5.067
+          ]
+        },
+        {
+          "source": "routeC-potato/run3",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:orbital-handoff"
+          ],
+          "screenLifeSeconds": [
+            5.058
+          ]
+        },
+        {
+          "source": "routeC-mobile/run1",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.586
+          ]
+        },
+        {
+          "source": "routeC-mobile/run2",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.544
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run1",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.469
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run2",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.489
+          ]
+        },
+        {
+          "source": "dive/run1",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.534
+          ]
+        },
+        {
+          "source": "dive/run2",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.521
+          ]
+        },
+        {
+          "source": "dive/run3",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.64
+          ]
+        },
+        {
+          "source": "routeA-ordered/run1",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            13.282
+          ]
+        },
+        {
+          "source": "routeA-ordered/run2",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            13.275
+          ]
+        },
+        {
+          "source": "routeA-ordered/run3",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            13.318
+          ]
+        },
+        {
+          "source": "replay/replay-deep-link",
+          "variant": "desktop",
+          "route": "reset matrix",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb"
+          ],
+          "screenLifeSeconds": [
+            3.453
+          ]
+        }
+      ],
+      "totalEntries": 24,
+      "totalFeedbackCues": 10,
+      "feedbackCuesPerEntry": 0.417,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL FLIGHT CONTROLS · IGNITE"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "BRING THE KESTREL ONLINE.",
+          "HOLD [SPACE] TO IGNITE AND LIFT."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 24,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "ch8:launch:orbital-handoff",
+      "observations": [
+        {
+          "source": "routeB-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.283
+          ]
+        },
+        {
+          "source": "routeB-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 chained movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.283
+          ]
+        },
+        {
+          "source": "routeC-desktop/run1",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeC-desktop/run2",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.283
+          ]
+        },
+        {
+          "source": "routeC-desktop/run3",
+          "variant": "desktop",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.216
+          ]
+        },
+        {
+          "source": "routeC-potato/run1",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeC-potato/run2",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.3
+          ]
+        },
+        {
+          "source": "routeC-potato/run3",
+          "variant": "quality-potato",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.302
+          ]
+        },
+        {
+          "source": "routeC-mobile/run1",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeC-mobile/run2",
+          "variant": "mobile",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run1",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeC-reduced-motion/run2",
+          "variant": "reduced-motion",
+          "route": "ch8 deep-link movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "dive/run1",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb",
+            null
+          ],
+          "screenLifeSeconds": [
+            15.088,
+            0.267
+          ]
+        },
+        {
+          "source": "dive/run2",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb",
+            null
+          ],
+          "screenLifeSeconds": [
+            14.966,
+            0.367
+          ]
+        },
+        {
+          "source": "dive/run3",
+          "variant": "desktop",
+          "route": "ch8 dive-and-climb",
+          "entries": 2,
+          "feedbackCues": 2,
+          "healthSequence": [
+            [
+              "ready"
+            ],
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "ch8:launch:climb",
+            null
+          ],
+          "screenLifeSeconds": [
+            14.937,
+            0.317
+          ]
+        },
+        {
+          "source": "routeA-ordered/run1",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.3
+          ]
+        },
+        {
+          "source": "routeA-ordered/run2",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.299
+          ]
+        },
+        {
+          "source": "routeA-ordered/run3",
+          "variant": "desktop",
+          "route": "ch8 canonical ordered-ignition",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.3
+          ]
+        },
+        {
+          "source": "replay/replay-deep-link",
+          "variant": "desktop",
+          "route": "reset matrix",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            15.3
+          ]
+        }
+      ],
+      "totalEntries": 22,
+      "totalFeedbackCues": 22,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "DEEP SPACE · HANDOFF"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "ATMOSPHERIC EXIT IS COMPLETE.",
+          "LET THE SYSTEM RESOLVE."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 22,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:calibrating",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.018
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.046
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.07
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.011
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.042
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:ready"
+          ],
+          "screenLifeSeconds": [
+            8.059
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "KESTREL · CALIBRATING"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "FLIGHT CALIBRATION IN PROGRESS."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:craft:flight_ready",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.019
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.021
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.01
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            6.037
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.018
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.031
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · CRAFT LOGIC WAFER"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "craft"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 3,
+      "missingMarkerObservations": 8,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:craft:lift_online",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.04
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.021
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.034
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            6.162
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.025
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.033
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · CRAFT LIFT CELL"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "craft"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 3,
+      "missingMarkerObservations": 8,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:diagnose",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            3.65
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            0.407
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            0.462
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            0.293
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            0.455
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 0,
+          "healthSequence": [
+            [
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:bench_online"
+          ],
+          "screenLifeSeconds": [
+            0.41
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 1,
+      "feedbackCuesPerEntry": 0.167,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK SCAR · TRACE RELATIONSHIPS"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 6,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:ready",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            8.17
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            8.158
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            8.142
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            5.022
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            8.175
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            null
+          ],
+          "screenLifeSeconds": [
+            8.156
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK · FLIGHT READY"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "FLIGHT CONTROLS CALIBRATED."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": false,
+      "kindsObserved": [
+        "wait"
+      ],
+      "requiresMarkerObserved": [
+        false
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 0,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:repair:bench_online",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.3
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.302
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.302
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            12.049
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.293
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:frame_restored"
+          ],
+          "screenLifeSeconds": [
+            1.305
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · RECOVER WRECK SALVAGE"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RECOVER WRECK SALVAGE."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 12,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:repair:flight_ready",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.68
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.678
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.623
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.684
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:calibrating"
+          ],
+          "screenLifeSeconds": [
+            0.635
+          ]
+        }
+      ],
+      "totalEntries": 5,
+      "totalFeedbackCues": 5,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · CALIBRATE FLIGHT CONTROLS"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] CALIBRATE FLIGHT CONTROLS."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 5,
+      "missingMarkerObservations": 10,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:repair:frame_restored",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.666
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            6.07
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:repair:hull_sealed"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · RESTORE STRUT FRAME"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] RESTORE STRUT FRAME."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 11,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:repair:hull_sealed",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.666
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        },
+        {
+          "source": "ch7manual/run1",
+          "variant": "desktop",
+          "route": "ch7 paced manual-shape",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            6.029
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.668
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:lift_online"
+          ],
+          "screenLifeSeconds": [
+            0.667
+          ]
+        }
+      ],
+      "totalEntries": 6,
+      "totalFeedbackCues": 6,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · SEAL SCARRED HULL"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] SEAL SCARRED HULL."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 6,
+      "missingMarkerObservations": 11,
+      "activeAtTraceEndCount": 0
+    },
+    {
+      "runtimeObjectiveId": "reconstruct:repair:lift_online",
+      "observations": [
+        {
+          "source": "ch7queue-desktop/run1",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.655
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run2",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.674
+          ]
+        },
+        {
+          "source": "ch7queue-desktop/run3",
+          "variant": "desktop",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.72
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-portrait/run1",
+          "variant": "mobile-portrait",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.671
+          ]
+        },
+        {
+          "source": "ch7mobile-mobile-landscape/run1",
+          "variant": "mobile-landscape",
+          "route": "ch7 movie",
+          "entries": 1,
+          "feedbackCues": 1,
+          "healthSequence": [
+            [
+              "missing-marker",
+              "ready",
+              "missing-marker"
+            ]
+          ],
+          "replacedBy": [
+            "reconstruct:craft:flight_ready"
+          ],
+          "screenLifeSeconds": [
+            0.686
+          ]
+        }
+      ],
+      "totalEntries": 5,
+      "totalFeedbackCues": 5,
+      "feedbackCuesPerEntry": 1,
+      "oneShotEntryFeedback": true,
+      "markerLabelsObserved": [
+        "WRECK BENCH · INSTALL LIFT CELL"
+      ],
+      "markerLabelSingular": true,
+      "workOrdersObserved": [
+        [
+          "RETURN TO THE WRECK BENCH.",
+          "[F] INSTALL LIFT CELL."
+        ]
+      ],
+      "workOrderCarriesVerbOrInput": true,
+      "kindsObserved": [
+        "interact"
+      ],
+      "requiresMarkerObserved": [
+        true
+      ],
+      "readyReachedCount": 5,
+      "missingMarkerObservations": 10,
+      "activeAtTraceEndCount": 0
+    }
+  ]
+}

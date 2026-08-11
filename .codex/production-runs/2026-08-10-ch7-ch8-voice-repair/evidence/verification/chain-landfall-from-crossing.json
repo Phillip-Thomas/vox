@@ -1,0 +1,1072 @@
+{
+  "url": "http://localhost:5176/?story=ch8-crossing&movie=1&profile=LOW",
+  "trace": [
+    {
+      "t": 0.1,
+      "beat": "ch8-crossing",
+      "obj": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      },
+      "ap": null
+    },
+    {
+      "t": 9.7,
+      "beat": "ch8-crossing",
+      "obj": {
+        "id": "ch8:crossing:hold-course",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD · COURSE",
+        "workOrder": [
+          "FOLLOW THE SIBLING WORLD MARKER.",
+          "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.7,
+        "nudges": 0,
+        "pos": [
+          8,
+          53.85,
+          -6
+        ]
+      }
+    },
+    {
+      "t": 16.7,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.2,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 19.7,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 29.8,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 39.8,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.2,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 49.9,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.1,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 59.9,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.3,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 69.9,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.2,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 80,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.4,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 90,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.3,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 100,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.5,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 110.1,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.4,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 120.1,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.6,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 130.1,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.6,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 140.1,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.7,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 150.2,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.7,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 160.2,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.8,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 170.2,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.8,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 180.3,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.9,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 190.3,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.9,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 200.3,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 2.1,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 210.4,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 220.4,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 2.2,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 230.4,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.1,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 239.5,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.3,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 249.5,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.3,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 259.6,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.5,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 269.6,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.4,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 279.6,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.6,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 289.7,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 0.5,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    },
+    {
+      "t": 299.7,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": null,
+        "keys": null,
+        "stillTime": 1.7,
+        "nudges": 0,
+        "pos": [
+          -107.52,
+          -15.53,
+          118.53
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "wall": 417.59999990463257,
+      "story": 417.59999990463257,
+      "beat": null,
+      "ch": "caption",
+      "text": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 417.59999990463257,
+      "story": 417.59999990463257,
+      "beat": null,
+      "ch": "audit",
+      "text": null,
+      "header": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 417.69999980926514,
+      "story": 417.69999980926514,
+      "beat": null,
+      "ch": "workorder",
+      "lines": []
+    },
+    {
+      "wall": 418.09999990463257,
+      "story": 418.09999990463257,
+      "beat": "ch8-crossing",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 418.39999985694885,
+      "story": 418.39999985694885,
+      "beat": "ch8-crossing",
+      "ch": "workorder",
+      "lines": [
+        "FIND THE SIBLING WORLD.",
+        "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+      ]
+    },
+    {
+      "wall": 418.39999985694885,
+      "story": 418.39999985694885,
+      "beat": "ch8-crossing",
+      "ch": "caption",
+      "text": "(there is another world here. it was always here.)",
+      "shownAt": 418.39999985694885,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 418.59999990463257,
+      "story": 418.59999990463257,
+      "beat": "ch8-crossing",
+      "ch": "workorder",
+      "lines": [
+        "FIND THE SIBLING WORLD.",
+        "CENTER IT AND SET COURSE."
+      ]
+    },
+    {
+      "wall": 448.19999980926514,
+      "story": 448.19999980926514,
+      "beat": "ch8-crossing",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:crossing:acquire-sibling",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 448.2999999523163,
+      "story": 448.2999999523163,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 3488.899999856949,
+      "story": 3488.899999856949,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 6989.5,
+      "story": 6989.5,
+      "beat": "ch8-crossing",
+      "ch": "workorder",
+      "lines": [
+        "FOLLOW THE SIBLING WORLD MARKER.",
+        "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+      ]
+    },
+    {
+      "wall": 6989.699999809265,
+      "story": 6989.699999809265,
+      "beat": "ch8-crossing",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:crossing:hold-course",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 6989.699999809265,
+      "story": 6989.699999809265,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:hold-course",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD · COURSE",
+        "workOrder": [
+          "FOLLOW THE SIBLING WORLD MARKER.",
+          "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 6989.899999856949,
+      "story": 6989.899999856949,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:hold-course",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD · COURSE",
+        "workOrder": [
+          "FOLLOW THE SIBLING WORLD MARKER.",
+          "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 16732.199999809265,
+      "story": 16732.199999809265,
+      "beat": "ch8-crossing",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:crossing:hold-course",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD · COURSE",
+        "workOrder": [
+          "FOLLOW THE SIBLING WORLD MARKER.",
+          "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 16872.699999809265,
+      "story": 16872.699999809265,
+      "beat": "ch8-landfall",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 16872.699999809265,
+      "story": 16872.699999809265,
+      "beat": "ch8-landfall",
+      "ch": "objective",
+      "objective": null
+    },
+    {
+      "wall": 16872.699999809265,
+      "story": 16872.699999809265,
+      "beat": "ch8-landfall",
+      "ch": "workorder",
+      "lines": [
+        "LAND ON DRY, LEVEL GROUND.",
+        "EXIT THE KESTREL."
+      ]
+    },
+    {
+      "wall": 16872.799999952316,
+      "story": 16872.799999952316,
+      "beat": "ch8-landfall",
+      "ch": "workorder",
+      "lines": [
+        "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+        "[F] LAND ON DRY, LEVEL GROUND."
+      ]
+    },
+    {
+      "wall": 16873,
+      "story": 16873,
+      "beat": "ch8-landfall",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:landfall:land-dry-level",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 16873,
+      "story": 16873,
+      "beat": "ch8-landfall",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    }
+  ]
+}

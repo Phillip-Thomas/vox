@@ -1,0 +1,38 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "contractVersion": "draft-v2",
+  "contractSha256": "aa7ea1ac3f60ad2c130e3eaa07c45b204be4a27f6ab2897e2035aeb9552aca8a",
+  "compiledAt": "2026-08-11T00:00:00Z",
+  "compiledBy": "Claude orchestrator compiler — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@286f9bf9c3bf10883d638d2edae86040d721c60fa8adf0d80c7b6f3160b4f3ca",
+  "reconstructionNote": "Derived 2026-08-11 from the canonical register's iterationIntroduced and iterationResolved fields. NOT a contemporaneous record: no defect-register bytes were captured at this iteration during the run, so this file states the register as it is now known to have stood, not as it was written then. The open-defect counts are honest — they follow directly from the recorded introduction and resolution iterations — but every statement, repair and route text is the closing-compile wording, and acceptance decisions taken at closeout are shown here as open because they had not yet been taken.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "40d1f016bbeead86b9f1da329c25259a2b0ec76ee76576819fdf787fd3115e21"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "f8d10735047678e5b4a23a7b55b2464bae925a87b069030c39c120c9e31ae6b4"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "96808d5041b52da736326f4431384ff91bade93bb7dc633035bc9988aa205979"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "8411405d2ee00babf2c79fcff7711f8986c8260e9ce9ef2b676bbcd3fa7985d6"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "56ead8c7889fe75ebd48725f8a6016f7585bd88b39ff90d97177c2aa6d0860e4"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "bd7491cfcffa547f3aac4e31e7aafc5138e3385aaee0d4209c9939a7ddce1822"
+    }
+  ],
+  "defects": []
+}

@@ -1,0 +1,89 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-08-10-ch7-ch8-voice-repair",
+  "mode": "scene",
+  "status": "locked",
+  "sourceRevision": "03e975a666767dd3d75fc339a3b3d61dfa755c4c",
+  "runProfileRef": "paravoxia-creative-scene@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner Gate Lift 2026-07-28, Owner Lane Override, Locked Owner Decisions",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    },
+    {
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "section": "Creative Triad authority, note passing, and cohesion review",
+      "sha256": "789aaa8c05c6bae27b77a01afc888f74e3142599addbd14a9340e8f5b67579fe"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-28-story-enjoyability/ch7-ch8-repair.md",
+      "section": "Chapter Director treatment entering the triad with contractChangeRequired: true (annotated 2026-08-10 per canon-audit F11: hosted-relay premise corrected; hash re-recorded by orchestrator lock action R7)",
+      "sha256": "7e7681cb30a5bb9b9009f11180725d23a9f2f22358b37c046e338fa2475804b7"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-28-story-enjoyability/owner-decision.md",
+      "section": "Owner approval, 2026-08-10, for the single ch7 exit shipped-string change",
+      "sha256": "ace14691602108509b4650d1d4e087f206272be64a3a28bafa4ecd0e73bd6b6c"
+    },
+    {
+      "path": ".codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
+      "section": "Signed A4 through Chapter 9 physical story contract",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "section": "Executable player-guidance context contract",
+      "sha256": "84851ca01ab09bae0210eaf8ff898e04d5f42a997067237d9115feb79dd3f477"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/storyText.ts",
+    "main/src/story/storyText.test.ts"
+  ],
+  "protectedPaths": [
+    "main/public/audio/",
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "main/src/story/emergentScoreDirector.ts",
+    "main/src/story/voyageDeck.ts",
+    "main/src/story/signedSceneAvRuntime.ts",
+    "main/src/story/generatedSceneAvRuntime.json",
+    "main/chapter-registry.json",
+    "main/chapter-journey-contract.json",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": [
+    "ch7-reconstruct",
+    "ch8-launch"
+  ],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [
+      "owner-decision-2026-08-10-ch7-exit-line"
+    ],
+    "protectedAudioPaths": [
+      "main/public/audio/",
+      "main/src/audio/",
+      "main/src/components/audio/",
+      "main/src/story/emergentScoreDirector.ts"
+    ],
+    "openGateRefs": [
+      "ch7-per-step-caption-lifecycle",
+      "ch8-anchor-copy-lifecycle",
+      "full-client-verify",
+      "canon-signoff-designation-line",
+      "human-release-decision"
+    ]
+  },
+  "canonicalPreviewUrl": "http://localhost:5176",
+  "publishAllowed": false,
+  "frozenAt": "2026-08-10T00:00:00Z"
+}

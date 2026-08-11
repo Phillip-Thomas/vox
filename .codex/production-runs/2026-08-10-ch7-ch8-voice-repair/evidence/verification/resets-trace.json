@@ -1,0 +1,1122 @@
+{
+  "mode": "resets",
+  "capturedAt": "2026-08-10T21:36:00.170Z",
+  "base": "http://localhost:5176",
+  "cases": [
+    {
+      "case": "sandbox_noop",
+      "url": "http://localhost:5176/",
+      "beat": null,
+      "events": [],
+      "storyText": {
+        "workorder": [],
+        "violation": [],
+        "caption": null,
+        "system": null,
+        "audit": null
+      },
+      "av": {
+        "sceneId": "distance-between-fires",
+        "contractRevision": "intent-v1",
+        "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+        "contractAnchorCount": 66,
+        "active": false,
+        "suspended": false,
+        "beat": null,
+        "anchorId": null,
+        "anchorEvent": null,
+        "activationSource": null,
+        "activationSequence": 0,
+        "activationHistoryAnchorIds": [],
+        "activatedAnchorIds": [],
+        "shot": null,
+        "score": {
+          "cueRefs": [],
+          "intensity": null,
+          "hit": null
+        },
+        "postFx": {
+          "activeEffectIds": [],
+          "supportMix": 0,
+          "lowTierFallbacks": [],
+          "reducedMotion": false
+        },
+        "lastResetReason": null
+      }
+    },
+    {
+      "case": "deep_link:ch7-board",
+      "url": "http://localhost:5176/?story=ch7-board&profile=LOW",
+      "beat": "ch7-board",
+      "objective": {
+        "id": "board:enter-hatch",
+        "kind": "interact",
+        "markerLabel": "KESTREL HATCH · BOARD",
+        "workOrder": [
+          "APPROACH THE KESTREL HATCH.",
+          "[F] ENTER THROUGH THE HATCH."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "events": [
+        {
+          "wall": 357.40000009536743,
+          "story": 357.40000009536743,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 357.40000009536743,
+          "story": 357.40000009536743,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 357.5,
+          "story": 357.5,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 357.90000009536743,
+          "story": 357.90000009536743,
+          "beat": "ch7-board",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 358.40000009536743,
+          "story": 358.40000009536743,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "wall": 388.40000009536743,
+          "story": 388.40000009536743,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:enter-hatch",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 388.5,
+          "story": 388.5,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 388.5,
+          "story": 388.5,
+          "beat": "ch7-board",
+          "ch": "caption",
+          "text": "(the wreck is waiting for an owner.)",
+          "shownAt": 388.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3493.7000000476837,
+          "story": 3493.7000000476837,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "case": "deep_link:ch8-crossing",
+      "url": "http://localhost:5176/?story=ch8-crossing&profile=LOW",
+      "beat": "ch8-crossing",
+      "objective": {
+        "id": "ch8:crossing:acquire-sibling",
+        "kind": "travel",
+        "markerLabel": "SIBLING WORLD",
+        "workOrder": [
+          "FIND THE SIBLING WORLD.",
+          "CENTER IT AND SET COURSE."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "events": [
+        {
+          "wall": 405.7999999523163,
+          "story": 405.7999999523163,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 405.7999999523163,
+          "story": 405.7999999523163,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 405.7999999523163,
+          "story": 405.7999999523163,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 406.2000000476837,
+          "story": 406.2000000476837,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 406.5,
+          "story": 406.5,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 406.59999990463257,
+          "story": 406.59999990463257,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 406.59999990463257,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 406.7000000476837,
+          "story": 406.7000000476837,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 414,
+          "story": 414,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 414.09999990463257,
+          "story": 414.09999990463257,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 3427.9000000953674,
+          "story": 3427.9000000953674,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "case": "deep_link:ch7-reconstruct",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&profile=LOW",
+      "beat": "ch7-reconstruct",
+      "objective": {
+        "id": "reconstruct:diagnose",
+        "kind": "interact",
+        "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+        "workOrder": [
+          "FOLLOW THE WRECK MARKER.",
+          "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "events": [
+        {
+          "wall": 399.2999999523163,
+          "story": 399.2999999523163,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 399.40000009536743,
+          "story": 399.40000009536743,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 399.40000009536743,
+          "story": 399.40000009536743,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 399.7000000476837,
+          "story": 399.7000000476837,
+          "beat": "ch7-reconstruct",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 400.2000000476837,
+          "story": 400.2000000476837,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "wall": 406.10000014305115,
+          "story": 406,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:diagnose",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 406.10000014305115,
+          "story": 406.10000014305115,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:diagnose",
+            "kind": "interact",
+            "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+            "workOrder": [
+              "FOLLOW THE WRECK MARKER.",
+              "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 406.10000014305115,
+          "story": 406.10000014305115,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "(repair is not return.)",
+          "shownAt": 406.10000014305115,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3633.7000000476837,
+          "story": 3633.7000000476837,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:diagnose",
+            "kind": "interact",
+            "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+            "workOrder": [
+              "FOLLOW THE WRECK MARKER.",
+              "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interrupt:pause",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "origin": {
+        "story": 6974.099999904633,
+        "wall": 6974.099999904633
+      },
+      "intervention": {
+        "kind": "pause",
+        "atStoryClock": 9976.5,
+        "atWindowOffsetSeconds": 3.002,
+        "resumeStoryClock": 15018.699999809265,
+        "heldSeconds": 5.042
+      },
+      "finalBeat": "ch8-crossing",
+      "events": [
+        {
+          "wall": 391.7999999523163,
+          "story": 391.7999999523163,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 391.7999999523163,
+          "story": 391.7999999523163,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 391.7999999523163,
+          "story": 391.7999999523163,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 392.5,
+          "story": 392.5,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 392.89999985694885,
+          "story": 392.89999985694885,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 393,
+          "story": 393,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 398.89999985694885,
+          "story": 398.89999985694885,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 398.89999985694885,
+          "story": 398.89999985694885,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3655.699999809265,
+          "story": 3655.699999809265,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3655.699999809265,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3655.7999999523163,
+          "story": 3655.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 3655.7999999523163,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3655.7999999523163,
+          "story": 3655.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 3655.7999999523163,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 6822.199999809265,
+          "story": 6822.199999809265,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 6822.399999856949,
+          "story": 6822.399999856949,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 6822.5,
+          "story": 6822.5,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 6974.099999904633,
+          "story": 6974.099999904633,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 6974,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 8738.599999904633,
+          "story": 8738.599999904633,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 8738.899999856949,
+          "story": 8738.899999856949,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 8739,
+          "story": 8739,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 8988.699999809265,
+          "story": 8988.699999809265,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 8988.699999809265,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 11005.199999809265,
+          "story": 11005.199999809265,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 11005.099999904633,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 13005.199999809265,
+          "story": 13005.199999809265,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13005.099999904633,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 15521.5,
+          "story": 15521.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 15521.5,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 18521.599999904633,
+          "story": 18521.599999904633,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 18521.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 21038.199999809265,
+          "story": 21038.099999904633,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 21038.099999904633,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24038.299999952316,
+          "story": 24038.299999952316,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 24038.39999985695,
+          "story": 24038.39999985695,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 24038.5,
+          "story": 24038.5,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 24038.5,
+          "story": 24038.5,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 24038.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24038.599999904633,
+          "story": 24038.599999904633,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 24038.799999952316,
+          "story": 24038.799999952316,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 24038.799999952316,
+          "story": 24038.799999952316,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 24039.699999809265,
+          "story": 24039.699999809265,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    },
+    {
+      "case": "interrupt:focus-loss",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "origin": {
+        "story": 7265.5,
+        "wall": 7265.5
+      },
+      "intervention": {
+        "kind": "focus-loss",
+        "atStoryClock": 10268.100000143051,
+        "atWindowOffsetSeconds": 3.003,
+        "resumeStoryClock": 15273.400000095367,
+        "heldSeconds": 5.005
+      },
+      "finalBeat": "ch8-crossing",
+      "events": [
+        {
+          "wall": 393,
+          "story": 393,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 393,
+          "story": 393,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 393,
+          "story": 393,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 393.7000000476837,
+          "story": 393.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 394,
+          "story": 394,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 394.10000014305115,
+          "story": 394.10000014305115,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 400.7000000476837,
+          "story": 400.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 400.7000000476837,
+          "story": 400.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 3933.7000000476837,
+          "story": 3933.7000000476837,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 3933.7000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3933.7999999523163,
+          "story": 3933.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "hold it. this is the only order left, and i am the one giving it.",
+          "shownAt": 3933.7999999523163,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3933.7999999523163,
+          "story": 3933.7999999523163,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the site gets small. the tree does not. i keep finding it.",
+          "shownAt": 3933.7999999523163,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 7152.799999952316,
+          "story": 7152.799999952316,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 7153,
+          "story": 7153,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 7153,
+          "story": 7153,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 7265.5,
+          "story": 7265.5,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 7265.400000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 9031.600000143051,
+          "story": 9031.600000143051,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 9031.799999952316,
+          "story": 9031.799999952316,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 9031.799999952316,
+          "story": 9031.799999952316,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 9281.5,
+          "story": 9281.5,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 9281.5,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 11298.400000095367,
+          "story": 11298.400000095367,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 11298.400000095367,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 13297.900000095367,
+          "story": 13297.900000095367,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 13297.799999952316,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 15797.900000095367,
+          "story": 15797.900000095367,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 15797.900000095367,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 18814.60000014305,
+          "story": 18814.60000014305,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 18814.60000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 21314.700000047684,
+          "story": 21314.700000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 21314.60000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24330.900000095367,
+          "story": 24330.900000095367,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 24330.900000095367,
+          "story": 24330.900000095367,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 24330.900000095367,
+          "story": 24330.900000095367,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 24330.900000095367,
+          "story": 24330.900000095367,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 24330.900000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 24331,
+          "story": 24331,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 24331.10000014305,
+          "story": 24331.10000014305,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 24331.10000014305,
+          "story": 24331.10000014305,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 24331.60000014305,
+          "story": 24331.60000014305,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        }
+      ]
+    }
+  ]
+}

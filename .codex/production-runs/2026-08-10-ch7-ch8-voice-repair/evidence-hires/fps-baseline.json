@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-08-10T18:56:27.032Z",
+  "viewport": "1280x720",
+  "qualityTier": "LOW",
+  "beats": [
+    {
+      "beat": "ch7-reconstruct",
+      "liveBeat": "ch7-reconstruct",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.29,
+        59.99,
+        60.12
+      ],
+      "median": 60.12
+    },
+    {
+      "beat": "ch7-board",
+      "liveBeat": "ch7-board",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.54,
+        60.11,
+        60.07
+      ],
+      "median": 60.11
+    },
+    {
+      "beat": "ch8-launch",
+      "liveBeat": "ch8-launch",
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "fps": [
+        60.35,
+        60.08,
+        60.08
+      ],
+      "median": 60.08
+    }
+  ]
+}

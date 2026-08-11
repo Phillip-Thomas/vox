@@ -1,0 +1,1739 @@
+{
+  "mode": "full-flow",
+  "capturedAt": "2026-08-10T21:08:43.001Z",
+  "base": "http://localhost:5176",
+  "runs": [
+    {
+      "url": "http://localhost:5176/?story=ch6-dive&movie=1&profile=LOW",
+      "startedAt": "2026-08-10T21:08:43.063Z",
+      "events": [
+        {
+          "wall": 374.30000019073486,
+          "story": 374.30000019073486,
+          "beat": null,
+          "ch": "caption",
+          "text": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 374.40000009536743,
+          "story": 374.40000009536743,
+          "beat": null,
+          "ch": "audit",
+          "text": null,
+          "header": null,
+          "shownAt": null,
+          "ttlMs": null
+        },
+        {
+          "wall": 374.40000009536743,
+          "story": 374.40000009536743,
+          "beat": null,
+          "ch": "workorder",
+          "lines": []
+        },
+        {
+          "wall": 374.7000000476837,
+          "story": 374.7000000476837,
+          "beat": "ch6-dive",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 375,
+          "story": 375,
+          "beat": "ch6-dive",
+          "ch": "workorder",
+          "lines": [
+            "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+            "INTERACT TO RECOVER THE KEEL MEMORY."
+          ]
+        },
+        {
+          "wall": 403.7000000476837,
+          "story": 403.60000014305115,
+          "beat": "ch6-dive",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "dive:recover-keel-memory",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 403.7000000476837,
+          "story": 403.7000000476837,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:recover-keel-memory",
+            "kind": "interact",
+            "markerLabel": "KEEL MEMORY",
+            "workOrder": [
+              "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+              "INTERACT TO RECOVER THE KEEL MEMORY."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 403.7000000476837,
+          "story": 403.7000000476837,
+          "beat": "ch6-dive",
+          "ch": "caption",
+          "text": "(the repaired tool has marked something beneath the water.)",
+          "shownAt": 403.7000000476837,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 3625.800000190735,
+          "story": 3625.800000190735,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:recover-keel-memory",
+            "kind": "interact",
+            "markerLabel": "KEEL MEMORY",
+            "workOrder": [
+              "FOLLOW THE KEEL MEMORY MARKER BELOW.",
+              "INTERACT TO RECOVER THE KEEL MEMORY."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 21011,
+          "story": 21011,
+          "beat": "ch6-dive",
+          "ch": "workorder",
+          "lines": [
+            "CARRY THE KEEL MEMORY THROUGH THE WATERLINE.",
+            "IF RECOVERY MOVED YOU TO SHORE, RE-ENTER THE WATER AND SURFACE."
+          ]
+        },
+        {
+          "wall": 21011.10000014305,
+          "story": 21011.10000014305,
+          "beat": "ch6-dive",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "dive:surface-with-keel",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 21011.10000014305,
+          "story": 21011.10000014305,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:surface-with-keel",
+            "kind": "travel",
+            "markerLabel": "WATERLINE · SURFACE WITH KEEL",
+            "workOrder": [
+              "CARRY THE KEEL MEMORY THROUGH THE WATERLINE.",
+              "IF RECOVERY MOVED YOU TO SHORE, RE-ENTER THE WATER AND SURFACE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 21011.300000190735,
+          "story": 21011.300000190735,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:surface-with-keel",
+            "kind": "travel",
+            "markerLabel": "WATERLINE · SURFACE WITH KEEL",
+            "workOrder": [
+              "CARRY THE KEEL MEMORY THROUGH THE WATERLINE.",
+              "IF RECOVERY MOVED YOU TO SHORE, RE-ENTER THE WATER AND SURFACE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 22064,
+          "story": 22064,
+          "beat": "ch6-dive",
+          "ch": "workorder",
+          "lines": [
+            "FOLLOW THE DRY SHORE MARKER.",
+            "RETURN THE KEEL MEMORY TO DRY GROUND."
+          ]
+        },
+        {
+          "wall": 22064.300000190735,
+          "story": 22064.300000190735,
+          "beat": "ch6-dive",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "dive:return-to-shore",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 22064.300000190735,
+          "story": 22064.300000190735,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:return-to-shore",
+            "kind": "travel",
+            "markerLabel": "DRY SHORE · SECURE KEEL MEMORY",
+            "workOrder": [
+              "FOLLOW THE DRY SHORE MARKER.",
+              "RETURN THE KEEL MEMORY TO DRY GROUND."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 22064.5,
+          "story": 22064.5,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:return-to-shore",
+            "kind": "travel",
+            "markerLabel": "DRY SHORE · SECURE KEEL MEMORY",
+            "workOrder": [
+              "FOLLOW THE DRY SHORE MARKER.",
+              "RETURN THE KEEL MEMORY TO DRY GROUND."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 24352.400000095367,
+          "story": 24352.400000095367,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:return-to-shore",
+            "kind": "travel",
+            "markerLabel": "DRY SHORE · SECURE KEEL MEMORY",
+            "workOrder": [
+              "FOLLOW THE DRY SHORE MARKER.",
+              "RETURN THE KEEL MEMORY TO DRY GROUND."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 24397.300000190735,
+          "story": 24397.300000190735,
+          "beat": "ch6-dive",
+          "ch": "workorder",
+          "lines": [
+            "KEEL MEMORY SECURED.",
+            "BREATHE. LET THE SHORE RETURN."
+          ]
+        },
+        {
+          "wall": 24397.400000095367,
+          "story": 24397.400000095367,
+          "beat": "ch6-dive",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "dive:shore-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 24397.400000095367,
+          "story": 24397.400000095367,
+          "beat": "ch6-dive",
+          "ch": "objective",
+          "objective": {
+            "id": "dive:shore-handoff",
+            "kind": "wait",
+            "markerLabel": "KEEL MEMORY · SECURED",
+            "workOrder": [
+              "KEEL MEMORY SECURED.",
+              "BREATHE. LET THE SHORE RETURN."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 24397.5,
+          "story": 24397.5,
+          "beat": "ch6-dive",
+          "ch": "caption",
+          "text": "(returned with breath. returned with a way to leave.)",
+          "shownAt": 24397.400000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 27009.5,
+          "story": 27009.5,
+          "beat": "ch7-reconstruct",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 27009.60000014305,
+          "story": 27009.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 27009.700000047684,
+          "story": 27009.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "FOLLOW THE WRECK MARKER.",
+            "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+          ]
+        },
+        {
+          "wall": 27009.900000095367,
+          "story": 27009.900000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:diagnose",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 27009.900000095367,
+          "story": 27009.900000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:diagnose",
+            "kind": "interact",
+            "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+            "workOrder": [
+              "FOLLOW THE WRECK MARKER.",
+              "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 27009.900000095367,
+          "story": 27009.900000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "(repair is not return.)",
+          "shownAt": 27009.900000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 27011.10000014305,
+          "story": 27011.10000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:diagnose",
+            "kind": "interact",
+            "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+            "workOrder": [
+              "FOLLOW THE WRECK MARKER.",
+              "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 27427.200000047684,
+          "story": 27427.200000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:diagnose",
+            "kind": "interact",
+            "markerLabel": "WRECK SCAR · TRACE RELATIONSHIPS",
+            "workOrder": [
+              "FOLLOW THE WRECK MARKER.",
+              "AIM AT THE SCAR. [F] TRACE RELATIONSHIPS."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 27473.200000047684,
+          "story": 27473.200000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RECOVER WRECK SALVAGE."
+          ]
+        },
+        {
+          "wall": 27473.300000190735,
+          "story": 27473.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:repair:bench_online",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 27473.300000190735,
+          "story": 27473.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:bench_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RECOVER WRECK SALVAGE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 27473.400000095367,
+          "story": 27473.400000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "audit",
+          "text": "HULL AT SITE 7C-θ · FILED: TOTAL LOSS · FILE CLOSED",
+          "header": "WRECK RELAY",
+          "shownAt": 27473.400000095367,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 27473.400000095367,
+          "story": 27473.400000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "the wreck that brought me here will leave here. i will build the leaving.",
+          "shownAt": 27473.400000095367,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 27473.5,
+          "story": 27473.5,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:bench_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RECOVER WRECK SALVAGE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 28097.800000190735,
+          "story": 28097.800000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:bench_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RECOVER WRECK SALVAGE",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RECOVER WRECK SALVAGE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 28776.300000190735,
+          "story": 28776.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] RESTORE STRUT FRAME."
+          ]
+        },
+        {
+          "wall": 28776.5,
+          "story": 28776.5,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:repair:frame_restored",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 28776.5,
+          "story": 28776.5,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:frame_restored",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RESTORE STRUT FRAME."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 28776.60000014305,
+          "story": 28776.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "the keel takes the weight first. everything after this is allowed to be heavy.",
+          "shownAt": 28776.60000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 28776.60000014305,
+          "story": 28776.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:frame_restored",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RESTORE STRUT FRAME."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 29426.700000047684,
+          "story": 29426.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:frame_restored",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · RESTORE STRUT FRAME",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] RESTORE STRUT FRAME."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 29443.5,
+          "story": 29443.5,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] SEAL SCARRED HULL."
+          ]
+        },
+        {
+          "wall": 29443.700000047684,
+          "story": 29443.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:repair:hull_sealed",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 29443.700000047684,
+          "story": 29443.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:hull_sealed",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] SEAL SCARRED HULL."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 29443.700000047684,
+          "story": 29443.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "it remembers a straight line and goes back to it without being told. i watch that closely.",
+          "shownAt": 29443.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 29443.800000190735,
+          "story": 29443.800000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:hull_sealed",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] SEAL SCARRED HULL."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 30093.400000095367,
+          "story": 30093.400000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:hull_sealed",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · SEAL SCARRED HULL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] SEAL SCARRED HULL."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30110.400000095367,
+          "story": 30110.400000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+          ]
+        },
+        {
+          "wall": 30110.700000047684,
+          "story": 30110.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:craft:lift_online",
+            "action": "craft"
+          }
+        },
+        {
+          "wall": 30110.700000047684,
+          "story": 30110.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:craft:lift_online",
+            "kind": "craft",
+            "markerLabel": "WRECK BENCH · CRAFT LIFT CELL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[C] OPEN FABRICATOR. CRAFT LIFT CELL."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30110.700000047684,
+          "story": 30110.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "audit",
+          "text": "PRESSURE BOUNDARY HELD · PASSIVE BEACON RESTORED",
+          "header": "WRECK RELAY",
+          "shownAt": 30110.700000047684,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 30110.700000047684,
+          "story": 30110.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "i closed it, and something inside started listening again. i did that too.",
+          "shownAt": 30110.700000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 30147.200000047684,
+          "story": 30147.200000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] INSTALL LIFT CELL."
+          ]
+        },
+        {
+          "wall": 30147.300000190735,
+          "story": 30147.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:repair:lift_online",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 30147.300000190735,
+          "story": 30147.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:lift_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] INSTALL LIFT CELL."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30147.5,
+          "story": 30147.5,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:lift_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] INSTALL LIFT CELL."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 30760.200000047684,
+          "story": 30760.200000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:lift_online",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · INSTALL LIFT CELL",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] INSTALL LIFT CELL."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30829.400000095367,
+          "story": 30829.400000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+          ]
+        },
+        {
+          "wall": 30829.5,
+          "story": 30829.5,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:craft:flight_ready",
+            "action": "craft"
+          }
+        },
+        {
+          "wall": 30829.5,
+          "story": 30829.5,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:craft:flight_ready",
+            "kind": "craft",
+            "markerLabel": "WRECK BENCH · CRAFT LOGIC WAFER",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[C] OPEN FABRICATOR. CRAFT LOGIC WAFER."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30829.60000014305,
+          "story": 30829.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "audit",
+          "text": "POWER BUS LIVE · TRANSPONDER ARMED",
+          "header": "WRECK RELAY",
+          "shownAt": 30829.60000014305,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 30829.60000014305,
+          "story": 30829.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "the ground's hold is a habit, not a law.",
+          "shownAt": 30829.60000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 30848.60000014305,
+          "story": 30848.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "RETURN TO THE WRECK BENCH.",
+            "[F] CALIBRATE FLIGHT CONTROLS."
+          ]
+        },
+        {
+          "wall": 30848.700000047684,
+          "story": 30848.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:repair:flight_ready",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 30848.800000190735,
+          "story": 30848.800000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:flight_ready",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] CALIBRATE FLIGHT CONTROLS."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 30848.800000190735,
+          "story": 30848.800000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:flight_ready",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] CALIBRATE FLIGHT CONTROLS."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 31427.300000190735,
+          "story": 31427.300000190735,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:repair:flight_ready",
+            "kind": "interact",
+            "markerLabel": "WRECK BENCH · CALIBRATE FLIGHT CONTROLS",
+            "workOrder": [
+              "RETURN TO THE WRECK BENCH.",
+              "[F] CALIBRATE FLIGHT CONTROLS."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 31495.900000095367,
+          "story": 31495.900000095367,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "FLIGHT CALIBRATION IN PROGRESS."
+          ]
+        },
+        {
+          "wall": 31496,
+          "story": 31496,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:calibrating",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 31496,
+          "story": 31496,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:calibrating",
+            "kind": "wait",
+            "markerLabel": "KESTREL · CALIBRATING",
+            "workOrder": [
+              "FLIGHT CALIBRATION IN PROGRESS."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 31496,
+          "story": 31496,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "the last part is the part that thinks. i am being watched now. i put it in anyway.",
+          "shownAt": 31496,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 39529.40000009537,
+          "story": 39529.40000009537,
+          "beat": "ch7-reconstruct",
+          "ch": "workorder",
+          "lines": [
+            "FLIGHT CONTROLS CALIBRATED."
+          ]
+        },
+        {
+          "wall": 39529.5,
+          "story": 39529.5,
+          "beat": "ch7-reconstruct",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "reconstruct:ready",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 39529.60000014305,
+          "story": 39529.60000014305,
+          "beat": "ch7-reconstruct",
+          "ch": "objective",
+          "objective": {
+            "id": "reconstruct:ready",
+            "kind": "wait",
+            "markerLabel": "WRECK · FLIGHT READY",
+            "workOrder": [
+              "FLIGHT CONTROLS CALIBRATED."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 39529.700000047684,
+          "story": 39529.700000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "audit",
+          "text": "UNSCHEDULED HULL · SITE 7C-θ · INTEREST RAISED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 39529.700000047684,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 40143.200000047684,
+          "story": 40143.200000047684,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "nothing has asked yet. something has started paying attention.",
+          "shownAt": 40143.200000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 42542,
+          "story": 42542,
+          "beat": "ch7-reconstruct",
+          "ch": "caption",
+          "text": "the scar remains. now it can carry me.",
+          "shownAt": 42542,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 44559,
+          "story": 44559,
+          "beat": "ch7-board",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 44559.200000047684,
+          "story": 44559.200000047684,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 44559.300000190735,
+          "story": 44559.300000190735,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "APPROACH THE KESTREL HATCH.",
+            "[F] ENTER THROUGH THE HATCH."
+          ]
+        },
+        {
+          "wall": 44559.40000009537,
+          "story": 44559.40000009537,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:enter-hatch",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 44559.40000009537,
+          "story": 44559.40000009537,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 44559.40000009537,
+          "story": 44559.40000009537,
+          "beat": "ch7-board",
+          "ch": "caption",
+          "text": "(the wreck is waiting for an owner.)",
+          "shownAt": 44559.40000009537,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 44559.60000014305,
+          "story": 44559.60000014305,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 45076.200000047684,
+          "story": 45076.200000047684,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:enter-hatch",
+            "kind": "interact",
+            "markerLabel": "KESTREL HATCH · BOARD",
+            "workOrder": [
+              "APPROACH THE KESTREL HATCH.",
+              "[F] ENTER THROUGH THE HATCH."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 45092.200000047684,
+          "story": 45092.200000047684,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "HATCH TRANSFER IN PROGRESS.",
+            "HOLD POSITION · ESC TO STEP BACK."
+          ]
+        },
+        {
+          "wall": 45092.300000190735,
+          "story": 45092.300000190735,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:hatch-in-progress",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 45092.300000190735,
+          "story": 45092.300000190735,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:hatch-in-progress",
+            "kind": "wait",
+            "markerLabel": "KESTREL HATCH · ENTERING",
+            "workOrder": [
+              "HATCH TRANSFER IN PROGRESS.",
+              "HOLD POSITION · ESC TO STEP BACK."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 46175.700000047684,
+          "story": 46175.700000047684,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "PRESSURE BOUNDARY CLOSING."
+          ]
+        },
+        {
+          "wall": 46175.90000009537,
+          "story": 46175.90000009537,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:pressure-seal",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 46175.90000009537,
+          "story": 46175.90000009537,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:pressure-seal",
+            "kind": "wait",
+            "markerLabel": "KESTREL · PRESSURE SEAL",
+            "workOrder": [
+              "PRESSURE BOUNDARY CLOSING."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 46802.700000047684,
+          "story": 46802.700000047684,
+          "beat": "ch7-board",
+          "ch": "workorder",
+          "lines": [
+            "COCKPIT CONTROL ESTABLISHED."
+          ]
+        },
+        {
+          "wall": 46802.800000190735,
+          "story": 46802.800000190735,
+          "beat": "ch7-board",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "board:cockpit-secured",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 46802.800000190735,
+          "story": 46802.800000190735,
+          "beat": "ch7-board",
+          "ch": "objective",
+          "objective": {
+            "id": "board:cockpit-secured",
+            "kind": "wait",
+            "markerLabel": "KESTREL · COCKPIT SECURED",
+            "workOrder": [
+              "COCKPIT CONTROL ESTABLISHED."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 46802.90000009537,
+          "story": 46802.90000009537,
+          "beat": "ch8-launch",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 46803,
+          "story": 46803,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 46803,
+          "story": 46803,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "IGNITE. LIFT. LEAVE THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 46803.10000014305,
+          "story": 46803.10000014305,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "BRING THE KESTREL ONLINE.",
+            "HOLD [SPACE] TO IGNITE AND LIFT."
+          ]
+        },
+        {
+          "wall": 46803.10000014305,
+          "story": 46803.10000014305,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:ignite",
+            "action": "interact"
+          }
+        },
+        {
+          "wall": 46803.10000014305,
+          "story": 46803.10000014305,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:ignite",
+            "kind": "interact",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 46851.60000014305,
+          "story": 46851.60000014305,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "the pond answered every time i asked. i am leaving anyway — that is what the answers were for.",
+          "shownAt": 46851.60000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 50056.5,
+          "story": 50056.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "KEEP THE KESTREL ASCENDING.",
+            "HOLD COURSE THROUGH THE ATMOSPHERE."
+          ]
+        },
+        {
+          "wall": 50056.60000014305,
+          "story": 50056.60000014305,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:climb",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 50056.60000014305,
+          "story": 50056.60000014305,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:climb",
+            "kind": "travel",
+            "markerLabel": "ATMOSPHERIC EXIT · CLIMB",
+            "workOrder": [
+              "KEEP THE KESTREL ASCENDING.",
+              "HOLD COURSE THROUGH THE ATMOSPHERE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 50159,
+          "story": 50159,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "i came down this line without being asked. i am going back up it on purpose.",
+          "shownAt": 50159,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 51925.5,
+          "story": 51925.5,
+          "beat": "ch8-launch",
+          "ch": "workorder",
+          "lines": [
+            "ATMOSPHERIC EXIT IS COMPLETE.",
+            "LET THE SYSTEM RESOLVE."
+          ]
+        },
+        {
+          "wall": 51925.700000047684,
+          "story": 51925.700000047684,
+          "beat": "ch8-launch",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:launch:orbital-handoff",
+            "action": "wait"
+          }
+        },
+        {
+          "wall": 51925.700000047684,
+          "story": 51925.700000047684,
+          "beat": "ch8-launch",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:launch:orbital-handoff",
+            "kind": "wait",
+            "markerLabel": "DEEP SPACE · HANDOFF",
+            "workOrder": [
+              "ATMOSPHERIC EXIT IS COMPLETE.",
+              "LET THE SYSTEM RESOLVE."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 52175.40000009537,
+          "story": 52175.40000009537,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "AUTOMATED CONTACT · SITE 7C-θ · HULL LOGGED: DESTROYED",
+          "header": "AUDIT NETWORK",
+          "shownAt": 52175.40000009537,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 54192.40000009537,
+          "story": 54192.40000009537,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "REGISTRY QUERY · STATE DESIGNATION.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 54192.40000009537,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 56191.800000190735,
+          "story": 56191.800000190735,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "NO DESIGNATION RETURNED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 56191.800000190735,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 58708.200000047684,
+          "story": 58708.200000047684,
+          "beat": "ch8-launch",
+          "ch": "audit",
+          "text": "CONTACT LOGGED.",
+          "header": "AUDIT NETWORK",
+          "shownAt": 58708.200000047684,
+          "ttlMs": 6500
+        },
+        {
+          "wall": 61708.10000014305,
+          "story": 61708.10000014305,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "they asked for a designation. what i have is not one.",
+          "shownAt": 61708.10000014305,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 64225.200000047684,
+          "story": 64225.200000047684,
+          "beat": "ch8-launch",
+          "ch": "caption",
+          "text": "nothing answers. the query does not close.",
+          "shownAt": 64225.200000047684,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 67224.5,
+          "story": 67224.5,
+          "beat": "ch8-crossing",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 67224.5,
+          "story": 67224.5,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 67224.5,
+          "story": 67224.5,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 67224.60000014305,
+          "story": 67224.60000014305,
+          "beat": "ch8-crossing",
+          "ch": "caption",
+          "text": "(there is another world here. it was always here.)",
+          "shownAt": 67224.5,
+          "ttlMs": 5200
+        },
+        {
+          "wall": 67224.70000004768,
+          "story": 67224.70000004768,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FIND THE SIBLING WORLD.",
+            "CENTER IT AND SET COURSE."
+          ]
+        },
+        {
+          "wall": 67224.90000009537,
+          "story": 67224.90000009537,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:acquire-sibling",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 67224.90000009537,
+          "story": 67224.90000009537,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 67225.30000019073,
+          "story": 67225.30000019073,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:acquire-sibling",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD",
+            "workOrder": [
+              "FIND THE SIBLING WORLD.",
+              "CENTER IT AND SET COURSE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 70391.60000014305,
+          "story": 70391.60000014305,
+          "beat": "ch8-crossing",
+          "ch": "workorder",
+          "lines": [
+            "FOLLOW THE SIBLING WORLD MARKER.",
+            "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+          ]
+        },
+        {
+          "wall": 70391.80000019073,
+          "story": 70391.80000019073,
+          "beat": "ch8-crossing",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:crossing:hold-course",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 70391.80000019073,
+          "story": 70391.80000019073,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:hold-course",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD · COURSE",
+            "workOrder": [
+              "FOLLOW THE SIBLING WORLD MARKER.",
+              "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 70391.90000009537,
+          "story": 70391.90000009537,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:hold-course",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD · COURSE",
+            "workOrder": [
+              "FOLLOW THE SIBLING WORLD MARKER.",
+              "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+            ],
+            "requiresMarker": true,
+            "health": "ready"
+          }
+        },
+        {
+          "wall": 94669.5,
+          "story": 94669.5,
+          "beat": "ch8-crossing",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:crossing:hold-course",
+            "kind": "travel",
+            "markerLabel": "SIBLING WORLD · COURSE",
+            "workOrder": [
+              "FOLLOW THE SIBLING WORLD MARKER.",
+              "HOLD COURSE INTO ITS APPROACH ENVELOPE."
+            ],
+            "requiresMarker": true,
+            "health": "missing-marker"
+          }
+        },
+        {
+          "wall": 94806.90000009537,
+          "story": 94806.90000009537,
+          "beat": "ch8-landfall",
+          "ch": "beat",
+          "active": true,
+          "era": null
+        },
+        {
+          "wall": 94806.90000009537,
+          "story": 94806.90000009537,
+          "beat": "ch8-landfall",
+          "ch": "objective",
+          "objective": null
+        },
+        {
+          "wall": 94806.90000009537,
+          "story": 94806.90000009537,
+          "beat": "ch8-landfall",
+          "ch": "workorder",
+          "lines": [
+            "LAND ON DRY, LEVEL GROUND.",
+            "EXIT THE KESTREL."
+          ]
+        },
+        {
+          "wall": 94807.10000014305,
+          "story": 94807.10000014305,
+          "beat": "ch8-landfall",
+          "ch": "workorder",
+          "lines": [
+            "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+            "[F] LAND ON DRY, LEVEL GROUND."
+          ]
+        },
+        {
+          "wall": 94807.20000004768,
+          "story": 94807.20000004768,
+          "beat": "ch8-landfall",
+          "ch": "feedback",
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "ch8:landfall:land-dry-level",
+            "action": "travel"
+          }
+        },
+        {
+          "wall": 94807.20000004768,
+          "story": 94807.20000004768,
+          "beat": "ch8-landfall",
+          "ch": "objective",
+          "objective": {
+            "id": "ch8:landfall:land-dry-level",
+            "kind": "travel",
+            "markerLabel": "DRY LEVEL GROUND",
+            "workOrder": [
+              "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+              "[F] LAND ON DRY, LEVEL GROUND."
+            ],
+            "requiresMarker": false,
+            "health": "ready"
+          }
+        }
+      ],
+      "shots": [],
+      "pageErrors": [],
+      "instrumentedMs": 371,
+      "timedOut": true,
+      "finalAv": {
+        "sceneId": "distance-between-fires",
+        "contractRevision": "intent-v1",
+        "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+        "contractAnchorCount": 66,
+        "active": true,
+        "suspended": false,
+        "beat": "ch8-landfall",
+        "anchorId": "anc.crossing.approach",
+        "anchorEvent": "ev.crossing.approach-established",
+        "activationSource": "semantic-event",
+        "activationSequence": 22,
+        "activationHistoryAnchorIds": [
+          "anc.dive.waterline",
+          "anc.dive.keel-revealed",
+          "anc.dive.keel-freed",
+          "anc.dive.surface",
+          "anc.dive.shore-bank",
+          "anc.reconstruct.diagnosis",
+          "anc.reconstruct.bench-online",
+          "anc.reconstruct.frame-restored",
+          "anc.reconstruct.hull-sealed",
+          "anc.reconstruct.lift-online",
+          "anc.reconstruct.route-online",
+          "anc.reconstruct.calibration",
+          "anc.board.hatch-enter",
+          "anc.board.camera-transfer",
+          "anc.board.pressure-seal",
+          "anc.board.cockpit-handback",
+          "anc.launch.ignition",
+          "anc.launch.liftoff",
+          "anc.launch.atmosphere-exit",
+          "anc.crossing.sibling-targeted",
+          "anc.crossing.local-handoff",
+          "anc.crossing.approach"
+        ],
+        "activatedAnchorIds": [],
+        "shot": {
+          "id": "cin.landfall.01-read-the-ground",
+          "cameraAuthority": "lens-rig",
+          "transitionType": "occlusion",
+          "declaredCut": false,
+          "lens": {
+            "startFovDeg": 70,
+            "endFovDeg": 72,
+            "durationMs": 0,
+            "elapsedMs": 0,
+            "appliedFovDeg": null,
+            "reducedMotion": false
+          },
+          "agency": {
+            "movement": "blended",
+            "look": "blended",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.landfall.touchdown"
+          }
+        },
+        "score": {
+          "cueRefs": [
+            "sc.crossing.distance"
+          ],
+          "intensity": 0.42,
+          "hit": null
+        },
+        "postFx": {
+          "activeEffectIds": [
+            "fx.landfall.01-read-the-ground"
+          ],
+          "supportMix": 1,
+          "lowTierFallbacks": [
+            "physical-state"
+          ],
+          "reducedMotion": false
+        },
+        "lastResetReason": "beat-exit"
+      },
+      "finalObjective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "reachedStopBeat": false,
+      "durationMs": 600069,
+      "endedAt": "2026-08-10T21:18:43.132Z"
+    }
+  ]
+}

@@ -1,0 +1,1817 @@
+{
+  "capturedAt": "2026-08-10T18:54:04.828Z",
+  "base": "http://localhost:5176",
+  "scenarios": [
+    {
+      "id": "ch7-reconstruct",
+      "url": "http://localhost:5176/?story=ch7-reconstruct&movie=1&profile=LOW",
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSource": null,
+            "activationSequence": 0,
+            "activationHistoryAnchorIds": [],
+            "activatedAnchorIds": [],
+            "shot": null,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.26,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [],
+              "supportMix": 0,
+              "lowTierFallbacks": [],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "wrecked",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 3.83,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.diagnosis",
+            "anchorEvent": "ev.reconstruct.relationships-diagnosed",
+            "activationSource": "semantic-event",
+            "activationSequence": 1,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.02-bench-wakes",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.bench-online"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.02-bench-wakes"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "wrecked",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 5.09,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.bench-online",
+            "anchorEvent": "ship_repair_stage:bench_online",
+            "activationSource": "story-event",
+            "activationSequence": 2,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.03-bearing-weight",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.frame-restored"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.03-bearing-weight"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "bench_online",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 5.72,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.frame-restored",
+            "anchorEvent": "ship_repair_stage:frame_restored",
+            "activationSource": "story-event",
+            "activationSequence": 3,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.04-boundary-seals",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.hull-sealed"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.04-boundary-seals"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "frame_restored",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 6.57,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.hull-sealed",
+            "anchorEvent": "ship_repair_stage:hull_sealed",
+            "activationSource": "story-event",
+            "activationSequence": 4,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.05-pulse-enters",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.lift-online"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.05-pulse-enters"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "hull_sealed",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 7.19,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.lift-online",
+            "anchorEvent": "ship_repair_stage:lift_online",
+            "activationSource": "story-event",
+            "activationSequence": 5,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.06-ground-relents",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.first-hover"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.06-ground-relents"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "lift_online",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 7.81,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.route-online",
+            "anchorEvent": "ev.reconstruct.flight-ready",
+            "activationSource": "story-event",
+            "activationSequence": 6,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.08-ready-is-not-departed",
+              "cameraAuthority": "player-camera",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 75,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 75,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.calibration"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.08-ready-is-not-departed"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 0,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 52,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 15.87,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.calibration",
+            "anchorEvent": "ev.reconstruct.calibration-completed",
+            "activationSource": "semantic-event",
+            "activationSequence": 7,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.09-one-exterior-reveal",
+              "cameraAuthority": "cinematic-look",
+              "transitionType": "occlusion",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 52,
+                "endFovDeg": 52,
+                "durationMs": 350,
+                "elapsedMs": 99.59999990463257,
+                "appliedFovDeg": 52,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.calibration"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.09-one-exterior-reveal"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 52,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 16.07,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.calibration",
+            "anchorEvent": "ev.reconstruct.calibration-completed",
+            "activationSource": "semantic-event",
+            "activationSequence": 7,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.09-one-exterior-reveal",
+              "cameraAuthority": "cinematic-look",
+              "transitionType": "occlusion",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 52,
+                "endFovDeg": 52,
+                "durationMs": 350,
+                "elapsedMs": 299,
+                "appliedFovDeg": 52,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.calibration"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.09-one-exterior-reveal"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 52,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 16.28,
+          "beat": "ch7-reconstruct",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-reconstruct",
+            "anchorId": "anc.reconstruct.calibration",
+            "anchorEvent": "ev.reconstruct.calibration-completed",
+            "activationSource": "semantic-event",
+            "activationSequence": 7,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "activatedAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "shot": {
+              "id": "cin.reconstruct.09-one-exterior-reveal",
+              "cameraAuthority": "cinematic-look",
+              "transitionType": "occlusion",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 52,
+                "endFovDeg": 52,
+                "durationMs": 350,
+                "elapsedMs": 350,
+                "appliedFovDeg": 52,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.reconstruct.calibration"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.reconstruct.one-instrument"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.reconstruct.09-one-exterior-reveal"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": true,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 52,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 16.69,
+          "beat": "ch7-board",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-board",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSource": null,
+            "activationSequence": 7,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration"
+            ],
+            "activatedAnchorIds": [],
+            "shot": null,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.56,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [],
+              "supportMix": 0,
+              "lowTierFallbacks": [],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          }
+        },
+        {
+          "t": 17.3,
+          "beat": "ch7-board",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-board",
+            "anchorId": "anc.board.camera-transfer",
+            "anchorEvent": "ev.board.camera-owner-vehicle",
+            "activationSource": "semantic-event",
+            "activationSequence": 9,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer"
+            ],
+            "activatedAnchorIds": [
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer"
+            ],
+            "shot": {
+              "id": "cin.board.02-one-owner",
+              "cameraAuthority": "cinematic-look",
+              "transitionType": "occlusion",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 75,
+                "endFovDeg": 70,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": 70,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "blended",
+                "look": "blended",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.board.pressure-seal"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.board.one-owner"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.board.02-one-owner"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 70,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 17.96,
+          "beat": "ch7-board",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch7-board",
+            "anchorId": "anc.board.pressure-seal",
+            "anchorEvent": "ev.board.cockpit-sealed",
+            "activationSource": "semantic-event",
+            "activationSequence": 10,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal"
+            ],
+            "activatedAnchorIds": [
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal"
+            ],
+            "shot": {
+              "id": "cin.board.03-pressure-boundary",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "occlusion",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 70,
+                "endFovDeg": 70,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "blended",
+                "look": "blended",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.board.cockpit-handback"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.board.one-owner"
+              ],
+              "intensity": null,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.board.03-pressure-boundary"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 70,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 18.17,
+          "beat": "ch8-launch",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-launch",
+            "anchorId": "anc.launch.liftoff",
+            "anchorEvent": "ev.launch.legal-liftoff",
+            "activationSource": "semantic-event",
+            "activationSequence": 13,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal",
+              "anc.board.cockpit-handback",
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "activatedAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "shot": {
+              "id": "cin.launch.02-world-below",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 74,
+                "endFovDeg": 74,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.launch.atmosphere-exit"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.launch.ground-relents"
+              ],
+              "intensity": 0.4375,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.launch.02-world-below"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 19.67,
+          "beat": "ch8-launch",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-launch",
+            "anchorId": "anc.launch.liftoff",
+            "anchorEvent": "ev.launch.legal-liftoff",
+            "activationSource": "semantic-event",
+            "activationSequence": 13,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal",
+              "anc.board.cockpit-handback",
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "activatedAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "shot": {
+              "id": "cin.launch.02-world-below",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 74,
+                "endFovDeg": 74,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.launch.atmosphere-exit"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.launch.ground-relents"
+              ],
+              "intensity": 0.4375,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.launch.02-world-below"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 21.66,
+          "beat": "ch8-crossing",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-crossing",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSource": null,
+            "activationSequence": 14,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal",
+              "anc.board.cockpit-handback",
+              "anc.launch.ignition",
+              "anc.launch.liftoff",
+              "anc.launch.atmosphere-exit"
+            ],
+            "activatedAnchorIds": [],
+            "shot": null,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [],
+              "supportMix": 0,
+              "lowTierFallbacks": [],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 22.89,
+          "beat": "ch8-crossing",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-crossing",
+            "anchorId": "anc.crossing.sibling-targeted",
+            "anchorEvent": "system_body_targeted:{worldId -1,-1:p1, seed 1600321158, profileId story:tidegarden, profileVersion 1 (story:tidegarden@1), profileHash pf1-eeef3b78, archetype verdant}",
+            "activationSource": "story-event",
+            "activationSequence": 15,
+            "activationHistoryAnchorIds": [
+              "anc.reconstruct.diagnosis",
+              "anc.reconstruct.bench-online",
+              "anc.reconstruct.frame-restored",
+              "anc.reconstruct.hull-sealed",
+              "anc.reconstruct.lift-online",
+              "anc.reconstruct.route-online",
+              "anc.reconstruct.calibration",
+              "anc.board.hatch-enter",
+              "anc.board.camera-transfer",
+              "anc.board.pressure-seal",
+              "anc.board.cockpit-handback",
+              "anc.launch.ignition",
+              "anc.launch.liftoff",
+              "anc.launch.atmosphere-exit",
+              "anc.crossing.sibling-targeted"
+            ],
+            "activatedAnchorIds": [
+              "anc.crossing.sibling-targeted"
+            ],
+            "shot": {
+              "id": "cin.crossing.03-another-world-ahead",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 79,
+                "endFovDeg": 70,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.crossing.local-handoff"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.crossing.distance"
+              ],
+              "intensity": 0.35,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.crossing.03-another-world-ahead"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        }
+      ],
+      "reachedStopBeat": true
+    },
+    {
+      "id": "ch8-launch",
+      "url": "http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW",
+      "trace": [
+        {
+          "t": 0,
+          "beat": "ch8-launch",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-launch",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSource": null,
+            "activationSequence": 0,
+            "activationHistoryAnchorIds": [],
+            "activatedAnchorIds": [],
+            "shot": null,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.5,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [],
+              "supportMix": 0,
+              "lowTierFallbacks": [],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 3.56,
+          "beat": "ch8-launch",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-launch",
+            "anchorId": "anc.launch.liftoff",
+            "anchorEvent": "ev.launch.legal-liftoff",
+            "activationSource": "semantic-event",
+            "activationSequence": 2,
+            "activationHistoryAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "activatedAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "shot": {
+              "id": "cin.launch.02-world-below",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 74,
+                "endFovDeg": 74,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.launch.atmosphere-exit"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.launch.ground-relents"
+              ],
+              "intensity": 0.4375,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.launch.02-world-below"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 4.79,
+          "beat": "ch8-launch",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-launch",
+            "anchorId": "anc.launch.liftoff",
+            "anchorEvent": "ev.launch.legal-liftoff",
+            "activationSource": "semantic-event",
+            "activationSequence": 2,
+            "activationHistoryAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "activatedAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff"
+            ],
+            "shot": {
+              "id": "cin.launch.02-world-below",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 74,
+                "endFovDeg": 74,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.launch.atmosphere-exit"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.launch.ground-relents"
+              ],
+              "intensity": 0.4375,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.launch.02-world-below"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": null
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 6.63,
+          "beat": "ch8-crossing",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-crossing",
+            "anchorId": null,
+            "anchorEvent": null,
+            "activationSource": null,
+            "activationSequence": 3,
+            "activationHistoryAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff",
+              "anc.launch.atmosphere-exit"
+            ],
+            "activatedAnchorIds": [],
+            "shot": null,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [],
+              "supportMix": 0,
+              "lowTierFallbacks": [],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        },
+        {
+          "t": 7.87,
+          "beat": "ch8-crossing",
+          "av": {
+            "sceneId": "distance-between-fires",
+            "contractRevision": "intent-v1",
+            "contractSha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+            "contractAnchorCount": 66,
+            "active": true,
+            "suspended": false,
+            "beat": "ch8-crossing",
+            "anchorId": "anc.crossing.sibling-targeted",
+            "anchorEvent": "system_body_targeted:{worldId -1,-1:p1, seed 1600321158, profileId story:tidegarden, profileVersion 1 (story:tidegarden@1), profileHash pf1-eeef3b78, archetype verdant}",
+            "activationSource": "story-event",
+            "activationSequence": 4,
+            "activationHistoryAnchorIds": [
+              "anc.launch.ignition",
+              "anc.launch.liftoff",
+              "anc.launch.atmosphere-exit",
+              "anc.crossing.sibling-targeted"
+            ],
+            "activatedAnchorIds": [
+              "anc.crossing.sibling-targeted"
+            ],
+            "shot": {
+              "id": "cin.crossing.03-another-world-ahead",
+              "cameraAuthority": "lens-rig",
+              "transitionType": "continuous",
+              "declaredCut": false,
+              "lens": {
+                "startFovDeg": 79,
+                "endFovDeg": 70,
+                "durationMs": 0,
+                "elapsedMs": 0,
+                "appliedFovDeg": null,
+                "reducedMotion": false
+              },
+              "agency": {
+                "movement": "player",
+                "look": "player",
+                "interaction": "player",
+                "handBackAnchorRef": "anc.crossing.local-handoff"
+              }
+            },
+            "score": {
+              "cueRefs": [
+                "sc.crossing.distance"
+              ],
+              "intensity": 0.35,
+              "hit": null
+            },
+            "postFx": {
+              "activeEffectIds": [
+                "fx.crossing.03-another-world-ahead"
+              ],
+              "supportMix": 1,
+              "lowTierFallbacks": [
+                "physical-state"
+              ],
+              "reducedMotion": false
+            },
+            "lastResetReason": "beat-exit"
+          },
+          "repairStage": "flight_ready",
+          "inputPolicy": {
+            "moveSpeedScale": 1,
+            "allowJump": true,
+            "allowSprint": true,
+            "allowBuild": false,
+            "allowCraft": false,
+            "lookMode": "free",
+            "feedBlend": 1,
+            "sideBlend": 1,
+            "targetFov": 75,
+            "targetDpr": null,
+            "voxelPropsOnly": false,
+            "mawRechargePerSecond": 0
+          },
+          "realityStage": "alive",
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          }
+        }
+      ],
+      "reachedStopBeat": true
+    }
+  ]
+}

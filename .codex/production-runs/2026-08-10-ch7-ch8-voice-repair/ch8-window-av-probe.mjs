@@ -1,0 +1,20 @@
+import os from 'node:os'; import path from 'node:path'; import fs from 'node:fs';
+const { chromium } = await import('/home/thomasphillip/Projects/vox/main/node_modules/playwright-core/index.mjs');
+const pwDir=path.join(os.homedir(),'.cache/ms-playwright');
+const chromeDir=fs.readdirSync(pwDir).filter(d=>/^chromium-\d+$/.test(d)).sort().pop();
+const browser=await chromium.launch({executablePath:path.join(pwDir,chromeDir,'chrome-linux/chrome'),headless:true,args:['--enable-unsafe-swiftshader','--use-gl=angle','--window-size=1280,720']});
+const page=await browser.newPage({viewport:{width:1280,height:720}});
+await page.goto('http://localhost:5176/?story=ch8-launch&movie=1&profile=LOW',{waitUntil:'load',timeout:90000});
+await page.evaluate(async()=>{const st=await import('/src/story/storyText.ts');const av=await import('/src/story/signedSceneAvRuntime.ts');const c=await import('/src/story/storyClock.ts');
+ window.__clk=c.storyNow;window.__av=()=>av.getSignedSceneAvDebugSnapshot();window.__o=null;
+ st.subscribeStoryText(()=>{const s=st.getStoryText();if(s.caption&&s.caption.text.startsWith('i came down this line')&&window.__o===null)window.__o=c.storyNow();});});
+const rows=[];const dl=Date.now()+180000;let origin=null;
+while(Date.now()<dl){const s=await page.evaluate(()=>{const a=window.__av();return{t:window.__clk(),o:window.__o,beat:window.__storyBeat??null,anchorId:a.anchorId,score:a.score,shot:a.shot?{id:a.shot.id,cameraAuthority:a.shot.cameraAuthority,appliedFovDeg:a.shot.lens.appliedFovDeg,reducedMotion:a.shot.lens.reducedMotion}:null,postFx:a.postFx,activated:[...a.activatedAnchorIds],reset:a.lastResetReason};});
+ if(origin===null&&s.o!==null)origin=s.o;
+ if(origin!==null)rows.push({off:Number(((s.t-origin)/1000).toFixed(2)),beat:s.beat,anchorId:s.anchorId,score:s.score,shot:s.shot,postFx:s.postFx,activated:s.activated,reset:s.reset});
+ if(origin!==null&&s.t-origin>19000)break; await new Promise(r=>setTimeout(r,250));}
+fs.writeFileSync('score-window.json',JSON.stringify(rows,null,2));
+const uniq=[...new Set(rows.map(r=>JSON.stringify([r.beat,r.anchorId,r.score,r.shot,r.postFx,r.activated,r.reset])))];
+for(const u of uniq)console.log(u);
+console.log('samples',rows.length);
+await browser.close();

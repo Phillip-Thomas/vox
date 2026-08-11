@@ -1,0 +1,160 @@
+[
+  {
+    "t": 599.6000001430511,
+    "beat": "ch7-board",
+    "activated": [],
+    "history": [],
+    "anchorId": null,
+    "reset": null,
+    "phase": "surface",
+    "control": "fps"
+  },
+  {
+    "t": 4762.200000047684,
+    "beat": "ch7-board",
+    "activated": [
+      "anc.board.hatch-enter"
+    ],
+    "history": [
+      "anc.board.hatch-enter"
+    ],
+    "anchorId": "anc.board.hatch-enter",
+    "reset": null,
+    "phase": "surface",
+    "control": "flight"
+  },
+  {
+    "t": 4940.400000095367,
+    "beat": "ch7-board",
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer"
+    ],
+    "anchorId": "anc.board.camera-transfer",
+    "reset": null,
+    "phase": "surface",
+    "control": "flight"
+  },
+  {
+    "t": 5274,
+    "beat": "ch7-board",
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal"
+    ],
+    "anchorId": "anc.board.pressure-seal",
+    "reset": null,
+    "phase": "surface",
+    "control": "flight"
+  },
+  {
+    "t": 5591.100000143051,
+    "beat": "ch7-board",
+    "activated": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback"
+    ],
+    "anchorId": "anc.board.cockpit-handback",
+    "reset": null,
+    "phase": "surface",
+    "control": "flight"
+  },
+  {
+    "t": 5641,
+    "beat": "ch8-launch",
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback",
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "anchorId": "anc.launch.liftoff",
+    "reset": "beat-exit",
+    "phase": "surface",
+    "control": "flight"
+  },
+  {
+    "t": 7043.299999952316,
+    "beat": "ch8-launch",
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback",
+      "anc.launch.ignition",
+      "anc.launch.liftoff"
+    ],
+    "anchorId": "anc.launch.liftoff",
+    "reset": "beat-exit",
+    "phase": "descent",
+    "control": "flight"
+  },
+  {
+    "t": 9031.600000143051,
+    "beat": "ch8-launch",
+    "activated": [
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback",
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "anchorId": "anc.launch.atmosphere-exit",
+    "reset": "beat-exit",
+    "phase": "deep_space",
+    "control": "flight"
+  },
+  {
+    "t": 26105.5,
+    "beat": "ch8-crossing",
+    "activated": [],
+    "history": [
+      "anc.board.hatch-enter",
+      "anc.board.camera-transfer",
+      "anc.board.pressure-seal",
+      "anc.board.cockpit-handback",
+      "anc.launch.ignition",
+      "anc.launch.liftoff",
+      "anc.launch.atmosphere-exit"
+    ],
+    "anchorId": null,
+    "reset": "beat-exit",
+    "phase": "deep_space",
+    "control": "flight"
+  }
+]

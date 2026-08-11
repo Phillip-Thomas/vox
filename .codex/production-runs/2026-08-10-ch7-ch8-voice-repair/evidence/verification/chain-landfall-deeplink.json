@@ -1,0 +1,261 @@
+{
+  "url": "http://localhost:5176/?story=ch8-landfall&movie=1&profile=LOW",
+  "trace": [
+    {
+      "t": 0.1,
+      "beat": "ch8-landfall",
+      "obj": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      },
+      "ap": null
+    },
+    {
+      "t": 10.5,
+      "beat": "ch9-settle",
+      "obj": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      },
+      "ap": {
+        "goal": [
+          2,
+          50.9,
+          -6
+        ],
+        "keys": null,
+        "stillTime": 0,
+        "nudges": 0,
+        "pos": [
+          1.9,
+          51.79,
+          -3.68
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "wall": 394.5,
+      "story": 394.5,
+      "beat": null,
+      "ch": "caption",
+      "text": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 394.5,
+      "story": 394.5,
+      "beat": null,
+      "ch": "audit",
+      "text": null,
+      "header": null,
+      "shownAt": null,
+      "ttlMs": null
+    },
+    {
+      "wall": 394.60000014305115,
+      "story": 394.60000014305115,
+      "beat": null,
+      "ch": "workorder",
+      "lines": []
+    },
+    {
+      "wall": 395.2999999523163,
+      "story": 395.2999999523163,
+      "beat": "ch8-landfall",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 395.60000014305115,
+      "story": 395.60000014305115,
+      "beat": "ch8-landfall",
+      "ch": "workorder",
+      "lines": [
+        "LAND ON DRY, LEVEL GROUND.",
+        "EXIT THE KESTREL."
+      ]
+    },
+    {
+      "wall": 395.7000000476837,
+      "story": 395.7000000476837,
+      "beat": "ch8-landfall",
+      "ch": "workorder",
+      "lines": [
+        "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+        "[F] LAND ON DRY, LEVEL GROUND."
+      ]
+    },
+    {
+      "wall": 429.10000014305115,
+      "story": 429.10000014305115,
+      "beat": "ch8-landfall",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:landfall:land-dry-level",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 429.2000000476837,
+      "story": 429.2000000476837,
+      "beat": "ch8-landfall",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:landfall:land-dry-level",
+        "kind": "travel",
+        "markerLabel": "DRY LEVEL GROUND",
+        "workOrder": [
+          "READ THE SURFACE FOR A DRY, LEVEL SITE.",
+          "[F] LAND ON DRY, LEVEL GROUND."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 6800.700000047684,
+      "story": 6800.700000047684,
+      "beat": "ch8-landfall",
+      "ch": "caption",
+      "text": "(a world does not begin when you see it. it begins when it holds your weight.)",
+      "shownAt": 6800.700000047684,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 8778.400000095367,
+      "story": 8778.299999952316,
+      "beat": "ch8-landfall",
+      "ch": "workorder",
+      "lines": [
+        "STAND ON THE SIBLING WORLD.",
+        "LET IT HOLD YOUR WEIGHT."
+      ]
+    },
+    {
+      "wall": 8778.600000143051,
+      "story": 8778.600000143051,
+      "beat": "ch8-landfall",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "ch8:landfall:first-footfall",
+        "action": "wait"
+      }
+    },
+    {
+      "wall": 8778.600000143051,
+      "story": 8778.600000143051,
+      "beat": "ch8-landfall",
+      "ch": "objective",
+      "objective": {
+        "id": "ch8:landfall:first-footfall",
+        "kind": "wait",
+        "markerLabel": "SIBLING WORLD · FIRST FOOTFALL",
+        "workOrder": [
+          "STAND ON THE SIBLING WORLD.",
+          "LET IT HOLD YOUR WEIGHT."
+        ],
+        "requiresMarker": false,
+        "health": "ready"
+      }
+    },
+    {
+      "wall": 10028.5,
+      "story": 10028.5,
+      "beat": "ch9-settle",
+      "ch": "beat",
+      "active": true,
+      "era": null
+    },
+    {
+      "wall": 10028.600000143051,
+      "story": 10028.600000143051,
+      "beat": "ch9-settle",
+      "ch": "objective",
+      "objective": null
+    },
+    {
+      "wall": 10028.700000047684,
+      "story": 10028.700000047684,
+      "beat": "ch9-settle",
+      "ch": "workorder",
+      "lines": [
+        "FOLLOW THE LIVING WATERLINE MARKER.",
+        "READ THE SIGNAL FIELD."
+      ]
+    },
+    {
+      "wall": 10028.900000095367,
+      "story": 10028.900000095367,
+      "beat": "ch9-settle",
+      "ch": "feedback",
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:scan-waterline",
+        "action": "travel"
+      }
+    },
+    {
+      "wall": 10028.900000095367,
+      "story": 10028.900000095367,
+      "beat": "ch9-settle",
+      "ch": "objective",
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true,
+        "health": "missing-marker"
+      }
+    },
+    {
+      "wall": 10028.900000095367,
+      "story": 10028.900000095367,
+      "beat": "ch9-settle",
+      "ch": "caption",
+      "text": "(abundance is not permission. it is a question with many answers.)",
+      "shownAt": 10028.900000095367,
+      "ttlMs": 5200
+    },
+    {
+      "wall": 10031,
+      "story": 10031,
+      "beat": "ch9-settle",
+      "ch": "objective",
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true,
+        "health": "ready"
+      }
+    }
+  ]
+}
