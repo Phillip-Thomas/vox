@@ -1,0 +1,75 @@
+{
+  "capturedAt": "2026-08-12T19:38:30.004Z",
+  "base": "http://localhost:5174",
+  "mode": "e2e",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "pageErrors": [],
+  "beats": [
+    {
+      "beat": "ch9-settle",
+      "atSeconds": 0,
+      "objectiveId": "settle:scan-waterline",
+      "nudges": 0
+    },
+    {
+      "beat": "ch9-hearth",
+      "atSeconds": 10.8,
+      "objectiveId": "settle:wait-night",
+      "nudges": 0
+    },
+    {
+      "beat": "done",
+      "atSeconds": 125.2,
+      "objectiveId": null,
+      "nudges": 0
+    },
+    {
+      "beat": "ch10-cold",
+      "atSeconds": 359.4,
+      "objectiveId": "station:fault-read",
+      "nudges": 0
+    },
+    {
+      "beat": "ch10-ask",
+      "atSeconds": 368.1,
+      "objectiveId": "station:return:crossing",
+      "nudges": 1
+    },
+    {
+      "beat": "ch10-transit",
+      "atSeconds": 404.1,
+      "objectiveId": "station:transit:reboard",
+      "nudges": 1
+    },
+    {
+      "beat": "done",
+      "atSeconds": 481.1,
+      "objectiveId": null,
+      "nudges": 1
+    }
+  ],
+  "lastAutopilot": {
+    "beat": "ch10-transit",
+    "clock": 76.8,
+    "pos": [
+      -0.28,
+      52.79,
+      -5.36
+    ],
+    "stillTime": 0,
+    "teleportNudgesTotal": 1,
+    "keys": []
+  },
+  "completed": true,
+  "durationSeconds": 481.1,
+  "rescueProbe": {
+    "rescues": null,
+    "autopilot": {
+      "nudges": 1,
+      "forced": null
+    }
+  },
+  "timeoutRescues": 0,
+  "legCount": 7
+}

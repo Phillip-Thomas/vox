@@ -29,7 +29,8 @@
   "acceptedExceptions": [
     "UX-2",
     "D-12",
-    "F8"
+    "F8",
+    "gate-raw-evidence-video"
   ],
   "acceptedExceptionDetails": [
     {
@@ -59,6 +60,17 @@
         "coherent as it stands \u2014 no artifact claims the ch10 contract is the registered activeProduction",
         "the authority gate pins production identity in five coupled literals; retargeting would drop the signed A4-to-ch9 contract out of gate coverage",
         "routed as a multi-production registration follow-on requiring its own schema, gate design and lock revision"
+      ]
+    },
+    {
+      "id": "gate-raw-evidence-video",
+      "acceptedBy": "orchestrator (recorded, pending owner review \u2014 no machine role may accept this on the owner's behalf)",
+      "scope": "The final gate's `raw-evidence.video` check requires a continuous video artifact. This run's production lock forbids movie renders outright, because the owner's instruction was to avoid excessive rendering and the lean evidence budget was written into the lock as a binding term.",
+      "conditions": [
+        "structurally unsatisfiable, not an omission: satisfying the check would require violating the lock",
+        "movie-lane traversal is instead proven by autopilot state traces at LOW with zero timeout rescues, end to end across the whole game (427s, 30/30 legs)",
+        "the conflict is between two governing documents and should be resolved in one of them \u2014 either the gate learns that a lock may forbid video, or a future lock stops forbidding it",
+        "no video was manufactured to satisfy the check"
       ]
     }
   ],

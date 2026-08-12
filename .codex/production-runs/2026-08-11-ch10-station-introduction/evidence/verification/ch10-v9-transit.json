@@ -1,0 +1,3284 @@
+{
+  "capturedAt": "2026-08-12T19:36:46.127Z",
+  "base": "http://localhost:5174",
+  "mode": "transit",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "pageErrors": [],
+  "urlIntended": "?story=ch10-transit&movie=1&profile=LOW",
+  "laneAssertion": {
+    "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+    "movieParam": "1",
+    "lane": "movie"
+  },
+  "transit": {
+    "samples": 178,
+    "feedbackFovMin": 70,
+    "feedbackFovMax": 70,
+    "renderCameraFovMin": 70,
+    "renderCameraFovMax": 70,
+    "boostMax": 0,
+    "shellWorldScaleMin": 1,
+    "shellWorldScaleMax": 1,
+    "framesAboveFov73_72": 0,
+    "framesAboveFov73_72_renderCamera": 0,
+    "borderChecks": [
+      {
+        "t": 4.8,
+        "borderCoveragePercent": 93.73,
+        "aperturePercentOfFrameWidth": 61.33
+      },
+      {
+        "t": 10.04,
+        "borderCoveragePercent": 93.83,
+        "aperturePercentOfFrameWidth": 61.33
+      },
+      {
+        "t": 15.03,
+        "borderCoveragePercent": 93.7,
+        "aperturePercentOfFrameWidth": 61.33
+      },
+      {
+        "t": 20.03,
+        "borderCoveragePercent": 93.77,
+        "aperturePercentOfFrameWidth": 60.23
+      },
+      {
+        "t": 25,
+        "borderCoveragePercent": 93.95,
+        "aperturePercentOfFrameWidth": 51.72
+      },
+      {
+        "t": 29.97,
+        "borderCoveragePercent": 93.8,
+        "aperturePercentOfFrameWidth": 60.62
+      },
+      {
+        "t": 34.99,
+        "borderCoveragePercent": 93.6,
+        "aperturePercentOfFrameWidth": 60.7
+      },
+      {
+        "t": 39.97,
+        "borderCoveragePercent": 93.5,
+        "aperturePercentOfFrameWidth": 60.16
+      },
+      {
+        "t": 45.06,
+        "borderCoveragePercent": 93.85,
+        "aperturePercentOfFrameWidth": 59.84
+      },
+      {
+        "t": 50.06,
+        "borderCoveragePercent": 58.4,
+        "aperturePercentOfFrameWidth": 46.33
+      },
+      {
+        "t": 55.04,
+        "borderCoveragePercent": 93.77,
+        "aperturePercentOfFrameWidth": 61.64
+      },
+      {
+        "t": 60.04,
+        "borderCoveragePercent": 93.88,
+        "aperturePercentOfFrameWidth": 60.86
+      },
+      {
+        "t": 65.01,
+        "borderCoveragePercent": 23.85,
+        "aperturePercentOfFrameWidth": 42.5
+      },
+      {
+        "t": 70.04,
+        "borderCoveragePercent": 93.7,
+        "aperturePercentOfFrameWidth": 60.39
+      }
+    ],
+    "minBorderCoveragePercent": 23.85,
+    "reachedHandback": true
+  },
+  "trace": [
+    {
+      "t": 0.01,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 44.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6614
+    },
+    {
+      "t": 0.45,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 57.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6594
+    },
+    {
+      "t": 0.92,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 69.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6567
+    },
+    {
+      "t": 1.39,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6535
+    },
+    {
+      "t": 1.86,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 85.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6503
+    },
+    {
+      "t": 2.32,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 91.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6466
+    },
+    {
+      "t": 2.75,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 95.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6433
+    },
+    {
+      "t": 3.16,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 99.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6393
+    },
+    {
+      "t": 3.57,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6356
+    },
+    {
+      "t": 3.98,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 41.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6332
+    },
+    {
+      "t": 4.39,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 37.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6318
+    },
+    {
+      "t": 4.8,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 51.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6300
+    },
+    {
+      "t": 5.52,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 65.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6273
+    },
+    {
+      "t": 5.93,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 74.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6245
+    },
+    {
+      "t": 6.34,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 82.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6213
+    },
+    {
+      "t": 6.75,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 89.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6178
+    },
+    {
+      "t": 7.16,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 94.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6140
+    },
+    {
+      "t": 7.57,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 98.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6100
+    },
+    {
+      "t": 7.98,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 102.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6060
+    },
+    {
+      "t": 8.39,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6026
+    },
+    {
+      "t": 8.81,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 27.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 6008
+    },
+    {
+      "t": 9.22,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 44.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5993
+    },
+    {
+      "t": 9.63,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 58.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5973
+    },
+    {
+      "t": 10.04,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 69.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5946
+    },
+    {
+      "t": 10.5,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5914
+    },
+    {
+      "t": 10.9,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 86,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5880
+    },
+    {
+      "t": 11.32,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 91.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5845
+    },
+    {
+      "t": 11.73,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 96.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5806
+    },
+    {
+      "t": 12.14,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5765
+    },
+    {
+      "t": 12.55,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 89.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5724
+    },
+    {
+      "t": 12.96,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5697
+    },
+    {
+      "t": 13.38,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 33.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5682
+    },
+    {
+      "t": 13.79,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 49.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5665
+    },
+    {
+      "t": 14.2,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5641
+    },
+    {
+      "t": 14.61,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 72.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5614
+    },
+    {
+      "t": 15.03,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 81,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5582
+    },
+    {
+      "t": 15.49,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 88.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5546
+    },
+    {
+      "t": 15.9,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 93.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5508
+    },
+    {
+      "t": 16.32,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 98,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5470
+    },
+    {
+      "t": 16.73,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 101.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5428
+    },
+    {
+      "t": 17.14,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 73.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5391
+    },
+    {
+      "t": 17.55,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 36.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5368
+    },
+    {
+      "t": 17.97,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 39.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5355
+    },
+    {
+      "t": 18.38,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 54.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5335
+    },
+    {
+      "t": 18.79,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 66.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5310
+    },
+    {
+      "t": 19.2,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 76.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5281
+    },
+    {
+      "t": 19.62,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 83.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5249
+    },
+    {
+      "t": 20.03,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 90,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "avFov": 70,
+      "stationDistance": 5213
+    },
+    {
+      "t": 20.49,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 95.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5172
+    },
+    {
+      "t": 20.9,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 99.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5133
+    },
+    {
+      "t": 21.31,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5092
+    },
+    {
+      "t": 21.72,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 59.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5059
+    },
+    {
+      "t": 22.13,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 28.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5043
+    },
+    {
+      "t": 22.54,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 45.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5027
+    },
+    {
+      "t": 22.95,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 58.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 5006
+    },
+    {
+      "t": 23.36,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 69.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4980
+    },
+    {
+      "t": 23.77,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4949
+    },
+    {
+      "t": 24.18,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 85.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4916
+    },
+    {
+      "t": 24.59,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 91.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4879
+    },
+    {
+      "t": 25,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 96.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4842
+    },
+    {
+      "t": 25.44,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4798
+    },
+    {
+      "t": 25.85,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 88.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4757
+    },
+    {
+      "t": 26.27,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4730
+    },
+    {
+      "t": 26.68,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 33.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4715
+    },
+    {
+      "t": 27.09,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 49.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4698
+    },
+    {
+      "t": 27.5,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4674
+    },
+    {
+      "t": 27.91,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 72.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4647
+    },
+    {
+      "t": 28.33,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 81.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4616
+    },
+    {
+      "t": 28.74,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 88,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4580
+    },
+    {
+      "t": 29.15,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 93.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4543
+    },
+    {
+      "t": 29.56,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 97.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4505
+    },
+    {
+      "t": 29.97,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 101.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4464
+    },
+    {
+      "t": 30.46,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 71.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4425
+    },
+    {
+      "t": 30.87,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 35.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4404
+    },
+    {
+      "t": 31.29,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 40.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4390
+    },
+    {
+      "t": 31.69,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 55.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4370
+    },
+    {
+      "t": 32.11,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 66.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4345
+    },
+    {
+      "t": 32.52,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 76.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4315
+    },
+    {
+      "t": 32.94,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 84.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4282
+    },
+    {
+      "t": 33.35,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 90.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4248
+    },
+    {
+      "t": 33.76,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 95.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4209
+    },
+    {
+      "t": 34.17,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 99.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4169
+    },
+    {
+      "t": 34.58,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 102.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4129
+    },
+    {
+      "t": 34.99,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4095
+    },
+    {
+      "t": 35.45,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 31.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4077
+    },
+    {
+      "t": 35.86,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 47.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4060
+    },
+    {
+      "t": 36.27,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 61.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4038
+    },
+    {
+      "t": 36.68,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 71.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 4011
+    },
+    {
+      "t": 37.09,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 80.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3980
+    },
+    {
+      "t": 37.5,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 87.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3946
+    },
+    {
+      "t": 37.91,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 92.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3910
+    },
+    {
+      "t": 38.32,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 97.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3871
+    },
+    {
+      "t": 38.73,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 101.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3830
+    },
+    {
+      "t": 39.15,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 90.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3790
+    },
+    {
+      "t": 39.56,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3762
+    },
+    {
+      "t": 39.97,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 34.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3747
+    },
+    {
+      "t": 40.42,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3729
+    },
+    {
+      "t": 40.83,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3705
+    },
+    {
+      "t": 41.25,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 73.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3678
+    },
+    {
+      "t": 41.66,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 81.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3646
+    },
+    {
+      "t": 42.07,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 88.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3611
+    },
+    {
+      "t": 42.48,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 93.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3575
+    },
+    {
+      "t": 42.9,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 98,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3536
+    },
+    {
+      "t": 43.31,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 101.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3495
+    },
+    {
+      "t": 43.76,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 74.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3457
+    },
+    {
+      "t": 44.19,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 37.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3433
+    },
+    {
+      "t": 44.61,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 42.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3418
+    },
+    {
+      "t": 45.06,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 56.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3398
+    },
+    {
+      "t": 45.53,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 69.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3369
+    },
+    {
+      "t": 45.96,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3337
+    },
+    {
+      "t": 46.37,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 86.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3302
+    },
+    {
+      "t": 46.78,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 91.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3267
+    },
+    {
+      "t": 47.19,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 96.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3228
+    },
+    {
+      "t": 47.6,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3189
+    },
+    {
+      "t": 48.01,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 90.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3148
+    },
+    {
+      "t": 48.42,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3120
+    },
+    {
+      "t": 48.83,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 33.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3106
+    },
+    {
+      "t": 49.24,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 49.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3089
+    },
+    {
+      "t": 49.65,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3066
+    },
+    {
+      "t": 50.06,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 70.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3044
+    },
+    {
+      "t": 50.51,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 79.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 3012
+    },
+    {
+      "t": 50.92,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 86.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2977
+    },
+    {
+      "t": 51.34,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 92.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2941
+    },
+    {
+      "t": 51.75,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 97.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2903
+    },
+    {
+      "t": 52.16,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2863
+    },
+    {
+      "t": 52.57,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 76,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2825
+    },
+    {
+      "t": 52.99,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 39.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2802
+    },
+    {
+      "t": 53.4,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 38.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2789
+    },
+    {
+      "t": 53.81,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 53.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2770
+    },
+    {
+      "t": 54.22,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 65.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2745
+    },
+    {
+      "t": 54.63,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 75,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2718
+    },
+    {
+      "t": 55.04,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 83,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2685
+    },
+    {
+      "t": 55.53,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 89.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2649
+    },
+    {
+      "t": 55.94,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 94.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2612
+    },
+    {
+      "t": 56.35,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 98.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2574
+    },
+    {
+      "t": 56.76,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 102.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2533
+    },
+    {
+      "t": 57.17,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 60.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2500
+    },
+    {
+      "t": 57.59,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 28.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2483
+    },
+    {
+      "t": 57.99,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 44.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2469
+    },
+    {
+      "t": 58.4,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 58.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2447
+    },
+    {
+      "t": 58.81,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 69.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2422
+    },
+    {
+      "t": 59.22,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 78.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2392
+    },
+    {
+      "t": 59.63,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 85.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2360
+    },
+    {
+      "t": 60.04,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 91.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2324
+    },
+    {
+      "t": 60.5,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 96.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2285
+    },
+    {
+      "t": 60.91,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 100.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2246
+    },
+    {
+      "t": 61.32,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 88.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2206
+    },
+    {
+      "t": 61.73,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 50.4,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2180
+    },
+    {
+      "t": 62.14,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 33.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2165
+    },
+    {
+      "t": 62.55,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 49.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2148
+    },
+    {
+      "t": 62.96,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 62.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2127
+    },
+    {
+      "t": 63.37,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 72.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2099
+    },
+    {
+      "t": 63.78,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 80.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2070
+    },
+    {
+      "t": 64.19,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 87.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2036
+    },
+    {
+      "t": 64.6,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 93.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 2001
+    },
+    {
+      "t": 65.01,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 97.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1963
+    },
+    {
+      "t": 65.49,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 101.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1920
+    },
+    {
+      "t": 65.91,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 73,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1884
+    },
+    {
+      "t": 66.31,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 38,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1863
+    },
+    {
+      "t": 66.72,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 39.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1850
+    },
+    {
+      "t": 67.14,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 54.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1831
+    },
+    {
+      "t": 67.56,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 66.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1806
+    },
+    {
+      "t": 67.97,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 76.1,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1778
+    },
+    {
+      "t": 68.38,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 83.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1747
+    },
+    {
+      "t": 68.79,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 90,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1713
+    },
+    {
+      "t": 69.21,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 95.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1676
+    },
+    {
+      "t": 69.62,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 99.3,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1638
+    },
+    {
+      "t": 70.04,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 102.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1598
+    },
+    {
+      "t": 70.53,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 59.2,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1566
+    },
+    {
+      "t": 70.94,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 27.5,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1550
+    },
+    {
+      "t": 71.35,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 44.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1536
+    },
+    {
+      "t": 71.77,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 58,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "avFov": 70,
+      "stationDistance": 1515
+    },
+    {
+      "t": 72.18,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 61.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1492
+    },
+    {
+      "t": 72.59,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 49.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1471
+    },
+    {
+      "t": 73,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 40.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1454
+    },
+    {
+      "t": 73.41,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 32.8,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1440
+    },
+    {
+      "t": 73.82,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 26.6,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1428
+    },
+    {
+      "t": 74.23,
+      "beat": "ch10-transit",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 21.7,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "avFov": 70,
+      "stationDistance": 1420
+    },
+    {
+      "t": 74.81,
+      "beat": "done",
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "feedbackFov": 70,
+      "boost": 0,
+      "speed": 16.9,
+      "renderCameraFov": 70,
+      "shellWorldScale": 1,
+      "rootWorldScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "avFov": null,
+      "stationDistance": 1411
+    }
+  ]
+}

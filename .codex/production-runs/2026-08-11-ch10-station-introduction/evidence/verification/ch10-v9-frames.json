@@ -1,0 +1,915 @@
+{
+  "analysedAt": "2026-08-12T20:09:25.300Z",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "stills": {
+    "still-seam-of-light": {
+      "heroFile": "evidence/capture/still-seam-of-light.png",
+      "measuredOn": "evidence/capture/still-seam-of-light-scene.png",
+      "uiRectsRecorded": 8,
+      "size": [
+        1280,
+        720
+      ],
+      "tier": "HIGH",
+      "hueLaw": {
+        "label": "still-seam-of-light",
+        "aperturePixels": 282656,
+        "cockpitMaskApplied": true,
+        "aperturePeakLuminance": 248,
+        "aperturePeakAt": [
+          649,
+          352
+        ],
+        "warmPixelsInAperture": 501,
+        "coolMagentaPixelsInAperture": 20205,
+        "neutralLitPixelsInAperture": 129086,
+        "warmClusters": 3,
+        "clusters": [
+          {
+            "areaPx": 203,
+            "bbox": [
+              538,
+              183,
+              17,
+              18
+            ],
+            "extentPx": 18,
+            "centroid": [
+              546.3,
+              191.5
+            ],
+            "peakLuminance": 199.6,
+            "peakAt": [
+              549,
+              191
+            ],
+            "meanHueDeg": 36.3,
+            "meanSaturation": 0.288,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 112,
+            "bbox": [
+              499,
+              197,
+              13,
+              12
+            ],
+            "extentPx": 13,
+            "centroid": [
+              504.8,
+              202.6
+            ],
+            "peakLuminance": 205.7,
+            "peakAt": [
+              503,
+              203
+            ],
+            "meanHueDeg": 44.3,
+            "meanSaturation": 0.29,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 60,
+            "bbox": [
+              822,
+              203,
+              11,
+              11
+            ],
+            "extentPx": 11,
+            "centroid": [
+              827,
+              207.7
+            ],
+            "peakLuminance": 206.5,
+            "peakAt": [
+              827,
+              205
+            ],
+            "meanHueDeg": 63.6,
+            "meanSaturation": 0.226,
+            "cockpitRingFraction": 0
+          }
+        ]
+      },
+      "borderRing": {
+        "ringPx": 2,
+        "samples": 8000,
+        "peakLuminance": 19.6,
+        "meanLuminance": 6.14,
+        "peakAt": [
+          0,
+          700
+        ]
+      },
+      "maskSize": [
+        1280,
+        720
+      ]
+    },
+    "still-seam-of-light-low": {
+      "heroFile": "evidence/capture/still-seam-of-light-low.png",
+      "measuredOn": "evidence/capture/still-seam-of-light-low-scene.png",
+      "uiRectsRecorded": 8,
+      "size": [
+        1280,
+        720
+      ],
+      "tier": "LOW",
+      "hueLaw": {
+        "label": "still-seam-of-light-low",
+        "aperturePixels": 323629,
+        "cockpitMaskApplied": true,
+        "aperturePeakLuminance": 252.8,
+        "aperturePeakAt": [
+          628,
+          367
+        ],
+        "warmPixelsInAperture": 219,
+        "coolMagentaPixelsInAperture": 1463,
+        "neutralLitPixelsInAperture": 41273,
+        "warmClusters": 1,
+        "clusters": [
+          {
+            "areaPx": 13,
+            "bbox": [
+              501,
+              207,
+              8,
+              2
+            ],
+            "extentPx": 8,
+            "centroid": [
+              504.7,
+              207.4
+            ],
+            "peakLuminance": 91.9,
+            "peakAt": [
+              505,
+              207
+            ],
+            "meanHueDeg": 40.7,
+            "meanSaturation": 0.407,
+            "cockpitRingFraction": 0.438
+          }
+        ]
+      },
+      "borderRing": {
+        "ringPx": 2,
+        "samples": 8000,
+        "peakLuminance": 114.7,
+        "meanLuminance": 8.97,
+        "peakAt": [
+          678,
+          719
+        ]
+      },
+      "maskSize": [
+        1280,
+        720
+      ]
+    },
+    "still-station-resolved": {
+      "heroFile": "evidence/capture/still-station-resolved.png",
+      "measuredOn": "evidence/capture/still-station-resolved-scene.png",
+      "uiRectsRecorded": 18,
+      "size": [
+        1280,
+        720
+      ],
+      "hueLaw": {
+        "label": "still-station-resolved",
+        "aperturePixels": 284083,
+        "cockpitMaskApplied": true,
+        "aperturePeakLuminance": 247.9,
+        "aperturePeakAt": [
+          827,
+          208
+        ],
+        "warmPixelsInAperture": 609,
+        "coolMagentaPixelsInAperture": 12266,
+        "neutralLitPixelsInAperture": 122197,
+        "warmClusters": 5,
+        "clusters": [
+          {
+            "areaPx": 202,
+            "bbox": [
+              538,
+              183,
+              18,
+              18
+            ],
+            "extentPx": 18,
+            "centroid": [
+              546.6,
+              191.6
+            ],
+            "peakLuminance": 202.6,
+            "peakAt": [
+              546,
+              189
+            ],
+            "meanHueDeg": 36.6,
+            "meanSaturation": 0.285,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 112,
+            "bbox": [
+              499,
+              197,
+              13,
+              13
+            ],
+            "extentPx": 13,
+            "centroid": [
+              504.8,
+              202.7
+            ],
+            "peakLuminance": 205.7,
+            "peakAt": [
+              503,
+              203
+            ],
+            "meanHueDeg": 44.2,
+            "meanSaturation": 0.29,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 108,
+            "bbox": [
+              821,
+              202,
+              13,
+              13
+            ],
+            "extentPx": 13,
+            "centroid": [
+              827,
+              207.7
+            ],
+            "peakLuminance": 211.4,
+            "peakAt": [
+              827,
+              210
+            ],
+            "meanHueDeg": 61,
+            "meanSaturation": 0.291,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 64,
+            "bbox": [
+              582,
+              345,
+              30,
+              23
+            ],
+            "extentPx": 30,
+            "centroid": [
+              596.7,
+              355.9
+            ],
+            "peakLuminance": 223.5,
+            "peakAt": [
+              610,
+              346
+            ],
+            "meanHueDeg": 45,
+            "meanSaturation": 0.543,
+            "cockpitRingFraction": 0
+          },
+          {
+            "areaPx": 12,
+            "bbox": [
+              641,
+              330,
+              4,
+              4
+            ],
+            "extentPx": 4,
+            "centroid": [
+              642.3,
+              331.8
+            ],
+            "peakLuminance": 45.2,
+            "peakAt": [
+              641,
+              333
+            ],
+            "meanHueDeg": 167.1,
+            "meanSaturation": 0.758,
+            "cockpitRingFraction": 0
+          }
+        ]
+      },
+      "borderRing": {
+        "ringPx": 2,
+        "samples": 8000,
+        "peakLuminance": 19.6,
+        "meanLuminance": 6.16,
+        "peakAt": [
+          0,
+          700
+        ]
+      },
+      "maskSize": [
+        1280,
+        720
+      ]
+    },
+    "still-st0-sighting": {
+      "heroFile": "evidence/capture/still-st0-sighting.png",
+      "measuredOn": "evidence/capture/still-st0-sighting-scene.png",
+      "uiRectsRecorded": 37,
+      "size": [
+        1280,
+        720
+      ],
+      "pointSourceLaw": {
+        "skyPixels": 527360,
+        "pitchDeg": 6.277,
+        "fovVDeg": 75,
+        "litSkyPixels": 11858,
+        "skySources": 2408,
+        "pointSources": 2402,
+        "discSources": 5,
+        "st0ProjectedPx": [
+          928,
+          205
+        ],
+        "st0PeakLuminance": 148.4,
+        "st0PeakAt": [
+          930,
+          205
+        ],
+        "st0PixelsAbove60": 5,
+        "st0ExtentPx": 2,
+        "st0ExtentPxAt1280": 2,
+        "brightestPointSource": {
+          "areaPx": 11,
+          "bbox": [
+            883,
+            185,
+            4,
+            3
+          ],
+          "extentPx": 4,
+          "centroid": [
+            884.6,
+            185.9
+          ],
+          "peakLuminance": 231.8,
+          "peakAt": [
+            885,
+            186
+          ],
+          "meanHueDeg": 243.7,
+          "meanSaturation": 0.094,
+          "extentPxAt1280": 4
+        },
+        "brightestDisc": {
+          "areaPx": 5748,
+          "bbox": [
+            166,
+            164,
+            93,
+            88
+          ],
+          "extentPx": 93,
+          "centroid": [
+            211.5,
+            207
+          ],
+          "peakLuminance": 225.3,
+          "peakAt": [
+            222,
+            242
+          ],
+          "meanHueDeg": 286.8,
+          "meanSaturation": 0.689,
+          "extentPxAt1280": 93
+        },
+        "st0BeatsBrightestPointSource": false,
+        "st0BelowBrightestDisc": true,
+        "topPointSources": [
+          {
+            "areaPx": 11,
+            "bbox": [
+              883,
+              185,
+              4,
+              3
+            ],
+            "extentPx": 4,
+            "centroid": [
+              884.6,
+              185.9
+            ],
+            "peakLuminance": 231.8,
+            "peakAt": [
+              885,
+              186
+            ],
+            "meanHueDeg": 243.7,
+            "meanSaturation": 0.094,
+            "extentPxAt1280": 4
+          },
+          {
+            "areaPx": 7,
+            "bbox": [
+              927,
+              102,
+              3,
+              3
+            ],
+            "extentPx": 3,
+            "centroid": [
+              928,
+              103
+            ],
+            "peakLuminance": 230.1,
+            "peakAt": [
+              928,
+              103
+            ],
+            "meanHueDeg": 255,
+            "meanSaturation": 0.062,
+            "extentPxAt1280": 3
+          },
+          {
+            "areaPx": 13,
+            "bbox": [
+              696,
+              37,
+              3,
+              5
+            ],
+            "extentPx": 5,
+            "centroid": [
+              697,
+              38.7
+            ],
+            "peakLuminance": 228.1,
+            "peakAt": [
+              697,
+              39
+            ],
+            "meanHueDeg": 267,
+            "meanSaturation": 0.122,
+            "extentPxAt1280": 5
+          },
+          {
+            "areaPx": 15,
+            "bbox": [
+              356,
+              72,
+              4,
+              5
+            ],
+            "extentPx": 5,
+            "centroid": [
+              357.7,
+              73.7
+            ],
+            "peakLuminance": 226.6,
+            "peakAt": [
+              358,
+              74
+            ],
+            "meanHueDeg": 283.3,
+            "meanSaturation": 0.281,
+            "extentPxAt1280": 5
+          },
+          {
+            "areaPx": 18,
+            "bbox": [
+              913,
+              208,
+              6,
+              7
+            ],
+            "extentPx": 7,
+            "centroid": [
+              915.4,
+              211
+            ],
+            "peakLuminance": 226.1,
+            "peakAt": [
+              914,
+              213
+            ],
+            "meanHueDeg": 150.9,
+            "meanSaturation": 0.371,
+            "extentPxAt1280": 7
+          },
+          {
+            "areaPx": 3,
+            "bbox": [
+              849,
+              387,
+              2,
+              2
+            ],
+            "extentPx": 2,
+            "centroid": [
+              849.3,
+              387.3
+            ],
+            "peakLuminance": 225.8,
+            "peakAt": [
+              849,
+              387
+            ],
+            "meanHueDeg": 205.7,
+            "meanSaturation": 0.074,
+            "extentPxAt1280": 2
+          },
+          {
+            "areaPx": 15,
+            "bbox": [
+              445,
+              23,
+              5,
+              5
+            ],
+            "extentPx": 5,
+            "centroid": [
+              447.1,
+              24.9
+            ],
+            "peakLuminance": 225.1,
+            "peakAt": [
+              447,
+              25
+            ],
+            "meanHueDeg": 297,
+            "meanSaturation": 0.402,
+            "extentPxAt1280": 5
+          },
+          {
+            "areaPx": 13,
+            "bbox": [
+              707,
+              82,
+              4,
+              4
+            ],
+            "extentPx": 4,
+            "centroid": [
+              708.4,
+              83.6
+            ],
+            "peakLuminance": 225.1,
+            "peakAt": [
+              708,
+              84
+            ],
+            "meanHueDeg": 269,
+            "meanSaturation": 0.196,
+            "extentPxAt1280": 4
+          }
+        ],
+        "topDiscs": [
+          {
+            "areaPx": 5748,
+            "bbox": [
+              166,
+              164,
+              93,
+              88
+            ],
+            "extentPx": 93,
+            "centroid": [
+              211.5,
+              207
+            ],
+            "peakLuminance": 225.3,
+            "peakAt": [
+              222,
+              242
+            ],
+            "meanHueDeg": 286.8,
+            "meanSaturation": 0.689,
+            "extentPxAt1280": 93
+          },
+          {
+            "areaPx": 31,
+            "bbox": [
+              26,
+              137,
+              10,
+              6
+            ],
+            "extentPx": 10,
+            "centroid": [
+              30.5,
+              139.4
+            ],
+            "peakLuminance": 210.1,
+            "peakAt": [
+              32,
+              140
+            ],
+            "meanHueDeg": 245.8,
+            "meanSaturation": 0.092,
+            "extentPxAt1280": 10
+          },
+          {
+            "areaPx": 212,
+            "bbox": [
+              747,
+              397,
+              26,
+              15
+            ],
+            "extentPx": 26,
+            "centroid": [
+              758.6,
+              403.6
+            ],
+            "peakLuminance": 165.9,
+            "peakAt": [
+              768,
+              405
+            ],
+            "meanHueDeg": 116.2,
+            "meanSaturation": 0.507,
+            "extentPxAt1280": 26
+          },
+          {
+            "areaPx": 39,
+            "bbox": [
+              1175,
+              36,
+              13,
+              10
+            ],
+            "extentPx": 13,
+            "centroid": [
+              1182.1,
+              41.5
+            ],
+            "peakLuminance": 165.6,
+            "peakAt": [
+              1183,
+              41
+            ],
+            "meanHueDeg": 271.9,
+            "meanSaturation": 0.195,
+            "extentPxAt1280": 13
+          }
+        ]
+      },
+      "bottomBand": {
+        "bandTopY": 576,
+        "bandPixels": 184320,
+        "litPixels": 132798,
+        "litFraction": 0.7205,
+        "warmPixels": 2955,
+        "warmFraction": 0.016,
+        "peakLuminance": 189.5,
+        "peakAt": [
+          566,
+          655
+        ]
+      },
+      "hueReference": {
+        "label": "still-st0-sighting (reference only; the warmth law does not apply)",
+        "aperturePixels": 921600,
+        "cockpitMaskApplied": false,
+        "aperturePeakLuminance": 231.8,
+        "aperturePeakAt": [
+          885,
+          186
+        ],
+        "warmPixelsInAperture": 19426,
+        "coolMagentaPixelsInAperture": 260689,
+        "neutralLitPixelsInAperture": 311157,
+        "warmClusters": 26,
+        "clusters": [
+          {
+            "areaPx": 8380,
+            "bbox": [
+              666,
+              515,
+              165,
+              98
+            ],
+            "extentPx": 165,
+            "centroid": [
+              749.8,
+              568.2
+            ],
+            "peakLuminance": 109.2,
+            "peakAt": [
+              811,
+              591
+            ],
+            "meanHueDeg": 151.9,
+            "meanSaturation": 0.362
+          },
+          {
+            "areaPx": 2645,
+            "bbox": [
+              643,
+              453,
+              124,
+              63
+            ],
+            "extentPx": 124,
+            "centroid": [
+              709.7,
+              495.2
+            ],
+            "peakLuminance": 102.7,
+            "peakAt": [
+              755,
+              478
+            ],
+            "meanHueDeg": 55.1,
+            "meanSaturation": 0.414
+          },
+          {
+            "areaPx": 1914,
+            "bbox": [
+              865,
+              452,
+              96,
+              59
+            ],
+            "extentPx": 96,
+            "centroid": [
+              916.6,
+              491.1
+            ],
+            "peakLuminance": 101.7,
+            "peakAt": [
+              953,
+              478
+            ],
+            "meanHueDeg": 42.1,
+            "meanSaturation": 0.414
+          },
+          {
+            "areaPx": 1325,
+            "bbox": [
+              1026,
+              456,
+              31,
+              81
+            ],
+            "extentPx": 81,
+            "centroid": [
+              1041.9,
+              500.4
+            ],
+            "peakLuminance": 112.6,
+            "peakAt": [
+              1044,
+              466
+            ],
+            "meanHueDeg": 179.9,
+            "meanSaturation": 0.363
+          },
+          {
+            "areaPx": 800,
+            "bbox": [
+              211,
+              612,
+              57,
+              27
+            ],
+            "extentPx": 57,
+            "centroid": [
+              239.8,
+              625.1
+            ],
+            "peakLuminance": 44.2,
+            "peakAt": [
+              236,
+              621
+            ],
+            "meanHueDeg": 49.7,
+            "meanSaturation": 1
+          },
+          {
+            "areaPx": 742,
+            "bbox": [
+              447,
+              464,
+              35,
+              52
+            ],
+            "extentPx": 52,
+            "centroid": [
+              462.2,
+              495.7
+            ],
+            "peakLuminance": 100.5,
+            "peakAt": [
+              450,
+              483
+            ],
+            "meanHueDeg": 151.5,
+            "meanSaturation": 0.382
+          },
+          {
+            "areaPx": 672,
+            "bbox": [
+              331,
+              456,
+              49,
+              49
+            ],
+            "extentPx": 49,
+            "centroid": [
+              354.3,
+              484.5
+            ],
+            "peakLuminance": 101.4,
+            "peakAt": [
+              339,
+              476
+            ],
+            "meanHueDeg": 33.3,
+            "meanSaturation": 0.405
+          },
+          {
+            "areaPx": 572,
+            "bbox": [
+              566,
+              490,
+              48,
+              22
+            ],
+            "extentPx": 48,
+            "centroid": [
+              588.7,
+              501.6
+            ],
+            "peakLuminance": 92.2,
+            "peakAt": [
+              571,
+              509
+            ],
+            "meanHueDeg": 92.4,
+            "meanSaturation": 0.408
+          }
+        ]
+      }
+    }
+  },
+  "cameraRigidWarmClusters": {
+    "seamClusters": 3,
+    "cutlineClusters": 5,
+    "rigidPairs": 3,
+    "pairs": [
+      {
+        "seamCentroid": [
+          546.3,
+          191.5
+        ],
+        "seamArea": 203,
+        "cutlineCentroid": [
+          546.6,
+          191.6
+        ],
+        "cutlineArea": 202,
+        "cameraRigid": true,
+        "cockpitRingFraction": 0
+      },
+      {
+        "seamCentroid": [
+          504.8,
+          202.6
+        ],
+        "seamArea": 112,
+        "cutlineCentroid": [
+          504.8,
+          202.7
+        ],
+        "cutlineArea": 112,
+        "cameraRigid": true,
+        "cockpitRingFraction": 0
+      },
+      {
+        "seamCentroid": [
+          827,
+          207.7
+        ],
+        "seamArea": 60,
+        "cutlineCentroid": [
+          827,
+          207.7
+        ],
+        "cutlineArea": 108,
+        "cameraRigid": true,
+        "cockpitRingFraction": 0
+      }
+    ],
+    "note": "seam Z=5164, cut-line Z=1426, different flights: a pixel-identical cluster is camera-rigid"
+  }
+}

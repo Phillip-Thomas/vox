@@ -79,7 +79,9 @@ const RESOLVE = async () => {
     director: /emergentStoryDirector\.ts/, companion: /systemCompanionBodiesModel\.ts/,
     inputPolicy: /storyInputPolicy\.ts/, flightFeedback: /shipFlightFeedback\.ts/,
     exterior: /spaceStation\/spaceStationExterior\.ts/, cues: /ux\/feedbackCues\.ts/,
-    cockpitLayout: /shipCockpitLayout\.ts/, cinematicLook: /cinematicLook\.ts/,
+    cockpitLayout: /shipCockpitLayout\.ts/, cinematicLook: /cinematicLook\.ts/, habitat: /habitatSystem\.ts/,
+    playerFrame: /state\/playerFrame\.ts/, mobileInput: /mobileInput\.ts/,
+    tidegarden: /tidegardenRoute\.ts/,
     companionModel: /systemCompanionBodiesModel\.ts/
   };
   const found = {};
@@ -682,7 +684,10 @@ const READ = async () => {
     feedHealth: feed?.getAttribute('data-objective-health') ?? null,
     feedText: feed ? feed.innerText.replace(/\s*\n\s*/g, ' | ').trim() : null,
     caption: caption ? caption.innerText.trim() : null,
-    cueCount: (w.__voxFeedbackLog ?? []).length };
+    cueCount: (w.__voxFeedbackLog ?? []).length,
+    interactionPrompts: [...document.querySelectorAll('[data-interaction-prompt="primary"]')]
+      .map(e => e.innerText.replace(/\s*\n\s*/g, ' | ').trim()),
+    interactionPromptActive: document.querySelectorAll('[data-interaction-prompt="primary"]').length > 0 };
   try { const f = await imp('spaceFlight');
     if (f) { const s = f.getSpaceFlightSnapshot(); out.flight = { phase: s.phase, controlMode: s.controlMode }; } } catch { /* ignore */ }
   try { const s = await imp('systemFlight');
@@ -738,6 +743,45 @@ const SET_PROFILE = async (p) => {
   const g = await import(/* @vite-ignore */ (window.__voxSpec ?? {}).graphics);
   g.setQualityProfile(p, { persist: false });
   return g.getQualityProfile();
+};
+
+
+// --- DOM-overlay control -----------------------------------------------------
+// page.screenshot() composites the DOM HUD over the canvas. The hero still is
+// the composite (K11 and the work-order state are DOM), but the v9 pixel laws
+// are laws about RENDERED LIGHT: measuring them over the composite compares
+// ST-0 against HUD glyphs and counts the caption band as a warm cluster. So each
+// still is shot twice at the same instant -- the hero composite, then a
+// scene-only twin with every non-canvas element hidden -- and the laws are
+// evaluated on the twin, with the overlay rects recorded for audit.
+const UI_RECTS = () => [...document.querySelectorAll('body *')]
+  .filter(e => e.tagName !== 'CANVAS' && e.children.length === 0)
+  .map(e => { const r = e.getBoundingClientRect();
+    return (r.width > 0 && r.height > 0 && r.bottom > 0 && r.right > 0)
+      ? { tag: e.tagName, text: (e.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 48),
+        rect: [Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)] } : null; })
+  .filter(Boolean);
+const HIDE_UI = () => {
+  const canvas = document.querySelector('canvas');
+  if (!canvas) return 0;
+  // visibility:hidden is inherited but overridable by any descendant rule, and
+  // several HUD layers set their own. An !important stylesheet rule that spares
+  // only the canvas and its ancestor chain cannot be overridden by a
+  // non-important declaration anywhere in the overlay.
+  let n = 0;
+  for (let el = canvas; el; el = el.parentElement) { el.setAttribute('data-vox-keep', '1'); n++; }
+  const style = document.createElement('style');
+  style.id = 'vox-hide-ui';
+  style.textContent = 'body *:not([data-vox-keep]) { visibility: hidden !important; }'
+    + ' canvas { visibility: visible !important; }';
+  document.head.appendChild(style);
+  window.__voxKeepCount = n;
+  return n;
+};
+const SHOW_UI = () => {
+  document.getElementById('vox-hide-ui')?.remove();
+  for (const el of document.querySelectorAll('[data-vox-keep]')) el.removeAttribute('data-vox-keep');
+  return true;
 };
 
 // ------------------------------------------------------------------- harness
@@ -960,6 +1004,12 @@ if (MODE === 'seam') {
     }
     const file = tier === 'HIGH' ? 'still-seam-of-light.png' : 'still-seam-of-light-low.png';
     await page.screenshot({ path: path.join(CAP_DIR, file) });
+    rec.uiRects = await page.evaluate(UI_RECTS).catch(() => null);
+    rec.uiHidden = await page.evaluate(HIDE_UI).catch(() => null);
+    const sceneFile = file.replace('.png', '-scene.png');
+    await page.screenshot({ path: path.join(CAP_DIR, sceneFile) });
+    rec.sceneFile = `evidence/capture/${sceneFile}`;
+    await page.evaluate(SHOW_UI).catch(() => {});
     const at = await page.evaluate(READ).catch(() => ({}));
     const comp = await page.evaluate(COMPOSE).catch(() => null);
     const masks = await page.evaluate(MASKS).catch(e => ({ maskError: String(e).slice(0, 120) }));
@@ -977,6 +1027,9 @@ if (MODE === 'seam') {
     rec.laneAssertion = { href: at.href ?? null, lane: at.lane ?? null };
     rec.stationMask = masks?.station ?? null;
     rec.cockpitMask = masks?.cockpit ?? null;
+    rec.cockpitMaskPackedBase64 = masks?.cockpitMaskPackedBase64 ?? null;
+    rec.cockpitMaskSize = masks?.cockpitMaskSize ?? null;
+    rec.stationMaskPackedBase64 = masks?.stationMaskPackedBase64 ?? null;
     rec.galaxyInFrame = (comp?.sky?.galaxy ?? []).filter(g => g.inFrame).length;
     rec.companionsInFrame = (comp?.sky?.companions ?? []).filter(g => g.inFrame).length;
     rec.flightPhase = at.flight?.phase ?? null;
@@ -1037,6 +1090,11 @@ if (MODE === 'cutline') {
     await new Promise(r => setTimeout(r, 100));
   }
   await page.screenshot({ path: path.join(CAP_DIR, 'still-station-resolved.png') });
+  report.uiRects = await page.evaluate(UI_RECTS).catch(() => null);
+  report.uiHidden = await page.evaluate(HIDE_UI).catch(() => null);
+  await page.screenshot({ path: path.join(CAP_DIR, 'still-station-resolved-scene.png') });
+  report.sceneFile = 'evidence/capture/still-station-resolved-scene.png';
+  await page.evaluate(SHOW_UI).catch(() => {});
   const at = await page.evaluate(READ).catch(() => ({}));
   const comp = await page.evaluate(COMPOSE).catch(() => null);
   const masks = await page.evaluate(MASKS).catch(e => ({ maskError: String(e).slice(0, 120) }));
@@ -1050,6 +1108,9 @@ if (MODE === 'cutline') {
     hullPickAgreesWithDiag: comp?.hullPickAgreesWithDiag ?? null,
     stationMask: masks?.station ?? null,
     stationSpineGeom: comp?.stationSpine ?? null, cockpitMask: masks?.cockpit ?? null,
+    cockpitMaskPackedBase64: masks?.cockpitMaskPackedBase64 ?? null,
+    cockpitMaskSize: masks?.cockpitMaskSize ?? null,
+    stationMaskPackedBase64: masks?.stationMaskPackedBase64 ?? null,
     stationHullInstances: comp?.stationHullInstances ?? null,
     stationLightInstances: comp?.stationLightInstances ?? null,
     k11Painted: (at.caption ?? '').includes('both fires behind you'),
@@ -1705,7 +1766,9 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
     fs.mkdirSync(dir, { recursive: true });
     for (const f of fs.readdirSync(dir)) fs.unlinkSync(path.join(dir, f));
   }
-  const { page, errs } = await open('?story=ch10-cold&profile=LOW', { settle: 14000 });
+  const ST0_URL = process.env.VOX_ST0_URL ?? '?story=ch10-cold&profile=LOW';
+  const { page, errs } = await open(ST0_URL, { settle: 14000 });
+  report.urlIntended = ST0_URL;
   report.pageErrors = errs;
   report.laneAssertion = await page.evaluate(() => ({ href: location.href,
     movieParam: new URLSearchParams(location.search).get('movie'),
@@ -1722,8 +1785,9 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
       isNight: n.isDarkDaylight(daylight) };
   };
   // ST-0 sky sample in the LOCAL HORIZON frame at the camera.
-  const ST0 = () => {
+  const ST0 = async () => {
     const w = window, THREE = w.__THREE;
+    const spec = w.__voxSpec ?? {};
     const { scene, camera } = w.__voxPick();
     if (!scene || !camera || !THREE) return null;
     camera.updateMatrixWorld(true);
@@ -1743,11 +1807,41 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
     };
     const altOf = (d) => 90 - Math.acos(Math.max(-1, Math.min(1, d.dot(up)))) * 180 / Math.PI;
     const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
-    const out = { camAz: Number(azOf(fwd).toFixed(3)), camAlt: Number(altOf(fwd).toFixed(3)),
+    const out = { promptActive: document.querySelectorAll('[data-interaction-prompt="primary"]').length > 0,
+      prompts: [...document.querySelectorAll('[data-interaction-prompt="primary"]')].map(e => e.innerText.replace(/\s+/g, ' ').trim()),
+      camAz: Number(azOf(fwd).toFixed(3)), camAlt: Number(altOf(fwd).toFixed(3)),
       fov: Number(camera.fov.toFixed(3)), camPos: [camPos.x, camPos.y, camPos.z].map(n => Number(n.toFixed(2))),
       coreDistance: null, st0: null };
     if (core) { const cp = new THREE.Vector3(); core.getWorldPosition(cp);
       out.coreName = core.name; out.coreDistance = Number(cp.distanceTo(camPos).toFixed(2)); }
+    // Authoritative handle: the habitat system's own core position, which is
+    // exactly what autopilot walks to. Scene-name matching is only a fallback.
+    try {
+      const h = await import(/* @vite-ignore */ spec.habitat);
+      const t = await import(/* @vite-ignore */ spec.tidegarden);
+      const st = h.getHabitatWorldState(t.TIDEGARDEN_WORLD_ID);
+      // The core position is in GAME world space, which is NOT the render frame
+      // (the renderer runs origin-shifted). Compare it against the same
+      // getPlayerWorldPosition() the autopilot's own walk uses.
+      const pf = await import(/* @vite-ignore */ spec.playerFrame);
+      const pp = pf.getPlayerWorldPosition();
+      out.playerWorld = [pp.x, pp.y, pp.z].map(n => Number(n.toFixed(2)));
+      if (st?.core?.position) {
+        const cp = new THREE.Vector3(...st.core.position);
+        out.habitatCoreWorld = st.core.position.map(n => Number(n.toFixed(2)));
+        out.habitatCoreDistanceEuclid = Number(cp.distanceTo(pp).toFixed(2));
+        out.habitatCoreDistanceFromRenderCamera = Number(cp.distanceTo(camPos).toFixed(2));
+        // The autopilot's own gaitDistance (autopilot.ts:816): tangential
+        // distance plus max(0, vertical-1). This is the walker's distance to
+        // the handle and the convention the contract's <=25 term inherits.
+        const pu = pf.getPlayerUp();
+        const toGoal = cp.clone().sub(pp);
+        const vertical = toGoal.dot(pu);
+        toGoal.addScaledVector(pu, -vertical);
+        out.habitatCoreDistance = Number((toGoal.length() + Math.max(0, vertical - 1)).toFixed(2));
+        out.habitatCoreVerticalOffset = Number(vertical.toFixed(2));
+      }
+    } catch (e) { out.habitatError = String(e).slice(0, 120); }
     if (st0) {
       const wp = new THREE.Vector3(); st0.getWorldPosition(wp);
       const d = wp.clone().sub(camPos).normalize();
@@ -1785,6 +1879,56 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
 
   await page.evaluate(HOLD_NIGHT, 0.62).catch(() => {});
   await new Promise(r => setTimeout(r, 1500));
+
+  if (HIGH_STILL) {
+    // ---- CLOSE THE 25-UNIT STAGING TERM ---------------------------------
+  // Two prior attempts shot from the Kestrel. The camera walks to the habitat
+  // core on real player input: aim at the core, hold W, stop inside 25 units.
+  const CORE_AIM = async () => {
+    const w = window, THREE = w.__THREE; const spec = w.__voxSpec ?? {};
+    const cl = await import(/* @vite-ignore */ spec.cinematicLook);
+    const h = await import(/* @vite-ignore */ spec.habitat);
+    const t = await import(/* @vite-ignore */ spec.tidegarden);
+    const st = h.getHabitatWorldState(t.TIDEGARDEN_WORLD_ID);
+    if (!st?.core?.position) return false;
+    cl.setCinematicGazeIntent(null);
+    cl.setCinematicLookTarget(new THREE.Vector3(...st.core.position));
+    cl.setCinematicLookWeight(1);
+    return true;
+  };
+  // Movement is gated on pointer lock, which headless Chromium never grants.
+  // The SHIPPED synthesis path (utils/mobileInput.ts) is the same one the
+  // touch controls use: setTouchActive() opens the gate and pressKey()
+  // dispatches the very KeyW the controllers already listen for.
+  const WALK = async (down) => {
+    const spec = window.__voxSpec ?? {};
+    const mi = await import(/* @vite-ignore */ spec.mobileInput);
+    if (down) { mi.setTouchActive(true); mi.pressKey('KeyW'); }
+    else { mi.releaseAllKeys(); mi.setTouchActive(false); }
+    return mi.isTouchActive();
+  };
+  const walk = [];
+  await page.evaluate(CORE_AIM).catch(e => { report.coreAimError = String(e).slice(0, 160); });
+  await new Promise(r => setTimeout(r, 1800));
+  report.walkGateOpened = await page.evaluate(WALK, true).catch(e => String(e).slice(0, 160));
+  const tw = Date.now();
+  let coreD = null;
+  while ((Date.now() - tw) / 1000 < 90) {
+    await page.evaluate(CORE_AIM).catch(() => {});
+    await page.evaluate(WALK, true).catch(() => {});
+    const s = await page.evaluate(ST0).catch(() => null);
+    coreD = s?.habitatCoreDistance ?? null;
+    walk.push({ t: Number(((Date.now() - tw) / 1000).toFixed(2)), coreDistance: coreD,
+      promptActive: s?.promptActive ?? null, prompts: s?.prompts ?? null,
+      playerWorld: s?.playerWorld ?? null });
+    if (coreD != null && coreD <= 12 && s && s.promptActive === false) break;
+    await new Promise(r => setTimeout(r, 300));
+  }
+  await page.evaluate(WALK, false).catch(() => {});
+  await new Promise(r => setTimeout(r, 900));
+  report.coreWalk = { frames: walk.length, finalCoreDistance: coreD, trace: walk };
+  console.log(`[st0still] walked to core: ${coreD}u`);
+  }
 
   // ---- PHASE TRACE: one full 90s ellipse, sampled at 4 Hz -----------------
   const trace = [];
@@ -1849,7 +1993,8 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
       frames.push({ index: i, file: `evidence/capture/strip-st0-nightdwell/${file}`,
         tSeconds: i * 4, camAz: s?.camAz ?? null, camAlt: s?.camAlt ?? null, fov: s?.fov ?? null,
         bearingDeltaDeg: s ? Number((((s.camAz - bearingAz + 540) % 360) - 180).toFixed(2)) : null,
-        coreDistance: s?.coreDistance ?? null, st0: s?.st0 ?? null });
+        coreDistance: s?.coreDistance ?? null, habitatCoreDistance: s?.habitatCoreDistance ?? null,
+        st0: s?.st0 ?? null });
       flush();
       report.frames = frames;
       if (i < 7) await new Promise(r => setTimeout(r, 4000));
@@ -1879,19 +2024,58 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
       await new Promise(r => setTimeout(r, 200));
     }
     // hold the aim through the HIGH warm, then wait for an arc frame >=10deg
-    const t1 = Date.now();
-    let shot = null;
-    while ((Date.now() - t1) / 1000 < 260) {
+    // TWO-PASS SHUTTER. The criterion binds three things at once: elevation
+    // >=10deg (peak preferred), the dot on the upper-third line +-5% of frame
+    // height, and yaw within +-2deg of the claimed bearing. At the prescribed
+    // pitch (peak-15deg) the latitude peak does NOT land on the upper third,
+    // because at the peak the dot is far off-axis horizontally and a
+    // perspective projection is not a linear map of elevation. Pass one traces
+    // the arc and finds the highest-elevation frame that also lands the dot in
+    // the band; pass two fires the shutter when that frame recurs.
+    const frameYOf = (ndc) => ((1 - ndc[1]) / 2) * 100;
+    const inBand = (ndc) => Math.abs(frameYOf(ndc) - (100 / 3)) <= 5;
+    const arc = [];
+    const tScan = Date.now();
+    while ((Date.now() - tScan) / 1000 < 100) {
       await page.evaluate(HOLD_NIGHT, 0.62).catch(() => {});
       await page.evaluate(AIM, { az: bearingAz, alt: aimAlt }).catch(() => {});
       const s = await page.evaluate(ST0).catch(() => null);
-      if (s?.st0 && s.st0.visible && s.st0.alt >= 10 && s.st0.inFrustum
-        && Math.abs(((s.camAz - bearingAz + 540) % 360) - 180) <= 2) { shot = s; break; }
-      await new Promise(r => setTimeout(r, 400));
+      if (s?.st0) arc.push({ t: Number(((Date.now() - tScan) / 1000).toFixed(2)),
+        alt: s.st0.alt, ndc: s.st0.ndc, frameY: Number(frameYOf(s.st0.ndc).toFixed(2)),
+        vis: s.st0.visible, inFrustum: s.st0.inFrustum,
+        yawErr: Number((((s.camAz - bearingAz + 540) % 360) - 180).toFixed(3)) });
+      await new Promise(r => setTimeout(r, 250));
     }
+    const cands = arc.filter(r => r.vis && r.inFrustum && r.alt >= 10
+      && Math.abs(r.yawErr) <= 2 && inBand(r.ndc));
+    const best = cands.length ? cands.reduce((a, b) => (b.alt > a.alt ? b : a)) : null;
+    report.shutterPlan = { arcSamples: arc.length, candidates: cands.length,
+      best: best ?? null, altFloorDeg: 10, frameYBand: [100 / 3 - 5, 100 / 3 + 5] };
+    // ---- pass two: fire when the planned frame recurs --------------------
+    const t1 = Date.now();
+    let shot = null;
+    const wantAlt = best ? best.alt : Math.max(10, (peakAlt ?? 16) - 4);
+    while ((Date.now() - t1) / 1000 < 220) {
+      await page.evaluate(HOLD_NIGHT, 0.62).catch(() => {});
+      await page.evaluate(AIM, { az: bearingAz, alt: aimAlt }).catch(() => {});
+      const s = await page.evaluate(ST0).catch(() => null);
+      if (s?.st0 && s.st0.visible && s.st0.inFrustum && s.st0.alt >= 10
+        && Math.abs(((s.camAz - bearingAz + 540) % 360) - 180) <= 2
+        && inBand(s.st0.ndc) && s.st0.alt >= wantAlt - 1.0) { shot = s; break; }
+      if (s?.st0 && s.st0.visible && s.st0.inFrustum && s.st0.alt >= 10
+        && Math.abs(((s.camAz - bearingAz + 540) % 360) - 180) <= 2
+        && inBand(s.st0.ndc)) shot = s;   // keep the best legal frame seen
+      await new Promise(r => setTimeout(r, 250));
+    }
+    report.arcTrace = arc;
     report.shutterState = shot;
     if (shot) {
       await page.screenshot({ path: path.join(CAP_DIR, 'still-st0-sighting.png') });
+      report.uiRects = await page.evaluate(UI_RECTS).catch(() => null);
+      report.uiHidden = await page.evaluate(HIDE_UI).catch(() => null);
+      await page.screenshot({ path: path.join(CAP_DIR, 'still-st0-sighting-scene.png') });
+      report.sceneFile = 'evidence/capture/still-st0-sighting-scene.png';
+      await page.evaluate(SHOW_UI).catch(() => {});
       const at = await page.evaluate(READ).catch(() => ({}));
       const comp = await page.evaluate(COMPOSE).catch(() => null);
       report.still = { id: 'still-st0-sighting', file: 'evidence/capture/still-st0-sighting.png',
@@ -1902,10 +2086,13 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
         yawErrorDeg: Number((((shot.camAz - bearingAz + 540) % 360) - 180).toFixed(3)),
         st0AltDeg: shot.st0.alt, st0Ndc: shot.st0.ndc,
         st0FrameYPercent: Number((((1 - shot.st0.ndc[1]) / 2) * 100).toFixed(2)),
-        coreDistance: shot.coreDistance, dayPhase: at.dayPhase ?? null,
+        coreDistance: shot.coreDistance, habitatCoreDistance: shot.habitatCoreDistance ?? null,
+        habitatCoreWorld: shot.habitatCoreWorld ?? null, dayPhase: at.dayPhase ?? null,
         daylight: at.daylight ?? null, isNight: at.isNight ?? null,
         objectiveId: at.objectiveId ?? null, caption: at.caption ?? null,
-        hudText: at.hudText ?? null, interactionPrompt: at.interactPrompt ?? null,
+        hudText: at.hudText ?? null,
+        interactionPromptActive: at.interactionPromptActive ?? null,
+        interactionPrompts: at.interactionPrompts ?? null,
         st0DeviceProjectedPixels: null, state: at };
     } else report.shutterMissed = true;
     flush();
