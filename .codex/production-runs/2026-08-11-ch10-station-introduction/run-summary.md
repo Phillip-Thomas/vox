@@ -140,3 +140,57 @@ wired; the blind viewer reading the spine as "a clean, moving spine" while
 naming two real defects nobody else had seen. The run's own quality gates —
 1663 contract checks and 1787 implementation checks — pass; the final gate's
 residue is enumerated in §7 by owner.
+
+## 11. Cohesion judgement (2026-08-12)
+
+**Disposition: repair.** Weighted 4.404 against a 4.75 bar; category floor 4.00
+against a 4.30 bar. Full reasoning in `cohesion-judge.md`, scores and evidence
+in `final-scorecard.json`. Per category: narrative 4.60, audiovisual 4.10,
+composition 4.00, score 4.70, palette 4.40, transition 4.70, ambition 4.70,
+interaction 4.25, implementation 4.50, evidence 4.00.
+
+The judge found the chapter to be "one authored event, not three departments
+side by side" — and then found the thing no single lane could see.
+
+**The joined finding.** Three reviewers independently reported the station
+reveal as "too small". Every lane treated it as a musical question, and the
+score lane defended its restraint on musical grounds. The judge measured the
+image: the cut line renders the station at **19.65% of frame width at range
+1,421**, against a contracted 22.0–28.7% across a window the ship can no longer
+reach. The cause is this run's own correct repair — suppressing the autopilot's
+held boost cut terminal speed from 320 to 117.5 u/s and shortened the coast
+from about 533 units to 196. So the "too small" perception is *half image
+regression*, and the musical half was being argued in isolation against it.
+This is now owner decision `owner-decision-cut-line-reach`.
+
+**Routed by the judge.** J-1 the cut line (Cinematography + Integration, fix
+first); J-2 ST-0 measuring below the starfield peak against a contract sentence
+claiming otherwise; J-6 a `thickness ≤2.4°` ceiling carried forward marked
+"unchanged" while the convention around it changed; J-7 camera-rigid cockpit
+clusters, one brighter than the station in its own aperture; J-8 variant parity
+proven manual-lane at a single profile; J-5 an uncommissioned `critic-report.md`
+cited as sole source for three defects, and an unfilled
+`chapter-journey-evidence.json`; J-9 the run cannot pass its own final gate
+under its own lock, because the gate demands a continuous video and a headed
+pass while the lock forbids renders and the box is headless.
+
+**Declined by the judge, correctly:** the reveal's restraint (owner's ear — no
+measurement settles it, and the fix reopens two signed terms), the corridor
+silence (only the human who played it has standing), the voice lane, and the
+cut line's golden-section framing versus the blind viewer's endorsement of that
+same frame.
+
+**Orchestrator disposition on J-3.** The judge reported all four hero-still
+hashes stale and the night-dwell strip unregistered. That was accurate when it
+read the registry — it began while the final stamping pass was still running.
+Re-verified afterwards: 314 rows hash-clean, ST-0 visibility evidence pinned on
+both halves of its split acceptance, and the only two stale rows were files
+written after the judge started, including its own scorecard. Both re-hashed.
+The finding is closed, and is recorded here rather than silently dropped
+because the judge was right to raise it.
+
+**Orchestrator disposition on J-4.** The judge is correct that no independent
+eye had seen the current stills — two changed materially after every review was
+filed. A fresh blind read of the three final stills and the night-dwell strip
+was commissioned on receipt of the judgement; its result is the last thing
+added to this record.

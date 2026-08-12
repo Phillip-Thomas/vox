@@ -1,25 +1,177 @@
 {
   "schema": "paravoxia.creativeScorecard.v1",
-  "runId": "{{RUN_ID}}",
-  "contractVersion": "draft-v0",
-  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
-  "mode": "scene",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "mode": "chapter",
   "rubricRef": "paravoxia-creative-cohesion@v1",
   "categories": [
-    { "slug": "narrative_and_player_causality", "weight": 14, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "audiovisual_emotional_alignment", "weight": 16, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "cinematic_composition_and_lens", "weight": 14, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "score_coherence_and_sync", "weight": 12, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "palette_light_and_render_cohesion", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "transition_and_state_integrity", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "creative_ambition_and_specificity", "weight": 10, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "interaction_accessibility_and_variants", "weight": 6, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "performance_and_implementation_fidelity", "weight": 5, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] },
-    { "slug": "evidence_review_and_learning", "weight": 3, "score": null, "rationale": "{{RATIONALE}}", "evidenceRefs": [], "defectRefs": [] }
+    {
+      "slug": "narrative_and_player_causality",
+      "weight": 14,
+      "score": 4.6,
+      "rationale": "Canon-clean and pillar-safe on an independent audit plus a fresh-instance delta; both-readings law holds on all eleven lines and every marker label; the single hidden-pillar spend is now an audible fact (answer at beat 3, 25.0% into a 7.06s sounding figure, 0 ms gap, unaccented, click-free) rather than the assertion the first audit found. The need to leave emerges from play - a wall she sealed herself, then her own instrument refusing her. Debits: D-15's 1.81s null target; one teleport nudge inside ch10-cold in the end-to-end run, which is a rescue however classified; the voice-lane question live at the chapter's stated agency peak; ten canon debts created for the docking run.",
+      "evidenceRefs": [
+        "story-audit.md#delta-re-check",
+        "score-audit.md#delta-re-check",
+        "evidence/score/relay_ask-through-answer_combined.wav",
+        "verification-report.json#acceptanceCriteria.AC-fallback-ledger"
+      ],
+      "defectRefs": [
+        "F1",
+        "D-15"
+      ]
+    },
+    {
+      "slug": "audiovisual_emotional_alignment",
+      "weight": 16,
+      "score": 4.1,
+      "rationale": "The ask-through-answer junction is genuine cross-domain authorship and the fabricator refusal is the best three-lane subtraction in the run. But the destination under-arrives in BOTH lanes at once: the music enters roughly 6 dB under the ask's own mean (three independent reviewers converged on it), and the image is measurably below its own contracted scale - 19.65% of frame width at range 1,421 against a contracted 22.0-28.7% across a [1,000-1,300] window that this run's own boost suppression made unreachable. Half of the 'reveal is too small' perception is a routable regression, not taste. NV-1 is an unaccepted medium inside this exact category, which the rubric's blocking policy names.",
+      "evidenceRefs": [
+        "naive-audience-report.md#music",
+        "score-audit.md#delta-re-check",
+        "verification-report.json#acceptanceCriteria.AC-hero-still-station-resolved",
+        "verification-report.json#newFindings",
+        "evidence/score/station-resolved_combined.wav"
+      ],
+      "defectRefs": [
+        "NV-1",
+        "D-A2"
+      ]
+    },
+    {
+      "slug": "cinematic_composition_and_lens",
+      "weight": 14,
+      "score": 4.0,
+      "rationale": "Lens identity proven where it was doubted: renderCamera and flightFeedback agree at 70.0 degrees across 178 samples with the cockpit shell at unit scale. The seam still is finally the seam (latch 5,154 inside the 5,100-5,200 band), ST-0's crossing is proven on 7 of 8 night-dwell frames after a real root-cause fix to the gaze solver, the berth ring is fenced at the mount, and there is no cut and no letterbox anywhere. Against that: two of three hero stills fail their own acceptance criteria; ST-0 peaks at 148.4 against a 4px star at 231.8 so the chapter's first perception is out-shone by an ordinary star; three camera-rigid cockpit clusters compete inside the aperture and one of them is the brightest pixel in the cut-line frame (247.9 against the station's 223.5); and no independent eye has seen any of the current stills, which were re-shot after every reviewer filed.",
+      "evidenceRefs": [
+        "verification-report.json#acceptanceCriteria.AC-hero-still-seam-of-light",
+        "verification-report.json#acceptanceCriteria.AC-hero-still-st0-sighting",
+        "verification-report.json#acceptanceCriteria.AC-composition-lens-identity",
+        "cinematography-audit.md#findings",
+        "evidence/capture/still-seam-of-light.png"
+      ],
+      "defectRefs": [
+        "D-A2",
+        "D-A3",
+        "D-A5"
+      ]
+    },
+    {
+      "slug": "score_coherence_and_sync",
+      "weight": 12,
+      "score": 4.7,
+      "rationale": "The strongest lane in the run. Every blocking and major defect closed with re-derived measurement by a fresh auditor instance: a pure milestone resolver over an 18-cell matrix with reload equivalence, the contracted ask figure realized, the resolve strictly below its equal-intensity a4 control on all three measures, the carrier's novelty proven as encoded, the ebb proven a real envelope event. Cue grid 10/10, intensity ladder exact against the contract, additive-only mood table byte-identical to the shipped base, 0.44 ceiling held, ST-0 silence enforced structurally rather than by discipline, click-free handback. Debits: the lane's own two taste risks left open rather than absorbed (correctly), the D4a wording residue, and two evidence files predating the carrier re-pitch.",
+      "evidenceRefs": [
+        "score-audit.md#delta-re-check",
+        "evidence/score/carrier-legality.json",
+        "evidence/score/resolved_vs_a4_rms.json",
+        "evidence/score/transit_seam-ebb_combined.wav"
+      ],
+      "defectRefs": [
+        "D1",
+        "D3",
+        "NV-1"
+      ]
+    },
+    {
+      "slug": "palette_light_and_render_cohesion",
+      "weight": 10,
+      "score": 4.4,
+      "rationale": "One atmosphere across the seams; fire-night into station amber reads as continuity rather than a change of film stock; the galaxy firewall is clean at zero impostors and zero companion bodies in both transit hero frames; the sky-body half of the warmth law holds exactly, with every disc and nebula neutral or cool magenta and zero warm-classified. Debits: the 'sole warm source' half fails on cockpit-rigid furniture inside the aperture, and ST-0's luminance shortfall against the starfield peak is as much a palette decision as a composition one.",
+      "evidenceRefs": [
+        "verification-report.json#acceptanceCriteria.AC-galaxy-firewall",
+        "verification-report.json#acceptanceCriteria.AC-hero-still-seam-of-light",
+        "cinematography-audit.md#continuity-matrix"
+      ],
+      "defectRefs": [
+        "D-A5"
+      ]
+    },
+    {
+      "slug": "transition_and_state_integrity",
+      "weight": 10,
+      "score": 4.7,
+      "rationale": "Score state is a pure function of beat plus five durable milestones, so a mid-transit reload no longer loses the chapter's two signature gestures; three deep links reconstruct the correct rung; sandbox and free play mount no HUD; effect resets fire across eight triggers on all four profiles; no stale objective survives the hand-back; the end-to-end run reaches the hand-back in 481.1s with zero timeout rescues and zero reachable timeout branches; boundary telemetry keeps the planet claim so the station never becomes the resident world. Debits: D-15's 1.81s null window, one teleport nudge in ch10-cold, and D-12's residual (closed on frequency 8/8, never observed off the headless box).",
+      "evidenceRefs": [
+        "verification-report.json#acceptanceCriteria.AC-fallback-ledger",
+        "objective-lifecycle-evidence.json#invariants",
+        "evidence/verification/ch10-reload-purity.json",
+        "evidence/verification/ch10-fence-reload-trace.json"
+      ],
+      "defectRefs": [
+        "D1",
+        "D-12",
+        "D-15"
+      ]
+    },
+    {
+      "slug": "creative_ambition_and_specificity",
+      "weight": 10,
+      "score": 4.7,
+      "rationale": "Bespoke mechanisms where it matters: an unmarked, cueless, scoreless 90-second orbit at the station's true bearing that most players will never see; an answer that arrives inside its own still-sounding question and is provable by onset measurement; refusal-to-fabricate as the engine of departure instead of a quest giver; a cut line that is an authored non-arrival; instrument silence proven at 949 units inside the corridor; one added draw call and no new shader programs in free play. The decisive signal is that a blind viewer given only frames and audio reconstructed the spine correctly and called it a clean, moving spine. Debits: the biggest image does not yet land at the scale this ambition implies, and the closed door read as unfinished to the one human who played it.",
+      "evidenceRefs": [
+        "naive-audience-report.md#cold-read",
+        "story-intent.md",
+        "evidence/verification/ch10-drawcall-fps.json",
+        "dissent-register.md"
+      ],
+      "defectRefs": [
+        "OD-1",
+        "NV-1"
+      ]
+    },
+    {
+      "slug": "interaction_accessibility_and_variants",
+      "weight": 6,
+      "score": 4.25,
+      "rationale": "Marker parity is structural and verified live for every marker-bearing rung; the one dishonest rung is gone - the missing reboard step the player-experience audit found the movie lane masking is now authored, wired from the ship's live pose, cued once per activation, and it is the objective the beat publishes on entry in the end-to-end run; 42,886 mutation-resolution records with zero mandatory objectives ever observable at missing-marker; no work order lacks an actionable input; all four profiles reach transit with a common applied FOV. Below the floor because on mobile-potato the entire ch10 work order renders as a JOURNAL button at all six anchors, so a whole platform receives the chapter's unannounced arrival as a small button (accepted as a shipped-baseline exception, which disposes of the blame but not of the experience); the repaired transit rungs are proven in the manual lane at desktop-low only; four of the auditor's six findings were never carried into the canonical register; and the auditor's own stated recheck - manual, non-movie, headed - has not happened.",
+      "evidenceRefs": [
+        "ux-audit.md#findings",
+        "objective-lifecycle-evidence.json#transitions",
+        "objective-lifecycle-evidence.json#variantMatrix",
+        "shipped-ux-baseline.json"
+      ],
+      "defectRefs": [
+        "UX-1",
+        "UX-2",
+        "D-15"
+      ]
+    },
+    {
+      "slug": "performance_and_implementation_fidelity",
+      "weight": 5,
+      "score": 4.5,
+      "rationale": "2,270 tests, verify 9/9, typecheck clean, 1663 contract-gate and 1787 implementation-gate checks passing, one added draw call and no new programs, the sandbox's byte-identity proven by exact-count test rather than argued from the mount graph, six pre-existing defects fixed because ch10 was the first thing to walk into them, four rotted verification tools repaired, and every scope expansion recorded as a lock revision naming the contract term that forced it. Debits: the contract and the shipped physics now disagree about a reachable range because a run constant moved without its dependents being re-derived; and publishing occurred out of band from an uncommitted tree with governance checks red, because the deploy hook never runs verify.",
+      "evidenceRefs": [
+        "evidence/implementation/verify.log",
+        "evidence/implementation/tests.log",
+        "implementation.diff",
+        "production-lock.md#lock-revision-R8"
+      ],
+      "defectRefs": [
+        "D-12"
+      ]
+    },
+    {
+      "slug": "evidence_review_and_learning",
+      "weight": 3,
+      "score": 4.0,
+      "rationale": "The learning half is close to exemplary: ten transferable lessons written for a team with no access to this run, an auditor's own critical finding disproved by instrumentation with its lane still refusing to let reclassification count as re-measurement, four unsatisfiable contract terms superseded with their causes recorded inline, and a verification report unusually willing to name its own failures. The evidence half is the weakest thing in the run: all four registered hero-still hashes are stale against the bytes on disk, the night-dwell strip and the four measurement twins are unregistered, the canonical defect register predates the final capture pass and omits its four new findings while carrying three severities outside its own schema, the moderation pass was never commissioned yet is cited as the sole source of three defects, chapter-journey-evidence.json is unfilled in a chapter-mode run, and three artifacts report three different end-to-end durations (427s, 449s, 481.1s).",
+      "evidenceRefs": [
+        "lessons-learned.md",
+        "evidence-registry.json",
+        "verification-report.json#residualsForTheJudge",
+        "cinematography-repair-direction.json"
+      ],
+      "defectRefs": [
+        "D-A1"
+      ]
+    }
   ],
-  "weightedScore": null,
-  "categoryFloor": null,
-  "fullCategoryCoverage": false,
+  "weightedScore": 4.404,
+  "categoryFloor": 4.0,
+  "fullCategoryCoverage": true,
   "thresholds": {
     "sceneWeighted": 4.75,
     "sceneFloor": 4.3,
@@ -27,12 +179,22 @@
     "flagshipFloor": 4.5
   },
   "openDefects": {
-    "critical": 0,
-    "high": 0,
-    "mediumUnaccepted": 0,
+    "critical": 1,
+    "high": 1,
+    "mediumUnaccepted": 2,
     "low": 0
   },
-  "decision": "template_incomplete",
-  "judge": "{{COHESION_JUDGE}}",
-  "judgedAt": "{{ISO_8601}}"
+  "decision": "repair",
+  "judge": "scene-cohesion-judge (Claude Opus 5, 1M context)",
+  "judgedAt": "2026-08-12T21:30:00Z",
+  "openDefectsNote": "Mechanical mirror of defects.json as it stands (D-A2 critical open; OD-1 high open; D-15 and NV-1 medium open; D-12, UX-2 and F8 accepted exceptions). The register is stale: it was compiled at 00:00Z and the final capture pass ran at 20:13Z, so it does not carry the verifier's four new findings (D-V9-1 and D-V9-3 high, D-V9-2 and D-V9-4 medium). It also carries three severities outside its own schema enum (F1 and D3 as major, D1 as blocking), one defect with no contract anchor (F8), and an owner value the gate rejects (D-A2).",
+  "judgeAssessedOpenDefects": {
+    "critical": 0,
+    "high": 6,
+    "mediumUnaccepted": 4,
+    "low": 0
+  },
+  "judgeAssessedOpenDefectsNote": "The judge's own count after tracing the register against the freshest evidence. D-A2 is reclassified from critical to closed-on-the-frame: the re-shoot latches at 5,154 inside the contracted 5,100-5,200 band, so the dot-to-line-to-place thesis now has its middle distance; what survives of it is a measurement-terms defect (J-6). High: J-1 (cut line lands smaller than authored and its contracted range window is unreachable), J-2 (ST-0 is not the brightest point source), J-3 (evidence chain does not describe the evidence), J-4 (no independent reviewer has seen the current hero stills), J-5 (uncommissioned moderation pass cited as the sole source of three defects, plus unfilled chapter journey evidence), OD-1 (owner-reported corridor silence). Medium unaccepted: J-6 (measurement-convention debt), J-7 (camera-rigid cockpit clusters out-brightening the subject), J-8 (variant parity and dropped UX findings), J-9 (the run cannot pass its own final gate under its own lock). NV-1's musical half is routed to the owner as taste; its image half is folded into J-1.",
+  "decisionNote": "The gate accepts only approved or ready-for-human-taste; repair is recorded honestly and is expected to fail that assertion. Weighted 4.404 against a 4.75 bar, floor 4.00 against 4.30, with an unaccepted medium inside audiovisual_emotional_alignment, which the rubric's blocking policy names. Headed real-GPU owner approval is not something this judge can supply, and no headed screening of the ch10 shot ladder exists.",
+  "judgementRef": "cohesion-judge.md"
 }

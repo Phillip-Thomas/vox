@@ -76,6 +76,18 @@
   ],
   "ownerDecisions": [
     {
+      "id": "owner-decision-cut-line-reach",
+      "question": "The station now reads smaller in the final frame than authored (19.65% of frame width vs a contracted 22.0-28.7%). Restore the ship's reach so it coasts into the authored range, or accept the smaller station and re-derive the window?",
+      "why": "The judge's sharpest finding: the 'reveal is too small' complaint that three reviewers raised as a MUSICAL problem is partly a measurable IMAGE regression, and this run caused it. Suppressing the autopilot's held boost \u2014 an unambiguously correct fix, it closed both a receding cockpit and an undeclared lens \u2014 cut terminal speed from 320 to 117.5 u/s, which shortened the coast from ~533 units to ~196. The ship now asymptotes at 1,377-1,399 and never enters the window the shot was specified against. So the score lane has been defending a musical position against a perception that is half image.",
+      "options": [
+        "restore reach (change the coast so the ship arrives in 1,000-1,300) \u2014 keeps the authored composition, but touches ship feel at the chapter's last moment",
+        "accept the smaller station and re-derive the window from the real coast endpoint \u2014 cheap and honest, but concedes the regression the judge named",
+        "split: restore reach for the movie lane's capture only, leave manual feel untouched \u2014 likely rejected as a two-truths staging, but worth ruling on explicitly"
+      ],
+      "recommendation": "restore reach. The judge's note is that fixing this closes a failing criterion, a measured regression, and half the run's loudest complaint at once \u2014 and the 'too small' perception is the one thing three independent reviewers agreed on.",
+      "status": "pending"
+    },
+    {
       "id": "owner-decision-docking-architecture",
       "question": "Docking: page reload (as the sandbox does today) or an in-place scene swap?",
       "why": "Gates the entire second run. The interior wants an 8cm near plane and system space a 100km far plane, which is why the shipped path navigates rather than swaps. A reload kills StoryDirectorDriver, the signed AV rail and score continuity across the seam, forcing resume-through-milestones; an in-place swap preserves them but is a large renderer change.",

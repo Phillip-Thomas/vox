@@ -2,10 +2,10 @@
   "schema": "paravoxia.creativeRunQualityReport.v1",
   "runPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-08-11-ch10-station-introduction",
   "phase": "final",
-  "checkedAt": "2026-08-12T20:51:53.695Z",
+  "checkedAt": "2026-08-12T20:52:23.883Z",
   "passed": false,
   "checkCount": 8725,
-  "failureCount": 94,
+  "failureCount": 95,
   "warningCount": 0,
   "checks": [
     {
@@ -30220,7 +30220,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:creative-run-quality-report-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:creative-run-quality-report-json"

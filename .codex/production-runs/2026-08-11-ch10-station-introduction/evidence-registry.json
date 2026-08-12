@@ -420,7 +420,7 @@
     {
       "ref": "artifact:creative-run-quality-report-json",
       "path": "creative-run-quality-report.json",
-      "sha256": "b2bb72f4f997adafb2d1fbc56a413321d0dd4f79db9296cf9133320f6e3ab06e",
+      "sha256": "8db563ba24d222b815ae2cdcef4a5efb29d37f4ecea1c4fd51af0b46b575cc05",
       "kind": "artifact",
       "description": "run artifact: creative-run-quality-report.json",
       "bytes": 1812939
@@ -436,10 +436,10 @@
     {
       "ref": "artifact:defects-json",
       "path": "defects.json",
-      "sha256": "9f00e7a523f242dfc1270443f1237ac659997fc395ed68a611322f7c3b5b7fa1",
+      "sha256": "1ff098c3679c562488f80eec733e7b5acf42df319ca945e21df72a208e0f928d",
       "kind": "artifact",
       "description": "run artifact: defects.json",
-      "bytes": 31481
+      "bytes": 36740
     },
     {
       "ref": "ledger:director-notes-jsonl",
@@ -3148,18 +3148,18 @@
     {
       "ref": "artifact:final-scorecard-json",
       "path": "final-scorecard.json",
-      "sha256": "093b58d27bbd68d99521b407397cba31cf8384432c747958739343c22ea3dc13",
+      "sha256": "4bd0f699a2e69b22bee3cce8966835a07f1ccdb740add1b7322d32ec0cbe9c13",
       "kind": "artifact",
       "description": "run artifact: final-scorecard.json",
-      "bytes": 2140
+      "bytes": 15249
     },
     {
       "ref": "artifact:human-decision-json",
       "path": "human-decision.json",
-      "sha256": "00977b024ba946e0572feebef0b385eca46ee078cefb18e0c616da80c6102a97",
+      "sha256": "aca123faf5768d53efc06760d17151bd4f007a5727ee35c32a5f1d76c6ea0be5",
       "kind": "artifact",
       "description": "run artifact: human-decision.json",
-      "bytes": 11561
+      "bytes": 13325
     },
     {
       "ref": "diff:implementation-diff",
@@ -3244,10 +3244,10 @@
     {
       "ref": "document:run-summary-md",
       "path": "run-summary.md",
-      "sha256": "d5ee778fe48b9f9a90fb4821158b9313a673ccaa2d0da50d59c9d7084a385b2f",
+      "sha256": "424c94528a2231152041245562feb5ea8a314a76e019fba986e42c7a9d3b54b4",
       "kind": "document",
       "description": "run document: run-summary.md",
-      "bytes": 7735
+      "bytes": 11033
     },
     {
       "ref": "artifact:scene-contract-json",

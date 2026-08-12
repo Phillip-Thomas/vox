@@ -30,6 +30,10 @@
     {
       "path": "critic-report.md",
       "sha256": "65ea8cc2481808a8b7d3d1c5b9b9772197379d76b9e19b86a3eb3889eb741bcb"
+    },
+    {
+      "path": "naive-final-stills-read.md",
+      "sha256": "fd254e4a977168d4b7c5290f899cc6cea935796c8ea100c6ce572720de08f556"
     }
   ],
   "defects": [
@@ -510,6 +514,113 @@
         "iterationDerivation": "chapter-repair-direction.json authoredAt 2026-08-12T02:10Z (2026-08-11 22:10-04:00) names story-audit-f8; the first ledger row at or after that instant is index 24. Routed at index 31 and accepted as an exception by the owner at index 57.",
         "statusNormalisation": "Reviewer status 'accepted-exception' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus."
       }
+    },
+    {
+      "id": "NF-1",
+      "severity": "high",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "ST-0",
+      "iterationIntroduced": 67,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "statement": "A blind viewer given the final ST-0 still could not find ST-0 at all. Measured: the brightest sky pixel in the frame is the crosshair (245); stars top out at 225-230; ST-0 is not distinguished. The eye goes instead to a lime-green ragged patch that reads as broken art. The chapter's first perception is not perceivable in its own hero still.",
+      "requestedRepair": "Rule whether ST-0's authored luminance is wrong or the still's staging is; the contract's reachability sentence claiming ST-0 sits above the starfield peak is contradicted by two independent measurements.",
+      "verificationRoute": "Re-measure ST-0 peak against classified point sources after any luminance change; re-run a blind read.",
+      "evidenceRefs": [
+        "naive-final-stills-read.md",
+        "evidence/capture/still-st0-sighting.png"
+      ],
+      "sourceReportRefs": [
+        "naive-final-stills-read.md"
+      ],
+      "corroborating": [
+        "cohesion-judge.md#J-2"
+      ]
+    },
+    {
+      "id": "NF-2",
+      "severity": "high",
+      "category": "audiovisual-alignment",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.ch10.station-resolved",
+      "iterationIntroduced": 67,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "statement": "In the run's final frame the moon measures roughly 8x the station's mean luminance (485 vs 60), making the subject the dimmest large object in its own cut line. The blind viewer's eye went moon, then the ORBITAL SCAN panel, then the station.",
+      "requestedRepair": "Owner-level taste ruling. Cinematography ruled the moon earns its place as cold light against the one kept fire; fresh measurement says it dominates the subject. A second ruling against contrary evidence is the owner's.",
+      "verificationRoute": "Luminance ordering measured inside the aperture; blind re-read.",
+      "evidenceRefs": [
+        "naive-final-stills-read.md",
+        "evidence/capture/still-station-resolved.png"
+      ],
+      "sourceReportRefs": [
+        "naive-final-stills-read.md"
+      ]
+    },
+    {
+      "id": "NF-3",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.ch10.station-resolved",
+      "iterationIntroduced": 67,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "statement": "The cut line is contracted as a frame with no annotation on it. It contains an ORBITAL SCAN panel, a MODE/VELOCITY bar, and detached cyan wireframe brackets that read as debug geometry.",
+      "requestedRepair": "Suppress gameplay chrome and the wireframe brackets at the handback frame, or amend the contract's claim.",
+      "verificationRoute": "Re-capture and inspect the aperture for chrome.",
+      "evidenceRefs": [
+        "naive-final-stills-read.md"
+      ],
+      "sourceReportRefs": [
+        "naive-final-stills-read.md"
+      ]
+    },
+    {
+      "id": "NF-4",
+      "severity": "medium",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "ST-0",
+      "iterationIntroduced": 67,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "statement": "In the ST-0 night-dwell strip the disc's colour strobes on alternating frames, RGB (180,88,30) on even frames and (250,193,111) on odd. A rendering defect no probe or review had detected.",
+      "requestedRepair": "Find the alternating-frame source (likely a per-frame toggle in the celestial or companion-body path) and fix.",
+      "verificationRoute": "Re-capture the dwell strip and compare per-frame disc colour.",
+      "evidenceRefs": [
+        "naive-final-stills-read.md",
+        "evidence/capture/strip-st0-nightdwell/"
+      ],
+      "sourceReportRefs": [
+        "naive-final-stills-read.md"
+      ]
+    },
+    {
+      "id": "NF-5",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "cinematography",
+      "anchor": "anc.ch10.seam-of-light",
+      "iterationIntroduced": 67,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "statement": "The seam still does not read as a line of light. A blind viewer at 5x reads it as a solid dark-teal hull with running lights - an object already - which collapses the dot-to-line-to-place thesis at its middle distance and weakens the resolve that follows.",
+      "requestedRepair": "Rule whether the seam distance, the structure LOD, or the emissive treatment is wrong.",
+      "verificationRoute": "Blind re-read of a re-staged seam capture.",
+      "evidenceRefs": [
+        "naive-final-stills-read.md",
+        "evidence/capture/still-seam-of-light.png"
+      ],
+      "sourceReportRefs": [
+        "naive-final-stills-read.md"
+      ]
     }
   ],
   "notes": [
